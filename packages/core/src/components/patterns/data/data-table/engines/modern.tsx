@@ -26,7 +26,7 @@
  */
 
 import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
-import { GripVertical } from 'lucide-react';
+import { Check, GripVertical, X } from 'lucide-react';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 import ModernCheckbox from '../../../../primitives/inputs/Checkbox/engines/modern';
@@ -69,6 +69,11 @@ const ACTION_CELL_PADDING_MAP = {
   comfortable: '0 10px',
   spacious: '0 12px',
 } as const;
+
+type InlineEditorControls = {
+  save: () => Promise<boolean>;
+  cancel: () => void;
+};
 
 /**
  * DS-token-styled data table that renders native HTML table elements with
@@ -203,6 +208,17 @@ export default function ModernDataTable<T extends object>(
   // --- Keyboard row navigation state ---
   const [activeRowIndex, setActiveRowIndex] = useState<number>(-1);
   const tbodyRef = useRef<HTMLTableSectionElement | null>(null);
+  const pendingEditableRowClickRef = useRef<number | null>(null);
+  const inlineEditorControlsRef = useRef<InlineEditorControls | null>(null);
+  const activeInlineEditRef = useRef<{
+    rowKey: string;
+    columnKey: string;
+    row: T;
+  } | null>(null);
+  const [savingCell, setSavingCell] = useState<{
+    rowKey: string;
+    columnKey: string;
+  } | null>(null);
 
   // ---------------------------------------------------------------------------
   // Derived values
@@ -282,6 +298,24 @@ export default function ModernDataTable<T extends object>(
     [visibleColumns],
   );
 
+  /** Discard the current inline edit without saving the draft value. */
+  const discardActiveInlineEdit = useCallback(() => {
+    const controls = inlineEditorControlsRef.current;
+    if (controls) {
+      controls.cancel();
+      return;
+    }
+
+    const activeEdit = activeInlineEditRef.current;
+    if (activeEdit) {
+      onCellEditCancel?.(activeEdit.row, activeEdit.columnKey);
+    }
+
+    activeInlineEditRef.current = null;
+    inlineEditorControlsRef.current = null;
+    setEditingCell(null);
+  }, [onCellEditCancel, setEditingCell]);
+
   /** Enter edit mode for a cell. */
   const enterEditMode = useCallback(
     (rk: string, colKey: string, row: T) => {
@@ -290,24 +324,40 @@ export default function ModernDataTable<T extends object>(
       const cfg = resolveEditableConfig(col.editable);
       if (!cfg) return;
       if (cfg.canEdit && !cfg.canEdit(row)) return;
+      if (savingCell) return;
+      if (editingCell?.rowKey === rk && editingCell.columnKey === colKey) return;
+
+      if (editingCell) {
+        discardActiveInlineEdit();
+      }
+
+      activeInlineEditRef.current = { rowKey: rk, columnKey: colKey, row };
       setEditingCell({ rowKey: rk, columnKey: colKey });
       onCellEditStart?.(row, colKey);
     },
-    [visibleColumns, setEditingCell, onCellEditStart],
+    [discardActiveInlineEdit, editingCell, savingCell, visibleColumns, setEditingCell, onCellEditStart],
   );
 
   /** Handle saving a cell value from the inline editor. */
   const handleCellSave = useCallback(
-    (row: T, rk: string, colKey: string, newValue: unknown, oldValue: unknown) => {
+    async (row: T, rk: string, colKey: string, newValue: unknown, oldValue: unknown) => {
       const col = visibleColumns.find((c) => c.key === colKey);
       const cfg = resolveEditableConfig(col?.editable);
-      // Call column-level onSave if provided
-      if (cfg?.onSave) {
-        cfg.onSave(row, colKey, newValue, oldValue);
+
+      setSavingCell({ rowKey: rk, columnKey: colKey });
+      try {
+        // Call column-level onSave if provided
+        if (cfg?.onSave) {
+          await cfg.onSave(row, colKey, newValue, oldValue);
+        }
+        // Call table-level onCellEdit
+        await onCellEdit?.(row, colKey, newValue, oldValue);
+        inlineEditorControlsRef.current = null;
+        activeInlineEditRef.current = null;
+        setEditingCell(null);
+      } finally {
+        setSavingCell(null);
       }
-      // Call table-level onCellEdit
-      onCellEdit?.(row, colKey, newValue, oldValue);
-      setEditingCell(null);
     },
     [visibleColumns, onCellEdit, setEditingCell],
   );
@@ -316,6 +366,8 @@ export default function ModernDataTable<T extends object>(
   const handleCellCancel = useCallback(
     (row: T, colKey: string) => {
       onCellEditCancel?.(row, colKey);
+      inlineEditorControlsRef.current = null;
+      activeInlineEditRef.current = null;
       setEditingCell(null);
     },
     [onCellEditCancel, setEditingCell],
@@ -656,6 +708,144 @@ export default function ModernDataTable<T extends object>(
     [data.length, onRowClick]
   );
 
+  const clearPendingEditableRowClick = useCallback(() => {
+    if (pendingEditableRowClickRef.current) {
+      window.clearTimeout(pendingEditableRowClickRef.current);
+      pendingEditableRowClickRef.current = null;
+    }
+  }, []);
+
+  const handleRowClick = useCallback(
+    (event: React.MouseEvent<HTMLTableRowElement>, row: T, index: number) => {
+      if (!onRowClick) return;
+
+      const target = event.target;
+      const isElementTarget = target instanceof Element;
+      const isEditableCellClick =
+        editTrigger === 'doubleClick'
+        && isElementTarget
+        && Boolean(target.closest('td[data-editable="true"]'));
+      const isEditingAwayClick =
+        Boolean(editingCell)
+        && isElementTarget
+        && !target.closest('td[data-editing="true"]');
+
+      if (isEditableCellClick || isEditingAwayClick) {
+        clearPendingEditableRowClick();
+        pendingEditableRowClickRef.current = window.setTimeout(() => {
+          pendingEditableRowClickRef.current = null;
+          onRowClick(row, index);
+        }, 360);
+        return;
+      }
+
+      clearPendingEditableRowClick();
+      onRowClick(row, index);
+    },
+    [clearPendingEditableRowClick, editTrigger, editingCell, onRowClick],
+  );
+
+  /** A double-click away from the active editor abandons its unsaved draft. */
+  const handleEditAbandonDoubleClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (!editingCell || savingCell) return;
+      clearPendingEditableRowClick();
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.closest('td[data-editing="true"]')) return;
+
+      discardActiveInlineEdit();
+    },
+    [clearPendingEditableRowClick, discardActiveInlineEdit, editingCell, savingCell],
+  );
+
+  useEffect(() => clearPendingEditableRowClick, [clearPendingEditableRowClick]);
+
+  useEffect(() => {
+    inlineEditorControlsRef.current = null;
+  }, [editingCell?.rowKey, editingCell?.columnKey]);
+
+  const renderInlineEditActions = useCallback(
+    (isSaving: boolean) => {
+      const buttonBaseStyle: React.CSSProperties = {
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 30,
+        height: 30,
+        padding: 0,
+        borderRadius: 'var(--ds-radius-sm, 6px)',
+        border: '1px solid var(--ds-color-border-subtle)',
+        background: 'var(--ds-surface-card)',
+        cursor: isSaving ? 'wait' : 'pointer',
+        transition: 'background 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease',
+      };
+
+      const stopActionEvent = (event: React.SyntheticEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+      };
+
+      return (
+        <span
+          aria-label="Inline edit actions"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            gap: 6,
+            minWidth: 0,
+            width: '100%',
+          }}
+        >
+          <button
+            type="button"
+            aria-label={isSaving ? 'Saving edit' : 'Save edit'}
+            title={isSaving ? 'Saving edit' : 'Save edit'}
+            disabled={isSaving}
+            onPointerDown={stopActionEvent}
+            onMouseDown={stopActionEvent}
+            onClick={(event) => {
+              stopActionEvent(event);
+              if (!isSaving) inlineEditorControlsRef.current?.save();
+            }}
+            style={{
+              ...buttonBaseStyle,
+              color: 'var(--ds-color-success, #047857)',
+              borderColor: 'color-mix(in srgb, var(--ds-color-success, #047857) 34%, var(--ds-color-border-subtle))',
+              background: 'color-mix(in srgb, var(--ds-color-success, #047857) 9%, var(--ds-surface-card))',
+              opacity: isSaving ? 0.72 : 1,
+            }}
+          >
+            <Check size={15} strokeWidth={2.4} aria-hidden />
+          </button>
+          <button
+            type="button"
+            aria-label="Cancel edit"
+            title="Cancel edit"
+            disabled={isSaving}
+            onPointerDown={stopActionEvent}
+            onMouseDown={stopActionEvent}
+            onClick={(event) => {
+              stopActionEvent(event);
+              if (!isSaving) inlineEditorControlsRef.current?.cancel();
+            }}
+            style={{
+              ...buttonBaseStyle,
+              color: 'var(--ds-color-error, #dc2626)',
+              borderColor: 'color-mix(in srgb, var(--ds-color-error, #dc2626) 30%, var(--ds-color-border-subtle))',
+              background: 'color-mix(in srgb, var(--ds-color-error, #dc2626) 7%, var(--ds-surface-card))',
+              opacity: isSaving ? 0.5 : 1,
+            }}
+          >
+            <X size={15} strokeWidth={2.4} aria-hidden />
+          </button>
+        </span>
+      );
+    },
+    [],
+  );
+
   // Focus the active row element when activeRowIndex changes
   useEffect(() => {
     if (activeRowIndex < 0 || !tbodyRef.current) return;
@@ -727,6 +917,10 @@ export default function ModernDataTable<T extends object>(
         }
         .ds-engine-modern td[data-editable="true"] {
           cursor: text;
+          transition:
+            background-color 140ms ease,
+            box-shadow 140ms ease,
+            transform 140ms ease;
         }
         .ds-engine-modern td[data-editable="true"]:hover::after {
           content: '';
@@ -739,9 +933,28 @@ export default function ModernDataTable<T extends object>(
           opacity: 0.4;
           pointer-events: none;
         }
+        .ds-engine-modern td[data-editable="true"]:hover {
+          background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
+          box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+        }
         .ds-engine-modern td[data-editing="true"] {
           overflow: visible !important;
           padding: 4px 6px !important;
+          background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)) !important;
+          box-shadow:
+            inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
+            0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+          animation: ds-inline-edit-enter 180ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes ds-inline-edit-enter {
+          from {
+            transform: scale(0.985);
+            opacity: 0.78;
+          }
+          to {
+            transform: scale(1);
+            opacity: 1;
+          }
         }
         .ds-engine-modern td[data-cell-dirty="true"]::before {
           content: '';
@@ -1248,6 +1461,8 @@ export default function ModernDataTable<T extends object>(
                         const key = getRowKey(row, index);
                         const isRowExpanded = expandedKeys.has(key);
                         const isSelected = selectedKeys.includes(key);
+                        const isRowEditing = editingCell?.rowKey === key;
+                        const isRowSaving = savingCell?.rowKey === key;
                         const isLastRowInSection = localIndex === section.items.length - 1;
                         const isLastRowOverall = isLastSection && isLastRowInSection;
 
@@ -1257,7 +1472,8 @@ export default function ModernDataTable<T extends object>(
                               data-row-index={index}
                               tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
                               role="row"
-                              onClick={onRowClick ? () => onRowClick(row, index) : undefined}
+                              onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
+                              onDoubleClick={handleEditAbandonDoubleClick}
                               onKeyDown={(e) => handleRowKeyDown(e, row, index)}
                               onFocus={() => setActiveRowIndex(index)}
                               style={{
@@ -1353,6 +1569,8 @@ export default function ModernDataTable<T extends object>(
                                 const grpTriggerProps: Record<string, unknown> = {};
                                 if (isCellEditable && !isCellEditing) {
                                   const handler = (e: React.MouseEvent) => {
+                                    clearPendingEditableRowClick();
+                                    e.preventDefault();
                                     e.stopPropagation();
                                     enterEditMode(key, col.key, row);
                                   };
@@ -1368,6 +1586,11 @@ export default function ModernDataTable<T extends object>(
                                     key={col.key}
                                     data-editable={isCellEditable ? 'true' : undefined}
                                     data-editing={isCellEditing ? 'true' : undefined}
+                                    title={isCellEditable && !isCellEditing
+                                      ? editTrigger === 'click'
+                                        ? 'Click to edit'
+                                        : 'Double-click to edit'
+                                      : undefined}
                                     {...grpTriggerProps}
                                     style={{
                                       textAlign: col.align,
@@ -1404,6 +1627,11 @@ export default function ModernDataTable<T extends object>(
                                           handleCellSave(row, key, col.key, newValue, cellValue)
                                         }
                                         onCancel={() => handleCellCancel(row, col.key)}
+                                        onControlsChange={(controls) => {
+                                          if (editingCell?.rowKey === key && editingCell.columnKey === col.key) {
+                                            inlineEditorControlsRef.current = controls;
+                                          }
+                                        }}
                                         onTabNext={
                                           tabNavigation
                                             ? () => {
@@ -1454,7 +1682,9 @@ export default function ModernDataTable<T extends object>(
                                   }}
                                   onClick={(e) => e.stopPropagation()}
                                 >
-                                  {actions(row, index)}
+                                  {isRowEditing
+                                    ? renderInlineEditActions(isRowSaving)
+                                    : actions(row, index)}
                                 </td>
                               )}
                             </tr>
@@ -1596,6 +1826,8 @@ export default function ModernDataTable<T extends object>(
                   const key = getRowKey(row, index);
                   const isExpanded = expandedKeys.has(key);
                   const isSelected = selectedKeys.includes(key);
+                  const isRowEditing = editingCell?.rowKey === key;
+                  const isRowSaving = savingCell?.rowKey === key;
                   const isLastRow = index === data.length - 1;
 
                   return (
@@ -1604,7 +1836,8 @@ export default function ModernDataTable<T extends object>(
                         data-row-index={index}
                         tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
                         role="row"
-                        onClick={onRowClick ? () => onRowClick(row, index) : undefined}
+                        onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
+                        onDoubleClick={handleEditAbandonDoubleClick}
                         onKeyDown={(e) => handleRowKeyDown(e, row, index)}
                         onFocus={() => setActiveRowIndex(index)}
                         style={{
@@ -1706,6 +1939,8 @@ export default function ModernDataTable<T extends object>(
                           const triggerProps: Record<string, unknown> = {};
                           if (isCellEditable && !isCellEditing) {
                             const handler = (e: React.MouseEvent) => {
+                              clearPendingEditableRowClick();
+                              e.preventDefault();
                               e.stopPropagation();
                               enterEditMode(key, col.key, row);
                             };
@@ -1721,6 +1956,11 @@ export default function ModernDataTable<T extends object>(
                               key={col.key}
                               data-editable={isCellEditable ? 'true' : undefined}
                               data-editing={isCellEditing ? 'true' : undefined}
+                              title={isCellEditable && !isCellEditing
+                                ? editTrigger === 'click'
+                                  ? 'Click to edit'
+                                  : 'Double-click to edit'
+                                : undefined}
                               {...triggerProps}
                               style={{
                                 textAlign: col.align,
@@ -1757,6 +1997,11 @@ export default function ModernDataTable<T extends object>(
                                     handleCellSave(row, key, col.key, newValue, cellValue)
                                   }
                                   onCancel={() => handleCellCancel(row, col.key)}
+                                  onControlsChange={(controls) => {
+                                    if (editingCell?.rowKey === key && editingCell.columnKey === col.key) {
+                                      inlineEditorControlsRef.current = controls;
+                                    }
+                                  }}
                                   onTabNext={
                                     tabNavigation
                                       ? () => {
@@ -1808,7 +2053,9 @@ export default function ModernDataTable<T extends object>(
                             }}
                             onClick={(e) => e.stopPropagation()}
                           >
-                            {actions(row, index)}
+                            {isRowEditing
+                              ? renderInlineEditActions(isRowSaving)
+                              : actions(row, index)}
                           </td>
                         )}
                       </tr>

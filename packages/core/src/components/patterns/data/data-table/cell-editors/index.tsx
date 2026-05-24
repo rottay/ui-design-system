@@ -26,13 +26,15 @@ export interface InlineCellEditorProps<T = unknown> {
   /** Editable configuration (resolved from ColumnDef.editable). */
   config: EditableConfig<T>;
   /** Called when the user saves the edit. */
-  onSave: (newValue: unknown) => void;
+  onSave: (newValue: unknown) => void | Promise<void>;
   /** Called when the user cancels the edit. */
   onCancel: () => void;
   /** Called when the user presses Tab to move to the next editable cell. */
   onTabNext?: () => void;
   /** Called when the user presses Shift+Tab to move to the previous editable cell. */
   onTabPrev?: () => void;
+  /** Registers external controls used by the row-level edit action buttons. */
+  onControlsChange?: (controls: { save: () => Promise<boolean>; cancel: () => void } | null) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -48,6 +50,7 @@ export function InlineCellEditor<T>({
   onCancel,
   onTabNext,
   onTabPrev,
+  onControlsChange,
 }: InlineCellEditorProps<T>): React.ReactElement {
   const [editValue, setEditValue] = useState<unknown>(value);
   const [error, setError] = useState<string | null>(null);
@@ -67,17 +70,33 @@ export function InlineCellEditor<T>({
     return () => clearTimeout(timer);
   }, []);
 
-  const attemptSave = useCallback(() => {
+  const saveValue = useCallback(async (nextValue: unknown) => {
     if (config.validate) {
-      const validationError = config.validate(editValue, row);
+      const validationError = config.validate(nextValue, row);
       if (validationError) {
         setError(validationError);
-        return;
+        return false;
       }
     }
     setError(null);
-    onSave(editValue);
-  }, [editValue, row, config, onSave]);
+    try {
+      await onSave(nextValue);
+      return true;
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'Unable to save this change.');
+      return false;
+    }
+  }, [row, config, onSave]);
+
+  const attemptSave = useCallback(
+    () => saveValue(editValue),
+    [editValue, saveValue],
+  );
+
+  useEffect(() => {
+    onControlsChange?.({ save: attemptSave, cancel: onCancel });
+    return () => onControlsChange?.(null);
+  }, [attemptSave, onCancel, onControlsChange]);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
@@ -86,32 +105,28 @@ export function InlineCellEditor<T>({
       switch (e.key) {
         case 'Enter':
           e.preventDefault();
-          attemptSave();
+          void attemptSave();
           break;
         case 'Escape':
           e.preventDefault();
           onCancel();
           break;
-        case 'Tab':
+        case 'Tab': {
           e.preventDefault();
-          // Save current value before moving
-          if (config.validate) {
-            const validationError = config.validate(editValue, row);
-            if (validationError) {
-              setError(validationError);
-              return;
+          const moveBackward = e.shiftKey;
+          void attemptSave().then((saved) => {
+            if (!saved) return;
+            if (moveBackward) {
+              onTabPrev?.();
+            } else {
+              onTabNext?.();
             }
-          }
-          onSave(editValue);
-          if (e.shiftKey) {
-            onTabPrev?.();
-          } else {
-            onTabNext?.();
-          }
+          });
           break;
+        }
       }
     },
-    [attemptSave, onCancel, onTabNext, onTabPrev, editValue, row, config, onSave],
+    [attemptSave, onCancel, onTabNext, onTabPrev],
   );
 
   const editorType = config.type ?? 'text';
@@ -141,7 +156,10 @@ export function InlineCellEditor<T>({
         onKeyDown={handleKeyDown}
         onClick={(e) => e.stopPropagation()}
       >
-        {config.render(value, row, onSave, onCancel)}
+        {config.render(value, row, async (nextValue) => {
+          setEditValue(nextValue);
+          await saveValue(nextValue);
+        }, onCancel)}
       </div>
     );
   }
@@ -160,7 +178,7 @@ export function InlineCellEditor<T>({
           onChange={(e) => {
             setEditValue(e.target.checked);
             // Checkbox saves immediately on change
-            onSave(e.target.checked);
+            void saveValue(e.target.checked);
           }}
           onKeyDown={handleKeyDown}
           style={{
@@ -185,7 +203,6 @@ export function InlineCellEditor<T>({
             const selected = config.options?.find((o) => String(o.value) === e.target.value);
             setEditValue(selected ? selected.value : e.target.value);
           }}
-          onBlur={attemptSave}
           onKeyDown={handleKeyDown}
           style={{
             ...inputStyle,
@@ -236,7 +253,6 @@ export function InlineCellEditor<T>({
           }
           setError(null);
         }}
-        onBlur={attemptSave}
         onKeyDown={handleKeyDown}
         style={inputStyle}
       />

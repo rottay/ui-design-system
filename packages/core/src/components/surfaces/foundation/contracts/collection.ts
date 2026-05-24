@@ -295,6 +295,16 @@ export interface WorkspaceSelectionConfig<T> {
 export interface WorkspacePreviewRailConfig<T> {
   enabled: boolean;
   width?: string;
+  /** Whether the preview rail can be resized by dragging its leading edge. Defaults to true. */
+  resizable?: boolean;
+  /** Minimum rail width in pixels when resizable. */
+  minWidth?: number;
+  /** Maximum rail width in pixels when resizable. */
+  maxWidth?: number;
+  /** Optional localStorage key used to persist the resized rail width. */
+  storageKey?: string;
+  /** Called whenever the user resizes the rail. */
+  onWidthChange?: (width: number) => void;
   render?: (item: T) => ReactNode;
   /** Declarative mobile navigation when pane is hidden. */
   mobileNavigation?: {
@@ -318,6 +328,17 @@ export interface WorkspaceFocusConfig {
 
 /** Inline cell editing configuration (delegates to PatternDataTable). */
 export interface WorkspaceCellEditingConfig<T> {
+  /**
+   * Enables inline editing inside collection tables. Defaults to true for
+   * CollectionWorkspaceSurface so double-click editing is available globally.
+   */
+  enabled?: boolean;
+  /**
+   * Automatically marks primitive accessor columns as editable when the column
+   * does not provide an explicit `editable` config. Defaults to true, but only
+   * activates when `onCellEdit` is configured so inferred editors can persist.
+   */
+  autoEnable?: boolean;
   /**
    * Called when a cell value is saved via inline editing.
    * Receives the full row, the column key, and both old and new values.

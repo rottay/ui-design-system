@@ -15,10 +15,10 @@
  * Advanced filters are collapsible -- hidden by default, toggled via button.
  */
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { CheckSquare2, ChevronDown, Filter } from 'lucide-react';
-import type { ColumnDef, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
+import type { ColumnDef, EditableConfig, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
 import type {
   CollectionWorkspaceConfig,
   WorkspaceActiveFiltersConfig,
@@ -131,6 +131,87 @@ function compareSortValues(a: unknown, b: unknown): number {
     numeric: true,
     sensitivity: 'base',
   });
+}
+
+const DEFAULT_PREVIEW_RAIL_WIDTH = 380;
+const DEFAULT_PREVIEW_RAIL_MIN_WIDTH = 280;
+const DEFAULT_PREVIEW_RAIL_MAX_WIDTH = 720;
+
+function isInlineEditablePrimitive(value: unknown): boolean {
+  return value == null || ['string', 'number', 'boolean'].includes(typeof value);
+}
+
+function inferInlineEditor<T>(value: unknown): EditableConfig<T> | null {
+  if (!isInlineEditablePrimitive(value)) return null;
+  if (typeof value === 'number') return { type: 'number' };
+  if (typeof value === 'boolean') return { type: 'checkbox' };
+  return { type: 'text' };
+}
+
+function hasColumnInlineSave<T>(column: ColumnDef<T> | undefined): boolean {
+  return Boolean(
+    column?.editable
+      && typeof column.editable === 'object'
+      && typeof column.editable.onSave === 'function',
+  );
+}
+
+function resolvePersistedInlineColumns<T>(
+  columns: ColumnDef<T>[],
+  options: {
+    enabled: boolean;
+    hasTableSave: boolean;
+  },
+): ColumnDef<T>[] {
+  return columns.map((column) => {
+    if (!column.editable) return column;
+    if (!options.enabled || (!options.hasTableSave && !hasColumnInlineSave(column))) {
+      return { ...column, editable: undefined };
+    }
+    return column;
+  });
+}
+
+function parseRailWidth(value: string | number | undefined, fallback = DEFAULT_PREVIEW_RAIL_WIDTH): number {
+  if (typeof value === 'number' && Number.isFinite(value)) return value;
+  if (typeof value !== 'string') return fallback;
+  const pxMatches = [...value.matchAll(/(\d+(?:\.\d+)?)px/g)];
+  const lastPx = pxMatches.at(-1)?.[1];
+  if (lastPx) return Number(lastPx);
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : fallback;
+}
+
+function clampRailWidth(value: number, minWidth: number, maxWidth: number): number {
+  return Math.min(Math.max(value, minWidth), maxWidth);
+}
+
+function getPreviewRailViewportMax(minWidth: number, maxWidth: number): number {
+  if (typeof window === 'undefined') return maxWidth;
+  return Math.max(minWidth, Math.min(maxWidth, window.innerWidth - 360));
+}
+
+function readStoredPreviewRailWidth(storageKey: string): number | null {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const storedWidth = window.localStorage.getItem(storageKey);
+    if (storedWidth == null) return null;
+    const parsedStoredWidth = Number(storedWidth);
+    return Number.isFinite(parsedStoredWidth) ? parsedStoredWidth : null;
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredPreviewRailWidth(storageKey: string, width: number): void {
+  if (typeof window === 'undefined') return;
+
+  try {
+    window.localStorage.setItem(storageKey, String(width));
+  } catch {
+    // Storage can be unavailable in private or embedded browser contexts.
+  }
 }
 
 const HIGH_VALUE_SCOPE_KEYS = [
@@ -308,6 +389,16 @@ const ENHANCED_CSS = `
 .ds-collection-enhanced .ds-resize-handle:focus-visible .ds-resize-handle__bar {
   opacity: 1;
   background: var(--ds-color-primary);
+}
+.ds-collection-enhanced .ds-collection-preview-rail__resize:hover > *,
+.ds-collection-enhanced .ds-collection-preview-rail__resize:focus-visible > * {
+  left: 5px !important;
+  width: 4px !important;
+  background: color-mix(in srgb, var(--ds-color-primary) 74%, transparent) !important;
+}
+.ds-collection-enhanced .ds-collection-preview-rail__resize:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 42%, transparent);
+  outline-offset: -2px;
 }
 `;
 
@@ -673,6 +764,11 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const isPremium = Boolean(resolvedHeader || command);
   const selectionEnabled = behavior?.selection?.enabled ?? false;
   const canToggleSelectionMode = Boolean(behavior?.selection?.onModeChange);
+  const hasInlinePersistenceHandler = typeof behavior?.cellEditing?.onCellEdit === 'function';
+  const inlineEditingEnabled = behavior?.cellEditing?.enabled ?? true;
+  const autoEnableInlineEditing = behavior?.cellEditing?.autoEnable ?? true;
+  const [draftCellValues, setDraftCellValues] = useState<Record<string, Record<string, unknown>>>({});
+  const previousDataRef = useRef(data);
   const searchCommand = command
     ?? (controls?.search?.enabled
         ? {
@@ -711,6 +807,122 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     && posture.pane !== 'hidden'
     && previewRailAllowed
     && previewKey != null;
+  const previewRailResizable = behavior?.previewRail?.resizable ?? true;
+  const previewRailMinWidth = behavior?.previewRail?.minWidth ?? DEFAULT_PREVIEW_RAIL_MIN_WIDTH;
+  const previewRailMaxWidth = behavior?.previewRail?.maxWidth ?? DEFAULT_PREVIEW_RAIL_MAX_WIDTH;
+  const previewRailStorageKey = behavior?.previewRail?.storageKey
+    ?? `ds:collection-preview-rail:${title}`;
+  const previewRailDefaultWidth = useMemo(
+    () => clampRailWidth(
+      parseRailWidth(behavior?.previewRail?.width, DEFAULT_PREVIEW_RAIL_WIDTH),
+      previewRailMinWidth,
+      previewRailMaxWidth,
+    ),
+    [behavior?.previewRail?.width, previewRailMaxWidth, previewRailMinWidth],
+  );
+  const [previewRailWidth, setPreviewRailWidth] = useState(previewRailDefaultWidth);
+  const previewRailWidthRef = useRef(previewRailDefaultWidth);
+  const previewRailDragActiveRef = useRef(false);
+
+  useEffect(() => {
+    previewRailWidthRef.current = previewRailWidth;
+  }, [previewRailWidth]);
+
+  useEffect(() => {
+    if (!previewRailResizable || typeof window === 'undefined') {
+      setPreviewRailWidth(previewRailDefaultWidth);
+      return;
+    }
+
+    const viewportMax = getPreviewRailViewportMax(previewRailMinWidth, previewRailMaxWidth);
+    const storedWidth = readStoredPreviewRailWidth(previewRailStorageKey);
+    const nextWidth = clampRailWidth(
+      storedWidth ?? previewRailDefaultWidth,
+      previewRailMinWidth,
+      viewportMax,
+    );
+
+    setPreviewRailWidth(nextWidth);
+  }, [
+    previewRailDefaultWidth,
+    previewRailMaxWidth,
+    previewRailMinWidth,
+    previewRailResizable,
+    previewRailStorageKey,
+  ]);
+
+  const commitPreviewRailWidth = useCallback(
+    (nextWidth: number) => {
+      const viewportMax = getPreviewRailViewportMax(previewRailMinWidth, previewRailMaxWidth);
+      const clampedWidth = clampRailWidth(nextWidth, previewRailMinWidth, viewportMax);
+
+      previewRailWidthRef.current = clampedWidth;
+      setPreviewRailWidth(clampedWidth);
+      behavior?.previewRail?.onWidthChange?.(clampedWidth);
+      writeStoredPreviewRailWidth(previewRailStorageKey, clampedWidth);
+    },
+    [
+      behavior?.previewRail,
+      previewRailMaxWidth,
+      previewRailMinWidth,
+      previewRailStorageKey,
+    ],
+  );
+
+  const handlePreviewRailResizeStart = useCallback(
+    (event: React.PointerEvent<HTMLElement> | React.MouseEvent<HTMLElement>) => {
+      if (!previewRailResizable || typeof window === 'undefined') return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      if (previewRailDragActiveRef.current) return;
+
+      const startX = event.clientX;
+      const startWidth = previewRailWidthRef.current;
+
+      previewRailDragActiveRef.current = true;
+
+      const handlePointerMove = (moveEvent: PointerEvent | MouseEvent) => {
+        const delta = startX - moveEvent.clientX;
+        commitPreviewRailWidth(startWidth + delta);
+      };
+
+      const handlePointerUp = () => {
+        document.removeEventListener('pointermove', handlePointerMove);
+        document.removeEventListener('mousemove', handlePointerMove);
+        document.removeEventListener('pointerup', handlePointerUp);
+        document.removeEventListener('mouseup', handlePointerUp);
+        previewRailDragActiveRef.current = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+      };
+
+      document.body.style.cursor = 'col-resize';
+      document.body.style.userSelect = 'none';
+      document.addEventListener('pointermove', handlePointerMove);
+      document.addEventListener('mousemove', handlePointerMove);
+      document.addEventListener('pointerup', handlePointerUp);
+      document.addEventListener('mouseup', handlePointerUp);
+    },
+    [commitPreviewRailWidth, previewRailResizable],
+  );
+
+  const handlePreviewRailResizeKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLElement>) => {
+      if (!previewRailResizable) return;
+
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        commitPreviewRailWidth(previewRailWidthRef.current + 24);
+      }
+
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        commitPreviewRailWidth(previewRailWidthRef.current - 24);
+      }
+    },
+    [commitPreviewRailWidth, previewRailResizable],
+  );
 
   const handleRowClick = useCallback(
     (item: T, index: number) => {
@@ -737,6 +949,90 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     [focusEnabled, behavior?.focus, behavior?.onRowClick, behavior?.previewRail?.mobileNavigation, onRowClick, posture.pane, rowKey, focusedKey],
   );
 
+  const renderPreviewRail = useCallback(
+    (railItem: T) => {
+      const configuredWidth = previewRailResizable
+        ? `${previewRailWidth}px`
+        : behavior?.previewRail?.width ?? `${DEFAULT_PREVIEW_RAIL_WIDTH}px`;
+
+      return (
+        <Box
+          className="ds-collection-preview-rail"
+          style={{
+            width: configuredWidth,
+            minWidth: configuredWidth,
+            maxWidth: configuredWidth,
+            flex: `0 0 ${configuredWidth}`,
+            position: 'relative',
+            borderLeft: '2px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary))',
+            paddingLeft: 'var(--ds-spacing-md, 16px)',
+            background: 'color-mix(in srgb, var(--ds-surface-card) 50%, var(--ds-color-bg-primary) 50%)',
+            borderRadius: '0 var(--ds-radius-sm, 6px) var(--ds-radius-sm, 6px) 0',
+            overflow: 'auto',
+            transition: previewRailResizable
+              ? 'width 140ms ease, min-width 140ms ease, max-width 140ms ease, flex-basis 140ms ease'
+              : undefined,
+          }}
+        >
+          {previewRailResizable ? (
+            <Box
+              as="div"
+              role="separator"
+              aria-orientation="vertical"
+              aria-label="Resize detail panel"
+              aria-valuemin={previewRailMinWidth}
+              aria-valuemax={getPreviewRailViewportMax(previewRailMinWidth, previewRailMaxWidth)}
+              aria-valuenow={previewRailWidth}
+              tabIndex={0}
+              title="Drag to resize detail panel"
+              onPointerDown={handlePreviewRailResizeStart}
+              onMouseDown={handlePreviewRailResizeStart}
+              onKeyDown={handlePreviewRailResizeKeyDown}
+              className="ds-collection-preview-rail__resize"
+              style={{
+                position: 'absolute',
+                top: 0,
+                bottom: 0,
+                left: 0,
+                width: 14,
+                padding: 0,
+                border: 0,
+                cursor: 'col-resize',
+                background: 'transparent',
+                transform: 'translateX(-50%)',
+                pointerEvents: 'auto',
+                zIndex: 40,
+              }}
+            >
+              <Box
+                aria-hidden
+                style={{
+                  position: 'absolute',
+                  top: 'clamp(12px, 30%, 180px)',
+                  bottom: 'clamp(12px, 30%, 180px)',
+                  left: 6,
+                  width: 2,
+                  borderRadius: 999,
+                  background: 'color-mix(in srgb, var(--ds-color-primary) 28%, transparent)',
+                  boxShadow: '0 0 0 1px color-mix(in srgb, var(--ds-surface-card) 70%, transparent)',
+                  transition: 'background 140ms ease, width 140ms ease, left 140ms ease',
+                }}
+              />
+            </Box>
+          ) : null}
+          {behavior!.previewRail!.render!(railItem)}
+        </Box>
+      );
+    },
+    [
+      behavior,
+      handlePreviewRailResizeKeyDown,
+      handlePreviewRailResizeStart,
+      previewRailResizable,
+      previewRailWidth,
+    ],
+  );
+
   const handleExport = useMemo(() => {
     if (!controls?.export?.enabled || !controls.export.onExport) return undefined;
     const fmt = controls.export.formats?.[0] ?? 'csv';
@@ -760,6 +1056,80 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     ? behavior?.sorting ?? null
     : internalSorting;
 
+  const effectiveColumns = useMemo<ColumnDef<T>[]>(() => {
+    const persistedColumns = resolvePersistedInlineColumns(columns, {
+      enabled: inlineEditingEnabled,
+      hasTableSave: hasInlinePersistenceHandler,
+    });
+
+    if (!inlineEditingEnabled || !autoEnableInlineEditing || !hasInlinePersistenceHandler) {
+      return persistedColumns;
+    }
+
+    return persistedColumns.map((column) => {
+      if (column.editable !== undefined || !column.accessorKey) return column;
+
+      const sampleValue = data
+        .map((item) => item[column.accessorKey as keyof T])
+        .find(isInlineEditablePrimitive);
+      const editor = inferInlineEditor<T>(sampleValue);
+      if (!editor) return column;
+
+      return {
+        ...column,
+        editable: editor,
+      };
+    });
+  }, [autoEnableInlineEditing, columns, data, hasInlinePersistenceHandler, inlineEditingEnabled]);
+
+  useEffect(() => {
+    if (previousDataRef.current === data) return;
+    previousDataRef.current = data;
+    setDraftCellValues((current) => (
+      Object.keys(current).length > 0 ? {} : current
+    ));
+  }, [data]);
+
+  const draftedData = useMemo(() => {
+    if (Object.keys(draftCellValues).length === 0) return data;
+
+    return data.map((item) => {
+      const itemKey = resolveKey(item, rowKey);
+      const itemDraft = draftCellValues[itemKey];
+      if (!itemDraft) return item;
+
+      return {
+        ...item,
+        ...itemDraft,
+      };
+    }) as T[];
+  }, [data, draftCellValues, rowKey]);
+
+  const handleInlineCellEdit = useCallback(
+    async (row: T, columnKey: string, newValue: unknown, oldValue: unknown) => {
+      const column = effectiveColumns.find((candidate) => candidate.key === columnKey);
+      const hasPersistence = hasInlinePersistenceHandler || hasColumnInlineSave(column);
+
+      if (!hasPersistence) {
+        throw new Error('Inline persistence is not configured for this field.');
+      }
+
+      await behavior?.cellEditing?.onCellEdit?.(row, columnKey, newValue, oldValue);
+
+      if (!column?.accessorKey) return;
+
+      const itemKey = resolveKey(row, rowKey);
+      setDraftCellValues((current) => ({
+        ...current,
+        [itemKey]: {
+          ...(current[itemKey] ?? {}),
+          [column.accessorKey as string]: newValue,
+        },
+      }));
+    },
+    [behavior?.cellEditing, effectiveColumns, hasInlinePersistenceHandler, rowKey],
+  );
+
   const handleSortChange = useCallback(
     (sort: SortConfig) => {
       if (behavior?.onSortChange) {
@@ -773,12 +1143,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   );
 
   const displayData = useMemo(() => {
-    if (usesExternalSorting || !effectiveSorting) return data;
+    if (usesExternalSorting || !effectiveSorting) return draftedData;
 
-    const sortColumn = columns.find((column) => column.key === effectiveSorting.key);
-    if (!sortColumn?.sortable) return data;
+    const sortColumn = effectiveColumns.find((column) => column.key === effectiveSorting.key);
+    if (!sortColumn?.sortable) return draftedData;
 
-    return data
+    return draftedData
       .map((item, index) => ({ item, index }))
       .sort((left, right) => {
         const comparison = compareSortValues(
@@ -791,7 +1161,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         return directedComparison || left.index - right.index;
       })
       .map(({ item }) => item);
-  }, [columns, data, effectiveSorting, usesExternalSorting]);
+  }, [draftedData, effectiveColumns, effectiveSorting, usesExternalSorting]);
 
   const hasColumnMenu = Boolean(
     controls?.columnSettings?.enabled &&
@@ -948,7 +1318,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     const toolbarViewMode: ViewMode = workspace.activeViewMode === 'table' ? 'list' : 'cards';
 
     return (
-      <Stack spacing="md" style={{ width: '100%', maxWidth: presentation?.maxWidth }}>
+      <Stack spacing="md" style={{ width: '100%', maxWidth: presentation?.maxWidth, minWidth: 0 }}>
         {headerSlot}
         {!showToolbar && (
           <Box>
@@ -1014,12 +1384,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           />
         )}
         <Flex gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box style={{ flex: '1 1 100%', minWidth: 0, width: '100%' }}>
+          <Box style={{ flex: '1 1 0%', minWidth: 0 }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
               data={displayData}
-              columns={columns}
+              columns={effectiveColumns}
               rowKey={rowKey}
               loading={loading}
               error={error}
@@ -1060,7 +1430,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               resizable={columnsResizable}
               columnWidths={controls?.columnSettings?.columnWidths}
               onColumnResize={controls?.columnSettings?.onColumnResize}
-              onCellEdit={behavior?.cellEditing?.onCellEdit}
+              onCellEdit={handleInlineCellEdit}
               onCellEditStart={behavior?.cellEditing?.onCellEditStart}
               onCellEditCancel={behavior?.cellEditing?.onCellEditCancel}
               editingCell={behavior?.cellEditing?.editingCell}
@@ -1072,19 +1442,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           {showPreviewRail && (() => {
             const railItem = displayData.find((item) => resolveKey(item, rowKey) === previewKey);
             if (!railItem) return null;
-            return (
-              <Box style={{
-                width: behavior!.previewRail!.width ?? '380px',
-                minWidth: behavior!.previewRail!.width ?? '380px',
-                maxWidth: behavior!.previewRail!.width ?? '380px',
-                flex: `0 0 ${behavior!.previewRail!.width ?? '380px'}`,
-                borderLeft: '2px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary))',
-                paddingLeft: 'var(--ds-spacing-md, 16px)',
-                overflow: 'auto',
-              }}>
-                {behavior!.previewRail!.render!(railItem)}
-              </Box>
-            );
+            return renderPreviewRail(railItem);
           })()}
         </Flex>
         {footerSlot}
@@ -1199,7 +1557,11 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   );
 
   const premiumContent = (
-    <Stack spacing="none" className={enhanced ? 'ds-collection-enhanced' : undefined}>
+    <Stack
+      spacing="none"
+      className={enhanced ? 'ds-collection-enhanced' : undefined}
+      style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
+    >
       {enhanced && <style dangerouslySetInnerHTML={{ __html: ENHANCED_CSS }} />}
       {editorialTechMasthead ? (
         <Box
@@ -1590,12 +1952,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       {/* 7. Table + preview rail */}
       <Box style={{ width: '100%', padding: posture.isPhone ? '4px 10px 12px' : '4px 16px 16px' }}>
         <Flex gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box style={{ flex: '1 1 100%', minWidth: 0, width: '100%' }}>
+          <Box style={{ flex: '1 1 0%', minWidth: 0 }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
               data={displayData}
-              columns={columns}
+              columns={effectiveColumns}
               rowKey={rowKey}
               loading={loading}
               emptyState={emptyState}
@@ -1636,7 +1998,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               resizable={columnsResizable}
               columnWidths={controls?.columnSettings?.columnWidths}
               onColumnResize={controls?.columnSettings?.onColumnResize}
-              onCellEdit={behavior?.cellEditing?.onCellEdit}
+              onCellEdit={handleInlineCellEdit}
               onCellEditStart={behavior?.cellEditing?.onCellEditStart}
               onCellEditCancel={behavior?.cellEditing?.onCellEditCancel}
               editingCell={behavior?.cellEditing?.editingCell}
@@ -1651,21 +2013,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           {showPreviewRail && (() => {
             const railItem = displayData.find((item) => resolveKey(item, rowKey) === previewKey);
             if (!railItem) return null;
-            return (
-              <Box style={{
-                width: behavior!.previewRail!.width ?? '380px',
-                minWidth: behavior!.previewRail!.width ?? '380px',
-                maxWidth: behavior!.previewRail!.width ?? '380px',
-                flex: `0 0 ${behavior!.previewRail!.width ?? '380px'}`,
-                borderLeft: '2px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary))',
-                paddingLeft: 'var(--ds-spacing-md, 16px)',
-                background: 'color-mix(in srgb, var(--ds-surface-card) 50%, var(--ds-color-bg-primary) 50%)',
-                borderRadius: '0 var(--ds-radius-sm, 6px) var(--ds-radius-sm, 6px) 0',
-                overflow: 'auto',
-              }}>
-                {behavior!.previewRail!.render!(railItem)}
-              </Box>
-            );
+            return renderPreviewRail(railItem);
           })()}
         </Flex>
       </Box>

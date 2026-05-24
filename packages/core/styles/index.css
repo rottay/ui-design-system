@@ -28976,7 +28976,7 @@ html[data-tenant='bithire']
 }
 
 html[data-tenant='bithire']
-  :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]) {
+  :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail)) {
   align-self: flex-start !important;
   box-sizing: border-box;
   block-size: auto !important;
@@ -28999,7 +28999,7 @@ html[data-tenant='bithire']
 
 @media (min-width: 960px) {
   html[data-tenant='bithire']
-    :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]) {
+    :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail)) {
     position: sticky !important;
     top: var(--ds-list-preview-rail-sticky-top) !important;
     z-index: 7;
@@ -29007,7 +29007,9 @@ html[data-tenant='bithire']
 }
 
 html[data-tenant='bithire']
-  :where(.ds-collection-enhanced [data-bithire-preview-rail='true']) {
+  :where(.ds-collection-enhanced [data-bithire-preview-rail='true']),
+html[data-tenant='bithire']
+  :where(.ds-collection-enhanced .ds-collection-preview-rail) {
   position: sticky !important;
   z-index: 12;
 }
@@ -29041,7 +29043,7 @@ html[data-tenant='bithire'] :where(.bithire-preview-rail-close:focus-visible) {
 }
 
 html[data-tenant='bithire']
-  :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"] > *) {
+  :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail) > *) {
   block-size: auto !important;
   min-block-size: 0 !important;
   width: 100%;
@@ -29050,7 +29052,7 @@ html[data-tenant='bithire']
 
 html[data-tenant='bithire']
   :where(
-    .ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"] > :is(.rt-rich-card, .rt-surface-card, [class*='row-preview'])
+    .ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail) > :is(.rt-rich-card, .rt-surface-card, [class*='row-preview'])
   ) {
   max-block-size: var(--ds-list-preview-panel-max-height) !important;
 }
