@@ -10,10 +10,15 @@ import {
   Grid3x3,
   Columns3,
   Calendar,
+  CalendarCheck,
+  CalendarClock,
   CalendarDays,
+  CalendarPlus,
   AlignJustify,
   AlignCenter,
   AlignLeft,
+  Kanban,
+  Layout,
   LayoutTemplate,
 } from 'lucide-react';
 import { createIcon } from '../factory';
@@ -28,3 +33,8 @@ export const AlignJustifyIcon = createIcon(AlignJustify, 'AlignJustifyIcon');
 export const AlignCenterIcon = createIcon(AlignCenter, 'AlignCenterIcon');
 export const AlignLeftIcon = createIcon(AlignLeft, 'AlignLeftIcon');
 export const LayoutTemplateIcon = createIcon(LayoutTemplate, 'LayoutTemplateIcon');
+export const CalendarCheckIcon = createIcon(CalendarCheck, 'CalendarCheckIcon');
+export const CalendarClockIcon = createIcon(CalendarClock, 'CalendarClockIcon');
+export const CalendarPlusIcon = createIcon(CalendarPlus, 'CalendarPlusIcon');
+export const KanbanIcon = createIcon(Kanban, 'KanbanIcon');
+export const LayoutIcon = createIcon(Layout, 'LayoutIcon');

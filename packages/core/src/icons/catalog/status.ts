@@ -15,8 +15,14 @@ import {
   AlertOctagon,
   Info,
   Ban,
+  HelpCircle,
   LoaderCircle,
   CircleAlert,
+  CircleDollarSign,
+  SearchX,
+  ShieldAlert,
+  ShieldOff,
+  ShieldX,
 } from 'lucide-react';
 import { createIcon } from '../factory';
 
@@ -32,3 +38,9 @@ export const InfoIcon = createIcon(Info, 'InfoIcon');
 export const BanIcon = createIcon(Ban, 'BanIcon');
 export const LoaderCircleIcon = createIcon(LoaderCircle, 'LoaderCircleIcon');
 export const CircleAlertIcon = createIcon(CircleAlert, 'CircleAlertIcon');
+export const CircleDollarSignIcon = createIcon(CircleDollarSign, 'CircleDollarSignIcon');
+export const HelpCircleIcon = createIcon(HelpCircle, 'HelpCircleIcon');
+export const SearchXIcon = createIcon(SearchX, 'SearchXIcon');
+export const ShieldAlertIcon = createIcon(ShieldAlert, 'ShieldAlertIcon');
+export const ShieldOffIcon = createIcon(ShieldOff, 'ShieldOffIcon');
+export const ShieldXIcon = createIcon(ShieldX, 'ShieldXIcon');

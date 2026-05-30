@@ -14,12 +14,27 @@ import {
   Download,
   Upload,
   Copy,
+  Clipboard,
+  ClipboardCheck,
   ClipboardCopy,
+  RefreshCcw,
   RefreshCw,
+  Repeat,
   RotateCcw,
+  RotateCw,
   Send,
   Share2,
   Power,
+  PowerOff,
+  CheckCheck,
+  CheckSquare,
+  SkipBack,
+  SkipForward,
+  Repeat2,
+  Reply,
+  Minus,
+  MinusCircle,
+  PlusCircle,
 } from 'lucide-react';
 import { createIcon } from '../factory';
 
@@ -38,3 +53,18 @@ export const RotateCcwIcon = createIcon(RotateCcw, 'RotateCcwIcon');
 export const SendIcon = createIcon(Send, 'SendIcon');
 export const Share2Icon = createIcon(Share2, 'Share2Icon');
 export const PowerIcon = createIcon(Power, 'PowerIcon');
+export const CheckCheckIcon = createIcon(CheckCheck, 'CheckCheckIcon');
+export const CheckSquareIcon = createIcon(CheckSquare, 'CheckSquareIcon');
+export const SkipBackIcon = createIcon(SkipBack, 'SkipBackIcon');
+export const SkipForwardIcon = createIcon(SkipForward, 'SkipForwardIcon');
+export const Repeat2Icon = createIcon(Repeat2, 'Repeat2Icon');
+export const ReplyIcon = createIcon(Reply, 'ReplyIcon');
+export const ClipboardIcon = createIcon(Clipboard, 'ClipboardIcon');
+export const ClipboardCheckIcon = createIcon(ClipboardCheck, 'ClipboardCheckIcon');
+export const RefreshCcwIcon = createIcon(RefreshCcw, 'RefreshCcwIcon');
+export const RepeatIcon = createIcon(Repeat, 'RepeatIcon');
+export const RotateCwIcon = createIcon(RotateCw, 'RotateCwIcon');
+export const PowerOffIcon = createIcon(PowerOff, 'PowerOffIcon');
+export const PlusCircleIcon = createIcon(PlusCircle, 'PlusCircleIcon');
+export const MinusCircleIcon = createIcon(MinusCircle, 'MinusCircleIcon');
+export const MinusIcon = createIcon(Minus, 'MinusIcon');

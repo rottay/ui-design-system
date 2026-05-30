@@ -8,6 +8,10 @@ import {
   User,
   Users,
   UserCheck,
+  UserCog,
+  UserPlus,
+  UserRound,
+  UserRoundCheck,
   UserX,
   UserMinus,
   Settings,
@@ -15,6 +19,7 @@ import {
   Shield,
   ShieldCheck,
   Lock,
+  Unlock,
   Key,
   KeyRound,
   Fingerprint,
@@ -36,3 +41,8 @@ export const KeyIcon = createIcon(Key, 'KeyIcon');
 export const KeyRoundIcon = createIcon(KeyRound, 'KeyRoundIcon');
 export const FingerprintIcon = createIcon(Fingerprint, 'FingerprintIcon');
 export const LogOutIcon = createIcon(LogOut, 'LogOutIcon');
+export const UserCogIcon = createIcon(UserCog, 'UserCogIcon');
+export const UserPlusIcon = createIcon(UserPlus, 'UserPlusIcon');
+export const UserRoundIcon = createIcon(UserRound, 'UserRoundIcon');
+export const UserRoundCheckIcon = createIcon(UserRoundCheck, 'UserRoundCheckIcon');
+export const UnlockIcon = createIcon(Unlock, 'UnlockIcon');
