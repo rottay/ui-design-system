@@ -208,8 +208,9 @@ describe('useOptimisticUpdate', () => {
         () => new Promise((resolve) => { resolveMutation = resolve; })
       );
 
+      let mutatePromise: Promise<unknown>;
       act(() => {
-        result.current.mutate({ id: 1, name: 'Optimistic' });
+        mutatePromise = result.current.mutate({ id: 1, name: 'Optimistic' });
       });
 
       expect(result.current.data).toEqual({ id: 1, name: 'Optimistic' });
@@ -221,8 +222,10 @@ describe('useOptimisticUpdate', () => {
 
       expect(result.current.data).toEqual({ id: 1, name: 'First' });
 
-      // Clean up the hanging promise
-      resolveMutation?.({ id: 1, name: 'ignored' });
+      await act(async () => {
+        resolveMutation?.({ id: 1, name: 'ignored' });
+        await mutatePromise;
+      });
     });
 
     it('rollback() is a no-op when there is no previous data', () => {

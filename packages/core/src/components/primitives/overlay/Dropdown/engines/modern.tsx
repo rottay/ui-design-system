@@ -14,8 +14,18 @@
  * ```
  */
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import type { DropdownProps, DropdownMenuItem } from '../Dropdown.types';
+import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../Dropdown.types';
 import { DROPDOWN_DEFAULTS } from '../Dropdown.types';
+
+const getPlacementClassName = (placement?: DropdownPlacement): string => {
+  if (!placement) return '';
+
+  return [
+    placement.startsWith('top') ? 'dropdown-top' : '',
+    placement.endsWith('Right') ? 'dropdown-end' : '',
+    placement.endsWith('Left') ? 'dropdown-start' : '',
+  ].filter(Boolean).join(' ');
+};
 
 /** Renders a single menu item, divider, or group header using DaisyUI classes. */
 const MenuItem: React.FC<{
@@ -38,7 +48,11 @@ const MenuItem: React.FC<{
     <li>
       <button
         type="button"
-        className={`flex items-center gap-2 ${item.disabled ? 'disabled' : ''}`}
+        className={[
+          'flex items-center gap-2',
+          item.danger ? 'text-error' : '',
+          item.disabled ? 'disabled' : '',
+        ].filter(Boolean).join(' ')}
         style={item.danger ? { color: 'var(--ds-color-error)' } : undefined}
         disabled={item.disabled}
         onClick={() => {
@@ -112,6 +126,12 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     }, [isOpen, handleOpenChange]);
 
     const triggerArray = Array.isArray(trigger) ? trigger : [trigger];
+    const rootClassName = ['dropdown', getPlacementClassName(placement), className]
+      .filter(Boolean)
+      .join(' ');
+    const menuClassName = ['dropdown-content', 'menu', overlayClassName]
+      .filter(Boolean)
+      .join(' ');
 
     // Translate the engine-agnostic placement prop into inline position styles
     const getPlacementStyle = (): React.CSSProperties => {
@@ -162,7 +182,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={className || undefined}
+        className={rootClassName}
         style={{ position: 'relative', display: 'inline-block' }}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
@@ -175,7 +195,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         {isOpen && menu?.items && (
           <ul
             tabIndex={0}
-            className={overlayClassName || undefined}
+            className={menuClassName}
             style={{ position: 'absolute', zIndex: 50, width: 208, padding: 8, borderRadius: 'var(--ds-radius-lg)', listStyle: 'none', margin: 0, background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-1)', ...getPlacementStyle(), ...overlayStyle }}
           >
             {menu.items.map((item) => (

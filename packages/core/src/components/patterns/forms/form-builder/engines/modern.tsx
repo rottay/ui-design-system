@@ -719,6 +719,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
       >
         {showLabel ? (
           <FormField
+            engine="modern"
             label={field.label ?? field.name}
             name={field.name}
             required={showRequired ? field.required : false}

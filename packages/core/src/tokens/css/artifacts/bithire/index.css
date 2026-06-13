@@ -1298,41 +1298,8 @@ html[data-tenant='bithire']
   word-break: normal;
 }
 
-html[data-tenant='bithire'] :where(.ant-tooltip) {
-  z-index: var(--ds-table-tooltip-z-index, 2700) !important;
-  width: max-content !important;
-  max-inline-size: var(--ds-preview-tooltip-max-width) !important;
-  max-width: var(--ds-preview-tooltip-max-width) !important;
-}
-
-html[data-tenant='bithire'] :where(.ant-tooltip-inner) {
-  width: max-content !important;
-  max-inline-size: var(--ds-preview-tooltip-max-width) !important;
-  max-width: var(--ds-preview-tooltip-max-width) !important;
-  line-height: 1.35;
-  text-align: left;
-  text-orientation: mixed;
-  writing-mode: horizontal-tb;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-html[data-tenant='bithire']
-  :where(
-    .bithire-data-table-card .ant-tooltip,
-    .ds-data-table-card .ant-tooltip,
-    .ds-collection-enhanced .ant-tooltip,
-    .bithire-data-table-card .ant-tooltip-inner,
-    .ds-data-table-card .ant-tooltip-inner,
-    .ds-collection-enhanced .ant-tooltip-inner
-  ) {
-  max-inline-size: var(--ds-table-action-tooltip-max-width) !important;
-  max-width: var(--ds-table-action-tooltip-max-width) !important;
-}
-
 html[data-tenant='bithire'] :where(.bithire-collection-polish) {
-  --ds-listing-grid-min-card-width: min(var(--bithire-collection-card-min-width, 300px), 100%);
+  --ds-listing-grid-min-card-width: min(300px, 100%);
 }
 
 html[data-tenant='bithire'] :where(.bithire-collection-polish .ds-collection-enhanced) {
@@ -1415,7 +1382,7 @@ html[data-tenant='bithire']
 
 @media (max-width: 720px) {
   html[data-tenant='bithire'] :where(.bithire-collection-polish) {
-    --bithire-collection-card-min-width: 100%;
+    --ds-listing-grid-min-card-width: 100%;
   }
 }
 
@@ -2812,7 +2779,7 @@ html[data-tenant='bithire'] :where(.rt-collection-preview__quick-action[aria-dis
 }
 
 html[data-tenant='bithire']
-  :where([role='tooltip'][aria-hidden='true'], .ant-tooltip-hidden) {
+  :where([role='tooltip'][aria-hidden='true']) {
   display: none !important;
   opacity: 0 !important;
   pointer-events: none !important;
@@ -2845,7 +2812,7 @@ html[data-tenant='bithire']
 }
 
 html[data-tenant='bithire']
-  :where(.ant-tooltip, .rottay-tooltip, .ds-tooltip, .tooltip) {
+  :where(.rottay-tooltip, .ds-tooltip, .tooltip) {
   z-index: var(--ds-z-index-tooltip, 2700) !important;
 }
 

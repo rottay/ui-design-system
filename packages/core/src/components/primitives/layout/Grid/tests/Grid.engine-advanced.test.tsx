@@ -60,8 +60,8 @@ describe('Grid advanced engine coverage', () => {
     const responsiveGrid = screen.getByTestId('classic-responsive-grid');
     const styleTag = container.querySelector('style');
     expect(responsiveGrid.style.display).toBe('inline-grid');
-    expect(responsiveGrid.style.gap).toBe('2rem');
-    expect(responsiveGrid.style.columnGap).toBe('0.5rem');
+    expect(responsiveGrid.style.gap).toBe('var(--ds-spacing-8, 2rem)');
+    expect(responsiveGrid.style.columnGap).toBe('var(--ds-spacing-2, 0.5rem)');
     expect(responsiveGrid.style.rowGap).toBe('12px');
     expect(responsiveGrid.style.gridAutoFlow).toBe('column');
     expect(responsiveGrid.style.gridAutoColumns).toBe('minmax(12rem, 1fr)');
@@ -125,8 +125,10 @@ describe('Grid advanced engine coverage', () => {
       </>
     );
 
-    expect(screen.getByTestId('modern-auto-grid')).toHaveClass('grid', 'grid-cols-auto', 'gap-1');
-    expect(screen.getByTestId('modern-none-grid')).toHaveClass('grid', 'grid-cols-none', 'gap-16');
+    expect(screen.getByTestId('modern-auto-grid')).toHaveClass('grid', 'grid-cols-auto');
+    expect(screen.getByTestId('modern-auto-grid').style.gap).toBe('var(--ds-spacing-1, 0.25rem)');
+    expect(screen.getByTestId('modern-none-grid')).toHaveClass('grid', 'grid-cols-none');
+    expect(screen.getByTestId('modern-none-grid').style.gap).toBe('var(--ds-spacing-16, 4rem)');
 
     const styleTag = container.querySelector('style');
     expect(screen.getByTestId('modern-responsive-grid')).toHaveStyle({
@@ -205,11 +207,11 @@ describe('Grid advanced engine coverage', () => {
       justifySelf: 'end',
     });
 
-    expect(screen.getByTestId('modern-template-grid')).toHaveClass('gap-0');
+    expect(screen.getByTestId('modern-template-grid').style.gap).toBe('0');
     expect(screen.getByTestId('modern-template-grid')).toHaveStyle({
       gridTemplateColumns: '240px 1fr',
       gridTemplateRows: 'auto 1fr',
-      columnGap: '2rem',
+      columnGap: 'var(--ds-spacing-8, 2rem)',
       rowGap: '14px',
     });
     expect(container.querySelectorAll('.rottay-grid-item--modern')[1]).toHaveStyle({ gridArea: 'main' });
@@ -254,8 +256,8 @@ describe('Grid advanced engine coverage', () => {
       gridTemplateColumns: 'repeat(4, 1fr)',
       gridTemplateRows: 'auto auto',
       gap: '6px',
-      columnGap: '1.5rem',
-      rowGap: '0.5rem',
+      columnGap: 'var(--ds-spacing-6, 1.5rem)',
+      rowGap: 'var(--ds-spacing-2, 0.5rem)',
     });
 
     const numericItem = container.querySelector('.rottay-grid-item--rustic');
@@ -309,7 +311,7 @@ describe('Grid advanced engine coverage', () => {
       display: 'inline-grid',
       gridTemplateColumns: 'auto',
       gridTemplateRows: 'none',
-      gap: '1rem',
+      gap: 'var(--ds-spacing-4, 1rem)',
       alignItems: 'start',
       justifyItems: 'center',
       alignContent: 'space-evenly',

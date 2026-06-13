@@ -192,8 +192,8 @@ describe('Input real engine coverage', () => {
     );
 
     const addons = container.querySelectorAll('.rottay-input-addon');
-    expect(addons[0].getAttribute('style') ?? '').toContain('border-top-right-radius: 0');
-    expect(addons[1].getAttribute('style') ?? '').toContain('margin-left: -1px');
+    expect(addons[0]).toHaveStyle({ borderTopRightRadius: '0px' });
+    expect(addons[1]).toHaveStyle({ marginLeft: '-1px' });
 
     rerender(
       <InputGroup compact={false} size="sm">
@@ -206,7 +206,7 @@ describe('Input real engine coverage', () => {
 
     const nonCompactAddons = container.querySelectorAll('.rottay-input-addon');
     expect(nonCompactAddons[0].getAttribute('style') ?? '').toContain('background-color: transparent');
-    expect(nonCompactAddons[1].getAttribute('style') ?? '').toContain('margin-left: 8px');
+    expect(nonCompactAddons[1]).toHaveStyle({ marginLeft: '8px' });
   });
 
   it('covers textarea focus and style branches directly', () => {

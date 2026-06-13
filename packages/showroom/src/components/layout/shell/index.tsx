@@ -58,8 +58,6 @@ const NAV_ITEM_ACTIVE_TEXT =
   "var(--showroom-shell-text, var(--ds-sidebar-item-color-active, var(--ds-color-text-primary)))";
 const NAV_ITEM_TEXT =
   "var(--showroom-shell-text-secondary, var(--ds-sidebar-item-color, var(--ds-color-text-secondary)))";
-const HEADER_BACKGROUND =
-  "var(--showroom-shell-header-backdrop, var(--ds-layout-header-bg, color-mix(in srgb, var(--ds-color-bg-primary) 86%, transparent)))";
 const HEADER_BORDER =
   "var(--showroom-shell-border-strong, var(--ds-layout-header-border, var(--ds-color-border-subtle)))";
 const PAGE_BACKGROUND =

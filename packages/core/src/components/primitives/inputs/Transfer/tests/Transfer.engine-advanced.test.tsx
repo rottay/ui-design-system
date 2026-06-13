@@ -17,6 +17,17 @@ function filterOption(input: string, item: TransferItem) {
   return item.title.toLowerCase().includes(input.toLowerCase());
 }
 
+function getModernPanel(container: HTMLElement, title: string) {
+  const titleElement = screen.getByText(title);
+  const panel = titleElement.closest('.flex.flex-col.rounded-lg.overflow-hidden');
+
+  if (!(panel instanceof HTMLElement) || !container.contains(panel)) {
+    throw new Error(`Expected modern ${title} panel wrapper`);
+  }
+
+  return panel;
+}
+
 describe('Transfer runtime engine coverage', () => {
   it('covers modern engine search, select-all, custom rendering, and bidirectional moves', () => {
     const handleChange = vi.fn();
@@ -58,10 +69,7 @@ describe('Transfer runtime engine coverage', () => {
     const removeButton = screen.getByRole('button', { name: 'Remove' });
     expect(addButton).toBeDisabled();
 
-    const sourcePanel = container.querySelectorAll('.border.border-base-300.rounded-lg')[0];
-    if (!(sourcePanel instanceof HTMLElement)) {
-      throw new Error('Expected modern source panel wrapper');
-    }
+    const sourcePanel = getModernPanel(container, 'Available');
 
     const sourceSelectAll = within(sourcePanel).getAllByRole('checkbox')[0];
     fireEvent.click(sourceSelectAll);
@@ -73,10 +81,7 @@ describe('Transfer runtime engine coverage', () => {
     expect(handleChange).toHaveBeenCalledWith(['beta', 'alpha'], 'right', ['alpha']);
     expect(removeButton).toBeDisabled();
 
-    const targetPanel = container.querySelectorAll('.border.border-base-300.rounded-lg')[1];
-    if (!(targetPanel instanceof HTMLElement)) {
-      throw new Error('Expected modern target panel wrapper');
-    }
+    getModernPanel(container, 'Selected');
 
     const targetBetaLabel = screen.getByText('Beta custom').closest('label');
     if (!(targetBetaLabel instanceof HTMLElement)) {
@@ -221,7 +226,7 @@ describe('Transfer runtime engine coverage', () => {
     const targetSearch = searchBoxes[1] as HTMLInputElement;
 
     fireEvent.focus(sourceSearch);
-    expect(sourceSearch.style.borderColor).toBe('var(--ds-color-primary, #1677ff)');
+    expect(sourceSearch.style.boxShadow).toContain('rgba(22, 119, 255, 0.15)');
     fireEvent.blur(sourceSearch);
     expect(sourceSearch.style.boxShadow).toBe('none');
 

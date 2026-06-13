@@ -58,12 +58,12 @@ const SLIDE_ANIMATION: Record<string, string> = {
   bottom: 'rottay-drawer-slide-bottom',
 };
 
-/** Premium size presets (default 400px for md). */
+/** Premium size presets shared with the public Drawer contract. */
 const SIZE_MAP: Record<DrawerSize, string> = {
-  sm: '320px',
-  md: '400px',
-  lg: '560px',
-  xl: '672px',
+  sm: '256px',
+  md: '378px',
+  lg: '520px',
+  xl: '736px',
   full: '100%',
 };
 
@@ -205,7 +205,12 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       display: 'flex',
       flexDirection: 'column',
       background: 'var(--ds-surface-card)',
-      border: '1px solid var(--ds-color-border-subtle)',
+      borderTopWidth: '1px',
+      borderRightWidth: '1px',
+      borderBottomWidth: '1px',
+      borderLeftWidth: '1px',
+      borderStyle: 'solid',
+      borderColor: 'var(--ds-color-border-subtle)',
       boxShadow: 'var(--ds-elevation-3)',
       borderRadius,
       animation: `${animationName} ${MOTION_DURATION} ${MOTION_EASING} both`,
@@ -223,7 +228,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: resolvedWidth,
           height: '100vh',
           maxWidth: '100vw',
-          borderLeft: 'none',
+          borderLeftWidth: 0,
         };
       case 'right':
         return {
@@ -233,7 +238,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: resolvedWidth,
           height: '100vh',
           maxWidth: '100vw',
-          borderRight: 'none',
+          borderRightWidth: 0,
         };
       case 'top':
         return {
@@ -243,7 +248,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: '100vw',
           height: resolvedHeight,
           maxHeight: '100vh',
-          borderTop: 'none',
+          borderTopWidth: 0,
         };
       case 'bottom':
         return {
@@ -253,7 +258,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: '100vw',
           height: resolvedHeight,
           maxHeight: '100vh',
-          borderBottom: 'none',
+          borderBottomWidth: 0,
         };
       default:
         return base;
@@ -269,6 +274,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       {/* Backdrop overlay with blur */}
       {mask && (
         <div
+          className="rottay-drawer-overlay"
           onClick={closeOnOverlayClick && closable !== false ? handleClose : undefined}
           style={{
             position: 'fixed',
@@ -287,7 +293,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
         role="dialog"
         aria-modal="true"
         aria-label={typeof title === 'string' ? title : undefined}
-        className={className}
+        className={`rottay-drawer rottay-drawer-${placement} ${className}`.trim()}
         style={getPositionStyles()}
       >
         {/* ---- Header ---- */}

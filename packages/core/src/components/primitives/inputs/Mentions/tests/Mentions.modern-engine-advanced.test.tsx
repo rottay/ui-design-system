@@ -45,7 +45,8 @@ describe('Mentions modern advanced coverage', () => {
     expect(handleSearch).toHaveBeenCalledWith('a', '@');
 
     const list = await screen.findByRole('listbox');
-    expect(list.className).toContain('bottom-full');
+    expect(list).toHaveAttribute('data-placement', 'top');
+    expect(list.className).toContain('rottay-mentions__popup--top');
     expect(list.className).toContain('mentions-popup');
 
     const optionButtons = within(list).getAllByRole('button');
@@ -84,7 +85,7 @@ describe('Mentions modern advanced coverage', () => {
 
     let input = screen.getByRole('textbox');
     expect(input).toHaveAttribute('rows', '2');
-    expect(input.className).toContain('textarea-warning');
+    expect(input.className).toContain('rottay-mentions__input--warning');
     expect(ref.current).toBeInstanceOf(HTMLTextAreaElement);
 
     Object.defineProperty(input, 'selectionStart', { configurable: true, writable: true, value: 4 });

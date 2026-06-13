@@ -19,7 +19,6 @@ import {
 } from '@/components/showroom-context';
 import {
   SHOWROOM_SURFACES,
-  mixWithCanvas,
   mixWithSurface,
 } from '../surface-tokens';
 

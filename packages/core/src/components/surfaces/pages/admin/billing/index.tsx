@@ -19,6 +19,11 @@ export interface BillingSurfaceProps {
   loading?: boolean;
 }
 
+const BILLING_ROW_STYLE: React.CSSProperties = {
+  padding: '8px 0',
+  borderBottom: '1px solid var(--ds-color-border, #e5e5e5)',
+};
+
 function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactElement {
   // Full escape hatch: when the app provides a custom plan renderer, the
   // surface yields entirely. This allows Stripe-specific or custom plan
@@ -113,11 +118,11 @@ function InvoicesSection({ config }: { config: BillingSurfaceConfig }): React.Re
         <Stack spacing="md">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>Invoices</Text>
           {invoices.map((invoice) => (
-            <Flex key={invoice.id} justify="between" align="center" style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}>
+            <Flex key={invoice.id} justify="between" align="center" style={BILLING_ROW_STYLE}>
               <Flex gap={12} align="center">
                 <Text style={{ fontWeight: 500 }}>{invoice.date}</Text>
                 <Text>{invoice.amount}</Text>
-                <Tag color={invoice.status === 'paid' ? 'success' : invoice.status === 'pending' ? 'warning' : 'default'}>
+                <Tag variant={invoice.status === 'paid' ? 'success' : invoice.status === 'pending' ? 'warning' : 'default'}>
                   {invoice.status}
                 </Tag>
               </Flex>
@@ -149,7 +154,7 @@ function PaymentMethodsSection({ config }: { config: BillingSurfaceConfig }): Re
         <Stack spacing="md">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>Payment Methods</Text>
           {paymentMethods.map((method) => (
-            <Flex key={method.id} justify="between" align="center" style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}>
+            <Flex key={method.id} justify="between" align="center" style={BILLING_ROW_STYLE}>
               <Flex gap={12} align="center">
                 <Text style={{ fontWeight: 500 }}>{method.type}</Text>
                 <Text style={{ color: 'var(--ds-color-text-muted)' }}>
@@ -159,7 +164,7 @@ function PaymentMethodsSection({ config }: { config: BillingSurfaceConfig }): Re
                   Exp {method.expiry}
                 </Text>
                 {method.isDefault && (
-                  <Tag color="processing">Default</Tag>
+                  <Tag variant="primary">Default</Tag>
                 )}
               </Flex>
             </Flex>

@@ -357,6 +357,7 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
     <>
       <style>{shimmerKeyframes}</style>
       <div
+        className="ds-stats-grid-skeleton"
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(auto-fill, minmax(min(max(200px, calc(100.1% / ${columns})), 100%), 1fr))`,
@@ -366,6 +367,7 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
         {Array.from({ length: columns }).map((_, i) => (
           <div
             key={i}
+            className="ds-stats-grid-skeleton__item"
             style={{
               background: 'var(--ds-surface-card)',
               boxShadow: 'var(--ds-elevation-1)',
@@ -377,11 +379,11 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
             }}
           >
             {/* Label shimmer */}
-            <div style={{ ...shimmerBg, width: '40%', height: 12 }} />
+            <div className="ds-stats-grid-skeleton__bar" style={{ ...shimmerBg, width: '40%', height: 12 }} />
             {/* Value shimmer */}
-            <div style={{ ...shimmerBg, width: '65%', height: 28 }} />
+            <div className="ds-stats-grid-skeleton__bar" style={{ ...shimmerBg, width: '65%', height: 28 }} />
             {/* Trend shimmer */}
-            <div style={{ ...shimmerBg, width: '30%', height: 16 }} />
+            <div className="ds-stats-grid-skeleton__bar" style={{ ...shimmerBg, width: '30%', height: 16 }} />
           </div>
         ))}
       </div>

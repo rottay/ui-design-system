@@ -70,7 +70,7 @@ describe('PatternStatsGrid advanced engine coverage', () => {
     if (engine === 'classic') {
       expect(container.querySelector('.ant-card-loading')).not.toBeNull();
     } else if (engine === 'modern') {
-      expect(container.querySelector('.animate-pulse')).not.toBeNull();
+      expect(container.querySelector('.ds-stats-grid-skeleton')).not.toBeNull();
     } else {
       expect(container.querySelector('style')).not.toBeNull();
     }

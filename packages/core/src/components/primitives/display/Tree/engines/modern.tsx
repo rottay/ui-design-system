@@ -44,8 +44,7 @@ import {
 // ---------------------------------------------------------------------------
 
 // Wraps the matching substring in a warning-tinted span for search highlighting.
-// Uses DaisyUI's warning color palette since it provides good contrast
-// across both light and dark themes without custom color variables.
+// Uses DS tokens so the highlight tracks tenant themes across light and dark modes.
 function highlightText(
   text: React.ReactNode,
   searchValue: string,
@@ -59,7 +58,7 @@ function highlightText(
   return (
     <>
       {before}
-      <span className="rounded-sm px-0.5" style={{ background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)', color: 'var(--ds-color-text-primary)' }}>
+      <span className="rottay-tree-search-highlight rounded-sm px-0.5" style={{ background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)', color: 'var(--ds-color-text-primary)' }}>
         {match}
       </span>
       {after}

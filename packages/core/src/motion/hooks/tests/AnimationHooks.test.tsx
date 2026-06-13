@@ -193,7 +193,13 @@ describe('animation hooks', () => {
           fallbackLocale: 'en',
           plan: 'enterprise',
           features: [],
-          branding: { companyName: 'Motion Test', primaryColor: '#0a66c2', accentColor: '#14b8a6' },
+          branding: {
+            companyName: 'Motion Test',
+            primaryColor: '#0a66c2',
+            darkPrimaryColor: '#60a5fa',
+            accentColor: '#0f766e',
+            darkAccentColor: '#5eead4',
+          },
         }}
         productProfile="events.organizer"
         forceEngine="rustic"

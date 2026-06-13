@@ -215,31 +215,18 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const variantConfig = VARIANT_MAP[effectiveVariant as keyof typeof VARIANT_MAP] || VARIANT_MAP.primary;
     const shapeRadius = SHAPE_MAP[shape as keyof typeof SHAPE_MAP] || SHAPE_MAP.default;
 
-    // Set CSS custom properties on the element so descendant styles (e.g., the
-    // loading spinner) can reference them, and tenants can override per-button.
-    const buttonVars: React.CSSProperties = {
-      '--ds-button-height': sizeConfig.height,
-      '--ds-button-padding': sizeConfig.padding,
-      '--ds-button-font-size': sizeConfig.fontSize,
-      '--ds-button-bg': variantConfig.bg,
-      '--ds-button-color': variantConfig.color,
-      '--ds-button-border-color': variantConfig.borderColor,
-      '--ds-button-hover-bg': variantConfig.hoverBg,
-      '--ds-button-radius': shapeRadius,
-      '--ds-button-transition': 'color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.2s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
-    } as React.CSSProperties;
-
-    // Compute effective background with hover state, using CSS var with fallback
+    // Compute effective background with hover state. The variant map already
+    // includes token fallbacks, so avoid nesting the same CSS var inside another
+    // var() call; that keeps both browsers and DOM test parsers on a simple path.
     const effectiveBg = isHovered && !disabled && !loading
-      ? `var(--ds-button-${effectiveVariant}-hover-bg, ${variantConfig.hoverBg})`
-      : `var(--ds-button-${effectiveVariant}-bg, ${variantConfig.bg})`;
+      ? variantConfig.hoverBg
+      : variantConfig.bg;
 
     // All button styles are computed inline because rustic engine cannot rely
     // on Tailwind/antd classes. Hover, focus, and active states are managed
     // through React state + inline style mutations (not CSS :hover/:focus)
     // since inline styles have higher specificity than pseudo-classes.
     const buttonStyle: React.CSSProperties = {
-      ...buttonVars,
       position: 'relative',
       display: 'inline-flex',
       alignItems: 'center',
@@ -248,7 +235,9 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       // When size is responsive, height/padding/fontSize are handled by injected CSS
       ...(!sizeIsResponsive && {
         height: sizeConfig.height,
-        padding: shape === 'circle' ? '0' : sizeConfig.padding,
+        ...(shape === 'circle'
+          ? { paddingTop: 0, paddingRight: 0, paddingBottom: 0, paddingLeft: 0 }
+          : { padding: sizeConfig.padding }),
         fontSize: sizeConfig.fontSize,
       }),
       width: isFullWidth ? '100%' : (shape === 'circle' ? sizeConfig.height : 'auto'),
@@ -261,7 +250,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       whiteSpace: 'nowrap',
       verticalAlign: 'middle',
       background: gradient
-        ? 'linear-gradient(135deg, var(--ds-button-bg) 0%, var(--ds-button-hover-bg) 100%)'
+        ? `linear-gradient(135deg, ${variantConfig.bg} 0%, ${variantConfig.hoverBg} 100%)`
         : effectiveBg,
       color: variantConfig.color,
       border: effectiveVariant === 'dashed'
@@ -272,7 +261,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       borderRadius: shapeRadius,
       cursor: disabled || loading ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
-      transition: 'var(--ds-button-transition, color 0.15s, background-color 0.15s, border-color 0.15s, box-shadow 0.2s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1))',
+      transition: 'var(--ds-button-transition, all 150ms ease)',
       outline: 'none',
       boxSizing: 'border-box',
       userSelect: 'none',

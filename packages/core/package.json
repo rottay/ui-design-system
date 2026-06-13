@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.8.21",
+  "version": "2.8.22",
   "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -98,6 +98,7 @@
     "test:ci": "COVERAGE=1 vitest run --coverage --reporter=verbose --reporter=json --outputFile.json=./test-results.json",
     "analyze": "node scripts/analyze-bundle.mjs",
     "analyze:skip-build": "node scripts/analyze-bundle.mjs --skip-build",
+    "lint": "pnpm run lint:folders && pnpm run lint:integration && pnpm run lint:vertical",
     "lint:folders": "node scripts/lint-folder-index.mjs",
     "lint:integration": "node scripts/audit-integration.mjs",
     "lint:vertical": "node scripts/audit-vertical-compliance.mjs",
@@ -262,6 +263,7 @@
     "dayjs": "^1.11.20"
   },
   "devDependencies": {
+    "@ant-design/v5-patch-for-react-19": "1.0.3",
     "@storybook/addon-a11y": "^9.1.20",
     "@storybook/addon-docs": "^9.1.20",
     "@storybook/addon-onboarding": "^9.1.20",

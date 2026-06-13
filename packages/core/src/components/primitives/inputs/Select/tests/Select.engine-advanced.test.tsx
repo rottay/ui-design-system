@@ -62,9 +62,12 @@ describe('Select advanced engine coverage', () => {
 
     const select = (await screen.findByRole('combobox')) as HTMLSelectElement;
     expect(select).toBeTruthy();
-    expect(select).toHaveClass('select', 'select-lg', 'select-warning');
+    expect(select.style.height).toBe('40px');
+    expect(select.style.fontSize).toBe('16px');
+    expect(select.style.paddingLeft).toBe('0px');
+    expect(select.style.borderColor).toBe('var(--ds-color-warning)');
     expect(select?.querySelector('option[value=""]')).toHaveTextContent('Choose record');
-    expect(container.querySelector('.loading-spinner')).toBeTruthy();
+    expect(container.querySelector('.rottay-select__loading-indicator')).toBeTruthy();
 
     fireEvent.focus(select!);
     fireEvent.blur(select!);
@@ -126,7 +129,7 @@ describe('Select advanced engine coverage', () => {
       expect(handleChange).toHaveBeenCalled();
     });
 
-    fireEvent.click(screen.getByRole('button', { name: 'x' }));
+    fireEvent.click(screen.getByRole('button', { name: /clear selection/i }));
     await waitFor(() => {
       expect(handleChange.mock.calls.length).toBeGreaterThanOrEqual(3);
     });

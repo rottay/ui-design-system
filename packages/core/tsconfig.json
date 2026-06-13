@@ -28,11 +28,10 @@
     "rootDir": "./src",
 
     /* Path aliases */
-    "baseUrl": "./src",
     "paths": {
-      "@/*": ["./*"],
-      "@types/*": ["./contracts/*"],
-      "@components/*": ["./components/*"]
+      "@/*": ["./src/*"],
+      "@types/*": ["./src/contracts/*"],
+      "@components/*": ["./src/components/*"]
     }
   },
   "include": ["src"],

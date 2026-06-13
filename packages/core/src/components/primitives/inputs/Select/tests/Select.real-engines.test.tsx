@@ -48,17 +48,16 @@ describe('Select real engine coverage', () => {
       'modern'
     );
 
-    fireEvent.click(container.querySelector('.select.w-full') as HTMLDivElement);
-    fireEvent.change(screen.getByRole('textbox'), { target: { value: 'a' } });
-    fireEvent.click(screen.getByText('Alpha'));
+    fireEvent.click(container.querySelector('.rottay-select__trigger') as HTMLDivElement);
+    fireEvent.change(screen.getByPlaceholderText('Search...'), { target: { value: 'a' } });
+    fireEvent.click(screen.getByRole('option', { name: 'Alpha' }));
 
     await waitFor(() => {
       expect(handleChange).toHaveBeenCalled();
     });
 
-    fireEvent.click(container.querySelector('.select.w-full') as HTMLDivElement);
-    fireEvent.click(screen.getByText('Gamma'));
-    fireEvent.click(container.querySelector('.btn.btn-ghost.btn-xs.btn-circle') as HTMLButtonElement);
+    fireEvent.click(screen.getByRole('option', { name: 'Gamma' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Clear selection' }));
 
     expect(handleClear).toHaveBeenCalledTimes(1);
   });

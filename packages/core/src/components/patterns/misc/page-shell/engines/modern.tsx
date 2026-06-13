@@ -268,7 +268,7 @@ export default function ModernPageShell(props: PageShellProps) {
   if (loading) {
     return (
       <div
-        className={`ds-pattern-page-shell ds-engine-modern ${className ?? ''}`}
+        className={`ds-pattern-page-shell ds-pattern-page-shell--loading ds-engine-modern ${className ?? ''}`}
         style={{
           padding: '24px 24px 0',
           maxWidth: maxWidth ?? undefined,
@@ -276,7 +276,7 @@ export default function ModernPageShell(props: PageShellProps) {
           ...style,
         }}
       >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="ds-pattern-page-shell__loading-skeleton" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {/* Breadcrumb skeleton */}
           <div
             style={{

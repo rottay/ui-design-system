@@ -18,7 +18,9 @@ const SURFACE_TEST_TENANT: TenantConfig = {
   branding: {
     companyName: 'Surface Test Tenant',
     primaryColor: '#0a66c2',
-    accentColor: '#14b8a6',
+    accentColor: '#0f766e',
+    darkPrimaryColor: '#60a5fa',
+    darkAccentColor: '#5eead4',
   },
 };
 

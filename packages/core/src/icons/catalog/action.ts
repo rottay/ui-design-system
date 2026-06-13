@@ -35,6 +35,9 @@ import {
   Minus,
   MinusCircle,
   PlusCircle,
+  Printer,
+  ToggleLeft,
+  ToggleRight,
 } from 'lucide-react';
 import { createIcon } from '../factory';
 
@@ -68,3 +71,6 @@ export const PowerOffIcon = createIcon(PowerOff, 'PowerOffIcon');
 export const PlusCircleIcon = createIcon(PlusCircle, 'PlusCircleIcon');
 export const MinusCircleIcon = createIcon(MinusCircle, 'MinusCircleIcon');
 export const MinusIcon = createIcon(Minus, 'MinusIcon');
+export const PrinterIcon = createIcon(Printer, 'PrinterIcon');
+export const ToggleLeftIcon = createIcon(ToggleLeft, 'ToggleLeftIcon');
+export const ToggleRightIcon = createIcon(ToggleRight, 'ToggleRightIcon');

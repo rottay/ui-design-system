@@ -109,7 +109,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
         className={`flex items-center justify-center min-h-[300px] ${className ?? ''}`}
         style={style}
       >
-        <span style={spinnerStyle(32)} />
+        <span className="loading-spinner" style={spinnerStyle(32)} />
       </div>
     );
   }

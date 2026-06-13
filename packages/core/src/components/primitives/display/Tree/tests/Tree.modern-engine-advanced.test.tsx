@@ -262,6 +262,11 @@ describe('Tree modern engine advanced coverage', () => {
     expect(screen.getByRole('tree')).toHaveTextContent('Group');
     expect(screen.getByRole('tree')).not.toHaveTextContent('Other Item');
     expect(screen.getByRole('tree')).not.toHaveTextContent('Outside Item');
-    expect(screen.getByText('Match')).toHaveClass('bg-warning/30');
+    const highlight = screen.getByText('Match');
+    expect(highlight).toHaveClass('rottay-tree-search-highlight');
+    expect(highlight).toHaveStyle({
+      background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)',
+      color: 'var(--ds-color-text-primary)',
+    });
   });
 });

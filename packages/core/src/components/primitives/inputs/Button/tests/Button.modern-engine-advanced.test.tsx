@@ -26,19 +26,19 @@ describe('ModernButton advanced engine coverage', () => {
     );
 
     const loadingButton = screen.getByRole('button', { name: /save/i });
-    expect(loadingButton.className).toContain('btn-error');
-    expect(loadingButton.className).toContain('btn-lg');
-    expect(loadingButton.className).toContain('btn-circle');
-    expect(loadingButton.className).toContain('btn-block');
-    expect(loadingButton.className).toContain('shadow-lg');
+    expect(loadingButton.className).toContain('rottay-button--danger');
+    expect(loadingButton.className).toContain('rottay-button--xl');
+    expect(loadingButton.className).toContain('rottay-button--circle');
+    expect(loadingButton.className).toContain('rottay-button--block');
+    expect(loadingButton.className).toContain('rottay-button--shadow');
     expect(loadingButton).toBeDisabled();
     expect(loadingButton).toHaveAttribute('aria-busy', 'true');
     const spinner = container.querySelector('svg');
     expect(spinner).toHaveAttribute('width', '18');
     expect(spinner).toHaveAttribute('height', '18');
-    expect(screen.queryByTestId('start-icon')).not.toBeInTheDocument();
+    expect(screen.getByTestId('start-icon').parentElement).toHaveStyle({ opacity: '0' });
     expect(screen.queryByTestId('prefix')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('suffix')).not.toBeInTheDocument();
+    expect(screen.getByTestId('suffix').parentElement).toHaveStyle({ opacity: '0' });
 
     fireEvent.click(loadingButton);
     expect(handleClick).not.toHaveBeenCalled();
@@ -59,9 +59,9 @@ describe('ModernButton advanced engine coverage', () => {
     );
 
     const activeButton = screen.getByRole('button', { name: /go/i });
-    expect(activeButton.className).toContain('btn-primary');
-    expect(activeButton.className).toContain('btn-xs');
-    expect(activeButton.className).toContain('rounded-full');
+    expect(activeButton.className).toContain('rottay-button--primary');
+    expect(activeButton.className).toContain('rottay-button--xs');
+    expect(activeButton.className).toContain('rottay-button--round');
     expect(screen.getByTestId('prefix')).toBeInTheDocument();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
     expect(screen.queryByTestId('suffix')).not.toBeInTheDocument();
@@ -87,27 +87,27 @@ describe('ModernButton advanced engine coverage', () => {
 
     const button = screen.getByRole('button', { name: /continue/i });
     expect(button).toHaveAttribute('type', 'submit');
-    expect(button.className).toContain('btn-link');
-    expect(button.className).toContain('btn-sm');
+    expect(button.className).toContain('rottay-button--link');
+    expect(button.className).toContain('rottay-button--sm');
     expect(screen.getByTestId('suffix')).toBeInTheDocument();
 
     fireEvent.mouseEnter(button);
-    expect(button.style.transform).toBe('var(--ds-button-hover-transform, translateY(-1px))');
+    expect(button.style.textDecoration).toBe('underline');
 
     fireEvent.mouseDown(button);
     expect(button.style.transform).toBe('scale(0.98)');
 
     fireEvent.mouseUp(button);
-    expect(button.style.transform).toBe('var(--ds-button-hover-transform, translateY(-1px))');
+    expect(button.style.transform).toBe('');
 
     fireEvent.focus(button);
-    expect(button.style.boxShadow).toContain('var(--ds-color-primary-200');
+    expect(button).toHaveAttribute('data-focus-visible', 'true');
 
     fireEvent.blur(button);
-    expect(button.style.boxShadow).toBe('');
+    expect(button).not.toHaveAttribute('data-focus-visible');
 
     fireEvent.mouseLeave(button);
-    expect(button.style.transform).toBe('translateY(0)');
+    expect(button.style.textDecoration).toBe('none');
 
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);

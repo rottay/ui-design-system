@@ -203,6 +203,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
         <div
           role="dialog"
           aria-modal="true"
+          className={`rottay-tour-dialog rottay-tour-dialog--${type}`}
+          data-type={type}
           style={{
             position: 'fixed',
             top: targetRect ? targetRect.bottom + padding + 8 : '50%',
@@ -214,7 +216,11 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
             padding: 'var(--ds-tour-padding, 20px)',
             maxWidth: 'var(--ds-tour-max-width, 360px)',
             minWidth: 'var(--ds-tour-min-width, 280px)',
-            border: isPrimary ? '2px solid var(--ds-tour-primary-border, var(--ds-color-primary-500, #3b82f6))' : 'none',
+            borderWidth: isPrimary ? '2px' : 0,
+            borderStyle: 'solid',
+            borderColor: isPrimary
+              ? 'var(--ds-tour-primary-border, var(--ds-color-primary-500, #3b82f6))'
+              : 'transparent',
             zIndex: zIndex! + 2,
           }}
         >

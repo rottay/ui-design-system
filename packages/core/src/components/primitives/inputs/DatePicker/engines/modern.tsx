@@ -52,6 +52,27 @@ const sizeStyleMap: Record<string, React.CSSProperties> = {
   large: { height: 'var(--ds-input-lg-height, 2.75rem)', fontSize: 'var(--ds-input-lg-font-size, 16px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
 };
 
+const sizeClassMap: Record<string, string> = {
+  small: 'input-sm',
+  default: '',
+  large: 'input-lg',
+};
+
+const statusClassMap: Record<string, string> = {
+  error: 'input-error',
+  warning: 'input-warning',
+};
+
+function getInputClassName(size: string, status?: string): string {
+  return [
+    'input',
+    'w-full',
+    'cursor-pointer',
+    sizeClassMap[size] ?? '',
+    status ? statusClassMap[status] : '',
+  ].filter(Boolean).join(' ');
+}
+
 // ---------------------------------------------------------------------------
 // SVG Icons (inline to avoid extra deps)
 // Modern engine uses inline SVGs instead of an icon library so that it stays
@@ -558,6 +579,12 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
           const isEndpoint =
             (rangeStart && isSameDay(cell.date, rangeStart)) ||
             (rangeEnd && isSameDay(cell.date, rangeEnd));
+          const endpointRange = rangeStart && isSameDay(cell.date, rangeStart)
+            ? 'start'
+            : rangeEnd && isSameDay(cell.date, rangeEnd)
+              ? 'end'
+              : undefined;
+          const originNode = cell.day;
 
           return (
             <button
@@ -585,7 +612,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
                 if (!cell.isDisabled) onDateSelect(cell.date);
               }}
             >
-              {cell.day}
+              {cellRender
+                ? cellRender(cell.date, { originNode, today, range: endpointRange })
+                : originNode}
             </button>
           );
         })}
@@ -849,6 +878,10 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
       : status === 'warning'
         ? { borderColor: 'var(--ds-color-warning)' }
         : {};
+    const dateInputClassName = getInputClassName(
+      size === 'large' ? 'large' : size === 'small' ? 'small' : 'default',
+      status,
+    );
 
     return (
       <>
@@ -866,9 +899,11 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             // readOnly prevents keyboard input -- dates must be selected via the
             // calendar panel. paddingRight reserves space for the clear + calendar icons.
             readOnly
-            className="w-full cursor-pointer"
+            className={dateInputClassName}
             style={{
-              border: '1px solid var(--ds-color-border)',
+              borderWidth: 1,
+              borderStyle: 'solid',
+              borderColor: 'var(--ds-color-border)',
               borderRadius: 'var(--ds-radius-md)',
               background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
               color: 'var(--ds-color-text-primary)',
@@ -1142,9 +1177,15 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
       : status === 'warning'
         ? { borderColor: 'var(--ds-color-warning)' }
         : {};
+    const rangeInputClassName = getInputClassName(
+      size === 'large' ? 'large' : size === 'small' ? 'small' : 'default',
+      status,
+    );
 
     const rangeInputBaseStyle: React.CSSProperties = {
-      border: '1px solid var(--ds-color-border)',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: 'var(--ds-color-border)',
       borderRadius: 'var(--ds-radius-md)',
       background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
       color: 'var(--ds-color-text-primary)',
@@ -1171,6 +1212,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           <input
             type="text"
             readOnly
+            className={rangeInputClassName}
             style={{
               ...rangeInputBaseStyle,
               ...(activeInput === 'start' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
@@ -1192,6 +1234,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           <input
             type="text"
             readOnly
+            className={rangeInputClassName}
             style={{
               ...rangeInputBaseStyle,
               ...(activeInput === 'end' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),

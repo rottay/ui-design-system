@@ -162,22 +162,30 @@ export default function RusticCard(props: CardProps): React.ReactElement {
   const variantStyles: Record<string, React.CSSProperties> = {
     elevated: {
       backgroundColor: backgroundColor || 'var(--ds-card-bg, #fff)',
-      border: 'none',
+      borderWidth: 0,
+      borderStyle: 'solid',
+      borderColor: 'transparent',
       boxShadow: isHovered && hoverable ? SHADOW_MAP.lg : SHADOW_MAP.md,
     },
     outlined: {
       backgroundColor: backgroundColor || 'var(--ds-card-bg, #fff)',
-      border: '1px solid var(--ds-card-border, #e5e5e5)',
+      borderWidth: 1,
+      borderStyle: 'solid',
+      borderColor: 'var(--ds-card-border, #e5e5e5)',
       boxShadow: 'none',
     },
     filled: {
       backgroundColor: backgroundColor || 'var(--ds-color-neutral-100, #f5f5f5)',
-      border: 'none',
+      borderWidth: 0,
+      borderStyle: 'solid',
+      borderColor: 'transparent',
       boxShadow: 'none',
     },
     ghost: {
       backgroundColor: 'transparent',
-      border: 'none',
+      borderWidth: 0,
+      borderStyle: 'solid',
+      borderColor: 'transparent',
       boxShadow: 'none',
     },
   };

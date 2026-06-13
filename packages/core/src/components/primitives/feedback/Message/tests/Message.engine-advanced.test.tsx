@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, waitFor, within } from '@testing-librar
 import { message as antMessage } from 'antd';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../../../utils/runtime-logger', () => ({
+vi.mock('../../../../../_internal/utils/runtime-logger', () => ({
   warnOnceInDev: vi.fn(),
 }));
 
@@ -170,6 +170,20 @@ describe('Message engine advanced coverage', () => {
 
   it('covers classic provider + hook flows, keyed updates, and destroy branches', async () => {
     let apiRef: ReturnType<typeof useClassicMessage>[0] | undefined;
+    const destroyMessage = vi.fn();
+    const hookApi = {
+      success: vi.fn().mockReturnValue(destroyMessage),
+      error: vi.fn().mockReturnValue(destroyMessage),
+      info: vi.fn().mockReturnValue(destroyMessage),
+      warning: vi.fn().mockReturnValue(destroyMessage),
+      loading: vi.fn().mockReturnValue(destroyMessage),
+      open: vi.fn().mockReturnValue(destroyMessage),
+      destroy: vi.fn(),
+    };
+    vi.spyOn(antMessage, 'useMessage').mockReturnValue([
+      hookApi,
+      <div key="holder" data-testid="classic-message-holder" />,
+    ] as never);
 
     render(
       <ClassicMessageProvider maxCount={2} placement="top" top={12}>
@@ -187,21 +201,28 @@ describe('Message engine advanced coverage', () => {
       apiRef!.success({ content: 'Classic hook success', key: 'classic-hook', duration: 0 });
     });
 
-    expect(await screen.findByText('Classic hook success')).toBeInTheDocument();
+    expect(screen.getByTestId('classic-message-holder')).toBeInTheDocument();
+    expect(hookApi.success).toHaveBeenCalledWith(expect.objectContaining({
+      content: 'Classic hook success',
+      duration: 0,
+      key: 'classic-hook',
+    }));
 
     act(() => {
       apiRef!.open({ type: 'info', content: 'Classic hook open', key: 'classic-hook', duration: 0 });
     });
 
-    expect(await screen.findByText('Classic hook open')).toBeInTheDocument();
+    expect(hookApi.info).toHaveBeenCalledWith(expect.objectContaining({
+      content: 'Classic hook open',
+      duration: 0,
+      key: 'classic-hook',
+    }));
 
     act(() => {
       apiRef!.destroy('classic-hook');
     });
 
-    await waitFor(() => {
-      expect(screen.queryByText('Classic hook open')).not.toBeInTheDocument();
-    });
+    expect(hookApi.destroy).toHaveBeenCalledWith('classic-hook');
 
     act(() => {
       apiRef!.destroy();

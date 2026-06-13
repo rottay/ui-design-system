@@ -10,6 +10,7 @@
 
 import { mkdirSync } from 'node:fs';
 import { resolve } from 'node:path';
+import '@ant-design/v5-patch-for-react-19';
 import { expect, afterEach, vi } from 'vitest';
 import { cleanup, configure } from '@testing-library/react';
 import * as matchers from '@testing-library/jest-dom/matchers';
@@ -25,6 +26,20 @@ expect.extend(matchers);
 configure({
   asyncUtilTimeout: 30000,
 });
+
+if ('happyDOM' in window) {
+  const happyDom = window.happyDOM as {
+    settings?: {
+      disableCSSFileLoading?: boolean;
+      handleDisabledFileLoadingAsSuccess?: boolean;
+    };
+  };
+
+  if (happyDom.settings) {
+    happyDom.settings.disableCSSFileLoading = true;
+    happyDom.settings.handleDisabledFileLoadingAsSuccess = false;
+  }
+}
 
 // Vitest's v8 coverage writer expects the reports directory to exist before it
 // flushes per-file artifacts. Creating the common report directories here keeps
@@ -96,20 +111,27 @@ Object.defineProperty(HTMLCanvasElement.prototype, 'toDataURL', {
   value: vi.fn().mockReturnValue('data:image/png;base64,'),
 });
 
-// Polyfill for matchMedia
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: vi.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: vi.fn(),
-    removeListener: vi.fn(),
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-    dispatchEvent: vi.fn(),
-  })),
-});
+function installMatchMediaMock(): void {
+  const noop = () => undefined;
+
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: (query: string): MediaQueryList => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: noop,
+      removeListener: noop,
+      addEventListener: noop,
+      removeEventListener: noop,
+      dispatchEvent: () => false,
+    } as MediaQueryList),
+  });
+}
+
+// Polyfill for matchMedia. Keep this as a plain function rather than a vi.fn()
+// so test-level vi.restoreAllMocks() cannot erase the browser shim.
+installMatchMediaMock();
 
 // Mock for getComputedStyle that properly returns inline styles
 // This is needed for toHaveStyle matcher to work correctly
@@ -155,6 +177,7 @@ Object.defineProperty(window, 'getComputedStyle', {
 // Cleanup after each test
 afterEach(() => {
   cleanup();
+  installMatchMediaMock();
   // Clean up tenant attribute to prevent leaks between tests
   document.documentElement.removeAttribute('data-tenant');
   document.documentElement.removeAttribute('data-theme');

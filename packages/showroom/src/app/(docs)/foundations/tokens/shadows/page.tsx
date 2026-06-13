@@ -75,7 +75,7 @@ function EngineShadowPreviewContent({ label }: { label: string }) {
           </Stack>
         </Box>
         <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
-          Elevation gets interpreted through each engine's tone, not only by blur size.
+          Elevation gets interpreted through each engine&apos;s tone, not only by blur size.
         </Text>
       </Stack>
     </Card>

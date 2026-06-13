@@ -29,6 +29,11 @@ import {
   FileWarning,
   ClipboardList,
   ListChecks,
+  Barcode,
+  FolderTree,
+  ImageOff,
+  QrCode,
+  ScanLine,
 } from 'lucide-react';
 import { createIcon } from '../factory';
 
@@ -56,3 +61,8 @@ export const FileEditIcon = createIcon(FileEdit, 'FileEditIcon');
 export const FileSearchIcon = createIcon(FileSearch, 'FileSearchIcon');
 export const FileTypeIcon = createIcon(FileType, 'FileTypeIcon');
 export const FolderOpenIcon = createIcon(FolderOpen, 'FolderOpenIcon');
+export const BarcodeIcon = createIcon(Barcode, 'BarcodeIcon');
+export const FolderTreeIcon = createIcon(FolderTree, 'FolderTreeIcon');
+export const ImageOffIcon = createIcon(ImageOff, 'ImageOffIcon');
+export const QrCodeIcon = createIcon(QrCode, 'QrCodeIcon');
+export const ScanLineIcon = createIcon(ScanLine, 'ScanLineIcon');

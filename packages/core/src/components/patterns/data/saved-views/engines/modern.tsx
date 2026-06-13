@@ -235,6 +235,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         }}
       >
         <svg
+          className="loading-spinner"
           width="18"
           height="18"
           viewBox="0 0 24 24"

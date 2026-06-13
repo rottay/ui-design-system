@@ -38,7 +38,6 @@ import {
 import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../../foundation/types';
 
-const { Panel } = Collapse;
 const { Title } = Typography;
 
 /**
@@ -221,21 +220,21 @@ export default function ClassicFilterPanel(props: FilterPanelProps) {
         <Collapse
           defaultActiveKey={defaultCollapsed ? [] : ['filters']}
           ghost
-        >
-          <Panel
-            header={
+          items={[
+            {
+              key: 'filters',
+              label: (
               <Space>
                 {title ?? 'Filters'}
                 {activeCount != null && activeCount > 0 && (
                   <Badge count={activeCount} />
                 )}
               </Space>
-            }
-            key="filters"
-          >
-            {filterContent}
-          </Panel>
-        </Collapse>
+              ),
+              children: filterContent,
+            },
+          ]}
+        />
       </div>
     );
   }

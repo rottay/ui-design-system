@@ -68,7 +68,8 @@ describe('Tour real engine coverage', () => {
     expect(dialog).toHaveTextContent('Welcome');
     expect(dialog).toHaveTextContent('Start here');
     expect(dialog).toHaveTextContent('Cover content');
-    expect(dialog.getAttribute('style') ?? '').toContain('border: 2px solid');
+    expect(dialog).toHaveClass('rottay-tour-dialog--primary');
+    expect(dialog).toHaveAttribute('data-type', 'primary');
 
     fireEvent.click(screen.getByRole('button', { name: 'Next' }));
     await waitFor(() => {

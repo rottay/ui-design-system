@@ -91,8 +91,7 @@ describe('Toast integration', () => {
     );
 
     const alert = await screen.findByRole('alert');
-    expect(alert.getAttribute('style') ?? '').toContain('var(--ds-toast-gradient-bg');
-    expect(alert.getAttribute('style') ?? '').toContain('var(--ds-toast-gradient-color');
+    expect(alert).toHaveAttribute('data-variant', 'gradient');
   });
 
   it('registers standalone toast methods while the provider is mounted', async () => {

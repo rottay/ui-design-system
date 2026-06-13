@@ -102,8 +102,24 @@ describe('PatternFilterPanel runtime engines', () => {
           target: { value: 'live' },
         });
       } else {
-        fireEvent.click(await screen.findByRole('combobox'));
-        fireEvent.click(await screen.findByRole('option', { name: 'Live' }));
+        const combobox = document.querySelector('[role="combobox"]');
+        if (!(combobox instanceof HTMLElement)) {
+          throw new Error('Expected modern select combobox');
+        }
+
+        fireEvent.click(combobox);
+
+        await waitFor(() => {
+          const liveOption = Array.from(document.querySelectorAll('[role="option"]')).find((option) =>
+            option.textContent?.includes('Live')
+          );
+          expect(liveOption).toBeDefined();
+        });
+
+        const liveOption = Array.from(document.querySelectorAll('[role="option"]')).find((option) =>
+          option.textContent?.includes('Live')
+        );
+        fireEvent.click(liveOption as Element);
       }
       expect(onChange).toHaveBeenCalledWith(expect.objectContaining({ status: 'live' }));
 

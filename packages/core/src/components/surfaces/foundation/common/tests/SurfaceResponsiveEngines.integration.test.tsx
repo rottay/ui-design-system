@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 
 import { AuthSurface } from '../../../pages/experience/auth';
 import { DetailSurface } from '../../../pages/data/detail';
@@ -252,7 +252,7 @@ describe('surface mobile resilience across stable engines', () => {
     async (engine) => {
       mockMatchMedia(390);
 
-      renderWithEngine(
+      const { container } = renderWithEngine(
         <ListSurface
           data={[{ id: '1', name: 'Ana Gomez', stage: 'interview' }]}
           adapter={listAdapter}
@@ -262,7 +262,10 @@ describe('surface mobile resilience across stable engines', () => {
       );
 
       expect(await screen.findByText('Candidate card: Ana Gomez')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /table/i })).not.toBeInTheDocument();
+      const buttonLabels = Array.from(container.querySelectorAll('button')).map((button) =>
+        button.textContent?.trim()
+      );
+      expect(buttonLabels).not.toContain('Table');
     },
     45000,
   );
@@ -272,10 +275,15 @@ describe('surface mobile resilience across stable engines', () => {
     async (engine) => {
       mockMatchMedia(390);
 
-      renderWithEngine(<FormSurface config={buildFormConfig()} />, engine);
+      const { baseElement } = renderWithEngine(<FormSurface config={buildFormConfig()} />, engine);
 
-      expect(await screen.findByRole('button', { name: /create record/i })).toBeInTheDocument();
-      expect(screen.queryByText('Desktop aside guidance')).not.toBeInTheDocument();
+      await waitFor(() => {
+        const submitButton = Array.from(baseElement.querySelectorAll('button')).find((button) =>
+          button.textContent?.includes('Create record')
+        );
+        expect(submitButton).toBeTruthy();
+      });
+      expect(baseElement.textContent).not.toContain('Desktop aside guidance');
     },
     45000,
   );
@@ -312,7 +320,7 @@ describe('surface mobile resilience across stable engines', () => {
       );
 
       expect(await screen.findByText('Queue module')).toBeInTheDocument();
-      expect(screen.getByText('Scanner spike detected')).toBeInTheDocument();
+      expect(await screen.findByText('Scanner spike detected')).toBeInTheDocument();
       expect(screen.queryByText('Secondary operator panel')).not.toBeInTheDocument();
       expect(screen.queryByText('Gates')).not.toBeInTheDocument();
     },

@@ -20,7 +20,6 @@ import type { ColumnDef, SortConfig } from '@rottay/design-system';
 
 const SURFACE = 'var(--ds-color-bg-container, #ffffff)';
 const ELEVATED_SURFACE = 'var(--ds-color-bg-elevated, #f8fafc)';
-const SUBTLE_SURFACE = 'var(--ds-color-bg-secondary, #f1f5f9)';
 const BORDER = 'var(--ds-color-border, rgba(148, 163, 184, 0.28))';
 const TEXT_SECONDARY = 'var(--ds-color-text-secondary)';
 const TEXT_MUTED = 'var(--ds-color-text-muted)';

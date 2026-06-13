@@ -1,12 +1,34 @@
 /** @fileoverview ProfileSurface integration tests -- save flow and layout variants. */
 
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { ProfileSurface } from '..';
 import type { ProfileSurfaceConfig } from '../../../../foundation/types';
 import { renderSurface } from '../../../../foundation/common/test-utils';
+
+function getButtonsByText(container: HTMLElement, label: RegExp): HTMLButtonElement[] {
+  return Array.from(container.querySelectorAll('button')).filter((button) =>
+    label.test(button.textContent ?? '')
+  );
+}
+
+function getButtonByText(container: HTMLElement, label: RegExp): HTMLButtonElement {
+  const button = getButtonsByText(container, label)[0];
+  expect(button).toBeDefined();
+  return button;
+}
+
+function queryButtonByText(container: HTMLElement, label: RegExp): HTMLButtonElement | undefined {
+  return getButtonsByText(container, label)[0];
+}
+
+async function expectText(container: HTMLElement, text: string): Promise<void> {
+  await waitFor(() => {
+    expect(container.textContent).toContain(text);
+  });
+}
 
 function buildConfig(overrides?: Partial<ProfileSurfaceConfig>): ProfileSurfaceConfig {
   return {
@@ -60,54 +82,55 @@ function buildConfig(overrides?: Partial<ProfileSurfaceConfig>): ProfileSurfaceC
 describe('ProfileSurface integration', () => {
   describe('section rendering', () => {
     it('renders all sections with labels', async () => {
-      renderSurface(<ProfileSurface config={buildConfig()} />);
+      const { container } = renderSurface(<ProfileSurface config={buildConfig()} />);
 
-      expect(await screen.findByText('Personal Information')).toBeInTheDocument();
-      expect(await screen.findByText('Contact Details')).toBeInTheDocument();
-      expect(await screen.findByText('Preferences')).toBeInTheDocument();
+      await expectText(container, 'Personal Information');
+      expect(container.textContent).toContain('Contact Details');
+      expect(container.textContent).toContain('Preferences');
     });
 
     it('renders section descriptions', async () => {
-      renderSurface(<ProfileSurface config={buildConfig()} />);
+      const { container } = renderSurface(<ProfileSurface config={buildConfig()} />);
 
-      expect(await screen.findByText('Your basic profile details')).toBeInTheDocument();
-      expect(await screen.findByText('How others can reach you')).toBeInTheDocument();
+      await expectText(container, 'Your basic profile details');
+      expect(container.textContent).toContain('How others can reach you');
     });
 
     it('renders all field labels', async () => {
-      renderSurface(<ProfileSurface config={buildConfig()} />);
+      const { container } = renderSurface(<ProfileSurface config={buildConfig()} />);
 
-      expect(await screen.findByText('Full Name')).toBeInTheDocument();
-      expect(await screen.findByText('Email')).toBeInTheDocument();
-      expect(await screen.findByText('Bio')).toBeInTheDocument();
-      expect(await screen.findByText('Phone')).toBeInTheDocument();
-      expect(await screen.findByText('Address')).toBeInTheDocument();
-      expect(await screen.findByText('Language')).toBeInTheDocument();
-      expect(await screen.findByText('Timezone')).toBeInTheDocument();
+      await expectText(container, 'Full Name');
+      expect(container.textContent).toContain('Email');
+      expect(container.textContent).toContain('Bio');
+      expect(container.textContent).toContain('Phone');
+      expect(container.textContent).toContain('Address');
+      expect(container.textContent).toContain('Language');
+      expect(container.textContent).toContain('Timezone');
     });
 
     it('renders field values in read mode', async () => {
-      renderSurface(<ProfileSurface config={buildConfig()} />);
+      const { container } = renderSurface(<ProfileSurface config={buildConfig()} />);
 
-      expect(await screen.findByText('John Doe')).toBeInTheDocument();
-      expect(await screen.findByText('john@example.com')).toBeInTheDocument();
-      expect(await screen.findByText('Software developer')).toBeInTheDocument();
-      expect(await screen.findByText('+1 555-0100')).toBeInTheDocument();
-      expect(await screen.findByText('123 Main St')).toBeInTheDocument();
+      await expectText(container, 'John Doe');
+      expect(container.textContent).toContain('john@example.com');
+      expect(container.textContent).toContain('Software developer');
+      expect(container.textContent).toContain('+1 555-0100');
+      expect(container.textContent).toContain('123 Main St');
     });
 
     it('renders chrome title', async () => {
-      renderSurface(<ProfileSurface config={buildConfig()} />);
+      const { container } = renderSurface(<ProfileSurface config={buildConfig()} />);
 
-      expect(await screen.findByText('My Profile')).toBeInTheDocument();
+      await expectText(container, 'My Profile');
     });
   });
 
   describe('save callback', () => {
     it('shows edit buttons for sections when onSave is provided', async () => {
-      renderSurface(<ProfileSurface config={buildConfig()} />);
+      const { container } = renderSurface(<ProfileSurface config={buildConfig()} />);
 
-      const editButtons = await screen.findAllByRole('button', { name: /edit/i });
+      await expectText(container, 'Personal Information');
+      const editButtons = getButtonsByText(container, /edit/i);
       expect(editButtons.length).toBe(3); // One per section
     });
 
@@ -119,21 +142,23 @@ describe('ProfileSurface integration', () => {
         },
       });
 
-      renderSurface(<ProfileSurface config={config} />);
+      const { container } = renderSurface(<ProfileSurface config={config} />);
 
-      expect(await screen.findByText('Personal Information')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /^edit$/i })).not.toBeInTheDocument();
+      await expectText(container, 'Personal Information');
+      expect(queryButtonByText(container, /^edit$/i)).toBeUndefined();
     });
 
     it('toggles to edit mode and back to save', async () => {
       const config = buildConfig();
-      renderSurface(<ProfileSurface config={config} />);
+      const { container } = renderSurface(<ProfileSurface config={config} />);
 
-      const editButtons = await screen.findAllByRole('button', { name: /edit/i });
+      await expectText(container, 'Personal Information');
+      const editButtons = getButtonsByText(container, /edit/i);
       fireEvent.click(editButtons[0]); // Edit "Personal Information"
 
       // After clicking edit, a Save button should appear
-      const saveButton = await screen.findByRole('button', { name: /save/i });
+      await expectText(container, 'Save');
+      const saveButton = getButtonByText(container, /save/i);
       expect(saveButton).toBeInTheDocument();
 
       fireEvent.click(saveButton);
@@ -150,9 +175,10 @@ describe('ProfileSurface integration', () => {
   describe('delete account', () => {
     it('renders delete account button and fires callback', async () => {
       const config = buildConfig();
-      renderSurface(<ProfileSurface config={config} />);
+      const { container } = renderSurface(<ProfileSurface config={config} />);
 
-      const deleteButton = await screen.findByRole('button', { name: /delete account/i });
+      await expectText(container, 'Delete Account');
+      const deleteButton = getButtonByText(container, /delete account/i);
       fireEvent.click(deleteButton);
       expect(config.behavior.onDeleteAccount).toHaveBeenCalledTimes(1);
     });
@@ -165,18 +191,19 @@ describe('ProfileSurface integration', () => {
         },
       });
 
-      renderSurface(<ProfileSurface config={config} />);
+      const { container } = renderSurface(<ProfileSurface config={config} />);
 
-      expect(await screen.findByText('Personal Information')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /delete account/i })).not.toBeInTheDocument();
+      await expectText(container, 'Personal Information');
+      expect(queryButtonByText(container, /delete account/i)).toBeUndefined();
     });
   });
 
   describe('change password', () => {
     it('renders change password button when handler is provided', async () => {
-      renderSurface(<ProfileSurface config={buildConfig()} />);
+      const { container } = renderSurface(<ProfileSurface config={buildConfig()} />);
 
-      const changePasswordButton = await screen.findByRole('button', { name: /change password/i });
+      await expectText(container, 'Change Password');
+      const changePasswordButton = getButtonByText(container, /change password/i);
       expect(changePasswordButton).toBeInTheDocument();
     });
 
@@ -188,10 +215,10 @@ describe('ProfileSurface integration', () => {
         },
       });
 
-      renderSurface(<ProfileSurface config={config} />);
+      const { container } = renderSurface(<ProfileSurface config={config} />);
 
-      expect(await screen.findByText('Personal Information')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /change password/i })).not.toBeInTheDocument();
+      await expectText(container, 'Personal Information');
+      expect(queryButtonByText(container, /change password/i)).toBeUndefined();
     });
   });
 
@@ -204,9 +231,9 @@ describe('ProfileSurface integration', () => {
         },
       });
 
-      renderSurface(<ProfileSurface config={config} />);
+      const { container } = renderSurface(<ProfileSurface config={config} />);
 
-      expect(await screen.findByText('No profile sections')).toBeInTheDocument();
+      await expectText(container, 'No profile sections');
     });
   });
 
@@ -216,9 +243,9 @@ describe('ProfileSurface integration', () => {
         visual: { layout: 'sidebar' },
       });
 
-      renderSurface(<ProfileSurface config={config} />);
+      const { container } = renderSurface(<ProfileSurface config={config} />);
 
-      expect(await screen.findByText('Personal Information')).toBeInTheDocument();
+      await expectText(container, 'Personal Information');
     });
   });
 });

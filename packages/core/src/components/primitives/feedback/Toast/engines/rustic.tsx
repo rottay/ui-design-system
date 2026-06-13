@@ -377,6 +377,7 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     <div
       role="alert"
       aria-live="polite"
+      data-variant={variant}
       className={className}
       style={containerStyle}
       onMouseEnter={handleMouseEnter}

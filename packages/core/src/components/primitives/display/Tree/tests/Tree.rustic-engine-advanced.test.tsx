@@ -239,8 +239,6 @@ describe('Tree rustic advanced engine coverage', () => {
     expect(screen.getByRole('tree')).toHaveTextContent('Group');
     expect(screen.getByRole('tree')).not.toHaveTextContent('Other Item');
     expect(screen.getByRole('tree')).not.toHaveTextContent('Outside Item');
-    expect(screen.getByText('Match').getAttribute('style')).toContain(
-      'background-color: var(--ds-tree-highlight-bg, #fef3c7)'
-    );
+    expect(screen.getByText('Match')).toHaveClass('rottay-tree-highlight');
   });
 });

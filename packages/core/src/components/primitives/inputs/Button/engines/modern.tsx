@@ -289,8 +289,15 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
 
   const size = scalarOrUndefined(sizeProp) ?? BUTTON_DEFAULTS.size;
 
-  // Explicit `danger` prop takes priority over `variant`
-  const effectiveVariant = danger ? 'danger' : (variant || 'primary');
+  // Explicit `danger` prop takes priority over `variant`.
+  // Unknown variants fall back to the public primary contract for className,
+  // data attributes, and inline styles consistently.
+  const requestedVariant = variant || 'primary';
+  const effectiveVariant = danger
+    ? 'danger'
+    : VARIANT_STYLES[requestedVariant]
+      ? requestedVariant
+      : 'primary';
 
   // -------------------------------------------------------------------------
   // Class names (no DaisyUI btn-* classes)
@@ -298,6 +305,13 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const classes = [
     'rottay-button',
     'rottay-button--modern',
+    `rottay-button--${effectiveVariant}`,
+    `rottay-button--${size}`,
+    `rottay-button--${shape}`,
+    isFullWidth && 'rottay-button--block',
+    loading && 'rottay-button--loading',
+    disabled && 'rottay-button--disabled',
+    shadow && 'rottay-button--shadow',
     className,
   ].filter(Boolean).join(' ');
 
@@ -447,6 +461,12 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         onBlur={() => setIsFocused(false)}
         aria-disabled={disabled || loading}
         aria-busy={loading}
+        data-variant={effectiveVariant}
+        data-size={size}
+        data-shape={shape}
+        data-loading={loading ? 'true' : undefined}
+        data-full-width={isFullWidth ? 'true' : undefined}
+        data-focus-visible={isFocused && !isInert ? 'true' : undefined}
         {...(responsive ? responsive.attrs : {})}
       >
         {/* Loading spinner - centered, replaces content */}

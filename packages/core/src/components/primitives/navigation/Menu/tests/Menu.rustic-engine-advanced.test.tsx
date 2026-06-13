@@ -25,7 +25,7 @@ const MENU_ITEMS = [
 
 describe('Menu rustic advanced engine coverage', () => {
   it('covers group, divider, submenu, keyboard navigation, multiple selection, and disabled-item guards', async () => {
-    const { default: RusticMenu } = await import('./engines/rustic');
+    const { default: RusticMenu } = await import('../engines/rustic');
     const handleClick = vi.fn();
     const handleSelect = vi.fn();
     const handleOpenChange = vi.fn();
@@ -78,7 +78,7 @@ describe('Menu rustic advanced engine coverage', () => {
   }, 10000);
 
   it('covers controlled submenu state, dark inline styling, non-selectable clicks, and submenu keyboard toggles', async () => {
-    const { default: RusticMenu } = await import('./engines/rustic');
+    const { default: RusticMenu } = await import('../engines/rustic');
     const handleClick = vi.fn();
     const handleSelect = vi.fn();
     const handleOpenChange = vi.fn();

@@ -23,6 +23,8 @@ import {
   ShieldAlert,
   ShieldOff,
   ShieldX,
+  CircleDashed,
+  CircleDot,
 } from 'lucide-react';
 import { createIcon } from '../factory';
 
@@ -44,3 +46,5 @@ export const SearchXIcon = createIcon(SearchX, 'SearchXIcon');
 export const ShieldAlertIcon = createIcon(ShieldAlert, 'ShieldAlertIcon');
 export const ShieldOffIcon = createIcon(ShieldOff, 'ShieldOffIcon');
 export const ShieldXIcon = createIcon(ShieldX, 'ShieldXIcon');
+export const CircleDashedIcon = createIcon(CircleDashed, 'CircleDashedIcon');
+export const CircleDotIcon = createIcon(CircleDot, 'CircleDotIcon');

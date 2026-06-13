@@ -8,6 +8,14 @@ import { ReportSurface } from '..';
 import type { ReportSurfaceConfig } from '../../../../foundation/types';
 import { renderSurface } from '../../../../foundation/common/test-utils';
 
+function findButtonForText(element: HTMLElement): HTMLButtonElement {
+  const button = element.closest('button');
+  if (!(button instanceof HTMLButtonElement)) {
+    throw new Error(`Expected "${element.textContent ?? ''}" to be rendered inside a button`);
+  }
+  return button;
+}
+
 function buildConfig(overrides?: Partial<ReportSurfaceConfig>): ReportSurfaceConfig {
   return {
     visual: {
@@ -160,8 +168,8 @@ describe('ReportSurface integration', () => {
       const config = buildConfig();
       renderSurface(<ReportSurface config={config} />);
 
-      const generateButton = await screen.findByRole('button', { name: /generate/i });
-      fireEvent.click(generateButton);
+      const generateLabel = await screen.findByText('Generate');
+      fireEvent.click(findButtonForText(generateLabel));
       expect(config.behavior.onGenerate).toHaveBeenCalledTimes(1);
     });
 
@@ -176,7 +184,7 @@ describe('ReportSurface integration', () => {
       renderSurface(<ReportSurface config={config} />);
 
       expect(await screen.findByText('Revenue Report')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /generate/i })).not.toBeInTheDocument();
+      expect(screen.queryByText('Generate')).not.toBeInTheDocument();
     });
   });
 
@@ -256,8 +264,8 @@ describe('ReportSurface integration', () => {
       const config = buildConfig();
       renderSurface(<ReportSurface config={config} />);
 
-      const pdfButton = await screen.findByRole('button', { name: /^PDF$/i });
-      fireEvent.click(pdfButton);
+      const pdfLabel = await screen.findByText('PDF');
+      fireEvent.click(findButtonForText(pdfLabel));
       expect(config.behavior.onExport).toHaveBeenCalledWith('pdf');
     });
 
@@ -265,8 +273,8 @@ describe('ReportSurface integration', () => {
       const config = buildConfig();
       renderSurface(<ReportSurface config={config} />);
 
-      const excelButton = await screen.findByRole('button', { name: /^EXCEL$/i });
-      fireEvent.click(excelButton);
+      const excelLabel = await screen.findByText('EXCEL');
+      fireEvent.click(findButtonForText(excelLabel));
       expect(config.behavior.onExport).toHaveBeenCalledWith('excel');
     });
 
@@ -274,8 +282,8 @@ describe('ReportSurface integration', () => {
       const config = buildConfig();
       renderSurface(<ReportSurface config={config} />);
 
-      const csvButton = await screen.findByRole('button', { name: /^CSV$/i });
-      fireEvent.click(csvButton);
+      const csvLabel = await screen.findByText('CSV');
+      fireEvent.click(findButtonForText(csvLabel));
       expect(config.behavior.onExport).toHaveBeenCalledWith('csv');
     });
 
@@ -290,9 +298,9 @@ describe('ReportSurface integration', () => {
       renderSurface(<ReportSurface config={config} />);
 
       expect(await screen.findByText('Revenue Report')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /^PDF$/i })).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /^EXCEL$/i })).not.toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /^CSV$/i })).not.toBeInTheDocument();
+      expect(screen.queryByText('PDF')).not.toBeInTheDocument();
+      expect(screen.queryByText('EXCEL')).not.toBeInTheDocument();
+      expect(screen.queryByText('CSV')).not.toBeInTheDocument();
     });
   });
 

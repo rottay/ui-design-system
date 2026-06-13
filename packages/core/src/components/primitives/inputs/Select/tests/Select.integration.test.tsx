@@ -23,15 +23,18 @@ const TEST_TENANT_CONFIG: TenantConfig = {
   branding: {
     companyName: 'Test Tenant',
     primaryColor: '#2563eb',
+    darkPrimaryColor: '#93c5fd',
     secondaryColor: '#0f766e',
+    darkSecondaryColor: '#5eead4',
     accentColor: '#7c3aed',
+    darkAccentColor: '#c4b5fd',
   },
 };
 
 describe('Select integration', () => {
   it.each(STABLE_ENGINES)('renders the live component with the %s engine', async (engine) => {
     const { Select } = await import('..');
-    const { DesignSystemProvider } = await import('../../../../../bootstrap');
+    const { DesignSystemProvider } = await import('../../../../../runtime/bootstrap');
     render(
       <DesignSystemProvider
         tenantConfig={{ ...TEST_TENANT_CONFIG, engine }}
@@ -49,7 +52,7 @@ describe('Select integration', () => {
 
   it.each(STABLE_ENGINES)('forwards refs through the factory with the %s engine', async (engine) => {
     const { Select } = await import('..');
-    const { DesignSystemProvider } = await import('../../../../../bootstrap');
+    const { DesignSystemProvider } = await import('../../../../../runtime/bootstrap');
     const ref = createRef<any>();
 
     render(

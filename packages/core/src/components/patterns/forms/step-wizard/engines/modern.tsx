@@ -229,12 +229,13 @@ export default function ModernStepWizard(props: StepWizardProps) {
   if (loading) {
     return (
       <div
-        className={className ?? ''}
+        className={['ds-step-wizard-skeleton', className].filter(Boolean).join(' ')}
         style={{ ...cardStyle, ...style }}
       >
         <div style={{ padding: 24 }}>
           {/* Shimmer bar for step indicators */}
           <div
+            className="ds-step-wizard-skeleton__progress"
             style={{
               height: 8,
               borderRadius: 'var(--ds-radius-full)',
@@ -245,6 +246,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
           />
           {/* Shimmer block for content */}
           <div
+            className="ds-step-wizard-skeleton__content"
             style={{
               height: 200,
               borderRadius: 'var(--ds-radius-md)',

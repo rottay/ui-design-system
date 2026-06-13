@@ -49,7 +49,7 @@ import { Stack } from '../../../../primitives/layout/Stack';
 import { Flex } from '../../../../primitives/layout/Flex';
 import { Text } from '../../../../primitives/display/Typography';
 import { Button } from '../../../../primitives/inputs/Button';
-import { WorkspaceShell } from '../../../layout/workspace-shell';
+import { WorkspaceShell } from '../../../layout/collection-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
 

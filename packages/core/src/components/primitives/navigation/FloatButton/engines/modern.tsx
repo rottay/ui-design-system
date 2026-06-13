@@ -44,6 +44,23 @@ import React, { useState, useEffect } from 'react';
 import type { FloatButtonProps, FloatButtonGroupProps, FloatButtonBackTopProps } from '../FloatButton.types';
 import { FLOAT_BUTTON_DEFAULTS } from '../FloatButton.types';
 
+function getFloatButtonClassName(
+  type: FloatButtonProps['type'],
+  shape: FloatButtonProps['shape'],
+  className = ''
+): string {
+  const typeClassName = type === 'primary'
+    ? 'btn-primary'
+    : 'btn-ghost bg-base-100';
+  const shapeClassName = shape === 'circle'
+    ? 'btn-circle'
+    : 'rounded-lg';
+
+  return ['btn', shapeClassName, typeClassName, 'shadow-lg', className]
+    .filter(Boolean)
+    .join(' ');
+}
+
 // ============================================================================
 // FloatButton Modern Implementation
 // ============================================================================
@@ -107,7 +124,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         {description && <span className="text-xs">{description}</span>}
         {children}
         {badge?.dot && (
-          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full" style={{ background: 'var(--ds-color-error)' }} />
+          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error" style={{ background: 'var(--ds-color-error)' }} />
         )}
         {badge?.count && (
           <span style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 9999, padding: '1px 6px', fontSize: 11, lineHeight: '16px', background: 'var(--ds-color-error)', color: '#fff' }}>
@@ -124,13 +141,14 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       boxShadow: 'var(--ds-elevation-2)',
       ...style,
     };
+    const floatClassName = getFloatButtonClassName(type, shape, className);
 
     const buttonElement = href ? (
       <a
         ref={ref as React.Ref<HTMLAnchorElement>}
         href={href}
         target={target}
-        className={className}
+        className={floatClassName}
         style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
       >
@@ -141,7 +159,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         ref={ref}
         type="button"
         onClick={onClick}
-        className={className}
+        className={floatClassName}
         style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
       >
@@ -239,6 +257,7 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         <button
           type="button"
           onClick={trigger === 'click' ? handleToggle : undefined}
+          className={getFloatButtonClassName(type, shape)}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -349,7 +368,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         ref={ref}
         type="button"
         onClick={scrollToTop}
-        className={`fixed bottom-6 right-6 transition-opacity duration-200 ${className}`}
+        className={`fixed bottom-6 right-6 transition-opacity duration-200 ${getFloatButtonClassName(type, shape, className)}`}
         style={{
           display: 'inline-flex',
           alignItems: 'center',

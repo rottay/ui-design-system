@@ -1,4 +1,5 @@
 import React from 'react';
+import { ConfigProvider } from 'antd';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -18,8 +19,12 @@ const TEST_TENANT_CONFIG: TenantConfig = {
   branding: {
     companyName: 'Coverage Tenant',
     primaryColor: '#2563eb',
+    darkPrimaryColor: '#60a5fa',
     secondaryColor: '#0f766e',
+    darkSecondaryColor: '#5eead4',
     accentColor: '#7c3aed',
+    darkAccentColor: '#c4b5fd',
+    darkBackgroundColor: '#171717',
   },
 };
 
@@ -34,9 +39,11 @@ function renderMessageHarness(engine: Exclude<EngineName, 'custom'>) {
 
   render(
     <DesignSystemProvider tenantConfig={{ ...TEST_TENANT_CONFIG, engine }} forceEngine={engine} skipCssLoading>
-      <MessageProvider maxCount={1} placement="top">
-        <Tester />
-      </MessageProvider>
+      <ConfigProvider theme={{ token: { motion: false } }}>
+        <MessageProvider maxCount={1} placement="top">
+          <Tester />
+        </MessageProvider>
+      </ConfigProvider>
     </DesignSystemProvider>
   );
 

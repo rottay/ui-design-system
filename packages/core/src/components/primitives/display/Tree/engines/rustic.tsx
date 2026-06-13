@@ -61,6 +61,7 @@ function highlightText(
     <>
       {before}
       <span
+        className="rottay-tree-highlight"
         style={{
           backgroundColor: 'var(--ds-tree-highlight-bg, #fef3c7)',
           color: 'var(--ds-tree-highlight-color, #92400e)',

@@ -79,11 +79,11 @@ describe('Card real engine coverage', () => {
   it('uses canonical variant border surfaces for outlined and ghost cards', () => {
     expect(getModernCardVariantStyle('outlined')).toMatchObject({
       borderWidth: 'var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px))',
-      borderColor: 'var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle)))',
+      borderColor: 'var(--ds-card-border, var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle))))',
     });
     expect(getModernCardVariantStyle('ghost')).toMatchObject({
       borderWidth: '0',
-      borderColor: 'var(--ds-card-ghost-border-color, transparent)',
+      borderColor: 'var(--ds-card-border, var(--ds-card-ghost-border-color, transparent))',
     });
   });
 

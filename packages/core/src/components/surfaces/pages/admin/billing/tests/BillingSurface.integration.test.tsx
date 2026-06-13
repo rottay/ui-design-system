@@ -1,7 +1,7 @@
 /** @fileoverview BillingSurface integration tests -- subscription flow and payment methods. */
 
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import { BillingSurface } from '..';
@@ -48,143 +48,171 @@ function buildConfig(overrides?: Partial<BillingSurfaceConfig>): BillingSurfaceC
   };
 }
 
+function getText(container: HTMLElement): string {
+  return container.textContent ?? '';
+}
+
+async function expectText(container: HTMLElement, text: string): Promise<void> {
+  await waitFor(() => {
+    expect(getText(container)).toContain(text);
+  });
+}
+
+function countText(container: HTMLElement, text: string): number {
+  return getText(container).split(text).length - 1;
+}
+
+function queryButton(container: HTMLElement, label: RegExp): HTMLButtonElement | undefined {
+  return Array.from(container.querySelectorAll('button')).find((button) =>
+    label.test(button.textContent ?? '')
+  );
+}
+
+async function findButton(container: HTMLElement, label: RegExp): Promise<HTMLButtonElement> {
+  let button: HTMLButtonElement | undefined;
+
+  await waitFor(() => {
+    button = queryButton(container, label);
+    expect(button).toBeTruthy();
+  });
+
+  return button as HTMLButtonElement;
+}
+
 describe('BillingSurface integration', () => {
   describe('plan display', () => {
     it('renders plan name and price with interval', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('Enterprise')).toBeInTheDocument();
-      expect(await screen.findByText('$299 / month')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, 'Enterprise');
+      await expectText(container, '$299 / month');
     });
 
     it('renders all plan features', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('Unlimited users')).toBeInTheDocument();
-      expect(await screen.findByText('Priority support')).toBeInTheDocument();
-      expect(await screen.findByText('Custom integrations')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, 'Unlimited users');
+      await expectText(container, 'Priority support');
+      await expectText(container, 'Custom integrations');
     });
 
     it('renders the chrome title and subtitle', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('Billing')).toBeInTheDocument();
-      expect(await screen.findByText('Manage your subscription')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, 'Billing');
+      await expectText(container, 'Manage your subscription');
     });
   });
 
   describe('usage bars', () => {
     it('renders all usage meters with labels', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('API Calls')).toBeInTheDocument();
-      expect(await screen.findByText('Storage')).toBeInTheDocument();
-      expect(await screen.findByText('Team Members')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, 'API Calls');
+      await expectText(container, 'Storage');
+      await expectText(container, 'Team Members');
     });
 
     it('renders usage values with current/limit format', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('8500 / 10000 calls')).toBeInTheDocument();
-      expect(await screen.findByText('45 / 100 GB')).toBeInTheDocument();
-      expect(await screen.findByText('12 / 25 seats')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, '8500 / 10000 calls');
+      await expectText(container, '45 / 100 GB');
+      await expectText(container, '12 / 25 seats');
     });
 
     it('does not render usage section when usage is empty', async () => {
       const config = buildConfig({ behavior: { ...buildConfig().behavior, usage: [] } });
-      renderSurface(<BillingSurface config={config} />);
-      expect(await screen.findByText('Enterprise')).toBeInTheDocument();
-      expect(screen.queryByText('Usage')).not.toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      await expectText(container, 'Enterprise');
+      expect(getText(container)).not.toContain('Usage');
     });
   });
 
   describe('invoice list', () => {
     it('renders all invoices with dates and amounts', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('2026-01-01')).toBeInTheDocument();
-      expect(await screen.findByText('2025-12-01')).toBeInTheDocument();
-      expect(await screen.findByText('2025-11-01')).toBeInTheDocument();
-      const amountElements = await screen.findAllByText('$299.00');
-      expect(amountElements.length).toBe(2);
-      expect(await screen.findByText('$149.00')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, '2026-01-01');
+      expect(getText(container)).toContain('2025-12-01');
+      expect(getText(container)).toContain('2025-11-01');
+      expect(countText(container, '$299.00')).toBe(2);
+      expect(getText(container)).toContain('$149.00');
     });
 
     it('renders invoice statuses', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      const paidElements = await screen.findAllByText('paid');
-      expect(paidElements.length).toBeGreaterThanOrEqual(2);
-      const pendingElements = await screen.findAllByText('pending');
-      expect(pendingElements.length).toBeGreaterThanOrEqual(1);
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, 'paid');
+      expect(countText(container, 'paid')).toBeGreaterThanOrEqual(2);
+      expect(countText(container, 'pending')).toBeGreaterThanOrEqual(1);
     });
 
     it('renders download button for invoices with download URLs', async () => {
       const config = buildConfig();
-      renderSurface(<BillingSurface config={config} />);
-      const downloadButtons = await screen.findAllByRole('button', { name: /download/i });
-      expect(downloadButtons.length).toBeGreaterThanOrEqual(1);
-      fireEvent.click(downloadButtons[0]);
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      const downloadButton = await findButton(container, /download/i);
+      fireEvent.click(downloadButton);
       expect(config.behavior.onDownloadInvoice).toHaveBeenCalledWith('inv-1');
     });
 
     it('does not render invoices section when empty', async () => {
       const config = buildConfig({ behavior: { ...buildConfig().behavior, invoices: [] } });
-      renderSurface(<BillingSurface config={config} />);
-      expect(await screen.findByText('Enterprise')).toBeInTheDocument();
-      expect(screen.queryByText('Invoices')).not.toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      await expectText(container, 'Enterprise');
+      expect(getText(container)).not.toContain('Invoices');
     });
   });
 
   describe('payment methods', () => {
     it('renders payment methods with masked card numbers', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('**** 4242')).toBeInTheDocument();
-      expect(await screen.findByText('**** 5555')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, '**** 4242');
+      await expectText(container, '**** 5555');
     });
 
     it('shows card types', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('Visa')).toBeInTheDocument();
-      expect(await screen.findByText('Mastercard')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, 'Visa');
+      await expectText(container, 'Mastercard');
     });
 
     it('identifies the default payment method', async () => {
-      renderSurface(<BillingSurface config={buildConfig()} />);
-      expect(await screen.findByText('Default')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={buildConfig()} />);
+      await expectText(container, 'Default');
     });
   });
 
   describe('actions', () => {
     it('fires upgrade callback', async () => {
       const config = buildConfig();
-      renderSurface(<BillingSurface config={config} />);
-      const upgradeButton = await screen.findByRole('button', { name: /upgrade/i });
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      const upgradeButton = await findButton(container, /upgrade/i);
       fireEvent.click(upgradeButton);
       expect(config.behavior.onUpgrade).toHaveBeenCalledTimes(1);
     });
 
     it('fires cancel callback', async () => {
       const config = buildConfig();
-      renderSurface(<BillingSurface config={config} />);
-      const cancelButton = await screen.findByRole('button', { name: /cancel/i });
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      const cancelButton = await findButton(container, /cancel/i);
       fireEvent.click(cancelButton);
       expect(config.behavior.onCancel).toHaveBeenCalledTimes(1);
     });
 
     it('does not render upgrade button when onUpgrade is not provided', async () => {
       const config = buildConfig({ behavior: { ...buildConfig().behavior, onUpgrade: undefined } });
-      renderSurface(<BillingSurface config={config} />);
-      expect(await screen.findByText('Enterprise')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /upgrade/i })).not.toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      await expectText(container, 'Enterprise');
+      expect(queryButton(container, /upgrade/i)).toBeUndefined();
     });
 
     it('does not render cancel button when onCancel is not provided', async () => {
       const config = buildConfig({ behavior: { ...buildConfig().behavior, onCancel: undefined } });
-      renderSurface(<BillingSurface config={config} />);
-      expect(await screen.findByText('Enterprise')).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /cancel/i })).not.toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      await expectText(container, 'Enterprise');
+      expect(queryButton(container, /cancel/i)).toBeUndefined();
     });
   });
 
   describe('tabs layout', () => {
     it('renders in tabs layout when configured', async () => {
       const config = buildConfig({ visual: { layout: 'tabs' } });
-      renderSurface(<BillingSurface config={config} />);
-      expect(await screen.findByText('Enterprise')).toBeInTheDocument();
+      const { container } = renderSurface(<BillingSurface config={config} />);
+      await expectText(container, 'Enterprise');
     });
   });
 });

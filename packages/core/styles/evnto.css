@@ -21095,6 +21095,34 @@ html {
       }
     }
   }
+  .dropdown-start {
+    @layer daisyui.l1.l2 {
+      --anchor-h: span-right;
+      :where(.dropdown-content) {
+        inset-inline-end: auto;
+        translate: 0 0;
+        [dir="rtl"] & {
+          translate: 0 0;
+        }
+      }
+      &.dropdown-left {
+        --anchor-h: left;
+        --anchor-v: span-bottom;
+        .dropdown-content {
+          top: calc(0.25rem * 0);
+          bottom: auto;
+        }
+      }
+      &.dropdown-right {
+        --anchor-h: right;
+        --anchor-v: span-bottom;
+        .dropdown-content {
+          top: calc(0.25rem * 0);
+          bottom: auto;
+        }
+      }
+    }
+  }
   .-end {
     inset-inline-end: calc(var(--spacing) * -1);
   }
@@ -22517,11 +22545,6 @@ html {
   .min-h-screen {
     min-height: 100vh;
   }
-  .btn-block {
-    @layer daisyui.l1.l2 {
-      width: 100%;
-    }
-  }
   .w-0\.5 {
     width: calc(var(--spacing) * 0.5);
   }
@@ -22810,9 +22833,6 @@ html {
   .justify-end {
     justify-content: flex-end;
   }
-  .gap-0 {
-    gap: calc(var(--spacing) * 0);
-  }
   .gap-1 {
     gap: calc(var(--spacing) * 1);
   }
@@ -23027,12 +23047,6 @@ html {
   .bg-secondary {
     background-color: var(--color-secondary);
   }
-  .bg-warning\/30 {
-    background-color: var(--color-warning);
-    @supports (color: color-mix(in lab, red, red)) {
-      background-color: color-mix(in oklab, var(--color-warning) 30%, transparent);
-    }
-  }
   .bg-white {
     background-color: var(--color-white);
   }
@@ -23110,16 +23124,6 @@ html {
   }
   .p-8 {
     padding: calc(var(--spacing) * 8);
-  }
-  .select-lg {
-    @layer daisyui.l1.l2 {
-      --size: calc(var(--size-field, 0.25rem) * 12);
-      font-size: 1.125rem;
-      option {
-        padding-inline: calc(0.25rem * 4);
-        padding-block: calc(0.25rem * 1.5);
-      }
-    }
   }
   .select-sm {
     @layer daisyui.l1.l2 {
@@ -23481,23 +23485,6 @@ html {
     --tw-numeric-spacing: tabular-nums;
     font-variant-numeric: var(--tw-ordinal,) var(--tw-slashed-zero,) var(--tw-numeric-figure,) var(--tw-numeric-spacing,) var(--tw-numeric-fraction,);
   }
-  .btn-link {
-    @layer daisyui.l1 {
-      text-decoration-line: underline;
-      outline-color: currentcolor;
-      --btn-border: #0000;
-      --btn-bg: #0000;
-      --btn-noise: none;
-      --btn-shadow: "";
-      &:not(.btn-disabled, .btn:disabled, .btn[disabled]) {
-        --btn-fg: var(--btn-color, var(--color-primary));
-      }
-      &:is(.btn-active, :hover, :active:focus, :focus-visible) {
-        --btn-border: #0000;
-        --btn-bg: #0000;
-      }
-    }
-  }
   .link-hover {
     @layer daisyui.l1.l2 {
       text-decoration-line: none;
@@ -23696,19 +23683,6 @@ html {
       --size: calc(var(--size-field, 0.25rem) * 8);
     }
   }
-  .btn-xs {
-    @layer daisyui.l1.l2 {
-      --fontsize: 0.6875rem;
-      --btn-p: 0.5rem;
-      --size: calc(var(--size-field, 0.25rem) * 6);
-    }
-  }
-  .btn-error {
-    @layer daisyui.l1.l2.l3 {
-      --btn-color: var(--color-error);
-      --btn-fg: var(--color-error-content);
-    }
-  }
   .btn-primary {
     @layer daisyui.l1.l2.l3 {
       --btn-color: var(--color-primary);
@@ -23735,20 +23709,6 @@ html {
   }
   .ring-inset {
     --tw-ring-inset: inset;
-  }
-  .select-warning {
-    @layer daisyui.l1.l2 {
-      &, &:focus, &:focus-within {
-        --input-color: var(--color-warning);
-      }
-    }
-  }
-  .textarea-warning {
-    @layer daisyui.l1.l2 {
-      &, &:focus, &:focus-within {
-        --input-color: var(--color-warning);
-      }
-    }
   }
   .toggle-error {
     @layer daisyui.l1.l2 {

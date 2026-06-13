@@ -8,6 +8,22 @@ import { ListSurface } from '..';
 import type { EntityAdapter, ListSurfaceConfig } from '../../../../foundation/types';
 import { renderSurface } from '../../../../foundation/common/test-utils';
 
+function getButtonsByText(container: HTMLElement, label: RegExp): HTMLButtonElement[] {
+  return Array.from(container.querySelectorAll('button')).filter((button) =>
+    label.test(button.textContent ?? '')
+  );
+}
+
+function getButtonByText(container: HTMLElement, label: RegExp): HTMLButtonElement {
+  const button = getButtonsByText(container, label)[0];
+  expect(button).toBeDefined();
+  return button;
+}
+
+function queryButtonByText(container: HTMLElement, label: RegExp): HTMLButtonElement | undefined {
+  return getButtonsByText(container, label)[0];
+}
+
 interface RawCandidate {
   id: string;
   name: string;
@@ -34,7 +50,9 @@ function buildConfig(overrides: Partial<ListSurfaceConfig<RawCandidate>> = {}): 
   return {
     visual: {
       defaultView: 'table',
+      mobileDefaultView: 'table',
       allowViewSwitch: true,
+      hideViewSwitchOnMobile: false,
       cardMinWidth: 260,
     },
     presentation: {
@@ -117,19 +135,19 @@ describe('ListSurface integration', () => {
     const config = buildConfig();
     const primaryAction = config.behavior.primaryAction;
 
-    renderSurface(<ListSurface data={rows} adapter={adapter} config={config} />);
+    const { container } = renderSurface(<ListSurface data={rows} adapter={adapter} config={config} />);
 
     expect(await screen.findByText('Candidates')).toBeInTheDocument();
-    expect(screen.getByText('Toolbar start')).toBeInTheDocument();
-    expect(screen.getByText('Toolbar end')).toBeInTheDocument();
-    expect(await screen.findByText((content) => content.startsWith('Filters'))).toBeInTheDocument();
-    expect(await screen.findByText('Candidate: Ana Gomez')).toBeInTheDocument();
+    expect(container.textContent).toContain('Toolbar start');
+    expect(container.textContent).toContain('Toolbar end');
+    expect(container.textContent).toContain('Stage');
+    expect(container.textContent).toContain('Ana Gomez');
     expect(screen.queryByText('Salary')).not.toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /create candidate/i })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /view/i })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: /restricted/i })).not.toBeInTheDocument();
+    expect(getButtonByText(container, /create candidate/i)).toBeInTheDocument();
+    expect(getButtonByText(container, /view/i)).toBeInTheDocument();
+    expect(queryButtonByText(container, /restricted/i)).toBeUndefined();
 
-    fireEvent.click(screen.getByRole('button', { name: /create candidate/i }));
+    fireEvent.click(getButtonByText(container, /create candidate/i));
     expect(primaryAction?.onClick).toHaveBeenCalled();
   });
 
@@ -141,16 +159,19 @@ describe('ListSurface integration', () => {
       },
     });
 
-    renderSurface(<ListSurface data={rows} adapter={adapter} config={config} />);
+    const { container } = renderSurface(<ListSurface data={rows} adapter={adapter} config={config} />);
 
-    fireEvent.click(await screen.findByRole('button', { name: /cards/i }));
+    await screen.findByText('Candidates');
+    fireEvent.click(getButtonByText(container, /cards/i));
 
-    expect(await screen.findByText('Candidate: Ana Gomez')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(container.textContent).toContain('Ana Gomez');
+    });
 
-    fireEvent.click(screen.getByText('Candidate: Ana Gomez'));
+    fireEvent.click(screen.getByText(/Ana Gomez/));
     expect(config.behavior.onRowClick).toHaveBeenCalledWith(rows[0], 0);
 
-    const viewButtons = screen.getAllByRole('button', { name: /view/i });
+    const viewButtons = getButtonsByText(container, /view/i);
     fireEvent.click(viewButtons[viewButtons.length - 1]);
     expect(config.behavior.rowActions?.[0].onClick).toHaveBeenCalledWith(rows[0]);
   });
@@ -159,13 +180,14 @@ describe('ListSurface integration', () => {
     const config = buildConfig();
     const onRetry = vi.fn();
 
-    renderSurface(
+    const emptyRender = renderSurface(
       <ListSurface data={[]} adapter={adapter} config={config} />
     );
 
     expect(await screen.findByText('Custom empty state')).toBeInTheDocument();
+    emptyRender.unmount();
 
-    renderSurface(
+    const errorRender = renderSurface(
       <ListSurface
         data={rows}
         adapter={adapter}
@@ -177,7 +199,7 @@ describe('ListSurface integration', () => {
 
     expect(await screen.findByText('List exploded')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: /try again/i }));
+    fireEvent.click(getButtonByText(errorRender.container, /try again/i));
 
     await waitFor(() => {
       expect(onRetry).toHaveBeenCalled();

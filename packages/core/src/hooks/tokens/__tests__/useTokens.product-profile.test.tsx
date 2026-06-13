@@ -16,7 +16,10 @@ const TOKEN_TEST_TENANT: TenantConfig = {
     companyName: 'Token Test',
     primaryColor: '#111827',
     secondaryColor: '#7c3aed',
-    accentColor: '#06b6d4',
+    accentColor: '#0e7490',
+    darkPrimaryColor: '#93c5fd',
+    darkSecondaryColor: '#a78bfa',
+    darkAccentColor: '#22d3ee',
   },
 };
 
@@ -42,7 +45,8 @@ describe('useTokens product profile resolution', () => {
         tenantOverrides={{
           branding: {
             companyName: 'Token Test Override',
-            primaryColor: '#ef4444',
+            primaryColor: '#991b1b',
+            darkPrimaryColor: '#fca5a5',
           },
           tokenOverrides: {
             borderRadius: {
@@ -66,7 +70,7 @@ describe('useTokens product profile resolution', () => {
 
     expect(screen.getByTestId('radius-md')).toHaveTextContent('22px');
     expect(screen.getByTestId('spacing-1')).toHaveTextContent('5');
-    expect(screen.getByTestId('primary-color')).toHaveTextContent('#ef4444');
+    expect(screen.getByTestId('primary-color')).toHaveTextContent('#991b1b');
     expect(screen.getByTestId('secondary-color')).toHaveTextContent('#7c3aed');
     expect(screen.getByTestId('card-density')).toHaveTextContent('compact');
   });

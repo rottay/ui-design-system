@@ -28,7 +28,6 @@ const ICON_TOTAL = iconCategories.reduce((sum, category) => sum + category.count
 const PAGE_GAP = 16;
 const PANEL_GAP = 20;
 const PANEL_RADIUS = 16;
-const PANEL_RADIUS_LG = 20;
 const PANEL_SHADOW = 'var(--ds-shadow-lg, 0 24px 56px rgba(0, 0, 0, 0.18))';
 
 const FOUNDATION_AREAS: FoundationArea[] = [

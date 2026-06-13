@@ -16,8 +16,6 @@ const shellBorder =
   "var(--showroom-shell-border, var(--ds-color-border, #1c1f26))";
 const shellSurface =
   "var(--showroom-shell-surface, var(--ds-color-bg-secondary, #111214))";
-const shellSurfaceStrong =
-  "var(--showroom-shell-surface-strong, var(--ds-color-bg-tertiary, #15171b))";
 const shellText =
   "var(--showroom-shell-text, var(--ds-color-text-primary, #f3f4f6))";
 const shellTextSecondary =

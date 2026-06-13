@@ -10,7 +10,7 @@
  *   Rule 4: No new shell/page-chrome/workspace code in _shared
  *   Rule 5: Recipes must have at least one runtime consumer
  *   Rule 6: No hardcoded shell geometry outside vertical/
- *   Rule 7: Permanent roots only (app, vertical, features, core, ui, styles)
+ *   Rule 7: Permanent roots only (app, vertical, features, core, ui, styles, worker, main, preload)
  *   Rule 9: Permanent roots may only import explicit components/ exceptions
  *
  * Source of truth: world-class-app-architecture/00-final-decision.md
@@ -19,14 +19,42 @@
  *   node scripts/audit-vertical-compliance.mjs --app-dir /path/to/app/src
  */
 
+import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
-import { basename, join, relative, resolve } from 'node:path';
+import { basename, dirname, join, relative, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = process.argv.slice(2);
 const appDirIdx = args.indexOf('--app-dir');
 if (appDirIdx === -1 || !args[appDirIdx + 1]) {
-  console.error('Usage: node audit-vertical-compliance.mjs --app-dir <path-to-src>');
-  process.exit(2);
+  const scriptDir = dirname(fileURLToPath(import.meta.url));
+  const repoRoot = resolve(scriptDir, '../../../..');
+  const appDirs = readdirSync(repoRoot, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name.startsWith('app-'))
+    .map((entry) => join(repoRoot, entry.name, 'src'))
+    .filter((srcPath) => existsSync(srcPath) && statSync(srcPath).isDirectory())
+    .sort();
+
+  if (appDirs.length === 0) {
+    console.error('Usage: node audit-vertical-compliance.mjs --app-dir <path-to-src>');
+    console.error('No sibling app-* src directories were found for default auditing.');
+    process.exit(2);
+  }
+
+  let failed = false;
+  for (const appDir of appDirs) {
+    console.log(`vertical-compliance: auditing ${relative(repoRoot, appDir)}`);
+    const result = spawnSync(
+      process.execPath,
+      [fileURLToPath(import.meta.url), '--app-dir', appDir],
+      { stdio: 'inherit' },
+    );
+    if (result.status !== 0) {
+      failed = true;
+    }
+  }
+
+  process.exit(failed ? 1 : 0);
 }
 const srcDir = resolve(args[appDirIdx + 1]);
 const appName = basename(resolve(srcDir, '..'));
@@ -224,11 +252,21 @@ for (const file of allTsFiles) {
 }
 
 // ---------------------------------------------------------------------------
-// Rule 7: Only permanent roots allowed (app, vertical, features, core, ui, styles)
+// Rule 7: Only permanent roots allowed (app, vertical, features, core, ui, styles, worker, main, preload)
 // Transitional roots (surfaces, actions, components, constants, hooks, providers,
 // stores, types, contexts, config) are flagged for awareness but not as hard errors.
 // ---------------------------------------------------------------------------
-const PERMANENT_ROOTS = new Set(['app', 'vertical', 'features', 'core', 'ui', 'styles']);
+const PERMANENT_ROOTS = new Set([
+  'app',
+  'vertical',
+  'features',
+  'core',
+  'ui',
+  'styles',
+  'worker',
+  'main',
+  'preload',
+]);
 const TRANSITIONAL_ROOTS = new Set([
   'surfaces', 'actions', 'components', 'constants', 'hooks', 'providers',
   'stores', 'types', 'contexts', 'config', 'database', 'platform', 'lib',
@@ -284,6 +322,10 @@ function isAllowedComponentImport(relPath, importPath) {
   }
 
   if (relPath.startsWith('features/showcase-marketing/') && marketingComponentRe.test(importPath)) {
+    return true;
+  }
+
+  if (relPath.startsWith('features/marketing/') && marketingComponentRe.test(importPath)) {
     return true;
   }
 

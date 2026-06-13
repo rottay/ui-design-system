@@ -56,6 +56,7 @@ import {
   Heart,
   Highlighter,
   History,
+  Instagram,
   Infinity,
   Landmark,
   Languages,
@@ -68,6 +69,8 @@ import {
   MonitorSmartphone,
   Move,
   Package,
+  PackageCheck,
+  PackageSearch,
   Palmtree,
   Paperclip,
   Percent,
@@ -83,12 +86,16 @@ import {
   ScanFace,
   Shuffle,
   SignalHigh,
+  ShoppingBag,
+  ShoppingCart,
   StickyNote,
+  Store,
   Table2,
   Tag,
   Tags,
   ThumbsDown,
   ThumbsUp,
+  Ticket,
   Timer,
   TimerReset,
   Truck,
@@ -97,6 +104,7 @@ import {
   Variable,
   Vote,
   WalletCards,
+  Warehouse,
   Wand2,
   Webhook,
   Wifi,
@@ -127,6 +135,11 @@ import {
   Trophy,
   Unplug,
   Wallet,
+  ChefHat,
+  Coffee,
+  Twitter,
+  UtensilsCrossed,
+  Wine,
 } from 'lucide-react';
 import { createIcon } from '../factory';
 
@@ -181,6 +194,7 @@ export const HeartHandshakeIcon = createIcon(HeartHandshake, 'HeartHandshakeIcon
 export const HeartIcon = createIcon(Heart, 'HeartIcon');
 export const HighlighterIcon = createIcon(Highlighter, 'HighlighterIcon');
 export const HistoryIcon = createIcon(History, 'HistoryIcon');
+export const InstagramIcon = createIcon(Instagram, 'InstagramIcon');
 export const InfinityIcon = createIcon(Infinity, 'InfinityIcon');
 export const LandmarkIcon = createIcon(Landmark, 'LandmarkIcon');
 export const LanguagesIcon = createIcon(Languages, 'LanguagesIcon');
@@ -193,6 +207,8 @@ export const LockKeyholeIcon = createIcon(LockKeyhole, 'LockKeyholeIcon');
 export const MonitorSmartphoneIcon = createIcon(MonitorSmartphone, 'MonitorSmartphoneIcon');
 export const MoveIcon = createIcon(Move, 'MoveIcon');
 export const PackageIcon = createIcon(Package, 'PackageIcon');
+export const PackageCheckIcon = createIcon(PackageCheck, 'PackageCheckIcon');
+export const PackageSearchIcon = createIcon(PackageSearch, 'PackageSearchIcon');
 export const PalmtreeIcon = createIcon(Palmtree, 'PalmtreeIcon');
 export const PaperclipIcon = createIcon(Paperclip, 'PaperclipIcon');
 export const PercentIcon = createIcon(Percent, 'PercentIcon');
@@ -208,12 +224,16 @@ export const RouteIcon = createIcon(Route, 'RouteIcon');
 export const ScanFaceIcon = createIcon(ScanFace, 'ScanFaceIcon');
 export const ShuffleIcon = createIcon(Shuffle, 'ShuffleIcon');
 export const SignalHighIcon = createIcon(SignalHigh, 'SignalHighIcon');
+export const ShoppingBagIcon = createIcon(ShoppingBag, 'ShoppingBagIcon');
+export const ShoppingCartIcon = createIcon(ShoppingCart, 'ShoppingCartIcon');
 export const StickyNoteIcon = createIcon(StickyNote, 'StickyNoteIcon');
+export const StoreIcon = createIcon(Store, 'StoreIcon');
 export const Table2Icon = createIcon(Table2, 'Table2Icon');
 export const TagIcon = createIcon(Tag, 'TagIcon');
 export const TagsIcon = createIcon(Tags, 'TagsIcon');
 export const ThumbsDownIcon = createIcon(ThumbsDown, 'ThumbsDownIcon');
 export const ThumbsUpIcon = createIcon(ThumbsUp, 'ThumbsUpIcon');
+export const TicketIcon = createIcon(Ticket, 'TicketIcon');
 export const TimerIcon = createIcon(Timer, 'TimerIcon');
 export const TimerResetIcon = createIcon(TimerReset, 'TimerResetIcon');
 export const TruckIcon = createIcon(Truck, 'TruckIcon');
@@ -222,6 +242,7 @@ export const UsersRoundIcon = createIcon(UsersRound, 'UsersRoundIcon');
 export const VariableIcon = createIcon(Variable, 'VariableIcon');
 export const VoteIcon = createIcon(Vote, 'VoteIcon');
 export const WalletCardsIcon = createIcon(WalletCards, 'WalletCardsIcon');
+export const WarehouseIcon = createIcon(Warehouse, 'WarehouseIcon');
 export const Wand2Icon = createIcon(Wand2, 'Wand2Icon');
 export const WebhookIcon = createIcon(Webhook, 'WebhookIcon');
 export const WifiIcon = createIcon(Wifi, 'WifiIcon');
@@ -252,3 +273,8 @@ export const TargetIcon = createIcon(Target, 'TargetIcon');
 export const TrophyIcon = createIcon(Trophy, 'TrophyIcon');
 export const UnplugIcon = createIcon(Unplug, 'UnplugIcon');
 export const WalletIcon = createIcon(Wallet, 'WalletIcon');
+export const ChefHatIcon = createIcon(ChefHat, 'ChefHatIcon');
+export const CoffeeIcon = createIcon(Coffee, 'CoffeeIcon');
+export const TwitterIcon = createIcon(Twitter, 'TwitterIcon');
+export const UtensilsCrossedIcon = createIcon(UtensilsCrossed, 'UtensilsCrossedIcon');
+export const WineIcon = createIcon(Wine, 'WineIcon');

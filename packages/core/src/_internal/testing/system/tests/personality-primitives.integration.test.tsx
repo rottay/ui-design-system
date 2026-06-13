@@ -9,8 +9,8 @@ import React, { Suspense } from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { DesignSystemProvider } from '../../../bootstrap';
-import type { EngineName, ProductProfileKey, TenantConfig } from '../../../contracts';
+import { DesignSystemProvider } from '../../../../runtime/bootstrap';
+import type { EngineName, ProductProfileKey, TenantConfig } from '../../../../contracts';
 import {
   Badge,
   Button,
@@ -54,9 +54,12 @@ const EVNTO_TENANT: TenantConfig = {
   features: ['events'],
   branding: {
     companyName: 'Evnto Test',
-    primaryColor: '#f97316',
+    primaryColor: '#c2410c',
+    darkPrimaryColor: '#fb923c',
     secondaryColor: '#0f766e',
+    darkSecondaryColor: '#5eead4',
     accentColor: '#8b5cf6',
+    darkAccentColor: '#c4b5fd',
   },
 };
 
@@ -72,8 +75,11 @@ const BITHIRE_TENANT: TenantConfig = {
   branding: {
     companyName: 'BitHire Test',
     primaryColor: '#0a66c2',
-    secondaryColor: '#22c55e',
-    accentColor: '#7c3aed',
+    darkPrimaryColor: '#60a5fa',
+    secondaryColor: '#057642',
+    darkSecondaryColor: '#86efac',
+    accentColor: '#5a2dbd',
+    darkAccentColor: '#c4b5fd',
   },
 };
 
@@ -145,7 +151,7 @@ describe('primitive personality integration', () => {
 
       const button = await screen.findByRole('button', { name: /primary action/i }, { timeout: 15000 });
 
-      expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#f97316');
+      expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#c2410c');
       expect(document.documentElement.style.getPropertyValue('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
       expect(document.documentElement.style.getPropertyValue('--ds-badge-radius')).toBe('var(--ds-radius-full)');
       expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('capitalize');
@@ -258,7 +264,7 @@ describe('primitive personality integration', () => {
 
     expect(document.documentElement.style.getPropertyValue('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
     expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('capitalize');
-    expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#f97316');
+    expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#c2410c');
 
     rerender(
       <DesignSystemProvider
@@ -278,7 +284,7 @@ describe('primitive personality integration', () => {
     );
 
     expect(document.documentElement.style.getPropertyValue('--ds-card-shadow')).toBe('var(--ds-shadow-sm)');
-    expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('uppercase');
+    expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('none');
     expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#0a66c2');
   });
 });

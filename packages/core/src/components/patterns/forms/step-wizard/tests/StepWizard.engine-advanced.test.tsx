@@ -50,7 +50,7 @@ describe('StepWizard advanced engine coverage', () => {
       if (engine === 'classic') {
         expect(container.querySelector('.ant-skeleton')).toBeTruthy();
       } else if (engine === 'modern') {
-        expect(container.querySelector('.animate-pulse')).toBeTruthy();
+        expect(container.querySelector('.ds-step-wizard-skeleton')).toBeTruthy();
       } else {
         expect(container.querySelector('style')).toBeTruthy();
       }

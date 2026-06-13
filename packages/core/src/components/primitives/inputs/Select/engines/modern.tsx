@@ -915,13 +915,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           ))}
         </select>
         {loading && (
-          <span style={{
-            position: 'absolute',
-            right: '32px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            display: 'inline-flex',
-          }}>
+          <span
+            className="rottay-select__loading-indicator"
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              right: '32px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              display: 'inline-flex',
+            }}
+          >
             <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
           </span>
         )}
@@ -1152,6 +1156,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       {/* Trigger */}
       <div
         {...triggerHtmlProps}
+        className="rottay-select__trigger"
         style={triggerStyle}
         onClick={() => {
           if (!disabled && !loading) {
@@ -1203,7 +1208,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           {isClearable && internalValue.length > 0 && !disabled && (
             <ClearButton onClick={handleClear} />
           )}
-          {loading && <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />}
+          {loading && <span className="rottay-select__loading-indicator" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />}
           <ChevronIcon isOpen={isOpen} />
         </div>
       </div>
