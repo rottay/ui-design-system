@@ -5500,12 +5500,10 @@
     }
   }
 }
-@layer base {
-  @property --radialprogress {
-    syntax: "<percentage>";
-    inherits: true;
-    initial-value: 0%;
-  }
+@property --radialprogress {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
 }
 @layer base {
   :root:not(span) {

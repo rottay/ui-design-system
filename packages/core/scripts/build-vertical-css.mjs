@@ -35,6 +35,13 @@ function readFile(path) {
   return readFileSync(path, 'utf-8');
 }
 
+function unwrapRegisteredCustomProperties(css) {
+  return css.replace(
+    /@layer base \{\n  @property --radialprogress \{\n    syntax: "<percentage>";\n    inherits: true;\n    initial-value: 0%;\n  \}\n\}\n/g,
+    '@property --radialprogress {\n  syntax: "<percentage>";\n  inherits: true;\n  initial-value: 0%;\n}\n',
+  );
+}
+
 /**
  * Resolve all relative @import directives by inlining file contents.
  * Handles `layer()` wrapping and recursive imports.
@@ -63,7 +70,8 @@ function resolveImports(css, baseDir) {
 
 // Read precompiled modern engine CSS
 const modernEnginePath = resolve(dist, 'modern-engine.css');
-const modernEngine = readFile(modernEnginePath);
+const modernEngine = unwrapRegisteredCustomProperties(readFile(modernEnginePath));
+writeFileSync(modernEnginePath, modernEngine);
 
 // Read tenant-free base CSS and resolve its imports
 const baseCssPath = resolve(srcCss, 'foundation/base.css');
