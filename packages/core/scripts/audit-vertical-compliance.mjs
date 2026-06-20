@@ -263,9 +263,20 @@ const PERMANENT_ROOTS = new Set([
   'core',
   'ui',
   'styles',
+  // Electron desktop entry roots (e.g. app-bithire-desktop)
   'worker',
   'main',
   'preload',
+  // Chrome extension (MV3) entry roots (e.g. app-bithire-linkedin-extension).
+  // These names are mandated by the extension manifest/build contract:
+  //   background  -> manifest background.service_worker
+  //   sidepanel   -> manifest side_panel.default_path
+  //   content     -> manifest content_scripts
+  //   shared      -> cross-context code shared by the entry roots above
+  'background',
+  'sidepanel',
+  'content',
+  'shared',
 ]);
 const TRANSITIONAL_ROOTS = new Set([
   'surfaces', 'actions', 'components', 'constants', 'hooks', 'providers',
