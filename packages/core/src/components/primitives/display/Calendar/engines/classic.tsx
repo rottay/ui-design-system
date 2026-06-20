@@ -24,6 +24,21 @@ import { Calendar as AntCalendar } from 'antd';
 import type { CalendarProps } from '../Calendar.types';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
+import localeData from 'dayjs/plugin/localeData';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import weekday from 'dayjs/plugin/weekday';
+
+// antd's Calendar renders a full month/year grid and calls dayjs methods
+// (`.weekday()`, `.localeData()`, `.week()`) that are not part of the dayjs
+// core build. Register the required plugins here -- the single conversion
+// boundary that owns the antd<->dayjs bridge -- so the real antd Calendar can
+// render instead of throwing `clone.weekday is not a function`. Keeping these
+// calls inside this module (which has a used export) ensures the production
+// bundler does not tree-shake the registration away. `dayjs.extend` is
+// idempotent, so repeated imports of this engine are safe.
+dayjs.extend(localeData);
+dayjs.extend(weekOfYear);
+dayjs.extend(weekday);
 
 // ---- Date bridge helpers ----
 // The DS surface uses native Date/string; antd uses dayjs internally.
