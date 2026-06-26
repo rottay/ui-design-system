@@ -959,7 +959,7 @@ function TourPreview() {
 // Component map -- slug to rendered live example
 // ---------------------------------------------------------------------------
 
-const COMPONENT_MAP: Record<string, ReactNode> = {
+export const COMPONENT_MAP: Record<string, ReactNode> = {
   // -- Inputs --
   'auto-complete': (
     <AutoComplete

@@ -1,6 +1,6 @@
 {
   "name": "@rottay/showroom",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,7 +9,9 @@
     "build": "next build --webpack",
     "start": "next start --port 7001",
     "typecheck": "tsc --noEmit",
-    "lint": "eslint . --max-warnings=0"
+    "lint": "eslint . --max-warnings=0",
+    "design:cards": "node scripts/design-cards/generate.mjs",
+    "design:validate": "node scripts/design-cards/validate.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",

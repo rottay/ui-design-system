@@ -1,0 +1,4 @@
+{
+  "comment": "Registry primitives intentionally without a Claude Design card fixture. Anything missing a fixture that is NOT listed here fails design:validate, forcing fixtures and registry to stay in lockstep.",
+  "slugs": []
+}
