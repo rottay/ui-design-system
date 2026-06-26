@@ -24390,8 +24390,8 @@ html {
  *
  * Professional, corporate, clean with signature blue
  *
- * Primary: #0A66C2 (LinkedIn Blue)
- * Secondary: #004182 (Dark Blue)
+ * Primary: #3A6FB0 (LinkedIn Blue)
+ * Secondary: #2C5587 (Dark Blue)
  * Accent: #7FC15E (Green)
  * Light backgrounds, corporate feel
  *
@@ -24409,11 +24409,11 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
      --color-* system so btn, card, badge, table, etc.
      render in the BitHire palette instead of DaisyUI defaults.
      ============================================ */
-  --color-primary: oklch(50% 0.14 250);              /* #0A66C2 LinkedIn Blue */
+  --color-primary: oklch(50% 0.14 250);              /* #3A6FB0 LinkedIn Blue */
   --color-primary-content: oklch(100% 0 0);           /* #FFFFFF white */
-  --color-secondary: oklch(42% 0.06 160);             /* #057642 green */
+  --color-secondary: oklch(42% 0.06 160);             /* #2F7D5E green */
   --color-secondary-content: oklch(100% 0 0);         /* #FFFFFF */
-  --color-accent: oklch(61.2% 0.135 137);             /* #5A9640 green accent */
+  --color-accent: oklch(61.2% 0.135 137);             /* #6E9A5E green accent */
   --color-accent-content: oklch(7% 0.01 260);         /* deep blue-gray */
   --color-neutral: oklch(30% 0.01 250);               /* #474747 dark gray */
   --color-neutral-content: oklch(97% 0.005 100);      /* #F3F2EF */
@@ -24421,13 +24421,13 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --color-base-200: oklch(96% 0.005 80);              /* #F3F2EF secondary bg */
   --color-base-300: oklch(93% 0.005 80);              /* #EAE9E5 tertiary bg */
   --color-base-content: oklch(12% 0.01 260);          /* deep blue-gray text */
-  --color-success: oklch(42% 0.06 160);               /* #057642 */
+  --color-success: oklch(42% 0.06 160);               /* #2F7D5E */
   --color-success-content: oklch(100% 0 0);
-  --color-warning: oklch(72% 0.12 75);                /* #E7A33E */
+  --color-warning: oklch(72% 0.12 75);                /* #D6A04E */
   --color-warning-content: oklch(7% 0.01 260);
-  --color-error: oklch(45% 0.18 25);                  /* #CC1016 */
+  --color-error: oklch(45% 0.18 25);                  /* #C5504C */
   --color-error-content: oklch(100% 0 0);
-  --color-info: oklch(50% 0.14 250);                  /* #0A66C2 same as primary */
+  --color-info: oklch(50% 0.14 250);                  /* #3A6FB0 same as primary */
   --color-info-content: oklch(100% 0 0);
   --rounded-box: 12px;
   --rounded-btn: 8px;
@@ -24441,15 +24441,15 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-primary-200: #b8dcff;
   --ds-color-primary-300: #70b8ff;
   --ds-color-primary-400: #378fe5;
-  --ds-color-primary-500: #0A66C2;
-  --ds-color-primary-600: #004182;
+  --ds-color-primary-500: #3A6FB0;
+  --ds-color-primary-600: #2C5587;
   --ds-color-primary-700: #00315f;
   --ds-color-primary-800: #002244;
   --ds-color-primary-900: #001830;
 
   /* Primary main color */
-  --ds-color-primary: #0A66C2;
-  --ds-color-primary-hover: #004182;
+  --ds-color-primary: #3A6FB0;
+  --ds-color-primary-hover: #2C5587;
 
   /* Secondary - Dark Blue */
   --ds-color-secondary-50: #f0fdf4;
@@ -24457,17 +24457,17 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-secondary-200: #bbf7d0;
   --ds-color-secondary-300: #86efac;
   --ds-color-secondary-400: #4ade80;
-  --ds-color-secondary-500: #057642;
+  --ds-color-secondary-500: #2F7D5E;
   --ds-color-secondary-600: #046339;
   --ds-color-secondary-700: #034d2d;
   --ds-color-secondary-800: #023621;
   --ds-color-secondary-900: #012416;
 
-  --ds-color-secondary: #057642;
+  --ds-color-secondary: #2F7D5E;
   --ds-color-secondary-hover: #046339;
 
   /* Accent - Green */
-  --ds-color-accent: #5A9640;
+  --ds-color-accent: #6E9A5E;
   --ds-color-accent-hover: #4F8A37;
 
   /* Neutral - LinkedIn Grays */
@@ -24509,7 +24509,7 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-border-secondary: #BCCBDC;
   --ds-color-border-tertiary: #E2EAF3;
   --ds-color-border-subtle: #DEE8F2;
-  --ds-color-border-focus: #0A66C2;
+  --ds-color-border-focus: #3A6FB0;
 
   /* LinkedIn-inspired surface chrome, tinted for BitHire */
   --ds-card-bg: #FFFFFF;
@@ -24567,12 +24567,12 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-timepicker-panel-shadow: var(--ds-shadow-popover);
 
   /* Button overrides */
-  --ds-button-primary-bg: #0A66C2;
-  --ds-button-primary-bg-hover: #004182;
+  --ds-button-primary-bg: #3A6FB0;
+  --ds-button-primary-bg-hover: #2C5587;
   --ds-button-primary-color: #ffffff;
   --ds-button-secondary-bg: transparent;
-  --ds-button-secondary-border: #0A66C2;
-  --ds-button-secondary-color: #0A66C2;
+  --ds-button-secondary-border: #3A6FB0;
+  --ds-button-secondary-color: #3A6FB0;
   --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
   --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: 0 1px 2px rgba(22, 42, 67, 0.1);
@@ -24603,10 +24603,10 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-input-border: #BCCBDC;
   --ds-input-border-color: #BCCBDC;
   --ds-input-border-color-hover: #90A6BE;
-  --ds-input-border-color-focus: #0A66C2;
+  --ds-input-border-color-focus: #3A6FB0;
   --ds-input-border-hover: #90A6BE;
-  --ds-input-border-focus: #0A66C2;
-  --ds-input-shadow-focus: 0 0 0 1px #0A66C2;
+  --ds-input-border-focus: #3A6FB0;
+  --ds-input-shadow-focus: 0 0 0 1px #3A6FB0;
   --ds-input-color: #162A43;
   --ds-input-color-placeholder: #8795A6;
   --ds-input-bg-disabled: #F8FAFC;
@@ -24621,14 +24621,14 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-select-color-placeholder: #8795A6;
   --ds-select-border-color: #BCCBDC;
   --ds-select-border-color-hover: #90A6BE;
-  --ds-select-border-color-focus: #0A66C2;
+  --ds-select-border-color-focus: #3A6FB0;
   --ds-select-dropdown-bg: #ffffff;
   --ds-select-dropdown-border-color: #D3DEEA;
   --ds-select-dropdown-shadow: var(--ds-shadow-popover);
   --ds-select-option-bg-hover: #F4F8FD;
   --ds-select-option-bg-selected: #E8F3FF;
   --ds-select-option-color: #162A43;
-  --ds-select-option-color-selected: #0A66C2;
+  --ds-select-option-color-selected: #3A6FB0;
 
   /* Layout */
   --ds-layout-bg: #FFFFFF;
@@ -24798,8 +24798,8 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-global-search-result-badge-border: var(--ds-color-border-subtle);
 
   /* Link colors */
-  --ds-color-link: #0A66C2;
-  --ds-color-link-hover: #004182;
+  --ds-color-link: #3A6FB0;
+  --ds-color-link-hover: #2C5587;
   --ds-color-link-visited: #6b3fa0;
 
   /* Interactive states */
@@ -24809,32 +24809,32 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-interactive-bg-muted: #F4F8FD;
 
   /* Status colors */
-  --ds-color-success: #057642;
+  --ds-color-success: #2F7D5E;
   --ds-color-success-50: #f0fdf4;
   --ds-color-success-100: #dcfce7;
   --ds-color-success-bg: #f0fdf4;
   --ds-color-success-border: rgba(5, 118, 66, 0.25);
 
-  --ds-color-warning: #e7a33e;
+  --ds-color-warning: #D6A04E;
   --ds-color-warning-50: #fffbeb;
   --ds-color-warning-100: #fef3c7;
   --ds-color-warning-bg: #fffbeb;
   --ds-color-warning-border: rgba(231, 163, 62, 0.25);
 
-  --ds-color-error: #cc1016;
+  --ds-color-error: #C5504C;
   --ds-color-error-50: #fef2f2;
   --ds-color-error-100: #fee2e2;
   --ds-color-error-bg: #fef2f2;
   --ds-color-error-border: rgba(204, 16, 22, 0.25);
 
-  --ds-color-info: #0A66C2;
+  --ds-color-info: #3A6FB0;
   --ds-color-info-50: #f0f7ff;
   --ds-color-info-100: #e0efff;
   --ds-color-info-bg: #f0f7ff;
   --ds-color-info-border: rgba(10, 102, 194, 0.25);
 
   /* Accent for live indicators */
-  --ds-color-accent-live: #057642;
+  --ds-color-accent-live: #2F7D5E;
   --ds-color-accent-live-bg: #f0fdf4;
 
   /* ============================================
@@ -24857,7 +24857,7 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-sidebar-item-font-weight: 400;
   --ds-sidebar-item-font-weight-active: 500;
   --ds-sidebar-item-color: #52677E;
-  --ds-sidebar-item-color-active: #0A66C2;
+  --ds-sidebar-item-color-active: #3A6FB0;
   --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
   --ds-sidebar-item-bg-hover: #F4F8FD;
   --ds-sidebar-item-indent: 6px;
@@ -25252,7 +25252,7 @@ html[data-tenant='bithire'].dark {
   --ds-color-border-secondary: #BCCBDC;
   --ds-color-border-tertiary: #E2EAF3;
   --ds-color-border-subtle: #DEE8F2;
-  --ds-color-border-focus: #0A66C2;
+  --ds-color-border-focus: #3A6FB0;
   --ds-color-interactive-border: #BCCBDC;
   --ds-color-interactive-bg-hover: rgba(10, 102, 194, 0.06);
   --ds-color-interactive-bg-active: rgba(10, 102, 194, 0.08);
@@ -25288,11 +25288,11 @@ html[data-tenant='bithire'].dark {
   --ds-input-border-color: #BCCBDC;
   --ds-input-border-hover: #90A6BE;
   --ds-input-border-color-hover: #90A6BE;
-  --ds-input-border-focus: #0A66C2;
-  --ds-input-border-color-focus: #0A66C2;
+  --ds-input-border-focus: #3A6FB0;
+  --ds-input-border-color-focus: #3A6FB0;
   --ds-input-border-disabled: #E2EAF3;
   --ds-input-border-color-disabled: #E2EAF3;
-  --ds-input-shadow-focus: 0 0 0 1px #0A66C2;
+  --ds-input-shadow-focus: 0 0 0 1px #3A6FB0;
 
   --ds-select-bg: #ffffff;
   --ds-select-bg-hover: #ffffff;
@@ -25301,14 +25301,14 @@ html[data-tenant='bithire'].dark {
   --ds-select-color-placeholder: #8795A6;
   --ds-select-border-color: #BCCBDC;
   --ds-select-border-color-hover: #90A6BE;
-  --ds-select-border-color-focus: #0A66C2;
+  --ds-select-border-color-focus: #3A6FB0;
   --ds-select-dropdown-bg: #ffffff;
   --ds-select-dropdown-border-color: #D3DEEA;
   --ds-select-dropdown-shadow: var(--ds-shadow-popover);
   --ds-select-option-bg-hover: #F4F8FD;
   --ds-select-option-bg-selected: #E8F3FF;
   --ds-select-option-color: #162A43;
-  --ds-select-option-color-selected: #0A66C2;
+  --ds-select-option-color-selected: #3A6FB0;
 
   --ds-dropdown-bg: #ffffff;
   --ds-dropdown-border: #D3DEEA;
@@ -25331,7 +25331,7 @@ html[data-tenant='bithire'].dark {
   --ds-sidebar-text: #162A43;
   --ds-sidebar-text-muted: #6B7F95;
   --ds-sidebar-item-color: #52677E;
-  --ds-sidebar-item-color-active: #0A66C2;
+  --ds-sidebar-item-color-active: #3A6FB0;
   --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
   --ds-sidebar-item-bg-hover: #F4F8FD;
   --ds-sidebar-group-color: #6B7F95;
