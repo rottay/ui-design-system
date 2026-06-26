@@ -261,6 +261,49 @@ describe('CollectionWorkspaceSurface', () => {
     expect(await screen.findByText('Charlie')).toBeInTheDocument();
   });
 
+  it('uses lean chrome defaults in embedded mode without hiding search', async () => {
+    renderSurface(
+      <CollectionWorkspaceSurface
+        {...buildProps({
+          surfaceMode: 'embed',
+          controls: {
+            search: { enabled: true, placeholder: 'Search embedded rows...' },
+          },
+          contextSlot: <div>Context should be hidden</div>,
+          statsSlot: <div>Stats should be hidden</div>,
+        })}
+      />,
+    );
+
+    expect(await screen.findByText('Alice')).toBeInTheDocument();
+    expect(screen.queryByText('Test Collection')).not.toBeInTheDocument();
+    expect(screen.queryByText('Context should be hidden')).not.toBeInTheDocument();
+    expect(screen.queryByText('Stats should be hidden')).not.toBeInTheDocument();
+    expect(await screen.findByPlaceholderText('Search embedded rows...')).toBeInTheDocument();
+  });
+
+  it('allows embedded chrome regions to be re-enabled explicitly', async () => {
+    renderSurface(
+      <CollectionWorkspaceSurface
+        {...buildProps({
+          surfaceMode: 'embed',
+          chrome: { header: true, context: true, stats: true },
+          header: {
+            eyebrow: 'Embedded',
+            title: 'Test Collection',
+            subtitle: 'Nested collection surface',
+          },
+          contextSlot: <div>Visible context</div>,
+          statsSlot: <div>Visible stats</div>,
+        })}
+      />,
+    );
+
+    expect(screen.getByText('Test Collection')).toBeInTheDocument();
+    expect(screen.getByText('Visible context')).toBeInTheDocument();
+    expect(screen.getByText('Visible stats')).toBeInTheDocument();
+  });
+
   it('renders header and footer slots', async () => {
     renderSurface(
       <CollectionWorkspaceSurface

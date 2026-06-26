@@ -20,7 +20,9 @@ import type { ReactNode } from 'react';
 import { CheckSquare2, ChevronDown, Filter } from 'lucide-react';
 import type { ColumnDef, EditableConfig, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
 import type {
+  CollectionWorkspaceChromeConfig,
   CollectionWorkspaceConfig,
+  CollectionWorkspaceSurfaceMode,
   WorkspaceActiveFiltersConfig,
 } from '../../../foundation/contracts/collection';
 import type { AdaptiveConfig } from '../../../foundation/contracts/adaptive';
@@ -76,6 +78,14 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
   statsSlot?: ReactNode;
   activeFilters?: WorkspaceActiveFiltersConfig;
   /**
+   * Page workspaces render the full collection chrome. Embedded workspaces are
+   * nested inside another surface, so their default chrome is intentionally
+   * leaner and avoids duplicate headings/metrics.
+   */
+  surfaceMode?: CollectionWorkspaceSurfaceMode;
+  /** Override which chrome regions render for this workspace instance. */
+  chrome?: CollectionWorkspaceChromeConfig;
+  /**
    * When true, contextSlot and statsSlot collapse with a smooth animation.
    * Drive this from the app's focus-mode or presentation-mode state.
    */
@@ -96,6 +106,21 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
+
+function resolveCollectionWorkspaceChrome(
+  surfaceMode: CollectionWorkspaceSurfaceMode,
+  chrome: CollectionWorkspaceChromeConfig | undefined,
+): Required<CollectionWorkspaceChromeConfig> {
+  const pageChrome = surfaceMode === 'page';
+
+  return {
+    header: chrome?.header ?? pageChrome,
+    command: chrome?.command ?? true,
+    context: chrome?.context ?? pageChrome,
+    stats: chrome?.stats ?? pageChrome,
+    activeFilters: chrome?.activeFilters ?? true,
+  };
+}
 
 function resolveKey<T extends object>(
   item: T,
@@ -717,6 +742,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     contextSlot,
     statsSlot,
     activeFilters,
+    surfaceMode = 'page',
+    chrome,
     slotsCollapsed = false,
     headerSlot,
     footerSlot,
@@ -748,29 +775,62 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const density: DensityKey = controls?.density?.value ?? 'compact';
   const compact = density === 'compact';
   const enhanced = presentation?.enhancedInteractions ?? false;
+  const resolvedChrome = resolveCollectionWorkspaceChrome(surfaceMode, chrome);
+  const autoEmbeddedSearchCommand =
+    surfaceMode === 'embed' && !command && controls?.search?.enabled
+      ? {
+          placeholder: controls.search.placeholder ?? 'Search...',
+          value: workspace.searchValue,
+          onSearch: workspace.setSearchValue,
+          hint: undefined,
+          suggestions: undefined,
+          recentQueries: undefined,
+        }
+      : undefined;
+  const resolvedCommand = resolvedChrome.command
+    ? (command ?? autoEmbeddedSearchCommand)
+    : undefined;
+  const resolvedContextSlot = resolvedChrome.context ? contextSlot : undefined;
+  const resolvedStatsSlot = resolvedChrome.stats ? statsSlot : undefined;
+  const resolvedActiveFilters = resolvedChrome.activeFilters
+    ? activeFilters
+    : undefined;
   const fallbackHeaderMetaItems = buildDefaultHeaderMetaItems({
     data,
     controls,
     loading,
     error,
   });
-  const resolvedHeader = header
+  const resolvedHeader = resolvedChrome.header && header
     ? {
         ...header,
         metaItems: header.metaItems?.length ? header.metaItems : fallbackHeaderMetaItems,
         metaItemsPlacement: header.metaItemsPlacement ?? 'eyebrow-end',
       }
-    : header;
-  const isPremium = Boolean(resolvedHeader || command);
+    : undefined;
+  const isPremium = Boolean(resolvedHeader || resolvedCommand);
   const selectionEnabled = behavior?.selection?.enabled ?? false;
+  const embeddedSurfaceStyle = surfaceMode === 'embed'
+    ? {
+        display: 'flex',
+        flexDirection: 'column' as const,
+        flex: '1 1 auto',
+        alignSelf: 'stretch',
+        width: '100%',
+        maxWidth: presentation?.maxWidth ?? '100%',
+        minWidth: 0,
+        minHeight: 0,
+        height: '100%',
+      }
+    : undefined;
   const canToggleSelectionMode = Boolean(behavior?.selection?.onModeChange);
   const hasInlinePersistenceHandler = typeof behavior?.cellEditing?.onCellEdit === 'function';
   const inlineEditingEnabled = behavior?.cellEditing?.enabled ?? true;
   const autoEnableInlineEditing = behavior?.cellEditing?.autoEnable ?? true;
   const [draftCellValues, setDraftCellValues] = useState<Record<string, Record<string, unknown>>>({});
   const previousDataRef = useRef(data);
-  const searchCommand = command
-    ?? (controls?.search?.enabled
+  const searchCommand = resolvedCommand
+    ?? (resolvedChrome.command && controls?.search?.enabled
         ? {
             placeholder: controls.search.placeholder ?? 'Search...',
             value: workspace.searchValue,
@@ -795,6 +855,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const filterLayout = posture.filters === 'sheet' || posture.filters === 'dropdown'
     ? 'stacked' : 'inline';
   const showOptionalChrome = !posture.compactHeader && !posture.isPhone;
+  const showContextChrome = Boolean(
+    resolvedContextSlot && (showOptionalChrome || chrome?.context === true),
+  );
+  const showStatsChrome = Boolean(
+    resolvedStatsSlot && (showOptionalChrome || chrome?.stats === true),
+  );
 
   // Focus
   const focusEnabled = behavior?.focus?.enabled ?? false;
@@ -1309,18 +1375,26 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   // Non-premium (legacy) mode: keep old stacked layout for backward compat
   // -------------------------------------------------------------------------
   if (!isPremium) {
-    const hasCommandBar = Boolean(command);
+    const hasCommandBar = Boolean(resolvedCommand);
     const showToolbar =
       controls?.viewMode?.enabled ||
       controls?.density?.enabled ||
       controls?.export?.enabled ||
-      (!hasCommandBar && controls?.search?.enabled);
+      (!hasCommandBar && resolvedChrome.command && controls?.search?.enabled);
     const toolbarViewMode: ViewMode = workspace.activeViewMode === 'table' ? 'list' : 'cards';
 
     return (
-      <Stack spacing="md" style={{ width: '100%', maxWidth: presentation?.maxWidth, minWidth: 0 }}>
+      <Stack
+        spacing="md"
+        style={{
+          width: '100%',
+          maxWidth: presentation?.maxWidth,
+          minWidth: 0,
+          ...(embeddedSurfaceStyle ?? {}),
+        }}
+      >
         {headerSlot}
-        {!showToolbar && (
+        {!showToolbar && surfaceMode !== 'embed' && (
           <Box>
             <Text size="xl" weight="semibold">{title}</Text>
             {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
@@ -1456,16 +1530,16 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   const hasScopes = controls?.scopes?.enabled && controls.scopes.scopes.length > 0;
   const hasSavedViews = controls?.savedViews?.enabled && controls.savedViews.views && controls.savedViews.views.length > 0;
-  const activeFilterCount = activeFilters?.filters.length ?? workspace.activeFilterCount;
+  const activeFilterCount = resolvedActiveFilters?.filters.length ?? workspace.activeFilterCount;
   const hasActiveFilters = activeFilterCount > 0;
-  const showInlineResultCount = !contextSlot;
+  const showInlineResultCount = !resolvedContextSlot;
   const shellConfig = presentation?.shell;
   const useWorkspaceShell = Boolean(isPremium && shellConfig);
   const useAtmosphericShell = Boolean(
     useWorkspaceShell && shellConfig?.variant && shellConfig.variant !== 'default',
   );
   const editorialTechMasthead = Boolean(
-    useAtmosphericShell && header?.layoutVariant === 'editorial-tech',
+    useAtmosphericShell && resolvedHeader?.layoutVariant === 'editorial-tech',
   );
   const promotedShortcuts =
     editorialTechMasthead && searchCommand && resolvedHeader?.shortcuts?.length
@@ -1529,12 +1603,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           commands={command?.commands}
           showCommandPalette={command?.showCommandPalette}
           topRailSlot={commandTopRailSlot}
-          surfaceVariant={useWorkspaceShell ? 'embedded' : 'default'}
+          surfaceVariant={useWorkspaceShell || surfaceMode === 'embed' ? 'embedded' : 'default'}
           layoutVariant={resolvedHeader?.layoutVariant}
         />
       )}
 
-      {contextSlot && showOptionalChrome && (
+      {showContextChrome && (
         <Box style={{
           padding: slotsCollapsed
             ? 0
@@ -1550,7 +1624,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           transition: 'max-height 250ms ease-out, opacity 250ms ease-out, padding 250ms ease-out',
           pointerEvents: slotsCollapsed ? 'none' : undefined,
         }}>
-          {contextSlot}
+          {resolvedContextSlot}
         </Box>
       )}
     </>
@@ -1560,7 +1634,19 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     <Stack
       spacing="none"
       className={enhanced ? 'ds-collection-enhanced' : undefined}
-      style={{ width: '100%', maxWidth: '100%', minWidth: 0 }}
+      style={{
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        ...(surfaceMode === 'embed'
+          ? {
+              display: 'flex',
+              flex: '1 1 auto',
+              minHeight: 0,
+              height: '100%',
+            }
+          : null),
+      }}
     >
       {enhanced && <style dangerouslySetInnerHTML={{ __html: ENHANCED_CSS }} />}
       {editorialTechMasthead ? (
@@ -1581,7 +1667,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       ) : topChrome}
 
       {/* 4. Stats slot (optional, collapsible) */}
-      {statsSlot && showOptionalChrome && (
+      {showStatsChrome && (
         <Box style={{
           padding: slotsCollapsed ? 0 : '14px 16px 10px',
           maxHeight: slotsCollapsed ? 0 : 400,
@@ -1590,7 +1676,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           transition: 'max-height 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1)',
           pointerEvents: slotsCollapsed ? 'none' : undefined,
         }}>
-          {statsSlot}
+          {resolvedStatsSlot}
         </Box>
       )}
 
@@ -1889,12 +1975,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       </Box>
 
       {/* 5.5 Active filters (embedded into the shell when present) */}
-      {activeFilters && activeFilters.filters.length > 0 && (
+      {resolvedActiveFilters && resolvedActiveFilters.filters.length > 0 && (
         <ActiveFiltersBar
-          activeFilters={activeFilters.filters}
-          onRemoveFilter={activeFilters.onRemove}
-          onClearAll={activeFilters.onClearAll}
-          onAddFilter={activeFilters.onAddFilter}
+          activeFilters={resolvedActiveFilters.filters}
+          onRemoveFilter={resolvedActiveFilters.onRemove}
+          onClearAll={resolvedActiveFilters.onClearAll}
+          onAddFilter={resolvedActiveFilters.onAddFilter}
           surfaceVariant={useWorkspaceShell ? 'embedded' : 'default'}
         />
       )}
@@ -1950,7 +2036,18 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       )}
 
       {/* 7. Table + preview rail */}
-      <Box style={{ width: '100%', padding: posture.isPhone ? '4px 10px 12px' : '4px 16px 16px' }}>
+      <Box
+        style={{
+          width: '100%',
+          padding: posture.isPhone ? '4px 10px 12px' : '4px 16px 16px',
+          ...(surfaceMode === 'embed'
+            ? {
+                flex: '1 1 auto',
+                minHeight: 0,
+              }
+            : null),
+        }}
+      >
         <Flex gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
           <Box style={{ flex: '1 1 0%', minWidth: 0 }}>
             <CollectionRenderDispatch<T>
@@ -2036,12 +2133,22 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           focusActive={Boolean(focusedKey)}
           previewActive={Boolean(showPreviewRail)}
           className={enhanced ? 'ds-collection-enhanced' : undefined}
-          style={{ width: '100%', maxWidth: presentation?.maxWidth }}
+          style={{
+            width: '100%',
+            maxWidth: presentation?.maxWidth,
+            ...(embeddedSurfaceStyle ?? {}),
+          }}
         >
           {premiumContent}
         </WorkspaceShell>
       ) : (
-        <Box style={{ width: '100%', maxWidth: presentation?.maxWidth }}>
+        <Box
+          style={{
+            width: '100%',
+            maxWidth: presentation?.maxWidth,
+            ...(embeddedSurfaceStyle ?? {}),
+          }}
+        >
           {premiumContent}
         </Box>
       )}
@@ -2090,3 +2197,5 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
 /** Canonical public alias. */
 export { CollectionWorkspaceSurface as CollectionWorkspace };
+export type CollectionWorkspaceSurfaceProps<T extends object> =
+  CollectionWorkspaceProps<T>;

@@ -166,6 +166,33 @@ export interface CollectionViewModeConfigs<T = unknown> {
 }
 
 // ---------------------------------------------------------------------------
+// Workspace surface chrome
+// ---------------------------------------------------------------------------
+
+/**
+ * Rendering posture for collection workspaces.
+ *
+ * - `page`: full standalone collection screen with page-level chrome.
+ * - `embed`: nested collection inside a detail/workbench surface, with lean
+ *   defaults that avoid duplicate headings, metrics, and context blocks.
+ */
+export type CollectionWorkspaceSurfaceMode = 'page' | 'embed';
+
+/** Optional region toggles for the workspace shell chrome. */
+export interface CollectionWorkspaceChromeConfig {
+  /** CollectionHeader region. Defaults to true in page mode and false in embed mode. */
+  header?: boolean;
+  /** Search/command bar region. Defaults to true. */
+  command?: boolean;
+  /** Context slot region. Defaults to true in page mode and false in embed mode. */
+  context?: boolean;
+  /** Stats/insight slot region. Defaults to true in page mode and false in embed mode. */
+  stats?: boolean;
+  /** Active filter chip region. Defaults to true. */
+  activeFilters?: boolean;
+}
+
+// ---------------------------------------------------------------------------
 // Controls
 // ---------------------------------------------------------------------------
 
@@ -459,6 +486,20 @@ export interface WorkspaceActiveFiltersConfig {
  * concerns (e.g., KanbanSurface adds drag-drop column config).
  */
 export interface CollectionWorkspaceConfig<T> {
+  /**
+   * Standalone page or embedded detail/workbench posture. Defaults to `page`.
+   */
+  surfaceMode?: CollectionWorkspaceSurfaceMode;
+  /**
+   * Per-region chrome overrides for this workspace instance. Embedded
+   * workspaces should use this instead of app CSS to hide duplicate chrome.
+   */
+  chrome?: CollectionWorkspaceChromeConfig;
+  /**
+   * Collapse optional context/stat slots while preserving search, filters, and
+   * table layout. Useful for focus or compact detail modes.
+   */
+  slotsCollapsed?: boolean;
   controls?: WorkspaceControlsConfig;
   behavior?: CollectionBehaviorConfig<T>;
   presentation?: CollectionPresentationConfig;
