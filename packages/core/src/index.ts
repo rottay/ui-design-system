@@ -90,6 +90,13 @@ export * from './runtime/verticals';
 export * from './compilers';
 
 // ============================================
+// BRAND THEMES (first-party authored BrandTheme sources)
+// ============================================
+// Consumers (and the in-app artifact drift test) resolve the canonical vertical
+// BrandTheme from here; the CSS artifact is a generated projection of these.
+export { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from './tokens/ts/brand-themes';
+
+// ============================================
 // I18N (locales, provider, hooks)
 // ============================================
 export * from './i18n';

@@ -25,6 +25,13 @@ import { getKnownTenantConfig, getDefaultTenant } from '../registry';
 export { loadStaticTenantConfig } from './static';
 export { generateTenantCss, generateTenantCssFile, buildTenantSelector } from './static';
 export type { GenerateTenantCssOptions } from './static';
+export {
+  renderVerticalArtifact,
+  GENERATED_ARTIFACT_BANNER,
+  FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
+  FIRST_PARTY_ARTIFACT_SPECS,
+} from './static';
+export type { RenderVerticalArtifactInput, FirstPartyArtifactSpec } from './static';
 export { fetchRemoteTenantConfig, configureTenantApi } from './remote';
 export { getKnownTenantConfig, isKnownTenant, getKnownTenantSlugs, DEFAULT_TENANT_SLUG } from '../registry';
 

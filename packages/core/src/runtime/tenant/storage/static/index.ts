@@ -15,3 +15,12 @@ export { loadStaticTenantConfig } from './loader';
 /** CSS generation utilities for producing tenant-scoped stylesheets. */
 export { generateTenantCss, generateTenantCssFile, buildTenantSelector } from './generator';
 export type { GenerateTenantCssOptions } from './generator';
+
+/** First-party vertical artifact generation (build:vertical-artifacts). */
+export {
+  renderVerticalArtifact,
+  GENERATED_ARTIFACT_BANNER,
+  FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
+  FIRST_PARTY_ARTIFACT_SPECS,
+} from './generator';
+export type { RenderVerticalArtifactInput, FirstPartyArtifactSpec } from './generator';

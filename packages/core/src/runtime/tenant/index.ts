@@ -86,8 +86,12 @@ export {
   configureTenantApi,
   clearTenantCache,
   preloadTenantConfig,
+  renderVerticalArtifact,
+  GENERATED_ARTIFACT_BANNER,
+  FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
+  FIRST_PARTY_ARTIFACT_SPECS,
 } from './storage';
-export type { GenerateTenantCssOptions } from './storage';
+export type { GenerateTenantCssOptions, RenderVerticalArtifactInput, FirstPartyArtifactSpec } from './storage';
 
 // ── Registry (known tenants) ──
 // First-party tenants (rottay, bithire, evnto) bundled with the DS for

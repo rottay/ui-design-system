@@ -27482,27 +27482,331 @@ html[data-tenant='rottay'].light {
 
 }
 
-/**
- * BitHire Theme - LinkedIn-Inspired Design
+/* GENERATED — do not edit */
+/*
+ * BitHire tenant theme.
  *
- * GENERATED SNAPSHOT — the canonical brand source is tokens/ts/brand-themes/bithire.ts.
- * This CSS supplements the runtime BrandTheme with sidebar, layout, shell, and
- * controls chrome that the brand compiler does not yet generate.
+ * This file is a BUILD OUTPUT assembled from two authored sources; any manual
+ * edit is reverted by the DS artifact parity/guard gates:
+ *   1. tokens/ts/brand-themes/bithire.ts (compiled via compileBrandTheme)
+ *   2. tokens/css/artifacts/bithire/_source/extension.css (declared extension)
  *
- * Professional, corporate, clean with signature blue
- *
- * Primary: #3A6FB0 (LinkedIn Blue)
- * Secondary: #2C5587 (Dark Blue)
- * Accent: #7FC15E (Green)
- * Light backgrounds, corporate feel
- *
- * Brand values are token-first. Tenant-scoped component rules below use
- * --ds-* tokens for BitHire-only integration surfaces.
+ * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
-/* ============================================
-   BITHIRE BRAND COLORS (LinkedIn-Inspired)
-   ============================================ */
+/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+html[data-tenant='bithire'] {
+  --ds-breadcrumb-active-color: #162A43;
+  --ds-breadcrumb-bg: color-mix(in srgb, #3A6FB0 4%, #FFFFFF);
+  --ds-breadcrumb-border: color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-breadcrumb-color: #52677E;
+  --ds-breadcrumb-color-active: #162A43;
+  --ds-breadcrumb-color-hover: #2C5587;
+  --ds-breadcrumb-font-size: 0.75rem;
+  --ds-breadcrumb-font-weight: 400;
+  --ds-breadcrumb-item-color: #52677E;
+  --ds-breadcrumb-link-color: #3A6FB0;
+  --ds-breadcrumb-padding: 0.625rem 1rem;
+  --ds-breadcrumb-separator-color: #8795A6;
+  --ds-button-default-bg: #FFFFFF;
+  --ds-button-default-bg-hover: #F4F8FD;
+  --ds-button-default-border: #BCCBDC;
+  --ds-button-default-color: #162A43;
+  --ds-button-disabled-bg: #F8FAFC;
+  --ds-button-disabled-border: #E2EAF3;
+  --ds-button-disabled-border-color: #E2EAF3;
+  --ds-button-disabled-color: #A7B2C0;
+  --ds-button-disabled-opacity: 0.45;
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: #F4F8FD;
+  --ds-button-ghost-color: #52677E;
+  --ds-button-primary-bg: #3A6FB0;
+  --ds-button-primary-bg-hover: #2C5587;
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-color: #ffffff;
+  --ds-button-primary-shadow: 0 1px 2px rgba(22, 42, 67, 0.1);
+  --ds-button-secondary-bg: transparent;
+  --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
+  --ds-button-secondary-border: #3A6FB0;
+  --ds-button-secondary-color: #3A6FB0;
+  --ds-card-bg: #ffffff;
+  --ds-card-bg-hover: #F9FBFE;
+  --ds-card-body-color: #162A43;
+  --ds-card-body-padding: 1rem;
+  --ds-card-border: #D3DEEA;
+  --ds-card-border-color: #D3DEEA;
+  --ds-card-border-radius: 8px;
+  --ds-card-color: #162A43;
+  --ds-card-color-muted: #6B7F95;
+  --ds-card-focus-ring: 0 0 0 3px rgba(10, 102, 194, 0.14);
+  --ds-card-footer-bg: #F8FBFF;
+  --ds-card-footer-border: #DEE8F2;
+  --ds-card-footer-border-color: #DEE8F2;
+  --ds-card-footer-color: #52677E;
+  --ds-card-footer-padding: 1rem;
+  --ds-card-header-bg: color-mix(in srgb, #FFFFFF 82%, #F4F8FD);
+  --ds-card-header-border: #DEE8F2;
+  --ds-card-header-border-color: #DEE8F2;
+  --ds-card-header-color: #52677E;
+  --ds-card-header-padding: 1rem;
+  --ds-card-hover-transform: translateY(-1px) scale(1);
+  --ds-card-image-placeholder-bg: #F4F8FD;
+  --ds-card-image-placeholder-color: #8795A6;
+  --ds-card-padding: 1rem;
+  --ds-card-padding-lg: 1.25rem;
+  --ds-card-padding-md: 1rem;
+  --ds-card-padding-sm: 0.875rem;
+  --ds-card-padding-xl: 1.5rem;
+  --ds-card-radius: 8px;
+  --ds-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
+  --ds-card-subtitle-color: #6B7F95;
+  --ds-card-title-color: #162A43;
+  --ds-card-title-font-weight: 600;
+  --ds-color-accent: #6E9A5E;
+  --ds-color-dark-accent: #6E9A5E;
+  --ds-color-dark-bg: #F8FBFF;
+  --ds-color-dark-primary: #3A6FB0;
+  --ds-color-dark-secondary: #2F7D5E;
+  --ds-color-error: #C5504C;
+  --ds-color-info: #3A6FB0;
+  --ds-color-primary: #3A6FB0;
+  --ds-color-secondary: #2F7D5E;
+  --ds-color-success: #2F7D5E;
+  --ds-color-warning: #D6A04E;
+  --ds-command-font: 'SF Mono', 'Fira Code', Menlo, monospace;
+  --ds-command-glow: none;
+  --ds-command-grid-bg: none;
+  --ds-command-grid-bg-strong: none;
+  --ds-command-grid-line: transparent;
+  --ds-command-grid-line-soft: transparent;
+  --ds-command-grid-line-strong: transparent;
+  --ds-command-grid-size: 22px;
+  --ds-command-home-compact-action-height: 202px;
+  --ds-command-home-console-bg: #F6FAFE;
+  --ds-command-home-console-min-height: calc(100vh - 108px);
+  --ds-command-home-console-padding: clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px;
+  --ds-command-home-control-bg: #FFFFFF;
+  --ds-command-home-control-border: #B7D3F2;
+  --ds-command-home-control-hover-bg: color-mix(in srgb, #3A6FB0 7%, #FFFFFF);
+  --ds-command-home-control-hover-border: color-mix(in srgb, #3A6FB0 42%, #D3DEEA);
+  --ds-command-home-gap: 16px;
+  --ds-command-home-grid-line: rgba(10, 102, 194, 0.06);
+  --ds-command-home-hero-bg: #FFFFFF;
+  --ds-command-home-icon-bg: color-mix(in srgb, #3A6FB0 9%, #FFFFFF);
+  --ds-command-home-icon-border: color-mix(in srgb, #3A6FB0 32%, #D3DEEA);
+  --ds-command-home-max-width: 1120px;
+  --ds-command-home-meter-bg: color-mix(in srgb, #D3DEEA 72%, transparent);
+  --ds-command-home-meter-fill: linear-gradient(90deg, #3A6FB0, #2F7D5E);
+  --ds-command-home-panel-bg: #FFFFFF;
+  --ds-command-home-panel-bg-strong: #FFFFFF;
+  --ds-command-home-panel-border: #A9C9EA;
+  --ds-command-home-panel-border-soft: #B7D3F2;
+  --ds-command-home-panel-gap: 14px;
+  --ds-command-home-panel-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-command-home-surface-bg: #FFFFFF;
+  --ds-command-letter-spacing: 0;
+  --ds-command-line: none;
+  --ds-command-rail-bg: #FFFFFF;
+  --ds-filter-pill-active-bg: rgba(10, 102, 194, 0.08);
+  --ds-filter-pill-active-border: color-mix(in srgb, #3A6FB0 28%, #D3DEEA);
+  --ds-filter-pill-active-color: #3A6FB0;
+  --ds-filter-pill-active-shadow: inset 0 0 0 1px color-mix(in srgb, #3A6FB0 28%, #D3DEEA), 0 1px 2px rgba(22, 42, 67, 0.05);
+  --ds-filter-pill-bg: #ffffff;
+  --ds-filter-pill-border: #D3DEEA;
+  --ds-filter-pill-color: #52677E;
+  --ds-filter-pill-count-active-bg: #ffffff;
+  --ds-filter-pill-count-active-border: color-mix(in srgb, #3A6FB0 24%, #BCCBDC);
+  --ds-filter-pill-count-active-ring: inset 0 0 0 1px color-mix(in srgb, #3A6FB0 24%, #BCCBDC);
+  --ds-filter-pill-count-bg: #ffffff;
+  --ds-filter-pill-count-border: color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-filter-pill-count-ring: inset 0 0 0 1px color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-filter-pill-focus-ring: 0 0 0 3px rgba(10, 102, 194, 0.22);
+  --ds-filter-pill-frame-border: color-mix(in srgb, #3A6FB0 10%, #D3DEEA);
+  --ds-filter-pill-frame-shadow: 0 1px 2px rgba(22, 42, 67, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+  --ds-filter-pill-hover-bg: rgba(10, 102, 194, 0.05);
+  --ds-filter-pill-hover-border: color-mix(in srgb, #3A6FB0 16%, #D3DEEA);
+  --ds-filter-pill-shadow: 0 1px 2px rgba(22, 42, 67, 0.03);
+  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ds-font-family-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ds-font-family-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --ds-font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+  --ds-glass-bg: none;
+  --ds-glass-blur: none;
+  --ds-glass-border: none;
+  --ds-gradient-mesh: none;
+  --ds-gradient-primary: none;
+  --ds-gradient-surface: none;
+  --ds-input-bg: #ffffff;
+  --ds-input-bg-disabled: #F8F8F8;
+  --ds-input-border: #BCCBDC;
+  --ds-input-border-color-disabled: #E2EAF3;
+  --ds-input-border-disabled: #E2EAF3;
+  --ds-input-border-focus: #3A6FB0;
+  --ds-input-border-hover: #90A6BE;
+  --ds-input-color: #162A43;
+  --ds-input-color-disabled: #A7B2C0;
+  --ds-input-color-placeholder: #8795A6;
+  --ds-input-disabled-opacity: 0.45;
+  --ds-input-search-clear-color: #A7B2C0;
+  --ds-input-search-icon-color: #8795A6;
+  --ds-input-shadow-focus: 0 0 0 1px #3A6FB0;
+  --ds-layout-bg: #FFFFFF;
+  --ds-layout-header-backdrop: blur(8px);
+  --ds-layout-header-bg: rgba(255, 255, 255, 0.92);
+  --ds-layout-header-border: #D3DEEA;
+  --ds-layout-sider-bg: #FFFFFF;
+  --ds-layout-sider-border: #D3DEEA;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-display: -0.02em;
+  --ds-letter-spacing-heading: -0.01em;
+  --ds-letter-spacing-mono: 0;
+  --ds-line-height-body: 1.6;
+  --ds-line-height-display: 1.1;
+  --ds-line-height-heading: 1.25;
+  --ds-line-height-relaxed: 1.75;
+  --ds-line-height-tight: 1.25;
+  --ds-metric-card-bg: #FFFFFF;
+  --ds-metric-card-border: color-mix(in srgb, #3A6FB0 10%, #D3DEEA);
+  --ds-metric-card-border-hover: color-mix(in srgb, #3A6FB0 24%, #D3DEEA);
+  --ds-metric-card-icon-bg: color-mix(in srgb, #3A6FB0 8%, #FFFFFF);
+  --ds-metric-card-icon-border: color-mix(in srgb, #3A6FB0 24%, #D3DEEA);
+  --ds-metric-card-label-color: #6B7F95;
+  --ds-metric-card-meter-fill: linear-gradient(90deg, #3A6FB0, #2F7D5E);
+  --ds-metric-card-meter-fill-error: #C5504C;
+  --ds-metric-card-meter-fill-neutral: #8795A6;
+  --ds-metric-card-meter-fill-success: #2F7D5E;
+  --ds-metric-card-meter-fill-warning: #D6A04E;
+  --ds-metric-card-meter-track: color-mix(in srgb, #D3DEEA 48%, #F4F8FD);
+  --ds-metric-card-meter-track-border: color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-metric-card-selected-border: color-mix(in srgb, #3A6FB0 58%, #D3DEEA);
+  --ds-metric-card-selected-ring: 0 0 0 3px rgba(10, 102, 194, 0.14);
+  --ds-metric-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-metric-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
+  --ds-metric-card-sheen: none;
+  --ds-metric-card-trend-color: #2F7D5E;
+  --ds-metric-card-value-color: #162A43;
+  --ds-overlay-heavy: rgba(22, 42, 67, 0.08);
+  --ds-overlay-light: rgba(22, 42, 67, 0.02);
+  --ds-overlay-medium: rgba(22, 42, 67, 0.04);
+  --ds-radius-lg: 10px;
+  --ds-radius-md: 8px;
+  --ds-radius-sm: 6px;
+  --ds-radius-xl: 14px;
+  --ds-search-bg: #ffffff;
+  --ds-search-border: #D3DEEA;
+  --ds-search-category-color: #6B7F95;
+  --ds-search-clear-color: #A7B2C0;
+  --ds-search-clear-color-hover: #52677E;
+  --ds-search-color: #162A43;
+  --ds-search-empty-bg: #F4F8FD;
+  --ds-search-icon-color: #8795A6;
+  --ds-search-input-bg: #ffffff;
+  --ds-search-input-border: #BCCBDC;
+  --ds-search-input-color: #162A43;
+  --ds-search-placeholder-color: #8795A6;
+  --ds-search-radius: 14px;
+  --ds-search-result-bg: #ffffff;
+  --ds-search-result-bg-hover: #F4F8FD;
+  --ds-search-result-border: #DEE8F2;
+  --ds-search-result-meta-color: #6B7F95;
+  --ds-search-result-shadow: 0 1px 2px rgba(22, 42, 67, 0.04);
+  --ds-search-result-title-color: #162A43;
+  --ds-search-shadow: 0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06);
+  --ds-shadow-lg: 0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06);
+  --ds-shadow-md: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-shadow-sm: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-shadow-xl: 0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06);
+  --ds-shell-active-bg: #EAE9E5;
+  --ds-shell-active-gradient: #EAE9E5;
+  --ds-shell-dropdown-shadow: 0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06);
+  --ds-shell-grid-line: transparent;
+  --ds-shell-grid-size: 0px;
+  --ds-sidebar-bg: #ffffff;
+  --ds-sidebar-border: #D3DEEA;
+  --ds-sidebar-footer-bg: #F8FBFF;
+  --ds-sidebar-group-color: #6B7F95;
+  --ds-sidebar-group-font-size: 0.75rem;
+  --ds-sidebar-group-font-weight: 600;
+  --ds-sidebar-group-letter-spacing: 0.04em;
+  --ds-sidebar-icon-size: 16px;
+  --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
+  --ds-sidebar-item-bg-hover: #F4F8FD;
+  --ds-sidebar-item-color: #52677E;
+  --ds-sidebar-item-color-active: #3A6FB0;
+  --ds-sidebar-item-font-size: 0.875rem;
+  --ds-sidebar-item-font-weight: 400;
+  --ds-sidebar-item-font-weight-active: 600;
+  --ds-sidebar-item-padding: 6px 10px;
+  --ds-sidebar-text: #162A43;
+  --ds-sidebar-text-muted: #6B7F95;
+  --ds-signal-card-badge-bg: rgba(10, 102, 194, 0.09);
+  --ds-signal-card-badge-border: color-mix(in srgb, #3A6FB0 28%, #D3DEEA);
+  --ds-signal-card-badge-color: #3A6FB0;
+  --ds-signal-card-bg: #ffffff;
+  --ds-signal-card-body-color: #52677E;
+  --ds-signal-card-border: #D3DEEA;
+  --ds-signal-card-border-hover: color-mix(in srgb, #3A6FB0 18%, #D3DEEA);
+  --ds-signal-card-icon-bg: color-mix(in srgb, #3A6FB0 8%, #FFFFFF);
+  --ds-signal-card-icon-border: color-mix(in srgb, #3A6FB0 24%, #D3DEEA);
+  --ds-signal-card-meter-fill: linear-gradient(90deg, #3A6FB0, #2F7D5E);
+  --ds-signal-card-meter-track: color-mix(in srgb, #D3DEEA 48%, #F4F8FD);
+  --ds-signal-card-meter-track-border: color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-signal-card-section-alt-bg: color-mix(in srgb, #3A6FB0 4%, #F4F8FD);
+  --ds-signal-card-section-bg: #ffffff;
+  --ds-signal-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-signal-card-title-color: #162A43;
+  --ds-table-action-bg: #FFFFFF;
+  --ds-table-action-border: color-mix(in srgb, #D3DEEA 70%, transparent);
+  --ds-table-bg: #ffffff;
+  --ds-table-border: #D3DEEA;
+  --ds-table-cell-color: #162A43;
+  --ds-table-cell-font-size: 0.875rem;
+  --ds-table-cell-padding: 0.875rem 1rem;
+  --ds-table-filter-focus-shadow: 0 0 0 3px rgba(10, 102, 194, 0.14), 0 0 8px rgba(10, 102, 194, 0.12);
+  --ds-table-filter-row-bg: #F4F8FD;
+  --ds-table-header-bg: #f3f2ef;
+  --ds-table-header-bg-hover: color-mix(in srgb, #3A6FB0 5%, #F3F2EF);
+  --ds-table-header-border: color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-table-header-color: #52677E;
+  --ds-table-header-font-size: 0.75rem;
+  --ds-table-header-font-weight: 600;
+  --ds-table-header-shadow: inset 0 -1px 0 color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-table-loading-overlay-bg: rgba(255, 255, 255, 0.7);
+  --ds-table-page-button-hover-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
+  --ds-table-radius: 10px;
+  --ds-table-reorder-bg: rgba(10, 102, 194, 0.10);
+  --ds-table-resize-bg: color-mix(in srgb, #3A6FB0 22%, #D3DEEA);
+  --ds-table-resize-bg-hover: #3A6FB0;
+  --ds-table-row-bg: #ffffff;
+  --ds-table-row-bg-expanded: #F4F8FD;
+  --ds-table-row-bg-hover: #F4F8FD;
+  --ds-table-row-bg-selected: #E8F3FF;
+  --ds-table-row-bg-striped: #FAFCFF;
+  --ds-table-row-border: #DEE8F2;
+  --ds-table-row-hover-bg: #F4F8FD;
+  --ds-table-row-hover-shadow: inset 1px 0 0 rgba(10, 102, 194, 0.34);
+  --ds-table-row-striped-bg: #FAFCFF;
+  --ds-table-sheen: none;
+  --ds-toolbar-bg: color-mix(in srgb, #3A6FB0 4%, #FFFFFF);
+  --ds-toolbar-border: #D3DEEA;
+  --ds-toolbar-border-bottom: color-mix(in srgb, #D3DEEA 82%, transparent);
+  --ds-toolbar-color: #162A43;
+  --ds-toolbar-control-bg: #ffffff;
+  --ds-toolbar-control-border: #BCCBDC;
+  --ds-toolbar-control-color: #162A43;
+  --ds-toolbar-divider: #DEE8F2;
+  --ds-toolbar-gap: 0.75rem;
+  --ds-toolbar-padding: 0.75rem 1rem;
+  --ds-toolbar-radius: 8px;
+  --ds-toolbar-shadow: 0 1px 2px rgba(22, 42, 67, 0.04);
+  --ds-workspace-shell-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 58%, #F4F8FD 100%);
+  --ds-workspace-shell-border: #D3DEEA;
+  --ds-workspace-shell-overlay: linear-gradient(180deg, rgba(10, 102, 194, 0.035) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%);
+  --ds-workspace-shell-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
+}
+
+/* === Declared artifact extension (authored source, generator-preserved) === */
 html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   /* ============================================
      DaisyUI 5 color bridge (oklch format)
@@ -27549,7 +27853,6 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-primary-900: #001830;
 
   /* Primary main color */
-  --ds-color-primary: #3A6FB0;
   --ds-color-primary-hover: #2C5587;
 
   /* Secondary - Dark Blue */
@@ -27563,12 +27866,9 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-secondary-700: #034d2d;
   --ds-color-secondary-800: #023621;
   --ds-color-secondary-900: #012416;
-
-  --ds-color-secondary: #2F7D5E;
   --ds-color-secondary-hover: #046339;
 
   /* Accent - Green */
-  --ds-color-accent: #6E9A5E;
   --ds-color-accent-hover: #4F8A37;
 
   /* Neutral - LinkedIn Grays */
@@ -27613,108 +27913,31 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-border-focus: #3A6FB0;
 
   /* LinkedIn-inspired surface chrome, tinted for BitHire */
-  --ds-card-bg: #FFFFFF;
-  --ds-card-border: #D3DEEA;
-  --ds-card-header-border: #DEE8F2;
-  --ds-card-footer-border: #DEE8F2;
-  --ds-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06);
-  --ds-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
-  --ds-table-bg: #FFFFFF;
-  --ds-table-border: #D3DEEA;
-  --ds-table-header-bg: #F3F2EF;
-  --ds-table-header-color: #52677E;
-  --ds-table-row-bg: #FFFFFF;
-  --ds-table-row-border: #DEE8F2;
-  --ds-table-row-bg-hover: #F4F8FD;
-  --ds-table-row-bg-striped: #FAFCFF;
-  --ds-workspace-shell-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 58%, #F4F8FD 100%);
-  --ds-workspace-shell-border: #D3DEEA;
-  --ds-workspace-shell-overlay: linear-gradient(180deg, rgba(10, 102, 194, 0.035) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%);
-  --ds-workspace-shell-shadow: 0 1px 2px rgba(22, 42, 67, 0.04), 0 10px 24px rgba(22, 42, 67, 0.06);
 
   /* Typography - LinkedIn uses system fonts */
-  --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  --ds-font-family-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-  --ds-font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
-  --ds-font-family-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
 
   /* Letter Spacing */
-  --ds-letter-spacing-display: -0.02em;
-  --ds-letter-spacing-heading: -0.01em;
-  --ds-letter-spacing-body: 0;
-  --ds-letter-spacing-mono: 0;
 
   /* Line Heights */
-  --ds-line-height-display: 1.1;
-  --ds-line-height-heading: 1.25;
-  --ds-line-height-body: 1.6;
-  --ds-line-height-tight: 1.25;
-  --ds-line-height-relaxed: 1.75;
 
   /* Border Radius - softer than classic enterprise (H4) */
-  --ds-radius-sm: 6px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 12px;
-  --ds-radius-xl: 16px;
   --ds-radius-full: 9999px;
 
   /* Shadows - subtle, professional */
-  --ds-shadow-sm: 0 1px 2px rgba(22, 42, 67, 0.06);
-  --ds-shadow-md: 0 4px 12px rgba(22, 42, 67, 0.08);
-  --ds-shadow-lg: 0 8px 24px rgba(22, 42, 67, 0.1);
-  --ds-shadow-xl: 0 16px 48px rgba(22, 42, 67, 0.12);
   --ds-shadow-popover: 0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06);
   --ds-datepicker-panel-shadow: var(--ds-shadow-popover);
   --ds-timepicker-panel-shadow: var(--ds-shadow-popover);
 
   /* Button overrides */
-  --ds-button-primary-bg: #3A6FB0;
-  --ds-button-primary-bg-hover: #2C5587;
-  --ds-button-primary-color: #ffffff;
-  --ds-button-secondary-bg: transparent;
-  --ds-button-secondary-border: #3A6FB0;
-  --ds-button-secondary-color: #3A6FB0;
-  --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
-  --ds-button-primary-border: transparent;
-  --ds-button-primary-shadow: 0 1px 2px rgba(22, 42, 67, 0.1);
-  --ds-button-default-bg: #FFFFFF;
-  --ds-button-default-bg-hover: #F4F8FD;
-  --ds-button-default-color: #162A43;
-  --ds-button-default-border: #BCCBDC;
-  --ds-button-ghost-bg: transparent;
-  --ds-button-ghost-bg-hover: #F4F8FD;
-  --ds-button-ghost-color: #52677E;
-  --ds-button-disabled-bg: #F8FAFC;
-  --ds-button-disabled-color: #A7B2C0;
-  --ds-button-disabled-border: #E2EAF3;
-  --ds-button-disabled-border-color: #E2EAF3;
-  --ds-button-disabled-opacity: 0.45;
 
   /* Card overrides */
-  --ds-card-bg: #ffffff;
-  --ds-card-bg-hover: #F9FBFE;
-  --ds-card-border: #D3DEEA;
-  --ds-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06);
-  --ds-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
 
   /* Input overrides */
-  --ds-input-bg: #ffffff;
   --ds-input-bg-hover: #ffffff;
   --ds-input-bg-focus: #ffffff;
-  --ds-input-border: #BCCBDC;
   --ds-input-border-color: #BCCBDC;
   --ds-input-border-color-hover: #90A6BE;
   --ds-input-border-color-focus: #3A6FB0;
-  --ds-input-border-hover: #90A6BE;
-  --ds-input-border-focus: #3A6FB0;
-  --ds-input-shadow-focus: 0 0 0 1px #3A6FB0;
-  --ds-input-color: #162A43;
-  --ds-input-color-placeholder: #8795A6;
-  --ds-input-bg-disabled: #F8FAFC;
-  --ds-input-color-disabled: #A7B2C0;
-  --ds-input-border-disabled: #E2EAF3;
-  --ds-input-border-color-disabled: #E2EAF3;
-  --ds-input-disabled-opacity: 0.45;
   --ds-select-bg: #ffffff;
   --ds-select-bg-hover: #ffffff;
   --ds-select-bg-focus: #ffffff;
@@ -27732,34 +27955,11 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-select-option-color-selected: #3A6FB0;
 
   /* Layout */
-  --ds-layout-bg: #FFFFFF;
-  --ds-layout-header-bg: rgba(255, 255, 255, 0.92);
-  --ds-layout-header-backdrop: blur(8px);
-  --ds-layout-header-border: #D3DEEA;
-  --ds-layout-sider-bg: #FFFFFF;
-  --ds-layout-sider-border: #D3DEEA;
 
   /* Shell (intentionally minimal) */
-  --ds-shell-grid-size: 0px;
-  --ds-shell-grid-line: transparent;
 
 
   /* Table */
-  --ds-table-bg: #ffffff;
-  --ds-table-border: #D3DEEA;
-  --ds-table-radius: var(--ds-radius-lg);
-  --ds-table-header-bg: #f3f2ef;
-  --ds-table-header-color: #52677E;
-  --ds-table-header-font-weight: 600;
-  --ds-table-header-font-size: 0.75rem;
-  --ds-table-row-bg: #ffffff;
-  --ds-table-row-bg-hover: #F4F8FD;
-  --ds-table-row-bg-striped: #FAFCFF;
-  --ds-table-row-bg-selected: #E8F3FF;
-  --ds-table-row-border: #DEE8F2;
-  --ds-table-cell-padding: 0.875rem 1rem;
-  --ds-table-cell-font-size: 0.875rem;
-  --ds-table-cell-color: #162A43;
 
   /* Premium white-label surfaces promoted from the BitHire app */
   --ds-surface-border: var(--ds-color-border);
@@ -27804,15 +28004,6 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-premium-card-section-bg: var(--ds-surface-card);
   --ds-premium-card-section-alt-bg: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-panel));
   --ds-premium-card-footer-bg: color-mix(in srgb, var(--ds-surface-panel) 72%, var(--ds-surface-card));
-  --ds-table-border: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-border));
-  --ds-table-header-bg: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--ds-surface-panel) 88%, var(--ds-surface-card)),
-    color-mix(in srgb, var(--ds-surface-panel) 72%, var(--ds-surface-card))
-  );
-  --ds-table-header-bg-hover: color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-panel));
-  --ds-table-header-border: color-mix(in srgb, var(--ds-color-border) 82%, transparent);
-  --ds-table-header-shadow: inset 0 -1px 0 var(--ds-table-header-border);
   --ds-table-header-chip-bg: transparent;
   --ds-table-header-chip-border: transparent;
   --ds-table-header-chip-shadow: none;
@@ -27822,20 +28013,6 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-table-header-bubble-bg: transparent;
   --ds-table-header-bubble-border: transparent;
   --ds-table-header-bubble-shadow: none;
-  --ds-table-row-bg-hover: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card));
-  --ds-table-row-bg-striped: color-mix(in srgb, var(--ds-color-primary) 3%, var(--ds-surface-card));
-  --ds-table-row-border: color-mix(in srgb, var(--ds-color-border) 74%, transparent);
-  --ds-table-row-hover-shadow: inset 1px 0 0 color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
-  --ds-table-resize-bg: color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border));
-  --ds-table-resize-bg-hover: var(--ds-color-primary);
-  --ds-table-reorder-bg: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card));
-  --ds-table-action-bg: linear-gradient(
-    90deg,
-    color-mix(in srgb, var(--ds-surface-card) 60%, transparent),
-    var(--ds-surface-card)
-  );
-  --ds-table-action-border: color-mix(in srgb, var(--ds-color-border) 70%, transparent);
-  --ds-table-sheen: linear-gradient(90deg, var(--ds-card-side-accent-soft), transparent 24%);
   --ds-shell-topbar-height: 56px;
   --ds-shell-sidebar-width: 256px;
   --ds-shell-sidebar-collapsed-width: 64px;
@@ -27849,16 +28026,10 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-shell-breadcrumb-border: color-mix(in srgb, var(--ds-color-border) 82%, transparent);
   --ds-shell-breadcrumb-shadow: inset 0 1px 0 color-mix(in srgb, white 58%, transparent),
     0 7px 18px -18px color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent);
-  --ds-breadcrumb-font-size: 11px;
   --ds-breadcrumb-line-height: 1.15;
   --ds-breadcrumb-item-gap: 5px;
   --ds-breadcrumb-link-font-weight: 500;
   --ds-breadcrumb-current-font-weight: 650;
-  --ds-breadcrumb-color: var(--ds-color-text-secondary);
-  --ds-breadcrumb-color-hover: var(--ds-color-primary);
-  --ds-breadcrumb-color-active: var(--ds-color-text-primary);
-  --ds-breadcrumb-active-color: var(--ds-color-text-primary);
-  --ds-breadcrumb-separator-color: var(--ds-color-text-tertiary);
   --ds-global-search-height: 38px;
   --ds-global-search-padding: 0 10px 0 12px;
   --ds-global-search-radius: var(--ds-radius-md);
@@ -27910,25 +28081,18 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-interactive-bg-muted: #F4F8FD;
 
   /* Status colors */
-  --ds-color-success: #2F7D5E;
   --ds-color-success-50: #f0fdf4;
   --ds-color-success-100: #dcfce7;
   --ds-color-success-bg: #f0fdf4;
   --ds-color-success-border: rgba(5, 118, 66, 0.25);
-
-  --ds-color-warning: #D6A04E;
   --ds-color-warning-50: #fffbeb;
   --ds-color-warning-100: #fef3c7;
   --ds-color-warning-bg: #fffbeb;
   --ds-color-warning-border: rgba(231, 163, 62, 0.25);
-
-  --ds-color-error: #C5504C;
   --ds-color-error-50: #fef2f2;
   --ds-color-error-100: #fee2e2;
   --ds-color-error-bg: #fef2f2;
   --ds-color-error-border: rgba(204, 16, 22, 0.25);
-
-  --ds-color-info: #3A6FB0;
   --ds-color-info-50: #f0f7ff;
   --ds-color-info-100: #e0efff;
   --ds-color-info-bg: #f0f7ff;
@@ -27944,33 +28108,15 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
      ============================================ */
 
   /* Group Headers - Bold, slightly larger than items */
-  --ds-sidebar-group-font-size: 11px;
-  --ds-sidebar-group-font-weight: 600;
-  --ds-sidebar-group-color: #6B7F95;
-  --ds-sidebar-group-letter-spacing: 0.04em;
   --ds-sidebar-group-margin-top: 8px;
   --ds-sidebar-group-margin-bottom: 4px;
   --ds-sidebar-group-padding-top: 10px;
   --ds-sidebar-group-border: 1px solid #D3DEEA;
 
   /* Nav Items - Compact, smaller than header */
-  --ds-sidebar-item-font-size: 13px;
-  --ds-sidebar-item-font-weight: 400;
-  --ds-sidebar-item-font-weight-active: 500;
-  --ds-sidebar-item-color: #52677E;
-  --ds-sidebar-item-color-active: #3A6FB0;
-  --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
-  --ds-sidebar-item-bg-hover: #F4F8FD;
   --ds-sidebar-item-indent: 6px;
-  --ds-sidebar-item-padding: 6px 10px;
-  --ds-sidebar-icon-size: 16px;
 
   /* Sidebar specific */
-  --ds-sidebar-bg: #ffffff;
-  --ds-sidebar-footer-bg: #F8FBFF;
-  --ds-sidebar-border: #D3DEEA;
-  --ds-sidebar-text: #162A43;
-  --ds-sidebar-text-muted: #6B7F95;
 
   /* ============================================
      BITHIRE SPECIFIC - Recruiting Domain Tokens
@@ -28587,35 +28733,6 @@ html[data-tenant='bithire'].dark {
    Mirrors chrome.shell.commandHome* in brand-themes/bithire.ts for the
    static CSS bundle until the vertical CSS builder emits BrandTheme chrome. */
 html[data-tenant='bithire'] {
-  --ds-command-home-max-width: 1120px;
-  --ds-command-home-gap: 16px;
-  --ds-command-home-panel-gap: 14px;
-  --ds-command-home-grid-line: rgba(10, 102, 194, 0.06);
-  --ds-command-home-panel-border: #A9C9EA;
-  --ds-command-home-panel-border-soft: #B7D3F2;
-  --ds-command-home-panel-shadow: 0 1px 2px rgba(22, 42, 67, 0.08), 0 16px 36px rgba(10, 102, 194, 0.10);
-  --ds-command-home-panel-bg: #FFFFFF;
-  --ds-command-home-panel-bg-strong: #FFFFFF;
-  --ds-command-home-compact-action-height: 202px;
-  --ds-command-home-console-min-height: calc(100vh - 108px);
-  --ds-command-home-console-padding: clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px;
-  --ds-command-home-console-bg:
-    repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px),
-    repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px),
-    linear-gradient(180deg, #F6FAFE 0%, #EEF6FF 100%);
-  --ds-command-home-surface-bg:
-    repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px),
-    repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 250, 254, 0.92) 100%);
-  --ds-command-home-hero-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
-  --ds-command-home-icon-bg: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg));
-  --ds-command-home-icon-border: color-mix(in srgb, var(--ds-color-primary) 32%, var(--ds-color-border-primary));
-  --ds-command-home-control-bg: #FFFFFF;
-  --ds-command-home-control-border: #B7D3F2;
-  --ds-command-home-control-hover-bg: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card-bg));
-  --ds-command-home-control-hover-border: color-mix(in srgb, var(--ds-color-primary) 42%, var(--ds-color-border-primary));
-  --ds-command-home-meter-bg: color-mix(in srgb, var(--ds-color-border-primary) 72%, transparent);
-  --ds-command-home-meter-fill: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-success));
   --ds-home-grid-line: var(--ds-command-home-grid-line);
   --ds-home-panel-border: var(--ds-command-home-panel-border);
   --ds-home-panel-shadow: var(--ds-command-home-panel-shadow);
