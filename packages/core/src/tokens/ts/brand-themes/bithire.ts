@@ -2,15 +2,22 @@
  * BitHire first-party vertical theme.
  *
  * Trusted recruiting workspace. LinkedIn-adjacent trust (not a clone).
- * Blue family primary, softer radii, fast fades, calm forms.
+ * Blue family primary, softer radii, calm expressive motion, calm forms.
  * Data-dense without looking harsh.
  *
- * Design: Professional corporate, clean with LinkedIn Blue (#3A6FB0).
- * Light backgrounds, system fonts, subtle shadows. BitHire intentionally
- * remains clear-mode even if a host shell sets `.dark`.
+ * Design: the Evidence Ledger (docs-engineering/engineering/verticals/
+ * bithire/product/design-language.md) — paper-calm surfaces, editorial
+ * hierarchy, one strong signal per screen, LinkedIn Blue (#3A6FB0).
+ * Light backgrounds, system fonts, 3-level elevation scale. BitHire
+ * intentionally remains clear-mode even if a host shell sets `.dark`.
  *
- * Source: tokens/css/artifacts/bithire/index.css (canonical visual reference).
- * This file MUST stay in sync with the CSS artifact.
+ * The ONE sanctioned multi-hue gradient is the Confidence Meter
+ * (meterFill / commandHomeMeterFill). Every other decoration field is
+ * flat/solid per the design-language §5 forbidden inventory.
+ *
+ * This file is the canonical authored source (theming LAW 1). The CSS
+ * artifact tokens/css/artifacts/bithire/index.css is a generated snapshot
+ * and is PENDING REGENERATION for these Evidence Ledger deltas (WO-DES-02).
  */
 
 import type { BrandTheme } from '../../../contracts/themes';
@@ -40,7 +47,7 @@ export const bithireBrandTheme: BrandTheme = {
     fontFamilyDisplay: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif",
     headingWeightBias: 'heavier',
     headingLetterSpacing: '-0.01em',
-    labelStyle: 'uppercase',
+    labelStyle: 'sentence',
     letterSpacing: {
       display: '-0.02em',
       heading: '-0.01em',
@@ -57,13 +64,16 @@ export const bithireBrandTheme: BrandTheme = {
   },
 
   surfaces: {
-    densityScale: 0.95,
-    borderRadius: { sm: '6px', md: '8px', lg: '12px', xl: '16px' },
+    densityScale: 0.98,
+    borderRadius: { sm: '6px', md: '8px', lg: '10px', xl: '14px' },
+    // Elevation collapses to 3 levels (design-language §2.4):
+    // level-0 = no shadow, level-1 (resting) = sm, level-2 (overlay) = lg/xl.
+    // md aliases sm; lg and xl alias the level-2 overlay value.
     shadows: {
       sm: '0 1px 2px rgba(22, 42, 67, 0.06)',
-      md: '0 4px 12px rgba(22, 42, 67, 0.08)',
-      lg: '0 8px 24px rgba(22, 42, 67, 0.1)',
-      xl: '0 16px 48px rgba(22, 42, 67, 0.12)',
+      md: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      lg: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
+      xl: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
     },
     glass: { blur: 'none', background: 'none', border: 'none' },
     gradients: { primary: 'none', surface: 'none', mesh: 'none' },
@@ -75,9 +85,10 @@ export const bithireBrandTheme: BrandTheme = {
   },
 
   motion: {
-    intensity: 0.4,
+    // Expressive-calm (owner direction 2026-07-02-b): raised budget, still calm.
+    intensity: 0.55,
     entrance: 'fade',
-    entranceDuration: 150,
+    entranceDuration: 200,
     hoverLift: 0,
     hoverScale: 1.0,
     useSpring: false,
@@ -102,9 +113,11 @@ export const bithireBrandTheme: BrandTheme = {
   chrome: {
     card: {
       defaultElevation: 'sm',
+      // Expressive-calm (2026-07-02-b): interactive cards answer hover with
+      // lift-one + tint together.
       hoverElevation: 'lift-one',
       showBorder: true,
-      hoverTint: false,
+      hoverTint: true,
       paddingDensity: 'compact',
     },
     accent: {
@@ -121,13 +134,15 @@ export const bithireBrandTheme: BrandTheme = {
       border: '#D3DEEA',
       text: '#162A43',
       textMuted: '#6B7F95',
-      groupFontSize: '11px',
+      // Type ramp alignment (design-language §2.1): group headers on the
+      // detail size, items on the body size, active weight on the 400/600/700 ramp.
+      groupFontSize: '0.75rem',
       groupFontWeight: 600,
       groupColor: '#6B7F95',
       groupLetterSpacing: '0.04em',
-      itemFontSize: '13px',
+      itemFontSize: '0.875rem',
       itemFontWeight: 400,
-      itemFontWeightActive: 500,
+      itemFontWeightActive: 600,
       itemColor: '#52677E',
       itemColorActive: '#3A6FB0',
       itemBgActive: 'rgba(10, 102, 194, 0.08)',
@@ -147,43 +162,45 @@ export const bithireBrandTheme: BrandTheme = {
       gridSize: '0px',
       gridLine: 'transparent',
       gridOpacity: 0,
+      // The page canvas gradient is the ONE allowed background gradient
+      // (design-language §5 budget item 1).
       bg: 'linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 58%, #F4F8FD 100%)',
       border: '#D3DEEA',
       overlay: 'linear-gradient(180deg, rgba(10, 102, 194, 0.035) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%)',
-      shadow: '0 1px 2px rgba(22, 42, 67, 0.04), 0 10px 24px rgba(22, 42, 67, 0.06)',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
       activeBg: '#EAE9E5',
-      activeGradient: 'linear-gradient(90deg, #EAE9E5, transparent)',
+      activeGradient: '#EAE9E5',
       dropdownShadow: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
-      shimmerFaint: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent)',
-      shimmerSoft: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.46), transparent)',
-      shimmerMedium: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.64), transparent)',
-      shimmerStrong: 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.78), transparent)',
+      // Decorative shimmers deleted per design-language §5 (skeletons stay
+      // `pulse`; AI-live affordances are the sole shimmer exception and do
+      // not read these tokens).
       commandFont: "'SF Mono', 'Fira Code', Menlo, monospace",
       commandLetterSpacing: '0',
       commandGridSize: '22px',
-      commandGridLineSoft: 'rgba(10, 102, 194, 0.06)',
-      commandGridLine: 'rgba(10, 102, 194, 0.11)',
-      commandGridLineStrong: 'rgba(10, 102, 194, 0.18)',
-      commandGridBg: 'linear-gradient(rgba(10, 102, 194, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(10, 102, 194, 0.06) 1px, transparent 1px)',
-      commandGridBgStrong: 'linear-gradient(rgba(10, 102, 194, 0.11) 1px, transparent 1px), linear-gradient(90deg, rgba(10, 102, 194, 0.11) 1px, transparent 1px)',
-      commandGlow: '0 0 0 1px rgba(10, 102, 194, 0.06), 0 10px 28px rgba(10, 102, 194, 0.05)',
-      commandLine: 'linear-gradient(90deg, transparent, rgba(10, 102, 194, 0.62), transparent)',
-      commandRailBg: 'linear-gradient(180deg, #FFFFFF 0%, #F6FAFE 100%)',
+      // Blueprint grid overlays retired (design-language §5 / §6.4).
+      commandGridLineSoft: 'transparent',
+      commandGridLine: 'transparent',
+      commandGridLineStrong: 'transparent',
+      commandGridBg: 'none',
+      commandGridBgStrong: 'none',
+      commandGlow: 'none',
+      commandLine: 'none',
+      commandRailBg: '#FFFFFF',
       commandHomeMaxWidth: '1120px',
       commandHomeGap: '16px',
       commandHomePanelGap: '14px',
       commandHomeGridLine: 'rgba(10, 102, 194, 0.06)',
       commandHomePanelBorder: '#A9C9EA',
       commandHomePanelBorderSoft: '#B7D3F2',
-      commandHomePanelShadow: '0 1px 2px rgba(22, 42, 67, 0.08), 0 16px 36px rgba(10, 102, 194, 0.10)',
+      commandHomePanelShadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
       commandHomePanelBg: '#FFFFFF',
       commandHomePanelBgStrong: '#FFFFFF',
       commandHomeCompactActionHeight: '202px',
       commandHomeConsoleMinHeight: 'calc(100vh - 108px)',
       commandHomeConsolePadding: 'clamp(20px, 3vw, 34px) clamp(16px, 4vw, 56px) 24px',
-      commandHomeConsoleBg: 'repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px), repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.05) 0 1px, transparent 1px 30px), linear-gradient(180deg, #F6FAFE 0%, #EEF6FF 100%)',
-      commandHomeSurfaceBg: 'repeating-linear-gradient(90deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px), repeating-linear-gradient(0deg, rgba(10, 102, 194, 0.055) 0 1px, transparent 1px 30px), linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(246, 250, 254, 0.92) 100%)',
-      commandHomeHeroBg: 'linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%)',
+      commandHomeConsoleBg: '#F6FAFE',
+      commandHomeSurfaceBg: '#FFFFFF',
+      commandHomeHeroBg: '#FFFFFF',
       commandHomeIconBg: 'color-mix(in srgb, #3A6FB0 9%, #FFFFFF)',
       commandHomeIconBorder: 'color-mix(in srgb, #3A6FB0 32%, #D3DEEA)',
       commandHomeControlBg: '#FFFFFF',
@@ -194,7 +211,7 @@ export const bithireBrandTheme: BrandTheme = {
       commandHomeMeterFill: 'linear-gradient(90deg, #3A6FB0, #2F7D5E)',
     },
     toolbar: {
-      bg: 'linear-gradient(180deg, color-mix(in srgb, #FFFFFF 92%, #3A6FB0 4%), color-mix(in srgb, #F4F8FD 84%, #FFFFFF))',
+      bg: 'color-mix(in srgb, #3A6FB0 4%, #FFFFFF)',
       border: '#D3DEEA',
       borderBottom: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
       color: '#162A43',
@@ -229,7 +246,7 @@ export const bithireBrandTheme: BrandTheme = {
       countActiveRing: 'inset 0 0 0 1px color-mix(in srgb, #3A6FB0 24%, #BCCBDC)',
     },
     breadcrumb: {
-      bg: 'linear-gradient(180deg, color-mix(in srgb, #FFFFFF 92%, #3A6FB0 4%), color-mix(in srgb, #F4F8FD 84%, #FFFFFF))',
+      bg: 'color-mix(in srgb, #3A6FB0 4%, #FFFFFF)',
       border: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
       color: '#52677E',
       linkColor: '#3A6FB0',
@@ -237,8 +254,9 @@ export const bithireBrandTheme: BrandTheme = {
       colorHover: '#2C5587',
       colorActive: '#162A43',
       separatorColor: '#8795A6',
-      fontSize: '0.8125rem',
-      fontWeight: 500,
+      // Breadcrumbs sit on the detail step of the type ramp (design-language §2.1).
+      fontSize: '0.75rem',
+      fontWeight: 400,
       padding: '0.625rem 1rem',
     },
     search: {
@@ -246,7 +264,8 @@ export const bithireBrandTheme: BrandTheme = {
       border: '#D3DEEA',
       color: '#162A43',
       shadow: '0 12px 30px rgba(22, 42, 67, 0.10), 0 2px 8px rgba(22, 42, 67, 0.06)',
-      radius: '12px',
+      // Command palette / search modal rides the xl radius step (design-language §2.3).
+      radius: '14px',
       inputBg: '#ffffff',
       inputBorder: '#BCCBDC',
       inputColor: '#162A43',
@@ -261,7 +280,7 @@ export const bithireBrandTheme: BrandTheme = {
       resultTitleColor: '#162A43',
       resultMetaColor: '#6B7F95',
       categoryColor: '#6B7F95',
-      emptyBg: 'linear-gradient(145deg, color-mix(in srgb, #3A6FB0 5%, #FFFFFF), #F4F8FD)',
+      emptyBg: '#F4F8FD',
     },
     controls: {
       buttonPrimary: { bg: '#3A6FB0', bgHover: '#2C5587', text: '#ffffff', color: '#ffffff', border: 'transparent', shadow: '0 1px 2px rgba(22, 42, 67, 0.1)' },
@@ -286,7 +305,8 @@ export const bithireBrandTheme: BrandTheme = {
     table: {
       bg: '#ffffff',
       border: '#D3DEEA',
-      radius: '12px',
+      // Tables/panels ride the lg radius step (design-language §2.3).
+      radius: '10px',
       headerBg: '#f3f2ef',
       headerBgHover: 'color-mix(in srgb, #3A6FB0 5%, #F3F2EF)',
       headerColor: '#52677E',
@@ -309,9 +329,9 @@ export const bithireBrandTheme: BrandTheme = {
       resizeBg: 'color-mix(in srgb, #3A6FB0 22%, #D3DEEA)',
       resizeBgHover: '#3A6FB0',
       reorderBg: 'rgba(10, 102, 194, 0.10)',
-      actionBg: 'linear-gradient(90deg, rgba(255, 255, 255, 0.6), #FFFFFF)',
+      actionBg: '#FFFFFF',
       actionBorder: 'color-mix(in srgb, #D3DEEA 70%, transparent)',
-      sheen: 'linear-gradient(90deg, rgba(10, 102, 194, 0.07), transparent 24%)',
+      sheen: 'none',
       pageButtonHoverShadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
       loadingOverlayBg: 'rgba(255, 255, 255, 0.7)',
     },
@@ -327,10 +347,12 @@ export const bithireBrandTheme: BrandTheme = {
       colorMuted: '#6B7F95',
       border: '#D3DEEA',
       borderColor: '#D3DEEA',
-      shadow: '0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06)',
+      // Resting cards sit at elevation level-1 (design-language §2.4).
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
       shadowHover: '0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08)',
       radius: '8px',
       focusRing: '0 0 0 3px rgba(10, 102, 194, 0.14)',
+      // Expressive-calm keeps the lift-one hover lift (2026-07-02-b).
       hoverTransform: 'translateY(-1px) scale(1)',
       headerBorder: '#DEE8F2',
       headerBorderColor: '#DEE8F2',
@@ -351,33 +373,35 @@ export const bithireBrandTheme: BrandTheme = {
       imagePlaceholderColor: '#8795A6',
     },
     metricCard: {
-      bg: 'linear-gradient(145deg, #FFFFFF 0%, color-mix(in srgb, #3A6FB0 4%, #F4F8FD) 100%)',
+      bg: '#FFFFFF',
       border: 'color-mix(in srgb, #3A6FB0 10%, #D3DEEA)',
       borderHover: 'color-mix(in srgb, #3A6FB0 24%, #D3DEEA)',
       selectedBorder: 'color-mix(in srgb, #3A6FB0 58%, #D3DEEA)',
       selectedRing: '0 0 0 3px rgba(10, 102, 194, 0.14)',
-      shadow: '0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06)',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
       shadowHover: '0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08)',
-      sheen: 'linear-gradient(90deg, rgba(10, 102, 194, 0.07), transparent 24%)',
-      iconBg: 'linear-gradient(135deg, color-mix(in srgb, #3A6FB0 14%, #FFFFFF), color-mix(in srgb, #2F7D5E 12%, #FFFFFF))',
+      sheen: 'none',
+      iconBg: 'color-mix(in srgb, #3A6FB0 8%, #FFFFFF)',
       iconBorder: 'color-mix(in srgb, #3A6FB0 24%, #D3DEEA)',
       labelColor: '#6B7F95',
       valueColor: '#162A43',
       trendColor: '#2F7D5E',
       meterTrack: 'color-mix(in srgb, #D3DEEA 48%, #F4F8FD)',
       meterTrackBorder: 'color-mix(in srgb, #D3DEEA 82%, transparent)',
+      // The Confidence Meter — the ONE sanctioned multi-hue gradient (S5).
       meterFill: 'linear-gradient(90deg, #3A6FB0, #2F7D5E)',
-      meterFillSuccess: 'linear-gradient(90deg, #2F7D5E, color-mix(in srgb, #2F7D5E 72%, #2F7D5E))',
-      meterFillWarning: 'linear-gradient(90deg, #D6A04E, color-mix(in srgb, #D6A04E 70%, #6E9A5E))',
-      meterFillError: 'linear-gradient(90deg, #C5504C, color-mix(in srgb, #C5504C 72%, #3A6FB0))',
-      meterFillNeutral: 'linear-gradient(90deg, #8795A6, color-mix(in srgb, #8795A6 72%, #3A6FB0))',
+      // Status meter variants are solid tone colors (design-language §5).
+      meterFillSuccess: '#2F7D5E',
+      meterFillWarning: '#D6A04E',
+      meterFillError: '#C5504C',
+      meterFillNeutral: '#8795A6',
     },
     signalCard: {
       bg: '#ffffff',
       border: '#D3DEEA',
       borderHover: 'color-mix(in srgb, #3A6FB0 18%, #D3DEEA)',
-      shadow: '0 1px 2px rgba(22, 42, 67, 0.05), 0 8px 22px rgba(22, 42, 67, 0.06)',
-      iconBg: 'linear-gradient(135deg, color-mix(in srgb, #3A6FB0 14%, #FFFFFF), color-mix(in srgb, #2F7D5E 12%, #FFFFFF))',
+      shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
+      iconBg: 'color-mix(in srgb, #3A6FB0 8%, #FFFFFF)',
       iconBorder: 'color-mix(in srgb, #3A6FB0 24%, #D3DEEA)',
       titleColor: '#162A43',
       bodyColor: '#52677E',
