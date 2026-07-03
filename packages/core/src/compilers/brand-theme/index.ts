@@ -244,7 +244,46 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       if (su.overlays.heavy) vars['--ds-overlay-heavy'] = su.overlays.heavy;
     }
   }
+  setTintScaleVariables(vars, bt);
   return vars;
+}
+
+/** The five closed tint steps of the one-blue scale (design-language §2.5). */
+const TINT_STEPS = [4, 8, 12, 16, 24] as const;
+
+/**
+ * Emit the closed tint scale --ds-tint-{4,8,12,16,24} per palette role.
+ *
+ * Each step is `color-mix(in srgb, <role> N%, var(--ds-color-bg-primary))`, so a
+ * single role color (mixed over the page background) generates every interaction
+ * tint instead of hand-picked rgba() values. This is what lets a vertical drop a
+ * foreign second blue and re-derive hover/active/selected/focus states from its
+ * primary alone (one-blue law). The primary role is emitted UNSUFFIXED (the
+ * canonical interaction scale — hover=tint-4, active/selected=tint-8, selected
+ * row=tint-12, focus ring=tint-24); each status tone (success/warning/error/info)
+ * carries a role suffix so a tinted pill reads bg = tint-8 of the tone and
+ * border = tint-24 of the tone. A role is skipped when its palette color is
+ * absent, so themes that omit a tone simply omit that tone's tints.
+ */
+function setTintScaleVariables(vars: Record<string, string>, bt: BrandTheme): void {
+  const palette = bt.palette;
+  if (!palette) return;
+
+  const roles: Array<{ suffix: string; color: string | undefined; colorVar: string }> = [
+    { suffix: '', color: palette.primaryColor, colorVar: '--ds-color-primary' },
+    { suffix: 'success', color: palette.successColor, colorVar: '--ds-color-success' },
+    { suffix: 'warning', color: palette.warningColor, colorVar: '--ds-color-warning' },
+    { suffix: 'error', color: palette.errorColor, colorVar: '--ds-color-error' },
+    { suffix: 'info', color: palette.infoColor, colorVar: '--ds-color-info' },
+  ];
+
+  for (const { suffix, color, colorVar } of roles) {
+    if (!color) continue;
+    for (const step of TINT_STEPS) {
+      const name = suffix ? `--ds-tint-${suffix}-${step}` : `--ds-tint-${step}`;
+      vars[name] = `color-mix(in srgb, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`;
+    }
+  }
 }
 
 /** Build a CSS string from variables with tenant selector scoping. */

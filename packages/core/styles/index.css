@@ -27526,7 +27526,7 @@ html[data-tenant='bithire'] {
   --ds-button-primary-color: #ffffff;
   --ds-button-primary-shadow: 0 1px 2px rgba(22, 42, 67, 0.1);
   --ds-button-secondary-bg: transparent;
-  --ds-button-secondary-bg-hover: rgba(10, 102, 194, 0.08);
+  --ds-button-secondary-bg-hover: var(--ds-tint-8);
   --ds-button-secondary-border: #3A6FB0;
   --ds-button-secondary-color: #3A6FB0;
   --ds-card-bg: #ffffff;
@@ -27538,7 +27538,7 @@ html[data-tenant='bithire'] {
   --ds-card-border-radius: 8px;
   --ds-card-color: #162A43;
   --ds-card-color-muted: #6B7F95;
-  --ds-card-focus-ring: 0 0 0 3px rgba(10, 102, 194, 0.14);
+  --ds-card-focus-ring: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
   --ds-card-footer-bg: #F8FBFF;
   --ds-card-footer-border: #DEE8F2;
   --ds-card-footer-border-color: #DEE8F2;
@@ -27591,7 +27591,7 @@ html[data-tenant='bithire'] {
   --ds-command-home-control-hover-bg: color-mix(in srgb, #3A6FB0 7%, #FFFFFF);
   --ds-command-home-control-hover-border: color-mix(in srgb, #3A6FB0 42%, #D3DEEA);
   --ds-command-home-gap: 16px;
-  --ds-command-home-grid-line: rgba(10, 102, 194, 0.06);
+  --ds-command-home-grid-line: color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
   --ds-command-home-hero-bg: #FFFFFF;
   --ds-command-home-icon-bg: color-mix(in srgb, #3A6FB0 9%, #FFFFFF);
   --ds-command-home-icon-border: color-mix(in srgb, #3A6FB0 32%, #D3DEEA);
@@ -27608,7 +27608,7 @@ html[data-tenant='bithire'] {
   --ds-command-letter-spacing: 0;
   --ds-command-line: none;
   --ds-command-rail-bg: #FFFFFF;
-  --ds-filter-pill-active-bg: rgba(10, 102, 194, 0.08);
+  --ds-filter-pill-active-bg: var(--ds-tint-8);
   --ds-filter-pill-active-border: color-mix(in srgb, #3A6FB0 28%, #D3DEEA);
   --ds-filter-pill-active-color: #3A6FB0;
   --ds-filter-pill-active-shadow: inset 0 0 0 1px color-mix(in srgb, #3A6FB0 28%, #D3DEEA), 0 1px 2px rgba(22, 42, 67, 0.05);
@@ -27621,10 +27621,10 @@ html[data-tenant='bithire'] {
   --ds-filter-pill-count-bg: #ffffff;
   --ds-filter-pill-count-border: color-mix(in srgb, #D3DEEA 82%, transparent);
   --ds-filter-pill-count-ring: inset 0 0 0 1px color-mix(in srgb, #D3DEEA 82%, transparent);
-  --ds-filter-pill-focus-ring: 0 0 0 3px rgba(10, 102, 194, 0.22);
+  --ds-filter-pill-focus-ring: 0 0 0 3px var(--ds-tint-24);
   --ds-filter-pill-frame-border: color-mix(in srgb, #3A6FB0 10%, #D3DEEA);
   --ds-filter-pill-frame-shadow: 0 1px 2px rgba(22, 42, 67, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-  --ds-filter-pill-hover-bg: rgba(10, 102, 194, 0.05);
+  --ds-filter-pill-hover-bg: var(--ds-tint-4);
   --ds-filter-pill-hover-border: color-mix(in srgb, #3A6FB0 16%, #D3DEEA);
   --ds-filter-pill-shadow: 0 1px 2px rgba(22, 42, 67, 0.03);
   --ds-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
@@ -27680,7 +27680,7 @@ html[data-tenant='bithire'] {
   --ds-metric-card-meter-track: color-mix(in srgb, #D3DEEA 48%, #F4F8FD);
   --ds-metric-card-meter-track-border: color-mix(in srgb, #D3DEEA 82%, transparent);
   --ds-metric-card-selected-border: color-mix(in srgb, #3A6FB0 58%, #D3DEEA);
-  --ds-metric-card-selected-ring: 0 0 0 3px rgba(10, 102, 194, 0.14);
+  --ds-metric-card-selected-ring: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
   --ds-metric-card-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
   --ds-metric-card-shadow-hover: 0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08);
   --ds-metric-card-sheen: none;
@@ -27730,7 +27730,7 @@ html[data-tenant='bithire'] {
   --ds-sidebar-group-font-weight: 600;
   --ds-sidebar-group-letter-spacing: 0.04em;
   --ds-sidebar-icon-size: 16px;
-  --ds-sidebar-item-bg-active: rgba(10, 102, 194, 0.08);
+  --ds-sidebar-item-bg-active: var(--ds-tint-8);
   --ds-sidebar-item-bg-hover: #F4F8FD;
   --ds-sidebar-item-color: #52677E;
   --ds-sidebar-item-color-active: #3A6FB0;
@@ -27740,7 +27740,7 @@ html[data-tenant='bithire'] {
   --ds-sidebar-item-padding: 6px 10px;
   --ds-sidebar-text: #162A43;
   --ds-sidebar-text-muted: #6B7F95;
-  --ds-signal-card-badge-bg: rgba(10, 102, 194, 0.09);
+  --ds-signal-card-badge-bg: var(--ds-tint-8);
   --ds-signal-card-badge-border: color-mix(in srgb, #3A6FB0 28%, #D3DEEA);
   --ds-signal-card-badge-color: #3A6FB0;
   --ds-signal-card-bg: #ffffff;
@@ -27763,7 +27763,7 @@ html[data-tenant='bithire'] {
   --ds-table-cell-color: #162A43;
   --ds-table-cell-font-size: 0.875rem;
   --ds-table-cell-padding: 0.875rem 1rem;
-  --ds-table-filter-focus-shadow: 0 0 0 3px rgba(10, 102, 194, 0.14), 0 0 8px rgba(10, 102, 194, 0.12);
+  --ds-table-filter-focus-shadow: 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent), 0 0 8px color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
   --ds-table-filter-row-bg: #F4F8FD;
   --ds-table-header-bg: #f3f2ef;
   --ds-table-header-bg-hover: color-mix(in srgb, #3A6FB0 5%, #F3F2EF);
@@ -27775,7 +27775,7 @@ html[data-tenant='bithire'] {
   --ds-table-loading-overlay-bg: rgba(255, 255, 255, 0.7);
   --ds-table-page-button-hover-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
   --ds-table-radius: 10px;
-  --ds-table-reorder-bg: rgba(10, 102, 194, 0.10);
+  --ds-table-reorder-bg: var(--ds-tint-12);
   --ds-table-resize-bg: color-mix(in srgb, #3A6FB0 22%, #D3DEEA);
   --ds-table-resize-bg-hover: #3A6FB0;
   --ds-table-row-bg: #ffffff;
@@ -27785,9 +27785,34 @@ html[data-tenant='bithire'] {
   --ds-table-row-bg-striped: #FAFCFF;
   --ds-table-row-border: #DEE8F2;
   --ds-table-row-hover-bg: #F4F8FD;
-  --ds-table-row-hover-shadow: inset 1px 0 0 rgba(10, 102, 194, 0.34);
+  --ds-table-row-hover-shadow: inset 1px 0 0 color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
   --ds-table-row-striped-bg: #FAFCFF;
   --ds-table-sheen: none;
+  --ds-tint-12: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in srgb, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in srgb, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in srgb, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in srgb, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in srgb, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in srgb, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in srgb, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in srgb, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in srgb, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in srgb, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in srgb, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
   --ds-toolbar-bg: color-mix(in srgb, #3A6FB0 4%, #FFFFFF);
   --ds-toolbar-border: #D3DEEA;
   --ds-toolbar-border-bottom: color-mix(in srgb, #D3DEEA 82%, transparent);
@@ -27802,7 +27827,7 @@ html[data-tenant='bithire'] {
   --ds-toolbar-shadow: 0 1px 2px rgba(22, 42, 67, 0.04);
   --ds-workspace-shell-bg: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 58%, #F4F8FD 100%);
   --ds-workspace-shell-border: #D3DEEA;
-  --ds-workspace-shell-overlay: linear-gradient(180deg, rgba(10, 102, 194, 0.035) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%);
+  --ds-workspace-shell-overlay: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 3.5%, transparent) 0%, transparent 42%, rgba(227, 240, 255, 0.48) 100%);
   --ds-workspace-shell-shadow: 0 1px 2px rgba(22, 42, 67, 0.06);
 }
 
