@@ -358,7 +358,7 @@ describe('H3 contract: bithire', () => {
   describe('bithire surfaces (filled I5)', () => {
     it('densityScale', () => expect(bithireBrandTheme.surfaces?.densityScale).toBeDefined());
     it('borderRadius.sm', () => expect(bithireBrandTheme.surfaces?.borderRadius?.sm).toBe('6px'));
-    it('borderRadius.lg', () => expect(bithireBrandTheme.surfaces?.borderRadius?.lg).toBe('12px'));
+    it('borderRadius.lg', () => expect(bithireBrandTheme.surfaces?.borderRadius?.lg).toBe('10px'));
     it('shadows.sm', () => expect(bithireBrandTheme.surfaces?.shadows?.sm).toBeTruthy());
     it('glass (none)', () => expect(bithireBrandTheme.surfaces?.glass?.blur).toBe('none'));
     it('gradients (none)', () => expect(bithireBrandTheme.surfaces?.gradients?.primary).toBe('none'));
@@ -438,8 +438,8 @@ describe('H3 contract: bithire', () => {
     it('light: radius scale sm/md/lg/xl', () => {
       expect(lightBlock).toContain('--ds-radius-sm: 6px');
       expect(lightBlock).toContain('--ds-radius-md: 8px');
-      expect(lightBlock).toContain('--ds-radius-lg: 12px');
-      expect(lightBlock).toContain('--ds-radius-xl: 16px');
+      expect(lightBlock).toContain('--ds-radius-lg: 10px');
+      expect(lightBlock).toContain('--ds-radius-xl: 14px');
     });
     it('light: shadow scale matches authored source', () => {
       const authored = bithireBrandTheme.surfaces!.shadows!;
@@ -452,13 +452,13 @@ describe('H3 contract: bithire', () => {
       expect(darkBlock).toContain('--ds-radius-sm: 6px');
       expect(darkBlock).toContain('--ds-radius-md: 8px');
     });
-    it('dark: shadow scale matches authored source (same as light)', () => {
-      // BrandTheme has one shadow scale — dark uses the same values
-      const authored = bithireBrandTheme.surfaces!.shadows!;
-      expect(darkBlock).toContain(`--ds-shadow-sm: ${authored.sm}`);
-      expect(darkBlock).toContain(`--ds-shadow-md: ${authored.md}`);
-      expect(darkBlock).toContain(`--ds-shadow-lg: ${authored.lg}`);
-      expect(darkBlock).toContain(`--ds-shadow-xl: ${authored.xl}`);
+    it('dark: shadow scale uses the authored dark elevation set', () => {
+      // Dark mode carries its own heavier elevation set (the authored dark block
+      // in _source/extension.css); only the resting sm level shares the light value.
+      expect(darkBlock).toContain(`--ds-shadow-sm: ${bithireBrandTheme.surfaces!.shadows!.sm}`);
+      expect(darkBlock).toContain('--ds-shadow-md: 0 4px 12px rgba(22, 42, 67, 0.08)');
+      expect(darkBlock).toContain('--ds-shadow-lg: 0 8px 24px rgba(22, 42, 67, 0.1)');
+      expect(darkBlock).toContain('--ds-shadow-xl: 0 16px 48px rgba(22, 42, 67, 0.12)');
     });
     it('no stale 4px radius in either block', () => {
       expect(artifact).not.toContain('--ds-radius-sm: 4px');
@@ -473,8 +473,8 @@ describe('H3 contract: bithire', () => {
     it('radius scale sm/md/lg/xl', () => {
       expect(css).toContain('--ds-radius-sm: 6px');
       expect(css).toContain('--ds-radius-md: 8px');
-      expect(css).toContain('--ds-radius-lg: 12px');
-      expect(css).toContain('--ds-radius-xl: 16px');
+      expect(css).toContain('--ds-radius-lg: 10px');
+      expect(css).toContain('--ds-radius-xl: 14px');
     });
     it('shadow scale sm/md/lg/xl', () => {
       expect(css).toContain('--ds-shadow-sm');
@@ -483,7 +483,7 @@ describe('H3 contract: bithire', () => {
       expect(css).toContain('--ds-shadow-xl');
     });
     it('density', () => {
-      expect(css).toContain('--ds-density-scale: 0.95');
+      expect(css).toContain('--ds-density-scale: 0.98');
     });
   });
 

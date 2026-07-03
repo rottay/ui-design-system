@@ -171,7 +171,7 @@ describe('shared pipeline: personality baseline', () => {
 describe('shared pipeline: density baseline', () => {
   it('bithire generates density scale from brandTheme', () => {
     const css = generateTenantCss(BITHIRE_CONFIG, { includeDarkSelector: false });
-    expect(css).toContain('--ds-density-scale: 0.95');
+    expect(css).toContain('--ds-density-scale: 0.98');
   });
 
   it('evnto generates density scale from vertical + brandTheme', () => {
@@ -321,16 +321,16 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   });
 
   it('bithire generates button variant vars with correct values', () => {
-    expect(bithireCss).toContain('--ds-button-primary-bg: #0A66C2');
+    expect(bithireCss).toContain('--ds-button-primary-bg: #3A6FB0');
     expect(bithireCss).toContain('--ds-button-primary-color: #ffffff');
-    expect(bithireCss).toContain('--ds-button-secondary-color: #0A66C2');
-    expect(bithireCss).toContain('--ds-button-secondary-border: #0A66C2');
+    expect(bithireCss).toContain('--ds-button-secondary-color: #3A6FB0');
+    expect(bithireCss).toContain('--ds-button-secondary-border: #3A6FB0');
   });
 
   it('bithire generates input vars with correct values', () => {
     expect(bithireCss).toContain('--ds-input-bg: #ffffff');
-    expect(bithireCss).toContain('--ds-input-border-focus: #0A66C2');
-    expect(bithireCss).toContain('--ds-input-shadow-focus: 0 0 0 1px #0A66C2');
+    expect(bithireCss).toContain('--ds-input-border-focus: #3A6FB0');
+    expect(bithireCss).toContain('--ds-input-shadow-focus: 0 0 0 1px #3A6FB0');
   });
 
   it('rottay generates layout vars with correct values', () => {
@@ -438,10 +438,10 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
 
     // Scoped selector — will NOT override dark-mode tenant CSS
     expect(scopedCss).toContain("html[data-tenant='db-customer']");
-    expect(scopedCss).toContain('--ds-button-primary-bg: #0A66C2');
+    expect(scopedCss).toContain('--ds-button-primary-bg: #3A6FB0');
     expect(scopedCss).toContain('--ds-sidebar-bg: #ffffff');
     expect(scopedCss).toContain('--ds-command-home-panel-border: #A9C9EA');
-    expect(scopedCss).toContain('--ds-command-home-meter-fill: linear-gradient(90deg, #0A66C2, #057642)');
+    expect(scopedCss).toContain('--ds-command-home-meter-fill: linear-gradient(90deg, #3A6FB0, #2F7D5E)');
     // NOT inline on :root — proper specificity
     expect(scopedCss).not.toContain(':root');
   });

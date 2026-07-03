@@ -395,9 +395,9 @@ describe('parity: first-party brand pipeline', () => {
     // (via registry) and DB-backed tenants (via compileBrandTheme).
     // bithireBrandTheme imported at top of file
     const branding = brandThemeToBranding(bithireBrandTheme);
-    expect(branding.primaryColor).toBe('#0A66C2');
-    expect(branding.secondaryColor).toBe('#057642');
-    expect(branding.accentColor).toBe('#5A9640');
+    expect(branding.primaryColor).toBe('#3A6FB0');
+    expect(branding.secondaryColor).toBe('#2F7D5E');
+    expect(branding.accentColor).toBe('#6E9A5E');
   });
 
   it('DB-backed tenant uses same pipeline as first-party', () => {
@@ -450,7 +450,7 @@ describe('parity: static generator with brandTheme', () => {
 
   it('generateTenantCss uses brandTheme surfaces for token overrides', () => {
     const css = generateTenantCss(bithireConfig, { includeDarkSelector: false });
-    // densityScale from brandTheme.surfaces (0.95)
+    // densityScale from brandTheme.surfaces (0.98)
     expect(css).toContain('--ds-density-scale');
   });
 
@@ -503,7 +503,7 @@ describe('parity: static generator with brandTheme', () => {
       ...bithireConfig,
       brandTheme: undefined,
       personality: {
-        animation: { intensity: 0.4, entrance: 'fade', entranceDuration: 150,
+        animation: { intensity: 0.55, entrance: 'fade', entranceDuration: 200,
           hoverLift: 0, hoverScale: 1.0, useSpring: false, springTension: 170,
           springFriction: 26, staggerDelay: 30, staggerMax: 200,
           pulseSpeed: 'slow', skeletonStyle: 'pulse', countUpEnabled: true },
@@ -513,8 +513,8 @@ describe('parity: static generator with brandTheme', () => {
     const brandCss = generateTenantCss(bithireConfig, { includeDarkSelector: false });
     const legacyCss = generateTenantCss(legacyConfig, { includeDarkSelector: false });
     // Both should contain the same personality animation intensity
-    expect(brandCss).toContain('--ds-personality-animation-intensity: 0.4');
-    expect(legacyCss).toContain('--ds-personality-animation-intensity: 0.4');
+    expect(brandCss).toContain('--ds-personality-animation-intensity: 0.55');
+    expect(legacyCss).toContain('--ds-personality-animation-intensity: 0.55');
     // Both should contain the same heading letter spacing
     expect(brandCss).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
     expect(legacyCss).toContain('--ds-personality-typography-heading-letter-spacing: -0.01em');
@@ -586,15 +586,15 @@ describe('parity: static generator with brandTheme', () => {
       features: [],
       branding: { companyName: 'Test' },
       vertical: 'evnto', // evnto vertical: bounce, intensity 1.5
-      brandTheme: bithireBrandTheme, // bithire: fade, intensity 0.4
+      brandTheme: bithireBrandTheme, // bithire: fade, intensity 0.55
     };
     const css = generateTenantCss(configWithBoth, { includeDarkSelector: false });
     // BrandTheme wins over vertical for keys it defines
     expect(css).toContain('--ds-personality-animation-entrance: fade'); // bithire brand wins
-    expect(css).toContain('--ds-personality-animation-intensity: 0.4'); // bithire brand wins
+    expect(css).toContain('--ds-personality-animation-intensity: 0.55'); // bithire brand wins
     expect(css).toContain('--ds-personality-card-padding-density: compact'); // bithire brand wins
     // BrandTheme surfaces win over vertical
-    expect(css).toContain('--ds-density-scale: 0.95'); // bithire brand wins over evnto 1.125
+    expect(css).toContain('--ds-density-scale: 0.98'); // bithire brand wins over evnto 1.125
   });
 
   it('legacy path resolves vertical + profile (no brandTheme)', () => {

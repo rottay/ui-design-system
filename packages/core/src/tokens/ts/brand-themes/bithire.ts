@@ -351,7 +351,8 @@ export const bithireBrandTheme: BrandTheme = {
       shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
       shadowHover: '0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08)',
       radius: '8px',
-      focusRing: '0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent)',
+      // Focus ring rides the tint scale at tint-24/3px (design-language §2.5).
+      focusRing: '0 0 0 3px var(--ds-tint-24)',
       // Expressive-calm keeps the lift-one hover lift (2026-07-02-b).
       hoverTransform: 'translateY(-1px) scale(1)',
       headerBorder: '#DEE8F2',
@@ -377,7 +378,8 @@ export const bithireBrandTheme: BrandTheme = {
       border: 'color-mix(in srgb, #3A6FB0 10%, #D3DEEA)',
       borderHover: 'color-mix(in srgb, #3A6FB0 24%, #D3DEEA)',
       selectedBorder: 'color-mix(in srgb, #3A6FB0 58%, #D3DEEA)',
-      selectedRing: '0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 14%, transparent)',
+      // Selected state rides the tint scale at tint-12 (design-language §2.5).
+      selectedRing: '0 0 0 3px var(--ds-tint-12)',
       shadow: '0 1px 2px rgba(22, 42, 67, 0.06)',
       shadowHover: '0 2px 6px rgba(22, 42, 67, 0.08), 0 12px 28px rgba(22, 42, 67, 0.08)',
       sheen: 'none',
