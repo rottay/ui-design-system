@@ -14,6 +14,7 @@ export * from './typography';
 export * from './shadows';
 export * from './borders';
 export * from './zIndex';
+export * from './density';
 
 // Named imports for grouped exports
 import { colors } from './colors';

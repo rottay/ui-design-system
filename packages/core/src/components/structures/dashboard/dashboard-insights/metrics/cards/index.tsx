@@ -3,7 +3,7 @@
 import { Box, Text, Stack, Flex, Grid } from "@/components/primitives";
 import { Activity, TrendingUp, TrendingDown } from "lucide-react";
 import { useSmoothCounter } from "@/motion/hooks";
-import { DENSITY_PRESETS, resolveDensityStyleVars } from "@/tokens/ts/density";
+import { DENSITY_PRESETS, resolveDensityStyleVars } from "@/tokens/ts/base/density";
 import type { MetricsProps, KeyMetric } from "../../types";
 import {
   METRIC_CARD_BG,

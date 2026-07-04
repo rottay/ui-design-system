@@ -54,8 +54,8 @@ import { Button } from '../../../../primitives/inputs/Button';
 import { WorkspaceShell } from '../../../layout/collection-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
-import { resolveDensityStyleVars, normalizeDensityMode } from '../../../../../tokens/ts/density';
-import type { DensityMode } from '../../../../../tokens/ts/density';
+import { resolveDensityStyleVars, normalizeDensityMode } from '../../../../../tokens/ts/base/density';
+import type { DensityMode } from '../../../../../tokens/ts/base/density';
 
 // ---------------------------------------------------------------------------
 // Props

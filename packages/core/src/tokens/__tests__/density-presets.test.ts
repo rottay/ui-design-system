@@ -11,7 +11,7 @@ import {
   normalizeDensityMode,
   resolveDensityStyleVars,
   type DensityMode,
-} from '../index';
+} from '../ts/base/density';
 
 describe('density presets (design-language §3)', () => {
   it('defaults to comfortable', () => {

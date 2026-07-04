@@ -2,7 +2,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import { createEngineComponent } from '../../../../runtime/engines/factory';
-import { resolveDensityStyleVars } from '../../../../tokens/ts/density';
+import { resolveDensityStyleVars } from '../../../../tokens/ts/base/density';
 import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
 import { useMediaQuery } from '../../../../hooks/responsive/useMediaQuery';
 import { Box, Button, Flex, Stack, Text } from '../../../primitives';

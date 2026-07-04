@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import type { DensityMode } from '../../../../../tokens/ts/density';
+import type { DensityMode } from '../../../../../tokens/ts/base/density';
 type LucideIcon = ComponentType<any>;
 
 // Variant types
