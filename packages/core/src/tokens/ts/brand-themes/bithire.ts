@@ -108,6 +108,11 @@ export const bithireBrandTheme: BrandTheme = {
     showDots: true,
     useGradientFill: false,
     tooltipStyle: 'detailed',
+    // One-blue law (design-language §8.3): chart series draw from the single-hue
+    // primary scale (#3A6FB0). The monochrome scheme is the DS palette that
+    // carries those tonalities; a highlight series still uses the accent/status
+    // tone explicitly at the call site.
+    colorScheme: 'monochrome',
   },
 
   chrome: {
