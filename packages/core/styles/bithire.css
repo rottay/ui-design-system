@@ -24507,6 +24507,8 @@ html[data-tenant='bithire'] {
   --ds-command-letter-spacing: 0;
   --ds-command-line: none;
   --ds-command-rail-bg: #FFFFFF;
+  --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ds-filter-pill-active-bg: var(--ds-tint-8);
   --ds-filter-pill-active-border: color-mix(in srgb, #3A6FB0 28%, #D3DEEA);
   --ds-filter-pill-active-color: #3A6FB0;
@@ -24585,6 +24587,9 @@ html[data-tenant='bithire'] {
   --ds-metric-card-sheen: none;
   --ds-metric-card-trend-color: #2F7D5E;
   --ds-metric-card-value-color: #162A43;
+  --ds-motion-calm: 200ms;
+  --ds-motion-deliberate: 320ms;
+  --ds-motion-instant: 120ms;
   --ds-overlay-heavy: rgba(22, 42, 67, 0.08);
   --ds-overlay-light: rgba(22, 42, 67, 0.02);
   --ds-overlay-medium: rgba(22, 42, 67, 0.04);
@@ -27474,5 +27479,126 @@ html[data-tenant='bithire']
   html[data-tenant='bithire'] :where(.rt-expanded-panel__detail-field-value) {
     max-width: 100%;
     text-align: start !important;
+  }
+}
+
+/* ============================================================================
+ * Evidence Ledger interaction layer (WO-DES-11 — design-language §8.1-§8.2)
+ *
+ * The Ledger's margin notes: ONE tag/badge system and ONE tooltip system,
+ * driven by the closed tint scale (§2.5) and composite type ramp (§2.1) the
+ * compiler emits above. Tags are pills at detail size, sentence case; tones
+ * read bg = tint-8, text = tone color, border = tint-24 — never saturated
+ * fills, white-on-color, or uppercase. Counting badges render tabular figures.
+ * Tooltips are a calm level-2 paper overlay. Everything animates on the §2.6
+ * motion tokens. Scoped to the tenant so it is theme-driven with zero product
+ * semantics; plain (non-:where) selectors clear antd v5's :where()-wrapped
+ * component styles without !important.
+ * ============================================================================ */
+
+html[data-tenant='bithire'] .rottay-tag,
+html[data-tenant='bithire'] .ant-tag {
+  border-radius: var(--ds-tag-radius-full, 9999px);
+  font-size: var(--ds-text-detail-size, 0.75rem);
+  font-weight: 600;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: 0;
+  border-width: 1px;
+  border-style: solid;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease),
+    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease);
+}
+
+/* Six-tone vocabulary (S4): bg = tint-8 of the tone, text = the tone color,
+ * border = tint-24 of the tone. Neutral/info fall back to the primary tint. */
+html[data-tenant='bithire'] .rottay-tag--default {
+  background: var(--ds-tint-8);
+  color: var(--ds-color-text-secondary, #52677E);
+  border-color: var(--ds-tint-24);
+}
+html[data-tenant='bithire'] .rottay-tag--primary,
+html[data-tenant='bithire'] .ant-tag-blue {
+  background: var(--ds-tint-8);
+  color: var(--ds-color-primary);
+  border-color: var(--ds-tint-24);
+}
+html[data-tenant='bithire'] .rottay-tag--success,
+html[data-tenant='bithire'] .ant-tag-success,
+html[data-tenant='bithire'] .ant-tag-green {
+  background: var(--ds-tint-success-8);
+  color: var(--ds-color-success);
+  border-color: var(--ds-tint-success-24);
+}
+html[data-tenant='bithire'] .rottay-tag--warning,
+html[data-tenant='bithire'] .ant-tag-warning,
+html[data-tenant='bithire'] .ant-tag-gold,
+html[data-tenant='bithire'] .ant-tag-orange {
+  background: var(--ds-tint-warning-8);
+  color: var(--ds-color-warning);
+  border-color: var(--ds-tint-warning-24);
+}
+html[data-tenant='bithire'] .rottay-tag--error,
+html[data-tenant='bithire'] .ant-tag-error,
+html[data-tenant='bithire'] .ant-tag-red {
+  background: var(--ds-tint-error-8);
+  color: var(--ds-color-error);
+  border-color: var(--ds-tint-error-24);
+}
+html[data-tenant='bithire'] .rottay-tag--secondary,
+html[data-tenant='bithire'] .ant-tag-cyan {
+  background: var(--ds-tint-info-8);
+  color: var(--ds-color-info);
+  border-color: var(--ds-tint-info-24);
+}
+
+/* Interactive tags (filters, removable skills) take the §2.5 interaction
+ * states: tint-4 hover on top of the resting tone tint. */
+html[data-tenant='bithire'] .ant-tag[style*='cursor: pointer']:hover,
+html[data-tenant='bithire'] .rottay-tag--clickable:hover {
+  filter: brightness(0.98);
+}
+
+/* Counting badges render tabular figures (§8.6); no saturated pulse. */
+html[data-tenant='bithire'] .ant-badge-count,
+html[data-tenant='bithire'] .ant-scroll-number,
+html[data-tenant='bithire'] .rottay-badge {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tooltip — the calm level-2 paper overlay (§8.2): white surface, tint hairline,
+ * radius-sm, detail-size ink text, ~280px max. Opacity-only enter at calm,
+ * position never animates; exit is instant (antd hideDelay). */
+html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-inner {
+  background: var(--ds-color-bg-primary, #FFFFFF);
+  color: var(--ds-color-text-primary, #162A43);
+  border: 1px solid var(--ds-tint-12);
+  border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: var(--ds-shadow-lg);
+  font-size: var(--ds-text-detail-size, 0.75rem);
+  line-height: 1.4;
+  max-width: var(--ds-tooltip-max-width, 280px);
+  padding: 6px 10px;
+}
+html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-arrow::before {
+  background: var(--ds-color-bg-primary, #FFFFFF);
+}
+
+/* Reduced-motion law (§2.6/§8.1): everything collapses to opacity, durations
+ * resolve to 0. Re-declare the motion tokens at tenant specificity (beats the
+ * compiled block) so DS components reading var(--ds-motion-*) go instant, and
+ * neutralize the tag transition authored above. */
+@media (prefers-reduced-motion: reduce) {
+  html[data-tenant='bithire'] {
+    --ds-motion-instant: 0ms;
+    --ds-motion-calm: 0ms;
+    --ds-motion-deliberate: 0ms;
+  }
+  html[data-tenant='bithire'] .rottay-tag,
+  html[data-tenant='bithire'] .ant-tag {
+    transition: none;
   }
 }

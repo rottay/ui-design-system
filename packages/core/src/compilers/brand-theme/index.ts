@@ -246,7 +246,29 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
   }
   setTintScaleVariables(vars, bt);
   setTypeRampVariables(vars);
+  setMotionVariables(vars, bt);
   return vars;
+}
+
+/**
+ * The closed motion vocabulary (design-language §2.6): three durations and two
+ * easing families, expressed as tokens. `instant` (hover/focus/toggle/pill),
+ * `calm` (page/tab transitions, entrance fades, tooltips), and `deliberate`
+ * (panel open/resize, sheets, modals) are the ONLY sanctioned durations —
+ * app-side raw ms literals are gate-banned in favor of these. The `standard`
+ * ease drives everything; `exit` drives dismissals. The three steps are a fixed
+ * closed set (120/200/320ms), except that `calm` tracks the theme's own
+ * `entranceDuration` so the transition speed a BrandTheme authors for its
+ * entrances is the same value tabs and tooltips animate at (design-language §2.6
+ * notes calm "matches BITHIRE_PROFILE.transitionSpeed: '200ms'").
+ */
+function setMotionVariables(vars: Record<string, string>, bt: BrandTheme): void {
+  const calmMs = bt.motion?.entranceDuration ?? 200;
+  vars['--ds-motion-instant'] = '120ms';
+  vars['--ds-motion-calm'] = `${calmMs}ms`;
+  vars['--ds-motion-deliberate'] = '320ms';
+  vars['--ds-ease-standard'] = 'cubic-bezier(0.2, 0, 0, 1)';
+  vars['--ds-ease-exit'] = 'cubic-bezier(0.4, 0, 1, 1)';
 }
 
 /** The five closed tint steps of the one-blue scale (design-language §2.5). */
