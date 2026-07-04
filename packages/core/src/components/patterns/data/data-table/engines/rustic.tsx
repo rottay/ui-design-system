@@ -42,14 +42,18 @@ const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms
 // Each density level defines th/td padding and font-size overrides. These are
 // merged into the base th/td styles at render time so consumers can switch
 // density without any external CSS class changes.
+// The two canonical modes resolve cell padding from the density cascade
+// (`--ds-density-cell-padding`, emitted per mode by `PatternDataTable`) with
+// the design-language §3 literal as the fallback. `spacious` is the legacy
+// mode and keeps its original padding.
 const DENSITY_STYLES = {
   compact: {
-    th: { padding: '0.375rem 0.5rem', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
-    td: { padding: '0.375rem 0.5rem', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
+    th: { padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
+    td: { padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
   },
   comfortable: {
-    th: { padding: '0.75rem 1rem', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
-    td: { padding: '0.75rem 1rem', fontSize: 'var(--ds-font-size-sm)' } as React.CSSProperties,
+    th: { padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
+    td: { padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)', fontSize: 'var(--ds-font-size-sm)' } as React.CSSProperties,
   },
   spacious: {
     th: { padding: '1rem 1.25rem', fontSize: 'var(--ds-font-size-sm)' } as React.CSSProperties,

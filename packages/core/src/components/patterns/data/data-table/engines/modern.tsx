@@ -45,10 +45,18 @@ function resolveEditableConfig<T>(editable: boolean | EditableConfig<T> | undefi
   return editable;
 }
 
-/** Density -> cell padding mapping */
+/**
+ * Density -> cell padding mapping.
+ *
+ * The two canonical modes resolve from the density cascade
+ * (`--ds-density-cell-padding`, emitted per mode by `PatternDataTable`) with
+ * the design-language §3 literal as the final fallback. A tenant/brand
+ * `--ds-table-padding-*` override still wins ahead of both. `spacious` is the
+ * legacy mode and keeps its original value.
+ */
 const DENSITY_PADDING_MAP = {
-  compact: 'var(--ds-table-padding-compact, 6px 12px)',
-  comfortable: 'var(--ds-table-padding-comfortable, 12px 16px)',
+  compact: 'var(--ds-table-padding-compact, var(--ds-density-cell-padding, 0.5rem 0.75rem))',
+  comfortable: 'var(--ds-table-padding-comfortable, var(--ds-density-cell-padding, 0.875rem 1rem))',
   spacious: 'var(--ds-table-padding-spacious, 16px 16px)',
 } as const;
 

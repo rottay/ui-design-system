@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { DensityMode } from '../../../../../tokens/ts/density';
 type LucideIcon = ComponentType<any>;
 
 // Variant types
@@ -34,6 +35,15 @@ export interface ScheduleItem {
 // Component props
 export interface MetricsProps {
   metrics: KeyMetric[];
+  /**
+   * Presentation density (design-language §3). `comfortable` (default) uses
+   * `1rem` card padding and maps to the `md` metric preset; `compact` uses
+   * `0.75rem` and maps to `sm`. Resolved from the `--ds-density-card-padding`
+   * token with a literal fallback, so embedded / beside-chat metric strips
+   * render denser than route-grade dashboards.
+   * @default 'comfortable'
+   */
+  density?: DensityMode;
 }
 
 export interface ActivityProps {

@@ -54,6 +54,8 @@ import { Button } from '../../../../primitives/inputs/Button';
 import { WorkspaceShell } from '../../../layout/collection-shell';
 import { CollectionRenderDispatch } from './render-dispatch';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
+import { resolveDensityStyleVars, normalizeDensityMode } from '../../../../../tokens/ts/density';
+import type { DensityMode } from '../../../../../tokens/ts/density';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -83,6 +85,19 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
    * leaner and avoids duplicate headings/metrics.
    */
   surfaceMode?: CollectionWorkspaceSurfaceMode;
+  /**
+   * Presentation density for this workspace instance (design-language §3).
+   * Route-grade listings render `'comfortable'` (the default); embedded /
+   * beside-chat collections render `'compact'`. Resolved from tokens — the
+   * surface emits `--ds-density-cell-padding` / `--ds-density-card-padding` /
+   * `--ds-density-scale` on its root and threads the mode to the inner table,
+   * so density derives declaratively from each capability's style contract.
+   *
+   * A runtime `controls.density` switcher (`WorkspaceDensityConfig`), when
+   * enabled and given a value, still overrides this baseline.
+   * @default 'comfortable'
+   */
+  density?: DensityMode;
   /** Override which chrome regions render for this workspace instance. */
   chrome?: CollectionWorkspaceChromeConfig;
   /**
@@ -743,6 +758,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     statsSlot,
     activeFilters,
     surfaceMode = 'page',
+    density: densityMode = 'comfortable',
     chrome,
     slotsCollapsed = false,
     headerSlot,
@@ -772,7 +788,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const columnsResizable = presentation?.resizable ?? !!controls?.columnSettings?.onColumnResize;
 
   const posture = useAdaptivePosture(adaptive);
-  const density: DensityKey = controls?.density?.value ?? 'compact';
+  // Effective density: a runtime `controls.density` switcher value wins; else
+  // the declarative `density` prop baseline (default 'comfortable'). The
+  // resolved density CSS variables (design-language §3) are emitted on the
+  // surface root so the inner table + embedded cards derive cell/card padding
+  // from the token cascade.
+  const density: DensityKey = controls?.density?.value ?? densityMode;
+  const densityStyleVars = resolveDensityStyleVars(normalizeDensityMode(density));
   const compact = density === 'compact';
   const enhanced = presentation?.enhancedInteractions ?? false;
   const resolvedChrome = resolveCollectionWorkspaceChrome(surfaceMode, chrome);
@@ -1390,6 +1412,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           width: '100%',
           maxWidth: presentation?.maxWidth,
           minWidth: 0,
+          ...densityStyleVars,
           ...(embeddedSurfaceStyle ?? {}),
         }}
       >
@@ -2136,6 +2159,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           style={{
             width: '100%',
             maxWidth: presentation?.maxWidth,
+            ...densityStyleVars,
             ...(embeddedSurfaceStyle ?? {}),
           }}
         >
@@ -2146,6 +2170,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           style={{
             width: '100%',
             maxWidth: presentation?.maxWidth,
+            ...densityStyleVars,
             ...(embeddedSurfaceStyle ?? {}),
           }}
         >

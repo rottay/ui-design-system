@@ -3,6 +3,7 @@
 import { Box, Text, Stack, Flex, Grid } from "@/components/primitives";
 import { Activity, TrendingUp, TrendingDown } from "lucide-react";
 import { useSmoothCounter } from "@/motion/hooks";
+import { DENSITY_PRESETS, resolveDensityStyleVars } from "@/tokens/ts/density";
 import type { MetricsProps, KeyMetric } from "../../types";
 import {
   METRIC_CARD_BG,
@@ -20,7 +21,6 @@ import {
   METRIC_CARD_MIN_HEIGHT,
   METRIC_CARD_NUMBER_FONT_VARIANT,
   METRIC_CARD_NUMBER_MIN_WIDTH,
-  METRIC_CARD_PADDING,
   METRIC_CARD_RADIUS,
   METRIC_CARD_SHADOW,
   METRIC_CARD_SHADOW_HOVER,
@@ -43,7 +43,7 @@ import {
   METRIC_PANEL_TITLE_COLOR,
 } from "../tokens";
 
-function MetricCard({ metric, index }: { metric: MetricsProps["metrics"][0]; index: number }) {
+function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metrics"][0]; index: number; cardPadding: string }) {
   const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, "")) || 0;
   const suffix = metric.value.replace(/[0-9.-]/g, "");
   const animatedValue = Math.floor(useSmoothCounter(0, numericValue, 1200, index * 200));
@@ -56,7 +56,7 @@ function MetricCard({ metric, index }: { metric: MetricsProps["metrics"][0]; ind
       style={{
         position: "relative",
         minHeight: METRIC_CARD_MIN_HEIGHT,
-        padding: METRIC_CARD_PADDING,
+        padding: cardPadding,
         background: METRIC_CARD_BG,
         border: `1px solid ${METRIC_CARD_BORDER}`,
         borderRadius: METRIC_CARD_RADIUS,
@@ -172,10 +172,15 @@ function MetricCard({ metric, index }: { metric: MetricsProps["metrics"][0]; ind
   );
 }
 
-export function MetricsCards({ metrics }: MetricsProps) {
+export function MetricsCards({ metrics, density = "comfortable" }: MetricsProps) {
+  // Density-resolved card padding (design-language §3): a tenant/brand
+  // `--ds-metric-card-padding` override wins, else the density preset
+  // (`1rem` comfortable / `0.75rem` compact) with a literal fallback.
+  const cardPadding = `var(--ds-metric-card-padding, ${DENSITY_PRESETS[density].cardPadding})`;
   return (
     <Box
       style={{
+        ...resolveDensityStyleVars(density),
         height: 415,
         padding: "16px",
         background: METRIC_PANEL_BG,
@@ -229,7 +234,7 @@ export function MetricsCards({ metrics }: MetricsProps) {
       <Box style={{ flex: 1, overflowY: "auto", minHeight: 0 }} className="metrics-scroll">
         <Grid columns={3} gap={10} style={{ position: "relative" }}>
           {metrics.map((metric: KeyMetric, i: number) => (
-            <MetricCard key={metric.label} metric={metric} index={i} />
+            <MetricCard key={metric.label} metric={metric} index={i} cardPadding={cardPadding} />
           ))}
         </Grid>
       </Box>

@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import { createEngineComponent } from '../../../../runtime/engines/factory';
+import { resolveDensityStyleVars } from '../../../../tokens/ts/density';
 import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
 import { useMediaQuery } from '../../../../hooks/responsive/useMediaQuery';
 import { Box, Button, Flex, Stack, Text } from '../../../primitives';
@@ -210,12 +211,24 @@ export function PatternDataTable<T extends object>(
     );
   }
 
+  // Emit the token-resolved density CSS variables (design-language §3) on the
+  // engine root for the two canonical modes so cell padding derives from the
+  // `--ds-density-cell-padding` cascade. The legacy `spacious` mode keeps its
+  // existing per-engine padding untouched (no density vars emitted).
+  const densityVars =
+    props.density === 'compact'
+      ? resolveDensityStyleVars('compact')
+      : props.density === 'spacious'
+        ? undefined
+        : resolveDensityStyleVars('comfortable');
+
   return (
     <DataTableEngine
       {...props}
       columns={visibleColumns}
       selectedKeys={selectedKeys}
       onSelectionChange={handleSelectionChange}
+      style={densityVars ? { ...densityVars, ...props.style } : props.style}
     />
   );
 }

@@ -401,10 +401,20 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   // ---------------------------------------------------------------------------
 
   /**
-   * Row density mode controlling vertical padding and font size.
-   * - `compact`: Minimal padding, smaller text
-   * - `comfortable`: Default balanced padding (default)
-   * - `spacious`: Extra padding, larger touch targets
+   * Row density mode controlling cell padding and font size.
+   *
+   * The two canonical modes resolve token-backed presets from the shared
+   * density spec (design-language §3): `comfortable` → `0.875rem 1rem` cells,
+   * `compact` → `0.5rem 0.75rem` cells. `PatternDataTable` emits
+   * `--ds-density-cell-padding` per mode (with a literal fallback) so the
+   * engines and any app CSS resolve cell padding from the token cascade —
+   * route-grade listings render `comfortable`, embedded / beside-chat render
+   * `compact`.
+   *
+   * - `compact`: Dense cell padding (`0.5rem 0.75rem`), smaller text
+   * - `comfortable`: Balanced cell padding (`0.875rem 1rem`) — the default
+   * - `spacious`: Legacy extra-padding mode retained for back-compat (larger
+   *   touch targets); not part of the canonical two-mode density set
    * @default 'comfortable'
    */
   density?: 'compact' | 'comfortable' | 'spacious';
