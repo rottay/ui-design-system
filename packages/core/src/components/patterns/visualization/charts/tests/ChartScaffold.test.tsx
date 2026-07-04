@@ -25,6 +25,28 @@ describe('ChartScaffold', () => {
     expect(screen.queryByRole('img')).toBeNull();
   });
 
+  it('binds tabular-nums + detail-size label typography on the chart svg (WO-DES-12)', () => {
+    const containerRef = createRef<HTMLDivElement>();
+    const svgRef = createRef<SVGSVGElement>();
+
+    render(
+      <ChartScaffold
+        containerRef={containerRef}
+        svgRef={svgRef}
+        width={420}
+        height={280}
+        ariaLabel="Typography chart"
+        ariaDescription="Typography chart."
+      />
+    );
+
+    // Axis + value labels inherit tabular figures at the detail-size token from
+    // the scaffold svg, so no chart wires it per-screen (WO-DES-12 §8.3/A5.5).
+    const svg = screen.getByRole('img', { name: 'Typography chart' }) as unknown as SVGSVGElement;
+    expect(svg.style.fontVariantNumeric).toBe('tabular-nums');
+    expect(svg.style.fontSize).toBe('var(--ds-font-size-xs)');
+  });
+
   it('supports keyboard navigation through summary items and optional title/subtitle/legend', () => {
     const containerRef = createRef<HTMLDivElement>();
     const svgRef = createRef<SVGSVGElement>();

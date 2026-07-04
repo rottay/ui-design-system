@@ -253,11 +253,16 @@ export function ChartScaffold({
         role="img"
         aria-roledescription="interactive chart"
         tabIndex={0}
-        // WO-DES-12 (design-language §8.3 / Craft Bar A5.5): all chart figures
-        // read as tabular numerals. font-variant-numeric inherits to every
-        // <text> descendant (axis ticks, value labels), so binding it once on
-        // the scaffold svg covers every chart without per-screen wiring.
-        style={{ fontVariantNumeric: 'tabular-nums' }}
+        // WO-DES-12 (design-language §8.3 / Craft Bar A5.5): axis + value labels
+        // read as tabular numerals at detail size. Both inherit to every <text>
+        // descendant, so binding them once on the scaffold svg covers every
+        // chart without per-screen wiring. The detail-size is a DEFAULT — charts
+        // that set an explicit size (hero gauge value, sized value labels) keep
+        // it; only otherwise-unsized labels snap to the detail token.
+        style={{
+          fontVariantNumeric: 'tabular-nums',
+          fontSize: 'var(--ds-font-size-xs)',
+        }}
         aria-label={ariaLabel}
         aria-labelledby={title ? `${titleId} ${svgTitleId}` : svgTitleId}
         aria-describedby={`${descriptionId}${summaryItems.length > 0 ? ` ${summaryListId}` : ''}`}
