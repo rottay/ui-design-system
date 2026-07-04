@@ -2800,6 +2800,20 @@ html[data-tenant='bithire'] .rottay-badge {
   font-variant-numeric: tabular-nums;
 }
 
+/* Tabular numerals everywhere data renders (§8.6 item 1; WO-DES-13). The display
+ * and title composite tokens carry a `-numeric` facet (font-variant-numeric cannot
+ * ride the `font` shorthand, so it is a companion like -letter-spacing), and DS
+ * data-table cells align digit-for-digit by default so screens stop hand-setting
+ * font-variant-numeric per cell — the property only affects digits, so covering the
+ * whole table is safe for text columns. */
+html[data-tenant='bithire'] {
+  --ds-text-display-numeric: tabular-nums;
+  --ds-text-title-numeric: tabular-nums;
+}
+html[data-tenant='bithire'] :where(.ds-pattern-data-table) :where(td, th) {
+  font-variant-numeric: tabular-nums;
+}
+
 /* Tooltip — the calm level-2 paper overlay (§8.2): white surface, tint hairline,
  * radius-sm, detail-size ink text, ~280px max. Opacity-only enter at calm,
  * position never animates; exit is instant (antd hideDelay). */

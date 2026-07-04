@@ -76,11 +76,17 @@ export function AvatarGroup({
   };
 
   // The surplus badge inherits the overlap styling and adds a neutral
-  // background with secondary text color for the "+N" count.
+  // background with secondary text color for the "+N" count. The count uses
+  // tabular figures so multi-digit overflows stay digit-aligned, and centers
+  // its label; consumers size the badge to match their avatars via `maxStyle`.
   const surplusStyle: CSSProperties = {
     ...childStyle,
+    display: 'inline-grid',
+    placeItems: 'center',
     backgroundColor: 'var(--ds-avatar-surplus-bg, var(--ds-color-bg-secondary))',
     color: 'var(--ds-avatar-surplus-color, var(--ds-color-text-secondary))',
+    fontWeight: 'var(--ds-avatar-group-overflow-font-weight, var(--ds-font-weight-medium))' as CSSProperties['fontWeight'],
+    fontVariantNumeric: 'tabular-nums',
     ...maxStyle,
   };
 

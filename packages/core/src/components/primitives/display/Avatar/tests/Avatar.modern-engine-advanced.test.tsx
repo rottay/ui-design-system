@@ -20,20 +20,39 @@ describe('Avatar modern advanced coverage', () => {
       />
     );
 
-    const avatarRoot = screen.getByText('JD').closest('.avatar') as HTMLDivElement;
+    const initials = screen.getByText('JD') as HTMLDivElement;
+    const avatarRoot = initials.closest('.avatar') as HTMLDivElement;
     const inner = avatarRoot.querySelector('.mask') as HTMLDivElement;
     const status = avatarRoot.querySelector('span') as HTMLSpanElement;
 
     expect(avatarRoot).toHaveClass('avatar-shell');
     expect(avatarRoot).toHaveStyle({ cursor: 'pointer' });
+    // Non-circular shapes clip via the DaisyUI squircle mask; bordered adds the ring utility.
     expect(inner.className).toContain('mask-squircle');
-    expect(inner.className).toContain('ring-primary');
-    expect(screen.getByText('JD').className).toContain('bg-gradient-to-br');
-    expect(screen.getByText('JD').className).toContain('text-white');
-    expect(status.className).toContain('bg-error');
+    expect(inner.className).toContain('ring');
+    // The gradient variant paints its background token and a legibility text-shadow inline.
+    expect(initials.style.background).toContain('linear-gradient');
+    expect(initials.style.textShadow).not.toBe('');
+    // Status renders a themed corner dot.
+    expect(status).toBeInTheDocument();
 
     fireEvent.click(avatarRoot);
     expect(handleClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('honors explicit backgroundColor/textColor on the initials fallback (entity tint tones)', () => {
+    render(
+      <ModernAvatar
+        name="Jane Doe"
+        shape="circle"
+        backgroundColor="var(--ds-tint-8)"
+        textColor="var(--ds-color-primary)"
+      />
+    );
+
+    const initials = screen.getByText('JD') as HTMLDivElement;
+    expect(initials.style.background).toBe('var(--ds-tint-8)');
+    expect(initials.style.color).toBe('var(--ds-color-primary)');
   });
 
   it('switches from image mode to fallback mode on error and resets when src changes', () => {

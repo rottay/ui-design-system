@@ -58,6 +58,8 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     onClick,
     onError,
     onLoad,
+    backgroundColor,
+    textColor,
     bordered,
     className = '',
     style,
@@ -155,13 +157,12 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
             style={{
               width: '100%',
               height: '100%',
-              ...variantBgStyle,
-              ...variantTextStyle,
+              // Explicit backgroundColor/textColor props win (e.g. an entity
+              // tint-scale tone) and fall back to the variant tokens otherwise.
+              background: backgroundColor || variantBgStyle.background,
               fontSize: `var(--ds-avatar-${size}-font-size)`,
               fontWeight: `var(--ds-avatar-font-weight)` as any,
-              // Ensure initials maintain contrast by using explicit token colors
-              // when the variant background is too close to text color
-              color: `var(--ds-avatar-${variant}-color)`,
+              color: textColor || variantTextStyle.color || `var(--ds-avatar-${variant}-color)`,
               textShadow: variant === 'gradient' ? '0 1px 2px rgba(0,0,0,0.15)' : undefined,
             }}
           >
