@@ -63,6 +63,7 @@ export function ScopeSwitcher({
       <Flex
         align="center"
         gap={8}
+        data-ds-scope-switcher-row="true"
         style={{
           minWidth: 'min-content',
           flexWrap: 'wrap',

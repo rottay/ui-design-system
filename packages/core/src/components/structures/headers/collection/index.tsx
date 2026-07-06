@@ -381,6 +381,7 @@ export function CollectionHeader({
             >
               <Box
                 aria-hidden
+                data-ds-collection-title-accent="true"
                 style={{
                   width: 3,
                   minHeight: compactLayout ? 28 : 34,

@@ -980,8 +980,11 @@ export default function ModernDataTable<T extends object>(
       {/* Toolbar slot */}
       {toolbar && <div style={{ marginBottom: 0 }}>{toolbar}</div>}
 
-      {/* Table container: card surface, rounded, bordered */}
+      {/* Table container: card surface, rounded, bordered. The data-ds-table-*
+          attributes are the stable addressing contract for consumers
+          (WO-UX-03) — apps must never target the inline-style values. */}
       <div
+        data-ds-table-card="true"
         style={{
           background: 'var(--ds-table-bg, var(--ds-surface-card))',
           borderRadius: 'var(--ds-radius-lg)',
@@ -994,6 +997,7 @@ export default function ModernDataTable<T extends object>(
         <div
           ref={virtualized ? virtualScroll.scrollRef : undefined}
           onScroll={virtualized ? virtualScroll.onScroll : undefined}
+          data-ds-table-scroll="true"
           style={{
             overflowX: 'auto',
             scrollbarGutter: 'stable both-edges',

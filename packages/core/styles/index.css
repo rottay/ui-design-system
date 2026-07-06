@@ -23051,10 +23051,6 @@ html {
   .bg-white {
     background-color: var(--color-white);
   }
-  .bg-gradient-to-br {
-    --tw-gradient-position: to bottom right in oklab;
-    background-image: linear-gradient(var(--tw-gradient-stops));
-  }
   .loading-spinner {
     @layer daisyui.l1.l2 {
       mask-image: url("data:image/svg+xml,%3Csvg width='24' height='24' stroke='black' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cg transform-origin='center'%3E%3Ccircle cx='12' cy='12' r='9.5' fill='none' stroke-width='3' stroke-linecap='round'%3E%3CanimateTransform attributeName='transform' type='rotate' from='0 12 12' to='360 12 12' dur='2s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dasharray' values='0,150;42,150;42,150' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3Canimate attributeName='stroke-dashoffset' values='0;-16;-59' keyTimes='0;0.475;1' dur='1.5s' repeatCount='indefinite'/%3E%3C/circle%3E%3C/g%3E%3C/svg%3E");
@@ -23467,9 +23463,6 @@ html {
   .text-warning {
     color: var(--color-warning);
   }
-  .text-white {
-    color: var(--color-white);
-  }
   .capitalize {
     text-transform: capitalize;
   }
@@ -23553,9 +23546,6 @@ html {
   .ring-2 {
     --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-  }
-  .ring-primary {
-    --tw-ring-color: var(--color-primary);
   }
   .ring-warning {
     --tw-ring-color: var(--color-warning);
@@ -28969,13 +28959,7 @@ html[data-tenant='bithire'] :where(.bithire-collection-polish .ds-collection-enh
 }
 
 html[data-tenant='bithire']
-  :where(.bithire-collection-polish .ds-collection-enhanced div[style*="max-height: 88px"]) {
-  max-height: none !important;
-  overflow: visible !important;
-}
-
-html[data-tenant='bithire']
-  :where(.bithire-collection-polish .ds-collection-enhanced div[style*="padding: 4px 16px 16px"]) {
+  :where(.bithire-collection-polish .ds-collection-enhanced [data-ds-collection-body='true']) {
   padding-top: 12px !important;
 }
 
@@ -29049,14 +29033,7 @@ html[data-tenant='bithire']
 }
 
 html[data-tenant='bithire']
-  :where(.ds-collection-enhanced > div[style*="padding: 14px 16px 0"]) {
-  max-height: none !important;
-  overflow: visible !important;
-  padding: 16px 18px 12px !important;
-}
-
-html[data-tenant='bithire']
-  :where(.ds-collection-enhanced > div[style*="padding: 6px 16px 0"]) {
+  :where(.ds-collection-enhanced > [data-ds-collection-toolbar-row='true']) {
   margin: var(--ds-list-shell-section-gap) 18px 0;
   padding: 12px 0 14px !important;
   border-top: 0 !important;
@@ -29065,48 +29042,17 @@ html[data-tenant='bithire']
 }
 
 html[data-tenant='bithire']
-  :where(.ds-collection-enhanced > div[style*="padding: 4px 16px 16px"]) {
+  :where(.ds-collection-enhanced > [data-ds-collection-body='true']) {
   padding: 16px 18px 22px !important;
   min-width: 0;
 }
 
 html[data-tenant='bithire']
-  :where(.ds-collection-enhanced > div[style*="padding: 4px 16px 16px"] > div) {
+  :where(.ds-collection-enhanced > [data-ds-collection-body='true'] > div) {
   align-items: flex-start !important;
   gap: var(--ds-list-preview-rail-gap) !important;
   min-width: 0;
   max-width: 100%;
-}
-
-html[data-tenant='bithire']
-  :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail)) {
-  align-self: flex-start !important;
-  box-sizing: border-box;
-  block-size: auto !important;
-  height: auto !important;
-  min-block-size: 0 !important;
-  inline-size: auto !important;
-  width: min(100%, var(--ds-list-preview-rail-max-width)) !important;
-  min-inline-size: var(--ds-list-preview-rail-min-width);
-  max-inline-size: var(--ds-list-preview-rail-max-width);
-  max-block-size: var(--ds-list-preview-rail-max-height) !important;
-  padding-inline-start: var(--ds-list-preview-rail-gap) !important;
-  border-inline-start: 2px solid var(--ds-list-preview-rail-border) !important;
-  background: var(--ds-list-preview-rail-bg) !important;
-  border-radius: 0 var(--ds-radius-sm, 6px) var(--ds-radius-sm, 6px) 0 !important;
-  overflow: visible !important;
-  overscroll-behavior: contain;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-}
-
-@media (min-width: 960px) {
-  html[data-tenant='bithire']
-    :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail)) {
-    position: sticky !important;
-    top: var(--ds-list-preview-rail-sticky-top) !important;
-    z-index: 7;
-  }
 }
 
 html[data-tenant='bithire']
@@ -29143,21 +29089,6 @@ html[data-tenant='bithire'] :where(.bithire-preview-rail-close:hover) {
 html[data-tenant='bithire'] :where(.bithire-preview-rail-close:focus-visible) {
   outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 58%, transparent);
   outline-offset: 2px;
-}
-
-html[data-tenant='bithire']
-  :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail) > *) {
-  block-size: auto !important;
-  min-block-size: 0 !important;
-  width: 100%;
-  max-width: 100%;
-}
-
-html[data-tenant='bithire']
-  :where(
-    .ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]:not(.ds-collection-preview-rail) > :is(.rt-rich-card, .rt-surface-card, [class*='row-preview'])
-  ) {
-  max-block-size: var(--ds-list-preview-panel-max-height) !important;
 }
 
 html[data-tenant='bithire'] :where(.rt-expanded-panel) {
@@ -30501,12 +30432,12 @@ html[data-tenant='bithire']
 
 @media (max-width: 1180px) {
   html[data-tenant='bithire']
-    :where(.ds-collection-enhanced > div[style*="padding: 4px 16px 16px"] > div) {
+    :where(.ds-collection-enhanced > [data-ds-collection-body='true'] > div) {
     flex-direction: column !important;
   }
 
   html[data-tenant='bithire']
-    :where(.ds-collection-enhanced [style*="border-left: 2px solid"][style*="padding-left: var(--ds-spacing-md"]) {
+    :where(.ds-collection-enhanced .ds-collection-preview-rail) {
     width: 100% !important;
     min-inline-size: 0;
     max-inline-size: 100%;
@@ -30536,17 +30467,12 @@ html[data-tenant='bithire']
   }
 
   html[data-tenant='bithire']
-    :where(.ds-collection-enhanced > div[style*="padding: 14px 16px 0"]) {
-    padding: 14px 14px 10px !important;
-  }
-
-  html[data-tenant='bithire']
-    :where(.ds-collection-enhanced > div[style*="padding: 6px 16px 0"]) {
+    :where(.ds-collection-enhanced > [data-ds-collection-toolbar-row='true']) {
     margin: 12px 14px 0;
   }
 
   html[data-tenant='bithire']
-    :where(.ds-collection-enhanced > div[style*="padding: 4px 16px 16px"]) {
+    :where(.ds-collection-enhanced > [data-ds-collection-body='true']) {
     padding: 14px 14px 18px !important;
   }
 
@@ -30667,6 +30593,20 @@ html[data-tenant='bithire'] .rottay-tag--clickable:hover {
 html[data-tenant='bithire'] .ant-badge-count,
 html[data-tenant='bithire'] .ant-scroll-number,
 html[data-tenant='bithire'] .rottay-badge {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tabular numerals everywhere data renders (§8.6 item 1; WO-DES-13). The display
+ * and title composite tokens carry a `-numeric` facet (font-variant-numeric cannot
+ * ride the `font` shorthand, so it is a companion like -letter-spacing), and DS
+ * data-table cells align digit-for-digit by default so screens stop hand-setting
+ * font-variant-numeric per cell — the property only affects digits, so covering the
+ * whole table is safe for text columns. */
+html[data-tenant='bithire'] {
+  --ds-text-display-numeric: tabular-nums;
+  --ds-text-title-numeric: tabular-nums;
+}
+html[data-tenant='bithire'] :where(.ds-pattern-data-table) :where(td, th) {
   font-variant-numeric: tabular-nums;
 }
 

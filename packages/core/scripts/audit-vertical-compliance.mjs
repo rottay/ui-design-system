@@ -263,6 +263,9 @@ const PERMANENT_ROOTS = new Set([
   'core',
   'ui',
   'styles',
+  // Ambient TypeScript declaration root (.d.ts only; app-bithire renamed
+  // src/types -> src/declarations in b26228996)
+  'declarations',
   // Electron desktop entry roots (e.g. app-bithire-desktop)
   'worker',
   'main',

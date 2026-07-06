@@ -1703,8 +1703,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         </Box>
       )}
 
-      {/* 5. Single compact controls rail with animated saved-views <-> filters swap */}
+      {/* 5. Single compact controls rail with animated saved-views <-> filters swap.
+          The data-ds-collection-* attributes are the STABLE addressing contract
+          for consumers (WO-UX-03): apps must target these hooks, never the
+          inline-style values, which may change in any release. */}
       <Box
+        data-ds-collection-toolbar-row="true"
         style={{
           padding: '6px 16px 0',
           borderTop: useWorkspaceShell
@@ -1719,6 +1723,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           align="center"
           gap={10}
           wrap={posture.isPhone ? 'wrap' : 'nowrap'}
+          data-ds-collection-controls-row="true"
           style={{ minHeight: 34 }}
         >
           <Box
@@ -1730,8 +1735,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               zIndex: filtersExpanded ? 16 : 1,
             }}
           >
-            <Box style={{ position: 'relative', minHeight: 44, overflow: 'visible' }}>
+            <Box
+              data-ds-collection-strip-host="true"
+              style={{ position: 'relative', minHeight: 44, overflow: 'visible' }}
+            >
               <Box
+                data-ds-collection-views-strip="true"
                 style={{
                   maxHeight: filtersExpanded ? 0 : 52,
                   opacity: filtersExpanded ? 0 : 1,
@@ -1786,6 +1795,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
               {hasFilters && (
                 <Box
+                  data-ds-collection-filters-strip="true"
                   style={{
                     maxHeight: filtersExpanded ? (posture.isPhone ? 96 : 48) : 0,
                     opacity: filtersExpanded ? 1 : 0,
@@ -1845,6 +1855,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                     </Flex>
 
                     <Box
+                      data-ds-collection-strip-scroller="true"
                       style={{
                         flex: '1 1 auto',
                         minWidth: 0,
@@ -2060,6 +2071,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* 7. Table + preview rail */}
       <Box
+        data-ds-collection-body="true"
         style={{
           width: '100%',
           padding: posture.isPhone ? '4px 10px 12px' : '4px 16px 16px',

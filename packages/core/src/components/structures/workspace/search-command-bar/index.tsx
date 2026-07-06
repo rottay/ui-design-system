@@ -846,6 +846,7 @@ export function SearchCommandBar({
             >
               {commandSuggestions.length > 0 && (
                 <Box
+                  data-ds-search-shell-slot="true"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -885,6 +886,7 @@ export function SearchCommandBar({
 
               {actionsSlot && (
                 <Box
+                  data-ds-search-shell-slot="true"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
