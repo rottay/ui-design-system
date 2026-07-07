@@ -28273,3 +28273,2153 @@ html[data-tenant="bithire"]
   ) {
   color: var(--ds-control-ink);
 }
+
+/* ============================================
+   Inline-editor skin — relocated from app globals (WO-UX-06 follow-up)
+   ============================================ */
+html[data-tenant="bithire"] :where([data-bithire-detail-editor-suite="true"]) {
+  gap: 0 !important;
+}
+
+html[data-tenant="bithire"] :where([data-bithire-detail-edit-panel="true"]) {
+  --rt-detail-soft-accent: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    var(--ds-color-info, var(--ds-color-primary))
+  );
+  position: relative;
+  width: 100% !important;
+  max-width: none !important;
+  min-width: 0;
+  margin-block: 12px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--rt-detail-soft-accent) 14%,
+      var(--ds-color-border-secondary)
+    ) !important;
+  border-radius: 8px !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 97%,
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 86%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+    )
+  ) !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-edit-panel="true"][data-bithire-detail-edit-panel-embedded="true"]
+  ) {
+  margin-block: 0 !important;
+  overflow: visible;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-size: auto !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-editor-suite="true"]
+      > [data-bithire-detail-edit-panel="true"]
+  ) {
+  margin-bottom: 0 !important;
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 12%,
+    var(--ds-color-border-secondary)
+  ) !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-edit-panel="true"]:has(
+      + [data-bithire-detail-coverage-panel="true"]
+    )
+  ) {
+  margin-bottom: 0 !important;
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 12%,
+    var(--ds-color-border-secondary)
+  ) !important;
+  border-bottom-left-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where(form, [role="form"]) {
+  width: 100%;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-edit-header="true"]) {
+  position: relative;
+  margin: 0 !important;
+  min-height: 38px;
+  padding: 7px 12px 7px 14px !important;
+  border-bottom: 1px solid
+    color-mix(
+      in srgb,
+      var(--rt-detail-soft-accent, var(--ds-color-primary)) 10%,
+      var(--ds-color-border-secondary)
+    ) !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 88%,
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 42%,
+      transparent
+    )
+  );
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-edit-panel="true"]:has(
+      [data-bithire-detail-advanced-toggle-placement="header-right"]
+    )
+  )
+  :where([data-bithire-detail-edit-header="true"]) {
+  padding-inline-end: clamp(150px, 18vw, 220px) !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-editor-header-actions="true"]) {
+  min-height: 28px;
+  gap: 6px !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-header="true"])
+  > :where(.rottay-flex:first-child) {
+  align-items: center !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-header="true"])
+  > :where(.rottay-flex:first-child)
+  > :where(.rottay-stack:last-child) {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 3px 8px !important;
+  min-width: 0;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-editor="true"])
+  :where(
+    [data-bithire-detail-editor-icon="true"],
+    [data-bithire-detail-editor-section-icon="true"]
+  ) {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 25px;
+  height: 25px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--rt-detail-soft-accent, var(--ds-color-primary)) 22%,
+      var(--ds-color-border-secondary)
+    );
+  border-radius: 7px;
+  background: color-mix(
+    in srgb,
+    var(--rt-detail-soft-accent, var(--ds-color-primary)) 8%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  );
+  color: color-mix(in srgb, var(--ds-color-primary) 44%, #4a9fc1);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 74%, transparent);
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-editor="true"])
+  :where(
+    [data-bithire-detail-editor-eyebrow="true"],
+    [data-bithire-detail-editor-section-number="true"]
+  ) {
+  color: color-mix(in srgb, var(--ds-color-primary) 38%, #4a9fc1);
+  font-family: var(--ds-font-family-mono);
+  font-size: 0.625rem;
+  font-weight: 820;
+  letter-spacing: 0;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-editor="true"])
+  :where([data-bithire-detail-editor-title="true"]) {
+  color: var(--ds-color-text-primary);
+  font-family: var(
+    --ds-font-family-display,
+    var(--ds-font-family-heading, var(--ds-font-family-base))
+  );
+  font-size: 0.84rem;
+  font-weight: 820;
+  line-height: 1.15;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-editor="true"])
+  :where([data-bithire-detail-editor-description="true"]) {
+  max-width: 70ch;
+  font-size: 0.72rem;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  ) {
+  --rt-detail-field-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 9%,
+    var(--ds-color-border-secondary)
+  );
+  --rt-detail-field-divider: color-mix(
+    in srgb,
+    var(--ds-color-primary) 5%,
+    var(--ds-color-border-secondary)
+  );
+  --rt-detail-field-guide: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    transparent
+  );
+  --rt-detail-field-track-min: 308px;
+  --rt-detail-field-row-min: 80px;
+  --rt-detail-field-bg: linear-gradient(
+    145deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 94%,
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 82%,
+      transparent
+    )
+  );
+  position: relative;
+  display: grid !important;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--rt-detail-field-track-min)), 1fr)
+  ) !important;
+  grid-auto-flow: row !important;
+  grid-auto-rows: auto !important;
+  align-items: stretch !important;
+  column-gap: clamp(22px, 2.4vw, 34px) !important;
+  row-gap: clamp(14px, 1.6vw, 22px) !important;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: clamp(16px, 1.8vw, 22px) clamp(18px, 2.4vw, 28px) !important;
+  border: 0 !important;
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 10%,
+      var(--ds-color-border-secondary)
+    ) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where(
+    .rt-form-section,
+    .rt-form-section,
+    [data-bithire-form-section="true"]
+  ) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section="true"]) {
+  min-width: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section-header="true"]) {
+  min-width: 0;
+  padding: clamp(10px, 1.1vw, 13px) clamp(18px, 2.4vw, 28px)
+    clamp(8px, 1vw, 11px) !important;
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 10%,
+      var(--ds-color-border-secondary)
+    );
+  border-bottom: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 8%,
+      var(--ds-color-border-secondary)
+    );
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 54%,
+      transparent
+    ),
+    transparent
+  );
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section-header="true"])
+  > :where(.rottay-flex:first-child) {
+  align-items: center !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section-header="true"])
+  > :where(.rottay-flex:first-child)
+  > :where(.rottay-stack:last-child) {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: baseline !important;
+  flex-wrap: wrap !important;
+  gap: 2px 8px !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section="true"]:first-child)
+  :where([data-bithire-detail-editor-section-header="true"]) {
+  border-top-color: transparent;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section-title="true"]) {
+  color: var(--ds-color-text-primary);
+  font-weight: 820;
+  line-height: 1.2;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section-description="true"]) {
+  max-width: 72ch;
+  line-height: 1.22;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section-content="true"]) {
+  min-width: 0;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-editor-section="true"]:first-child) {
+  border-top-color: transparent !important;
+  padding-top: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-advanced-fields="true"]) {
+  border-top-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 16%,
+    var(--ds-color-border-secondary)
+  ) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-grid) {
+  display: grid !important;
+  width: 100% !important;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, var(--rt-detail-field-track-min, 320px)), 1fr)
+  ) !important;
+  grid-auto-flow: row !important;
+  grid-auto-rows: auto !important;
+  align-items: stretch !important;
+  column-gap: clamp(16px, 1.9vw, 30px) !important;
+  row-gap: clamp(12px, 1.35vw, 20px) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    :not(
+      [data-bithire-detail-more-divider="true"],
+      [data-bithire-detail-more-sticky="true"],
+      [data-bithire-detail-more-fields-divider="true"],
+      [data-bithire-detail-more-fields-sticky="true"]
+    )
+  ) {
+  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-self: stretch !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  min-height: auto;
+  margin: 0 !important;
+  padding: 4px 0 12px !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    :not(
+      [data-bithire-detail-more-divider="true"],
+      [data-bithire-detail-more-sticky="true"],
+      [data-bithire-detail-more-fields-divider="true"],
+      [data-bithire-detail-more-fields-sticky="true"]
+    )
+  )::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 12%,
+      var(--ds-color-border-subtle)
+    ),
+    color-mix(
+        in srgb,
+        var(--ds-color-primary) 4%,
+        var(--ds-color-border-subtle)
+      )
+      74%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    [data-bithire-detail-more-divider="true"],
+    [data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-fields-divider="true"],
+    [data-bithire-detail-more-fields-sticky="true"]
+  ) {
+  grid-column: 1 / -1 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    :not(
+      [data-bithire-detail-more-divider="true"],
+      [data-bithire-detail-more-sticky="true"],
+      [data-bithire-detail-more-fields-divider="true"],
+      [data-bithire-detail-more-fields-sticky="true"]
+    )
+  )
+  :where(.rt-form-field-label-root) {
+  display: grid !important;
+  grid-template-rows: auto 1fr;
+  align-content: start;
+  gap: 3px !important;
+  min-height: 0 !important;
+  margin-bottom: 7px !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    :not(
+      [data-bithire-detail-more-divider="true"],
+      [data-bithire-detail-more-sticky="true"],
+      [data-bithire-detail-more-fields-divider="true"],
+      [data-bithire-detail-more-fields-sticky="true"]
+    )
+  )
+  :where(.rt-form-field-label-root > .rottay-flex:first-child) {
+  align-items: center !important;
+  flex-wrap: wrap !important;
+  row-gap: 4px !important;
+  min-width: 0;
+  min-height: 22px !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    :not(
+      [data-bithire-detail-more-divider="true"],
+      [data-bithire-detail-more-sticky="true"],
+      [data-bithire-detail-more-fields-divider="true"],
+      [data-bithire-detail-more-fields-sticky="true"]
+    )
+  )
+  :where(input, select, textarea, [role="combobox"]) {
+  width: 100% !important;
+  min-width: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    :not(
+      [data-bithire-detail-more-divider="true"],
+      [data-bithire-detail-more-sticky="true"],
+      [data-bithire-detail-more-fields-divider="true"],
+      [data-bithire-detail-more-fields-sticky="true"]
+    )
+  )
+  :where(.rottay-box, .rottay-stack, .rottay-flex) {
+  max-width: 100%;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where([data-bithire-detail-field-span="2"]) {
+  grid-column: span 2 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where([data-bithire-detail-field-span="3"]) {
+  grid-column: span 3 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where([data-bithire-detail-field-span="full"]) {
+  grid-column: 1 / -1 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where([data-bithire-detail-field="true"]) {
+  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  align-self: stretch !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+  min-height: auto;
+  margin: 0 !important;
+  padding: 4px 0 12px !important;
+  border: 0 !important;
+  border-left: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where([data-bithire-detail-field="true"])::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  inset-block-end: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 12%,
+      var(--ds-color-border-subtle)
+    ),
+    color-mix(
+        in srgb,
+        var(--ds-color-primary) 4%,
+        var(--ds-color-border-subtle)
+      )
+      74%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(
+    [data-bithire-detail-field="true"][data-bithire-detail-field-span="2"]
+  ) {
+  grid-column: span 2 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(
+    [data-bithire-detail-field="true"][data-bithire-detail-field-span="3"]
+  ) {
+  grid-column: span 3 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(
+    [data-bithire-detail-field="true"][data-bithire-detail-field-span="full"]
+  ) {
+  grid-column: 1 / -1 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where([data-bithire-detail-edit-section])::before,
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where([data-bithire-detail-edit-section])::after {
+  content: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  > :where(
+    [data-bithire-detail-edit-section],
+    [data-bithire-detail-edit-band]
+  ) {
+  display: block !important;
+  grid-column: 1 / -1 !important;
+  min-height: auto !important;
+  margin: 0 !important;
+  padding: clamp(15px, 1.6vw, 20px) 0 !important;
+  border: 0 !important;
+  border-top: 1px solid
+    var(
+      --rt-detail-field-divider,
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 13%,
+        var(--ds-color-border-secondary)
+      )
+    ) !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
+  border-left: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+html[data-tenant="bithire"] :where([data-bithire-detail-field-icon="true"]) {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  margin-top: 1px;
+  flex: 0 0 auto;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 24%,
+      var(--ds-color-border-secondary)
+    );
+  border-radius: 8px;
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  );
+  color: var(--ds-color-primary);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 74%, transparent);
+}
+
+html[data-tenant="bithire"] :where([data-bithire-detail-field-control="true"]) {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 0 !important;
+  margin-top: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-field-control="true"]) {
+  width: min(100%, var(--rt-detail-control-inline-size, 100%)) !important;
+  overflow: visible !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-flex):has(:where(input, textarea, select, [role="combobox"])),
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-stack):has(> .rt-form-field-label-root):has(
+    :where(input, textarea, select, [role="combobox"])
+  ) {
+  position: relative;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-box):has(> :where(input, textarea, select, [role="combobox"])),
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-box):has(> .rottay-flex:first-child):has(
+    > :where(input, textarea, select, [role="combobox"])
+  ) {
+  position: relative;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-flex):has(:where(input, textarea, select, [role="combobox"])) {
+  align-items: stretch !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(
+    .rottay-flex:not([data-bithire-detail-inline-control-row="true"])
+  ):has(:where(input, textarea, select, [role="combobox"]))
+  > * {
+  flex: none !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(
+    .rottay-flex:not([data-bithire-detail-inline-control-row="true"])
+  ):has(:where(input, textarea, select, [role="combobox"]))
+  > :not(:first-child) {
+  width: 100% !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-control-row="true"]) {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-control-row="true"])
+  > * {
+  width: auto !important;
+  max-width: 100% !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-control-row="true"])
+  > :first-child {
+  flex: 1 1 260px !important;
+  min-width: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-control-row="true"])
+  > :not(:first-child) {
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-inline-control-row="true"])
+  :where(input, textarea, select, [role="combobox"]) {
+  width: 100% !important;
+  inline-size: 100% !important;
+  max-inline-size: 100% !important;
+  min-inline-size: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-flex):has(:where([role="switch"])) {
+  position: relative;
+  min-width: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where([data-bithire-detail-field-control="true"]) {
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-edit-panel="true"],
+    [data-bithire-detail-read-panel="true"],
+    [data-testid$="read-panel"],
+    .rt-detail-section
+  )
+  :where(.rt-form-field-number) {
+  display: inline-grid;
+  place-items: center;
+  min-width: 24px;
+  height: 20px;
+  padding: 0 6px;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 24%,
+      var(--ds-color-border-secondary)
+    );
+  border-radius: 999px;
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  );
+  color: var(--ds-color-primary);
+  font-size: 10px;
+  font-weight: 850;
+  line-height: 1;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 76%, transparent);
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-edit-panel="true"],
+    [data-bithire-detail-read-panel="true"],
+    [data-testid$="read-panel"],
+    .rt-detail-section
+  )
+  :where(.rt-form-requirement-pill) {
+  min-height: 20px;
+  padding: 3px 8px;
+  border-color: color-mix(
+    in srgb,
+    currentColor 28%,
+    var(--ds-color-border-secondary)
+  );
+  box-shadow:
+    0 5px 12px color-mix(in srgb, currentColor 8%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 74%, transparent);
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(.rottay-flex):has(:where(input, textarea, select, [role="combobox"]))
+  > :where(.rottay-text:first-child, label:first-child) {
+  flex: none !important;
+  min-width: 0 !important;
+  color: var(--ds-color-text-muted) !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(input, textarea, select, [role="combobox"]) {
+  max-width: 100% !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-field-control-wrapper="true"]) {
+  inline-size: min(100%, var(--rt-detail-control-inline-size, 100%)) !important;
+  min-inline-size: 0 !important;
+  max-inline-size: 100% !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-field-control-wrapper="true"])
+  :where(
+    input,
+    textarea,
+    select,
+    [role="combobox"],
+    .ant-input,
+    .ant-select,
+    .rottay-input,
+    .rottay-select,
+    [data-radix-select-trigger]
+  ) {
+  box-sizing: border-box !important;
+  inline-size: min(100%, var(--rt-detail-control-inline-size, 100%)) !important;
+  max-inline-size: 100% !important;
+  min-inline-size: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-field-control-wrapper="true"]:has(
+      [data-bithire-detail-inline-control-row="true"]
+    )
+  )
+  :where(
+    [data-bithire-detail-inline-control-row="true"]
+      :is(input, textarea, select, [role="combobox"])
+  ) {
+  width: 100% !important;
+  inline-size: 100% !important;
+  max-inline-size: 100% !important;
+  min-inline-size: 0 !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-field-control-width="compact"],
+    [data-bithire-detail-field-control-kind="number-stepper"],
+    [data-bithire-detail-field-control-kind="date"],
+    [data-bithire-detail-field-control-kind="duration"]
+  ) {
+  --rt-detail-control-inline-size: 280px;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-field-control-width="wide"],
+    [data-bithire-detail-field-control-kind="phone"],
+    [data-bithire-detail-field-control-kind="currency"],
+    [data-bithire-detail-field-control-kind="date-range"],
+    [data-bithire-detail-field-control-kind="media"]
+  ) {
+  --rt-detail-control-inline-size: 520px;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where([data-bithire-detail-field-control-kind="phone"]) {
+  --rt-detail-phone-border: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 10%,
+    var(--ds-color-border-secondary)
+  );
+  --rt-detail-phone-bg: color-mix(
+    in srgb,
+    var(--ds-surface-control) 88%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  );
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where([data-bithire-detail-field-control-kind="phone"])
+  :where(input, select) {
+  min-height: 38px !important;
+  border-color: var(--rt-detail-phone-border) !important;
+  border-radius: 8px !important;
+  background: var(--rt-detail-phone-bg) !important;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 42%, transparent) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(
+    [data-bithire-detail-smart-control="number-stepper"],
+    [data-bithire-detail-field-control-kind="number-stepper"]
+      [data-bithire-detail-field-control="true"]
+  ) {
+  display: grid !important;
+  grid-template-columns: 38px minmax(0, 1fr) 38px !important;
+  gap: 0 !important;
+  width: min(100%, 280px) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--ds-detail-control-border) !important;
+  border-radius: 8px !important;
+  background: var(--ds-detail-control-bg) !important;
+  box-shadow: var(--ds-detail-control-shadow) !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-smart-control="date-control"]) {
+  width: min(100%, 360px) !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-smart-control="segmented-choice"]) {
+  width: min(100%, 560px) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(input, textarea, select, [role="combobox"]) {
+  box-sizing: border-box !important;
+  width: min(100%, var(--rt-detail-control-inline-size, 100%)) !important;
+  inline-size: min(100%, var(--rt-detail-control-inline-size, 100%)) !important;
+  max-width: 100% !important;
+  min-height: 38px !important;
+  border: 1px solid var(--ds-detail-control-border) !important;
+  border-radius: 8px !important;
+  background: var(--ds-detail-control-bg) !important;
+  box-shadow: var(--ds-detail-control-shadow) !important;
+  color: var(--ds-color-text-primary) !important;
+  font-family: var(--ds-font-family-base) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(input:hover, textarea:hover, select:hover, [role="combobox"]:hover) {
+  border-color: var(--ds-detail-control-border-hover) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(
+    input:focus,
+    textarea:focus,
+    select:focus,
+    [role="combobox"]:focus,
+    input:focus-visible,
+    textarea:focus-visible,
+    select:focus-visible,
+    [role="combobox"]:focus-visible
+  ) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 34%,
+    var(--ds-color-border-secondary)
+  ) !important;
+  box-shadow:
+    var(--ds-shadow-focus-ring),
+    var(--ds-detail-control-shadow) !important;
+  outline: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-primary-fields="true"],
+    [data-bithire-detail-advanced-fields="true"]
+  )
+  :where(textarea) {
+  min-height: 68px !important;
+  resize: vertical;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-field-control-width="natural"])
+  :where(input, select, [role="combobox"]) {
+  width: auto !important;
+  min-width: min(100%, 12rem);
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-smart-control="number-stepper"])
+  :where(button, input) {
+  height: 38px !important;
+  min-height: 38px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-smart-control="number-stepper"])
+  > :where(:not(:first-child)) {
+  border-inline-start: 1px solid
+    color-mix(in srgb, var(--ds-color-text-primary) 9%, transparent) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-advanced-toggle="true"],
+    [data-bithire-detail-coverage-toggle="true"]
+  ) {
+  min-height: 32px !important;
+  padding-inline: 11px !important;
+  border-color: color-mix(
+    in srgb,
+    var(--rt-detail-soft-accent, var(--ds-color-primary)) 24%,
+    var(--ds-color-border-secondary)
+  ) !important;
+  border-radius: 999px !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 94%,
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 82%,
+      transparent
+    )
+  ) !important;
+  color: color-mix(in srgb, var(--ds-color-primary) 72%, #438eaa) !important;
+  font-weight: 800 !important;
+  box-shadow:
+    0 5px 12px
+      color-mix(
+        in srgb,
+        var(--rt-detail-soft-accent, var(--ds-color-primary)) 7%,
+        transparent
+      ),
+    inset 0 1px 0 color-mix(in srgb, white 76%, transparent) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-divider="true"],
+    [data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-fields-divider="true"],
+    [data-bithire-detail-more-fields-sticky="true"],
+    [data-bithire-detail-advanced-toggle-slot="true"]
+  ) {
+  --rt-detail-more-divider-line: color-mix(
+    in srgb,
+    var(--rt-detail-soft-accent, var(--ds-color-primary)) 14%,
+    var(--ds-color-border-secondary)
+  );
+  position: relative;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100%;
+  min-width: 0;
+  min-height: 34px;
+  margin-block: 4px 2px;
+  padding: 3px clamp(10px, 1.8vw, 18px) !important;
+  border: 0 !important;
+  background: transparent !important;
+  isolation: isolate;
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where(
+    [data-bithire-detail-primary-fields],
+    [data-bithire-detail-advanced-fields]
+  )
+  > :where([data-bithire-detail-advanced-toggle-slot="true"]) {
+  grid-column: 1 / -1 !important;
+  align-self: center !important;
+  min-height: 34px !important;
+  padding: 2px 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-divider="true"],
+    [data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-fields-divider="true"],
+    [data-bithire-detail-more-fields-sticky="true"]
+  )::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset-inline: clamp(18px, 4vw, 46px);
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--rt-detail-more-divider-line) 24%,
+    var(--rt-detail-more-divider-line) 76%,
+    transparent
+  );
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-divider="true"],
+    [data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-fields-divider="true"],
+    [data-bithire-detail-more-fields-sticky="true"],
+    [data-bithire-detail-advanced-toggle-slot="true"]
+  )
+  > :where([data-bithire-detail-advanced-toggle="true"]) {
+  position: relative;
+  z-index: 1;
+  min-width: min(100%, 136px);
+  justify-content: center !important;
+  background: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary)),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 74%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+    )
+  ) !important;
+  pointer-events: auto;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-divider="true"],
+    [data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-fields-divider="true"],
+    [data-bithire-detail-more-fields-sticky="true"]
+  )
+  > :where([data-bithire-detail-coverage-toggle="true"]) {
+  position: relative;
+  z-index: 1;
+  min-width: min(100%, 136px);
+  justify-content: center !important;
+  background: linear-gradient(
+    180deg,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary)),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 74%,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+    )
+  ) !important;
+  pointer-events: auto;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-divider="true"][data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-fields-sticky="true"]
+  ) {
+  position: sticky;
+  top: var(--rt-detail-sticky-top, 72px);
+  z-index: 9;
+  min-height: 34px;
+  margin-block: 4px 6px;
+  padding-block: 3px !important;
+  border-block: 0 !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 82%,
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 64%,
+      transparent
+    )
+  ) !important;
+  backdrop-filter: blur(10px);
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-sticky="true"],
+    [data-bithire-detail-more-fields-sticky="true"],
+    [data-bithire-detail-advanced-toggle-slot="true"][data-bithire-detail-advanced-toggle-dock="floating"]
+  )::before {
+  content: none;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-fields-divider="true"][data-bithire-detail-more-fields-state="collapsed"]
+  ) {
+  position: relative !important;
+  z-index: auto;
+  inset: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 34px;
+  margin: 10px 0 2px !important;
+  padding: 2px 0 !important;
+  background: transparent !important;
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-fields-divider="true"][data-bithire-detail-more-fields-state="collapsed"]
+  )::before {
+  content: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-advanced-toggle-placement="header-right"]) {
+  position: absolute !important;
+  z-index: 7;
+  inset-block-start: 10px;
+  inset-inline-end: 12px;
+  display: flex !important;
+  justify-content: flex-end !important;
+  width: auto !important;
+  min-height: 0;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-advanced-toggle-placement="header-right"]
+  )::before {
+  content: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-advanced-toggle-placement="bottom-center"]) {
+  position: relative !important;
+  inset: auto !important;
+  z-index: auto !important;
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  min-height: 34px !important;
+  margin: 10px 0 2px !important;
+  padding: 2px 0 !important;
+  background: transparent !important;
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-advanced-toggle-placement="bottom-center"]
+  )::before {
+  content: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-advanced-toggle-placement="bottom-center"][data-bithire-detail-advanced-toggle-label="show-more"]
+  ) {
+  grid-column: 1 / -1 !important;
+  justify-content: center !important;
+  width: 100% !important;
+  margin: 12px 0 2px !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-advanced-toggle-placement="floating-top"]) {
+  position: fixed !important;
+  top: var(--rt-detail-sticky-top, 72px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 32;
+  justify-content: center !important;
+  width: fit-content !important;
+  max-width: calc(100% - 28px);
+  margin: 7px auto 10px !important;
+  padding: 4px !important;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--rt-detail-soft-accent, var(--ds-color-primary)) 20%,
+      var(--ds-color-border-secondary)
+    ) !important;
+  border-radius: 999px !important;
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 86%,
+    transparent
+  ) !important;
+  box-shadow:
+    0 14px 32px
+      color-mix(
+        in srgb,
+        var(--rt-detail-soft-accent, var(--ds-color-primary)) 10%,
+        transparent
+      ),
+    0 1px 0 color-mix(in srgb, white 72%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 76%, transparent) !important;
+  backdrop-filter: blur(14px);
+  animation: rt-detail-floating-toggle-in 180ms ease-out;
+}
+
+@keyframes rt-detail-floating-toggle-in {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-more-fields-divider="true"],
+    [data-bithire-detail-more-fields-sticky="true"]
+  )
+  > :where([data-bithire-detail-advanced-toggle="true"]) {
+  min-height: 28px !important;
+  min-width: 0;
+  padding: 4px 10px !important;
+  border-color: color-mix(
+    in srgb,
+    var(--rt-detail-soft-accent, var(--ds-color-primary)) 24%,
+    var(--ds-color-border-secondary)
+  ) !important;
+  border-radius: 999px !important;
+  background: color-mix(
+    in srgb,
+    var(--rt-detail-soft-accent, var(--ds-color-primary)) 6%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  ) !important;
+  color: color-mix(in srgb, var(--ds-color-primary) 48%, #438eaa) !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-footer="true"])
+  :where(
+    [data-bithire-detail-action-kind="inline-cancel"],
+    :is(button, a, [role="button"]):first-of-type
+  ) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 22%,
+    var(--ds-color-border-secondary)
+  ) !important;
+  background: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 4%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  ) !important;
+  color: var(--ds-color-text-primary) !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-footer="true"])
+  :where(
+    [data-bithire-detail-action-kind="inline-save"],
+    :is(button, a, [role="button"]):last-of-type
+  ) {
+  border-color: color-mix(
+    in srgb,
+    var(--rt-detail-soft-accent, var(--ds-color-primary)) 42%,
+    var(--ds-color-border-secondary)
+  ) !important;
+  background: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--rt-detail-soft-accent, var(--ds-color-primary)) 72%,
+      var(--ds-color-info, var(--ds-color-primary))
+    ),
+    color-mix(
+      in srgb,
+      var(--rt-detail-soft-accent, var(--ds-color-primary)) 58%,
+      var(--ds-color-primary)
+    )
+  ) !important;
+  box-shadow:
+    0 8px 18px
+      color-mix(
+        in srgb,
+        var(--rt-detail-soft-accent, var(--ds-color-primary)) 12%,
+        transparent
+      ),
+    inset 0 1px 0 color-mix(in srgb, white 44%, transparent) !important;
+  color: var(--ds-control-on-brand, var(--ds-color-text-on-primary)) !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-edit-footer="true"]) {
+  margin-top: 0 !important;
+  padding: 14px 18px !important;
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 15%,
+      var(--ds-color-border-secondary)
+    ) !important;
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 74%,
+    transparent
+  );
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-footer-actions="true"]) {
+  margin-inline-start: auto;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-footer-summary="true"]) {
+  overflow-wrap: anywhere;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-footer-state="error"]) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-error) 28%,
+    var(--ds-color-border-secondary)
+  ) !important;
+}
+
+@media (max-width: 960px) {
+  html[data-tenant="bithire"]
+    :where([data-bithire-detail-edit-panel="true"])
+    :where([data-bithire-detail-edit-footer="true"]) {
+    position: sticky;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    z-index: 190;
+    margin: 10px 8px 0 !important;
+    padding: 8px !important;
+    border: 1px solid
+      color-mix(
+        in srgb,
+        var(--ds-color-primary) 22%,
+        var(--ds-color-border-secondary)
+      ) !important;
+    border-radius: 14px;
+    background: color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 96%,
+      transparent
+    );
+    box-shadow:
+      0 14px 34px
+        color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent),
+      inset 0 1px 0 color-mix(in srgb, white 70%, transparent);
+    backdrop-filter: blur(16px);
+  }
+
+  html[data-tenant="bithire"]
+    :where([data-bithire-detail-edit-footer-actions="true"]) {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 720px) {
+  html[data-tenant="bithire"]
+    :where([data-bithire-detail-edit-panel="true"])
+    :where([data-bithire-detail-edit-footer="true"]) {
+    bottom: calc(58px + env(safe-area-inset-bottom, 0px));
+  }
+
+  html[data-tenant="bithire"]
+    :where([data-bithire-detail-edit-footer-actions="true"])
+    :where(:is(button, a, [role="button"])) {
+    flex: 1 1 124px;
+    min-width: 0;
+  }
+}
+
+@media (min-width: 1680px) {
+  html[data-tenant="bithire"]
+    :where([data-bithire-detail-edit-panel="true"])
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    ) {
+    --rt-detail-field-track-min: 324px;
+  }
+}
+
+@media (max-width: 1180px) {
+  html[data-tenant="bithire"]
+    :where([data-bithire-detail-edit-panel="true"])
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    ) {
+    --rt-detail-field-track-min: 276px;
+    --rt-detail-field-row-min: 84px;
+  }
+}
+
+@media (max-width: 760px) {
+  html[data-tenant="bithire"]
+    :where([data-bithire-detail-edit-panel="true"])
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    ) {
+    --rt-detail-field-track-min: 100%;
+    --rt-detail-field-row-min: auto;
+    grid-auto-flow: row !important;
+    padding: 12px 14px !important;
+  }
+
+  html[data-tenant="bithire"]
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    )
+    > :where(
+      [data-bithire-detail-field-span="2"],
+      [data-bithire-detail-field-span="3"],
+      [data-bithire-detail-field-span="full"]
+    ),
+  html[data-tenant="bithire"]
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    )
+    :where(
+      [data-bithire-detail-field="true"][data-bithire-detail-field-span="2"],
+      [data-bithire-detail-field="true"][data-bithire-detail-field-span="3"],
+      [data-bithire-detail-field="true"][data-bithire-detail-field-span="full"]
+    ) {
+    grid-column: 1 / -1 !important;
+  }
+
+  html[data-tenant="bithire"]
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    )
+    > :where(
+      :not(
+        [data-bithire-detail-more-divider="true"],
+        [data-bithire-detail-more-sticky="true"],
+        [data-bithire-detail-more-fields-divider="true"],
+        [data-bithire-detail-more-fields-sticky="true"]
+      )
+    ),
+  html[data-tenant="bithire"]
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    )
+    :where([data-bithire-detail-field="true"]) {
+    min-height: auto;
+    padding: 8px 0 10px 12px !important;
+  }
+
+  html[data-tenant="bithire"]
+    :where(
+      [data-bithire-detail-primary-fields="true"],
+      [data-bithire-detail-advanced-fields="true"]
+    )
+    :where(.rt-form-field-label-root) {
+    min-height: auto;
+  }
+
+  html[data-tenant="bithire"]
+    :where(
+      [data-bithire-detail-more-divider="true"],
+      [data-bithire-detail-more-sticky="true"],
+      [data-bithire-detail-more-fields-divider="true"],
+      [data-bithire-detail-more-fields-sticky="true"]
+    )::before {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--rt-detail-more-divider-line) 12%,
+      var(--rt-detail-more-divider-line) 88%,
+      transparent
+    );
+  }
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where(textarea[data-bithire-dictation-target="true"]) {
+  padding-inline-end: 44px !important;
+}
+
+html[data-tenant="bithire"] :where(.rt-detail-dictation-host) {
+  position: absolute;
+  z-index: 5;
+  display: inline-flex;
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"] :where(.rt-detail-dictation-button) {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 24%,
+      var(--ds-color-border-secondary)
+    );
+  border-radius: 999px;
+  background: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 94%,
+    transparent
+  );
+  color: var(--ds-color-primary);
+  box-shadow: 0 8px 18px
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+html[data-tenant="bithire"]
+  :where(.rt-detail-dictation-button:hover:not(:disabled)) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 42%,
+    var(--ds-color-border-secondary)
+  );
+  background: color-mix(
+    in srgb,
+    var(--ds-color-primary) 9%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  );
+}
+
+html[data-tenant="bithire"]
+  :where(.rt-detail-dictation-button[data-listening="true"]) {
+  border-color: color-mix(
+    in srgb,
+    var(--ds-color-error) 38%,
+    var(--ds-color-border-secondary)
+  );
+  color: var(--ds-color-error);
+}
+
+html[data-tenant="bithire"] :where(.rt-detail-dictation-button:disabled) {
+  opacity: 0.48;
+  cursor: not-allowed;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-advanced-fields][hidden]),
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-advanced-fields][data-bithire-detail-advanced-fields-state="collapsed"]
+  ) {
+  display: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-tags-structured="true"]) {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-detail-tag-chip="true"]) {
+  white-space: normal !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-edit-panel="true"])
+  :where([data-bithire-workflow-card="detail"]) {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Detail nav soft-segmented selected state (the ONE tab treatment — no
+   bottom-border strips, no primary underlines). Pinned home: the shared
+   detail polish gate asserts this selector lives in globals.css. */
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-nav-item="true"][data-active="true"]) {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(
+    --ds-tint-10,
+    color-mix(in srgb, var(--ds-color-primary) 10%, transparent)
+  );
+  box-shadow: inset 0 0 0 1px
+    var(
+      --ds-tint-25,
+      color-mix(in srgb, var(--ds-color-primary) 25%, transparent)
+    );
+  color: var(--ds-color-text-primary);
+}
+
+/* ============================================
+   Field-coverage panel skin — relocated from app globals (WO-UX-06 follow-up)
+   ============================================ */
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-panel="true"]) {
+  --rt-detail-coverage-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 12%,
+    var(--ds-color-border-secondary)
+  );
+  --rt-detail-coverage-cell-bg: linear-gradient(
+    145deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 94%,
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 82%,
+      transparent
+    )
+  );
+  --rt-detail-coverage-guide: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    transparent
+  );
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-coverage-panel="true"]:not(
+      [data-bithire-detail-coverage-embedded="true"]
+    )
+  ) {
+  border-color: var(--rt-detail-coverage-border) !important;
+  border-radius: 8px !important;
+  background: linear-gradient(
+    145deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card-bg, var(--ds-color-bg-primary)) 94%,
+      transparent
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel-bg, var(--ds-color-bg-secondary)) 88%,
+      transparent
+    )
+  ) !important;
+  background-size: auto !important;
+  box-shadow:
+    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 4%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 72%, transparent) !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-editor-suite="true"]
+      > [data-bithire-detail-coverage-panel="true"]
+  ) {
+  border: 0 !important;
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 10%,
+      var(--ds-color-border-secondary)
+    ) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    [data-bithire-detail-edit-panel="true"]
+      + [data-bithire-detail-coverage-panel="true"]
+  ) {
+  border: 0 !important;
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 10%,
+      var(--ds-color-border-secondary)
+    ) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-panel="true"])
+  :where([data-bithire-detail-coverage-header="true"]) {
+  gap: 10px !important;
+  padding: 0 0 4px !important;
+}
+
+html[data-tenant="bithire"] :where([data-bithire-detail-coverage-body="true"]) {
+  gap: clamp(10px, 1.1vw, 16px) !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-group="true"]) {
+  gap: 0 !important;
+  padding-top: clamp(8px, 0.9vw, 12px);
+  border: 0 !important;
+  border-top: 1px solid
+    color-mix(
+      in srgb,
+      var(--ds-color-primary) 8%,
+      var(--ds-color-border-secondary)
+    );
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-group-header="true"]) {
+  min-height: 38px;
+  padding-block: 7px 9px !important;
+  border-bottom-color: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-color-border-secondary)
+  ) !important;
+}
+
+html[data-tenant="bithire"] :where([data-bithire-detail-coverage-grid="true"]) {
+  display: grid !important;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(min(100%, 292px), 1fr)
+  ) !important;
+  align-items: stretch !important;
+  gap: clamp(8px, 0.9vw, 13px) clamp(18px, 2vw, 32px) !important;
+  border-top: 0;
+  border-left: 0;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-field="true"]) {
+  position: relative;
+  min-width: 0 !important;
+  min-height: 76px;
+  padding: 7px 2px 10px 12px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-field="true"])::before {
+  content: "";
+  position: absolute;
+  display: block;
+  inset-block: 9px 14px;
+  inset-inline-start: 0;
+  width: 2px;
+  border-radius: var(--ds-radius-full, 999px);
+  background: linear-gradient(
+    180deg,
+    var(--rt-detail-coverage-guide),
+    color-mix(in srgb, var(--ds-color-primary) 3%, transparent)
+  );
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-field="true"])::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--ds-color-primary) 7%, transparent),
+    color-mix(in srgb, var(--ds-color-primary) 3%, transparent) 70%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-field="true"][data-populated="false"]) {
+  opacity: 0.82;
+}
+
+html[data-tenant="bithire"]
+  :where([data-bithire-detail-coverage-field="true"])
+  :where(pre) {
+  max-height: 112px !important;
+  border-radius: 8px !important;
+}
