@@ -3169,3 +3169,734 @@ html[data-tenant='bithire'] .ant-tooltip .ant-tooltip-arrow::before {
     transition: none;
   }
 }
+
+/* ============================================
+   BITHIRE PRODUCTION GUARDRAILS (TOKEN REMAP)
+   Relocated verbatim from app-bithire src/app/globals.css region UX05-R01
+   (WO-UX-05 stage E). Plain tenant-root scope, appended after every other
+   artifact block so these declarations win by source order over the compiled
+   BrandTheme block above -- mirroring the app, where globals.css loaded after
+   the artifact. The higher-specificity light/dark theme blocks earlier in
+   this file keep their runtime winners for the var names they also declare,
+   exactly as in production today (the app pins data-theme="light" for
+   bithire, so the light block always applies and the dark blocks never do).
+   Deliberate exception to the verbatim copy: the two legacy "-text"-suffixed
+   button ink aliases (primary/secondary) are NOT relocated. The artifact
+   gates ban that legacy suffix (engines consume the canonical
+   --ds-button-*-color vars; the legacy fallback is unreachable while -color
+   is declared), and app-bithire styles/foundation.css re-declares the same
+   aliases with identical values at :root.
+   ============================================ */
+/*
+ * BitHire production guardrails.
+ *
+ * The imported DS package still contains platform fallback literals for generic
+ * tenants. Keep this app on semantic BitHire/DS tokens so controls stay
+ * readable in production bundles and button/pill text cannot disappear against
+ * light surfaces.
+ */
+html[data-tenant="bithire"] {
+  --ds-control-ink: var(--ds-color-text-primary);
+  --ds-control-ink-muted: var(--ds-color-text-secondary);
+  --ds-control-on-brand: var(
+    --ds-color-text-on-primary,
+    var(--ds-color-text-inverse)
+  );
+  --ds-color-on-primary: var(--ds-control-on-brand);
+  --ds-control-surface: var(--ds-surface-card);
+  --ds-control-surface-raised: color-mix(
+    in srgb,
+    var(--ds-surface-card) 86%,
+    var(--ds-surface-panel)
+  );
+  --ds-control-brand-tint: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    var(--ds-control-surface)
+  );
+  --ds-control-brand-tint-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 15%,
+    var(--ds-control-surface)
+  );
+  --ds-control-brand-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 30%,
+    var(--ds-color-border)
+  );
+  --ds-command-glow: 0 18px 46px
+    color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  --ds-icon-tile-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 22%,
+    var(--ds-color-border)
+  );
+  --ds-chip-bg: var(--ds-control-brand-tint);
+  --ds-chip-color: var(--ds-color-primary);
+  --ds-chip-border: var(--ds-control-brand-border);
+  --ds-premium-card-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 12%,
+    var(--ds-color-border)
+  );
+  --ds-premium-card-border-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 28%,
+    var(--ds-color-border)
+  );
+  --ds-premium-card-selected-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 46%,
+    var(--ds-color-border)
+  );
+  --ds-premium-card-selected-ring: 0 0 0 3px
+    color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+  --ds-card-bg: var(--ds-surface-card);
+  --ds-card-bg-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 4%,
+    var(--ds-surface-card)
+  );
+  --ds-card-border: var(--ds-premium-card-border);
+  --ds-card-border-hover: var(--ds-premium-card-border-hover);
+  --ds-card-border-color: var(--ds-premium-card-border);
+  --ds-card-border-color-hover: var(--ds-premium-card-border-hover);
+  --ds-card-radius: var(--ds-radius-md);
+  --ds-card-border-radius: var(--ds-radius-md);
+  --ds-card-shadow: var(--ds-surface-shadow, var(--ds-shadow-sm));
+  --ds-card-shadow-hover: var(--ds-surface-shadow-hover, var(--ds-shadow-md));
+  --ds-card-title-letter-spacing: 0;
+  --ds-card-body-color: var(--ds-color-text-primary);
+  --ds-card-footer-bg: var(--ds-premium-card-footer-bg);
+  --ds-surface-card-bg: var(--ds-surface-card);
+  --ds-surface-panel-bg: var(--ds-surface-panel);
+  --ds-surface-card-border: var(--ds-color-border);
+  --ds-surface-card-border-strong: var(--ds-color-border-secondary);
+  --ds-surface-card-border-soft: var(--ds-color-border-subtle);
+  --ds-surface-card-grid-size: 22px;
+  --ds-surface-card-grid-line: color-mix(
+    in srgb,
+    var(
+        --rt-premium-card-accent,
+        var(--ds-signal-card-accent, var(--ds-color-primary))
+      )
+      5%,
+    transparent
+  );
+  --ds-surface-card-grid-line-strong: color-mix(
+    in srgb,
+    var(
+        --rt-premium-card-accent,
+        var(--ds-signal-card-accent, var(--ds-color-primary))
+      )
+      8%,
+    transparent
+  );
+  --ds-surface-card-grid-bg:
+    linear-gradient(var(--ds-surface-card-grid-line) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      var(--ds-surface-card-grid-line) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      115deg,
+      transparent 0%,
+      color-mix(in srgb, var(--ds-surface-card) 34%, transparent) 46%,
+      transparent 66%
+    );
+  --rt-premium-card-grid:
+    linear-gradient(var(--ds-surface-card-grid-line) 1px, transparent 1px),
+    linear-gradient(
+      90deg,
+      var(--ds-surface-card-grid-line) 1px,
+      transparent 1px
+    );
+  --ds-card-top-line-display: none;
+  --ds-card-top-line-height: 0px;
+  --ds-card-top-line-bg: transparent;
+  --ds-premium-card-header-top-line-display: none;
+  --ds-premium-card-header-top-line-height: 0px;
+  --ds-premium-card-header-top-line-bg: transparent;
+  --ds-signal-card-top-line-display: none;
+  --ds-list-shell-gap: 18px;
+  --ds-list-shell-section-gap: 14px;
+  --ds-list-shell-frame-padding: 0px;
+  --ds-list-shell-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-surface-card) 62%, transparent) 0%,
+    color-mix(in srgb, var(--ds-surface-panel) 74%, transparent) 52%,
+    color-mix(in srgb, var(--ds-color-primary) 3%, transparent) 100%
+  );
+  --ds-list-shell-header-padding: 18px;
+  --ds-list-shell-filters-padding: 14px;
+  --ds-list-shell-content-padding: 18px;
+  --ds-list-shell-header-bg: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--ds-surface-card) 96%, var(--ds-color-primary) 4%)
+      0%,
+    color-mix(
+        in srgb,
+        var(--ds-control-surface) 88%,
+        var(--ds-surface-panel) 12%
+      )
+      54%,
+    color-mix(
+        in srgb,
+        var(--ds-surface-panel) 94%,
+        var(--ds-color-secondary) 4%
+      )
+      100%
+  );
+  --ds-list-shell-region-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-control-surface) 94%, var(--ds-surface-card) 6%)
+      0%,
+    color-mix(
+        in srgb,
+        var(--ds-surface-panel) 88%,
+        var(--ds-control-surface) 12%
+      )
+      100%
+  );
+  --ds-list-shell-region-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    var(--ds-color-border)
+  );
+  --ds-list-shell-depth: 0 12px 34px
+    color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+  --ds-list-shell-region-shadow: 0 1px 2px
+    color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  --ds-list-table-header-bg: color-mix(
+    in srgb,
+    var(--ds-surface-panel) 88%,
+    var(--ds-control-surface)
+  );
+  --ds-list-table-header-border: color-mix(
+    in srgb,
+    var(--ds-color-border) 82%,
+    transparent
+  );
+  --ds-breadcrumb-bar-padding-x: 18px;
+  --ds-breadcrumb-bar-bg: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-primary) 3%),
+    color-mix(in srgb, var(--ds-surface-panel) 86%, var(--ds-surface-card))
+  );
+  --ds-breadcrumb-bar-border: color-mix(
+    in srgb,
+    var(--ds-color-border) 82%,
+    transparent
+  );
+  --ds-breadcrumb-bar-shadow:
+    inset 0 -1px 0 color-mix(in srgb, var(--ds-surface-card) 62%, transparent),
+    0 7px 18px -18px
+      color-mix(in srgb, var(--ds-color-text-primary) 42%, transparent);
+  --ds-breadcrumb-font-size: 11px;
+  --ds-breadcrumb-line-height: 1.15;
+  --ds-breadcrumb-link-color: var(--ds-color-text-secondary);
+  --ds-breadcrumb-color: var(--ds-color-text-secondary);
+  --ds-breadcrumb-color-hover: var(--ds-color-primary);
+  --ds-breadcrumb-color-active: var(--ds-color-text-primary);
+  --ds-breadcrumb-active-color: var(--ds-color-text-primary);
+  --ds-breadcrumb-separator-color: var(--ds-color-text-muted);
+  --ds-insight-panel-padding: 18px;
+  --ds-insight-panel-bg: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-control-surface) 96%,
+      var(--rt-insight-accent, var(--ds-color-primary))
+    ),
+    var(--ds-control-surface)
+  );
+  --ds-insight-panel-border: color-mix(
+    in srgb,
+    var(--rt-insight-accent, var(--ds-color-primary)) 18%,
+    var(--ds-color-border)
+  );
+  --ds-insight-panel-shadow:
+    var(--ds-card-shadow),
+    0 18px 46px
+      color-mix(
+        in srgb,
+        var(--rt-insight-accent, var(--ds-color-primary)) 7%,
+        transparent
+      );
+  --ds-insight-grid-line: color-mix(
+    in srgb,
+    var(--rt-insight-accent, var(--ds-color-primary)) 8%,
+    transparent
+  );
+  --ds-insight-signal-bg: color-mix(
+    in srgb,
+    var(--rt-insight-accent, var(--ds-color-primary)) 10%,
+    var(--ds-control-surface)
+  );
+  --ds-detail-radius: var(--ds-radius-md, 8px);
+  --ds-detail-shell-gap: clamp(12px, 1.6vw, 18px);
+  --ds-detail-shell-padding: clamp(12px, 1.6vw, 18px);
+  --ds-detail-hero-grid-size: 30px;
+  --ds-detail-hero-grid-line: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    transparent
+  );
+  --ds-detail-hero-grid-line-soft: color-mix(
+    in srgb,
+    var(--ds-color-info, var(--ds-color-primary)) 7%,
+    transparent
+  );
+  --ds-detail-hero-checker: color-mix(
+    in srgb,
+    var(--ds-color-primary) 5%,
+    transparent
+  );
+  --ds-detail-hero-spine: color-mix(
+    in srgb,
+    var(--ds-color-primary) 46%,
+    transparent
+  );
+  --ds-detail-shell-bg: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card) 94%,
+      var(--ds-surface-canvas, var(--ds-surface-panel))
+    ),
+    color-mix(
+      in srgb,
+      var(--ds-surface-panel) 82%,
+      var(--ds-surface-canvas, var(--ds-surface-panel))
+    )
+  );
+  --ds-detail-shell-border: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 8%,
+    transparent
+  );
+  --ds-detail-shell-shadow:
+    0 16px 42px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 74%, transparent);
+  --ds-detail-grid-gap: clamp(14px, 1.8vw, 22px);
+  --ds-detail-rail-width: clamp(280px, 22vw, 340px);
+  --ds-detail-hero-bg: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-control-surface) 98%,
+      var(--ds-color-primary) 2%
+    ),
+    color-mix(in srgb, var(--ds-surface-panel) 54%, var(--ds-control-surface))
+  );
+  --ds-detail-hero-border: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 9%,
+    transparent
+  );
+  --ds-detail-hero-shadow:
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    0 12px 28px color-mix(in srgb, var(--ds-color-primary) 5%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 76%, transparent);
+  --ds-detail-section-bg: linear-gradient(
+    180deg,
+    var(--ds-surface-card) 0%,
+    color-mix(in srgb, var(--ds-surface-panel) 34%, var(--ds-surface-card)) 100%
+  );
+  --ds-detail-section-border: color-mix(
+    in srgb,
+    var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 11%,
+    var(--ds-color-border)
+  );
+  --ds-detail-section-shadow:
+    0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    0 8px 20px color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent);
+  --ds-action-rail-card-bg: linear-gradient(
+    180deg,
+    color-mix(
+      in srgb,
+      var(--ds-surface-card) 96%,
+      var(--ds-surface-tone, var(--rt-surface-tone, var(--ds-color-primary))) 4%
+    ),
+    color-mix(in srgb, var(--ds-surface-panel) 42%, var(--ds-surface-card))
+  );
+  --ds-action-rail-card-border: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 8%,
+    transparent
+  );
+  --ds-action-rail-card-shadow:
+    0 8px 22px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
+    inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 78%, transparent);
+  --ds-detail-control-bg: color-mix(
+    in srgb,
+    var(--ds-control-surface) 92%,
+    var(--ds-surface-card-bg, var(--ds-color-bg-primary))
+  );
+  --ds-detail-control-border: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 10%,
+    var(--ds-color-border-secondary)
+  );
+  --ds-detail-control-border-hover: color-mix(
+    in srgb,
+    var(--ds-color-primary) 22%,
+    var(--ds-color-border-secondary)
+  );
+  --ds-detail-control-shadow: inset 0 1px 0
+    color-mix(in srgb, white 42%, transparent);
+  --ds-detail-nested-surface-bg: color-mix(
+    in srgb,
+    var(--ds-surface-panel-bg, var(--ds-surface-panel)) 72%,
+    var(--ds-surface-card-bg, var(--ds-surface-card))
+  );
+  --ds-detail-nested-surface-border: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 7%,
+    transparent
+  );
+  --ds-detail-continuous-boundary: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 7.5%,
+    transparent
+  );
+  --ds-detail-continuous-surface: color-mix(
+    in srgb,
+    var(--ds-surface-card-bg, var(--ds-surface-card)) 94%,
+    transparent
+  );
+  --ds-chart-panel-border: color-mix(
+    in srgb,
+    var(--ds-color-text-primary) 8%,
+    transparent
+  );
+
+  --ds-button-primary-bg: var(--ds-color-primary);
+  --ds-button-primary-bg-hover: var(--ds-color-primary-hover);
+  --ds-button-primary-hover-bg: var(--ds-button-primary-bg-hover);
+  --ds-button-primary-bg-active: var(
+    --ds-color-primary-active,
+    var(--ds-button-primary-bg-hover)
+  );
+  --ds-button-primary-color: var(--ds-control-on-brand);
+  --ds-button-primary-border: var(--ds-button-primary-bg);
+  --ds-button-primary-border-color: var(--ds-button-primary-bg);
+
+  --ds-button-secondary-bg: var(--ds-control-brand-tint);
+  --ds-button-secondary-bg-hover: var(--ds-control-brand-tint-hover);
+  --ds-button-secondary-hover-bg: var(--ds-button-secondary-bg-hover);
+  --ds-button-secondary-bg-active: color-mix(
+    in srgb,
+    var(--ds-color-primary) 18%,
+    var(--ds-control-surface)
+  );
+  --ds-button-secondary-color: var(--ds-color-primary);
+  --ds-button-secondary-border: var(--ds-control-brand-border);
+  --ds-button-secondary-border-color: var(--ds-button-secondary-border);
+
+  --ds-button-default-bg: var(--ds-control-surface);
+  --ds-button-default-bg-hover: var(--ds-control-surface-raised);
+  --ds-button-default-hover-bg: var(--ds-button-default-bg-hover);
+  --ds-button-default-bg-active: color-mix(
+    in srgb,
+    var(--ds-surface-panel) 82%,
+    var(--ds-control-surface)
+  );
+  --ds-button-default-color: var(--ds-control-ink);
+  --ds-button-default-color-hover: var(--ds-control-ink);
+  --ds-button-default-color-active: var(--ds-control-ink);
+  --ds-button-default-border: var(--ds-color-border);
+  --ds-button-default-border-color: var(--ds-button-default-border);
+
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: var(--ds-control-brand-tint);
+  --ds-button-ghost-hover-bg: var(--ds-button-ghost-bg-hover);
+  --ds-button-ghost-bg-active: var(--ds-control-brand-tint-hover);
+  --ds-button-ghost-color: var(--ds-control-ink-muted);
+  --ds-button-ghost-color-hover: var(--ds-control-ink);
+  --ds-button-ghost-color-active: var(--ds-control-ink);
+
+  --ds-button-text-bg: transparent;
+  --ds-button-text-bg-hover: var(--ds-control-brand-tint);
+  --ds-button-text-hover-bg: var(--ds-button-text-bg-hover);
+  --ds-button-text-bg-active: var(--ds-control-brand-tint-hover);
+  --ds-button-text-color: var(--ds-control-ink);
+  --ds-button-text-color-hover: var(--ds-control-ink);
+  --ds-button-text-color-active: var(--ds-control-ink);
+
+  --ds-button-link-color: var(--ds-color-primary);
+  --ds-button-link-color-hover: var(--ds-color-primary-hover);
+  --ds-button-link-color-active: var(
+    --ds-color-primary-active,
+    var(--ds-button-link-color-hover)
+  );
+
+  --ds-button-danger-bg: var(--ds-color-error);
+  --ds-button-danger-hover-bg: var(
+    --ds-color-error-hover,
+    var(--ds-color-error)
+  );
+  --ds-button-danger-color: var(
+    --ds-color-text-on-error,
+    var(--ds-control-on-brand)
+  );
+  --ds-button-danger-border: var(--ds-button-danger-bg);
+  --ds-button-error-bg: var(--ds-button-danger-bg);
+  --ds-button-error-bg-hover: var(--ds-button-danger-hover-bg);
+  --ds-button-error-color: var(--ds-button-danger-color);
+  --ds-button-error-border: var(--ds-button-danger-border);
+  --ds-button-warning-color: var(
+    --ds-color-warning-900,
+    var(--ds-control-ink)
+  );
+  --ds-button-success-color: var(
+    --ds-color-text-on-success,
+    var(--ds-control-on-brand)
+  );
+  --ds-button-info-color: var(
+    --ds-color-text-on-info,
+    var(--ds-control-on-brand)
+  );
+
+  --ds-badge-default-bg: var(--ds-control-surface-raised);
+  --ds-badge-default-color: var(--ds-control-ink-muted);
+  --ds-badge-default-border: var(--ds-color-border);
+  --ds-badge-primary-bg: var(--ds-control-brand-tint);
+  --ds-badge-primary-color: var(--ds-color-primary);
+  --ds-badge-primary-border: var(--ds-control-brand-border);
+  --ds-badge-secondary-bg: var(--ds-control-surface-raised);
+  --ds-badge-secondary-color: var(--ds-control-ink-muted);
+  --ds-badge-secondary-border: var(--ds-color-border);
+  --ds-badge-success-bg: color-mix(
+    in srgb,
+    var(--ds-color-success) 12%,
+    var(--ds-control-surface)
+  );
+  --ds-badge-success-color: var(--ds-color-success);
+  --ds-badge-success-border: color-mix(
+    in srgb,
+    var(--ds-color-success) 24%,
+    var(--ds-color-border)
+  );
+  --ds-badge-warning-bg: color-mix(
+    in srgb,
+    var(--ds-color-warning) 16%,
+    var(--ds-control-surface)
+  );
+  --ds-badge-warning-color: var(
+    --ds-color-warning-900,
+    var(--ds-color-warning)
+  );
+  --ds-badge-warning-border: color-mix(
+    in srgb,
+    var(--ds-color-warning) 28%,
+    var(--ds-color-border)
+  );
+  --ds-badge-error-bg: color-mix(
+    in srgb,
+    var(--ds-color-error) 12%,
+    var(--ds-control-surface)
+  );
+  --ds-badge-error-color: var(--ds-color-error);
+  --ds-badge-error-border: color-mix(
+    in srgb,
+    var(--ds-color-error) 24%,
+    var(--ds-color-border)
+  );
+  --ds-badge-info-bg: color-mix(
+    in srgb,
+    var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 12%,
+    var(--ds-control-surface)
+  );
+  --ds-badge-info-color: var(
+    --ds-color-info,
+    var(--ds-color-secondary, var(--ds-color-primary))
+  );
+  --ds-badge-info-border: color-mix(
+    in srgb,
+    var(--ds-color-info, var(--ds-color-secondary, var(--ds-color-primary))) 24%,
+    var(--ds-color-border)
+  );
+  --ds-badge-height: 28px;
+  --ds-badge-padding-x: 0.625rem;
+  --ds-badge-radius: var(--ds-radius-full, 999px);
+  --ds-badge-line-height: 1.2;
+  --ds-badge-font-weight: 700;
+
+  --ds-pill-bg: var(--ds-chip-bg);
+  --ds-pill-color: var(--ds-chip-color);
+  --ds-pill-border: var(--ds-chip-border);
+
+  --ds-filter-pill-frame-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 10%,
+    var(--ds-color-border)
+  );
+  --ds-filter-pill-hover-bg: color-mix(
+    in srgb,
+    var(--ds-color-primary) 8%,
+    var(--ds-control-surface)
+  );
+  --ds-filter-pill-hover-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 20%,
+    var(--ds-color-border)
+  );
+  --ds-filter-pill-active-border: color-mix(
+    in srgb,
+    var(--ds-color-primary) 26%,
+    var(--ds-color-border)
+  );
+  --ds-filter-pill-active-shadow:
+    inset 0 0 0 1px var(--ds-filter-pill-active-border),
+    0 1px 2px color-mix(in srgb, var(--ds-control-ink) 6%, transparent);
+  --ds-filter-pill-count-bg: color-mix(
+    in srgb,
+    var(--ds-surface-panel) 78%,
+    var(--ds-control-surface)
+  );
+  --ds-filter-pill-count-active-bg: var(--ds-control-surface);
+  --ds-filter-pill-count-ring: none;
+  --ds-filter-pill-count-active-ring: none;
+  --ds-cell-pill-bg: var(--ds-control-brand-tint);
+  --ds-cell-pill-border: var(--ds-control-brand-border);
+  --ds-cell-pill-color: var(--ds-control-ink-muted);
+}
+
+/* ============================================
+   BITHIRE CONTROL-COMPAT CLASS PATCHES
+   Relocated verbatim from app-bithire src/app/globals.css region UX05-R02
+   (WO-UX-05 stage E). Bithire-scoped :where() button/badge compat rules,
+   zero !important.
+   ============================================ */
+html[data-tenant="bithire"]
+  :where(.btn-primary, .ds-btn--primary, .ant-btn-primary) {
+  color: var(--ds-button-primary-color);
+  background: var(--ds-button-primary-bg);
+  border-color: var(--ds-button-primary-border);
+}
+
+html[data-tenant="bithire"]
+  :where(.btn-secondary, .ds-btn--secondary, .ant-btn-default) {
+  color: var(--ds-button-secondary-color);
+  background: var(--ds-button-secondary-bg);
+  border-color: var(--ds-button-secondary-border);
+}
+
+html[data-tenant="bithire"]
+  :where(.btn-ghost, .ds-btn--ghost, .ant-btn-text, .ant-btn-link) {
+  color: var(--ds-button-ghost-color);
+}
+
+html[data-tenant="bithire"] :where(.btn-link, .ds-btn--link, .ant-btn-link) {
+  color: var(--ds-button-link-color);
+}
+
+html[data-tenant="bithire"]
+  :where(
+    .badge-default,
+    .ds-badge--default,
+    .ds-badge:not(.ds-badge--primary):not(.ds-badge--secondary):not(
+        .ds-badge--success
+      ):not(.ds-badge--warning):not(.ds-badge--error):not(.ds-badge--info)
+  ) {
+  color: var(--ds-badge-default-color);
+  background: var(--ds-badge-default-bg);
+  border-color: var(--ds-badge-default-border);
+}
+
+html[data-tenant="bithire"] :where(.badge-primary, .ds-badge--primary) {
+  color: var(--ds-badge-primary-color);
+  background: var(--ds-badge-primary-bg);
+  border-color: var(--ds-badge-primary-border);
+}
+
+html[data-tenant="bithire"] :where(.badge-secondary, .ds-badge--secondary) {
+  color: var(--ds-badge-secondary-color);
+  background: var(--ds-badge-secondary-bg);
+  border-color: var(--ds-badge-secondary-border);
+}
+
+html[data-tenant="bithire"]
+  :where(
+    .badge-success,
+    .ds-badge--success,
+    .bithire-form-section__complete-pill
+  ) {
+  color: var(--ds-badge-success-color);
+  background: var(--ds-badge-success-bg);
+  border-color: var(--ds-badge-success-border);
+}
+
+html[data-tenant="bithire"] :where(.badge-warning, .ds-badge--warning) {
+  color: var(--ds-badge-warning-color);
+  background: var(--ds-badge-warning-bg);
+  border-color: var(--ds-badge-warning-border);
+}
+
+html[data-tenant="bithire"]
+  :where(.badge-error, .ds-badge--error, .bithire-form-required-pill) {
+  color: var(--ds-badge-error-color);
+  background: var(--ds-badge-error-bg);
+  border-color: var(--ds-badge-error-border);
+}
+
+html[data-tenant="bithire"] :where(.badge-info, .ds-badge--info) {
+  color: var(--ds-badge-info-color);
+  background: var(--ds-badge-info-bg);
+  border-color: var(--ds-badge-info-border);
+}
+
+html[data-tenant="bithire"] :where(.badge, .ds-badge) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
+  min-height: var(--ds-badge-height, 28px);
+  padding-block: 0.25rem;
+  padding-inline: var(--ds-badge-padding-x, 0.625rem);
+  overflow: hidden;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--ds-badge-radius, var(--ds-radius-full, 999px));
+  background-clip: padding-box;
+  box-shadow: inset 0 1px 0
+    color-mix(in srgb, var(--ds-control-surface) 68%, transparent);
+  font-weight: var(--ds-badge-font-weight, 700);
+  line-height: var(--ds-badge-line-height, 1.2);
+  text-overflow: ellipsis;
+  transform: none;
+  transition:
+    color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease),
+    background-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease),
+    border-color var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease),
+    box-shadow var(--ds-motion-instant, 120ms) var(--ds-ease-standard, ease);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+html[data-tenant="bithire"] :where(.badge > *, .ds-badge > *) {
+  min-width: 0;
+}
+
+html[data-tenant="bithire"]
+  :where(
+    .ds-surface-hero,
+    .rt-surface-hero,
+    .bithire-surface-hero,
+    .ds-rich-card,
+    .rt-rich-card,
+    .bithire-premium-card,
+    .ds-surface-card,
+    .rt-surface-card,
+    .bithire-surface-card,
+    .ds-surface-panel,
+    .rt-surface-panel,
+    .bithire-surface-panel
+  ) {
+  color: var(--ds-control-ink);
+}
