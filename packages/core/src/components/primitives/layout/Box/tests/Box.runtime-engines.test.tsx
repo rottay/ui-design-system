@@ -209,6 +209,75 @@ describe('Box runtime engines', () => {
     }
   );
 
+  // Regression: RT-ERR-01 / RT-ERR-02 (WO-CNF-01). ModernBox passed
+  // `React.Children.toArray(children)` — which is `[]` for undefined children —
+  // as the createElement children argument. React-DOM rejects any children
+  // argument on a void element ("<input> is a void element tag and must neither
+  // have children…"), so every void `Box` (input, img, hr, br, …) crashed under
+  // the modern engine and was replaced by the EngineErrorBoundary. All three
+  // engines must now render void elements with their full attribute set and no
+  // children argument.
+  const VOID_CASES = [
+    { as: 'input', tag: 'INPUT', attrs: { type: 'hidden', name: 'jobIdentifier', value: 'job-123' } },
+    { as: 'img', tag: 'IMG', attrs: { src: 'https://example.com/a.png', alt: 'a' } },
+    { as: 'hr', tag: 'HR', attrs: {} },
+    { as: 'br', tag: 'BR', attrs: {} },
+  ] as const;
+
+  describe.each(Object.entries(ENGINE_COMPONENTS))(
+    'void elements render under the %s engine',
+    (engine, Component) => {
+      it.each(VOID_CASES)(
+        'renders <$as> with attributes and no children argument',
+        ({ as, tag, attrs }) => {
+          const ref = createRef<HTMLElement>();
+          expect(() =>
+            render(
+              <Component
+                ref={ref}
+                as={as as any}
+                data-testid={`void-${engine}-${as}`}
+                {...(attrs as Record<string, unknown>)}
+              />
+            )
+          ).not.toThrow();
+
+          const el = screen.getByTestId(`void-${engine}-${as}`);
+          expect(el.tagName).toBe(tag);
+          expect(el).toHaveClass('rottay-box');
+          expect(el).toHaveClass(`rottay-box--${engine}`);
+          expect(ref.current).toBe(el);
+          // Void elements never have child nodes.
+          expect(el.childNodes.length).toBe(0);
+          for (const [key, val] of Object.entries(attrs)) {
+            if (key === 'value') {
+              expect((el as HTMLInputElement).value).toBe(val);
+            } else {
+              expect(el.getAttribute(key)).toBe(val);
+            }
+          }
+        }
+      );
+    }
+  );
+
+  // The hidden job-identifier input on the public apply page is the exact
+  // RT-ERR-01 repro: a void Box that MUST reach the DOM so the server action can
+  // resolve the job from FormData.
+  it.each(Object.entries(ENGINE_COMPONENTS))(
+    'keeps a hidden job-identifier input in the DOM under the %s engine',
+    (engine, Component) => {
+      render(
+        <Component as="input" type="hidden" name="jobIdentifier" value="acme-senior-eng" data-testid={`hidden-${engine}`} />
+      );
+      const el = screen.getByTestId(`hidden-${engine}`) as HTMLInputElement;
+      expect(el.tagName).toBe('INPUT');
+      expect(el.getAttribute('type')).toBe('hidden');
+      expect(el.getAttribute('name')).toBe('jobIdentifier');
+      expect(el.value).toBe('acme-senior-eng');
+    }
+  );
+
   it.each(Object.entries(ENGINE_COMPONENTS))(
     'does not emit spacing or radius styles when the %s engine receives none values',
     (engine, Component) => {

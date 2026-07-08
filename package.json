@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.16.3",
+  "version": "2.16.5",
   "sideEffects": [
     "*.css"
   ],
@@ -53,7 +53,9 @@
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
     "roadmap:status": "node scripts/roadmap-status.mjs status",
-    "roadmap:check": "node scripts/roadmap-status.mjs check"
+    "roadmap:check": "node scripts/roadmap-status.mjs check",
+    "roadmap:commercial": "node scripts/roadmap-commercial-status.mjs status",
+    "roadmap:commercial:check": "node scripts/roadmap-commercial-status.mjs check"
   },
   "packageManager": "pnpm@9.15.9",
   "engines": {

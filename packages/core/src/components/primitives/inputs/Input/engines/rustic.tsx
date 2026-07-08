@@ -318,6 +318,43 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const showClearButton = clearable && currentValue && !disabled && !readOnly;
 
+  // Hidden inputs carry no visible chrome: render a bare, form-participating
+  // `<input type="hidden">` so server-action forms receive the value via
+  // FormData without the container/affix markup.
+  if (type === 'hidden') {
+    return (
+      <input
+        type="hidden"
+        name={props.name}
+        id={props.id}
+        value={(currentValue ?? '') as string}
+        readOnly
+        data-testid={dataTestId}
+      />
+    );
+  }
+
+  // File inputs are uncontrolled native pickers: render a bare `<input
+  // type="file">` that forwards its ref and native change event. No `value` is
+  // applied — assigning to a file input's value is illegal.
+  if (type === 'file') {
+    return (
+      <input
+        ref={inputRef}
+        type="file"
+        name={props.name}
+        id={props.id}
+        accept={props.accept}
+        multiple={props.multiple}
+        disabled={props.disabled}
+        className={props.className}
+        style={props.style}
+        data-testid={dataTestId}
+        onChange={handleChange}
+      />
+    );
+  }
+
   // Build class names
   const containerClasses = [
     'rottay-input',

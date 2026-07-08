@@ -100,7 +100,16 @@ export type InputType =
   | 'datetime-local'
   | 'month'
   | 'week'
-  | 'color';
+  | 'color'
+  // Renders a bare, chrome-free `<input type="hidden">` that participates in
+  // native form submission (FormData). Used for server-action form fields such
+  // as a job identifier that must reach the DOM without any visible control.
+  | 'hidden'
+  // Renders a bare, chrome-free `<input type="file">` that forwards its ref (so
+  // callers can trigger it programmatically) and its native change event (so
+  // callers can read `event.target.files`). File inputs are uncontrolled, so no
+  // `value` is applied.
+  | 'file';
 
 /**
  * Props for the Input component.
@@ -147,6 +156,13 @@ export interface InputProps extends EngineAwareProps {
   status?: InputStatus;
   /** Input HTML type */
   type?: InputType;
+  /**
+   * Accepted file types for `type="file"` (native `accept` attribute), e.g.
+   * `"image/*"` or `".pdf,.docx"`.
+   */
+  accept?: string;
+  /** Allow selecting multiple files for `type="file"`. */
+  multiple?: boolean;
   /** Placeholder text */
   placeholder?: string;
   /** Current value (controlled) */

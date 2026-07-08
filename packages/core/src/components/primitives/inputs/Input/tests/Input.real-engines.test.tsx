@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import ClassicInput from '../engines/classic';
 import ModernInput from '../engines/modern';
+import RusticInput from '../engines/rustic';
 import { Input } from '..';
 import { InputAddon } from '../compound/Addon';
 import { InputGroup } from '../compound/Group';
@@ -13,6 +14,71 @@ import { InputTextArea } from '../compound/TextArea';
 import { renderWithEngine } from '../../../../../_internal/testing/helpers/engine-test-utils';
 
 describe('Input real engine coverage', () => {
+  // WO-CNF-01: `type="hidden"` renders a bare, form-participating input with no
+  // wrapper chrome, so server-action forms (e.g. the public apply page's
+  // jobIdentifier) receive the value via FormData across every engine.
+  it.each([
+    ['classic', ClassicInput],
+    ['modern', ModernInput],
+    ['rustic', RusticInput],
+  ] as const)('renders a bare hidden input under the %s engine', (_engine, Engine) => {
+    const { container } = render(
+      <Engine type="hidden" name="jobIdentifier" value="acme-senior-eng" data-testid="hidden-field" />
+    );
+
+    const el = screen.getByTestId('hidden-field') as HTMLInputElement;
+    expect(el.tagName).toBe('INPUT');
+    expect(el.getAttribute('type')).toBe('hidden');
+    expect(el.getAttribute('name')).toBe('jobIdentifier');
+    expect(el.value).toBe('acme-senior-eng');
+    // Bare passthrough: the hidden input is the only rendered element (no shell,
+    // label, or placeholder <style> chrome around it).
+    expect(container.querySelectorAll('input').length).toBe(1);
+    expect(container.querySelector('label')).toBeNull();
+    // A native FormData round trip carries the hidden value.
+    const form = document.createElement('form');
+    form.appendChild(el.cloneNode(true));
+    expect(new FormData(form).get('jobIdentifier')).toBe('acme-senior-eng');
+  });
+
+  // WO-CNF-01: `type="file"` renders a bare file picker that forwards its ref
+  // (so callers can `.click()` it programmatically) and its native change event
+  // (so callers can read `event.target.files`), with no chrome and no value.
+  it.each([
+    ['classic', ClassicInput],
+    ['modern', ModernInput],
+    ['rustic', RusticInput],
+  ] as const)('renders a bare file input that forwards ref + change event under the %s engine', (_engine, Engine) => {
+    const ref = React.createRef<HTMLInputElement>();
+    const onChange = vi.fn();
+    const { container } = render(
+      <Engine
+        ref={ref}
+        type="file"
+        name="audio"
+        accept="audio/*"
+        onChange={onChange}
+        style={{ display: 'none' }}
+        data-testid="file-field"
+      />
+    );
+
+    const el = screen.getByTestId('file-field') as HTMLInputElement;
+    expect(el.tagName).toBe('INPUT');
+    expect(el.getAttribute('type')).toBe('file');
+    expect(el.getAttribute('accept')).toBe('audio/*');
+    expect(el.style.display).toBe('none');
+    // Ref forwards to the real file input so callers can trigger it.
+    expect(ref.current).toBe(el);
+    // Bare passthrough: no wrapper/label chrome.
+    expect(container.querySelectorAll('input').length).toBe(1);
+    expect(container.querySelector('label')).toBeNull();
+    // The DS onChange contract passes (value, event); callers read files off the event.
+    fireEvent.change(el, { target: { files: [] } });
+    expect(onChange).toHaveBeenCalled();
+    expect(onChange.mock.calls[0][1]).toBeTruthy();
+  });
+
   it('covers classic number, password, search, and error branches', async () => {
     const handleChange = vi.fn();
     const handleEnter = vi.fn();

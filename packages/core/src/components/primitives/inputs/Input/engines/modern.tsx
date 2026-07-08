@@ -363,6 +363,44 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const showClearButton = clearable && currentValue && !disabled && !readOnly;
 
+  // Hidden inputs carry no visible chrome: render a bare, form-participating
+  // `<input type="hidden">` so server-action forms receive the value via
+  // FormData without any wrapper, focus ring, or placeholder styling.
+  if (type === 'hidden') {
+    return (
+      <input
+        type="hidden"
+        name={name}
+        id={id}
+        value={(currentValue ?? '') as string}
+        readOnly
+        data-testid={dataTestId}
+      />
+    );
+  }
+
+  // File inputs are uncontrolled native pickers: render a bare `<input
+  // type="file">` that forwards its ref (so callers can call `.click()`) and its
+  // native change event (so callers can read `event.target.files`). No `value`
+  // is applied — assigning to a file input's value is illegal.
+  if (type === 'file') {
+    return (
+      <input
+        ref={inputRef}
+        type="file"
+        name={name}
+        id={id}
+        accept={props.accept}
+        multiple={props.multiple}
+        disabled={disabled}
+        className={className}
+        style={style}
+        data-testid={dataTestId}
+        onChange={handleChange}
+      />
+    );
+  }
+
   const shellStyle = buildShellStyle(
     size as keyof typeof SIZES,
     variant,

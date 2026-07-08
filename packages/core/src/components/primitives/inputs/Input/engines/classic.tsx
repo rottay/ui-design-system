@@ -314,6 +314,43 @@ const ClassicInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   ) : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
+  // Hidden inputs carry no visible chrome: render a bare, form-participating
+  // `<input type="hidden">` so server-action forms receive the value via
+  // FormData without Ant Design wrapper markup.
+  if (type === 'hidden') {
+    return (
+      <input
+        type="hidden"
+        name={props.name}
+        id={props.id}
+        value={(currentValue ?? '') as string}
+        readOnly
+        data-testid={props['data-testid']}
+      />
+    );
+  }
+
+  // File inputs are uncontrolled native pickers: render a bare `<input
+  // type="file">` that forwards its ref and native change event. No `value` is
+  // applied — assigning to a file input's value is illegal.
+  if (type === 'file') {
+    return (
+      <input
+        ref={ref as any}
+        type="file"
+        name={props.name}
+        id={props.id}
+        accept={props.accept}
+        multiple={props.multiple}
+        disabled={props.disabled}
+        className={props.className}
+        style={props.style}
+        data-testid={props['data-testid']}
+        onChange={handleChange}
+      />
+    );
+  }
+
   // Ant Design's InputNumber is a separate component with a different API,
   // so numeric inputs branch here to avoid prop mismatches (e.g., allowClear
   // is not supported on InputNumber).

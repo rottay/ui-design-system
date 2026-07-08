@@ -12,7 +12,7 @@
 
 import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
 import type { BoxProps, BoxSpacing, BoxBorderRadius, BoxShadow } from '../Box.types';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../Box.types';
+import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP, isVoidElement } from '../Box.types';
 import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
 import { scalarOrUndefined, collectBoxResponsiveEntries } from '../../shared/responsive-helpers.js';
 
@@ -348,24 +348,30 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   ].filter(Boolean).join(' ');
 
   const ElementType = Component as ElementType;
-  const renderedChildren = React.Children.toArray(children);
+  const elementProps = {
+    ...htmlAttributes,
+    ref: ref as Ref<HTMLElement>,
+    className: classNames,
+    style: computedStyle,
+    ...(responsive ? responsive.attrs : {}),
+  };
+
+  // Void elements (input, img, br, hr, ...) have no content model: React-DOM
+  // throws "<tag> is a void element tag and must neither have children nor use
+  // dangerouslySetInnerHTML" if ANY children argument is passed — and
+  // `React.Children.toArray(undefined)` returns `[]`, which counts as a
+  // (empty) children argument. Create void elements with NO children argument
+  // so every void `Box` renders with all its attributes intact.
+  const element = isVoidElement(Component)
+    ? React.createElement(ElementType, elementProps)
+    : React.createElement(ElementType, elementProps, React.Children.toArray(children));
 
   return (
     <>
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
-      {React.createElement(
-        ElementType,
-        {
-          ...htmlAttributes,
-          ref: ref as Ref<HTMLElement>,
-          className: classNames,
-          style: computedStyle,
-          ...(responsive ? responsive.attrs : {}),
-        },
-        renderedChildren
-      )}
+      {element}
     </>
   );
 });

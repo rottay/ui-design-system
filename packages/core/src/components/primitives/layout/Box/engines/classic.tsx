@@ -44,7 +44,7 @@
 
 import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
 import type { BoxProps, BoxSpacing } from '../Box.types';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP } from '../Box.types';
+import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP, isVoidElement } from '../Box.types';
 import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
 import { scalarOrUndefined, collectBoxResponsiveEntries } from '../../shared/responsive-helpers.js';
 
@@ -392,23 +392,26 @@ const ClassicBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   ].filter(Boolean).join(' ');
 
   const ElementType = Component as ElementType;
+  const elementProps = {
+    ...htmlAttributes,
+    ref: ref as Ref<HTMLElement>,
+    className: classNames,
+    style: computedStyle,
+    ...(responsive ? responsive.attrs : {}),
+  };
+
+  // Void elements (input, img, br, hr, ...) reject a children argument in
+  // React-DOM; create them with no children so a void `Box` renders cleanly.
+  const element = isVoidElement(Component)
+    ? React.createElement(ElementType, elementProps)
+    : React.createElement(ElementType, elementProps, children);
 
   return (
     <>
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
-      {React.createElement(
-        ElementType,
-        {
-          ...htmlAttributes,
-          ref: ref as Ref<HTMLElement>,
-          className: classNames,
-          style: computedStyle,
-          ...(responsive ? responsive.attrs : {}),
-        },
-        children
-      )}
+      {element}
     </>
   );
 });

@@ -506,3 +506,43 @@ export const SHADOW_MAP: Record<BoxShadow, string> = {
   xl: 'var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1))',
   '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
 };
+
+/**
+ * The complete set of HTML void (self-closing) elements. Per the HTML spec
+ * these elements have no content model: the DOM rejects any children on them,
+ * and React-DOM throws
+ * `"<tag> is a void element tag and must neither have children nor use
+ * dangerouslySetInnerHTML"` if a children argument is supplied.
+ *
+ * A `Box` can render any of these through `as` (e.g. `as="input"`,
+ * `as="img"`, `as="hr"`), so every engine must create them WITHOUT a children
+ * argument. See {@link isVoidElement}.
+ */
+export const VOID_ELEMENTS: ReadonlySet<string> = new Set([
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'keygen',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+]);
+
+/**
+ * Returns `true` when `as` resolves to an intrinsic HTML void element that must
+ * be created without any children argument.
+ *
+ * Only string tag names can be void — a component `as` (function/class) owns
+ * its own children contract, so those always return `false`.
+ */
+export function isVoidElement(as: ElementType | undefined): boolean {
+  return typeof as === 'string' && VOID_ELEMENTS.has(as);
+}
