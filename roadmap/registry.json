@@ -494,13 +494,15 @@
       "lane": "craft",
       "order": 3,
       "size": "M",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [],
       "mustLandWith": [],
       "programs": [
         "P-16"
       ],
-      "notes": null
+      "notes": null,
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09"
     },
     {
       "id": "WO-CRA-04",
@@ -1035,7 +1037,7 @@
       "lane": "engine-modern",
       "order": 15,
       "size": "S",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-ENG-13"
       ],
@@ -1044,7 +1046,9 @@
         "fable-advisory",
         "owner-2026-07-09"
       ],
-      "notes": "Owner decision 2026-07-09. API-default change; diffs downstream app screenshots. Record in the release note."
+      "notes": "Owner decision 2026-07-09. API-default change; diffs downstream app screenshots. Record in the release note.",
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09"
     },
     {
       "id": "WO-ENG-16",
@@ -1052,13 +1056,15 @@
       "lane": "engine-modern",
       "order": 16,
       "size": "S",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [],
       "mustLandWith": [],
       "programs": [
         "fable-advisory"
       ],
-      "notes": "The primitive and PatternDataTable currently disagree about what a table is."
+      "notes": "The primitive and PatternDataTable currently disagree about what a table is.",
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09"
     },
     {
       "id": "WO-ENG-17",
@@ -1097,7 +1103,7 @@
       "lane": "engine-modern",
       "order": 19,
       "size": "M",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-TOK-05"
       ],
@@ -1105,7 +1111,9 @@
       "programs": [
         "gat-03-probe"
       ],
-      "notes": "SystemCssVariablesBridge stamps personality-derived vars INLINE on <html>, the highest CSS precedence, while personality is the LOWEST layer of the documented merge chain. A derived boolean (showBorder) therefore outranks a color the tenant typed (chrome.cardComponent.border). Found by the hostile-tenant probe; no other gate could see it."
+      "notes": "SystemCssVariablesBridge stamps personality-derived vars INLINE on <html>, the highest CSS precedence, while personality is the LOWEST layer of the documented merge chain. A derived boolean (showBorder) therefore outranks a color the tenant typed (chrome.cardComponent.border). Found by the hostile-tenant probe; no other gate could see it.",
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09"
     },
     {
       "id": "WO-ENG-20",
@@ -1139,6 +1147,20 @@
         "owner-2026-07-09"
       ],
       "notes": "Owner request. The flat tree produced two naming fictions this session unpicked: platform.css is a byte-identical copy of rottay.css (P-30), and a live customer's theme sat in legacy/ while evnto sat beside rottay as a peer. A structure that cannot express 'this tenant belongs to that vertical' keeps producing decisions that assume they are peers. Pure move: zero token changes, zero pixel movement, public API unchanged."
+    },
+    {
+      "id": "WO-TOK-07",
+      "title": "One chrome emitter, and a gate that can see all of them",
+      "lane": "tokens",
+      "order": 7,
+      "size": "M",
+      "status": "todo",
+      "dependsOn": [],
+      "mustLandWith": [],
+      "programs": [
+        "second-emitter-pattern"
+      ],
+      "notes": "WO-TOK-04 is INCOMPLETE: it removed the dead table-row aliases from brand-theme; compilers/appearance/index.ts:537,539 still emits both, and audit-integration reports all-checks-passed because it scans one emitter. Fourth instance this session of a second emitter ignoring a rule the first follows."
     }
   ]
 }

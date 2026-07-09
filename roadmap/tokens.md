@@ -217,3 +217,23 @@ signature moments.
 - **Acceptance gate** — `pnpm --filter @rottay/showroom run test:whitelabel` green with the new canvas probe passing under both torture fixtures; `test:gates` green with first-party baselines UNMOVED (rottay/bithire artifacts already declare their canvas, so their pixels must not shift); `pnpm test` + build green; sighted proof that `?fixture=torture-light` renders on a light ground.
 - **Do NOT** — Do not introduce a user-facing light/dark toggle (owner decision 2026-07-07; P-07 withdrawn). Do not let the foundation's light canvas outrank a tenant's declared one.
 - **Size** — M.
+
+### WO-TOK-07 One chrome emitter, and a gate that can see all of them
+- **Outcome** — The design system stops maintaining two hand-written copies of the same chrome-to-CSS mapping, and `audit-integration` stops proving a property about one file while the identical defect lives in the other.
+- **Why** — Discovered 2026-07-09 while certifying WO-TOK-05. Four facts, each verified:
+  1. `compilers/appearance/index.ts` is a **near-verbatim duplicate** of `compilers/brand-theme/index.ts`'s chrome emission — same variable names, same field names, typed against `TenantAppearanceAdvanced.chrome` instead of `BrandTheme.chrome`.
+  2. **WO-TOK-04 is therefore incomplete.** It deleted the dead aliases `--ds-table-row-hover-bg` / `--ds-table-row-striped-bg` from the brand-theme compiler. `compilers/appearance/index.ts:537,539` still emits both. `node packages/core/scripts/audit-integration.mjs` reports "all checks passed" because it scans one emitter. **The gate that found the dead code in one file is blind to the identical dead code in the other.** TOK-04's evidence says core lint is green; it is, and that sentence proves less than it sounds like it proves.
+  3. `runtime/tenant/storage/static/generator/index.ts`'s `personalityVariables()` (`:365-496`) is a THIRD, hand-written, INCOMPLETE duplicate of `runtime/personality/primitives.ts`'s `resolvePersonalityCssVariables()`. It emits some variables and structurally never emits others (`--ds-badge-hover-transform`, `--ds-button-transition`, the toast/message/notification animation families, `--ds-duration-*`).
+  4. `--ds-duration-fast/-normal/-slow` carry TWO different hardcoded defaults in two files: `200ms/300ms/400ms` (`runtime/personality/primitives.ts:218-220`) and `0.15s/0.2s/0.3s` (`tokens/css/foundation/animations/transitions.css:314-316`). Neither is a compiler.
+  This is the fourth instance in one session of a SECOND EMITTER that ignores a rule the first one follows: the `'none'` guard the compiler has and `ThemeProvider.tsx:987` lacks; the personality bridge that stamps inline over the generated block (WO-ENG-19); these dead aliases; and the `chrome.card` / `chrome.cardComponent` collision recorded in WO-ENG-19. **The pattern is the finding.**
+- **Depends on** — none.
+- **Steps** —
+  1. Extract ONE chrome-emission implementation and have both compilers call it. They already agree on every variable name; the duplication is the bug.
+  2. Delete the two dead aliases from the appearance compiler.
+  3. Generalize `audit-integration.mjs` so its orphan-premium-var scan covers EVERY emitter, not the one it happens to read today. Re-run it against `494e7d85` in a throwaway worktree to see what it should have been catching all along.
+  4. Reconcile the generator's `personalityVariables()` with `resolvePersonalityCssVariables()`: one implementation, or a documented reason why the static and runtime paths must diverge.
+  5. Pick one default for `--ds-duration-*` and delete the other.
+- **Files** — `packages/core/src/compilers/{brand-theme,appearance}/index.ts`, a shared emission module, `packages/core/src/runtime/tenant/storage/static/generator/index.ts`, `packages/core/src/runtime/personality/primitives.ts`, `packages/core/src/tokens/css/foundation/animations/transitions.css`, `packages/core/scripts/audit-integration.mjs`.
+- **Acceptance gate** — `audit-integration` scans every emitter and is green; a DRILL is recorded (reintroduce one dead alias in EITHER compiler, watch it go red, revert — the current gate would miss one of the two); the compiled output of both compilers is byte-identical to before except the two removed aliases; `test:gates` green with zero pixel movement; build + `pnpm test` green.
+- **Do NOT** — Do not fix this by deleting the appearance compiler's chrome support. Do not leave two implementations that must agree forever.
+- **Size** — M.
