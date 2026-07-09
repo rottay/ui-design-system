@@ -14,7 +14,7 @@
  * - Disabled: muted background, reduced opacity 0.5
  * - Resize handle: vertical only, subtle styling
  * - Touch target: min 44px height ensured
- * - Transitions: 150ms ease-out on border/outline
+ * - Transitions: var(--ds-motion-fast) ease-out on border/outline
  *
  * @example
  * ```tsx
@@ -132,7 +132,7 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
   const isBorderless = variant === 'borderless';
   const isFilled = variant === 'filled';
 
-  const transitionTiming = '150ms ease-out';
+  const transitionTiming = 'var(--ds-motion-fast) ease-out';
 
   const backgroundColor = (() => {
     if (disabled) return 'var(--ds-color-bg-disabled, var(--ds-color-bg-secondary))';

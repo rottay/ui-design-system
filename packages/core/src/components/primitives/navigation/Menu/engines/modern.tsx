@@ -11,7 +11,7 @@
  * - Consistent item heights and spacing
  * - Proper hierarchy for submenu children
  * - Danger/disabled/focus-visible treatments
- * - Smooth 150ms ease-out transitions
+ * - Smooth var(--ds-motion-fast) ease-out transitions
  *
  * @example
  * ```tsx
@@ -65,7 +65,7 @@ const ACCENT_BAR_WIDTH = 3;
 /** Border radius token */
 const RADIUS = 'var(--ds-radius-lg, 12px)';
 /** Transition for interactive states */
-const TRANSITION = 'background 150ms ease-out, color 150ms ease-out, opacity 150ms ease-out';
+const TRANSITION = 'background var(--ds-motion-fast) ease-out, color var(--ds-motion-fast) ease-out, opacity var(--ds-motion-fast) ease-out';
 
 function getItemPaddingLeft(level: number, inlineIndent: number): string {
   if (level <= 0) {
@@ -160,7 +160,7 @@ function getAccentBarStyle(): CSSProperties {
     height: '64%',
     borderRadius: ACCENT_BAR_WIDTH,
     background: 'var(--ds-color-primary, var(--ds-sidebar-item-color-active))',
-    transition: 'opacity 150ms ease-out, height 150ms ease-out',
+    transition: 'opacity var(--ds-motion-fast) ease-out, height var(--ds-motion-fast) ease-out',
   };
 }
 
@@ -363,7 +363,7 @@ function MenuItemRow({
               height: 'var(--ds-sidebar-icon-column-size, 22px)',
               fontSize: 'var(--ds-sidebar-icon-size, 17.25px)',
               opacity: isSelected ? 1 : 0.7,
-              transition: 'opacity 150ms ease-out',
+              transition: 'opacity var(--ds-motion-fast) ease-out',
             }}
           >
             {item.icon}
@@ -476,7 +476,7 @@ function SubmenuRow({
                 height: 'var(--ds-sidebar-icon-column-size, 22px)',
                 fontSize: 'var(--ds-sidebar-icon-size, 17.25px)',
                 opacity: 0.7,
-                transition: 'opacity 150ms ease-out',
+                transition: 'opacity var(--ds-motion-fast) ease-out',
               }}
             >
               {item.icon}
@@ -495,7 +495,7 @@ function SubmenuRow({
                   height: 14,
                   flexShrink: 0,
                   opacity: 0.4,
-                  transition: 'transform 150ms ease-out',
+                  transition: 'transform var(--ds-motion-fast) ease-out',
             }}
           >
             <svg

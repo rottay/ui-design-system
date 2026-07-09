@@ -15,7 +15,7 @@
  * - Hover: border brightens to `--ds-color-border` / `--ds-color-primary`
  * - Focus: 2px outline `--ds-color-primary` with offset, `:focus-visible` only
  * - Disabled: opacity 0.5, cursor not-allowed
- * - Transitions on bg, border-color, transform (150ms ease-out)
+ * - Transitions on bg, border-color, transform (var(--ds-motion-fast) ease-out)
  * - Touch target min 44x44 via padding on the label row
  *
  * @see {@link Checkbox} for the main component
@@ -47,7 +47,7 @@ const CheckIcon = ({ size }: { size: number }) => {
       style={{
         display: 'block',
         transform: 'scale(1)',
-        transition: 'transform 150ms ease-out',
+        transition: 'transform var(--ds-motion-fast) ease-out',
       }}
     >
       <path
@@ -74,7 +74,7 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
       style={{
         display: 'block',
         transform: 'scale(1)',
-        transition: 'transform 150ms ease-out',
+        transition: 'transform var(--ds-motion-fast) ease-out',
       }}
     >
       <path
@@ -170,7 +170,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   const isStandaloneIndicator = !displayLabel;
 
   /* -- Styles ------------------------------------------------------- */
-  const transitionTiming = '150ms ease-out';
+  const transitionTiming = 'var(--ds-motion-fast) ease-out';
 
   const boxStyle: React.CSSProperties = {
     position: 'relative',

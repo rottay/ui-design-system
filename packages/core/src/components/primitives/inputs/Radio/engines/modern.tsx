@@ -14,7 +14,7 @@
  * - Hover: border brightens to `--ds-color-border` / `--ds-color-primary`
  * - Focus: 2px outline `--ds-color-primary` with offset, `:focus-visible` only
  * - Disabled: opacity 0.5, cursor not-allowed
- * - Transitions on border-color and dot transform (150ms ease-out)
+ * - Transitions on border-color and dot transform (var(--ds-motion-fast) ease-out)
  * - Touch target min 44x44 via padding on the label row
  *
  * @see {@link Radio} for the main component
@@ -89,7 +89,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   const displayLabel = label || children;
 
   /* -- Styles ------------------------------------------------------- */
-  const transitionTiming = '150ms ease-out';
+  const transitionTiming = 'var(--ds-motion-fast) ease-out';
 
   const circleStyle: React.CSSProperties = {
     position: 'relative',

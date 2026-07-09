@@ -370,7 +370,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                         fontSize: 14,
                         fontWeight: 500,
                         cursor: 'pointer',
-                        transition: 'background 150ms ease-out',
+                        transition: 'background var(--ds-motion-fast) ease-out',
                       }}
                       onClick={handleCancel}
                     >
@@ -389,7 +389,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                         fontWeight: 500,
                         cursor: confirmLoading ? 'wait' : 'pointer',
                         opacity: confirmLoading ? 0.7 : 1,
-                        transition: 'opacity 150ms ease-out',
+                        transition: 'opacity var(--ds-motion-fast) ease-out',
                       }}
                       onClick={handleOk}
                       disabled={confirmLoading}

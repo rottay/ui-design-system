@@ -106,7 +106,7 @@ const DropIndicator: React.FC<{ position: 'before' | 'inside' | 'after'; level: 
         paddingLeft: left,
       }}
     >
-      <div className="h-0.5 rounded-full" style={{ background: 'var(--ds-tree-line-color, var(--ds-color-primary))', animation: 'rottay-drop-indicator 0.3s ease-out' }} />
+      <div className="h-0.5 rounded-full" style={{ background: 'var(--ds-tree-line-color, var(--ds-color-primary))', animation: 'rottay-drop-indicator var(--ds-motion-slow) ease-out' }} />
     </div>
   );
 };

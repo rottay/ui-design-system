@@ -208,7 +208,7 @@ const FileItem: React.FC<FileItemProps> = ({
       justifyContent: 'center',
       background: 'var(--ds-color-bg-secondary, #fafafa)',
       border: `1px solid ${file.status === 'error' ? 'var(--ds-color-error, #ef4444)' : 'var(--ds-color-border, #e5e5e5)'}`,
-      transition: 'box-shadow 0.2s, transform 0.2s',
+      transition: 'box-shadow var(--ds-motion-normal), transform var(--ds-motion-normal)',
       cursor: 'pointer',
     };
     const overlayStyle: React.CSSProperties = {
@@ -231,7 +231,7 @@ const FileItem: React.FC<FileItemProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      transition: 'background 0.15s',
+      transition: 'background var(--ds-motion-fast)',
     };
     const originNode = (
       <div

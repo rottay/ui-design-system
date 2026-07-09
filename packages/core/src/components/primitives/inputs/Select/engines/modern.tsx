@@ -10,7 +10,7 @@
  * - Radius: `--ds-radius-md` (trigger), `--ds-radius-lg` (dropdown), `--ds-radius-sm` (items)
  * - Elevation: `--ds-elevation-3` (dropdown shadow)
  * - Focus ring: `--ds-focus-ring-width`, `--ds-focus-ring-offset`, `--ds-focus-ring-color`
- * - Motion: `--ds-motion-fast` (150ms), `--ds-motion-ease-out`
+ * - Motion: `--ds-motion-fast` (var(--ds-motion-fast)), `--ds-motion-ease-out`
  *
  * @module ModernSelect
  * @category Inputs
@@ -926,7 +926,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               display: 'inline-flex',
             }}
           >
-            <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
+            <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
           </span>
         )}
       </div>
@@ -1208,7 +1208,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           {isClearable && internalValue.length > 0 && !disabled && (
             <ClearButton onClick={handleClear} />
           )}
-          {loading && <span className="rottay-select__loading-indicator" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />}
+          {loading && <span className="rottay-select__loading-indicator" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />}
           <ChevronIcon isOpen={isOpen} />
         </div>
       </div>

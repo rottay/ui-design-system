@@ -76,7 +76,7 @@ const triggerBaseStyle: CSSProperties = {
   gap: 6,
   fontFamily: 'inherit',
   lineHeight: 1,
-  transition: 'border-color 150ms ease-out, background 150ms ease-out',
+  transition: 'border-color var(--ds-motion-fast) ease-out, background var(--ds-motion-fast) ease-out',
 };
 
 const triggerSmStyle: CSSProperties = {

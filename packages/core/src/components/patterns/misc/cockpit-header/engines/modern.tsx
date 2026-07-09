@@ -68,7 +68,7 @@ const TRANSITION_FAST =
   'var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
 const TRANSITION_NORMAL =
-  '200ms var(--ds-motion-ease-out)';
+  'var(--ds-motion-normal) var(--ds-motion-ease-out)';
 
 /* ------------------------------------------------------------------ */
 /* BreadcrumbLink                                                      */

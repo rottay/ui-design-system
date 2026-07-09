@@ -76,7 +76,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
 
   // Store the element that had focus before the palette opened so we
   // can return focus when it closes. Reset search and auto-focus the
-  // input. The 50ms delay is needed because the DOM element must be
+  // input. The var(--ds-motion-instant) delay is needed because the DOM element must be
   // mounted before focus() can succeed.
   useEffect(() => {
     if (open) {

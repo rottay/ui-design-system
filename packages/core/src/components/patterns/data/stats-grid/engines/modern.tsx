@@ -226,7 +226,7 @@ function StatCard({
     display: 'flex',
     flexDirection: 'column',
     gap: 4,
-    transition: 'box-shadow 0.2s ease, transform 0.15s ease',
+    transition: 'box-shadow var(--ds-motion-normal) ease, transform var(--ds-motion-fast) ease',
     position: 'relative',
     overflow: 'hidden',
   };

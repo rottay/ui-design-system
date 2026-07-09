@@ -159,7 +159,7 @@ export default function ModernTag(props: TagProps): React.ReactElement {
     fontWeight: 'var(--ds-tag-font-weight, 500)',
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
-    transition: 'var(--ds-tag-transition, all 0.2s)',
+    transition: 'var(--ds-tag-transition, all var(--ds-motion-normal))',
     borderRadius: RADIUS_STYLES[radius] ?? RADIUS_STYLES.md,
     ...(SIZE_STYLES[size] || SIZE_STYLES.md),
     ...variantStyles,

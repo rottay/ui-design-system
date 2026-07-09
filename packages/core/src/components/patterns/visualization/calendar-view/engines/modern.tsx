@@ -129,7 +129,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           event sets. */}
       {loading ? (
         <div className="flex justify-center py-12">
-          <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin 0.6s linear infinite' }} />
+          <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
         </div>
       ) : (
         <div className="grid grid-cols-7 border rounded-lg overflow-hidden" style={{ borderColor: 'var(--ds-color-border)' }}>

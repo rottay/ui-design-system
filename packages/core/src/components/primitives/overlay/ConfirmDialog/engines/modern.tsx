@@ -191,7 +191,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                   border: '2px solid currentColor',
                   borderTopColor: 'transparent',
                   borderRadius: '50%',
-                  animation: 'ds-spin 0.6s linear infinite',
+                  animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
                 }}
               />
             )}

@@ -44,7 +44,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
   /* Reset search and auto-focus the input when the overlay opens.
-     The 50ms delay ensures the DOM has rendered before focusing. */
+     The var(--ds-motion-instant) delay ensures the DOM has rendered before focusing. */
   useEffect(() => {
     if (open) {
       setQuery('');

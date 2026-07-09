@@ -786,7 +786,7 @@ export default function ModernDataTable<T extends object>(
         border: '1px solid var(--ds-color-border-subtle)',
         background: 'var(--ds-surface-card)',
         cursor: isSaving ? 'wait' : 'pointer',
-        transition: 'background 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease',
+        transition: 'background var(--ds-motion-fast) ease, border-color var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease, opacity var(--ds-motion-fast) ease',
       };
 
       const stopActionEvent = (event: React.SyntheticEvent) => {
@@ -926,9 +926,9 @@ export default function ModernDataTable<T extends object>(
         .ds-engine-modern td[data-editable="true"] {
           cursor: text;
           transition:
-            background-color 140ms ease,
-            box-shadow 140ms ease,
-            transform 140ms ease;
+            background-color var(--ds-motion-fast) ease,
+            box-shadow var(--ds-motion-fast) ease,
+            transform var(--ds-motion-fast) ease;
         }
         .ds-engine-modern td[data-editable="true"]:hover::after {
           content: '';
@@ -952,7 +952,7 @@ export default function ModernDataTable<T extends object>(
           box-shadow:
             inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
             0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-          animation: ds-inline-edit-enter 180ms var(--ds-motion-ease-out);
+          animation: ds-inline-edit-enter var(--ds-motion-normal) var(--ds-motion-ease-out);
         }
         @keyframes ds-inline-edit-enter {
           from {
@@ -1320,7 +1320,7 @@ export default function ModernDataTable<T extends object>(
                                 fill="none"
                                 style={{
                                   opacity: sorting?.key === col.key && sorting.direction === 'asc' ? 1 : 0.25,
-                                  transition: 'opacity 150ms ease',
+                                  transition: 'opacity var(--ds-motion-fast) ease',
                                 }}
                               >
                                 <path d="M4 0L7.5 5H0.5L4 0Z" fill="currentColor" />
@@ -1332,7 +1332,7 @@ export default function ModernDataTable<T extends object>(
                                 fill="none"
                                 style={{
                                   opacity: sorting?.key === col.key && sorting.direction === 'desc' ? 1 : 0.25,
-                                  transition: 'opacity 150ms ease',
+                                  transition: 'opacity var(--ds-motion-fast) ease',
                                 }}
                               >
                                 <path d="M4 5L0.5 0H7.5L4 5Z" fill="currentColor" />
@@ -1409,7 +1409,7 @@ export default function ModernDataTable<T extends object>(
                                 height: '50%',
                                 borderRadius: 1,
                                 background: 'var(--ds-color-border)',
-                                transition: 'width 150ms ease, background 150ms ease',
+                                transition: 'width var(--ds-motion-fast) ease, background var(--ds-motion-fast) ease',
                               }}
                             />
                           </span>
@@ -2149,7 +2149,7 @@ export default function ModernDataTable<T extends object>(
             fontWeight: 500,
             cursor: disabled ? 'not-allowed' : 'pointer',
             opacity: disabled ? 0.5 : 1,
-            transition: 'background 150ms ease, color 150ms ease',
+            transition: 'background var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease',
           });
 
           return (
@@ -2222,7 +2222,7 @@ export default function ModernDataTable<T extends object>(
                         fontSize: 13,
                         fontWeight: page === pagination.current ? 600 : 400,
                         cursor: 'pointer',
-                        transition: 'background 150ms ease, color 150ms ease',
+                        transition: 'background var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease',
                         fontVariantNumeric: 'tabular-nums',
                       }}
                     >

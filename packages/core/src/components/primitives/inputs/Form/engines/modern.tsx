@@ -73,19 +73,19 @@ const FeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'valida
   switch (status) {
     case 'success':
       return (
-        <span className="ml-2 inline-flex items-center" aria-label="Validation passed" style={{ color: 'var(--ds-color-success)', animation: 'rottay-form-feedback-in 0.3s var(--ds-motion-ease-out)' }}>
+        <span className="ml-2 inline-flex items-center" aria-label="Validation passed" style={{ color: 'var(--ds-color-success)', animation: 'rottay-form-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
         </span>
       );
     case 'error':
       return (
-        <span className="ml-2 inline-flex items-center" aria-label="Validation failed" style={{ color: 'var(--ds-color-error)', animation: 'rottay-form-feedback-in 0.3s var(--ds-motion-ease-out)' }}>
+        <span className="ml-2 inline-flex items-center" aria-label="Validation failed" style={{ color: 'var(--ds-color-error)', animation: 'rottay-form-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
         </span>
       );
     case 'warning':
       return (
-        <span className="ml-2 inline-flex items-center" aria-label="Validation warning" style={{ color: 'var(--ds-color-warning)', animation: 'rottay-form-feedback-in 0.3s var(--ds-motion-ease-out)' }}>
+        <span className="ml-2 inline-flex items-center" aria-label="Validation warning" style={{ color: 'var(--ds-color-warning)', animation: 'rottay-form-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.832c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
         </span>
       );
@@ -689,7 +689,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           )}
         </div>
         {(help || fieldErrors.length > 0) && (
-          <div style={{ paddingTop: 4, animation: hasError ? 'rottay-form-error-slide 0.2s ease-out' : undefined }}>
+          <div style={{ paddingTop: 4, animation: hasError ? 'rottay-form-error-slide var(--ds-motion-normal) ease-out' : undefined }}>
             <span style={{ fontSize: 12, color: hasError ? 'var(--ds-color-error)' : 'var(--ds-color-text-secondary)' }}>
               {help || fieldErrors[0]}
             </span>

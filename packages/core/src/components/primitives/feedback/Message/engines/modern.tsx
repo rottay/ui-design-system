@@ -449,7 +449,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       </svg>
     ),
     loading: (
-      <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }}></span>
+      <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }}></span>
     ),
   };
 

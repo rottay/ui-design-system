@@ -148,7 +148,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
         <li>
           <hr style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />
           <div className="timeline-start">
-            <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-timeline-pending-dot-color, var(--ds-color-primary))', borderRadius: '50%', animation: 'spin 0.6s linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
+            <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-timeline-pending-dot-color, var(--ds-color-primary))', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
             {pending}
           </div>
           <div className="timeline-middle">

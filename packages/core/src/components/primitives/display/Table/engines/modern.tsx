@@ -348,7 +348,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             position: stickyConfig.enabled || column.fixed ? 'sticky' : undefined,
             ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40, zIndex: 20, background: 'var(--ds-table-header-bg, var(--ds-surface-inset))' } : {}),
             ...getFixedStyle(column.fixed),
-            ...(isSortable ? { cursor: 'pointer', userSelect: 'none' as const, transition: 'color 0.15s' } : {}),
+            ...(isSortable ? { cursor: 'pointer', userSelect: 'none' as const, transition: 'color var(--ds-motion-fast)' } : {}),
             ...(bordered ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
             ...column.style,
           }}
@@ -359,7 +359,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, position: 'relative' }}>
             <span style={{ flex: 1 }}>{column.title}</span>
             {isSortable && (
-              <span style={{ fontSize: 12, opacity: 0.6, display: 'inline-block', transition: 'transform 0.2s', transform: isCurrentSort && sortState.order === 'descend' ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+              <span style={{ fontSize: 12, opacity: 0.6, display: 'inline-block', transition: 'transform var(--ds-motion-normal)', transform: isCurrentSort && sortState.order === 'descend' ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                 {isCurrentSort
                   ? '\u25B2'
                   : '\u21C5'}
@@ -405,7 +405,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     return (
-      <tr style={{ background: 'var(--ds-table-header-bg, var(--ds-surface-inset))', transition: 'background-color 0.2s' }}>
+      <tr style={{ background: 'var(--ds-table-header-bg, var(--ds-surface-inset))', transition: 'background-color var(--ds-motion-normal)' }}>
         {rowSelection && <th style={{ width: 48 }} />}
         {showExpandCol && <th style={{ width: 48 }} />}
         {leafColumns.map((col, i) => {
@@ -417,7 +417,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             <th key={col.key || field || i} style={{ padding: 4 }}>
               <input
                 type="text"
-                style={{ ...inlineInputStyle, transition: 'border-color 0.2s' }}
+                style={{ ...inlineInputStyle, transition: 'border-color var(--ds-motion-normal)' }}
                 placeholder={t('table.filter_column', { column: String(col.title || '') })}
                 value={columnFilters[field || ''] || ''}
                 onChange={(e) => field && handleColumnFilter(field, e.target.value)}
@@ -463,7 +463,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           <tr
             className={rowClass || undefined}
             style={{
-              transition: rowHoverable ? 'background-color 0.2s' : undefined,
+              transition: rowHoverable ? 'background-color var(--ds-motion-normal)' : undefined,
               ...(isSelected ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' } : {}),
             }}
             aria-expanded={hasExpandable ? isExpanded : undefined}
@@ -487,11 +487,11 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     })
                   ) : (
                     <button
-                      style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all 200ms' }}
+                      style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
                       onClick={() => handleToggleExpand(record, actualIndex)}
                       aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
                     >
-                      <span style={{ display: 'inline-block', transition: 'transform 0.2s', transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>{'\u25B6'}</span>
+                      <span style={{ display: 'inline-block', transition: 'transform var(--ds-motion-normal)', transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>{'\u25B6'}</span>
                     </button>
                   )
                 ) : null}
@@ -544,7 +544,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     width,
                     ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, maxWidth: 320 } : {}),
                     ...getFixedStyle(column.fixed),
-                    ...(cellEditable && !cellIsEditing ? { cursor: 'pointer', transition: 'all 0.15s' } : {}),
+                    ...(cellEditable && !cellIsEditing ? { cursor: 'pointer', transition: 'all var(--ds-motion-fast)' } : {}),
                     ...(bordered ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
                     ...column.style,
                   }}
@@ -577,7 +577,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           {/* Expanded row content */}
           {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
             <tr style={{ background: 'var(--ds-table-row-bg-striped, var(--ds-surface-inset))' }}>
-              <td colSpan={totalColSpan} style={{ padding: 16, animation: 'rottay-table-expand 0.3s ease-out' }}>
+              <td colSpan={totalColSpan} style={{ padding: 16, animation: 'rottay-table-expand var(--ds-motion-slow) ease-out' }}>
                 {expandable.expandedRowRender(record, actualIndex, expandable.indentSize || 0, true)}
               </td>
             </tr>
@@ -712,7 +712,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               border: '2px solid var(--ds-color-border)',
               borderTopColor: 'var(--ds-color-primary)',
               borderRadius: '50%',
-              animation: 'rottay-table-spin 0.6s linear infinite',
+              animation: 'rottay-table-spin var(--ds-motion-glacial) linear infinite',
             }}
             role="status"
             aria-label="Loading"
@@ -749,7 +749,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           <span style={{ fontSize: 14, color: 'var(--ds-color-text-secondary)' }}>{paginationRange}</span>
           <div style={{ display: 'inline-flex' }}>
             <button
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all 200ms' }}
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
               aria-label={t('table.previous_page')}
@@ -760,7 +760,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               {t('table.page', { current: currentPage })}
             </button>
             <button
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all 200ms' }}
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
               disabled={currentPage * pageSize >= totalItems}
               onClick={() => setCurrentPage(currentPage + 1)}
               aria-label={t('table.next_page')}

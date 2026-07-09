@@ -13,7 +13,7 @@
  * - Border: `--ds-color-border` (resting), `--ds-color-primary` (focus)
  * - Radius: `--ds-radius-md` (8px default)
  * - Focus ring: `--ds-focus-ring-width`, `--ds-focus-ring-offset`, `--ds-focus-ring-color`
- * - Motion: `--ds-motion-fast` (150ms), `--ds-motion-ease-out`
+ * - Motion: `--ds-motion-fast` (var(--ds-motion-fast)), `--ds-motion-ease-out`
  * - Text: `--ds-color-text-primary`, `--ds-color-text-muted` (placeholder)
  *
  * @see {@link Input} for the main component

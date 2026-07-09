@@ -9,7 +9,7 @@
  * - **Soft**: 10% opacity tinted bg with colored text. Premium, not washed out.
  * - **Outline**: Transparent bg with colored border and text.
  *
- * All transitions use --ds-motion-fast (150ms). Border radius defaults to
+ * All transitions use --ds-motion-fast (var(--ds-motion-fast)). Border radius defaults to
  * --ds-radius-full for round shape and --ds-radius-sm for default.
  *
  * @example

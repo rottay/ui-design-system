@@ -73,7 +73,7 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
           padding: 'var(--ds-list-default-padding-vertical, 12px) var(--ds-list-default-padding-horizontal, 16px)',
           background: 'var(--ds-list-item-background-color, transparent)',
           color: 'var(--ds-list-text-color, inherit)',
-          transition: 'background var(--ds-list-transition-duration, 0.2s) var(--ds-list-transition-timing, ease-in-out)',
+          transition: 'background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing, ease-in-out)',
           ...style,
         }}
       >

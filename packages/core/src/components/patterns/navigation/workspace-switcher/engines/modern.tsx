@@ -236,7 +236,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     )}
                     {onSettings && (
                       <button
-                        style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isFocused ? 1 : 0, transition: 'opacity 0.15s' }}
+                        style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isFocused ? 1 : 0, transition: 'opacity var(--ds-motion-fast)' }}
                         onClick={(e) => {
                           e.stopPropagation();
                           onSettings(ws.id);

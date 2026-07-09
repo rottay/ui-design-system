@@ -138,7 +138,7 @@ const TransferList: React.FC<TransferListProps> = ({
         <div className="p-2" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
           <input
             type="text"
-            style={{ width: '100%', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-input-radius, var(--ds-radius-md))', padding: '4px var(--ds-input-sm-padding-x, 10px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', transition: 'border-color 0.2s' }}
+            style={{ width: '100%', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-input-radius, var(--ds-radius-md))', padding: '4px var(--ds-input-sm-padding-x, 10px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', transition: 'border-color var(--ds-motion-normal)' }}
             onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--ds-color-primary)'; }}
             onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--ds-color-border)'; }}
             placeholder={locale?.searchPlaceholder || t('transfer.search_placeholder')}
@@ -334,7 +334,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
         <div className="flex flex-col gap-2">
           <button
             type="button"
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 'var(--ds-input-sm-height, 32px)', height: 'var(--ds-input-sm-height, 32px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-input-sm-font-size, 13px)', transition: 'all 200ms' }}
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 'var(--ds-input-sm-height, 32px)', height: 'var(--ds-input-sm-height, 32px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-input-sm-font-size, 13px)', transition: 'all var(--ds-motion-normal)' }}
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
           >
@@ -343,7 +343,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           {!oneWay && (
             <button
               type="button"
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 'var(--ds-input-sm-height, 32px)', height: 'var(--ds-input-sm-height, 32px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-input-sm-font-size, 13px)', transition: 'all 200ms' }}
+              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 'var(--ds-input-sm-height, 32px)', height: 'var(--ds-input-sm-height, 32px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-input-sm-font-size, 13px)', transition: 'all var(--ds-motion-normal)' }}
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}
             >

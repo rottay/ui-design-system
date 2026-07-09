@@ -51,9 +51,11 @@ function countMotionLiterals(files) {
   let rawDuration = 0;
   let orphanTokens = 0;
   const cubicRe = /cubic-bezier\(/g;
-  // Time literals: milliseconds are unambiguous; seconds must not be a length unit.
+  // Forbidden = INTERACTION-motion literals (< 1s). Milliseconds are always interaction
+  // durations; seconds are counted only when < 1s. Durations >= 1s are loop/shimmer/spinner
+  // tempos that legitimately sit outside the 120/200/320 canon and are allowlisted.
   const msRe = /\b\d+(?:\.\d+)?ms\b/g;
-  const sRe = /(?<![\w.])\d*\.?\d+s(?![\w])/g;
+  const sRe = /(?<![\w.])(\d*\.?\d+)s(?![\w])/g;
   const orphanRe = new RegExp(
     ORPHAN_MOTION_NAMES.map((n) => n.replace(/[-]/g, "\\-")).join("|"),
     "g",
@@ -62,7 +64,9 @@ function countMotionLiterals(files) {
     const text = readFileSync(file, "utf8");
     cubicBezier += (text.match(cubicRe) || []).length;
     rawDuration += (text.match(msRe) || []).length;
-    rawDuration += (text.match(sRe) || []).length;
+    for (const m of text.matchAll(sRe)) {
+      if (Number(m[1]) < 1) rawDuration += 1; // sub-second seconds are interaction durations
+    }
     orphanTokens += (text.match(orphanRe) || []).length;
   }
   return { cubicBezier, rawDuration, orphanTokens };

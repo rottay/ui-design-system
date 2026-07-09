@@ -159,7 +159,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
             style={{
               height: '100%',
               borderRadius: 9999,
-              transition: 'all 0.3s',
+              transition: 'all var(--ds-motion-slow)',
               width: STRENGTH_WIDTHS[strengthLevel],
               backgroundColor: STRENGTH_COLORS[strengthLevel],
             }}

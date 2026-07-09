@@ -68,7 +68,7 @@ const CardSpinner: React.FC = () => (
     height={24}
     viewBox="0 0 24 24"
     fill="none"
-    style={{ animation: 'rottay-button-spin 0.8s linear infinite' }}
+    style={{ animation: 'rottay-button-spin var(--ds-motion-glacial) linear infinite' }}
   >
     <circle
       cx="12"

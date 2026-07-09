@@ -632,7 +632,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         className={`flex items-center justify-center min-h-[100px] ${className ?? ''}`}
         style={style}
       >
-        <span className="loading-spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin 0.6s linear infinite' }} />
+        <span className="loading-spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }

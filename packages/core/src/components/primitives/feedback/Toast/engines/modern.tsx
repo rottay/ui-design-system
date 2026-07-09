@@ -369,7 +369,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       {showProgress && duration > 0 && (
         <div
           className="absolute bottom-0 left-0 h-1 bg-current opacity-30"
-          style={{ width: `${progress}%`, transition: 'width 0.1s linear' }}
+          style={{ width: `${progress}%`, transition: 'width var(--ds-motion-fast) linear' }}
         />
       )}
     </div>

@@ -213,7 +213,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                         {/* Dismiss button: low opacity by default, full on hover */}
                         {onClear && (
                           <button
-                            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3, transition: 'opacity 0.15s' }}
+                            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3, transition: 'opacity var(--ds-motion-fast)' }}
                             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
                             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.3'; }}
                             onClick={(e) => { e.stopPropagation(); onClear(item.id); }}

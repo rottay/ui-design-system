@@ -113,7 +113,7 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
       case 'loading':
         return (
           <div className="absolute inset-0 flex items-center justify-center" style={{ background: 'var(--ds-qrcode-loading-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent))', opacity: 'var(--ds-qrcode-loading-opacity, 1)' }}>
-            <span style={{ display: 'inline-block', width: 24, height: 24, border: '2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border))', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin 0.6s linear infinite' }} />
+            <span style={{ display: 'inline-block', width: 24, height: 24, border: '2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border))', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
           </div>
         );
       case 'expired':

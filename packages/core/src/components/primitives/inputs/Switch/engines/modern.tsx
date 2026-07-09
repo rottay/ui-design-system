@@ -11,7 +11,7 @@
  * **Visual Spec:**
  * - Track: 36x20, rounded-full, `--ds-color-border-secondary` bg when off
  * - On: track bg `--ds-color-primary`
- * - Thumb: 16px white circle with subtle shadow, slides right (200ms ease-out)
+ * - Thumb: 16px white circle with subtle shadow, slides right (var(--ds-motion-normal) ease-out)
  * - Hover: slight track color change
  * - Focus: 2px outline `--ds-color-primary` with offset, `:focus-visible` only
  * - Disabled: opacity 0.5, cursor not-allowed
@@ -107,7 +107,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     const thumbTravel = dim.trackW - dim.thumbSize - dim.thumbInset * 2;
 
     /* -- Styles ----------------------------------------------------- */
-    const transitionTiming = '200ms ease-out';
+    const transitionTiming = 'var(--ds-motion-normal) ease-out';
 
     const wrapperStyle: React.CSSProperties = {
       display: 'inline-flex',
@@ -224,7 +224,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             viewBox="0 0 14 14"
             fill="none"
             style={{
-              animation: 'spin 0.8s linear infinite',
+              animation: 'spin var(--ds-motion-glacial) linear infinite',
               marginLeft: 2,
             }}
           >

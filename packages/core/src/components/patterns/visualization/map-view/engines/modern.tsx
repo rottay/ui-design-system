@@ -56,7 +56,7 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
         {/* Loading state replaces the entire map + list with a centered DaisyUI spinner */}
         {loading ? (
           <div className="flex justify-center items-center" style={{ height }}>
-            <span style={{ display: 'inline-block', width: 32, height: 32, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin 0.6s linear infinite' }} />
+            <span style={{ display: 'inline-block', width: 32, height: 32, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
           </div>
         ) : (
           <>

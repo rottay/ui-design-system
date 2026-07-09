@@ -162,7 +162,7 @@ function ActionButton({ action }: { action: DetailAction }) {
             border: '2px solid currentColor',
             borderTopColor: 'transparent',
             borderRadius: 'var(--ds-radius-full)',
-            animation: 'spin 0.6s linear infinite',
+            animation: 'spin var(--ds-motion-glacial) linear infinite',
             flexShrink: 0,
           }}
         />

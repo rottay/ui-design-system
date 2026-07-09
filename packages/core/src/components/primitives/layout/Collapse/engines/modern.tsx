@@ -25,8 +25,8 @@ import { COLLAPSE_DEFAULTS } from '../Collapse.types';
 
 /** Keyframes for collapse content transition */
 const COLLAPSE_STYLES = `
-.rottay-collapse-content{overflow:hidden;transition:max-height var(--ds-collapse-transition-duration,0.2s) var(--ds-collapse-transition-timing,ease),opacity var(--ds-collapse-transition-duration,0.2s) var(--ds-collapse-transition-timing,ease),padding var(--ds-collapse-transition-duration,0.2s) var(--ds-collapse-transition-timing,ease)}
-.rottay-collapse-arrow{display:inline-block;transition:var(--ds-collapse-icon-default-idle-transition,transform 0.2s ease)}
+.rottay-collapse-content{overflow:hidden;transition:max-height var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,ease),opacity var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,ease),padding var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,ease)}
+.rottay-collapse-arrow{display:inline-block;transition:var(--ds-collapse-icon-default-idle-transition,transform var(--ds-motion-normal) ease)}
 `.trim();
 
 /** Shared state between Collapse and its Panel children via React Context */

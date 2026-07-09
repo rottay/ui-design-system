@@ -324,7 +324,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       visibility: portalPosition ? 'visible' : 'hidden',
       transform: `scale(${isVisible ? 1 : 0.95})`,
       transformOrigin: 'center',
-      transition: 'opacity 0.15s ease, transform 0.15s ease',
+      transition: 'opacity var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease',
     };
 
     const wrapperStyle: React.CSSProperties = {
