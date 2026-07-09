@@ -101,6 +101,27 @@ function renderWithProfile(
   );
 }
 
+/**
+ * Reads a personality token from the `:root` rule the bridge owns.
+ *
+ * Personality is the LOWEST layer of the visual merge chain, so its tokens live
+ * in a stylesheet a tenant-scoped selector can outrank. They are deliberately
+ * not inline on `<html>`: inline is the highest precedence CSS offers, and a
+ * boolean the tenant never typed would win over a color the tenant did.
+ * Reading these back off `documentElement.style` would therefore only ever pass
+ * for the bug the bridge exists to prevent.
+ */
+function personalityToken(name: string): string {
+  const styleElement = document.getElementById('ds-personality-tokens') as HTMLStyleElement | null;
+  const rule = styleElement?.sheet?.cssRules?.[0] as CSSStyleRule | undefined;
+  return rule?.style.getPropertyValue(name) ?? '';
+}
+
+/** Tenant branding stays inline on `<html>`; only personality moved. */
+function inlineToken(name: string): string {
+  return document.documentElement.style.getPropertyValue(name);
+}
+
 describe('primitive personality integration', () => {
   beforeAll(async () => {
     await Promise.all([
@@ -151,11 +172,17 @@ describe('primitive personality integration', () => {
 
       const button = await screen.findByRole('button', { name: /primary action/i }, { timeout: 15000 });
 
-      expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#c2410c');
-      expect(document.documentElement.style.getPropertyValue('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
-      expect(document.documentElement.style.getPropertyValue('--ds-badge-radius')).toBe('var(--ds-radius-full)');
-      expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('capitalize');
-      expect(document.documentElement.style.getPropertyValue('--ds-personality-animation-entrance')).toBe('slideUp');
+      expect(inlineToken('--ds-color-primary')).toBe('#c2410c');
+      expect(personalityToken('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
+      expect(personalityToken('--ds-badge-radius')).toBe('var(--ds-radius-full)');
+      expect(personalityToken('--ds-typography-label-transform')).toBe('capitalize');
+      expect(personalityToken('--ds-personality-animation-entrance')).toBe('slideUp');
+
+      // The invariant, not an incidental: a personality token on the inline
+      // style attribute would outrank every tenant-scoped rule in the cascade.
+      expect(inlineToken('--ds-card-shadow')).toBe('');
+      expect(inlineToken('--ds-badge-radius')).toBe('');
+
       expect(button.getAttribute('style') ?? '').toContain('--ds-button-hover-transform');
 
       buttonView.unmount();
@@ -169,7 +196,7 @@ describe('primitive personality integration', () => {
         'events.organizer'
       );
       expect(await screen.findByText('Card content', undefined, { timeout: 15000 })).toBeInTheDocument();
-      expect(document.documentElement.style.getPropertyValue('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
+      expect(personalityToken('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
       cardView.unmount();
 
       const badgeView = renderWithProfile(
@@ -183,7 +210,7 @@ describe('primitive personality integration', () => {
       );
       expect(await screen.findByText('3', undefined, { timeout: 15000 })).toBeInTheDocument();
       expect(screen.getByText('Live')).toBeInTheDocument();
-      expect(document.documentElement.style.getPropertyValue('--ds-badge-radius')).toBe('var(--ds-radius-full)');
+      expect(personalityToken('--ds-badge-radius')).toBe('var(--ds-radius-full)');
       badgeView.unmount();
 
       const skeletonView = renderWithProfile(
@@ -243,7 +270,7 @@ describe('primitive personality integration', () => {
         'events.organizer'
       );
       expect(await screen.findByText('Display name', undefined, { timeout: 15000 })).toBeInTheDocument();
-      expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('capitalize');
+      expect(personalityToken('--ds-typography-label-transform')).toBe('capitalize');
       typographyView.unmount();
     }
   );
@@ -262,9 +289,9 @@ describe('primitive personality integration', () => {
       'events.organizer'
     );
 
-    expect(document.documentElement.style.getPropertyValue('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
-    expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('capitalize');
-    expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#c2410c');
+    expect(personalityToken('--ds-card-shadow')).toBe('var(--ds-shadow-md)');
+    expect(personalityToken('--ds-typography-label-transform')).toBe('capitalize');
+    expect(inlineToken('--ds-color-primary')).toBe('#c2410c');
 
     rerender(
       <DesignSystemProvider
@@ -283,8 +310,8 @@ describe('primitive personality integration', () => {
       </DesignSystemProvider>
     );
 
-    expect(document.documentElement.style.getPropertyValue('--ds-card-shadow')).toBe('var(--ds-shadow-sm)');
-    expect(document.documentElement.style.getPropertyValue('--ds-typography-label-transform')).toBe('none');
-    expect(document.documentElement.style.getPropertyValue('--ds-color-primary')).toBe('#0a66c2');
+    expect(personalityToken('--ds-card-shadow')).toBe('var(--ds-shadow-sm)');
+    expect(personalityToken('--ds-typography-label-transform')).toBe('none');
+    expect(inlineToken('--ds-color-primary')).toBe('#0a66c2');
   });
 });
