@@ -381,11 +381,19 @@ export type {
   UseTableExportReturn,
 } from './table-export';
 
-export { useOptimisticUpdate } from './optimistic';
+export { useOptimisticUpdate, useOptimisticList } from './optimistic';
 export type {
   UseOptimisticUpdateOptions,
   UseOptimisticUpdateReturn,
+  UseOptimisticListOptions,
+  UseOptimisticListReturn,
 } from './optimistic';
+
+export { useDeferredPending } from './deferred-pending';
+export type {
+  UseDeferredPendingOptions,
+  UseDeferredPendingResult,
+} from './deferred-pending';
 
 export { usePdfExport } from './pdf-export';
 export type {

@@ -35,7 +35,7 @@
 
 import React, { forwardRef, useState, useId } from 'react';
 import type { ButtonProps, ButtonSize } from '../Button.types';
-import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP } from '../Button.types';
+import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP, resolveButtonBusyState } from '../Button.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
@@ -239,6 +239,9 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     htmlType = BUTTON_DEFAULTS.htmlType,
     disabled = BUTTON_DEFAULTS.disabled,
     loading = BUTTON_DEFAULTS.loading,
+    loadingText,
+    pending = false,
+    pendingLabel,
     block = BUTTON_DEFAULTS.block,
     fullWidth,
     danger,
@@ -252,6 +255,15 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     style,
     ...nativeButtonProps
   } = props;
+
+  // Single documented resolution point for the overlapping busy props (see
+  // `resolveButtonBusyState` in Button.types.ts for the precedence rules).
+  const { busy, widthStable, label: resolvedBusyLabel } = resolveButtonBusyState({
+    pending,
+    pendingLabel,
+    loading,
+    loadingText,
+  });
 
   const [isHovered, setIsHovered] = useState(false);
   const [isActive, setIsActive] = useState(false);
@@ -314,6 +326,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     `rottay-button--${shape}`,
     isFullWidth && 'rottay-button--block',
     loading && 'rottay-button--loading',
+    pending && 'rottay-button--pending',
     disabled && 'rottay-button--disabled',
     shadow && 'rottay-button--shadow',
     className,
@@ -324,7 +337,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   // -------------------------------------------------------------------------
   const variantStyle = VARIANT_STYLES[effectiveVariant] || VARIANT_STYLES.primary;
   const sizeStyle = !sizeIsResponsive ? (SIZE_STYLES[size || 'md'] || SIZE_STYLES.md) : {};
-  const hoverOverrides = (isHovered && !disabled && !loading)
+  const hoverOverrides = (isHovered && !disabled && !busy)
     ? (VARIANT_HOVER_STYLES[effectiveVariant] || {})
     : {};
 
@@ -345,7 +358,10 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   // -------------------------------------------------------------------------
   // Inline styles - interaction cascade
   // -------------------------------------------------------------------------
-  const isInert = disabled || loading;
+  // `busy` (pending or the deprecated loading) shares the inert interaction
+  // model (no press/hover/focus affordance) but keeps its variant colour —
+  // only true `disabled` dims to the disabled token.
+  const isInert = disabled || busy;
 
   // Determine if this variant gets an elevation shadow on hover
   const isElevatedVariant = effectiveVariant === 'primary' || effectiveVariant === 'danger';
@@ -357,7 +373,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     justifyContent: 'center',
     gap: 'var(--ds-spacing-2, 8px)',
     width: isFullWidth ? '100%' : undefined,
-    cursor: isInert ? (loading ? 'wait' : 'not-allowed') : 'pointer',
+    cursor: isInert ? (busy ? 'wait' : 'not-allowed') : 'pointer',
     fontWeight: 'var(--ds-font-weight-medium)',
     lineHeight: 1,
     textDecoration: 'none',
@@ -411,8 +427,9 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     // Hover overrides
     ...hoverOverrides,
 
-    // Disabled state - uses brand compiler vars with fallback
-    ...(isInert && !loading ? {
+    // Disabled state - uses brand compiler vars with fallback. Keyed to true
+    // `disabled` only: a `pending` button keeps its variant colour while busy.
+    ...(disabled && !loading ? {
       background: 'var(--ds-button-disabled-bg)',
       color: 'var(--ds-button-disabled-color)',
       borderColor: 'var(--ds-button-disabled-border-color, var(--ds-button-disabled-border))',
@@ -437,12 +454,46 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const endContent = iconPosition === 'end' ? icon : undefined;
   const renderedChildren = React.Children.toArray(children);
 
-  // Content opacity when loading (smooth fade)
-  const contentOpacity: React.CSSProperties = loading ? {
+  // Content opacity when busy (smooth fade)
+  const contentOpacity: React.CSSProperties = busy ? {
     opacity: 0,
     position: 'absolute' as const,
     pointerEvents: 'none' as const,
   } : {};
+
+  // Single source of truth for the resting content's layout, shared by the
+  // resting/loading render path (visible) and the `pending` width-stable
+  // overlay's hidden layer (invisible but in flow). Keeping ONE copy means
+  // the two can never drift apart and silently break width stability.
+  const restingContentStyle: React.CSSProperties = {
+    display: isFullWidth ? 'flex' : 'inline-flex',
+    alignItems: 'center',
+    justifyContent: isFullWidth ? 'inherit' : undefined,
+    gap: 'var(--ds-spacing-2, 8px)',
+    width: isFullWidth ? '100%' : undefined,
+    minWidth: 0,
+    whiteSpace: isFullWidth ? 'normal' : 'nowrap',
+  };
+
+  const restingContentNode = (
+    <>
+      {startContent || prefix}
+      {renderedChildren.length > 0 && (
+        <span
+          style={{
+            display: isFullWidth ? 'block' : 'inline',
+            flex: isFullWidth ? '1 1 auto' : undefined,
+            width: isFullWidth ? '100%' : undefined,
+            minWidth: 0,
+            whiteSpace: isFullWidth ? 'normal' : 'inherit',
+          }}
+        >
+          {renderedChildren}
+        </span>
+      )}
+      {endContent || suffix}
+    </>
+  );
 
   return (
     <>
@@ -454,7 +505,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         ref={ref}
         type={htmlType}
         className={classes}
-        disabled={disabled || loading}
+        disabled={disabled || busy}
         onClick={onClick}
         style={interactiveStyle}
         onMouseEnter={() => setIsHovered(true)}
@@ -463,49 +514,77 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         onMouseUp={() => setIsActive(false)}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        aria-disabled={disabled || loading}
-        aria-busy={loading}
+        aria-disabled={disabled || busy}
+        aria-busy={busy}
         data-variant={effectiveVariant}
         data-size={size}
         data-shape={shape}
         data-loading={loading ? 'true' : undefined}
+        data-pending={pending ? 'true' : undefined}
         data-full-width={isFullWidth ? 'true' : undefined}
         data-focus-visible={isFocused && !isInert ? 'true' : undefined}
         {...(responsive ? responsive.attrs : {})}
       >
-        {/* Loading spinner - centered, replaces content */}
-        {loading && <LoadingSpinner size={size} />}
-
-        {/* Content wrapper - hidden (but in DOM) during loading for layout stability */}
-        <span
-          style={{
-            display: isFullWidth ? 'flex' : 'inline-flex',
-            alignItems: 'center',
-            justifyContent: isFullWidth ? 'inherit' : undefined,
-            gap: 'var(--ds-spacing-2, 8px)',
-            width: isFullWidth ? '100%' : undefined,
-            minWidth: 0,
-            whiteSpace: isFullWidth ? 'normal' : 'nowrap',
-            transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-            ...contentOpacity,
-          }}
-        >
-          {startContent || prefix}
-          {renderedChildren.length > 0 && (
+        {widthStable ? (
+          // Width-stable busy posture (`pending`): the resting content renders
+          // at `visibility: hidden` in normal flow, so it ALONE determines this
+          // wrapper's box. The spinner + resolved label render in an
+          // absolutely-positioned overlay inside that box, which cannot grow
+          // it. A `resolvedBusyLabel` wider than the resting content clips
+          // (`overflow: hidden`) instead of reflowing the button -- this is
+          // what makes the width guarantee unconditional, not just true for
+          // short labels.
+          <span
+            style={{
+              position: 'relative',
+              display: isFullWidth ? 'flex' : 'inline-flex',
+              alignItems: 'center',
+              justifyContent: isFullWidth ? 'inherit' : undefined,
+              width: isFullWidth ? '100%' : undefined,
+              minWidth: 0,
+            }}
+          >
+            <span aria-hidden="true" style={{ ...restingContentStyle, visibility: 'hidden' }}>
+              {restingContentNode}
+            </span>
             <span
               style={{
-                display: isFullWidth ? 'block' : 'inline',
-                flex: isFullWidth ? '1 1 auto' : undefined,
-                width: isFullWidth ? '100%' : undefined,
-                minWidth: 0,
-                whiteSpace: isFullWidth ? 'normal' : 'inherit',
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 'var(--ds-spacing-2, 8px)',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
               }}
             >
-              {renderedChildren}
+              <LoadingSpinner size={size} />
+              {resolvedBusyLabel != null && (
+                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{resolvedBusyLabel}</span>
+              )}
             </span>
-          )}
-          {endContent || suffix}
-        </span>
+          </span>
+        ) : (
+          <>
+            {/* Busy spinner - centered, replaces content. Label-less busy still
+                lets the button shrink to spinner-only width -- use `pending`
+                instead when the box must never reflow. */}
+            {busy && <LoadingSpinner size={size} />}
+            {busy && resolvedBusyLabel != null && <span>{resolvedBusyLabel}</span>}
+
+            {/* Content wrapper - hidden (but in DOM) during busy for layout stability */}
+            <span
+              style={{
+                ...restingContentStyle,
+                transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+                ...contentOpacity,
+              }}
+            >
+              {restingContentNode}
+            </span>
+          </>
+        )}
       </button>
     </>
   );

@@ -95,7 +95,9 @@ describe('ModernButton advanced engine coverage', () => {
     expect(button.style.textDecoration).toBe('underline');
 
     fireEvent.mouseDown(button);
-    expect(button.style.transform).toBe('scale(0.98)');
+    // The press depth is a token, not a literal: a tenant tunes it through
+    // --ds-state-press-scale, so the inline style carries the var reference.
+    expect(button.style.transform).toBe('scale(var(--ds-state-press-scale))');
 
     fireEvent.mouseUp(button);
     expect(button.style.transform).toBe('');

@@ -79,6 +79,8 @@
  * - `useSurfaceQuery` - Data fetching for Surface components
  * - `useTableExport` - Export table data to CSV, JSON, or clipboard
  * - `useOptimisticUpdate` - Optimistic mutations with automatic rollback
+ * - `useOptimisticList` - Optimistic row/list reconciliation over useOptimisticUpdate
+ * - `useDeferredPending` - Deferred busy-state gating (spinner after a delay, skeleton after a longer threshold)
  * - `usePdfExport` - PDF-ready content generation (print, structured data, HTML export)
  *
  * **Form Hooks:**
@@ -230,7 +232,14 @@ export type {
 // ============================================================================
 // Data hooks -- fetching, exporting, optimistic updates, PDF generation
 // ============================================================================
-export { useSurfaceQuery, useTableExport, useOptimisticUpdate, usePdfExport } from './data';
+export {
+  useSurfaceQuery,
+  useTableExport,
+  useOptimisticUpdate,
+  useOptimisticList,
+  useDeferredPending,
+  usePdfExport,
+} from './data';
 export type {
   SurfaceQueryParams,
   SurfaceQueryResult,
@@ -241,6 +250,10 @@ export type {
   UseTableExportReturn,
   UseOptimisticUpdateOptions,
   UseOptimisticUpdateReturn,
+  UseOptimisticListOptions,
+  UseOptimisticListReturn,
+  UseDeferredPendingOptions,
+  UseDeferredPendingResult,
   PdfMargins,
   PdfExportOptions,
   PdfTableData,

@@ -203,6 +203,111 @@ export interface ButtonProps extends BaseComponentProps, EngineAwareProps, Loada
    * Suffix after content (alternative to icon with position='end').
    */
   suffix?: ReactNode;
+
+  /**
+   * @deprecated Use {@link ButtonProps.pending} instead. `loading` still
+   * marks the button busy (disabled + `aria-busy`) but never reserves the
+   * resting label's width -- the button can shrink to spinner-only size.
+   * Kept for backward compatibility (apps pin this package); resolved
+   * alongside `pending` by {@link resolveButtonBusyState}.
+   */
+  loading?: boolean;
+
+  /**
+   * @deprecated Use {@link ButtonProps.pendingLabel} instead. Used as the
+   * fallback busy label only when `pendingLabel` is not set. Kept for
+   * backward compatibility (apps pin this package); resolved by
+   * {@link resolveButtonBusyState}.
+   */
+  loadingText?: string;
+
+  /**
+   * Pending posture for mutation-triggering buttons: swaps the label for a
+   * spinner WITHOUT a width jump, keeps the button `disabled` and
+   * `aria-busy`, and transitions on the state motion tokens. This is the
+   * canonical busy prop -- prefer it over the deprecated `loading`.
+   *
+   * @remarks
+   * The resting label's box is always reserved: a hidden layer holds the
+   * original content in normal flow, and the spinner plus resolved label
+   * render in an absolutely-positioned overlay inside that reserved box. The
+   * button's width is therefore IDENTICAL whether `pending` is true or
+   * false -- even when the resolved label is longer than the resting label,
+   * in which case the overlay clips (`overflow: hidden`) instead of growing
+   * the button. This holds unconditionally, not only for short labels.
+   *
+   * `pending` and the deprecated `loading` both mark the button busy
+   * (disabled + `aria-busy`); they are not mutually exclusive. When `pending`
+   * is true it always selects the width-stable render path, even if
+   * `loading` is also true. See {@link resolveButtonBusyState} for the full
+   * precedence rules -- it is the one place every engine resolves these
+   * overlapping props, so the order cannot drift between engines.
+   *
+   * The modern engine implements the full width-stable posture; the classic
+   * and rustic engines map `pending` onto their existing busy state (same as
+   * `loading` in those two engines -- width stability is modern-only).
+   */
+  pending?: boolean;
+
+  /**
+   * Optional label shown beside the spinner while the button is busy
+   * (`pending` or the deprecated `loading`). Takes precedence over the
+   * deprecated `loadingText`. When neither is set, the button's existing
+   * children are kept (hidden but still reserving width), so the busy swap
+   * never changes the button's size.
+   */
+  pendingLabel?: ReactNode;
+}
+
+/**
+ * Resolved busy state for a Button, computed from every overlapping busy
+ * field on {@link ButtonProps}. This is the ONE place that reconciles the
+ * canonical `pending` / `pendingLabel` pair with the deprecated `loading` /
+ * `loadingText` pair inherited from `LoadableProps` -- every engine calls
+ * this instead of reading the raw props, so the precedence below cannot
+ * drift between engines.
+ *
+ * Resolution order (highest precedence first):
+ * 1. `widthStable` is true only when `pending` is true. The deprecated
+ *    `loading` never triggers the width-stable render path on its own --
+ *    that path keeps each engine's pre-existing, width-shrinkable busy
+ *    rendering.
+ * 2. `busy` is true when EITHER `pending` or `loading` is true. They are not
+ *    mutually exclusive flags -- they are two ways to request the same
+ *    "disabled + aria-busy" posture.
+ * 3. `label` is `pendingLabel` if set, else the deprecated `loadingText` if
+ *    set, else `undefined`. `ButtonLoadingConfig.loadingText` is excluded
+ *    from this resolution: that type has never been wired to a `ButtonProps`
+ *    field, so there is nothing to read from it.
+ */
+export interface ResolvedButtonBusyState {
+  /** True when the button should render `disabled` + `aria-busy` (from `pending` or `loading`). */
+  busy: boolean;
+  /** True only when the width-stable render path applies (`pending`; never `loading` alone). */
+  widthStable: boolean;
+  /** Resolved label to show alongside the spinner, or `undefined` to keep the resting content. */
+  label: ReactNode | undefined;
+}
+
+/**
+ * Resolves the busy state and label for a Button from its overlapping busy
+ * props. See {@link ResolvedButtonBusyState} for the precedence rules this
+ * function implements.
+ *
+ * @param props - The `pending`, `pendingLabel`, `loading`, and `loadingText`
+ * fields of {@link ButtonProps} (already defaulted by the caller where
+ * applicable).
+ */
+export function resolveButtonBusyState(
+  props: Pick<ButtonProps, 'pending' | 'pendingLabel' | 'loading' | 'loadingText'>
+): ResolvedButtonBusyState {
+  const pending = Boolean(props.pending);
+  const loading = Boolean(props.loading);
+  return {
+    busy: pending || loading,
+    widthStable: pending,
+    label: props.pendingLabel ?? props.loadingText ?? undefined,
+  };
 }
 
 /**
@@ -263,7 +368,12 @@ export interface IconButtonProps extends Omit<ButtonProps, 'icon' | 'iconPositio
 }
 
 /**
- * Button loading configuration.
+ * @deprecated Dormant config object: no `ButtonProps` field has ever accepted
+ * a `ButtonLoadingConfig`, so none of these fields are read by any engine.
+ * Use `pending` + `pendingLabel` (or the deprecated `loading` + `loadingText`)
+ * directly on `ButtonProps` instead -- see {@link resolveButtonBusyState}.
+ * Kept exported for backward compatibility with consumers that reference the
+ * type; not removed because published apps pin this package.
  */
 export interface ButtonLoadingConfig {
   /** Whether loading */

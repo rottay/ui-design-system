@@ -74,6 +74,22 @@ export type ToastPosition =
   | 'bottom-right';
 
 // ============================================================================
+// Countdown Variant
+// ============================================================================
+
+/**
+ * Countdown affordance for the undo-window Toast recipe (`Toast.Undo`).
+ *
+ * - `ring`: a circular SVG that depletes over the undo window
+ * - `bar`: a linear bar that depletes over the undo window
+ * - `none`: no visible countdown (auto-dismiss still runs)
+ *
+ * Under `prefers-reduced-motion` the depletion animation is disabled: the
+ * affordance renders static and does not loop.
+ */
+export type ToastCountdownVariant = 'ring' | 'bar' | 'none';
+
+// ============================================================================
 // Component Props
 // ============================================================================
 

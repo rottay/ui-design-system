@@ -57,7 +57,7 @@
 import React, { forwardRef, useId } from 'react';
 import { Button as AntButton } from 'antd';
 import type { ButtonProps, ButtonSize } from '../Button.types';
-import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP } from '../Button.types';
+import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP, resolveButtonBusyState } from '../Button.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
@@ -115,7 +115,10 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
     shape = BUTTON_DEFAULTS.shape,
     htmlType = BUTTON_DEFAULTS.htmlType,
     disabled = BUTTON_DEFAULTS.disabled,
-    loading = BUTTON_DEFAULTS.loading,
+    loading: loadingProp = BUTTON_DEFAULTS.loading,
+    loadingText,
+    pending = false,
+    pendingLabel,
     block = BUTTON_DEFAULTS.block,
     fullWidth,
     danger,
@@ -134,6 +137,19 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
     tabIndex,
     ...nativeButtonProps
   } = props;
+
+  // Single documented resolution point for the overlapping busy props (see
+  // `resolveButtonBusyState` in Button.types.ts). `pending` maps onto the
+  // classic engine's existing busy state (Ant renders a spinner and blocks
+  // interaction); the width-stable posture is modern-only, so only the
+  // merged `busy` flag and resolved label are used here.
+  const { busy, label: resolvedBusyLabel } = resolveButtonBusyState({
+    pending,
+    pendingLabel,
+    loading: loadingProp,
+    loadingText,
+  });
+  const loading = busy;
 
   // `fullWidth` is the DS-preferred name; `block` is kept for backward
   // compatibility with Ant Design's naming convention.
@@ -217,9 +233,10 @@ const ClassicButton = forwardRef<any, ButtonProps>((props, ref) => {
         aria-label={ariaLabel}
         data-testid={dataTestId}
         tabIndex={tabIndex}
+        aria-busy={loading || undefined}
         {...(responsive ? responsive.attrs : {})}
       >
-        {children}
+        {loading && resolvedBusyLabel != null ? resolvedBusyLabel : children}
         {/* End icon / suffix is rendered outside Ant's icon slot because Ant
             only supports a single icon position (start). The left margin is
             removed when there are no children to avoid asymmetric spacing. */}

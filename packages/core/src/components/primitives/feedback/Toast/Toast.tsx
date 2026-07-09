@@ -24,12 +24,13 @@
 
 import type { ToastProps } from './Toast.types';
 import { BaseToast } from './base';
-import { ToastContainer } from './compound';
+import { ToastContainer, UndoToast } from './compound';
 
 export type {
   ToastProps,
   ToastVariant,
   ToastPosition,
+  ToastCountdownVariant,
   ToastAction,
   ToastProviderConfig,
   ToastOptions,
@@ -45,8 +46,8 @@ export {
   VARIANT_COLORS,
 } from './Toast.types';
 
-export { ToastContainer } from './compound';
-export type { ToastContainerProps } from './compound';
+export { ToastContainer, UndoToast } from './compound';
+export type { ToastContainerProps, UndoToastProps } from './compound';
 
 export {
   ToastProvider,
@@ -69,4 +70,6 @@ export const Toast = Object.assign(ToastComponent, {
   // Attach the stack renderer -- consumers place <Toast.Container /> once in the tree.
   /** Positioned container that renders and animates the toast stack. */
   Container: ToastContainer,
+  /** Undo-window recipe: countdown affordance + Undo action, reduced-motion safe. */
+  Undo: UndoToast,
 });

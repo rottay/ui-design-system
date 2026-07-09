@@ -399,6 +399,22 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 
   /* ─────────────────────────────────────────────────────────────────────────────
+     5.1a ASYNC STATE (WO-CRA-02) — perceived-speed choreography thresholds
+     Mutation-bearing components stage their busy affordance against these two
+     thresholds instead of flashing a spinner on every await. A wait shorter than
+     --ds-async-spinner-delay shows no busy indicator at all (sub-perceptual waits
+     stay silent); past it a lightweight spinner is warranted; past
+     --ds-async-skeleton-after a structural Skeleton supersedes the spinner for a
+     long wait. The useDeferredPending() hook RESOLVES these two tokens off the
+     document root, so a tenant that overrides them moves the JS timing with the
+     CSS law rather than leaving the two to disagree. Under prefers-reduced-motion
+     the hook holds a single stable indicator: the spinner delay is kept so a
+     sub-threshold wait never flashes, and the Skeleton escalation is suppressed.
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-async-spinner-delay: 150ms;
+  --ds-async-skeleton-after: 500ms;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
      5.2 TOUCH TARGETS (WO-ENG-12) — coarse-pointer hit-area floor
      A single floor value, not a parallel size scale: an engine-scoped
      `@media (pointer: coarse)` rule clamps a control's existing sizing tokens

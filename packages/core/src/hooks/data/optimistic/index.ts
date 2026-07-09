@@ -242,3 +242,216 @@ export function useOptimisticUpdate<T>(
     data,
   };
 }
+
+// ============================================================================
+// Optimistic list reconciliation (thin recipe over useOptimisticUpdate)
+// ============================================================================
+
+/**
+ * Configuration options for the `useOptimisticList` recipe.
+ */
+export interface UseOptimisticListOptions<T> {
+  /**
+   * Stable identity extractor. Used to reconcile a server-confirmed row back
+   * into the list and to locate a row for removal. Must be domain-agnostic
+   * (e.g. `(row) => row.id`).
+   */
+  getKey: (item: T) => string | number;
+
+  /** Initial list contents. @default [] */
+  initialItems?: T[];
+
+  /**
+   * Delay in milliseconds before `onError` fires (and the list reverts) after a
+   * failed operation. Forwarded to the underlying `useOptimisticUpdate`.
+   * @default 0
+   */
+  rollbackDelay?: number;
+
+  /**
+   * Called after the list rolls back on failure. Receives the error and the
+   * restored list snapshot.
+   */
+  onError?: (error: Error, restored: T[]) => void;
+
+  /**
+   * Called after a confirmed operation reconciles into the list. Receives the
+   * server-confirmed row.
+   */
+  onSuccess?: (confirmed: T) => void;
+}
+
+/**
+ * Return type of the `useOptimisticList` recipe.
+ */
+export interface UseOptimisticListReturn<T> {
+  /** Current list (optimistic or confirmed). */
+  items: T[];
+
+  /** Replace the list imperatively (e.g. after an external refetch). */
+  setItems: (items: T[]) => void;
+
+  /**
+   * Optimistically upsert `optimisticItem` (replace by key or append), run
+   * `mutate`, then reconcile the server-confirmed row into the list. On failure
+   * the list reverts to its pre-operation snapshot (after `rollbackDelay`).
+   * Resolves with the confirmed row; rejects if `mutate` throws.
+   */
+  upsert: (optimisticItem: T, mutate: (item: T) => Promise<T>) => Promise<T>;
+
+  /**
+   * Optimistically remove `item`, run `mutate`, and keep it removed on success.
+   * On failure the list reverts to its pre-operation snapshot.
+   */
+  remove: (item: T, mutate: (item: T) => Promise<unknown>) => Promise<void>;
+
+  /** Whether an operation is in flight. */
+  isPending: boolean;
+
+  /** The last operation error, or null. */
+  error: Error | null;
+}
+
+/**
+ * Replace `item` in `list` by key, or append it when absent.
+ */
+function upsertByKey<T>(
+  list: T[],
+  item: T,
+  getKey: (item: T) => string | number,
+): T[] {
+  const key = getKey(item);
+  const index = list.findIndex((existing) => getKey(existing) === key);
+  if (index === -1) {
+    return [...list, item];
+  }
+  const next = list.slice();
+  next[index] = item;
+  return next;
+}
+
+/**
+ * Domain-agnostic optimistic row/list reconciliation over `useOptimisticUpdate`.
+ *
+ * Applies an optimistic row change to a local list immediately, runs the caller's
+ * per-row mutation, reconciles the confirmed row on success, and rolls the whole
+ * list back to its pre-operation snapshot on failure — inheriting the single-flight
+ * guard and `rollbackDelay` timing of `useOptimisticUpdate`. Because it inherits
+ * that single-flight behavior, concurrent operations resolve latest-wins; drive
+ * genuinely independent row mutations from separate instances if needed.
+ *
+ * This recipe carries no product semantics: it only knows how to key, upsert, and
+ * remove rows. Apps bind it to their own action-result envelope and copy.
+ *
+ * @param options - Recipe configuration
+ * @returns The list plus `upsert` / `remove` operations and mutation state
+ *
+ * @example
+ * ```tsx
+ * const { items, upsert, remove } = useOptimisticList<Row>({
+ *   getKey: (row) => row.id,
+ *   initialItems: rows,
+ *   rollbackDelay: 400,
+ *   onError: (err) => toast.error(err.message),
+ * });
+ *
+ * // Optimistically mark a row done, reconcile the server row on confirm:
+ * upsert({ ...row, status: 'done' }, (r) => api.updateRow(r));
+ * ```
+ */
+export function useOptimisticList<T>(
+  options: UseOptimisticListOptions<T>,
+): UseOptimisticListReturn<T> {
+  const { getKey, initialItems = [], rollbackDelay, onError, onSuccess } = options;
+
+  const [items, setItems] = useState<T[]>(initialItems);
+
+  // Latest values captured in refs so the single engine's config callbacks and
+  // the imperative operations always read current state without re-arming.
+  const itemsRef = useRef(items);
+  itemsRef.current = items;
+
+  const getKeyRef = useRef(getKey);
+  getKeyRef.current = getKey;
+
+  const onErrorRef = useRef(onError);
+  onErrorRef.current = onError;
+
+  const onSuccessRef = useRef(onSuccess);
+  onSuccessRef.current = onSuccess;
+
+  // Snapshot of the list captured immediately before an optimistic write, and
+  // restored verbatim if the operation fails.
+  const snapshotRef = useRef<T[] | null>(null);
+
+  // Kind of the in-flight operation so the confirm step reconciles correctly:
+  // an 'upsert' folds the confirmed row back in, a 'remove' keeps it gone.
+  const opKindRef = useRef<'upsert' | 'remove' | null>(null);
+
+  // Per-call server function, injected via a ref so a single engine instance
+  // serves every operation.
+  const serverCallRef = useRef<(row: T) => Promise<T>>(() =>
+    Promise.reject(new Error('useOptimisticList: no operation in flight')),
+  );
+
+  const engine = useOptimisticUpdate<T>({
+    onMutate: (row) => serverCallRef.current(row),
+    rollbackDelay,
+    onSuccess: (confirmed) => {
+      if (opKindRef.current === 'upsert') {
+        setItems((current) => upsertByKey(current, confirmed, getKeyRef.current));
+      }
+      snapshotRef.current = null;
+      opKindRef.current = null;
+      onSuccessRef.current?.(confirmed);
+    },
+    onError: (error) => {
+      const restored = snapshotRef.current ?? itemsRef.current;
+      if (snapshotRef.current !== null) {
+        setItems(snapshotRef.current);
+      }
+      snapshotRef.current = null;
+      opKindRef.current = null;
+      onErrorRef.current?.(error, restored);
+    },
+  });
+
+  // engine.mutate identity changes whenever its confirmed data changes; keep it
+  // in a ref so the operations below stay referentially stable.
+  const mutateRef = useRef(engine.mutate);
+  mutateRef.current = engine.mutate;
+
+  const upsert = useCallback(
+    (optimisticItem: T, mutate: (item: T) => Promise<T>): Promise<T> => {
+      snapshotRef.current = itemsRef.current;
+      opKindRef.current = 'upsert';
+      serverCallRef.current = mutate;
+      setItems((current) => upsertByKey(current, optimisticItem, getKeyRef.current));
+      return mutateRef.current(optimisticItem);
+    },
+    [],
+  );
+
+  const remove = useCallback(
+    async (item: T, mutate: (item: T) => Promise<unknown>): Promise<void> => {
+      snapshotRef.current = itemsRef.current;
+      opKindRef.current = 'remove';
+      // The engine reconciles a T on success; echo the removed row so the list
+      // stays without it rather than folding anything back in.
+      serverCallRef.current = (row) => Promise.resolve(mutate(row)).then(() => row);
+      const key = getKeyRef.current(item);
+      setItems((current) => current.filter((existing) => getKeyRef.current(existing) !== key));
+      await mutateRef.current(item);
+    },
+    [],
+  );
+
+  return {
+    items,
+    setItems,
+    upsert,
+    remove,
+    isPending: engine.isPending,
+    error: engine.error,
+  };
+}

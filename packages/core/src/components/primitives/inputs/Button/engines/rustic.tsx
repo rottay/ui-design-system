@@ -77,7 +77,7 @@
 
 import React, { forwardRef, useState, useId, type AnchorHTMLAttributes } from 'react';
 import type { ButtonProps, ButtonSize } from '../Button.types';
-import { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from '../Button.types';
+import { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP, resolveButtonBusyState } from '../Button.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
@@ -147,7 +147,10 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       shape = BUTTON_DEFAULTS.shape,
       htmlType = BUTTON_DEFAULTS.htmlType,
       disabled = BUTTON_DEFAULTS.disabled,
-      loading = BUTTON_DEFAULTS.loading,
+      loading: loadingProp = BUTTON_DEFAULTS.loading,
+      loadingText,
+      pending = false,
+      pendingLabel,
       block = BUTTON_DEFAULTS.block,
       fullWidth,
       danger,
@@ -166,6 +169,20 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
       style = {},
       ...rest
     } = props;
+
+    // Single documented resolution point for the overlapping busy props (see
+    // `resolveButtonBusyState` in Button.types.ts). `pending` maps onto the
+    // rustic engine's existing busy state (spinner + blocked interaction);
+    // the width-stable posture is modern-only, so only the merged `busy`
+    // flag and resolved label are used here.
+    const { busy, label: resolvedBusyLabel } = resolveButtonBusyState({
+      pending,
+      pendingLabel,
+      loading: loadingProp,
+      loadingText,
+    });
+    const loading = busy;
+    const busyLabel = loading && resolvedBusyLabel != null ? resolvedBusyLabel : children;
 
     const isFullWidth = fullWidth ?? block;
 
@@ -349,7 +366,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
             {loading && <LoadingSpinner size={size} />}
             {!loading && iconPosition === 'start' && renderIcon}
             {!loading && renderPrefix}
-            {children && <span className="rottay-button__content">{children}</span>}
+            {busyLabel && <span className="rottay-button__content">{busyLabel}</span>}
             {renderSuffix}
             {!loading && iconPosition === 'end' && renderIcon}
           </a>
@@ -381,7 +398,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           {loading && <LoadingSpinner size={size} />}
           {!loading && iconPosition === 'start' && renderIcon}
           {!loading && renderPrefix}
-          {children && <span className="rottay-button__content">{children}</span>}
+          {busyLabel && <span className="rottay-button__content">{busyLabel}</span>}
           {renderSuffix}
           {!loading && iconPosition === 'end' && renderIcon}
         </button>

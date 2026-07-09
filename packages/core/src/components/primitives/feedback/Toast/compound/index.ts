@@ -40,3 +40,14 @@ export { ToastContainer } from './Container';
  * Props for the ToastContainer compound component.
  */
 export type { ToastContainerProps } from './Container';
+
+/**
+ * UndoToast - undo-window recipe (countdown + Undo action), reduced-motion safe.
+ * @see {@link UndoToastProps} for prop documentation
+ */
+export { UndoToast } from './UndoToast';
+
+/**
+ * Props for the UndoToast recipe.
+ */
+export type { UndoToastProps } from './UndoToast';
