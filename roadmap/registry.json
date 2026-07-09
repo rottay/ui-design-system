@@ -1070,7 +1070,7 @@
       "programs": [
         "owner-2026-07-09"
       ],
-      "notes": "Discovered 2026-07-09: all three verticals declare engine 'modern', all three first-party tenants declare 'classic', and the tenant wins at DesignSystemProvider.tsx:439. app-evnto therefore renders CLASSIC -- sixteen modern-engine WOs are invisible there. app-platform's engine flag is inverted. Contradicts the CLAUDE.md static-first law."
+      "notes": "Discovered 2026-07-09: all three verticals declare engine 'modern', all three first-party tenants declare 'classic', and the tenant wins at DesignSystemProvider.tsx:439. app-evnto therefore renders CLASSIC -- sixteen modern-engine WOs are invisible there. app-platform's engine flag is inverted. Contradicts the CLAUDE.md static-first law. OWNER DECISION 2026-07-09: all three verticals go to modern, engine stays changeable. Law = forceEngine > vertical.engine > fallback; tenantConfig.engine REMOVED (legacy, and the cause). app-evnto and app-platform switch to modern; evnto has zero visual baselines so before/after capture is a precondition."
     },
     {
       "id": "WO-ENG-18",
