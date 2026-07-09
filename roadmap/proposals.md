@@ -540,3 +540,11 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **What** — `packages/core/styles/platform.css` and `packages/core/styles/rottay.css` are byte-identical (862,308 bytes each), and the package exports both (`./styles/platform`, `./styles/rottay`). `platform.css`'s only tenant selector is `html[data-tenant='rottay']`: "platform" is a legacy name for the rottay tenant, not a second tenant.
 - **Why it matters** — Roughly 860KB of duplicated CSS in the published artifact, and a naming fiction that made a work order describe `rottay` as a "showcase tenant" when it is the DS `DEFAULT_TENANT` (`ThemeProvider.tsx:433`) and app-platform's base. The duplication is what allowed the fiction to survive.
 - **Shape** — Keep one bundle. Either make `./styles/platform` re-export `./styles/rottay`, or deprecate the `platform` entry with a release-note migration. Verify no consumer imports it (`grep` across the three apps) before choosing. Gate: an assertion in the build that no two emitted style bundles are byte-identical.
+
+### P-31 app-platform's engine flag is inverted (XS, cross-repo)
+
+- **What** — `app-platform/src/core/providers/tenant-provider/index.tsx:78` and `dashboard-providers/index.tsx:203` both read
+  `forceEngine={process.env.NEXT_PUBLIC_DS_ENGINE === 'modern' ? undefined : 'modern'}`.
+  Setting `NEXT_PUBLIC_DS_ENGINE=modern` sets `forceEngine` to `undefined`, which falls through to the tenant's `engine: 'classic'`. The flag does the opposite of what it says.
+- **Why it matters** — Anyone opting into the modern engine by that variable gets classic, silently. It is also the second symptom of the WO-ENG-17 root cause: the tenant registry's stale `engine: 'classic'` is what the fallback lands on.
+- **Shape** — `app-platform` is READ-ONLY to this repo. Its own orchestrator owns the one-line fix; record the cross-repo notification in WO-ENG-17's handoff. Once WO-ENG-17 makes the vertical own the engine, both `forceEngine` expressions in app-platform and the hardcoded one in app-bithire become unnecessary.

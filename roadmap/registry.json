@@ -1057,6 +1057,37 @@
         "fable-advisory"
       ],
       "notes": "The primitive and PatternDataTable currently disagree about what a table is."
+    },
+    {
+      "id": "WO-ENG-17",
+      "title": "The vertical owns the engine, as the law already says",
+      "lane": "engine-modern",
+      "order": 17,
+      "size": "M",
+      "status": "todo",
+      "dependsOn": [],
+      "mustLandWith": [],
+      "programs": [
+        "owner-2026-07-09"
+      ],
+      "notes": "Discovered 2026-07-09: all three verticals declare engine 'modern', all three first-party tenants declare 'classic', and the tenant wins at DesignSystemProvider.tsx:439. app-evnto therefore renders CLASSIC -- sixteen modern-engine WOs are invisible there. app-platform's engine flag is inverted. Contradicts the CLAUDE.md static-first law."
+    },
+    {
+      "id": "WO-ENG-18",
+      "title": "Vertical posture and intra-vertical tenant divergence, proven",
+      "lane": "engine-modern",
+      "order": 18,
+      "size": "L",
+      "status": "todo",
+      "dependsOn": [
+        "WO-ENG-17",
+        "WO-GAT-03"
+      ],
+      "mustLandWith": [],
+      "programs": [
+        "owner-2026-07-09"
+      ],
+      "notes": "Owner request. themanagementmiami is in BUNDLED_TENANT_SLUGS but has no TenantConfig and no artifact -- isBundledTenant returns true so the runtime skips generating its CSS, and no bundled CSS exists. A brandTheme under that slug is silently ignored. The set is a promise about the bundle and it lies."
     }
   ]
 }
