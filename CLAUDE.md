@@ -345,3 +345,23 @@ DB-driven tenants can customize all chrome sections via `TenantAppearanceAdvance
 - `tokenOverrides` -- raw `--ds-*` vars (max 200)
 
 The appearance compiler (`compilers/appearance/`) converts these to CSS vars injected by ThemeProvider.
+
+---
+
+## Modern Engine Premium Uplift — Spec + Operative Backlog
+
+The `modern` engine is being taken from "hand-made, mid-tier (near-indistinguishable from `rustic`)"
+to the **Quiet Premium** target. Two artifacts govern this:
+
+- **Normative law (the spec)**: `../docs-engineering/engineering/design-system/runtime/engines/modern/README.md`
+  — the canonical Quiet Premium specification (motion contract, dark-aware elevation, interaction-state
+  contract, gradient/glass/glow roles, color purity, scale hygiene, theme.css drain, content integrity,
+  cross-engine layout, premium signature, and the section 12 metrics ratchet). Read it FULLY before
+  touching the modern engine, tokens, or the `packages/core/src/tokens/css/engines/modern/` tree.
+- **Operative backlog (the work)**: `roadmap/` holds one lane, `roadmap/engine-modern.md` (11 delegable
+  work orders WO-ENG-01..11, each with file-level steps, a blocking acceptance gate, and a ready-to-paste
+  delegation prompt). State lives in `roadmap/registry.json`; check status with `pnpm roadmap:status`
+  and validate registry/lane agreement with `pnpm roadmap:check`. Read `roadmap/README.md` (start order,
+  handoff protocol, bootstrap prompt, sighted-check law) before picking work. The lane's mechanical gate
+  is `scripts/engine-token-audit.mjs` (created by WO-ENG-01). Statuses change ONLY via
+  `scripts/roadmap-status.mjs`; never hand-edit `registry.json` or `STATUS.md`.

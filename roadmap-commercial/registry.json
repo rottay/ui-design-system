@@ -1,0 +1,188 @@
+{
+ "$schema": "roadmap work-order state registry — ISOLATED commercial-surfaces program (single source of WO status; specs live in the showroom lane .md file)",
+ "updated": "2026-07-09",
+ "rules": {
+  "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
+  "claim_requires": "all dependsOn done",
+  "edit_via": "scripts/roadmap-commercial-status.mjs only (claim/progress/done/reopen); never hand-edit statuses",
+  "new_work": "new WO in roadmap-commercial/showroom.md + registry entry, verified by roadmap-commercial-status.mjs check; NO new plan documents anywhere",
+  "isolation": "ISOLATED commercial-surfaces program (owner decision 2026-07-07) — extracted from the main ui-design-system roadmap; own machinery (pnpm roadmap:commercial), own state. Normative law: docs-engineering/engineering/design-system/commercial-surfaces/README.md (sections 1-10). Cross-roadmap edges (WO-SHW-03 BLOCKED-ON-EXTERNAL ordering vs WO-ENG-02 in the main roadmap; WO-SHW-01's release unblocks app-platform WO-COM-01) are external prose, never registry deps."
+ },
+ "metrics": [
+  {
+   "name": "Showroom commercial score (owner-rated, sighted gallery)",
+   "baseline": "4/10 (landing alone 8/10, the only on-brand page)",
+   "target": "10/10 owner-approved",
+   "measure": "owner-scored sighted gallery vs commercial-surfaces spec sections 1 + 10.3 (WO-SHW-02/04/05)",
+   "asOf": "2026-07-07"
+  },
+  {
+   "name": "Accent colors in showroom chrome",
+   "baseline": "8 rotating section accents (components/layout/config.ts) + radial glows in shell",
+   "target": "0 (product windows / color-token page / D3 charts allowlisted)",
+   "measure": "grep non-grayscale color literals over packages/showroom/src/components/layout/** + runtime/** (WO-SHW-02)",
+   "asOf": "2026-07-07"
+  },
+  {
+   "name": "Browse index pages rendering zero live components",
+   "baseline": "5 (foundations/primitives/patterns/structures/surfaces — essay + name-chips only)",
+   "target": "0 (every index leads with a live blueprint gallery)",
+   "measure": "sighted: each index page renders live components above the fold (WO-SHW-03)",
+   "asOf": "2026-07-07"
+  },
+  {
+   "name": "Showroom CSS transitions / spec-canon motion coverage",
+   "baseline": "37 CSS transitions total, ad hoc; ASCII/texture/attention motion absent",
+   "target": "spec-canon motion coverage (kit reveals + View Transitions, prefers-reduced-motion aware)",
+   "measure": "sighted motion pass vs spec sections 1/6/10.3 across the kit + tour (WO-SHW-01/05)",
+   "asOf": "2026-07-07"
+  },
+  {
+   "name": "framer-motion files (showroom dependency)",
+   "baseline": "0 files use it (dependency in packages/showroom/package.json)",
+   "target": "decision recorded (recommend drop; spec motion rides CSS + View Transitions)",
+   "measure": "grep -rl framer-motion packages/showroom/src; packages/showroom/package.json (WO-SHW-02)",
+   "asOf": "2026-07-07"
+  },
+  {
+   "name": "Excellence layer implemented (spec 11 items)",
+   "baseline": "0 (excellence layer unimplemented; spec section 11 added 2026-07-07)",
+   "target": "complete (all spec 11 items shipped)",
+   "measure": "WO-SHW-06 (showroom excellence, spec 11.3 + 11.0) acceptance gate",
+   "asOf": "2026-07-07"
+  }
+ ],
+ "workOrders": [
+  {
+   "id": "WO-SHW-01",
+   "title": "The commercial kit: @rottay/design-system/commercial",
+   "lane": "showroom",
+   "order": 1,
+   "size": "L",
+   "status": "done",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "commercial-spec"
+   ],
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 00:47",
+     "by": "ds-agent",
+     "note": "Foundation built (Opus): commercial ramp tokens (11-step perceptually-even L* grayscale + ink/paper/hairline/texture/motion in commercial-ramp.css + TS mirror tokens/index.ts); shared _internal/motion (useReducedMotion + useReveal, one-shot + reduced-motion-collapse); reference components AsciiFrame + SectionFrame (folder/index.tsx + .types.ts + .css pattern, rt-* classes, aria-hidden decorative ASCII, tokens-not-literals). NEXT: delegate the 9 remaining components to Sonnet against this pattern, then wire subpath export (commercial.ts + vite lib.entry + package.json exports/build:commercial-css) + gates + sighted capture."
+    },
+    {
+     "at": "2026-07-09 00:51",
+     "by": "ds-agent",
+     "note": "Export wiring done (Opus, surgical — owner package.json WIP untouched): vite.config.ts lib.entry += commercial; package.json exports += ./commercial (js) + ./commercial.css (style) + files entry + build:commercial-css postcss step chained into build. 6 Sonnet agents building the 9 remaining components in parallel (Typewriter+TerminalBlock / TreeView+CropMarks / InvertSection+TextureBackdrop / MonoStat / AsciiDiagram / ProductWindow), each to its own folder against the AsciiFrame/SectionFrame reference pattern. NEXT (blocked on their return): audit each vs monochrome+a11y+motion fences, write src/commercial.ts barrel, unit tests (render + aria-hidden + reduced-motion), build gate, docs update, sighted capture."
+    },
+    {
+     "at": "2026-07-09 00:52",
+     "by": "ds-agent",
+     "note": "Docs catalog page drafted (Opus): docs-engineering/engineering/design-system/commercial/README.md (kit purpose, two laws, ramp tokens, component table, consuming). Step 5 of the WO done. STILL WAITING on the 6 Sonnet agents (9 component folders still empty at this poll — not interfering). Remaining after they land: audit each vs fences, src/commercial.ts barrel, unit tests, pnpm build gate, sighted capture under both tenant palettes."
+    },
+    {
+     "at": "2026-07-09 01:21",
+     "by": "ds-agent",
+     "note": "10/11 components landed + audited CLEAN (Opus audit): grep proves ZERO non-grayscale color literals across all component files; export names all convention-correct; domain-noun sweep clean after fixing ProductWindow comments (tenant->brand, 3 files). Barrel src/commercial.ts written (all 11 components + TS tokens). MonoStat/Typewriter/TerminalBlock verified reduced-motion-safe (start-at-final-value, aria-hidden animated, visually-hidden full text). ONLY AsciiDiagram folder still empty (its Sonnet agent, the hardest component, still running — not interfering). REMAINING when it lands: reconcile barrel AsciiDiagram exports, write unit test (render + aria-hidden + reduced-motion collapse), pnpm build gate (tsc+vite emits dist/commercial.{js,cjs,d.ts}+css), pnpm test, sighted kit-inventory capture under both tenant palettes -> done."
+    },
+    {
+     "at": "2026-07-09 01:41",
+     "by": "ds-agent",
+     "note": "SIGHTED CHECK caught 2 real bugs the unit tests missed (this is why sighted is mandatory): (1) per-component CSS was NOT shipping in the vite dist (only ramp tokens in commercial.css) -> visually-hidden spans rendered VISIBLE causing 601601 text doubling; (2) InvertSection paper surface never painted white. ROOT CAUSE: vite library build strips per-component 'import ./X.css' side-effects. FIX: new scripts/build-commercial-css.mjs concatenates ramp tokens + all 11 component stylesheets into the single dist/commercial.css (the sanctioned ./commercial.css export); package.json build:commercial-css repointed to it. Re-captured + re-reviewed: both bugs gone, kit renders premium monochrome under BOTH surfaces (ink dark + paper light), AsciiDiagram signature clean, ProductWindow color pass-through works. Full pnpm build re-run exit 0."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "pnpm --filter @rottay/design-system build exit 0 emits dist/commercial.{js,cjs,d.ts,css} (792-line css with all 11 component stylesheets + ramp tokens); tsc --noEmit -p tsconfig.json exit 0; vitest commercial-kit.test.tsx 5/5 pass (renders + aria-hidden decorative ASCII with text alternative + reduced-motion collapse); grep proves ZERO non-grayscale color literals outside ProductWindow and ZERO domain nouns across packages/core/src/commercial/**; temp showroom probe /probe/kit-inventory imports @rottay/design-system/commercial, typechecks + renders HTTP 200 with kit classes; sighted capture test-artifacts/showroom/shw-01/ (1280 rottay+bithire, 360 mobile) reviewed under both tenant palettes -- caught+fixed 2 integration bugs (per-component CSS not shipping; InvertSection paper). 11 components: AsciiFrame SectionFrame CropMarks InvertSection TextureBackdrop TreeView AsciiDiagram Typewriter TerminalBlock MonoStat ProductWindow. Docs: docs-engineering/.../design-system/commercial/README.md. Checkpoint commit DEFERRED (owner WIP in tree)."
+  },
+  {
+   "id": "WO-SHW-02",
+   "title": "Monochrome chrome: one brand from the front door inward",
+   "lane": "showroom",
+   "order": 2,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-SHW-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "commercial-spec"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-SHW-03",
+   "title": "Index pages become galleries",
+   "lane": "showroom",
+   "order": 3,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-SHW-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "commercial-spec"
+   ],
+   "coordinatesWith": [
+    "WO-ENG-02"
+   ],
+   "notes": "BLOCKED-ON-EXTERNAL ordering law vs WO-ENG-02 in the MAIN ui-design-system roadmap (roadmap/engine-modern.md): the two roadmaps are separate graphs, so the WO-ENG-02 edge is external prose (coordinatesWith metadata), not a registry dependency. Both edit packages/showroom — never execute concurrently; whichever lands second re-verifies the other's galleries still render."
+  },
+  {
+   "id": "WO-SHW-04",
+   "title": "Blueprint sheets + the three lenses",
+   "lane": "showroom",
+   "order": 4,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-SHW-02",
+    "WO-SHW-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "commercial-spec"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-SHW-05",
+   "title": "The tour, the promotion, the doors",
+   "lane": "showroom",
+   "order": 5,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-SHW-03",
+    "WO-SHW-04"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "commercial-spec"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-SHW-06",
+   "title": "Showroom excellence pass",
+   "lane": "showroom",
+   "order": 6,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-SHW-04",
+    "WO-SHW-05"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "excellence-11"
+   ],
+   "notes": null
+  }
+ ]
+}

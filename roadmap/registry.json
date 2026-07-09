@@ -1,0 +1,653 @@
+{
+ "$schema": "roadmap work-order state registry (single source of WO status; specs live in the engine-modern lane .md file)",
+ "updated": "2026-07-09",
+ "rules": {
+  "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
+  "claim_requires": "all dependsOn done",
+  "edit_via": "scripts/roadmap-status.mjs only (claim/done/reopen); never hand-edit statuses",
+  "new_work": "new WO in engine-modern.md + registry entry, verified by roadmap-status.mjs check; NO new plan documents anywhere"
+ },
+ "metrics": [
+  {
+   "name": "cubic-bezier literals in modern components",
+   "baseline": "43 (33 + 10)",
+   "target": "0",
+   "measure": "node scripts/engine-token-audit.mjs (cubic-bezier counter)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Raw duration literals in modern components",
+   "baseline": "39",
+   "target": "0",
+   "measure": "node scripts/engine-token-audit.mjs (raw-duration counter)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Consumed-but-undefined motion tokens",
+   "baseline": "6 names",
+   "target": "0",
+   "measure": "node scripts/engine-token-audit.mjs (undefined-motion-name counter)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Hardcoded hex / rgba in modern components",
+   "baseline": "78 / 30 (31 rgba on 2026-07-06 re-measure; WO-ENG-01 pins the counting method and re-baselines in engine-token-audit.baseline.json)",
+   "target": "0 / 0",
+   "measure": "node scripts/engine-token-audit.mjs (hex + rgba counters)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Shadow scales",
+   "baseline": "2 (parallel)",
+   "target": "1 (dark-aware)",
+   "measure": "node scripts/engine-token-audit.mjs (shadow-scale counter)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Files consuming --ds-gradient-* / --ds-glass-* / --ds-shadow-glow-*",
+   "baseline": "1 / 0 / 0",
+   "target": "sanctioned-role consumers only, > 0",
+   "measure": "node scripts/engine-token-audit.mjs (effect-consumer counters)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "modern/theme.css lines",
+   "baseline": "4563",
+   "target": "< 800, all selectors consumer-proven",
+   "measure": "wc -l packages/core/src/tokens/css/engines/modern/theme.css; node scripts/engine-token-audit.mjs (selector-consumer gate)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Radius scale declarations",
+   "baseline": "2",
+   "target": "1",
+   "measure": "node scripts/engine-token-audit.mjs (radius-declaration counter)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Cross-engine layout divergences (unintended)",
+   "baseline": ">= 1 (StatsGrid)",
+   "target": "0",
+   "measure": "node scripts/engine-token-audit.mjs (cross-engine-layout counter)",
+   "asOf": "2026-07-06"
+  },
+  {
+   "name": "Responsive counters (fixed-width literals / 360px overflow probes)",
+   "baseline": "to-measure (WO-ENG-12 step 5)",
+   "target": "0 above allowlist / 0",
+   "measure": "node scripts/engine-token-audit.mjs --check (responsive counters, added by WO-ENG-12)",
+   "asOf": "2026-07-07"
+  }
+ ],
+ "workOrders": [
+  {
+   "id": "WO-ENG-01",
+   "title": "Motion contract unification",
+   "lane": "engine-modern",
+   "order": 1,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "spec-2",
+    "spec-12"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-02",
+   "title": "Showroom evidence surfaces",
+   "lane": "engine-modern",
+   "order": 2,
+   "size": "M",
+   "status": "in-progress",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "audit-method"
+   ],
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 01:52",
+     "by": "ds-agent",
+     "note": "Started ENG-02 instead of ENG-01 (safety reorder, no graph violation — ENG-02 has no dep on ENG-01). REASON: ENG-01's motion codemod targets **/engines/modern* including Input/engines/modern.tsx which has 3 motion literals AND is UNCOMMITTED OWNER WIP (git status: Input.types.ts + Input/modern.tsx + Box/modern.tsx + CLAUDE.md). Running ENG-01 now would clobber the owner's in-flight work -> ENG-01 HELD until the owner commits/blesses that WIP. ENG-02 is safe: touches packages/showroom only, explicitly forbids modifying packages/core engine components; SHW-03 not running so the non-concurrency law holds."
+    }
+   ]
+  },
+  {
+   "id": "WO-ENG-03",
+   "title": "Dark-aware elevation collapse",
+   "lane": "engine-modern",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-3"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-04",
+   "title": "Interaction-state contract",
+   "lane": "engine-modern",
+   "order": 4,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01",
+    "WO-ENG-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-4"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-05",
+   "title": "Gradient/glass/glow wiring",
+   "lane": "engine-modern",
+   "order": 5,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-5"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-06",
+   "title": "Color purity",
+   "lane": "engine-modern",
+   "order": 6,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-6"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-07",
+   "title": "Scale hygiene",
+   "lane": "engine-modern",
+   "order": 7,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-7"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-08",
+   "title": "theme.css drain",
+   "lane": "engine-modern",
+   "order": 8,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01",
+    "WO-ENG-03",
+    "WO-ENG-04"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-8"
+   ],
+   "coordinatesWith": [
+    "WO-ENG-05",
+    "WO-ENG-06",
+    "WO-ENG-07"
+   ],
+   "notes": "Coordinates ENG-05/06/07: their edits land in modern/theme.css — sequence the drain after or in lockstep so nothing load-bearing is deleted."
+  },
+  {
+   "id": "WO-ENG-09",
+   "title": "Content integrity",
+   "lane": "engine-modern",
+   "order": 9,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-9"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-10",
+   "title": "Cross-engine layout contract",
+   "lane": "engine-modern",
+   "order": 10,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-10"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-11",
+   "title": "Premium signature pass + owner gallery",
+   "lane": "engine-modern",
+   "order": 11,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01",
+    "WO-ENG-02",
+    "WO-ENG-03",
+    "WO-ENG-04",
+    "WO-ENG-05",
+    "WO-ENG-06",
+    "WO-ENG-07",
+    "WO-ENG-08",
+    "WO-ENG-09",
+    "WO-ENG-10",
+    "WO-ENG-12"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-11"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ENG-12",
+   "title": "Full-responsive conformance for the modern engine",
+   "lane": "engine-modern",
+   "order": 12,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01",
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-13",
+    "owner-2026-07-07"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-01",
+   "title": "Micro-typography pack",
+   "lane": "craft",
+   "order": 1,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "P-19"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-02",
+   "title": "Instant-feel choreography: optimistic UI and async-state law",
+   "lane": "craft",
+   "order": 2,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "P-17"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-03",
+   "title": "Keyboard-first interaction model",
+   "lane": "craft",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "P-16"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-04",
+   "title": "Data-visualization and flagship-primitive craft",
+   "lane": "craft",
+   "order": 4,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01",
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-18"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-05",
+   "title": "Tenant Brand Studio",
+   "lane": "craft",
+   "order": 5,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-20"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-GAT-01",
+   "title": "Visual-regression CI on the showroom",
+   "lane": "gates",
+   "order": 1,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-11"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-GAT-02",
+   "title": "Package-side quality gates",
+   "lane": "gates",
+   "order": 2,
+   "size": "S",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-14"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-GAT-03",
+   "title": "Hostile-tenant whitelabel proof",
+   "lane": "gates",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-05"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-GAT-04",
+   "title": "Accessibility CI: axe + APCA + focus audit",
+   "lane": "gates",
+   "order": 4,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-02",
+    "WO-ENG-04"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-10"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-TOK-01",
+   "title": "Single-source tokens: artifacts always generated + DTCG evaluation",
+   "lane": "tokens",
+   "order": 1,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "P-06"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-TOK-02",
+   "title": "OKLCH color engine with generated ramps",
+   "lane": "tokens",
+   "order": 2,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-06",
+    "WO-TOK-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-04"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-TOK-03",
+   "title": "Retire the dead DaisyUI layer from modern",
+   "lane": "tokens",
+   "order": 3,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-08"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-03"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ARC-01",
+   "title": "Component API normalization",
+   "lane": "architecture",
+   "order": 1,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-13"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ARC-02",
+   "title": "Headless behavior core + CSS-first pilot",
+   "lane": "architecture",
+   "order": 2,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-04",
+    "WO-GAT-01",
+    "WO-ARC-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-01",
+    "P-02"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ARC-03",
+   "title": "Fleet migration to the headless core",
+   "lane": "architecture",
+   "order": 3,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ARC-02",
+    "WO-ENG-11"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-01",
+    "P-02"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ARC-04",
+   "title": "Custom-engine skin pack API",
+   "lane": "architecture",
+   "order": 4,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ARC-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-01"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-ARC-05",
+   "title": "Container queries + fluid scales",
+   "lane": "architecture",
+   "order": 5,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ARC-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-08"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-06",
+   "title": "Motion choreography system",
+   "lane": "craft",
+   "order": 6,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-21"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-07",
+   "title": "Micro-interaction catalog",
+   "lane": "craft",
+   "order": 7,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01",
+    "WO-ENG-04"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-22"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-08",
+   "title": "View Transitions + scroll-driven motion",
+   "lane": "craft",
+   "order": 8,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-01"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-09"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-09",
+   "title": "AI-surface kit",
+   "lane": "craft",
+   "order": 9,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ENG-02"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "P-12"
+   ],
+   "notes": null
+  },
+  {
+   "id": "WO-CRA-10",
+   "title": "Promotion pass: proven app kits into the DS",
+   "lane": "craft",
+   "order": 10,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "P-15"
+   ],
+   "notes": null
+  }
+ ]
+}
