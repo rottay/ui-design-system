@@ -11,7 +11,7 @@
 
 import type { TenantConfig } from '../../../../../contracts';
 import type { CompiledBrand } from '../../../../../contracts/themes';
-import { compileBrandTheme, brandThemeToBranding, mergePartialPersonality, deepMergeTokenOverrides } from '../../../../../compilers/brand-theme';
+import { compileBrandTheme, brandThemeToBranding, brandThemeToChromeVariables, mergePartialPersonality, deepMergeTokenOverrides } from '../../../../../compilers/brand-theme';
 import { isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor, buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor, buildElevationScale } from '../../../../../compilers/_shared/color-math';
 import { appearanceToVariables } from '../../../../../compilers/appearance';
 import { getVerticalPreset } from '../../../../verticals/registry';
@@ -657,13 +657,36 @@ export function generateTenantCssFromResolvedVisualConfig(
   const blocks = [toCssBlock(selector, lightDeclarations)];
 
   if (includeDarkSelector) {
-    // Dark declarations use base (no chrome) + dark-specific overrides.
-    // Appearance vars are included because in the runtime they are set as
-    // inline styles on the root element and persist across theme switches.
+    // chrome.controls (buttons + full input chrome), chrome.cardComponent, and
+    // chrome.modal carry no separate dark variant -- unlike BrandPalette's
+    // darkPrimaryColor/darkAccentColor/darkBackgroundColor, a tenant declares these
+    // once and they apply under both themes. Scoped to these three sub-objects only
+    // (not the rest of BrandChrome) so sidebar/layout/shell/table/tabs positional
+    // chrome, pinned dark-block-absent by premium-regression.test.ts, is unaffected.
+    // A tenant with no brandTheme (or a brandTheme with none of these three) gets {}
+    // here, so darkSemanticVariables' generated defaults below are the only source.
+    const darkChromeVars = effectiveConfig.brandTheme?.chrome
+      ? brandThemeToChromeVariables({
+          ...effectiveConfig.brandTheme,
+          chrome: {
+            controls: effectiveConfig.brandTheme.chrome.controls,
+            cardComponent: effectiveConfig.brandTheme.chrome.cardComponent,
+            modal: effectiveConfig.brandTheme.chrome.modal,
+          },
+        })
+      : {};
+
+    // Dark declarations layer: base (brand compat + token overrides + personality),
+    // dark-tuned brand scale, generated dark defaults, then the tenant's compiled
+    // chrome so a declared value overrides the generated default for that channel,
+    // followed by dark-only personality deltas. Appearance vars are included because
+    // in the runtime they are set as inline styles on the root element and persist
+    // across theme switches.
     const darkDeclarations = {
       ...baseDeclarations,
       ...darkBrandingVariables(effectiveConfig),
       ...darkSemanticVariables(effectiveConfig),
+      ...darkChromeVars,
       ...darkPersonalityOverrides(effectiveConfig),
       ...appearanceVars,
     };

@@ -3323,6 +3323,9 @@
       font-size: 0.75rem;
     }
   }
+  .row-1 {
+    grid-row: 1;
+  }
   .row-span-3 {
     grid-row: span 3 / span 3;
   }
