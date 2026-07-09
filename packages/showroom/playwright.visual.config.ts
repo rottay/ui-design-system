@@ -27,11 +27,12 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e',
-  // Both production-server spec directories, and only those: a bare
+  // The production-server spec directories, and only those: a bare
   // `playwright test --config playwright.visual.config.ts` runs the visual
-  // suite and the whitelabel probe together (one webServer boot), while
-  // `test:visual` / `test:whitelabel` narrow to one via a path filter.
-  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts'],
+  // suite, the whitelabel probe, and the responsive probe together (one
+  // webServer boot), while `test:visual` / `test:whitelabel` /
+  // `test:responsive` narrow to one via a path filter.
+  testMatch: ['visual/**/*.spec.ts', 'whitelabel/**/*.spec.ts', 'responsive/**/*.spec.ts'],
   // One flagship gallery page serves every cell in the matrix; parallel
   // workers would fight over the same production server's compile/response
   // cache for no benefit, so this mirrors the a11y harness's single-worker,

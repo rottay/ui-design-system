@@ -8,6 +8,7 @@ import {
   TenantPaletteSurface,
   surfaceLabelFor,
   FLAGSHIP_SLUGS,
+  RESPONSIVE_SLUGS,
   type SurfaceTenant,
 } from '@/components/state-gallery';
 
@@ -19,7 +20,11 @@ import {
 // Chrome-free so a screenshot is pure component evidence. Query params:
 //   ?tenant=rottay|bithire|evnto  which palette owns the page (default rottay)
 //   ?w=360|768|1280               fixed content width for the responsive law
-//   ?slug=button                  capture a single flagship in isolation
+//   ?slug=button                  capture a single component in isolation
+//   ?set=flagship|responsive      which slug set ?slug looks up against and
+//                                 which set renders when ?slug is absent
+//                                 (default flagship; responsive covers
+//                                 components absent from FLAGSHIP_SPECS)
 // ---------------------------------------------------------------------------
 
 const CAPTURE_WIDTHS: Record<string, number> = {
@@ -30,8 +35,14 @@ const CAPTURE_WIDTHS: Record<string, number> = {
 
 const TENANTS: SurfaceTenant[] = ['rottay', 'bithire', 'evnto'];
 
+type GallerySet = 'flagship' | 'responsive';
+
 function sanitizeTenant(raw: string | null): SurfaceTenant {
   return raw && (TENANTS as string[]).includes(raw) ? (raw as SurfaceTenant) : 'rottay';
+}
+
+function sanitizeSet(raw: string | null): GallerySet {
+  return raw === 'responsive' ? 'responsive' : 'flagship';
 }
 
 function EvidenceContent() {
@@ -39,15 +50,18 @@ function EvidenceContent() {
 
   const tenant = useMemo(() => sanitizeTenant(searchParams.get('tenant')), [searchParams]);
 
+  const set = useMemo(() => sanitizeSet(searchParams.get('set')), [searchParams]);
+
   const contentWidth = useMemo(() => {
     const raw = searchParams.get('w');
     return raw && CAPTURE_WIDTHS[raw] ? CAPTURE_WIDTHS[raw] : undefined;
   }, [searchParams]);
 
   const slugs = useMemo(() => {
+    const setSlugs = set === 'responsive' ? RESPONSIVE_SLUGS : FLAGSHIP_SLUGS;
     const only = searchParams.get('slug');
-    return only && FLAGSHIP_SLUGS.includes(only) ? [only] : FLAGSHIP_SLUGS;
-  }, [searchParams]);
+    return only && setSlugs.includes(only) ? [only] : setSlugs;
+  }, [searchParams, set]);
 
   return (
     <TenantPaletteSurface tenant={tenant}>

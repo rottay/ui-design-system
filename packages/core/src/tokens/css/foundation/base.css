@@ -77,8 +77,8 @@
   .ant-tabs-tab,
   .ant-pagination-item,
   .ant-tag {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: var(--ds-touch-target-min);
+    min-width: var(--ds-touch-target-min);
   }
 
   .ant-tabs-tab {

@@ -1147,6 +1147,18 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 
   /* ─────────────────────────────────────────────────────────────────────────────
+     5.2 TOUCH TARGETS (WO-ENG-12) — coarse-pointer hit-area floor
+     A single floor value, not a parallel size scale: an engine-scoped
+     `@media (pointer: coarse)` rule clamps a control's existing sizing tokens
+     to this floor via `min-height` (see engines/modern/theme.css), so a touch
+     pointer gets a >= 44x44 CSS px hit area while a fine (mouse) pointer keeps
+     its normal rendered size untouched. 44px matches the WCAG AAA target size
+     already hardcoded at foundation/base.css's unlayered coarse-pointer rule
+     and at foundation/responsive/button.css and avatar.css.
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-touch-target-min: 44px;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
      6. Z-INDEX
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-z-index-base: 0;
@@ -12409,6 +12421,23 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border-radius: var(--ds-radius-sm);
 }
 
+/* =============================================================================
+   TOUCH TARGETS - coarse-pointer hit-area floor (WO-ENG-12, spec section 13)
+   ============================================================================= */
+
+/* `@media (pointer: coarse)` is a pointer-capability query, not a viewport
+   fork: it targets touch hardware regardless of screen size, so fine (mouse)
+   pointer rendering is untouched. Button/link/checkbox/radio/select hit
+   areas are already floored by the unlayered rule in foundation/base.css;
+   the modern Input's <input> renders with inline styles and only a
+   per-render hashed class, so `.rottay-input--modern` is its stable hook
+   for this floor. */
+@media (pointer: coarse) {
+  [data-tenant] .rottay-input--modern {
+    min-height: var(--ds-touch-target-min);
+  }
+}
+
 /**
  * Rustic Engine Theme - Rottay Design System
  *
@@ -14595,8 +14624,8 @@ html {
   .ant-tabs-tab,
   .ant-pagination-item,
   .ant-tag {
-    min-height: 44px;
-    min-width: 44px;
+    min-height: var(--ds-touch-target-min);
+    min-width: var(--ds-touch-target-min);
   }
 
   .ant-tabs-tab {

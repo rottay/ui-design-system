@@ -2,25 +2,35 @@
 
 import { Box, Flex, Stack, Text } from '@rottay/design-system';
 import { FLAGSHIP_SPECS, type FlagshipSpec } from './flagship-specs';
+import { RESPONSIVE_SPECS } from './responsive-specs';
 
 export type { FlagshipSpec, StateGroup, StateCell } from './flagship-specs';
 export { FLAGSHIP_SPECS } from './flagship-specs';
+export { RESPONSIVE_SPECS } from './responsive-specs';
 export { TenantPaletteSurface, surfaceLabelFor } from './tenant-axis';
 export type { SurfaceTenant } from './tenant-axis';
 
 /** Slugs that have an authored variant + state gallery (the ENG-02 flagship set). */
 export const FLAGSHIP_SLUGS: string[] = FLAGSHIP_SPECS.map((spec) => spec.slug);
 
+/** Slugs covered by the responsive-only gallery (components absent from FLAGSHIP_SPECS). */
+export const RESPONSIVE_SLUGS: string[] = RESPONSIVE_SPECS.map((spec) => spec.slug);
+
 export function getFlagshipSpec(slug: string): FlagshipSpec | undefined {
   return FLAGSHIP_SPECS.find((spec) => spec.slug === slug);
 }
 
+export function getResponsiveSpec(slug: string): FlagshipSpec | undefined {
+  return RESPONSIVE_SPECS.find((spec) => spec.slug === slug);
+}
+
 /**
- * Renders a flagship component's real variants and states as a labeled grid.
- * Returns null for slugs without an authored spec so callers can fall back.
+ * Renders a flagship or responsive-set component's real variants and states
+ * as a labeled grid. Returns null for slugs without an authored spec in
+ * either set so callers can fall back.
  */
 export function StateGallery({ slug }: { slug: string }) {
-  const spec = getFlagshipSpec(slug);
+  const spec = getFlagshipSpec(slug) ?? getResponsiveSpec(slug);
 
   if (!spec) {
     return null;

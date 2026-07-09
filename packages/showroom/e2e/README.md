@@ -1,20 +1,37 @@
 # Showroom Playwright harness
 
-Three spec directories, two configs. Do not add a third config — every new
+Four spec directories, two configs. Do not add a third config — every new
 browser-driven gate lives under one of these two.
 
-| | `e2e/a11y/` | `e2e/visual/` | `e2e/whitelabel/` |
-| --- | --- | --- | --- |
-| Config | `playwright.config.ts` | `playwright.visual.config.ts` | `playwright.visual.config.ts` |
-| Target server | dev server (`pnpm dev`, Turbopack) | production build (`pnpm start`, `next start`) | production build (`pnpm start`) |
-| What it gates | axe + focus-visible sweep (WO-GAT-04) | pixel-diff screenshots (WO-GAT-01) | hostile-tenant computed-style probe (WO-GAT-03) |
-| Run | `pnpm --filter @rottay/showroom exec playwright test e2e/a11y` | `pnpm --filter @rottay/showroom run test:visual` | `pnpm --filter @rottay/showroom run test:whitelabel` |
+| | `e2e/a11y/` | `e2e/visual/` | `e2e/whitelabel/` | `e2e/responsive/` |
+| --- | --- | --- | --- | --- |
+| Config | `playwright.config.ts` | `playwright.visual.config.ts` | `playwright.visual.config.ts` | `playwright.visual.config.ts` |
+| Target server | dev server (`pnpm dev`) | production build (`pnpm start`) | production build | production build |
+| What it gates | axe + focus-visible sweep (WO-GAT-04) | pixel-diff screenshots (WO-GAT-01) | hostile-tenant computed-style probe (WO-GAT-03) | 360px overflow + coarse-pointer hit areas (WO-ENG-12) |
+| Run | `... exec playwright test e2e/a11y` | `... run test:visual` | `... run test:whitelabel` | `... run test:responsive` |
 
-`playwright.visual.config.ts` matches both of its directories, so
-`pnpm --filter @rottay/showroom run test:gates` runs the visual suite and the
-whitelabel probe in one invocation over one `next start` — that is what CI's
-`visual` job does. `playwright.config.ts` ignores those two directories so a
-bare run on the a11y config never drives them against the dev server.
+`playwright.visual.config.ts` matches all three of its directories, so
+`pnpm --filter @rottay/showroom run test:gates` runs the visual suite, the
+whitelabel probe, and the responsive probe in one invocation over one
+`next start` — that is what CI's `visual` job does. `playwright.config.ts`
+ignores those three directories so a bare run on the a11y config never drives
+them against the dev server.
+
+## The responsive probe (`e2e/responsive/`)
+
+Both of its properties are measured on the chrome-free capture route, never on a
+docs page: the showroom shell clips content at 360px (elements reach past the
+viewport while the document does not scroll), so a shell defect and a component
+defect are indistinguishable there.
+
+`overflow-baseline.json` carries two decrease-only lists — `overflowing` (one
+entry per capture cell whose document scrolls horizontally at 360px) and
+`touchTargets` (one per interactive part under 44x44 on a coarse pointer).
+`node packages/core/scripts/engine-token-audit.mjs --check` reads the length of
+`overflowing` as its `responsive.overflowCells` ratchet, so the count cannot
+grow even if this spec is skipped. Regenerate with
+`RESPONSIVE_UPDATE_BASELINE=1`, which rewrites the file to the intersection with
+the current run. Fix the width or the hit area; never widen the baseline.
 
 ## Why visual regression needs the production build
 

@@ -285,11 +285,12 @@ export const FLAGSHIP_SPECS: FlagshipSpec[] = [
     groups: [
       {
         label: 'States',
+        // Cells must be fluid: this gallery is captured at fixed 360/768/1280 viewports.
         cells: [
           {
             label: 'Populated',
             node: (
-              <Box style={{ width: 360 }}>
+              <Box style={{ width: '100%', maxWidth: 360 }}>
                 <Table rowKey="key" pagination={false} dataSource={TABLE_ROWS} columns={TABLE_COLUMNS} />
               </Box>
             ),
@@ -297,7 +298,7 @@ export const FLAGSHIP_SPECS: FlagshipSpec[] = [
           {
             label: 'Empty',
             node: (
-              <Box style={{ width: 360 }}>
+              <Box style={{ width: '100%', maxWidth: 360 }}>
                 <Table rowKey="key" pagination={false} dataSource={[]} columns={TABLE_COLUMNS} />
               </Box>
             ),
@@ -312,11 +313,12 @@ export const FLAGSHIP_SPECS: FlagshipSpec[] = [
     groups: [
       {
         label: 'Active item',
+        // Cells must be fluid: this gallery is captured at fixed 360/768/1280 viewports.
         cells: [
           {
             label: 'First active',
             node: (
-              <Box style={{ width: 300 }}>
+              <Box style={{ width: '100%', maxWidth: 300 }}>
                 <Tabs items={TABS_ITEMS} defaultActiveKey="1" />
               </Box>
             ),
@@ -324,7 +326,7 @@ export const FLAGSHIP_SPECS: FlagshipSpec[] = [
           {
             label: 'Second active',
             node: (
-              <Box style={{ width: 300 }}>
+              <Box style={{ width: '100%', maxWidth: 300 }}>
                 <Tabs items={TABS_ITEMS} defaultActiveKey="2" />
               </Box>
             ),

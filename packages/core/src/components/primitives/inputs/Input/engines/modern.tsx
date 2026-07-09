@@ -537,7 +537,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
           <input
             {...inputProps}
-            className={placeholderStyleId}
+            className={`rottay-input rottay-input--modern ${placeholderStyleId}`}
             style={innerInputStyle}
           />
 
@@ -576,7 +576,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       <input
         {...inputProps}
         {...responsiveAttrs}
-        className={placeholderStyleId}
+        className={`rottay-input rottay-input--modern ${placeholderStyleId}`}
         style={standaloneStyle}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

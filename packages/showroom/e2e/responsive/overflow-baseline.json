@@ -1,0 +1,5 @@
+{
+  "countingMethod": "One entry per capture cell (component slug x tenant palette) whose document still scrolls horizontally at a 360px viewport on the chrome-free capture route /probe/engine-modern. Measured by e2e/responsive/responsive.spec.ts against the PRODUCTION build. Decrease-only: the spec fails on any cell absent from this list, and node packages/core/scripts/engine-token-audit.mjs --check reads the list length as the responsive.overflowCells ratchet so the number cannot grow unnoticed. Regenerate with RESPONSIVE_UPDATE_BASELINE=1, which rewrites the file to the intersection with the current run -- fixed cells drop out, new ones can never be added.",
+  "overflowing": [],
+  "touchTargets": []
+}

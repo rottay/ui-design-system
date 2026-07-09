@@ -14,10 +14,12 @@
   "color.modernHexLiterals": 13,
   "color.modernRgbaLiterals": 1,
   "themeCss.unreferencedSelectors": 0,
-  "themeCss.lineCount": 1675,
+  "themeCss.lineCount": 1692,
   "themeCss.deadSelectorsClassic": 13,
   "themeCss.deadSelectorsRustic": 146,
   "content.magicZIndex": 33,
   "layout.crossEngineDivergences": 0,
-  "a11y.apcaPairings": 6
+  "a11y.apcaPairings": 6,
+  "responsive.fixedWidthLiterals": 0,
+  "responsive.overflowCells": 0
 }

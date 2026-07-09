@@ -1673,3 +1673,20 @@
   border: none;
   border-radius: var(--ds-radius-sm);
 }
+
+/* =============================================================================
+   TOUCH TARGETS - coarse-pointer hit-area floor (WO-ENG-12, spec section 13)
+   ============================================================================= */
+
+/* `@media (pointer: coarse)` is a pointer-capability query, not a viewport
+   fork: it targets touch hardware regardless of screen size, so fine (mouse)
+   pointer rendering is untouched. Button/link/checkbox/radio/select hit
+   areas are already floored by the unlayered rule in foundation/base.css;
+   the modern Input's <input> renders with inline styles and only a
+   per-render hashed class, so `.rottay-input--modern` is its stable hook
+   for this floor. */
+@media (pointer: coarse) {
+  [data-tenant] .rottay-input--modern {
+    min-height: var(--ds-touch-target-min);
+  }
+}

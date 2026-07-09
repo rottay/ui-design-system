@@ -299,7 +299,10 @@ export default function ModernPageShell(props: PageShellProps) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div
                 style={{
-                  width: 280,
+                  // In-flow skeleton: 280px exceeds the content box a 360px
+                  // viewport offers, so it is bounded rather than pinned.
+                  width: '100%',
+                  maxWidth: 280,
                   height: 28,
                   borderRadius: 'var(--ds-radius-sm)',
                   background: 'var(--ds-color-neutral-100)',

@@ -294,10 +294,11 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @rottay/showroom exec playwright install chromium
 
-      # One invocation, one `next start`: e2e/visual/ (pixel diffs, WO-GAT-01)
-      # and e2e/whitelabel/ (hostile-tenant computed-style probe, WO-GAT-03)
-      # are the two spec directories playwright.visual.config.ts matches.
-      - name: Run visual regression + whitelabel torture suites
+      # One invocation, one `next start`: e2e/visual/ (pixel diffs, WO-GAT-01),
+      # e2e/whitelabel/ (hostile-tenant computed-style probe, WO-GAT-03), and
+      # e2e/responsive/ (360px overflow + coarse-pointer hit areas, WO-ENG-12)
+      # are the three spec directories playwright.visual.config.ts matches.
+      - name: Run visual regression, whitelabel, and responsive suites
         run: pnpm --filter @rottay/showroom run test:gates
 
       - name: Upload visual regression report
