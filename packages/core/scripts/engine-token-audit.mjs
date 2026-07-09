@@ -436,8 +436,48 @@ function countInlineStateLiterals() {
   return count;
 }
 
+/**
+ * Count render-layer files that CONSUME each sanctioned premium effect family
+ * (spec section 5): gradient (surface-tint + accent), glass (overlay backdrops),
+ * signal-glow. Scans src/components + src/motion (the render layer) and requires
+ * a real `var(--ds-<family>...)` usage, so token definitions (premium.css), the
+ * compiler, the useTokens() catalog, tenant artifacts, and comment mentions do
+ * not count. The premium layer measured 1/0/0 (gradient/glass/glow) dead at the
+ * 2026-07-06 baseline; WO-ENG-05 wires each family to > 0 sanctioned consumers
+ * (enforced as a floor via MIN below).
+ */
+function countEffectConsumers() {
+  const roots = [componentsDir, join(root, "src/motion")];
+  const families = {
+    gradient: /var\(\s*--ds-gradient-/,
+    glass: /var\(\s*--ds-glass-/,
+    glow: /var\(\s*--ds-shadow-glow-/,
+  };
+  const counts = { gradient: 0, glass: 0, glow: 0 };
+  function walk(dir) {
+    if (!existsSync(dir)) return;
+    for (const entry of readdirSync(dir)) {
+      const full = join(dir, entry);
+      const rel = full.replace(/\\/g, "/");
+      if (statSync(full).isDirectory()) {
+        walk(full);
+        continue;
+      }
+      if (!/\.tsx?$/.test(full)) continue;
+      if (/__tests__|\.(test|spec|stories)\./.test(rel)) continue;
+      const text = readFileSync(full, "utf8");
+      for (const [fam, re] of Object.entries(families)) {
+        if (re.test(text)) counts[fam] += 1;
+      }
+    }
+  }
+  for (const r of roots) walk(r);
+  return counts;
+}
+
 const files = modernFiles(componentsDir);
 const motion = countMotionLiterals(files);
+const effects = countEffectConsumers();
 
 const counters = {
   "motion.cubicBezierLiterals": motion.cubicBezier,
@@ -449,7 +489,10 @@ const counters = {
   "scale.fallbackParityViolations": countFallbackParityViolations(),
   "state.darkFocusRingDefects": countDarkFocusRingDefects(),
   "state.inlineStateLiterals": countInlineStateLiterals(),
-  // Later WOs extend here: color.hardcodedHex, effects.gradientConsumers, ...
+  "effects.gradientConsumers": effects.gradient,
+  "effects.glassConsumers": effects.glass,
+  "effects.glowConsumers": effects.glow,
+  // Later WOs extend here: color.hardcodedHex, theme.css lines, ...
 };
 
 /** Invariants checked for exact equality (not just decrease-only) in --check. */
@@ -460,6 +503,19 @@ const EXACT = {
   "scale.radiusScaleDeclarations": 1,
   // No dark-blind focus ring survives on any dark-surface tenant (audit 3.4).
   "state.darkFocusRingDefects": 0,
+};
+
+/**
+ * Invariants checked as a MINIMUM floor (counter must be >= value) in --check.
+ * Unlike the decrease-only ratchet, these are keys where a HIGHER value is
+ * healthy: the number of sanctioned premium-effect consumers (spec section 5,
+ * the 1/0/0 dead layer now wired). Keys here are exempt from the decrease-only
+ * "risen above baseline" check.
+ */
+const MIN = {
+  "effects.gradientConsumers": 1,
+  "effects.glassConsumers": 1,
+  "effects.glowConsumers": 1,
 };
 
 const mode = process.argv.includes("--check")
@@ -486,6 +542,7 @@ if (mode === "check") {
   const baseline = JSON.parse(readFileSync(baselinePath, "utf8"));
   const risen = [];
   for (const [k, v] of Object.entries(counters)) {
+    if (k in MIN) continue; // floor-governed (higher is healthy), not ceiling-governed
     const base = baseline[k] ?? Infinity;
     if (v > base) risen.push(`${k}: ${v} > baseline ${base}`);
   }
@@ -493,11 +550,16 @@ if (mode === "check") {
   for (const [k, expected] of Object.entries(EXACT)) {
     if (counters[k] !== expected) invariant.push(`${k}: ${counters[k]} != required ${expected}`);
   }
-  if (risen.length || invariant.length) {
+  const belowFloor = [];
+  for (const [k, min] of Object.entries(MIN)) {
+    if ((counters[k] ?? 0) < min) belowFloor.push(`${k}: ${counters[k]} < required >= ${min}`);
+  }
+  if (risen.length || invariant.length || belowFloor.length) {
     console.error("engine-token-audit --check FAILED:");
     for (const r of risen) console.error("  - rose above baseline: " + r);
     for (const r of invariant) console.error("  - invariant broken: " + r);
+    for (const r of belowFloor) console.error("  - below required floor: " + r);
     process.exit(1);
   }
-  console.log("engine-token-audit --check OK (all counters at or below baseline; invariants hold)");
+  console.log("engine-token-audit --check OK (all counters within baseline; invariants and floors hold)");
 }

@@ -126,6 +126,7 @@ html[data-tenant='bithire'] {
   --ds-command-rail-bg: #FFFFFF;
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-effect-intensity: 0;
   --ds-filter-pill-active-bg: var(--ds-tint-8);
   --ds-filter-pill-active-border: color-mix(in srgb, #3A6FB0 28%, #D3DEEA);
   --ds-filter-pill-active-color: #3A6FB0;
@@ -149,12 +150,6 @@ html[data-tenant='bithire'] {
   --ds-font-family-display: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   --ds-font-family-heading: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
   --ds-font-family-mono: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
-  --ds-glass-bg: none;
-  --ds-glass-blur: none;
-  --ds-glass-border: none;
-  --ds-gradient-mesh: none;
-  --ds-gradient-primary: none;
-  --ds-gradient-surface: none;
   --ds-input-bg: #ffffff;
   --ds-input-bg-disabled: #F8F8F8;
   --ds-input-border: #BCCBDC;

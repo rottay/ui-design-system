@@ -7,5 +7,8 @@
   "scale.radiusScaleDeclarations": 1,
   "scale.fallbackParityViolations": 0,
   "state.darkFocusRingDefects": 0,
-  "state.inlineStateLiterals": 0
+  "state.inlineStateLiterals": 0,
+  "effects.gradientConsumers": 3,
+  "effects.glassConsumers": 4,
+  "effects.glowConsumers": 1
 }

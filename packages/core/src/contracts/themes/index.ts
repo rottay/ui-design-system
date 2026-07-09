@@ -127,6 +127,13 @@ export interface BrandSurfaces {
   gradients?: TenantGradientTokens;
   overlays?: TenantOverlayTokens;
   densityScale?: number;
+  /**
+   * Premium effect-intensity dial. Emitted as `--ds-effect-intensity` and
+   * multiplies the gradient/glass/glow layer (engines/modern spec section 5):
+   * `1` = full Quiet Premium (DS/rottay default), `0` = flat/zero-decoration
+   * (BitHire's Evidence-Ledger law). Defaults to `1` when unset.
+   */
+  effectIntensity?: number;
 }
 
 export interface BrandMotion {

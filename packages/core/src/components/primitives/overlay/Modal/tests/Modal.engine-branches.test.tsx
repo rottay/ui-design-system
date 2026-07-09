@@ -175,7 +175,11 @@ describe('Modal advanced engine coverage', () => {
     const backdrop = Array.from(dialog.children).find(
       (node) => !(node as HTMLElement).hasAttribute('role')
     ) as HTMLDivElement;
-    expect(backdrop.style.backdropFilter).toContain('blur');
+    // Modern blur backdrop is tokenized (WO-ENG-05 glass wiring): the blurBackdrop
+    // branch renders --ds-glass-backdrop-filter, which resolves to
+    // blur(calc(12px * var(--ds-effect-intensity))). (When blurBackdrop is false the
+    // property is undefined, so this still proves the blur-backdrop branch is active.)
+    expect(backdrop.style.backdropFilter).toContain('--ds-glass-backdrop-filter');
 
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(handleClose).not.toHaveBeenCalled();

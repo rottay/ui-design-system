@@ -284,9 +284,16 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             style={{
               position: 'fixed',
               inset: 0,
-              background: 'var(--ds-modal-overlay-bg, color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent))',
-              backdropFilter: blurBackdrop !== false ? 'var(--ds-modal-overlay-backdrop, blur(4px))' : undefined,
-              WebkitBackdropFilter: blurBackdrop !== false ? 'var(--ds-modal-overlay-backdrop, blur(4px))' : undefined,
+              // Scrim (kept) with the glass layer (spec section 5) on top: a subtle
+              // frost tint + backdrop blur that both scale with --ds-effect-intensity,
+              // collapsing to a plain scrim at 0. Glass is sanctioned on overlay
+              // backdrops only.
+              backgroundColor: 'var(--ds-modal-overlay-bg, color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent))',
+              backgroundImage: blurBackdrop !== false
+                ? 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))'
+                : undefined,
+              backdropFilter: blurBackdrop !== false ? 'var(--ds-glass-backdrop-filter)' : undefined,
+              WebkitBackdropFilter: blurBackdrop !== false ? 'var(--ds-glass-backdrop-filter)' : undefined,
               animation: `rottay-modal-backdrop-enter ${MOTION_DURATION} ${MOTION_EASING}`,
               pointerEvents: 'none',
             }}

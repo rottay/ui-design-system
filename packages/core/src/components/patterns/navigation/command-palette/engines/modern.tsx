@@ -153,10 +153,17 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
 
   return (
     <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
-      {/* Backdrop */}
+      {/* Backdrop: scrim (kept) + glass layer (spec section 5). Frost tint + backdrop
+          blur scale with --ds-effect-intensity, collapsing to a plain scrim at 0.
+          Glass is sanctioned on overlay backdrops only. */}
       <div
         className="absolute inset-0"
-        style={{ background: 'var(--ds-overlay-backdrop, rgba(0, 0, 0, 0.5))' }}
+        style={{
+          backgroundColor: 'var(--ds-overlay-backdrop, rgba(0, 0, 0, 0.5))',
+          backgroundImage: 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))',
+          backdropFilter: 'var(--ds-glass-backdrop-filter)',
+          WebkitBackdropFilter: 'var(--ds-glass-backdrop-filter)',
+        }}
         onClick={() => onOpenChange(false)}
       />
       {/* Dialog */}

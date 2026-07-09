@@ -77,6 +77,10 @@ export const bithireBrandTheme: BrandTheme = {
     },
     glass: { blur: 'none', background: 'none', border: 'none' },
     gradients: { primary: 'none', surface: 'none', mesh: 'none' },
+    // Evidence-Ledger zero-decoration law (engines/modern spec section 5): the
+    // effect-intensity dial is 0, so --ds-effect-intensity collapses the entire
+    // gradient/glass/glow layer to flat product-wide.
+    effectIntensity: 0,
     overlays: {
       light: 'rgba(22, 42, 67, 0.02)',
       medium: 'rgba(22, 42, 67, 0.04)',

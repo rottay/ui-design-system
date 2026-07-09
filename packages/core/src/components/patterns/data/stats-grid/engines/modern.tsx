@@ -128,17 +128,22 @@ function useAnimatedValue(
 /** Maps variant names to DS token inline styles for card styling. */
 const variantStyles: Record<NonNullable<StatsGridProps['variant']>, React.CSSProperties> = {
   default: {
-    background: 'var(--ds-surface-card)',
+    // Surface-tint (spec section 5, role 1) layered over the fill; collapses to
+    // flat when --ds-effect-intensity is 0.
+    backgroundColor: 'var(--ds-surface-card)',
+    backgroundImage: 'var(--ds-gradient-surface)',
     boxShadow: 'var(--ds-elevation-1)',
     borderRadius: 'var(--ds-radius-lg)',
   },
   outlined: {
-    background: 'var(--ds-surface-card)',
+    backgroundColor: 'var(--ds-surface-card)',
+    backgroundImage: 'var(--ds-gradient-surface)',
     border: '1px solid var(--ds-color-border)',
     borderRadius: 'var(--ds-radius-lg)',
   },
   filled: {
-    background: 'var(--ds-surface-inset)',
+    backgroundColor: 'var(--ds-surface-inset)',
+    backgroundImage: 'var(--ds-gradient-surface)',
     borderRadius: 'var(--ds-radius-lg)',
   },
   glass: {

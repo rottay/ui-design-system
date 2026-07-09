@@ -632,9 +632,10 @@ export const VARIANT_COLORS = {
     borderColor: 'var(--ds-toast-secondary-border, var(--ds-color-alpha-secondary-20))',
     iconColor: 'var(--ds-toast-secondary-icon, var(--ds-color-secondary))',
   },
-  /** Gradient variant - decorative gradient background */
+  /** Gradient variant - decorative gradient background. Self-contained brand
+   *  gradient (not --ds-gradient-primary, which is the subtle button-accent sheen). */
   gradient: {
-    bg: 'var(--ds-toast-gradient-bg, var(--ds-gradient-primary))',
+    bg: 'var(--ds-toast-gradient-bg, linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-secondary)))',
     color: 'var(--ds-toast-gradient-color, var(--ds-color-text-on-primary))',
     borderColor: 'transparent',
     iconColor: 'var(--ds-toast-gradient-icon, var(--ds-color-text-on-primary))',

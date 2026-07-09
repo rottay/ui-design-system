@@ -280,9 +280,13 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             position: 'fixed',
             inset: 0,
             zIndex: zBase,
-            background: 'color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)',
-            backdropFilter: 'blur(4px)',
-            WebkitBackdropFilter: 'blur(4px)',
+            // Scrim (kept) + glass layer (spec section 5): frost tint + backdrop blur
+            // scale with --ds-effect-intensity, collapsing to a plain scrim at 0.
+            // Glass is sanctioned on overlay backdrops only.
+            backgroundColor: 'color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)',
+            backgroundImage: 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))',
+            backdropFilter: 'var(--ds-glass-backdrop-filter)',
+            WebkitBackdropFilter: 'var(--ds-glass-backdrop-filter)',
             animation: `rottay-drawer-backdrop-fade ${MOTION_DURATION} ${MOTION_EASING}`,
           }}
         />

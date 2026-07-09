@@ -97,6 +97,9 @@ const CardSpinner: React.FC = () => (
 
 interface VariantStyle {
   backgroundColor: string;
+  /** Surface-tint gradient (spec section 5, role 1) layered over the fill.
+   *  Collapses to flat when --ds-effect-intensity is 0. */
+  backgroundImage?: string;
   borderWidth: string;
   borderStyle: 'solid';
   borderColor: string;
@@ -112,6 +115,7 @@ interface VariantHoverStyle {
 const VARIANT_STYLES: Record<string, VariantStyle> = {
   elevated: {
     backgroundColor: 'var(--ds-card-bg, var(--ds-card-elevated-bg, var(--ds-surface-card)))',
+    backgroundImage: 'var(--ds-gradient-surface)',
     borderWidth: 'var(--ds-card-elevated-border-width, 0)',
     borderStyle: 'solid',
     borderColor: 'var(--ds-card-border, transparent)',
@@ -119,6 +123,7 @@ const VARIANT_STYLES: Record<string, VariantStyle> = {
   },
   outlined: {
     backgroundColor: 'var(--ds-card-bg, var(--ds-card-bordered-bg, var(--ds-surface-card)))',
+    backgroundImage: 'var(--ds-gradient-surface)',
     borderWidth: 'var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px))',
     borderStyle: 'solid',
     borderColor: 'var(--ds-card-border, var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle))))',
@@ -126,6 +131,7 @@ const VARIANT_STYLES: Record<string, VariantStyle> = {
   },
   filled: {
     backgroundColor: 'var(--ds-card-bg, var(--ds-card-flat-bg, var(--ds-surface-panel)))',
+    backgroundImage: 'var(--ds-gradient-surface)',
     borderWidth: 'var(--ds-card-flat-border-width, 0)',
     borderStyle: 'solid',
     borderColor: 'var(--ds-card-border, transparent)',
@@ -254,6 +260,9 @@ export default function ModernCard(props: CardProps): React.ReactElement {
     position: 'relative',
     borderRadius: radiusValue,
     backgroundColor: variantStyle.backgroundColor,
+    // Surface-tint (spec section 5, role 1) layered over the fill; color variants
+    // carry their own tone, so the tint is suppressed for them.
+    backgroundImage: hasColorVariant ? undefined : variantStyle.backgroundImage,
     border: `${variantStyle.borderWidth} ${variantStyle.borderStyle} ${borderColor}`,
     boxShadow: isFocused && onClick
       ? `${hoverStyle.boxShadow || variantStyle.boxShadow}, 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color)`

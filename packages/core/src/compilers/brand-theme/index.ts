@@ -229,20 +229,30 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       if (su.shadows.xl) vars['--ds-shadow-xl'] = su.shadows.xl;
     }
     if (su.glass) {
-      if (su.glass.background) vars['--ds-glass-bg'] = su.glass.background;
-      if (su.glass.border) vars['--ds-glass-border'] = su.glass.border;
-      if (su.glass.blur) vars['--ds-glass-blur'] = su.glass.blur;
+      // 'none' is legacy zero-decoration suppression. The premium.css defaults + the
+      // --ds-effect-intensity dial now own collapse, so a 'none' override must NOT be
+      // emitted: doing so clobbered premium.css at runtime for every non-zero-intensity
+      // tenant (including rottay, killing its surface tint). A tenant stays flat via
+      // --ds-effect-intensity: 0 (bithire), not by nulling the role token. Only a real
+      // (non-'none') value is emitted.
+      if (su.glass.background && su.glass.background !== 'none') vars['--ds-glass-bg'] = su.glass.background;
+      if (su.glass.border && su.glass.border !== 'none') vars['--ds-glass-border'] = su.glass.border;
+      if (su.glass.blur && su.glass.blur !== 'none') vars['--ds-glass-blur'] = su.glass.blur;
     }
     if (su.gradients) {
-      if (su.gradients.primary) vars['--ds-gradient-primary'] = su.gradients.primary;
-      if (su.gradients.surface) vars['--ds-gradient-surface'] = su.gradients.surface;
-      if (su.gradients.mesh) vars['--ds-gradient-mesh'] = su.gradients.mesh;
+      if (su.gradients.primary && su.gradients.primary !== 'none') vars['--ds-gradient-primary'] = su.gradients.primary;
+      if (su.gradients.surface && su.gradients.surface !== 'none') vars['--ds-gradient-surface'] = su.gradients.surface;
+      if (su.gradients.mesh && su.gradients.mesh !== 'none') vars['--ds-gradient-mesh'] = su.gradients.mesh;
     }
     if (su.overlays) {
       if (su.overlays.light) vars['--ds-overlay-light'] = su.overlays.light;
       if (su.overlays.medium) vars['--ds-overlay-medium'] = su.overlays.medium;
       if (su.overlays.heavy) vars['--ds-overlay-heavy'] = su.overlays.heavy;
     }
+    // Premium effect-intensity dial (engines/modern spec section 5). Multiplies the
+    // gradient/glass/glow layer via --ds-effect-intensity; 0 collapses it to flat.
+    // Defaults to 1 (full Quiet Premium) when the theme does not set it.
+    vars['--ds-effect-intensity'] = String(su.effectIntensity ?? 1);
   }
   setTintScaleVariables(vars, bt);
   setTypeRampVariables(vars);

@@ -45,7 +45,10 @@ import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js'
 // ---------------------------------------------------------------------------
 const VARIANT_STYLES: Record<string, React.CSSProperties> = {
   primary: {
-    background: 'var(--ds-button-primary-bg, var(--ds-color-primary))',
+    // Accent (spec section 5, role 2): --ds-gradient-primary top-light sheen
+    // layered over the primary fill; collapses to flat when --ds-effect-intensity
+    // is 0 (the gradient resolves to fully transparent / none).
+    background: 'var(--ds-gradient-primary), var(--ds-button-primary-bg, var(--ds-color-primary))',
     color: 'var(--ds-button-primary-color, var(--ds-button-primary-text, var(--ds-color-text-on-primary)))',
     border: '1px solid var(--ds-button-primary-border, var(--ds-color-primary))',
     boxShadow: 'var(--ds-button-primary-shadow, none)',
@@ -110,7 +113,8 @@ const VARIANT_STYLES: Record<string, React.CSSProperties> = {
 // Hover style overrides per variant - uses brand compiler vars with fallbacks
 const VARIANT_HOVER_STYLES: Record<string, React.CSSProperties> = {
   primary: {
-    background: 'var(--ds-button-primary-bg-hover, var(--ds-color-primary))',
+    // Keep the accent sheen (spec section 5, role 2) on hover.
+    background: 'var(--ds-gradient-primary), var(--ds-button-primary-bg-hover, var(--ds-color-primary))',
     boxShadow: 'var(--ds-button-primary-shadow-hover, var(--ds-elevation-2))',
   },
   secondary: {
