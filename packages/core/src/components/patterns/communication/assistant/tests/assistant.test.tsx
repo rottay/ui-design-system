@@ -1,15 +1,18 @@
 import React from 'react';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
 import {
   AssistantStatusBadge,
+  AssistantStatusIndicator,
+  ConfirmActionCard,
   MessageBubble,
+  PreviewDiffCard,
   StreamingText,
   ToolCallCard,
   TypingIndicator,
   type AssistantMessagePart,
 } from '..';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 
 beforeAll(async () => {
   await Promise.all([
@@ -18,6 +21,7 @@ beforeAll(async () => {
     import('../../../../primitives/display/Card/engines/rustic'),
     import('../../../../primitives/display/Tag/engines/rustic'),
     import('../../../../primitives/display/Typography/engines/rustic'),
+    import('../../../../primitives/inputs/Button/engines/rustic'),
   ]);
 });
 
@@ -157,5 +161,105 @@ describe('assistant patterns', () => {
     expect(screen.getByText('Delivered cleanly')).toBeInTheDocument();
     expect(screen.getByText('Conversation metadata')).toBeInTheDocument();
     expect(screen.getByText('No role branch')).toBeInTheDocument();
+  });
+
+  it('streams a shimmer/caret while live and stops dead on completion (rendered alone)', async () => {
+    // Rendered without a TypingIndicator so the caret keyframes must be owned by
+    // the streaming path itself; a co-mounting dependency would fail this.
+    const streamingView = renderSurface(<StreamingText text="Generating summary" streaming />);
+
+    expect(await screen.findByText('|')).toBeInTheDocument();
+    const injectedStyles = Array.from(document.querySelectorAll('style'))
+      .map((node) => node.textContent ?? '')
+      .join('\n');
+    expect(injectedStyles).toContain('ds-assistant-caret');
+
+    streamingView.unmount();
+
+    renderSurface(<StreamingText text="Generating summary" />);
+    expect(await screen.findByText('Generating summary')).toBeInTheDocument();
+    expect(screen.queryByText('|')).not.toBeInTheDocument();
+  });
+
+  it('renders a terminal receipt for a completed tool call and hides live I/O', async () => {
+    renderSurface(
+      <ToolCallCard
+        name="search_index"
+        status="complete"
+        summary="Indexed 12 records"
+        input="query=onboarding"
+        output="12 records"
+        duration="1.2s"
+      />
+    );
+
+    expect(await screen.findByText('search_index')).toBeInTheDocument();
+    expect(screen.getByText('Indexed 12 records')).toBeInTheDocument();
+    expect(screen.getByText('1.2s')).toBeInTheDocument();
+    // The receipt posture omits the live input/output expansion.
+    expect(screen.queryByText('query=onboarding')).not.toBeInTheDocument();
+    expect(screen.queryByText('12 records')).not.toBeInTheDocument();
+    expect(screen.queryByText('Input')).not.toBeInTheDocument();
+  });
+
+  it('fires confirm and cancel callbacks from ConfirmActionCard', async () => {
+    const onConfirm = vi.fn();
+    const onCancel = vi.fn();
+
+    renderSurface(
+      <ConfirmActionCard
+        title="Apply proposed change"
+        summary="This will update three fields."
+        confirmLabel="Apply"
+        cancelLabel="Discard"
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+      />
+    );
+
+    fireEvent.click(await screen.findByRole('button', { name: 'Discard' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Apply' }));
+
+    expect(onCancel).toHaveBeenCalledTimes(1);
+    expect(onConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders added and removed rows in PreviewDiffCard from props alone', async () => {
+    renderSurface(
+      <PreviewDiffCard
+        title="Proposed update"
+        rows={[
+          { label: 'Status', after: 'Published', change: 'added' },
+          { label: 'Owner', before: 'Alex', change: 'removed' },
+          { label: 'Priority', before: 'Low', after: 'High', change: 'updated' },
+        ]}
+      />
+    );
+
+    expect(await screen.findByText('Proposed update')).toBeInTheDocument();
+    expect(screen.getByText('Published')).toBeInTheDocument();
+    expect(screen.getByText('Alex')).toBeInTheDocument();
+    expect(screen.getByText('Low')).toBeInTheDocument();
+    expect(screen.getByText('High')).toBeInTheDocument();
+  });
+
+  it('renders every state in the agent status set', async () => {
+    renderSurface(
+      <div>
+        <AssistantStatusIndicator status="idle" />
+        <AssistantStatusIndicator status="thinking" />
+        <AssistantStatusIndicator status="streaming" />
+        <AssistantStatusIndicator status="acting" />
+        <AssistantStatusIndicator status="error" />
+        <AssistantStatusIndicator status="streaming" label="Custom streaming label" />
+      </div>
+    );
+
+    expect(await screen.findByText('Idle')).toBeInTheDocument();
+    expect(screen.getByText('Thinking')).toBeInTheDocument();
+    expect(screen.getByText('Streaming')).toBeInTheDocument();
+    expect(screen.getByText('Acting')).toBeInTheDocument();
+    expect(screen.getByText('Error')).toBeInTheDocument();
+    expect(screen.getByText('Custom streaming label')).toBeInTheDocument();
   });
 });

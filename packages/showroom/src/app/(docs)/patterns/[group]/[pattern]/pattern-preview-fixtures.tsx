@@ -3,6 +3,7 @@
 import { useState, type ReactNode } from 'react';
 import {
   AssistantStatusBadge,
+  AssistantStatusIndicator,
   Avatar,
   Badge,
   Box,
@@ -10,6 +11,7 @@ import {
   Button,
   Card,
   cellRenderers,
+  ConfirmActionCard,
   Flex,
   LiveCursor,
   MessageBubble,
@@ -54,8 +56,10 @@ import {
   PatternWorkspaceSwitcher,
   PresenceBar,
   PresenceTypingIndicator,
+  PreviewDiffCard,
   Stack,
   StatusFilterPills,
+  StreamingText,
   Text,
   ToolCallCard,
   TypingIndicator,
@@ -579,16 +583,30 @@ function CellRenderersPreview() {
 }
 
 function AssistantPreview() {
+  // Local state drives the two sighted transitions: shimmer live -> stopped,
+  // and the confirm ceremony resolving to a terminal outcome.
+  const [streaming, setStreaming] = useState(true);
+  const [decision, setDecision] = useState<'pending' | 'confirmed' | 'cancelled'>('pending');
+
   return (
     <Stack spacing="md" style={{ width: '100%', maxWidth: 760 }}>
       <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
         <Flex gap={8} align="center" style={{ flexWrap: 'wrap' }}>
           <Text size="sm" weight="semibold">
-            Assistant primitives composed into a live conversation
+            Assistant kit: streaming, receipts, diff/confirm, and status
           </Text>
           <AssistantStatusBadge label="streaming" tone="info" />
         </Flex>
         <TypingIndicator label="Assistant is preparing the rollout brief" />
+      </Flex>
+
+      {/* Agent status set: thinking/streaming/acting animate; idle/error hold static. */}
+      <Flex gap={16} align="center" style={{ flexWrap: 'wrap' }}>
+        <AssistantStatusIndicator status="idle" />
+        <AssistantStatusIndicator status="thinking" />
+        <AssistantStatusIndicator status="streaming" />
+        <AssistantStatusIndicator status="acting" />
+        <AssistantStatusIndicator status="error" />
       </Flex>
 
       <MessageBubble
@@ -617,24 +635,84 @@ function AssistantPreview() {
             type: 'markdown',
             content:
               'Approvals are clear for Finance and Ops. Legal still has 2 contracts in review and one vendor exception is awaiting a decision.',
-            streaming: true,
+            streaming,
           },
           {
             type: 'tool-status',
             name: 'approval_audit',
             status: 'complete',
             summary: 'Checked current approval queues across tenants.',
-            output: <Text size="sm">2 pending legal approvals, 1 vendor exception.</Text>,
+            duration: '0.8s',
+            meta: <Text size="xs">2 pending legal approvals, 1 vendor exception.</Text>,
           },
         ]}
       />
 
+      {/* Streaming law: the shimmer runs only while live and stops on completion. */}
+      <Card variant="outlined">
+        <Card.Body>
+          <Stack spacing="sm">
+            <Flex align="center" justify="between" gap={12} style={{ flexWrap: 'wrap' }}>
+              <Text size="sm" weight="semibold">
+                Streaming text {streaming ? '(live)' : '(complete)'}
+              </Text>
+              <Button size="sm" variant="secondary" onClick={() => setStreaming((value) => !value)}>
+                {streaming ? 'Complete response' : 'Restart stream'}
+              </Button>
+            </Flex>
+            <StreamingText
+              text="Drafting the rollout brief: approvals cleared for Finance and Ops, legal contracts still pending, and one vendor exception to decide."
+              streaming={streaming}
+            />
+          </Stack>
+        </Card.Body>
+      </Card>
+
+      {/* Tool call running -> terminal receipt (compact outcome + elapsed time). */}
       <ToolCallCard
-        name="publish_update"
-        status="queued"
-        summary="Ready to notify stakeholders once the final approval lands."
+        name="scan_approvals"
+        status="running"
+        summary="Scanning approval queues across tenants..."
+        input="scope=all-tenants"
+      />
+      <ToolCallCard
+        name="scan_approvals"
+        status="complete"
+        summary="Scanned approval queues across tenants."
+        duration="0.9s"
         meta={<Text size="xs">Target channel: cmd+k runtime bulletin</Text>}
       />
+
+      {/* Preview-confirm ceremony: proposed diff, then a confirm/cancel surface. */}
+      <PreviewDiffCard
+        title="Proposed rollout change"
+        rows={[
+          { label: 'Stage', before: 'Draft', after: 'Scheduled', change: 'updated' },
+          { label: 'Notify channel', after: 'cmd+k runtime bulletin', change: 'added' },
+          { label: 'Legal hold', before: 'On', change: 'removed' },
+        ]}
+      />
+
+      {decision === 'pending' ? (
+        <ConfirmActionCard
+          title="Publish rollout update"
+          summary="Applies the proposed change and notifies stakeholders in the cmd+k runtime bulletin."
+          confirmLabel="Publish update"
+          cancelLabel="Keep draft"
+          onConfirm={() => setDecision('confirmed')}
+          onCancel={() => setDecision('cancelled')}
+        />
+      ) : (
+        <Flex gap={8} align="center" style={{ flexWrap: 'wrap' }}>
+          <AssistantStatusBadge
+            label={decision === 'confirmed' ? 'Update published' : 'Kept as draft'}
+            tone={decision === 'confirmed' ? 'success' : 'neutral'}
+          />
+          <Button size="sm" variant="secondary" onClick={() => setDecision('pending')}>
+            Reset
+          </Button>
+        </Flex>
+      )}
     </Stack>
   );
 }

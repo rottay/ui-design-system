@@ -3,23 +3,33 @@
 /**
  * @fileoverview Assistant UI pattern -- composable chat primitives for AI
  * assistant interfaces. Exports StreamingText, TypingIndicator, ToolCallCard,
- * MessageBubble, and AssistantStatusBadge.
+ * MessageBubble, AssistantStatusBadge, AssistantStatusIndicator,
+ * PreviewDiffCard, and ConfirmActionCard.
  *
  * Unlike engine-based patterns, these components use DS primitives directly
- * (Box, Card, Stack, Text, Tag) and are engine-agnostic. They handle
- * rendering concerns (streaming caret, typing dots, tool call cards) while
- * leaving message state management to the consumer.
+ * (Box, Card, Stack, Text, Tag, Button) and are engine-agnostic. They handle
+ * rendering concerns (streaming shimmer/caret, typing dots, tool receipts,
+ * diff/confirm surfaces) while leaving message state management to the consumer.
+ *
+ * The kit is domain-agnostic: field labels, values, actions, and callbacks
+ * arrive as props so no product entity meaning leaks into the design system.
  */
 
 import React from 'react';
 
-import { Box, Card, Stack, Text, Tag } from '../../../primitives';
+import { Box, Button, Card, Stack, Text, Tag } from '../../../primitives';
+import { ShimmerText, useReducedMotion } from '../../../../motion';
 import type {
+  AssistantAgentStatus,
   AssistantDeliveryStatus,
   AssistantMessagePart,
   AssistantMessageRole,
   AssistantStatusBadgeProps,
+  AssistantStatusIndicatorProps,
+  AssistantToolStatus,
+  ConfirmActionCardProps,
   MessageBubbleProps,
+  PreviewDiffCardProps,
   StreamingTextProps,
   ToolCallCardProps,
   TypingIndicatorProps,
@@ -29,13 +39,27 @@ export type {
   AssistantMessageRole,
   AssistantDeliveryStatus,
   AssistantToolStatus,
+  AssistantAgentStatus,
   AssistantMessagePart,
   AssistantStatusBadgeProps,
+  AssistantStatusIndicatorProps,
   StreamingTextProps,
   TypingIndicatorProps,
   ToolCallCardProps,
+  PreviewDiffChange,
+  PreviewDiffRow,
+  PreviewDiffCardProps,
+  ConfirmActionCardProps,
   MessageBubbleProps,
 } from './types';
+
+// Keyframes are owned inline by the streaming and typing paths so their
+// animations run whether or not a sibling indicator is mounted. Identical
+// duplicate definitions are idempotent at the CSS cascade level.
+const ASSISTANT_CARET_KEYFRAMES =
+  '@keyframes ds-assistant-caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }';
+const ASSISTANT_DOT_KEYFRAMES =
+  '@keyframes ds-assistant-dot { 0%, 80%, 100% { opacity: .35; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-2px); } }';
 
 // -- Internal mapping helpers --
 
@@ -92,6 +116,62 @@ function roleLabel(role: AssistantMessageRole | undefined): string | null {
   }
 }
 
+/** Maps a tool execution status to the badge tone used across the kit. */
+function toolStatusToTone(
+  status: AssistantToolStatus
+): AssistantStatusBadgeProps['tone'] {
+  switch (status) {
+    case 'complete':
+      return 'success';
+    case 'error':
+      return 'danger';
+    case 'running':
+      return 'info';
+    default:
+      return 'warning';
+  }
+}
+
+/** Resolves a badge tone to its semantic color CSS variable. */
+function toneToColorVar(tone: AssistantStatusBadgeProps['tone']): string {
+  switch (tone) {
+    case 'success':
+      return 'var(--ds-color-success)';
+    case 'warning':
+      return 'var(--ds-color-warning)';
+    case 'danger':
+      return 'var(--ds-color-error)';
+    case 'info':
+      return 'var(--ds-color-info)';
+    default:
+      return 'var(--ds-color-text-muted)';
+  }
+}
+
+/**
+ * Resolves an agent activity status to its dot color, liveness, and default
+ * label. Live states (thinking/streaming/acting) animate; idle/error hold
+ * static. Colors resolve through semantic `--ds-color-*` tokens.
+ */
+function agentStatusVisual(status: AssistantAgentStatus): {
+  color: string;
+  live: boolean;
+  defaultLabel: string;
+} {
+  switch (status) {
+    case 'thinking':
+      return { color: 'var(--ds-color-info)', live: true, defaultLabel: 'Thinking' };
+    case 'streaming':
+      return { color: 'var(--ds-color-primary-500)', live: true, defaultLabel: 'Streaming' };
+    case 'acting':
+      return { color: 'var(--ds-color-warning)', live: true, defaultLabel: 'Acting' };
+    case 'error':
+      return { color: 'var(--ds-color-error)', live: false, defaultLabel: 'Error' };
+    default:
+      return { color: 'var(--ds-color-text-muted)', live: false, defaultLabel: 'Idle' };
+  }
+}
+
 /**
  * Renders a tonal badge for delivery or tool status.
  *
@@ -110,44 +190,60 @@ export function AssistantStatusBadge({
 }
 
 /**
- * Displays text with an optional blinking caret while streaming is active.
+ * Displays text with a live affordance while streaming is active.
+ *
+ * While streaming with motion enabled, the text renders through the shared
+ * ShimmerText effect so the copy reads as actively generating; a blinking
+ * caret marks the insertion point. The shimmer and caret exist only inside the
+ * streaming branch, so both stop the instant streaming completes. Under reduced
+ * motion the shimmer is dropped in favor of a static (non-blinking) caret.
  *
  * The `as` prop switches between plain text and monospace (markdown) rendering.
  * The caret is `aria-hidden` because the streaming state is conveyed by the
- * parent's delivery status badge, not by the visual caret.
+ * parent's delivery status badge, not by the decorative motion.
  *
- * @param props - Text content, streaming flag, and display mode.
- * @returns A text block with an optional animated caret.
+ * @param props - Text content, streaming flag, display mode, reduced-motion override.
+ * @returns A text block with a streaming-only shimmer and caret.
  */
 export function StreamingText({
   text,
   streaming = false,
   as = 'text',
+  reducedMotion,
 }: StreamingTextProps): React.ReactElement {
+  const prefersReducedMotion = useReducedMotion();
+  // A controlled `reducedMotion` wins; otherwise defer to the OS preference.
+  const reduceMotion = reducedMotion ?? prefersReducedMotion;
+  const fontFamily =
+    as === 'markdown' ? 'var(--ds-font-family-mono, inherit)' : undefined;
+
   return (
     <Box>
-      <Text
-        style={{
-          whiteSpace: 'pre-wrap',
-          fontFamily: as === 'markdown' ? 'var(--ds-font-family-mono, inherit)' : undefined,
-        }}
-      >
-        {text}
-      </Text>
-      {/* Blinking caret is aria-hidden because it is purely decorative;
-          the streaming state is conveyed by the parent's delivery status badge. */}
+      {streaming && !reduceMotion ? (
+        <ShimmerText text={text} style={{ whiteSpace: 'pre-wrap', fontFamily }} />
+      ) : (
+        <Text style={{ whiteSpace: 'pre-wrap', fontFamily }}>{text}</Text>
+      )}
       {streaming ? (
-        <Text
-          aria-hidden="true"
-          style={{
-            marginLeft: 4,
-            display: 'inline-block',
-            color: 'var(--ds-color-primary-500)',
-            animation: 'ds-assistant-caret 1s steps(2, jump-none) infinite',
-          }}
-        >
-          |
-        </Text>
+        <>
+          {/* Caret keyframes are owned here so the caret animates without a
+              co-mounted TypingIndicator. Under reduced motion the caret holds
+              a static position instead of blinking. */}
+          <style>{ASSISTANT_CARET_KEYFRAMES}</style>
+          <Text
+            aria-hidden="true"
+            style={{
+              marginLeft: 4,
+              display: 'inline-block',
+              color: 'var(--ds-color-primary-500)',
+              animation: reduceMotion
+                ? 'none'
+                : 'ds-assistant-caret 1s steps(2, jump-none) infinite',
+            }}
+          >
+            |
+          </Text>
+        </>
       ) : null}
     </Box>
   );
@@ -172,7 +268,7 @@ export function TypingIndicator({
       aria-live="polite"
       style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
-      <style>{`@keyframes ds-assistant-dot { 0%, 80%, 100% { opacity: .35; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-2px); } } @keyframes ds-assistant-caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }`}</style>
+      <style>{ASSISTANT_DOT_KEYFRAMES}</style>
       <Box aria-hidden="true" style={{ display: 'inline-flex', gap: 4 }}>
         {[0, 1, 2].map((index) => (
           <Box
@@ -193,14 +289,16 @@ export function TypingIndicator({
 }
 
 /**
- * Card displaying a tool invocation with its name, status badge, and
- * optional input/output sections.
+ * Card displaying a tool invocation with its name, status badge, and either a
+ * live input/output expansion or a terminal receipt.
  *
  * Designed for AI assistant UIs where the model calls external tools
- * (e.g. search, code execution). The status badge color is automatically
- * derived from the status string.
+ * (e.g. search, code execution). The status badge tone derives from the status
+ * string. Once the call reaches `complete` or `error` the card collapses to a
+ * compact receipt: a single outcome line plus the elapsed `duration`, tinted by
+ * the status tone through semantic `--ds-color-*` tokens.
  *
- * @param props - Tool name, execution status, and optional I/O content.
+ * @param props - Tool name, execution status, optional I/O content, and duration.
  * @returns An outlined Card with structured tool call information.
  */
 export function ToolCallCard({
@@ -209,45 +307,261 @@ export function ToolCallCard({
   summary,
   input,
   output,
+  duration,
   meta,
 }: ToolCallCardProps): React.ReactElement {
+  const tone = toolStatusToTone(status);
+  // Completed and errored calls read as a compact receipt (outcome + elapsed
+  // time), not the live input/output expansion.
+  const terminal = status === 'complete' || status === 'error';
+
   return (
     <Card variant="outlined">
       <Card.Body>
         <Stack spacing="sm">
           <Stack direction="horizontal" justify="space-between" align="center">
             <Text style={{ fontWeight: 700 }}>{name}</Text>
-            <AssistantStatusBadge
-              label={status}
-              tone={
-                status === 'complete'
-                  ? 'success'
-                  : status === 'error'
-                    ? 'danger'
-                    : status === 'running'
-                      ? 'info'
-                      : 'warning'
-              }
-            />
+            <AssistantStatusBadge label={status} tone={tone} />
           </Stack>
-          {summary ? <Box>{summary}</Box> : null}
-          {input ? (
-            <Box>
-              <Text size="sm" color="muted">
-                Input
-              </Text>
-              <Box>{input}</Box>
-            </Box>
-          ) : null}
-          {output ? (
-            <Box>
-              <Text size="sm" color="muted">
-                Output
-              </Text>
-              <Box>{output}</Box>
-            </Box>
-          ) : null}
+          {terminal ? (
+            summary || duration ? (
+              <Stack
+                direction="horizontal"
+                justify="space-between"
+                align="center"
+                spacing="sm"
+              >
+                {summary ? (
+                  <Text size="sm" color="muted">
+                    {summary}
+                  </Text>
+                ) : (
+                  <Box />
+                )}
+                {duration ? (
+                  <Text size="sm" style={{ color: toneToColorVar(tone) }}>
+                    {duration}
+                  </Text>
+                ) : null}
+              </Stack>
+            ) : null
+          ) : (
+            <>
+              {summary ? <Box>{summary}</Box> : null}
+              {input ? (
+                <Box>
+                  <Text size="sm" color="muted">
+                    Input
+                  </Text>
+                  <Box>{input}</Box>
+                </Box>
+              ) : null}
+              {output ? (
+                <Box>
+                  <Text size="sm" color="muted">
+                    Output
+                  </Text>
+                  <Box>{output}</Box>
+                </Box>
+              ) : null}
+            </>
+          )}
           {meta ? <Box>{meta}</Box> : null}
+        </Stack>
+      </Card.Body>
+    </Card>
+  );
+}
+
+/**
+ * Compact activity indicator for an assistant/agent. Renders a tonal dot and a
+ * label for the current status. The dot animates only for live states
+ * (thinking, streaming, acting) and holds static for idle/error or under
+ * reduced motion. Reuses the typing-dot keyframes.
+ *
+ * @param props - Agent status, optional label, and reduced-motion override.
+ * @returns An inline status indicator with a tonal dot and label.
+ */
+export function AssistantStatusIndicator({
+  status,
+  label,
+  reducedMotion,
+}: AssistantStatusIndicatorProps): React.ReactElement {
+  const prefersReducedMotion = useReducedMotion();
+  const reduceMotion = reducedMotion ?? prefersReducedMotion;
+  const visual = agentStatusVisual(status);
+  // Animation runs only while the state is live and motion is allowed.
+  const animate = visual.live && !reduceMotion;
+
+  return (
+    <Box
+      role="status"
+      aria-live="polite"
+      style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
+    >
+      {animate ? <style>{ASSISTANT_DOT_KEYFRAMES}</style> : null}
+      <Box
+        aria-hidden="true"
+        style={{
+          width: 8,
+          height: 8,
+          borderRadius: '50%',
+          background: visual.color,
+          animation: animate ? 'ds-assistant-dot 1.1s ease-in-out infinite' : 'none',
+        }}
+      />
+      <Text size="sm" color="muted">
+        {label ?? visual.defaultLabel}
+      </Text>
+    </Box>
+  );
+}
+
+/**
+ * Before/after field table for a proposed mutation. Each row shows the prior
+ * and proposed value; added values are tinted with `--ds-color-success` and
+ * removed values with `--ds-color-error`. Fully domain-agnostic: labels and
+ * values arrive as opaque nodes.
+ *
+ * @param props - Optional title, before/after rows, column labels, and metadata.
+ * @returns An outlined Card presenting the diff rows.
+ */
+export function PreviewDiffCard({
+  title,
+  rows,
+  beforeLabel = 'Before',
+  afterLabel = 'After',
+  meta,
+}: PreviewDiffCardProps): React.ReactElement {
+  return (
+    <Card variant="outlined">
+      <Card.Body>
+        <Stack spacing="sm">
+          {title ? <Text style={{ fontWeight: 700 }}>{title}</Text> : null}
+          <Stack direction="horizontal" spacing="sm" align="center">
+            <Box style={{ flex: 2, minWidth: 0 }} />
+            <Text size="xs" color="muted" style={{ flex: 3, minWidth: 0 }}>
+              {beforeLabel}
+            </Text>
+            <Box aria-hidden="true" style={{ width: 16 }} />
+            <Text size="xs" color="muted" style={{ flex: 3, minWidth: 0 }}>
+              {afterLabel}
+            </Text>
+          </Stack>
+          {rows.map((row, index) => {
+            const change = row.change ?? 'updated';
+            const beforeColor =
+              change === 'removed'
+                ? 'var(--ds-color-error)'
+                : 'var(--ds-color-text-muted)';
+            const afterColor =
+              change === 'added' || change === 'updated'
+                ? 'var(--ds-color-success)'
+                : change === 'removed'
+                  ? 'var(--ds-color-text-muted)'
+                  : undefined;
+            return (
+              <Stack
+                key={`diff-row-${index}`}
+                direction="horizontal"
+                spacing="sm"
+                align="center"
+                style={{ borderTop: '1px solid var(--ds-color-border)', paddingTop: 6 }}
+              >
+                <Text size="sm" style={{ flex: 2, minWidth: 0, fontWeight: 600 }}>
+                  {row.label}
+                </Text>
+                <Box style={{ flex: 3, minWidth: 0 }}>
+                  {row.before !== undefined ? (
+                    <Text
+                      size="sm"
+                      style={{
+                        color: beforeColor,
+                        textDecoration:
+                          change === 'removed' || change === 'updated'
+                            ? 'line-through'
+                            : undefined,
+                      }}
+                    >
+                      {row.before}
+                    </Text>
+                  ) : null}
+                </Box>
+                <Text
+                  aria-hidden="true"
+                  size="sm"
+                  color="muted"
+                  style={{ width: 16, textAlign: 'center' }}
+                >
+                  {'→'}
+                </Text>
+                <Box style={{ flex: 3, minWidth: 0 }}>
+                  {row.after !== undefined ? (
+                    <Text
+                      size="sm"
+                      style={{
+                        color: afterColor,
+                        fontWeight: change === 'unchanged' ? undefined : 600,
+                      }}
+                    >
+                      {row.after}
+                    </Text>
+                  ) : null}
+                </Box>
+              </Stack>
+            );
+          })}
+          {meta ? <Box>{meta}</Box> : null}
+        </Stack>
+      </Card.Body>
+    </Card>
+  );
+}
+
+/**
+ * Proposed-action confirmation surface. Presents a summary and optional detail
+ * slot, then confirm/cancel controls wired to caller callbacks. Fully
+ * domain-agnostic: copy and callbacks are supplied by the consumer. Passing
+ * `actions` replaces the default control pair entirely.
+ *
+ * @param props - Summary, details, control labels, callbacks, and state flags.
+ * @returns An outlined Card with an action summary and confirm/cancel controls.
+ */
+export function ConfirmActionCard({
+  title,
+  summary,
+  details,
+  confirmLabel = 'Confirm',
+  cancelLabel = 'Cancel',
+  onConfirm,
+  onCancel,
+  confirmDisabled = false,
+  busy = false,
+  tone = 'default',
+  actions,
+}: ConfirmActionCardProps): React.ReactElement {
+  return (
+    <Card variant="outlined">
+      <Card.Body>
+        <Stack spacing="sm">
+          {title ? <Text style={{ fontWeight: 700 }}>{title}</Text> : null}
+          {summary ? <Box>{summary}</Box> : null}
+          {details ? <Box>{details}</Box> : null}
+          {actions ?? (
+            <Stack direction="horizontal" justify="end" align="center" spacing="sm">
+              <Button variant="secondary" onClick={onCancel} disabled={busy}>
+                {cancelLabel}
+              </Button>
+              <Button
+                variant={tone === 'danger' ? 'danger' : 'primary'}
+                onClick={onConfirm}
+                loading={busy}
+                disabled={confirmDisabled || busy}
+              >
+                {confirmLabel}
+              </Button>
+            </Stack>
+          )}
         </Stack>
       </Card.Body>
     </Card>
@@ -281,6 +595,7 @@ function renderDefaultPart(part: AssistantMessagePart, index: number): React.Rea
           summary={part.summary}
           input={part.input}
           output={part.output}
+          duration={part.duration}
           meta={part.meta}
         />
       );
