@@ -39,7 +39,7 @@ describe('ModernTooltip', () => {
     );
 
     const tooltip = screen.getByRole('tooltip');
-    expect(tooltip.style.zIndex).toContain('--ds-z-index-tooltip');
+    expect(tooltip.style.zIndex).toContain('--ds-z-tooltip');
     expect(tooltip).toHaveStyle({
       whiteSpace: 'normal',
       textOrientation: 'mixed',

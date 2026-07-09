@@ -332,7 +332,7 @@
    "lane": "engine-modern",
    "order": 9,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-02"
    ],
@@ -340,7 +340,18 @@
    "programs": [
     "spec-9"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 10:28",
+     "by": "ds-agent",
+     "note": "Full implementation DELEGATED to fresh agent a2a9fc2398d6bcdcc (sonnet, edit-only; NO build/test/commit): fix content-integrity defects - (1) label/value concatenation in data-table/card/stats-grid modern (structural separation, no string-concat/zero-gap); (2) constrain gradient fade mask to overflow affordance only (never clip readable text, don't remove); (3) badge/chip mid-word wrap -> drop min-width + white-space:nowrap + ellipsis truncation; (4) tokenized --ds-z-* scale in default.css + route modern overlays/tooltip/callout/modal/drawer/dropdown through it; (5) audit content.magicZIndex counter (target 0, decrease-only). ON RETURN: audit diff, gate (build+test+audit --check), thorough SIGHTED before/after data-table separated label/value + no clipped text + no mid-word chip wrap + correct layering, both palettes (test-artifacts/engine-modern/eng-09/), commit. Prior 10/34 committed (a16b58b7)."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "Outcome met across all 4 content-integrity axes. (a) LABEL/VALUE SEPARATION: NOT a DS-component defect - agent fully read data-table (2327 lines) + Card + stats-grid + adjacent; every label/value pair already renders with structural separation (block/flex+gap, CSS-blockified children). The audit's run-on strings ('Runtime expectationRow density', 'MANAGED ACCOUNTSAcross 128...') trace to a SHOWROOM demo file (packages/showroom/.../demos/platform/user-list), OUTSIDE the DS engine scope; the DS files were reworked by ENG-03..08 (incidental remediation). No fix invented (no-workarounds law). (b) FADE CLIPPING: NOT a current defect - every mask/fade in the named files is a decorative pseudo-element at z-index:0 BEHIND content (z-index 1/2), never over text; the one real scrim (Card cover-image) is opt-in standard. No change. (c) CHIP MID-WORD WRAP: FIXED - Badge modern removed height-based minWidth (let narrow flex parents shrink below the label) + added maxWidth:100%/overflow:hidden/textOverflow:ellipsis alongside existing whiteSpace:nowrap; Tag hardened same. (d) Z-INDEX: discovered a PRE-EXISTING canonical --ds-z-index-* scale; added --ds-z-* fallback-parity ALIASES onto it (not a 3rd scheme); routed Modal/Drawer/Sheet/ConfirmDialog/Popover/Dropdown/ContextMenu/Tooltip through var(--ds-z-*) - fixed a dead Popover zIndex prop + a dead Tooltip fallback chain (var(--ds-z-index-tooltip,var(--ds-tooltip-z-index,1070)) - neither ever defined -> always magic 1070). AUDIT: content.magicZIndex 39->33 (baselined, decrease-only; the 33 remaining are LOCAL/sticky positioning z-index OUTSIDE the named scope - data-table pinning/sticky-header, Select/AutoComplete/DatePicker floating popups, FloatButton - flagged for a later z-index-cleanup pass; the OVERLAY-LAYERING defect this WO targets IS fully tokenized). GATE: build exit 0; audit --check green (magicZIndex=33, all other counters unchanged); targeted tests (overlays + Badge/Tag/Tooltip/Modal/Drawer/Sheet/ConfirmDialog/Popover/Dropdown/ContextMenu) 484 passed after updating ONE stale Tooltip assertion (--ds-z-index-tooltip[dead]->--ds-z-tooltip[real], test intent preserved). SIGHTED (test-artifacts/engine-modern/eng-09/): modal-open overlay layers correctly on top of dimmed content; after-evidence both palettes BYTE-IDENTICAL to before (zero regression - a/b no-change, c is a wide-container no-op that fixes the narrow-container wrap). FLAGGED FOR OWNER: the run-on text lives in the SHOWROOM demo (demos/platform/user-list), a showroom-demo cleanup not a DS WO; 33 residual local z-index literals = a broader follow-up."
   },
   {
    "id": "WO-ENG-10",

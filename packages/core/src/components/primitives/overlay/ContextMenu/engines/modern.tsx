@@ -135,7 +135,10 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
           className={overlayClassName || undefined}
           style={{
             position: 'absolute',
-            zIndex: 50,
+            // Tokenized overlay stack (spec section 9): context menus share
+            // the popover tier (matches the canonical --ds-z-index-context-menu
+            // alias), not a magic 50.
+            zIndex: 'var(--ds-z-popover)',
             width: 224,
             padding: 8,
             listStyle: 'none',

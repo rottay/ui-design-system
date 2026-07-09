@@ -319,7 +319,11 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       writingMode: 'horizontal-tb',
       textOrientation: 'mixed',
       pointerEvents: 'none',
-      zIndex: zIndex ?? 'var(--ds-z-index-tooltip, var(--ds-tooltip-z-index, 1070))',
+      // Tokenized overlay stack (spec section 9): route through the canonical
+      // scale instead of the dead --ds-z-index-tooltip/--ds-tooltip-z-index
+      // fallback chain (neither name was ever defined, so it silently
+      // resolved to the magic 1070 literal every time).
+      zIndex: zIndex ?? 'var(--ds-z-tooltip)',
       opacity: isVisible ? 1 : 0,
       visibility: portalPosition ? 'visible' : 'hidden',
       transform: `scale(${isVisible ? 1 : 0.95})`,

@@ -103,7 +103,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
     centered = MODAL_DEFAULTS.centered,
     placement = 'center',
     fullScreen = false,
-    zIndex = MODAL_DEFAULTS.zIndex,
+    zIndex,
     radius = MODAL_DEFAULTS.radius,
     shadow = MODAL_DEFAULTS.shadow,
     padding = MODAL_DEFAULTS.padding,
@@ -204,7 +204,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
         style={{
           position: 'fixed',
           inset: 0,
-          zIndex,
+          // Tokenized overlay stack (spec section 9): an explicit numeric
+          // override still wins; otherwise route through the z-index scale
+          // instead of the old MODAL_DEFAULTS.zIndex magic number.
+          zIndex: zIndex ?? 'var(--ds-z-modal)',
           display: 'flex',
           alignItems: placementStyles.alignItems,
           justifyContent: 'center',

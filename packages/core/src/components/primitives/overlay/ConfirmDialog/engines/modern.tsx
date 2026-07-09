@@ -110,7 +110,9 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 50,
+        // Tokenized overlay stack (spec section 9): modal-tier blocking
+        // dialog instead of a magic 50.
+        zIndex: 'var(--ds-z-modal)',
         ...style,
       }}
       data-testid={dataTestId}

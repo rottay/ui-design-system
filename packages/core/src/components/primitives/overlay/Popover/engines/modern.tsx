@@ -67,6 +67,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       children,
       mouseEnterDelay = POPOVER_DEFAULTS.mouseEnterDelay,
       mouseLeaveDelay = POPOVER_DEFAULTS.mouseLeaveDelay,
+      zIndex,
       className,
       overlayClassName,
       overlayStyle,
@@ -118,7 +119,11 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
 
     /** Maps the placement prop to CSS positioning styles for the content panel. */
     const getContentPositionStyles = (): React.CSSProperties => {
-      const base: React.CSSProperties = { position: 'absolute', zIndex: 50 };
+      // Tokenized overlay stack (spec section 9): an explicit numeric
+      // override still wins; otherwise route through the popover tier
+      // instead of a magic 50 (the zIndex prop / POPOVER_DEFAULTS.zIndex
+      // were previously unused by this engine).
+      const base: React.CSSProperties = { position: 'absolute', zIndex: zIndex ?? 'var(--ds-z-popover)' };
       if (placement?.includes('top')) {
         Object.assign(base, { bottom: '100%', marginBottom: 8 });
       } else if (placement?.includes('bottom')) {

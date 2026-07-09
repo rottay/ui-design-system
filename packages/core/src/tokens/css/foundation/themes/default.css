@@ -414,6 +414,27 @@
   --ds-z-index-max: 9999;
 
   /* ─────────────────────────────────────────────────────────────────────────────
+     6b. Z-INDEX — SHORT OVERLAY-STACK ALIASES (WO-ENG-09, spec section 9)
+     Thin aliases onto the canonical --ds-z-index-* scale above (section 6) so
+     modern-engine overlay/tooltip/callout/modal/drawer/dropdown components
+     route `zIndex` through one short namespace instead of ad-hoc magic
+     numbers (audit 4: "Floating tooltip / callout overlaps live content").
+     Fallback literals mirror the canonical values (fallback-parity rule,
+     spec section 7) so a var()-unaware consumer still resolves the same
+     tier. Do not add a second literal scale here -- these are aliases only.
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-z-base: var(--ds-z-index-base, 0);
+  --ds-z-dropdown: var(--ds-z-index-dropdown, 1000);
+  --ds-z-sticky: var(--ds-z-index-sticky, 1100);
+  --ds-z-fixed: var(--ds-z-index-fixed, 1200);
+  --ds-z-overlay: var(--ds-z-index-overlay, 1300);
+  --ds-z-drawer: var(--ds-z-index-drawer, 1400);
+  --ds-z-modal: var(--ds-z-index-modal, 1500);
+  --ds-z-popover: var(--ds-z-index-popover, 1600);
+  --ds-z-tooltip: var(--ds-z-index-tooltip, 1700);
+  --ds-z-toast: var(--ds-z-index-notification, 1800);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
      7. TRANSITIONS
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);

@@ -196,7 +196,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           <ul
             tabIndex={0}
             className={menuClassName}
-            style={{ position: 'absolute', zIndex: 50, width: 208, padding: 8, borderRadius: 'var(--ds-radius-lg)', listStyle: 'none', margin: 0, background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-1)', ...getPlacementStyle(), ...overlayStyle }}
+            style={{ position: 'absolute', zIndex: 'var(--ds-z-dropdown)', width: 208, padding: 8, borderRadius: 'var(--ds-radius-lg)', listStyle: 'none', margin: 0, background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-1)', ...getPlacementStyle(), ...overlayStyle }}
           >
             {menu.items.map((item) => (
               <MenuItem key={item.key} item={item} onClick={handleItemClick} />

@@ -178,11 +178,9 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const sizeIsResponsive = isResponsiveValue(sizeProp);
 
   if (sizeIsResponsive) {
-    responsiveEntries.push({
-      cssProperty: 'min-width',
-      value: sizeProp,
-      resolve: (v: BadgeSize) => (SIZE_MAP[v as keyof typeof SIZE_MAP] || SIZE_MAP.md).minWidth,
-    } as ResponsivePropEntry<any>);
+    // No responsive min-width entry: see the content-integrity note on
+    // badgeInlineStyle above -- a forced min-width is what lets a narrow
+    // breakpoint shrink the badge below its label, causing mid-word wrap.
     responsiveEntries.push({
       cssProperty: 'height',
       value: sizeProp,
@@ -256,7 +254,11 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     alignItems: 'center',
     justifyContent: 'center',
     height: sizeSpec.height,
-    minWidth: sizeSpec.height, // ensures pills are at least as wide as tall
+    // No forced min-width: a fixed min-width lets a flex/grid parent shrink the
+    // badge below its label's natural width, which is what produces mid-word
+    // wrap ("Bad ge") in narrow containers (spec section 9 / section 13).
+    // Padding alone gives count/dot badges their pill proportions.
+    maxWidth: '100%',
     paddingLeft: sizeSpec.paddingX,
     paddingRight: sizeSpec.paddingX,
     fontSize: sizeSpec.fontSize,
@@ -269,6 +271,8 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     border: badgeBorder,
     borderRadius: 'var(--ds-radius-sm)',
     whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
     transition: `all var(--ds-motion-fast) var(--ds-motion-ease-out)`,
     // Clickable cursor
     ...(clickable || onClick ? { cursor: 'pointer' } : {}),

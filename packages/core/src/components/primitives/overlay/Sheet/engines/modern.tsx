@@ -179,7 +179,9 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
   const getPanelPositionStyles = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
-      zIndex: 51,
+      // Tokenized overlay stack (spec section 9): panel sits at the drawer
+      // tier, above the wrapper's overlay tier, instead of a magic 51.
+      zIndex: 'var(--ds-z-drawer)',
       display: 'flex',
       flexDirection: 'column',
       background: 'var(--ds-surface-card)',
@@ -239,7 +241,9 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         style={{
           position: 'fixed',
           inset: 0,
-          zIndex: 50,
+          // Tokenized overlay stack (spec section 9), matching Drawer's
+          // backdrop/panel pair instead of a magic 50.
+          zIndex: 'var(--ds-z-overlay)',
         }}
       >
         {/* ---- Backdrop overlay ---- */}

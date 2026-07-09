@@ -194,14 +194,16 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   const resolvedHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100%');
   const animationName = SLIDE_ANIMATION[placement as string] || SLIDE_ANIMATION.right;
   const borderRadius = RADIUS_BY_PLACEMENT[placement as string] || RADIUS_BY_PLACEMENT.right;
-  const zBase = DRAWER_DEFAULTS.zIndex || 1000;
 
   // -- position styles --------------------------------------------------------
 
   const getPositionStyles = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
-      zIndex: zBase + 1,
+      // Tokenized overlay stack (spec section 9): the panel sits one tier
+      // above the backdrop via the drawer/overlay pair, not a `zBase + 1`
+      // magic-number offset.
+      zIndex: 'var(--ds-z-drawer)',
       display: 'flex',
       flexDirection: 'column',
       background: 'var(--ds-surface-card)',
@@ -279,7 +281,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           style={{
             position: 'fixed',
             inset: 0,
-            zIndex: zBase,
+            zIndex: 'var(--ds-z-overlay)',
             // Scrim (kept) + glass layer (spec section 5): frost tint + backdrop blur
             // scale with --ds-effect-intensity, collapsing to a plain scrim at 0.
             // Glass is sanctioned on overlay backdrops only.
