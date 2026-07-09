@@ -5,5 +5,7 @@
   "depth.shadowScales": 1,
   "depth.darkPureBlackElevations": 0,
   "scale.radiusScaleDeclarations": 1,
-  "scale.fallbackParityViolations": 0
+  "scale.fallbackParityViolations": 0,
+  "state.darkFocusRingDefects": 0,
+  "state.inlineStateLiterals": 0
 }

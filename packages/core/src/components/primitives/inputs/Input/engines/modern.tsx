@@ -89,7 +89,7 @@ function buildShellStyle(
     borderStyle: 'solid',
     borderColor: 'var(--ds-input-border, var(--ds-color-border))',
     borderRadius: 'var(--ds-radius-md, 8px)',
-    outline: '2px solid transparent',
+    outline: 'var(--ds-focus-ring-width, 2px) solid transparent',
     outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
     transition: TRANSITION,
     boxSizing: 'border-box',

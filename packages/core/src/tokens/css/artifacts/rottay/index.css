@@ -370,6 +370,10 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   --ds-shadow-focus-ring: 0 0 0 3px rgba(255, 255, 255, 0.12);
   --ds-shadow-focus-ring-error: 0 0 0 3px rgba(239, 68, 68, 0.16);
 
+  /* Dark-surface focus ring: the primary is white on this dark canvas, so the
+     --ds-focus-ring contract reads >=3:1 vs #0A0A0C (WO-ENG-04). */
+  --ds-focus-ring-color: var(--ds-color-primary);
+
   /* ============================================
      7. COMPONENT TOKENS - BUTTON
      ============================================ */

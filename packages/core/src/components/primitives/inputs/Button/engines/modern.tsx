@@ -111,7 +111,7 @@ const VARIANT_STYLES: Record<string, React.CSSProperties> = {
 const VARIANT_HOVER_STYLES: Record<string, React.CSSProperties> = {
   primary: {
     background: 'var(--ds-button-primary-bg-hover, var(--ds-color-primary))',
-    boxShadow: 'var(--ds-button-primary-shadow-hover, var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05)))',
+    boxShadow: 'var(--ds-button-primary-shadow-hover, var(--ds-elevation-2))',
   },
   secondary: {
     background: 'var(--ds-button-secondary-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.04)))',
@@ -383,15 +383,15 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
       `text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out)`,
     ].join(', '),
 
-    // Transform: active press > hover (none) > idle
+    // Transform: press = -1 step scale (tokenized) when active, else idle
     transform:
       isActive && !isInert
-        ? 'scale(0.98)'
+        ? 'scale(var(--ds-state-press-scale))'
         : undefined,
 
-    // Shadow from variant base styles (hover shadow applied via hoverOverrides)
+    // Resting elevation on raised buttons; hover lifts +1 step via hoverOverrides
     ...(shadow && !isHovered ? {
-      boxShadow: 'var(--ds-elevation-1, 0 1px 3px 0 rgba(0, 0, 0, 0.1))',
+      boxShadow: 'var(--ds-elevation-1)',
     } : {}),
 
     // Focus ring: outline-based (not box-shadow, so it stacks with elevation)

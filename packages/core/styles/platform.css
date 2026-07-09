@@ -1115,6 +1115,38 @@
   --ds-shadow-focus-ring-error: 0 0 0 2px rgba(239, 68, 68, 0.25);
 
   /* ─────────────────────────────────────────────────────────────────────────────
+     5.1 INTERACTION STATES (WO-ENG-04) — tokenized, uniform, dark-aware
+     Components CONSUME these; they do not invent per-component inline state
+     styling. Hover = +1 elevation step + surface luminance shift; press = -1
+     step + scale(--ds-state-press-scale); focus = --ds-focus-ring (2px ring,
+     2px offset, primary family, >=3:1 vs the adjacent surface); disabled dims to
+     --ds-state-disabled-opacity. State changes transition on --ds-motion-fast /
+     --ds-motion-ease-out (--ds-state-transition).
+
+     --ds-focus-ring-color defaults to the brand primary. Dark-surface tenants
+     (whose primary reads dark against a dark canvas) override it with a
+     light/saturated value in their dark region: the rottay artifact dark block
+     and the generator darkSemanticVariables() dark path. Light-default tenants
+     whose dark mode already brightens the primary inherit it correctly.
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-state-hover-shift: 4%;
+  --ds-state-press-scale: 0.98;
+  --ds-state-disabled-opacity: 0.6;
+
+  --ds-focus-ring-width: 2px;
+  --ds-focus-ring-offset: 2px;
+  --ds-focus-ring-color: var(--ds-color-primary);
+  --ds-focus-ring:
+    0 0 0 var(--ds-focus-ring-offset) var(--ds-color-bg-primary),
+    0 0 0 calc(var(--ds-focus-ring-offset) + var(--ds-focus-ring-width)) var(--ds-focus-ring-color);
+
+  --ds-state-transition:
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out);
+
+  /* ─────────────────────────────────────────────────────────────────────────────
      6. Z-INDEX
      ───────────────────────────────────────────────────────────────────────────── */
   --ds-z-index-base: 0;
@@ -1232,7 +1264,8 @@
   --ds-button-primary-color: #ffffff;
   --ds-button-primary-border: transparent;
   --ds-button-primary-shadow: none;
-  --ds-button-primary-shadow-hover: var(--ds-shadow-sm);
+  /* Hover = +1 elevation step (WO-ENG-04 interaction-state contract). */
+  --ds-button-primary-shadow-hover: var(--ds-elevation-2);
 
   /* Button Secondary Variant */
   --ds-button-secondary-bg: #f5f5f5;
@@ -1307,7 +1340,8 @@
   --ds-button-disabled-bg: #f5f5f5;
   --ds-button-disabled-color: #a3a3a3;
   --ds-button-disabled-border: #e5e5e5;
-  --ds-button-disabled-opacity: 0.6;
+  /* Canonical disabled dim (WO-ENG-04 state contract). */
+  --ds-button-disabled-opacity: var(--ds-state-disabled-opacity);
 
   /* Button Common */
   --ds-button-font-weight: 500;
@@ -2714,6 +2748,9 @@ html.dark {
   --ds-color-border-primary: #334155;
   --ds-color-border-secondary: #1e293b;
   --ds-color-border-focus: var(--ds-color-primary-400);
+  /* Dark-surface focus ring must read >=3:1 on the dark canvas; the primary-400
+     tint clears it on #0b1220 (WO-ENG-04). */
+  --ds-focus-ring-color: var(--ds-color-primary-400);
 
   --ds-color-neutral-0: #020617;
   --ds-color-neutral-50: #0b1220;
@@ -10757,11 +10794,11 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
   /* -------------------------------------------------------------------------
      Focus ring
-     Consistent focus indicator for accessibility across all interactive elements.
+     The --ds-focus-ring / --ds-focus-ring-width / --ds-focus-ring-offset /
+     --ds-focus-ring-color contract lives at the foundation layer
+     (foundation/themes/default.css) with a dark-surface override; components
+     reference those tokens directly.
      ------------------------------------------------------------------------- */
-  --ds-focus-ring-width: 2px;
-  --ds-focus-ring-offset: 2px;
-  --ds-focus-ring-color: var(--ds-color-primary-200, rgba(10, 10, 10, 0.2));
 
   /* -------------------------------------------------------------------------
      Motion contract
@@ -24798,6 +24835,10 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
 
   --ds-shadow-focus-ring: 0 0 0 3px rgba(255, 255, 255, 0.12);
   --ds-shadow-focus-ring-error: 0 0 0 3px rgba(239, 68, 68, 0.16);
+
+  /* Dark-surface focus ring: the primary is white on this dark canvas, so the
+     --ds-focus-ring contract reads >=3:1 vs #0A0A0C (WO-ENG-04). */
+  --ds-focus-ring-color: var(--ds-color-primary);
 
   /* ============================================
      7. COMPONENT TOKENS - BUTTON

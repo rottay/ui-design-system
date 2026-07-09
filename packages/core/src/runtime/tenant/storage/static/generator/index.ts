@@ -552,6 +552,11 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
       ? buildDarkRuntimeScale(config.branding.primaryColor)[200]
       : '#a5d8ff',
 
+    /* ── Focus ring: the dark-lightened primary (scale[300]) reads >=3:1 on the
+       dark canvas, where the base near-black primary would be dark-blind
+       (WO-ENG-04 interaction-state contract). ── */
+    '--ds-focus-ring-color': primaryColor,
+
     /* ── Overlay / Modal ── */
     '--ds-overlay-bg': 'rgba(2, 6, 23, 0.72)',
     '--ds-modal-overlay-bg': 'rgba(2, 6, 23, 0.78)',

@@ -184,7 +184,7 @@
    "lane": "engine-modern",
    "order": 4,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01",
     "WO-ENG-03"
@@ -193,7 +193,18 @@
    "programs": [
     "spec-4"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 06:21",
+     "by": "ds-agent",
+     "note": "Full implementation DELEGATED to fresh agent a66c7ae0d2bc9da47 (edit-only + artifact regen; NO build/test/commit): foundation state tokens (--ds-state-hover-shift, --ds-state-press-scale:0.98, --ds-state-disabled-opacity, dark-aware --ds-focus-ring w/ explicit dark override >=3:1 vs #0A0A0C) at default.css; delete old --ds-focus-ring block engines/modern/theme.css:96-98; hover=+1 elevation step / press=-1 step + press-scale, transitions on --ds-motion-fast/ease-out; move Button (kill inline scale(0.98)~L387)/input/tabs/select modern state styling off inline literals onto tokens (keep React state tracking); audit focus-ring dark-contrast assertion + inline-state-literal counter. Told to follow the ENG-03 dark precedent: dark override in rottay artifact block + generator darkSemanticVariables. ON RETURN: audit diff vs fences, gate (build+test+audit --check+brand-theme suite), SIGHTED before/after focus-ring on BOTH palettes + hover/press consistency across Button/input/tabs/select + classic/rustic zero-delta, commit. Prior: ENG-01/02/03/07 + CRA-01 done+committed (bfdc34ba latest); 5/34."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "Foundation state tokens (default.css '5.1 INTERACTION STATES'): --ds-state-hover-shift:4%, --ds-state-press-scale:0.98, --ds-state-disabled-opacity:0.6, --ds-focus-ring-width/offset/color, composite --ds-focus-ring, --ds-state-transition (bg/border/shadow/transform on --ds-motion-fast/ease-out). Hover=+1 elevation step (--ds-button-primary-shadow-hover->var(--ds-elevation-2)); --ds-button-disabled-opacity->var(--ds-state-disabled-opacity). DARK-AWARE FOCUS RING: focus-ring-color=var(--ds-color-primary) -> rottay dark resolves #FFFFFF on #0A0A0C ~19.8:1; generic [data-theme=dark] -> primary-400 ~7.5:1; generator darkSemanticVariables emits --ds-focus-ring-color=buildDarkRuntimeScale(primary)[300] (~11:1) for DB-driven dark tenants. Old --ds-focus-ring block at engines/modern/theme.css DELETED (rgba(10,10,10,0.2) dark-blind defect gone; 0 defs remain there). COMPONENTS wired (modern): Button (scale(0.98)->var(--ds-state-press-scale); hover/base shadow->elevation tokens; focus consumes dark-aware focus-ring tokens), Input/Select (idle+focus outline tokenized), Tabs (:focus-visible tokenized). React state tracking kept; only literal values tokenized; no prop/behavior change. AUDIT: state.darkFocusRingDefects (EXACT 0 - resolves each dark tenant ring color + flags near-black/low-alpha; verified real, rottay inverted primary-200 #1A1A1E would trip it) + state.inlineStateLiterals (0); --check green. GATE: build exit 0; audit --check green; targeted tests (Button/Input/Select/Tabs + generator + brand-theme + governance) 1205 passed + 3 PRE-EXISTING failures (version-match, token-mirror, bithire .ant-); full suite killed at ~67% by a resource cap, all-passing before the kill. SIGHTED (test-artifacts/engine-modern/eng-04/): dark-aware focus ring VISIBLE at high contrast on rottay dark (white ring on Primary button) AND bithire light (blue ring on input) - dark-blind defect fixed. Classic/rustic zero-delta: additive tokens + modern-only wiring; Button/Input/Select/Tabs it.each(STABLE_ENGINES) tests pass (classic+rustic render correctly). DEVIATION: Button focus kept on outline (consuming dark-aware focus-ring constituents) not box-shadow var(--ds-focus-ring), avoiding a box-shadow:none,<ring> invalid-list hazard; composite still defined for box-shadow consumers, same dark-aware color. disabled-opacity 0.6 reconciled to Button's existing value (zero regression)."
   },
   {
    "id": "WO-ENG-05",

@@ -80,11 +80,11 @@
 
   /* -------------------------------------------------------------------------
      Focus ring
-     Consistent focus indicator for accessibility across all interactive elements.
+     The --ds-focus-ring / --ds-focus-ring-width / --ds-focus-ring-offset /
+     --ds-focus-ring-color contract lives at the foundation layer
+     (foundation/themes/default.css) with a dark-surface override; components
+     reference those tokens directly.
      ------------------------------------------------------------------------- */
-  --ds-focus-ring-width: 2px;
-  --ds-focus-ring-offset: 2px;
-  --ds-focus-ring-color: var(--ds-color-primary-200, rgba(10, 10, 10, 0.2));
 
   /* -------------------------------------------------------------------------
      Motion contract
