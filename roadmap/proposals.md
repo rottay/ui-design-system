@@ -486,3 +486,20 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   the canvas tokens in the compiler, and extend the GAT-03 probe with a canvas entry once the
   channel exists (today a canvas probe would pass for the wrong reason: the two fixtures differ
   only because each falls back to a different default).
+
+### P-26 The brand compiler emits two names per table-row channel; two are dead (S — `core lint` is red on main)
+
+- **What** — `compilers/brand-theme/index.ts:768-771` emits `--ds-table-row-bg-hover` AND
+  `--ds-table-row-hover-bg`, `--ds-table-row-bg-striped` AND `--ds-table-row-striped-bg`. Every
+  component consumes only the `-bg-hover` / `-bg-striped` spelling (4 and 6 references under
+  `src/components/`); the other two have no consumer anywhere in the DS or in app-bithire,
+  app-platform, or app-evnto.
+- **Why it matters** — `pnpm --filter @rottay/design-system run lint` fails on `audit-integration`
+  with two `orphan-premium-var` violations, and has done so since before 2026-07-09 (reproduced
+  against commit `494e7d85` in a throwaway worktree). A standing red gate hides the next real one.
+  This is a FOURTH pre-existing gate failure, alongside the three known unit failures.
+- **Shape** — delete the two dead emissions. Note this is not purely internal: the aliases are
+  written into the generated tenant artifacts (e.g. `artifacts/bithire/index.css`), so the change
+  must regenerate the artifacts and pass the regenerate-and-diff parity guard. Removing an emitted
+  variable is also a public-surface decision for any tenant overriding it, which is why this is a
+  WO and not a drive-by deletion.
