@@ -520,3 +520,17 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 - **What** — `Button/engines/modern.tsx` gates the disabled-dim styling on `disabled && !loading`, which never learned about `pending`. A `disabled` + `pending` button (without the deprecated `loading`) keeps its full variant color instead of dimming.
 - **Why it matters** — Same shape as the `hoverOverrides` bug WO-CRA-02 fixed (`!loading` → `!busy`), left deliberately unfixed because dimming is a visual decision with an existing comment asserting specific intent. It is a one-line change (`disabled && !loading` → `disabled && !busy`) and it moves pixels, so it wants a sighted check.
+
+### P-29 A public symbol with no consumer is debt with green tests (M — the systemic one)
+
+- **What** — Three unrelated defects found in a single session share one shape: a symbol exists, is typed, is passed around, and **nothing reads it**. Every test was green in all three cases.
+  - `--ds-async-spinner-delay` / `--ds-async-skeleton-after` (`tokens/css/foundation/themes/default.css`): defined as tokens; no CSS read them and `useDeferredPending` hardcoded its own numbers, while a comment claimed the hook "mirrors" them. Fixed in WO-CRA-02.
+  - `ButtonProps.loadingText`: never destructured in any of the three Button engines, so it leaked onto the DOM as a `loadingtext` attribute and never rendered — while `app-bithire`'s passkey prompt passes it in a live auth flow. Fixed in WO-CRA-02.
+  - `BrandCompilerInput.baseTheme`: present in the contract, faithfully passed by callers including `torture-fixtures.test.ts`; `compileBrandTheme` never destructures or reads it. Still open.
+  - Adjacent: `--ds-table-row-hover-bg` / `--ds-table-row-striped-bg`, emitted by the compiler and consumed by nothing — the ONLY one of these a gate caught, because `audit-integration.mjs` happens to scan premium chrome vars specifically. Fixed in WO-TOK-04.
+- **Why it matters** — Unit tests prove that what runs, runs. They cannot prove that what is declared is read. Type checking cannot either: an unread prop, an unresolved parameter and an unconsumed token are all perfectly well-typed. This class ships silently, teaches consumers a lie (`loadingText` "works"), and creates two sources of truth that drift.
+- **Shape** — Generalize `scripts/audit-integration.mjs` beyond premium chrome vars into a **consumer census** with three counters, all decrease-only, each with an allowlist whose entries carry a stated reason:
+  1. `--ds-*` tokens defined in `tokens/css/**` with no consumer in `components/**`, `engines/**`, `tokens/css/**`, or a JS token read.
+  2. Public component props declared in `*.types.ts` that no engine destructures.
+  3. Exported contract fields that no implementation reads (start with `compilers/**` inputs).
+- **Gate it bites** — The census must be seeded with a drill, per `roadmap/README.md` rule 3: reintroduce one of the four defects above, watch the counter rise, revert. A counter that has never been red is not a counter.
