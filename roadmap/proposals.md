@@ -534,3 +534,9 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   2. Public component props declared in `*.types.ts` that no engine destructures.
   3. Exported contract fields that no implementation reads (start with `compilers/**` inputs).
 - **Gate it bites** — The census must be seeded with a drill, per `roadmap/README.md` rule 3: reintroduce one of the four defects above, watch the counter rise, revert. A counter that has never been red is not a counter.
+
+### P-30 The package ships the same 862KB stylesheet twice (S)
+
+- **What** — `packages/core/styles/platform.css` and `packages/core/styles/rottay.css` are byte-identical (862,308 bytes each), and the package exports both (`./styles/platform`, `./styles/rottay`). `platform.css`'s only tenant selector is `html[data-tenant='rottay']`: "platform" is a legacy name for the rottay tenant, not a second tenant.
+- **Why it matters** — Roughly 860KB of duplicated CSS in the published artifact, and a naming fiction that made a work order describe `rottay` as a "showcase tenant" when it is the DS `DEFAULT_TENANT` (`ThemeProvider.tsx:433`) and app-platform's base. The duplication is what allowed the fiction to survive.
+- **Shape** — Keep one bundle. Either make `./styles/platform` re-export `./styles/rottay`, or deprecate the `platform` entry with a release-note migration. Verify no consumer imports it (`grep` across the three apps) before choosing. Gate: an assertion in the build that no two emitted style bundles are byte-identical.

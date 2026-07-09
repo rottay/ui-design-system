@@ -300,3 +300,48 @@ before/after gallery scored against the spec; the owner approves signature momen
   - `modern.tsx` is the reported case.
   **All three engines share the identical defect for this input.** The Outcome above stands unchanged -- "the three engines agree on what a labelled badge looks like" -- but there was no correct engine to copy from, so the fix must land in all three with the same shape: route labelled children through each engine's own standalone/tag chrome. **Files widened** to `Badge/engines/{classic,rustic}.tsx`. **Amended gate**: the `it.each(STABLE_ENGINES)` regression asserting a labelled badge paints a background and clips a long label must be REAL, not scoped to modern; the numeric `count={0}` / `showZero` semantic stays pinned across all three.
   This is the fourth work order in one session whose premise the code contradicts, and the first the orchestrator itself authored. It is why `roadmap/README.md` now states that a WO is a hypothesis and the code is the law.
+
+### WO-ENG-14 The premium effects actually render on the showcase tenant
+- **Outcome** — The surface tint and glass that spec section 11 calls signature cues are visible on the rottay showcase surface, and a PIXEL probe holds them there. `effects.gradientConsumers` stops being the only thing standing between the engine and a grey slab.
+- **Why** — Owner decision 2026-07-09, on the Fable premium advisory. Three verified facts: (a) `rottay.ts:69-70` declares `gradients: { primary: 'none', surface: 'none', mesh: 'none' }` and `glass: { blur: 'none', ... }`, and `artifacts/bithire/index.css:129` sets `--ds-effect-intensity: 0`, so cues 3 and 5 render on NO first-party tenant and no showcase — spec section 5's sentence "the DS default (rottay tenant, showroom) showcases the full Quiet Premium treatment" is false in the tree. (b) Measured on `test-artifacts/gates/gat-03/rottay.png`: the card face is flat rgb(24,24,27) top to bottom within 1/255, where the sanctioned 2.5% top tint should give roughly +6/255. (c) A LIVE DEFECT: `runtime/theming/ThemeProvider.tsx:987` stamps `--ds-gradient-surface` from legacy `tokenOverrides` with no `'none'` guard (`'none'` is truthy), while `compilers/brand-theme/index.ts:243-245` guards exactly this and documents the rule. WO-ENG-05 found this bug class and fixed it in one of the two emitters.
+  The counter that was supposed to protect this measures FILES REFERENCING A TOKEN and is a MIN floor. It is green while the effect is pixel-invisible everywhere. A metric for a visual effect that never looks at a render cannot correlate with quality.
+- **Depends on** — WO-ENG-05 (the effect roles + intensity dial).
+- **Steps** —
+  1. Add the missing `'none'` guard to `ThemeProvider.tsx`'s gradient and glass stamping (lines ~970-993), matching the compiler's rule. This is a defect fix regardless of the rest.
+  2. Delete the `'none'` declarations from `rottay.ts:69-70` so the showcase tenant inherits `premium.css`'s sanctioned roles. bithire keeps `--ds-effect-intensity: 0` (its Evidence-Ledger law) and evnto keeps its own posture; this WO changes ONLY the showcase tenant.
+  3. Add a RENDER-LEVEL probe to the showroom harness, parallel to the APCA probe the audit already runs: sample the card's top strip and mid strip on the showcase tenant and assert a luminance delta at or above 4/255. Wire it as a decrease-only counter, and DRILL it (set `--ds-effect-intensity: 0` on rottay, watch it go red, revert) per README rule 3.
+  4. Amend spec section 12's effects row: it currently claims "rendered" while measuring "wired". The pixel probe is what makes the claim true.
+  5. Recapture the flagship matrix and review by eye.
+- **Files** — `packages/core/src/runtime/theming/ThemeProvider.tsx`, `packages/core/src/tokens/ts/brand-themes/rottay.ts`, `packages/core/src/tokens/css/artifacts/rottay/**` (regenerated), `packages/showroom/e2e/**` (the pixel probe), `packages/core/scripts/engine-token-audit.{mjs,baseline.json}`.
+- **Acceptance gate** — The pixel probe passes on rottay and its drill is recorded (red on `--ds-effect-intensity: 0`, green on revert); `engine-token-audit --check` green; `test:gates` green after regenerating the flagship baselines, which WILL move on rottay — reviewed by eye; bithire and evnto baselines UNMOVED (they opted out); build + `pnpm test` green.
+- **Do NOT** — Do not turn effects on for bithire or evnto. Do not keep `effects.gradientConsumers` as the only effects gate. Do not raise the intensity beyond the sanctioned roles to make the probe pass.
+- **Size** — M.
+
+- **AMENDMENT 2026-07-09 (owner caught it during authoring)** — This WO said "showcase tenant". **`rottay` is not a showcase.** Verified: `runtime/theming/ThemeProvider.tsx:433` sets `const DEFAULT_TENANT = 'rottay'`, so it is the DS default for any consumer that names no tenant; it is the tenant the showroom mounts; and `packages/core/styles/platform.css` is a BYTE-IDENTICAL alias of `styles/rottay.css` (862,308 bytes each) whose only tenant selector is `html[data-tenant='rottay']` — "platform" is the legacy name for this tenant, which is why app-platform reads as a separate product but renders on rottay.
+  **Real blast radius**: the showroom, app-platform, and every consumer that specifies no tenant. NOT app-bithire, which mounts the `bithire` tenant and keeps `--ds-effect-intensity: 0` under its Evidence-Ledger law. The owner's operating context recorded 2026-07-07 states that app-platform has no meaningful prod/dev distinction and needs no production caution, while app-bithire is the live exception. The decision therefore stands, but the WO must not describe this as a showcase-only change, and the `done --evidence` must state that app-platform's rendering moves.
+  Spec section 5's phrase "the DS default (rottay tenant, showroom)" conflates a product tenant with a showcase and should be corrected in the same pass.
+
+### WO-ENG-15 Badge defaults to the soft treatment
+- **Outcome** — A status badge reads as a quiet chip, not as the loudest object on the screen. `badgeStyle` defaults to `'soft'`; `'solid'` stays available.
+- **Why** — Owner decision 2026-07-09, on the Fable premium advisory. On the monochrome rottay surface, fully saturated solid fills (`#22C55E`, amber, red — `Badge/engines/modern.tsx:83-106`, default `badgeStyle: 'solid'` at `Badge.types.ts:277`) are where every eye lands first. The house already knows the answer: the stats-grid delta chips use a 10% tinted background with colored text and are the most premium-looking element in the entire evidence set. Linear and Stripe both default to tinted-soft status chips on dark.
+- **Depends on** — WO-ENG-13 (a labelled badge must paint chrome before its treatment can be judged).
+- **Steps** —
+  1. Change the default in `Badge.types.ts`; keep `'solid'` as an explicit opt-in and leave the indicator (count/dot) path alone.
+  2. Re-check the soft pairs against the existing APCA pairing floors in `engine-token-audit.mjs` — a tinted background changes the text/surface pairing.
+  3. Apply the same default to all three engines, since WO-ENG-13 established they must agree on what a labelled badge is.
+- **Files** — `packages/core/src/components/primitives/display/Badge/**`, `packages/showroom/e2e/visual/__screenshots__/**` (badge, card, table baselines move).
+- **Acceptance gate** — `a11y.apcaPairings` does not rise; `test:gates` green after regenerating the badge/card/table baselines, reviewed by eye; the three engines render the same treatment; build + `pnpm test` green. This is an API-default change that will diff app screenshots downstream — record it in the release note.
+- **Do NOT** — Do not change the semantic colors themselves. Do not touch the count/dot indicator treatment.
+- **Size** — S.
+
+### WO-ENG-16 The Table primitive draws a header hairline by default
+- **Outcome** — A default `<Table>` separates its header from its body. The primitive and `PatternDataTable` agree about what a table is.
+- **Why** — Fable premium advisory, 2026-07-09, verified: `Table/engines/modern.tsx:352` and `:548` attach the header and cell bottom hairlines only under `bordered`, which defaults to `false`. The everyday table is therefore floating text with a weight change (`test-artifacts/engine-modern/eng-12/flagship-rottay-table-1280.png`, and the same on light). `PatternDataTable` already draws them (`responsive-rottay-data-table-1280.png`). No reference product ships a header-less default table; it reads unfinished, not minimal.
+- **Depends on** — none.
+- **Steps** —
+  1. Default a single header-bottom hairline in the modern engine, using `--ds-table-border` at low alpha; keep fully-borderless available as an explicit opt-out.
+  2. Reconcile the primitive with `PatternDataTable` so the two do not disagree; document which owns the default.
+- **Files** — `packages/core/src/components/primitives/display/Table/engines/modern.tsx`, its tests, the table baselines.
+- **Acceptance gate** — `test:gates` green after regenerating the table baselines, reviewed by eye; classic/rustic untouched; build + `pnpm test` green.
+- **Do NOT** — Do not add vertical rules or cell borders. One hairline.
+- **Size** — S.

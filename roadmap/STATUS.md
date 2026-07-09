@@ -7,14 +7,17 @@
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
 | [engine-modern](./engine-modern.md) | 12 | 0 | 1 | 13 |
-| [craft](./craft.md) | 5 | 0 | 5 | 10 |
+| [craft](./craft.md) | 5 | 1 | 4 | 10 |
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
-| [tokens](./tokens.md) | 1 | 0 | 5 | 6 |
+| [tokens](./tokens.md) | 1 | 1 | 4 | 6 |
 | [architecture](./architecture.md) | 0 | 0 | 5 | 5 |
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-CRA-07 | Micro-interaction catalog | ds-agent | 2026-07-09 | (no entries — log via `progress`) |
+| WO-TOK-05 | A dynamic dark tenant keeps its BrandTheme chrome | ds-agent | 2026-07-09 | 2026-07-09 20:14 — Dark-chrome layering landed (uncommitted; the real gate is the hostile-tenant probe, which needs a build -- deferred while a sibling agent edits the tree). MECHANISM: generateTenantCssFromResolvedVisualConfig's dark block gains one layer, darkChromeVars, spread AFTER darkSemanticVariables and before darkPersonalityOverrides. It calls the already-exported, already-pure brandThemeToChromeVariables -- the same function compileBrandTheme uses -- so no compiler change was needed. The hardcoded literals stay exactly where they were and now function as the DEFAULT a tenant's chrome overrides. ORCHESTRATOR AUDIT of the scope narrowing (the agent narrowed to controls/cardComponent/modal): its stated reason was that the WO names those three sub-objects. That reason is weak. The STRONG reason, which I verified: darkSemanticVariables emits literals for exactly card, input, modal (plus drawer/toast/tooltip/notification/message/overlay, which have NO counterpart in BrandChrome, so they clobber nothing declarable). It emits ZERO --ds-(sidebar/layout/shell/table/tabs)-* vars. That is why table and tabs already followed the tenant in the probe measurement and card/input/modal did not. So the narrowing is principled, not arbitrary: re-emit exactly the clobbered channels that a tenant can declare. AND the premium-regression.test.ts assertion the agent hit -- 'chrome vars NOT in dark block' for sidebar/layout/shell -- is CORRECT, not a bug being pinned: those vars live in the light block html[data-tenant=x], which also matches under data-theme=dark, so their absence from the dark block is right. DRILL (my rule: a gate that has never been red is not a gate): removing the darkChromeVars spread makes exactly the new test 'layers a dark tenant's compiled chrome over the generated dark defaults' fail, and only that one; restored, green. DISCOVERED, not fixed: BrandCompilerInput.baseTheme exists in the contract and is passed by torture-fixtures.test.ts, but compileBrandTheme never destructures or reads it -- a dead parameter. Left alone; consuming it is a separate change. GATE SO FAR: runtime/tenant + compilers/brand-theme = 505 passed / 10 files, independently re-run, including the previously-at-risk premium-regression suite; core tsc 0. REMAINING: build, regenerate artifacts (expected EMPTY first-party diff -- build-vertical-artifacts.mjs calls renderVerticalArtifact, a code path that never invokes the edited function), then run test:whitelabel and prove the baseline shrinks from 7 violations to at most 1 (select/native/background-color, a different defect). Also flagged: sidebar/layout/shell/table/tabs chrome will still look unchanged in dark under the torture fixture -- that is the scope decision above, not a regression. |
 
 ## Next up (todo, dependencies satisfied)
 
@@ -27,9 +30,7 @@
 | WO-TOK-03 | Retire the dead DaisyUI layer from modern | M | tokens | P-03 |
 | WO-ARC-01 | Component API normalization | M | architecture | P-13 |
 | WO-CRA-06 | Motion choreography system | L | craft | P-21 |
-| WO-CRA-07 | Micro-interaction catalog | M | craft | P-22 |
 | WO-CRA-10 | Promotion pass: proven app kits into the DS | M | craft | P-15 |
-| WO-TOK-05 | A dynamic dark tenant keeps its BrandTheme chrome | M | tokens | P-24 |
 
 ## Blocked (waiting on dependencies)
 
