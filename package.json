@@ -65,6 +65,7 @@
     "kill-port": "^2.0.1"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.31.0"
+    "@changesets/cli": "^2.31.0",
+    "apca-w3": "^0.1.9"
   }
 }

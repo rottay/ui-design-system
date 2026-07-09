@@ -93,6 +93,12 @@ jobs:
       - name: Typecheck
         run: pnpm --filter @rottay/design-system run typecheck
 
+      # WO-GAT-04: the engine-token ratchet includes the APCA contrast counter
+      # (a11y.apcaPairings). It runs off source, so no build is required first.
+      # (test:ci does not trigger the `pretest` hook, so it is gated explicitly.)
+      - name: Engine token + APCA audit
+        run: pnpm --filter @rottay/design-system run engine-audit:check
+
       - name: Build
         run: pnpm --filter @rottay/design-system run build
 
@@ -186,6 +192,62 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=4096
 
   # ─────────────────────────────────────────────────────
+  #  Accessibility CI — axe + focus sweep (WO-GAT-04)
+  # ─────────────────────────────────────────────────────
+  a11y:
+    name: Accessibility (a11y)
+    needs: [detect, core]
+    if: |
+      always() &&
+      (needs.detect.outputs.showroom == 'true' || needs.detect.outputs.core == 'true') &&
+      (needs.core.result == 'success' || needs.core.result == 'skipped')
+    runs-on: self-hosted
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@rottay'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # The showroom dev server (Playwright webServer) imports the built DS.
+      - name: Build core (dependency)
+        run: pnpm --filter @rottay/design-system run build
+
+      - name: Install Playwright browser
+        run: pnpm --filter @rottay/showroom exec playwright install chromium
+
+      # axe.spec.ts + focus.spec.ts drive the flagship galleries under both tenant
+      # palettes. Playwright starts the dev server via its webServer config (CI:
+      # reuseExistingServer is false).
+      - name: Run a11y specs (axe + focus sweep)
+        run: pnpm --filter @rottay/showroom exec playwright test e2e/a11y
+
+      - name: Upload a11y report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a11y-report
+          path: |
+            test-artifacts/gates/gat-04
+            packages/showroom/test-results
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # ─────────────────────────────────────────────────────
   #  Changeset Validation (PRs only)
   # ─────────────────────────────────────────────────────
   changeset:
@@ -222,7 +284,7 @@ jobs:
   # ─────────────────────────────────────────────────────
   gate:
     name: Summary
-    needs: [detect, core, showroom, changeset]
+    needs: [detect, core, showroom, a11y, changeset]
     if: always()
     runs-on: self-hosted
     timeout-minutes: 2
@@ -236,6 +298,7 @@ jobs:
 
           CORE_RESULT="${{ needs.core.result }}"
           SHOWROOM_RESULT="${{ needs.showroom.result }}"
+          A11Y_RESULT="${{ needs.a11y.result }}"
           CHANGESET_RESULT="${{ needs.changeset.result }}"
 
           if [ "$CORE_RESULT" = "skipped" ]; then
@@ -250,6 +313,12 @@ jobs:
             echo "| Showroom App | $SHOWROOM_RESULT |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
+          if [ "$A11Y_RESULT" = "skipped" ]; then
+            echo "| Accessibility (a11y) | Skipped (no changes) |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Accessibility (a11y) | $A11Y_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           if [ "$CHANGESET_RESULT" = "skipped" ]; then
             echo "| Changeset | Skipped (push event) |" >> "$GITHUB_STEP_SUMMARY"
           else
@@ -257,7 +326,7 @@ jobs:
           fi
 
           # Fail if any required job failed or was cancelled
-          if [ "$CORE_RESULT" = "failure" ] || [ "$CORE_RESULT" = "cancelled" ] || [ "$SHOWROOM_RESULT" = "failure" ] || [ "$SHOWROOM_RESULT" = "cancelled" ] || [ "$CHANGESET_RESULT" = "failure" ]; then
+          if [ "$CORE_RESULT" = "failure" ] || [ "$CORE_RESULT" = "cancelled" ] || [ "$SHOWROOM_RESULT" = "failure" ] || [ "$SHOWROOM_RESULT" = "cancelled" ] || [ "$A11Y_RESULT" = "failure" ] || [ "$A11Y_RESULT" = "cancelled" ] || [ "$CHANGESET_RESULT" = "failure" ]; then
             echo ""
             echo "CI FAILED"
             exit 1

@@ -37,7 +37,7 @@ export function StateGallery({ slug }: { slug: string }) {
               display: 'block',
               textTransform: 'uppercase',
               letterSpacing: '0.08em',
-              color: 'var(--ds-color-text-muted)',
+              color: 'var(--ds-color-text-secondary)',
             }}
           >
             {group.label}

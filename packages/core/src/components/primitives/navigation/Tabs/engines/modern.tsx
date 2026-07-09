@@ -441,8 +441,8 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           to { opacity: 1; transform: translateY(0); }
         }
         [data-tabs-id="${tabsId}"] [role="tab"]:focus-visible {
-          outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
-          outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px));
+          outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color) !important;
+          outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px)) !important;
           border-radius: var(--ds-radius-sm);
         }
       `}} />

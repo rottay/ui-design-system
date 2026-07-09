@@ -1,0 +1,98 @@
+{
+  "label|.ds-input-ph-_id_": {
+    "rule": "label",
+    "impact": "critical",
+    "help": "Form elements must have labels",
+    "target": ".ds-input-ph-_id_",
+    "occurrences": [
+      {
+        "tenant": "rottay",
+        "slug": "input"
+      },
+      {
+        "tenant": "rottay",
+        "slug": "input"
+      },
+      {
+        "tenant": "bithire",
+        "slug": "input"
+      },
+      {
+        "tenant": "bithire",
+        "slug": "input"
+      }
+    ]
+  },
+  "select-name|.ds-sel-_id_": {
+    "rule": "select-name",
+    "impact": "critical",
+    "help": "Select element must have an accessible name",
+    "target": ".ds-sel-_id_",
+    "occurrences": [
+      {
+        "tenant": "rottay",
+        "slug": "select"
+      },
+      {
+        "tenant": "rottay",
+        "slug": "select"
+      },
+      {
+        "tenant": "rottay",
+        "slug": "select"
+      },
+      {
+        "tenant": "bithire",
+        "slug": "select"
+      },
+      {
+        "tenant": "bithire",
+        "slug": "select"
+      },
+      {
+        "tenant": "bithire",
+        "slug": "select"
+      }
+    ]
+  },
+  "color-contrast|#tabs-tab-_id_-2": {
+    "rule": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "target": "#tabs-tab-_id_-2",
+    "occurrences": [
+      {
+        "tenant": "rottay",
+        "slug": "tabs"
+      }
+    ]
+  },
+  "color-contrast|#tabs-tab-_id_-3": {
+    "rule": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "target": "#tabs-tab-_id_-3",
+    "occurrences": [
+      {
+        "tenant": "rottay",
+        "slug": "tabs"
+      },
+      {
+        "tenant": "rottay",
+        "slug": "tabs"
+      }
+    ]
+  },
+  "color-contrast|#tabs-tab-_id_-1": {
+    "rule": "color-contrast",
+    "impact": "serious",
+    "help": "Elements must meet minimum color contrast ratio thresholds",
+    "target": "#tabs-tab-_id_-1",
+    "occurrences": [
+      {
+        "tenant": "rottay",
+        "slug": "tabs"
+      }
+    ]
+  }
+}

@@ -30,6 +30,12 @@
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+// WO-GAT-04 (accessibility CI, proposal P-10): APCA is the perceptually-accurate contrast model
+// (the successor to WCAG-2 ratios) used by the `a11y.apcaPairings` counter below. `apca-w3` is a
+// ROOT devDependency (this script resolves it via Node's upward node_modules walk to the repo
+// root, whichever workspace CWD invokes it). This is ADDITIVE gate machinery: it does NOT touch
+// the shipped WCAG validator at src/_internal/a11y/contrast/index.ts (a published /server API).
+import { calcAPCA } from "apca-w3";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, "..");
@@ -1358,6 +1364,269 @@ function writeCoverageArtifacts(coverage) {
   return { jsonPath, mdPath };
 }
 
+/* ============================================================================
+   APCA contrast gate (WO-GAT-04, proposal P-10, axis 2): evaluate a DOCUMENTED
+   list of text/surface token pairings across every first-party palette with
+   APCA (Accessible Perceptual Contrast Algorithm) Lc values, and count pairings
+   below their threshold as failures. Decrease-only ratchet, like every other
+   counter here. This is ADDITIVE to — never a replacement for — the shipped
+   WCAG-2 validator at src/_internal/a11y/contrast/index.ts (a published /server
+   API). APCA is the perceptually accurate successor: WCAG-2 ratios are known to
+   mis-rank contrast (over-rating light-on-dark, under-rating dark-on-light),
+   which the P-05 hostile-tenant palettes make actively misleading.
+
+   ── THRESHOLDS (documented, fixed by proposal P-10) ────────────────────────
+   APCA Lc is signed (polarity: negative = light text on dark bg). We compare
+   the ABSOLUTE Lc against a floor:
+     - body-text pairs:      |Lc| >= 60   (primary reading text)
+     - large-text / UI pairs: |Lc| >= 45   (component labels, low-emphasis text,
+                                            status accents)
+   These map to the APCA bronze-tier guidance (60 = fluent body minimum at
+   normal sizes; 45 = large/bold/UI minimum). We deliberately do NOT chase the
+   90/75 silver tiers here — the gate's job is to catch the dark-blind and
+   wash-out failures, and to ratchet them down, not to fail the whole system
+   against an aspirational bar.
+
+   ── PALETTES ───────────────────────────────────────────────────────────────
+   The SAME pairing list is resolved against each first-party palette on its
+   OWN default surface (the one TenantPaletteSurface renders in the WO-ENG-02
+   galleries): the foundation defaults (dark) and the three tenant artifacts
+   (rottay dark, bithire light, evnto light). Each artifact's tokens are merged
+   OVER the foundation defaults (artifact wins — mirroring the real cascade,
+   where html[data-tenant=…] overrides :root), then `var(--x)` chains are
+   followed to a concrete color.
+
+   ── SKIP-WITH-COUNT ────────────────────────────────────────────────────────
+   A pairing whose text OR bg resolves to a non-static value — `color-mix()`, an
+   unresolved `var()` (no definition, no fallback), a non-opaque rgba()/#rrggbbaa
+   (APCA needs an opaque pair; compositing needs a known backdrop), or a keyword
+   we do not map — is SKIPPED and COUNTED (reported), never silently dropped. At
+   the WO-GAT-04 baseline every documented pairing resolves to opaque hex, so the
+   skip count is 0; a pairing that STARTS skipping later is a visible signal in
+   the report that a token was changed to a non-static form (which would also
+   quietly shrink the evaluated set), not an invisible hole in the gate.
+   ============================================================================ */
+
+const APCA_BODY_MIN = 60; // body-text pairs
+const APCA_UI_MIN = 45; // large-text / UI / low-emphasis pairs
+
+/**
+ * The documented text/surface token pairings. `kind` selects the threshold.
+ * Each pairing names the TWO `--ds-*` tokens (text foreground, then surface
+ * background) exactly as the components consume them; the resolver follows
+ * their `var()` chains per palette. The list mirrors what the WO-ENG-02
+ * flagship galleries actually render: body/muted copy on the page ground, body
+ * copy on the elevated card surface, the primary button label on its own fill,
+ * the five badge tones the gallery renders (fg on own tone bg — self-contained,
+ * surface-independent), and each semantic status color used AS text on the page
+ * ground (the status-message/label pattern).
+ */
+const APCA_PAIRINGS = [
+  // Body-reading text (|Lc| >= 60)
+  { id: "body-text-on-page-bg", kind: "body", text: "--ds-color-text-primary", bg: "--ds-color-bg-primary" },
+  { id: "text-on-card-surface", kind: "body", text: "--ds-color-text-primary", bg: "--ds-color-bg-elevated" },
+  // Low-emphasis text (|Lc| >= 45): muted/secondary copy — timestamps, hints, help text
+  { id: "muted-text-on-page-bg", kind: "ui", text: "--ds-color-text-muted", bg: "--ds-color-bg-primary" },
+  // Primary button label on its own fill (|Lc| >= 45)
+  { id: "primary-button-label", kind: "ui", text: "--ds-button-primary-color", bg: "--ds-button-primary-bg" },
+  // Badge tone label on its own tone fill (|Lc| >= 45) — the 5 gallery tones
+  { id: "badge-primary", kind: "ui", text: "--ds-badge-primary-color", bg: "--ds-badge-primary-bg" },
+  { id: "badge-secondary", kind: "ui", text: "--ds-badge-secondary-color", bg: "--ds-badge-secondary-bg" },
+  { id: "badge-success", kind: "ui", text: "--ds-badge-success-color", bg: "--ds-badge-success-bg" },
+  { id: "badge-warning", kind: "ui", text: "--ds-badge-warning-color", bg: "--ds-badge-warning-bg" },
+  { id: "badge-error", kind: "ui", text: "--ds-badge-error-color", bg: "--ds-badge-error-bg" },
+  // Semantic status color used AS text on the page ground (|Lc| >= 45)
+  { id: "semantic-success-text", kind: "ui", text: "--ds-color-success", bg: "--ds-color-bg-primary" },
+  { id: "semantic-info-text", kind: "ui", text: "--ds-color-info", bg: "--ds-color-bg-primary" },
+  { id: "semantic-warning-text", kind: "ui", text: "--ds-color-warning", bg: "--ds-color-bg-primary" },
+  { id: "semantic-error-text", kind: "ui", text: "--ds-color-error", bg: "--ds-color-bg-primary" },
+];
+
+/**
+ * The first-party palettes, each on the surface its WO-ENG-02 gallery renders.
+ * `theme` selects which artifact block is the default (rottay is dark-first;
+ * bithire/evnto are light-first), so the resolver reads the block that actually
+ * paints, not the opposite-scheme override.
+ */
+const APCA_PALETTES = [
+  { id: "default", kind: "foundation", file: join(foundationDir, "themes/default.css"), theme: "dark" },
+  { id: "rottay", kind: "artifact", tenant: "rottay", file: join(artifactsDir, "rottay/index.css"), theme: "dark" },
+  { id: "bithire", kind: "artifact", tenant: "bithire", file: join(artifactsDir, "bithire/index.css"), theme: "light" },
+  { id: "evnto", kind: "artifact", tenant: "evnto", file: join(artifactsDir, "evnto/index.css"), theme: "light" },
+];
+
+/** Extract only the DIRECT (brace-depth-0) `--name: value;` declarations from a
+ * rule body, skipping any nested rule (e.g. the `*, ::after { border-color }`
+ * reset that tenant blocks carry) — those set inherited properties, not the
+ * root token scale. */
+function apcaTopLevelDecls(body) {
+  const out = [];
+  let depth = 0;
+  let seg = "";
+  for (let i = 0; i < body.length; i++) {
+    const c = body[i];
+    if (c === "{") { depth += 1; seg = ""; continue; }
+    if (c === "}") { if (depth > 0) depth -= 1; seg = ""; continue; }
+    if (depth !== 0) continue;
+    if (c === ";") {
+      const m = /(--[a-zA-Z0-9-]+)\s*:\s*([\s\S]+)/.exec(seg);
+      if (m) out.push([m[1], m[2].trim()]);
+      seg = "";
+    } else {
+      seg += c;
+    }
+  }
+  return out;
+}
+
+/** True when `selector` is the tenant's ROOT token block for its DEFAULT theme:
+ * `html[data-tenant='T']` with only attached qualifiers (`:not(...)`, `.class`,
+ * `[data-theme=...]`) and NO descendant/`:where(...)` scoping, and NOT scoped to
+ * the OPPOSITE scheme (a non-negated `.dark`/`[data-theme='dark']` for a
+ * light-default tenant, or `.light`/`[data-theme='light']` for a dark-default
+ * one). The opposite-scheme override block is thereby excluded. */
+function apcaBlockMatchesDefault(selector, tenant, defaultTheme) {
+  const compact = selector.replace(/\s+/g, "");
+  const rootRe = new RegExp(
+    `^html\\[data-tenant=['"]${tenant}['"]\\](?::not\\([^)]*\\)|\\.[A-Za-z0-9_-]+|\\[data-theme=['"][^'"]*['"]\\])*$`,
+  );
+  if (!rootRe.test(compact)) return false;
+  const opp = defaultTheme === "light" ? "dark" : "light";
+  const oppClass = new RegExp(`(?<!:not\\()\\.${opp}(?![A-Za-z0-9_-])`);
+  const oppAttr = new RegExp(`(?<!:not\\()\\[data-theme=['"]${opp}['"]\\]`);
+  if (oppClass.test(compact) || oppAttr.test(compact)) return false;
+  return true;
+}
+
+/** Build a name -> raw-value map from every top-level rule of `cssText` whose
+ * selector satisfies `matchSelector`, in source order (LAST wins — matching the
+ * cascade, where a later same-scope block overrides an earlier one). */
+function apcaCollectDecls(cssText, matchSelector) {
+  const stripped = stripBlockComments(cssText);
+  const defs = new Map();
+  for (const rule of parseCssRules(stripped, 0, stripped.length)) {
+    if (!rule.selector || !matchSelector(rule.selector)) continue;
+    const body = stripped.slice(rule.bodyStart, rule.bodyEnd);
+    for (const [n, v] of apcaTopLevelDecls(body)) defs.set(n, v);
+  }
+  return defs;
+}
+
+/** Parse a concrete CSS color literal to an OPAQUE color string calcAPCA
+ * accepts (`#rrggbb` or `rgb(r, g, b)`), or null when it is not a static opaque
+ * color (color-mix / gradient / non-opaque alpha / var-bearing / unmapped
+ * keyword) — the "skip-with-count" cases. */
+function apcaParseColor(raw) {
+  const str = raw.trim().replace(/\s*!important\s*$/i, "");
+  const kw = { white: "#ffffff", black: "#000000" };
+  if (Object.prototype.hasOwnProperty.call(kw, str.toLowerCase())) return kw[str.toLowerCase()];
+  if (/^#[0-9a-fA-F]{6}$/.test(str)) return str;
+  if (/^#[0-9a-fA-F]{3}$/.test(str)) return str;
+  if (/^#[0-9a-fA-F]{8}$/.test(str)) return str.slice(7).toLowerCase() === "ff" ? "#" + str.slice(1, 7) : null;
+  if (/^#[0-9a-fA-F]{4}$/.test(str)) return str[4].toLowerCase() === "f" ? "#" + str.slice(1, 4) : null;
+  const m = /^rgba?\(\s*([0-9.]+)\s*[,\s]\s*([0-9.]+)\s*[,\s]\s*([0-9.]+)\s*(?:[,/]\s*([0-9.]+%?)\s*)?\)$/.exec(str);
+  if (m) {
+    let a = 1;
+    if (m[4] !== undefined) a = m[4].endsWith("%") ? parseFloat(m[4]) / 100 : parseFloat(m[4]);
+    if (!(a >= 1)) return null; // non-opaque needs compositing — skip
+    return `rgb(${Math.round(+m[1])}, ${Math.round(+m[2])}, ${Math.round(+m[3])})`;
+  }
+  return null; // color-mix(), gradients, unresolved var(), unmapped keyword
+}
+
+/** Resolve a `--ds-*` token to a concrete opaque color within `defs`, following
+ * `var(--x, fallback)` chains; null when it bottoms out on an undefined name or
+ * a non-static value (see apcaParseColor). */
+function apcaResolveColor(name, defs, seen = new Set()) {
+  if (seen.has(name)) return null;
+  seen.add(name);
+  const raw = defs.get(name);
+  if (raw === undefined) return null;
+  return apcaResolveValue(raw, defs, seen);
+}
+
+function apcaResolveValue(raw, defs, seen) {
+  const value = raw.trim().replace(/\s*!important\s*$/i, "");
+  const varM = /^var\(\s*(--[a-zA-Z0-9-]+)\s*(?:,\s*([\s\S]+))?\)$/.exec(value);
+  if (varM) {
+    const inner = apcaResolveColor(varM[1], defs, new Set(seen));
+    if (inner) return inner;
+    return varM[2] !== undefined ? apcaResolveValue(varM[2].trim(), defs, seen) : null;
+  }
+  return apcaParseColor(value);
+}
+
+/**
+ * Evaluate every APCA_PAIRINGS pair against every APCA_PALETTES palette. Returns
+ * the failure count (pairs whose |Lc| is below their threshold), the skip count
+ * (unresolvable pairs), and a per-evaluation detail list for the report/evidence.
+ */
+function evaluateApcaPairings() {
+  const foundationText = existsSync(APCA_PALETTES[0].file) ? readFileSync(APCA_PALETTES[0].file, "utf8") : "";
+  const foundationDefs = apcaCollectDecls(foundationText, (sel) => sel.trim() === ":root");
+  const results = [];
+  let failures = 0;
+  let skipped = 0;
+  for (const pal of APCA_PALETTES) {
+    let defs;
+    if (pal.kind === "foundation") {
+      defs = foundationDefs;
+    } else {
+      const text = existsSync(pal.file) ? readFileSync(pal.file, "utf8") : "";
+      const artDefs = apcaCollectDecls(text, (sel) => apcaBlockMatchesDefault(sel, pal.tenant, pal.theme));
+      defs = new Map([...foundationDefs, ...artDefs]); // artifact overrides foundation
+    }
+    for (const pair of APCA_PAIRINGS) {
+      const textColor = apcaResolveColor(pair.text, defs);
+      const bgColor = apcaResolveColor(pair.bg, defs);
+      const threshold = pair.kind === "body" ? APCA_BODY_MIN : APCA_UI_MIN;
+      if (!textColor || !bgColor) {
+        skipped += 1;
+        results.push({
+          palette: pal.id, pair: pair.id, kind: pair.kind, threshold, status: "skip",
+          textToken: pair.text, bgToken: pair.bg, textColor, bgColor,
+        });
+        continue;
+      }
+      const lcRaw = calcAPCA(textColor, bgColor);
+      const absLc = Math.abs(typeof lcRaw === "number" ? lcRaw : Number(lcRaw) || 0);
+      const pass = absLc >= threshold;
+      if (!pass) failures += 1;
+      results.push({
+        palette: pal.id, pair: pair.id, kind: pair.kind, threshold,
+        textToken: pair.text, bgToken: pair.bg, textColor, bgColor,
+        lc: Number(absLc.toFixed(1)), status: pass ? "pass" : "FAIL",
+      });
+    }
+  }
+  return { failures, skipped, evaluated: results.length - skipped, results };
+}
+
+/** Render the APCA evidence Markdown (written by --apca-report; also the shape
+ * printed in report mode). */
+function renderApcaMarkdown(apca) {
+  const lines = [];
+  lines.push("# APCA contrast pairings (WO-GAT-04)");
+  lines.push("");
+  lines.push(`Generated: ${new Date().toISOString()}`);
+  lines.push("");
+  lines.push(
+    `Thresholds: body-text |Lc| >= ${APCA_BODY_MIN}; large-text/UI |Lc| >= ${APCA_UI_MIN}. ` +
+      `Failures (below threshold): ${apca.failures}. Skipped (unresolvable, counted): ${apca.skipped}. ` +
+      `Evaluated: ${apca.evaluated}.`,
+  );
+  lines.push("");
+  lines.push("| Palette | Pairing | Kind | Text | Bg | Lc | Floor | Status |");
+  lines.push("| --- | --- | --- | --- | --- | --- | --- | --- |");
+  for (const r of apca.results) {
+    lines.push(
+      `| ${r.palette} | ${r.pair} | ${r.kind} | ${r.textColor ?? r.textToken} | ${r.bgColor ?? r.bgToken} | ${r.lc ?? "—"} | ${r.threshold} | ${r.status} |`,
+    );
+  }
+  lines.push("");
+  return lines.join("\n");
+}
+
 const files = modernFiles(componentsDir);
 const motion = countMotionLiterals(files);
 const effects = countEffectConsumers();
@@ -1375,6 +1644,7 @@ const classicThemeAudit = auditEngineTheme(classicThemeCssPath, classicFiles, {
 });
 const rusticThemeAudit = auditEngineTheme(rusticThemeCssPath, rusticFiles);
 const crossEngineLayoutDivergences = countCrossEngineLayoutDivergences();
+const apca = evaluateApcaPairings();
 
 const counters = {
   "motion.cubicBezierLiterals": motion.cubicBezier,
@@ -1401,6 +1671,12 @@ const counters = {
   "themeCss.deadSelectorsRustic": rusticThemeAudit.unreferencedSelectors,
   "content.magicZIndex": countMagicZIndex(files),
   "layout.crossEngineDivergences": crossEngineLayoutDivergences,
+  // WO-GAT-04 (accessibility CI, proposal P-10): APCA text/surface pairings below their Lc
+  // threshold, across the foundation + rottay/bithire/evnto palettes. Decrease-only, no hard
+  // target (dark-surface saturated status colors and low-emphasis muted text sit below the bar
+  // today; a future color WO ratchets them down). Skip count (unresolvable pairs) is reported,
+  // not gated — see evaluateApcaPairings(). Threshold + pairing list documented at APCA_PAIRINGS.
+  "a11y.apcaPairings": apca.failures,
   // Later WOs extend here: responsive counters (WO-ENG-12), ...
 };
 
@@ -1440,7 +1716,9 @@ const mode = process.argv.includes("--check")
     ? "update"
     : process.argv.includes("--coverage")
       ? "coverage"
-      : "report";
+      : process.argv.includes("--apca-report")
+        ? "apca-report"
+        : "report";
 
 if (mode === "update") {
   writeFileSync(baselinePath, JSON.stringify(counters, null, 2) + "\n");
@@ -1461,6 +1739,30 @@ if (mode === "coverage") {
   process.exit(0);
 }
 
+if (mode === "apca-report") {
+  // WO-GAT-04 evidence: persist the full APCA pairing table to test-artifacts/gates/gat-04/.
+  const outDir = join(gatesDir, "gat-04");
+  if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
+  const jsonPath = join(outDir, "apca-report.json");
+  const mdPath = join(outDir, "apca-report.md");
+  writeFileSync(
+    jsonPath,
+    JSON.stringify(
+      { generatedAt: new Date().toISOString(), thresholds: { body: APCA_BODY_MIN, ui: APCA_UI_MIN }, ...apca },
+      null,
+      2,
+    ) + "\n",
+  );
+  writeFileSync(mdPath, renderApcaMarkdown(apca));
+  console.log("engine-token-audit --apca-report: wrote");
+  console.log(`  ${jsonPath}`);
+  console.log(`  ${mdPath}`);
+  console.log(
+    `engine-token-audit — APCA pairings: ${apca.failures} below threshold, ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated`,
+  );
+  process.exit(0);
+}
+
 console.log("engine-token-audit — modern engine files:", files.length);
 for (const [k, v] of Object.entries(counters)) console.log(`  ${k}: ${v}`);
 
@@ -1471,6 +1773,22 @@ const coverageSummary = buildTokenCoverage();
 console.log(
   `engine-token-audit — token coverage: ${coverageSummary.filesScanned} files scanned, ${coverageSummary.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverageSummary.literalsOutstandingTotal} hardcoded literals outstanding`,
 );
+
+// WO-GAT-04: one-line APCA summary, appended to both report and --check output.
+console.log(
+  `engine-token-audit — APCA contrast: ${apca.failures} pairings below threshold (body>=${APCA_BODY_MIN}/ui>=${APCA_UI_MIN}), ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated across ${APCA_PALETTES.length} palettes`,
+);
+
+if (mode === "report") {
+  console.log("\nengine-token-audit — APCA pairing detail:");
+  console.log("  palette   pairing                 kind  Lc     floor  status");
+  for (const r of apca.results) {
+    const lc = r.status === "skip" ? "  skip" : String(r.lc).padStart(5);
+    console.log(
+      `  ${r.palette.padEnd(9)} ${r.pair.padEnd(23)} ${r.kind.padEnd(4)}  ${lc}  ${String(r.threshold).padStart(4)}   ${r.status}`,
+    );
+  }
+}
 
 if (mode === "report") {
   console.log(

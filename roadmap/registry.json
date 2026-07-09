@@ -568,7 +568,7 @@
    "lane": "gates",
    "order": 4,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-02",
     "WO-ENG-04"
@@ -577,7 +577,18 @@
    "programs": [
     "P-10"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 11:37",
+     "by": "ds-agent",
+     "note": "TOK-01 reopened (deferred: rottay-artifact carve risk after ENG-03/04/05/09 hand-edits + binding app-evnto WO-IDN-06 cross-repo coordination). GAT-04 full impl DELEGATED to fresh agent ac4db1fbf74b9500d (may pnpm install the 2 deps + run playwright e2e/a11y + audit --check + showroom dev; NO core build/pnpm test/commit): (1) @axe-core/playwright + axe.spec.ts over flagship galleries (WO-ENG-02 /probe/engine-modern) both palettes + decrease-only axe-baseline.json; (2) apca-w3 + a11y.apcaPairings counter in engine-token-audit.mjs (documented pairing list from default.css + artifacts/{rottay,bithire,evnto}, |Lc|>=60 body/>=45 UI, skip-with-count, decrease-only; do NOT touch the WCAG validator - additive); (3) focus.spec.ts Tab-sweep asserting visible --ds-focus-ring indicator dark+light; (4) CI a11y job; (5) drill. ON RETURN: audit diff, gate (build+pnpm test+audit --check+run the a11y specs+showroom build), commit. Prior 12/34 committed (5d22fb31); engine-modern ENG-01..10 + GAT-02 done."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "a11y CI gate: axe (AxeBuilder over 8 flagships x 2 tenant palettes) + focus-visible sweep + APCA contrast counter in engine-token-audit. Gate GREEN: core build exit0; engine-token-audit --check green (a11y.apcaPairings=6, 47 evaluated/6 honest fails on muted+status text/5 skipped color-mix); unit suite exit0 (no regression); playwright e2e/a11y 17/17 (axe 0 non-baselined vs 5-entry decrease-only baseline: label+select-name criticals on bare inputs/selects, rottay inactive-tab contrast x3; focus 16/16). Root fixes: Tabs/engines/modern.tsx :focus-visible outline+offset !important (inline outline:none was hiding the keyboard ring); state-gallery eyebrow label muted->secondary (WCAG AA on bithire light). Drill: evnto muted bad value -> apcaPairings 6->7 -> --check FAILED -> reverted (gate proven). CI: new a11y job + explicit APCA audit step in core job (test:ci did not fire pretest). Sighted both palettes: focus ring visible (white on rottay-dark, blue on bithire-light); rottay dark ground + label recolor confirmed."
   },
   {
    "id": "WO-TOK-01",
@@ -591,7 +602,11 @@
    "programs": [
     "P-06"
    ],
-   "notes": null
+   "notes": "DEFERRED by ds-agent (not started): (1) requires carving the rottay artifact (3099 lines) into generated .ts + _source/extension.css with ZERO value change, but ENG-03/04/05/09 hand-edited that artifact's dark block (elevation hairline, dark focus ring, gradient-none-skip interplay, z-index) - delicate carve, high regression risk; (2) BINDING cross-repo coordination with app-evnto WO-IDN-06 on the shared build-vertical-artifacts.mjs + generator spec - cannot confirm that window is clear autonomously from this repo. Best run with a fresh context + confirmed app-evnto coordination. Prior 12/34 committed (5d22fb31).",
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-TOK-02",

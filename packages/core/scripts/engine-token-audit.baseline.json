@@ -18,5 +18,6 @@
   "themeCss.deadSelectorsClassic": 13,
   "themeCss.deadSelectorsRustic": 146,
   "content.magicZIndex": 33,
-  "layout.crossEngineDivergences": 0
+  "layout.crossEngineDivergences": 0,
+  "a11y.apcaPairings": 6
 }
