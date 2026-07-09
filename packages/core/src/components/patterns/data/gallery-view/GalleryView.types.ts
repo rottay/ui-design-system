@@ -129,6 +129,19 @@ export interface GalleryViewProps<T> {
   onItemClick?: (item: T, index: number) => void;
 
   /**
+   * Opt-in `j`/`k`/`x`/`enter` keyboard shortcuts for this gallery (`j` next,
+   * `k` previous, `x` toggle selection, `enter` open). OFF by default. The
+   * shortcuts are gated to a scope covering this gallery's own DOM region,
+   * so they fire only while focus is within (or, with no other gallery/scope
+   * focused, while this is the most recently mounted one) -- never globally.
+   * `x` requires `selectable`; `enter` requires `onItemClick`. Requires a
+   * `<ShortcutProvider>` ancestor (see `hooks/shortcuts`) -- when absent,
+   * this prop is silently inert rather than crashing, since it is opt-in.
+   * @default false
+   */
+  collectionShortcuts?: boolean;
+
+  /**
    * Custom empty state rendered when `data` is an empty array.
    * Overrides the default "No items" placeholder.
    */

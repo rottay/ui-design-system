@@ -21,8 +21,10 @@ import { ImageIcon } from 'lucide-react';
 import { Box, Flex, Skeleton, Stack, Text } from '../../../primitives';
 import { Checkbox } from '../../../primitives/inputs/Checkbox';
 import { Pagination } from '../../../primitives/navigation/Pagination';
+import { ShortcutScope } from '../../../../hooks/shortcuts';
 import type { GalleryViewProps } from './GalleryView.types';
 import { resolveGalleryKey } from './GalleryView.types';
+import { useGalleryKeyboardNav, GalleryCollectionShortcuts } from './useGalleryKeyboardNav';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -190,8 +192,11 @@ function DefaultGalleryCard<T>({
 // ---------------------------------------------------------------------------
 
 /**
- * Card wrapper that handles click, keyboard navigation, hover effects via
- * the `ds-gallery-card` CSS class, and selection checkbox overlay.
+ * Card wrapper that handles click, hover effects via the `ds-gallery-card`
+ * CSS class, and selection checkbox overlay. Arrow-key/Enter navigation is
+ * NOT handled here -- it is owned by the roving-tabindex group at the grid
+ * level (see PatternGalleryView) so exactly one code path activates a card,
+ * avoiding a double-fire of `onItemClick` on Enter/Space.
  * @internal
  */
 function GalleryCardWrapper<T>({
@@ -200,6 +205,10 @@ function GalleryCardWrapper<T>({
   itemKey,
   selected,
   selectable,
+  focusable,
+  tabIndex,
+  itemRef,
+  onFocusItem,
   onToggleSelection,
   onItemClick,
   renderCard,
@@ -212,6 +221,14 @@ function GalleryCardWrapper<T>({
   itemKey: string;
   selected: boolean;
   selectable: boolean;
+  /** Whether this card participates in the roving-tabindex group at all (mirrors `onItemClick || selectable` at the gallery level). */
+  focusable: boolean;
+  /** 0 or -1, from useRovingTabindex.getTabIndex(index). Ignored when `focusable` is false. */
+  tabIndex: 0 | -1;
+  /** From useRovingTabindex.getItemRef(index) -- required so arrow-key movement can call .focus() on this card. */
+  itemRef: (node: HTMLElement | null) => void;
+  /** Call on focus (click, native Tab, or roving-tabindex arrow movement) to keep the active index in sync. */
+  onFocusItem: () => void;
   onToggleSelection: (key: string) => void;
   onItemClick?: (item: T, index: number) => void;
   renderCard?: (item: T, index: number) => React.ReactNode;
@@ -236,18 +253,10 @@ function GalleryCardWrapper<T>({
   return (
     <Box
       role={onItemClick ? 'button' : undefined}
-      tabIndex={onItemClick ? 0 : undefined}
+      ref={focusable ? itemRef : undefined}
+      tabIndex={focusable ? tabIndex : undefined}
+      onFocus={focusable ? onFocusItem : undefined}
       onClick={handleClick}
-      onKeyDown={
-        onItemClick
-          ? (e: React.KeyboardEvent) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onItemClick(item, index);
-              }
-            }
-          : undefined
-      }
       style={{
         position: 'relative',
         borderRadius: 'var(--ds-radius-md, 8px)',
@@ -258,7 +267,6 @@ function GalleryCardWrapper<T>({
         background: 'var(--ds-color-bg-primary, #fff)',
         cursor: onItemClick ? 'pointer' : 'default',
         transition: 'box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease',
-        outline: 'none',
       }}
       className="ds-gallery-card"
     >
@@ -422,6 +430,7 @@ export function PatternGalleryView<T extends object>(
     selectedKeys: controlledSelectedKeys,
     onSelectionChange,
     onItemClick,
+    collectionShortcuts = false,
     emptyState,
     loading = false,
     pagination,
@@ -463,6 +472,55 @@ export function PatternGalleryView<T extends object>(
     },
     [data, getItemKey, handleSelectionChange, selectedKeys],
   );
+
+  // -------------------------------------------------------------------------
+  // Keyboard navigation: roving tabindex (always on whenever cards are
+  // focusable) + opt-in j/k/x/enter shortcuts (WO-CRA-03)
+  // -------------------------------------------------------------------------
+
+  // Cards are focusable whenever there is something to DO with the active
+  // one -- open it (onItemClick) or select it (selectable). This is a
+  // deliberate widening of the previous `onItemClick`-only gate: a
+  // selection-only gallery (selectable, no onItemClick) now also gets
+  // roving-tabindex focus, since j/k/x need SOME notion of "the active
+  // item" to toggle even without an open action.
+  const focusable = Boolean(onItemClick) || selectable;
+
+  const handleOpenActive = useCallback(
+    (index: number) => {
+      const item = data[index];
+      if (item !== undefined) onItemClick?.(item, index);
+    },
+    [data, onItemClick],
+  );
+
+  const { roving, shortcutsActive, scopeId } = useGalleryKeyboardNav({
+    itemCount: data.length,
+    focusable,
+    collectionShortcuts,
+    onOpen: onItemClick ? handleOpenActive : undefined,
+  });
+
+  const handleToggleActiveSelection = useCallback(() => {
+    if (!selectable) return;
+    const item = data[roving.activeIndex];
+    if (item === undefined) return;
+    toggleSelection(getItemKey(item, roving.activeIndex));
+  }, [data, getItemKey, roving.activeIndex, selectable, toggleSelection]);
+
+  // Shortcut-mode "open" (the `enter` key in GalleryCollectionShortcuts) is
+  // deliberately NOT wired to roving.selectActive(). selectActive() mirrors
+  // native Enter/Space semantics -- a no-op until an item has EXPLICITLY
+  // received focus -- which is correct for a real keydown (you cannot press
+  // Enter on a card without first focusing it) but wrong here: the `enter`
+  // shortcut can fire via the scope's topmost-mounted fallback BEFORE any
+  // card has been explicitly focused, and should act on the
+  // visually-indicated default item (roving.activeIndex, item 0 before any
+  // interaction) immediately, matching `x` (toggle selection) below rather
+  // than requiring a prior j/k/Tab press first.
+  const handleOpenActiveViaShortcut = useCallback(() => {
+    handleOpenActive(roving.activeIndex);
+  }, [handleOpenActive, roving.activeIndex]);
 
   // -------------------------------------------------------------------------
   // Grid styles
@@ -527,31 +585,52 @@ export function PatternGalleryView<T extends object>(
   // Card grid
   // -------------------------------------------------------------------------
 
+  const grid = (
+    <Box className={className} style={gridStyle} onKeyDown={focusable ? roving.handleKeyDown : undefined}>
+      {data.map((item, index) => {
+        const key = getItemKey(item, index);
+        return (
+          <GalleryCardWrapper
+            key={key}
+            item={item}
+            index={index}
+            itemKey={key}
+            selected={selectedKeys.includes(key)}
+            selectable={selectable}
+            focusable={focusable}
+            tabIndex={roving.getTabIndex(index)}
+            itemRef={roving.getItemRef(index)}
+            onFocusItem={() => roving.syncActiveIndex(index)}
+            onToggleSelection={toggleSelection}
+            onItemClick={onItemClick}
+            renderCard={renderCard}
+            imageField={imageField}
+            captionField={captionField}
+            aspectRatio={aspectRatio}
+          />
+        );
+      })}
+    </Box>
+  );
+
   return (
     <Stack spacing="md">
       <style>{GALLERY_HOVER_STYLES}</style>
 
-      <Box className={className} style={gridStyle}>
-        {data.map((item, index) => {
-          const key = getItemKey(item, index);
-          return (
-            <GalleryCardWrapper
-              key={key}
-              item={item}
-              index={index}
-              itemKey={key}
-              selected={selectedKeys.includes(key)}
-              selectable={selectable}
-              onToggleSelection={toggleSelection}
-              onItemClick={onItemClick}
-              renderCard={renderCard}
-              imageField={imageField}
-              captionField={captionField}
-              aspectRatio={aspectRatio}
-            />
-          );
-        })}
-      </Box>
+      {shortcutsActive ? (
+        <ShortcutScope id={scopeId}>
+          {grid}
+          <GalleryCollectionShortcuts
+            scopeId={scopeId}
+            onNext={roving.moveNext}
+            onPrevious={roving.movePrevious}
+            onOpen={onItemClick ? handleOpenActiveViaShortcut : undefined}
+            onToggleSelect={selectable ? handleToggleActiveSelection : undefined}
+          />
+        </ShortcutScope>
+      ) : (
+        grid
+      )}
 
       {/* Pagination */}
       {pagination && (
