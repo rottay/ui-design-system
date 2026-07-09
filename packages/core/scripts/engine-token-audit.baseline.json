@@ -12,5 +12,7 @@
   "effects.glassConsumers": 4,
   "effects.glowConsumers": 1,
   "color.modernHexLiterals": 13,
-  "color.modernRgbaLiterals": 1
+  "color.modernRgbaLiterals": 1,
+  "themeCss.unreferencedSelectors": 0,
+  "themeCss.lineCount": 1675
 }

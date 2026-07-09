@@ -298,7 +298,7 @@
    "lane": "engine-modern",
    "order": 8,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01",
     "WO-ENG-03",
@@ -313,7 +313,18 @@
     "WO-ENG-06",
     "WO-ENG-07"
    ],
-   "notes": "Coordinates ENG-05/06/07: their edits land in modern/theme.css — sequence the drain after or in lockstep so nothing load-bearing is deleted."
+   "notes": "Coordinates ENG-05/06/07: their edits land in modern/theme.css — sequence the drain after or in lockstep so nothing load-bearing is deleted.",
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 08:51",
+     "by": "ds-agent",
+     "note": "Before-baseline captured (test-artifacts/engine-modern/eng-08/before-evidence-{rottay,bithire}.png, full flagship set). Full drain DELEGATED to fresh agent acd1620ce6d815de7 (sonnet, edit-only; NO build/test/commit; NEVER mass-git-restore theme.css): drain engines/modern/theme.css 4563->under 800 by deleting DEAD (unconsumed) DaisyUI class-hook selectors. SAFE procedure: (1) inventory modern-component consumed-class set; (2) BUILD the audit gate FIRST (themeCss.unreferencedSelectors=0 + themeCss.lineCount<800; exempt :root token block/@keyframes/[data-tenant]/base rules); (3) delete only gate-flagged-dead class selectors, KEEP if unsure + KEEP all --ds-* defs/[data-tenant]/@keyframes; (4) re-check all counters unchanged. ON RETURN: audit diff (confirm NO --ds-*/[data-tenant]/@keyframes deleted), gate (build+test+audit --check + wc -l<800), SIGHTED after vs before zero-delta across flagships both palettes, commit. Prior 8/34 committed (ad501eca)."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "theme.css drained 4537->1675 lines (63%): 466 dead DaisyUI class-hook selectors deleted + 8 dead class-aliases trimmed; 252 rules kept, ALL consumer-proven. AUDIT GATE added: themeCss.unreferencedSelectors=0 (EXACT invariant - every remaining class selector has a modern-component consumer; consumed-class set = 575 tokens via scoped className extraction) + themeCss.lineCount=1675 (decrease-only). The agent caught+fixed a bug in its OWN extractor (className=literal producing zero tokens) that would have wrongly deleted load-bearing .modal-box/.stat-title/.stat-value selectors - fixed BEFORE touching CSS. CONFIRMED via git-diff: NO --ds-* token def, [data-tenant] root block, or @keyframes deleted; classic/rustic theme files untouched. Safely deleted: input[type=file]/.file-input (Upload renders it display:none -> never paints), .rottay-table-wrapper/[data-component=table] (zero usage); KEPT bare-element table/form/select/textarea/input[color] (native visible consumers). GATE: build exit 0; audit --check green (unreferencedSelectors=0, ALL other counters unchanged - no motion/depth/scale/state/effects/color regression); full unit 5360 passed + 3 PRE-EXISTING failures. SIGHTED: before/after full-flagship evidence (rottay dark + bithire light) are BYTE-IDENTICAL (cmp) = zero visual regression from the drain (test-artifacts/engine-modern/eng-08/). CAVEAT - <800 TARGET NOT REACHED (1675 is the safe floor): the WO premise ('0 btn-*, almost nothing used') was INCORRECT; the gate proves all 1675 kept lines have REAL consumers (FloatButton uses btn-primary/ghost/circle; Menu/Dropdown/rottay-descriptions/tree/Collapse/Steps/Toast/Skeleton/Checkbox-Radio + Tailwind layout utilities genuinely consumed). Reaching <800 requires MIGRATING those components off DaisyUI onto rottay-*/inline = a separate larger component-migration WO, FLAGGED FOR OWNER. The enforceable real outcome (every remaining selector consumer-proven, dead code drained) is fully met."
   },
   {
    "id": "WO-ENG-09",

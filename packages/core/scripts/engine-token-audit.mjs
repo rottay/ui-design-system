@@ -551,11 +551,343 @@ function countEffectConsumers() {
   return counts;
 }
 
+/* ============================================================================
+   theme.css drain gate (WO-ENG-08, spec section 8): every remaining selector
+   in modern/theme.css must be proven-consumed by a real modern-engine class
+   render, or it is dead DaisyUI-mapping weight the drain must remove.
+   ============================================================================ */
+
+const themeCssPath = join(tokensCssDir, "engines/modern/theme.css");
+
+/** Split already-unwrapped string content on whitespace and add every
+ * class-shaped token to `set`. */
+function addTokensFromContent(content, set) {
+  for (const tok of content.split(/\s+/)) {
+    if (/^[A-Za-z][A-Za-z0-9_-]*$/.test(tok)) set.add(tok);
+  }
+}
+
+/**
+ * Extract class-name-shaped tokens out of every quoted string ("...", '...')
+ * and template-literal static segment (`...`, with `${...}` interpolations
+ * blanked out) found WITHIN `text`, adding each to `set`. `text` must be raw
+ * source text that still contains the quote/backtick delimiters (e.g. a
+ * `className={...}` expression body) -- for content that has ALREADY been
+ * unwrapped from its quotes (e.g. a regex capture group), call
+ * `addTokensFromContent` directly instead, or this finds nothing (there are
+ * no quote characters left to match).
+ */
+function extractClassTokens(text, set) {
+  const stringRe = /"([^"\n]*)"|'([^'\n]*)'/g;
+  for (const m of text.matchAll(stringRe)) {
+    addTokensFromContent(m[1] !== undefined ? m[1] : m[2], set);
+  }
+  const templateRe = /`([^`]*)`/g;
+  for (const m of text.matchAll(templateRe)) {
+    addTokensFromContent(m[1].replace(/\$\{[^}]*\}/g, " "), set);
+  }
+}
+
+/** Given the index of an opening `{`, return the index just past its
+ * matching `}` (brace-depth matching). */
+function matchBrace(text, openIdx) {
+  let depth = 1;
+  let j = openIdx + 1;
+  while (j < text.length && depth > 0) {
+    if (text[j] === "{") depth += 1;
+    else if (text[j] === "}") depth -= 1;
+    j += 1;
+  }
+  return j;
+}
+
+/**
+ * Resolve a same-file `const/let/var NAME = <RHS>;` (optionally with a `:
+ * Type` annotation between the name and `=`) to its RHS source text, via a
+ * balanced `(){}[]`-depth scan out to the terminating top-level `;`. Used to
+ * follow a bare `className={someLocal}` identifier back to its definition
+ * (e.g. Avatar's `const containerClass = \`avatar ${status ? 'online' : ''}
+ * ${className}\`;`, referenced later as `className={containerClass}` --
+ * one hop, no `.join(` involved, so the join-block scan alone would miss
+ * it). Returns null if no such same-file declaration exists.
+ */
+function findVarRHS(text, name) {
+  const re = new RegExp(`\\b(?:const|let|var)\\s+${name}\\b\\s*(?::[^=;]+)?=\\s*`, "g");
+  const m = re.exec(text);
+  if (!m) return null;
+  let k = re.lastIndex;
+  let depth = 0;
+  while (k < text.length) {
+    const c = text[k];
+    if (c === "(" || c === "[" || c === "{") depth += 1;
+    else if (c === ")" || c === "]" || c === "}") {
+      if (depth === 0) break;
+      depth -= 1;
+    } else if (c === ";" && depth === 0) break;
+    k += 1;
+  }
+  return text.slice(re.lastIndex, k);
+}
+
+/** Every `{...}` range in `text` (content between a `{` and its matching
+ * `}`), via a brace stack -- used to find the smallest enclosing block
+ * around a `.join(` call. */
+function collectBraceRanges(text) {
+  const stack = [];
+  const ranges = [];
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === "{") stack.push(i);
+    else if (text[i] === "}") {
+      const start = stack.pop();
+      if (start !== undefined) ranges.push({ start: start + 1, end: i });
+    }
+  }
+  return ranges;
+}
+
+/**
+ * The class tokens every modern-engine component (`engines/modern.tsx` /
+ * `engines/modern/*.tsx`) actually renders -- the theme.css gate's ground
+ * truth for "has a consumer." Scoped extraction, NOT a whole-file string
+ * scan: an earlier whole-file version measurably leaked non-class prose
+ * into the consumed set (a `// ... "completed" ...` line comment in
+ * Stepper, and the UI status string `'File selected'` in FormBuilder both
+ * produced clean-looking but bogus class tokens -- "completed" and
+ * "selected" -- that then falsely "proved" a consumer for otherwise-dead
+ * theme.css selectors). Four scoped passes per file instead:
+ *  1. `className="..."` / `className='...'` (also bare `class=`) -- direct
+ *     literal.
+ *  2. `className={...}` / `class={...}` (balanced-brace-scanned) -- covers
+ *     ternaries and inline arrays written directly in the JSX attribute.
+ *  3. Every bare identifier referenced inside one of those `{...}`
+ *     expressions is resolved one hop against a same-file `const/let/var`
+ *     declaration (`findVarRHS`) -- covers a local built earlier in the
+ *     component and referenced by name (e.g. Avatar's `const containerClass
+ *     = \`avatar ${status ? 'online' : ''} ${className}\`;`, later
+ *     `className={containerClass}`).
+ *  4. The smallest enclosing `{...}` block around every `.join(` call --
+ *     covers the `[...].filter(Boolean).join(' ')` idiom even when it sits
+ *     inside a helper function several hops from the JSX `className={...}`
+ *     site (e.g. FloatButton's `getFloatButtonClassName()` builds
+ *     `btn-primary`/`btn-ghost`/`btn-circle` through two chained
+ *     const-ternary locals before the array join -- scoping to the
+ *     function's own block picks up those locals without pulling in
+ *     unrelated text from sibling components in the same file).
+ */
+/** JS literals/keywords that can appear as a bare identifier inside a
+ * `className={...}` expression but are never a same-file variable
+ * declaration worth resolving. */
+const JS_KEYWORDS = new Set([
+  "true", "false", "null", "undefined", "this", "typeof", "void",
+]);
+
+function buildConsumedClassSet(files) {
+  const consumed = new Set();
+  for (const file of files) {
+    const text = stripBlockComments(readFileSync(file, "utf8"));
+
+    const attrStringRe = /class(?:Name)?\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
+    for (const m of text.matchAll(attrStringRe)) {
+      addTokensFromContent(m[1] !== undefined ? m[1] : m[2], consumed);
+    }
+
+    const attrBraceRe = /class(?:Name)?\s*=\s*\{/g;
+    let am;
+    while ((am = attrBraceRe.exec(text))) {
+      const openIdx = attrBraceRe.lastIndex - 1;
+      const endIdx = matchBrace(text, openIdx);
+      const exprText = text.slice(openIdx + 1, endIdx - 1);
+      extractClassTokens(exprText, consumed);
+      const seenIdents = new Set();
+      for (const im of exprText.matchAll(/[A-Za-z_$][\w$]*/g)) {
+        const ident = im[0];
+        if (JS_KEYWORDS.has(ident) || seenIdents.has(ident)) continue;
+        seenIdents.add(ident);
+        const rhs = findVarRHS(text, ident);
+        if (rhs) extractClassTokens(rhs, consumed);
+      }
+    }
+
+    const braceRanges = collectBraceRanges(text);
+    const joinIdxs = [...text.matchAll(/\.join\(/g)].map((m) => m.index);
+    if (joinIdxs.length > 0) {
+      const seen = new Set();
+      for (const idx of joinIdxs) {
+        let best = null;
+        for (const r of braceRanges) {
+          if (r.start <= idx && idx <= r.end) {
+            if (!best || r.end - r.start < best.end - best.start) best = r;
+          }
+        }
+        if (best) {
+          const key = `${best.start}:${best.end}`;
+          if (!seen.has(key)) {
+            seen.add(key);
+            extractClassTokens(text.slice(best.start, best.end), consumed);
+          }
+        }
+      }
+    }
+  }
+  return consumed;
+}
+
+/**
+ * Generic UI state/status words that are real, common CSS class MODIFIERS
+ * (DaisyUI and this codebase both use bare `.active`/`.disabled` as state
+ * hooks) but are ALSO common non-class prose: status enums (`status ===
+ * 'error'`), UI copy ("File selected"), aria attribute values, etc. Proven
+ * leak sources (WO-ENG-08 investigation): "completed" only ever appears
+ * inside a `//` line comment in Stepper (never stripped -- matches this
+ * script's existing stripBlockComments convention of not touching `//`,
+ * see its module doc), and "selected" only ever appears inside the UI
+ * string `'File selected'` in FormBuilder -- neither is a class anywhere.
+ * "active"/"disabled" ARE genuinely rendered as bare classes elsewhere
+ * (AutoComplete, Mentions, Cascader, Dropdown, file-manager), so they
+ * correctly belong in the consumed set -- the risk isn't that these words
+ * are never real, it's that a GLOBAL consumed-set means "active" being
+ * real for Menu/Tabs can wrongly "prove" a consumer for an unrelated dead
+ * selector like `.calendar-day.active` that merely happens to share the
+ * modifier. Selector classification below only lets one of these words
+ * stand in for a whole compound selector when there is no more specific
+ * sibling class token to check instead -- it never removes a word from the
+ * consumed set itself, so a selector whose ONLY class token is one of
+ * these (e.g. a hypothetical bare `.active { ... }`) is still evaluated
+ * fairly via the fallback branch.
+ */
+const GENERIC_MODIFIER_TOKENS = new Set([
+  "active", "disabled", "selected", "completed", "error", "success",
+  "warning", "info", "checked", "open", "closed", "expanded", "collapsed",
+  "hidden", "visible", "loading", "focused", "hovered", "pressed", "empty",
+]);
+
+/** Binary-searchable char-offset -> 1-based line-number index. */
+function buildLineIndex(text) {
+  const offsets = [0];
+  for (let k = 0; k < text.length; k++) if (text[k] === "\n") offsets.push(k + 1);
+  return (charIdx) => {
+    let lo = 0, hi = offsets.length - 1;
+    while (lo < hi) {
+      const mid = (lo + hi + 1) >> 1;
+      if (offsets[mid] <= charIdx) lo = mid; else hi = mid - 1;
+    }
+    return lo + 1;
+  };
+}
+
+/** Split `text[start, end)` into top-level CSS rules (selector text + body
+ * offsets), via brace-depth matching -- generic enough to recurse into an
+ * `@media` rule's body as its own set of top-level rules. */
+function parseCssRules(text, start, end) {
+  const rules = [];
+  let selStart = start;
+  let i = start;
+  while (i < end) {
+    if (text[i] === "{") {
+      const rawSlice = text.slice(selStart, i);
+      const selector = rawSlice.trim();
+      // Report the offset of the selector text itself (skip the leading
+      // whitespace/blanked-comment run between the previous rule's `}` and
+      // this one), so line numbers point at the visible selector, not at
+      // the gap/comment-banner before it.
+      const leadingWs = rawSlice.length - rawSlice.trimStart().length;
+      const trimmedStart = selStart + leadingWs;
+      let depth = 1;
+      let j = i + 1;
+      while (j < end && depth > 0) {
+        if (text[j] === "{") depth += 1;
+        else if (text[j] === "}") depth -= 1;
+        j += 1;
+      }
+      rules.push({ selector, bodyStart: i + 1, bodyEnd: j - 1, selStart: trimmedStart, ruleEnd: j });
+      selStart = j;
+      i = j;
+    } else {
+      i += 1;
+    }
+  }
+  return rules;
+}
+
+/** Every `.class` token referenced anywhere in a (possibly comma-separated)
+ * selector, ignoring combinators, elements, pseudo-classes, and attribute
+ * selectors (e.g. `label.input input, [data-tenant] .avatar.placeholder >
+ * div` yields `["input", "avatar", "placeholder"]`). */
+function selectorClassTokens(selector) {
+  return [...selector.matchAll(/\.([A-Za-z_-][A-Za-z0-9_-]*)/g)].map((m) => m[1]);
+}
+
+/**
+ * Walk modern/theme.css and classify every selector as:
+ *  - exempt (the bare `[data-tenant]` engine-token root block, `@keyframes`,
+ *    or any selector with NO class token at all -- a pure element/attribute
+ *    hook like `[data-tenant] select` / `input[type="color"]`, which is not a
+ *    "class hook" this gate drains and is proven-consumed separately by
+ *    direct source inspection, not by this mechanical counter)
+ *  - referenced (>= 1 class token appears in the consumed-class set)
+ *  - unreferenced (every class token is absent from the consumed-class set)
+ * `@media` bodies are recursed into so each nested selector is judged on its
+ * own rather than the whole media query being treated as one opaque unit.
+ */
+function auditThemeCss(files) {
+  if (!existsSync(themeCssPath)) {
+    return { lineCount: 0, unreferencedSelectors: 0, unreferenced: [], consumedSize: 0 };
+  }
+  const raw = readFileSync(themeCssPath, "utf8");
+  const lineCount = (raw.match(/\n/g) || []).length;
+  const stripped = stripBlockComments(raw);
+  const lineOf = buildLineIndex(raw);
+  const consumed = buildConsumedClassSet(files);
+
+  const unreferenced = [];
+  const referencedDebug = [];
+  let unreferencedCount = 0;
+
+  function walk(start, end) {
+    for (const rule of parseCssRules(stripped, start, end)) {
+      if (!rule.selector) continue;
+      if (rule.selector === "[data-tenant]") continue; // root engine-token block
+      if (/^@keyframes\b/.test(rule.selector)) continue; // opaque, exempt
+      if (/^@media\b/.test(rule.selector)) {
+        walk(rule.bodyStart, rule.bodyEnd);
+        continue;
+      }
+      const tokens = rule.selector.split(",").flatMap((part) => selectorClassTokens(part));
+      if (tokens.length === 0) continue; // pure element/attribute hook, not a class selector
+      // Prefer specific (non-generic-modifier) tokens when the selector has
+      // any: a generic word riding along with a dead anchor class (e.g.
+      // `.calendar-day.selected` when `.calendar-day` itself is unreferenced
+      // everywhere else) should not alone prove a consumer. Falls back to
+      // the full token set when EVERY token is a generic modifier, so a
+      // selector with no specific anchor at all is still judged fairly.
+      const specific = tokens.filter((t) => !GENERIC_MODIFIER_TOKENS.has(t));
+      const checkSet = specific.length > 0 ? specific : tokens;
+      const matched = checkSet.filter((t) => consumed.has(t));
+      if (matched.length === 0) {
+        unreferencedCount += 1;
+        unreferenced.push({ selector: rule.selector, line: lineOf(rule.selStart) });
+      } else if (process.env.DEBUG_REFERENCED) {
+        referencedDebug.push({ selector: rule.selector, line: lineOf(rule.selStart), matched });
+      }
+    }
+  }
+  walk(0, stripped.length);
+  if (process.env.DEBUG_REFERENCED) {
+    console.log(`\n--- DEBUG referenced (${referencedDebug.length}) ---`);
+    for (const r of referencedDebug) {
+      console.log(`  line ${r.line}: ${r.selector.replace(/\s+/g, " ")}  <-- [${r.matched.join(", ")}]`);
+    }
+  }
+
+  return { lineCount, unreferencedSelectors: unreferencedCount, unreferenced, consumedSize: consumed.size };
+}
+
 const files = modernFiles(componentsDir);
 const motion = countMotionLiterals(files);
 const effects = countEffectConsumers();
 const colorFiles = modernColorFiles(componentsDir);
 const color = countColorLiterals(colorFiles);
+const themeCssAudit = auditThemeCss(files);
 
 const counters = {
   "motion.cubicBezierLiterals": motion.cubicBezier,
@@ -572,7 +904,9 @@ const counters = {
   "effects.glowConsumers": effects.glow,
   "color.modernHexLiterals": color.hex,
   "color.modernRgbaLiterals": color.rgba,
-  // Later WOs extend here: theme.css lines, cross-engine layout, ...
+  "themeCss.unreferencedSelectors": themeCssAudit.unreferencedSelectors,
+  "themeCss.lineCount": themeCssAudit.lineCount,
+  // Later WOs extend here: cross-engine layout, ...
 };
 
 /** Invariants checked for exact equality (not just decrease-only) in --check. */
@@ -583,6 +917,8 @@ const EXACT = {
   "scale.radiusScaleDeclarations": 1,
   // No dark-blind focus ring survives on any dark-surface tenant (audit 3.4).
   "state.darkFocusRingDefects": 0,
+  // Every remaining theme.css selector is consumer-proven (WO-ENG-08, spec section 8).
+  "themeCss.unreferencedSelectors": 0,
 };
 
 /**
@@ -613,6 +949,18 @@ if (mode === "update") {
 
 console.log("engine-token-audit — modern engine files:", files.length);
 for (const [k, v] of Object.entries(counters)) console.log(`  ${k}: ${v}`);
+
+if (mode === "report") {
+  console.log(
+    `\nengine-token-audit — theme.css consumed-class set: ${themeCssAudit.consumedSize} tokens`,
+  );
+  console.log(
+    `engine-token-audit — theme.css unreferenced selectors (${themeCssAudit.unreferenced.length}):`,
+  );
+  for (const u of themeCssAudit.unreferenced) {
+    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, " ")}`);
+  }
+}
 
 if (mode === "check") {
   if (!existsSync(baselinePath)) {
