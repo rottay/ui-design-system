@@ -505,3 +505,18 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   must regenerate the artifacts and pass the regenerate-and-diff parity guard. Removing an emitted
   variable is also a public-surface decision for any tenant overriding it, which is why this is a
   WO and not a drive-by deletion.
+
+---
+
+## D. Found while certifying the CRA lane (2026-07-09), pending owner review
+
+### P-27 A pending Button has no accessible name (S — a11y defect)
+
+- **What** — A modern-engine Button in the `pending` state with no `pendingLabel` exposes NO accessible name: the resting label renders `visibility:hidden` + `aria-hidden`, and the visible overlay is a bare spinner SVG. A screen-reader user hears an unnamed button.
+- **Why it matters** — Pre-existing (the old grid-based structure had the identical hidden/visible split), and it survives WO-CRA-02's width-stability rewrite. Classic and rustic are unaffected: they keep the original children visible when no label resolves. The WO-GAT-04 axe sweep does not cover a pending button, so no gate sees it.
+- **Shape** — Keep the resting label available to the accessibility tree (e.g. `aria-hidden` only on the visual layer, or an `aria-label` derived from the resting content), and extend the axe sweep to a pending button so the gate holds it.
+
+### P-28 A disabled+pending Button keeps its variant color (XS)
+
+- **What** — `Button/engines/modern.tsx` gates the disabled-dim styling on `disabled && !loading`, which never learned about `pending`. A `disabled` + `pending` button (without the deprecated `loading`) keeps its full variant color instead of dimming.
+- **Why it matters** — Same shape as the `hoverOverrides` bug WO-CRA-02 fixed (`!loading` → `!busy`), left deliberately unfixed because dimming is a visual decision with an existing comment asserting specific intent. It is a one-line change (`disabled && !loading` → `disabled && !busy`) and it moves pixels, so it wants a sighted check.
