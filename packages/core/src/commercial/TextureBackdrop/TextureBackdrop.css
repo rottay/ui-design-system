@@ -1,0 +1,84 @@
+/**
+ * TextureBackdrop — whisper-contrast texture layer behind content (spec section 5).
+ *
+ * Every pattern is generated in CSS — gradients for `dots` / `hatch` / `graph` / `halftone`, an
+ * SVG `feTurbulence` noise mask for `grain` — so the kit ships zero image assets. The layer
+ * paints in `currentColor`: the base rule resolves it from `--ds-commercial-texture-ink` (the
+ * kit-wide ink default, mirroring `InvertSection` / commercial-ramp.css), and the
+ * `[data-surface="paper"] .rt-texture-backdrop__layer` rule switches it to
+ * `--ds-commercial-texture-paper` whenever the layer sits under a paper surface (e.g. an
+ * `InvertSection surface="paper"` ancestor) — the same ink/paper pairing the rest of the kit
+ * uses, applied to texture instead of text. `grain` masks a `currentColor` fill with the noise
+ * SVG so it rides the same switch as the other four patterns; the SVG itself paints pure white
+ * so it stays grayscale regardless of mask mode (alpha or luminance). The layer sits behind
+ * `children` via `isolation: isolate` + a negative z-index, and is `aria-hidden` — texture never
+ * carries information.
+ */
+
+.rt-texture-backdrop {
+  position: relative;
+  display: block;
+  isolation: isolate;
+}
+
+.rt-texture-backdrop__layer {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: var(--ds-commercial-texture-ink);
+  opacity: var(--rt-texture-opacity, var(--ds-commercial-texture-opacity, 0.03));
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+[data-surface="paper"] .rt-texture-backdrop__layer {
+  color: var(--ds-commercial-texture-paper);
+}
+
+/* dots — a radial-gradient dot grid. */
+.rt-texture-backdrop__layer[data-pattern="dots"] {
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* hatch — repeating diagonal lines. */
+.rt-texture-backdrop__layer[data-pattern="hatch"] {
+  background-image: repeating-linear-gradient(
+    45deg,
+    currentColor 0,
+    currentColor 1px,
+    transparent 1px,
+    transparent 9px
+  );
+}
+
+/* graph — two crossed repeating linear gradients (graph paper). */
+.rt-texture-backdrop__layer[data-pattern="graph"] {
+  background-image:
+    repeating-linear-gradient(0deg, currentColor 0, currentColor 1px, transparent 1px, transparent 24px),
+    repeating-linear-gradient(90deg, currentColor 0, currentColor 1px, transparent 1px, transparent 24px);
+}
+
+/* halftone — layered radial-gradients at offset centers/sizes, a Ben-day "grayscale screen" feel
+   (the low-contrast dot-density shift the spec describes as a "░ ▒ ▓" texture). */
+.rt-texture-backdrop__layer[data-pattern="halftone"] {
+  background-image:
+    radial-gradient(circle at 25% 25%, currentColor 1.4px, transparent 1.6px),
+    radial-gradient(circle at 75% 75%, currentColor 1.4px, transparent 1.6px),
+    radial-gradient(circle at 75% 25%, currentColor 0.7px, transparent 0.9px),
+    radial-gradient(circle at 25% 75%, currentColor 0.7px, transparent 0.9px);
+  background-size: 14px 14px;
+}
+
+/* grain — feTurbulence noise as a mask over a currentColor fill (never a raster asset). The SVG
+   renders pure white (R=G=B=1 via feColorMatrix) with alpha carrying the turbulence, so only
+   shape/alpha comes from the asset and the visible tone always comes from currentColor. */
+.rt-texture-backdrop__layer[data-pattern="grain"] {
+  background-color: currentColor;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.9 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E");
+  -webkit-mask-repeat: repeat;
+  mask-repeat: repeat;
+  -webkit-mask-size: 128px 128px;
+  mask-size: 128px 128px;
+}

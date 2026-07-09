@@ -1,0 +1,63 @@
+/**
+ * TreeView — repo/module tree rendered with box-drawing connectors (spec section 3: tree
+ * structures as real content devices — "what you get").
+ *
+ * The connectors (`├── `, `└── `, `│`) are plain monospace text prefixed onto each row and
+ * marked `aria-hidden` in the component. `white-space: pre` keeps their run of guide spaces
+ * from being collapsed by normal HTML whitespace rules, so the columns stay aligned under the
+ * monospace font. `list-style: none` removes the browser bullet (the ASCII connector is the
+ * marker); the component restores `role="list"` / `role="listitem"` so the semantics survive
+ * that removal in every browser.
+ */
+
+.rt-tree-view,
+.rt-tree-view__group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rt-tree-view {
+  display: block;
+  font-family: var(--ds-commercial-font-mono);
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--ds-commercial-fg);
+}
+
+.rt-tree-view__item {
+  display: block;
+}
+
+.rt-tree-view__row {
+  display: flex;
+  align-items: baseline;
+}
+
+.rt-tree-view__connector {
+  flex: none;
+  white-space: pre;
+  color: var(--ds-commercial-hairline-strong);
+  pointer-events: none;
+  user-select: none;
+}
+
+.rt-tree-view__label {
+  color: var(--ds-commercial-fg);
+}
+
+.rt-tree-view__link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ds-commercial-hairline);
+}
+
+.rt-tree-view__link:hover {
+  border-bottom-color: var(--ds-commercial-fg);
+}
+
+.rt-tree-view__link:focus-visible {
+  outline: var(--ds-commercial-focus-ring-width) solid var(--ds-commercial-fg);
+  outline-offset: 2px;
+  border-bottom-color: transparent;
+}

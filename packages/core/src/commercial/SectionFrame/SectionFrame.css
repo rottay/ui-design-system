@@ -1,0 +1,51 @@
+/**
+ * SectionFrame — numbered mono section label + framing rules (spec section 5).
+ *
+ * Every major commercial section is explicitly framed: a numbered `[01]` mono label sits on
+ * a top hairline rule, so no section floats unframed. The label is real text (a heading);
+ * only the bracket/rule chrome is presentational.
+ */
+
+.rt-section-frame {
+  position: relative;
+  display: block;
+  padding: 2.5rem 0;
+  color: var(--ds-commercial-fg);
+  border-top: 1px solid var(--ds-commercial-hairline);
+}
+
+.rt-section-frame__label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+  font-family: var(--ds-commercial-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.rt-section-frame__index {
+  color: var(--ds-commercial-gray-500);
+}
+
+.rt-section-frame__title {
+  margin: 0;
+  font: inherit;
+  color: var(--ds-commercial-fg);
+}
+
+.rt-section-frame__dash {
+  color: var(--ds-commercial-gray-500);
+}
+
+.rt-section-frame__meta {
+  margin-left: auto;
+  color: var(--ds-commercial-gray-500);
+  font-variant-numeric: tabular-nums;
+}
+
+.rt-section-frame__body {
+  display: block;
+}

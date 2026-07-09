@@ -1,0 +1,69 @@
+/**
+ * AsciiFrame — box-drawing corner-and-rule framing.
+ *
+ * Hybrid technique: crisp 1px hairline edges (scale to any width) + real box-drawing corner
+ * glyphs at each corner for the ASCII signature. The corner glyphs are decorative and are
+ * marked aria-hidden in the component; the frame reads as `┌─┐│└┘` at any size without the
+ * character wrapping that a pure-text frame suffers.
+ */
+
+.rt-ascii-frame {
+  position: relative;
+  display: block;
+  padding: 1rem 1.25rem;
+  color: var(--ds-commercial-fg);
+  border: 1px solid var(--ds-commercial-hairline);
+  background: transparent;
+}
+
+.rt-ascii-frame[data-variant="double"] {
+  border-width: 1px;
+  box-shadow: 0 0 0 3px var(--ds-commercial-bg), 0 0 0 4px var(--ds-commercial-hairline-strong);
+}
+
+/* Box-drawing corner glyphs. Positioned over each corner; the hairline border draws the
+   edges between them. */
+.rt-ascii-frame__corner {
+  position: absolute;
+  font-family: var(--ds-commercial-font-mono);
+  font-size: 0.875rem;
+  line-height: 1;
+  color: var(--ds-commercial-hairline-strong);
+  pointer-events: none;
+  user-select: none;
+}
+.rt-ascii-frame__corner--tl {
+  top: -0.5em;
+  left: -0.06em;
+}
+.rt-ascii-frame__corner--tr {
+  top: -0.5em;
+  right: -0.06em;
+}
+.rt-ascii-frame__corner--bl {
+  bottom: -0.5em;
+  left: -0.06em;
+}
+.rt-ascii-frame__corner--br {
+  bottom: -0.5em;
+  right: -0.06em;
+}
+
+/* A label seated in the top rule: a small mono caption on the frame background. */
+.rt-ascii-frame__label {
+  position: absolute;
+  top: 0;
+  left: 1rem;
+  transform: translateY(-50%);
+  padding: 0 0.5rem;
+  font-family: var(--ds-commercial-font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ds-commercial-fg);
+  background: var(--ds-commercial-bg);
+}
+
+.rt-ascii-frame__body {
+  position: relative;
+}

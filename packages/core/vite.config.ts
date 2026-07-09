@@ -46,6 +46,7 @@ export default defineConfig({
         server: resolve(__dirname, 'src/server.ts'),
         icons: resolve(__dirname, 'src/icons.ts'),
         eslint: resolve(__dirname, 'src/eslint.ts'),
+        commercial: resolve(__dirname, 'src/commercial.ts'),
         // Only real package.json exports are listed as entries.
         // Component code is included via the root barrel and
         // preserveModules handles per-file output automatically.

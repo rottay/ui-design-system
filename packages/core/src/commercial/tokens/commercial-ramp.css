@@ -1,0 +1,75 @@
+/**
+ * Commercial ramp — the monochrome token contract for the commercial surfaces.
+ *
+ * Spec: docs-engineering/engineering/design-system/commercial-surfaces/README.md section 2.
+ * Rottay's brand colors ARE this grayscale ramp; emphasis comes from inversion, scale,
+ * weight, texture, framing, and motion — never hue.
+ *
+ * The 11 numeric steps (gray-0 = black .. gray-1000 = white) are PERCEPTUALLY EVEN:
+ * each step is +10 in CIE L*, converted to sRGB gray. This makes contrast between any two
+ * adjacent steps feel uniform, unlike a naive linear-RGB ramp.
+ *
+ * Motion is consumed from the Quiet Premium engine canon (--ds-motion-*) WITH fallbacks to
+ * the canon's literal values, so the kit is self-contained today and upgrades automatically
+ * when the engine lane (WO-ENG-01) defines those tokens centrally.
+ */
+
+:root {
+  /* Perceptually-even grayscale ramp (CIE L* 0..100 in steps of 10). */
+  --ds-commercial-gray-0: #000000; /* L* 0  */
+  --ds-commercial-gray-100: #1b1b1b; /* L* 10 */
+  --ds-commercial-gray-200: #303030; /* L* 20 */
+  --ds-commercial-gray-300: #474747; /* L* 30 */
+  --ds-commercial-gray-400: #5e5e5e; /* L* 40 */
+  --ds-commercial-gray-500: #777777; /* L* 50 */
+  --ds-commercial-gray-600: #919191; /* L* 60 */
+  --ds-commercial-gray-700: #ababab; /* L* 70 */
+  --ds-commercial-gray-800: #c6c6c6; /* L* 80 */
+  --ds-commercial-gray-900: #e2e2e2; /* L* 90 */
+  --ds-commercial-gray-1000: #ffffff; /* L* 100 */
+
+  /* Semantic anchors. */
+  --ds-commercial-ink: #0a0a0c; /* the flagship dark surface (spec section 2) */
+  --ds-commercial-paper: #ffffff; /* the flagship light surface */
+  --ds-commercial-hairline: var(--ds-commercial-gray-300); /* 1px rules */
+  --ds-commercial-hairline-strong: var(--ds-commercial-gray-500);
+
+  /* Texture strength (whisper contrast, spec section 5). */
+  --ds-commercial-texture-opacity: 0.03;
+  --ds-commercial-texture-ink: var(--ds-commercial-gray-1000); /* texture on dark surfaces */
+  --ds-commercial-texture-paper: var(--ds-commercial-gray-0); /* texture on light surfaces */
+
+  /* Motion — consumed from the engine canon with literal fallbacks (namespace law: the kit
+     consumes --ds-motion-*, it does not redefine it). */
+  --ds-commercial-motion-fast: var(--ds-motion-fast, 120ms);
+  --ds-commercial-motion-normal: var(--ds-motion-normal, 200ms);
+  --ds-commercial-motion-slow: var(--ds-motion-slow, 320ms);
+  --ds-commercial-motion-ease: var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+
+  /* Type — a monospace signature secondary (spec section 4). The display grotesk is chosen
+     by the consuming surface; the kit only pins the mono role and tabular numerals. */
+  --ds-commercial-font-mono: var(
+    --ds-font-mono,
+    ui-monospace,
+    "SFMono-Regular",
+    "SF Mono",
+    "Menlo",
+    "Consolas",
+    monospace
+  );
+  --ds-commercial-focus-ring-width: 2px;
+}
+
+/*
+ * Focus rings are pure inversion (spec section 2): the ring color is the FOREGROUND of the
+ * surface it sits on, so it is always visible in monochrome. Surfaces set
+ * --ds-commercial-fg / --ds-commercial-bg; the kit reads them.
+ */
+:where(.ds-commercial) {
+  --ds-commercial-fg: var(--ds-commercial-gray-1000);
+  --ds-commercial-bg: var(--ds-commercial-ink);
+}
+:where(.ds-commercial[data-surface="paper"]) {
+  --ds-commercial-fg: var(--ds-commercial-gray-0);
+  --ds-commercial-bg: var(--ds-commercial-paper);
+}

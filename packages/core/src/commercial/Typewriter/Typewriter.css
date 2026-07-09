@@ -1,0 +1,34 @@
+/**
+ * Typewriter — one-shot typed/decoded text reveal (spec sections 3 and 6).
+ *
+ * The real text is the visible content from first paint and is also carried permanently in a
+ * visually-hidden span for screenreaders; the animated glyphs render in a separate
+ * aria-hidden layer. `data-mode="decode"` pins the animated layer to the mono signature so
+ * the character-substitution settle never jitters the measure the way a proportional face
+ * would.
+ */
+
+.rt-typewriter {
+  color: var(--ds-commercial-fg);
+}
+
+.rt-typewriter__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rt-typewriter__visual {
+  white-space: pre-wrap;
+}
+
+.rt-typewriter[data-mode="decode"] .rt-typewriter__visual {
+  font-family: var(--ds-commercial-font-mono);
+  font-variant-numeric: tabular-nums;
+}

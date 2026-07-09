@@ -1,0 +1,29 @@
+/**
+ * InvertSection — full-black / full-white inversion boundary (spec section 1).
+ *
+ * The section language of the commercial surfaces: full-black ("ink") sections alternate with
+ * full-white ("paper") ones, and every crossing must read as deliberate. The base rule below
+ * mirrors the kit-wide ink default (`:where(.ds-commercial)` in commercial-ramp.css); the
+ * `[data-surface="paper"]` rule mirrors that same file's
+ * `:where(.ds-commercial[data-surface="paper"])` override — the identical ink/paper token
+ * pairing, reassigned locally so an `InvertSection` is a self-contained inversion boundary
+ * wherever it is dropped, with no dependency on an ancestor carrying the shared class. A top
+ * hairline marks every crossing explicitly, so no boundary is left to read as accidental.
+ */
+
+.rt-invert-section {
+  --ds-commercial-fg: var(--ds-commercial-gray-1000);
+  --ds-commercial-bg: var(--ds-commercial-ink);
+
+  position: relative;
+  display: block;
+  width: 100%;
+  color: var(--ds-commercial-fg);
+  background: var(--ds-commercial-bg);
+  border-top: 1px solid var(--ds-commercial-hairline);
+}
+
+.rt-invert-section[data-surface="paper"] {
+  --ds-commercial-fg: var(--ds-commercial-gray-0);
+  --ds-commercial-bg: var(--ds-commercial-paper);
+}

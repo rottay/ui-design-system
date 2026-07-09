@@ -1,6 +1,6 @@
 {
   "name": "@rottay/design-system",
-  "version": "2.16.5",
+  "version": "2.16.6",
   "description": "Multi-tenant, multi-engine design system with Ant Design, DaisyUI, and pure HTML engines",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -67,6 +67,16 @@
       "import": "./dist/eslint.js",
       "require": "./dist/eslint.cjs"
     },
+    "./commercial": {
+      "types": "./dist/commercial.d.ts",
+      "import": "./dist/commercial.js",
+      "require": "./dist/commercial.cjs"
+    },
+    "./commercial.css": {
+      "style": "./dist/commercial.css",
+      "import": "./dist/commercial.css",
+      "default": "./dist/commercial.css"
+    },
     "./dist/*.css": "./dist/*.css"
   },
   "files": [
@@ -75,6 +85,7 @@
     "dist/**/*.d.ts",
     "dist/styles.css",
     "dist/modern-engine.css",
+    "dist/commercial.css",
     "dist/platform.css",
     "dist/bithire.css",
     "dist/evnto.css",
@@ -84,8 +95,9 @@
   ],
   "scripts": {
     "dev": "node scripts/dev.mjs",
-    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:vertical-css",
+    "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css",
     "build:modern-css": "postcss src/tokens/css/engines/modern/compiled.css -o dist/modern-engine.css",
+    "build:commercial-css": "node scripts/build-commercial-css.mjs",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",

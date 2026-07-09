@@ -1,0 +1,77 @@
+/**
+ * ProductWindow — the sanctioned color exception (spec section 1).
+ *
+ * The commercial chrome is monochrome-only; a ProductWindow is the ONE place a live product or
+ * DS demo keeps its real brand colors, framed and labeled as a window into the product so the
+ * monochrome chrome makes it pop. Every rule in this file that touches the frame, title bar,
+ * affordance dots, or caption reads a `var(--ds-commercial-*)` token — never a literal. The
+ * `&__content` region is the sanctioned seat: it sets NO color, background, or border-color of
+ * any kind, so the live demo rendered as `children` keeps its own real brand colors untouched.
+ * This file must never gain a color rule on that region.
+ */
+
+.rt-product-window {
+  position: relative;
+  display: block;
+  margin: 0;
+}
+
+.rt-product-window__frame {
+  position: relative;
+  display: block;
+  border: 1px solid var(--ds-commercial-hairline);
+  background: transparent;
+  /* Subtle inset shadow "seating" the window — gray only, mixed from the ramp's black step. */
+  box-shadow: inset 0 2px 16px 0 color-mix(in srgb, var(--ds-commercial-gray-0) 10%, transparent);
+}
+
+.rt-product-window__titlebar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.875rem;
+  border-bottom: 1px solid var(--ds-commercial-hairline);
+  font-family: var(--ds-commercial-font-mono);
+}
+
+/* Minimal ASCII window affordance: three mono dots, gray only — never colored traffic lights. */
+.rt-product-window__affordance {
+  flex: none;
+  font-size: 0.75rem;
+  line-height: 1;
+  letter-spacing: 0.2em;
+  color: var(--ds-commercial-hairline-strong);
+  user-select: none;
+}
+
+.rt-product-window__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ds-commercial-fg);
+}
+
+/*
+ * The content area is the sanctioned color exception seat (spec section 1). It sets NO color,
+ * background, or border-color of any kind — layout only. Whatever renders here (the live
+ * product/DS demo) keeps its own real brand colors, unconstrained by the monochrome chrome.
+ */
+.rt-product-window__content {
+  position: relative;
+  display: block;
+}
+
+.rt-product-window__caption {
+  margin: 0.75rem 0 0;
+  font-family: var(--ds-commercial-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--ds-commercial-hairline-strong);
+}

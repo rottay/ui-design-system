@@ -1,0 +1,64 @@
+/**
+ * AsciiDiagram — data-driven box-drawing architecture/flow diagram (spec section 3).
+ *
+ * The grid is monospace `<pre>` text stamped from a node/edge model (see index.tsx for the
+ * layout + routing algorithm). The REQUIRED description is the real accessible content, carried
+ * permanently in a visually-hidden element; the `<pre>` grid is a separate decorative
+ * `aria-hidden` layer — the same split the kit's Typewriter/MonoStat/TerminalBlock use.
+ * `white-space: pre` (never `pre-wrap`) is deliberate: wrapping would destroy the box-drawing
+ * alignment, so a diagram wider than its container scrolls horizontally instead.
+ */
+
+.rt-ascii-diagram {
+  position: relative;
+  display: block;
+  color: var(--ds-commercial-fg);
+}
+
+.rt-ascii-diagram__visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.rt-ascii-diagram__grid {
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--ds-commercial-font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.25;
+  white-space: pre;
+}
+
+/*
+ * "draw" reveal: the whole grid fades/rises in once, gated by `data-visible` (mirroring
+ * `useReveal().revealed`). "type" and "none" reveal through the text content itself
+ * (index.tsx) and stay fully opaque at all times, so this rule only ever applies under
+ * `data-reveal="draw"`.
+ */
+.rt-ascii-diagram[data-reveal="draw"] .rt-ascii-diagram__grid {
+  opacity: 0;
+  transform: translateY(0.5rem);
+  transition:
+    opacity var(--ds-commercial-motion-slow) var(--ds-commercial-motion-ease),
+    transform var(--ds-commercial-motion-slow) var(--ds-commercial-motion-ease);
+}
+
+.rt-ascii-diagram[data-reveal="draw"][data-visible="true"] .rt-ascii-diagram__grid {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rt-ascii-diagram[data-reveal="draw"] .rt-ascii-diagram__grid {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+}
