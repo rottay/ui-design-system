@@ -44,8 +44,8 @@ const TRANSITION_FAST = [
 
 const SIZE_CONFIG: Record<string, { height: string; fontSize: string; padding: string; iconSize: string; badgeFontSize: string }> = {
   sm: { height: 'var(--ds-tabs-sm-height, 32px)', fontSize: 'var(--ds-font-size-xs, 12px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', iconSize: 'var(--ds-tabs-sm-icon-size, 14px)', badgeFontSize: 'var(--ds-font-size-2xs, 10px)' },
-  md: { height: 'var(--ds-tabs-md-height, 36px)', fontSize: 'var(--ds-font-size-sm, 13px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-md-icon-size, 16px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
-  lg: { height: 'var(--ds-tabs-lg-height, 40px)', fontSize: 'var(--ds-font-size-base, 14px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-lg-icon-size, 18px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
+  md: { height: 'var(--ds-tabs-md-height, 36px)', fontSize: 'var(--ds-font-size-sm, 14px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-md-icon-size, 16px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
+  lg: { height: 'var(--ds-tabs-lg-height, 40px)', fontSize: 'var(--ds-font-size-base, 15px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-lg-icon-size, 18px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
 };
 
 // ============================================================================
@@ -257,8 +257,8 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   if (sizeIsResponsive) {
     const TABS_SIZE_STYLES: Record<string, { padding: string; fontSize: string }> = {
       sm: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', fontSize: 'var(--ds-font-size-xs, 12px)' },
-      md: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-sm, 13px)' },
-      lg: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-base, 14px)' },
+      md: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-sm, 14px)' },
+      lg: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-base, 15px)' },
     };
     responsiveEntries.push({
       cssProperty: 'padding',

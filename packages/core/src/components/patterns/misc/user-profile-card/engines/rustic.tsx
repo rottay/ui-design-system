@@ -36,7 +36,7 @@ const sizeMap = {
 // Base card container style -- all colors from --ds-* tokens.
 const cardStyle: CSSProperties = {
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  borderRadius: 'var(--ds-radius-lg, 8px)',
+  borderRadius: 'var(--ds-radius-lg, 12px)',
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   overflow: 'hidden',
 };
@@ -61,13 +61,13 @@ const avatarStyle = (size: number): CSSProperties => ({
 
 // Base button style shared by all action button variants.
 const btnBase: CSSProperties = {
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   color: 'var(--ds-color-text-primary, var(--ds-color-text))',
   cursor: 'pointer',
   fontWeight: 500,
-  fontSize: 'var(--ds-font-size-sm, 13px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
 };
 
 /**
@@ -187,10 +187,10 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
         <div style={{
           display: 'inline-block',
           padding: '2px 10px',
-          borderRadius: 'var(--ds-radius-sm, 4px)',
+          borderRadius: 'var(--ds-radius-sm, 6px)',
           background: 'var(--ds-color-primary-50, var(--ds-color-bg-muted))',
           color: 'var(--ds-color-primary)',
-          fontSize: 'var(--ds-font-size-xs, 11px)',
+          fontSize: 'var(--ds-font-size-xs, 12px)',
           fontWeight: 500,
           marginBottom: 8,
         }}>
@@ -208,10 +208,10 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
         <div style={{
           display: 'inline-block',
           padding: '2px 10px',
-          borderRadius: 'var(--ds-radius-sm, 4px)',
+          borderRadius: 'var(--ds-radius-sm, 6px)',
           background: statusColors[user.status],
           color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
-          fontSize: 'var(--ds-font-size-xs, 11px)',
+          fontSize: 'var(--ds-font-size-xs, 12px)',
           fontWeight: 500,
           marginBottom: 12,
         }}>

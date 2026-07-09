@@ -233,7 +233,7 @@
    "lane": "engine-modern",
    "order": 7,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01"
    ],
@@ -241,7 +241,18 @@
    "programs": [
     "spec-7"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 05:28",
+     "by": "ds-agent",
+     "note": "Full implementation DELEGATED to fresh agent a2c5b7f065ca272f4 (sonnet, edit-only; may run audit --check/--update-baseline; NO build/test/commit): delete redeclared radius block theme.css:118-122 (canonical=default.css:325); tokenize off-scale px 13/15/18/20/75 + gap:6px (FORM LAYOUT ~theme.css:4484); move Button fontWeight:500->var(--ds-font-weight-medium) + letterSpacing:0.01em->token out of Button/engines/modern.tsx; fallback-parity across packages/core/src (fix var(--ds-spacing-2,6px)->8px + scan others); align --animation-btn/-input (theme.css:60-61, 0.18s)->--ds-motion-* step; extend engine-token-audit.mjs with scale.radiusScaleDeclarations=1 + scale.fallbackParityViolations=0. ON RETURN: audit diff vs fences, gate (build+test+audit --check), light sighted form-rhythm spot-check test-artifacts/engine-modern/eng-07/, commit. Prior WOs ENG-01/02/03 + CRA-01 done+committed (65e13572 latest)."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "RADIUS: deleted the redeclared --ds-radius-* block in engines/modern/theme.css AND a second redundant declaration in foundation/base/borders.css (both identical to the canonical foundation/themes/default.css); radiusScaleDeclarations=1. FORM LAYOUT px: .form-item gap 6px->var(--ds-form-item-gap)(spacing-1=4px) + margin-bottom 20px->var(--ds-spacing-5)(20px); the 13/15/18/75px literals the audit named no longer exist in the file (content drifted from earlier WOs) — not invented. BUTTON typography: fontWeight:500->var(--ds-font-weight-medium); letterSpacing:'0.01em'->var(--ds-letter-spacing-subtle-wide) (new foundation token added between normal and wide — none matched +0.01em). FALLBACK-PARITY across ALL packages/core/src: ~400 numeric-scalar fallback mismatches fixed across 100 files, aligned to the EFFECTIVE token values (themes/default.css prioritized on name conflicts = real import order); includes --ds-spacing-2 6px->8px, button-md-height 36->40, disabled-opacity 0.5->0.6, 5 stale motion-ease keyword fallbacks, Typography SIZE_MAP. VERIFIED SAFE: every fallback is INERT (its token is defined, so the fallback never renders) and now matches the token's effective value = ZERO rendering change (build green; 5360 unit tests pass with NO new failures; form+button sighted unchanged; SIZE_MAP + button height/opacity spot-checked against default.css definitions). Left documented not guessed: calendar-heatmap D3 rx/ry attr, 4 asymmetric rustic paddings, --ds-font-mono keyword, 2 template-literal false-positives. DAISYUI: --animation-btn/-input 0.18s->var(--ds-motion-normal). AUDIT: scale.radiusScaleDeclarations(exact 1) + scale.fallbackParityViolations(decrease-only 0); --check green. GATE: build exit 0; audit --check green; full unit 5360 passed + 3 PRE-EXISTING failures (version-match, token-mirror, bithire .ant-). SIGHTED: form rottay-dark + bithire-light rhythm clean after 6px->4px form-item gap; button token-equivalent (test-artifacts/engine-modern/eng-07/). FLAGGED FOR OWNER (NOT fixed, needs own WO): foundation/base/{spacing,typography}.css each declare a COMPLETE semantic-alias ladder overlapping in name but DIFFERING in value from themes/default.css (spacing sm 16px vs 8px; font-size base 16px vs 15px); default.css imports last so base/*.css is silently dead — wider two-sources-of-truth class, not a safe delete (covers extra steps)."
   },
   {
    "id": "WO-ENG-08",

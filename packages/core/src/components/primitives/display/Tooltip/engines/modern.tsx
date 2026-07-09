@@ -71,7 +71,7 @@ function normalizeTriggers(trigger?: string | string[]): string[] {
 }
 
 function resolveMaxWidth(maxWidth: TooltipProps['maxWidth']): string | number {
-  return maxWidth ?? 'var(--ds-tooltip-max-width, 280px)';
+  return maxWidth ?? 'var(--ds-tooltip-max-width, 300px)';
 }
 
 const TOOLTIP_OFFSET = 8;
@@ -319,7 +319,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       writingMode: 'horizontal-tb',
       textOrientation: 'mixed',
       pointerEvents: 'none',
-      zIndex: zIndex ?? 'var(--ds-z-index-tooltip, var(--ds-tooltip-z-index, 2700))',
+      zIndex: zIndex ?? 'var(--ds-z-index-tooltip, var(--ds-tooltip-z-index, 1070))',
       opacity: isVisible ? 1 : 0,
       visibility: portalPosition ? 'visible' : 'hidden',
       transform: `scale(${isVisible ? 1 : 0.95})`,

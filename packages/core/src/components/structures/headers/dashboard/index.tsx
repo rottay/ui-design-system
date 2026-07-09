@@ -133,7 +133,7 @@ function MetricChip({ metric }: { metric: DashboardMetric }) {
       gap={2}
       style={{
         padding: '6px 12px',
-        borderRadius: 'var(--ds-radius-md, 6px)',
+        borderRadius: 'var(--ds-radius-md, 8px)',
         background: 'var(--ds-color-bg-secondary)',
         border: '1px solid var(--ds-color-border-secondary)',
       }}
@@ -186,7 +186,7 @@ export function DashboardHeader({
         role="banner"
         aria-label={title}
         style={{
-          padding: 'var(--ds-spacing-sm, 12px) var(--ds-spacing-md, 16px)',
+          padding: 'var(--ds-spacing-sm, 8px) var(--ds-spacing-md, 16px)',
           borderBottom: '1px solid var(--ds-color-border-secondary)',
         }}
       >

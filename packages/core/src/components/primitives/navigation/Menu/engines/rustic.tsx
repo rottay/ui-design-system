@@ -211,7 +211,7 @@ function renderRusticMenuItems(
               opacity: item.disabled ? 0.5 : 1,
               color: 'var(--ds-menu-item-color, inherit)',
               backgroundColor: isFocused ? 'var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover))' : 'transparent',
-              borderRadius: 'var(--ds-menu-border-radius, 6px)',
+              borderRadius: 'var(--ds-menu-border-radius, 8px)',
               transition: 'all 0.2s ease',
               outline: isFocused ? '2px solid var(--ds-menu-focus-ring-color, var(--ds-color-primary))' : 'none',
               outlineOffset: '-2px',
@@ -304,7 +304,7 @@ function renderRusticMenuItems(
               : isFocused
                 ? 'var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover))'
                 : 'transparent',
-            borderRadius: 'var(--ds-menu-border-radius, 6px)',
+            borderRadius: 'var(--ds-menu-border-radius, 8px)',
             transition: 'all 0.2s ease',
             outline: isFocused ? '2px solid var(--ds-menu-focus-ring-color, var(--ds-color-primary))' : 'none',
             outlineOffset: '-2px',

@@ -17,8 +17,8 @@ import type { TimePickerProps, TimeRangePickerProps } from '../TimePicker.types'
 /** Maps DS size values to inline style dimensions. */
 const sizeStyleMap: Record<string, React.CSSProperties> = {
   small: { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' },
-  default: { height: 'var(--ds-input-md-height, 36px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' },
-  large: { height: 'var(--ds-input-lg-height, 40px)', fontSize: 'var(--ds-input-lg-font-size, 16px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
+  default: { height: 'var(--ds-input-md-height, 40px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' },
+  large: { height: 'var(--ds-input-lg-height, 44px)', fontSize: 'var(--ds-input-lg-font-size, 15px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' },
 };
 
 /** Pads a number to 2 digits. */
@@ -119,7 +119,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
     fontWeight: 600,
     color: 'var(--ds-color-text-muted)',
     textTransform: 'uppercase' as const,
-    letterSpacing: 'var(--ds-letter-spacing-wide, 0.05em)',
+    letterSpacing: 'var(--ds-letter-spacing-wide, 0.025em)',
     textAlign: 'center' as const,
     flex: 1,
   };
@@ -131,7 +131,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 'var(--ds-input-sm-font-size, 13px)',
-    borderRadius: 'var(--ds-radius-md, 6px)',
+    borderRadius: 'var(--ds-radius-md, 8px)',
     cursor: 'pointer',
     border: 'none',
     fontWeight: isActive ? 600 : 400,
@@ -239,7 +239,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
               padding: '4px var(--ds-spacing-3, 12px)',
               fontSize: 'var(--ds-font-size-xs, 12px)',
               fontWeight: 500,
-              borderRadius: 'var(--ds-radius-md, 6px)',
+              borderRadius: 'var(--ds-radius-md, 8px)',
               border: 'none',
               background: 'var(--ds-color-primary)',
               color: 'var(--ds-color-white)',

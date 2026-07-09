@@ -470,26 +470,26 @@ export const SIZE_MAP = {
    * the smallest heading (`xs`) is visually larger than body text.
    */
   heading: {
-    xs: 'var(--ds-font-size-base, 1rem)',       // 16px
-    sm: 'var(--ds-font-size-xl, 1.25rem)',       // 20px
-    md: 'var(--ds-font-size-2xl, 1.5rem)',       // 24px
-    lg: 'var(--ds-font-size-3xl, 1.875rem)',     // 30px
-    xl: 'var(--ds-font-size-4xl, 2.25rem)',      // 36px
-    '2xl': 'var(--ds-font-size-5xl, 3rem)',      // 48px
-    '3xl': 'var(--ds-font-size-6xl, 3.75rem)',   // 60px
+    xs: 'var(--ds-font-size-base, 0.9375rem)',   // 15px
+    sm: 'var(--ds-font-size-xl, 1.125rem)',      // 18px
+    md: 'var(--ds-font-size-2xl, 1.25rem)',      // 20px
+    lg: 'var(--ds-font-size-3xl, 1.5rem)',       // 24px
+    xl: 'var(--ds-font-size-4xl, 2rem)',         // 32px
+    '2xl': 'var(--ds-font-size-5xl, 2.5rem)',    // 40px
+    '3xl': 'var(--ds-font-size-6xl, 3rem)',      // 48px
   },
   /**
    * Text sizes follow a standard typographic scale for inline
-   * and body text. `md` matches the base font-size (1rem / 16px).
+   * and body text. `md` matches the base font-size (0.9375rem / 15px).
    */
   text: {
     xs: 'var(--ds-font-size-xs, 0.75rem)',       // 12px
     sm: 'var(--ds-font-size-sm, 0.875rem)',      // 14px
-    md: 'var(--ds-font-size-base, 1rem)',        // 16px
-    lg: 'var(--ds-font-size-lg, 1.125rem)',      // 18px
-    xl: 'var(--ds-font-size-xl, 1.25rem)',       // 20px
-    '2xl': 'var(--ds-font-size-2xl, 1.5rem)',    // 24px
-    '3xl': 'var(--ds-font-size-3xl, 1.875rem)',  // 30px
+    md: 'var(--ds-font-size-base, 0.9375rem)',   // 15px
+    lg: 'var(--ds-font-size-lg, 1rem)',          // 16px
+    xl: 'var(--ds-font-size-xl, 1.125rem)',      // 18px
+    '2xl': 'var(--ds-font-size-2xl, 1.25rem)',   // 20px
+    '3xl': 'var(--ds-font-size-3xl, 1.5rem)',    // 24px
   },
 } as const;
 

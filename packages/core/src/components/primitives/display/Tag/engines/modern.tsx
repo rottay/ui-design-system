@@ -58,11 +58,11 @@ const CloseIcon: React.FC = () => (
  * Maps size prop to inline CSSProperties for the tag pill.
  */
 const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  xs: { height: 'var(--ds-tag-xs-height, 18px)', padding: 'var(--ds-tag-xs-padding, 0 4px)', fontSize: 'var(--ds-tag-xs-font-size, 10px)' },
-  sm: { height: 'var(--ds-tag-sm-height, 22px)', padding: 'var(--ds-tag-sm-padding, 0 6px)', fontSize: 'var(--ds-tag-sm-font-size, 11px)' },
+  xs: { height: 'var(--ds-tag-xs-height, 16px)', padding: 'var(--ds-tag-xs-padding, 0 4px)', fontSize: 'var(--ds-tag-xs-font-size, 11px)' },
+  sm: { height: 'var(--ds-tag-sm-height, 20px)', padding: 'var(--ds-tag-sm-padding, 0 6px)', fontSize: 'var(--ds-tag-sm-font-size, 12px)' },
   md: { height: 'var(--ds-tag-md-height, var(--ds-tag-default-height, 26px))', padding: 'var(--ds-tag-md-padding, var(--ds-tag-default-padding, 0 8px))', fontSize: 'var(--ds-tag-md-font-size, var(--ds-tag-default-font-size, 12px))' },
-  lg: { height: 'var(--ds-tag-lg-height, 30px)', padding: 'var(--ds-tag-lg-padding, 0 10px)', fontSize: 'var(--ds-tag-lg-font-size, 14px)' },
-  xl: { height: 'var(--ds-tag-xl-height, 30px)', padding: 'var(--ds-tag-xl-padding, 0 10px)', fontSize: 'var(--ds-tag-xl-font-size, 14px)' },
+  lg: { height: 'var(--ds-tag-lg-height, 28px)', padding: 'var(--ds-tag-lg-padding, 0 10px)', fontSize: 'var(--ds-tag-lg-font-size, 14px)' },
+  xl: { height: 'var(--ds-tag-xl-height, 32px)', padding: 'var(--ds-tag-xl-padding, 0 10px)', fontSize: 'var(--ds-tag-xl-font-size, 16px)' },
 };
 
 /**
@@ -82,7 +82,7 @@ const VARIANT_STYLES: Record<string, React.CSSProperties> = {
  */
 const RADIUS_STYLES: Record<string, string | number> = {
   none: 'var(--ds-tag-radius-none, 0)',
-  sm: 'var(--ds-tag-radius-sm, 2px)',
+  sm: 'var(--ds-tag-radius-sm, 3px)',
   md: 'var(--ds-tag-radius-md, var(--ds-tag-default-radius, var(--ds-radius-md)))',
   lg: 'var(--ds-tag-radius-lg, var(--ds-radius-lg))',
   full: 'var(--ds-tag-radius-full, 9999px)',

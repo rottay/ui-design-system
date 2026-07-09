@@ -16,7 +16,7 @@
   /* ========================================================================
      VALUE - Main statistic number
      ======================================================================== */
-  --ds-statistic-value-font-size: var(--ds-font-size-2xl, 1.5rem);
+  --ds-statistic-value-font-size: var(--ds-font-size-2xl, 1.25rem);
   --ds-statistic-value-font-weight: var(--ds-font-weight-semibold, 600);
   --ds-statistic-value-color: var(--ds-color-text-primary);
 

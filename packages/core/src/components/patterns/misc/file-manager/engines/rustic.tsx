@@ -43,7 +43,7 @@ function formatDate(date?: string): string {
 
 const containerStyle: CSSProperties = {
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  borderRadius: 'var(--ds-radius-lg, 8px)',
+  borderRadius: 'var(--ds-radius-lg, 12px)',
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   overflow: 'hidden',
 };
@@ -58,8 +58,8 @@ const toolbarStyle: CSSProperties = {
 
 const btnStyle: CSSProperties = {
   padding: '6px 14px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   color: 'var(--ds-color-text-primary, var(--ds-color-text))',
@@ -164,7 +164,7 @@ export default function RusticFileManager(props: FileManagerProps) {
     display: 'flex',
     alignItems: 'center',
     gap: 4,
-    fontSize: 'var(--ds-font-size-sm, 13px)',
+    fontSize: 'var(--ds-font-size-sm, 14px)',
     color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
   };
 
@@ -196,7 +196,7 @@ export default function RusticFileManager(props: FileManagerProps) {
     width: 110,
     padding: 12,
     textAlign: 'center',
-    borderRadius: 'var(--ds-radius-md, 6px)',
+    borderRadius: 'var(--ds-radius-md, 8px)',
     border: selected ? '2px solid var(--ds-color-primary)' : '2px solid transparent',
     cursor: 'pointer',
     background: selected ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))' : undefined,
@@ -290,10 +290,10 @@ export default function RusticFileManager(props: FileManagerProps) {
                     <span>{item.name}</span>
                   )}
                 </div>
-                <div style={{ width: 80, fontSize: 'var(--ds-font-size-sm, 13px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div style={{ width: 80, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                   {item.type === 'file' ? formatSize((item as FileItem).size) : '--'}
                 </div>
-                <div style={{ width: 120, fontSize: 'var(--ds-font-size-sm, 13px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div style={{ width: 120, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                   {formatDate(item.modifiedAt)}
                 </div>
                 <div style={{ width: 100, display: 'flex', gap: 4 }}>

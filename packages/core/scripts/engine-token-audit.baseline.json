@@ -3,5 +3,7 @@
   "motion.rawDurationLiterals": 0,
   "motion.orphanMotionTokens": 0,
   "depth.shadowScales": 1,
-  "depth.darkPureBlackElevations": 0
+  "depth.darkPureBlackElevations": 0,
+  "scale.radiusScaleDeclarations": 1,
+  "scale.fallbackParityViolations": 0
 }

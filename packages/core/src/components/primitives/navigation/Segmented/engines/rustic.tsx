@@ -107,7 +107,7 @@ const styles = {
   container: {
     display: 'inline-flex',
     backgroundColor: 'var(--ds-segmented-bg, var(--ds-color-neutral-100, #f5f5f5))',
-    borderRadius: 'var(--ds-segmented-radius, 6px)',
+    borderRadius: 'var(--ds-segmented-radius, 8px)',
     padding: 'var(--ds-segmented-padding, 2px)',
   } as React.CSSProperties,
 

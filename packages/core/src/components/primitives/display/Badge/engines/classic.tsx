@@ -149,7 +149,7 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
       justifyContent: 'center',
       backgroundColor: color,
       color: 'var(--ds-badge-text-color, #fff)',
-      borderRadius: 'var(--ds-badge-border-radius, 10px)',
+      borderRadius: 'var(--ds-badge-border-radius, 9999px)',
       padding: 'var(--ds-badge-padding, 0 8px)',
       fontSize: sizeValues.fontSize,
       height: sizeValues.height,

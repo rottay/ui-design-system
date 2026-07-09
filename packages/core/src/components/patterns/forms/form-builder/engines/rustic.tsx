@@ -51,7 +51,7 @@ const s = {
   sectionDivider: {
     border: 'none',
     borderTop: '1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200))',
-    margin: 'var(--ds-card-body-padding, 1.5rem) 0',
+    margin: 'var(--ds-card-body-padding, 1.25rem) 0',
   } as CSSProperties,
   label: {
     display: 'block',

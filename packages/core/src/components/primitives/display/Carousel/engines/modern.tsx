@@ -231,7 +231,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           <>
             <button
               className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
-              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 13px)', boxShadow: 'var(--ds-elevation-1)' }}
+              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', boxShadow: 'var(--ds-elevation-1)' }}
               onClick={prev}
               aria-label="Previous slide"
               type="button"
@@ -240,7 +240,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             </button>
             <button
               className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
-              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 13px)', boxShadow: 'var(--ds-elevation-1)' }}
+              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', boxShadow: 'var(--ds-elevation-1)' }}
               onClick={next}
               aria-label="Next slide"
               type="button"

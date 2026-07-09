@@ -437,7 +437,7 @@ export const SHADOW_MAP: Record<string, string> = {
 export const RADIUS_MAP: Record<string, string> = {
   none: '0',
   sm: 'var(--ds-card-radius-sm, 4px)',
-  md: 'var(--ds-card-radius, 8px)',
+  md: 'var(--ds-card-radius, 12px)',
   lg: 'var(--ds-card-radius-lg, 12px)',
   xl: 'var(--ds-card-radius-xl, 16px)',
 };

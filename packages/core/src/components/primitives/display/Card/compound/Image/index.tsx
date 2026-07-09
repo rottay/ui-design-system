@@ -155,16 +155,16 @@ export function CardImage({
     overflow: 'hidden',
     borderRadius: RADIUS_MAP[radius] || radius,
     ...(position === 'top' && {
-      borderTopLeftRadius: 'var(--ds-card-radius, 8px)',
-      borderTopRightRadius: 'var(--ds-card-radius, 8px)',
+      borderTopLeftRadius: 'var(--ds-card-radius, 12px)',
+      borderTopRightRadius: 'var(--ds-card-radius, 12px)',
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
     }),
     ...(position === 'bottom' && {
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
-      borderBottomLeftRadius: 'var(--ds-card-radius, 8px)',
-      borderBottomRightRadius: 'var(--ds-card-radius, 8px)',
+      borderBottomLeftRadius: 'var(--ds-card-radius, 12px)',
+      borderBottomRightRadius: 'var(--ds-card-radius, 12px)',
     }),
     ...(position === 'cover' && {
       position: 'absolute',

@@ -76,7 +76,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 'var(--ds-card-body-padding, 1rem)',
+    marginBottom: 'var(--ds-card-body-padding, 1.25rem)',
     gap: '0.75rem',
     paddingBottom: '0.75rem',
     borderBottom: '1px solid var(--ds-color-neutral-100)',

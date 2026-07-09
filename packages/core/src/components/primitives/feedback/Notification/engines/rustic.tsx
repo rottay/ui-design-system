@@ -167,7 +167,7 @@ const styles = {
       display: 'flex',
       gap: '12px',
       padding: 'var(--ds-notification-padding, 16px 24px)',
-      borderRadius: 'var(--ds-notification-radius, 8px)',
+      borderRadius: 'var(--ds-notification-radius, 12px)',
       backgroundColor: 'var(--ds-notification-bg, var(--ds-color-bg-elevated))',
       boxShadow: 'var(--ds-notification-shadow, var(--ds-shadow-lg))',
       pointerEvents: 'auto' as const,
@@ -245,7 +245,7 @@ const styles = {
     color: 'var(--ds-notification-close-color, var(--ds-color-text-tertiary))',
     fontSize: '14px',
     lineHeight: 1,
-    transition: 'color var(--ds-duration-fast, 200ms)',
+    transition: 'color var(--ds-duration-fast, 150ms)',
     marginLeft: '8px',
   } as React.CSSProperties,
 };

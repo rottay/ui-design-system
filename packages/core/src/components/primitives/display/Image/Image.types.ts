@@ -47,7 +47,7 @@
  * console.log(IMAGE_DEFAULTS.zoomable);  // false
  *
  * // Access radius CSS values
- * console.log(RADIUS_MAP.lg);            // 'var(--ds-radius-lg, 1rem)'
+ * console.log(RADIUS_MAP.lg);            // 'var(--ds-radius-lg, 0.75rem)'
  * console.log(RADIUS_MAP.full);          // 'var(--ds-radius-full, 9999px)'
  * ```
  *
@@ -423,11 +423,11 @@ export const RADIUS_MAP: Record<ImageRadius, string> = {
   /** No border radius - sharp corners */
   none: '0',
   /** Small radius (0.25rem / 4px) */
-  sm: 'var(--ds-radius-sm, 0.25rem)',
+  sm: 'var(--ds-radius-sm, 0.375rem)',
   /** Medium radius (0.5rem / 8px) */
   md: 'var(--ds-radius-md, 0.5rem)',
   /** Large radius (1rem / 16px) */
-  lg: 'var(--ds-radius-lg, 1rem)',
+  lg: 'var(--ds-radius-lg, 0.75rem)',
   /** Full radius (9999px) - creates circular shape on square elements */
   full: 'var(--ds-radius-full, 9999px)',
 };

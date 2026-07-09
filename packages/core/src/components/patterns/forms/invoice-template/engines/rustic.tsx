@@ -31,7 +31,7 @@ const containerStyle: CSSProperties = {
   maxWidth: 800,
   margin: '0 auto',
   border: '1px solid var(--ds-color-neutral-200, #e5e7eb)',
-  borderRadius: 'var(--ds-radius-lg, 8px)',
+  borderRadius: 'var(--ds-radius-lg, 12px)',
   background: 'var(--ds-color-background, #fff)',
   padding: 32,
 };
@@ -39,8 +39,8 @@ const containerStyle: CSSProperties = {
 /** Lightweight button style using design tokens for border/radius */
 const btnStyle: CSSProperties = {
   padding: '6px 14px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
   background: 'var(--ds-color-background, #fff)',
   color: 'var(--ds-color-text)',
@@ -61,7 +61,7 @@ const thStyle: CSSProperties = {
 /** Table data cell style -- subtle 1px separator between rows */
 const tdStyle: CSSProperties = {
   padding: '10px 12px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
   borderBottom: '1px solid var(--ds-color-neutral-100, #f3f4f6)',
 };
 
@@ -102,13 +102,13 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
   const sectionBg: CSSProperties = {
     padding: 16,
     background: 'var(--ds-color-neutral-50, #f9fafb)',
-    borderRadius: 'var(--ds-radius-md, 6px)',
+    borderRadius: 'var(--ds-radius-md, 8px)',
     marginBottom: 24,
   };
 
   /** Section label style -- uppercase, muted, small font for "Bill To" / "Notes" headings */
   const labelStyle: CSSProperties = {
-    fontSize: 'var(--ds-font-size-xs, 11px)',
+    fontSize: 'var(--ds-font-size-xs, 12px)',
     fontWeight: 600,
     textTransform: 'uppercase' as const,
     color: 'var(--ds-color-text-muted)',
@@ -155,10 +155,10 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
             <div style={{
               display: 'inline-block',
               padding: '2px 10px',
-              borderRadius: 'var(--ds-radius-sm, 4px)',
+              borderRadius: 'var(--ds-radius-sm, 6px)',
               background: statusColors[invoice.status],
               color: '#fff',
-              fontSize: 'var(--ds-font-size-xs, 11px)',
+              fontSize: 'var(--ds-font-size-xs, 12px)',
               fontWeight: 600,
               marginTop: 8,
             }}>
@@ -233,7 +233,7 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
       {invoice.notes && (
         <div style={{ ...sectionBg, marginTop: 32, marginBottom: 0 }}>
           <div style={labelStyle}>Notes</div>
-          <div style={{ fontSize: 'var(--ds-font-size-sm, 13px)', color: 'var(--ds-color-text-muted)', whiteSpace: 'pre-wrap' }}>
+          <div style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)', whiteSpace: 'pre-wrap' }}>
             {invoice.notes}
           </div>
         </div>

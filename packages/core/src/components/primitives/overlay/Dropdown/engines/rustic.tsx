@@ -240,7 +240,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             zIndex: 'var(--ds-dropdown-z-index, 1050)' as unknown as number,
             minWidth: 'var(--ds-dropdown-min-width, 160px)',
             backgroundColor: 'var(--ds-dropdown-bg, #fff)',
-            borderRadius: 'var(--ds-dropdown-radius, 8px)',
+            borderRadius: 'var(--ds-dropdown-radius, 12px)',
             boxShadow: 'var(--ds-dropdown-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
             padding: '4px 0',
             transform: placement?.includes('top') ? 'translateY(-100%)' : undefined,

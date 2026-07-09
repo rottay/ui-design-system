@@ -110,7 +110,7 @@ function avatarName(
     .toUpperCase();
 
   return React.createElement('div', {
-    style: { display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-3, 10px)' },
+    style: { display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-3, 12px)' },
   },
     React.createElement('div', {
       style: {
@@ -273,7 +273,7 @@ function iconText(
     }),
     React.createElement('span', {
       style: {
-        fontSize: 'var(--ds-font-size-sm, 13px)',
+        fontSize: 'var(--ds-font-size-sm, 14px)',
         color: value ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
@@ -303,7 +303,7 @@ function countWithIcon(
       style: { color: 'var(--ds-color-text-muted)', flexShrink: 0 },
     }),
     React.createElement('span', {
-      style: { color: 'var(--ds-color-text-primary)', fontSize: 'var(--ds-font-size-sm, 13px)' },
+      style: { color: 'var(--ds-color-text-primary)', fontSize: 'var(--ds-font-size-sm, 14px)' },
     }, label ? `${count} ${label}` : String(count)),
   );
 }
@@ -332,7 +332,7 @@ function date(
 
   return React.createElement('span', {
     style: {
-      fontSize: 'var(--ds-font-size-sm, 13px)',
+      fontSize: 'var(--ds-font-size-sm, 14px)',
       color: 'var(--ds-color-text-muted)',
       fontFamily: options?.mono !== false ? 'var(--ds-font-family-mono, monospace)' : undefined,
       whiteSpace: 'nowrap',
@@ -364,8 +364,8 @@ function tags(
         style: {
           display: 'inline-flex',
           padding: '1px 6px',
-          borderRadius: 'var(--ds-radius-sm, 4px)',
-          fontSize: 'var(--ds-font-size-xs, 11px)',
+          borderRadius: 'var(--ds-radius-sm, 6px)',
+          fontSize: 'var(--ds-font-size-xs, 12px)',
           fontWeight: 500,
           background: 'var(--ds-color-alpha-black-100, rgba(0,0,0,0.06))',
           color: 'var(--ds-color-text-secondary)',
@@ -375,7 +375,7 @@ function tags(
     ),
     overflow > 0
       ? React.createElement('span', {
-          style: { fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-muted)' },
+          style: { fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' },
         }, `+${overflow}`)
       : null,
   );
@@ -450,7 +450,7 @@ function boolean(
   const isTrue = Boolean(value);
   return React.createElement('span', {
     style: {
-      fontSize: 'var(--ds-font-size-sm, 13px)',
+      fontSize: 'var(--ds-font-size-sm, 14px)',
       color: isTrue ? 'var(--ds-color-success)' : 'var(--ds-color-text-muted)',
       fontWeight: isTrue ? 500 : 400,
     },
@@ -471,7 +471,7 @@ function truncated(
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       textOverflow: 'ellipsis',
-      fontSize: 'var(--ds-font-size-sm, 13px)',
+      fontSize: 'var(--ds-font-size-sm, 14px)',
       color: 'var(--ds-color-text-primary)',
     },
   }, value ?? '--');

@@ -244,7 +244,7 @@ export function SelectionPreviewRail<T extends object>({
             style={{
               position: 'relative',
               overflow: 'hidden',
-              borderRadius: 'var(--ds-radius-xl, 18px)',
+              borderRadius: 'var(--ds-radius-xl, 16px)',
               border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
               background:
                 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 90%, white 10%), var(--ds-surface-card))',
@@ -310,7 +310,7 @@ export function SelectionPreviewRail<T extends object>({
           style={{
             position: 'relative',
             overflow: 'hidden',
-            borderRadius: 'var(--ds-radius-xl, 18px)',
+            borderRadius: 'var(--ds-radius-xl, 16px)',
             border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
             background:
               'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 88%, white 12%), var(--ds-surface-card))',
@@ -374,7 +374,7 @@ export function SelectionPreviewRail<T extends object>({
                 style={{
                   marginTop: 16,
                   padding: '14px 14px 14px 16px',
-                  borderRadius: 'var(--ds-radius-lg, 14px)',
+                  borderRadius: 'var(--ds-radius-lg, 12px)',
                   border: '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)',
                   background:
                     'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 4%, transparent))',
@@ -474,7 +474,7 @@ export function SelectionPreviewRail<T extends object>({
 
         <Box
           style={{
-            borderRadius: 'var(--ds-radius-xl, 18px)',
+            borderRadius: 'var(--ds-radius-xl, 16px)',
             border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
             background: 'var(--ds-surface-card)',
             boxShadow: '0 10px 30px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)',

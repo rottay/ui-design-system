@@ -235,7 +235,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
           <span
             style={{
               padding: '3px 8px',
-              borderRadius: 'var(--ds-radius-sm, 4px)',
+              borderRadius: 'var(--ds-radius-sm, 6px)',
               border: '1px solid var(--ds-command-palette-shortcut-border, var(--ds-color-border))',
               background: 'var(--ds-command-palette-shortcut-bg, var(--ds-color-surface-muted, var(--ds-color-neutral-50)))',
               fontSize: 11,

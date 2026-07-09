@@ -107,7 +107,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
   const btn: React.CSSProperties = {
     padding: '4px 10px',
     border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-    borderRadius: 'var(--ds-radius-sm, 4px)',
+    borderRadius: 'var(--ds-radius-sm, 6px)',
     background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
     color: 'var(--ds-color-text-primary, var(--ds-color-text))',
     cursor: 'pointer',

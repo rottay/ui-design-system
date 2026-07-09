@@ -55,15 +55,15 @@ function formatTimestamp(ts: string): string {
 
 const containerStyle: CSSProperties = {
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-  borderRadius: 'var(--ds-radius-lg, 8px)',
+  borderRadius: 'var(--ds-radius-lg, 12px)',
   background: 'var(--ds-color-surface, var(--ds-color-background))',
   padding: 16,
 };
 
 const selectStyle: CSSProperties = {
   padding: '4px 8px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
   background: 'var(--ds-color-surface, var(--ds-color-background))',
   color: 'var(--ds-color-text)',
@@ -140,8 +140,8 @@ export default function RusticActivityLog(props: ActivityLogProps) {
   const tagStyle = (color: string): CSSProperties => ({
     display: 'inline-block',
     padding: '2px 8px',
-    borderRadius: 'var(--ds-radius-sm, 4px)',
-    fontSize: 'var(--ds-font-size-xs, 11px)',
+    borderRadius: 'var(--ds-radius-sm, 6px)',
+    fontSize: 'var(--ds-font-size-xs, 12px)',
     fontWeight: 500,
     background: color,
     color: 'var(--ds-color-text-on-primary)',
@@ -227,7 +227,7 @@ export default function RusticActivityLog(props: ActivityLogProps) {
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-muted)', marginTop: 4, marginLeft: 32 }}>
+                      <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 4, marginLeft: 32 }}>
                         {formatTimestamp(activity.timestamp)}
                       </div>
                       {activity.diff && (

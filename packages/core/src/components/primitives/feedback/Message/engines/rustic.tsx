@@ -224,7 +224,7 @@ const styles = {
     color: 'var(--ds-message-close-color, var(--ds-color-text-tertiary))',
     fontSize: '14px',
     lineHeight: 1,
-    transition: 'color var(--ds-duration-fast, 200ms)',
+    transition: 'color var(--ds-duration-fast, 150ms)',
   } as React.CSSProperties,
 
   /**

@@ -327,7 +327,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   // Shape styles
   const shapeStyle: React.CSSProperties = {};
   if (shape === 'circle') {
-    const dim = sizeStyle.height ?? 'var(--ds-button-md-height, 36px)';
+    const dim = sizeStyle.height ?? 'var(--ds-button-md-height, 40px)';
     shapeStyle.borderRadius = '50%';
     shapeStyle.width = dim;
     shapeStyle.height = dim;
@@ -351,17 +351,17 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     display: isFullWidth ? 'flex' : 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 'var(--ds-spacing-2, 6px)',
+    gap: 'var(--ds-spacing-2, 8px)',
     width: isFullWidth ? '100%' : undefined,
     cursor: isInert ? (loading ? 'wait' : 'not-allowed') : 'pointer',
-    fontWeight: 500,
+    fontWeight: 'var(--ds-font-weight-medium)',
     lineHeight: 1,
     textDecoration: 'none',
     whiteSpace: isFullWidth ? 'normal' : 'nowrap',
     userSelect: 'none',
     boxSizing: 'border-box',
     fontFamily: 'inherit',
-    letterSpacing: '0.01em',
+    letterSpacing: 'var(--ds-letter-spacing-subtle-wide)',
 
     // Variant base styles
     ...variantStyle,
@@ -412,7 +412,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
       background: 'var(--ds-button-disabled-bg)',
       color: 'var(--ds-button-disabled-color)',
       borderColor: 'var(--ds-button-disabled-border-color, var(--ds-button-disabled-border))',
-      opacity: 'var(--ds-button-disabled-opacity, 0.5)' as unknown as number,
+      opacity: 'var(--ds-button-disabled-opacity, 0.6)' as unknown as number,
       pointerEvents: 'none' as const,
     } : {}),
 
@@ -478,7 +478,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
             display: isFullWidth ? 'flex' : 'inline-flex',
             alignItems: 'center',
             justifyContent: isFullWidth ? 'inherit' : undefined,
-            gap: 'var(--ds-spacing-2, 6px)',
+            gap: 'var(--ds-spacing-2, 8px)',
             width: isFullWidth ? '100%' : undefined,
             minWidth: 0,
             whiteSpace: isFullWidth ? 'normal' : 'nowrap',

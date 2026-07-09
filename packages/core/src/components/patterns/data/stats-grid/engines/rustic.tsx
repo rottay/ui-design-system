@@ -172,7 +172,7 @@ function StatCard({
     <div
       style={{
         ...variantStyles[variant || 'default'],
-        padding: 'var(--ds-card-body-padding, 16px)',
+        padding: 'var(--ds-card-body-padding, 20px)',
         cursor: onClick ? 'pointer' : undefined,
         boxShadow: 'var(--ds-card-shadow, none)',
         transition: `box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}, transform ${RUSTIC_DURATION} ${RUSTIC_EASING}, background-color ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
@@ -246,7 +246,7 @@ function StatCard({
             color: changeColor,
             marginTop: 6,
             padding: '2px 6px',
-            borderRadius: 'var(--ds-radius-sm, 4px)',
+            borderRadius: 'var(--ds-radius-sm, 6px)',
             // Subtle tinted background reinforces the semantic color meaning.
             background: stat.changeType === 'increase'
               ? 'var(--ds-color-success-50, rgba(16,185,129,0.08))'
@@ -344,7 +344,7 @@ export default function RusticStatsGrid(props: StatsGridProps) {
     renderStat,
     columns = 4,
     sparkline,
-    gap = 'var(--ds-card-body-padding, 16px)' as unknown as number,
+    gap = 'var(--ds-card-body-padding, 20px)' as unknown as number,
     variant = 'default',
     animate,
     onStatClick,

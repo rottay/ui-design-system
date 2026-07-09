@@ -167,7 +167,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             ref={inputRef}
             type="text"
             className="w-full text-lg focus:outline-none"
-            style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 18px)', border: 'none', background: 'transparent', color: 'inherit' }}
+            style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 16px)', border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={placeholder}
             value={query}
             onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}

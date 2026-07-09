@@ -249,7 +249,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
               <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--ds-color-border)' }}>
                 <button
                   type="button"
-                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-input-sm-height, 32px)', padding: '0 var(--ds-input-sm-padding-x, 12px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-input-sm-height, 32px)', padding: '0 var(--ds-input-sm-padding-x, 10px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
                   onClick={handleClear}
                   disabled={disabled}
                 >

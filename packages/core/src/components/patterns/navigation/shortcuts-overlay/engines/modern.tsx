@@ -109,7 +109,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
         <div className="flex items-center justify-between border-b px-5 py-3" style={{ borderColor: 'var(--ds-color-border)' }}>
           <h2 className="text-base font-semibold">{title}</h2>
           <button
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-control-sm-size, 32px)', width: 'var(--ds-control-sm-size, 32px)', padding: 0, fontSize: 'var(--ds-font-size-xs, 13px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-control-sm-size, 32px)', width: 'var(--ds-control-sm-size, 32px)', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClose}
             aria-label="Close"
           >
@@ -122,7 +122,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
             ref={inputRef}
             type="text"
             className="w-full focus:outline-none"
-            style={{ padding: 'var(--ds-spacing-1-5, 6px) 0', fontSize: 'var(--ds-font-size-sm, 13px)', border: 'none', background: 'transparent', color: 'inherit' }}
+            style={{ padding: 'var(--ds-spacing-1-5, 6px) 0', fontSize: 'var(--ds-font-size-sm, 14px)', border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={searchPlaceholder}
             value={query}
             onChange={(e) => setQuery(e.target.value)}

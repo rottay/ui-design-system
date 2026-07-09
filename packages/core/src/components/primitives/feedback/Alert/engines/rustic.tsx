@@ -272,7 +272,7 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
     gap: isCompact ? '0.5rem' : '0.75rem',
     padding: isCompact ? '0.5rem 0.75rem' : '1rem',
     fontSize: isCompact ? '0.8125rem' : undefined,
-    borderRadius: 'var(--ds-radius-md, 0.375rem)',
+    borderRadius: 'var(--ds-radius-md, 0.5rem)',
     borderLeft: '4px solid',
     ...TYPE_STYLES[alertType],
     ...style,

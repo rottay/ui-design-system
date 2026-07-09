@@ -415,7 +415,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               <div style={{ minWidth: 0, flex: 1 }}>
                 {title && (
                   <div style={{
-                    fontSize: 'var(--ds-card-title-font-size, 15px)',
+                    fontSize: 'var(--ds-card-title-font-size, 16px)',
                     fontWeight: 600,
                     lineHeight: 1.4,
                     color: 'var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)))',

@@ -45,7 +45,7 @@ const dotStyle = (color: string, animate?: boolean): CSSProperties => ({
 const toggleContainerStyle: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
   overflow: 'hidden',
 };
@@ -95,7 +95,7 @@ const modalBoxStyle: CSSProperties = {
 /** Toggle button style -- active state uses the environment color as background */
 const btnStyle = (active: boolean, color: string): CSSProperties => ({
   padding: '4px 12px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
   fontWeight: active ? 600 : 400,
   background: active ? color : 'transparent',
   color: active ? 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))' : 'var(--ds-color-text-primary, var(--ds-color-text))',
@@ -110,12 +110,12 @@ const btnStyle = (active: boolean, color: string): CSSProperties => ({
 /** Pill button style -- similar to toggle but with individual border radius per button */
 const pillBtnStyle = (active: boolean, color: string): CSSProperties => ({
   padding: '4px 12px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
   fontWeight: active ? 600 : 400,
   background: active ? color : 'transparent',
   color: active ? 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))' : 'var(--ds-color-text-primary, var(--ds-color-text))',
   border: active ? 'none' : '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
@@ -197,7 +197,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
         fontSize: 9,
         fontWeight: 600,
         padding: '1px 5px',
-        borderRadius: 'var(--ds-radius-sm, 3px)',
+        borderRadius: 'var(--ds-radius-sm, 6px)',
         background: 'var(--ds-color-alpha-white-20)',
         color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
         textTransform: 'uppercase',
@@ -222,9 +222,9 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
               padding: '6px 12px',
               background: 'none',
               border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-              borderRadius: 'var(--ds-radius-md, 6px)',
+              borderRadius: 'var(--ds-radius-md, 8px)',
               cursor: 'pointer',
-              fontSize: 'var(--ds-font-size-sm, 13px)',
+              fontSize: 'var(--ds-font-size-sm, 14px)',
               color: 'var(--ds-color-text-primary, var(--ds-color-text))',
             }}
             onClick={() => setDropdownOpen(!dropdownOpen)}
@@ -261,7 +261,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
                     background: env.id === activeEnvironment ? 'var(--ds-color-bg-muted, var(--ds-color-neutral-100))' : 'transparent',
                     border: 'none',
                     cursor: 'pointer',
-                    fontSize: 'var(--ds-font-size-sm, 13px)',
+                    fontSize: 'var(--ds-font-size-sm, 14px)',
                     fontWeight: env.id === activeEnvironment ? 600 : 400,
                     color: 'var(--ds-color-text-primary, var(--ds-color-text))',
                     textAlign: 'left',
@@ -361,7 +361,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
         <div style={modalOverlayStyle} onClick={() => setConfirmEnv(null)}>
           {/* stopPropagation prevents the overlay's dismiss handler from catching inner clicks */}
           <div style={modalBoxStyle} onClick={(e) => e.stopPropagation()}>
-            <div style={{ fontSize: 'var(--ds-font-size-lg, 18px)', fontWeight: 700, marginBottom: 12 }}>
+            <div style={{ fontSize: 'var(--ds-font-size-lg, 16px)', fontWeight: 700, marginBottom: 12 }}>
               Switch to Production
             </div>
             <div style={{
@@ -378,9 +378,9 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
                   padding: '6px 14px',
                   background: 'none',
                   border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-                  borderRadius: 'var(--ds-radius-md, 6px)',
+                  borderRadius: 'var(--ds-radius-md, 8px)',
                   cursor: 'pointer',
-                  fontSize: 'var(--ds-font-size-sm, 13px)',
+                  fontSize: 'var(--ds-font-size-sm, 14px)',
                   color: 'var(--ds-color-text-primary, var(--ds-color-text))',
                 }}
                 onClick={() => setConfirmEnv(null)}
@@ -392,9 +392,9 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
                   padding: '6px 14px',
                   background: 'var(--ds-color-error)',
                   border: 'none',
-                  borderRadius: 'var(--ds-radius-md, 6px)',
+                  borderRadius: 'var(--ds-radius-md, 8px)',
                   cursor: 'pointer',
-                  fontSize: 'var(--ds-font-size-sm, 13px)',
+                  fontSize: 'var(--ds-font-size-sm, 14px)',
                   color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
                   fontWeight: 500,
                 }}

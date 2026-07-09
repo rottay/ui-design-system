@@ -284,7 +284,7 @@ function GalleryCardWrapper<T>({
             left: 8,
             zIndex: 2,
             background: 'color-mix(in srgb, var(--ds-color-bg-primary, #fff) 85%, transparent)',
-            borderRadius: 'var(--ds-radius-sm, 4px)',
+            borderRadius: 'var(--ds-radius-sm, 6px)',
             boxShadow: 'var(--ds-elevation-1, 0 1px 3px rgba(0,0,0,0.12))',
             padding: 2,
             lineHeight: 0,
@@ -509,7 +509,7 @@ export function PatternGalleryView<T extends object>(
         className={className}
         style={{
           padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
-          borderRadius: 'var(--ds-radius-lg, 8px)',
+          borderRadius: 'var(--ds-radius-lg, 12px)',
           border: '1px dashed var(--ds-color-border, #d9d9d9)',
           background: 'var(--ds-color-bg-secondary, #fafafa)',
           textAlign: 'center',

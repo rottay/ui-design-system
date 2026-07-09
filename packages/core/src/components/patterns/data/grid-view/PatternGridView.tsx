@@ -89,11 +89,11 @@ function SelectableCard<T>({
     <Box
       style={{
         position: 'relative',
-        borderRadius: 'var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 8px)))',
+        borderRadius: 'var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)))',
         boxShadow: selected
           ? 'var(--ds-collection-card-selected-ring, var(--ds-premium-card-selected-ring, 0 0 0 2px var(--ds-color-primary)))'
           : 'none',
-        transition: 'box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)',
+        transition: 'box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
       }}
     >
       {/* Checkbox overlay */}
@@ -111,7 +111,7 @@ function SelectableCard<T>({
           size="sm"
           style={{
             background: 'var(--ds-color-bg-primary, #fff)',
-            borderRadius: 'var(--ds-radius-sm, 4px)',
+            borderRadius: 'var(--ds-radius-sm, 6px)',
             boxShadow: 'var(--ds-elevation-1, 0 1px 3px rgba(0,0,0,0.12))',
             padding: 2,
           }}
@@ -261,7 +261,7 @@ export function PatternGridView<T>(
         className={className}
         style={{
           padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
-          borderRadius: 'var(--ds-radius-lg, 8px)',
+          borderRadius: 'var(--ds-radius-lg, 12px)',
           border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)))',
           background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary, #fff)))',
           textAlign: 'center',

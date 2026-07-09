@@ -152,8 +152,8 @@ export const SIZE_MAP: Record<string, { padding: string; fontSize: string; heigh
  */
 export const RADIUS_MAP: Record<TagRadius, string> = {
   none: 'var(--ds-tag-radius-none, 0)',
-  sm: 'var(--ds-tag-radius-sm, 0.125rem)',
-  md: 'var(--ds-tag-radius-md, 0.25rem)',
+  sm: 'var(--ds-tag-radius-sm, 0.1875rem)',
+  md: 'var(--ds-tag-radius-md, 0.375rem)',
   lg: 'var(--ds-tag-radius-lg, 0.5rem)',
   full: 'var(--ds-tag-radius-full, 9999px)',
 };

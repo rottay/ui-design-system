@@ -1027,7 +1027,7 @@ export default function ModernDataTable<T extends object>(
                     style={{
                       flex: ci === 0 ? 1.5 : 1,
                       height: 10,
-                      borderRadius: 'var(--ds-radius-sm, 4px)',
+                      borderRadius: 'var(--ds-radius-sm, 6px)',
                       background: 'var(--ds-color-border-subtle)',
                       opacity: 0.5,
                     }}
@@ -1056,7 +1056,7 @@ export default function ModernDataTable<T extends object>(
                       style={{
                         flex: ci === 0 ? 1.5 : 1,
                         height: 14,
-                        borderRadius: 'var(--ds-radius-sm, 4px)',
+                        borderRadius: 'var(--ds-radius-sm, 6px)',
                         background: 'color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
                       }}
                     />

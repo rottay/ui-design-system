@@ -43,7 +43,7 @@ import { SPINNER_DEFAULTS } from '../Spinner.types';
  * Dimension uses --ds-spinner-*-size tokens with pixel fallbacks.
  */
 const SIZE_MAP: Record<string, { dimension: string; borderWidth: number }> = {
-  sm: { dimension: 'var(--ds-spinner-sm-size, 16px)', borderWidth: 2 },
+  sm: { dimension: 'var(--ds-spinner-sm-size, 20px)', borderWidth: 2 },
   md: { dimension: 'var(--ds-spinner-md-size, 24px)', borderWidth: 2 },
   lg: { dimension: 'var(--ds-spinner-lg-size, 32px)', borderWidth: 3 },
   xl: { dimension: 'var(--ds-spinner-xl-size, 40px)', borderWidth: 3 },

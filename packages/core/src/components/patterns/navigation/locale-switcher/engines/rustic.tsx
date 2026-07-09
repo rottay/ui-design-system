@@ -29,7 +29,7 @@ const triggerBaseStyle: CSSProperties = {
   background: 'transparent',
   color: 'var(--ds-color-text-primary, #1a1a1a)',
   border: '1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9))',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   cursor: 'pointer',
   fontFamily: 'inherit',
   lineHeight: 1,
@@ -40,14 +40,14 @@ const triggerSmStyle: CSSProperties = {
   ...triggerBaseStyle,
   height: 28,
   padding: '0 8px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
 };
 
 const triggerMdStyle: CSSProperties = {
   ...triggerBaseStyle,
   height: 32,
   padding: '0 10px',
-  fontSize: 'var(--ds-font-size-md, 14px)',
+  fontSize: 'var(--ds-font-size-md, 16px)',
 };
 
 const dropdownStyle: CSSProperties = {
@@ -61,7 +61,7 @@ const dropdownStyle: CSSProperties = {
   overflowY: 'auto',
   background: 'var(--ds-surface-card, #fff)',
   border: '1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9))',
-  borderRadius: 'var(--ds-radius-lg, 8px)',
+  borderRadius: 'var(--ds-radius-lg, 12px)',
   boxShadow: 'var(--ds-elevation-2, 0 4px 12px rgba(0,0,0,0.12))',
   padding: 4,
 };
@@ -71,8 +71,8 @@ const menuItemBaseStyle: CSSProperties = {
   alignItems: 'center',
   gap: 8,
   padding: '8px 12px',
-  borderRadius: 'var(--ds-radius-md, 6px)',
-  fontSize: 'var(--ds-font-size-md, 14px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
+  fontSize: 'var(--ds-font-size-md, 16px)',
   cursor: 'pointer',
   transition: 'background 150ms ease-out',
   color: 'var(--ds-color-text-primary, #1a1a1a)',

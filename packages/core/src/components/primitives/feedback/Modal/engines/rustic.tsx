@@ -308,7 +308,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
   // customize at any granularity (modal-specific, theme-wide, or neither).
   const modalStyle: React.CSSProperties = {
     backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-    borderRadius: 'var(--ds-modal-radius, var(--ds-radius-lg, 8px))',
+    borderRadius: 'var(--ds-modal-radius, var(--ds-radius-lg, 12px))',
     boxShadow: 'var(--ds-modal-shadow, var(--ds-shadow-xl))',
     position: 'relative',
     width: '100%',
@@ -335,7 +335,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     borderTop: '1px solid var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)))',
     display: 'flex',
     justifyContent: 'flex-end',
-    gap: 'var(--ds-modal-footer-gap, 8px)',
+    gap: 'var(--ds-modal-footer-gap, 12px)',
   };
 
   /**

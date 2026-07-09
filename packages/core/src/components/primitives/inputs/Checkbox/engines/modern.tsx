@@ -94,8 +94,8 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
 /** DS token references for checkbox box dimensions (CSS custom properties with px fallbacks). */
 const CHECKBOX_SIZE_TOKEN_MAP: Record<string, string> = {
   xs: 'var(--ds-checkbox-size-xs, 14px)',
-  sm: 'var(--ds-checkbox-size-sm, 16px)',
-  md: 'var(--ds-checkbox-size-md, 18px)',
+  sm: 'var(--ds-checkbox-size-sm, 14px)',
+  md: 'var(--ds-checkbox-size-md, 16px)',
   lg: 'var(--ds-checkbox-size-lg, 20px)',
   xl: 'var(--ds-checkbox-size-xl, 24px)',
 };

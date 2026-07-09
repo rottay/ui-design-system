@@ -94,6 +94,7 @@
   --ds-letter-spacing-snug: -0.015em;
   --ds-letter-spacing-subtle: -0.01em;
   --ds-letter-spacing-normal: 0;
+  --ds-letter-spacing-subtle-wide: 0.01em;
   --ds-letter-spacing-wide: 0.025em;
   --ds-letter-spacing-wider: 0.05em;
   --ds-letter-spacing-widest: 0.1em;

@@ -139,7 +139,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     fontSize: 18,
     color: 'var(--ds-color-text-muted)',
     padding: '4px 8px',
-    borderRadius: 'var(--ds-radius-sm, 4px)',
+    borderRadius: 'var(--ds-radius-sm, 6px)',
     lineHeight: 1,
   };
 
@@ -190,7 +190,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     justifyContent: 'center',
     minWidth: 22,
     padding: '2px 6px',
-    borderRadius: 'var(--ds-radius-sm, 4px)',
+    borderRadius: 'var(--ds-radius-sm, 6px)',
     border: '1px solid var(--ds-color-border)',
     background: 'var(--ds-shortcuts-overlay-kbd-bg, var(--ds-color-bg-secondary))',
     fontSize: 11,

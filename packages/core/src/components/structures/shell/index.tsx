@@ -130,7 +130,7 @@ export function AppShell({
             display: 'flex',
             alignItems: 'center',
             justifyContent: (!isDrawer && collapsed) ? 'center' : 'flex-start',
-            padding: (!isDrawer && collapsed) ? '0' : '0 var(--ds-spacing-5, 18px)',
+            padding: (!isDrawer && collapsed) ? '0' : '0 var(--ds-spacing-5, 20px)',
             borderBottom: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
             overflow: 'hidden',
           }}
@@ -146,7 +146,7 @@ export function AppShell({
             overflowX: 'hidden',
             padding: (!isDrawer && collapsed)
               ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
-              : 'var(--ds-spacing-3, 10px) var(--ds-spacing-3, 10px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px)',
+              : 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) calc(var(--ds-spacing-3, 12px) + 28px) var(--ds-spacing-3, 12px)',
             scrollPaddingBlockEnd: 'calc(var(--ds-spacing-6, 24px) + 76px)',
           }}
         >
@@ -159,7 +159,7 @@ export function AppShell({
             flexShrink: 0,
             padding: (!isDrawer && collapsed)
               ? 'var(--ds-spacing-3, 12px) var(--ds-spacing-2, 8px)'
-              : 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 10px) var(--ds-spacing-3, 14px)',
+              : 'var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px) var(--ds-spacing-3, 12px)',
             borderTop: '1px solid var(--ds-sidebar-border, var(--ds-color-border-subtle))',
             background: 'var(--ds-sidebar-footer-bg, var(--ds-sidebar-bg))',
           }}

@@ -92,7 +92,7 @@
 
   --ds-qrcode-icon-bg: #ffffff;
   --ds-qrcode-icon-padding: 4px;
-  --ds-qrcode-icon-border-radius: var(--ds-radius-sm, 4px);
+  --ds-qrcode-icon-border-radius: var(--ds-radius-sm, 6px);
 
   /* ========================================================================
      TRANSITIONS

@@ -23,8 +23,8 @@ import { TOGGLE_DEFAULTS } from '../Toggle.types';
 const SIZE_DIMS: Record<string, { trackW: string; trackH: string; thumbSize: string }> = {
   xs: { trackW: 'var(--ds-toggle-xs-width, 28px)', trackH: 'var(--ds-toggle-xs-height, 16px)', thumbSize: 'var(--ds-toggle-xs-dot, 12px)' },
   sm: { trackW: 'var(--ds-toggle-sm-width, 32px)', trackH: 'var(--ds-toggle-sm-height, 18px)', thumbSize: 'var(--ds-toggle-sm-dot, 14px)' },
-  md: { trackW: 'var(--ds-toggle-md-width, 36px)', trackH: 'var(--ds-toggle-md-height, 20px)', thumbSize: 'var(--ds-toggle-md-dot, 16px)' },
-  lg: { trackW: 'var(--ds-toggle-lg-width, 44px)', trackH: 'var(--ds-toggle-lg-height, 24px)', thumbSize: 'var(--ds-toggle-lg-dot, 20px)' },
+  md: { trackW: 'var(--ds-toggle-md-width, 44px)', trackH: 'var(--ds-toggle-md-height, 24px)', thumbSize: 'var(--ds-toggle-md-dot, 20px)' },
+  lg: { trackW: 'var(--ds-toggle-lg-width, 56px)', trackH: 'var(--ds-toggle-lg-height, 30px)', thumbSize: 'var(--ds-toggle-lg-dot, 26px)' },
   xl: { trackW: 'var(--ds-toggle-xl-width, 44px)', trackH: 'var(--ds-toggle-xl-height, 24px)', thumbSize: 'var(--ds-toggle-xl-dot, 20px)' },
 };
 

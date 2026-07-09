@@ -37,7 +37,7 @@ const styles = {
   } as React.CSSProperties,
   panel: {
     border: '1px solid var(--ds-collapse-border-color, var(--ds-color-neutral-300, #d9d9d9))',
-    borderRadius: 'var(--ds-collapse-radius, 4px)',
+    borderRadius: 'var(--ds-collapse-radius, 12px)',
     overflow: 'hidden',
   } as React.CSSProperties,
   panelGhost: {

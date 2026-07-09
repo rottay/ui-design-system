@@ -565,7 +565,7 @@ export function CollectionRenderDispatch<T extends object>(
                 {kc.renderColumnHeader
                   ? kc.renderColumnHeader(col.id, col.title, items.length)
                   : (
-                    <Text style={{ fontWeight: 600, fontSize: 'var(--ds-font-size-sm, 13px)' }}>
+                    <Text style={{ fontWeight: 600, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                       {col.title} <span style={{ color: 'var(--ds-color-text-muted)', fontWeight: 400 }}>({items.length})</span>
                     </Text>
                   )
@@ -605,7 +605,7 @@ export function CollectionRenderDispatch<T extends object>(
       return (
         <Box style={{
           padding: '32px 20px',
-          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 24px))',
+          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 16px))',
           border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
           background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
         }}>
@@ -616,7 +616,7 @@ export function CollectionRenderDispatch<T extends object>(
     if (data.length === 0) {
       return (
         <Box style={{
-          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 24px))',
+          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 16px))',
           border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
           background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
           overflow: 'hidden',

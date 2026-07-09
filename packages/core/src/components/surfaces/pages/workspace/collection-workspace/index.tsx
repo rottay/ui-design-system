@@ -1382,7 +1382,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             position: 'relative',
             background: 'color-mix(in srgb, var(--ds-color-primary) 7%, transparent)',
             boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 34%, transparent)',
-            borderRadius: 'var(--ds-radius-xs, 2px)',
+            borderRadius: 'var(--ds-radius-xs, 3px)',
             transition: 'background 150ms ease-out, box-shadow 150ms ease-out',
           }}
         >
@@ -2195,7 +2195,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         <Box style={{
           position: 'sticky',
           bottom: 0,
-          padding: 'var(--ds-spacing-sm, 12px) var(--ds-spacing-md, 16px)',
+          padding: 'var(--ds-spacing-sm, 8px) var(--ds-spacing-md, 16px)',
           background: 'var(--ds-color-bg-primary)',
           borderTop: '1px solid var(--ds-color-border-secondary)',
           zIndex: 10,

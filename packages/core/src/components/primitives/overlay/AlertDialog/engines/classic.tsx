@@ -98,7 +98,7 @@ export default function ClassicAlertDialog(props: AlertDialogProps): React.React
           </div>
           <div style={{ flex: 1 }}>
             {title && (
-              <div style={{ fontSize: 'var(--ds-modal-title-font-size, 16px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', marginBottom: '8px', color: 'var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a))' }}>
+              <div style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', marginBottom: '8px', color: 'var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a))' }}>
                 {title}
               </div>
             )}

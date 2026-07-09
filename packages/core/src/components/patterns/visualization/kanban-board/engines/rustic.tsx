@@ -163,7 +163,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 style={{
                   padding: '10px 14px',
                   marginBottom: 8,
-                  borderRadius: 'var(--ds-radius-sm, 4px)',
+                  borderRadius: 'var(--ds-radius-sm, 6px)',
                   background: 'var(--ds-color-bg-secondary, var(--ds-color-neutral-50))',
                   borderTop: column.color
                     ? `3px solid ${column.color}`
@@ -233,7 +233,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 <div
                   style={{
                     flex: 1,
-                    borderRadius: 'var(--ds-radius-sm, 4px)',
+                    borderRadius: 'var(--ds-radius-sm, 6px)',
                     padding: 8,
                     minHeight: 100,
                     // Swap to primary-tinted background + dashed border when
@@ -283,7 +283,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           style={{
                             marginBottom: 8,
                             padding: 12,
-                            borderRadius: 'var(--ds-radius-sm, 4px)',
+                            borderRadius: 'var(--ds-radius-sm, 6px)',
                             background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
                             border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
                             boxShadow: 'var(--ds-card-shadow, var(--ds-shadow-sm))',
@@ -332,7 +332,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         padding: '8px 0',
                         border:
                           '1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-                        borderRadius: 'var(--ds-radius-sm, 4px)',
+                        borderRadius: 'var(--ds-radius-sm, 6px)',
                         background: 'transparent',
                         color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
                         fontSize: 13,

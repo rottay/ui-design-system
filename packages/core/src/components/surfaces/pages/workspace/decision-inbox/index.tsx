@@ -194,7 +194,7 @@ function DecisionEmptyState() {
           align="center"
           justify="center"
           style={{
-            padding: 'var(--ds-spacing-xl, 48px) var(--ds-spacing-md, 16px)',
+            padding: 'var(--ds-spacing-xl, 32px) var(--ds-spacing-md, 16px)',
             flexDirection: 'column',
             gap: 'var(--ds-spacing-sm, 8px)',
           }}
@@ -327,7 +327,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
             <Text
               size="sm"
               color="muted"
-              style={{ marginTop: 'var(--ds-spacing-xs, 2px)' }}
+              style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
             >
               {subtitle}
             </Text>
@@ -489,7 +489,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                         <Text
                           size="sm"
                           weight="medium"
-                          style={{ marginBottom: 'var(--ds-spacing-xs, 6px)' }}
+                          style={{ marginBottom: 'var(--ds-spacing-xs, 4px)' }}
                         >
                           Reason
                         </Text>

@@ -130,7 +130,7 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
       ? 'none'
       : `1px solid ${getBorderColor()}`,
     borderBottom: variant === 'flushed' ? `2px solid ${getBorderColor()}` : undefined,
-    borderRadius: variant === 'flushed' || variant === 'unstyled' ? '0' : 'var(--ds-radius-md, 6px)',
+    borderRadius: variant === 'flushed' || variant === 'unstyled' ? '0' : 'var(--ds-radius-md, 8px)',
     backgroundColor: variant === 'filled'
       ? 'var(--ds-color-neutral-100, #f5f5f5)'
       : 'transparent',
@@ -159,7 +159,7 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
     cursor: 'pointer',
     color: 'var(--ds-color-text-secondary, #666)',
     padding: 0,
-    borderRadius: 'var(--ds-radius-sm, 4px)',
+    borderRadius: 'var(--ds-radius-sm, 6px)',
   };
 
   return (

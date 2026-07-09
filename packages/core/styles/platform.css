@@ -230,6 +230,7 @@
   --ds-letter-spacing-snug: -0.015em;
   --ds-letter-spacing-subtle: -0.01em;
   --ds-letter-spacing-normal: 0;
+  --ds-letter-spacing-subtle-wide: 0.01em;
   --ds-letter-spacing-wide: 0.025em;
   --ds-letter-spacing-wider: 0.05em;
   --ds-letter-spacing-widest: 0.1em;
@@ -553,15 +554,6 @@
      BORDER RADIUS - Rounding Scale
      Consistent corner rounding for components
      ======================================================================== */
-  --ds-radius-none: 0;
-  --ds-radius-xs: 0.1875rem;   /* 3px */
-  --ds-radius-sm: 0.375rem;    /* 6px */
-  --ds-radius-md: 0.5rem;      /* 8px - Default */
-  --ds-radius-lg: 0.75rem;     /* 12px */
-  --ds-radius-xl: 1rem;        /* 16px */
-  --ds-radius-2xl: 1.25rem;    /* 20px */
-  --ds-radius-3xl: 1.5rem;     /* 24px */
-  --ds-radius-full: 9999px;    /* Fully rounded (pills, circles) */
 
   /* Component-specific radius */
   --ds-radius-button: var(--ds-radius-md);
@@ -3938,10 +3930,10 @@ html.dark {
   );
   --ds-premium-card-hover-transform: translateY(-2px) scale(1);
   --ds-premium-card-transition:
-    background var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out),
-    border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out),
-    box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out),
-    transform var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out);
+    background var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    border-color var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)),
+    transform var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
 
   --ds-premium-card-icon-bg: var(--ds-surface-icon-bg, color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-card-bg)));
   --ds-premium-card-icon-border: var(--ds-surface-icon-border, color-mix(in srgb, var(--ds-color-primary) 20%, var(--ds-card-border-color)));
@@ -5492,7 +5484,7 @@ html.dark {
 
   --ds-qrcode-icon-bg: #ffffff;
   --ds-qrcode-icon-padding: 4px;
-  --ds-qrcode-icon-border-radius: var(--ds-radius-sm, 4px);
+  --ds-qrcode-icon-border-radius: var(--ds-radius-sm, 6px);
 
   /* ========================================================================
      TRANSITIONS
@@ -5957,7 +5949,7 @@ html.dark {
     color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card-bg)) 50%,
     var(--ds-surface-panel-bg) 75%
   );
-  --ds-page-transition-duration: var(--ds-motion-normal, 260ms);
+  --ds-page-transition-duration: var(--ds-motion-normal, 200ms);
   --ds-workflow-gap: 32px;
   --ds-workflow-rail-width: 360px;
   --ds-control-disabled-bg: var(--ds-button-disabled-bg);
@@ -6202,12 +6194,12 @@ html.dark {
   background: var(--ds-premium-card-bg);
   background-clip: padding-box;
   box-shadow: var(--ds-card-shadow);
-  animation: ds-surface-enter var(--ds-duration-slow, 260ms) var(--ds-ease-out, ease-out) both;
+  animation: ds-surface-enter var(--ds-duration-slow, 300ms) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both;
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease,
-    transform var(--ds-duration-fast, 160ms) ease,
-    filter var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease,
+    transform var(--ds-duration-fast, 150ms) ease,
+    filter var(--ds-duration-fast, 150ms) ease;
 }
 
 :where(.ds-surface-card, .ds-surface-rail-card)::before,
@@ -6226,7 +6218,7 @@ html.dark {
     auto;
   opacity: 0.28;
   mask-image: linear-gradient(180deg, var(--ds-color-text-primary), transparent 82%);
-  transition: opacity var(--ds-duration-fast, 160ms) ease;
+  transition: opacity var(--ds-duration-fast, 150ms) ease;
 }
 
 :where(.ds-surface-card, .ds-surface-rail-card)::after,
@@ -6259,9 +6251,9 @@ html.dark {
   border-radius: var(--ds-radius-sm);
   background: color-mix(in srgb, var(--ds-surface-panel-bg) 92%, var(--ds-surface-card-bg));
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    background var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    background var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease;
 }
 
 :where(.ds-surface-panel)::before {
@@ -6304,9 +6296,9 @@ html.dark {
   background: var(--ds-premium-card-bg);
   box-shadow: var(--ds-card-shadow);
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease,
-    filter var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease,
+    filter var(--ds-duration-fast, 150ms) ease;
 }
 
 :where(:where(.ds-surface-table-card), .ds-collection-enhanced) :where(.ds-engine-modern) {
@@ -6326,12 +6318,12 @@ html.dark {
   border: 1px solid var(--ds-premium-card-border);
   border-radius: var(--ds-radius-md);
   box-shadow: var(--ds-card-shadow);
-  animation: ds-surface-enter var(--ds-duration-slow, 260ms) var(--ds-ease-out, ease-out) both;
+  animation: ds-surface-enter var(--ds-duration-slow, 300ms) var(--ds-ease-out, cubic-bezier(0.16, 1, 0.3, 1)) both;
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease,
-    transform var(--ds-duration-fast, 160ms) ease,
-    filter var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease,
+    transform var(--ds-duration-fast, 150ms) ease,
+    filter var(--ds-duration-fast, 150ms) ease;
 }
 
 :where(.ds-rich-card--interactive):hover {
@@ -6383,8 +6375,8 @@ html.dark {
   background: var(--ds-icon-tile-bg);
   box-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    transform var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    transform var(--ds-duration-fast, 150ms) ease;
 }
 
 :where(.ds-rich-card--interactive:hover, .ds-rich-card--interactive:focus-within) :where(.ds-rich-card__icon) {
@@ -6737,7 +6729,7 @@ html.dark {
   padding: var(--ds-command-home-console-padding);
   overflow: hidden;
   border: 1px solid var(--ds-command-home-panel-border);
-  border-radius: var(--ds-radius-lg, 10px);
+  border-radius: var(--ds-radius-lg, 12px);
   background-clip: padding-box;
   background: var(--ds-command-home-console-bg);
   box-shadow:
@@ -6758,7 +6750,7 @@ html.dark {
   min-width: 0;
   padding: 16px 18px;
   border: 1px solid var(--ds-command-home-panel-border-soft);
-  border-radius: var(--ds-radius-lg, 10px);
+  border-radius: var(--ds-radius-lg, 12px);
   background-clip: padding-box;
   background: var(--ds-command-home-hero-bg);
   box-shadow:
@@ -6874,7 +6866,7 @@ html.dark {
   min-width: 0;
   padding: 16px;
   border: 1px solid var(--ds-command-home-panel-border-soft);
-  border-radius: var(--ds-radius-lg, 10px);
+  border-radius: var(--ds-radius-lg, 12px);
   background-clip: padding-box;
   background: var(--ds-command-home-surface-bg);
 }
@@ -6913,9 +6905,9 @@ html.dark {
     0 1px 1px color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent),
     0 10px 24px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease,
-    transform var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease,
+    transform var(--ds-duration-fast, 150ms) ease;
 }
 
 :is(.ds-command-home-launchpad-card, .ds-launchpad-card):hover {
@@ -6983,7 +6975,7 @@ html.dark {
   gap: 14px;
   padding: 14px;
   border: 1px solid var(--ds-command-home-panel-border-soft);
-  border-radius: var(--ds-radius-lg, 10px);
+  border-radius: var(--ds-radius-lg, 12px);
   background-clip: padding-box;
   background: var(--ds-command-home-surface-bg);
   box-shadow:
@@ -7005,7 +6997,7 @@ html.dark {
   min-height: 178px;
   padding: 22px;
   border: 1px solid var(--ds-command-home-panel-border-soft);
-  border-radius: var(--ds-radius-lg, 10px);
+  border-radius: var(--ds-radius-lg, 12px);
   background:
     radial-gradient(circle at 50% 0%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent 46%),
     var(--ds-command-home-panel-bg);
@@ -7136,9 +7128,9 @@ html.dark {
   cursor: pointer;
   text-align: start;
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease,
-    transform var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease,
+    transform var(--ds-duration-fast, 150ms) ease;
 }
 
 :is(.ds-command-home-prompt-row, .ds-ai-prompt-row):hover {
@@ -7175,7 +7167,7 @@ html.dark {
   min-width: 0;
   padding: 10px;
   border: 1px solid var(--ds-command-home-panel-border-soft);
-  border-radius: var(--ds-radius-lg, 10px);
+  border-radius: var(--ds-radius-lg, 12px);
   background: var(--ds-command-home-panel-bg-strong);
   box-shadow: 0 18px 42px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
 }
@@ -7206,9 +7198,9 @@ html.dark {
   cursor: pointer;
   font-family: inherit;
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    color var(--ds-duration-fast, 160ms) ease,
-    background var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    color var(--ds-duration-fast, 150ms) ease,
+    background var(--ds-duration-fast, 150ms) ease;
 }
 
 :is(.ds-command-home-context-select, .ds-ai-context-select) {
@@ -7259,7 +7251,7 @@ html.dark {
   min-width: 0;
   padding: 14px;
   border: 1px solid var(--ds-command-home-panel-border-soft);
-  border-radius: var(--ds-radius-lg, 10px);
+  border-radius: var(--ds-radius-lg, 12px);
   background-clip: padding-box;
   background: var(--ds-command-home-surface-bg);
   box-shadow:
@@ -7322,9 +7314,9 @@ html.dark {
   border-radius: var(--ds-radius-md, 8px);
   background: var(--ds-command-home-control-bg);
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease,
-    transform var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease,
+    transform var(--ds-duration-fast, 150ms) ease;
 }
 
 :is(.ds-command-home-next-move):hover {
@@ -7382,9 +7374,9 @@ html.dark {
   font-size: 0.875rem;
   font-weight: 760;
   transition:
-    border-color var(--ds-duration-fast, 160ms) ease,
-    box-shadow var(--ds-duration-fast, 160ms) ease,
-    transform var(--ds-duration-fast, 160ms) ease;
+    border-color var(--ds-duration-fast, 150ms) ease,
+    box-shadow var(--ds-duration-fast, 150ms) ease,
+    transform var(--ds-duration-fast, 150ms) ease;
 }
 
 :is(.ds-command-home-search-lane):hover {
@@ -7681,7 +7673,7 @@ html.dark {
   min-height: 110px;
   padding: 14px;
   border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
-  border-radius: var(--ds-radius-sm, 8px);
+  border-radius: var(--ds-radius-sm, 6px);
   background-clip: padding-box;
   background: var(--ds-command-home-card-bg);
   background-size: 24px 24px, 24px 24px, auto;
@@ -7780,7 +7772,7 @@ html.dark {
   min-width: 0;
   padding: 10px 14px;
   border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
-  border-radius: var(--ds-radius-sm, 8px);
+  border-radius: var(--ds-radius-sm, 6px);
   color: var(--ds-color-text-primary);
   background: var(--ds-command-home-card-bg) !important;
   background-size: 24px 24px, 24px 24px, auto !important;
@@ -7876,7 +7868,7 @@ html.dark {
   --ds-command-home-card-tone: var(--ds-color-primary);
   min-width: 0;
   border: 1px solid color-mix(in srgb, var(--ds-command-home-card-tone) 18%, var(--ds-surface-card-border, var(--ds-color-border-secondary))) !important;
-  border-radius: var(--ds-radius-sm, 8px);
+  border-radius: var(--ds-radius-sm, 6px);
   background: var(--ds-command-home-card-bg) !important;
   background-size: 24px 24px, 24px 24px, auto !important;
   box-shadow: var(--ds-command-home-card-shadow) !important;
@@ -10742,8 +10734,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   --rounded-box: var(--ds-radius-lg);
   --rounded-btn: var(--ds-button-md-radius);
   --rounded-badge: var(--ds-badge-radius);
-  --animation-btn: 0.18s;
-  --animation-input: 0.18s;
+  --animation-btn: var(--ds-motion-normal);
+  --animation-input: var(--ds-motion-normal);
   --btn-focus-scale: 0.98;
   --border-btn: 1px;
   --tab-border: 2px;
@@ -10779,16 +10771,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
      canon. Components reference the foundation tokens directly.
      ------------------------------------------------------------------------- */
 
-  /* -------------------------------------------------------------------------
-     Border radius scale
-     Re-declared here for engine-local resolution. Canonical values
-     live in default.css; these ensure the modern engine is self-contained.
-     ------------------------------------------------------------------------- */
-  --ds-radius-sm: 6px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 12px;
-  --ds-radius-xl: 16px;
-  --ds-radius-full: 9999px;
 }
 
 /* =============================================================================
@@ -11480,7 +11462,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   min-width: 180px;
   background-color: var(--ds-dropdown-bg);
   border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-dropdown-radius, 8px);
+  border-radius: var(--ds-dropdown-radius, 12px);
   box-shadow: var(--ds-dropdown-shadow);
   padding: 4px;
 }
@@ -11527,7 +11509,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   padding: 8px 12px;
   border: none;
   background: transparent;
-  border-radius: var(--ds-dropdown-item-radius, 6px);
+  border-radius: var(--ds-dropdown-item-radius, 8px);
   color: var(--ds-text-primary);
   font-size: 14px;
   text-align: left;
@@ -14345,11 +14327,11 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 [data-tenant] .join .join-item:first-child {
-  border-radius: var(--ds-radius-md, 6px) 0 0 var(--ds-radius-md, 6px);
+  border-radius: var(--ds-radius-md, 8px) 0 0 var(--ds-radius-md, 8px);
 }
 
 [data-tenant] .join .join-item:last-child {
-  border-radius: 0 var(--ds-radius-md, 6px) var(--ds-radius-md, 6px) 0;
+  border-radius: 0 var(--ds-radius-md, 8px) var(--ds-radius-md, 8px) 0;
 }
 
 [data-tenant] .join .join-item:not(:first-child):not(:last-child) {
@@ -15157,8 +15139,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 [data-tenant] .form-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 20px;
+  gap: var(--ds-form-item-gap);
+  margin-bottom: var(--ds-spacing-5);
   width: 100%;
 }
 
@@ -16463,7 +16445,7 @@ h1, h2, h3, h4, h5, h6,
 .ant-modal,
 .modal,
 [data-engine] .ds-modal {
-  transition-duration: var(--ds-modal-animation-duration, 300ms);
+  transition-duration: var(--ds-modal-animation-duration, 200ms);
   transition-timing-function: var(--ds-modal-animation-timing);
 }
 

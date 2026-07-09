@@ -715,7 +715,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: 'var(--ds-spacing-1, 4px)',
-                padding: '1px var(--ds-spacing-2, 6px)',
+                padding: '1px var(--ds-spacing-2, 8px)',
                 fontSize: 'var(--ds-font-size-xs, 12px)',
                 lineHeight: 'var(--ds-line-height-xs, 20px)',
                 borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -763,7 +763,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             <span style={{
               display: 'inline-flex',
               alignItems: 'center',
-              padding: '1px var(--ds-spacing-2, 6px)',
+              padding: '1px var(--ds-spacing-2, 8px)',
               fontSize: 'var(--ds-font-size-xs, 12px)',
               lineHeight: 'var(--ds-line-height-xs, 20px)',
               borderRadius: 'var(--ds-radius-sm, 6px)',

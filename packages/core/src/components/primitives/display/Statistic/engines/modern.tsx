@@ -165,13 +165,13 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
         <div ref={ref} className={className} style={{
           ...style,
           animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
-          animationDuration: 'var(--ds-skeleton-animation-duration, 2s)',
+          animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
         }}>
           <div
             style={{
               height: 'var(--ds-spacing-4, 1rem)',
               width: 'var(--ds-spacing-16, 4rem)',
-              borderRadius: 'var(--ds-radius-sm, 4px)',
+              borderRadius: 'var(--ds-radius-sm, 6px)',
               marginBottom: 'var(--ds-spacing-2, 0.5rem)',
               background: 'var(--ds-statistic-loading-bg, var(--ds-surface-panel))',
             }}
@@ -180,7 +180,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
             style={{
               height: 'var(--ds-spacing-8, 2rem)',
               width: 'var(--ds-spacing-24, 6rem)',
-              borderRadius: 'var(--ds-radius-sm, 4px)',
+              borderRadius: 'var(--ds-radius-sm, 6px)',
               background: 'var(--ds-statistic-loading-bg, var(--ds-surface-panel))',
             }}
           />

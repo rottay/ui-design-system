@@ -1,7 +1,7 @@
 import type { CSSProperties } from 'react';
 
-export const MOTION_FAST = 'var(--ds-motion-fast, 150ms)';
-export const EASE_OUT = 'var(--ds-motion-ease-out, ease-out)';
+export const MOTION_FAST = 'var(--ds-motion-fast, 120ms)';
+export const EASE_OUT = 'var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
 export const TRANSITION = `${MOTION_FAST} ${EASE_OUT}`;
 
 export const TOOLBAR_BG = 'var(--ds-toolbar-bg, var(--ds-surface-card, var(--ds-color-bg-primary)))';

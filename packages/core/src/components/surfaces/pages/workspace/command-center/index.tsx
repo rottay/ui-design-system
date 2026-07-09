@@ -240,7 +240,7 @@ function QuickActionCard({ action }: { action: QuickAction }) {
               <Text
                 size="xs"
                 color="muted"
-                style={{ marginTop: 'var(--ds-spacing-xs, 2px)' }}
+                style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
               >
                 {action.description}
               </Text>
@@ -513,7 +513,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
                   <Text
                     size="sm"
                     weight="medium"
-                    style={{ marginBottom: 'var(--ds-spacing-sm, 12px)' }}
+                    style={{ marginBottom: 'var(--ds-spacing-sm, 8px)' }}
                   >
                     {section.title}
                   </Text>
@@ -533,7 +533,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
               align="center"
               justify="center"
               style={{
-                padding: 'var(--ds-spacing-xl, 48px) var(--ds-spacing-md, 16px)',
+                padding: 'var(--ds-spacing-xl, 32px) var(--ds-spacing-md, 16px)',
                 flexDirection: 'column',
                 gap: 'var(--ds-spacing-sm, 8px)',
               }}

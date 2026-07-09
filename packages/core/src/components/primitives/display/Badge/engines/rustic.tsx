@@ -125,9 +125,9 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     '--ds-badge-font-size': sizeValues.fontSize,
     '--ds-badge-dot-size': dotSize,
     '--ds-badge-border-radius': radius === 'full' ? 'var(--ds-badge-radius-full, 9999px)' :
-                             radius === 'lg' ? 'var(--ds-badge-radius-lg, 8px)' :
-                             radius === 'md' ? 'var(--ds-badge-radius-md, 4px)' :
-                             radius === 'sm' ? 'var(--ds-badge-radius-sm, 2px)' : 'var(--ds-badge-radius-none, 0)',
+                             radius === 'lg' ? 'var(--ds-badge-radius-lg, 12px)' :
+                             radius === 'md' ? 'var(--ds-badge-radius-md, 8px)' :
+                             radius === 'sm' ? 'var(--ds-badge-radius-sm, 6px)' : 'var(--ds-badge-radius-none, 0)',
   } as React.CSSProperties;
 
   /**

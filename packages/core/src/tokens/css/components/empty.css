@@ -30,13 +30,13 @@
      ======================================================================== */
   --ds-empty-title-color: #525252;
   --ds-empty-title-margin-top: 1rem;
-  --ds-empty-title-font-size: var(--ds-font-size-base, 14px);
+  --ds-empty-title-font-size: var(--ds-font-size-base, 15px);
   --ds-empty-title-font-weight: var(--ds-font-weight-medium, 500);
 
   /* ========================================================================
      DESCRIPTION - Secondary text
      ======================================================================== */
   --ds-empty-description-color: #a3a3a3;
-  --ds-empty-description-font-size: var(--ds-font-size-sm, 12px);
+  --ds-empty-description-font-size: var(--ds-font-size-sm, 14px);
   --ds-empty-description-margin-top: 0.25rem;
 }

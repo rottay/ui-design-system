@@ -568,7 +568,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                     marginTop: 4,
                     background: 'var(--ds-color-bg-elevated, #fff)',
                     border: '1px solid var(--ds-color-border)',
-                    borderRadius: 'var(--ds-radius-lg, 8px)',
+                    borderRadius: 'var(--ds-radius-lg, 12px)',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                     zIndex: 10,
                     minWidth: 180,

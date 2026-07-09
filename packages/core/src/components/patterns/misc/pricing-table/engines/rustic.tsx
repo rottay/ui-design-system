@@ -52,13 +52,13 @@ const cellStyle: CSSProperties = {
 const btnBase: CSSProperties = {
   width: '100%',
   padding: '8px 16px',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   color: 'var(--ds-color-text-primary, var(--ds-color-text))',
   cursor: 'pointer',
   fontWeight: 600,
-  fontSize: 'var(--ds-font-size-sm, 13px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
   marginTop: 12,
 };
 
@@ -146,7 +146,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
             <span style={{
               marginLeft: 6,
               padding: '2px 6px',
-              borderRadius: 'var(--ds-radius-sm, 4px)',
+              borderRadius: 'var(--ds-radius-sm, 6px)',
               background: 'var(--ds-color-success-600, var(--ds-color-success))',
               color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
               fontSize: 10,
@@ -161,7 +161,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: plans.length * 180 + 200 }}>
           <thead>
             <tr>
-              <th style={{ ...cellStyle, textAlign: 'left', width: 200, verticalAlign: 'bottom', fontSize: 'var(--ds-font-size-sm, 13px)', fontWeight: 600, color: 'var(--ds-color-text-muted)', border: 'none' }}>
+              <th style={{ ...cellStyle, textAlign: 'left', width: 200, verticalAlign: 'bottom', fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 600, color: 'var(--ds-color-text-muted)', border: 'none' }}>
                 Features
               </th>
               {/* Each plan column header: highlighted plans get thicker primary border + tinted bg */}
@@ -173,7 +173,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                     {renderPlanHeader ? renderPlanHeader(plan) : (
                       <div style={{
                         padding: 16,
-                        borderRadius: 'var(--ds-radius-lg, 8px)',
+                        borderRadius: 'var(--ds-radius-lg, 12px)',
                         border: isHighlighted ? '2px solid var(--ds-color-primary)' : '1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
                         background: isHighlighted ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))' : undefined,
                       }}>
@@ -181,7 +181,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                           <div style={{
                             display: 'inline-block',
                             padding: '2px 8px',
-                            borderRadius: 'var(--ds-radius-sm, 4px)',
+                            borderRadius: 'var(--ds-radius-sm, 6px)',
                             background: 'var(--ds-color-primary)',
                             color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
                             fontSize: 10,
@@ -197,10 +197,10 @@ export default function RusticPricingTable(props: PricingTableProps) {
                           {typeof plan.price === 'number' ? `${currency}${plan.price}` : plan.price}
                         </div>
                           {plan.priceNote && (
-                          <div style={{ fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>{plan.priceNote}</div>
+                          <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>{plan.priceNote}</div>
                         )}
                         {plan.description && (
-                          <div style={{ fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>{plan.description}</div>
+                          <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>{plan.description}</div>
                         )}
                         {/* CTA button: highlighted plans get the primary button style */}
                         <button
@@ -243,7 +243,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                   )}
                   {/* Feature row: label cell + one value cell per plan */}
                   <tr>
-                    <td style={{ ...cellStyle, fontSize: 'var(--ds-font-size-sm, 13px)' }}>
+                    <td style={{ ...cellStyle, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                       {feature.label}
                     </td>
                     {plans.map(plan => (

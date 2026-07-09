@@ -128,7 +128,7 @@ export function MenuItem({
       ? 'var(--ds-menu-item-danger-color, var(--ds-color-error))'
       : 'var(--ds-menu-item-color, inherit)',
     backgroundColor: 'transparent',
-    borderRadius: 'var(--ds-menu-border-radius, 6px)',
+    borderRadius: 'var(--ds-menu-border-radius, 8px)',
     transition: 'all 0.2s ease',
     userSelect: 'none',
     ...style,

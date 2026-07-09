@@ -121,7 +121,7 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
   // Outlined cancel button styled via DS tokens for border and transitions
   const cancelButtonStyle: React.CSSProperties = {
     padding: '8px 16px',
-    borderRadius: 'var(--ds-radius-md, 6px)',
+    borderRadius: 'var(--ds-radius-md, 8px)',
     fontSize: '14px',
     fontWeight: 500,
     cursor: 'pointer',

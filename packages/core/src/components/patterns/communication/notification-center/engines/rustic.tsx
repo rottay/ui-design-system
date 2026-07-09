@@ -59,7 +59,7 @@ const triggerBtnStyle: CSSProperties = {
   cursor: 'pointer',
   fontSize: 20,
   color: 'var(--ds-color-text)',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
 };
 
 const badgeStyle: CSSProperties = {
@@ -88,7 +88,7 @@ const dropdownStyle: CSSProperties = {
   maxHeight: 440,
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  borderRadius: 'var(--ds-radius-lg, 8px)',
+  borderRadius: 'var(--ds-radius-lg, 12px)',
   boxShadow: 'var(--ds-shadow-xl)',
   overflow: 'hidden',
   display: 'flex',
@@ -244,7 +244,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       {/* Unread titles are bold (600); read titles are normal (400) */}
-                      <span style={{ fontSize: 'var(--ds-font-size-sm, 13px)', fontWeight: item.read ? 400 : 600 }}>
+                      <span style={{ fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: item.read ? 400 : 600 }}>
                         {item.title}
                       </span>
                       {/* Small primary dot for visual unread indicator */}
@@ -257,7 +257,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                     </div>
                     {/* Footer row: timestamp + optional action button */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
-                      <span style={{ fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-muted)', opacity: 0.7 }}>
+                      <span style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', opacity: 0.7 }}>
                         {formatTimestamp(item.timestamp)}
                       </span>
                       {item.action && (

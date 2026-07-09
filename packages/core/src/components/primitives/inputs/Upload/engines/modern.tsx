@@ -201,7 +201,7 @@ const FileItem: React.FC<FileItemProps> = ({
       position: 'relative',
       width: 104,
       height: 104,
-      borderRadius: 'var(--ds-upload-file-radius, 8px)',
+      borderRadius: 'var(--ds-upload-file-radius, 6px)',
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',

@@ -63,7 +63,7 @@ const textareaStyle: CSSProperties = {
   width: '100%',
   padding: '8px 12px',
   fontSize: 'var(--ds-font-size-sm, 14px)',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
   background: 'var(--ds-color-background, #fff)',
   color: 'var(--ds-color-text)',
@@ -74,8 +74,8 @@ const textareaStyle: CSSProperties = {
 /** Base button style -- neutral border, white background, used for Cancel actions. */
 const btnStyle: CSSProperties = {
   padding: '4px 12px',
-  fontSize: 'var(--ds-font-size-sm, 13px)',
-  borderRadius: 'var(--ds-radius-md, 6px)',
+  fontSize: 'var(--ds-font-size-sm, 14px)',
+  borderRadius: 'var(--ds-radius-md, 8px)',
   border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
   background: 'var(--ds-color-background, #fff)',
   color: 'var(--ds-color-text)',
@@ -166,7 +166,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               {formatTimestamp(comment.timestamp)}
             </span>
             {comment.edited && (
-              <span style={{ color: 'var(--ds-color-text-muted)', fontSize: 'var(--ds-font-size-xs, 11px)', fontStyle: 'italic', opacity: 0.6 }}>
+              <span style={{ color: 'var(--ds-color-text-muted)', fontSize: 'var(--ds-font-size-xs, 12px)', fontStyle: 'italic', opacity: 0.6 }}>
                 (edited)
               </span>
             )}

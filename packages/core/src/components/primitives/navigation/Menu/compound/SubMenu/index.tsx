@@ -186,7 +186,7 @@ export function MenuSubMenu({
     opacity: disabled ? 0.5 : 1,
     color: 'var(--ds-menu-item-color, inherit)',
     backgroundColor: isOpen ? 'var(--ds-menu-submenu-bg, var(--ds-color-bg-secondary))' : 'transparent',
-    borderRadius: 'var(--ds-menu-border-radius, 6px)',
+    borderRadius: 'var(--ds-menu-border-radius, 8px)',
     transition: 'all 0.2s ease',
     userSelect: 'none',
   };

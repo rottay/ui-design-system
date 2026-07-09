@@ -210,7 +210,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
               <div className="flex flex-col">
                 <button
                   type="button"
-                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 4px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
+                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 6px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('up')}
                   tabIndex={-1}
                 >
@@ -218,7 +218,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
                 </button>
                 <button
                   type="button"
-                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 4px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
+                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 6px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('down')}
                   tabIndex={-1}
                 >

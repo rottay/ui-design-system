@@ -205,7 +205,7 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
           : valueType === 'warning'
             ? 'var(--ds-color-warning)'
             : 'var(--ds-color-text-primary)',
-      '--ds-statistic-value-font-size': 'var(--ds-font-size-2xl, 24px)',
+      '--ds-statistic-value-font-size': 'var(--ds-font-size-2xl, 20px)',
       '--ds-statistic-value-font-weight': 'var(--ds-font-weight-semibold, 600)',
     } as React.CSSProperties;
 

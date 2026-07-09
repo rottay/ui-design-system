@@ -161,7 +161,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
       style={{
         padding: '20px',
         border: `1px solid ${previewBorder}`,
-        borderRadius: 'var(--ds-radius-md, 6px)',
+        borderRadius: 'var(--ds-radius-md, 8px)',
         backgroundColor: previewSurface,
         fontFamily: 'system-ui, -apple-system, sans-serif',
         color: previewText,
@@ -178,7 +178,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
             <img
               src={creationConfig.logo}
               alt={creationConfig.name}
-              style={{ width: '28px', height: '28px', borderRadius: 'var(--ds-radius-sm, 4px)', objectFit: 'cover' }}
+              style={{ width: '28px', height: '28px', borderRadius: 'var(--ds-radius-sm, 6px)', objectFit: 'cover' }}
             />
           )}
           <div>
@@ -199,7 +199,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
           <div>
               <div style={{ fontSize: '11px', color: previewTextSecondary, marginBottom: '3px' }}>Primary</div>
-              <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-sm, 4px)', overflow: 'hidden' }}>
+              <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-sm, 6px)', overflow: 'hidden' }}>
                 {primaryPalette.map(({ step, color }) => (
                   <div
                     key={step}
@@ -223,7 +223,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
             {secondaryPalette && (
               <div>
                 <div style={{ fontSize: '11px', color: previewTextSecondary, marginBottom: '3px' }}>Secondary</div>
-                <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-sm, 4px)', overflow: 'hidden' }}>
+                <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-sm, 6px)', overflow: 'hidden' }}>
                   {secondaryPalette.map(({ step, color }) => (
                     <div
                       key={step}
@@ -451,7 +451,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                   padding: '6px 8px',
                   backgroundColor: previewSurfaceSecondary,
                   border: `1px solid ${previewBorderMuted}`,
-                  borderRadius: 'var(--ds-radius-sm, 4px)',
+                  borderRadius: 'var(--ds-radius-sm, 6px)',
                 }}
               >
                 <div style={{ fontSize: '10px', color: previewTextSecondary, marginBottom: '1px' }}>{label}</div>

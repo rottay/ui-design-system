@@ -156,7 +156,7 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
      * Overflow hidden ensures the image placeholder respects border-radius.
      */
     const containerStyle: React.CSSProperties = {
-      borderRadius: 'var(--ds-radius-lg, 8px)',
+      borderRadius: 'var(--ds-radius-lg, 12px)',
       overflow: 'hidden',
       border: '1px solid var(--ds-skeleton-border, var(--ds-color-border))',
       ...style,
@@ -182,7 +182,7 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
         {/* Card body with title and text lines */}
         <div
           style={{
-            padding: 'var(--ds-card-body-padding, 16px)',
+            padding: 'var(--ds-card-body-padding, 20px)',
             display: 'flex',
             flexDirection: 'column',
             gap: '8px',

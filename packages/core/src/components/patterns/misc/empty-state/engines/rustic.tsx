@@ -73,7 +73,7 @@ export default function RusticEmptyState(props: EmptyStateProps) {
   /** Shared base button styles -- all action buttons inherit radius, padding, and transition */
   const btnBase: CSSProperties = {
     border: '1px solid var(--ds-color-neutral-300)',
-    borderRadius: 'var(--ds-radius-md, 6px)',
+    borderRadius: 'var(--ds-radius-md, 8px)',
     padding: s.btnPadding,
     fontSize: 'var(--ds-font-size-sm, 14px)',
     cursor: 'pointer',

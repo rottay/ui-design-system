@@ -134,7 +134,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
   // Shared base for both cancel and confirm buttons; cursor changes when loading
   const buttonBaseStyle: React.CSSProperties = {
     padding: '8px 16px',
-    borderRadius: 'var(--ds-radius-md, 6px)',
+    borderRadius: 'var(--ds-radius-md, 8px)',
     fontSize: '14px',
     fontWeight: 500,
     cursor: loading ? 'not-allowed' : 'pointer',

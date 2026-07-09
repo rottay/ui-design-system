@@ -52,7 +52,7 @@ const dropdownStyle: CSSProperties = {
 const headerStyle: CSSProperties = {
   padding: '8px 12px',
   borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  fontSize: 'var(--ds-font-size-xs, 11px)',
+  fontSize: 'var(--ds-font-size-xs, 12px)',
   fontWeight: 600,
   color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
   textTransform: 'uppercase',
@@ -84,7 +84,7 @@ const linkBtnStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: 'var(--ds-radius-sm, 4px)',
+  borderRadius: 'var(--ds-radius-sm, 6px)',
 };
 
 const dividerStyle: CSSProperties = {
@@ -208,7 +208,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           <span style={{
             flex: 1,
             textAlign: 'left',
-            fontSize: 'var(--ds-font-size-sm, 13px)',
+            fontSize: 'var(--ds-font-size-sm, 14px)',
             fontWeight: 600,
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -283,7 +283,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <span style={{
-                        fontSize: 'var(--ds-font-size-sm, 13px)',
+                        fontSize: 'var(--ds-font-size-sm, 14px)',
                         fontWeight: isActive ? 600 : 400,
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
@@ -295,7 +295,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                         <span style={{ color: 'var(--ds-color-primary)', fontSize: 12 }}>{'\u2713'}</span>
                       )}
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--ds-font-size-xs, 11px)', color: 'var(--ds-color-text-muted)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
                       {ws.role && <span>{ws.role}</span>}
                       {ws.plan && <span style={{ textTransform: 'capitalize' }}>{ws.plan}</span>}
                       {typeof ws.online === 'number' && (
@@ -354,9 +354,9 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     padding: '6px 12px',
                     background: 'none',
                     border: '1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-                    borderRadius: 'var(--ds-radius-md, 6px)',
+                    borderRadius: 'var(--ds-radius-md, 8px)',
                     cursor: 'pointer',
-                    fontSize: 'var(--ds-font-size-sm, 13px)',
+                    fontSize: 'var(--ds-font-size-sm, 14px)',
                     color: 'var(--ds-color-text-muted)',
                     display: 'flex',
                     alignItems: 'center',
@@ -410,7 +410,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   </div>
                   {currentUser.email && (
                     <div style={{
-                      fontSize: 'var(--ds-font-size-xs, 11px)',
+                      fontSize: 'var(--ds-font-size-xs, 12px)',
                       color: 'var(--ds-color-text-muted)',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',

@@ -89,7 +89,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
       fontFamily: 'var(--ds-font-family-base, inherit)',
       display: 'flex',
       flexDirection: 'column',
-      transition: 'transform var(--ds-modal-animation-duration, 300ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1)), box-shadow var(--ds-modal-animation-duration, 300ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
+      transition: 'transform var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1)), box-shadow var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
       border: '1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb))',
     };
 
@@ -142,7 +142,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
             inset: 0,
             backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))))',
             zIndex: 1059,
-            transition: 'opacity var(--ds-modal-animation-duration, 300ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
+            transition: 'opacity var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
             backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
           }}
           onClick={closeOnOverlayClick ? () => onOpenChange(false) : undefined}

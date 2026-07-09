@@ -140,7 +140,7 @@ export function InlineCellEditor<T>({
     border: error
       ? '1.5px solid var(--ds-color-error, #e53e3e)'
       : '1.5px solid var(--ds-color-primary, #3b82f6)',
-    borderRadius: 'var(--ds-radius-sm, 4px)',
+    borderRadius: 'var(--ds-radius-sm, 6px)',
     background: 'var(--ds-surface-card, #fff)',
     color: 'var(--ds-color-text-primary, #1a1a1a)',
     outline: 'none',

@@ -314,8 +314,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const getSizeStyle = (): React.CSSProperties => {
       switch (size) {
         case 'small': return { height: 'var(--ds-input-sm-height, 32px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', padding: '4px var(--ds-input-sm-padding-x, 10px)' };
-        case 'large': return { height: 'var(--ds-input-lg-height, 40px)', fontSize: 'var(--ds-input-lg-font-size, 16px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' };
-        default: return { height: 'var(--ds-input-md-height, 36px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' };
+        case 'large': return { height: 'var(--ds-input-lg-height, 44px)', fontSize: 'var(--ds-input-lg-font-size, 15px)', padding: '8px var(--ds-input-lg-padding-x, 14px)' };
+        default: return { height: 'var(--ds-input-md-height, 40px)', fontSize: 'var(--ds-input-md-font-size, 14px)', padding: '6px var(--ds-input-md-padding-x, 12px)' };
       }
     };
 

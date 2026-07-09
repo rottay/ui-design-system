@@ -44,7 +44,7 @@ const s = {
     background: 'var(--ds-color-neutral-0, #fff)',
     border: '1px solid var(--ds-color-neutral-200)',
     borderRadius: 'var(--ds-radius-lg)',
-    padding: 'var(--ds-card-body-padding, 1.5rem)',
+    padding: 'var(--ds-card-body-padding, 1.25rem)',
     boxShadow: 'var(--ds-card-shadow, none)',
   } as React.CSSProperties,
   breadcrumbs: {
@@ -216,8 +216,8 @@ const s = {
     lineHeight: '1.4',
   } as React.CSSProperties,
   footer: {
-    marginTop: 'var(--ds-card-body-padding, 1rem)',
-    paddingTop: 'var(--ds-card-body-padding, 1rem)',
+    marginTop: 'var(--ds-card-body-padding, 1.25rem)',
+    paddingTop: 'var(--ds-card-body-padding, 1.25rem)',
     borderTop: '1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200))',
   } as React.CSSProperties,
   // Skeleton factory: pulsing placeholder at given dimensions, used in loading state.

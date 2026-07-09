@@ -57,8 +57,8 @@
   --rounded-box: var(--ds-radius-lg);
   --rounded-btn: var(--ds-button-md-radius);
   --rounded-badge: var(--ds-badge-radius);
-  --animation-btn: 0.18s;
-  --animation-input: 0.18s;
+  --animation-btn: var(--ds-motion-normal);
+  --animation-input: var(--ds-motion-normal);
   --btn-focus-scale: 0.98;
   --border-btn: 1px;
   --tab-border: 2px;
@@ -94,16 +94,6 @@
      canon. Components reference the foundation tokens directly.
      ------------------------------------------------------------------------- */
 
-  /* -------------------------------------------------------------------------
-     Border radius scale
-     Re-declared here for engine-local resolution. Canonical values
-     live in default.css; these ensure the modern engine is self-contained.
-     ------------------------------------------------------------------------- */
-  --ds-radius-sm: 6px;
-  --ds-radius-md: 8px;
-  --ds-radius-lg: 12px;
-  --ds-radius-xl: 16px;
-  --ds-radius-full: 9999px;
 }
 
 /* =============================================================================
@@ -795,7 +785,7 @@
   min-width: 180px;
   background-color: var(--ds-dropdown-bg);
   border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-dropdown-radius, 8px);
+  border-radius: var(--ds-dropdown-radius, 12px);
   box-shadow: var(--ds-dropdown-shadow);
   padding: 4px;
 }
@@ -842,7 +832,7 @@
   padding: 8px 12px;
   border: none;
   background: transparent;
-  border-radius: var(--ds-dropdown-item-radius, 6px);
+  border-radius: var(--ds-dropdown-item-radius, 8px);
   color: var(--ds-text-primary);
   font-size: 14px;
   text-align: left;
@@ -3660,11 +3650,11 @@
 }
 
 [data-tenant] .join .join-item:first-child {
-  border-radius: var(--ds-radius-md, 6px) 0 0 var(--ds-radius-md, 6px);
+  border-radius: var(--ds-radius-md, 8px) 0 0 var(--ds-radius-md, 8px);
 }
 
 [data-tenant] .join .join-item:last-child {
-  border-radius: 0 var(--ds-radius-md, 6px) var(--ds-radius-md, 6px) 0;
+  border-radius: 0 var(--ds-radius-md, 8px) var(--ds-radius-md, 8px) 0;
 }
 
 [data-tenant] .join .join-item:not(:first-child):not(:last-child) {
@@ -4472,8 +4462,8 @@
 [data-tenant] .form-item {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 20px;
+  gap: var(--ds-form-item-gap);
+  margin-bottom: var(--ds-spacing-5);
   width: 100%;
 }
 

@@ -17,7 +17,7 @@ import { KBD_DEFAULTS } from '../Kbd.types';
 
 /** Maps size tokens to inline style dimensions using DS token references. */
 const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  sm: { padding: 'var(--ds-kbd-sm-padding, 1px 4px)', fontSize: 'var(--ds-font-size-xs, 0.6875rem)', minHeight: 'var(--ds-kbd-sm-min-height, 20px)' },
+  sm: { padding: 'var(--ds-kbd-sm-padding, 1px 4px)', fontSize: 'var(--ds-font-size-xs, 0.75rem)', minHeight: 'var(--ds-kbd-sm-min-height, 20px)' },
   md: { padding: 'var(--ds-kbd-md-padding, 2px 6px)', fontSize: 'var(--ds-font-size-xs, 0.75rem)', minHeight: 'var(--ds-kbd-md-min-height, 24px)' },
   lg: { padding: 'var(--ds-kbd-lg-padding, 3px 8px)', fontSize: 'var(--ds-font-size-sm, 0.875rem)', minHeight: 'var(--ds-kbd-lg-min-height, 28px)' },
 };

@@ -262,7 +262,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           <ul
             className={['rottay-mentions__popup', `rottay-mentions__popup--${placement}`, popupClassName].filter(Boolean).join(' ')}
             data-placement={placement}
-            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 'var(--ds-dropdown-padding, 4px)', maxHeight: 'var(--ds-dropdown-max-height, 192px)', overflowY: 'auto', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', ...(placement === 'top' ? { bottom: '100%', marginBottom: 'var(--ds-spacing-1, 4px)' } : { top: '100%', marginTop: 'var(--ds-spacing-1, 4px)' }) }}
+            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 'var(--ds-dropdown-padding, 6px)', maxHeight: 'var(--ds-dropdown-max-height, 192px)', overflowY: 'auto', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', ...(placement === 'top' ? { bottom: '100%', marginBottom: 'var(--ds-spacing-1, 4px)' } : { top: '100%', marginTop: 'var(--ds-spacing-1, 4px)' }) }}
             role="listbox"
             aria-label="Mention suggestions"
           >

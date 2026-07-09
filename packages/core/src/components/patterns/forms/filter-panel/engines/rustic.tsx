@@ -31,7 +31,7 @@ import type { FilterDef } from '../../../foundation/types';
 const baseInput: React.CSSProperties = {
   padding: '6px 10px',
   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-  borderRadius: 'var(--ds-radius-sm, 4px)',
+  borderRadius: 'var(--ds-radius-sm, 6px)',
   fontSize: 13,
   background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-input))',
   color: 'var(--ds-color-text-primary, var(--ds-color-text))',
@@ -244,7 +244,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
   // Base button style for action buttons (Apply, Reset).
   const btnBase: React.CSSProperties = {
     padding: '6px 14px',
-    borderRadius: 'var(--ds-radius-sm, 4px)',
+    borderRadius: 'var(--ds-radius-sm, 6px)',
     fontSize: 13,
     cursor: 'pointer',
     border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
@@ -302,7 +302,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
               style={{
                 background: 'var(--ds-color-primary)',
                 color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
-                borderRadius: 'var(--ds-badge-radius, 10px)',
+                borderRadius: 'var(--ds-badge-radius, 9999px)',
                 padding: '1px 8px',
                 fontSize: 11,
                 fontWeight: 600,

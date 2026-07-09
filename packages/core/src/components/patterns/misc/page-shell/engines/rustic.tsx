@@ -132,7 +132,7 @@ export default function RusticPageShell(props: PageShellProps) {
                 alignItems: 'center',
                 gap: 4,
                 padding: '4px 8px',
-                borderRadius: 'var(--ds-radius-sm, 4px)',
+                borderRadius: 'var(--ds-radius-sm, 6px)',
               }}
             >
               &#8592; {back.label}

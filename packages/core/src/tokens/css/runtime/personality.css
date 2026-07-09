@@ -134,7 +134,7 @@ h1, h2, h3, h4, h5, h6,
 .ant-modal,
 .modal,
 [data-engine] .ds-modal {
-  transition-duration: var(--ds-modal-animation-duration, 300ms);
+  transition-duration: var(--ds-modal-animation-duration, 200ms);
   transition-timing-function: var(--ds-modal-animation-timing);
 }
 
