@@ -214,7 +214,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                   : vertical
                     ? `translateY(${(index - currentSlide) * 100}%)`
                     : `translateX(${(index - currentSlide) * 100}%)`,
-                transition: `all ${speed}ms var(--ds-motion-ease-out, ease-in-out)`,
+                transition: `all ${speed}ms var(--ds-motion-ease-out)`,
               }}
               role="group"
               aria-roledescription="slide"

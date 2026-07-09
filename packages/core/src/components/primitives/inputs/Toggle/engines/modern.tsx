@@ -102,7 +102,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     borderRadius: dims.trackH,
     background: trackColor,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    transition: 'background var(--ds-motion-base, 200ms) var(--ds-motion-ease-out, ease-out)',
+    transition: 'background var(--ds-motion-normal) var(--ds-motion-ease-out)',
     flexShrink: 0,
   };
 
@@ -115,7 +115,7 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     borderRadius: '50%',
     background: 'var(--ds-surface-control, var(--ds-color-text-on-primary))',
     transform: isChecked ? `translateX(calc(${dims.trackW} - ${dims.trackH}))` : 'translateX(0)',
-    transition: 'transform var(--ds-motion-base, 200ms) var(--ds-motion-ease-out, ease-out)',
+    transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
     boxShadow: 'var(--ds-elevation-1)',
   };
 

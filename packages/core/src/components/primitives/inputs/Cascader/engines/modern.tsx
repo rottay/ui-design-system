@@ -356,13 +356,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
               ✕
             </button>
           )}
-          <span style={{ transition: 'transform var(--ds-motion-duration-fast, 0.2s)' }} className={`${isOpen ? 'rotate-180' : ''}`}>&#9660;</span>
+          <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`${isOpen ? 'rotate-180' : ''}`}>&#9660;</span>
         </div>
 
         {isOpen && (
           <>
             <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes rottay-cascader-panel-in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}` }} />
-            <div style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', animation: 'rottay-select-slide-in var(--ds-motion-duration-fast, 0.15s) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
+            <div style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
             {/* Search input */}
             {showSearch && (
               <div className="p-2" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
@@ -380,7 +380,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                     color: 'var(--ds-color-text-primary)',
                     outline: 'none',
                     boxSizing: 'border-box',
-                    transition: 'all var(--ds-motion-duration-fast, 0.2s)',
+                    transition: 'all var(--ds-motion-fast)',
                   }}
                   placeholder="Search..."
                   value={searchValue}
@@ -426,7 +426,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                         maxHeight: 240,
                         overflowY: 'auto',
                         borderRight: colIndex < activeColumns.length - 1 ? '1px solid var(--ds-color-border)' : undefined,
-                        ...(colIndex > 0 ? { animation: 'rottay-cascader-panel-in var(--ds-motion-duration-fast, 0.2s) ease-out' } : {}),
+                        ...(colIndex > 0 ? { animation: 'rottay-cascader-panel-in var(--ds-motion-fast) ease-out' } : {}),
                       }}
                     >
                       {column.length > 0 ? (
@@ -441,7 +441,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                               <button
                                 type="button"
                                 className={`flex justify-between ${option.disabled ? 'disabled' : ''} ${isSelected ? 'active font-medium' : ''}`}
-                                style={{ transition: 'all var(--ds-motion-duration-fast, 0.15s)', ...(isSelected ? { background: 'var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))', borderLeft: '2px solid var(--ds-color-primary)' } : undefined) }}
+                                style={{ transition: 'all var(--ds-motion-fast)', ...(isSelected ? { background: 'var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))', borderLeft: '2px solid var(--ds-color-primary)' } : undefined) }}
                                 disabled={option.disabled}
                                 onClick={() => handleOptionClick(option, colIndex)}
                                 onMouseEnter={() => handleOptionHover(option, colIndex)}

@@ -86,14 +86,23 @@
    "lane": "engine-modern",
    "order": 1,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "spec-2",
     "spec-12"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 02:26",
+     "by": "ds-agent",
+     "note": "PARTIAL (build green, committing per owner): motion canon --ds-motion-* defined at foundation/animations/transitions.css (instant80/fast120/normal200/slow320/glacial500 + ease-out/ease-in-out/spring + scale-in/offset-in + re-expressed --ds-transition-* catalog); legacy --duration-*/--easing-*/--transition-* untouched (classic/rustic zero-delta). scripts/engine-token-audit.mjs (section-12 ratchet) + scripts/codemod-motion-tokens.mjs. Codemod result: cubicBezier 43->0, orphanTokens 32->0, 119 var-fallbacks stripped, 14 bare beziers replaced (23 files). Deleted the wrong-cadence engine-local [data-tenant] motion block in modern/theme.css so the canon wins. pnpm build exit 0. REMAINING: inline transition/animation duration literals 133->~0 (extend codemod, allowlist shimmer-loop 1.5s + setTimeout delays); brand-theme compiler setMotionVariables reconcile; ESLint no-motion-literals rule; pnpm test + audit --check + sighted classic/rustic zero-delta; then done."
+    }
+   ]
   },
   {
    "id": "WO-ENG-02",
@@ -101,22 +110,24 @@
    "lane": "engine-modern",
    "order": 2,
    "size": "M",
-   "status": "in-progress",
+   "status": "todo",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "audit-method"
    ],
-   "notes": null,
-   "claimedBy": "ds-agent",
-   "claimedAt": "2026-07-09",
+   "notes": "Reconned then reopened: owner committed the modern-engine WIP (commit 8deeecd6) so WO-ENG-01 is now UNBLOCKED. Per the owner's order (ENG-01 before ENG-02), next iteration takes ENG-01 first; ENG-02 recon note stays in this trail for when it resumes (target: replace runtime-fingerprint.tsx + live-preview.tsx with real per-component variant/state galleries + tenant-palette axis + stable capture route, packages/showroom only).",
+   "claimedBy": null,
+   "claimedAt": null,
    "progressLog": [
     {
      "at": "2026-07-09 01:52",
      "by": "ds-agent",
      "note": "Started ENG-02 instead of ENG-01 (safety reorder, no graph violation — ENG-02 has no dep on ENG-01). REASON: ENG-01's motion codemod targets **/engines/modern* including Input/engines/modern.tsx which has 3 motion literals AND is UNCOMMITTED OWNER WIP (git status: Input.types.ts + Input/modern.tsx + Box/modern.tsx + CLAUDE.md). Running ENG-01 now would clobber the owner's in-flight work -> ENG-01 HELD until the owner commits/blesses that WIP. ENG-02 is safe: touches packages/showroom only, explicitly forbids modifying packages/core engine components; SHW-03 not running so the non-concurrency law holds."
     }
-   ]
+   ],
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-ENG-03",

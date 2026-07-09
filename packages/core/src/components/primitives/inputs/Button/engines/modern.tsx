@@ -374,13 +374,13 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
 
     // Transitions
     transition: [
-      `transform var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
-      `box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
-      `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
-      `background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
-      `border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
-      `filter var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
-      `text-decoration var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+      `transform var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+      `box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+      `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+      `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+      `border-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+      `filter var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+      `text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out)`,
     ].join(', '),
 
     // Transform: active press > hover (none) > idle
@@ -482,7 +482,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
             width: isFullWidth ? '100%' : undefined,
             minWidth: 0,
             whiteSpace: isFullWidth ? 'normal' : 'nowrap',
-            transition: `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+            transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
             ...contentOpacity,
           }}
         >

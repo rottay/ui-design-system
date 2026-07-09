@@ -170,8 +170,8 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
             : variant === 'rounded'
               ? 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))'
               : '0',
-          animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-duration-slow, 1.5s))',
-          animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-easing-ease-in-out, ease-in-out))',
+          animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-slow))',
+          animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-ease-in-out))',
         }}
       />
     );
@@ -193,8 +193,8 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
             background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))',
             borderRadius: avatarShape === 'circle' ? '50%' : 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))',
             flexShrink: 0,
-            animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-duration-slow, 1.5s))',
-            animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-easing-ease-in-out, ease-in-out))',
+            animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-slow))',
+            animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-ease-in-out))',
           }}
         />
       )}
@@ -202,7 +202,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
       {/* Content section with title and paragraph lines */}
       <div className="flex-1 space-y-2">
         {/* Title line is 60% width to visually distinguish it from body text */}
-        {title && <div className="skeleton" style={{ height: '1.25rem', width: '60%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-duration-slow, 1.5s))', animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-easing-ease-in-out, ease-in-out))' }} />}
+        {title && <div className="skeleton" style={{ height: '1.25rem', width: '60%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-slow))', animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-ease-in-out))' }} />}
 
         {/* Last paragraph line is 80% width to simulate a natural text ending,
             preventing the skeleton from looking like a uniform block */}
@@ -213,7 +213,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
             <div
               key={i}
               className="skeleton"
-              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-duration-slow, 1.5s))', animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-easing-ease-in-out, ease-in-out))' }}
+              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, var(--ds-motion-slow))', animationTimingFunction: 'var(--ds-skeleton-animation-easing, var(--ds-motion-ease-in-out))' }}
             />
           ))}
       </div>

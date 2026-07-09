@@ -50,9 +50,9 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 const BODY_PADDING = 'var(--ds-card-body-padding, 20px)';
 
 const TRANSITION = [
-  'box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-  'transform var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
-  'border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+  'box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)',
+  'transform var(--ds-motion-fast) var(--ds-motion-ease-out)',
+  'border-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
 ].join(', ');
 
 // ============================================================================
@@ -360,7 +360,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                 borderRadius: 'inherit',
                 zIndex: 1,
                 opacity: 1,
-                transition: `opacity var(--ds-motion-normal, 250ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))`,
+                transition: `opacity var(--ds-motion-normal) var(--ds-motion-ease-out)`,
               }}
             >
               <CardSpinner />

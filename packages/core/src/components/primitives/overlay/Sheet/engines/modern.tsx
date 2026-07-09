@@ -23,8 +23,8 @@ import { SHEET_DEFAULTS } from '../Sheet.types';
 // ============================================================================
 
 /** Shared overlay motion tokens. */
-const MOTION_DURATION = 'var(--ds-motion-normal, 250ms)';
-const MOTION_EASING = 'var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
+const MOTION_DURATION = 'var(--ds-motion-normal)';
+const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
 /** Keyframe animations for each side + backdrop. */
 const SHEET_STYLES = `
@@ -88,7 +88,7 @@ function CloseButton({ onClick }: { onClick: () => void }) {
         cursor: 'pointer',
         color: 'var(--ds-color-text-secondary)',
         flexShrink: 0,
-        transition: `background-color var(--ds-motion-fast, 150ms) ${MOTION_EASING}`,
+        transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLElement).style.backgroundColor =

@@ -67,7 +67,7 @@ const SIZES = {
 /*  Shared transition string                                           */
 /* ------------------------------------------------------------------ */
 
-const TRANSITION = 'border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), outline-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), outline-offset var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
+const TRANSITION = 'border-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-offset var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
 /* ------------------------------------------------------------------ */
 /*  Trigger shell builder (matches Input shell exactly)                */
@@ -226,7 +226,7 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
       style={{
         flexShrink: 0,
         color: 'var(--ds-color-text-muted)',
-        transition: 'transform var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+        transition: 'transform var(--ds-motion-fast) var(--ds-motion-ease-out)',
         transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
       }}
     >
@@ -272,7 +272,7 @@ function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
         color: 'var(--ds-color-text-muted)',
         cursor: 'pointer',
         flexShrink: 0,
-        transition: 'background-color var(--ds-motion-fast, 150ms)',
+        transition: 'background-color var(--ds-motion-fast)',
       }}
       onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--ds-surface-canvas)'; }}
       onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
@@ -292,7 +292,7 @@ const KEYFRAME_CSS = `
 @keyframes rottay-select-appear {
   from {
     opacity: 0;
-    transform: scale(var(--ds-motion-scale-in, 0.98)) translateY(var(--ds-motion-offset-in, -2px));
+    transform: scale(var(--ds-motion-scale-in)) translateY(var(--ds-motion-offset-in));
   }
   to {
     opacity: 1;
@@ -748,7 +748,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   color: 'var(--ds-color-text-muted)',
                   cursor: 'pointer',
                   flexShrink: 0,
-                  transition: 'color var(--ds-motion-fast, 150ms)',
+                  transition: 'color var(--ds-motion-fast)',
                 }}
                 onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ds-color-text-primary)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ds-color-text-muted)'; }}
@@ -987,7 +987,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     lineHeight: '20px',
     color: 'var(--ds-color-text-primary)',
     transition:
-      'background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), box-shadow var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+      'background-color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)',
     userSelect: 'none',
     border: '1px solid transparent',
     background: 'transparent',
@@ -1069,7 +1069,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               : '1px solid var(--ds-color-border)',
             backgroundColor: isSelected ? 'var(--ds-color-primary)' : 'transparent',
             flexShrink: 0,
-            transition: 'all var(--ds-motion-fast, 150ms)',
+            transition: 'all var(--ds-motion-fast)',
           }}>
             {isSelected && (
               <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
@@ -1236,7 +1236,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             right: 'auto',
             width: dropdownPosition.width || undefined,
             zIndex: 2400,
-            animation: 'rottay-select-appear var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))',
+            animation: 'rottay-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
           }}
         >
           {/* Search input inside dropdown */}
@@ -1342,7 +1342,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                                 : '1px solid var(--ds-color-border)',
                               backgroundColor: isSelected ? 'var(--ds-color-primary)' : 'transparent',
                               flexShrink: 0,
-                              transition: 'all var(--ds-motion-fast, 150ms)',
+                              transition: 'all var(--ds-motion-fast)',
                             }}>
                               {isSelected && (
                                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">

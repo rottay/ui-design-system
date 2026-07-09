@@ -952,7 +952,7 @@ export default function ModernDataTable<T extends object>(
           box-shadow:
             inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
             0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-          animation: ds-inline-edit-enter 180ms cubic-bezier(0.16, 1, 0.3, 1);
+          animation: ds-inline-edit-enter 180ms var(--ds-motion-ease-out);
         }
         @keyframes ds-inline-edit-enter {
           from {
@@ -1240,7 +1240,7 @@ export default function ModernDataTable<T extends object>(
                               : undefined,
                           userSelect: col.sortable || reorderable || resizable ? 'none' : undefined,
                           opacity: dragSourceKey === col.key ? 0.45 : 1,
-                          transition: `opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out), background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
+                          transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
                           cursor: reorderable && onColumnReorder ? 'grab' : col.sortable ? 'pointer' : undefined,
                         }}
                         data-col-key={col.key}
@@ -1285,7 +1285,7 @@ export default function ModernDataTable<T extends object>(
                                 border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)',
                                 background: 'color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)',
                                 color: 'var(--ds-color-text-secondary)',
-                                transition: `opacity var(--ds-motion-fast, 150ms), border-color var(--ds-motion-fast, 150ms), background-color var(--ds-motion-fast, 150ms)`,
+                                transition: `opacity var(--ds-motion-fast), border-color var(--ds-motion-fast), background-color var(--ds-motion-fast)`,
                               }}
                               aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
                               role="button"
@@ -1495,7 +1495,7 @@ export default function ModernDataTable<T extends object>(
                                   : striped && index % 2 === 1
                                     ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
                                     : 'transparent',
-                                transition: `background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
+                                transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
                                 borderBottom: !isLastRowOverall
                                   ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
                                   : 'none',
@@ -1557,7 +1557,7 @@ export default function ModernDataTable<T extends object>(
                                       color: 'var(--ds-color-text-secondary)',
                                       cursor: 'pointer',
                                       fontSize: 12,
-                                      transition: `background var(--ds-motion-fast, 150ms)`,
+                                      transition: `background var(--ds-motion-fast)`,
                                     }}
                                   >
                                     {isRowExpanded ? '\u25BC' : '\u25B6'}
@@ -1765,7 +1765,7 @@ export default function ModernDataTable<T extends object>(
                                       height: 18,
                                       fontSize: 10,
                                       color: 'var(--ds-color-text-secondary)',
-                                      transition: 'transform var(--ds-motion-fast, 150ms) ease',
+                                      transition: 'transform var(--ds-motion-fast) ease',
                                       transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
                                     }}
                                   >
@@ -1861,7 +1861,7 @@ export default function ModernDataTable<T extends object>(
                             : striped && index % 2 === 1
                               ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
                               : 'transparent',
-                          transition: `background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, ease-out)`,
+                          transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
                           borderBottom: !isLastRow
                             ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
                             : 'none',
@@ -1925,7 +1925,7 @@ export default function ModernDataTable<T extends object>(
                                 color: 'var(--ds-color-text-secondary)',
                                 cursor: 'pointer',
                                 fontSize: 12,
-                                transition: `background var(--ds-motion-fast, 150ms)`,
+                                transition: `background var(--ds-motion-fast)`,
                               }}
                             >
                               {isExpanded ? '\u25BC' : '\u25B6'}
@@ -2307,7 +2307,7 @@ export default function ModernDataTable<T extends object>(
                     fontWeight: 500,
                     cursor: action.disabled ? 'not-allowed' : 'pointer',
                     opacity: action.disabled ? 0.5 : 1,
-                    transition: `opacity var(--ds-motion-fast, 150ms)`,
+                    transition: `opacity var(--ds-motion-fast)`,
                   }}
                 >
                   {action.icon}

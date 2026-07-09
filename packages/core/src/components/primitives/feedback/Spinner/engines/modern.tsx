@@ -106,7 +106,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
           border: `${sizeConfig.borderWidth}px solid var(--ds-color-border)`,
           borderTopColor: 'var(--ds-color-primary)',
           borderRadius: '50%',
-          animation: `rottay-ds-spin var(--ds-motion-slow, 0.6s) linear infinite`,
+          animation: `rottay-ds-spin var(--ds-motion-slow) linear infinite`,
         }}
         role="status"
         aria-label={label || 'Loading'}

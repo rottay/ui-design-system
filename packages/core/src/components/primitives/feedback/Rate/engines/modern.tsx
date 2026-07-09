@@ -339,7 +339,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
             // ring-warning is replaced by an inline value so tenants
             // can control focus appearance.
             '--tw-ring-color': 'var(--ds-rate-focus-ring-color, var(--ds-color-warning, #facc15))',
-            transitionDuration: 'var(--ds-motion-duration-fast, 200ms)',
+            transitionDuration: 'var(--ds-motion-fast)',
           } as React.CSSProperties}
           title={tooltips?.[index]}
           onMouseEnter={() => handleHover(starIndex)}

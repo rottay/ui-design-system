@@ -158,7 +158,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
                 width: 'var(--ds-timeline-dot-size, 12px)',
                 height: 'var(--ds-timeline-dot-size, 12px)',
                 background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))',
-                animation: 'var(--ds-timeline-pending-animation, pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite)',
+                animation: 'var(--ds-timeline-pending-animation, pulse 2s var(--ds-motion-ease-in-out) infinite)',
               }}
             />
           </div>

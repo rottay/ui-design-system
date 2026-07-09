@@ -54,7 +54,7 @@ const SIZES = {
 /*  Shared inline styles                                               */
 /* ------------------------------------------------------------------ */
 
-const TRANSITION = 'border-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), outline-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), outline-offset var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background-color var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
+const TRANSITION = 'border-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-offset var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
 /**
  * Build the shell style object for the input field (or the wrapping label
@@ -195,7 +195,7 @@ function ClearButton({ onClick, visible }: { onClick: () => void; visible: boole
         color: 'var(--ds-color-text-muted)',
         cursor: 'pointer',
         opacity: visible ? 1 : 0,
-        transition: 'opacity var(--ds-motion-fast, 150ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1)), background-color var(--ds-motion-fast, 150ms)',
+        transition: 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast)',
         flexShrink: 0,
       }}
       onMouseEnter={(e) => { (e.currentTarget.style.backgroundColor as any) = 'var(--ds-surface-canvas)'; }}

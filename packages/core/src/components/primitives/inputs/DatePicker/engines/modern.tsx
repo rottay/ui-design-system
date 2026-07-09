@@ -343,7 +343,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     border: '1px solid var(--ds-color-border)',
     width: 288,
     fontFamily: 'inherit',
-    animation: 'rottay-select-slide-in var(--ds-motion-duration-fast, 0.15s) ease-out',
+    animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out',
   };
 
   const headerStyle: React.CSSProperties = {
@@ -365,7 +365,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     cursor: 'pointer',
     color: 'var(--ds-color-text-primary)',
     fontSize: 'var(--ds-input-md-font-size, 14px)',
-    transition: 'background var(--ds-motion-duration-fast, 0.15s)',
+    transition: 'background var(--ds-motion-fast)',
   };
 
   const gridCellStyle = (
@@ -395,7 +395,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     color: isSelected || isEndpoint
       ? 'var(--ds-color-white)'
       : 'var(--ds-color-text-primary)',
-    transition: 'all var(--ds-motion-duration-fast, 0.15s)',
+    transition: 'all var(--ds-motion-fast)',
     outline: 'none',
   });
 
@@ -408,7 +408,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
     cursor: 'pointer',
     padding: '6px 0',
     fontSize: 'var(--ds-input-sm-font-size, 13px)',
-    transition: 'background var(--ds-motion-duration-fast, 0.15s)',
+    transition: 'background var(--ds-motion-fast)',
     background: 'transparent',
     color: 'var(--ds-color-text-primary)',
   };
@@ -644,7 +644,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               background: 'var(--ds-color-primary)',
               color: 'var(--ds-color-white)',
               cursor: 'pointer',
-              transition: 'opacity var(--ds-motion-duration-fast, 0.15s)',
+              transition: 'opacity var(--ds-motion-fast)',
             }}
             onClick={onTodayClick}
           >

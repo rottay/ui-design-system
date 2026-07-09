@@ -90,7 +90,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
     boxShadow: 'var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)))',
     border: '1px solid var(--ds-color-border)',
     fontFamily: 'inherit',
-    animation: 'rottay-select-slide-in var(--ds-motion-duration-fast, 0.15s) ease-out',
+    animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out',
     overflow: 'hidden',
   };
 
@@ -137,7 +137,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
     fontWeight: isActive ? 600 : 400,
     background: isActive ? 'var(--ds-color-primary)' : 'transparent',
     color: isActive ? 'var(--ds-color-white)' : 'var(--ds-color-text-primary)',
-    transition: 'all var(--ds-motion-duration-fast, 0.1s)',
+    transition: 'all var(--ds-motion-fast)',
     margin: '1px auto',
     outline: 'none',
   });
@@ -244,7 +244,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
               background: 'var(--ds-color-primary)',
               color: 'var(--ds-color-white)',
               cursor: 'pointer',
-              transition: 'opacity var(--ds-motion-duration-fast, 0.15s)',
+              transition: 'opacity var(--ds-motion-fast)',
             }}
             onClick={onNowClick}
           >

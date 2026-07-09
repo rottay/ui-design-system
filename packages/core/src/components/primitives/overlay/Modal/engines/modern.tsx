@@ -46,8 +46,8 @@ const PREMIUM_SIZE_MAP: Record<string, string> = {
 };
 
 /** Shared overlay motion duration. */
-const MOTION_DURATION = 'var(--ds-motion-normal, 250ms)';
-const MOTION_EASING = 'var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1))';
+const MOTION_DURATION = 'var(--ds-motion-normal)';
+const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
 /** Keyframe animations injected via <style> tag -- no external stylesheet needed. */
 const OVERLAY_MODAL_STYLES = `
@@ -91,7 +91,7 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
         cursor: 'pointer',
         color: 'var(--ds-modal-close-color, var(--ds-color-text-secondary))',
         flexShrink: 0,
-        transition: `background-color var(--ds-motion-fast, 150ms) ${MOTION_EASING}`,
+        transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
       }}
       onMouseEnter={(e) => {
         (e.currentTarget as HTMLElement).style.backgroundColor =

@@ -753,8 +753,8 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
         ref={contentRef}
         style={{
           overflow: 'hidden',
-          transition: `max-height var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out),
-                       opacity var(--ds-motion-normal, 200ms) var(--ds-motion-ease-out)`,
+          transition: `max-height var(--ds-motion-normal) var(--ds-motion-ease-out),
+                       opacity var(--ds-motion-normal) var(--ds-motion-ease-out)`,
           maxHeight: collapsible && collapsed ? 0 : 2000,
           opacity: collapsible && collapsed ? 0 : 1,
         }}

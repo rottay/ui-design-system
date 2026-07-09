@@ -16,13 +16,13 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-ENG-02 | Showroom evidence surfaces | ds-agent | 2026-07-09 | 2026-07-09 01:52 — Started ENG-02 instead of ENG-01 (safety reorder, no graph violation — ENG-02 has no dep on ENG-01). REASON: ENG-01's motion codemod targets **/engines/modern* including Input/engines/modern.tsx which has 3 motion literals AND is UNCOMMITTED OWNER WIP (git status: Input.types.ts + Input/modern.tsx + Box/modern.tsx + CLAUDE.md). Running ENG-01 now would clobber the owner's in-flight work -> ENG-01 HELD until the owner commits/blesses that WIP. ENG-02 is safe: touches packages/showroom only, explicitly forbids modifying packages/core engine components; SHW-03 not running so the non-concurrency law holds. |
+| WO-ENG-01 | Motion contract unification | ds-agent | 2026-07-09 | 2026-07-09 02:26 — PARTIAL (build green, committing per owner): motion canon --ds-motion-* defined at foundation/animations/transitions.css (instant80/fast120/normal200/slow320/glacial500 + ease-out/ease-in-out/spring + scale-in/offset-in + re-expressed --ds-transition-* catalog); legacy --duration-*/--easing-*/--transition-* untouched (classic/rustic zero-delta). scripts/engine-token-audit.mjs (section-12 ratchet) + scripts/codemod-motion-tokens.mjs. Codemod result: cubicBezier 43->0, orphanTokens 32->0, 119 var-fallbacks stripped, 14 bare beziers replaced (23 files). Deleted the wrong-cadence engine-local [data-tenant] motion block in modern/theme.css so the canon wins. pnpm build exit 0. REMAINING: inline transition/animation duration literals 133->~0 (extend codemod, allowlist shimmer-loop 1.5s + setTimeout delays); brand-theme compiler setMotionVariables reconcile; ESLint no-motion-literals rule; pnpm test + audit --check + sighted classic/rustic zero-delta; then done. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-ENG-01 | Motion contract unification | L | engine-modern | spec-2, spec-12 |
+| WO-ENG-02 | Showroom evidence surfaces | M | engine-modern | audit-method |
 | WO-CRA-01 | Micro-typography pack | S | craft | P-19 |
 | WO-CRA-02 | Instant-feel choreography: optimistic UI and async-state law | M | craft | P-17 |
 | WO-CRA-03 | Keyboard-first interaction model | M | craft | P-16 |

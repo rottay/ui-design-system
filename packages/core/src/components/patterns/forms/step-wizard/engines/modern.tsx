@@ -241,7 +241,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
               borderRadius: 'var(--ds-radius-full)',
               background: 'var(--ds-surface-panel)',
               marginBottom: 24,
-              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
           {/* Shimmer block for content */}
@@ -251,7 +251,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
               height: 200,
               borderRadius: 'var(--ds-radius-md)',
               background: 'var(--ds-surface-panel)',
-              animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
           <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>

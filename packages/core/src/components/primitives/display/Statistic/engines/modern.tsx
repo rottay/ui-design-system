@@ -164,7 +164,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       return (
         <div ref={ref} className={className} style={{
           ...style,
-          animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+          animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
           animationDuration: 'var(--ds-skeleton-animation-duration, 2s)',
         }}>
           <div

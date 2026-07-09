@@ -570,7 +570,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             borderRadius: 'var(--ds-radius-md)',
             background: 'var(--ds-surface-panel)',
             marginBottom: 8,
-            animation: 'formBuilderPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
           }}
         />
         {/* Description shimmer */}
@@ -581,7 +581,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             borderRadius: 'var(--ds-radius-md)',
             background: 'var(--ds-surface-panel)',
             marginBottom: 28,
-            animation: 'formBuilderPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
           }}
         />
         {/* Field shimmer rows */}
@@ -594,7 +594,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                 borderRadius: 'var(--ds-radius-sm)',
                 background: 'var(--ds-surface-panel)',
                 marginBottom: 8,
-                animation: 'formBuilderPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
               }}
             />
             <div
@@ -603,7 +603,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                 width: '100%',
                 borderRadius: 'var(--ds-radius-md)',
                 background: 'var(--ds-surface-panel)',
-                animation: 'formBuilderPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
               }}
             />
           </div>
@@ -625,7 +625,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               width: 80,
               borderRadius: 'var(--ds-radius-md)',
               background: 'var(--ds-surface-panel)',
-              animation: 'formBuilderPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
           <div
@@ -634,7 +634,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               width: 100,
               borderRadius: 'var(--ds-radius-md)',
               background: 'var(--ds-surface-panel)',
-              animation: 'formBuilderPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
         </div>
