@@ -12,3 +12,10 @@
 export { rottayBrandTheme } from './rottay';
 export { bithireBrandTheme } from './bithire';
 export { evntoBrandTheme } from './evnto';
+
+/**
+ * Hostile-tenant whitelabel PROOF FIXTURES (WO-GAT-03). NOT product tenants —
+ * never registered in KNOWN_TENANTS, BUNDLED_TENANT_SLUGS, or
+ * FIRST_PARTY_ARTIFACT_SPECS. See torture.ts for the full rationale.
+ */
+export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './torture';

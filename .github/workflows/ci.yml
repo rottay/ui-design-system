@@ -251,7 +251,7 @@ jobs:
   #  Visual regression CI — screenshot diff on the showroom (WO-GAT-01)
   # ─────────────────────────────────────────────────────
   visual:
-    name: Visual Regression
+    name: Visual Regression + Whitelabel
     needs: [detect, core, showroom]
     if: |
       always() &&
@@ -294,8 +294,11 @@ jobs:
       - name: Install Playwright browser
         run: pnpm --filter @rottay/showroom exec playwright install chromium
 
-      - name: Run visual regression suite
-        run: pnpm --filter @rottay/showroom run test:visual
+      # One invocation, one `next start`: e2e/visual/ (pixel diffs, WO-GAT-01)
+      # and e2e/whitelabel/ (hostile-tenant computed-style probe, WO-GAT-03)
+      # are the two spec directories playwright.visual.config.ts matches.
+      - name: Run visual regression + whitelabel torture suites
+        run: pnpm --filter @rottay/showroom run test:gates
 
       - name: Upload visual regression report
         if: failure()
@@ -304,6 +307,7 @@ jobs:
           name: visual-report
           path: |
             test-artifacts/gates/gat-01
+            test-artifacts/gates/gat-03
             packages/showroom/test-results
             packages/showroom/playwright-report
           if-no-files-found: ignore
@@ -383,9 +387,9 @@ jobs:
           fi
 
           if [ "$VISUAL_RESULT" = "skipped" ]; then
-            echo "| Visual Regression | Skipped (no changes) |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Visual Regression + Whitelabel | Skipped (no changes) |" >> "$GITHUB_STEP_SUMMARY"
           else
-            echo "| Visual Regression | $VISUAL_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+            echo "| Visual Regression + Whitelabel | $VISUAL_RESULT |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
           if [ "$CHANGESET_RESULT" = "skipped" ]; then

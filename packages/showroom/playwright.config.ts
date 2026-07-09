@@ -19,6 +19,11 @@ const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: './e2e',
+  // e2e/visual/ and e2e/whitelabel/ target the PRODUCTION server and belong to
+  // playwright.visual.config.ts. Ignoring them here keeps a bare `playwright
+  // test` on this config from running pixel diffs and torture captures against
+  // the dev server, whose pre-theme paint is non-deterministic.
+  testIgnore: ['visual/**', 'whitelabel/**'],
   // Dev-server compile contention makes parallel navigation flaky; the a11y
   // sweep is read-only and cheap, so a single worker in series is both stable
   // and fast enough (all specs hit one route; Next compiles it once).

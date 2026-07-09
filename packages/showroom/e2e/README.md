@@ -1,14 +1,20 @@
 # Showroom Playwright harness
 
-Two spec directories, two configs. Do not add a third config — every new
+Three spec directories, two configs. Do not add a third config — every new
 browser-driven gate lives under one of these two.
 
-| | `e2e/a11y/` | `e2e/visual/` |
-| --- | --- | --- |
-| Config | `playwright.config.ts` | `playwright.visual.config.ts` |
-| Target server | dev server (`pnpm dev`, Turbopack) | production build (`pnpm start`, `next start`) |
-| What it gates | axe + focus-visible sweep (WO-GAT-04) | pixel-diff screenshots (WO-GAT-01) |
-| Run | `pnpm --filter @rottay/showroom exec playwright test e2e/a11y` | `pnpm --filter @rottay/showroom run test:visual` |
+| | `e2e/a11y/` | `e2e/visual/` | `e2e/whitelabel/` |
+| --- | --- | --- | --- |
+| Config | `playwright.config.ts` | `playwright.visual.config.ts` | `playwright.visual.config.ts` |
+| Target server | dev server (`pnpm dev`, Turbopack) | production build (`pnpm start`, `next start`) | production build (`pnpm start`) |
+| What it gates | axe + focus-visible sweep (WO-GAT-04) | pixel-diff screenshots (WO-GAT-01) | hostile-tenant computed-style probe (WO-GAT-03) |
+| Run | `pnpm --filter @rottay/showroom exec playwright test e2e/a11y` | `pnpm --filter @rottay/showroom run test:visual` | `pnpm --filter @rottay/showroom run test:whitelabel` |
+
+`playwright.visual.config.ts` matches both of its directories, so
+`pnpm --filter @rottay/showroom run test:gates` runs the visual suite and the
+whitelabel probe in one invocation over one `next start` — that is what CI's
+`visual` job does. `playwright.config.ts` ignores those two directories so a
+bare run on the a11y config never drives them against the dev server.
 
 ## Why visual regression needs the production build
 
@@ -83,11 +89,58 @@ baseline set). A macOS contributor's local `pnpm visual:test` run compares
 against the `-darwin` baselines and never touches the `-linux` ones, and vice
 versa in CI.
 
+## The whitelabel torture probe (`e2e/whitelabel/`)
+
+Whitelabel used to be true by construction. This makes it true by proof.
+
+`torture.spec.ts` drives `/probe/whitelabel-torture`, which renders the same
+WO-ENG-02 flagship galleries under two hostile proof fixtures —
+`tortureDarkBrandTheme` and `tortureLightBrandTheme` — plus a `rottay`
+REFERENCE load. The fixtures are ordinary `BrandTheme` objects with garish,
+clashing values in every bounded channel. They are never registered as product
+tenants and never generate an artifact: because their slugs are absent from
+`BUNDLED_TENANT_SLUGS`, `DesignSystemProvider` compiles them at render time
+through `generateTenantCssFromResolvedVisualConfig`, which is the same path a
+DB-driven customer tenant takes.
+
+Each probed component part is read twice — once under a torture fixture, once
+under `rottay` — and checked two ways:
+
+1. **Derivation.** The part's computed value must equal the value the tenant
+   declared for the token that drives it (read off `<html>`). A part painting
+   its own literal cannot satisfy this.
+2. **Differential.** The two loads must disagree. A part whose computed value
+   is IDENTICAL under a magenta-on-black tenant and under rottay is not reading
+   the tenant at all — that is a hardcode, and it is recorded as a violation.
+
+The differential can only detect a hardcode where the two themes actually
+differ on that channel, so the fixtures' hostility is itself gated: the unit
+test `packages/core/src/compilers/brand-theme/tests/torture-fixtures.test.ts`
+asserts every variable in `TORTURE_PROBE_VARS` compiles to a different value
+under torture than under the matching first-party theme. Weakening a fixture
+turns that test red rather than silently voiding a probe.
+
+Violations are counted into `e2e/whitelabel/torture-baseline.json` and the
+baseline is **decrease-only**: a run fails when a violation appears that the
+baseline does not list. Fix the hardcode; never widen the baseline to absorb
+one. Regenerate with `TORTURE_UPDATE_BASELINE=1 pnpm --filter @rottay/showroom
+run test:whitelabel`, which rewrites the file to the INTERSECTION of the old
+baseline and the current run (fixed entries drop out, new ones can never be
+added).
+
+Screenshots land in `test-artifacts/gates/gat-03/` on every run. They are
+informational — a human looks at them to confirm the torture tenant is legibly
+themed and the RTL column mirrors without clipping. They are deliberately NOT
+pixel-diffed: a garish fixture is a probe target, not visual canon.
+
 ## Scripts
 
 - `pnpm --filter @rottay/showroom run test:visual` — run the suite, compare
   against committed baselines.
 - `pnpm --filter @rottay/showroom run test:visual:approve` — regenerate
   baselines for the current platform.
-- Root conveniences: `pnpm visual:test`, `pnpm visual:approve` (same commands,
-  delegated via `pnpm --filter @rottay/showroom`).
+- `pnpm --filter @rottay/showroom run test:whitelabel` — run the torture probe.
+- `pnpm --filter @rottay/showroom run test:gates` — both production-server
+  suites in one invocation (what CI runs).
+- Root conveniences: `pnpm visual:test`, `pnpm visual:approve`,
+  `pnpm whitelabel:test` (same commands, delegated via `pnpm --filter`).

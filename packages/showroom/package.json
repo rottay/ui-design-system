@@ -12,6 +12,8 @@
     "lint": "eslint . --max-warnings=0",
     "test:visual": "playwright test e2e/visual --config playwright.visual.config.ts",
     "test:visual:approve": "playwright test e2e/visual --config playwright.visual.config.ts --update-snapshots",
+    "test:whitelabel": "playwright test e2e/whitelabel --config playwright.visual.config.ts",
+    "test:gates": "playwright test --config playwright.visual.config.ts",
     "design:cards": "node scripts/design-cards/generate.mjs",
     "design:validate": "node scripts/design-cards/validate.mjs"
   },
