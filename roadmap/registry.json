@@ -122,15 +122,15 @@
    "lane": "engine-modern",
    "order": 2,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "audit-method"
    ],
    "notes": "Reconned then reopened: owner committed the modern-engine WIP (commit 8deeecd6) so WO-ENG-01 is now UNBLOCKED. Per the owner's order (ENG-01 before ENG-02), next iteration takes ENG-01 first; ENG-02 recon note stays in this trail for when it resumes (target: replace runtime-fingerprint.tsx + live-preview.tsx with real per-component variant/state galleries + tenant-palette axis + stable capture route, packages/showroom only).",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
    "progressLog": [
     {
      "at": "2026-07-09 01:52",
@@ -138,8 +138,8 @@
      "note": "Started ENG-02 instead of ENG-01 (safety reorder, no graph violation — ENG-02 has no dep on ENG-01). REASON: ENG-01's motion codemod targets **/engines/modern* including Input/engines/modern.tsx which has 3 motion literals AND is UNCOMMITTED OWNER WIP (git status: Input.types.ts + Input/modern.tsx + Box/modern.tsx + CLAUDE.md). Running ENG-01 now would clobber the owner's in-flight work -> ENG-01 HELD until the owner commits/blesses that WIP. ENG-02 is safe: touches packages/showroom only, explicitly forbids modifying packages/core engine components; SHW-03 not running so the non-concurrency law holds."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-07-09",
+   "evidence": "Real per-component variant+state galleries for the 8 flagships (button/input/select/card/badge/table/tabs/modal) via new packages/showroom/src/components/state-gallery/ (flagship-specs + StateGallery + TenantPaletteSurface). Flagship detail pages now render the gallery instead of the RuntimeFingerprint card (live-preview.tsx swaps on getFlagshipSpec). Honest states only: variants/sizes + prop-driven states (disabled/read-only/error/empty); pseudo-states (hover/focus) exercised by real Playwright interaction, never faked. Tenant-palette axis: rottay DARK surface (#0A0A0C) + bithire LIGHT, both modern engine. ARCHITECTURE FINDING: tenant+theme are html-anchored (ThemeProvider writes document.documentElement; rule html[data-tenant=rottay]:not([data-theme=light])), so same-DOM side-by-side two-tenant rendering is impossible — nested providers both write <html> and the last silently wins (first attempt rendered rottay light). Honest axis = ONE tenant per load via ?tenant=, captured twice; documented deviation from the WO's single-capture-both (two captures is the truthful representation). Stable chrome-free capture route /probe/engine-modern, viewport-parameterizable (?w=360/768/1280) + ?tenant + ?slug — fixed target for WO-ENG-11. GATE: showroom production build exit 0; tsc clean. SIGHTED: rottay-dark + bithire-light + 360 responsive + button focus/hover + detail-swap captured to test-artifacts/engine-modern/eng-02/ and reviewed (looked at every PNG). Fences: packages/core engine components untouched; generic states only; SHW-03 not running. Gate also surfaced + fixed a latent WO-ENG-01 defect (motion-canon CSS comment '*/' broke Next strict postcss on the prod build) in a separate fix commit."
   },
   {
    "id": "WO-ENG-03",

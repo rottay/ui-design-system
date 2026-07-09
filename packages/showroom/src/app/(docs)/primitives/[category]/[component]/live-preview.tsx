@@ -111,6 +111,7 @@ import {
   useToast,
 } from '@rottay/design-system';
 import { RuntimeFingerprint } from '@/components/runtime/runtime-fingerprint';
+import { StateGallery, getFlagshipSpec } from '@/components/state-gallery';
 import {
   SHOWROOM_SURFACES,
   mixWithCanvas,
@@ -1927,6 +1928,7 @@ export function LivePreview({ slug }: LivePreviewProps) {
   const accent = entry
     ? CATEGORY_ACCENTS[entry.category]
     : 'var(--ds-color-primary, #60a5fa)';
+  const isFlagship = Boolean(getFlagshipSpec(slug));
 
   return (
     <Box
@@ -2121,11 +2123,15 @@ export function LivePreview({ slug }: LivePreviewProps) {
               letterSpacing: '0.08em',
             }}
           >
-            Runtime fingerprint
+            {isFlagship ? 'Variant + state gallery' : 'Runtime fingerprint'}
           </Text>
           <Divider />
           <Box style={{ marginTop: 10 }}>
-            <RuntimeFingerprint compact compactColumns={2} itemLimit={6} showHeader={false} />
+            {isFlagship ? (
+              <StateGallery slug={slug} />
+            ) : (
+              <RuntimeFingerprint compact compactColumns={2} itemLimit={6} showHeader={false} />
+            )}
           </Box>
         </Box>
 
