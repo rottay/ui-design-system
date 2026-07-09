@@ -481,6 +481,10 @@ export function appearanceAdvancedToVariables(
     if (ct.input) {
       const i = ct.input;
       if (i.bg) vars['--ds-input-bg'] = i.bg;
+      // Mirrors the brand-theme compiler: the semantic control surface must be
+      // reachable from a DB-driven tenant too, or its controls keep the DS dark
+      // default. See the note at the same emission in `compilers/brand-theme`.
+      if (i.bg) vars['--ds-color-bg-input'] = i.bg;
       if (i.bgHover) vars['--ds-input-bg-hover'] = i.bgHover;
       if (i.bgFocus) vars['--ds-input-bg-focus'] = i.bgFocus;
       if (i.bgDisabled) vars['--ds-input-bg-disabled'] = i.bgDisabled;

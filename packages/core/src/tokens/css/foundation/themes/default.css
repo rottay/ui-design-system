@@ -1288,8 +1288,10 @@
      SELECT
      ───────────────────────────────────────────────────────────────────────────── */
 
-  /* Select Base */
-  --ds-select-bg: #ffffff;
+  /* Select Base. The surface derives from the tenant's control surface; a white
+     literal here painted every un-customized select white, including on this
+     file's own dark ground. See `tokens/css/components/select.css`. */
+  --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, #ffffff));
   --ds-select-bg-disabled: #fafafa;
   --ds-select-color: #171717;
   --ds-select-color-placeholder: #a3a3a3;

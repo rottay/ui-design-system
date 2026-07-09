@@ -1,9 +1,4 @@
 {
   "countingMethod": "One violation per (component part, CSS property) probe in e2e/whitelabel/torture.spec.ts PROBES. reason=static-across-tenants: the part computes the SAME value under torture-dark and under rottay, two tenants that declare different values for that channel, so the part ignores the tenant. reason=not-derived: the part computes a value different from the one torture-dark declared for the token that drives it. A missing element is a hard failure, never a violation. Decrease-only: a run fails on any violation absent from this file; TORTURE_UPDATE_BASELINE=1 rewrites it to the intersection with the current run, so entries can only be removed.",
-  "violations": [
-    {
-      "key": "select/native/background-color",
-      "reason": "static-across-tenants"
-    }
-  ]
+  "violations": []
 }

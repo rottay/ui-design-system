@@ -828,7 +828,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       lineHeight: s.lineHeight,
       fontFamily: 'inherit',
       color: 'var(--ds-color-text-primary)',
-      backgroundColor: 'var(--ds-surface-control)',
+      // Same chain as the custom trigger above. The native path used to read
+      // `--ds-surface-control` directly, so a tenant that set `--ds-select-bg`
+      // moved one of this file's two selects and not the other.
+      backgroundColor: 'var(--ds-select-bg, var(--ds-surface-control))',
       borderWidth: '1px',
       borderStyle: 'solid',
       borderColor: 'var(--ds-color-border)',

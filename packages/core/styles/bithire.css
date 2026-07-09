@@ -2036,8 +2036,10 @@
      SELECT
      ───────────────────────────────────────────────────────────────────────────── */
 
-  /* Select Base */
-  --ds-select-bg: #ffffff;
+  /* Select Base. The surface derives from the tenant's control surface; a white
+     literal here painted every un-customized select white, including on this
+     file's own dark ground. See `tokens/css/components/select.css`. */
+  --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, #ffffff));
   --ds-select-bg-disabled: #fafafa;
   --ds-select-color: #171717;
   --ds-select-color-placeholder: #a3a3a3;
@@ -4766,9 +4768,14 @@ html.dark {
      DEFAULT STATE - Base Appearance
      Default select styling
      ======================================================================== */
-  --ds-select-bg: var(--ds-color-white);
-  --ds-select-bg-hover: var(--ds-color-white);
-  --ds-select-bg-focus: var(--ds-color-white);
+  /* Derived, not white. `--ds-surface-control` is declared on the same element
+     by the tenant scope, and a var() reference resolves against the computed
+     value regardless of rule order, so this follows the tenant. A literal here
+     outranked the tenant for every customer that did not hand-write a select
+     colour into its artifact, which is all of them. */
+  --ds-select-bg: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
+  --ds-select-bg-hover: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
+  --ds-select-bg-focus: var(--ds-surface-control, var(--ds-color-bg-input, var(--ds-color-white)));
   --ds-select-bg-disabled: var(--ds-color-neutral-50);
 
   --ds-select-color: var(--ds-color-neutral-900);
@@ -22012,6 +22019,7 @@ html[data-tenant='bithire'] {
   --ds-card-title-color: #162A43;
   --ds-card-title-font-weight: 600;
   --ds-color-accent: #6E9A5E;
+  --ds-color-bg-input: #ffffff;
   --ds-color-dark-accent: #6E9A5E;
   --ds-color-dark-bg: #F8FBFF;
   --ds-color-dark-primary: #3A6FB0;

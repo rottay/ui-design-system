@@ -111,10 +111,14 @@ const PROBES: readonly Probe[] = [
   { key: 'input/default/border-color', selector: '[data-testid="probe-input"] input', property: 'border-top-color', themePath: 'chrome.controls.input.border', kind: 'color' },
   { key: 'input/default/border-radius', selector: '[data-testid="probe-input"] input', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.md', kind: 'length' },
 
-  // Select — the gallery's simple select takes the NATIVE <select> path, which
-  // reads --ds-surface-control and never --ds-select-bg. There is no BrandTheme
-  // channel for it, so only the differential applies.
-  { key: 'select/native/background-color', selector: '[data-testid="probe-select"] select', property: 'background-color', themePath: null, kind: 'color' },
+  // Select — the gallery's simple select takes the NATIVE <select> path. It
+  // reads --ds-select-bg falling back to --ds-surface-control, which derives
+  // from --ds-color-bg-input, which the compiler emits from the tenant's own
+  // `chrome.controls.input.bg`. The whole chain terminates in the BrandTheme,
+  // so the derivation check applies and not only the differential. (Before
+  // WO-TOK-08 nothing emitted --ds-color-bg-input, the chain terminated in the
+  // DS dark default, and this probe's comment claimed there was no channel.)
+  { key: 'select/native/background-color', selector: '[data-testid="probe-select"] select', property: 'background-color', themePath: 'chrome.controls.input.bg', kind: 'color' },
 
   // Card — the default `elevated` variant has border-width 0, so its border is
   // unobservable; the outlined card in the extras block carries the border.
