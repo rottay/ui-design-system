@@ -342,6 +342,55 @@
   --ds-text-code-weight: var(--ds-font-weight-normal);
   --ds-text-code-line-height: var(--ds-line-height-normal);
   --ds-text-code-family: var(--ds-font-family-mono);
+
+  /* ========================================================================
+     MICRO-TYPOGRAPHY (WO-CRA-01)
+     Numeric alignment, line wrapping, and optical sizing. The utility classes
+     below and the TS mirror (tokens/ts/base/typography.ts) consume these so no
+     consumer re-invents the values inline.
+     ======================================================================== */
+  --ds-numeric-tabular: tabular-nums;
+  --ds-numeric-proportional: proportional-nums;
+  --ds-font-feature-tabular: "tnum" 1, "lnum" 1;
+  --ds-text-wrap-balance: balance;
+  --ds-text-wrap-pretty: pretty;
+  --ds-hyphens-auto: auto;
+}
+
+/* ==========================================================================
+   MICRO-TYPOGRAPHY UTILITIES (WO-CRA-01)
+   Opt-in classes so data surfaces align digits and prose wraps cleanly. Every
+   property degrades gracefully — it is ignored, never broken, where the engine
+   or font lacks support.
+   ========================================================================== */
+
+/* Optical sizing: tenant variable/optical fonts render at their designed
+   optical size. Harmless on fonts without an optical axis. :where() keeps the
+   specificity at 0 so apps and tenants can still override. */
+:where(html) {
+  font-optical-sizing: auto;
+}
+
+/* Tabular (fixed-advance) figures so numbers align column-to-column in tables
+   and metric tiles instead of jittering with proportional digits. */
+.ds-nums-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: var(--ds-font-feature-tabular);
+}
+
+/* Balanced multi-line headings — even line lengths, no lonely last word. */
+.ds-text-balance {
+  text-wrap: balance;
+}
+
+/* Prettier body wrapping — avoids a single-word final line (orphan). */
+.ds-text-pretty {
+  text-wrap: pretty;
+}
+
+/* Automatic hyphenation for narrow measures (honors the element's lang). */
+.ds-hyphenate {
+  hyphens: auto;
 }
 
 /**

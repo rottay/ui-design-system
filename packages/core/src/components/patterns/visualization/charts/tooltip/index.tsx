@@ -188,7 +188,7 @@ export function TooltipValue({
     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
       {color ? <span style={{ ...SWATCH_STYLE, backgroundColor: color }} /> : null}
       <span style={{ color: 'var(--ds-color-text-secondary)' }}>{label}</span>
-      <span style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{value}</span>
+      <span className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{value}</span>
     </div>
   );
 }
@@ -236,7 +236,7 @@ export function TooltipSeries({
         >
           <span style={{ ...SWATCH_STYLE, backgroundColor: item.color }} />
           <span style={{ color: 'var(--ds-color-text-secondary)' }}>{item.name}</span>
-          <span style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{item.value}</span>
+          <span className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{item.value}</span>
         </div>
       ))}
     </div>

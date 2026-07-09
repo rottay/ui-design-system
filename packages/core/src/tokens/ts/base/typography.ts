@@ -182,6 +182,28 @@ export const textStyles = {
   },
 } as const;
 
+// Micro-typography (WO-CRA-01) -- numeric figures and line wrapping.
+// Consumers reference these tokens instead of inlining string literals.
+export const numeric = {
+  tabular: 'var(--ds-numeric-tabular)',
+  proportional: 'var(--ds-numeric-proportional)',
+} as const;
+
+export const textWrap = {
+  balance: 'var(--ds-text-wrap-balance)',
+  pretty: 'var(--ds-text-wrap-pretty)',
+} as const;
+
+// Atomic references (named for direct consumption; see WO-CRA-01).
+export const numericTabular = numeric.tabular;
+export const numericProportional = numeric.proportional;
+export const textWrapBalance = textWrap.balance;
+export const textWrapPretty = textWrap.pretty;
+export const hyphensAuto = 'var(--ds-hyphens-auto)';
+
+/** Opt-in utility class that applies tabular figures (defined in typography.css). */
+export const NUMS_TABULAR_CLASS = 'ds-nums-tabular';
+
 // Combined typography export
 export const typography = {
   fontFamily,
@@ -193,6 +215,8 @@ export const typography = {
   textTransform,
   textDecoration,
   textStyles,
+  numeric,
+  textWrap,
 } as const;
 
 // Type exports
@@ -201,3 +225,5 @@ export type FontWeightKey = keyof typeof fontWeight;
 export type LineHeightKey = keyof typeof lineHeight;
 export type LetterSpacingKey = keyof typeof letterSpacing;
 export type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+/** Figure style for the Text primitive's `numeric` prop (WO-CRA-01). */
+export type NumericFigures = 'tabular' | 'proportional';

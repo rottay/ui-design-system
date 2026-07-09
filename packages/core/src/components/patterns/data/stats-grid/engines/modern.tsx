@@ -281,6 +281,7 @@ function StatCard({
       {/* Value row: main value + trend */}
       <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
         <span
+          className="ds-nums-tabular"
           style={{
             fontSize: 28,
             fontWeight: 700,

@@ -159,6 +159,7 @@ function StatCard({
         prefix={prefix}
         suffix={stat.suffix}
         valueStyle={{ color: stat.color }}
+        valueRender={(node) => <span className="ds-nums-tabular">{node}</span>}
       />
       {stat.change != null && (
         <div style={{ fontSize: 12, color: changeColor, marginTop: 4 }}>

@@ -327,13 +327,17 @@
    "lane": "craft",
    "order": 1,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "P-19"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "doneAt": "2026-07-09",
+   "evidence": "Micro-typography tokenized at the foundation: .ds-nums-tabular (tabular-nums + tnum/lnum), .ds-text-balance, .ds-text-pretty, .ds-hyphenate, global font-optical-sizing:auto in tokens/css/foundation/base/typography.css; TS mirror in tokens/ts/base/typography.ts (numeric/textWrap objects + numericTabular/numericProportional/textWrapBalance/textWrapPretty/hyphensAuto atoms + NUMS_TABULAR_CLASS + NumericFigures type). Typography primitive: Heading emits text-wrap:balance and Text emits text-wrap:pretty across ALL 3 engines (modern/classic/rustic); numeric?:'tabular'|'proportional' prop added to TextProps (default proportional), destructured in each Text engine to prevent DOM leak, applies the ds-nums-tabular class. Data surfaces routed to tabular via the CLASS (never inline font-variant-numeric): stats-grid (3 engines), data-table modern (right-aligned cells, both grouped+ungrouped), chart tooltip (TooltipValue + TooltipSeries). No font bundled; no text content transformed. GATE: core build exit 0; motion ratchet green; targeted tests 115/115 (Typography+stats-grid+data-table+tooltip); full unit 5360 passed. Grep gate clean (diff-based: no new inline font-variant-numeric/fontWeight:<num>/letterSpacing:'<em>'; the only new font-variant-numeric is the .ds-nums-tabular utility definition itself). SIGHTED: rottay-dark + bithire-light demo route /probe/micro-typography captured to test-artifacts/craft/cra-01/ showing tabular metric grid (proportional-vs-tabular before/after) + balanced multi-line heading + pretty body — reviewed both palettes. PRE-EXISTING out-of-scope failures NOT introduced by CRA-01 (none of these files touched by this WO): (a) source-governance 'token mirror out of runtime' — src/index.ts + PatternDataTable.tsx + dashboard-insights etc. already import tokens/ts; (b) root/core version-match — core 2.16.6 vs root 2.16.5, no package.json change here; (c) whitelabel 'bithire CSS no .ant- selectors' — 636 pre-existing, 0 added. Flagged for owner reconcile."
   },
   {
    "id": "WO-CRA-02",

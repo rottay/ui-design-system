@@ -232,6 +232,9 @@ export interface TextProps extends BaseComponentProps, EngineAwareProps {
    */
   monospace?: boolean;
 
+  /** Figure style: 'tabular' aligns digits column-to-column for data. Default 'proportional'. */
+  numeric?: 'tabular' | 'proportional';
+
   /** Text content */
   children: React.ReactNode;
 }
@@ -422,6 +425,8 @@ export const TYPOGRAPHY_DEFAULTS = {
     italic: false,
     /** Proportional (not monospace) font by default. */
     monospace: false,
+    /** Proportional (not tabular) figure style by default. */
+    numeric: 'proportional' as const,
   },
   /** Defaults for `<Typography.Paragraph>`. */
   paragraph: {

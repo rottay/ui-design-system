@@ -165,6 +165,7 @@ export const ClassicHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           type={TYPE_MAP[color]}
           ellipsis={ellipsisConfig}
           style={{
+            textWrap: 'balance',
             textAlign: align,
             // Reset AntD's default Title margin to let the DS layout
             // components (Stack, Flex) control spacing instead.
@@ -211,6 +212,7 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
       strikethrough = TYPOGRAPHY_DEFAULTS.text.strikethrough,
       italic = TYPOGRAPHY_DEFAULTS.text.italic,
       monospace = TYPOGRAPHY_DEFAULTS.text.monospace,
+      numeric,
       children,
       className,
       style,
@@ -264,10 +266,11 @@ export const ClassicText = forwardRef<HTMLElement, TextProps>(
           code={monospace}
           ellipsis={ellipsisConfig}
           style={{
+            textWrap: 'pretty',
             textAlign: align,
             ...style,
           }}
-          className={className}
+          className={[className, numeric === 'tabular' ? 'ds-nums-tabular' : undefined].filter(Boolean).join(' ') || undefined}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >

@@ -123,6 +123,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     // variables (var(--ds-*)) with hardcoded fallbacks, ensuring the heading
     // renders correctly without a theme provider (SSR, email, etc.).
     const headingStyle: React.CSSProperties = {
+      textWrap: 'balance',
       // Only set font-size/line-height inline when NOT responsive
       ...(!sizeIsResponsive && {
         fontSize: SIZE_MAP.heading[effectiveSize] || SIZE_MAP.heading.md,
@@ -192,6 +193,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
       strikethrough = TYPOGRAPHY_DEFAULTS.text.strikethrough,
       italic = TYPOGRAPHY_DEFAULTS.text.italic,
       monospace = TYPOGRAPHY_DEFAULTS.text.monospace,
+      numeric,
       children,
       className = '',
       style,
@@ -234,6 +236,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
     if (strikethrough) decorations.push('line-through');
 
     const textStyle: React.CSSProperties = {
+      textWrap: 'pretty',
       // Only set font-size inline when NOT responsive
       ...(!sizeIsResponsive && {
         fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
@@ -266,7 +269,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
         )}
         <TextElement
           ref={ref}
-          className={`rottay-text ${className}`.trim()}
+          className={`rottay-text${numeric === 'tabular' ? ' ds-nums-tabular' : ''} ${className}`.trim()}
           style={textStyle}
           {...(responsive ? responsive.attrs : {})}
           {...restProps}

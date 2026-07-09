@@ -218,6 +218,7 @@ function StatCard({
         </span>
       </div>
       <div
+        className="ds-nums-tabular"
         style={{
           fontSize: 28,
           fontWeight: 'var(--ds-typography-heading-font-weight, 700)' as unknown as number,

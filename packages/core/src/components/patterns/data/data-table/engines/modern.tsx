@@ -1604,6 +1604,7 @@ export default function ModernDataTable<T extends object>(
                                         : 'Double-click to edit'
                                       : undefined}
                                     {...grpTriggerProps}
+                                    className={col.align === 'right' ? 'ds-nums-tabular' : undefined}
                                     style={{
                                       textAlign: col.align,
                                       width: resolvedWidth,
@@ -1974,6 +1975,7 @@ export default function ModernDataTable<T extends object>(
                                   : 'Double-click to edit'
                                 : undefined}
                               {...triggerProps}
+                              className={col.align === 'right' ? 'ds-nums-tabular' : undefined}
                               style={{
                                 textAlign: col.align,
                                 width: resolvedWidth,

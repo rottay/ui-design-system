@@ -284,7 +284,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         <Component
           ref={ref as React.Ref<HTMLHeadingElement>}
           className={classes}
-          style={{ ...typographyStyle, ...colorStyle, ...style }}
+          style={{ textWrap: 'balance', ...typographyStyle, ...colorStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >
@@ -324,6 +324,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       strikethrough = TYPOGRAPHY_DEFAULTS.text.strikethrough,
       italic = TYPOGRAPHY_DEFAULTS.text.italic,
       monospace = TYPOGRAPHY_DEFAULTS.text.monospace,
+      numeric,
       children,
       className,
       style,
@@ -374,6 +375,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
       monospace ? 'font-mono' : '',
       truncate ? 'truncate' : '',
       lineClamp ? `line-clamp-${lineClamp}` : '',
+      numeric === 'tabular' ? 'ds-nums-tabular' : '',
       className,
     ]
       .filter(Boolean)
@@ -394,7 +396,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
         <Component
           ref={ref as any}
           className={classes}
-          style={{ ...textSizeStyle, ...colorStyle, ...style }}
+          style={{ textWrap: 'pretty', ...textSizeStyle, ...colorStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >
