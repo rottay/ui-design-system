@@ -85,7 +85,9 @@ describe('Tenant Schema', () => {
 
       expect(config.slug).toBe('test');
       expect(config.name).toBe('Test Company');
-      expect(config.engine).toBe('classic');
+      // A materialized tenant holds NO engine opinion. One that silently claims
+      // `classic` outranks the vertical that declares `modern` (WO-ENG-17).
+      expect(config.engine).toBeUndefined();
       expect(config.theme).toBe('base'); // default theme is 'base'
       expect(config.plan).toBe('starter');
       expect(config.features).toEqual([]);
@@ -116,7 +118,8 @@ describe('Tenant Defaults', () => {
 
       expect(config.slug).toBe('demo');
       expect(config.name).toBe('Demo Tenant');
-      expect(config.engine).toBeDefined();
+      // Same rule for the fallback tenant: no engine, so the vertical decides.
+      expect(config.engine).toBeUndefined();
       expect(config.theme).toBeDefined();
       expect(config.plan).toBeDefined();
       expect(config.features).toBeDefined();

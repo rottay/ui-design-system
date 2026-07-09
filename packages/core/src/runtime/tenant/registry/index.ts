@@ -19,7 +19,7 @@
  * slower network-based sources (static files, remote API).
  */
 
-import type { TenantConfig, EngineName } from '../../../contracts';
+import type { TenantConfig } from '../../../contracts';
 import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme, themanagementmiamiBrandTheme } from '../../../tokens';
 
 /**
@@ -40,7 +40,6 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   rottay: {
     slug: 'rottay',
     name: 'Rottay',
-    engine: 'classic' as EngineName,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],
@@ -66,7 +65,6 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   bithire: {
     slug: 'bithire',
     name: 'BitHire',
-    engine: 'classic' as EngineName,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],
@@ -89,7 +87,6 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   evnto: {
     slug: 'evnto',
     name: 'Evnto',
-    engine: 'classic' as EngineName,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],
@@ -117,7 +114,6 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
   themanagementmiami: {
     slug: 'themanagementmiami',
     name: 'The Management Miami',
-    engine: 'classic' as EngineName,
     theme: 'base',
     plan: 'enterprise',
     features: ['*'],

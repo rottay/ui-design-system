@@ -364,6 +364,46 @@ before/after gallery scored against the spec; the owner approves signature momen
   **The law, one place per axis:** `forceEngine` (an explicit caller override -- the showroom capture route and tests use it) > `vertical.engine` > `'classic'` fallback. **`tenantConfig.engine` is REMOVED**, not merely reordered: it is legacy, it is what made the vertical's engine unreachable, and leaving it as a lower-priority tiebreak would preserve two places that decide one thing. Changing engine means changing the vertical, or forcing it explicitly. A DB-driven tenant can never set it -- fail-closed, per `CLAUDE.md`'s bounded-branding rule.
   **Consequence to capture before landing:** `app-evnto` and `app-platform` switch from classic to modern. evnto has ZERO visual baselines, so a before/after set is a precondition, not a nicety. `app-bithire` is unaffected in output (it already forces modern) and its hardcoded `forceEngine` becomes redundant; app-platform's inverted flag (P-31) becomes moot.
 
+#### WO-ENG-17 HANDOFF — cross-repo impact (the app repos are READ-ONLY to this lane)
+
+Measured, not predicted. At commit `70460435`, rendering each vertical through
+`DesignSystemProvider` with no `forceEngine` and reading `<html data-engine>`
+produced `classic` for **all three** verticals. After this work order the same
+assertion produces `modern` for all three. The test that measures it is
+`packages/core/src/runtime/bootstrap/tests/engine-ownership.integration.test.tsx`.
+
+The engine was decided in **four** places, not the two the work order named:
+
+| Place | What it did |
+| --- | --- |
+| `runtime/bootstrap/DesignSystemProvider.tsx:439` | `forceEngine ?? tenant ?? vertical ?? 'classic'` — the tenant outranked the vertical |
+| `runtime/tenant/schema/index.ts:85` | `engine: partial.engine ?? 'classic'` — materialized a stale opinion |
+| `runtime/tenant/authoring/create-tenant.ts:86` | `engine = 'classic'` — a destructuring default |
+| `runtime/tenant/defaults/index.ts:28` | `DEFAULT_TENANT_CONFIG.engine = 'classic'` |
+
+All four are gone. `runtime/engines/resolution.ts` is now the only one, and
+`TenantConfig.engine` is optional and documented as a bundled-tenant pin that a
+database-driven tenant may not set (fail-closed, tested).
+
+**What each app repo must now do — none of it in this repo:**
+
+- **`app-bithire`** — `core/providers/index.tsx:221` hardcodes `forceEngine="modern"`.
+  It is now redundant: the bithire vertical declares `modern`. Removing it is
+  safe and makes the vertical the single source. Nothing breaks if it stays.
+- **`app-evnto`** — passes no `forceEngine`, so it rendered `classic` and now
+  renders `modern`. **This moves its rendering substantially.** It has zero
+  visual baselines. Capture a full before/after set *before* taking the next DS
+  version, or the change will land unobserved. Sixteen modern-engine work orders
+  become visible in that product on the same bump.
+- **`app-platform`** — carries an inverted flag:
+  `forceEngine={process.env.NEXT_PUBLIC_DS_ENGINE === 'modern' ? undefined : 'modern'}`.
+  Setting the variable to `modern` yields `classic`. That is its own bug, fixed
+  by its own orchestrator. With the vertical now owning the engine, the correct
+  end state is to delete the flag.
+
+None of this reaches any app until the DS is version-bumped, published to GH
+Packages, repinned, and deployed. This work order does none of those.
+
 ### WO-ENG-18 Vertical posture, tenant freedom, and the invariants no tenant may break
 - **Outcome** — The three verticals read as three different products, and two tenants inside the SAME vertical read as two different companies while remaining recognisably that product. Both halves are proven by a matrix test, not by eye: tenants within a vertical must DIVERGE on every bounded channel, and CONVERGE on the vertical's identity.
 - **Why** — Owner request 2026-07-09: give each vertical its own posture (rottay a monochrome infrastructure console, bithire a professional blue, evnto a ticketing surface), let some read more `rustic` than others, and prove that a second tenant inside bithire can look completely different. Today none of this is demonstrable: `themanagementmiami` is listed in `BUNDLED_TENANT_SLUGS` (`runtime/tenant/registry/index.ts:125`) yet has NO `TenantConfig`, NO entry in `KNOWN_TENANTS`, and no artifact under `tokens/css/artifacts/` — only a stale folder at `tokens/css/legacy/themanagementmiami`. That combination is a trap: `isBundledTenant('themanagementmiami')` returns true, so `DesignSystemProvider` SKIPS runtime tenant-CSS generation for it, while no bundled CSS exists to take its place. A tenant that declared a `brandTheme` under that slug would have it silently ignored.

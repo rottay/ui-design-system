@@ -22,7 +22,6 @@
  * const tenantConfig = {
  *   slug: 'acme',
  *   name: 'ACME Corp',
- *   engine: 'classic',
  *   theme: 'light',
  *   plan: 'enterprise',
  *   features: ['advanced-charts', 'export-pdf'],

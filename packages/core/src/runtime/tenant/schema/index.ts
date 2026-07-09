@@ -82,7 +82,11 @@ export function createTenantConfig(partial: Partial<TenantConfig> & { slug: stri
     slug: partial.slug,
     name: partial.name,
     domain: partial.domain,
-    engine: partial.engine ?? 'classic',
+    // Deliberately not defaulted. A materialized tenant that silently claims
+    // `classic` outranks the vertical that declares `modern`, which is the bug
+    // WO-ENG-17 exists to close. Undefined means "no opinion"; the resolution
+    // in `runtime/engines/resolution.ts` then lets the vertical decide.
+    engine: partial.engine,
     theme: partial.theme ?? 'base',
     locale: partial.locale,
     fallbackLocale: partial.fallbackLocale,

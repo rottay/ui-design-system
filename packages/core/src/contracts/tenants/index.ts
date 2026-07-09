@@ -104,7 +104,14 @@ export interface TenantConfig {
   name: string;
   domain?: string;
 
-  engine: EngineName;
+  /**
+   * A deliberate engine pin, honoured only for a bundled first-party tenant
+   * rendered with no vertical in play. The vertical owns the engine; a tenant
+   * arriving from the database may not set this and it will be ignored if it
+   * does. See `runtime/engines/resolution.ts`, which is the only place the
+   * engine is decided.
+   */
+  engine?: EngineName;
   theme: string;
   locale?: SupportedLocale;
   fallbackLocale?: SupportedLocale;

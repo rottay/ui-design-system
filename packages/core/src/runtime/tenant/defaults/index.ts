@@ -20,12 +20,13 @@ import type { TenantConfig } from '../../../contracts';
  *
  * - `features: ['*']` ensures no feature gates block rendering in fallback mode.
  * - `plan: 'starter'` is the lowest tier; callers can override via `getDefaultTenantConfig`.
- * - `engine: 'classic'` is the stable Ant Design-backed engine.
+ * - No `engine`: the fallback tenant holds no opinion, so the vertical (or
+ *   `FALLBACK_ENGINE` in `runtime/engines/resolution.ts`) decides. A default
+ *   tenant that claims an engine outranks the vertical that declares one.
  */
 export const DEFAULT_TENANT_CONFIG: TenantConfig = {
   slug: 'default',
   name: 'Default Tenant',
-  engine: 'classic',
   theme: 'base',
   plan: 'starter',
   features: ['*'],  // All features enabled by default

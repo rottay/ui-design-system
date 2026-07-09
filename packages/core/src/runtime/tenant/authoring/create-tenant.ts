@@ -83,7 +83,7 @@ export function createTenantConfig(config: TenantCreationConfig): TenantConfig {
     primaryColor,
     secondaryColor,
     logo,
-    engine = 'classic',
+    engine,
     personality: personalityPreset = 'neutral',
     density = 'comfortable',
     plan = 'starter',

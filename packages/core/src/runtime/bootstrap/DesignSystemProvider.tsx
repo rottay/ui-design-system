@@ -34,7 +34,6 @@
  * const tenantConfig = {
  *   slug: 'acme',
  *   name: 'ACME Corp',
- *   engine: 'classic',
  *   theme: 'dark',
  *   plan: 'enterprise',
  *   features: ['advanced-analytics', 'export'],
@@ -93,6 +92,7 @@ import { ResponsiveProvider } from '../responsive';
 import { AntdConfigProvider } from '../engines/AntdConfigProvider';
 import { appearanceToVariables } from '../../compilers/appearance';
 import { isBundledTenant } from '../tenant/registry';
+import { resolveEngine } from '../engines/resolution';
 import {
   generateTenantCssFromResolvedVisualConfig,
   hasVisualBrandingFields,
@@ -436,7 +436,12 @@ export function DesignSystemProvider({
 
   // Final precedence used by the runtime:
   // force props -> explicit tenant theme (light/dark/auto) -> appearance.backgroundMode -> DS fallback.
-  const engine = forceEngine ?? normalizedConfig.engine ?? resolvedVertical?.engine ?? 'classic';
+  const engine = resolveEngine({
+    forceEngine,
+    verticalEngine: resolvedVertical?.engine,
+    tenantEngine: normalizedConfig.engine,
+    tenantSlug: normalizedConfig.slug,
+  });
   // backgroundMode maps: 'light' -> 'light', 'dark' -> 'dark', 'auto' -> 'auto'.
   // tenant.theme only wins if it's explicitly set to a real mode (not the default 'base').
   const appearanceBackgroundMode = normalizedConfig.appearance?.general?.palette?.backgroundMode;

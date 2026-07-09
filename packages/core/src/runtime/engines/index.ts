@@ -23,6 +23,7 @@ export * from './registry';
 export * from './factory';
 export * from './binding';
 export * from './boundary';
+export * from './resolution';
 export * from './custom';
 export * from './EngineProvider';
 export * from './AntdConfigProvider';

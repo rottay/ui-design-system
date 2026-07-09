@@ -63,7 +63,9 @@ describe('createTenantConfig', () => {
 
     expect(config.slug).toBe('acme');
     expect(config.name).toBe('ACME Corp');
-    expect(config.engine).toBe('classic');
+    // No engine is materialized. A tenant that silently claims `classic`
+    // outranks the vertical that declares `modern` (WO-ENG-17).
+    expect(config.engine).toBeUndefined();
     expect(config.theme).toBe('base');
     expect(config.plan).toBe('starter');
     expect(config.features).toEqual([]);
