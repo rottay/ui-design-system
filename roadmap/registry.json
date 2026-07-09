@@ -86,7 +86,7 @@
    "lane": "engine-modern",
    "order": 1,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
@@ -101,8 +101,20 @@
      "at": "2026-07-09 02:26",
      "by": "ds-agent",
      "note": "PARTIAL (build green, committing per owner): motion canon --ds-motion-* defined at foundation/animations/transitions.css (instant80/fast120/normal200/slow320/glacial500 + ease-out/ease-in-out/spring + scale-in/offset-in + re-expressed --ds-transition-* catalog); legacy --duration-*/--easing-*/--transition-* untouched (classic/rustic zero-delta). scripts/engine-token-audit.mjs (section-12 ratchet) + scripts/codemod-motion-tokens.mjs. Codemod result: cubicBezier 43->0, orphanTokens 32->0, 119 var-fallbacks stripped, 14 bare beziers replaced (23 files). Deleted the wrong-cadence engine-local [data-tenant] motion block in modern/theme.css so the canon wins. pnpm build exit 0. REMAINING: inline transition/animation duration literals 133->~0 (extend codemod, allowlist shimmer-loop 1.5s + setTimeout delays); brand-theme compiler setMotionVariables reconcile; ESLint no-motion-literals rule; pnpm test + audit --check + sighted classic/rustic zero-delta; then done."
+    },
+    {
+     "at": "2026-07-09 02:32",
+     "by": "ds-agent",
+     "note": "Inline duration codemod done: scripts/codemod-motion-durations.mjs mapped 104 sub-second transition/animation durations -> canon tokens (nearest step); 29 loop/shimmer tempos >=1s (1.5s/2s) left as-is (allowlisted, outside interaction canon); audit rawDuration counter refined to only count <1s. ALL THREE MOTION COUNTERS 0 (cubicBezier/rawDuration/orphan). pnpm build exit 0, audit --check green. Committed. REMAINING (delicate - hand off carefully): brand-theme compiler setMotionVariables emits --ds-motion-instant='120ms' (contradicts canon 80ms) + --ds-motion-calm/deliberate + --ds-ease-standard/exit -- these are consumed by the BITHIRE TENANT contract (tokens/css/artifacts/bithire/_source/extension.css + tokens/__tests__/bithire-motion-interaction.test.ts), NOT just classic/rustic. Reconcile must: fix the instant 120->align with canon, map calm->normal/deliberate->slow per spec, UPDATE bithire _source/extension.css to match, regenerate artifacts, keep bithire-motion-interaction.test green -- read that test + extension.css first. THEN: ESLint @rottay/no-motion-literals rule (scoped to components/**/engines/modern*), wire audit --check into pretest/test, final gate pnpm test + sighted classic/rustic zero-delta capture, then done."
+    },
+    {
+     "at": "2026-07-09 03:02",
+     "by": "ds-agent",
+     "note": "Near-complete. Added ESLint @rottay/no-motion-literals rule (src/eslint/rules/no-motion-literals.ts, scoped to engines/modern* via filename check, registered in configs.recommended); wired the ratchet always-on (package.json engine-audit:check + pretest hook running audit --check). SIGHTED CHECK caught a real CSS bug the build missed: my canon comment contained '--duration-*/--easing-*' whose '*/' prematurely closed the CSS comment -> styles.css syntax error -> showroom 500 on every page loading styles.css. Fixed the comment. Rebuild exit 0, styles.css parses, showroom /foundations/engines + button pages HTTP 200. Sighted engines 3-col captured (test-artifacts/engine-modern/eng-01/): modern renders correctly post-codemod (buttons/inputs/cards), rustic unchanged, classic's blank buttons are PRE-EXISTING (2026-07-06 audit) not my regression -> classic/rustic zero-delta (I touched no classic/rustic files). bithire-motion-interaction.test 8/8 green (bithire contract untouched). WAITING on full pnpm test suite (running). DEFERRED (cross-vertical, needs bithire coordination): brand-theme compiler still emits bithire's legacy --ds-motion-instant/calm/deliberate names that app-bithire binds to; renaming to canon is a breaking change for app-bithire (read-only) -> flagged, not done unilaterally. On test-green: done + commit."
     }
-   ]
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "Motion canon --ds-motion-* established at the foundation (transitions.css); engine-local [data-tenant] block with wrong cadence (150/250/350) deleted so the canon can never silently vanish. Modern-engine motion literals eliminated: cubicBezierLiterals=0, rawDurationLiterals=0, orphanMotionTokens=0 (engine-token-audit --check green over 128 modern files). Codemods: 119 var() fallbacks + 14 bare beziers stripped (23 files); 104 inline durations tokenized (29 >=1s loop/shimmer intentionally left). ESLint firewall @rottay/no-motion-literals added + registered recommended:error; functional check green (fires on modern cubic-bezier/150ms/0.2s, silent on canon var()/>=1s/classic/rustic). Ratchet wired into gate via pretest + engine-audit:check. pnpm build exit 0; artifacts regenerated with motion-canon-only diff; bithire-motion-interaction 8/8; sighted classic+rustic zero visual delta. PRE-EXISTING out-of-scope debt (NOT introduced here, proven by pre-ENG-01 file revert reproducing identical failure; component reads no motion tokens in JS): PatternCommandPalette.engine-advanced modern test times out. DEFERRED (needs app-bithire coordination): brand-theme compiler setMotionVariables emits bithire legacy --ds-motion-instant/calm/deliberate + --ds-ease-standard/exit that read-only app-bithire binds to; canon rename is a cross-vertical breaking change."
   },
   {
    "id": "WO-ENG-02",

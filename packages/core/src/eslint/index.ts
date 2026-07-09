@@ -23,6 +23,7 @@ import { noRawHtml } from './rules/no-raw-html';
 import { noHardcodedColors } from './rules/no-hardcoded-colors';
 import { noDbInComponents } from './rules/no-db-in-components';
 import { noDirectLucide } from './rules/no-direct-lucide';
+import { noMotionLiterals } from './rules/no-motion-literals';
 
 // ── Plugin object ──────────────────────────────────────────────────
 
@@ -31,6 +32,7 @@ export const rules = {
   'no-hardcoded-colors': noHardcodedColors,
   'no-db-in-components': noDbInComponents,
   'no-direct-lucide': noDirectLucide,
+  'no-motion-literals': noMotionLiterals,
 };
 
 /** Standalone plugin reference (for manual wiring) */
@@ -52,6 +54,7 @@ export const configs = {
       '@rottay/no-hardcoded-colors': 'error' as const,
       '@rottay/no-db-in-components': 'error' as const,
       '@rottay/no-direct-lucide': 'warn' as const,
+      '@rottay/no-motion-literals': 'error' as const,
     },
   },
 
