@@ -15,7 +15,7 @@ import { mkdir, writeFile, copyFile, rm } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildCardHtml, buildIndexHtml, groupLabelFor } from './template.mjs';
+import { buildCardHtml, buildIndexHtml } from './template.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const showroomDir = path.resolve(here, '../../');
