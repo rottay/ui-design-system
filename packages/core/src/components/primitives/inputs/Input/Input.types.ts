@@ -58,7 +58,7 @@
 'use client';
 
 import type { EngineAwareProps } from '../../../../contracts';
-import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent, InputHTMLAttributes } from 'react';
+import type { ReactNode, ChangeEvent, FocusEvent, KeyboardEvent, InputHTMLAttributes, AriaRole } from 'react';
 import type { ResponsiveValue } from '../../layout/shared/types';
 
 /**
@@ -235,6 +235,26 @@ export interface InputProps extends EngineAwareProps {
   'aria-describedby'?: string;
   /** ARIA invalid state override */
   'aria-invalid'?: boolean | 'false' | 'true' | 'grammar' | 'spelling';
+  /**
+   * ARIA role override. Set `role="combobox"` to expose an autocomplete
+   * textbox that owns a popup listbox (the WAI-ARIA combobox pattern).
+   */
+  role?: AriaRole;
+  /** Native spellcheck attribute. Disable for identifiers, codes, and search. */
+  spellCheck?: boolean;
+  /**
+   * ARIA autocomplete behavior for a combobox textbox: `list` when the popup
+   * offers suggestions, `both`/`inline` for inline completion, `none` otherwise.
+   */
+  'aria-autocomplete'?: 'none' | 'inline' | 'list' | 'both';
+  /** ID of the popup element this textbox controls (e.g. the results listbox). */
+  'aria-controls'?: string;
+  /** Whether the controlled popup is currently expanded. */
+  'aria-expanded'?: boolean;
+  /** ID of the active option inside the controlled listbox, for roving focus. */
+  'aria-activedescendant'?: string;
+  /** ARIA popup type this textbox triggers (e.g. `listbox` for a combobox). */
+  'aria-haspopup'?: boolean | 'false' | 'true' | 'menu' | 'listbox' | 'tree' | 'grid' | 'dialog';
   /** Data test id */
   'data-testid'?: string;
 }

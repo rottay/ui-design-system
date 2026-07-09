@@ -117,6 +117,10 @@ function buildShellStyle(
     base.backgroundColor = 'transparent';
     base.outline = 'none';
     base.borderRadius = '0';
+    // Unstyled is a chrome-free field for embedding in a custom control, so it
+    // carries no horizontal inset — the host owns spacing around the text.
+    base.paddingLeft = '0';
+    base.paddingRight = '0';
   }
 
   // Hover
@@ -259,6 +263,13 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid,
+    role,
+    spellCheck,
+    'aria-autocomplete': ariaAutocomplete,
+    'aria-controls': ariaControls,
+    'aria-expanded': ariaExpanded,
+    'aria-activedescendant': ariaActiveDescendant,
+    'aria-haspopup': ariaHasPopup,
   } = props;
 
   // Responsive size handling
@@ -491,9 +502,16 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     tabIndex,
     autoComplete,
     autoFocus,
+    spellCheck,
+    role,
     'aria-label': ariaLabel,
     'aria-describedby': ariaDescribedBy,
     'aria-invalid': ariaInvalid ?? (hasError || undefined),
+    'aria-autocomplete': ariaAutocomplete,
+    'aria-controls': ariaControls,
+    'aria-expanded': ariaExpanded,
+    'aria-activedescendant': ariaActiveDescendant,
+    'aria-haspopup': ariaHasPopup,
     'data-testid': dataTestId,
     onChange: handleChange,
     onFocus: handleFocus,

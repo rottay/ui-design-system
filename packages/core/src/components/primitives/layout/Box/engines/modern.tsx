@@ -358,13 +358,13 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   // Void elements (input, img, br, hr, ...) have no content model: React-DOM
   // throws "<tag> is a void element tag and must neither have children nor use
-  // dangerouslySetInnerHTML" if ANY children argument is passed — and
-  // `React.Children.toArray(undefined)` returns `[]`, which counts as a
-  // (empty) children argument. Create void elements with NO children argument
-  // so every void `Box` renders with all its attributes intact.
+  // dangerouslySetInnerHTML" if a children argument is passed — even an empty
+  // one. Void elements therefore get NO children argument. Every other element
+  // receives `children` unwrapped so a caller's child array keeps its own key
+  // identity and React's dev key check points at the caller rather than at Box.
   const element = isVoidElement(Component)
     ? React.createElement(ElementType, elementProps)
-    : React.createElement(ElementType, elementProps, React.Children.toArray(children));
+    : React.createElement(ElementType, elementProps, children);
 
   return (
     <>
