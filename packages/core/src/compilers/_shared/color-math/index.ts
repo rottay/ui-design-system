@@ -132,3 +132,68 @@ export function getReadableForegroundColor(baseColor: string): string {
   const luminance = rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114;
   return luminance > 186 ? '#171717' : '#ffffff';
 }
+
+/** NTSC perceived luminance (0-255) of a hex surface color; 255 for non-hex. */
+export function surfaceLuminance(surfaceColor: string): number {
+  const rgb = hexToRgb(surfaceColor);
+  if (!rgb) return 255;
+  return rgb.r * 0.299 + rgb.g * 0.587 + rgb.b * 0.114;
+}
+
+/** A surface is dark when its NTSC luminance falls below the mid threshold. */
+export function isDarkSurface(surfaceColor: string): boolean {
+  return surfaceLuminance(surfaceColor) < 128;
+}
+
+export type ElevationScale = Record<
+  | '--ds-elevation-0'
+  | '--ds-elevation-1'
+  | '--ds-elevation-2'
+  | '--ds-elevation-3'
+  | '--ds-elevation-4'
+  | '--ds-elevation-5',
+  string
+>;
+
+/**
+ * Perceived-depth shadows for a surface, keyed to --ds-elevation-0..5 (0 = flat).
+ *
+ * A dark surface (NTSC luminance below the mid threshold) resolves to the
+ * dark-aware treatment: a top hairline highlight (inset white, stronger at higher
+ * elevation) plus a deeper ambient shadow, because pure-black shadows are invisible
+ * on a dark canvas; elevation 4-5 add a low-alpha primary glow for floating
+ * overlays. A light surface resolves to layered key+ambient black shadows at low
+ * alpha. The dark values mirror the tenant-artifact overrides for dark-surface
+ * tenants so the runtime path and the committed artifact agree.
+ */
+export function buildElevationScale(surfaceColor: string): ElevationScale {
+  if (isDarkSurface(surfaceColor)) {
+    return {
+      '--ds-elevation-0': 'none',
+      '--ds-elevation-1':
+        'inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 1px 2px rgba(0, 0, 0, 0.40), 0 2px 6px rgba(0, 0, 0, 0.28)',
+      '--ds-elevation-2':
+        'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 2px 4px rgba(0, 0, 0, 0.44), 0 6px 16px rgba(0, 0, 0, 0.34)',
+      '--ds-elevation-3':
+        'inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 6px 12px rgba(0, 0, 0, 0.46), 0 12px 28px rgba(0, 0, 0, 0.40)',
+      '--ds-elevation-4':
+        'inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 12px 24px rgba(0, 0, 0, 0.50), 0 20px 44px rgba(0, 0, 0, 0.44), 0 0 24px color-mix(in srgb, var(--ds-color-primary, #ffffff) 8%, transparent)',
+      '--ds-elevation-5':
+        'inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 40px rgba(0, 0, 0, 0.56), 0 32px 64px rgba(0, 0, 0, 0.48), 0 0 32px color-mix(in srgb, var(--ds-color-primary, #ffffff) 10%, transparent)',
+    };
+  }
+
+  return {
+    '--ds-elevation-0': 'none',
+    '--ds-elevation-1':
+      '0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.02)',
+    '--ds-elevation-2':
+      '0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.03)',
+    '--ds-elevation-3':
+      '0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.03), 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.04)',
+    '--ds-elevation-4':
+      '0 4px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.03), 0 16px 32px rgba(0, 0, 0, 0.04), 0 32px 64px rgba(0, 0, 0, 0.06)',
+    '--ds-elevation-5':
+      '0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.06), 0 32px 64px rgba(0, 0, 0, 0.08)',
+  };
+}

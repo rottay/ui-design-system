@@ -147,7 +147,7 @@
    "lane": "engine-modern",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01"
    ],
@@ -155,7 +155,28 @@
    "programs": [
     "spec-3"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 04:28",
+     "by": "ds-agent",
+     "note": "Recon delegated to Explore (spec sec3 + both scales + brand-theme compiler emission + tenant artifacts + audit script + consumer-resolution question). PLAN: (1) define --ds-elevation-0..5 at FOUNDATION default.css (light = layered key+ambient low-alpha, base on current --ds-shadow-* values); (2) alias --ds-shadow-xs..2xl -> corresponding --ds-elevation steps at foundation (classic/rustic + brand-theme compiler still consume --ds-shadow-*, so aliases keep them 1-source); (3) DELETE engine-local --ds-elevation block at engines/modern/theme.css:85-90; (4) HARD PART = compiler dark-aware per-tenant derivation: compileBrandTheme derives dark-surface elevation from tenant surface luminance (deeper ambient + top hairline inset 0 1px 0 rgba(255,255,255,.04-.08) + surface-luminance step; glow allowed on 4-5) and emits into tenant artifacts (no data-theme toggle, owner 2026-07-07); (5) extend scripts/engine-token-audit.mjs: shadow-scales counter=1 + no elevation token pure-black-only in a dark-surface tenant artifact; (6) regenerate tokens/css/artifacts, keep compilers/brand-theme suite green. KEY INSIGHT: keep BOTH token NAMES (elevation source + shadow alias) => the 53+3 consumers need NO rewrite, only definitions change (recon confirming). SIGHTED: /probe/engine-modern (ENG-02 surface) card+stats-grid on rottay dark before(flat)->after(depth) + bithire light + classic/rustic zero-regression. GATE: audit --check shadow-scales=1, build+test green, brand-theme suite green."
+    },
+    {
+     "at": "2026-07-09 04:34",
+     "by": "ds-agent",
+     "note": "Before-baseline captured (test-artifacts/engine-modern/eng-03/before-*.png) — confirmed flat-on-dark defect: rottay cards read as flat fills, pure-black shadow invisible on #0A0A0C. Full implementation DELEGATED to fresh agent a4db86f366c73efb8 (edit-only + artifact regen; NO build/test/commit — orchestrator gates): redefine --ds-elevation-0..5 at foundation + alias --ds-shadow-* + delete engine-local block + dark-aware emission into the rottay dark artifact block (html[data-tenant=rottay]:not([data-theme=light])) via generator/compiler from surface luminance + audit shadow-scales=1 counter. ON RETURN: audit diff vs fences, regenerate/verify artifacts, gate (build+test+audit --check+brand-theme suite), sighted AFTER capture (eng03-capture.cjs after) compared to before on rottay dark + bithire light + classic/rustic zero-regression spot-check, then commit. Recon hint: generator has an elevation<->shadow helper; bithire has artifact-validation tests."
+    },
+    {
+     "at": "2026-07-09 05:07",
+     "by": "ds-agent",
+     "note": "Agent implementation AUDITED: buildElevationScale() helper (luminance-derived dark/light ramps) is spec-correct; rottay artifact dark elevation values mirror the helper exactly; default.css + shadows.css alias --ds-shadow-*->--ds-elevation-*; engine-local block deleted; audit shadow-scales=1/darkPureBlack=0 green; core build exit 0. SIGHTED CAUGHT A REAL DEFECT: cards STILL flat on rottay dark — components resolve depth via --ds-shadow-md + --ds-card-shadow* (card computes line-358 pure-black 0.32/0.18), and the rottay artifact DARK block kept PRE-EXISTING pure-black --ds-shadow-xs..2xl (356-361) + --ds-card-shadow* (524-526) that shadow the new elevation and are invisible on #0A0A0C. FIX DELEGATED back to agent a4db86f366c73efb8 (resumed): alias rottay dark --ds-shadow-* + --ds-card-shadow* to var(--ds-elevation-*) + mirror in generator dark path + regenerate; verify a rottay card computes a box-shadow containing the inset hairline. NEXT: re-audit, re-capture after, re-gate, commit."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "ONE dark-aware --ds-elevation-0..5 at foundation (default.css); --ds-shadow-* (default.css + foundation/base/shadows.css) now aliases of --ds-elevation-*; engine-local --ds-elevation block deleted (engines/modern/theme.css). buildElevationScale(surfaceColor) in compilers/_shared/color-math (NTSC luminance<128=dark; dark ramp=top hairline inset white 0.04-0.08 + deeper ambient + primary glow on 4-5; light ramp=layered low-alpha), wired into the generator dark path (darkSemanticVariables) so any DB-driven dark tenant derives it. rottay artifact dark block: --ds-elevation-1..5 dark values mirror buildElevationScale EXACTLY + --ds-shadow-* AND --ds-card-shadow* aliased to var(--ds-elevation-*). AUDIT: depth.shadowScales=1 (exact invariant) + depth.darkPureBlackElevations=0 (broadened to scan the CONSUMED --ds-shadow-*/--ds-card-shadow* tokens, not just --ds-elevation-*); --check green. GATE: core build exit 0; audit --check green; generator.test.ts stale pure-black assertion updated to var(--ds-elevation-1) (9/9); full unit 5360 passed with only 3 PRE-EXISTING unrelated failures (source-governance token-mirror, root/core version 2.16.6 vs 2.16.5, whitelabel bithire .ant-). SIGHTED (the whole point): rottay dark card NOW computes box-shadow containing 'inset 0 1px 0 rgba(255,255,255,0.05)' + deeper ambient — cards lift off #0A0A0C vs the flat-fill BEFORE; confirmed via computed style AND the before/after PNGs in test-artifacts/engine-modern/eng-03/. IMPORTANT: the sighted check caught that the foundation fix alone did NOT reach the card (it resolves depth via --ds-shadow-md/--ds-card-shadow*, which the rottay dark artifact re-defined as pure-black) — fixed by aliasing those consumed tokens. Classic/rustic zero-regression: light --ds-elevation-* values === old --ds-shadow-* values (deterministic token equivalence, light unchanged); on dark they gain the hairline (rustic card computed-shadow confirmed) = improvement. DEVIATION: rottay artifact hand-authored (rottay not in build-vertical-artifacts scope=bithire-only; dark elevation not expressible in BrandTheme.surfaces.shadows) — artifact is rottay's operative source, values mirror the helper; rottay.ts untouched. docs-engineering foundations/tokens update flagged as follow-up (fence: read-only)."
   },
   {
    "id": "WO-ENG-04",

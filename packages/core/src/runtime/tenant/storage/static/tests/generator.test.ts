@@ -175,7 +175,7 @@ describe('tenant css generator', () => {
     expect(css).toContain('--ds-color-bg: #0a0a0a;');
     expect(css).toContain('--ds-color-text: #fafafa;');
     expect(css).toContain('--ds-color-border-primary: rgba(255, 255, 255, 0.12);');
-    expect(css).toContain('--ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24)');
+    expect(css).toContain('--ds-shadow-sm: var(--ds-elevation-1)');
     expect(artifact.path).toBe('evnto-labs/index.css');
     expect(artifact.contents).toContain('Auto-generated tenant theme for Evnto Labs');
   });

@@ -401,40 +401,19 @@
 
 :root {
   /* ========================================================================
-     BOX SHADOWS - Elevation Scale
-     Used to create depth and elevation in the UI
+     BOX SHADOWS - aliases of the --ds-elevation-0..5 depth scale
+     --ds-elevation-* is defined in themes/default.css (co-loaded with this file
+     in every entrypoint). classic/rustic components and the brand compiler
+     consume these --ds-shadow-* names.
      ======================================================================== */
-  --ds-shadow-none: none;
-
-  --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04),
-               0 1px 3px rgba(0, 0, 0, 0.02);
-
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04),
-               0 2px 4px rgba(0, 0, 0, 0.03),
-               0 4px 8px rgba(0, 0, 0, 0.02);
-
-  --ds-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.03),
-               0 4px 8px rgba(0, 0, 0, 0.04),
-               0 8px 16px rgba(0, 0, 0, 0.03);
-
-  --ds-shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.02),
-               0 4px 8px rgba(0, 0, 0, 0.03),
-               0 8px 16px rgba(0, 0, 0, 0.04),
-               0 16px 32px rgba(0, 0, 0, 0.04);
-
-  --ds-shadow-xl: 0 4px 8px rgba(0, 0, 0, 0.02),
-               0 8px 16px rgba(0, 0, 0, 0.03),
-               0 16px 32px rgba(0, 0, 0, 0.04),
-               0 32px 64px rgba(0, 0, 0, 0.06);
-
-  --ds-shadow-2xl: 0 8px 16px rgba(0, 0, 0, 0.04),
-                0 16px 32px rgba(0, 0, 0, 0.06),
-                0 32px 64px rgba(0, 0, 0, 0.08);
-
-  --ds-shadow-3xl: 0 8px 16px rgba(0, 0, 0, 0.04),
-                0 16px 32px rgba(0, 0, 0, 0.06),
-                0 32px 64px rgba(0, 0, 0, 0.08),
-                0 48px 96px rgba(0, 0, 0, 0.1);
+  --ds-shadow-none: var(--ds-elevation-0);
+  --ds-shadow-xs: var(--ds-elevation-1);
+  --ds-shadow-sm: var(--ds-elevation-1);
+  --ds-shadow-md: var(--ds-elevation-2);
+  --ds-shadow-lg: var(--ds-elevation-3);
+  --ds-shadow-xl: var(--ds-elevation-4);
+  --ds-shadow-2xl: var(--ds-elevation-5);
+  --ds-shadow-3xl: var(--ds-elevation-5), 0 48px 96px rgba(0, 0, 0, 0.1);
 
   /* Inner shadow for inset effects */
   --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
@@ -1108,15 +1087,29 @@
   --ds-radius-full: 9999px;
 
   /* ─────────────────────────────────────────────────────────────────────────────
-     5. SHADOWS - Multi-Layer Premium Depth
+     5. DEPTH - dark-aware elevation scale
+     --ds-elevation-0..5 is the sole perceived-depth ramp (0 = flat, 5 = highest).
+     The values here are the light-surface treatment: layered key+ambient shadows at
+     low alpha. Dark-surface tenants override --ds-elevation-1..5 in their tenant
+     artifact with a top hairline highlight + deeper ambient + a surface-luminance
+     step, because pure-black shadows are invisible on a dark canvas.
+     --ds-shadow-* are aliases of the elevation steps; classic/rustic components and
+     the brand-theme compiler consume the --ds-shadow-* names.
      ───────────────────────────────────────────────────────────────────────────── */
-  --ds-shadow-none: none;
-  --ds-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.02);
-  --ds-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.03);
-  --ds-shadow-lg: 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.03), 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.04);
-  --ds-shadow-xl: 0 4px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.03), 0 16px 32px rgba(0, 0, 0, 0.04), 0 32px 64px rgba(0, 0, 0, 0.06);
-  --ds-shadow-2xl: 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.06), 0 32px 64px rgba(0, 0, 0, 0.08);
+  --ds-elevation-0: none;
+  --ds-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.02);
+  --ds-elevation-2: 0 2px 4px rgba(0, 0, 0, 0.03), 0 4px 8px rgba(0, 0, 0, 0.04), 0 8px 16px rgba(0, 0, 0, 0.03);
+  --ds-elevation-3: 0 2px 4px rgba(0, 0, 0, 0.02), 0 4px 8px rgba(0, 0, 0, 0.03), 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.04);
+  --ds-elevation-4: 0 4px 8px rgba(0, 0, 0, 0.02), 0 8px 16px rgba(0, 0, 0, 0.03), 0 16px 32px rgba(0, 0, 0, 0.04), 0 32px 64px rgba(0, 0, 0, 0.06);
+  --ds-elevation-5: 0 8px 16px rgba(0, 0, 0, 0.04), 0 16px 32px rgba(0, 0, 0, 0.06), 0 32px 64px rgba(0, 0, 0, 0.08);
+
+  --ds-shadow-none: var(--ds-elevation-0);
+  --ds-shadow-xs: var(--ds-elevation-1);
+  --ds-shadow-sm: var(--ds-elevation-1);
+  --ds-shadow-md: var(--ds-elevation-2);
+  --ds-shadow-lg: var(--ds-elevation-3);
+  --ds-shadow-xl: var(--ds-elevation-4);
+  --ds-shadow-2xl: var(--ds-elevation-5);
   --ds-shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.04);
 
   /* Colored Shadows */
@@ -10769,17 +10762,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   --ds-surface-control: var(--ds-color-bg-input, var(--ds-color-bg-secondary));
   --ds-surface-overlay: rgba(0, 0, 0, 0.5);
   --ds-surface-highlight: var(--ds-color-bg-hover, rgba(255, 255, 255, 0.06));
-
-  /* -------------------------------------------------------------------------
-     Elevation scale
-     Box-shadow layers for perceived depth. 0 = flat, 5 = highest.
-     ------------------------------------------------------------------------- */
-  --ds-elevation-0: none;
-  --ds-elevation-1: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --ds-elevation-2: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  --ds-elevation-3: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-  --ds-elevation-4: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-  --ds-elevation-5: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
 
   /* -------------------------------------------------------------------------
      Focus ring

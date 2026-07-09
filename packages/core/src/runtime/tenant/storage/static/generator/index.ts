@@ -12,7 +12,7 @@
 import type { TenantConfig } from '../../../../../contracts';
 import type { CompiledBrand } from '../../../../../contracts/themes';
 import { compileBrandTheme, brandThemeToBranding, mergePartialPersonality, deepMergeTokenOverrides } from '../../../../../compilers/brand-theme';
-import { isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor, buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor } from '../../../../../compilers/_shared/color-math';
+import { isHexColor, normalizeHexColor, hexToRgb, rgbToHex, mixColor, buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor, buildElevationScale } from '../../../../../compilers/_shared/color-math';
 import { appearanceToVariables } from '../../../../../compilers/appearance';
 import { getVerticalPreset } from '../../../../verticals/registry';
 import type { VerticalPreset } from '../../../../verticals/types';
@@ -573,13 +573,22 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
     '--ds-input-placeholder-color': '#94a3b8',
     '--ds-input-color': '#fafafa',
 
-    /* ── Shadow darkening: increase opacity for dark backgrounds ── */
-    '--ds-shadow-sm': '0 1px 2px rgba(0, 0, 0, 0.24), 0 2px 4px rgba(0, 0, 0, 0.18), 0 4px 8px rgba(0, 0, 0, 0.12)',
-    '--ds-shadow-md': '0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 8px rgba(0, 0, 0, 0.24), 0 8px 16px rgba(0, 0, 0, 0.18)',
-    '--ds-shadow-lg': '0 4px 8px rgba(0, 0, 0, 0.2), 0 8px 16px rgba(0, 0, 0, 0.24), 0 16px 32px rgba(0, 0, 0, 0.2)',
-    '--ds-shadow-xl': '0 8px 16px rgba(0, 0, 0, 0.24), 0 16px 32px rgba(0, 0, 0, 0.28), 0 32px 64px rgba(0, 0, 0, 0.24)',
-    '--ds-card-shadow': '0 1px 2px rgba(0, 0, 0, 0.32), 0 2px 4px rgba(0, 0, 0, 0.24)',
-    '--ds-card-shadow-hover': '0 4px 8px rgba(0, 0, 0, 0.28), 0 8px 16px rgba(0, 0, 0, 0.24)',
+    /* ── Depth tokens alias the dark elevation ramp so every --ds-shadow-* /
+       --ds-card-shadow* consumer inherits the hairline highlight (pure-black
+       shadows are invisible on a dark canvas) ── */
+    '--ds-shadow-xs': 'var(--ds-elevation-1)',
+    '--ds-shadow-sm': 'var(--ds-elevation-1)',
+    '--ds-shadow-md': 'var(--ds-elevation-2)',
+    '--ds-shadow-lg': 'var(--ds-elevation-3)',
+    '--ds-shadow-xl': 'var(--ds-elevation-4)',
+    '--ds-shadow-2xl': 'var(--ds-elevation-5)',
+    '--ds-card-shadow': 'var(--ds-elevation-1)',
+    '--ds-card-shadow-hover': 'var(--ds-elevation-2)',
+    '--ds-card-shadow-elevated': 'var(--ds-elevation-3)',
+
+    /* ── Perceived depth: elevation derived from the dark canvas luminance
+       (top hairline highlight + deeper ambient + glow on 4-5) ── */
+    ...buildElevationScale('#0a0a0a'),
 
     /* ── Alias shortcuts ── */
     '--ds-text-primary': 'var(--ds-color-text-primary)',

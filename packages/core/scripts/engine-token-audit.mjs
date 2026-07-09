@@ -72,6 +72,85 @@ function countMotionLiterals(files) {
   return { cubicBezier, rawDuration, orphanTokens };
 }
 
+const tokensCssDir = join(root, "src/tokens/css");
+const artifactsDir = join(tokensCssDir, "artifacts");
+
+/** Recursively collect every `.css` file under a directory. */
+function cssFilesUnder(dir) {
+  if (!existsSync(dir)) return [];
+  const out = [];
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    if (statSync(full).isDirectory()) out.push(...cssFilesUnder(full));
+    else if (full.endsWith(".css")) out.push(full);
+  }
+  return out;
+}
+
+/** NTSC perceived luminance (0-255) of a 6-digit hex color. */
+function luminanceHex(hex) {
+  const n = Number.parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 0.299 + g * 0.587 + b * 0.114;
+}
+
+/**
+ * Count elevation/shadow SCALE definition sites at the foundation/engine layer
+ * (tenant artifacts are surface-adaptive overrides of the one scale, not scales).
+ * The single source of truth is one --ds-elevation-* ramp defined with literal
+ * box-shadow values; --ds-shadow-* must be var() aliases of it. A parallel
+ * --ds-shadow-* ramp defined with literal values counts as a second scale.
+ * Target: exactly 1.
+ */
+function countShadowScales() {
+  const files = [
+    ...cssFilesUnder(join(tokensCssDir, "foundation")),
+    ...cssFilesUnder(join(tokensCssDir, "engines")),
+  ];
+  let scales = 0;
+  for (const f of files) {
+    const t = readFileSync(f, "utf8");
+    if (/--ds-elevation-1:\s*(?!var\()[^;]*(?:rgba?\(|px|none)/.test(t)) scales += 1;
+    if (/--ds-shadow-(?:sm|md|lg):\s*(?!var\()[^;]*(?:rgba?\(|px)/.test(t)) scales += 1;
+  }
+  return scales;
+}
+
+/**
+ * Count depth declarations that resolve to a pure-black-only value in the dark
+ * region of a dark-surface tenant artifact. Covers the elevation ramp AND the
+ * tokens components actually consume for depth (--ds-shadow-xs..2xl,
+ * --ds-card-shadow / -hover / -elevated), since a pure-black value on any of them
+ * renders flat on a dark canvas. A dark-surface depth token must carry a hairline
+ * highlight (white) and/or a primary glow — in practice by aliasing the dark
+ * --ds-elevation-* ramp. Target: 0.
+ */
+function countDarkPureBlackElevations() {
+  if (!existsSync(artifactsDir)) return 0;
+  let count = 0;
+  for (const slug of readdirSync(artifactsDir)) {
+    const file = join(artifactsDir, slug, "index.css");
+    if (!existsSync(file)) continue;
+    const css = readFileSync(file, "utf8");
+    const bg = css.match(/--ds-color-bg-primary:\s*(#[0-9a-fA-F]{6})/);
+    if (!bg || luminanceHex(bg[1]) >= 128) continue; // not a dark-surface tenant
+    // Split off the light-mode counterpart block (a POSITIVE light selector, not the
+    // dark block's own `:not([data-theme='light'])` scope) so only the dark region
+    // is scanned.
+    const lightIdx = css.search(/(?<!:not\()\[data-theme=['"]light['"]\]|(?<!:not\()\.light(?=[\s,{])/);
+    const darkRegion = lightIdx >= 0 ? css.slice(0, lightIdx) : css;
+    const depthToken = /--ds-(?:elevation-[1-5]|shadow-(?:xs|sm|md|lg|xl|2xl)|card-shadow(?:-hover|-elevated)?):\s*([^;]+);/g;
+    for (const m of darkRegion.matchAll(depthToken)) {
+      const val = m[1].trim();
+      if (val === "none") continue;
+      const hasHighlight = /255/.test(val) || /color-mix|var\(--ds-color-primary/.test(val);
+      const isBlackShadow = /rgba?\(\s*0\s*,\s*0\s*,\s*0/.test(val);
+      if (isBlackShadow && !hasHighlight) count += 1;
+    }
+  }
+  return count;
+}
+
 const files = modernFiles(componentsDir);
 const motion = countMotionLiterals(files);
 
@@ -79,7 +158,15 @@ const counters = {
   "motion.cubicBezierLiterals": motion.cubicBezier,
   "motion.rawDurationLiterals": motion.rawDuration,
   "motion.orphanMotionTokens": motion.orphanTokens,
-  // Later WOs extend here: color.hardcodedHex, depth.shadowScales, effects.gradientConsumers, ...
+  "depth.shadowScales": countShadowScales(),
+  "depth.darkPureBlackElevations": countDarkPureBlackElevations(),
+  // Later WOs extend here: color.hardcodedHex, effects.gradientConsumers, ...
+};
+
+/** Invariants checked for exact equality (not just decrease-only) in --check. */
+const EXACT = {
+  // One elevation source of truth: the foundation ramp, with --ds-shadow-* aliases.
+  "depth.shadowScales": 1,
 };
 
 const mode = process.argv.includes("--check")
@@ -109,10 +196,15 @@ if (mode === "check") {
     const base = baseline[k] ?? Infinity;
     if (v > base) risen.push(`${k}: ${v} > baseline ${base}`);
   }
-  if (risen.length) {
-    console.error("engine-token-audit --check FAILED (counters rose above baseline):");
-    for (const r of risen) console.error("  - " + r);
+  const invariant = [];
+  for (const [k, expected] of Object.entries(EXACT)) {
+    if (counters[k] !== expected) invariant.push(`${k}: ${counters[k]} != required ${expected}`);
+  }
+  if (risen.length || invariant.length) {
+    console.error("engine-token-audit --check FAILED:");
+    for (const r of risen) console.error("  - rose above baseline: " + r);
+    for (const r of invariant) console.error("  - invariant broken: " + r);
     process.exit(1);
   }
-  console.log("engine-token-audit --check OK (all counters at or below baseline)");
+  console.log("engine-token-audit --check OK (all counters at or below baseline; invariants hold)");
 }

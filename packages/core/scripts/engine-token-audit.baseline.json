@@ -1,5 +1,7 @@
 {
   "motion.cubicBezierLiterals": 0,
   "motion.rawDurationLiterals": 0,
-  "motion.orphanMotionTokens": 0
+  "motion.orphanMotionTokens": 0,
+  "depth.shadowScales": 1,
+  "depth.darkPureBlackElevations": 0
 }
