@@ -248,6 +248,68 @@ jobs:
           retention-days: 14
 
   # ─────────────────────────────────────────────────────
+  #  Visual regression CI — screenshot diff on the showroom (WO-GAT-01)
+  # ─────────────────────────────────────────────────────
+  visual:
+    name: Visual Regression
+    needs: [detect, core, showroom]
+    if: |
+      always() &&
+      (needs.detect.outputs.showroom == 'true' || needs.detect.outputs.core == 'true') &&
+      (needs.core.result == 'success' || needs.core.result == 'skipped') &&
+      (needs.showroom.result == 'success' || needs.showroom.result == 'skipped')
+    runs-on: self-hosted
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: '@rottay'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Build core (dependency)
+        run: pnpm --filter @rottay/design-system run build
+
+      # e2e/visual/ runs against the PRODUCTION build, never the dev server
+      # (dev-mode Turbopack/HMR paints non-deterministically) — playwright.visual.config.ts's
+      # webServer starts `next start` over this build.
+      - name: Build showroom (production)
+        run: pnpm --filter @rottay/showroom run build
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
+
+      - name: Install Playwright browser
+        run: pnpm --filter @rottay/showroom exec playwright install chromium
+
+      - name: Run visual regression suite
+        run: pnpm --filter @rottay/showroom run test:visual
+
+      - name: Upload visual regression report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-report
+          path: |
+            test-artifacts/gates/gat-01
+            packages/showroom/test-results
+            packages/showroom/playwright-report
+          if-no-files-found: ignore
+          retention-days: 14
+
+  # ─────────────────────────────────────────────────────
   #  Changeset Validation (PRs only)
   # ─────────────────────────────────────────────────────
   changeset:
@@ -284,7 +346,7 @@ jobs:
   # ─────────────────────────────────────────────────────
   gate:
     name: Summary
-    needs: [detect, core, showroom, a11y, changeset]
+    needs: [detect, core, showroom, a11y, visual, changeset]
     if: always()
     runs-on: self-hosted
     timeout-minutes: 2
@@ -299,6 +361,7 @@ jobs:
           CORE_RESULT="${{ needs.core.result }}"
           SHOWROOM_RESULT="${{ needs.showroom.result }}"
           A11Y_RESULT="${{ needs.a11y.result }}"
+          VISUAL_RESULT="${{ needs.visual.result }}"
           CHANGESET_RESULT="${{ needs.changeset.result }}"
 
           if [ "$CORE_RESULT" = "skipped" ]; then
@@ -319,6 +382,12 @@ jobs:
             echo "| Accessibility (a11y) | $A11Y_RESULT |" >> "$GITHUB_STEP_SUMMARY"
           fi
 
+          if [ "$VISUAL_RESULT" = "skipped" ]; then
+            echo "| Visual Regression | Skipped (no changes) |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| Visual Regression | $VISUAL_RESULT |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
           if [ "$CHANGESET_RESULT" = "skipped" ]; then
             echo "| Changeset | Skipped (push event) |" >> "$GITHUB_STEP_SUMMARY"
           else
@@ -326,7 +395,7 @@ jobs:
           fi
 
           # Fail if any required job failed or was cancelled
-          if [ "$CORE_RESULT" = "failure" ] || [ "$CORE_RESULT" = "cancelled" ] || [ "$SHOWROOM_RESULT" = "failure" ] || [ "$SHOWROOM_RESULT" = "cancelled" ] || [ "$A11Y_RESULT" = "failure" ] || [ "$A11Y_RESULT" = "cancelled" ] || [ "$CHANGESET_RESULT" = "failure" ]; then
+          if [ "$CORE_RESULT" = "failure" ] || [ "$CORE_RESULT" = "cancelled" ] || [ "$SHOWROOM_RESULT" = "failure" ] || [ "$SHOWROOM_RESULT" = "cancelled" ] || [ "$A11Y_RESULT" = "failure" ] || [ "$A11Y_RESULT" = "cancelled" ] || [ "$VISUAL_RESULT" = "failure" ] || [ "$VISUAL_RESULT" = "cancelled" ] || [ "$CHANGESET_RESULT" = "failure" ]; then
             echo ""
             echo "CI FAILED"
             exit 1

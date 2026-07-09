@@ -52,6 +52,8 @@
     "changeset": "changeset",
     "changeset:version": "changeset version",
     "changeset:publish": "changeset publish",
+    "visual:test": "pnpm --filter @rottay/showroom run test:visual",
+    "visual:approve": "pnpm --filter @rottay/showroom run test:visual:approve",
     "roadmap:status": "node scripts/roadmap-status.mjs status",
     "roadmap:check": "node scripts/roadmap-status.mjs check",
     "roadmap:commercial": "node scripts/roadmap-commercial-status.mjs status",

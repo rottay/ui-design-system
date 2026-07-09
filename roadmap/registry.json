@@ -509,7 +509,7 @@
    "lane": "gates",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-02"
    ],
@@ -517,7 +517,18 @@
    "programs": [
     "P-11"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 13:02",
+     "by": "ds-agent",
+     "note": "Delegated to Sonnet agent (gat01-visual). Decisions baked: separate playwright.visual.config.ts (production next start, NOT the a11y dev config), 8x2x3=48-cell flagship matrix over probe/engine-modern with wait-for-ground guard, platform-embedded snapshotPathTemplate, maxDiffPixelRatio 0.0005, visual CI job mirroring the a11y job + gate wiring, token-perturbation drill. Awaiting return for orchestrator audit + gate + commit."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "Self-hosted visual-regression CI: 48 cells (8 flagships x 2 tenant palettes x 3 viewports) via playwright.visual.config.ts over the PRODUCTION build (next start), separate from the a11y dev config. Baselines committed platform-scoped (-chromium-darwin) under e2e/visual/__screenshots__/ with a waitForGroundPaint guard (body-bg luminance) so no pre-theme light-paint leaks in. Gate GREEN: core+showroom build exit0; test:visual 48/48 against committed baselines after a clean rebuild (deterministic); token-perturbation drill (--ds-color-primary) FAILS with a legible diff localizing the primary buttons then GREEN after revert (evidence in test-artifacts/gates/gat-01/); engine-token-audit --check green (apcaPairings=6); unit project exit0 (no regression; 3 documented pre-existing failures untouched). CI: visual job mirrors the a11y job (needs detect/core/showroom, self-hosted, production build, chromium install, artifact upload on failure) + gate summary wired. README documents the a11y-vs-visual split, approve flow, platform-scoped baselines, never-loosen/never-mask law. Sighted both palettes: rottay dark ground + bithire light ground render correctly."
   },
   {
    "id": "WO-GAT-02",

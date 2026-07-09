@@ -21,6 +21,12 @@ coverage-*/
 .nyc_output/
 *.lcov
 
+# Gate evidence (drill diffs, sighted captures) — generated, uploaded by CI, never committed
+test-artifacts/
+# Playwright visual-regression run output (baselines under e2e/visual/__screenshots__/ ARE committed)
+packages/showroom/test-results/
+packages/showroom/playwright-report/
+
 # Environment files
 .env
 .env.local

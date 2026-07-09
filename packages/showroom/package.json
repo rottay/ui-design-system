@@ -10,6 +10,8 @@
     "start": "next start --port 7001",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings=0",
+    "test:visual": "playwright test e2e/visual --config playwright.visual.config.ts",
+    "test:visual:approve": "playwright test e2e/visual --config playwright.visual.config.ts --update-snapshots",
     "design:cards": "node scripts/design-cards/generate.mjs",
     "design:validate": "node scripts/design-cards/validate.mjs"
   },
