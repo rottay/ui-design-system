@@ -1106,6 +1106,39 @@
         "gat-03-probe"
       ],
       "notes": "SystemCssVariablesBridge stamps personality-derived vars INLINE on <html>, the highest CSS precedence, while personality is the LOWEST layer of the documented merge chain. A derived boolean (showBorder) therefore outranks a color the tenant typed (chrome.cardComponent.border). Found by the hostile-tenant probe; no other gate could see it."
+    },
+    {
+      "id": "WO-ENG-20",
+      "title": "themanagementmiami becomes a real tenant, and a genuinely different one",
+      "lane": "engine-modern",
+      "order": 20,
+      "size": "M",
+      "status": "in-progress",
+      "dependsOn": [
+        "WO-GAT-03"
+      ],
+      "mustLandWith": [],
+      "programs": [
+        "owner-2026-07-09",
+        "fable-advisory"
+      ],
+      "notes": "Owner request: make themanagement and bithire look really different so it serves for testing. Split out of WO-ENG-18 because the tenant work does not need the engine-ownership fix. Fixes the BUNDLED_TENANT_SLUGS trap: the slug is listed, has no config and no artifact, so isBundledTenant returns true, the runtime skips generating its CSS, and a brandTheme under it is silently ignored.",
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09"
+    },
+    {
+      "id": "WO-ARC-06",
+      "title": "Verticals own their tenants in the file tree",
+      "lane": "architecture",
+      "order": 6,
+      "size": "M",
+      "status": "todo",
+      "dependsOn": [],
+      "mustLandWith": [],
+      "programs": [
+        "owner-2026-07-09"
+      ],
+      "notes": "Owner request. The flat tree produced two naming fictions this session unpicked: platform.css is a byte-identical copy of rottay.css (P-30), and a live customer's theme sat in legacy/ while evnto sat beside rottay as a peer. A structure that cannot express 'this tenant belongs to that vertical' keeps producing decisions that assume they are peers. Pure move: zero token changes, zero pixel movement, public API unchanged."
     }
   ]
 }
