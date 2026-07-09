@@ -10,5 +10,7 @@
   "state.inlineStateLiterals": 0,
   "effects.gradientConsumers": 3,
   "effects.glassConsumers": 4,
-  "effects.glowConsumers": 1
+  "effects.glowConsumers": 1,
+  "color.modernHexLiterals": 13,
+  "color.modernRgbaLiterals": 1
 }

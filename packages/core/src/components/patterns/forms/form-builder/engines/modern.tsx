@@ -509,7 +509,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         case 'color':
           return (
             <ColorPicker
-              value={(val as string) ?? '#111827'}
+              value={val as string | undefined}
               onChange={(_color: Color, hex: string) => updateValue(field.name, hex)}
               disabled={fieldDisabled}
               showText

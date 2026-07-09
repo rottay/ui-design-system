@@ -117,7 +117,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
     >
       {/* Backdrop delegates dismiss to onCancel (always allowed, unlike AlertDialog) */}
       <div
-        style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)' }}
+        style={{ position: 'absolute', inset: 0, background: 'var(--ds-color-alpha-black-40)' }}
         onClick={onCancel}
       />
       <div

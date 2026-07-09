@@ -159,7 +159,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       <div
         className="absolute inset-0"
         style={{
-          backgroundColor: 'var(--ds-overlay-backdrop, rgba(0, 0, 0, 0.5))',
+          backgroundColor: 'var(--ds-color-bg-overlay)',
           backgroundImage: 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))',
           backdropFilter: 'var(--ds-glass-backdrop-filter)',
           WebkitBackdropFilter: 'var(--ds-glass-backdrop-filter)',

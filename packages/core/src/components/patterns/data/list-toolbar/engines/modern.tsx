@@ -102,7 +102,7 @@ const RADIUS_MD = TOOLBAR_RADIUS;
 const COLOR_TEXT_PRIMARY = TOOLBAR_COLOR;
 const COLOR_TEXT_SECONDARY = TOOLBAR_CONTROL_COLOR;
 const COLOR_TEXT_MUTED = FILTER_PILL_COLOR;
-const COLOR_TEXT_ON_PRIMARY = 'var(--ds-color-text-on-primary, #fff)';
+const COLOR_TEXT_ON_PRIMARY = 'var(--ds-color-text-on-primary)';
 
 // Spacing constants (px)
 const GAP_INTRA = 6;   // within a group

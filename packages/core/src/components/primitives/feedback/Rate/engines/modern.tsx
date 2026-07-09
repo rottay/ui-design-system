@@ -333,12 +333,12 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
             width: `${sizeValue}px`,
             height: `${sizeValue}px`,
             color: isFilled || isHalfFilled
-              ? activeColor || 'var(--ds-rate-active-color, var(--ds-color-warning, #facc15))'
-              : inactiveColor || 'var(--ds-rate-inactive-color, var(--ds-color-neutral-200, #d1d5db))',
+              ? activeColor || 'var(--ds-rate-active-color)'
+              : inactiveColor || 'var(--ds-rate-inactive-color)',
             // DS token override for the focus ring color; Tailwind's
             // ring-warning is replaced by an inline value so tenants
             // can control focus appearance.
-            '--tw-ring-color': 'var(--ds-rate-focus-ring-color, var(--ds-color-warning, #facc15))',
+            '--tw-ring-color': 'var(--ds-rate-focus-ring-color)',
             transitionDuration: 'var(--ds-motion-fast)',
           } as React.CSSProperties}
           title={tooltips?.[index]}
@@ -382,7 +382,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
               {/* Background (inactive) star */}
               <span
                 className="absolute inset-0"
-                style={{ color: inactiveColor || 'var(--ds-rate-inactive-color, var(--ds-color-neutral-200, #d1d5db))' }}
+                style={{ color: inactiveColor || 'var(--ds-rate-inactive-color)' }}
               >
                 {renderCharacter(index)}
               </span>
@@ -391,7 +391,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
                 className="absolute inset-0 overflow-hidden"
                 style={{
                   width: '50%',
-                  color: activeColor || 'var(--ds-rate-active-color, var(--ds-color-warning, #facc15))',
+                  color: activeColor || 'var(--ds-rate-active-color)',
                 }}
               >
                 {renderCharacter(index)}

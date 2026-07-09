@@ -448,7 +448,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                               >
                                 <span className="truncate">{optLabel}</span>
                                 {isLoading ? (
-                                  <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border, #ccc)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+                                  <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
                                     <span>›</span>

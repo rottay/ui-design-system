@@ -163,7 +163,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
               fontSize: `var(--ds-avatar-${size}-font-size)`,
               fontWeight: `var(--ds-avatar-font-weight)` as any,
               color: textColor || variantTextStyle.color || `var(--ds-avatar-${variant}-color)`,
-              textShadow: variant === 'gradient' ? '0 1px 2px rgba(0,0,0,0.15)' : undefined,
+              textShadow: variant === 'gradient' ? '0 1px 2px color-mix(in srgb, var(--ds-color-black) 15%, transparent)' : undefined,
             }}
           >
             {displayInitials || children}

@@ -119,7 +119,7 @@ const VARIANT_STYLES: Record<string, VariantStyle> = {
     borderWidth: 'var(--ds-card-elevated-border-width, 0)',
     borderStyle: 'solid',
     borderColor: 'var(--ds-card-border, transparent)',
-    boxShadow: 'var(--ds-card-shadow, var(--ds-card-elevated-shadow, var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.03))))',
+    boxShadow: 'var(--ds-card-shadow)',
   },
   outlined: {
     backgroundColor: 'var(--ds-card-bg, var(--ds-card-bordered-bg, var(--ds-surface-card)))',
@@ -154,7 +154,7 @@ function getHoverStyle(variant: string): VariantHoverStyle {
   switch (variant) {
     case 'elevated':
       return {
-        boxShadow: 'var(--ds-card-shadow-hover, var(--ds-card-elevated-shadow-hover, var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03))))',
+        boxShadow: 'var(--ds-card-shadow-hover)',
         transform: 'var(--ds-card-interactive-transform-hover, translateY(-1px))',
       };
     case 'outlined':

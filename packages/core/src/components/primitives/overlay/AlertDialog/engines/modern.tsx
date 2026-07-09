@@ -89,7 +89,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
         className="modal-backdrop"
         onClick={handleBackdropClick}
         style={{
-          background: 'var(--ds-overlay-bg, rgba(0, 0, 0, 0.45))',
+          background: 'var(--ds-overlay-bg)',
         }}
       />
       <div

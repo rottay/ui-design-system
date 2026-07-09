@@ -819,9 +819,9 @@ export default function ModernDataTable<T extends object>(
             }}
             style={{
               ...buttonBaseStyle,
-              color: 'var(--ds-color-success, #047857)',
-              borderColor: 'color-mix(in srgb, var(--ds-color-success, #047857) 34%, var(--ds-color-border-subtle))',
-              background: 'color-mix(in srgb, var(--ds-color-success, #047857) 9%, var(--ds-surface-card))',
+              color: 'var(--ds-color-success)',
+              borderColor: 'color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-subtle))',
+              background: 'color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card))',
               opacity: isSaving ? 0.72 : 1,
             }}
           >
@@ -840,9 +840,9 @@ export default function ModernDataTable<T extends object>(
             }}
             style={{
               ...buttonBaseStyle,
-              color: 'var(--ds-color-error, #dc2626)',
-              borderColor: 'color-mix(in srgb, var(--ds-color-error, #dc2626) 30%, var(--ds-color-border-subtle))',
-              background: 'color-mix(in srgb, var(--ds-color-error, #dc2626) 7%, var(--ds-surface-card))',
+              color: 'var(--ds-color-error)',
+              borderColor: 'color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border-subtle))',
+              background: 'color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card))',
               opacity: isSaving ? 0.5 : 1,
             }}
           >
@@ -937,7 +937,7 @@ export default function ModernDataTable<T extends object>(
           top: 0;
           bottom: 0;
           width: 2px;
-          background: var(--ds-color-primary, #3b82f6);
+          background: var(--ds-color-primary);
           opacity: 0.4;
           pointer-events: none;
         }
@@ -971,7 +971,7 @@ export default function ModernDataTable<T extends object>(
           top: 0;
           bottom: 0;
           width: 3px;
-          background: var(--ds-color-warning, #f59e0b);
+          background: var(--ds-color-warning);
           pointer-events: none;
         }
       `}</style>
@@ -2219,7 +2219,7 @@ export default function ModernDataTable<T extends object>(
                           ? 'var(--ds-color-primary)'
                           : 'transparent',
                         color: page === pagination.current
-                          ? 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse, #fff))'
+                          ? 'var(--ds-color-text-on-primary)'
                           : 'var(--ds-color-text-secondary)',
                         fontSize: 13,
                         fontWeight: page === pagination.current ? 600 : 400,
@@ -2303,7 +2303,7 @@ export default function ModernDataTable<T extends object>(
                         ? 'var(--ds-color-primary)'
                         : 'var(--ds-surface-card)',
                     color: action.variant === 'danger' || action.variant === 'primary'
-                      ? 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse, #fff))'
+                      ? 'var(--ds-color-text-on-primary)'
                       : 'var(--ds-color-text-primary)',
                     fontSize: 13,
                     fontWeight: 500,

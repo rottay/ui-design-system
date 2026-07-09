@@ -143,7 +143,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     // Padding around the spotlight cutout so the target element has visual breathing room
     const padding = 8;
     const maskStyle = typeof mask === 'object' ? mask.style : {};
-    const maskColor = typeof mask === 'object' ? mask.color : 'rgba(0, 0, 0, 0.5)';
+    const maskColor = typeof mask === 'object' ? mask.color : 'var(--ds-color-alpha-black-50)';
 
     return createPortal(
       <div ref={ref} className={className} style={{ zIndex }}>

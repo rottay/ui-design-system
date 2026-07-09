@@ -124,7 +124,7 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     width: dotSize,
     height: dotSize,
     borderRadius: '50%',
-    backgroundColor: 'var(--ds-radio-indicator-color, var(--ds-color-text-on-primary, #fff))',
+    backgroundColor: 'var(--ds-color-text-on-primary)',
     transform: isChecked ? 'scale(1)' : 'scale(0)',
     transition: `transform ${transitionTiming}`,
   };

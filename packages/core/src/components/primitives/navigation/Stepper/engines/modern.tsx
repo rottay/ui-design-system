@@ -89,7 +89,7 @@ function getStepTokenStyle(status: StepStatus): React.CSSProperties {
     // Override DaisyUI connector-line color via the CSS custom property
     // it exposes on step elements. The fallback ensures a neutral line
     // when no DS token is set.
-    '--step-neutral': 'var(--ds-steps-connector-color, var(--ds-color-border-secondary, #e5e7eb))',
+    '--step-neutral': 'var(--ds-steps-connector-color, var(--ds-color-border-secondary))',
   } as React.CSSProperties;
 
   switch (status) {

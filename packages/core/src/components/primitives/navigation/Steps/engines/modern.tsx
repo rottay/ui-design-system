@@ -71,7 +71,7 @@ const getStepClass = (status: StepStatus): string => {
  */
 const getStepTokenStyle = (status: StepStatus): React.CSSProperties => {
   const base: React.CSSProperties = {
-    '--step-neutral': 'var(--ds-steps-connector-color, var(--ds-color-border-secondary, #e5e7eb))',
+    '--step-neutral': 'var(--ds-steps-connector-color, var(--ds-color-border-secondary))',
   } as React.CSSProperties;
 
   switch (status) {

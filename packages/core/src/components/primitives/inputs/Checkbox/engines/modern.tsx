@@ -52,7 +52,7 @@ const CheckIcon = ({ size }: { size: number }) => {
     >
       <path
         d="M2.5 6.5L5 9L9.5 3.5"
-        stroke="var(--ds-checkbox-indicator-color, #fff)"
+        stroke="var(--ds-color-text-on-primary)"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -79,7 +79,7 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
     >
       <path
         d="M3 6H9"
-        stroke="var(--ds-checkbox-indicator-color, #fff)"
+        stroke="var(--ds-color-text-on-primary)"
         strokeWidth="2"
         strokeLinecap="round"
       />

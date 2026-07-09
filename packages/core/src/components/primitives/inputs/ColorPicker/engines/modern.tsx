@@ -176,7 +176,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
         >
           <div
             className={`${getSizeClass()} rounded`}
-            style={{ backgroundColor: currentValue || '#fff', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid', boxShadow: 'var(--ds-elevation-1)' }}
+            style={{ backgroundColor: currentValue || 'var(--ds-color-white)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid', boxShadow: 'var(--ds-elevation-1)' }}
           />
           {displayText && <span className="text-sm">{displayText}</span>}
         </div>
@@ -214,7 +214,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                   outline: 'none',
                   boxSizing: 'border-box',
                 }}
-                placeholder="#000000"
+                placeholder="#RRGGBB"
                 disabled={disabled}
               />
             </div>

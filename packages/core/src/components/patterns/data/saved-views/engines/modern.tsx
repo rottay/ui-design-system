@@ -299,7 +299,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           fontSize: 13,
           fontWeight: isActive ? 600 : 400,
           lineHeight: '20px',
-          color: isActive ? 'var(--ds-color-primary-foreground, #fff)' : 'var(--ds-color-text)',
+          color: isActive ? 'var(--ds-color-primary-foreground)' : 'var(--ds-color-text)',
           background: isActive
             ? 'var(--ds-color-primary)'
             : isHovered
@@ -389,7 +389,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                   height: 6,
                   borderRadius: '50%',
                   background: isActive
-                    ? 'var(--ds-color-primary-foreground, #fff)'
+                    ? 'var(--ds-color-primary-foreground)'
                     : 'var(--ds-color-primary)',
                   flexShrink: 0,
                 }}
@@ -407,7 +407,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 fill="currentColor"
                 style={{
                   color: isActive
-                    ? 'var(--ds-color-primary-foreground, #fff)'
+                    ? 'var(--ds-color-primary-foreground)'
                     : 'var(--ds-color-warning)',
                   flexShrink: 0,
                 }}
@@ -435,7 +435,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                     background:
                       hoveredMenuBtn === view.id
                         ? isActive
-                          ? 'rgba(255,255,255,0.2)'
+                          ? 'var(--ds-color-alpha-white-20)'
                           : 'var(--ds-surface-highlight)'
                         : 'transparent',
                     borderRadius: 'var(--ds-radius-sm)',

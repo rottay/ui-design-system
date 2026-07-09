@@ -103,7 +103,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
   return (
     <div
       className="fixed inset-0 z-[9999] flex items-center justify-center"
-      style={{ background: 'var(--ds-upload-preview-backdrop, rgba(0,0,0,0.6))' }}
+      style={{ background: 'var(--ds-upload-preview-backdrop)' }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -206,15 +206,15 @@ const FileItem: React.FC<FileItemProps> = ({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'var(--ds-color-bg-secondary, #fafafa)',
-      border: `1px solid ${file.status === 'error' ? 'var(--ds-color-error, #ef4444)' : 'var(--ds-color-border, #e5e5e5)'}`,
+      background: 'var(--ds-color-bg-secondary)',
+      border: `1px solid ${file.status === 'error' ? 'var(--ds-color-error)' : 'var(--ds-color-border)'}`,
       transition: 'box-shadow var(--ds-motion-normal), transform var(--ds-motion-normal)',
       cursor: 'pointer',
     };
     const overlayStyle: React.CSSProperties = {
       position: 'absolute',
       inset: 0,
-      background: 'var(--ds-upload-preview-overlay, rgba(0,0,0,0.5))',
+      background: 'var(--ds-upload-preview-overlay)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -225,8 +225,8 @@ const FileItem: React.FC<FileItemProps> = ({
       height: 32,
       borderRadius: '50%',
       border: 'none',
-      background: 'rgba(255,255,255,0.2)',
-      color: 'var(--ds-upload-overlay-action-color, #fff)',
+      background: 'var(--ds-color-alpha-white-20)',
+      color: 'var(--ds-upload-overlay-action-color)',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
@@ -244,10 +244,10 @@ const FileItem: React.FC<FileItemProps> = ({
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
-          <span style={{ fontSize: 12, color: 'var(--ds-color-text-muted, #a3a3a3)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '0 4px', textAlign: 'center' }}>{file.name}</span>
+          <span style={{ fontSize: 12, color: 'var(--ds-color-text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '0 4px', textAlign: 'center' }}>{file.name}</span>
         )}
         {isUploading && (
-          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 4, background: 'var(--ds-color-alpha-black-40, rgba(0,0,0,0.4))' }}>
+          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 4, background: 'var(--ds-color-alpha-black-40)' }}>
             <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
@@ -290,13 +290,13 @@ const FileItem: React.FC<FileItemProps> = ({
           </div>
         )}
         {hovered && !isUploading && (
-          <div className="absolute inset-0 rounded-full flex items-center justify-center gap-1" style={{ background: 'var(--ds-upload-preview-overlay, rgba(0,0,0,0.5))' }}>
+          <div className="absolute inset-0 rounded-full flex items-center justify-center gap-1" style={{ background: 'var(--ds-upload-preview-overlay)' }}>
             {isImg && (
-              <button type="button" style={{ background: 'transparent', color: 'var(--ds-upload-overlay-action-color, #fff)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
+              <button type="button" style={{ background: 'transparent', color: 'var(--ds-upload-overlay-action-color)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
               </button>
             )}
-            <button type="button" style={{ background: 'transparent', color: 'var(--ds-upload-overlay-action-color, #fff)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
+            <button type="button" style={{ background: 'transparent', color: 'var(--ds-upload-overlay-action-color)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>

@@ -566,10 +566,10 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                     top: '100%',
                     left: 0,
                     marginTop: 4,
-                    background: 'var(--ds-color-bg-elevated, #fff)',
+                    background: 'var(--ds-color-bg-elevated)',
                     border: '1px solid var(--ds-color-border)',
                     borderRadius: 'var(--ds-radius-lg, 12px)',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                    boxShadow: 'var(--ds-elevation-2)',
                     zIndex: 10,
                     minWidth: 180,
                     maxHeight: 260,
@@ -595,7 +595,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                         gap: 8,
                       }}
                       onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLDivElement).style.background = 'var(--ds-color-bg-secondary, #f5f5f5)';
+                        (e.currentTarget as HTMLDivElement).style.background = 'var(--ds-color-bg-secondary)';
                       }}
                       onMouseLeave={(e) => {
                         (e.currentTarget as HTMLDivElement).style.background = 'transparent';

@@ -108,7 +108,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
           <button
             // Signal-glow (spec section 5, role 3): reserved for live moments like
             // new real-time items arriving. Collapses to none when --ds-effect-intensity is 0.
-            style={{ background: 'var(--ds-color-info, #3b82f6)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', marginBottom: 12, boxShadow: 'var(--ds-shadow-glow-primary)' }}
+            style={{ background: 'var(--ds-color-info)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', marginBottom: 12, boxShadow: 'var(--ds-shadow-glow-primary)' }}
             onClick={onShowNewItems}
           >
             <div style={{ ...pillBadgeSmStyle, background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>{newItemsCount}</div>

@@ -244,7 +244,7 @@
    "lane": "engine-modern",
    "order": 6,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01"
    ],
@@ -252,7 +252,18 @@
    "programs": [
     "spec-6"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 08:16",
+     "by": "ds-agent",
+     "note": "Full implementation DELEGATED to fresh agent a514eb4a80dc0742b (sonnet, edit-only; NO build/test/commit): drive modern-engine hardcoded colors to 0/0 (78 hex + ~31 rgba across ~23 files) - status hex->--ds-color-success/info/error/warning by MEANING, neutral/surface hex->--ds-color-* scale, remove var() hex fallbacks (keep ENG-07 fallback-parity=0), no hex-for-hex swaps. Named offenders: data-table/live-feed/environment-toggle/calendar-view modern engines (esp #3b82f6). Audit: color.modernHexLiterals + color.modernRgbaLiterals counters (target 0/0, decrease-only, documented counting). ON RETURN: audit diff vs fences (no new hex, no divergent fallbacks), gate (build+test+audit --check), SIGHTED before/after status colors shift with tenant+light/dark (test-artifacts/engine-modern/eng-06/), commit. Prior 7/34 committed (be39de7a). NOTE: ENG-05 done w/ rottay-tint caveat (dev-server Turbopack cache; static output verified correct; flagged for prod verify)."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "Modern-engine hardcoded colors driven down: hex 78->13, rgba 29->1 (audit-counted, comments + HTML-entities excluded); 30 files edited across all 128 modern-engine files. Status/semantic hex mapped to tokens BY MEANING: #047857->var(--ds-color-success), #dc2626->error, #f59e0b->warning, #3b82f6->info (or --ds-color-primary for brand accent). Named offenders fixed (data-table inline-edit save/cancel + dirty-cell + resize-handle, live-feed info, environment-toggle scrim+arbitrary-color, calendar-view). Dead var(--ds-color-x,#hex) fallbacks removed -> ENG-07 fallbackParityViolations stays 0. rgba scrims -> --ds-color-alpha-* tokens; continuous/caller-configurable opacity -> color-mix(in srgb, var(--ds-color-black) N%, transparent). Orphan-token defects fixed (--ds-overlay-backdrop->--ds-color-bg-overlay; --ds-checkbox/radio-indicator-color->--ds-color-text-on-primary). BONUS real pre-existing bug fixed: rottay --ds-color-primary=#FFFFFF made checkbox/radio checkmarks white-on-white (invisible) via the old #fff fallback; routing through the contrast-paired --ds-color-text-on-primary fixes it. DOCUMENTED non-tokenizable residual (13 hex + 1 rgba, NOT 0/0): tenant-preview color-math (interpolates a tenant-supplied brand hex to a literal palette-ramp + displays literal hex text), ColorPicker native <input type=color> (value requires a literal #rrggbb, var() invalid there) + rgb() conversion of arbitrary user color. AUDIT: color.modernHexLiterals(13) + color.modernRgbaLiterals(1), decrease-only ratchet, documented counting method. GATE: build exit 0; audit --check green (parity=0 preserved); ZERO new hex/rgba introduced (diff-verified); component tests primitives+patterns (the 30-file scope) 3447 passed / 0 regressions. SIGHTED (test-artifacts/engine-modern/eng-06/): status colors route through tenant/theme-scoped tokens -- --ds-color-success has 7 per-tenant/theme definitions in the compiled CSS => inherent shift with tenant + light/dark; table/badge status captured both palettes; modern Badge renders variants subtly (PRE-EXISTING since ENG-04, diff shows only dead-fallback removal, not an ENG-06 change); data-table interaction-state colors are tokenized (resolve per tenant/theme)."
   },
   {
    "id": "WO-ENG-07",

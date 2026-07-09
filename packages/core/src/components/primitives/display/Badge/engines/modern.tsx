@@ -73,7 +73,7 @@ const VARIANT_TOKENS: Record<string, VariantTokens> = {
   },
   secondary: {
     solidBg: 'var(--ds-color-secondary)',
-    solidColor: 'var(--ds-color-text-on-primary, #ECECEC)',
+    solidColor: 'var(--ds-color-text-on-primary)',
     softBg: 'var(--ds-color-alpha-secondary-10)',
     softColor: 'var(--ds-color-secondary-600)',
     outlineBorder: 'var(--ds-color-secondary-300)',
@@ -81,7 +81,7 @@ const VARIANT_TOKENS: Record<string, VariantTokens> = {
   },
   success: {
     solidBg: 'var(--ds-color-success)',
-    solidColor: 'var(--ds-color-text-on-primary, #ECECEC)',
+    solidColor: 'var(--ds-color-text-on-primary)',
     softBg: 'var(--ds-color-alpha-success-10)',
     softColor: 'var(--ds-color-success-700)',
     outlineBorder: 'var(--ds-color-success-border)',
@@ -89,7 +89,7 @@ const VARIANT_TOKENS: Record<string, VariantTokens> = {
   },
   warning: {
     solidBg: 'var(--ds-color-warning)',
-    solidColor: 'var(--ds-color-text-on-primary, #ECECEC)',
+    solidColor: 'var(--ds-color-text-on-primary)',
     softBg: 'var(--ds-color-alpha-warning-10)',
     softColor: 'var(--ds-color-warning-700)',
     outlineBorder: 'var(--ds-color-warning-border)',
@@ -97,7 +97,7 @@ const VARIANT_TOKENS: Record<string, VariantTokens> = {
   },
   error: {
     solidBg: 'var(--ds-color-error)',
-    solidColor: 'var(--ds-color-text-on-primary, #ECECEC)',
+    solidColor: 'var(--ds-color-text-on-primary)',
     softBg: 'var(--ds-color-alpha-error-10)',
     softColor: 'var(--ds-color-error-700)',
     outlineBorder: 'var(--ds-color-error-border)',
@@ -105,7 +105,7 @@ const VARIANT_TOKENS: Record<string, VariantTokens> = {
   },
   info: {
     solidBg: 'var(--ds-color-info)',
-    solidColor: 'var(--ds-color-text-on-primary, #ECECEC)',
+    solidColor: 'var(--ds-color-text-on-primary)',
     softBg: 'var(--ds-color-alpha-info-10)',
     softColor: 'var(--ds-color-info-700)',
     outlineBorder: 'var(--ds-color-info-border)',

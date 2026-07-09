@@ -100,7 +100,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
           >
             <span
               className="w-2 h-2 rounded-full inline-block"
-              style={{ background: activeEnv?.color ?? '#ccc' }}
+              style={{ background: activeEnv?.color ?? 'var(--ds-color-neutral-400)' }}
             />
             {activeEnv?.name ?? 'Select'}
             {activeEnv?.badge && (
@@ -254,7 +254,7 @@ export default function ModernEnvironmentToggle(props: EnvironmentToggleProps) {
             </div>
           </div>
           {/* Transparent backdrop -- closes modal on click without switching */}
-          <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.5)' }} onClick={() => setConfirmEnv(null)} />
+          <div style={{ position: 'absolute', inset: 0, background: 'var(--ds-color-alpha-black-50)' }} onClick={() => setConfirmEnv(null)} />
         </div>
       )}
     </div>

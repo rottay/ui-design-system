@@ -233,7 +233,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
             onClick={handleExpand}
           >
             {isLoading ? (
-              <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border, #ccc)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+              <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
             ) : (
               <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`inline-block ${isExpanded ? 'rotate-90' : ''}`}>&#9654;</span>
             )}

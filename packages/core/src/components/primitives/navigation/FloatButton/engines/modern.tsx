@@ -127,7 +127,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
           <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error" style={{ background: 'var(--ds-color-error)' }} />
         )}
         {badge?.count && (
-          <span style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 9999, padding: '1px 6px', fontSize: 11, lineHeight: '16px', background: 'var(--ds-color-error)', color: '#fff' }}>
+          <span style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 9999, padding: '1px 6px', fontSize: 11, lineHeight: '16px', background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' }}>
             {badge.count > 99 ? '99+' : badge.count}
           </span>
         )}

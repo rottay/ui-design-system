@@ -88,7 +88,8 @@ function getPlacementStyles(
 
 function getOverlayBackground(showBackdrop: boolean, overlayOpacity: number): string {
   if (!showBackdrop) return 'transparent';
-  return `rgba(0, 0, 0, ${Math.min(Math.max(overlayOpacity, 0), 1)})`;
+  const clampedPercent = Math.min(Math.max(overlayOpacity, 0), 1) * 100;
+  return `color-mix(in srgb, var(--ds-color-black) ${clampedPercent}%, transparent)`;
 }
 
 // ============================================================================

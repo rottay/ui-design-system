@@ -692,7 +692,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                   lineHeight: 1,
                   borderRadius: 9,
                   background: 'var(--ds-color-primary)',
-                  color: 'var(--ds-color-primary-foreground, #fff)',
+                  color: 'var(--ds-color-primary-foreground)',
                 }}
               >
                 {activeCount}
@@ -782,7 +782,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                 border: 'none',
                 borderRadius: 'var(--ds-radius-sm)',
                 background: 'var(--ds-color-primary)',
-                color: 'var(--ds-color-primary-foreground, #fff)',
+                color: 'var(--ds-color-primary-foreground)',
                 cursor: 'pointer',
                 transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
               }}

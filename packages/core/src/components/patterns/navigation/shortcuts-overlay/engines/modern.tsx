@@ -99,7 +99,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
          the page header rather than dead-center, which feels more natural for reference panels */
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]" style={style} role="dialog" aria-modal="true" aria-label={title}>
       {/* Semi-transparent backdrop closes the dialog on click */}
-      <div className="absolute inset-0" style={{ background: 'var(--ds-overlay-backdrop, rgba(0, 0, 0, 0.5))' }} onClick={handleClose} />
+      <div className="absolute inset-0" style={{ background: 'var(--ds-color-bg-overlay)' }} onClick={handleClose} />
       {/* Dialog card -- max-w-lg prevents overly wide layouts on ultrawide screens */}
       <div
         className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`}

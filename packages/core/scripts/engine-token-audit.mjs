@@ -6,9 +6,10 @@
  * section 12) drives to zero, and enforces a DECREASE-ONLY ratchet: no counter may rise above
  * its recorded baseline. WO-ENG-01 seeds the motion counters, WO-ENG-03 the depth counters,
  * WO-ENG-07 the scale counters (radius-scale-declarations, fallback-parity), WO-ENG-04 the
- * interaction-state counters (dark-focus-ring-defects, inline-state-literals); later WOs extend
- * this file with the remaining section-12 counters (hardcoded colors, gradient/glass/glow
- * usage, theme.css lines, cross-engine layout).
+ * interaction-state counters (dark-focus-ring-defects, inline-state-literals), WO-ENG-06 the
+ * color-purity counters (modernHexLiterals, modernRgbaLiterals); later WOs extend this file
+ * with the remaining section-12 counters (gradient/glass/glow usage, theme.css lines,
+ * cross-engine layout).
  *
  * Usage:
  *   node scripts/engine-token-audit.mjs            # print the current counts
@@ -37,6 +38,81 @@ function modernFiles(dir) {
     }
   }
   return out;
+}
+
+/**
+ * Collect the color-purity file set (WO-ENG-06, spec section 6): every modern-engine
+ * source file, `.tsx`/`.ts` OR `.css` -- the spec names the target as any `engines/modern*`
+ * path ending in `.tsx`, `.ts`, or `.css`.
+ * Today every modern-engine file is `.tsx` (one `.ts`); no `.css` sibling exists yet under an
+ * `engines/modern/` path, so this currently returns the same set as modernFiles(), but the
+ * `.css` branch is included so a future modern-engine stylesheet is covered automatically
+ * instead of silently escaping the ratchet.
+ */
+function modernColorFiles(dir) {
+  const out = [];
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    const st = statSync(full);
+    if (st.isDirectory()) {
+      out.push(...modernColorFiles(full));
+    } else if (/engines\/modern(\/[^/]+)?\.(tsx?|css)$/.test(full.replace(/\\/g, "/"))) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
+/** Strips `/* ... *\/` block comments (replacing their content with spaces, so offsets/line
+ * counts are unaffected) before color-literal counting. JSDoc `@example` blocks on several
+ * patterns (EnvironmentToggle, CalendarView, TenantPreview, Rate, ColorPicker) illustrate a
+ * free-form `color`/`primaryColor` prop with a sample hex; that sample documents a prop SHAPE
+ * for arbitrary consumer data, not a hardcoded engine chrome color, and a comment is never a
+ * rendered color regardless. Line comments (`//`) are deliberately NOT stripped: no exemption
+ * found in this codebase needed it, and naively stripping `//` risks eating real code that
+ * follows a `//` inside a string (e.g. a URL). */
+function stripBlockComments(text) {
+  return text.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
+}
+
+/**
+ * Count hardcoded hex and rgba/rgb color literals across the color-purity file set (WO-ENG-06,
+ * spec section 6: "Zero hardcoded colors in engine component files"). Counting method:
+ *  - hex: `#` + 3, 4, 6, or 8 hex digits at a word boundary, EXCLUDING a `#` immediately
+ *    preceded by `&` -- that is an HTML numeric character entity (`&#10003;` a checkmark,
+ *    `&#171;`/`&#187;` guillemets, `&#9654;`/`&#9660;` triangles -- literal glyph content in a
+ *    few components, never a color) and would otherwise false-positive (`&#10003;` reads as
+ *    hex digits 1/0/0/0/3).
+ *  - rgba: `rgb(` or `rgba(` as a literal function call.
+ *  - Both are counted after stripBlockComments() removes comment content (see above).
+ *  - NOT exempted -- counts as real, tracked residual: hex/rgba used as color-MATH
+ *    inputs/outputs over arbitrary, non-token data. Two concrete cases, both left in place and
+ *    documented in the WO-ENG-06 report rather than routed through a token:
+ *      1. TenantPreview's mixColor()/hexToRgb()/getContrastColor() helpers interpolate a
+ *         TENANT-SUPPLIED brand hex toward true white/black to derive a live preview palette,
+ *         then display the literal computed hex in a tooltip (`title={`${step}: ${color}`}`) --
+ *         the value must be a real hex string, and "true white"/"true black" are
+ *         theme-invariant interpolation endpoints, not chrome that should shift with branding.
+ *      2. ColorPicker's toRgbString() conversion and its native `<input type="color">`
+ *         defaultValue -- the DOM color input's value attribute requires a literal `#rrggbb`
+ *         string; `var(--ds-color-*)` is not a valid value there.
+ *  - Data URIs are exempt implicitly: this codebase's modern-engine files contain none, so no
+ *    special-case was needed, but a `data:` URI hex/rgba (e.g. inside an inlined SVG or base64
+ *    image) would be a false positive the same way HTML entities are, not a real color.
+ * Target: 0 / 0. Current documented residual: 13 hex (TenantPreview 12 + ColorPicker 1) + 1
+ * rgba (ColorPicker) -- see the WO-ENG-06 report for the full per-file accounting.
+ */
+function countColorLiterals(files) {
+  let hex = 0;
+  let rgba = 0;
+  const hexRe = /(?<!&)#[0-9a-fA-F]{3,8}\b/g;
+  const rgbaRe = /\brgba?\(/g;
+  for (const file of files) {
+    const text = stripBlockComments(readFileSync(file, "utf8"));
+    hex += (text.match(hexRe) || []).length;
+    rgba += (text.match(rgbaRe) || []).length;
+  }
+  return { hex, rgba };
 }
 
 /** The motion token names components consume that the canon must define (else they resolve to fallbacks). */
@@ -478,6 +554,8 @@ function countEffectConsumers() {
 const files = modernFiles(componentsDir);
 const motion = countMotionLiterals(files);
 const effects = countEffectConsumers();
+const colorFiles = modernColorFiles(componentsDir);
+const color = countColorLiterals(colorFiles);
 
 const counters = {
   "motion.cubicBezierLiterals": motion.cubicBezier,
@@ -492,7 +570,9 @@ const counters = {
   "effects.gradientConsumers": effects.gradient,
   "effects.glassConsumers": effects.glass,
   "effects.glowConsumers": effects.glow,
-  // Later WOs extend here: color.hardcodedHex, theme.css lines, ...
+  "color.modernHexLiterals": color.hex,
+  "color.modernRgbaLiterals": color.rgba,
+  // Later WOs extend here: theme.css lines, cross-engine layout, ...
 };
 
 /** Invariants checked for exact equality (not just decrease-only) in --check. */

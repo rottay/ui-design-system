@@ -118,24 +118,24 @@ const VARIANT_HOVER_STYLES: Record<string, React.CSSProperties> = {
     boxShadow: 'var(--ds-button-primary-shadow-hover, var(--ds-elevation-2))',
   },
   secondary: {
-    background: 'var(--ds-button-secondary-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.04)))',
+    background: 'var(--ds-button-secondary-bg-hover, var(--ds-color-bg-subtle))',
     borderColor: 'var(--ds-button-secondary-border-hover, var(--ds-color-border))',
   },
   default: {
-    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.04)))',
+    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle))',
     borderColor: 'var(--ds-button-default-border-hover, var(--ds-color-border))',
   },
   outline: {
-    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.04)))',
+    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle))',
   },
   ghost: {
-    background: 'var(--ds-button-ghost-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.05)))',
+    background: 'var(--ds-button-ghost-bg-hover, var(--ds-color-bg-subtle))',
   },
   text: {
-    background: 'var(--ds-button-text-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.05)))',
+    background: 'var(--ds-button-text-bg-hover, var(--ds-color-bg-subtle))',
   },
   dashed: {
-    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle, rgba(0,0,0,0.02)))',
+    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle))',
   },
   danger: {
     background: 'var(--ds-button-error-bg-hover, var(--ds-color-error))',
