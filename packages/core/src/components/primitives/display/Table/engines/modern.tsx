@@ -87,6 +87,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     loading = false,
     size = 'default',
     bordered = false,
+    headerBordered = true,
     pagination = {},
     rowSelection,
     expandable,
@@ -157,6 +158,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const showExpandCol = hasExpandable && expandable?.showExpandColumn !== false;
   // Only render the filter row if at least one column declares filterSearch or filters.
   const hasFilters = leafColumns.some((c) => c.filterSearch || c.filters);
+  // Header/body separator: `bordered` implies the full cell-border treatment
+  // (see the <td> borderBottom below, gated on `bordered` alone), which always
+  // includes this line. `headerBordered` controls the line independently so an
+  // unconfigured <Table> still separates header from body; passing
+  // `headerBordered={false}` is the only way to reach a fully borderless table.
+  const showHeaderHairline = bordered || headerBordered;
 
   /**
    * Returns inline styles for fixed (pinned) columns. Sticky positioning with
@@ -349,7 +356,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40, zIndex: 20, background: 'var(--ds-table-header-bg, var(--ds-surface-inset))' } : {}),
             ...getFixedStyle(column.fixed),
             ...(isSortable ? { cursor: 'pointer', userSelect: 'none' as const, transition: 'color var(--ds-motion-fast)' } : {}),
-            ...(bordered ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
+            ...(showHeaderHairline ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
             ...column.style,
           }}
           onClick={() => isSortable && handleSort(column)}

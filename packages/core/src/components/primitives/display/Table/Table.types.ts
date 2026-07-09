@@ -386,8 +386,16 @@ export interface TableProps<T = unknown> {
   loading?: boolean | { spinning?: boolean; delay?: number };
   /** Size */
   size?: TableSize;
-  /** Bordered */
+  /** Bordered -- full outer border plus per-cell borders. Always implies `headerBordered`. */
   bordered?: boolean;
+  /**
+   * Header/body separator hairline, independent of `bordered`. Set to `false`
+   * for a fully borderless table when `bordered` is also left at its default.
+   * Only the modern engine reads this flag; classic and rustic derive their
+   * header separator from their own default styling.
+   * @default true
+   */
+  headerBordered?: boolean;
   /** Pagination */
   pagination?: false | TablePaginationConfig;
   /** Row selection */
@@ -460,6 +468,8 @@ export const TABLE_DEFAULTS: Partial<TableProps> = {
   size: 'default',
   /** No outer border by default. */
   bordered: false,
+  /** Header/body separator hairline is shown by default. */
+  headerBordered: true,
   /** Column headers are visible by default. */
   showHeader: true,
   /** Row highlight on mouse-over is enabled by default. */
