@@ -26,6 +26,7 @@ import { useTokens } from '../../../../../hooks/tokens';
 import type { StatsGridProps } from '../StatsGrid.types';
 import type { StatDef } from '../../../foundation/types';
 import { resolveStatsGridMotion } from '../personality';
+import { resolveStatsGridColumns } from '../layout';
 
 /**
  * Maps raw data values to SVG polyline coordinates for a mini sparkline.
@@ -306,7 +307,7 @@ function LoadingSkeleton({
   return (
     <>
       <style>{`@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.4 } } @keyframes wave { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }`}</style>
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap }}>
+      <div style={{ display: 'grid', gridTemplateColumns: resolveStatsGridColumns(columns), gap }}>
         {Array.from({ length: columns }).map((_, i) => (
           <div
             key={i}
@@ -365,7 +366,7 @@ export default function RusticStatsGrid(props: StatsGridProps) {
       className={className}
       style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gridTemplateColumns: resolveStatsGridColumns(columns),
         gap,
         ...style,
       }}

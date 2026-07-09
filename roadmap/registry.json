@@ -348,7 +348,7 @@
    "lane": "engine-modern",
    "order": 10,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-02"
    ],
@@ -356,7 +356,18 @@
    "programs": [
     "spec-10"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 10:00",
+     "by": "ds-agent",
+     "note": "Full implementation DELEGATED to fresh agent a322dba6e96988411 (sonnet, edit-only; NO build/test/commit): fix modern StatsGrid vertical-stacking (should be horizontal like classic/rustic) by moving orientation/columns layout to the COMPONENT layer (engine themes, does not re-layout); sweep engines/{classic,modern,rustic} for other undeclared layout-axis divergences (flexDirection/gridTemplateColumns) - unify or document engine-themable; audit layout.crossEngineDivergences counter=0. ON RETURN: audit diff (layout moved OUT to component not INTO engine; StatsGrid visual theming unchanged), gate (build+test+audit --check), SIGHTED stats-grid modern horizontal matching classic/rustic (test-artifacts/engine-modern/eng-10/), commit. Prior 9/34 committed (bbe018e7). ENG-08 <800 shortfall flagged (component-off-DaisyUI migration needed)."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "StatsGrid cross-engine layout FIXED: root cause = modern used a responsive auto-fill/minmax grid (repeat(auto-fill, minmax(...))) that collapses to 1 column in a narrow container -> vertical stack, vs classic/rustic's fixed repeat(columns,1fr). Fix: new shared packages/core/.../stats-grid/layout.ts (resolveStatsGridColumns(columns=4)->repeat(columns,1fr)) imported by ALL 3 engines (following the sibling personality.ts precedent) for both main grid + loading skeleton; modern auto-fill removed (0 left); classic/rustic = no-op refactor (identical output string). StatsGrid VISUAL THEMING byte-unchanged (variantStyles/StatCard/sparkline/skeleton/gap untouched — only gridTemplateColumns moved to the component layer). SWEEP: all 132 engine triads surveyed (6 engine-coverage gaps out of scope); 126 valid: 72 zero-diff, 54 reviewed via parallel fork reviews. 49 false positives (AntD-internal layout / block-flow / shared layout|orientation props honored identically - Form/Stepper/Steps are positive parity references). 5 real divergences: StatsGrid FIXED; Toggle not-real (labelPlacement ternary position - documented + allowlisted); + 4 REPORTED-not-fixed (correctly, not half-fixed): form-builder (modern flexWrap tag-cloud vs documented per-field label layout - risky 1074-line rewrite unverifiable w/o build), file-manager (grid column algorithm modern Tailwind-breakpoints vs classic/rustic container-width - responsive decision), Layout (modern gates sider-row behind md: breakpoint; Layout.types has an UNCONSUMED breakpoint prop - overlaps WO-ENG-12 responsive scope), list-toolbar (modern nowrap+mobile-overflow tier - likely deliberate). AUDIT: layout.crossEngineDivergences EXACT invariant=0 (narrow heuristic: modern inline flexDirection/gridTemplateColumns disagreeing w/ agreeing classic+rustic; DOCUMENTED blind spot for Tailwind-utility-class layout - which is how the 4 reported divergences manifest) + LAYOUT_AXIS_EXCEPTIONS allowlist (Toggle). GATE: build exit 0; audit --check green (crossEngineDivergences=0, all other counters unchanged); targeted tests stats-grid+Toggle+Layout 59 passed. SIGHTED: modern StatsGrid now lays out HORIZONTALLY matching classic/rustic (test-artifacts/engine-modern/eng-10/ before-vs-after differ; engine-comparison shows all 3 engines horizontal). FLAGGED FOR OWNER/ENG-12: the 4 documented divergences (form-builder per-field label; file-manager + Layout responsive column/breakpoint -> ENG-12/P-08; list-toolbar overflow) - Tailwind-utility blind spot means the counter doesn't auto-detect them, documented in-script."
   },
   {
    "id": "WO-ENG-11",

@@ -47,8 +47,9 @@ export interface StatsGridProps extends PatternBaseProps {
   renderStat?: (stat: StatDef, defaultRender: ReactNode) => ReactNode;
 
   /**
-   * Number of columns in the grid layout.
-   * Falls back to a responsive default based on container width.
+   * Number of columns in the grid layout. Renders a fixed `columns`-track
+   * horizontal grid (via the shared `resolveStatsGridColumns` helper);
+   * identical across classic, modern, and rustic. Defaults to 4.
    */
   columns?: number;
 

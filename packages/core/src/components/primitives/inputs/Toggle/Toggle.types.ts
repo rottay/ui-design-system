@@ -76,7 +76,11 @@ export interface ToggleProps extends EngineAwareProps {
   error?: boolean;
   /** Error message */
   errorMessage?: string;
-  /** Label placement relative to toggle */
+  /**
+   * Label placement relative to toggle. Drives the same row/row-reverse
+   * flex axis identically in classic, modern, and rustic -- not an
+   * engine-specific layout choice, just a shared prop-driven axis.
+   */
   labelPlacement?: ToggleLabelPlacement;
   /** Change handler */
   onChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;

@@ -5,7 +5,8 @@
  *
  * Premium stat-card grid with:
  * - Clear number hierarchy (large bold value, muted label, colored trend)
- * - Responsive auto-filling grid layout
+ * - Fixed `columns`-count horizontal grid layout (shared with classic/rustic
+ *   via resolveStatsGridColumns; the engine themes the tiles, not the layout)
  * - Animated value count-up with cubic ease-out
  * - Premium shimmer skeleton with card-shaped placeholders
  * - Mini SVG sparkline charts for trend visualization
@@ -26,6 +27,7 @@ import { useTokens } from '../../../../../hooks/tokens';
 import type { StatsGridProps } from '../StatsGrid.types';
 import type { StatDef } from '../../../foundation/types';
 import { resolveStatsGridMotion } from '../personality';
+import { resolveStatsGridColumns } from '../layout';
 
 /* ---------------------------------------------------------------------------
  * Sparkline
@@ -366,7 +368,7 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
         className="ds-stats-grid-skeleton"
         style={{
           display: 'grid',
-          gridTemplateColumns: `repeat(auto-fill, minmax(min(max(200px, calc(100.1% / ${columns})), 100%), 1fr))`,
+          gridTemplateColumns: resolveStatsGridColumns(columns),
           gap,
         }}
       >
@@ -404,9 +406,9 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
 /**
  * Modern engine for the StatsGrid pattern component.
  *
- * Renders a responsive CSS grid of premium stat cards styled entirely
- * with DS tokens. Supports columns, sparklines, variant styles, animated
- * count-up values, and custom renderStat slots.
+ * Renders a fixed `columns`-track CSS grid of premium stat cards styled
+ * entirely with DS tokens. Supports columns, sparklines, variant styles,
+ * animated count-up values, and custom renderStat slots.
  *
  * @param props - {@link StatsGridProps} controlling stats data, layout, animation, and callbacks.
  * @returns A grid of statistic cards.
@@ -432,21 +434,12 @@ export default function ModernStatsGrid(props: StatsGridProps) {
   // Respects user's prefers-reduced-motion OS preference.
   const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
 
-  // `columns` is a MAXIMUM column count, not a fixed grid. On narrow
-  // viewports the grid wraps to fewer columns automatically.
-  //
-  // Strategy: auto-fill + minmax where the min-width is computed so that
-  // `columns` items can only fit when the container is wide enough.
-  // For columns=4: min card width ~= 100%/4 ~= 25%, so we use
-  // max(200px, 100.1%/columns) as the floor. The 100.1% (not 100%)
-  // ensures that exactly `columns` items fill the row without an extra
-  // column squeezing in due to rounding.
-  const minCardWidth = columns
-    ? `max(200px, calc(100.1% / ${columns}))`
-    : '240px';
+  // Column axis is a component-layer concern shared by every engine
+  // (Quiet Premium spec section 10): a fixed `columns`-track horizontal
+  // grid, identical to classic/rustic. See resolveStatsGridColumns.
   const gridStyle: React.CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: `repeat(auto-fill, minmax(min(${minCardWidth}, 100%), 1fr))`,
+    gridTemplateColumns: resolveStatsGridColumns(columns),
     gap,
     ...style,
   };

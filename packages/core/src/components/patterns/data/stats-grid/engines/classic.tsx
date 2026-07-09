@@ -27,6 +27,7 @@ import { useTokens } from '../../../../../hooks/tokens';
 import type { StatsGridProps } from '../StatsGrid.types';
 import type { StatDef } from '../../../foundation/types';
 import { resolveStatsGridMotion } from '../personality';
+import { resolveStatsGridColumns } from '../layout';
 
 /**
  * Maps raw data values to SVG polyline coordinate pairs.
@@ -182,7 +183,7 @@ function StatCard({
 /** Skeleton placeholder grid rendered while stat data is being fetched. */
 function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | number }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`, gap }}>
+    <div style={{ display: 'grid', gridTemplateColumns: resolveStatsGridColumns(columns), gap }}>
       {Array.from({ length: columns }).map((_, i) => (
         <Card key={i} loading size="small" />
       ))}
@@ -227,7 +228,7 @@ export default function ClassicStatsGrid(props: StatsGridProps) {
       className={className}
       style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${columns}, 1fr)`,
+        gridTemplateColumns: resolveStatsGridColumns(columns),
         gap,
         ...style,
       }}

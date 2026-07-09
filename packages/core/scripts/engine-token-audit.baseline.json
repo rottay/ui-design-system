@@ -14,5 +14,6 @@
   "color.modernHexLiterals": 13,
   "color.modernRgbaLiterals": 1,
   "themeCss.unreferencedSelectors": 0,
-  "themeCss.lineCount": 1675
+  "themeCss.lineCount": 1675,
+  "layout.crossEngineDivergences": 0
 }
