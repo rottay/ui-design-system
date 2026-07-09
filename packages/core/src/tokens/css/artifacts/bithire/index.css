@@ -300,9 +300,7 @@ html[data-tenant='bithire'] {
   --ds-table-row-bg-selected: #E8F3FF;
   --ds-table-row-bg-striped: #FAFCFF;
   --ds-table-row-border: #DEE8F2;
-  --ds-table-row-hover-bg: #F4F8FD;
   --ds-table-row-hover-shadow: inset 1px 0 0 color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
-  --ds-table-row-striped-bg: #FAFCFF;
   --ds-table-sheen: none;
   --ds-text-body: 400 0.875rem/1.25rem var(--ds-font-family-base);
   --ds-text-body-letter-spacing: 0;

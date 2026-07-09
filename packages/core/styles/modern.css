@@ -263,6 +263,9 @@
       }
     }
   }
+  .\@container {
+    container-type: inline-size;
+  }
   .modal {
     @layer daisyui.l1.l2.l3 {
       pointer-events: none;
@@ -1248,6 +1251,9 @@
         display: revert-layer;
       }
     }
+  }
+  .\!visible {
+    visibility: visible !important;
   }
   .collapse {
     visibility: collapse;

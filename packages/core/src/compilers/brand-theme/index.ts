@@ -765,10 +765,11 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
     if (t.headerBorder) vars['--ds-table-header-border'] = t.headerBorder;
     if (t.headerShadow) vars['--ds-table-header-shadow'] = t.headerShadow;
     if (t.rowBg) vars['--ds-table-row-bg'] = t.rowBg;
+    // One name per channel. Components consume the `-bg-hover` / `-bg-striped`
+    // spelling; a second alias for the same value has no consumer anywhere in
+    // the design system or the three consuming apps.
     if (t.rowBgHover) vars['--ds-table-row-bg-hover'] = t.rowBgHover;
-    if (t.rowBgHover) vars['--ds-table-row-hover-bg'] = t.rowBgHover;
     if (t.rowBgStriped) vars['--ds-table-row-bg-striped'] = t.rowBgStriped;
-    if (t.rowBgStriped) vars['--ds-table-row-striped-bg'] = t.rowBgStriped;
     if (t.rowBgSelected) vars['--ds-table-row-bg-selected'] = t.rowBgSelected;
     if (t.rowBgExpanded) vars['--ds-table-row-bg-expanded'] = t.rowBgExpanded;
     if (t.rowBorder) vars['--ds-table-row-border'] = t.rowBorder;

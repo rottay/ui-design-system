@@ -1147,6 +1147,22 @@
     transform var(--ds-motion-fast) var(--ds-motion-ease-out);
 
   /* ─────────────────────────────────────────────────────────────────────────────
+     5.1a ASYNC STATE (WO-CRA-02) — perceived-speed choreography thresholds
+     Mutation-bearing components stage their busy affordance against these two
+     thresholds instead of flashing a spinner on every await. A wait shorter than
+     --ds-async-spinner-delay shows no busy indicator at all (sub-perceptual waits
+     stay silent); past it a lightweight spinner is warranted; past
+     --ds-async-skeleton-after a structural Skeleton supersedes the spinner for a
+     long wait. The useDeferredPending() hook RESOLVES these two tokens off the
+     document root, so a tenant that overrides them moves the JS timing with the
+     CSS law rather than leaving the two to disagree. Under prefers-reduced-motion
+     the hook holds a single stable indicator: the spinner delay is kept so a
+     sub-threshold wait never flashes, and the Skeleton escalation is suppressed.
+     ───────────────────────────────────────────────────────────────────────────── */
+  --ds-async-spinner-delay: 150ms;
+  --ds-async-skeleton-after: 500ms;
+
+  /* ─────────────────────────────────────────────────────────────────────────────
      5.2 TOUCH TARGETS (WO-ENG-12) — coarse-pointer hit-area floor
      A single floor value, not a parallel size scale: an engine-scoped
      `@media (pointer: coarse)` rule clamps a control's existing sizing tokens
@@ -14983,6 +14999,94 @@ html {
   }
 }
 
+/* =========================================================================
+   VIEW TRANSITIONS + SCROLL-DRIVEN REVEAL
+   Page-to-page transitions (View Transitions API) and CSS scroll-driven
+   reveal, both expressed on the --ds-motion-* canon. The View Transitions
+   root animation reuses --ds-page-transition-duration (defined in
+   components/patterns.css as --ds-motion-normal) so page cadence stays in one
+   place. Elements opt into the scroll reveal with the .ds-scroll-reveal class
+   (see the ScrollReveal primitive). Both degrade to a static paint under
+   reduced motion via the guarded block below.
+   ========================================================================= */
+
+@keyframes ds-view-transition-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ds-view-transition-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+::view-transition-old(root) {
+  animation: ds-view-transition-fade-out
+    var(--ds-page-transition-duration, var(--ds-motion-normal))
+    var(--ds-motion-ease-out) both;
+}
+
+::view-transition-new(root) {
+  animation: ds-view-transition-fade-in
+    var(--ds-page-transition-duration, var(--ds-motion-normal))
+    var(--ds-motion-ease-out) both;
+}
+
+@keyframes ds-scroll-reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Opt-in scroll-driven reveal. Active only where an animation can bind to the
+   view() timeline; the ScrollReveal primitive uses an IntersectionObserver
+   path otherwise. `animation-range` completes the reveal inside the entry
+   phase and `both` holds the end state, so content reveals once as it scrolls
+   into view and does not reverse on scroll-out. The duration is inert while a
+   scroll timeline drives progress but is kept on the --ds-motion canon. */
+@supports (animation-timeline: view()) {
+  .ds-scroll-reveal {
+    animation: ds-scroll-reveal-in var(--ds-motion-slow) var(--ds-motion-ease-out) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 60%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-scroll-reveal {
+    animation: none;
+    animation-timeline: auto;
+    opacity: 1;
+  }
+
+  /* `*` matches every view-transition-name: "root" and every DS-assigned
+     name (ds-vt-list-body, ds-vt-detail-body, ds-vt-record-<key>) alike, so
+     a reduced-motion preference neutralizes the root crossfade and any
+     element morph the same way. The group pseudo-element animates the
+     transform/size interpolation between old and new geometry (the morph
+     itself); old/new animate the opacity crossfade of their content.
+     Without an animation, the group renders directly at the new geometry:
+     an instant cut instead of motion. */
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+}
+
 /**
  * Keyframe Animations - Rottay Design System
  *
@@ -16019,6 +16123,9 @@ html {
       }
     }
   }
+  .\@container {
+    container-type: inline-size;
+  }
   .modal {
     @layer daisyui.l1.l2.l3 {
       pointer-events: none;
@@ -17004,6 +17111,9 @@ html {
         display: revert-layer;
       }
     }
+  }
+  .\!visible {
+    visibility: visible !important;
   }
   .collapse {
     visibility: collapse;
