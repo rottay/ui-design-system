@@ -5294,6 +5294,36 @@
       --size: calc(var(--size-field, 0.25rem) * 8);
     }
   }
+  .badge-error {
+    @layer daisyui.l1.l2 {
+      --badge-color: var(--color-error);
+      --badge-fg: var(--color-error-content);
+    }
+  }
+  .badge-primary {
+    @layer daisyui.l1.l2 {
+      --badge-color: var(--color-primary);
+      --badge-fg: var(--color-primary-content);
+    }
+  }
+  .badge-secondary {
+    @layer daisyui.l1.l2 {
+      --badge-color: var(--color-secondary);
+      --badge-fg: var(--color-secondary-content);
+    }
+  }
+  .badge-success {
+    @layer daisyui.l1.l2 {
+      --badge-color: var(--color-success);
+      --badge-fg: var(--color-success-content);
+    }
+  }
+  .badge-warning {
+    @layer daisyui.l1.l2 {
+      --badge-color: var(--color-warning);
+      --badge-fg: var(--color-warning-content);
+    }
+  }
   .btn-primary {
     @layer daisyui.l1.l2.l3 {
       --btn-color: var(--color-primary);
