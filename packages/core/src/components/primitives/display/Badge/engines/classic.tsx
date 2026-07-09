@@ -14,7 +14,7 @@
 import React, { useId } from 'react';
 import { Badge as AntBadge } from 'antd';
 import type { BadgeProps, BadgeSize } from '../Badge.types';
-import { BADGE_DEFAULTS, VARIANT_COLOR_MAP, SIZE_MAP } from '../Badge.types';
+import { BADGE_DEFAULTS, VARIANT_COLOR_MAP, VARIANT_SOFT_COLOR_MAP, VARIANT_SOFT_TEXT_COLOR_MAP, SIZE_MAP } from '../Badge.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
@@ -61,6 +61,7 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     max = BADGE_DEFAULTS.overflowCount,
     variant = BADGE_DEFAULTS.variant,
     size: sizeProp = BADGE_DEFAULTS.size,
+    badgeStyle: badgeStyleProp,
     pulse,
     position = BADGE_DEFAULTS.position,
     icon,
@@ -110,6 +111,29 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
   // Resolve variant to a concrete colour value via the shared colour map
   const color = VARIANT_COLOR_MAP[variant!] || VARIANT_COLOR_MAP.default;
 
+  // Resolved badgeStyle for the standalone/labelled-tag path below -- soft by
+  // default (BADGE_DEFAULTS.badgeStyle). The AntBadge indicator path further
+  // down never reads this: it always renders its own solid sup/dot chrome.
+  const resolvedBadgeStyle = badgeStyleProp ?? BADGE_DEFAULTS.badgeStyle;
+  let standaloneBg: string;
+  let standaloneColor: string;
+  switch (resolvedBadgeStyle) {
+    case 'outline':
+    case 'ghost':
+      standaloneBg = 'transparent';
+      standaloneColor = color;
+      break;
+    case 'soft':
+      standaloneBg = VARIANT_SOFT_COLOR_MAP[variant!] || VARIANT_SOFT_COLOR_MAP.default;
+      standaloneColor = VARIANT_SOFT_TEXT_COLOR_MAP[variant!] || VARIANT_SOFT_TEXT_COLOR_MAP.default;
+      break;
+    case 'solid':
+    default:
+      standaloneBg = color;
+      standaloneColor = 'var(--ds-badge-text-color, #fff)';
+      break;
+  }
+
   // Ant Design only exposes two size tokens; collapse our 5-tier scale into them
   const antSize = size === 'sm' || size === 'xs' ? 'small' : 'default';
 
@@ -156,8 +180,8 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: color,
-      color: 'var(--ds-badge-text-color, #fff)',
+      backgroundColor: standaloneBg,
+      color: standaloneColor,
       borderRadius: 'var(--ds-badge-border-radius, 9999px)',
       padding: 'var(--ds-badge-padding, 0 8px)',
       fontSize: sizeValues.fontSize,
@@ -165,7 +189,9 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
       minWidth: sizeValues.minWidth,
       maxWidth: '100%',
       fontWeight: 500,
-      border: bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : undefined,
+      border: resolvedBadgeStyle === 'outline'
+        ? `1px solid ${color}`
+        : (bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : undefined),
       boxShadow: bordered ? `0 0 0 1px ${color}` : undefined,
       cursor: clickable || onClick ? 'pointer' : undefined,
       transition: 'var(--ds-badge-transition, all 0.2s ease-in-out)',

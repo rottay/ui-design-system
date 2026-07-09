@@ -162,7 +162,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     max = BADGE_DEFAULTS.overflowCount,
     variant = BADGE_DEFAULTS.variant,
     size: sizeProp = BADGE_DEFAULTS.size,
-    badgeStyle = BADGE_DEFAULTS.badgeStyle,
+    badgeStyle: badgeStyleProp,
     visible = BADGE_DEFAULTS.visible,
     pulse,
     position = BADGE_DEFAULTS.position,
@@ -238,6 +238,13 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   // renders through the standalone tag chrome below instead of the bare
   // anchor-only fallback.
   const isLabelledChildren = Boolean(children) && displayValue === undefined && !dot;
+
+  // A labelled tag defaults to the soft treatment (BADGE_DEFAULTS.badgeStyle).
+  // An indicator positioned over a real anchor child defaults to solid
+  // regardless, since a notification bubble needs a saturated fill to stay
+  // legible at a glance. An explicit badgeStyle prop always wins either way.
+  const isIndicatorRender = Boolean(children) && !isLabelledChildren;
+  const badgeStyle = badgeStyleProp ?? (isIndicatorRender ? 'solid' : BADGE_DEFAULTS.badgeStyle);
 
   // -------------------------------------------------------------------------
   // Style computation

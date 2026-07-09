@@ -107,3 +107,53 @@ describe('Modern Badge - implementation-level routing detail (WO-ENG-13)', () =>
     expect(container.querySelector('div')).toBeNull();
   });
 });
+
+describe('Badge defaults to soft; the count/dot indicator stays solid (WO-ENG-15)', () => {
+  it.each(STABLE_ENGINES)('%s engine defaults a labelled badge to the soft (tinted) treatment', async (engine) => {
+    const { findByText } = renderWithEngine(<Badge variant="success">Ready</Badge>, engine);
+    const el = await findByText('Ready');
+
+    expect(el.style.backgroundColor).toBe('var(--ds-color-alpha-success-10)');
+    // The soft text color is the darker -700 shade (matching the modern engine's
+    // softColor token), not the solid fill color -- the solid token is tuned for
+    // white text on top of it at full opacity, not for use as small text on its
+    // own low-opacity tint.
+    expect(el.style.color).toBe('var(--ds-color-success-700)');
+  });
+
+  it.each(STABLE_ENGINES)('%s engine still produces the saturated solid fill when badgeStyle="solid" is explicit', async (engine) => {
+    const { findByText } = renderWithEngine(
+      <Badge variant="success" badgeStyle="solid">Ready</Badge>,
+      engine
+    );
+    const el = await findByText('Ready');
+
+    expect(el.style.backgroundColor).not.toBe('');
+    expect(el.style.backgroundColor).not.toBe('transparent');
+    expect(el.style.backgroundColor).not.toBe('var(--ds-color-alpha-success-10)');
+  });
+
+  it.each(STABLE_ENGINES)('%s engine keeps an indicator positioned over a real anchor solid by default, unaffected by the label soft default', async (engine) => {
+    const { findByText } = renderWithEngine(
+      <Badge content="Beta" variant="success">
+        <span>Anchor</span>
+      </Badge>,
+      engine
+    );
+    const indicator = await findByText('Beta');
+
+    expect(indicator.style.backgroundColor).not.toBe('var(--ds-color-alpha-success-10)');
+  });
+
+  it('modern engine keeps a count indicator solid by default at the implementation level', () => {
+    render(
+      <ModernBadge count={5} variant="success">
+        <span>Anchor</span>
+      </ModernBadge>
+    );
+    const indicator = screen.getByText('5');
+
+    expect(indicator.style.backgroundColor).toBe('var(--ds-color-success)');
+    expect(indicator.style.backgroundColor).not.toBe('var(--ds-color-alpha-success-10)');
+  });
+});

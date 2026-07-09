@@ -13,7 +13,8 @@ import { TortureSurface, TORTURE_FIXTURES, type TortureFixture } from '@/compone
 // fixture per load -- tenant, theme, and text direction are all html-anchored
 // (see components/torture-surface), so there is no side-by-side comparison,
 // only repeat loads driven by query params:
-//   ?fixture=torture-dark|torture-light|rottay   which fixture owns the page (default torture-dark)
+//   ?fixture=torture-dark|torture-light|rottay|bithire|themanagementmiami
+//                                                 which fixture owns the page (default torture-dark)
 //   ?rtl=1                                       Arabic locale + RTL proof block
 //   ?slug=button                                 capture a single flagship in isolation
 //   ?w=360|768|1280                              fixed content width for the responsive law
@@ -23,7 +24,10 @@ import { TortureSurface, TORTURE_FIXTURES, type TortureFixture } from '@/compone
 // ?fixture=rottay is the REFERENCE load the differential probe compares
 // against, and it stays structurally identical to the torture loads (same
 // provider, same layout, same slugs) so any visual delta is attributable to
-// the tenant alone.
+// the tenant alone. ?fixture=bithire and ?fixture=themanagementmiami render
+// the bithire vertical's two real tenants for sighted side-by-side review
+// (WO-ENG-20) using this same flagship set and capture width, not the
+// differential violation count.
 // ---------------------------------------------------------------------------
 
 const CAPTURE_WIDTHS: Record<string, number> = {
@@ -60,8 +64,11 @@ function ChromeExtras() {
     <Stack spacing="md" fullWidth>
       {/* Boxed so the stack's stretch alignment cannot widen the badge past its
           intrinsic size — a full-bleed badge would misread as a broken capture. */}
+      {/* Explicitly solid: the derivation probe asserts this background equals
+          the tenant's primary. The soft default paints a 10% tint of it, which
+          is a different assertion and would silence this one. */}
       <Box>
-        <Badge variant="primary" content="Beta" />
+        <Badge variant="primary" badgeStyle="solid" content="Beta" />
       </Box>
       <Table rowKey="key" bordered pagination={false} dataSource={EXTRAS_ROWS} columns={EXTRAS_COLUMNS} />
       <Card variant="outlined" title="Outlined" style={{ width: 240 }} />

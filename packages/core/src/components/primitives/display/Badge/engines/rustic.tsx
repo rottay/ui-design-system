@@ -13,7 +13,7 @@
 
 import React, { useId } from 'react';
 import type { BadgeProps, BadgeSize } from '../Badge.types';
-import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP } from '../Badge.types';
+import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP, VARIANT_SOFT_COLOR_MAP, VARIANT_SOFT_TEXT_COLOR_MAP } from '../Badge.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
@@ -43,7 +43,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     max = BADGE_DEFAULTS.overflowCount,
     variant = BADGE_DEFAULTS.variant,
     size: sizeProp = BADGE_DEFAULTS.size,
-    badgeStyle = BADGE_DEFAULTS.badgeStyle,
+    badgeStyle: badgeStyleProp,
     visible = BADGE_DEFAULTS.visible,
     pulse,
     position = BADGE_DEFAULTS.position,
@@ -122,6 +122,13 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   // positioned-container fallback.
   const isLabelledChildren = Boolean(children) && displayValue === undefined && !dot;
 
+  // A labelled tag defaults to the soft treatment (BADGE_DEFAULTS.badgeStyle).
+  // An indicator positioned over a real anchor child defaults to solid
+  // regardless, since a notification bubble needs a saturated fill to stay
+  // legible at a glance. An explicit badgeStyle prop always wins either way.
+  const isIndicatorRender = Boolean(children) && !isLabelledChildren;
+  const badgeStyle = badgeStyleProp ?? (isIndicatorRender ? 'solid' : BADGE_DEFAULTS.badgeStyle);
+
   // Pull size-specific dimensions from the shared constants (height, minWidth, fontSize)
   const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
@@ -168,8 +175,8 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
         };
       case 'soft':
         return {
-          backgroundColor: `${color}26`, // 15% opacity hex
-          color: 'var(--ds-badge-bg)',
+          backgroundColor: VARIANT_SOFT_COLOR_MAP[variant!] || VARIANT_SOFT_COLOR_MAP.default,
+          color: VARIANT_SOFT_TEXT_COLOR_MAP[variant!] || VARIANT_SOFT_TEXT_COLOR_MAP.default,
         };
       case 'ghost':
         return {

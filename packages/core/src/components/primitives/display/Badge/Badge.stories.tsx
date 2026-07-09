@@ -69,7 +69,7 @@ multiple engines (Classic, Modern, Rustic) for different UI library implementati
       options: ['solid', 'outline', 'soft', 'ghost'],
       description: 'Visual style of the badge',
       table: {
-        defaultValue: { summary: 'solid' },
+        defaultValue: { summary: 'soft' },
       },
     },
     position: {

@@ -81,7 +81,7 @@ export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithCh
 
   /**
    * Badge visual style.
-   * @default 'solid'
+   * @default 'soft'
    */
   badgeStyle?: BadgeStyle;
 
@@ -274,7 +274,7 @@ export const BADGE_DEFAULTS = {
   /** Default border radius style */
   radius: 'full' as const,
   /** Default visual style */
-  badgeStyle: 'solid' as const,
+  badgeStyle: 'soft' as const,
   /** Whether the badge is visible */
   visible: true,
 } as const;
@@ -298,6 +298,50 @@ export const VARIANT_COLOR_MAP: Record<string, string> = {
   error: 'var(--ds-badge-error-bg)',
   /** Blue background for informational notices. */
   info: 'var(--ds-badge-info-bg)',
+} as const;
+
+/**
+ * Mapping of variant names to their soft-style (low-opacity tint) background.
+ * A `var()` reference cannot be hex-suffixed for alpha -- computed-value-time
+ * substitution splices the resolved token, it does not concatenate with a
+ * trailing literal into a single color -- so the `soft` badgeStyle reads
+ * these pre-computed tint tokens directly instead of deriving a tint from
+ * VARIANT_COLOR_MAP. Shared by the classic and rustic engines, which both
+ * already source their solid fill from VARIANT_COLOR_MAP above.
+ */
+export const VARIANT_SOFT_COLOR_MAP: Record<string, string> = {
+  /** Low-opacity black tint for neutral / general-purpose badges. */
+  default: 'var(--ds-color-alpha-black-100)',
+  /** Low-opacity primary tint. */
+  primary: 'var(--ds-color-alpha-primary-10)',
+  /** Low-opacity secondary tint. */
+  secondary: 'var(--ds-color-alpha-secondary-10)',
+  /** Low-opacity success tint. */
+  success: 'var(--ds-color-alpha-success-10)',
+  /** Low-opacity warning tint. */
+  warning: 'var(--ds-color-alpha-warning-10)',
+  /** Low-opacity error tint. */
+  error: 'var(--ds-color-alpha-error-10)',
+  /** Low-opacity info tint. */
+  info: 'var(--ds-color-alpha-info-10)',
+} as const;
+
+/**
+ * Mapping of variant names to the text color used on top of their soft tint
+ * (VARIANT_SOFT_COLOR_MAP). A deliberately darker/more saturated shade than
+ * the solid fill token -- the solid fill is tuned for white text on top of
+ * it at full opacity, not for use as small text on a light tenant surface,
+ * where the solid hue alone can fall under the APCA UI floor. Mirrors the
+ * modern engine's softColor token per variant.
+ */
+export const VARIANT_SOFT_TEXT_COLOR_MAP: Record<string, string> = {
+  default: 'var(--ds-color-text-secondary)',
+  primary: 'var(--ds-color-primary)',
+  secondary: 'var(--ds-color-secondary-600)',
+  success: 'var(--ds-color-success-700)',
+  warning: 'var(--ds-color-warning-700)',
+  error: 'var(--ds-color-error-700)',
+  info: 'var(--ds-color-info-700)',
 } as const;
 
 /**
