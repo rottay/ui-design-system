@@ -24,7 +24,7 @@
   proposals; new items still follow the same law (owner approves 1:1, then a `### WO-` block +
   registry entry).
 
-## Four rules learned the hard way (2026-07-09)
+## Five rules learned the hard way (2026-07-09)
 
 Each of these was paid for. They are not style preferences.
 
@@ -57,6 +57,39 @@ Each of these was paid for. They are not style preferences.
    `dist`, a 500 on the probe route, and 43 spurious visual failures. And on the
    same day an executor marked its own WO `done` — no build, no `--check`, no
    sighted review. Both fences are structural, not advisory.
+
+5. **A harness that watches for errors is not a harness that watches for
+   content.** The first sighted capture of `themanagementmiami` wrote a
+   plausible-looking, entirely blank PNG, and the capture script called the run
+   clean: it asserted no page errors and no 4xx, and a dev-server rebuild had
+   blown the React tree away between the readiness check and the shutter. Assert
+   what you came to photograph is on the page **at the moment of the shot**, not
+   that nothing threw on the way there. This is the same shape as the circular
+   probe and the single-emitter audit: the check ran, the check was green, and
+   the check was not looking where the defect was.
+
+## The pre-existing failure baseline (measured, not assumed)
+
+`pnpm test` in `packages/core` fails **17 tests** at HEAD. All 17 also fail at
+`9d59a97a`, the commit before this program's first, verified by checking that
+commit out into a throwaway worktree and running the same files. This program
+has introduced **zero** unit regressions.
+
+Do not quote a smaller number. An earlier note in this session claimed "3 stable
+pre-existing failures"; that count came from a narrower run and was repeated
+without being remeasured. The real set:
+
+| Count | Tests | Cause |
+| --- | --- | --- |
+| 12 | `List`, `Statistic`, `Typography`, `Slider`, `Popover`, `Pagination`, `Skeleton`, `TimePicker` (×5) engine-advanced/integration | `happy-dom@20.9.0` silently drops a `background` shorthand whose value is a nested `var(--a, var(--b, #lit))`. The declaration vanishes from the serialized inline style; the assertion looks for it and does not find it. The components are correct — the DOM implementation is not. Verified directly against `happy-dom`: `background: var(--a)` survives, `background: var(--a, var(--b, #0066CC))` does not, and `background-color` with a nested fallback serializes to `null`. |
+| 2 | `source-governance` version match, token mirror | Known. |
+| 1 | `whitelabel-field-coverage` bithire `.ant-` selectors | Known. |
+| 1 | `PatternCommandPalette` engine-advanced | Test timeout, identical at base. |
+| 1 | `TimePicker` real-engines | Same happy-dom cause. |
+
+The fix for the twelve is not to weaken the assertions. It is either a
+`happy-dom` upgrade or a longhand emission. Until one of those lands, this table
+is the contract: **17, and no test outside it may go red.**
 
 ## State model (this plan cannot rot silently)
 
