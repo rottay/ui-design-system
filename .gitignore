@@ -12,6 +12,7 @@ build/
 storybook-static/
 packages/core/storybook-static/
 packages/core/*.tgz
+packages/core/.bundle-analysis-components/
 
 # Test coverage
 coverage/

@@ -525,7 +525,7 @@
    "lane": "gates",
    "order": 2,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01"
    ],
@@ -533,7 +533,18 @@
    "programs": [
     "P-14"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "progressLog": [
+    {
+     "at": "2026-07-09 10:58",
+     "by": "ds-agent",
+     "note": "Full implementation DELEGATED to fresh agent aee976affb62fa272 (sonnet, edit-only + may run audit --check/--coverage + analyze:components; NO build/test/commit): (1) VERIFY no-motion-literals rule present+wired (ENG-01 shipped it - not recreate); (2) --coverage mode in engine-token-audit.mjs (token-coverage.json + per-file --ds-* consumed vs literals + --check summary line); (3) dead-selectors-classic/rustic counters REUSING ENG-08's shared selector-scan helper (.ant-* allowlisted by prefix, decrease-only, no hard target); (4) --components mode in analyze-bundle.mjs (per-flagship gzip bundles vs COMPONENT_BUDGET measured+10%) + analyze:components script; (5) wire ci.yml core job bundle-budgets step. Non-visual WO (no sighted). ON RETURN: audit diff, gate (build+test+audit --check green w/ new counters + coverage line + analyze:components), commit. Prior 11/34 committed (66f9197c) - engine-modern lane ENG-01..10 all DONE; only ENG-12(L) + owner-parked ENG-11 remain there."
+    }
+   ],
+   "doneAt": "2026-07-09",
+   "evidence": "(a) ESLint @rottay/no-motion-literals VERIFIED present+wired (WO-ENG-01 shipped it; NOT recreated) - rules map + configs.recommended='error', scoped **/engines/modern*. (b) --coverage mode in engine-token-audit.mjs: writes test-artifacts/gates/token-coverage.{json,md} (per-file --ds-* consumed vs hardcoded literals, reusing the blocking counters' regexes factored out so numbers can't drift); 1040 files / 2012 unique tokens / 1479 literals; one-line coverage summary added to --check output. (c) classic/rustic dead-selector counters: GENERALIZED WO-ENG-08's modern scan into ONE shared auditEngineTheme() helper (auditThemeCss now a thin wrapper - one scan impl, three callers, verified no fork, 12 refs). Baselines themeCss.deadSelectorsClassic=13 / deadSelectorsRustic=146 (decrease-only, NO hard target). Allowlist broadened to [ant-, anticon, slick-] after investigation found .anticon (antd icon font) + .slick-* (react-slick via antd Carousel) are ALIVE at runtime; documented. rustic 146 is real (117/125 rustic files use rottay-* BEM+inline convention -> rustic theme.css largely orphaned; future drain). (d) --components mode in analyze-bundle.mjs: per-flagship externals-heavy Vite lib bundles gzip-measured vs new COMPONENT_BUDGET (measured+10%): Button 15.8k/17.5k, Input 11k/12.5k, Select 16.7k/18.5k, Card 15k/16.5k, Badge 12.4k/14k, Table 15.1k/17k, Tabs 7.4k/8.5k, Modal 8.8k/10k, PatternDataTable 60.8k/67k - all 9 PASS (87-91% usage, exit 0); analyze:components script added to package.json. (e) CI: .github/workflows/ci.yml core job gains a 'Bundle budgets' step (analyze --skip-build + analyze:components). GATE: build exit 0; audit --check green (both new dead-selector counters at baseline + coverage line present); full unit 5360 passed + 3 PRE-EXISTING failures; analyze:components all 9 PASS; shared helper confirmed (no 2nd scan). Note: the pre-existing entry-point analyze budget wasn't re-run by the delegate (needs a real dist); orchestrator build produced fresh dist."
   },
   {
    "id": "WO-GAT-03",

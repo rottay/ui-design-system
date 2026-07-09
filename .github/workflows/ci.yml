@@ -96,6 +96,11 @@ jobs:
       - name: Build
         run: pnpm --filter @rottay/design-system run build
 
+      - name: Bundle budgets
+        run: |
+          pnpm --filter @rottay/design-system run analyze -- --skip-build
+          pnpm --filter @rottay/design-system run analyze:components
+
       - name: Unit tests with coverage
         run: pnpm --filter @rottay/design-system run test:ci
         env:

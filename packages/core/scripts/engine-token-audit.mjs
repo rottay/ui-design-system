@@ -12,12 +12,22 @@
  * (content.magicZIndex), WO-ENG-10 the cross-engine layout counter; later WOs extend this
  * file with the remaining section-12 counters (responsive).
  *
+ * WO-GAT-02 (package-side quality gates, proposal P-14) extends this same file rather than
+ * forking a second script: (1) generalizes WO-ENG-08's modern-only theme.css dead-selector scan
+ * into a shared `auditEngineTheme()` helper reused by two new decrease-only counters,
+ * `themeCss.deadSelectorsClassic` and `themeCss.deadSelectorsRustic`, over the classic/rustic
+ * engine theme files (classic allowlists `.ant-*` Ant Design runtime classes by prefix -- see
+ * `auditEngineTheme`'s doc comment); (2) adds a `--coverage` mode/report (informational, not
+ * gated) listing per-component-file `--ds-*` token consumption vs. hardcoded literals, plus a
+ * one-line summary appended to `--check`/report output.
+ *
  * Usage:
  *   node scripts/engine-token-audit.mjs            # print the current counts
  *   node scripts/engine-token-audit.mjs --check    # exit 1 if any counter rose above baseline
  *   node scripts/engine-token-audit.mjs --update-baseline   # rewrite the baseline to current
+ *   node scripts/engine-token-audit.mjs --coverage # write the token-coverage report (informational)
  */
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -26,19 +36,32 @@ const root = resolve(here, "..");
 const componentsDir = join(root, "src/components");
 const baselinePath = join(here, "engine-token-audit.baseline.json");
 
-/** Collect every modern-engine component source file (`engines/modern.tsx` or `engines/modern/*.tsx`). */
-function modernFiles(dir) {
+/**
+ * Collect every `engines/<engineName>.tsx` or `engines/<engineName>/*.tsx` component source
+ * file under `dir`. Generalized (WO-GAT-02) from the modern-only file walk so the classic/
+ * rustic dead-selector counters below can build their consumed-class sets from the SAME shared
+ * scan helpers (`buildConsumedClassSet`, `auditEngineTheme`) that WO-ENG-08 built for modern --
+ * one selector-scan implementation, three engine callers, per the ratchet law (never fork a
+ * second scan).
+ */
+function collectEngineFiles(dir, engineName) {
   const out = [];
+  const engineRe = new RegExp(`engines/${engineName}(/[^/]+)?\\.tsx?$`);
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) {
-      out.push(...modernFiles(full));
-    } else if (/engines\/modern(\/[^/]+)?\.tsx?$/.test(full.replace(/\\/g, "/"))) {
+      out.push(...collectEngineFiles(full, engineName));
+    } else if (engineRe.test(full.replace(/\\/g, "/"))) {
       out.push(full);
     }
   }
   return out;
+}
+
+/** Collect every modern-engine component source file (`engines/modern.tsx` or `engines/modern/*.tsx`). */
+function modernFiles(dir) {
+  return collectEngineFiles(dir, "modern");
 }
 
 /**
@@ -102,16 +125,31 @@ function stripBlockComments(text) {
  *    image) would be a false positive the same way HTML entities are, not a real color.
  * Target: 0 / 0. Current documented residual: 13 hex (TenantPreview 12 + ColorPicker 1) + 1
  * rgba (ColorPicker) -- see the WO-ENG-06 report for the full per-file accounting.
+ *
+ * The scan itself lives in `countColorLiteralsInText()` (per-text, below), factored out so the
+ * WO-GAT-02 `--coverage` report can reuse the EXACT same detection rule per file instead of
+ * forking a second regex that could drift from this counter's definition of "a color literal".
+ * Callers must pass text already run through `stripBlockComments()`.
  */
+function countColorLiteralsInText(strippedText) {
+  const hexRe = /(?<!&)#[0-9a-fA-F]{3,8}\b/g;
+  const rgbaRe = /\brgba?\(/g;
+  return {
+    hex: (strippedText.match(hexRe) || []).length,
+    rgba: (strippedText.match(rgbaRe) || []).length,
+  };
+}
+
+/** Aggregate `countColorLiteralsInText()` across a file list -- see that function's doc for the
+ * counting method. */
 function countColorLiterals(files) {
   let hex = 0;
   let rgba = 0;
-  const hexRe = /(?<!&)#[0-9a-fA-F]{3,8}\b/g;
-  const rgbaRe = /\brgba?\(/g;
   for (const file of files) {
     const text = stripBlockComments(readFileSync(file, "utf8"));
-    hex += (text.match(hexRe) || []).length;
-    rgba += (text.match(rgbaRe) || []).length;
+    const perFile = countColorLiteralsInText(text);
+    hex += perFile.hex;
+    rgba += perFile.rgba;
   }
   return { hex, rgba };
 }
@@ -125,27 +163,42 @@ const ORPHAN_MOTION_NAMES = [
   "--ds-motion-easing-ease-in-out",
 ];
 
-function countMotionLiterals(files) {
+/**
+ * Per-text motion-literal scan (cubic-bezier + raw interaction durations), factored out of
+ * `countMotionLiterals()` so the WO-GAT-02 `--coverage` report can reuse the EXACT same
+ * detection rules per file instead of forking a second regex set (see
+ * `countColorLiteralsInText` above for the same rationale).
+ */
+function countMotionLiteralsInText(text) {
   let cubicBezier = 0;
   let rawDuration = 0;
-  let orphanTokens = 0;
   const cubicRe = /cubic-bezier\(/g;
   // Forbidden = INTERACTION-motion literals (< 1s). Milliseconds are always interaction
   // durations; seconds are counted only when < 1s. Durations >= 1s are loop/shimmer/spinner
   // tempos that legitimately sit outside the 120/200/320 canon and are allowlisted.
   const msRe = /\b\d+(?:\.\d+)?ms\b/g;
   const sRe = /(?<![\w.])(\d*\.?\d+)s(?![\w])/g;
+  cubicBezier += (text.match(cubicRe) || []).length;
+  rawDuration += (text.match(msRe) || []).length;
+  for (const m of text.matchAll(sRe)) {
+    if (Number(m[1]) < 1) rawDuration += 1; // sub-second seconds are interaction durations
+  }
+  return { cubicBezier, rawDuration };
+}
+
+function countMotionLiterals(files) {
+  let cubicBezier = 0;
+  let rawDuration = 0;
+  let orphanTokens = 0;
   const orphanRe = new RegExp(
     ORPHAN_MOTION_NAMES.map((n) => n.replace(/[-]/g, "\\-")).join("|"),
     "g",
   );
   for (const file of files) {
     const text = readFileSync(file, "utf8");
-    cubicBezier += (text.match(cubicRe) || []).length;
-    rawDuration += (text.match(msRe) || []).length;
-    for (const m of text.matchAll(sRe)) {
-      if (Number(m[1]) < 1) rawDuration += 1; // sub-second seconds are interaction durations
-    }
+    const perFile = countMotionLiteralsInText(text);
+    cubicBezier += perFile.cubicBezier;
+    rawDuration += perFile.rawDuration;
     orphanTokens += (text.match(orphanRe) || []).length;
   }
   return { cubicBezier, rawDuration, orphanTokens };
@@ -559,6 +612,10 @@ function countEffectConsumers() {
    ============================================================================ */
 
 const themeCssPath = join(tokensCssDir, "engines/modern/theme.css");
+/** WO-GAT-02: the classic/rustic counterparts of `themeCssPath`, scanned by the same shared
+ * `auditEngineTheme()` helper (see below) -- never a second scan implementation. */
+const classicThemeCssPath = join(tokensCssDir, "engines/classic/theme.css");
+const rusticThemeCssPath = join(tokensCssDir, "engines/rustic/theme.css");
 
 /** Split already-unwrapped string content on whitespace and add every
  * class-shaped token to `set`. */
@@ -819,42 +876,71 @@ function selectorClassTokens(selector) {
 }
 
 /**
- * Walk modern/theme.css and classify every selector as:
+ * Walk an engine theme.css file (`themeFile`) and classify every selector as:
  *  - exempt (the bare `[data-tenant]` engine-token root block, `@keyframes`,
  *    or any selector with NO class token at all -- a pure element/attribute
- *    hook like `[data-tenant] select` / `input[type="color"]`, which is not a
- *    "class hook" this gate drains and is proven-consumed separately by
- *    direct source inspection, not by this mechanical counter)
+ *    hook like `[data-tenant] select` / `input[type="color"]` / classic's
+ *    `html[data-tenant]` root scope, which is not a "class hook" this gate
+ *    drains and is proven-consumed separately by direct source inspection,
+ *    not by this mechanical counter)
+ *  - allowlisted (WO-GAT-02: every class token on the selector starts with one of
+ *    `opts.allowlistPrefixes`. For classic this is `["ant-", "anticon", "slick-"]` -- NOT just
+ *    `.ant-*`: investigation while measuring the baseline found classic/theme.css also targets
+ *    `.anticon` (Ant Design's icon-font class -- no hyphen after "ant", so it needs its own
+ *    prefix entry, not just "ant-") and `.slick-*` (react-slick, the carousel library antd's
+ *    `Carousel` wraps internally). All three are rendered by antd (or its vendored
+ *    dependencies) at runtime and never appear literally in DS `className`/`class` output, so
+ *    the consumed-class heuristic below can neither prove nor disprove them -- they are
+ *    tallied separately in `allowlisted` and NEVER reported dead. A first pass allowlisting
+ *    only "ant-" measured 29 "dead" selectors for classic; 18 of those were actually `anticon`/
+ *    `slick-*` compound selectors (e.g. `.ant-carousel .slick-dots li.slick-active button`) --
+ *    alive via antd, not dead -- which is why the prefix list is broadened here instead of left
+ *    as a single string.)
  *  - referenced (>= 1 class token appears in the consumed-class set)
  *  - unreferenced (every class token is absent from the consumed-class set)
  * `@media` bodies are recursed into so each nested selector is judged on its
  * own rather than the whole media query being treated as one opaque unit.
+ *
+ * Generalized (WO-GAT-02) from the modern-only `auditThemeCss()` below (WO-ENG-08's original
+ * scan target) -- this is the ONE shared selector-scan implementation for all three engines;
+ * never fork a second one. `consumerFiles` is that engine's own component file set (see
+ * `collectEngineFiles`), so "consumed" always means "rendered by THIS engine's source", never
+ * a different engine's.
  */
-function auditThemeCss(files) {
-  if (!existsSync(themeCssPath)) {
-    return { lineCount: 0, unreferencedSelectors: 0, unreferenced: [], consumedSize: 0 };
+function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
+  const allowlistPrefixes = opts.allowlistPrefixes ?? [];
+  if (!existsSync(themeFile)) {
+    return { lineCount: 0, unreferencedSelectors: 0, unreferenced: [], consumedSize: 0, allowlisted: 0 };
   }
-  const raw = readFileSync(themeCssPath, "utf8");
+  const raw = readFileSync(themeFile, "utf8");
   const lineCount = (raw.match(/\n/g) || []).length;
   const stripped = stripBlockComments(raw);
   const lineOf = buildLineIndex(raw);
-  const consumed = buildConsumedClassSet(files);
+  const consumed = buildConsumedClassSet(consumerFiles);
 
   const unreferenced = [];
   const referencedDebug = [];
   let unreferencedCount = 0;
+  let allowlistedCount = 0;
 
   function walk(start, end) {
     for (const rule of parseCssRules(stripped, start, end)) {
       if (!rule.selector) continue;
-      if (rule.selector === "[data-tenant]") continue; // root engine-token block
+      if (rule.selector === "[data-tenant]") continue; // root engine-token block (modern)
       if (/^@keyframes\b/.test(rule.selector)) continue; // opaque, exempt
       if (/^@media\b/.test(rule.selector)) {
         walk(rule.bodyStart, rule.bodyEnd);
         continue;
       }
       const tokens = rule.selector.split(",").flatMap((part) => selectorClassTokens(part));
-      if (tokens.length === 0) continue; // pure element/attribute hook, not a class selector
+      if (tokens.length === 0) continue; // pure element/attribute hook (e.g. classic's `html[data-tenant]` root), not a class selector
+      if (
+        allowlistPrefixes.length > 0 &&
+        tokens.every((t) => allowlistPrefixes.some((p) => t.startsWith(p)))
+      ) {
+        allowlistedCount += 1; // e.g. classic's ant-/anticon/slick- families -- externally consumed, never dead
+        continue;
+      }
       // Prefer specific (non-generic-modifier) tokens when the selector has
       // any: a generic word riding along with a dead anchor class (e.g.
       // `.calendar-day.selected` when `.calendar-day` itself is unreferenced
@@ -874,13 +960,25 @@ function auditThemeCss(files) {
   }
   walk(0, stripped.length);
   if (process.env.DEBUG_REFERENCED) {
-    console.log(`\n--- DEBUG referenced (${referencedDebug.length}) ---`);
+    console.log(`\n--- DEBUG referenced (${referencedDebug.length}) in ${themeFile} ---`);
     for (const r of referencedDebug) {
       console.log(`  line ${r.line}: ${r.selector.replace(/\s+/g, " ")}  <-- [${r.matched.join(", ")}]`);
     }
   }
 
-  return { lineCount, unreferencedSelectors: unreferencedCount, unreferenced, consumedSize: consumed.size };
+  return {
+    lineCount,
+    unreferencedSelectors: unreferencedCount,
+    unreferenced,
+    consumedSize: consumed.size,
+    allowlisted: allowlistedCount,
+  };
+}
+
+/** Modern-engine caller of `auditEngineTheme()` (WO-ENG-08's original scan target). Kept as a
+ * named function so the existing call site/output shape below is unchanged. */
+function auditThemeCss(files) {
+  return auditEngineTheme(themeCssPath, files);
 }
 
 /* ============================================================================
@@ -1114,12 +1212,168 @@ function countCrossEngineLayoutDivergences() {
   return count;
 }
 
+/* ============================================================================
+   Token-coverage report (WO-GAT-02, proposal P-14): informational visibility into which
+   --ds-* tokens each component file consumes vs. what it still hardcodes. NOT a blocking
+   gate -- the blocking gates remain the modern-scoped counters above; this report covers ALL
+   engines under packages/core/src/components/ for visibility, reusing the exact same literal-
+   detection rules (`countMotionLiteralsInText`, `countColorLiteralsInText`) so its numbers can
+   never drift from what the blocking counters themselves count.
+   ============================================================================ */
+
+/** Every `.ts`/`.tsx` component source file, across all engines, excluding tests/stories (same
+ * exclusion convention as the other per-file walks in this script -- e.g.
+ * `countFallbackParityViolations`). */
+function collectCoverageFiles(dir) {
+  const out = [];
+  for (const entry of readdirSync(dir)) {
+    const full = join(dir, entry);
+    const st = statSync(full);
+    if (st.isDirectory()) {
+      out.push(...collectCoverageFiles(full));
+      continue;
+    }
+    if (!/\.tsx?$/.test(full)) continue;
+    const rel = full.replace(/\\/g, "/");
+    if (/__tests__|\.(test|spec|stories)\./.test(rel)) continue;
+    out.push(full);
+  }
+  return out;
+}
+
+const DS_TOKEN_RE = /var\(\s*(--ds-[a-zA-Z0-9-]+)/g;
+
+/**
+ * Build the WO-GAT-02 token-coverage report: for every component source file, the set of
+ * `--ds-*` custom properties it consumes (`var(--ds-...)`) and the hardcoded literal counts
+ * the existing motion/color counters find (cubic-bezier, raw duration, hex, rgba). Cheap enough
+ * (~1,000 small source files) to compute on every `--check`/report run for the one-line
+ * summary; `--coverage` mode additionally persists the full detail to disk.
+ */
+function buildTokenCoverage() {
+  const coverageFiles = collectCoverageFiles(componentsDir);
+  const allTokens = new Set();
+  const fileReports = [];
+  let literalsOutstandingTotal = 0;
+
+  for (const file of coverageFiles) {
+    const raw = readFileSync(file, "utf8");
+    const stripped = stripBlockComments(raw);
+    const rel = file.slice(root.length + 1).replace(/\\/g, "/");
+
+    const tokens = new Set();
+    for (const m of raw.matchAll(DS_TOKEN_RE)) tokens.add(m[1]);
+    for (const t of tokens) allTokens.add(t);
+
+    const motionLit = countMotionLiteralsInText(raw);
+    const colorLit = countColorLiteralsInText(stripped);
+    const literalsTotal = motionLit.cubicBezier + motionLit.rawDuration + colorLit.hex + colorLit.rgba;
+    literalsOutstandingTotal += literalsTotal;
+
+    fileReports.push({
+      file: rel,
+      dsTokensConsumed: [...tokens].sort(),
+      literals: {
+        cubicBezier: motionLit.cubicBezier,
+        rawDuration: motionLit.rawDuration,
+        hex: colorLit.hex,
+        rgba: colorLit.rgba,
+        total: literalsTotal,
+      },
+    });
+  }
+
+  fileReports.sort((a, b) => a.file.localeCompare(b.file));
+
+  return {
+    generatedAt: new Date().toISOString(),
+    filesScanned: fileReports.length,
+    tokensConsumedUnique: allTokens.size,
+    literalsOutstandingTotal,
+    files: fileReports,
+  };
+}
+
+/** Render the human-readable Markdown summary written by `--coverage` mode. */
+function renderCoverageMarkdown(coverage) {
+  const topLiterals = coverage.files
+    .filter((f) => f.literals.total > 0)
+    .slice()
+    .sort((a, b) => b.literals.total - a.literals.total)
+    .slice(0, 25);
+
+  const lines = [];
+  lines.push("# Token coverage report (WO-GAT-02)");
+  lines.push("");
+  lines.push(`Generated: ${coverage.generatedAt}`);
+  lines.push("");
+  lines.push(
+    "Informational only -- this report is NOT a blocking gate. The blocking gates remain the",
+  );
+  lines.push(
+    "modern-scoped counters in `node scripts/engine-token-audit.mjs --check` (motion/color/etc).",
+  );
+  lines.push(
+    "This report lists, per component source file across ALL engines, which `--ds-*` custom",
+  );
+  lines.push(
+    "properties it consumes and how many hardcoded literals (motion/hex/rgba, using the exact",
+  );
+  lines.push("same detection rules as the blocking counters) it still carries.");
+  lines.push("");
+  lines.push("## Summary");
+  lines.push("");
+  lines.push(`- Files scanned: ${coverage.filesScanned}`);
+  lines.push(`- Unique \`--ds-*\` tokens consumed: ${coverage.tokensConsumedUnique}`);
+  lines.push(`- Hardcoded literals outstanding: ${coverage.literalsOutstandingTotal}`);
+  lines.push("");
+  lines.push(`## Top ${topLiterals.length} files by outstanding literals`);
+  lines.push("");
+  lines.push("| File | cubic-bezier | raw duration | hex | rgba | total |");
+  lines.push("| --- | --- | --- | --- | --- | --- |");
+  for (const f of topLiterals) {
+    lines.push(
+      `| ${f.file} | ${f.literals.cubicBezier} | ${f.literals.rawDuration} | ${f.literals.hex} | ${f.literals.rgba} | ${f.literals.total} |`,
+    );
+  }
+  lines.push("");
+  lines.push(
+    "Full per-file detail (including files with zero outstanding literals and their full",
+  );
+  lines.push("consumed-token list) is in the sibling `token-coverage.json`.");
+  lines.push("");
+  return lines.join("\n");
+}
+
+const repoRoot = resolve(root, "..", "..");
+const gatesDir = join(repoRoot, "test-artifacts", "gates");
+
+/** Write the `--coverage` mode artifacts (JSON + Markdown) to `test-artifacts/gates/`. */
+function writeCoverageArtifacts(coverage) {
+  if (!existsSync(gatesDir)) mkdirSync(gatesDir, { recursive: true });
+  const jsonPath = join(gatesDir, "token-coverage.json");
+  writeFileSync(jsonPath, JSON.stringify(coverage, null, 2) + "\n");
+  const mdPath = join(gatesDir, "token-coverage.md");
+  writeFileSync(mdPath, renderCoverageMarkdown(coverage));
+  return { jsonPath, mdPath };
+}
+
 const files = modernFiles(componentsDir);
 const motion = countMotionLiterals(files);
 const effects = countEffectConsumers();
 const colorFiles = modernColorFiles(componentsDir);
 const color = countColorLiterals(colorFiles);
 const themeCssAudit = auditThemeCss(files);
+const classicFiles = collectEngineFiles(componentsDir, "classic");
+const rusticFiles = collectEngineFiles(componentsDir, "rustic");
+const classicThemeAudit = auditEngineTheme(classicThemeCssPath, classicFiles, {
+  // "ant-" (Ant Design 5.x component classes), "anticon" (Ant Design's icon-font class -- no
+  // hyphen after "ant"), "slick-" (react-slick, vendored internally by antd's Carousel). All
+  // three are externally-consumed runtime classes, never written literally in DS source -- see
+  // auditEngineTheme's doc comment for how this list was derived from the measured baseline.
+  allowlistPrefixes: ["ant-", "anticon", "slick-"],
+});
+const rusticThemeAudit = auditEngineTheme(rusticThemeCssPath, rusticFiles);
 const crossEngineLayoutDivergences = countCrossEngineLayoutDivergences();
 
 const counters = {
@@ -1139,6 +1393,12 @@ const counters = {
   "color.modernRgbaLiterals": color.rgba,
   "themeCss.unreferencedSelectors": themeCssAudit.unreferencedSelectors,
   "themeCss.lineCount": themeCssAudit.lineCount,
+  // WO-GAT-02: classic/rustic dead-selector counters, generalized from WO-ENG-08's modern scan
+  // (`auditEngineTheme`, shared). Decrease-only, no hard target -- draining classic/rustic CSS
+  // is future work; these counters only stop further growth. Classic's near-total .ant-*
+  // allowlisting (see auditEngineTheme's doc comment) is reported separately, not counted here.
+  "themeCss.deadSelectorsClassic": classicThemeAudit.unreferencedSelectors,
+  "themeCss.deadSelectorsRustic": rusticThemeAudit.unreferencedSelectors,
   "content.magicZIndex": countMagicZIndex(files),
   "layout.crossEngineDivergences": crossEngineLayoutDivergences,
   // Later WOs extend here: responsive counters (WO-ENG-12), ...
@@ -1178,7 +1438,9 @@ const mode = process.argv.includes("--check")
   ? "check"
   : process.argv.includes("--update-baseline")
     ? "update"
-    : "report";
+    : process.argv.includes("--coverage")
+      ? "coverage"
+      : "report";
 
 if (mode === "update") {
   writeFileSync(baselinePath, JSON.stringify(counters, null, 2) + "\n");
@@ -1187,8 +1449,28 @@ if (mode === "update") {
   process.exit(0);
 }
 
+if (mode === "coverage") {
+  const coverage = buildTokenCoverage();
+  const { jsonPath, mdPath } = writeCoverageArtifacts(coverage);
+  console.log("engine-token-audit --coverage: wrote");
+  console.log(`  ${jsonPath}`);
+  console.log(`  ${mdPath}`);
+  console.log(
+    `engine-token-audit — token coverage: ${coverage.filesScanned} files scanned, ${coverage.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverage.literalsOutstandingTotal} hardcoded literals outstanding`,
+  );
+  process.exit(0);
+}
+
 console.log("engine-token-audit — modern engine files:", files.length);
 for (const [k, v] of Object.entries(counters)) console.log(`  ${k}: ${v}`);
+
+// WO-GAT-02: one-line token-coverage summary, appended to both report and --check output
+// (computed unconditionally so --check callers see it too; the coverage report itself is
+// informational and never gates -- see buildTokenCoverage()'s doc comment).
+const coverageSummary = buildTokenCoverage();
+console.log(
+  `engine-token-audit — token coverage: ${coverageSummary.filesScanned} files scanned, ${coverageSummary.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverageSummary.literalsOutstandingTotal} hardcoded literals outstanding`,
+);
 
 if (mode === "report") {
   console.log(
@@ -1198,6 +1480,18 @@ if (mode === "report") {
     `engine-token-audit — theme.css unreferenced selectors (${themeCssAudit.unreferenced.length}):`,
   );
   for (const u of themeCssAudit.unreferenced) {
+    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, " ")}`);
+  }
+  console.log(
+    `\nengine-token-audit — classic/theme.css: ${classicThemeAudit.consumedSize} consumed classes, ${classicThemeAudit.allowlisted} externally-consumed (ant-/anticon/slick-) allowlisted, ${classicThemeAudit.unreferencedSelectors} dead:`,
+  );
+  for (const u of classicThemeAudit.unreferenced) {
+    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, " ")}`);
+  }
+  console.log(
+    `\nengine-token-audit — rustic/theme.css: ${rusticThemeAudit.consumedSize} consumed classes, ${rusticThemeAudit.unreferencedSelectors} dead:`,
+  );
+  for (const u of rusticThemeAudit.unreferenced) {
     console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, " ")}`);
   }
 }
