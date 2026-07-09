@@ -9,6 +9,16 @@
  * The surface owns layout, transcript scaffolding, composer behavior, and
  * personality-aware motion. It deliberately delegates rich message rendering
  * to assistant patterns so the shell stays vendor-agnostic.
+ *
+ * Composition seam with the assistant kit: transcript messages render through
+ * {@link MessageBubble}, whose parts drive `StreamingText` (streaming shimmer
+ * that stops dead on completion) and `ToolCallCard` (a terminal receipt for
+ * completed/errored calls, including `duration`). Higher-order compounds --
+ * `PreviewDiffCard`, `ConfirmActionCard`, and `AssistantStatusIndicator` --
+ * compose into the transcript through the `renderMessage` / `renderPart` slots
+ * or a message `artifact` part, with the app supplying domain copy and
+ * callbacks. This surface is the single conversation host: no `AgentChatSurface`
+ * is introduced (monorepo non-negotiable).
  */
 
 import React, { useEffect, useState } from 'react';

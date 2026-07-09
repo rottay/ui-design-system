@@ -629,6 +629,16 @@ export interface DetailSurfaceBehaviorConfig<TView> {
   activeTab?: string;
   /** Called when the user switches tabs. */
   onTabChange?: (key: string) => void;
+  /**
+   * Derives a stable per-record identity used to pair this detail page with
+   * its originating list card for a view-transition element morph (see
+   * `recordTransitionName` in the motion module). Must resolve to the SAME
+   * value the originating list surface's `rowKey` resolves to for this
+   * record, or the two elements will not pair. When omitted, the detail
+   * body keeps a constant transition name shared by every record (a plain
+   * crossfade between detail pages) rather than guessing an identity.
+   */
+  recordKey?: keyof TView | ((item: TView) => string);
 }
 
 /** Visual hints for the detail page sidebar layout. */

@@ -17,8 +17,8 @@
  */
 
 import { Box, Stack } from '../../../../primitives';
-import { PatternDetailPanel } from '../../../../patterns';
-import { FadeIn } from '../../../../../motion';
+import { PatternDetailPanel, resolveRowKey } from '../../../../patterns';
+import { FadeIn, recordTransitionName } from '../../../../../motion';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 import {
   filterDetailSurfaceTabs,
@@ -148,11 +148,26 @@ export function DetailSurface<TRaw, TView>({
   const pageTitle = config.presentation.chrome?.pageTitle
     ?? (typeof derivedTitle === 'string' ? derivedTitle : (loading ? tSurface('detail.loading') : ''));
 
+  // A record-derived name pairs this detail body with the list card that
+  // resolves the SAME key (see ListSurfaceBehaviorConfig.rowKey +
+  // resolveRowKey), producing a real element morph. Unlike the list, the
+  // detail surface has no array index to fall back to, so without a
+  // configured recordKey there is no reliable per-record identity here; the
+  // body keeps a constant name instead of guessing one that could morph
+  // from the wrong list card.
+  const detailTransitionName =
+    item && config.behavior.recordKey !== undefined
+      ? recordTransitionName(resolveRowKey(item, config.behavior.recordKey, 0))
+      : 'ds-vt-detail-body';
+
   const detailPanel = (
     <Box
       style={{
         position: profileDefaults.accentPosition !== 'none' ? 'relative' : undefined,
         overflow: profileDefaults.accentPosition !== 'none' ? 'hidden' : undefined,
+        // Record-derived seam when recordKey is configured, else the coarse
+        // constant detail-body seam. Inert outside an active view transition.
+        viewTransitionName: detailTransitionName,
       }}
     >
       {/* Accent bars are rendered at the surface layer so patterns remain presentation-agnostic. */}

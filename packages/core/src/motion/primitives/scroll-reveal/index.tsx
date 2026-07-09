@@ -16,10 +16,19 @@
  * ```
  */
 
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import type { ScrollRevealProps } from '../../types';
 import { useMotionPersonality } from '../../hooks';
+
+/** True when the browser can drive reveals from the scroll timeline via CSS. */
+function supportsScrollTimeline(): boolean {
+  return (
+    typeof CSS !== 'undefined' &&
+    typeof CSS.supports === 'function' &&
+    CSS.supports('animation-timeline', 'view()')
+  );
+}
 
 /**
  * Reveal content when it enters the viewport, with configurable intersection thresholds.
@@ -41,6 +50,37 @@ export const ScrollReveal = forwardRef<HTMLDivElement, ScrollRevealProps>(
   ({ children, threshold = 0.1, rootMargin, once = true, className, style }, ref) => {
     const motionPersonality = useMotionPersonality();
     const shouldReduceMotion = motionPersonality.shouldReduceMotion;
+
+    // Feature detection is deferred to mount so the server render and the first
+    // client render agree (a synchronous probe would diverge and trip
+    // hydration). Until then the framer-motion fallback path renders.
+    const [useCssTimeline, setUseCssTimeline] = useState(false);
+    useEffect(() => {
+      if (supportsScrollTimeline()) {
+        setUseCssTimeline(true);
+      }
+    }, []);
+
+    // CSS-first path: when the browser supports scroll-driven animation, the
+    // reveal is owned entirely by the `ds-scroll-reveal` class (see
+    // transitions.css). The wrapper carries no framer-motion animation props,
+    // so no JavaScript-driven animation runs; the CSS `view()` timeline is the
+    // sole animator. `threshold` and `rootMargin` describe an
+    // IntersectionObserver contract that the `view()` timeline approximates
+    // rather than honors literally; they remain in the public API for the
+    // fallback path below. Reduced-motion is handled by the guarded media block
+    // in transitions.css.
+    if (useCssTimeline) {
+      return (
+        <motion.div
+          ref={ref}
+          className={['ds-scroll-reveal', className].filter(Boolean).join(' ')}
+          style={style}
+        >
+          {children}
+        </motion.div>
+      );
+    }
 
     // Two easing curves tuned for perceptual smoothness: `slideEase` has a
     // sharper initial acceleration for positional movement, while `fadeEase`

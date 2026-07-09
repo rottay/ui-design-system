@@ -14,3 +14,9 @@ export { useScrollProgress } from './use-scroll-progress';
 export { useSmoothCounter } from './use-smooth-counter';
 // `useMotionPersonality` is the bridge between token personality and motion primitives.
 export { useMotionPersonality } from './use-motion-personality';
+export { useViewTransition, startDsViewTransition, recordTransitionName } from './use-view-transition';
+export type {
+  ViewTransitionUpdate,
+  StartViewTransitionOptions,
+  DsViewTransitionHandle,
+} from './use-view-transition';

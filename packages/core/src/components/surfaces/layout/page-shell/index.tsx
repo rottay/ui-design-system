@@ -20,6 +20,7 @@
  */
 
 import type { ReactNode } from 'react';
+import { Box } from '../../../primitives';
 import { PatternPageShell } from '../../../patterns';
 import type { SurfacePageChrome } from '../../foundation/types';
 
@@ -78,7 +79,10 @@ export function PageShellSurface({
       maxWidth={chrome.maxWidth}
       loading={loading}
     >
-      {children}
+      {/* Coarse view-transition seam: the page body is a single named group so
+          a same-name morph runs across surface-to-surface navigations. The
+          name is inert outside an active view transition. */}
+      <Box style={{ viewTransitionName: 'ds-vt-page-body' }}>{children}</Box>
     </PatternPageShell>
   );
 }

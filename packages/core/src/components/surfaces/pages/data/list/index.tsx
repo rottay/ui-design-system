@@ -12,10 +12,10 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, Button, Card, Flex, Grid, Stack, Text } from '../../../../primitives';
-import { PatternDataTable, PatternFilterPanel } from '../../../../patterns';
+import { PatternDataTable, PatternFilterPanel, resolveRowKey } from '../../../../patterns';
 import { PatternListToolbar } from '../../../../patterns/data/list-toolbar';
 import type { ViewMode } from '../../../../patterns/data/list-toolbar';
-import { FadeIn, StaggerChildren } from '../../../../../motion';
+import { FadeIn, StaggerChildren, recordTransitionName } from '../../../../../motion';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 import {
   countActiveFilters,
@@ -157,9 +157,19 @@ function DefaultCardView<TView>({
         // Give apps a full escape hatch before falling back to the stock card rendering.
         const customCard = config.presentation.renderCard?.(item, index);
 
+        // Per-item view-transition seam, keyed by the SAME rowKey resolution
+        // the table view uses (resolveRowKey) so a card and the detail
+        // surface displaying the same record agree on identity structurally
+        // rather than by two files sharing a convention. Falls back to the
+        // array index when no rowKey is configured, matching resolveRowKey's
+        // table behavior; an index-derived name is unique within this page
+        // but does not carry record identity across a sort, filter, or
+        // navigation.
+        const itemTransitionName = recordTransitionName(resolveRowKey(item, config.behavior.rowKey, index));
+
         if (customCard) {
           return (
-            <Box key={index}>
+            <Box key={index} style={{ viewTransitionName: itemTransitionName }}>
               {customCard}
             </Box>
           );
@@ -172,6 +182,7 @@ function DefaultCardView<TView>({
             hoverable={!!config.behavior.onRowClick}
             clickable={!!config.behavior.onRowClick}
             onClick={() => config.behavior.onRowClick?.(item, index)}
+            style={{ viewTransitionName: itemTransitionName }}
           >
             <Card.Body>
               <Stack spacing="md">
@@ -533,13 +544,17 @@ export function ListSurface<TRaw, TView extends object>({
   return (
     <PageShellSurface chrome={config.presentation.chrome} actions={headerActions} loading={loading}>
       <SurfaceAccentBarWrapper defaults={profileDefaults}>
-        {profileDefaults.animateEntrance ? (
-          <FadeIn duration={profileDefaults.entranceDuration}>
-            {listContent}
-          </FadeIn>
-        ) : (
-          listContent
-        )}
+        {/* Coarse view-transition seam wrapping the list body. Inert outside an
+            active view transition. */}
+        <Box style={{ viewTransitionName: 'ds-vt-list-body' }}>
+          {profileDefaults.animateEntrance ? (
+            <FadeIn duration={profileDefaults.entranceDuration}>
+              {listContent}
+            </FadeIn>
+          ) : (
+            listContent
+          )}
+        </Box>
       </SurfaceAccentBarWrapper>
     </PageShellSurface>
   );
