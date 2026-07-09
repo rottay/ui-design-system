@@ -427,3 +427,62 @@ Effort: S (< 1 day agent work) / M (1-3 days) / L (1-2 weeks) / XL (multi-week p
 Approving an item means: it gets a full `### WO-` block (bithire format) in a lane —
 `engine-modern.md` for ENG-adjacent items, or a new lane file for the P-01 program — plus a
 registry entry, and only then enters STATUS.
+
+---
+
+## C. New proposals — found by the WO-GAT-03 whitelabel proof (pending owner review)
+
+These three are DEFECTS the hostile-tenant gate surfaced on 2026-07-09, not ideas. Each is
+outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducible against
+`/probe/whitelabel-torture` and against `packages/showroom/e2e/whitelabel/torture-baseline.json`.
+
+### P-23 Badge renders no chrome when given children (S — a live product defect)
+
+- **What** — `Badge/engines/modern.tsx:215` computes
+  `shouldShowBadge = visible && (dot || (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero)))`.
+  With `children` and no `content`/`count`, the standalone branch at `:309` is skipped, the
+  condition is false, and `:353` returns a bare `<div>{children}</div>` — no background, no
+  radius, no padding, no `overflow`/`ellipsis`. `Number('Beta') > 0` is also false, so a string
+  `content` passed alongside `children` hides the badge too.
+- **Why it matters** — `<Badge variant="success">Ready</Badge>` is the natural API and the form
+  used by the WO-ENG-02 badge gallery and the flagship table's status column. Both currently
+  render unstyled text under the modern engine; it is visible in
+  `test-artifacts/gates/gat-03/torture-dark.png`. This is the likely root cause of the standing
+  "bithire badge background weak/absent in production" flag — the cause is neither a DaisyUI
+  purge nor a `color-mix`/APCA skip, so WO-TOK-03 will not fix it.
+- **Shape** — treat a non-empty string `formattedValue` as showable; keep the numeric
+  `> 0 || showZero` rule for `count`. Cross-engine parity check (classic/rustic render the
+  label today) and a regression test per engine. Visual baselines will move — intended.
+
+### P-24 A dynamic dark tenant loses its BrandTheme chrome (M — the biggest whitelabel hole)
+
+- **What** — the tenant CSS generator emits a dark block scoped
+  `html[data-tenant='x'][data-theme='dark']` (specificity 0,2,1) containing hardcoded literals,
+  e.g. `'--ds-card-bg': '#111827'` (`runtime/tenant/storage/static/generator/index.ts:565`).
+  The compiled BrandTheme chrome rides in the light block (0,1,1), so the dark block wins and the
+  tenant's own `chrome.controls.input.*`, `chrome.cardComponent.*`, and `chrome.modal.*` are
+  discarded.
+- **Evidence** — torture-dark asks for `input.bg: '#1A0014'` and paints `#0F172A`; it asks for
+  `cardComponent.bg: '#120010'` and paints `#111827`. The LIGHT fixture honours the same channels,
+  so the defect is dark-path-only. These are the six `not-derived` entries in the GAT-03 baseline.
+- **Why it matters** — every DB-driven dark tenant silently renders DS-default inputs, cards, and
+  modals. First-party verticals are immune only because their generated artifacts re-state the
+  chrome, which is exactly the "true by construction" blind spot P-05 was written to expose.
+- **Shape** — the dark block must layer the compiled dark chrome, not literals. Ratchet: the six
+  baseline entries drop to zero and the gate holds them there.
+
+### P-25 The app canvas is not a BrandTheme channel (M)
+
+- **What** — `palette.darkBackgroundColor` compiles to `--ds-color-dark-bg` and never reaches
+  `--ds-color-bg-primary`, and `BrandPalette` has no light background field at all. The foundation
+  is dark-first (`:root { --ds-color-bg-primary: #0A0A0C }`) with no `[data-theme='light']` canvas
+  block, so a dynamic light tenant paints light components on a dark canvas — visible in
+  `test-artifacts/gates/gat-03/torture-light.png`. Only generated first-party artifacts set the
+  canvas per tenant.
+- **Why it matters** — the owner's 2026-07-07 decision is that the tenant palette decides the
+  ground and there is no user-facing light/dark toggle. That decision is currently unimplementable
+  for any tenant that is not first-party. (This is NOT the withdrawn P-07: no toggle is proposed.)
+- **Shape** — add a light `backgroundColor` to `BrandPalette`, bridge both background fields onto
+  the canvas tokens in the compiler, and extend the GAT-03 probe with a canvas entry once the
+  channel exists (today a canvas probe would pass for the wrong reason: the two fixtures differ
+  only because each falls back to a different default).
