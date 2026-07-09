@@ -4,7 +4,7 @@
  * @fileoverview Modern (token-driven) engine for the LiveFeed pattern.
  * Renders a real-time feed inside a DS token card with optional auto-refresh
  * polling, a "new items" banner, and load-more pagination.
- * New items receive Tailwind's `animate-pulse` class to signal freshness.
+ * New items receive the `ds-pulse-changed` single-flash utility to signal freshness.
  *
  * @example
  * <ModernLiveFeed
@@ -123,10 +123,13 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             emptyState ?? <div className="text-center py-8" style={{ color: 'var(--ds-color-text-secondary)' }}>No items</div>
           ) : (
             <div className="flex flex-col gap-2">
-              {/* Tailwind animate-pulse on new items provides a visual cue that the
-                  entry just arrived, helping users track real-time changes. */}
+              {/* ds-pulse-changed (foundation/animations/transitions.css) flashes
+                  ONCE on insertion to signal a freshly-arrived item. Each item
+                  has a stable key, so the flash plays when its DOM node is first
+                  inserted and does not replay on subsequent re-renders while
+                  isNew stays true, satisfying the never-loop pulse discipline. */}
               {displayItems.map((item, i) => (
-                <div key={item.key} className={item.isNew ? 'animate-pulse' : ''}>
+                <div key={item.key} className={item.isNew ? 'ds-pulse-changed' : ''}>
                   {renderItem(item, i)}
                 </div>
               ))}

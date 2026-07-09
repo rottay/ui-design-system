@@ -26,6 +26,58 @@ import { TOAST_CONTAINER_DEFAULTS, TOAST_ANIMATION, POSITION_MAP } from '../../T
 import { useToastContext } from '../../utils/ToastProvider';
 import { injectToastStyles, getToastAnimationStyle } from '../../utils/animations';
 import { BaseToast } from '../../base';
+import { useBreakpoints } from '../../../../../../hooks';
+
+// ============================================================================
+// Stacking Physics
+// ============================================================================
+
+/**
+ * Maximum number of "behind" layers that visibly compress/fan. Capping at 2
+ * keeps a 5-toast stack from over-shrinking the back-most items to an
+ * illegible size.
+ */
+const MAX_STACK_DEPTH = 2;
+
+/** Per-depth-step scale reduction and vertical offset (px), transform-only. */
+const STACK_SCALE_STEP = 0.035;
+const STACK_OFFSET_STEP = 5;
+
+/**
+ * Computes the transform-only compress/fan style for one toast in the stack.
+ *
+ * The most recently added toast (last entry in `visibleToasts`) is the front
+ * layer: full scale, no offset. Earlier toasts scale down and shift toward
+ * the container's anchored edge (the direction its own position already
+ * grows toward -- see `getContainerPosition`), so the stack reads as cards
+ * fanned behind the front one. Because each toast keeps the same DOM node
+ * (`key={toast.id}`) across re-renders, the `transition` below animates the
+ * transform delta automatically whenever a dismissal shifts every other
+ * toast's depth -- no extra JS re-settle logic is needed.
+ */
+function getStackTransform(
+  index: number,
+  total: number,
+  vertical: 'top' | 'bottom',
+  disableTransition: boolean
+): CSSProperties {
+  const depthFromFront = Math.min(total - 1 - index, MAX_STACK_DEPTH);
+
+  if (depthFromFront === 0) {
+    return {
+      transform: 'none',
+      transition: disableTransition ? 'none' : 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
+    };
+  }
+
+  const scale = 1 - depthFromFront * STACK_SCALE_STEP;
+  const offset = depthFromFront * STACK_OFFSET_STEP * (vertical === 'top' ? -1 : 1);
+
+  return {
+    transform: `scale(${scale}) translateY(${offset}px)`,
+    transition: disableTransition ? 'none' : 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
+  };
+}
 
 // ============================================================================
 // Type Definitions
@@ -213,6 +265,7 @@ export function ToastContainer({
 }: ToastContainerProps): React.ReactElement | null {
   const { toasts, config, dispatch } = useToastContext();
   const containerRef = useRef<HTMLDivElement>(null);
+  const { prefersReducedMotion } = useBreakpoints();
 
   // Use prop position or fall back to config
   const position = positionProp || config.position;
@@ -325,13 +378,26 @@ export function ToastContainer({
       aria-live="polite"
       aria-atomic="false"
     >
-      {visibleToasts.map((toast) => {
+      {visibleToasts.map((toast, index) => {
+        // Compress/fan stacking transform, keyed to this toast's distance
+        // from the front (most recent) of the CURRENT visible slice. This is
+        // computed fresh every render, so when a dismissal shrinks
+        // visibleToasts, every surviving toast (same DOM node, same `key`)
+        // recomputes a new depth and transitions to it -- the re-settle.
+        const stackStyle = getStackTransform(
+          index,
+          visibleToasts.length,
+          POSITION_MAP[position].vertical,
+          prefersReducedMotion
+        );
+
         // Use custom render if provided
         if (renderToast) {
           return (
             <div
               key={toast.id}
-              style={{ pointerEvents: 'auto' }}
+              data-stack-depth={Math.min(visibleToasts.length - 1 - index, MAX_STACK_DEPTH)}
+              style={{ pointerEvents: 'auto', ...stackStyle }}
               onMouseEnter={() => handlePause(toast.id)}
               onMouseLeave={() => handleResume(toast.id)}
             >
@@ -340,22 +406,29 @@ export function ToastContainer({
           );
         }
 
-        // Default toast rendering
+        // Default toast rendering. The stacking transform/transition lives on
+        // this OUTER wrapper; the enter/exit `animation` (getToastAnimationStyle)
+        // stays on the INNER div. Both target `transform`, and the enter/exit
+        // keyframe runs with `animation-fill-mode: forwards`, which would
+        // otherwise permanently pin the outer transform to the animation's
+        // final keyframe value and mask the stacking transform. Separate
+        // elements compose their transforms instead of one overriding the
+        // other.
         return (
           <div
             key={toast.id}
-            style={{
-              pointerEvents: 'auto',
-              ...getToastAnimationStyle(position, toast.visible ? 'in' : 'out'),
-            }}
+            data-stack-depth={Math.min(visibleToasts.length - 1 - index, MAX_STACK_DEPTH)}
+            style={{ pointerEvents: 'auto', ...stackStyle }}
             onMouseEnter={() => handlePause(toast.id)}
             onMouseLeave={() => handleResume(toast.id)}
           >
-            <BaseToast
-              {...toast.options}
-              visible={toast.visible}
-              onClose={() => handleDismiss(toast.id)}
-            />
+            <div style={getToastAnimationStyle(position, toast.visible ? 'in' : 'out')}>
+              <BaseToast
+                {...toast.options}
+                visible={toast.visible}
+                onClose={() => handleDismiss(toast.id)}
+              />
+            </div>
           </div>
         );
       })}

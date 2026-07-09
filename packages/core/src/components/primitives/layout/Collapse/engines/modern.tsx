@@ -19,14 +19,27 @@
  * @category Layout
  * @package @rottay/design-system
  */
-import React, { useState, useRef, useEffect, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
+import React, { useState, createContext, useContext, Children, cloneElement, isValidElement } from 'react';
 import type { CollapseProps, CollapsePanelProps } from '../Collapse.types';
 import { COLLAPSE_DEFAULTS } from '../Collapse.types';
 
-/** Keyframes for collapse content transition */
+/**
+ * Collapse expand/collapse transition, expressed on `grid-template-rows`
+ * (0fr -> 1fr). The previous pixel-bound-height technique required an
+ * arbitrary upper bound and animated a non-linear timing curve near that
+ * bound (most of the transition duration spent animating pixels the content
+ * never reaches); the fr-unit track animates uniformly regardless of content
+ * height and needs no bound. The `.rottay-collapse-content` element is the
+ * grid row track; its `.rottay-collapse-content-inner` child needs
+ * `min-height:0` because grid items default to `min-height:auto`, which
+ * would keep the inner content's intrinsic height as a floor and prevent the
+ * track from ever reaching 0fr.
+ */
 const COLLAPSE_STYLES = `
-.rottay-collapse-content{overflow:hidden;transition:max-height var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,ease),opacity var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,ease),padding var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,ease)}
-.rottay-collapse-arrow{display:inline-block;transition:var(--ds-collapse-icon-default-idle-transition,transform var(--ds-motion-normal) ease)}
+.rottay-collapse-content{display:grid;transition:grid-template-rows var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,var(--ds-motion-ease-out))}
+.rottay-collapse-content-inner{min-height:0;overflow:hidden;transition:opacity var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,var(--ds-motion-ease-out)),padding var(--ds-collapse-transition-duration,var(--ds-motion-normal)) var(--ds-collapse-transition-timing,var(--ds-motion-ease-out))}
+.rottay-collapse-arrow{display:inline-block;transition:var(--ds-collapse-icon-default-idle-transition,transform var(--ds-motion-normal) var(--ds-motion-ease-out))}
+@media (prefers-reduced-motion: reduce){.rottay-collapse-content,.rottay-collapse-content-inner,.rottay-collapse-arrow{transition:none}}
 `.trim();
 
 /** Shared state between Collapse and its Panel children via React Context */
@@ -73,16 +86,6 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     // Use explicit panelKey when provided, otherwise derive from render index
     const key = panelKey ?? `panel-${index}`;
     const isActive = context.activeKeys.includes(key);
-
-    // Measure content height for smooth max-height transition
-    const contentRef = useRef<HTMLDivElement>(null);
-    const [contentHeight, setContentHeight] = useState<number>(0);
-
-    useEffect(() => {
-      if (contentRef.current) {
-        setContentHeight(contentRef.current.scrollHeight);
-      }
-    }, [children, isActive]);
 
     const handleClick = () => {
       if (!disabled) {
@@ -167,25 +170,33 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
           {extra && <span style={{ marginLeft: 'auto' }}>{extra}</span>}
           {context.expandIconPosition === 'end' && arrowIcon}
         </div>
-        {/* Content area animated via max-height transition */}
+        {/* Content area: the outer element is the grid-template-rows track
+            (0fr collapsed / 1fr expanded); the inner element carries
+            min-height:0 (see COLLAPSE_STYLES) plus the opacity/padding fade
+            so the whole reveal reads as one motion. */}
         <div
-          ref={contentRef}
           className="rottay-collapse-content"
           style={{
-            maxHeight: isActive ? contentHeight || 9999 : 0,
-            opacity: isActive ? 1 : 0,
-            color: 'var(--ds-collapse-content-default-idle-color, inherit)',
-            background: context.ghost
-              ? 'var(--ds-collapse-content-ghost-idle-bg, transparent)'
-              : 'var(--ds-collapse-content-default-idle-bg, transparent)',
-            fontSize: 'var(--ds-collapse-content-default-idle-font-size, inherit)',
-            lineHeight: 'var(--ds-collapse-content-default-idle-line-height, normal)',
-            padding: isActive
-              ? `0 var(--ds-collapse-content-default-idle-padding-x, 16px) var(--ds-collapse-content-default-idle-padding-y, 16px) var(--ds-collapse-content-default-idle-padding-x, 16px)`
-              : '0 var(--ds-collapse-content-default-idle-padding-x, 16px)',
+            gridTemplateRows: isActive ? '1fr' : '0fr',
           }}
         >
-          {children}
+          <div
+            className="rottay-collapse-content-inner"
+            style={{
+              opacity: isActive ? 1 : 0,
+              color: 'var(--ds-collapse-content-default-idle-color, inherit)',
+              background: context.ghost
+                ? 'var(--ds-collapse-content-ghost-idle-bg, transparent)'
+                : 'var(--ds-collapse-content-default-idle-bg, transparent)',
+              fontSize: 'var(--ds-collapse-content-default-idle-font-size, inherit)',
+              lineHeight: 'var(--ds-collapse-content-default-idle-line-height, normal)',
+              padding: isActive
+                ? `0 var(--ds-collapse-content-default-idle-padding-x, 16px) var(--ds-collapse-content-default-idle-padding-y, 16px) var(--ds-collapse-content-default-idle-padding-x, 16px)`
+                : '0 var(--ds-collapse-content-default-idle-padding-x, 16px)',
+            }}
+          >
+            {children}
+          </div>
         </div>
       </div>
     );

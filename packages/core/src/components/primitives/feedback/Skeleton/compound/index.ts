@@ -100,3 +100,10 @@ export type { SkeletonFormProps } from './FormSkeleton';
  */
 export { SkeletonParagraph } from './Paragraph';
 export type { SkeletonParagraphProps } from './Paragraph';
+
+/**
+ * Opacity-only crossfade between a skeleton placeholder and its real content.
+ * @see {@link SkeletonTransitionProps}
+ */
+export { SkeletonTransition } from './Transition';
+export type { SkeletonTransitionProps } from './Transition';

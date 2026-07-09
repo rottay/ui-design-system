@@ -20,6 +20,9 @@ export type { UseFilterPanelOptions, UseFilterPanelReturn } from './useFilterPan
 export { useInlineEditing } from './useInlineEditing';
 export type { UseInlineEditingOptions, UseInlineEditingReturn } from './useInlineEditing';
 
+export { usePulseOnChange, PulseValue } from './usePulseOnChange';
+export type { UsePulseOnChangeResult, PulseValueProps } from './usePulseOnChange';
+
 export { useVirtualScroll } from '../../../patterns/data/data-table/useVirtualScroll';
 export type { UseVirtualScrollOptions, UseVirtualScrollReturn } from '../../../patterns/data/data-table/useVirtualScroll';
 

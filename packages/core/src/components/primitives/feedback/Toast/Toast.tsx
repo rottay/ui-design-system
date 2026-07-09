@@ -24,7 +24,7 @@
 
 import type { ToastProps } from './Toast.types';
 import { BaseToast } from './base';
-import { ToastContainer, UndoToast } from './compound';
+import { ToastContainer, UndoToast, AnimatedCheck } from './compound';
 
 export type {
   ToastProps,
@@ -46,8 +46,8 @@ export {
   VARIANT_COLORS,
 } from './Toast.types';
 
-export { ToastContainer, UndoToast } from './compound';
-export type { ToastContainerProps, UndoToastProps } from './compound';
+export { ToastContainer, UndoToast, AnimatedCheck } from './compound';
+export type { ToastContainerProps, UndoToastProps, AnimatedCheckProps } from './compound';
 
 export {
   ToastProvider,
@@ -72,4 +72,6 @@ export const Toast = Object.assign(ToastComponent, {
   Container: ToastContainer,
   /** Undo-window recipe: countdown affordance + Undo action, reduced-motion safe. */
   Undo: UndoToast,
+  /** Draw-in success checkmark for completed confirm flows, reduced-motion safe. */
+  Check: AnimatedCheck,
 });

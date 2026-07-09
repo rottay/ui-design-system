@@ -51,3 +51,14 @@ export { UndoToast } from './UndoToast';
  * Props for the UndoToast recipe.
  */
 export type { UndoToastProps } from './UndoToast';
+
+/**
+ * AnimatedCheck - draw-in success checkmark for completed confirm flows.
+ * @see {@link AnimatedCheckProps} for prop documentation
+ */
+export { AnimatedCheck } from './AnimatedCheck';
+
+/**
+ * Props for the AnimatedCheck recipe.
+ */
+export type { AnimatedCheckProps } from './AnimatedCheck';

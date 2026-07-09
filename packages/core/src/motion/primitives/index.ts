@@ -16,3 +16,7 @@ export { Magnetic } from './magnetic';
 export { TextReveal } from './text-reveal';
 export { CountUp } from './count-up';
 export { Morph } from './morph';
+export { HamburgerToX } from './morph/HamburgerToX';
+export type { HamburgerToXProps } from './morph/HamburgerToX';
+export { CopyToCheck } from './morph/CopyToCheck';
+export type { CopyToCheckProps } from './morph/CopyToCheck';

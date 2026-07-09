@@ -422,3 +422,38 @@
     animation: none;
   }
 }
+
+/* =========================================================================
+   DATA-CHANGED PULSE (.ds-pulse-changed)
+   A single, non-looping flash for live-updating cells/rows (data-table live
+   cells, live-feed rows). Uses an inset box-shadow rather than
+   background-color so it layers on top of whatever background the element
+   already has (striped rows, hover state, selection) instead of overwriting
+   it. Intensity is tunable via --ds-effect-intensity (0 collapses the flash
+   to fully transparent, satisfying a zero-decoration tenant without a
+   separate opt-out). `animation` with no explicit iteration-count defaults
+   to 1 -- this must NEVER be changed to `infinite` or given a `-loop`
+   variant; the "one subtle flash" contract depends on it staying singular.
+   Pair with the `usePulseOnChange` hook (patterns/foundation/hooks), which
+   remounts the flashing node on each change so the animation restarts.
+   ========================================================================= */
+@keyframes ds-pulse-changed-flash {
+  from {
+    box-shadow: inset 0 0 0 9999px rgba(var(--ds-color-primary-rgb), calc(0.14 * var(--ds-effect-intensity, 1)));
+  }
+  to {
+    box-shadow: inset 0 0 0 9999px rgba(var(--ds-color-primary-rgb), 0);
+  }
+}
+
+.ds-pulse-changed {
+  animation-name: ds-pulse-changed-flash;
+  animation-duration: var(--ds-motion-slow);
+  animation-timing-function: var(--ds-motion-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-pulse-changed {
+    animation: none;
+  }
+}

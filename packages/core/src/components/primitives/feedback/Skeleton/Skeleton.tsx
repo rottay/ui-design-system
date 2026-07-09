@@ -35,6 +35,7 @@ import {
   SkeletonTable,
   SkeletonForm,
   SkeletonParagraph,
+  SkeletonTransition,
 } from './compound';
 
 export {
@@ -44,9 +45,9 @@ export {
   SKELETON_DEFAULTS,
 } from './Skeleton.types';
 
-export { SkeletonAvatar, SkeletonText, SkeletonButton, SkeletonCard, SkeletonListItem, SkeletonTable, SkeletonForm, SkeletonParagraph };
+export { SkeletonAvatar, SkeletonText, SkeletonButton, SkeletonCard, SkeletonListItem, SkeletonTable, SkeletonForm, SkeletonParagraph, SkeletonTransition };
 export type { SkeletonAvatarProps, SkeletonTextProps, SkeletonButtonProps } from './compound';
-export type { SkeletonCardProps, SkeletonListItemProps, SkeletonTableProps, SkeletonFormProps, SkeletonParagraphProps } from './compound';
+export type { SkeletonCardProps, SkeletonListItemProps, SkeletonTableProps, SkeletonFormProps, SkeletonParagraphProps, SkeletonTransitionProps } from './compound';
 
 // Engine-switchable base -- not exported directly because SkeletonComponent
 // wraps it to inject personality-aware animation defaults.
@@ -105,5 +106,7 @@ export const Skeleton = Object.assign(
     Form: SkeletonForm,
     /** Dense body-copy placeholder with variable last-line width. */
     Paragraph: SkeletonParagraph,
+    /** Opacity-only crossfade between a skeleton and its real content. */
+    Transition: SkeletonTransition,
   }
 );

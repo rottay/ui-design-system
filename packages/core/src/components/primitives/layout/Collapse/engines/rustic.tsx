@@ -61,7 +61,7 @@ const styles = {
     pointerEvents: 'none',
   } as React.CSSProperties,
   arrow: {
-    transition: 'transform 0.2s',
+    transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
     fontSize: 10,
   } as React.CSSProperties,
   arrowActive: {
@@ -70,22 +70,47 @@ const styles = {
   headerContent: {
     flex: 1,
   } as React.CSSProperties,
-  content: {
-    overflow: 'hidden',
-    transition: 'max-height 0.2s, padding 0.2s',
-    backgroundColor: 'var(--ds-collapse-content-bg, #fff)',
+  // Outer grid-row track (0fr collapsed / 1fr expanded, see contentTrackActive/
+  // contentTrackInactive) replaces the previous pixel-bound height technique,
+  // which needed an arbitrary upper bound (1000px) and animated a non-linear
+  // curve near that bound. The fr-unit track animates uniformly regardless of
+  // content height and needs no bound.
+  contentTrack: {
+    display: 'grid',
+    transition: 'grid-template-rows var(--ds-motion-normal) var(--ds-motion-ease-out)',
   } as React.CSSProperties,
-  // maxHeight of 1000px is an arbitrary upper bound for the transition;
-  // actual content will scroll if it exceeds this value
-  contentActive: {
-    maxHeight: 1000,
+  contentTrackActive: {
+    gridTemplateRows: '1fr',
+  } as React.CSSProperties,
+  contentTrackInactive: {
+    gridTemplateRows: '0fr',
+  } as React.CSSProperties,
+  // The inner wrapper needs min-height:0 -- grid items default to
+  // min-height:auto, which would floor the track at the content's intrinsic
+  // height and prevent it from ever reaching 0fr.
+  contentInner: {
+    minHeight: 0,
+    overflow: 'hidden',
+    backgroundColor: 'var(--ds-collapse-content-bg, #fff)',
+    transition: 'padding var(--ds-motion-normal) var(--ds-motion-ease-out)',
+  } as React.CSSProperties,
+  contentInnerActive: {
     padding: 'var(--ds-collapse-content-padding, 16px)',
   } as React.CSSProperties,
-  contentInactive: {
-    maxHeight: 0,
+  contentInnerInactive: {
     padding: '0 16px',
   } as React.CSSProperties,
 };
+
+/**
+ * The transitions above are inline styles (rustic stays framework-free), so
+ * they cannot be reached by a plain CSS class rule for the reduced-motion
+ * override. This is the one injected `<style>` block in the file, scoped to
+ * two class hooks added purely for this media query.
+ */
+const RUSTIC_REDUCED_MOTION_STYLES = `
+@media (prefers-reduced-motion: reduce){.rottay-collapse-content-track,.rottay-collapse-arrow{transition:none}}
+`.trim();
 
 /** Shared state between Collapse and its Panel children via React Context */
 interface CollapseContextValue {
@@ -138,6 +163,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     // Arrow rotates 90deg when expanded via inline transform style
     const arrowIcon = showArrow && (
       <span
+        className="rottay-collapse-arrow"
         style={{
           ...styles.arrow,
           ...(isActive ? styles.arrowActive : {}),
@@ -171,14 +197,24 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
           {extra}
           {context.expandIconPosition === 'end' && arrowIcon}
         </div>
-        {/* Content animated via max-height transition between 0 and 1000px */}
+        {/* Content: outer div is the grid-row track, inner div carries
+            min-height:0 + the padding fade. See contentTrack/contentInner in
+            the styles object above. */}
         <div
+          className="rottay-collapse-content-track"
           style={{
-            ...styles.content,
-            ...(isActive ? styles.contentActive : styles.contentInactive),
+            ...styles.contentTrack,
+            ...(isActive ? styles.contentTrackActive : styles.contentTrackInactive),
           }}
         >
-          {children}
+          <div
+            style={{
+              ...styles.contentInner,
+              ...(isActive ? styles.contentInnerActive : styles.contentInnerInactive),
+            }}
+          >
+            {children}
+          </div>
         </div>
       </div>
     );
@@ -251,6 +287,8 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       <CollapseContext.Provider
         value={{ activeKeys, toggleKey, accordion, expandIconPosition, bordered, ghost }}
       >
+        {/* Inject the reduced-motion override -- safe static string */}
+        <style dangerouslySetInnerHTML={{ __html: RUSTIC_REDUCED_MOTION_STYLES }} />
         <div
           ref={ref}
           className={className}

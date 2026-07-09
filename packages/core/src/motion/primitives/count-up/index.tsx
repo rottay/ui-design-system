@@ -100,7 +100,10 @@ export const CountUp: React.FC<CountUpProps> = ({
 
   return (
     <span ref={ref} className={className} style={style}>
-      <span ref={displayRef}>{prefix}{formatter ? formatter(from) : from.toLocaleString()}{suffix}</span>
+      {/* ds-nums-tabular (CRA-01, foundation/base/typography.css) locks every
+          digit to a fixed advance width so the ticking value never jitters
+          column-to-column as digits change on each animation frame. */}
+      <span ref={displayRef} className="ds-nums-tabular">{prefix}{formatter ? formatter(from) : from.toLocaleString()}{suffix}</span>
     </span>
   );
 };
