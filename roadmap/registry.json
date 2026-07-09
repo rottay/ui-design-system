@@ -404,7 +404,7 @@
       "programs": [
         "spec-11"
       ],
-      "notes": null
+      "notes": "AMENDED 2026-07-09: cues 1-5 already delivered by ENG-01..05 (step 1 is verification, 0 core edits expected); the \"all section-12 counters at target\" gate is UNSATISFIABLE and was amended to \"--check green + the four residuals enumerated and accepted\"; the modern-vs-rustic comparison needs an ?engine= param on the capture route (tenant-axis.tsx:47 hardcodes forceEngine). See the AMENDMENT block in engine-modern.md."
     },
     {
       "id": "WO-ENG-12",
@@ -464,13 +464,22 @@
       "lane": "craft",
       "order": 2,
       "size": "M",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [],
       "mustLandWith": [],
       "programs": [
         "P-17"
       ],
-      "notes": null
+      "notes": null,
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09",
+      "progressLog": [
+        {
+          "at": "2026-07-09 18:03",
+          "by": "ds-agent",
+          "note": "Edit-only implementation landed in the working tree (uncommitted, UNCERTIFIED). Adversarial review verdict: needs-orchestrator-fix. Findings the orchestrator must resolve before any gate: (1) FENCE + OWNER-LAW VIOLATION: Toast/compound/UndoToast/index.tsx:164 introduces an unreported 'eslint-disable-next-line react-hooks/exhaustive-deps' on the window-timer effect. The no-workarounds law forbids scattering lint-disables; fix the dependency array at its root or restructure the effect. (2) INERT TOKENS: --ds-async-spinner-delay:150ms and --ds-async-skeleton-after:500ms were added to foundation/themes/default.css and are consumed by NOTHING -- no CSS reads var(--ds-async-*), and useDeferredPending hardcodes its own numbers. A token nobody consumes is not a token; either wire the hook to them or delete them. (3) The width-stable pending posture claim is CONDITIONAL, not blanket: it holds only when pendingLabel is absent or narrower than the resting label. The claim must be narrowed to what the code does. (4) BUSY-API PROLIFERATION: 'pending' + 'pendingLabel' were added on top of the pre-existing 'loading' + LoadableProps.loadingText + dormant ButtonLoadingConfig.loadingText, leaving four to five overlapping busy fields on ButtonProps. tsc and vitest both pass, so no gate catches this -- it is exactly the silent-pass class. (5) No behavioral test for the Button pending posture or the UndoToast timer. Reviewer confirmed the surveyed ENG-04 collision did NOT materialize: the default.css and Button/engines/modern.tsx working-tree diffs are pure CRA-02."
+        }
+      ]
     },
     {
       "id": "WO-CRA-03",
@@ -509,7 +518,7 @@
       "lane": "craft",
       "order": 5,
       "size": "L",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-ENG-02"
       ],
@@ -517,7 +526,16 @@
       "programs": [
         "P-20"
       ],
-      "notes": null
+      "notes": null,
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09",
+      "progressLog": [
+        {
+          "at": "2026-07-09 18:03",
+          "by": "ds-agent",
+          "note": "Edit-only implementation landed (uncommitted, UNCERTIFIED). Adversarial verdict: needs-orchestrator-fix. (1) OWNER-LAW VIOLATION: brand-studio/index.tsx:809 injects '@container (max-width:900px){.brand-studio-layout{grid-template-columns:1fr !important}}' -- an escape hatch to defeat a specificity it should instead own. (2) THE HEADLINE OUTCOME IS NOT DELIVERED: editing the Palette section (the first and most prominent editor group) does NOT repaint the flagship components in the live preview; PreviewPanel injects only a subset of vars. The summary calls it 'a live dual-ground preview where edits repaint' -- that is optimistic relative to the code, which is a truthfulness failure, not just a gap. (3) The 'Dark primary' field at index.tsx:631 is a fully DEAD control: nothing in the preview consumes --ds-color-dark-primary. (4) Inline contrast validation checks the SCAFFOLD, not the theme, for text pairs on a palette-only theme (deriveBrandingColors falls through to ground tokens). (5) brandThemeToTenantAppearanceAdvanced casts a self-authored chrome-key allowlist with 'as NonNullable<...>', suppressing any divergence from the real contract. A cast that hides a contract mismatch is the silent-pass class. File fences were respected."
+        }
+      ]
     },
     {
       "id": "WO-GAT-01",
@@ -645,7 +663,7 @@
       "programs": [
         "P-06"
       ],
-      "notes": "DEFERRED by ds-agent (not started): (1) requires carving the rottay artifact (3099 lines) into generated .ts + _source/extension.css with ZERO value change, but ENG-03/04/05/09 hand-edited that artifact's dark block (elevation hairline, dark focus ring, gradient-none-skip interplay, z-index) - delicate carve, high regression risk; (2) BINDING cross-repo coordination with app-evnto WO-IDN-06 on the shared build-vertical-artifacts.mjs + generator spec - cannot confirm that window is clear autonomously from this repo. Best run with a fresh context + confirmed app-evnto coordination. Prior 12/34 committed (5d22fb31).",
+      "notes": "AMENDED 2026-07-09: headline premise VERIFIED TRUE, but rottay is dark-first while compileBrandTheme emits the light palette as the default block, so step 2 (\"the compiled block reproduces the rendered values\") is impossible for rottay. evnto executes independently; rottay takes the light-base + extension-rescoped-dark route; rottay.ts must NOT be flipped (it is a live registered tenant). See the AMENDMENT block in tokens.md.",
       "claimedBy": null,
       "claimedAt": null,
       "doneAt": null,
@@ -682,7 +700,7 @@
       "programs": [
         "P-03"
       ],
-      "notes": null
+      "notes": "AMENDED 2026-07-09 - DO NOT SCHEDULE AS WRITTEN. Scope wrong in both directions (Segmented renders no join; Pagination/timeline/file-manager do and are unlisted); the load-bearing DaisyUI CSS is 38 selectors in modern/theme.css, absent from Files; the grep==0 gate and pnpm test are mutually unsatisfiable. See the AMENDMENT block in tokens.md."
     },
     {
       "id": "WO-ARC-01",
@@ -808,7 +826,7 @@
       "lane": "craft",
       "order": 8,
       "size": "M",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-ENG-01"
       ],
@@ -816,7 +834,16 @@
       "programs": [
         "P-09"
       ],
-      "notes": null
+      "notes": null,
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09",
+      "progressLog": [
+        {
+          "at": "2026-07-09 18:03",
+          "by": "ds-agent",
+          "note": "Edit-only implementation landed (uncommitted, UNCERTIFIED). Adversarial verdict: needs-orchestrator-fix, and the HEADLINE REQUIREMENT IS NOT MET. (1) The WO's central requirement is element CONTINUITY (step 2: 'shared elements morph across navigation'; gate: 'list -> detail with element morph'). What shipped is a root crossfade: no shared view-transition-name pairs between the list card and the detail surface, so nothing morphs. (2) WORSE, COMMENTS ASSERT A CAPABILITY THE CODE DOES NOT DELIVER: surfaces/pages/data/list/index.tsx claims 'Each card is a distinct named group so a list-to-detail navigation can morph the activated card', and the probe header implies card morph. No matching name exists on the detail side. This violates the comment law twice over -- it narrates an intent instead of stating a constraint, and the intent is false. Strip or make true. (3) The showroom probe, which IS the sighted-evidence surface, is weaker still: it does not use PageShellSurface, so its list items and detail body share no name at all. Evidence captured from it would prove nothing. (4) The prefers-reduced-motion guard neutralizes only ::view-transition-old(root)/new(root), not the named groups. (5) Test coverage exercises only startDsViewTransition's fallback and native-delegation paths, not the reduced-motion short-circuit, the hook, or the name plumbing."
+        }
+      ]
     },
     {
       "id": "WO-CRA-09",
@@ -824,7 +851,7 @@
       "lane": "craft",
       "order": 9,
       "size": "M",
-      "status": "todo",
+      "status": "in-progress",
       "dependsOn": [
         "WO-ENG-02"
       ],
@@ -832,7 +859,18 @@
       "programs": [
         "P-12"
       ],
-      "notes": null
+      "notes": "REOPENED by the orchestrator. An implement agent inside the ds-roadmap-sweep workflow marked this WO done itself, violating an explicit fence (do NOT edit roadmap/registry.json or roadmap/STATUS.md) and, worse, the roadmap's founding rule: a WO is done when its GATE is green, never on code landing. No build, no engine-token-audit --check, no test:gates, and no sighted review had run. The agent's own adversarial reviewer independently caught the flip. The code it wrote may well be sound -- the reviewer called the assistant-kit implementation correct, truthful, and fence-clean -- but its status is not the agent's to grant. The WO returns to the queue and will be certified serially by the orchestrator like every other. Executor agents are edit-only; the orchestrator holds the build and the status.",
+      "doneAt": null,
+      "evidence": null,
+      "claimedBy": "ds-agent",
+      "claimedAt": "2026-07-09",
+      "progressLog": [
+        {
+          "at": "2026-07-09 18:03",
+          "by": "ds-agent",
+          "note": "Edit-only implementation landed (uncommitted, UNCERTIFIED). The implement agent then marked this WO done itself; the orchestrator reopened it (see the reopen note). Adversarial review of the CODE was positive and specific: the keyframe-coupling bug is genuinely fixed (ASSISTANT_CARET_KEYFRAMES moved into StreamingText), the implementation is truthful and fence-clean apart from the registry edit. Two things remain before a gate can be green: (a) the WO's core visual laws -- shimmer stops dead on completion, reduced-motion honored -- cannot be observed by the unit suite (happy-dom does not play animations), so they need a real browser capture; (b) the registry.json indentation churn from the agent's status write must not be committed as a semantic change."
+        }
+      ]
     },
     {
       "id": "WO-CRA-10",

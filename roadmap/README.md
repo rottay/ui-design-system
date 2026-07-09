@@ -24,6 +24,40 @@
   proposals; new items still follow the same law (owner approves 1:1, then a `### WO-` block +
   registry entry).
 
+## Four rules learned the hard way (2026-07-09)
+
+Each of these was paid for. They are not style preferences.
+
+1. **A work order is a HYPOTHESIS, not a law. The code is the law.** A survey of
+   13 work orders on 2026-07-09 found 7 whose premise the code contradicts.
+   Three had already been caught mid-execution: WO-ENG-08 assumed DaisyUI was
+   dead (1,675 lines had real consumers), WO-GAT-03 specified side-by-side tenant
+   columns (tenant, theme and `dir` are all `<html>`-anchored, so they are
+   impossible), WO-ENG-12 blamed the Table primitive for an overflow that lived
+   in the gallery cell above it. **The first step of every WO is to try to
+   falsify itself.** `roadmap:check` proves a WO is consistent; nothing proves it
+   is true. When a premise falls, amend the WO in place with an `AMENDMENT` block
+   citing `file:line` — leave the original claim standing so the correction is
+   auditable.
+2. **A gate authored before the code was read is a trap.** WO-ENG-11's gate
+   ("all section-12 counters at target") is unsatisfiable — `--check` does not
+   verify those targets, and two of them are documented as unreachable.
+   WO-TOK-03's gate (`grep -ri daisyui == 0`) contradicts `pnpm test`. A gate
+   that cannot go green forces either a lie or an amendment. Write the gate after
+   the survey.
+3. **Every new gate ships with a DRILL that proves it bites.** Introduce the
+   defect the gate exists to catch, watch it go red, revert, watch it go green,
+   and record both in `done --evidence`. WO-GAT-03 did this and found that its
+   own derivation probe was circular; the circular version reported 1 violation,
+   the corrected one reported 7. A counter that has never been red is not a
+   counter.
+4. **Executors are edit-only; the orchestrator holds the build AND the status.**
+   Build, test, and Playwright are one shared resource over one working tree. Two
+   agents building concurrently produced a `.next` compiled against a half-written
+   `dist`, a 500 on the probe route, and 43 spurious visual failures. And on the
+   same day an executor marked its own WO `done` — no build, no `--check`, no
+   sighted review. Both fences are structural, not advisory.
+
 ## State model (this plan cannot rot silently)
 
 - **The spec** lives in the lane files (`engine-modern.md`, `craft.md`, `gates.md`, `tokens.md`,

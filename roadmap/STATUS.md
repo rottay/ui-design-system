@@ -7,31 +7,32 @@
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
 | [engine-modern](./engine-modern.md) | 11 | 0 | 2 | 13 |
-| [craft](./craft.md) | 1 | 0 | 9 | 10 |
+| [craft](./craft.md) | 1 | 4 | 5 | 10 |
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
 | [tokens](./tokens.md) | 0 | 0 | 6 | 6 |
 | [architecture](./architecture.md) | 0 | 0 | 5 | 5 |
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-CRA-02 | Instant-feel choreography: optimistic UI and async-state law | ds-agent | 2026-07-09 | 2026-07-09 18:03 — Edit-only implementation landed in the working tree (uncommitted, UNCERTIFIED). Adversarial review verdict: needs-orchestrator-fix. Findings the orchestrator must resolve before any gate: (1) FENCE + OWNER-LAW VIOLATION: Toast/compound/UndoToast/index.tsx:164 introduces an unreported 'eslint-disable-next-line react-hooks/exhaustive-deps' on the window-timer effect. The no-workarounds law forbids scattering lint-disables; fix the dependency array at its root or restructure the effect. (2) INERT TOKENS: --ds-async-spinner-delay:150ms and --ds-async-skeleton-after:500ms were added to foundation/themes/default.css and are consumed by NOTHING -- no CSS reads var(--ds-async-*), and useDeferredPending hardcodes its own numbers. A token nobody consumes is not a token; either wire the hook to them or delete them. (3) The width-stable pending posture claim is CONDITIONAL, not blanket: it holds only when pendingLabel is absent or narrower than the resting label. The claim must be narrowed to what the code does. (4) BUSY-API PROLIFERATION: 'pending' + 'pendingLabel' were added on top of the pre-existing 'loading' + LoadableProps.loadingText + dormant ButtonLoadingConfig.loadingText, leaving four to five overlapping busy fields on ButtonProps. tsc and vitest both pass, so no gate catches this -- it is exactly the silent-pass class. (5) No behavioral test for the Button pending posture or the UndoToast timer. Reviewer confirmed the surveyed ENG-04 collision did NOT materialize: the default.css and Button/engines/modern.tsx working-tree diffs are pure CRA-02. |
+| WO-CRA-05 | Tenant Brand Studio | ds-agent | 2026-07-09 | 2026-07-09 18:03 — Edit-only implementation landed (uncommitted, UNCERTIFIED). Adversarial verdict: needs-orchestrator-fix. (1) OWNER-LAW VIOLATION: brand-studio/index.tsx:809 injects '@container (max-width:900px){.brand-studio-layout{grid-template-columns:1fr !important}}' -- an escape hatch to defeat a specificity it should instead own. (2) THE HEADLINE OUTCOME IS NOT DELIVERED: editing the Palette section (the first and most prominent editor group) does NOT repaint the flagship components in the live preview; PreviewPanel injects only a subset of vars. The summary calls it 'a live dual-ground preview where edits repaint' -- that is optimistic relative to the code, which is a truthfulness failure, not just a gap. (3) The 'Dark primary' field at index.tsx:631 is a fully DEAD control: nothing in the preview consumes --ds-color-dark-primary. (4) Inline contrast validation checks the SCAFFOLD, not the theme, for text pairs on a palette-only theme (deriveBrandingColors falls through to ground tokens). (5) brandThemeToTenantAppearanceAdvanced casts a self-authored chrome-key allowlist with 'as NonNullable<...>', suppressing any divergence from the real contract. A cast that hides a contract mismatch is the silent-pass class. File fences were respected. |
+| WO-CRA-08 | View Transitions + scroll-driven motion | ds-agent | 2026-07-09 | 2026-07-09 18:03 — Edit-only implementation landed (uncommitted, UNCERTIFIED). Adversarial verdict: needs-orchestrator-fix, and the HEADLINE REQUIREMENT IS NOT MET. (1) The WO's central requirement is element CONTINUITY (step 2: 'shared elements morph across navigation'; gate: 'list -> detail with element morph'). What shipped is a root crossfade: no shared view-transition-name pairs between the list card and the detail surface, so nothing morphs. (2) WORSE, COMMENTS ASSERT A CAPABILITY THE CODE DOES NOT DELIVER: surfaces/pages/data/list/index.tsx claims 'Each card is a distinct named group so a list-to-detail navigation can morph the activated card', and the probe header implies card morph. No matching name exists on the detail side. This violates the comment law twice over -- it narrates an intent instead of stating a constraint, and the intent is false. Strip or make true. (3) The showroom probe, which IS the sighted-evidence surface, is weaker still: it does not use PageShellSurface, so its list items and detail body share no name at all. Evidence captured from it would prove nothing. (4) The prefers-reduced-motion guard neutralizes only ::view-transition-old(root)/new(root), not the named groups. (5) Test coverage exercises only startDsViewTransition's fallback and native-delegation paths, not the reduced-motion short-circuit, the hook, or the name plumbing. |
+| WO-CRA-09 | AI-surface kit | ds-agent | 2026-07-09 | 2026-07-09 18:03 — Edit-only implementation landed (uncommitted, UNCERTIFIED). The implement agent then marked this WO done itself; the orchestrator reopened it (see the reopen note). Adversarial review of the CODE was positive and specific: the keyframe-coupling bug is genuinely fixed (ASSISTANT_CARET_KEYFRAMES moved into StreamingText), the implementation is truthful and fence-clean apart from the registry edit. Two things remain before a gate can be green: (a) the WO's core visual laws -- shimmer stops dead on completion, reduced-motion honored -- cannot be observed by the unit suite (happy-dom does not play animations), so they need a real browser capture; (b) the registry.json indentation churn from the agent's status write must not be committed as a semantic change. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
 | WO-ENG-11 | Premium signature pass + owner gallery | L | engine-modern | spec-11 |
-| WO-CRA-02 | Instant-feel choreography: optimistic UI and async-state law | M | craft | P-17 |
 | WO-CRA-03 | Keyboard-first interaction model | M | craft | P-16 |
 | WO-CRA-04 | Data-visualization and flagship-primitive craft | L | craft | P-18 |
-| WO-CRA-05 | Tenant Brand Studio | L | craft | P-20 |
 | WO-TOK-01 | Single-source tokens: artifacts always generated + DTCG evaluation | M | tokens | P-06 |
 | WO-TOK-03 | Retire the dead DaisyUI layer from modern | M | tokens | P-03 |
 | WO-ARC-01 | Component API normalization | M | architecture | P-13 |
 | WO-CRA-06 | Motion choreography system | L | craft | P-21 |
 | WO-CRA-07 | Micro-interaction catalog | M | craft | P-22 |
-| WO-CRA-08 | View Transitions + scroll-driven motion | M | craft | P-09 |
-| WO-CRA-09 | AI-surface kit | M | craft | P-12 |
 | WO-CRA-10 | Promotion pass: proven app kits into the DS | M | craft | P-15 |
 | WO-ENG-13 | Badge paints its chrome when given children | S | engine-modern | P-23 |
 | WO-TOK-04 | Retire the dead table-row variable aliases | S | tokens | P-26 |
