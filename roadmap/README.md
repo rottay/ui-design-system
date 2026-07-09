@@ -120,6 +120,13 @@
    visual WO additionally REQUIRES a sighted before/after gallery scored against the spec (sections 1 +
    11); the `done --evidence` must reference the screenshots and the verdict. The owner approves signature
    moments (WO-ENG-11).
+
+   > **Owner decision 2026-07-09 — approval delegated to the orchestrator** ("auto aprobate. pedí calidad
+   > máxima pero auto aprobate"). The orchestrator may mark owner-gated work orders done without waiting
+   > for a signature, and may promote an approved proposal into a WO block itself. The bar does not move:
+   > the sighted gallery is still captured, still reviewed by eye, and the verdict is still recorded in
+   > `done --evidence`. Delegated approval means no waiting, not no review — and every WO closed under this
+   > delegation must say so in its evidence, so the trail explains itself without this README.
 6. `node scripts/roadmap-status.mjs done WO-ENG-NN --evidence "<gate command + result>"` — refused if
    deps/hazards/evidence are not satisfied.
 7. If interrupted mid-WO: leave it `in-progress` — the successor runs `node scripts/roadmap-status.mjs

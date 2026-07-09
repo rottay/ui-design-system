@@ -160,3 +160,43 @@ second re-verifies parity before certifying). **TOK-02 after WO-ENG-06 + WO-TOK-
 before/after captures under both tenant palettes (a dark-surface tenant — rottay — and a
 light-surface tenant — bithire or evnto; there is no light/dark toggle); the owner approves
 signature moments.
+
+### WO-TOK-04 Retire the dead table-row variable aliases
+- **Outcome** — The brand compiler emits one name per table-row channel. `pnpm --filter @rottay/design-system run lint` is green.
+- **Why** — P-26 (proposals.md, APPROVED by the owner 2026-07-09). `compilers/brand-theme/index.ts:768-771` emits `--ds-table-row-bg-hover` AND `--ds-table-row-hover-bg`, `--ds-table-row-bg-striped` AND `--ds-table-row-striped-bg`. Components consume only the `-bg-hover` / `-bg-striped` spelling (4 and 6 references under `src/components/`); the other two have no consumer in the DS, app-bithire, app-platform, or app-evnto. `scripts/audit-integration.mjs` reports them as two `orphan-premium-var` violations, and core lint has been red since before 2026-07-09 (reproduced against commit `494e7d85` in a throwaway worktree). A standing red gate hides the next real one.
+- **Depends on** — none. Lands FIRST among the new tokens WOs: all three edit `compilers/brand-theme/index.ts` and regenerate the tenant artifacts, and running them concurrently would race on the generated files.
+- **Steps** —
+  1. Delete the two dead emissions at `compilers/brand-theme/index.ts:769,771`.
+  2. Regenerate the tenant artifacts (`packages/core/src/tokens/css/artifacts/**`, `packages/core/styles/**`) and pass the regenerate-and-diff parity guard: the ONLY delta may be the removal of those two variables.
+  3. Confirm no app consumes them: `grep -rl -- "--ds-table-row-hover-bg\|--ds-table-row-striped-bg"` over the three sibling app repos returns nothing (they are READ-ONLY; only read).
+- **Files** — `packages/core/src/compilers/brand-theme/index.ts`, `packages/core/src/tokens/css/artifacts/**`, `packages/core/styles/**`.
+- **Acceptance gate** — `pnpm --filter @rottay/design-system run lint` exits 0 with `audit-integration: 0 violations`; `pnpm --filter @rottay/design-system run build` green; artifact diff contains only the two removed variables; `pnpm --filter @rottay/showroom run test:gates` green (zero pixel movement expected — a moved pixel means a component silently consumed one of them).
+- **Do NOT** — Do not silence `audit-integration` by allowlisting the vars. Do not rename the surviving spelling. Removing an emitted variable is a public-surface change: record it in the release note.
+- **Size** — S.
+
+### WO-TOK-05 A dynamic dark tenant keeps its BrandTheme chrome
+- **Outcome** — A DB-driven tenant on a dark theme renders the input, card, and modal chrome its own `BrandTheme` declares, exactly as a first-party artifact tenant does. The six `not-derived` entries in the WO-GAT-03 whitelabel baseline drop to zero and the gate holds them there.
+- **Why** — P-24 (proposals.md, APPROVED by the owner 2026-07-09), the biggest whitelabel hole and the reason the hostile-tenant gate was built. The tenant CSS generator emits a dark block scoped `html[data-tenant='x'][data-theme='dark']` (specificity 0,2,1) containing hardcoded literals — e.g. `'--ds-card-bg': '#111827'` at `runtime/tenant/storage/static/generator/index.ts:565`. The compiled BrandTheme chrome rides in the light block (0,1,1), so the dark block wins and the tenant's `chrome.controls.input.*`, `chrome.cardComponent.*`, and `chrome.modal.*` are discarded. Proven at runtime: torture-dark asks for `input.bg: '#1A0014'` and paints `#0F172A`; it asks for `cardComponent.bg: '#120010'` and paints `#111827`. The LIGHT fixture honours the same channels, so the defect is dark-path-only. First-party verticals are immune only because their generated artifacts re-state the chrome — which is exactly the "true by construction" blind spot P-05 was written to expose.
+- **Depends on** — WO-TOK-04 (same compiler file, same artifact regeneration).
+- **Steps** —
+  1. In `generator/index.ts`, make the dark block layer the tenant's COMPILED dark chrome rather than literals. A literal in the dark block is a default masquerading as a tenant value; the defaults belong in the foundation's `[data-theme='dark']` rules, where a tenant rule can override them.
+  2. Preserve the derived dark values (`darkSemanticVariables`, `darkBrandingVariables`, `buildDarkRuntimeScale`) for tenants that declare no chrome — a tenant that says nothing must still get a usable dark surface.
+  3. Update `generator` unit tests: assert a synthetic dark tenant with `chrome.cardComponent.bg` set gets THAT value, and one without it gets the derived default.
+- **Files** — `packages/core/src/runtime/tenant/storage/static/generator/index.ts`, its test suite, `packages/core/src/compilers/brand-theme/index.ts` (only if the dark chrome map must be compiled), `packages/core/src/tokens/css/artifacts/**`, `packages/core/styles/**`.
+- **Acceptance gate** — `pnpm --filter @rottay/showroom run test:whitelabel` green with `torture-baseline.json` shrunk to at most one entry (`select/native/background-color`, which is a different defect); regenerate the baseline with `TORTURE_UPDATE_BASELINE=1` and commit the shrunk file; `pnpm --filter @rottay/design-system run build` + `pnpm test` green; first-party artifact diff EMPTY (rottay/bithire/evnto already re-state their chrome, so their output must not move); sighted proof on `/probe/whitelabel-torture?fixture=torture-dark` that the input and card now carry the fixture's magenta-on-black chrome.
+- **Do NOT** — Do not fix this by re-stating chrome in every artifact; that is the disease, not the cure. Do not weaken the whitelabel probe to make the baseline shrink.
+- **Size** — M.
+
+### WO-TOK-06 The app canvas becomes a BrandTheme channel
+- **Outcome** — A tenant declares its own canvas on both surfaces. A dynamic light tenant renders light components on a light ground; a dynamic dark tenant's `darkBackgroundColor` reaches `--ds-color-bg-primary`.
+- **Why** — P-25 (proposals.md, APPROVED by the owner 2026-07-09). `palette.darkBackgroundColor` compiles to `--ds-color-dark-bg` and never reaches `--ds-color-bg-primary`, and `BrandPalette` has no light background field at all. The foundation is dark-first (`:root { --ds-color-bg-primary: #0A0A0C }`) with no `[data-theme='light']` canvas block, so a dynamic light tenant paints light components on a dark ground — visible in `test-artifacts/gates/gat-03/torture-light.png`, and measured: torture-dark asks for `#050307` and the canvas paints `#0a0a0a`. Only generated first-party artifacts set the canvas per tenant. The owner's 2026-07-07 decision — the tenant palette decides the ground, there is no user-facing light/dark toggle — is therefore unimplementable for any tenant that is not first-party. (This is NOT the withdrawn P-07: no toggle is proposed.)
+- **Depends on** — WO-TOK-05.
+- **Steps** —
+  1. Add a light `backgroundColor` to `BrandPalette` (`contracts/themes/index.ts`), mirroring `darkBackgroundColor`.
+  2. Bridge both fields onto the canvas token family in the compiler and the generator, so the surface tokens (`--ds-color-bg-primary/secondary/elevated`) derive from the tenant's declared ground rather than from a foundation literal.
+  3. Give the foundation a `[data-theme='light']` canvas block, so a tenant that declares nothing still gets a light ground in light mode instead of inheriting the dark-first `:root`.
+  4. Extend the WO-GAT-03 probe with a `ground/root/background-color` entry now that the channel exists. Note why it could not be added before: with no channel, the two fixtures differ only because each falls back to a different default, so the probe would have passed for the wrong reason.
+- **Files** — `packages/core/src/contracts/themes/index.ts`, `packages/core/src/compilers/brand-theme/index.ts`, `packages/core/src/runtime/tenant/storage/static/generator/index.ts`, `packages/core/src/tokens/css/foundation/themes/default.css`, `packages/showroom/e2e/whitelabel/torture.spec.ts`, `packages/core/src/tokens/ts/brand-themes/torture.ts`, artifacts + `packages/core/styles/**`.
+- **Acceptance gate** — `pnpm --filter @rottay/showroom run test:whitelabel` green with the new canvas probe passing under both torture fixtures; `test:gates` green with first-party baselines UNMOVED (rottay/bithire artifacts already declare their canvas, so their pixels must not shift); `pnpm test` + build green; sighted proof that `?fixture=torture-light` renders on a light ground.
+- **Do NOT** — Do not introduce a user-facing light/dark toggle (owner decision 2026-07-07; P-07 withdrawn). Do not let the foundation's light canvas outrank a tenant's declared one.
+- **Size** — M.

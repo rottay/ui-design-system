@@ -430,7 +430,9 @@ registry entry, and only then enters STATUS.
 
 ---
 
-## C. New proposals — found by the WO-GAT-03 whitelabel proof (pending owner review)
+## C. Defects found by the WO-GAT-03 whitelabel proof — APPROVED by the owner 2026-07-09
+
+All four are now work orders: P-23 -> WO-ENG-13, P-24 -> WO-TOK-05, P-25 -> WO-TOK-06, P-26 -> WO-TOK-04.
 
 These three are DEFECTS the hostile-tenant gate surfaced on 2026-07-09, not ideas. Each is
 outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducible against
