@@ -17485,8 +17485,8 @@ html {
      The single motion contract every modern-engine component references, with
      ZERO literal fallbacks. Spec: engines/modern/README.md section 2. Defined
      at the foundation (NOT under [data-tenant]) so it can never silently vanish
-     when the tenant attribute is absent. The legacy --duration-*/--easing-* and
-     the shared --transition-* catalog below are left intact for the classic and
+     when the tenant attribute is absent. The legacy duration/easing tokens and
+     the shared transition catalog below are left intact for the classic and
      rustic engines (zero visual delta).
      ======================================================================== */
 
