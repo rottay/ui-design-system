@@ -9,7 +9,13 @@
  * This is the canonical integrated entry point. Apps that want full control
  * over the items array can still use `PatternCommandPalette` directly.
  *
- * Includes a built-in Cmd+K / Ctrl+K keyboard shortcut to open.
+ * Includes a built-in Cmd+K / Ctrl+K keyboard shortcut to open, and a
+ * built-in "Keyboard shortcuts" command (default `?`) that opens the
+ * `PatternShortcutsOverlay` cheatsheet, populated from every command with a
+ * `shortcut` field (via `useCommands`) plus, when the app has also mounted
+ * `<ShortcutProvider>`, every `useGlobalShortcut`/scoped registration (via
+ * `useRegisteredShortcuts`, which is safe to call either way -- see
+ * hooks/shortcuts).
  *
  * @example
  * ```tsx
@@ -24,10 +30,14 @@
  * ```
  */
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { CommandPaletteProps } from './CommandPalette.types';
 import { useCommandPaletteItems } from '../../../../hooks/commands/useCommandPaletteItems';
+import { useRegisterCommands, useCommands } from '../../../../hooks/commands';
+import { useRegisteredShortcuts } from '../../../../hooks/shortcuts';
+import { PatternShortcutsOverlay } from '../shortcuts-overlay';
+import type { ShortcutDisplayItem } from '../shortcuts-overlay';
 
 // Import the engine factory directly instead of through the barrel (index.ts)
 // to avoid a circular dependency: index.ts re-exports ConnectedCommandPalette,
@@ -51,21 +61,30 @@ export interface ConnectedCommandPaletteProps {
    * @default 'mod+k' (Cmd+K on Mac, Ctrl+K elsewhere)
    */
   openShortcut?: string;
+  /**
+   * Keyboard shortcut that opens the "Keyboard shortcuts" cheatsheet.
+   * @default '?'
+   */
+  shortcutsOverlayKey?: string;
   /** Footer slot rendered below the command list. */
   footer?: React.ReactNode;
 }
 
 /**
  * Registry-backed command palette that auto-populates from
- * `CommandRegistryProvider`. Mounts a Cmd+K listener by default.
+ * `CommandRegistryProvider`. Mounts a Cmd+K listener by default, and a
+ * built-in "Keyboard shortcuts" command/`?` listener that opens a cheatsheet
+ * of every registered shortcut.
  */
 export function ConnectedCommandPalette({
   placeholder = 'Type a command or search...',
   emptyMessage = 'No matching commands',
   openShortcut = 'mod+k',
+  shortcutsOverlayKey = '?',
   footer,
 }: ConnectedCommandPaletteProps) {
   const [open, setOpen] = useState(false);
+  const [shortcutsOverlayOpen, setShortcutsOverlayOpen] = useState(false);
   const { items, onSearch } = useCommandPaletteItems();
 
   // Close palette and execute the selected command
@@ -128,15 +147,73 @@ export function ConnectedCommandPalette({
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [openShortcut]);
 
+  // Built-in "Keyboard shortcuts" command: palette-searchable (via
+  // useCommandPaletteItems, above) AND fires on `shortcutsOverlayKey` via
+  // the command registry's own bubble-phase, editable-suppressed listener
+  // (see hooks/commands) -- no dependency on ShortcutProvider.
+  useRegisterCommands([
+    {
+      id: 'ds-keyboard-shortcuts',
+      label: 'Keyboard shortcuts',
+      description: 'View all keyboard shortcuts',
+      category: 'Help',
+      shortcut: shortcutsOverlayKey,
+      action: () => setShortcutsOverlayOpen(true),
+    },
+  ]);
+
+  const { commands } = useCommands();
+  // Safe without a <ShortcutProvider> ancestor -- returns [] rather than
+  // throwing (see hooks/shortcuts). Merges in any app-level
+  // useGlobalShortcut/ShortcutScope registrations (e.g. a collection
+  // pattern's opt-in j/k/x/enter) alongside the command registry's own
+  // shortcut-bound commands, so the cheatsheet reflects both registries
+  // when both are in use.
+  const registeredShortcuts = useRegisteredShortcuts();
+
+  const shortcutDisplayItems = useMemo<ShortcutDisplayItem[]>(() => {
+    const fromCommands = commands
+      .filter((cmd) => cmd.shortcut)
+      .map((cmd) => ({
+        key: cmd.shortcut as string,
+        description: cmd.label,
+        category: cmd.category ?? 'Commands',
+      }));
+    // Group by scope when a shortcut has no explicit category, so scoped
+    // registrations (e.g. "Collection", per-gallery scope ids) don't all
+    // collapse into "General".
+    const fromRegistry = registeredShortcuts.map((s) => ({
+      key: s.key,
+      description: s.description,
+      category: s.category ?? s.scope ?? 'Global',
+    }));
+
+    const seen = new Set<string>();
+    return [...fromCommands, ...fromRegistry].filter((item) => {
+      const dedupeKey = `${item.key}::${item.description}`;
+      if (seen.has(dedupeKey)) return false;
+      seen.add(dedupeKey);
+      return true;
+    });
+  }, [commands, registeredShortcuts]);
+
   return (
-    <PatternCommandPalette
-      open={open}
-      onOpenChange={handleOpenChange}
-      items={items}
-      onSearch={onSearch}
-      placeholder={placeholder}
-      emptyMessage={emptyMessage}
-      footer={footer}
-    />
+    <>
+      <PatternCommandPalette
+        open={open}
+        onOpenChange={handleOpenChange}
+        items={items}
+        onSearch={onSearch}
+        placeholder={placeholder}
+        emptyMessage={emptyMessage}
+        footer={footer}
+      />
+      <PatternShortcutsOverlay
+        open={shortcutsOverlayOpen}
+        onOpenChange={setShortcutsOverlayOpen}
+        shortcuts={shortcutDisplayItems}
+        title="Keyboard Shortcuts"
+      />
+    </>
   );
 }

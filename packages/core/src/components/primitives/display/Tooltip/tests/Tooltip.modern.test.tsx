@@ -45,4 +45,31 @@ describe('ModernTooltip', () => {
       textOrientation: 'mixed',
     });
   });
+
+  it('renders formatted key chips alongside content when shortcut is set', () => {
+    render(
+      <ModernTooltip content="Open command palette" shortcut="ctrl+k" visible>
+        <button>Open</button>
+      </ModernTooltip>,
+    );
+
+    const tooltip = screen.getByRole('tooltip');
+    expect(tooltip).toHaveTextContent('Open command palette');
+    // formatShortcutKey renders platform-appropriate symbols (Ctrl or the
+    // Mac control glyph) plus the letter -- assert on the kbd count and the
+    // stable letter segment rather than the platform-dependent modifier glyph.
+    expect(tooltip.querySelectorAll('kbd')).toHaveLength(2);
+    expect(tooltip).toHaveTextContent('K');
+  });
+
+  it('renders no kbd chips when shortcut is omitted', () => {
+    render(
+      <ModernTooltip content="Plain tooltip" visible>
+        <button>Action</button>
+      </ModernTooltip>,
+    );
+
+    const tooltip = screen.getByRole('tooltip');
+    expect(tooltip.querySelectorAll('kbd')).toHaveLength(0);
+  });
 });

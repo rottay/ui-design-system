@@ -14,6 +14,8 @@
  * - Conflict detection with console warnings
  * - Conditional activation via `when` callback
  * - Category grouping for overlay display
+ * - Per-surface scopes via `scope` + `ShortcutScope`/`useShortcutScope`: a
+ *   scoped shortcut fires only while its scope is active (see `ShortcutScope`)
  *
  * @example Register a shortcut
  * ```tsx
@@ -33,7 +35,22 @@
  * ]);
  * ```
  *
- * @status active (wired to CommandRegistryProvider)
+ * @example Scoped shortcuts (fire only while a surface is active)
+ * ```tsx
+ * function TaskList() {
+ *   const scopeRef = useShortcutScope('task-list');
+ *   useGlobalShortcut({ key: 'j', handler: selectNext, description: 'Next task', scope: 'task-list' });
+ *   return <div ref={scopeRef}>...</div>;
+ * }
+ * ```
+ *
+ * @status active. Note: `ShortcutProvider` is a standalone provider -- unlike
+ * `CommandRegistryProvider`, it is NOT currently mounted by
+ * `runtime/bootstrap/DesignSystemProvider`, so `useGlobalShortcut(s)` and
+ * `useShortcutScope` throw unless the consuming app wraps its tree in
+ * `<ShortcutProvider>` itself. `useRegisteredShortcuts` is the one exception:
+ * it fails open (returns `[]`) without a provider so read-only consumers
+ * (e.g. a shortcuts cheatsheet) never crash on a missing provider.
  * @module System/Hooks/Shortcuts
  * @category System
  * @package @rottay/design-system
@@ -68,6 +85,17 @@ export interface ShortcutDefinition {
   category?: string;
   /** Conditional activation: shortcut only fires when this returns true */
   when?: () => boolean;
+  /**
+   * Optional scope id. When set, this shortcut fires ONLY while its scope is
+   * active: focus is within the DOM container registered for this scope via
+   * `ShortcutScope`/`useShortcutScope`, OR -- when focus is outside every
+   * registered scope container -- this is the most recently mounted scope.
+   * At most one scope is considered active per keydown (focus-within always
+   * wins over "topmost"), so two scoped shortcuts on the same key never fire
+   * together. Omit for a global shortcut, which always fires (subject to
+   * `when` and editable-element suppression) regardless of scope state.
+   */
+  scope?: string;
 }
 
 /**
@@ -238,6 +266,8 @@ interface ShortcutContextValue {
   register: (entry: ShortcutRegistryEntry) => void;
   unregister: (id: string) => void;
   getAll: () => ShortcutDefinition[];
+  registerScope: (scopeId: string, container: HTMLElement) => void;
+  unregisterScope: (scopeId: string) => void;
 }
 
 const ShortcutContext = createContext<ShortcutContextValue | null>(null);
@@ -251,6 +281,35 @@ function useShortcutContext(): ShortcutContextValue {
     );
   }
   return ctx;
+}
+
+// ---------------------------------------------------------------------------
+// Scope resolution
+// ---------------------------------------------------------------------------
+
+/**
+ * Resolves which single scope (if any) is active for the current keydown.
+ *
+ * Rule: if `document.activeElement` sits inside a registered scope
+ * container, that scope is the active one. Otherwise (focus is outside every
+ * registered scope, e.g. on `<body>` or an unscoped element) the most
+ * recently mounted scope -- the last entry of `scopeStack` -- is active.
+ * Exactly one scope (or none) is ever active, so two scopes can never both
+ * claim the same keydown.
+ */
+function resolveActiveScopeId(
+  scopeContainers: Map<string, HTMLElement>,
+  scopeStack: string[]
+): string | null {
+  const active = document.activeElement;
+  if (active) {
+    for (const [scopeId, container] of scopeContainers) {
+      if (container.contains(active)) {
+        return scopeId;
+      }
+    }
+  }
+  return scopeStack.length > 0 ? scopeStack[scopeStack.length - 1] : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -307,14 +366,26 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
   // matching (e.g. pressing 'g' then 'i' within SEQUENCE_TIMEOUT).
   const sequenceBufferRef = useRef<string[]>([]);
   const sequenceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Scope containers keyed by scope id, and a mount-order stack (last =
+  // most recently mounted = "topmost") -- see resolveActiveScopeId.
+  const scopeContainersRef = useRef<Map<string, HTMLElement>>(new Map());
+  const scopeStackRef = useRef<string[]>([]);
 
   const register = useCallback((entry: ShortcutRegistryEntry) => {
     const existing = registryRef.current.get(entry.id);
     if (!existing) {
       // Dev-only conflict warning: helps catch accidental duplicate bindings
-      // before they reach production.
+      // before they reach production. Two DIFFERENT, defined scopes reusing
+      // the same key is not a real conflict -- they can never both be active
+      // at once (resolveActiveScopeId picks at most one) -- so only warn
+      // when at least one side is global, or both share the same scope.
       for (const [existingId, existingEntry] of registryRef.current.entries()) {
-        if (existingEntry.parsed.definition.key === entry.parsed.definition.key) {
+        const sameKey = existingEntry.parsed.definition.key === entry.parsed.definition.key;
+        const existingScope = existingEntry.parsed.definition.scope;
+        const newScope = entry.parsed.definition.scope;
+        const distinctScopes = existingScope !== undefined && newScope !== undefined && existingScope !== newScope;
+
+        if (sameKey && !distinctScopes) {
           if (process.env.NODE_ENV !== 'production') {
             console.warn(
               `[Rottay DS] Shortcut conflict: "${entry.parsed.definition.key}" is already registered ` +
@@ -330,6 +401,20 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
 
   const unregister = useCallback((id: string) => {
     registryRef.current.delete(id);
+  }, []);
+
+  const registerScope = useCallback((scopeId: string, container: HTMLElement) => {
+    scopeContainersRef.current.set(scopeId, container);
+    // Re-registering (e.g. React StrictMode double-invoke, or a remount)
+    // moves the scope to the top of the mount-order stack rather than
+    // duplicating it.
+    scopeStackRef.current = scopeStackRef.current.filter((id) => id !== scopeId);
+    scopeStackRef.current.push(scopeId);
+  }, []);
+
+  const unregisterScope = useCallback((scopeId: string) => {
+    scopeContainersRef.current.delete(scopeId);
+    scopeStackRef.current = scopeStackRef.current.filter((id) => id !== scopeId);
   }, []);
 
   const getAll = useCallback((): ShortcutDefinition[] => {
@@ -353,27 +438,42 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
 
       const eventKey = normalizeKey(event.key);
 
+      // Resolved once per keydown: at most one scope is ever "active" (see
+      // resolveActiveScopeId), so a scoped entry either matches it exactly
+      // or is skipped -- it can never fire "a little bit".
+      const activeScopeId = resolveActiveScopeId(scopeContainersRef.current, scopeStackRef.current);
+      const isEligible = (def: ShortcutDefinition) => !def.when || def.when();
+
       // --- Pass 1: combo shortcuts (modifier + key) ---
       // Combos are checked first because they are unambiguous: the modifier
-      // state tells us immediately whether it matches.
+      // state tells us immediately whether it matches. Among matches, a
+      // shortcut scoped to the active scope wins over a global (scope-less)
+      // shortcut bound to the same key, so a surface can safely reuse a key
+      // a global command also uses without the global one shadowing it.
+      const comboMatches: ParsedShortcut[] = [];
       for (const entry of registryRef.current.values()) {
         const { parsed } = entry;
         if (parsed.isSequence) continue;
+        if (matchesCombo(event, parsed)) comboMatches.push(parsed);
+      }
 
-        if (matchesCombo(event, parsed)) {
-          if (parsed.definition.when && !parsed.definition.when()) continue;
+      const scopedCombo = activeScopeId
+        ? comboMatches.find((p) => p.definition.scope === activeScopeId && isEligible(p.definition))
+        : undefined;
+      const globalCombo = comboMatches.find((p) => !p.definition.scope && isEligible(p.definition));
+      const winningCombo = scopedCombo ?? globalCombo;
 
-          event.preventDefault();
-          event.stopPropagation();
-          parsed.definition.handler();
-          // A combo match invalidates any in-progress sequence.
-          sequenceBufferRef.current = [];
-          if (sequenceTimerRef.current) {
-            clearTimeout(sequenceTimerRef.current);
-            sequenceTimerRef.current = null;
-          }
-          return;
+      if (winningCombo) {
+        event.preventDefault();
+        event.stopPropagation();
+        winningCombo.definition.handler();
+        // A combo match invalidates any in-progress sequence.
+        sequenceBufferRef.current = [];
+        if (sequenceTimerRef.current) {
+          clearTimeout(sequenceTimerRef.current);
+          sequenceTimerRef.current = null;
         }
+        return;
       }
 
       // --- Pass 2: key sequences (e.g. g then i) ---
@@ -392,6 +492,8 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
       }
 
       // Check if the tail of the buffer matches any registered sequence.
+      // Same scoped-wins-over-global priority as combos, above.
+      const sequenceMatches: ParsedShortcut[] = [];
       for (const entry of registryRef.current.values()) {
         const { parsed } = entry;
         if (!parsed.isSequence) continue;
@@ -401,21 +503,27 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
 
         if (buffer.length >= sequence.length) {
           const tail = buffer.slice(buffer.length - sequence.length);
-          const matches = tail.every((k, i) => k === sequence[i]);
-
-          if (matches) {
-            if (parsed.definition.when && !parsed.definition.when()) continue;
-
-            event.preventDefault();
-            parsed.definition.handler();
-            sequenceBufferRef.current = [];
-            if (sequenceTimerRef.current) {
-              clearTimeout(sequenceTimerRef.current);
-              sequenceTimerRef.current = null;
-            }
-            return;
+          if (tail.every((k, i) => k === sequence[i])) {
+            sequenceMatches.push(parsed);
           }
         }
+      }
+
+      const scopedSequence = activeScopeId
+        ? sequenceMatches.find((p) => p.definition.scope === activeScopeId && isEligible(p.definition))
+        : undefined;
+      const globalSequence = sequenceMatches.find((p) => !p.definition.scope && isEligible(p.definition));
+      const winningSequence = scopedSequence ?? globalSequence;
+
+      if (winningSequence) {
+        event.preventDefault();
+        winningSequence.definition.handler();
+        sequenceBufferRef.current = [];
+        if (sequenceTimerRef.current) {
+          clearTimeout(sequenceTimerRef.current);
+          sequenceTimerRef.current = null;
+        }
+        return;
       }
 
       // Reset the buffer after SEQUENCE_TIMEOUT if no further keys are pressed.
@@ -436,8 +544,8 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
   }, []);
 
   const value = useMemo<ShortcutContextValue>(
-    () => ({ register, unregister, getAll }),
-    [register, unregister, getAll]
+    () => ({ register, unregister, getAll, registerScope, unregisterScope }),
+    [register, unregister, getAll, registerScope, unregisterScope]
   );
 
   return createElement(ShortcutContext.Provider, { value }, children);
@@ -491,6 +599,7 @@ export function useGlobalShortcut(shortcut: ShortcutDefinition): void {
       key: shortcutRef.current.key,
       description: shortcutRef.current.description,
       category: shortcutRef.current.category,
+      scope: shortcutRef.current.scope,
       handler: () => shortcutRef.current.handler(),
       when: shortcutRef.current.when ? () => shortcutRef.current.when!() : undefined,
     };
@@ -502,7 +611,7 @@ export function useGlobalShortcut(shortcut: ShortcutDefinition): void {
       ctx.unregister(id);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ctx, shortcut.key, shortcut.description, shortcut.category]);
+  }, [ctx, shortcut.key, shortcut.description, shortcut.category, shortcut.scope]);
 }
 
 /**
@@ -547,6 +656,7 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
         key: shortcut.key,
         description: shortcut.description,
         category: shortcut.category,
+        scope: shortcut.scope,
         handler: () => shortcutsRef.current[index]?.handler(),
         when: shortcut.when ? () => shortcutsRef.current[index]?.when?.() ?? false : undefined,
       };
@@ -564,7 +674,7 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
   }, [
     ctx,
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    shortcuts.map((s) => `${s.key}::${s.description}::${s.category ?? ''}`).join('|'),
+    shortcuts.map((s) => `${s.key}::${s.description}::${s.category ?? ''}::${s.scope ?? ''}`).join('|'),
   ]);
 }
 
@@ -572,7 +682,17 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
  * Get all currently registered shortcuts.
  * Used by the ShortcutsOverlay to display all available shortcuts.
  *
- * @returns Array of all registered shortcut definitions
+ * Unlike the registration hooks (`useGlobalShortcut(s)`, `useShortcutScope`),
+ * this is read-only and deliberately does NOT throw without a
+ * `<ShortcutProvider>` ancestor -- it returns `[]` instead. A registration
+ * hook silently no-op-ing would hide a real bug (a shortcut the developer
+ * expects to work), but a display hook reporting "nothing registered" when
+ * there is in fact no registry is simply correct, and lets read-only
+ * consumers (e.g. a shortcuts cheatsheet mounted by a component that cannot
+ * guarantee a ShortcutProvider ancestor) render safely either way.
+ *
+ * @returns Array of all registered shortcut definitions, or `[]` if no
+ *   `<ShortcutProvider>` is mounted.
  *
  * @example
  * ```tsx
@@ -581,8 +701,115 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
  * ```
  */
 export function useRegisteredShortcuts(): ShortcutDefinition[] {
-  const ctx = useShortcutContext();
+  const ctx = useContext(ShortcutContext);
+  if (!ctx) return [];
   return ctx.getAll();
+}
+
+/**
+ * Reports whether a `<ShortcutProvider>` ancestor is mounted, without
+ * throwing either way. Exists so an OPT-IN consumer of shortcuts (e.g. a
+ * pattern with a `collectionShortcuts` boolean prop) can decide, before
+ * calling any registration hook, whether to render the small child
+ * component that performs the (provider-requiring, throwing-if-absent)
+ * registration at all -- letting the feature degrade to "inert" instead of
+ * crashing an app that has not adopted `ShortcutProvider` yet.
+ *
+ * @example
+ * ```tsx
+ * function OptionalShortcuts({ enabled }: { enabled: boolean }) {
+ *   const hasProvider = useHasShortcutProvider();
+ *   if (!enabled || !hasProvider) return null;
+ *   return <RegistersActualShortcuts />; // free to call useGlobalShortcut unconditionally in here
+ * }
+ * ```
+ */
+export function useHasShortcutProvider(): boolean {
+  return useContext(ShortcutContext) !== null;
+}
+
+// ---------------------------------------------------------------------------
+// Scopes: ShortcutScope / useShortcutScope
+// ---------------------------------------------------------------------------
+
+/**
+ * Registers the DOM element it is attached to as the container for a
+ * keyboard-shortcut scope. Shortcuts registered with a matching `scope` id
+ * (via `useGlobalShortcut({ ..., scope })`) fire only while this scope is
+ * active -- see `ShortcutDefinition.scope` for the exact activation rule.
+ *
+ * Attach the returned ref to an EXISTING container element (no wrapper DOM
+ * node is introduced). Throws without a `<ShortcutProvider>` ancestor, same
+ * as the other registration hooks -- a scope silently failing to register
+ * would make its shortcuts silently fire globally-by-topmost instead, which
+ * is a correctness bug worth failing fast on.
+ *
+ * Returns a CALLBACK ref, not a `RefObject`, on purpose: registration must
+ * happen exactly when the DOM node attaches or detaches, which a `useEffect`
+ * keyed on `[ctx, scopeId]` cannot detect on its own -- if the OWNING
+ * component conditionally renders the container without those deps
+ * changing (e.g. a collapsible panel toggling visibility), a `RefObject`'s
+ * `.current` changes silently and no effect re-runs to notice it. A
+ * callback ref fires on every attach/detach regardless.
+ *
+ * @param scopeId - Unique id for this scope. Must be stable across renders.
+ *
+ * @example
+ * ```tsx
+ * function TaskList() {
+ *   const scopeRef = useShortcutScope<HTMLDivElement>('task-list');
+ *   useGlobalShortcut({ key: 'j', handler: selectNext, description: 'Next task', scope: 'task-list' });
+ *   return <div ref={scopeRef}>...</div>;
+ * }
+ * ```
+ */
+export function useShortcutScope<T extends HTMLElement = HTMLElement>(scopeId: string): (node: T | null) => void {
+  const ctx = useShortcutContext();
+  const isRegisteredRef = useRef(false);
+
+  return useCallback(
+    (node: T | null) => {
+      if (node) {
+        ctx.registerScope(scopeId, node);
+        isRegisteredRef.current = true;
+      } else if (isRegisteredRef.current) {
+        ctx.unregisterScope(scopeId);
+        isRegisteredRef.current = false;
+      }
+    },
+    [ctx, scopeId]
+  );
+}
+
+export interface ShortcutScopeProps {
+  /** Unique id for this scope, referenced by `ShortcutDefinition.scope`. Must be stable across renders. */
+  id: string;
+  children: ReactNode;
+}
+
+/**
+ * Convenience wrapper around `useShortcutScope` for surfaces that do not
+ * already have a container ref to attach it to. Renders `display: contents`
+ * so the wrapper never affects layout -- it exists purely to mark a DOM
+ * region as a shortcut scope.
+ *
+ * Prefer `useShortcutScope` directly when the surface already has its own
+ * root ref, to avoid the extra DOM node entirely.
+ *
+ * @example
+ * ```tsx
+ * <ShortcutScope id="task-list">
+ *   <TaskListContent />
+ * </ShortcutScope>
+ * ```
+ */
+export function ShortcutScope({ id, children }: ShortcutScopeProps) {
+  const ref = useShortcutScope<HTMLDivElement>(id);
+  return createElement(
+    'div',
+    { ref, style: { display: 'contents' }, 'data-ds-shortcut-scope': id },
+    children
+  );
 }
 
 // ---------------------------------------------------------------------------

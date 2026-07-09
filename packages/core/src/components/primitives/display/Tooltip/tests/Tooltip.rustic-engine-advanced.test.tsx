@@ -109,4 +109,28 @@ describe('Tooltip rustic engine advanced coverage', () => {
     });
     expect(screen.getByRole('tooltip', { hidden: true })).toHaveAttribute('aria-hidden', 'true');
   });
+
+  it('renders formatted key chips alongside content when shortcut is set', () => {
+    render(
+      <RusticTooltip content="Open command palette" shortcut="ctrl+k" visible>
+        <button type="button">Open</button>
+      </RusticTooltip>
+    );
+
+    const tooltip = screen.getByRole('tooltip', { hidden: true });
+    expect(tooltip).toHaveTextContent('Open command palette');
+    expect(tooltip.querySelectorAll('kbd')).toHaveLength(2);
+    expect(tooltip).toHaveTextContent('K');
+  });
+
+  it('renders no kbd chips when shortcut is omitted', () => {
+    render(
+      <RusticTooltip content="Plain tooltip" visible>
+        <button type="button">Action</button>
+      </RusticTooltip>
+    );
+
+    const tooltip = screen.getByRole('tooltip', { hidden: true });
+    expect(tooltip.querySelectorAll('kbd')).toHaveLength(0);
+  });
 });

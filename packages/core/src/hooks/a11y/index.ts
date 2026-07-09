@@ -6,6 +6,9 @@
  * The accessibility hooks provide:
  *
  * - **useKeyboardNavigation**: Arrow key navigation for lists, menus, grids
+ * - **useRovingTabindex**: WAI-ARIA roving-tabindex management (built on
+ *   useKeyboardNavigation) -- Tab enters an item set once, arrows move
+ *   focus within it
  * - **useAriaAnnounce**: Screen reader announcements via aria-live regions
  *
  * All hooks are:
@@ -53,13 +56,14 @@
  * ```
  *
  * @see {@link useKeyboardNavigation} - Keyboard navigation hook
+ * @see {@link useRovingTabindex} - Roving-tabindex hook
  * @see {@link useAriaAnnounce} - Screen reader announcement hook
  * @module System/Hooks/A11y
  * @category System
  * @package @rottay/design-system
  */
 
-import { useState, useCallback, useRef, type KeyboardEvent, type FC } from 'react';
+import { useState, useCallback, useEffect, useRef, type KeyboardEvent, type FC } from 'react';
 import { createElement } from 'react';
 
 // ---------------------------------------------------------------------------
@@ -256,6 +260,185 @@ export function useKeyboardNavigation(
     setFocusedIndex,
     handleKeyDown,
     reset,
+  };
+}
+
+// ---------------------------------------------------------------------------
+// useRovingTabindex
+// ---------------------------------------------------------------------------
+
+/**
+ * Configuration for the roving-tabindex hook.
+ */
+export interface UseRovingTabindexOptions {
+  /** Total number of items in the group. */
+  itemCount: number;
+  /** Arrow key orientation, forwarded to useKeyboardNavigation. @default 'vertical' */
+  orientation?: 'vertical' | 'horizontal' | 'both';
+  /** Whether navigation wraps around at the ends, forwarded to useKeyboardNavigation. @default false */
+  loop?: boolean;
+  /** Called when Enter/Space is pressed, or `selectActive()` is invoked, on the active item. */
+  onSelect?: (index: number) => void;
+  /** Called when Escape is pressed. */
+  onEscape?: () => void;
+}
+
+/**
+ * Return value of useRovingTabindex.
+ */
+export interface UseRovingTabindexResult {
+  /** Index that currently holds tabIndex 0 (where Tab lands). Defaults to 0 before any interaction. */
+  activeIndex: number;
+  /** tabIndex (0 or -1) for the item at `index`. Spread onto each item's `tabIndex` prop. */
+  getTabIndex: (index: number) => 0 | -1;
+  /** Ref callback for the item at `index`. Required: arrow-key movement calls `.focus()` on this node. */
+  getItemRef: (index: number) => (node: HTMLElement | null) => void;
+  /** Keydown handler for arrows/Home/End/Enter/Escape. Attach to the group container or each item. */
+  handleKeyDown: (event: KeyboardEvent) => void;
+  /** Call when an item receives focus outside of arrow-key movement (e.g. mouse click, native Tab). */
+  syncActiveIndex: (index: number) => void;
+  /** Moves the active item forward (honors `loop`) and moves real DOM focus with it. Same target as ArrowDown/ArrowRight. */
+  moveNext: () => void;
+  /** Moves the active item backward (honors `loop`) and moves real DOM focus with it. Same target as ArrowUp/ArrowLeft. */
+  movePrevious: () => void;
+  /** Invokes `onSelect` for the currently active item -- a no-op if nothing has been focused yet, matching Enter/Space. */
+  selectActive: () => void;
+}
+
+/**
+ * Manages WAI-ARIA roving tabindex across a set of items: exactly one item
+ * has `tabIndex={0}` (so Tab enters the group once, at that item) and every
+ * other item has `tabIndex={-1}` (removed from the page Tab order, but still
+ * programmatically focusable). Arrow keys move both the logical active index
+ * AND real DOM focus together, per the roving-tabindex contract.
+ *
+ * Built on `useKeyboardNavigation` for the arrow/Home/End/Enter/Escape key
+ * handling and the underlying focused-index state; this hook adds the DOM
+ * focus side effect, the tabIndex/ref helpers, and imperative `moveNext`/
+ * `movePrevious`/`selectActive` for external triggers (e.g. a "j"/"k"
+ * shortcut) that need to drive the same index without synthesizing a fake
+ * keyboard event.
+ *
+ * Does NOT touch native Tab semantics beyond the tabIndex assignment itself
+ * -- Tab still moves to whatever the browser's default next/previous
+ * focusable element is; this hook never intercepts the Tab key.
+ *
+ * @example
+ * ```tsx
+ * function Menu({ items }: { items: string[] }) {
+ *   const roving = useRovingTabindex({
+ *     itemCount: items.length,
+ *     onSelect: (index) => activate(items[index]),
+ *   });
+ *
+ *   return (
+ *     <ul role="menu" onKeyDown={roving.handleKeyDown}>
+ *       {items.map((item, i) => (
+ *         <li
+ *           key={item}
+ *           role="menuitem"
+ *           ref={roving.getItemRef(i)}
+ *           tabIndex={roving.getTabIndex(i)}
+ *           onFocus={() => roving.syncActiveIndex(i)}
+ *         >
+ *           {item}
+ *         </li>
+ *       ))}
+ *     </ul>
+ *   );
+ * }
+ * ```
+ */
+export function useRovingTabindex(options: UseRovingTabindexOptions): UseRovingTabindexResult {
+  const { itemCount, orientation = 'vertical', loop = false, onSelect, onEscape } = options;
+
+  const itemRefs = useRef<Map<number, HTMLElement>>(new Map());
+
+  const { focusedIndex, setFocusedIndex, handleKeyDown } = useKeyboardNavigation({
+    items: itemCount,
+    orientation,
+    loop,
+    onSelect,
+    onEscape,
+  });
+
+  // Presentational fallback: before any interaction (focusedIndex === -1),
+  // item 0 is still the one that should carry tabIndex 0 so Tab can enter
+  // the group in the first place. This is intentionally separate from
+  // "should we imperatively move DOM focus right now" (below), which must
+  // NOT fall back to 0 -- doing so would steal focus to item 0 on mount.
+  const activeIndex = focusedIndex < 0 ? 0 : focusedIndex;
+
+  // Move real DOM focus whenever the logical index changes via keyboard or
+  // an imperative move*() call. Guarded on focusedIndex (the raw, un-defaulted
+  // value): only after an explicit interaction, never on mount.
+  useEffect(() => {
+    if (focusedIndex < 0) return;
+    const node = itemRefs.current.get(focusedIndex);
+    if (node && document.activeElement !== node) {
+      node.focus();
+    }
+  }, [focusedIndex]);
+
+  const getTabIndex = useCallback(
+    (index: number): 0 | -1 => (index === activeIndex ? 0 : -1),
+    [activeIndex]
+  );
+
+  const getItemRef = useCallback(
+    (index: number) => (node: HTMLElement | null) => {
+      if (node) {
+        itemRefs.current.set(index, node);
+      } else {
+        itemRefs.current.delete(index);
+      }
+    },
+    []
+  );
+
+  const syncActiveIndex = useCallback(
+    (index: number) => setFocusedIndex(index),
+    [setFocusedIndex]
+  );
+
+  // moveNext/movePrevious re-derive useKeyboardNavigation's internal clamp
+  // math (not exported -- only handleKeyDown, a native KeyboardEvent
+  // handler, is) so an external trigger like a "j"/"k" shortcut can drive
+  // the same index without synthesizing a fake keyboard event. Uses the raw
+  // `focusedIndex` (not the 0-defaulted `activeIndex`) so the FIRST press
+  // from an unfocused state lands on item 0, exactly matching ArrowDown's
+  // own behavior, rather than skipping straight to item 1.
+  const moveNext = useCallback(() => {
+    if (itemCount <= 0) return;
+    const current = focusedIndex;
+    const next = current < 0 ? 0 : current >= itemCount - 1 ? (loop ? 0 : itemCount - 1) : current + 1;
+    setFocusedIndex(next);
+  }, [focusedIndex, itemCount, loop, setFocusedIndex]);
+
+  const movePrevious = useCallback(() => {
+    if (itemCount <= 0) return;
+    const current = focusedIndex;
+    const prev = current <= 0 ? (loop ? itemCount - 1 : 0) : current - 1;
+    setFocusedIndex(prev);
+  }, [focusedIndex, itemCount, loop, setFocusedIndex]);
+
+  // Matches useKeyboardNavigation's own Enter/Space guard: a no-op when
+  // nothing has been focused yet, rather than defaulting to item 0.
+  const selectActive = useCallback(() => {
+    if (focusedIndex >= 0 && focusedIndex < itemCount) {
+      onSelect?.(focusedIndex);
+    }
+  }, [focusedIndex, itemCount, onSelect]);
+
+  return {
+    activeIndex,
+    getTabIndex,
+    getItemRef,
+    handleKeyDown,
+    syncActiveIndex,
+    moveNext,
+    movePrevious,
+    selectActive,
   };
 }
 

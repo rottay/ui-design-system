@@ -163,6 +163,15 @@ export interface TooltipProps extends BaseComponentProps, EngineAwareProps, With
    * @default false
    */
   interactive?: boolean;
+
+  /**
+   * Optional keyboard shortcut to render as key chips alongside `content`
+   * (e.g. `'ctrl+k'`, `'g+i'`). Formatted via `formatShortcutKey` from
+   * `hooks/shortcuts`. Display-only -- passing this does NOT register a
+   * keyboard listener; the caller is still responsible for binding the
+   * actual shortcut (e.g. via `useGlobalShortcut`).
+   */
+  shortcut?: string;
 }
 
 /**

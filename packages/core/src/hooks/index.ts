@@ -207,26 +207,32 @@ export type {
 // ============================================================================
 // Accessibility hooks -- keyboard navigation and screen reader support
 // ============================================================================
-export { useKeyboardNavigation, useAriaAnnounce } from './a11y';
+export { useKeyboardNavigation, useAriaAnnounce, useRovingTabindex } from './a11y';
 export type {
   UseKeyboardNavigationOptions,
   UseKeyboardNavigationResult,
   UseAriaAnnounceResult,
+  UseRovingTabindexOptions,
+  UseRovingTabindexResult,
 } from './a11y';
 
 // ============================================================================
-// Shortcut hooks -- global keyboard shortcut registration and display
+// Shortcut hooks -- global keyboard shortcut registration, scoping, and display
 // ============================================================================
 export {
   useGlobalShortcut,
   useGlobalShortcuts,
   useRegisteredShortcuts,
+  useHasShortcutProvider,
+  useShortcutScope,
   ShortcutProvider,
+  ShortcutScope,
   formatShortcutKey,
 } from './shortcuts';
 export type {
   ShortcutDefinition,
   ShortcutProviderProps,
+  ShortcutScopeProps,
 } from './shortcuts';
 
 // ============================================================================

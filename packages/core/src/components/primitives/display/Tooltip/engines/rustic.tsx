@@ -41,6 +41,33 @@
 import React, { forwardRef, useState, useRef, useEffect, useCallback } from 'react';
 import type { TooltipProps } from '../Tooltip.types';
 import { TOOLTIP_DEFAULTS, PLACEMENT_MAP } from '../Tooltip.types';
+import { formatShortcutKey } from '../../../../../hooks/shortcuts';
+
+/**
+ * Layout + chip styles for the optional `shortcut` prop. Built on
+ * `currentColor` so the chips adapt to whichever `--ds-tooltip-{color}-color`
+ * is active without a second color map to keep in sync.
+ */
+const SHORTCUT_ROW_STYLE: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
+const SHORTCUT_CHIPS_STYLE: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 3,
+  flexShrink: 0,
+};
+const SHORTCUT_KBD_STYLE: React.CSSProperties = {
+  padding: '1px 5px',
+  borderRadius: 'var(--ds-radius-sm)',
+  border: '1px solid color-mix(in srgb, currentColor 30%, transparent)',
+  background: 'color-mix(in srgb, currentColor 12%, transparent)',
+  fontSize: '0.85em',
+  fontFamily: 'var(--ds-font-family-mono, monospace)',
+  lineHeight: 1.4,
+};
 
 /**
  * Rustic (Vanilla HTML/CSS) implementation of the Tooltip component.
@@ -71,6 +98,7 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       zIndex,
       className = '',
       style,
+      shortcut,
     } = props;
 
     const [isVisible, setIsVisible] = useState(defaultVisible);
@@ -189,7 +217,20 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
             style={tooltipStyle}
             aria-hidden={!visible}
           >
-            {content}
+            {shortcut ? (
+              <span style={SHORTCUT_ROW_STYLE}>
+                <span>{content}</span>
+                <span style={SHORTCUT_CHIPS_STYLE}>
+                  {formatShortcutKey(shortcut).map((segment, i) => (
+                    <kbd key={i} style={SHORTCUT_KBD_STYLE}>
+                      {segment}
+                    </kbd>
+                  ))}
+                </span>
+              </span>
+            ) : (
+              content
+            )}
             {arrow && <div style={arrowStyle} />}
           </div>
         )}

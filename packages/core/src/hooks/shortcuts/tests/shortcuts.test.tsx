@@ -7,6 +7,9 @@ import {
   useGlobalShortcut,
   useGlobalShortcuts,
   useRegisteredShortcuts,
+  useHasShortcutProvider,
+  useShortcutScope,
+  ShortcutScope,
   formatShortcutKey,
 } from '../index';
 
@@ -313,6 +316,277 @@ describe('Key sequences', () => {
     });
 
     expect(handler).not.toHaveBeenCalled();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Scoped shortcuts (WO-CRA-03)
+// ---------------------------------------------------------------------------
+
+/**
+ * Two-scope harness: registers a "j" shortcut scoped to "scope-a", and
+ * mounts both scope-a and scope-b (in that order, so scope-b is the
+ * most-recently-mounted / "topmost" scope). Used to prove a scoped
+ * shortcut fires only while ITS OWN scope is active.
+ */
+function TwoScopeHarness({ onFire }: { onFire: () => void }) {
+  const scopeARef = useShortcutScope<HTMLDivElement>('scope-a');
+  const scopeBRef = useShortcutScope<HTMLDivElement>('scope-b');
+  useGlobalShortcut({ key: 'j', handler: onFire, description: 'Next', scope: 'scope-a' });
+
+  return (
+    <>
+      <div ref={scopeARef} data-testid="scope-a">
+        <button data-testid="btn-a">A</button>
+      </div>
+      <div ref={scopeBRef} data-testid="scope-b">
+        <button data-testid="btn-b">B</button>
+      </div>
+    </>
+  );
+}
+
+describe('Scoped shortcuts', () => {
+  it('does NOT fire while a different scope is focused (and topmost)', () => {
+    const onFire = vi.fn();
+    const { getByTestId } = render(<TwoScopeHarness onFire={onFire} />, { wrapper: createWrapper() });
+
+    // scope-b is both focused AND the most-recently-mounted scope here --
+    // either rule alone would exclude scope-a's shortcut from firing.
+    act(() => {
+      getByTestId('btn-b').focus();
+    });
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+
+    expect(onFire).not.toHaveBeenCalled();
+  });
+
+  it('DOES fire while its own scope is focused, even when a different scope is topmost', () => {
+    const onFire = vi.fn();
+    const { getByTestId } = render(<TwoScopeHarness onFire={onFire} />, { wrapper: createWrapper() });
+
+    // scope-a is focused but NOT topmost (scope-b mounted after it) --
+    // proves focus-within wins over mount order.
+    act(() => {
+      getByTestId('btn-a').focus();
+    });
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+
+    expect(onFire).toHaveBeenCalledTimes(1);
+  });
+
+  it('fires for the only mounted scope when focus is outside every scope', () => {
+    const onFire = vi.fn();
+
+    function SoloScope() {
+      const ref = useShortcutScope<HTMLDivElement>('solo');
+      useGlobalShortcut({ key: 'j', handler: onFire, description: 'Next', scope: 'solo' });
+      return <div ref={ref} />;
+    }
+
+    render(<SoloScope />, { wrapper: createWrapper() });
+
+    // Nothing inside any scope is focused -- the sole mounted scope is
+    // "topmost" by default and should receive the shortcut.
+    act(() => {
+      (document.activeElement as HTMLElement | null)?.blur?.();
+    });
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+
+    expect(onFire).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not fire before its scope mounts, and stops firing after it unmounts', () => {
+    const onFire = vi.fn();
+
+    // ToggleableScope itself never unmounts -- only the ref target toggles
+    // between null and a real node. useShortcutScope must notice via its
+    // callback ref regardless, since neither of its effect deps (ctx,
+    // scopeId) change when only `mounted` flips.
+    function ToggleableScope({ mounted }: { mounted: boolean }) {
+      const ref = useShortcutScope<HTMLDivElement>('toggle');
+      useGlobalShortcut({ key: 'j', handler: onFire, description: 'Next', scope: 'toggle' });
+      return mounted ? <div ref={ref} /> : null;
+    }
+
+    const { rerender } = render(<ToggleableScope mounted={false} />, { wrapper: createWrapper() });
+
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+    expect(onFire).not.toHaveBeenCalled();
+
+    rerender(<ToggleableScope mounted />);
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+    expect(onFire).toHaveBeenCalledTimes(1);
+
+    rerender(<ToggleableScope mounted={false} />);
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+    expect(onFire).toHaveBeenCalledTimes(1); // unchanged -- scope is gone
+  });
+
+  it('global (scope-less) shortcuts keep firing regardless of mounted/focused scopes', () => {
+    const onFire = vi.fn();
+
+    function WithScope() {
+      const ref = useShortcutScope<HTMLDivElement>('some-scope');
+      useGlobalShortcut({ key: 'g', handler: onFire, description: 'Global action' }); // no scope
+      return (
+        <div ref={ref}>
+          <button data-testid="inside">x</button>
+        </div>
+      );
+    }
+
+    const { getByTestId } = render(<WithScope />, { wrapper: createWrapper() });
+
+    act(() => {
+      getByTestId('inside').focus();
+    });
+    act(() => {
+      fireEvent.keyDown(document, { key: 'g' });
+    });
+
+    expect(onFire).toHaveBeenCalledTimes(1);
+  });
+
+  it('a scoped shortcut wins over a same-key global shortcut while its scope is active', () => {
+    const globalHandler = vi.fn();
+    const scopedHandler = vi.fn();
+
+    function Harness() {
+      const ref = useShortcutScope<HTMLDivElement>('panel');
+      useGlobalShortcut({ key: 'j', handler: globalHandler, description: 'Global next' });
+      useGlobalShortcut({ key: 'j', handler: scopedHandler, description: 'Panel next', scope: 'panel' });
+      return (
+        <div ref={ref}>
+          <button data-testid="inside">x</button>
+        </div>
+      );
+    }
+
+    const { getByTestId } = render(<Harness />, { wrapper: createWrapper() });
+
+    act(() => {
+      getByTestId('inside').focus();
+    });
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+
+    expect(scopedHandler).toHaveBeenCalledTimes(1);
+    expect(globalHandler).not.toHaveBeenCalled();
+  });
+
+  it('does not warn on conflicting keys registered under two different scopes', () => {
+    const spy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    function TwoDistinctScopes() {
+      const refA = useShortcutScope<HTMLDivElement>('list-a');
+      const refB = useShortcutScope<HTMLDivElement>('list-b');
+      useGlobalShortcut({ key: 'j', handler: () => {}, description: 'Next in A', scope: 'list-a' });
+      useGlobalShortcut({ key: 'j', handler: () => {}, description: 'Next in B', scope: 'list-b' });
+      return (
+        <>
+          <div ref={refA} />
+          <div ref={refB} />
+        </>
+      );
+    }
+
+    render(<TwoDistinctScopes />, { wrapper: createWrapper() });
+
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
+  it('ShortcutScope (component form) scopes a shortcut the same way as the hook', () => {
+    const onFire = vi.fn();
+
+    // Two ShortcutScope regions (not one) so this test actually exercises
+    // focus-gating, mirroring TwoScopeHarness above -- with only one scope
+    // mounted, that scope is topmost by default and the "not focused" case
+    // would trivially fire too (see the "solo scope" test), which would
+    // prove nothing about gating specifically.
+    function Harness() {
+      useGlobalShortcut({ key: 'j', handler: onFire, description: 'Next', scope: 'wrapped-a' });
+      return (
+        <>
+          <ShortcutScope id="wrapped-a">
+            <button data-testid="inside-a">a</button>
+          </ShortcutScope>
+          <ShortcutScope id="wrapped-b">
+            <button data-testid="inside-b">b</button>
+          </ShortcutScope>
+        </>
+      );
+    }
+
+    const { getByTestId } = render(<Harness />, { wrapper: createWrapper() });
+
+    act(() => {
+      getByTestId('inside-b').focus();
+    });
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+    expect(onFire).not.toHaveBeenCalled();
+
+    act(() => {
+      getByTestId('inside-a').focus();
+    });
+    act(() => {
+      fireEvent.keyDown(document, { key: 'j' });
+    });
+    expect(onFire).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('useRegisteredShortcuts without a provider', () => {
+  it('returns [] instead of throwing when no ShortcutProvider is mounted', () => {
+    let result: ReturnType<typeof useRegisteredShortcuts> | undefined;
+
+    function Reader() {
+      result = useRegisteredShortcuts();
+      return null;
+    }
+
+    expect(() => render(<Reader />)).not.toThrow();
+    expect(result).toEqual([]);
+  });
+});
+
+describe('useHasShortcutProvider', () => {
+  it('is false without a ShortcutProvider ancestor', () => {
+    let result: boolean | undefined;
+    function Reader() {
+      result = useHasShortcutProvider();
+      return null;
+    }
+
+    expect(() => render(<Reader />)).not.toThrow();
+    expect(result).toBe(false);
+  });
+
+  it('is true within a ShortcutProvider', () => {
+    let result: boolean | undefined;
+    function Reader() {
+      result = useHasShortcutProvider();
+      return null;
+    }
+
+    render(<Reader />, { wrapper: createWrapper() });
+    expect(result).toBe(true);
   });
 });
 

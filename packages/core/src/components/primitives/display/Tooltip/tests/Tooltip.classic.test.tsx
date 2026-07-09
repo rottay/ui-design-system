@@ -10,9 +10,12 @@ vi.mock('antd', () => ({
       data-body-white-space={styles?.body?.whiteSpace}
       data-root-class={classNames?.root}
       data-root-style-color={styles?.root?.color}
-      data-title={title}
+      data-title={typeof title === 'string' ? title : undefined}
     >
       {children}
+      {/* title can be a composite element (see `shortcut` prop) -- render it
+          for real so tests can query its content, not just a string attribute. */}
+      <div data-testid="antd-title-slot">{title}</div>
     </div>
   ),
 }));
@@ -49,5 +52,31 @@ describe('ClassicTooltip', () => {
 
     const wrapper = screen.getByText('Default action').parentElement;
     expect(wrapper).toHaveAttribute('data-body-max-width', '300');
+  });
+
+  it('renders formatted key chips alongside content when shortcut is set', () => {
+    render(
+      <ClassicTooltip content="Open command palette" shortcut="ctrl+k">
+        <button>Open</button>
+      </ClassicTooltip>,
+    );
+
+    const slot = screen.getByTestId('antd-title-slot');
+    expect(slot).toHaveTextContent('Open command palette');
+    // formatShortcutKey renders platform-appropriate symbols (Ctrl or the
+    // Mac control glyph) plus the letter -- assert on the letter segment,
+    // which is stable across platforms.
+    expect(slot).toHaveTextContent('K');
+  });
+
+  it('renders content alone (no chip markup) when shortcut is omitted', () => {
+    render(
+      <ClassicTooltip content="Plain tooltip">
+        <button>Action</button>
+      </ClassicTooltip>,
+    );
+
+    const slot = screen.getByTestId('antd-title-slot');
+    expect(slot.querySelector('kbd')).toBeNull();
   });
 });

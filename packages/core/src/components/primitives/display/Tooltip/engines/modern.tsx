@@ -48,6 +48,7 @@ import React, { forwardRef, useState, useEffect, useRef, useCallback, useLayoutE
 import { createPortal } from 'react-dom';
 import type { TooltipProps } from '../Tooltip.types';
 import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
+import { formatShortcutKey } from '../../../../../hooks/shortcuts';
 
 /**
  * Maps color variants to DS token background/color pairs.
@@ -59,6 +60,33 @@ const COLOR_STYLE_MAP: Record<string, React.CSSProperties> = {
   success: { background: 'var(--ds-color-success)', color: 'var(--ds-color-text-on-primary)' },
   warning: { background: 'var(--ds-color-warning)', color: 'var(--ds-color-text-on-primary)' },
   error: { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' },
+};
+
+/**
+ * Layout + chip styles for the optional `shortcut` prop. Built on
+ * `currentColor` rather than a fixed token so the chips automatically
+ * adapt to whichever `color` variant (COLOR_STYLE_MAP, above) is active,
+ * without a second color map to keep in sync.
+ */
+const SHORTCUT_ROW_STYLE: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
+const SHORTCUT_CHIPS_STYLE: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 3,
+  flexShrink: 0,
+};
+const SHORTCUT_KBD_STYLE: React.CSSProperties = {
+  padding: '1px 5px',
+  borderRadius: 'var(--ds-radius-sm)',
+  border: '1px solid color-mix(in srgb, currentColor 30%, transparent)',
+  background: 'color-mix(in srgb, currentColor 12%, transparent)',
+  fontSize: '0.85em',
+  fontFamily: 'var(--ds-font-family-mono, monospace)',
+  lineHeight: 1.4,
 };
 
 /**
@@ -178,6 +206,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       zIndex,
       className = '',
       style,
+      shortcut,
     } = props;
 
     const triggers = normalizeTriggers(trigger);
@@ -349,7 +378,20 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
         {!disabled && content && isVisible && typeof document !== 'undefined'
           ? createPortal(
               <div ref={tooltipRef} role="tooltip" style={bubbleStyle} aria-hidden={!isVisible}>
-                {content}
+                {shortcut ? (
+                  <span style={SHORTCUT_ROW_STYLE}>
+                    <span>{content}</span>
+                    <span style={SHORTCUT_CHIPS_STYLE}>
+                      {formatShortcutKey(shortcut).map((segment, i) => (
+                        <kbd key={i} style={SHORTCUT_KBD_STYLE}>
+                          {segment}
+                        </kbd>
+                      ))}
+                    </span>
+                  </span>
+                ) : (
+                  content
+                )}
               </div>,
               document.body,
             )

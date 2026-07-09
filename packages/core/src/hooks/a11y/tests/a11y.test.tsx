@@ -2,8 +2,8 @@ import React from 'react';
 import { render, act, screen } from '@testing-library/react';
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
-import { useKeyboardNavigation, useAriaAnnounce } from '../index';
-import type { UseKeyboardNavigationOptions } from '../index';
+import { useKeyboardNavigation, useRovingTabindex, useAriaAnnounce } from '../index';
+import type { UseKeyboardNavigationOptions, UseRovingTabindexResult } from '../index';
 
 // ---------------------------------------------------------------------------
 // useKeyboardNavigation
@@ -334,6 +334,180 @@ describe('useKeyboardNavigation', () => {
       });
       expect(result.current.focusedIndex).toBe(-1);
     });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// useRovingTabindex
+// ---------------------------------------------------------------------------
+
+/**
+ * Renders `itemCount` real, focusable buttons wired through
+ * `useRovingTabindex`, so tests can drive actual DOM focus (not just
+ * inspect returned state) -- exactly what roving tabindex is about.
+ */
+function RovingList({
+  itemCount,
+  onSelect,
+  onEscape,
+  loop,
+  controlsRef,
+}: {
+  itemCount: number;
+  onSelect?: (index: number) => void;
+  onEscape?: () => void;
+  loop?: boolean;
+  controlsRef?: React.MutableRefObject<UseRovingTabindexResult | null>;
+}) {
+  const roving = useRovingTabindex({ itemCount, onSelect, onEscape, loop });
+  if (controlsRef) controlsRef.current = roving;
+
+  return (
+    <div role="listbox" onKeyDown={roving.handleKeyDown} data-testid="roving-list">
+      {Array.from({ length: itemCount }, (_, i) => (
+        <button
+          key={i}
+          ref={roving.getItemRef(i)}
+          tabIndex={roving.getTabIndex(i)}
+          onFocus={() => roving.syncActiveIndex(i)}
+          data-testid={`roving-item-${i}`}
+        >
+          {`Item ${i}`}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+describe('useRovingTabindex', () => {
+  it('gives item 0 tabIndex 0 and every other item -1 before any interaction, without stealing focus', () => {
+    render(<RovingList itemCount={4} />);
+
+    expect(screen.getByTestId('roving-item-0')).toHaveAttribute('tabindex', '0');
+    expect(screen.getByTestId('roving-item-1')).toHaveAttribute('tabindex', '-1');
+    expect(screen.getByTestId('roving-item-2')).toHaveAttribute('tabindex', '-1');
+    expect(screen.getByTestId('roving-item-3')).toHaveAttribute('tabindex', '-1');
+
+    // Mounting must never move focus on its own -- only an explicit
+    // interaction (Tab, click, arrow key, or an imperative move*() call)
+    // should ever call .focus().
+    expect(document.activeElement).not.toBe(screen.getByTestId('roving-item-0'));
+  });
+
+  it('ArrowDown moves real DOM focus to the next item and flips which item is tabIndex 0', () => {
+    render(<RovingList itemCount={3} />);
+    const item0 = screen.getByTestId('roving-item-0');
+    const item1 = screen.getByTestId('roving-item-1');
+
+    // Tab (simulated here via a direct .focus(), since jsdom/happy-dom does
+    // not implement real Tab-order traversal) lands on the one tabbable item.
+    act(() => {
+      item0.focus();
+    });
+    expect(document.activeElement).toBe(item0);
+
+    act(() => {
+      screen.getByTestId('roving-list').dispatchEvent(
+        Object.assign(new (window as any).KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }), {})
+      );
+    });
+
+    expect(document.activeElement).toBe(item1);
+    expect(item0).toHaveAttribute('tabindex', '-1');
+    expect(item1).toHaveAttribute('tabindex', '0');
+  });
+
+  it('moveNext()/movePrevious() drive the same index and DOM focus as arrow keys, without a synthetic key event', () => {
+    const controlsRef = { current: null as UseRovingTabindexResult | null };
+    render(<RovingList itemCount={3} controlsRef={controlsRef} />);
+    const [item0, item1] = [screen.getByTestId('roving-item-0'), screen.getByTestId('roving-item-1')];
+
+    act(() => {
+      item0.focus();
+    });
+
+    // This is the exact call a "j" shortcut handler would make -- no
+    // KeyboardEvent involved at all.
+    act(() => {
+      controlsRef.current?.moveNext();
+    });
+
+    expect(document.activeElement).toBe(item1);
+    expect(item0).toHaveAttribute('tabindex', '-1');
+    expect(item1).toHaveAttribute('tabindex', '0');
+
+    act(() => {
+      controlsRef.current?.movePrevious();
+    });
+    expect(document.activeElement).toBe(item0);
+  });
+
+  it('moveNext() from an unfocused state lands on item 0 first (matches ArrowDown), not item 1', () => {
+    const controlsRef = { current: null as UseRovingTabindexResult | null };
+    render(<RovingList itemCount={3} controlsRef={controlsRef} />);
+
+    act(() => {
+      controlsRef.current?.moveNext();
+    });
+
+    expect(document.activeElement).toBe(screen.getByTestId('roving-item-0'));
+  });
+
+  it('selectActive() invokes onSelect for the active item, and is a no-op before any focus', () => {
+    const onSelect = vi.fn();
+    const controlsRef = { current: null as UseRovingTabindexResult | null };
+    render(<RovingList itemCount={3} onSelect={onSelect} controlsRef={controlsRef} />);
+
+    act(() => {
+      controlsRef.current?.selectActive();
+    });
+    expect(onSelect).not.toHaveBeenCalled();
+
+    act(() => {
+      screen.getByTestId('roving-item-1').focus();
+    });
+    act(() => {
+      controlsRef.current?.selectActive();
+    });
+    expect(onSelect).toHaveBeenCalledWith(1);
+  });
+
+  it('Home/End move DOM focus to the first/last item (inherited from useKeyboardNavigation)', () => {
+    render(<RovingList itemCount={4} />);
+    const list = screen.getByTestId('roving-list');
+
+    act(() => {
+      screen.getByTestId('roving-item-1').focus();
+    });
+    act(() => {
+      list.dispatchEvent(Object.assign(new (window as any).KeyboardEvent('keydown', { key: 'End', bubbles: true }), {}));
+    });
+    expect(document.activeElement).toBe(screen.getByTestId('roving-item-3'));
+
+    act(() => {
+      list.dispatchEvent(Object.assign(new (window as any).KeyboardEvent('keydown', { key: 'Home', bubbles: true }), {}));
+    });
+    expect(document.activeElement).toBe(screen.getByTestId('roving-item-0'));
+  });
+
+  it('does not respond to Tab -- native Tab semantics are left untouched', () => {
+    const controlsRef = { current: null as UseRovingTabindexResult | null };
+    render(<RovingList itemCount={3} controlsRef={controlsRef} />);
+    const item0 = screen.getByTestId('roving-item-0');
+
+    act(() => {
+      item0.focus();
+    });
+    act(() => {
+      screen.getByTestId('roving-list').dispatchEvent(
+        Object.assign(new (window as any).KeyboardEvent('keydown', { key: 'Tab', bubbles: true }), {})
+      );
+    });
+
+    // No item-to-item movement happens for Tab -- this hook only manages
+    // tabIndex assignment; it never intercepts the key itself.
+    expect(document.activeElement).toBe(item0);
+    expect(item0).toHaveAttribute('tabindex', '0');
   });
 });
 

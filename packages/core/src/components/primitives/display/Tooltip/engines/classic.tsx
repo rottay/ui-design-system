@@ -50,6 +50,33 @@ import { forwardRef, type CSSProperties } from 'react';
 import { Tooltip as AntTooltip } from 'antd';
 import type { TooltipProps } from '../Tooltip.types';
 import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
+import { formatShortcutKey } from '../../../../../hooks/shortcuts';
+
+/**
+ * Layout + chip styles for the optional `shortcut` prop. Built on
+ * `currentColor` so the chips adapt to whichever text color Ant Design's
+ * tooltip body ends up using, without a second color map to keep in sync.
+ */
+const SHORTCUT_ROW_STYLE: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
+const SHORTCUT_CHIPS_STYLE: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 3,
+  flexShrink: 0,
+};
+const SHORTCUT_KBD_STYLE: CSSProperties = {
+  padding: '1px 5px',
+  borderRadius: 'var(--ds-radius-sm)',
+  border: '1px solid color-mix(in srgb, currentColor 30%, transparent)',
+  background: 'color-mix(in srgb, currentColor 12%, transparent)',
+  fontSize: '0.85em',
+  fontFamily: 'var(--ds-font-family-mono, monospace)',
+  lineHeight: 1.4,
+};
 
 /**
  * Placement mapping from our standard to Ant Design's placement names.
@@ -110,6 +137,7 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       maxWidth = TOOLTIP_DEFAULTS.maxWidth,
       className,
       style,
+      shortcut,
       ...restProps
     } = props;
 
@@ -146,11 +174,26 @@ const ClassicTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       lineHeight: 1.35,
     };
 
+    const titleContent = shortcut ? (
+      <span style={SHORTCUT_ROW_STYLE}>
+        <span>{content}</span>
+        <span style={SHORTCUT_CHIPS_STYLE}>
+          {formatShortcutKey(shortcut).map((segment, i) => (
+            <kbd key={i} style={SHORTCUT_KBD_STYLE}>
+              {segment}
+            </kbd>
+          ))}
+        </span>
+      </span>
+    ) : (
+      content
+    );
+
     // When disabled, pass undefined as title to suppress the tooltip entirely
     // rather than rendering an empty popup.
     return (
       <AntTooltip
-        title={disabled ? undefined : content}
+        title={disabled ? undefined : titleContent}
         placement={antPlacement as any}
         trigger={triggers}
         arrow={arrow}
