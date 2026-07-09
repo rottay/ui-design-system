@@ -13,3 +13,17 @@ export * from './page-shell';
 export * from './empty-state';
 export { TokenInspector } from './token-inspector';
 export { BrandingPreviewSandbox } from './branding-preview-sandbox';
+export {
+  PatternBrandStudio,
+  serializeBrandTheme,
+  deserializeBrandTheme,
+  brandThemeToTenantAppearanceAdvanced,
+} from './brand-studio';
+export type {
+  PatternBrandStudioProps,
+  BrandStudioSurfaceConfig,
+  BrandStudioSurfaceKey,
+  BrandStudioGalleriesSlot,
+  BrandStudioGalleryContext,
+  BrandStudioContrastReport,
+} from './brand-studio';
