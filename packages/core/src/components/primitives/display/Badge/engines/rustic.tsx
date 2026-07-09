@@ -103,10 +103,24 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
 
   // Badge is hidden when visible=false, or when there is no dot and the count
   // is zero (unless showZero is set). This avoids rendering an empty indicator.
+  // A string display value is showable whenever non-empty -- a label, not a
+  // count. Checked against displayValue, not formattedValue, so a numeric
+  // overflow already formatted to text (e.g. "99+") is not re-parsed as a
+  // string label.
   const shouldShowBadge = visible && (
     dot ||
-    (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero))
+    (displayValue !== undefined && (
+      typeof displayValue === 'string'
+        ? displayValue.length > 0
+        : displayValue > 0 || showZero
+    ))
   );
+
+  // children with no explicit content/count/dot has no separate indicator
+  // value to position over an anchor -- children itself is the label, so it
+  // renders through the standalone tag chrome below instead of the
+  // positioned-container fallback.
+  const isLabelledChildren = Boolean(children) && displayValue === undefined && !dot;
 
   // Pull size-specific dimensions from the shared constants (height, minWidth, fontSize)
   const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
@@ -196,6 +210,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     alignItems: 'center',
     justifyContent: 'center',
     minWidth: dot ? 'var(--ds-badge-dot-size)' : 'var(--ds-badge-min-width)',
+    maxWidth: '100%',
     height: dot ? 'var(--ds-badge-dot-size)' : 'var(--ds-badge-height)',
     padding: dot ? 0 : '0 6px',
     fontSize: 'var(--ds-badge-font-size)',
@@ -207,6 +222,9 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     cursor: clickable || onClick ? 'pointer' : 'default',
     transition: 'var(--ds-badge-transition, all 0.2s ease-in-out)',
     userSelect: 'none',
+    whiteSpace: 'nowrap',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
     ...getStyleVariation(),
   };
 
@@ -220,8 +238,10 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   ) : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
-  // Standalone path: render as an inline tag without any wrapper container
-  if (!children) {
+  // Standalone / labelled-children path: render as an inline tag without any
+  // wrapper container -- children (if present, with no separate content/
+  // count/dot) is the label, falling back to formattedValue when it is set.
+  if (!children || isLabelledChildren) {
     return (
       <>
         {responsiveStyleTag}
@@ -240,7 +260,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
           {...responsiveAttrs}
         >
           {icon && <span style={{ marginRight: formattedValue !== undefined ? 4 : 0 }}>{icon}</span>}
-          {!dot && formattedValue}
+          {!dot && (formattedValue !== undefined ? formattedValue : children)}
           {closable && (
             <span
               style={{ marginLeft: 4, cursor: 'pointer', opacity: 0.7 }}

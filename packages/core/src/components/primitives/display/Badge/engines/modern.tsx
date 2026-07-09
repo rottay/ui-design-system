@@ -17,6 +17,7 @@
  * <Badge engine="modern" count={5} variant="primary"><Avatar /></Badge>
  * <Badge engine="modern" content="New" badgeStyle="soft" variant="success" />
  * <Badge engine="modern" content="Beta" badgeStyle="outline" variant="info" />
+ * <Badge engine="modern" variant="success">Ready</Badge>
  * ```
  */
 
@@ -139,9 +140,14 @@ const SIZE_SPECS: Record<string, SizeSpec> = {
  * Premium modern badge implementation.
  *
  * Three render paths:
- * 1. Standalone badge (no children) - renders as an inline tag
- * 2. Hidden badge (visibility check fails) - renders children only
- * 3. Indicator badge (positioned over children) - uses DaisyUI indicator
+ * 1. Standalone / labelled-children badge (no children, or children with no
+ *    separate content/count/dot to position) - renders as an inline tag;
+ *    children is the label when there is no formattedValue.
+ * 2. Anchor-only badge (an explicit content/count/dot fails the visibility
+ *    check, e.g. count=0 without showZero) - renders children with no
+ *    indicator chrome.
+ * 3. Indicator badge (positioned over children) - a separate content/count/
+ *    dot value renders as a small badge layered over children.
  *
  * @param props - Unified BadgeProps from the design system type contract
  * @returns React element with premium badge styling
@@ -212,10 +218,26 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     return displayValue > max! ? `${max}+` : displayValue;
   })();
 
+  // A string display value (explicit content) is showable whenever non-empty
+  // -- it is a label, not a count. A numeric count keeps the Ant-style
+  // semantic: shown only when positive, or when showZero is set. Checked
+  // against displayValue (not the post-formatting formattedValue) so a
+  // numeric overflow already rendered as text, e.g. "99+", is not re-parsed
+  // as a string label -- it is undefined iff displayValue is undefined.
   const shouldShowBadge = visible && (
     dot ||
-    (formattedValue !== undefined && (Number(formattedValue) > 0 || showZero))
+    (displayValue !== undefined && (
+      typeof displayValue === 'string'
+        ? displayValue.length > 0
+        : displayValue > 0 || showZero
+    ))
   );
+
+  // children with no explicit content/count/dot has no separate indicator
+  // value to position over an anchor -- children itself is the label, so it
+  // renders through the standalone tag chrome below instead of the bare
+  // anchor-only fallback.
+  const isLabelledChildren = Boolean(children) && displayValue === undefined && !dot;
 
   // -------------------------------------------------------------------------
   // Style computation
@@ -304,9 +326,9 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
   // =========================================================================
-  // Render: Standalone badge (no children)
+  // Render: Standalone / labelled-children badge
   // =========================================================================
-  if (!children) {
+  if (!children || isLabelledChildren) {
     return (
       <>
         {responsiveStyleTag}
@@ -348,8 +370,11 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   }
 
   // =========================================================================
-  // Render: Hidden badge (children only)
+  // Render: Anchor only (explicit content/count/dot fails visibility)
   // =========================================================================
+  // Reached only when children is a real anchor and a separate content/
+  // count/dot value exists but is currently suppressed (count=0 without
+  // showZero, or visible=false) -- children renders with no indicator chrome.
   if (!shouldShowBadge) {
     return <div className={className} style={style}>{children}</div>;
   }

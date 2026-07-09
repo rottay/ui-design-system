@@ -40,8 +40,13 @@ function formatCount(count: number | string | undefined, max: number): number | 
  * Classic (Ant Design) implementation of the Badge component.
  *
  * Maps the unified DS prop interface to antd's Badge API. Handles two distinct
- * render paths: a standalone tag-like badge (no children, no count) using
- * inline styles, and the standard antd Badge wrapper for all other cases.
+ * render paths: a standalone/labelled tag-like badge (no children, or children
+ * with no separate content/count/dot to position -- children is then the
+ * tag's own label) using inline styles, and the standard antd Badge wrapper
+ * for the remaining case of a real content/count/dot positioned over a real
+ * anchor child. antd's own Badge only positions a sup indicator over children;
+ * it never paints chrome onto children itself, so a labelled child is routed
+ * to the standalone span rather than fought into shape via antd overrides.
  *
  * @param props - Unified BadgeProps from the design system type contract
  * @returns React element rendering either a standalone span or an antd Badge wrapper
@@ -138,9 +143,13 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
   // Ant Design's 'processing' status adds a ripple animation -- re-purpose it for our pulse prop
   const status = pulse ? 'processing' : undefined;
 
-  // Standalone render path: when there are no children and no count/dot, render
-  // as a tag-like inline element instead of wrapping antd Badge around nothing
-  if (!children && displayValue === undefined && !dot) {
+  // Standalone / labelled-children render path: entered whenever there is no
+  // separate content/count/dot to position, regardless of children -- either
+  // there are no children (a bare tag) or children exist with nothing to
+  // position over them (children is then the tag's own label). AntBadge is
+  // only reached when it has an actual value or dot to render, with or
+  // without a wrapped anchor child.
+  if (displayValue === undefined && !dot) {
     const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
 
     const standaloneStyle: React.CSSProperties = {
@@ -154,11 +163,15 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
       fontSize: sizeValues.fontSize,
       height: sizeValues.height,
       minWidth: sizeValues.minWidth,
+      maxWidth: '100%',
       fontWeight: 500,
       border: bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : undefined,
       boxShadow: bordered ? `0 0 0 1px ${color}` : undefined,
       cursor: clickable || onClick ? 'pointer' : undefined,
       transition: 'var(--ds-badge-transition, all 0.2s ease-in-out)',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
       ...style,
     };
 
