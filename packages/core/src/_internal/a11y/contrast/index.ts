@@ -130,7 +130,12 @@ interface HSL {
   l: number; // 0-1
 }
 
-function rgbToHsl(rgb: RGB): HSL {
+/**
+ * Converts RGB to HSL. The canonical hue/saturation/lightness conversion for
+ * this package -- callers that need a hue-based separation measurement should
+ * reuse this rather than re-implementing HSL conversion.
+ */
+export function rgbToHsl(rgb: RGB): HSL {
   const r = rgb.r / 255;
   const g = rgb.g / 255;
   const b = rgb.b / 255;

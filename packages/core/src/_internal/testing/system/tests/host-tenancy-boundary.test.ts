@@ -4,7 +4,11 @@
  *
  * 1. All first-party tenants are recognized by `isKnownTenant()`.
  * 2. Arbitrary slugs are rejected.
- * 3. Every slug in `BUNDLED_TENANT_SLUGS` has a corresponding CSS file on disk.
+ * 3. Every slug in `BUNDLED_TENANT_SLUGS` has a corresponding CSS file on disk
+ *    at the conventional `tokens/css/artifacts/<slug>/index.css` path. This is
+ *    derived directly from the live set, not a hand-maintained parallel list,
+ *    so a slug cannot sit in `BUNDLED_TENANT_SLUGS` promising a bundle that
+ *    does not exist on disk.
  *
  * This test reads source files and imports registry helpers -- no rendering.
  */
@@ -14,6 +18,7 @@ import { join } from 'node:path';
 import { describe, it, expect } from 'vitest';
 import {
   isKnownTenant,
+  isBundledTenant,
   BUNDLED_TENANT_SLUGS,
   getKnownTenantSlugs,
 } from '../../../../runtime/tenant/registry';
@@ -37,6 +42,10 @@ describe('tenant registry', () => {
     expect(isKnownTenant('evnto')).toBe(true);
   });
 
+  it('recognizes themanagementmiami as a known tenant', () => {
+    expect(isKnownTenant('themanagementmiami')).toBe(true);
+  });
+
   it('rejects an arbitrary slug', () => {
     expect(isKnownTenant('random-corp')).toBe(false);
   });
@@ -46,11 +55,18 @@ describe('tenant registry', () => {
     expect(isKnownTenant('BITHIRE')).toBe(true);
   });
 
-  it('returns at least the three first-party slugs', () => {
+  it('returns at least the four first-party slugs', () => {
     const slugs = getKnownTenantSlugs();
     expect(slugs).toContain('rottay');
     expect(slugs).toContain('bithire');
     expect(slugs).toContain('evnto');
+    expect(slugs).toContain('themanagementmiami');
+  });
+
+  it('themanagementmiami is a known tenant but is NOT bundled -- its CSS compiles at runtime like a DB-driven tenant', () => {
+    expect(isKnownTenant('themanagementmiami')).toBe(true);
+    expect(isBundledTenant('themanagementmiami')).toBe(false);
+    expect(BUNDLED_TENANT_SLUGS.has('themanagementmiami')).toBe(false);
   });
 });
 
@@ -58,28 +74,23 @@ describe('tenant registry', () => {
 // Bundled CSS artifacts exist on disk
 // ---------------------------------------------------------------------------
 
-/**
- * Map from bundled slug to the expected CSS artifact path (relative to src/).
- * First-party verticals use `tokens/css/artifacts/{slug}/index.css`.
- * Legacy customer tenants use `tokens/css/legacy/{slug}/index.css`.
- */
-const ARTIFACT_PATHS: Record<string, string> = {
-  rottay: 'tokens/css/artifacts/rottay/index.css',
-  bithire: 'tokens/css/artifacts/bithire/index.css',
-  evnto: 'tokens/css/artifacts/evnto/index.css',
-  themanagementmiami: 'tokens/css/legacy/themanagementmiami/index.css',
-};
-
 describe('bundled tenant CSS artifacts', () => {
   it('BUNDLED_TENANT_SLUGS contains exactly the expected slugs', () => {
-    const expected = new Set(Object.keys(ARTIFACT_PATHS));
-    expect(new Set(BUNDLED_TENANT_SLUGS)).toEqual(expected);
+    expect(new Set(BUNDLED_TENANT_SLUGS)).toEqual(new Set(['rottay', 'bithire', 'evnto']));
   });
 
-  for (const [slug, relativePath] of Object.entries(ARTIFACT_PATHS)) {
-    it(`${slug} CSS artifact exists at ${relativePath}`, () => {
-      const absolutePath = join(SRC_ROOT, relativePath);
+  // Derived directly from the live set: a future slug added to
+  // BUNDLED_TENANT_SLUGS without a matching artifact fails here immediately,
+  // instead of shipping a bundled-tenant promise the CSS output cannot keep.
+  for (const slug of BUNDLED_TENANT_SLUGS) {
+    it(`${slug} CSS artifact exists at tokens/css/artifacts/${slug}/index.css`, () => {
+      const absolutePath = join(SRC_ROOT, 'tokens/css/artifacts', slug, 'index.css');
       expect(existsSync(absolutePath)).toBe(true);
     });
   }
+
+  it('themanagementmiami has a legacy CSS artifact on disk that is deliberately excluded from BUNDLED_TENANT_SLUGS', () => {
+    const legacyPath = join(SRC_ROOT, 'tokens/css/legacy/themanagementmiami/index.css');
+    expect(existsSync(legacyPath)).toBe(true);
+  });
 });

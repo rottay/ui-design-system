@@ -13,7 +13,7 @@ import {
 // ---------------------------------------------------------------------------
 // Torture surface (WO-GAT-03 hostile-tenant whitelabel proof)
 //
-// Renders children under one of three fixtures:
+// Renders children under one of five fixtures:
 //   - torture-dark / torture-light: synthetic hostile tenants that are NOT
 //     registered anywhere (not in BUNDLED_TENANT_SLUGS, not in the known-tenant
 //     registry). Because their slug is unbundled and they carry a brandTheme,
@@ -23,6 +23,13 @@ import {
 //     registered for this to work.
 //   - rottay: the real first-party tenant, used as the differential reference
 //     the Playwright spec compares the torture fixtures against.
+//   - bithire / themanagementmiami: the bithire vertical's two real tenants
+//     (WO-ENG-20). Both resolve through getKnownTenantConfig() like rottay.
+//     themanagementmiami is unbundled (no CSS artifact), so it also compiles
+//     at render time through the dynamic path, same as the torture fixtures --
+//     it is simply a real, tasteful theme instead of a hostile one. Used for
+//     sighted side-by-side comparison against bithire, not the differential
+//     violation count (that stays scoped to the torture-dark/rottay pair).
 //
 // Tenant, theme, and text direction are all anchored on <html>
 // (ThemeProvider writes document.documentElement, TenantProvider writes
@@ -31,13 +38,25 @@ import {
 // driven by the ?fixture= query param on the probe page.
 // ---------------------------------------------------------------------------
 
-export type TortureFixture = 'torture-dark' | 'torture-light' | 'rottay';
+export type TortureFixture = 'torture-dark' | 'torture-light' | 'rottay' | 'bithire' | 'themanagementmiami';
 
-export const TORTURE_FIXTURES: TortureFixture[] = ['torture-dark', 'torture-light', 'rottay'];
+export const TORTURE_FIXTURES: TortureFixture[] = [
+  'torture-dark',
+  'torture-light',
+  'rottay',
+  'bithire',
+  'themanagementmiami',
+];
+
+/** Fixtures that resolve through the known-tenant registry rather than an inline synthetic config. */
+const KNOWN_TENANT_FIXTURES: ReadonlySet<TortureFixture> = new Set(['rottay', 'bithire', 'themanagementmiami']);
+
+/** Fixtures that render clear-mode (light) rather than the torture fixtures' dark/light pairing. */
+const LIGHT_FORCED_FIXTURES: ReadonlySet<TortureFixture> = new Set(['torture-light', 'bithire', 'themanagementmiami']);
 
 function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined {
-  if (fixture === 'rottay') {
-    return getKnownTenantConfig('rottay');
+  if (KNOWN_TENANT_FIXTURES.has(fixture)) {
+    return getKnownTenantConfig(fixture);
   }
 
   if (fixture === 'torture-dark') {
@@ -66,12 +85,12 @@ function tortureTenantConfig(fixture: TortureFixture): TenantConfig | undefined 
 }
 
 /**
- * Ground the differential probe should wait for before capturing: torture-light
- * is the only fixture that paints a light ground, torture-dark and rottay both
- * paint dark.
+ * Ground the differential probe should wait for before capturing: torture-dark
+ * and rottay both paint dark; torture-light, bithire, and themanagementmiami
+ * all paint a light/clear-mode ground.
  */
 export function surfaceGroundFor(fixture: TortureFixture): 'dark' | 'light' {
-  return fixture === 'torture-light' ? 'light' : 'dark';
+  return LIGHT_FORCED_FIXTURES.has(fixture) ? 'light' : 'dark';
 }
 
 /** The window key the whitelabel probe reads the active fixture's BrandTheme from. */
@@ -111,7 +130,7 @@ export function TortureSurface({
   return (
     <DesignSystemProvider
       forceEngine="modern"
-      forceTheme={fixture === 'torture-light' ? 'light' : 'dark'}
+      forceTheme={surfaceGroundFor(fixture)}
       tenantConfig={tenantConfig}
       locale={rtl ? 'ar' : 'en'}
       // No `vertical` prop for ANY fixture, including rottay: a vertical

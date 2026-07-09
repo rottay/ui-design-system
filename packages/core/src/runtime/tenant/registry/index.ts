@@ -1,14 +1,18 @@
 /**
- * @fileoverview Known tenants registry -- first-party tenants bundled with the DS.
- * @description Three built-in tenants ship with pre-computed CSS and personality:
+ * @fileoverview Known tenants registry -- first-party tenants recognized by the DS.
+ * @description Four built-in tenants ship with authored personality:
  * - `rottay` -- Default/flagship. Monochrome dark, matte premium, fade animations, professional IT/AI SaaS.
  * - `bithire` -- Recruiting platform. Corporate blue, subtle fade animations, structured borders.
  * - `evnto` -- Event management. Black + warm beige, minimal, clean operator aesthetic.
+ * - `themanagementmiami` -- Recruiting platform (bithire vertical). Warm teal/terracotta,
+ *   serif display type, shadow-led separation. Has no precompiled CSS artifact (see
+ *   BUNDLED_TENANT_SLUGS below) -- its CSS is compiled at runtime from `brandTheme`,
+ *   the same path a DB-driven tenant uses.
  *
  * Customer tenants should NOT be added here. They resolve from the remote API
  * or static file storage instead.
  *
- * WHY these live in the DS bundle:
+ * WHY rottay/bithire/evnto also live in the DS's bundled CSS output:
  * First-party tenants need zero-latency resolution (no API call, no static file fetch)
  * because they are used in development, Storybook, and CI. The storage facade in
  * `tenancy/storage/index.ts` checks this registry (step 3) before attempting
@@ -16,7 +20,7 @@
  */
 
 import type { TenantConfig, EngineName } from '../../../contracts';
-import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme } from '../../../tokens';
+import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme, themanagementmiamiBrandTheme } from '../../../tokens';
 
 /**
  * First-party tenants that ship with the DS.
@@ -100,6 +104,32 @@ const KNOWN_TENANTS: Record<string, TenantConfig> = {
     // personality and tokenOverrides removed — brandTheme is the canonical source.
     // evntoBrandTheme.surfaces already contains densityScale: 1.125 and borderRadius.
   },
+
+  /**
+   * The Management Miami - Recruiting platform (bithire vertical)
+   * Warm teal/terracotta, serif display type, shadow-led separation
+   * Not in BUNDLED_TENANT_SLUGS -- CSS compiles at runtime from brandTheme,
+   * the same path a DB-driven tenant uses. A legacy stylesheet still exists at
+   * tokens/css/legacy/themanagementmiami/index.css and ships in the full CSS
+   * bundle (its retirement is a separate, later work order) but this tenant
+   * does not read from it: brandTheme above is this tenant's sole source.
+   */
+  themanagementmiami: {
+    slug: 'themanagementmiami',
+    name: 'The Management Miami',
+    engine: 'classic' as EngineName,
+    theme: 'base',
+    plan: 'enterprise',
+    features: ['*'],
+    vertical: 'bithire',
+    branding: {
+      companyName: 'The Management Miami',
+      // Colors intentionally omitted -- brandTheme is the canonical source and
+      // this tenant is not bundled, so the runtime compiles its CSS on demand.
+      logo: undefined,
+    },
+    brandTheme: themanagementmiamiBrandTheme,
+  },
 };
 
 /**
@@ -110,19 +140,21 @@ export const DEFAULT_TENANT_SLUG = 'rottay';
 
 /**
  * Tenants whose CSS is bundled in the DS styles output.
- * This matches tokens/css/artifacts/ + legacy/ directories — the actual CSS bundle.
+ * This matches the tokens/css/artifacts/ directories — the actual CSS bundle.
  * Used to determine whether a tenant needs runtime-generated chrome CSS
  * (unbundled tenants do, bundled tenants already have it in their CSS file).
  *
- * This is intentionally separate from KNOWN_TENANTS: a tenant can have
- * bundled CSS without having a full TenantConfig in the registry
- * (e.g. themanagementmiami has CSS but no runtime config).
+ * This is intentionally separate from KNOWN_TENANTS: a tenant can be a known,
+ * fully-configured first-party tenant (a real TenantConfig with a brandTheme)
+ * without having a precompiled CSS artifact -- `themanagementmiami` is exactly
+ * that case. Every member of this set MUST have bundled CSS on disk at
+ * tokens/css/artifacts/<slug>/index.css; host-tenancy-boundary.test.ts asserts
+ * this mechanically so the set cannot silently drift from the shipped bundle.
  */
 export const BUNDLED_TENANT_SLUGS: ReadonlySet<string> = new Set([
   'rottay',
   'bithire',
   'evnto',
-  'themanagementmiami',
 ]);
 
 /** Check if a tenant has pre-bundled CSS in the DS styles output. */

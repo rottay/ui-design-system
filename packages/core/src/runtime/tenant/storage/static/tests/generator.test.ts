@@ -360,4 +360,61 @@ describe('tenant css generator', () => {
     expect(css).toContain('--ds-motion-spring: 240 18;');
     expect(css).toContain('--ds-motion-duration-scale: 0.85;');
   });
+
+  it("layers a dark tenant's compiled chrome over the generated dark defaults (WO-TOK-05)", () => {
+    const config: TenantConfig = {
+      ...TENANT,
+      slug: 'dark-chrome-tenant',
+      name: 'Dark Chrome Tenant',
+      tokenOverrides: undefined,
+      personality: undefined,
+      brandTheme: {
+        id: 'dark-chrome-brand',
+        name: 'Dark Chrome Brand',
+        chrome: {
+          cardComponent: { bg: '#120010', border: '#4D0033' },
+          controls: {
+            input: { bg: '#1A0014', border: '#661144', color: '#FF99DD' },
+          },
+          modal: { bg: '#1F0016' },
+        },
+      },
+    };
+
+    const css = generateTenantCss(config);
+    const darkSelectorIndex = css.indexOf(`${buildTenantSelector('dark-chrome-tenant')}[data-theme='dark']`);
+    expect(darkSelectorIndex).toBeGreaterThan(-1);
+    const darkBlock = css.slice(darkSelectorIndex);
+
+    expect(darkBlock).toContain('--ds-card-bg: #120010;');
+    expect(darkBlock).toContain('--ds-card-border-color: #4D0033;');
+    expect(darkBlock).toContain('--ds-input-bg: #1A0014;');
+    expect(darkBlock).toContain('--ds-input-border: #661144;');
+    expect(darkBlock).toContain('--ds-input-color: #FF99DD;');
+    expect(darkBlock).toContain('--ds-modal-bg: #1F0016;');
+  });
+
+  it('keeps the generated dark defaults when a tenant brandTheme declares no chrome (WO-TOK-05)', () => {
+    const config: TenantConfig = {
+      ...TENANT,
+      slug: 'dark-no-chrome-tenant',
+      name: 'Dark No Chrome Tenant',
+      tokenOverrides: undefined,
+      personality: undefined,
+      brandTheme: {
+        id: 'dark-no-chrome-brand',
+        name: 'Dark No Chrome Brand',
+        palette: { primaryColor: '#336699' },
+      },
+    };
+
+    const css = generateTenantCss(config);
+    const darkSelectorIndex = css.indexOf(`${buildTenantSelector('dark-no-chrome-tenant')}[data-theme='dark']`);
+    expect(darkSelectorIndex).toBeGreaterThan(-1);
+    const darkBlock = css.slice(darkSelectorIndex);
+
+    expect(darkBlock).toContain('--ds-card-bg: #111827;');
+    expect(darkBlock).toContain('--ds-input-bg: #0f172a;');
+    expect(darkBlock).toContain('--ds-modal-bg: #111827;');
+  });
 });

@@ -12,6 +12,7 @@
 export { rottayBrandTheme } from './rottay';
 export { bithireBrandTheme } from './bithire';
 export { evntoBrandTheme } from './evnto';
+export { themanagementmiamiBrandTheme } from './themanagementmiami';
 
 /**
  * Hostile-tenant whitelabel PROOF FIXTURES (WO-GAT-03). NOT product tenants —
