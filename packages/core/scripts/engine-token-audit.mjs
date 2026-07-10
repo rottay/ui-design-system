@@ -1006,7 +1006,14 @@ function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
       const specific = tokens.filter((t) => !GENERIC_MODIFIER_TOKENS.has(t));
       const checkSet = specific.length > 0 ? specific : tokens;
       const matched = checkSet.filter((t) => consumed.has(t));
-      if (matched.length === 0) {
+      // EVERY specific token must be live, not merely one of them. `.join .btn`
+      // read as referenced because `btn` is rendered elsewhere while no component
+      // renders `join` at all; `.toast .alert-success` read as referenced because
+      // `toast` is live via Notification and Message while `alert-success` is
+      // rendered by nobody. A compound selector only matches when all of its
+      // parts do, so a counter that accepts one of them is measuring a different
+      // question than the one it is named after.
+      if (matched.length < checkSet.length) {
         unreferencedCount += 1;
         unreferenced.push({ selector: rule.selector, line: lineOf(rule.selStart) });
       } else if (process.env.DEBUG_REFERENCED) {
@@ -1015,6 +1022,9 @@ function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
     }
   }
   walk(0, stripped.length);
+  if (process.env.DEBUG_UNREFERENCED) {
+    for (const r of unreferenced) console.log(`${themeFile}:${r.line}  ${r.selector}`);
+  }
   if (process.env.DEBUG_REFERENCED) {
     console.log(`\n--- DEBUG referenced (${referencedDebug.length}) in ${themeFile} ---`);
     for (const r of referencedDebug) {

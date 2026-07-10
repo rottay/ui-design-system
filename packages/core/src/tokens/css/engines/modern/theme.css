@@ -167,17 +167,6 @@
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
-/* Disabled Button */
-[data-tenant] .btn:disabled,
-[data-tenant] .btn-disabled {
-  background-color: var(--ds-button-disabled-bg) !important;
-  border-color: var(--ds-button-disabled-border) !important;
-  color: var(--ds-button-disabled-color) !important;
-  opacity: var(--ds-button-disabled-opacity);
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
 /* =============================================================================
    INPUT - .input
    ============================================================================= */
@@ -304,11 +293,6 @@
    ============================================================================= */
 
 [data-tenant] .avatar > div {
-  background-color: var(--ds-avatar-default-bg);
-  color: var(--ds-avatar-default-color);
-}
-
-[data-tenant] .avatar.placeholder > div {
   background-color: var(--ds-avatar-default-bg);
   color: var(--ds-avatar-default-color);
 }
@@ -476,16 +460,6 @@
   background-color: var(--ds-border-color);
 }
 
-/* Menu title/group header */
-[data-tenant] .menu li.menu-title {
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--ds-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 /* Base background utility */
 [data-tenant] .bg-base-100 {
   background-color: var(--ds-dropdown-bg);
@@ -499,10 +473,6 @@
   list-style: none;
   padding: var(--ds-sidebar-shell-padding-inline, 14px);
   margin: 0;
-}
-
-[data-tenant] .rottay-menu.menu-vertical {
-  width: 100%;
 }
 
 [data-tenant] .rottay-menu li {
@@ -605,17 +575,6 @@
   list-style: none;
 }
 
-/* Menu Title (group header) */
-[data-tenant] .rottay-menu .menu-title {
-  padding: 6px 16px 3px;
-  font-size: 10.75px;
-  font-weight: 600;
-  color: var(--ds-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.085em;
-  list-style: none;
-}
-
 /* Disabled state */
 [data-tenant] .rottay-menu li > a.disabled,
 [data-tenant] .rottay-menu li > button.disabled,
@@ -650,15 +609,6 @@
   position: relative;
 }
 
-[data-tenant] td .dropdown-content,
-[data-tenant] .table .dropdown-content,
-[data-tenant] .rottay-table .dropdown-content {
-  z-index: 9999 !important;
-  position: absolute;
-  right: 0;
-  top: 100%;
-}
-
 /* =============================================================================
    BREADCRUMBS - .breadcrumbs
    ============================================================================= */
@@ -685,30 +635,6 @@
 }
 
 /* =============================================================================
-   PAGINATION - .join (used for pagination)
-   ============================================================================= */
-
-[data-tenant] .join .btn {
-  min-width: var(--ds-pagination-item-size);
-  height: var(--ds-pagination-item-size);
-  padding: 0;
-  background-color: var(--ds-pagination-item-bg);
-  border-color: var(--ds-pagination-item-border);
-  color: var(--ds-pagination-item-color);
-  border-radius: var(--ds-pagination-item-radius);
-}
-
-[data-tenant] .join .btn:hover {
-  background-color: var(--ds-pagination-item-bg-hover);
-}
-
-[data-tenant] .join .btn.btn-active {
-  background-color: var(--ds-pagination-item-bg-active);
-  color: var(--ds-pagination-item-color-active);
-  border-color: var(--ds-pagination-item-bg-active);
-}
-
-/* =============================================================================
    STEPS - .steps
    ============================================================================= */
 
@@ -716,18 +642,9 @@
   background-color: var(--ds-steps-line-color);
 }
 
-[data-tenant] .steps .step-primary::before {
-  background-color: var(--ds-steps-line-color-active);
-}
-
 [data-tenant] .steps .step::after {
   background-color: var(--ds-steps-item-bg);
   color: var(--ds-steps-item-color);
-}
-
-[data-tenant] .steps .step-primary::after {
-  background-color: var(--ds-steps-item-bg-active);
-  color: var(--ds-steps-item-color-active);
 }
 
 /* =============================================================================
@@ -738,15 +655,6 @@
 [data-tenant] .rottay-collapse {
   border-color: var(--ds-collapse-border);
   border-radius: var(--ds-collapse-radius);
-}
-
-[data-tenant] .rottay-collapse .rottay-collapse-header {
-  background-color: var(--ds-collapse-header-bg);
-  color: var(--ds-collapse-header-color);
-}
-
-[data-tenant] .rottay-collapse .rottay-collapse-header:hover {
-  background-color: var(--ds-collapse-header-bg-hover);
 }
 
 [data-tenant] .rottay-collapse .rottay-collapse-content {
@@ -838,31 +746,6 @@
   z-index: var(--ds-toast-z-index);
 }
 
-/* Toast Variants */
-[data-tenant] .toast .alert-success {
-  background-color: var(--ds-toast-success-bg);
-  color: var(--ds-toast-success-color);
-  border-color: var(--ds-toast-success-border);
-}
-
-[data-tenant] .toast .alert-error {
-  background-color: var(--ds-toast-error-bg);
-  color: var(--ds-toast-error-color);
-  border-color: var(--ds-toast-error-border);
-}
-
-[data-tenant] .toast .alert-warning {
-  background-color: var(--ds-toast-warning-bg);
-  color: var(--ds-toast-warning-color);
-  border-color: var(--ds-toast-warning-border);
-}
-
-[data-tenant] .toast .alert-info {
-  background-color: var(--ds-toast-info-bg);
-  color: var(--ds-toast-info-color);
-  border-color: var(--ds-toast-info-border);
-}
-
 /* =============================================================================
    LINK - a
    ============================================================================= */
@@ -944,133 +827,6 @@
   background-color: var(--ds-tree-node-bg-hover);
 }
 
-[data-tenant] .rottay-tree .rottay-tree-node--selected {
-  background-color: var(--ds-tree-node-bg-selected);
-  color: var(--ds-tree-node-color-selected);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-node--disabled {
-  color: var(--ds-tree-node-color-disabled);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-icon {
-  width: var(--ds-tree-icon-size);
-  height: var(--ds-tree-icon-size);
-  color: var(--ds-tree-icon-color);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-switcher {
-  width: var(--ds-tree-switcher-size);
-  height: var(--ds-tree-switcher-size);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-indent {
-  width: var(--ds-tree-indent);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-line {
-  border-color: var(--ds-tree-line-color);
-  border-width: var(--ds-tree-line-width);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-checkbox {
-  margin-right: var(--ds-tree-checkbox-margin);
-}
-
-/* =============================================================================
-   DESCRIPTIONS - Info panels with label/value pairs
-   ============================================================================= */
-
-[data-tenant] .descriptions,
-[data-tenant] .rottay-descriptions {
-  background-color: var(--ds-card-bg);
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-radius-md, 8px);
-  overflow: hidden;
-}
-
-/* Descriptions title */
-[data-tenant] .descriptions-title,
-[data-tenant] .rottay-descriptions-title {
-  padding: 12px 16px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ds-text-primary);
-  border-bottom: 1px solid var(--ds-border-color);
-  background-color: var(--ds-color-neutral-50);
-}
-
-/* Descriptions row */
-[data-tenant] .descriptions-row,
-[data-tenant] .rottay-descriptions-row {
-  display: flex;
-  border-bottom: 1px solid var(--ds-border-color);
-}
-
-[data-tenant] .descriptions-row:last-child,
-[data-tenant] .rottay-descriptions-row:last-child {
-  border-bottom: none;
-}
-
-/* Descriptions label */
-[data-tenant] .descriptions-label,
-[data-tenant] .rottay-descriptions-label {
-  flex: 0 0 140px;
-  padding: 12px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ds-text-secondary);
-  background-color: var(--ds-color-neutral-50);
-  border-right: 1px solid var(--ds-border-color);
-  text-transform: var(--ds-typography-label-transform, uppercase);
-  letter-spacing: var(--ds-personality-typography-heading-letter-spacing, normal);
-}
-
-/* Descriptions content/value */
-[data-tenant] .descriptions-content,
-[data-tenant] .rottay-descriptions-content {
-  flex: 1;
-  padding: 12px 16px;
-  font-size: 14px;
-  color: var(--ds-text-primary);
-}
-
-/* Vertical layout descriptions */
-[data-tenant] .descriptions-vertical .descriptions-row,
-[data-tenant] .rottay-descriptions-vertical .rottay-descriptions-row {
-  flex-direction: column;
-}
-
-[data-tenant] .descriptions-vertical .descriptions-label,
-[data-tenant] .rottay-descriptions-vertical .rottay-descriptions-label {
-  flex: none;
-  border-right: none;
-  border-bottom: none;
-  padding-bottom: 4px;
-}
-
-[data-tenant] .descriptions-vertical .descriptions-content,
-[data-tenant] .rottay-descriptions-vertical .rottay-descriptions-content {
-  padding-top: 0;
-}
-
-/* Borderless variant */
-[data-tenant] .descriptions-borderless,
-[data-tenant] .rottay-descriptions-borderless {
-  border: none;
-}
-
-[data-tenant] .descriptions-borderless .descriptions-row,
-[data-tenant] .rottay-descriptions-borderless .rottay-descriptions-row {
-  border-bottom: none;
-}
-
-[data-tenant] .descriptions-borderless .descriptions-label,
-[data-tenant] .rottay-descriptions-borderless .rottay-descriptions-label {
-  border-right: none;
-  background: transparent;
-}
-
 /* =============================================================================
    EMPTY
    ============================================================================= */
@@ -1083,20 +839,6 @@
   justify-content: center;
   padding: var(--ds-empty-padding);
   color: var(--ds-text-secondary);
-}
-
-[data-tenant] .rottay-empty .rottay-empty-icon {
-  font-size: var(--ds-empty-icon-size);
-  color: var(--ds-empty-icon-color);
-}
-
-[data-tenant] .rottay-empty .rottay-empty-title {
-  color: var(--ds-empty-title-color);
-  margin-top: var(--ds-empty-title-margin-top);
-}
-
-[data-tenant] .rottay-empty .rottay-empty-description {
-  color: var(--ds-empty-description-color);
 }
 
 [data-tenant] .rottay-empty__footer {
@@ -1202,34 +944,6 @@
   font-weight: 500;
 }
 
-/* Card inside stats */
-[data-tenant] .card .stat-title {
-  font-size: 14px;
-  color: var(--ds-text-secondary);
-  margin-bottom: 4px;
-}
-
-[data-tenant] .card .stat-value {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--ds-text-primary);
-}
-
-/* Bordered table */
-[data-tenant] .table.border {
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-radius-md, 8px);
-  overflow: hidden;
-}
-
-/* Table cell content - ensure inline-flex items have proper gap */
-[data-tenant] .table td .inline-flex,
-[data-tenant] .table td > div {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
 /* Space component in any context - ensure gap works */
 [data-tenant] .inline-flex.flex-row {
   display: inline-flex !important;
@@ -1278,10 +992,6 @@
   cursor: not-allowed;
 }
 
-[data-tenant] .input-group .input {
-  padding-left: 40px;
-}
-
 /* =============================================================================
    BUTTON - Mejoras adicionales
    ============================================================================= */
@@ -1307,18 +1017,6 @@
 [data-tenant] .btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-/* Default button (outline style) */
-[data-tenant] .btn:not(.btn-primary):not(.btn-secondary):not(.btn-error):not(.btn-success):not(.btn-warning):not(.btn-info):not(.btn-ghost) {
-  background-color: var(--ds-button-default-bg);
-  border-color: var(--ds-border-color);
-  color: var(--ds-text-primary);
-}
-
-[data-tenant] .btn:not(.btn-primary):not(.btn-secondary):not(.btn-error):not(.btn-success):not(.btn-warning):not(.btn-info):not(.btn-ghost):hover:not(:disabled) {
-  background-color: var(--ds-color-neutral-50);
-  border-color: var(--ds-color-neutral-300);
 }
 
 /* Primary button */
@@ -1458,27 +1156,6 @@
 }
 
 /* =============================================================================
-   HEADER/TOPBAR - Ghost buttons with icons
-   ============================================================================= */
-
-/* Icon-only ghost buttons in header context */
-[data-tenant] .btn-ghost.btn-icon,
-[data-tenant] .btn-ghost:has(> span > svg):not(:has(> span + span)) {
-  padding: 8px;
-  min-width: 36px;
-  min-height: 36px;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--ds-radius-md, 8px);
-}
-
-[data-tenant] .btn-ghost.btn-icon svg,
-[data-tenant] .btn-ghost:has(> span > svg) svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* =============================================================================
    GRID - Responsive grid system
    ============================================================================= */
 
@@ -1605,13 +1282,6 @@
   opacity: var(--ds-input-disabled-opacity);
 }
 
-/* Full width inputs */
-[data-tenant] .input,
-[data-tenant] .textarea,
-[data-tenant] .select {
-  width: 100%;
-}
-
 /* Textarea specific */
 [data-tenant] textarea {
   min-height: 100px;
@@ -1626,17 +1296,6 @@
 /* Ensure buttons have gap when in flex/inline containers */
 [data-tenant] .btn + .btn {
   margin-left: 8px;
-}
-
-/* Space component with buttons */
-[data-tenant] .space-x > .btn,
-[data-tenant] [class*="space"] > .btn {
-  margin-right: 8px;
-}
-
-[data-tenant] .space-x > .btn:last-child,
-[data-tenant] [class*="space"] > .btn:last-child {
-  margin-right: 0;
 }
 
 /* Generic flex gap for button parents */

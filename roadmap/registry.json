@@ -1329,7 +1329,7 @@
    "lane": "tokens",
    "order": 10,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
@@ -1338,7 +1338,9 @@
    "notes": null,
    "claimedBy": "ds-agent",
    "claimedAt": "2026-07-10",
-   "progressLog": []
+   "progressLog": [],
+   "doneAt": "2026-07-10",
+   "evidence": "Fifty-one dead selectors deleted, and the counter that reported zero can see them now. THE COUNTER WAS MEASURING A DIFFERENT QUESTION THAN ITS NAME: auditEngineTheme marked a compound selector \"referenced\" if ANY ONE class token in it matched a rendered className. Tightened to require EVERY specific token to be live, on the same unchanged file, themeCss.unreferencedSelectors went from 0 to 51. .join .btn read as referenced because btn is rendered elsewhere while no component renders join at all; .toast .alert-success read as referenced because toast is live via Notification and Message while alert-success is rendered by nobody. Also dead and invisible: .descriptions-* (the component renders rottay-descriptions-*, a DIFFERENT class -- my own first grep matched the substring and I nearly declared a false positive on a real corpse), .rottay-tree-node--selected, .rottay-collapse-header, .btn-active, .step-primary, .menu-title, .dropdown-content, .avatar.placeholder. DELETED: 51 rules. theme.css falls from 1,692 to 1,351 lines. A CAUTION RECORDED FOR THE NEXT PERSON, because I made the mistake: the first deletion pass used a line-based scanner and left orphaned selector runs with no opening brace -- grouped selectors span lines. I restored theme.css from HEAD (one file, never a directory) and re-pruned with a brace-matching parser, one rule per pass, re-measuring between each. Brace balance (204/204) and orphan-run count (0) asserted after. DRILL: reintroduce `[data-tenant] .toast .alert-success` and --check fails with \"rose above baseline: themeCss.unreferencedSelectors: 1 > baseline 0\"; restore, green. GATE: modern-bridge.contract.test.ts 62/62 -- the sixteen DaisyUI-5 bridge variables survive, because only class-selector rules were removed and the [data-tenant] root variable block is skipped by construction; pnpm typecheck 0; build 0; audit-integration green; artifact parity green; test:gates 89/89 with ZERO pixel movement, which is what \"nothing renders these\" means when it is true. Closes P-42. Owner delegated approval 2026-07-10."
   },
   {
    "id": "WO-ARC-07",
