@@ -24,7 +24,7 @@
   proposals; new items still follow the same law (owner approves 1:1, then a `### WO-` block +
   registry entry).
 
-## Thirteen rules learned the hard way (2026-07-09 … 2026-07-10)
+## Seventeen rules learned the hard way (2026-07-09 … 2026-07-10)
 
 Each of these was paid for. They are not style preferences.
 
@@ -135,6 +135,37 @@ Each of these was paid for. They are not style preferences.
    measured zero. Fixing `scripts/audit-integration.mjs` left its twin,
    `token-fidelity.test.ts`, red — and the suite, not the reasoning, is what caught
    it. Grep for the rule's *sentence*, not its file.
+
+14. **Look at it.** On rottay, the classic engine painted a white primary-button
+   label on a white primary button — 1.00:1, an invisible label on the platform's
+   own brand. It shipped. 118 gate assertions were green, because none of them
+   selects an engine and the antd button does not carry the class the contrast
+   gate looks for. It was found by opening a screenshot of a page nobody had
+   photographed and seeing an empty white rectangle. A sighted check is not a
+   formality at the end of a WO; it is the only instrument that has no schema.
+   (P-52.)
+
+15. **A token whose name says `shadow` is not a colour.** The modern Input's focus
+   ring was written `outline: var(--ds-focus-ring-width, 2px) solid
+   var(--ds-input-shadow-focus, var(--ds-focus-ring-color))`. That variable holds
+   `0 0 0 3px rgba(255,255,255,0.10)`. Substituted, the declaration is invalid at
+   computed-value time and the browser drops the whole thing — the `var()` fallback
+   never runs, because the property IS defined. The outline has never painted on
+   any tenant, and the ring the user sees comes from somewhere else entirely. An
+   invalid CSS declaration fails silently, in every direction. (P-54.)
+
+16. **A flaky test is a race with a name.** "17 failures on one run, 21 on the
+   next" was treated as noise for months. Two files, run together, fail every time:
+   a `findByRole` with a 1000ms default racing a `React.lazy` engine chunk that
+   needs longer under CPU contention. The fix is determinism, never a wider
+   timeout — a widened window still closes on a slower machine. Reach for a
+   reproducer before you reach for a tolerance. (P-49.)
+
+17. **A counter the baseline has never heard of gates nothing.** `--check` compared
+   an unbaselined counter against `Infinity`, so it could not rise and could not
+   fail. It measured, printed a number, and guarded air. Every new counter must be
+   seeded in the same commit that adds it, and `--check` now refuses one that is
+   not.
 
 ## The pre-existing failure baseline (measured, not assumed)
 
