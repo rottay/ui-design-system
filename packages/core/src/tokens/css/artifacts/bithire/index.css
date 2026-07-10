@@ -80,9 +80,11 @@ html[data-tenant='bithire'] {
   --ds-card-title-color: #162A43;
   --ds-card-title-font-weight: 600;
   --ds-color-accent: #6E9A5E;
+  --ds-color-background: #F8FBFF;
+  --ds-color-bg: #F8FBFF;
   --ds-color-bg-input: #ffffff;
+  --ds-color-bg-primary: #F8FBFF;
   --ds-color-dark-accent: #6E9A5E;
-  --ds-color-dark-bg: #F8FBFF;
   --ds-color-dark-primary: #3A6FB0;
   --ds-color-dark-secondary: #2F7D5E;
   --ds-color-error: #C5504C;

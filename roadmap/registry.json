@@ -398,7 +398,8 @@
     "WO-ENG-08",
     "WO-ENG-09",
     "WO-ENG-10",
-    "WO-ENG-12"
+    "WO-ENG-12",
+    "WO-ENG-14"
    ],
    "mustLandWith": [],
    "programs": [
@@ -1008,7 +1009,7 @@
    "lane": "tokens",
    "order": 6,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-TOK-05"
    ],
@@ -1016,7 +1017,11 @@
    "programs": [
     "P-25"
    ],
-   "notes": "Adds the canvas probe to the whitelabel gate once the channel exists."
+   "notes": "Adds the canvas probe to the whitelabel gate once the channel exists.",
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "The tenant owns the ground it stands on. MEASURED IN A BROWSER, before -> after, reading the computed background of the probe ground (which paints var(--ds-color-bg-primary)): torture-dark asks #050307 and painted #0a0a0a, now paints rgb(5,3,7); torture-light asks #FDFDFF and painted #0a0a0c -- a near-black ground under data-theme=light -- now paints rgb(253,253,255); themanagementmiami asks #FBF6EC and paints it. MECHANISM: palette.darkBackgroundColor compiled only to --ds-color-dark-bg, a variable with ZERO consumers (grepped), while the generator darkSemanticVariables wrote the literal #0a0a0a. There was no clear-mode ground field at all. BrandPalette now has backgroundColor, the compiler emits it to --ds-color-bg-primary plus the --ds-color-bg / --ds-color-background aliases, and the dark block reads config.brandTheme.palette.darkBackgroundColor with the DS default as fallback. THE WO DID NOT SAY THIS AND THE CODE DID: the field was semantically OVERLOADED. Three of four first-party themes stored a near-white or cream in darkBackgroundColor -- bithire #F8FBFF, themanagementmiami #FBF6EC, torture-light #FDFDFF. It was never a dark ground; it was THE ground under a dark name. Wiring it into the dark block unread would have painted bithire dark mode white. Those values migrated to backgroundColor; a light-first product with no dark ground now inherits the DS dark default rather than asserting a false one. A stale test kept the overload alive (i0-inventory required every theme to declare darkBackgroundColor); it now requires a theme to declare the ground for the mode it actually renders in. NEW GATE: probe ground/canvas/background-color in torture.spec.ts, themePath palette.darkBackgroundColor, selector [data-testid=probe-ground]. Theme-anchored, so it is not circular. Torture baseline stays at ZERO across 22 probes. torture-light gained a hostile dark ground (#12001F) so the completeness test still covers every probed channel. REPORTED, not fixed (P-36 updated with two measured instances): bithire asks #F8FBFF and paints rgb(255,255,255); rottay asks #0C0C0E and paints rgb(10,10,12). Their HAND-WRITTEN artifacts override their own themes. This is also exactly why the 48 visual baselines did not move -- \"no pixels moved\" reads as safety and here it is the symptom. The generated path is correct; the hand-written path is stale. WO-TOK-01 (artifacts always generated) is the fix and this raises its priority. GATE: test:gates 63/63, compilers+runtime 672/672, canvas-channel 5/5, pnpm typecheck 0, build 0, lint:artifacts parity green (bithire regenerates with --ds-color-bg-primary: #F8FBFF added at line 86). Owner delegated approval 2026-07-09."
   },
   {
    "id": "WO-ENG-14",
@@ -1180,7 +1185,11 @@
    "programs": [
     "owner-2026-07-09"
    ],
-   "notes": "Owner request. The flat tree produced two naming fictions this session unpicked: platform.css is a byte-identical copy of rottay.css (P-30), and a live customer's theme sat in legacy/ while evnto sat beside rottay as a peer. A structure that cannot express 'this tenant belongs to that vertical' keeps producing decisions that assume they are peers. Pure move: zero token changes, zero pixel movement, public API unchanged."
+   "notes": "Owner request. The flat tree produced two naming fictions this session unpicked: platform.css is a byte-identical copy of rottay.css (P-30), and a live customer's theme sat in legacy/ while evnto sat beside rottay as a peer. A structure that cannot express 'this tenant belongs to that vertical' keeps producing decisions that assume they are peers. Pure move: zero token changes, zero pixel movement, public API unchanged.",
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-TOK-07",
