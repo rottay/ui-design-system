@@ -105,7 +105,7 @@ describe('Button integration', () => {
     fireEvent.pointerEnter(button);
     fireEvent.focus(button);
     fireEvent.pointerDown(button);
-    expect(button.style.transform).toContain('var(--ds-button-active-transform');
+    expect(button.getAttribute('data-state')).toContain('pressed');
 
     fireEvent.pointerUp(button);
     fireEvent.click(button);
@@ -113,6 +113,7 @@ describe('Button integration', () => {
 
     fireEvent.blur(button);
     fireEvent.pointerLeave(button);
-    expect(button.style.transform).toBe('translateY(0) scale(1)');
+    // At rest a part carries no state at all, so `[data-state]` cannot match it.
+    expect(button).not.toHaveAttribute('data-state');
   });
 });

@@ -45,21 +45,27 @@ describe('RusticButton advanced runtime coverage', () => {
     expect(screen.getByTestId('suffix')).toBeInTheDocument();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
 
+    // The skin paints from a stylesheet this runtime never loads. What is
+    // assertable here is the state the engine publishes for it to select on;
+    // the paint is measured against a real cascade, per tenant and per engine,
+    // by `packages/showroom/e2e/visual/states.spec.ts`.
+    expect(link).toHaveAttribute('data-variant', 'link');
+
     fireEvent.pointerEnter(link);
-    expect(link.style.textDecoration).toBe('underline');
+    expect(link.getAttribute('data-state')).toContain('hovered');
 
     fireEvent.pointerDown(link);
-    expect(link.style.transform).toContain('var(--ds-button-active-transform');
+    expect(link.getAttribute('data-state')).toContain('pressed');
 
     fireEvent.pointerUp(link);
     fireEvent.pointerLeave(link);
-    expect(link.style.transform).toBe('translateY(0) scale(1)');
+    expect(link).not.toHaveAttribute('data-state');
   });
 
   it('covers dashed, outline/default border logic and full-width circle sizing', () => {
     const { rerender } = render(<RusticButton variant="dashed">Dashed</RusticButton>);
     let button = screen.getByRole('button', { name: /dashed/i });
-    expect((button as HTMLButtonElement).style.border).toContain('dashed');
+    expect(button).toHaveAttribute('data-variant', 'dashed');
 
     rerender(
       <RusticButton variant="outline" shape="circle" fullWidth>
@@ -67,12 +73,14 @@ describe('RusticButton advanced runtime coverage', () => {
       </RusticButton>
     );
     button = screen.getByRole('button', { name: 'O' });
-    expect((button as HTMLButtonElement).style.border).toContain('solid');
-    expect(button).toHaveStyle({ width: '100%', padding: '0px' });
+    expect(button).toHaveAttribute('data-variant', 'outline');
+    expect(button).toHaveAttribute('data-shape', 'circle');
+    expect(button).toHaveAttribute('data-full-width', 'true');
 
     rerender(<RusticButton variant="default">Default</RusticButton>);
     button = screen.getByRole('button', { name: /default/i });
-    expect((button as HTMLButtonElement).style.border).toContain('solid');
+    expect(button).toHaveAttribute('data-variant', 'default');
+    expect(button).not.toHaveAttribute('data-full-width');
   });
 
   it('covers danger override, gradient, pulse, shadow, disabled and loading branches on the button path', async () => {
@@ -96,8 +104,8 @@ describe('RusticButton advanced runtime coverage', () => {
     expect(button.className).toContain('rottay-button--danger');
     expect(button.className).toContain('rottay-button--shadow');
     expect(button.className).toContain('rottay-button--gradient');
-    expect(button).toHaveStyle({ animation: 'rottay-button-pulse 2s infinite' });
-    expect(button.style.boxShadow).toContain('rgba(0, 0, 0');
+    expect(button).toHaveAttribute('data-pulse', 'true');
+    expect(button).toHaveAttribute('data-bordered', 'true');
 
     rerender(
       <RusticButton
@@ -114,7 +122,9 @@ describe('RusticButton advanced runtime coverage', () => {
 
     fireEvent.focus(screen.getByRole('button', { name: /save/i }));
     await waitFor(() => {
-      expect(screen.getByRole('button', { name: /save/i }).style.boxShadow).toContain('var(--ds-button-focus-ring');
+      expect(screen.getByRole('button', { name: /save/i }).getAttribute('data-state')).toContain(
+        'focus-visible'
+      );
     });
 
     fireEvent.click(screen.getByRole('button', { name: /save/i }));

@@ -13514,6 +13514,288 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   justify-content: center;
 }
 
+/**
+ * Rustic Button skin (WO-ARC-07).
+ *
+ * DELIBERATELY UNLAYERED, for the reason the engine itself used to state in a
+ * comment above its inline style object: "inline styles have higher specificity
+ * than pseudo-classes". They do -- and so does Tailwind's preflight, which sits
+ * in an `@layer base` that sorts after every `rottay-*` layer. A skin in a
+ * design-system layer cannot paint a `button` at all (measured; see P-47), and a
+ * single-class rule loses its border colour to each tenant's unlayered
+ * `* { border-color: … }` floor at (0,3,1) (see P-48). Two classes plus the
+ * anatomy part and the variant reach (0,4,0), which clears both.
+ *
+ * No rule below guards against a busy control reacting. It does not have to:
+ * the engine constructs its interaction state with `disabled: disabled || busy`,
+ * so an inert button never publishes `hovered`, `pressed` or `focus-visible`.
+ * That was not true until P-50 was fixed, and encoding `:not([data-loading])`
+ * here would have carried the defect into the layer meant to be free of it.
+ *
+ * Rule order mirrors the order the inline object assigned its properties, and
+ * ties break by position exactly as they did by assignment order.
+ */
+
+/* base */
+.rottay-button.rottay-button--rustic[data-part='trigger'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  min-width: auto;
+  font-weight: 500;
+  font-family: inherit;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  opacity: 1;
+  transition: var(--ds-button-transition, all 150ms ease);
+  outline: none;
+  box-sizing: border-box;
+  user-select: none;
+  /* disables double-tap zoom on mobile, removing the 300ms click delay */
+  touch-action: manipulation;
+  box-shadow: none;
+  /* explicit identity so `transition` has a value to animate from */
+  transform: translateY(0) scale(1);
+  animation: none;
+}
+
+/* variant, at rest */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='primary'] {
+  background: var(--ds-button-primary-bg, #0066CC);
+  color: var(--ds-button-primary-color, #FFFFFF);
+  border: 1px solid transparent;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='secondary'] {
+  background: var(--ds-button-secondary-bg, #F5F5F5);
+  color: var(--ds-button-secondary-color, #333333);
+  border: 1px solid var(--ds-button-secondary-border, #D9D9D9);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='outline'] {
+  background: var(--ds-button-outline-bg, transparent);
+  color: var(--ds-button-outline-color, #0066CC);
+  border: 1px solid var(--ds-button-outline-border, #0066CC);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='ghost'] {
+  background: var(--ds-button-ghost-bg, transparent);
+  color: var(--ds-button-ghost-color, #333333);
+  border: 1px solid transparent;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='link'] {
+  background: var(--ds-button-link-bg, transparent);
+  color: var(--ds-button-link-color, #0066CC);
+  border: 1px solid transparent;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='danger'] {
+  background: var(--ds-button-danger-bg, #EF4444);
+  color: var(--ds-button-danger-color, #FFFFFF);
+  border: 1px solid transparent;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='default'] {
+  background: var(--ds-button-default-bg, #FFFFFF);
+  color: var(--ds-button-default-color, #333333);
+  border: 1px solid var(--ds-button-default-border, #D9D9D9);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='text'] {
+  background: var(--ds-button-text-bg, transparent);
+  color: var(--ds-button-text-color, #333333);
+  border: 1px solid transparent;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='dashed'] {
+  background: var(--ds-button-dashed-bg, transparent);
+  color: var(--ds-button-dashed-color, #333333);
+  border: 1px dashed var(--ds-button-dashed-border, #D9D9D9);
+}
+
+/* `bordered` forces the variant border on the variants that hide it */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='primary'][data-bordered='true'] {
+  border: 1px solid var(--ds-button-primary-border, transparent);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='ghost'][data-bordered='true'] {
+  border: 1px solid var(--ds-button-ghost-border, transparent);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='link'][data-bordered='true'] {
+  border: 1px solid var(--ds-button-link-border, transparent);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='danger'][data-bordered='true'] {
+  border: 1px solid var(--ds-button-danger-border, transparent);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='text'][data-bordered='true'] {
+  border: 1px solid var(--ds-button-text-border, transparent);
+}
+
+/* size */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-size='xs']:not([data-size-responsive]) {
+  height: var(--ds-button-xs-height);
+  padding: var(--ds-button-xs-padding);
+  font-size: var(--ds-button-xs-font-size);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-size='sm']:not([data-size-responsive]) {
+  height: var(--ds-button-sm-height);
+  padding: var(--ds-button-sm-padding);
+  font-size: var(--ds-button-sm-font-size);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-size='md']:not([data-size-responsive]) {
+  height: var(--ds-button-md-height);
+  padding: var(--ds-button-md-padding);
+  font-size: var(--ds-button-md-font-size);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-size='lg']:not([data-size-responsive]) {
+  height: var(--ds-button-lg-height);
+  padding: var(--ds-button-lg-padding);
+  font-size: var(--ds-button-lg-font-size);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-size='xl']:not([data-size-responsive]) {
+  height: var(--ds-button-xl-height);
+  padding: var(--ds-button-xl-padding);
+  font-size: var(--ds-button-xl-font-size);
+}
+
+/* shape */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='default'] {
+  border-radius: var(--ds-button-radius, 6px);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='round'] {
+  border-radius: var(--ds-button-radius-round, 9999px);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='circle'] {
+  border-radius: var(--ds-button-radius-circle, 50%);
+}
+
+/* a circle takes its box from the size */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='circle'][data-size='xs']:not([data-size-responsive]) {
+  width: var(--ds-button-xs-height);
+  min-width: var(--ds-button-xs-height);
+  padding: 0;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='circle'][data-size='sm']:not([data-size-responsive]) {
+  width: var(--ds-button-sm-height);
+  min-width: var(--ds-button-sm-height);
+  padding: 0;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='circle'][data-size='md']:not([data-size-responsive]) {
+  width: var(--ds-button-md-height);
+  min-width: var(--ds-button-md-height);
+  padding: 0;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='circle'][data-size='lg']:not([data-size-responsive]) {
+  width: var(--ds-button-lg-height);
+  min-width: var(--ds-button-lg-height);
+  padding: 0;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-shape='circle'][data-size='xl']:not([data-size-responsive]) {
+  width: var(--ds-button-xl-height);
+  min-width: var(--ds-button-xl-height);
+  padding: 0;
+}
+
+/* hover */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='primary'][data-state~='hovered'] {
+  background: var(--ds-button-primary-hover-bg, #0052A3);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='secondary'][data-state~='hovered'] {
+  background: var(--ds-button-secondary-hover-bg, #E8E8E8);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='outline'][data-state~='hovered'] {
+  background: var(--ds-button-outline-hover-bg, rgba(0, 102, 204, 0.1));
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='ghost'][data-state~='hovered'] {
+  background: var(--ds-button-ghost-hover-bg, rgba(0, 0, 0, 0.05));
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='link'][data-state~='hovered'] {
+  background: var(--ds-button-link-hover-bg, transparent);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='danger'][data-state~='hovered'] {
+  background: var(--ds-button-danger-hover-bg, #DC2626);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='default'][data-state~='hovered'] {
+  background: var(--ds-button-default-hover-bg, #F5F5F5);
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='text'][data-state~='hovered'] {
+  background: var(--ds-button-text-hover-bg, rgba(0, 0, 0, 0.05));
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='dashed'][data-state~='hovered'] {
+  background: var(--ds-button-dashed-hover-bg, rgba(0, 0, 0, 0.02));
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-variant='link'][data-state~='hovered'] {
+  text-decoration: underline;
+}
+
+/* the gradient posture ignores hover: it is one fixed ramp, as the inline object built it */
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='primary'] {
+  background: linear-gradient(135deg, var(--ds-button-primary-bg, #0066CC) 0%, var(--ds-button-primary-hover-bg, #0052A3) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='secondary'] {
+  background: linear-gradient(135deg, var(--ds-button-secondary-bg, #F5F5F5) 0%, var(--ds-button-secondary-hover-bg, #E8E8E8) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='outline'] {
+  background: linear-gradient(135deg, var(--ds-button-outline-bg, transparent) 0%, var(--ds-button-outline-hover-bg, rgba(0, 102, 204, 0.1)) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='ghost'] {
+  background: linear-gradient(135deg, var(--ds-button-ghost-bg, transparent) 0%, var(--ds-button-ghost-hover-bg, rgba(0, 0, 0, 0.05)) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='link'] {
+  background: linear-gradient(135deg, var(--ds-button-link-bg, transparent) 0%, var(--ds-button-link-hover-bg, transparent) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='danger'] {
+  background: linear-gradient(135deg, var(--ds-button-danger-bg, #EF4444) 0%, var(--ds-button-danger-hover-bg, #DC2626) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='default'] {
+  background: linear-gradient(135deg, var(--ds-button-default-bg, #FFFFFF) 0%, var(--ds-button-default-hover-bg, #F5F5F5) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='text'] {
+  background: linear-gradient(135deg, var(--ds-button-text-bg, transparent) 0%, var(--ds-button-text-hover-bg, rgba(0, 0, 0, 0.05)) 100%);
+}
+.rottay-button.rottay-button--rustic.rottay-button--gradient[data-part='trigger'][data-variant='dashed'] {
+  background: linear-gradient(135deg, var(--ds-button-dashed-bg, transparent) 0%, var(--ds-button-dashed-hover-bg, rgba(0, 0, 0, 0.02)) 100%);
+}
+
+/* elevation: a raised button at rest, any button on hover */
+.rottay-button.rottay-button--rustic.rottay-button--shadow[data-part='trigger'],
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-state~='hovered'] {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* the focus ring outranks both */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-state~='focus-visible'] {
+  box-shadow: var(--ds-button-focus-ring, 0 0 0 3px var(--ds-color-primary-200)), 0 0 12px rgba(0, 102, 204, 0.15);
+}
+
+/* the press outranks the hover lift */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-state~='hovered'] {
+  transform: var(--ds-button-hover-transform, translateY(-1px) scale(1.01));
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-state~='pressed'] {
+  transform: var(--ds-button-active-transform, scale(0.97));
+}
+
+/* a full-width button outranks a circle's box */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-full-width='true'] {
+  width: 100%;
+  min-width: auto;
+}
+
+/* attention */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-pulse='true'] {
+  animation: rottay-button-pulse 2s infinite;
+}
+
+/* inert postures. `pending` refuses activation without refusing the cursor:
+   that is what the inline object said, and this migration does not decide it. */
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-disabled='true'],
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-loading='true'] {
+  cursor: not-allowed;
+}
+.rottay-button.rottay-button--rustic[data-part='trigger'][data-disabled='true'] {
+  opacity: 0.5;
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

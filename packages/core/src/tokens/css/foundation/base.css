@@ -60,6 +60,7 @@
    whatever its specificity (measured; see P-47). Unlayered outranks preflight
    and DaisyUI, and still yields to a consumer's inline `style` prop. */
 @import '../engines/modern/skin/button.css';
+@import '../engines/rustic/skin/button.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

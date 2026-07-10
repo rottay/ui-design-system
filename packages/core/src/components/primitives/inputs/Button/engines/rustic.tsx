@@ -79,7 +79,7 @@ import React, { forwardRef, useId, type AnchorHTMLAttributes } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { ButtonProps, ButtonSize } from '../Button.types';
-import { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP, resolveButtonBusyState } from '../Button.types';
+import { BUTTON_DEFAULTS, SIZE_MAP, resolveButtonBusyState } from '../Button.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
@@ -132,7 +132,8 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
  * All styling is computed via inline styles referencing CSS custom properties,
  * so no Tailwind or Ant Design classes are needed. Hover, focus, and active
  * states are tracked in React state because inline styles override CSS
- * pseudo-classes. When `href` is provided, renders an `<a>` tag for proper
+ * pseudo-classes -- see `tokens/css/engines/rustic/skin/button.css` for why the
+ * skin is unlayered. When `href` is provided, renders an `<a>` tag for proper
  * link semantics.
  *
  * @param props - Standardized ButtonProps from the DS type contract, plus
@@ -201,9 +202,6 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     const { state: interaction, handlers: interactionHandlers } = useInteractionState({
       disabled: disabled || busy,
     });
-    const isHovered = interaction.hovered;
-    const isFocused = interaction.focusVisible;
-    const isActive = interaction.pressed;
 
     // Responsive size handling
     const reactId = useId();
@@ -239,81 +237,29 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     // Resolve configuration objects from the shared type maps. These maps
     // live in Button.types.ts so all three engines share the same token
     // definitions for sizes, variants, and shapes.
-    const sizeConfig = SIZE_MAP[size as keyof typeof SIZE_MAP] || SIZE_MAP.md;
     const effectiveVariant = danger ? 'danger' : (variant || 'primary');
-    const variantConfig = VARIANT_MAP[effectiveVariant as keyof typeof VARIANT_MAP] || VARIANT_MAP.primary;
-    const shapeRadius = SHAPE_MAP[shape as keyof typeof SHAPE_MAP] || SHAPE_MAP.default;
 
-    // Compute effective background with hover state. The variant map already
-    // includes token fallbacks, so avoid nesting the same CSS var inside another
-    // var() call; that keeps both browsers and DOM test parsers on a simple path.
-    const effectiveBg = isHovered && !disabled && !loading
-      ? variantConfig.hoverBg
-      : variantConfig.bg;
+    // Paint lives in `tokens/css/engines/rustic/skin/button.css`, keyed on the
+    // attributes below. Only a caller's own `style` prop stays inline, which is
+    // the precedence it has always had.
+    const buttonStyle: React.CSSProperties | undefined = style;
 
-    // All button styles are computed inline because rustic engine cannot rely
-    // on Tailwind/antd classes. Hover, focus, and active states are managed
-    // through React state + inline style mutations (not CSS :hover/:focus)
-    // since inline styles have higher specificity than pseudo-classes.
-    const buttonStyle: React.CSSProperties = {
-      position: 'relative',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: '8px',
-      // When size is responsive, height/padding/fontSize are handled by injected CSS
-      ...(!sizeIsResponsive && {
-        height: sizeConfig.height,
-        ...(shape === 'circle'
-          ? { paddingTop: 0, paddingRight: 0, paddingBottom: 0, paddingLeft: 0 }
-          : { padding: sizeConfig.padding }),
-        fontSize: sizeConfig.fontSize,
-      }),
-      width: isFullWidth ? '100%' : (shape === 'circle' ? sizeConfig.height : 'auto'),
-      minWidth: shape === 'circle' ? sizeConfig.height : 'auto',
-      fontWeight: 500,
-      fontFamily: 'inherit',
-      lineHeight: 1.5,
-      textAlign: 'center',
-      textDecoration: effectiveVariant === 'link' ? (isHovered ? 'underline' : 'none') : 'none',
-      whiteSpace: 'nowrap',
-      verticalAlign: 'middle',
-      background: gradient
-        ? `linear-gradient(135deg, ${variantConfig.bg} 0%, ${variantConfig.hoverBg} 100%)`
-        : effectiveBg,
-      color: variantConfig.color,
-      border: effectiveVariant === 'dashed'
-        ? `1px dashed ${variantConfig.borderColor}`
-        : bordered || ['outline', 'secondary', 'default'].includes(effectiveVariant)
-          ? `1px solid ${variantConfig.borderColor}`
-          : '1px solid transparent',
-      borderRadius: shapeRadius,
-      cursor: disabled || loading ? 'not-allowed' : 'pointer',
-      opacity: disabled ? 0.5 : 1,
-      transition: 'var(--ds-button-transition, all 150ms ease)',
-      outline: 'none',
-      boxSizing: 'border-box',
-      userSelect: 'none',
-      // touchAction: manipulation disables double-tap zoom on mobile,
-      // preventing the 300ms click delay on touch devices.
-      touchAction: 'manipulation',
-      boxShadow: isFocused
-        ? 'var(--ds-button-focus-ring, 0 0 0 3px var(--ds-color-primary-200)), 0 0 12px rgba(0, 102, 204, 0.15)'
-        : shadow || (isHovered && !disabled && !loading)
-          ? '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-          : 'none',
-      // Three-state transform: active presses in (0.97), hover lifts up (-1px),
-      // default is identity. translateY(0) scale(1) is explicit so the
-      // transition property has a value to animate from.
-      transform:
-        isActive && !disabled && !loading
-          ? 'var(--ds-button-active-transform, scale(0.97))'
-          : isHovered && !disabled && !loading
-            ? 'var(--ds-button-hover-transform, translateY(-1px) scale(1.01))'
-            : 'translateY(0) scale(1)',
-      animation: pulse ? 'rottay-button-pulse 2s infinite' : 'none',
-      ...style,
-    };
+    /** The DOM contract the rustic skin selects on. Spread onto whichever
+     *  element this engine renders, so a link and a button paint alike. */
+    const skinAttributes = {
+      'data-variant': effectiveVariant,
+      'data-size': size,
+      'data-shape': shape,
+      'data-full-width': isFullWidth ? 'true' : undefined,
+      'data-loading': loading ? 'true' : undefined,
+      // The `disabled` prop, not the DOM attribute: the element sets
+      // `disabled={disabled || loading}`, and a loading button keeps its
+      // variant opacity while a disabled one dims.
+      'data-disabled': disabled ? 'true' : undefined,
+      'data-bordered': bordered ? 'true' : undefined,
+      'data-pulse': pulse ? 'true' : undefined,
+      'data-size-responsive': sizeIsResponsive ? 'true' : undefined,
+    } as const;
 
     // Build class names
     const classNames = [
@@ -369,6 +315,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
             style={buttonStyle}
             {...interactionHandlers}
             {...partAttributes('trigger', interaction)}
+            {...skinAttributes}
             {...responsiveAttrs}
           >
             {loading && <LoadingSpinner size={size} />}
@@ -394,6 +341,7 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           onClick={handleClick}
           {...interactionHandlers}
           {...partAttributes('trigger', interaction)}
+          {...skinAttributes}
           aria-disabled={disabled || loading}
           aria-busy={loading}
           {...responsiveAttrs}
