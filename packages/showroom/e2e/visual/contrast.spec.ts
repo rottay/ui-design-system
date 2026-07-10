@@ -111,3 +111,61 @@ test.describe('every control is readable against its own background', () => {
     }
   }
 });
+
+// ---------------------------------------------------------------------------
+// The classic engine's primary button.
+//
+// The suite above never selects an engine, so it measures the probe's default,
+// `modern`. The classic engine is Ant Design, and the DS hands antd a theme
+// through `runtime/engines/AntdConfigProvider.tsx`, which maps `colorPrimary`
+// from `--ds-color-primary` and -- until this gate existed -- mapped nothing to
+// `colorTextLightSolid`, the colour antd paints ON a solid primary. antd's own
+// default for it is `#fff`.
+//
+// On a tenant whose primary IS white, that is white text on a white button. It
+// shipped on rottay, the platform's own brand: measured at a contrast ratio of
+// exactly 1.00:1, a button with an invisible label, while all 118 gate tests
+// were green.
+//
+// Only the primary button is covered here. The classic engine's select, badge
+// and input have antd handles of their own (`.ant-select-selector`, `.ant-input`)
+// and are NOT measured yet -- that is a named gap, filed as P-53, not a silent
+// one.
+// ---------------------------------------------------------------------------
+
+const CLASSIC_PRIMARY_BUTTON = '[data-testid="probe-button"] .ant-btn-primary';
+
+test.describe("the classic engine's primary button is readable on every tenant", () => {
+  for (const tenant of TENANTS) {
+    test(`${tenant}: classic primary button`, async ({ page }) => {
+      await page.goto(`/probe/whitelabel-torture?fixture=${tenant}&engine=classic`, {
+        waitUntil: 'domcontentloaded',
+      });
+      await page.waitForSelector('[data-testid="probe-ground"]', { timeout: 45_000 });
+      await page.waitForFunction(
+        (slug) => document.documentElement.getAttribute('data-tenant') === slug,
+        tenant,
+        { timeout: 45_000 }
+      );
+      await page.waitForFunction(
+        () => document.documentElement.getAttribute('data-engine') === 'classic',
+        undefined,
+        { timeout: 45_000 }
+      );
+      await page.evaluate(() => document.fonts.ready);
+
+      const reading = await readControl(page, CLASSIC_PRIMARY_BUTTON);
+
+      expect(reading.found, `${tenant}: no element matched ${CLASSIC_PRIMARY_BUTTON}`).toBe(true);
+      expect(Number.isFinite(reading.delta), `${tenant}: could not read colours`).toBe(true);
+      expect(
+        reading.delta,
+        `${tenant}: the classic primary button is unreadable against itself: background ` +
+          `${reading.background}, text ${reading.color}, luminance delta ${reading.delta.toFixed(1)}. ` +
+          `antd paints ON a solid primary with \`colorTextLightSolid\`; if the DS does not map it to ` +
+          `--ds-color-text-on-primary, antd keeps its own #fff and a light-primary tenant gets an ` +
+          `invisible label.`
+      ).toBeGreaterThanOrEqual(MIN_LUMINANCE_DELTA);
+    });
+  }
+});

@@ -722,9 +722,10 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   | `surfaces/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx` | `renders a direct Export button when a single format is configured` | passed | 35/35 passed |
   | `surfaces/pages/admin/audit/tests/AuditSurface.test.tsx` | `Unable to find an element with the text: user.created` (observed 2026-07-10, during WO-ARC-07's Card certification) | passed on the re-run | 2/2 passed |
 
+- **A fourth instance, and a mechanism.** `structures/record/edit-fields/tests/EditFields.test.tsx` joined the family on 2026-07-10 (`Unable to find an accessible element with the role "button" and name "Hide more fields"`), and its shape names the cause: it awaits `findByRole`, then calls `rerender`, then queries **synchronously** with `getByRole`. Every component here mounts through an engine's lazy boundary, so a query that does not wait can run before the re-render has resolved -- usually it does not, under full-suite load it does. All four files mix sync `getBy*` with async `findBy*`: EditFields 8/21, ListToolbar 3/1, AuditSurface 4/2, CollectionWorkspace 3/24. The EditFields instance is fixed by awaiting the query, which is strictly more correct and cannot regress anything.
 - **A third instance, same shape** — every one of them fails to FIND a rendered element under full-suite load and passes alone. That is a rendering or timing leak, not three unrelated bugs.
 - **Why it matters** — the ledger is the contract this program certifies against: "17 failures, and here is each one." A suite that returns 17 or 21 depending on the run makes that contract unfalsifiable, and it is exactly how a real regression gets waved through as "one of the known flaky ones". This program has already been burned once by an inherited failure count (P-40).
-- **Ask** — one WO. Reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
+- **Ask** — one WO. Sweep every `getBy*` that follows a `rerender` or a preceding `await findBy*` in a `renderSurface`/engine-lazy tree and make it wait. Then, if instances remain, reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
 - **Status** — OPEN.
 
 ### P-50 The rustic Button drops the busy posture the modern Button honours
@@ -771,3 +772,27 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Restated ask** — give the rustic engine the modern engine's `handleKeyDown`, and gate its `role` / `tabIndex` on `onClick`, not on `clickable`. Pin both engines with a cross-engine parity test in the shape of `Button.busy-parity.test.tsx`. The Card skin can then key its focus ring on a state both engines can actually enter.
 - **Method note** — this proposal was filed from a rendered `tabindex` and a read of one engine. One more render, of the other engine, reversed it. "A work order is a hypothesis, the code is the law" applies to proposals too, and to the ones this program writes about itself.
 - **Status** — OPEN. Card's CSS-first migration is blocked on it.
+
+### P-52 The classic engine paints white text on a white button, on the platform's own brand
+- **Found** — 2026-07-10, by a sighted check of `/structures/record/edit-fields` under two tenants, the acceptance-gate item WO-CRA-10's executor could not run.
+- **Evidence** — the showroom's three-engine comparison renders one Save button per engine. On rottay, the classic column's button is a white rectangle with no readable label. Measured on the torture probe, per engine, per tenant:
+
+  | tenant / engine | background | text | contrast |
+  | --- | --- | --- | --- |
+  | rottay / classic | `rgb(255,255,255)` | `rgb(255,255,255)` | **1.00:1** |
+  | rottay / modern | `rgb(255,255,255)` | `rgb(12,12,14)` | 19.54:1 |
+  | rottay / rustic | `rgb(255,255,255)` | `rgb(12,12,14)` | 19.54:1 |
+  | evnto / classic | `rgb(232,232,224)` | `rgb(255,255,255)` | **1.14:1** |
+  | bithire / classic | `rgb(58,111,176)` | `rgb(255,255,255)` | 5.15:1 |
+
+- **The cause** — `runtime/engines/AntdConfigProvider.tsx` maps nine antd tokens from `--ds-*` variables. `colorTextLightSolid` — the colour antd paints ON a solid primary surface (`.ant-btn-primary`, `.ant-tag`, `.ant-badge-count`) — was not among them, so antd kept its own default of `#fff`. It is not derived from `colorPrimary`; antd treats it as an independent map token. Every tenant whose primary is light therefore got an invisible label.
+- **Why no gate saw it** — WO-ENG-22's `contrast.spec.ts` never selects an engine, so it measured the probe's default, `modern`. Its primary-button selector is `.rottay-button--primary`, a class the antd button does not carry. The classic engine has been outside every contrast assertion since the gate was written.
+- **FIXED 2026-07-10.** `colorTextLightSolid` now maps to `--ds-color-text-on-primary` (rottay `#0c0c0e`, bithire/evnto `#fff`), and `contrast.spec.ts` gained four assertions for the classic primary button, one per tenant. Drilled in the correct order: the assertions were written first and went red on rottay (delta 0.0) and evnto (delta 23.6); the mapping turned them green. Full gate 122/122, no baseline moved.
+- **Status** — CLOSED, with P-53 open behind it.
+
+### P-53 The classic engine's select, badge and input are still outside every contrast assertion
+- **Found** — 2026-07-10, while closing P-52.
+- **Evidence** — `contrast.spec.ts` measures four controls. P-52 added an engine axis for exactly one of them, the primary button, because the other three have antd handles of their own (`.ant-select-selector`, `.ant-input`, `.ant-badge-*`) that the current selectors do not match. Measured on the torture probe under `engine=classic`: `.ant-select-selector` × 4, `.ant-input` × 6, `[class*="badge"]` × 2 — all present, none asserted.
+- **Why it was not closed in the same pass** — opening the whole gate to classic could turn up several defects at once, and a red gate left standing is worse than a named gap. This is that name.
+- **Ask** — one WO. Give `CONTROLS` a per-engine selector map, run all four controls across all three engines and all four tenants (48 assertions), and fix what turns red. The classic engine is Ant Design's tokens, not the DS's; every one of them that the DS does not map is a default antd chose for a light theme.
+- **Status** — OPEN.

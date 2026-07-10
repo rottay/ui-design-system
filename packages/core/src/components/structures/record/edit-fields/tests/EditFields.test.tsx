@@ -239,7 +239,10 @@ describe('MoreFieldsToggle', () => {
     expect(onToggle).toHaveBeenCalledTimes(1);
 
     rerender(<MoreFieldsToggle expanded onToggle={onToggle} />);
-    const expandedButton = screen.getByRole('button', { name: 'Hide more fields' });
+    // `renderSurface` mounts through an engine's lazy boundary, so a query that
+    // does not wait can run before the re-render has resolved. It usually does
+    // not; under full-suite load it does.
+    const expandedButton = await screen.findByRole('button', { name: 'Hide more fields' });
     expect(expandedButton.getAttribute('aria-expanded')).toBe('true');
   });
 

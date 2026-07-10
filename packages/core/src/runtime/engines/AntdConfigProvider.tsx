@@ -48,6 +48,14 @@ const CSS_VAR_MAP = {
   colorTextBase: '--ds-color-text-primary',
   colorLink: '--ds-color-primary',
   borderRadius: '--ds-radius-md',
+  /**
+   * The colour antd paints ON a solid primary surface (`.ant-btn-primary`,
+   * `.ant-tag`, `.ant-badge-count`, ...). antd's own default is `#fff`, which is
+   * an invisible label on any tenant whose primary is light. It is not derived
+   * from `colorPrimary`: antd treats it as an independent map token, so it must
+   * be handed the DS's own answer.
+   */
+  colorTextLightSolid: '--ds-color-text-on-primary',
 } as const;
 
 /**
@@ -65,6 +73,8 @@ const SSR_DEFAULTS = {
   colorTextBase: '#F5F5F2',
   colorLink: '#F5F5F2',
   borderRadius: 10,
+  /** Matches `--ds-color-text-on-primary` in themes/default.css, whose primary is light. */
+  colorTextLightSolid: '#0C0C0E',
 } as const;
 
 /** Widened version of SSR_DEFAULTS: literal types relaxed to string/number. */
@@ -78,6 +88,7 @@ interface ResolvedDefaults {
   colorTextBase: string;
   colorLink: string;
   borderRadius: number;
+  colorTextLightSolid: string;
 }
 
 /**
@@ -112,6 +123,7 @@ function readCssTokenDefaults(): ResolvedDefaults {
     colorTextBase: read(CSS_VAR_MAP.colorTextBase, SSR_DEFAULTS.colorTextBase),
     colorLink: read(CSS_VAR_MAP.colorLink, SSR_DEFAULTS.colorLink),
     borderRadius: readPx(CSS_VAR_MAP.borderRadius, SSR_DEFAULTS.borderRadius),
+    colorTextLightSolid: read(CSS_VAR_MAP.colorTextLightSolid, SSR_DEFAULTS.colorTextLightSolid),
   };
 }
 
@@ -172,6 +184,9 @@ export function AntdConfigProvider({
         colorTextBase: cssDefaults.colorTextBase,
         colorLink: cssDefaults.colorLink,
         borderRadius: cssDefaults.borderRadius,
+        // Independent of `colorPrimary`: antd will not derive a readable label
+        // for a light primary on its own.
+        colorTextLightSolid: cssDefaults.colorTextLightSolid,
       },
     };
   }, [engine, config, cssDefaults]);
