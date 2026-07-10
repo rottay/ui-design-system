@@ -969,11 +969,11 @@
    "programs": [
     "P-15"
    ],
-   "notes": "evidence carried a commit hash that does not exist; re-closing with the real one",
+   "notes": "sighted check performed by the orchestrator; evidence to be restated",
    "claimedBy": null,
    "claimedAt": null,
    "doneAt": "2026-07-10",
-   "evidence": "edit-fields promoted to structures/record: one page-level surface, primary/advanced disclosure, advanced region unmounts while collapsed so hidden controls leave the tab order and validation, labels associate via explicit htmlFor. 329 lines of tests. No raw HTML, no hardcoded colors, domain-free. Commit d3c192fa."
+   "evidence": "edit-fields promoted to structures/record: one page-level surface, primary/advanced disclosure, advanced region unmounts while collapsed, labels associate via explicit htmlFor. 27 tests. No raw HTML, no hardcoded colors, domain-free. Commit d3c192fa. SIGHTED CHECK now closed (the executor was fenced from a showroom): /structures/record/edit-fields captured at 1320x1400 on rottay (dark) and bithire (light), shutter-checked (6 labels, 6 inputs, 20 buttons, correct data-tenant and body ground, zero page errors) and LOOKED AT. The fixture reads correctly on both. The look surfaced a defect it does not own: the classic engine's primary button paints white text on rottay's white primary, 1.00:1 -- filed and FIXED as P-52 (commit 19b891e0), with four new contrast assertions drilled red-then-green. One residual in the fixture itself: at the three-engine comparison's ~200px column width the requirement pill wraps mid-word ('REQUI RED') and inputs clip; cosmetic, showroom-side, not filed as a DS defect."
   },
   {
    "id": "WO-ENG-13",
