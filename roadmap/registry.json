@@ -681,17 +681,17 @@
    "lane": "tokens",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "P-06"
    ],
    "notes": "AMENDED 2026-07-09: headline premise VERIFIED TRUE, but rottay is dark-first while compileBrandTheme emits the light palette as the default block, so step 2 (\"the compiled block reproduces the rendered values\") is impossible for rottay. evnto executes independently; rottay takes the light-base + extension-rescoped-dark route; rottay.ts must NOT be flipped (it is a live registered tenant). See the AMENDMENT block in tokens.md.",
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "Every first-party artifact is a build product. VERIFIED, NOT ACCEPTED ON REPORT. FIRST_PARTY_ARTIFACT_SPECS now carries bithire, evnto and rottay; the generator script imports all three brand themes; the \"Scope: bithire only\" header limitation is gone. `build-vertical-artifacts.mjs --check` now checks THREE artifacts and reports all three up to date -- it reported only bithire until I rebuilt dist, which is worth recording: the script reads the compiled package, so a stale dist made the gate silently narrower than its source. DRILL, per slug: hand-edit artifacts/{rottay,evnto,bithire}/index.css, run --check, each reports \"1 vertical artifact(s) are stale or hand-edited\"; restore each, green. The check is chained into `pretest` (package.json:102, alongside engine-token-audit --check), so the command the repo actually uses to certify reaches it. The two bithire-only guard tests are replaced by first-party-artifacts-{generated,parity}.test.ts, parameterized over the spec list: 45/45. The manual-sync law is deleted from CLAUDE.md and the theme files. ZERO RENDERED-VALUE CHANGE, proven by pixels: test:gates 63/63, including 48 visual baselines byte-unchanged. evnto PROVES THE PIPELINE: it declares darkBackgroundColor #131210 and now paints rgb(19,18,16). THE UNCOMFORTABLE PART, recorded rather than hidden (P-36 updated): rottay and bithire still disagree with their own themes. The gate demanded zero rendered delta, so their ground literals survive in the declared residue -- artifacts/rottay/_source/extension.css:138 writes --ds-color-bg-primary: #0A0A0C while rottayBrandTheme says #0C0C0E; bithire extension writes #ffffff while its theme says #F8FBFF. The disagreement moved from a hand-written artifact into a hand-written extension: now visible, gated and regenerable, and still a disagreement. CLAUDE.md says the .ts is the source of truth for the ground; for two of three tenants it is not. That is an owner decision, and taking it inside a zero-delta WO would have been the wrong place. DTCG: DEFER, with a four-criteria record appended to the WO block -- no consumer exists today (the one reference is an unstarted showroom export WO in an isolated program), the spec reached its first stable release 2025-10-28 so immaturity is no longer the objection, the converter cost is real (the compiler emits ~270 untyped strings, 15% of them cascade-time CSS functions, and rottay largest part lives in declared extension CSS the compiler never sees), and no lane or gate depends on it. GATE: pnpm typecheck 0, build 0, engine-token-audit --check green, artifact --check green across three slugs with a per-slug drill, guard tests 45/45, test:gates 63/63. Owner delegated approval 2026-07-09."
   },
   {
    "id": "WO-TOK-02",
@@ -732,7 +732,7 @@
    "lane": "architecture",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-01"
    ],
@@ -740,7 +740,11 @@
    "programs": [
     "P-13"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "arc01-api",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "ONE size vocabulary, and a semantic tone axis separated from structural variant. VERIFIED INDEPENDENTLY OF THE EXECUTOR REPORT. Delivered: tone on the display primitives (Avatar, Badge, Tag, Callout) threaded through ALL THREE engines; the raw antd size unions gone from the five primitives that declared them inline; the duplicate ButtonSize declaration removed from the token layer (tokens is what components import FROM, never the reverse); deprecated aliases keep compiling with @deprecated JSDoc naming their replacement; codemods under scripts/codemods/. TWO NEW COUNTERS, DRILLED BY ME: vocabulary.rawAntdSizeUnions and vocabulary.duplicateSizeDeclarations, both at 0 in the baseline. Reintroducing a raw small|middle|large union takes rawAntdSizeUnions to 1 and engine-token-audit --check goes RED; reverting returns it to green. THE GATE CONTRADICTS THE WO OUTCOME AND THE EXECUTOR WAS RIGHT TO BREAK IT: the acceptance gate demands an empty classic-engine diff, but tone threaded only through modern would be a prop that works in one engine and silently does nothing in its twin -- the exact defect this program has now found seven times. The classic engines take tone; with tone undefined they render identically, and test:gates 63/63 with zero pixel movement proves the zero-rendering-change outcome. I MIS-ATTRIBUTED A REGRESSION TO THIS EXECUTOR AND CORRECTED IT: ColorPicker.engine-advanced was red because ad501eca (WO-ENG-06, \"color purity\") changed placeholder=\"#000000\" to placeholder=\"#RRGGBB\" to lower the color.modernHexLiterals counter -- it lowered the counter by changing what the component shows the user, and the test had been red since. The executor RESTORED the placeholder. The defect was the counter, which was a regex over file text and could not tell a style from a string; it now skips content-bearing attributes and is drilled in both directions. Same commit broke Card.real-engines. Filed as P-40. GATE: pnpm typecheck 0 (core + showroom), build 0, engine-token-audit --check green, artifact parity green, ColorPicker 38/38, primitives 3496 passed / 13 failed (all 13 in the documented 17-failure ledger), test:gates 63/63. No eslint-disable, no !important, no @ts-ignore in the diff (grepped). Owner delegated approval 2026-07-09."
   },
   {
    "id": "WO-ARC-02",
@@ -1107,7 +1111,7 @@
    "lane": "engine-modern",
    "order": 18,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-ENG-17",
     "WO-GAT-03"
@@ -1116,7 +1120,9 @@
    "programs": [
     "owner-2026-07-09"
    ],
-   "notes": "Owner decision 2026-07-09: tenants in the same vertical need NOT look alike -- customized experiences are the product. The advisory's convergence set is removed where it was brand (cadence, density, separation, accent grammar, type ramp) and reframed where it was correctness. The gate becomes an INVARIANT matrix: no tenant configuration, however creative, can produce an unusable interface (semantic distinguishability, APCA floors, visible focus, 44px hit areas, RTL, reduced motion). Plus a semantic-collision probe: the legacy blue success at legacy/themanagementmiami/index.css:118 happened because a green brand collided with a green semantic and someone fixed it by breaking the meaning."
+   "notes": "Owner decision 2026-07-09: tenants in the same vertical need NOT look alike -- customized experiences are the product. The advisory's convergence set is removed where it was brand (cadence, density, separation, accent grammar, type ramp) and reframed where it was correctness. The gate becomes an INVARIANT matrix: no tenant configuration, however creative, can produce an unusable interface (semantic distinguishability, APCA floors, visible focus, 44px hit areas, RTL, reduced motion). Plus a semantic-collision probe: the legacy blue success at legacy/themanagementmiami/index.css:118 happened because a green brand collided with a green semantic and someone fixed it by breaking the meaning.",
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10"
   },
   {
    "id": "WO-ENG-19",

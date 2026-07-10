@@ -21937,24 +21937,298 @@ html {
 
 
 /* === platform tenant overrides (unlayered, wins by specificity + source order) === */
-/**
- * Rottay - Professional Dark-First Theme
+/* GENERATED — do not edit */
+/*
+ * Rottay tenant theme.
  *
- * GENERATED SNAPSHOT — the canonical brand source is tokens/ts/brand-themes/rottay.ts.
- * This CSS supplements the runtime BrandTheme with sidebar, layout, shell, and
- * controls chrome that the brand compiler does not yet generate.
+ * This file is a BUILD OUTPUT assembled from two authored sources; any manual
+ * edit is reverted by the DS artifact parity/guard gates:
+ *   1. tokens/ts/brand-themes/rottay.ts (compiled via compileBrandTheme)
+ *   2. tokens/css/artifacts/rottay/_source/extension.css (declared extension)
  *
- * Variables-only tenant configuration.
- * All component styling is handled by the engine CSS layer.
- *
- * Design Philosophy: Premium, precise, editorial dark SaaS
- * Dark-first with clean light mode counterpart
- * Primary brand: White on dark (#FFFFFF accents on #0C0C0E canvas)
- * Inspired by: Vercel, Linear, GitHub Dark, OpenAI
+ * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
+/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+html[data-tenant='rottay'][data-theme='light'], html[data-tenant='rottay'].light {
+  --ds-button-default-bg: #18181B;
+  --ds-button-default-bg-active: #2A2A2F;
+  --ds-button-default-bg-hover: #222226;
+  --ds-button-default-border: #3A3A40;
+  --ds-button-default-border-hover: rgba(255, 255, 255, 0.18);
+  --ds-button-default-color: #ECECEC;
+  --ds-button-disabled-bg: #18181B;
+  --ds-button-disabled-border: #2A2A2F;
+  --ds-button-disabled-border-color: #2A2A2F;
+  --ds-button-disabled-color: #52525B;
+  --ds-button-disabled-opacity: 0.4;
+  --ds-button-error-bg: #EF4444;
+  --ds-button-error-bg-active: #B91C1C;
+  --ds-button-error-bg-hover: #DC2626;
+  --ds-button-error-border: transparent;
+  --ds-button-error-color: #ffffff;
+  --ds-button-focus-ring: 0 0 0 2px rgba(255, 255, 255, 0.20);
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-active: rgba(255, 255, 255, 0.08);
+  --ds-button-ghost-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-button-ghost-color: #A0A0A5;
+  --ds-button-info-bg: #3B82F6;
+  --ds-button-info-bg-active: #1D4ED8;
+  --ds-button-info-bg-hover: #2563EB;
+  --ds-button-info-border: transparent;
+  --ds-button-info-color: #ffffff;
+  --ds-button-link-color: #ECECEC;
+  --ds-button-link-color-active: #D4D4D8;
+  --ds-button-link-color-hover: #FFFFFF;
+  --ds-button-primary-bg: #FFFFFF;
+  --ds-button-primary-bg-active: #D4D4D8;
+  --ds-button-primary-bg-hover: #E0E0E0;
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-color: #0C0C0E;
+  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.30);
+  --ds-button-primary-shadow-hover: 0 2px 12px rgba(255, 255, 255, 0.08);
+  --ds-button-secondary-bg: #2A2A2F;
+  --ds-button-secondary-bg-active: #4A4A4F;
+  --ds-button-secondary-bg-hover: #3A3A40;
+  --ds-button-secondary-border: #3A3A40;
+  --ds-button-secondary-border-hover: rgba(255, 255, 255, 0.14);
+  --ds-button-secondary-color: #ECECEC;
+  --ds-button-success-bg: #16A34A;
+  --ds-button-success-bg-active: #166534;
+  --ds-button-success-bg-hover: #15803D;
+  --ds-button-success-border: transparent;
+  --ds-button-success-color: #ffffff;
+  --ds-button-text-bg: transparent;
+  --ds-button-text-bg-active: rgba(255, 255, 255, 0.08);
+  --ds-button-text-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-button-text-color: #A0A0A5;
+  --ds-button-warning-bg: #D97706;
+  --ds-button-warning-bg-active: #92400E;
+  --ds-button-warning-bg-hover: #B45309;
+  --ds-button-warning-border: transparent;
+  --ds-button-warning-color: #FFFFFF;
+  --ds-card-bg: #18181B;
+  --ds-card-bg-hover: #1A1A1E;
+  --ds-card-body-color: #A0A0A5;
+  --ds-card-border: #2A2A2F;
+  --ds-card-border-accent-hover: rgba(255, 255, 255, 0.14);
+  --ds-card-border-color: #2A2A2F;
+  --ds-card-border-color-hover: #3A3A40;
+  --ds-card-border-hover: #3A3A40;
+  --ds-card-color: #ECECEC;
+  --ds-card-footer-bg: #101012;
+  --ds-card-footer-border: #2A2A2F;
+  --ds-card-footer-border-color: #2A2A2F;
+  --ds-card-header-border: #2A2A2F;
+  --ds-card-header-border-color: #2A2A2F;
+  --ds-card-header-color: #ECECEC;
+  --ds-card-shadow: none;
+  --ds-card-shadow-elevated: 0 16px 40px rgba(0, 0, 0, 0.28);
+  --ds-card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.20);
+  --ds-card-subtitle-color: #A0A0A5;
+  --ds-card-title-color: #ECECEC;
+  --ds-color-accent: #6B6B6B;
+  --ds-color-bg-input: #131316;
+  --ds-color-dark-accent: #A0A0A5;
+  --ds-color-dark-bg: #0C0C0E;
+  --ds-color-dark-primary: #FFFFFF;
+  --ds-color-dark-secondary: #A0A0A5;
+  --ds-color-error: #EF4444;
+  --ds-color-info: #3B82F6;
+  --ds-color-primary: #0A0A0A;
+  --ds-color-secondary: #6B6B6B;
+  --ds-color-success: #22C55E;
+  --ds-color-warning: #F59E0B;
+  --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-effect-intensity: 1;
+  --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ds-font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --ds-font-family-mono: 'JetBrains Mono', 'Geist Mono', ui-monospace, monospace;
+  --ds-input-addon-bg: #1A1A1E;
+  --ds-input-addon-border: #2A2A2F;
+  --ds-input-addon-color: #6B6B72;
+  --ds-input-bg: #131316;
+  --ds-input-bg-disabled: #18181B;
+  --ds-input-bg-focus: #131316;
+  --ds-input-bg-hover: #1A1A1E;
+  --ds-input-border: #2A2A2F;
+  --ds-input-border-color-disabled: #2A2A2F;
+  --ds-input-border-disabled: #2A2A2F;
+  --ds-input-border-focus: rgba(255, 255, 255, 0.36);
+  --ds-input-border-hover: #3A3A40;
+  --ds-input-clear-color: #6B6B72;
+  --ds-input-clear-color-hover: #A0A0A5;
+  --ds-input-color: #ECECEC;
+  --ds-input-color-disabled: #52525B;
+  --ds-input-color-placeholder: #6B6B72;
+  --ds-input-disabled-opacity: 0.4;
+  --ds-input-error-border: #EF4444;
+  --ds-input-error-color: #EF4444;
+  --ds-input-error-shadow-focus: 0 0 0 2px rgba(239, 68, 68, 0.18);
+  --ds-input-filled-bg: #1A1A1E;
+  --ds-input-filled-bg-focus: #1A1A1E;
+  --ds-input-filled-bg-hover: #222226;
+  --ds-input-helper-color: #6B6B72;
+  --ds-input-label-color: #A0A0A5;
+  --ds-input-shadow-focus: 0 0 0 3px rgba(255, 255, 255, 0.10);
+  --ds-input-success-border: #16A34A;
+  --ds-input-success-shadow-focus: 0 0 0 2px rgba(34, 197, 94, 0.18);
+  --ds-input-warning-border: #D97706;
+  --ds-input-warning-shadow-focus: 0 0 0 2px rgba(245, 158, 11, 0.18);
+  --ds-layout-bg: #0C0C0E;
+  --ds-layout-header-backdrop: blur(12px);
+  --ds-layout-header-bg: rgba(12, 12, 14, 0.82);
+  --ds-layout-header-border: rgba(255, 255, 255, 0.05);
+  --ds-layout-sider-bg: #0D0D10;
+  --ds-layout-sider-border: #18181C;
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-display: -0.025em;
+  --ds-letter-spacing-heading: -0.015em;
+  --ds-letter-spacing-mono: 0;
+  --ds-line-height-body: 1.6;
+  --ds-line-height-display: 1.1;
+  --ds-line-height-heading: 1.2;
+  --ds-line-height-relaxed: 1.75;
+  --ds-line-height-tight: 1.25;
+  --ds-modal-bg: #1A1A1E;
+  --ds-modal-body-color: #A0A0A5;
+  --ds-modal-close-bg-hover: rgba(255, 255, 255, 0.05);
+  --ds-modal-close-color: #6B6B72;
+  --ds-modal-close-color-hover: #ECECEC;
+  --ds-modal-color: #ECECEC;
+  --ds-modal-footer-bg: #1A1A1E;
+  --ds-modal-footer-border: #2A2A2F;
+  --ds-modal-header-bg: #222226;
+  --ds-modal-header-border: #2A2A2F;
+  --ds-modal-overlay-backdrop: blur(10px);
+  --ds-modal-overlay-bg: rgba(0, 0, 0, 0.64);
+  --ds-modal-shadow: 0 24px 64px rgba(0, 0, 0, 0.40);
+  --ds-modal-subtitle-color: #6B6B72;
+  --ds-modal-title-color: #ECECEC;
+  --ds-motion-calm: 300ms;
+  --ds-motion-deliberate: 320ms;
+  --ds-motion-instant: 120ms;
+  --ds-overlay-heavy: rgba(255, 255, 255, 0.1);
+  --ds-overlay-light: rgba(255, 255, 255, 0.03);
+  --ds-overlay-medium: rgba(255, 255, 255, 0.06);
+  --ds-radius-lg: 14px;
+  --ds-radius-md: 10px;
+  --ds-radius-sm: 6px;
+  --ds-radius-xl: 18px;
+  --ds-shadow-lg: 0 8px 20px rgba(0, 0, 0, 0.28), 0 16px 40px rgba(0, 0, 0, 0.22);
+  --ds-shadow-md: 0 2px 4px rgba(0, 0, 0, 0.32), 0 8px 24px rgba(0, 0, 0, 0.18);
+  --ds-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.28), 0 4px 12px rgba(0, 0, 0, 0.14);
+  --ds-shadow-xl: 0 16px 40px rgba(0, 0, 0, 0.34), 0 24px 56px rgba(0, 0, 0, 0.28);
+  --ds-shell-grid-line: rgba(255, 255, 255, 0.03);
+  --ds-shell-grid-size: 28px;
+  --ds-sidebar-bg: #0D0D10;
+  --ds-sidebar-border: #18181C;
+  --ds-sidebar-collapsed-width: 96px;
+  --ds-sidebar-footer-bg: #0D0D10;
+  --ds-sidebar-group-color: #6B6B72;
+  --ds-sidebar-group-font-size: 10.9px;
+  --ds-sidebar-group-font-weight: 600;
+  --ds-sidebar-group-letter-spacing: 0.085em;
+  --ds-sidebar-header-height: 104px;
+  --ds-sidebar-icon-size: 17.25px;
+  --ds-sidebar-item-bg-active: rgba(255, 255, 255, 0.07);
+  --ds-sidebar-item-bg-hover: rgba(255, 255, 255, 0.04);
+  --ds-sidebar-item-color: #A0A0A5;
+  --ds-sidebar-item-color-active: #FFFFFF;
+  --ds-sidebar-item-font-size: 16.35px;
+  --ds-sidebar-item-font-weight: 450;
+  --ds-sidebar-item-font-weight-active: 600;
+  --ds-sidebar-item-padding: 0 13px;
+  --ds-sidebar-text: #ECECEC;
+  --ds-sidebar-text-muted: #6B6B72;
+  --ds-sidebar-width: 296px;
+  --ds-tab-bg-hover: rgba(255, 255, 255, 0.03);
+  --ds-tab-border-active: #FFFFFF;
+  --ds-tab-color: #6B6B72;
+  --ds-tab-color-active: #ECECEC;
+  --ds-tab-color-hover: #ECECEC;
+  --ds-table-bg: #0C0C0E;
+  --ds-table-border: #2A2A2F;
+  --ds-table-cell-color: #ECECEC;
+  --ds-table-cell-font-size: 0.875rem;
+  --ds-table-cell-padding: 0.875rem 1rem;
+  --ds-table-header-bg: #131316;
+  --ds-table-header-color: #A0A0A5;
+  --ds-table-header-font-size: 0.6875rem;
+  --ds-table-header-font-weight: 600;
+  --ds-table-loading-overlay-bg: rgba(12, 12, 14, 0.7);
+  --ds-table-row-bg: #0C0C0E;
+  --ds-table-row-bg-hover: rgba(255, 255, 255, 0.025);
+  --ds-table-row-bg-selected: rgba(255, 255, 255, 0.05);
+  --ds-table-row-bg-striped: #131316;
+  --ds-table-row-border: #222226;
+  --ds-tabs-border: #2A2A2F;
+  --ds-text-body: 400 0.875rem/1.25rem var(--ds-font-family-base);
+  --ds-text-body-letter-spacing: 0;
+  --ds-text-body-line-height: 1.25rem;
+  --ds-text-body-size: 0.875rem;
+  --ds-text-body-weight: 400;
+  --ds-text-detail: 400 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-detail-letter-spacing: 0;
+  --ds-text-detail-line-height: 1rem;
+  --ds-text-detail-size: 0.75rem;
+  --ds-text-detail-weight: 400;
+  --ds-text-display: 700 2rem/2.25rem var(--ds-font-family-base);
+  --ds-text-display-letter-spacing: -0.02em;
+  --ds-text-display-line-height: 2.25rem;
+  --ds-text-display-size: 2rem;
+  --ds-text-display-weight: 700;
+  --ds-text-emphasis: 600 1rem/1.5rem var(--ds-font-family-base);
+  --ds-text-emphasis-letter-spacing: 0;
+  --ds-text-emphasis-line-height: 1.5rem;
+  --ds-text-emphasis-size: 1rem;
+  --ds-text-emphasis-weight: 600;
+  --ds-text-eyebrow: 600 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-eyebrow-letter-spacing: 0.08em;
+  --ds-text-eyebrow-line-height: 1rem;
+  --ds-text-eyebrow-size: 0.75rem;
+  --ds-text-eyebrow-transform: uppercase;
+  --ds-text-eyebrow-weight: 600;
+  --ds-text-title: 600 1.25rem/1.75rem var(--ds-font-family-base);
+  --ds-text-title-letter-spacing: -0.01em;
+  --ds-text-title-line-height: 1.75rem;
+  --ds-text-title-size: 1.25rem;
+  --ds-text-title-weight: 600;
+  --ds-tint-12: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in srgb, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in srgb, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in srgb, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in srgb, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in srgb, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in srgb, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in srgb, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in srgb, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in srgb, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in srgb, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in srgb, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
+}
+
+/* === Declared artifact extension (authored source, generator-preserved) === */
 /* ============================================
-   ROTTAY DARK THEME (Default for tenant)
+   ROTTAY DARK THEME (default for tenant)
+   rottayBrandTheme.chrome (sidebar/layout/table/controls) is single-valued
+   and dark-authored; it cannot represent both themes, so palette and chrome
+   for this state are declared extension, alongside the DaisyUI oklch bridge.
    ============================================ */
 html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
   color-scheme: dark;
@@ -23552,7 +23826,10 @@ html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
 
 /* ============================================
    ROTTAY LIGHT THEME (explicit light mode)
-   Activated by [data-theme='light'] or .light class
+   Activated by [data-theme='light'] or .light class. chrome is declared
+   extension here for the same reason as the dark block above; kept as a
+   complete, self-contained block (not diffed against the compiled block)
+   so each theme-scoped selector stays independently readable.
    ============================================ */
 html[data-tenant='rottay'][data-theme='light'],
 html[data-tenant='rottay'].light {

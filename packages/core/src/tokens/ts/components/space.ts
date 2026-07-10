@@ -19,4 +19,10 @@ export const spaceTokens = {
 } as const;
 
 // Type exports
-export type SpaceSize = keyof typeof spaceSize;
+//
+// The canonical, publicly-exported Space size prop type is `SpaceSize` in
+// `components/primitives/layout/Space/Space.types.ts` (derived from the shared `Size`
+// union). Tokens is the foundation layer components import FROM, never the reverse; this
+// file's own size-key type -- the legacy 'small' | 'middle' | 'large' spelling this token
+// map defines entries for -- is named distinctly so the two do not share a name.
+export type SpaceSizeToken = keyof typeof spaceSize;

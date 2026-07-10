@@ -99,7 +99,7 @@
     "build:modern-css": "postcss src/tokens/css/engines/modern/compiled.css -o dist/modern-engine.css",
     "build:commercial-css": "node scripts/build-commercial-css.mjs",
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
-    "pretest": "node scripts/engine-token-audit.mjs --check",
+    "pretest": "node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
     "build:vertical-css": "node scripts/build-vertical-artifacts.mjs && node scripts/build-vertical-css.mjs",
     "storybook": "storybook dev -p 6006",

@@ -21937,25 +21937,193 @@ html {
 
 
 /* === evnto tenant overrides (unlayered, wins by specificity + source order) === */
-/**
- * Evnto Theme - Light Minimal Design
+/* GENERATED — do not edit */
+/*
+ * Evnto tenant theme.
  *
- * GENERATED SNAPSHOT — the canonical brand source is tokens/ts/brand-themes/evnto.ts.
- * This CSS supplements the runtime BrandTheme with sidebar, layout, shell, and
- * controls chrome that the brand compiler does not yet generate.
+ * This file is a BUILD OUTPUT assembled from two authored sources; any manual
+ * edit is reverted by the DS artifact parity/guard gates:
+ *   1. tokens/ts/brand-themes/evnto.ts (compiled via compileBrandTheme)
+ *   2. tokens/css/artifacts/evnto/_source/extension.css (declared extension)
  *
- * White backgrounds, black text, grey and beige accents
- *
- * Design Philosophy: Light-first, clean, modern
- * Primary: White backgrounds with black text
- * Accents: Warm beige/sand tones for highlights
- *
- * VARIABLES-ONLY: No component selector overrides.
- * All styling flows through --ds-* CSS custom properties.
+ * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
  */
 
+/* === Compiled from BrandTheme via compileBrandTheme — do not edit === */
+html[data-tenant='evnto'] {
+  --ds-button-default-bg: #FFFFFF;
+  --ds-button-default-bg-hover: #FAFAFA;
+  --ds-button-default-border: rgba(0, 0, 0, 0.1);
+  --ds-button-default-color: #171717;
+  --ds-button-disabled-bg: #FAFAFA;
+  --ds-button-disabled-border: rgba(0, 0, 0, 0.06);
+  --ds-button-disabled-border-color: rgba(0, 0, 0, 0.06);
+  --ds-button-disabled-color: rgba(0, 0, 0, 0.25);
+  --ds-button-disabled-opacity: 0.4;
+  --ds-button-ghost-bg: transparent;
+  --ds-button-ghost-bg-hover: rgba(0, 0, 0, 0.03);
+  --ds-button-ghost-color: #525252;
+  --ds-button-primary-bg: #171717;
+  --ds-button-primary-bg-hover: #262626;
+  --ds-button-primary-border: transparent;
+  --ds-button-primary-color: #ffffff;
+  --ds-button-primary-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --ds-button-secondary-bg: transparent;
+  --ds-button-secondary-bg-hover: rgba(0, 0, 0, 0.04);
+  --ds-button-secondary-border: rgba(0, 0, 0, 0.15);
+  --ds-button-secondary-color: #171717;
+  --ds-card-bg: #ffffff;
+  --ds-card-border: rgba(0, 0, 0, 0.08);
+  --ds-card-border-color: rgba(0, 0, 0, 0.08);
+  --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --ds-color-accent: #7A6A5A;
+  --ds-color-background: #FFFFFF;
+  --ds-color-bg: #FFFFFF;
+  --ds-color-bg-input: #ffffff;
+  --ds-color-bg-primary: #FFFFFF;
+  --ds-color-dark-accent: #A89880;
+  --ds-color-dark-bg: #131210;
+  --ds-color-dark-primary: #E8E8E0;
+  --ds-color-dark-secondary: #A89880;
+  --ds-color-error: #B91C1C;
+  --ds-color-info: #475569;
+  --ds-color-primary: #171717;
+  --ds-color-secondary: #7A6A5A;
+  --ds-color-success: #15803D;
+  --ds-color-warning: #A16207;
+  --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ds-effect-intensity: 1;
+  --ds-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ds-font-family-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ds-font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --ds-font-family-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Menlo, monospace;
+  --ds-input-bg: #ffffff;
+  --ds-input-bg-disabled: #FAFAFA;
+  --ds-input-border: rgba(0, 0, 0, 0.12);
+  --ds-input-border-color-disabled: rgba(0, 0, 0, 0.06);
+  --ds-input-border-disabled: rgba(0, 0, 0, 0.06);
+  --ds-input-border-focus: #171717;
+  --ds-input-color-disabled: rgba(0, 0, 0, 0.25);
+  --ds-input-disabled-opacity: 0.4;
+  --ds-input-shadow-focus: 0 0 0 1px rgba(23, 23, 23, 0.2);
+  --ds-layout-bg: #FFFFFF;
+  --ds-layout-header-backdrop: blur(10px);
+  --ds-layout-header-bg: rgba(255, 255, 255, 0.95);
+  --ds-layout-header-border: rgba(0, 0, 0, 0.06);
+  --ds-layout-sider-bg: #FAFAFA;
+  --ds-layout-sider-border: rgba(0, 0, 0, 0.06);
+  --ds-letter-spacing-body: 0;
+  --ds-letter-spacing-display: -0.025em;
+  --ds-letter-spacing-heading: -0.02em;
+  --ds-letter-spacing-mono: 0;
+  --ds-line-height-body: 1.6;
+  --ds-line-height-display: 1.1;
+  --ds-line-height-heading: 1.2;
+  --ds-line-height-relaxed: 1.75;
+  --ds-line-height-tight: 1.25;
+  --ds-motion-calm: 500ms;
+  --ds-motion-deliberate: 320ms;
+  --ds-motion-instant: 120ms;
+  --ds-overlay-heavy: rgba(0, 0, 0, 0.06);
+  --ds-overlay-light: rgba(0, 0, 0, 0.01);
+  --ds-overlay-medium: rgba(0, 0, 0, 0.03);
+  --ds-radius-lg: 18px;
+  --ds-radius-md: 14px;
+  --ds-radius-sm: 10px;
+  --ds-radius-xl: 24px;
+  --ds-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --ds-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --ds-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --ds-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.1);
+  --ds-shell-grid-line: transparent;
+  --ds-shell-grid-size: 0px;
+  --ds-sidebar-bg: #fafafa;
+  --ds-sidebar-group-color: #737373;
+  --ds-sidebar-group-font-size: 11px;
+  --ds-sidebar-group-font-weight: 600;
+  --ds-sidebar-group-letter-spacing: 0.04em;
+  --ds-sidebar-icon-size: 18px;
+  --ds-sidebar-item-bg-active: rgba(0, 0, 0, 0.06);
+  --ds-sidebar-item-bg-hover: rgba(0, 0, 0, 0.03);
+  --ds-sidebar-item-color: #3d3d3d;
+  --ds-sidebar-item-color-active: #171717;
+  --ds-sidebar-item-font-size: 14px;
+  --ds-sidebar-item-font-weight: 400;
+  --ds-sidebar-item-font-weight-active: 500;
+  --ds-sidebar-item-padding: 8px 12px;
+  --ds-sidebar-text: #171717;
+  --ds-sidebar-text-muted: #525252;
+  --ds-table-header-bg: rgba(0, 0, 0, 0.02);
+  --ds-table-header-color: #737373;
+  --ds-table-header-font-size: 0.75rem;
+  --ds-table-header-font-weight: 500;
+  --ds-text-body: 400 0.875rem/1.25rem var(--ds-font-family-base);
+  --ds-text-body-letter-spacing: 0;
+  --ds-text-body-line-height: 1.25rem;
+  --ds-text-body-size: 0.875rem;
+  --ds-text-body-weight: 400;
+  --ds-text-detail: 400 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-detail-letter-spacing: 0;
+  --ds-text-detail-line-height: 1rem;
+  --ds-text-detail-size: 0.75rem;
+  --ds-text-detail-weight: 400;
+  --ds-text-display: 700 2rem/2.25rem var(--ds-font-family-base);
+  --ds-text-display-letter-spacing: -0.02em;
+  --ds-text-display-line-height: 2.25rem;
+  --ds-text-display-size: 2rem;
+  --ds-text-display-weight: 700;
+  --ds-text-emphasis: 600 1rem/1.5rem var(--ds-font-family-base);
+  --ds-text-emphasis-letter-spacing: 0;
+  --ds-text-emphasis-line-height: 1.5rem;
+  --ds-text-emphasis-size: 1rem;
+  --ds-text-emphasis-weight: 600;
+  --ds-text-eyebrow: 600 0.75rem/1rem var(--ds-font-family-base);
+  --ds-text-eyebrow-letter-spacing: 0.08em;
+  --ds-text-eyebrow-line-height: 1rem;
+  --ds-text-eyebrow-size: 0.75rem;
+  --ds-text-eyebrow-transform: uppercase;
+  --ds-text-eyebrow-weight: 600;
+  --ds-text-title: 600 1.25rem/1.75rem var(--ds-font-family-base);
+  --ds-text-title-letter-spacing: -0.01em;
+  --ds-text-title-line-height: 1.75rem;
+  --ds-text-title-size: 1.25rem;
+  --ds-text-title-weight: 600;
+  --ds-tint-12: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in srgb, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in srgb, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in srgb, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in srgb, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in srgb, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in srgb, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in srgb, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in srgb, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in srgb, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in srgb, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in srgb, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
+}
+
+/* === Declared artifact extension (authored source, generator-preserved) === */
 /* ============================================
    EVNTO BRAND COLORS (Light Mode Default)
+   Declared extension: the DaisyUI oklch bridge and domain-owned ticket/
+   event tokens (frozen decision 12). Kept as a complete, self-contained
+   block (not diffed against the compiled block) so each theme-scoped
+   selector stays independently readable.
    ============================================ */
 html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   /* ============================================
@@ -22221,10 +22389,10 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
 
 /* ============================================
    EVNTO BRAND COLORS (Dark Mode)
-   Warm dark aesthetic - maintains beige hue family
+   Activated by [data-theme='dark'] or .dark class. evntoBrandTheme.palette
+   and chrome are single-valued and light-authored, so dark mode is
+   declared extension.
    ============================================ */
-
-/* Dark mode for Evnto - warm dark aesthetic */
 html[data-tenant='evnto'][data-theme='dark'],
 html[data-tenant='evnto'].dark {
   color-scheme: dark;

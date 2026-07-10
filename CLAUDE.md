@@ -147,7 +147,7 @@ Visual merge chain: `DS base -> vertical baseline -> BrandTheme -> generated art
 - First-party tenant CSS files (`tokens/css/artifacts/`) are **generated snapshots**, not the source of truth. The `.ts` BrandTheme files are the source.
 - Domain-specific tokens (`--ds-ticket-*`, `--ds-event-*`) belong in consuming apps, not DS core.
 - The brand compiler (`compilers/brand-theme/`) converts BrandTheme to CSS vars and personality tokens.
-- BrandTheme `.ts` files MUST stay in sync with CSS artifacts. If you edit one, update the other.
+- First-party tenant artifacts (`tokens/css/artifacts/{bithire,evnto,rottay}/index.css`) are build products assembled from the BrandTheme `.ts` file plus a declared `_source/extension.css`. Regenerate with `pnpm -C packages/core build:vertical-css`; hand-edits fail `lint:artifacts` (chained into `pretest` and `lint`).
 
 ## Icon System (109 curated icons)
 

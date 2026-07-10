@@ -8,8 +8,9 @@
  * Design: Vercel/Linear inspired - dark, sober, technical, premium.
  * Primary: #FFFFFF (white on dark), Canvas: #0C0C0E
  *
- * Source: tokens/css/artifacts/rottay/index.css (canonical visual reference).
- * This file MUST stay in sync with the CSS artifact.
+ * This file is the canonical authored source. tokens/css/artifacts/rottay/index.css
+ * is a generated build product — regenerate with `pnpm -C packages/core
+ * build:vertical-css`; hand-edits fail `lint:artifacts`.
  */
 
 import type { BrandTheme } from '../../../contracts/themes';

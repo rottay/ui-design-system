@@ -7,8 +7,9 @@
  * Design: Minimal light-first. Black primary on white canvas.
  * Warm beige/sand accents. Largest border radius of all brands.
  *
- * Source: tokens/css/artifacts/evnto/index.css (canonical visual reference).
- * This file MUST stay in sync with the CSS artifact.
+ * This file is the canonical authored source. tokens/css/artifacts/evnto/index.css
+ * is a generated build product — regenerate with `pnpm -C packages/core
+ * build:vertical-css`; hand-edits fail `lint:artifacts`.
  */
 
 import type { BrandTheme } from '../../../contracts/themes';
@@ -24,6 +25,7 @@ export const evntoBrandTheme: BrandTheme = {
     darkPrimaryColor: '#E8E8E0',
     darkSecondaryColor: '#A89880',
     darkAccentColor: '#A89880',
+    backgroundColor: '#FFFFFF',
     darkBackgroundColor: '#131210',
     successColor: '#15803D',
     warningColor: '#A16207',

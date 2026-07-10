@@ -10,8 +10,9 @@
  * component rules). This keeps the artifact a pure projection of authored
  * sources so drift cannot accumulate by hand-editing.
  *
- * Scope: bithire only (WO-DES-02). evnto/rottay stay hand-authored until their
- * own themes reach parity — do not regenerate them here.
+ * Scope: every slug in FIRST_PARTY_ARTIFACT_SPECS (bithire, evnto, rottay).
+ * themanagementmiami and the torture fixtures are deliberately not registered
+ * there and must not be added here.
  *
  * Usage:
  *   node scripts/build-vertical-artifacts.mjs           # write artifacts
@@ -32,6 +33,8 @@ import {
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../dist/runtime/tenant/storage/static/generator/index.js';
 import { bithireBrandTheme } from '../dist/tokens/ts/brand-themes/bithire.js';
+import { evntoBrandTheme } from '../dist/tokens/ts/brand-themes/evnto.js';
+import { rottayBrandTheme } from '../dist/tokens/ts/brand-themes/rottay.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
@@ -42,6 +45,8 @@ const REGENERATE_COMMAND = FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND;
 /** Resolve the authored BrandTheme for each first-party artifact slug. */
 const BRAND_THEMES = {
   bithire: bithireBrandTheme,
+  evnto: evntoBrandTheme,
+  rottay: rottayBrandTheme,
 };
 
 /** First-party artifacts this generator owns (spec is the shared source of truth). */
