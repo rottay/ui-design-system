@@ -194,7 +194,13 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     // Shared with the modern skin. The two engines paint a press differently --
     // modern uses --ds-state-press-scale, rustic --ds-button-active-transform --
     // but they no longer disagree about WHEN a part is pressed.
-    const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
+    // `busy` is inert, not merely styled inert: a control that cannot be
+    // activated must not report hover or press. The modern engine constructs the
+    // triad the same way, and `behavior/anatomy.ts` exists so the two cannot
+    // answer this differently.
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState({
+      disabled: disabled || busy,
+    });
     const isHovered = interaction.hovered;
     const isFocused = interaction.focusVisible;
     const isActive = interaction.pressed;
