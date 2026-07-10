@@ -17,7 +17,7 @@
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
 | WO-ARC-05 | Container queries + fluid scales | daniel | 2026-07-10 | 2026-07-10 10:26 — Unblocked half landed (commit fd21437a): fluid clamp() ramps, cqi-based, bounded by adjacent static steps; 35 assertions; 3 drills. Plus responsive.viewportMqInSkins (baseline 0, drilled both ways) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) are blocked on WO-ARC-07's Card/table/rail skins, not on ARC-03 — see the WO amendment. |
-| WO-ARC-07 | CSS-first skins for the primitives on the headless core | ds-agent | 2026-07-10 | 2026-07-10 10:43 — Correction to the previous entry, whose backticks the shell ate: ARC-03 amendment 2 warns that an Input focus BORDER keys on focused, not focusVisible. Conflating them would delete the border from every text field on click, and no baseline focuses anything. |
+| WO-ARC-07 | CSS-first skins for the primitives on the headless core | ds-agent | 2026-07-10 | 2026-07-10 11:09 — P-51 fixed at the root (rustic Card keyboard activation, 12 parity assertions, drilled). Card is now structurally migratable; what remains before its skin moves is a probe slug with a CLICKABLE card so states.spec.ts can photograph the focus ring, since the flagship gallery cards are hoverable-only and its 48 baselines must not move. |
 
 ## Next up (todo, dependencies satisfied)
 

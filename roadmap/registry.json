@@ -1391,6 +1391,11 @@
      "at": "2026-07-10 10:43",
      "by": "ds-agent",
      "note": "Correction to the previous entry, whose backticks the shell ate: ARC-03 amendment 2 warns that an Input focus BORDER keys on focused, not focusVisible. Conflating them would delete the border from every text field on click, and no baseline focuses anything."
+    },
+    {
+     "at": "2026-07-10 11:09",
+     "by": "ds-agent",
+     "note": "P-51 fixed at the root (rustic Card keyboard activation, 12 parity assertions, drilled). Card is now structurally migratable; what remains before its skin moves is a probe slug with a CLICKABLE card so states.spec.ts can photograph the focus ring, since the flagship gallery cards are hoverable-only and its 48 baselines must not move."
     }
    ]
   }
