@@ -740,3 +740,19 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Consequence for CSS-first skins** — a skin keyed on `[data-state~='hovered']` would animate a busy rustic button. Encoding `:not([data-loading])` into the stylesheet would carry the defect forward into the layer meant to be free of it.
 - **Ask** — pass `disabled: disabled || busy` in the rustic engine, drop the now-redundant `!loading` guards, and pin it with a cross-engine parity test that renders both engines busy and demands the same `data-state`. Any component that takes a busy prop should be swept the same way.
 - **Status** — OPEN.
+
+### P-51 A modern Card that says it is clickable cannot be clicked by a keyboard
+- **Found** — 2026-07-10, by WO-ARC-07, while checking whether the Card's focus ring could be certified before migrating it.
+- **Evidence** — rendered, not read:
+
+  | `<Card clickable />` | `cursor` | `tabindex` | `role` |
+  | --- | --- | --- | --- |
+  | modern | `pointer` | **absent** | **absent** |
+  | rustic | `pointer` | `0` | `button` |
+
+- **The cause** — `Card/engines/modern.tsx` gates the tab stop on `onClick`: `tabIndex={onClick ? 0 : undefined}`, `role={onClick ? 'button' : undefined}`, `onKeyDown={onClick ? handleKeyDown : undefined}`. Its cursor, though, is gated on `clickable || onClick`. `Card/engines/rustic.tsx` gates all of them on `clickable || onClick`.
+- **What it costs** — a modern card with `clickable` and no `onClick` paints a pointer cursor, announces nothing to a screen reader, takes no focus, and its Enter/Space handler is unreachable. The same markup under rustic is a focusable button. Same prop, same component, two answers.
+- **A second, quieter consequence** — `cardStyle`'s focus branch is `isFocused && onClick ? <shadow>, <ring> : <shadow>`. On a `clickable`-only card that branch can never run. It is not merely unreachable in the modern engine: it is unreachable *by construction*, and no test in the suite notices, because no test focuses a Card.
+- **Why ARC-07 did not fix it** — it is behaviour, not paint, and ARC-07's gate is pixel-identical. But it **blocks** the Card skin: a stylesheet that keys the ring on `[data-clickable][data-state~='focus-visible']` would be keying on a state the modern engine cannot enter.
+- **Ask** — one WO. Gate `tabIndex`, `role` and `onKeyDown` on `clickable || onClick` in the modern engine, matching rustic and matching its own cursor. Pin it with a cross-engine parity test in the shape of `Button.busy-parity.test.tsx`. Then add a clickable Card to a probe slug of its own — not to the flagship gallery, whose 48 baselines must not move — so `states.spec.ts` can photograph the focus ring the skin is about to inherit.
+- **Status** — OPEN. Card's CSS-first migration is blocked on it.
