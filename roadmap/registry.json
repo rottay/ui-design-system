@@ -833,7 +833,7 @@
    "lane": "architecture",
    "order": 5,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-ARC-03"
    ],
@@ -841,7 +841,16 @@
    "programs": [
     "P-08"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "daniel",
+   "claimedAt": "2026-07-10",
+   "progressLog": [
+    {
+     "at": "2026-07-10 10:26",
+     "by": "daniel",
+     "note": "Unblocked half landed (commit fd21437a): fluid clamp() ramps, cqi-based, bounded by adjacent static steps; 35 assertions; 3 drills. Plus responsive.viewportMqInSkins (baseline 0, drilled both ways) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) are blocked on WO-ARC-07's Card/table/rail skins, not on ARC-03 — see the WO amendment."
+    }
+   ]
   },
   {
    "id": "WO-CRA-06",

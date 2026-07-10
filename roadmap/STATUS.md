@@ -10,19 +10,19 @@
 | [craft](./craft.md) | 10 | 0 | 0 | 10 |
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
-| [architecture](./architecture.md) | 5 | 1 | 1 | 7 |
+| [architecture](./architecture.md) | 5 | 2 | 0 | 7 |
 
 ## In progress
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
+| WO-ARC-05 | Container queries + fluid scales | daniel | 2026-07-10 | 2026-07-10 10:26 — Unblocked half landed (commit fd21437a): fluid clamp() ramps, cqi-based, bounded by adjacent static steps; 35 assertions; 3 drills. Plus responsive.viewportMqInSkins (baseline 0, drilled both ways) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) are blocked on WO-ARC-07's Card/table/rail skins, not on ARC-03 — see the WO amendment. |
 | WO-ARC-07 | CSS-first skins for the primitives on the headless core | ds-agent | 2026-07-10 | 2026-07-10 09:26 — Button modern landed CSS-first and pixel-verified. Two blocking cascade findings (P-47, P-48) surfaced; Card and Input still to migrate. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-ARC-05 | Container queries + fluid scales | M | architecture | P-08 |
 
 ## Blocked (waiting on dependencies)
 
