@@ -24,7 +24,7 @@
   proposals; new items still follow the same law (owner approves 1:1, then a `### WO-` block +
   registry entry).
 
-## Five rules learned the hard way (2026-07-09)
+## Thirteen rules learned the hard way (2026-07-09 … 2026-07-10)
 
 Each of these was paid for. They are not style preferences.
 
@@ -103,6 +103,38 @@ Each of these was paid for. They are not style preferences.
    and a green typecheck. If a script must read a value the library owns, that
    value has to be reachable from a real entry — re-export it from the module
    whose concern it is, and the bundler will keep it.
+
+10. **No design-system cascade layer can paint a component.** `foundation/base.css`
+   declares seven layers (`rottay-reset` … `rottay-responsive`) and then imports
+   Tailwind, whose own `theme` / `base` / `utilities` layers are absent from that
+   statement and therefore sort AFTER all seven. Layer order beats specificity, so
+   a rule in `@layer rottay-engines` at (0,2,0) loses to preflight's
+   `button { background-color: transparent }` at (0,0,1). Measured on the shipped
+   bundle: the layered rule changed nothing; the identical rule, unlayered, painted.
+   That is why both interactive engines painted inline. A skin must be **unlayered**.
+   (P-47.)
+
+11. **Two classes is the floor for any rule that sets `border-color`.** Every tenant
+   ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) * { border-color: … }`
+   at (0,3,1). Every single-class component rule loses its border to it. A component
+   that names its own border must reach (0,4,0) — two classes plus the anatomy part
+   plus the variant. (P-48.)
+
+12. **A baseline that never hovers certifies nothing about hover.** The 48 visual
+   baselines photograph pages at rest. A skin could lose its entire hover rule, its
+   press transform and its focus ring with all of them green. `states.spec.ts`
+   records 132 computed cells across tenant × engine × variant × state, and it found
+   a real bug the moment it existed: the modern Button's hover set `borderColor` as a
+   longhand over a `border` shorthand, and once the pointer left, the colour fell
+   through to the cascade. Settle by THREE agreeing samples, not two — a spring
+   approaches its target asymptotically and two samples can agree on a plateau it
+   has not left.
+
+13. **Fix a rule in every emitter, then look for the third.** `token-consumption-ratio`
+   read a component's `.tsx` alone, so a skin consuming 169 `--ds-button-*` tokens
+   measured zero. Fixing `scripts/audit-integration.mjs` left its twin,
+   `token-fidelity.test.ts`, red — and the suite, not the reasoning, is what caught
+   it. Grep for the rule's *sentence*, not its file.
 
 ## The pre-existing failure baseline (measured, not assumed)
 
