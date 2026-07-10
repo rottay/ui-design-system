@@ -8,9 +8,16 @@ import {
   PatternDataTable,
   PatternFormBuilder,
   PatternStatsGrid,
+  SelectionPreviewRail,
   Switch,
 } from '@rottay/design-system';
-import type { ColumnDef, DropdownMenuItem, FieldDef, StatDef } from '@rottay/design-system';
+import type {
+  ColumnDef,
+  DropdownMenuItem,
+  FieldDef,
+  SelectionPreviewRailColumn,
+  StatDef,
+} from '@rottay/design-system';
 import type { FlagshipSpec } from './flagship-specs';
 
 // ---------------------------------------------------------------------------
@@ -69,6 +76,18 @@ const DATA_TABLE_COLUMNS: ColumnDef<ResponsiveTeamRow>[] = [
     key: 'status',
     header: 'Status',
     accessorKey: 'status',
+    render: (value: unknown) => <Badge variant={statusBadgeVariant(String(value))}>{String(value)}</Badge>,
+  },
+];
+
+// Same fields as DATA_TABLE_COLUMNS, shaped for the rail (title/dataIndex).
+const RAIL_COLUMNS: SelectionPreviewRailColumn<ResponsiveTeamRow>[] = [
+  { key: 'name', title: 'Name', dataIndex: 'name' },
+  { key: 'team', title: 'Team', dataIndex: 'team' },
+  {
+    key: 'status',
+    title: 'Status',
+    dataIndex: 'status',
     render: (value: unknown) => <Badge variant={statusBadgeVariant(String(value))}>{String(value)}</Badge>,
   },
 ];
@@ -215,6 +234,32 @@ export const RESPONSIVE_SPECS: FlagshipSpec[] = [
                 rowKey="id"
                 pagination={false}
                 style={{ width: '100%' }}
+              />
+            ),
+          },
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'rail',
+    name: 'Selection preview rail',
+    groups: [
+      {
+        label: 'States',
+        // The rail's own root already caps at min(100%, 380px); one real
+        // cell is enough here.
+        cells: [
+          {
+            label: 'Selected item',
+            node: (
+              <SelectionPreviewRail
+                item={DATA_TABLE_ROWS[0]}
+                itemKey={DATA_TABLE_ROWS[0].id}
+                itemIndex={0}
+                columns={RAIL_COLUMNS}
+                onClose={() => undefined}
+                mode="selection"
               />
             ),
           },

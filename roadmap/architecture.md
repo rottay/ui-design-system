@@ -276,7 +276,7 @@ after the fleet is on the core.
     (42-58px) are magnitudes the fluid tokens cannot express — leave them, file a spec-§7 finding.
   - **SEQUENCE (each a deployable checkpoint, ~1 build+gate cycle):** (1) capture harness + container-axis gallery
     FIRST (a probe route capturing one component at ~380/620/1160 wrappers inside one 1280 viewport, per tenant,
-    in the `signature.spec.ts` idiom) — zero component change, zero baseline movement, and its "before" gallery is
+    in the `flagships.spec.ts` idiom -- toHaveScreenshot with committed baselines, NOT signature.spec.ts which is pixel-math with none) — zero component change, zero baseline movement, and its "before" gallery is
     the evidence base for every later approval; (2) the data-table contract (priority field + stamps + container
     context + the two collapse rules + a demo page) — fleet-wide INERT (nobody sets priority, the container
     declaration adds no pixel), so the gate must show zero diff outside the demo baselines; (3) rail density +
