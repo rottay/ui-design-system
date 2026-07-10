@@ -238,10 +238,62 @@ after the fleet is on the core.
 - **Size** — M.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, add container-query adaptation + fluid scales from proposal P-08 (`roadmap/proposals.md`, APPROVED 2026-07-07). Depends on WO-ARC-03 (real CSS skins). Today exactly ONE `@container` rule exists in `packages/core/src` (`tokens/css/components/patterns.css:926`) and there is no foundation fluid scale (`foundation/base/typography.css` has zero `clamp()`). (1) Declare named container contexts (`container-type: inline-size`; names card|table|rail|pane) in the card, table/data-table, preview-rail/pane, and workspace-region skins under `packages/core/src/tokens/css/engines/{modern,rustic}/components/**`, folding the lone patterns.css rule into the scheme and documenting containers in the behavior contracts. (2) Add `@container` adaptations — cards stack meta below a named width, data-table collapses low-priority columns, rails/panes step density down — presentation only, layout intent stays component-owned (spec section 10). (3) Add `--ds-font-size-fluid-*` + `--ds-space-fluid-*` `clamp()` ramps to `packages/core/src/tokens/css/foundation/base/typography.css` and the spacing foundation, bounded by adjacent EXISTING static steps (no new magnitudes), consumed opt-in; apply the tenant-artifact rule (regenerate artifacts + `compilers/brand-theme` green) if any fluid token is compiler-emitted. (4) Extend the WO-ENG-12/WO-ENG-02 capture preset with a container-width axis (same component at rail-, half-, and full-width in one viewport) captured to `test-artifacts/architecture/arc-05/` under both tenant palettes (dark-surface rottay `#0A0A0C` + a light-surface tenant — no light/dark toggle, tenant palette decides). (5) Extend `scripts/engine-token-audit.mjs` with a `viewport-mq-in-skins` counter (decrease-only; container queries are the sanctioned mechanism) keeping every ENG-12 responsive counter green unchanged. Gate: build + `pnpm test` green; audit `--check` green (ENG-12 counters unchanged, new counter at/below baseline); sighted container-axis gallery reviewed; the WO-GAT-01 suite (command as registered by WO-GAT-01) green with full-width baselines unchanged and narrow-container adaptations explicitly approved; classic untouched. Run the showroom (`pnpm --filter @rottay/showroom run dev`, http://localhost:7001) and LOOK at the PNGs. Fences: never weaken ENG-12, no viewport media queries in skins, no layout intent in engines, no new magnitudes, edit-only, no commits, never git-restore directories, app-bithire and docs-engineering read-only, showroom dev server allowed.
 
-### WO-ARC-08 Workspace-tier CSS skins + container queries
+### WO-ARC-08 Workspace-tier container queries + fluid consumption (ADDITIVE)
+- **CONTRACT 2026-07-10 (Fable advisory, supersedes the paint-migration language below).** This WO is ADDITIVE
+  and does NOT migrate paint — that is WO-ARC-09. The container-query value is delivered on the components AS
+  THEY ARE (inline paint intact) by three additive moves, and this is what makes ARC-08 and ARC-09 independent:
+  - **Container contexts** on component ROOTS that ALREADY impose their own width (so `container-type: inline-size`
+    changes no sizing): the data-table root (`modern.tsx:893-899` and `rustic.tsx:653` already ship
+    `width:100%; minWidth:0; contain:layout style`) and the rail root (`width:min(100%,380px)`). Pre-ARC-09 the
+    declaration rides the existing inline style object (`containerType`/`containerName` in the TSX); ARC-09's
+    skins absorb it later, unchanged.
+  - **Container NAMES are idents, not custom properties.** A `@container` prelude cannot read a custom property,
+    and an unnamed query resolves the NEAREST container (wrong the moment a card sits in a rail). The scheme is
+    `container-name: ds-table | ds-rail | ds-card` (drop "pane" — no split-pane component exists). EVERY `@container`
+    prelude is name-qualified; an audit counter enforces it and the sanctioned widths.
+  - **`@container` rules may do ONLY two things** until ARC-09: set `--ds-*` custom properties (inline paint
+    consumes them via `var()`; where an inline value is a literal, first change it to `var(--ds-x, <old literal>)`
+    — zero-pixel by construction), and set `display` on priority-stamped cells (nothing paints `display` on
+    th/td inline or via preflight/DaisyUI). This is the proven mechanism of the lone existing rule at
+    `patterns.css:926`, which this WO folds into the scheme.
+  - **Two documented breakpoint LITERALS:** `640px` (column-priority collapse) and `480px` (density/meta-stack).
+    Not one — a 600px table wants fewer columns but not compact density.
+  - **Column priority:** a new minimal `priority?: 'low'` field on the column def, stamped `data-col-priority` on
+    every th/td, CONSUMER-assigned (never a default/heuristic — `display:none` makes the column's data
+    unreachable in a narrow container, so it is opt-in per column). Does NOT overload `pin` (pinned never
+    collapses) or `mobileCardBreakpoint` (a viewport-gated whole-table posture switch, a different coexisting
+    mechanism).
+  - **§10 (component-owned layout):** collapse is component-owned IFF the axis is declared in `DataTable.types.ts`
+    + the behavior contract, the threshold is a documented component constant, and the rule lives in shared
+    ENGINE-AGNOSTIC pattern CSS (unlayered `patterns.css`, one rule covering both engines via the shared root
+    class), NOT duplicated per-engine skin. Classic (antd) never stamps priorities and never collapses — a
+    declared divergence so the §10 metric does not misfire.
+  - **Fluid consumption is SCOPED, never blanket** (the ramps ship "opt-in, nothing consumes by default"). First
+    spots: `collection/index.tsx:241` default-title branch → `--ds-font-size-fluid-4xl` (moves the 1280 baseline
+    too: 30→36px, a real improvement — the hand-rolled `clamp(3xl, 2vw, 4xl)` is inert below ~1500px today); the
+    metric-card value via `--ds-metric-card-value-size: var(--ds-font-size-fluid-4xl)` (retires `patterns.css:926`);
+    rail/pane `--ds-space-fluid-*` only where ENG-12 evidence shows cramping. The off-scale header branches
+    (42-58px) are magnitudes the fluid tokens cannot express — leave them, file a spec-§7 finding.
+  - **SEQUENCE (each a deployable checkpoint, ~1 build+gate cycle):** (1) capture harness + container-axis gallery
+    FIRST (a probe route capturing one component at ~380/620/1160 wrappers inside one 1280 viewport, per tenant,
+    in the `signature.spec.ts` idiom) — zero component change, zero baseline movement, and its "before" gallery is
+    the evidence base for every later approval; (2) the data-table contract (priority field + stamps + container
+    context + the two collapse rules + a demo page) — fleet-wide INERT (nobody sets priority, the container
+    declaration adds no pixel), so the gate must show zero diff outside the demo baselines; (3) rail density +
+    card meta-stack; (4) fluid consumption LAST (a container context changes what `cqi` means beneath it, so
+    consume-then-contain would move the same pixels twice and double-approve).
+  - **BIGGEST RISK:** treating `container-type: inline-size` as styling when it is a PUBLIC LAYOUT CONTRACT — it
+    permanently zeroes the element's intrinsic-width contribution (collapses any consumer that sizes it by
+    content), and every `cqi` consumer beneath a new context silently re-resolves. Mitigated exactly by the
+    sequence above: contexts only on roots that already impose their width (both targets verified), contexts
+    before any consumption, every query named.
+  - **Gate reword:** "full-width renderings unchanged EXCEPT the enumerated fluid-consumption approvals" (step-4
+    fluid legitimately moves the 1280 header title 30→36px; "byte-identical" would force the executor to skip
+    sanctioned consumption or fudge the diff).
 - **Provenance** — Carved from WO-ARC-05 on 2026-07-10 (owner-delegated decision), exactly as WO-ARC-07 was
   carved from WO-ARC-03. ARC-05 shipped the fluid-scale foundation; this WO carries the container-query half
-  it could not, because that half needs CSS skins the workspace tier does not yet have.
+  it could not. (The paint-migration language in the Outcome/Steps below is SUPERSEDED by the additive contract
+  above and lives in WO-ARC-09.)
 - **Outcome** — The workspace-tier components the DS renders at many widths inside one viewport — the table /
   data-table, the preview rail, and the split pane — paint from unlayered engine skins in the WO-ARC-07
   pattern (`tokens/css/engines/{modern,rustic}/skin/*.css`, keyed on the `data-part`/`data-state` contract),
