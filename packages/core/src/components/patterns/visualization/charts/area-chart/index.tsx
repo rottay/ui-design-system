@@ -41,8 +41,10 @@ import {
 
 import type { ChartBaseProps, Series } from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
+import { ChartTooltip, TooltipSeries } from '../tooltip';
+import { createChartCrosshair, nearestIndexByPixel, plotLocalPointerPosition, pointerToContainerPosition } from '../tooltip/crosshair';
 
 /** Props for the {@link AreaChart} component. */
 export interface AreaChartProps extends ChartBaseProps {
@@ -90,6 +92,7 @@ export const AreaChart = memo(function AreaChart({
   const chartPersonality = useChartPersonality({ animate, curved, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
@@ -293,20 +296,68 @@ export const AreaChart = memo(function AreaChart({
           }
         }
 
-        if (chartPersonality.tooltip) {
-          g.selectAll(`.dot-area-${i}`)
-            .data(s.data)
-            .enter()
-            .append('circle')
-            .attr('cx', (d) => x(String(d.x)) ?? 0)
-            .attr('cy', (d) => y(d.y))
-            .attr('r', 3)
-            .attr('fill', color)
-            .attr('opacity', 0)
-            .append('title')
-            .text((d) => compactState.compactTooltip ? String(d.y) : `${s.name}: ${d.y}`);
-        }
       });
+    }
+
+    // Unified crosshair + tooltip (shared by stacked and non-stacked mode):
+    // one full-plot hit target snaps to the nearest category and shows every
+    // series' value at that x. Stacked mode places each focus dot at the
+    // segment's cumulative height (where its layer boundary actually draws)
+    // while the tooltip still reports each series' own contribution, not the
+    // running total.
+    if (chartPersonality.tooltip) {
+      const crosshair = createChartCrosshair(g, innerWidth, innerHeight);
+      const categoryPositions = categories.map((cat) => x(cat) ?? 0);
+
+      g.append('rect')
+        .attr('class', 'chart-hover-overlay')
+        .attr('width', innerWidth)
+        .attr('height', innerHeight)
+        .attr('fill', 'transparent')
+        .style('pointer-events', 'all')
+        .on('mousemove', (event: MouseEvent) => {
+          const local = plotLocalPointerPosition(event, svgRef.current, margin);
+          if (!local) return;
+          const idx = nearestIndexByPixel(local.x, categoryPositions);
+          const cat = categories[idx];
+          if (cat === undefined) return;
+          const catX = categoryPositions[idx];
+
+          const focusPoints: Array<{ y: number; color: string }> = [];
+          const rows: Array<{ name: string; value: number; color: string }> = [];
+          let cumulative = 0;
+          series.forEach((s, i) => {
+            const color = s.color ?? palette[i % palette.length];
+            const point = s.data.find((d) => String(d.x) === cat);
+            if (!point) return;
+            cumulative += stacked ? point.y : 0;
+            focusPoints.push({ y: stacked ? y(cumulative) : y(point.y), color });
+            rows.push({ name: s.name, value: point.y, color });
+          });
+
+          if (rows.length === 0) {
+            crosshair.hide();
+            hideTooltip();
+            return;
+          }
+
+          crosshair.show(catX, focusPoints, focusPoints.length === 1 ? focusPoints[0].y : undefined);
+
+          const pos = pointerToContainerPosition(event, containerRef.current);
+          if (!pos) return;
+          showTooltip(
+            pos.x,
+            pos.y,
+            <TooltipSeries
+              title={compactState.compactTooltip ? undefined : cat}
+              items={rows.map((row) => ({ name: compactState.compactTooltip ? '' : row.name, value: row.value, color: row.color }))}
+            />
+          );
+        })
+        .on('mouseleave', () => {
+          crosshair.hide();
+          hideTooltip();
+        });
     }
 
     if (xAxisLabel) {
@@ -318,7 +369,14 @@ export const AreaChart = memo(function AreaChart({
 
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [series, chartWidth, chartHeight, stacked, opacity, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
+
+    // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
+    // above), which would otherwise leave a stale React-side tooltip pointing at
+    // removed nodes.
+    return () => {
+      hideTooltip();
+    };
+  }, [series, chartWidth, chartHeight, stacked, opacity, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
 
   return (
     <ChartScaffold
@@ -342,6 +400,7 @@ export const AreaChart = memo(function AreaChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
+      overlay={<ChartTooltip {...tooltipProps} />}
     />
   );
 });

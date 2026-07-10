@@ -27,8 +27,10 @@ import { axisBottom, axisLeft, extent, max, min, scaleLinear, scaleSqrt, select 
 
 import type { ChartBaseProps } from '../Charts.types';
 import { DEFAULT_COLORS, DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
+import { ChartTooltip, TooltipSeries } from '../tooltip';
+import { createChartCrosshair, pointerToContainerPosition } from '../tooltip/crosshair';
 
 /** A single data point in the scatter plot. */
 export interface ScatterDataPoint {
@@ -133,6 +135,7 @@ export const ScatterChart = memo(function ScatterChart({
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
@@ -301,16 +304,43 @@ export const ScatterChart = memo(function ScatterChart({
       .attr('stroke-width', 1)
       .attr('stroke-opacity', 0.9);
 
-    // Tooltips
+    // Crosshair + tooltip, attached per-point (scatter points are already
+    // discrete hit targets -- unlike line/bar there is no "nearest x" to
+    // snap to between them) -- replaces the native <title> tooltip so hover
+    // feedback is consistent with the rest of the chart family.
     if (chartPersonality.tooltip) {
-      circles.append('title').text((d) => {
-        const labelPart = d.label ? `${d.label}: ` : '';
-        const coords = `x=${d.x}, y=${d.y}`;
-        const sizePart = bubble && d.size != null ? `, size=${d.size}` : '';
-        return compactState.compactTooltip
-          ? `${d.x}, ${d.y}`
-          : `${labelPart}${coords}${sizePart}`;
-      });
+      const crosshair = createChartCrosshair(g, innerWidth, innerHeight);
+
+      circles
+        .style('cursor', 'pointer')
+        .on('mouseenter mousemove', (event: MouseEvent, d) => {
+          const cx = x(d.x);
+          const cy = y(d.y);
+          const color = String(select(event.currentTarget as SVGCircleElement).attr('fill'));
+
+          crosshair.show(cx, [{ y: cy, color }], cy);
+
+          const pos = pointerToContainerPosition(event, containerRef.current);
+          if (!pos) return;
+
+          const compact = compactState.compactTooltip;
+          showTooltip(
+            pos.x,
+            pos.y,
+            <TooltipSeries
+              title={compact ? undefined : d.label}
+              items={[
+                { name: compact ? '' : 'x', value: d.x, color },
+                { name: compact ? '' : 'y', value: d.y, color },
+                ...(bubble && d.size != null ? [{ name: compact ? '' : 'size', value: d.size, color }] : []),
+              ]}
+            />
+          );
+        })
+        .on('mouseleave', () => {
+          crosshair.hide();
+          hideTooltip();
+        });
     }
 
     // Fade-in animation
@@ -357,7 +387,14 @@ export const ScatterChart = memo(function ScatterChart({
     // Style axis lines
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [data, chartWidth, chartHeight, pointRadius, bubble, sizeRange, grid, opacity, trendLine, chartPersonality, colors, margin, xLabel, yLabel, tickCount, compactState.compactTooltip]);
+
+    // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
+    // above), which would otherwise leave a stale React-side tooltip pointing at
+    // removed nodes.
+    return () => {
+      hideTooltip();
+    };
+  }, [data, chartWidth, chartHeight, pointRadius, bubble, sizeRange, grid, opacity, trendLine, chartPersonality, colors, margin, xLabel, yLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
 
   return (
     <ChartScaffold
@@ -383,6 +420,7 @@ export const ScatterChart = memo(function ScatterChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
+      overlay={<ChartTooltip {...tooltipProps} />}
     />
   );
 });

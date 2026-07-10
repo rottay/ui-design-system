@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import { AreaChart, LineChart } from '..';
 import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
@@ -191,10 +191,27 @@ describe('Area and line chart advanced coverage', () => {
     expect(screen.getByText('Seated', { selector: 'span' })).toBeInTheDocument();
     expect(screen.getByText('Standing', { selector: 'span' })).toBeInTheDocument();
 
+    let overlay!: SVGRectElement;
     await waitFor(() => {
       expect(container.querySelectorAll('linearGradient').length).toBe(0);
-      expect(container.querySelectorAll('title').length).toBeGreaterThan(2);
-      expect(container.querySelectorAll('circle').length).toBeGreaterThan(2);
+      overlay = container.querySelector('.chart-hover-overlay') as SVGRectElement;
+      expect(overlay).toBeTruthy();
     });
+
+    // WO-CRA-04: native <title> tooltips are replaced by the shared crosshair
+    // + ChartTooltip overlay -- hovering the plot snaps to the nearest
+    // category and shows every series' value at that x.
+    expect(container.querySelectorAll('title').length).toBe(0);
+
+    fireEvent.mouseMove(overlay, { clientX: 10, clientY: 10 });
+
+    const tooltip = screen.getByRole('tooltip');
+    expect(tooltip.style.visibility).toBe('visible');
+    expect(tooltip).toHaveTextContent('Seated');
+    expect(tooltip).toHaveTextContent('Standing');
+    expect(container.querySelectorAll('.chart-crosshair-dot').length).toBe(2);
+
+    fireEvent.mouseLeave(overlay);
+    expect(tooltip.style.visibility).toBe('hidden');
   });
 });

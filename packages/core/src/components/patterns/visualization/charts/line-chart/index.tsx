@@ -39,8 +39,10 @@ import {
 
 import type { ChartBaseProps, Series } from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
+import { ChartTooltip, TooltipSeries } from '../tooltip';
+import { createChartCrosshair, nearestIndexByPixel, plotLocalPointerPosition, pointerToContainerPosition } from '../tooltip/crosshair';
 
 /** Props for the {@link LineChart} component. */
 export interface LineChartProps extends ChartBaseProps {
@@ -90,6 +92,7 @@ export const LineChart = memo(function LineChart({
   const chartPersonality = useChartPersonality({ animate, curved, showDots, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
@@ -273,7 +276,7 @@ export const LineChart = memo(function LineChart({
 
       // Dots
       if (chartPersonality.showDots) {
-        const dots = g
+        g
           .selectAll(`.dot-${i}`)
           .data(s.data)
           .enter()
@@ -284,12 +287,68 @@ export const LineChart = memo(function LineChart({
           .attr('fill', color)
           .attr('stroke', 'var(--ds-color-bg-primary)')
           .attr('stroke-width', 2);
-
-        if (chartPersonality.tooltip) {
-          dots.append('title').text((d) => compactState.compactTooltip ? String(d.y) : `${s.name}: ${d.y}`);
-        }
       }
     });
+
+    // Unified crosshair + tooltip: one full-plot hit target tracks the mouse,
+    // snaps to the nearest x (category tick, or nearest point's x in time/
+    // linear mode), and shows every series' value at that x -- replacing the
+    // per-dot native <title> tooltip so hover feedback is consistent with
+    // every other chart in the family.
+    if (chartPersonality.tooltip) {
+      const crosshair = createChartCrosshair(g, innerWidth, innerHeight);
+      const snapCandidates: Array<{ value: string | number | Date; px: number }> =
+        xType === 'category'
+          ? (x as ScalePoint<string>).domain().map((cat) => ({ value: cat, px: (x as ScalePoint<string>)(cat) ?? 0 }))
+          : allPoints.map((d) => ({ value: d.x, px: getX(d) }));
+
+      g.append('rect')
+        .attr('class', 'chart-hover-overlay')
+        .attr('width', innerWidth)
+        .attr('height', innerHeight)
+        .attr('fill', 'transparent')
+        .style('pointer-events', 'all')
+        .on('mousemove', (event: MouseEvent) => {
+          const local = plotLocalPointerPosition(event, svgRef.current, margin);
+          if (!local) return;
+          const idx = nearestIndexByPixel(local.x, snapCandidates.map((c) => c.px));
+          const snapped = snapCandidates[idx];
+          if (!snapped) return;
+
+          const focusPoints: Array<{ y: number; color: string }> = [];
+          const rows: Array<{ name: string; value: number; color: string }> = [];
+          series.forEach((s, i) => {
+            const color = s.color ?? palette[i % palette.length];
+            const match = s.data.find((d) => String(d.x) === String(snapped.value));
+            if (!match) return;
+            focusPoints.push({ y: y(match.y), color });
+            rows.push({ name: s.name, value: match.y, color });
+          });
+
+          if (rows.length === 0) {
+            crosshair.hide();
+            hideTooltip();
+            return;
+          }
+
+          crosshair.show(snapped.px, focusPoints, focusPoints.length === 1 ? focusPoints[0].y : undefined);
+
+          const pos = pointerToContainerPosition(event, containerRef.current);
+          if (!pos) return;
+          showTooltip(
+            pos.x,
+            pos.y,
+            <TooltipSeries
+              title={compactState.compactTooltip ? undefined : String(snapped.value)}
+              items={rows.map((row) => ({ name: compactState.compactTooltip ? '' : row.name, value: row.value, color: row.color }))}
+            />
+          );
+        })
+        .on('mouseleave', () => {
+          crosshair.hide();
+          hideTooltip();
+        });
+    }
 
     // Axis labels
     if (xAxisLabel) {
@@ -317,7 +376,14 @@ export const LineChart = memo(function LineChart({
 
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [series, chartWidth, chartHeight, showArea, xType, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
+
+    // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
+    // above), which would otherwise leave a stale React-side tooltip pointing at
+    // removed nodes.
+    return () => {
+      hideTooltip();
+    };
+  }, [series, chartWidth, chartHeight, showArea, xType, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
 
   return (
     <ChartScaffold
@@ -340,6 +406,7 @@ export const LineChart = memo(function LineChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
+      overlay={<ChartTooltip {...tooltipProps} />}
     />
   );
 });

@@ -110,19 +110,34 @@ export type ChartColorScheme =
   | 'monochrome'
   | 'accessible';
 
-/** Default 10-color palette using mid-range design system token values */
-export const DEFAULT_COLORS = [
-  'var(--ds-color-primary-500)',
-  'var(--ds-color-info-500)',
-  'var(--ds-color-success-500)',
-  'var(--ds-color-warning-500)',
-  'var(--ds-color-error-500)',
-  'var(--ds-color-secondary-500)',
-  'var(--ds-color-primary-300)',
-  'var(--ds-color-info-300)',
-  'var(--ds-color-success-300)',
-  'var(--ds-color-secondary-300)',
+/**
+ * Colorblind-safe categorical palette using perceptually distinct hues.
+ * Based on established accessible color sets (Wong, 2011). Fixed hex rather
+ * than `--ds-color-*` tokens: colorblind distinctness is validated against
+ * these exact values, not against whatever hue a tenant assigns to primary.
+ */
+export const ACCESSIBLE_COLORS = [
+  '#0072B2', // blue
+  '#E69F00', // orange
+  '#009E73', // bluish green
+  '#CC79A7', // reddish purple
+  '#F0E442', // yellow
+  '#56B4E9', // sky blue
+  '#D55E00', // vermilion
+  '#000000', // black
+  '#999999', // grey
+  '#661100', // dark red
 ];
+
+/**
+ * Default 10-color palette for a no-config chart. Equal to the accessible
+ * Wong (2011) sequence: a rotation through primary/info/success/warning/
+ * error/secondary at matching weight puts 6 distinct hues -- 3 of them
+ * status-semantic (success/warning/error) -- in front of a chart the moment
+ * it has 3+ series, which both reads as a rainbow and repurposes status
+ * colors as arbitrary category colors.
+ */
+export const DEFAULT_COLORS = ACCESSIBLE_COLORS;
 
 /** Lighter, softer tones for dashboards that favor a calm aesthetic */
 export const PASTEL_COLORS = [
@@ -164,23 +179,6 @@ export const MONOCHROME_COLORS = [
   'var(--ds-color-primary-100)',
   'var(--ds-color-primary-50)',
   'var(--ds-color-primary-800)',
-];
-
-/**
- * Colorblind-safe palette using perceptually distinct hues.
- * Based on established accessible color sets (Wong, 2011).
- */
-export const ACCESSIBLE_COLORS = [
-  '#0072B2', // blue
-  '#E69F00', // orange
-  '#009E73', // bluish green
-  '#CC79A7', // reddish purple
-  '#F0E442', // yellow
-  '#56B4E9', // sky blue
-  '#D55E00', // vermilion
-  '#000000', // black
-  '#999999', // grey
-  '#661100', // dark red
 ];
 
 /** Map from colorScheme name to the corresponding palette */

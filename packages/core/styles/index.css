@@ -21950,7 +21950,7 @@ html {
  *
  * This file is a BUILD OUTPUT assembled from two authored sources; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   1. tokens/ts/brand-themes/rottay.ts (compiled via compileBrandTheme)
+ *   1. tokens/ts/brand-themes/platform/rottay.ts (compiled via compileBrandTheme)
  *   2. tokens/css/artifacts/rottay/_source/extension.css (declared extension)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
@@ -25345,7 +25345,7 @@ html[data-tenant='rottay'].light {
  *
  * This file is a BUILD OUTPUT assembled from two authored sources; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   1. tokens/ts/brand-themes/bithire.ts (compiled via compileBrandTheme)
+ *   1. tokens/ts/brand-themes/bithire/bithire.ts (compiled via compileBrandTheme)
  *   2. tokens/css/artifacts/bithire/_source/extension.css (declared extension)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css
@@ -31394,7 +31394,7 @@ html[data-tenant="bithire"]
  *
  * This file is a BUILD OUTPUT assembled from two authored sources; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   1. tokens/ts/brand-themes/evnto.ts (compiled via compileBrandTheme)
+ *   1. tokens/ts/brand-themes/evnto/evnto.ts (compiled via compileBrandTheme)
  *   2. tokens/css/artifacts/evnto/_source/extension.css (declared extension)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css

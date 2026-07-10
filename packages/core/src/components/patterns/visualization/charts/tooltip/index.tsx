@@ -54,7 +54,7 @@ const TOOLTIP_STYLE: CSSProperties = {
   position: 'absolute',
   pointerEvents: 'none',
   zIndex: 10,
-  background: 'var(--ds-color-bg-elevated, #1a1a1e)',
+  background: 'var(--ds-color-bg-elevated)',
   border: '1px solid var(--ds-color-border)',
   color: 'var(--ds-color-text-primary)',
   boxShadow: 'var(--ds-shadow-lg)',
@@ -63,7 +63,7 @@ const TOOLTIP_STYLE: CSSProperties = {
   fontSize: 12,
   maxWidth: 280,
   whiteSpace: 'nowrap',
-  transition: 'opacity 150ms ease',
+  transition: 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)',
 };
 
 // ---------------------------------------------------------------------------
@@ -229,9 +229,11 @@ export function TooltipSeries({
           {title}
         </div>
       ) : null}
-      {items.map((item) => (
+      {items.map((item, index) => (
         <div
-          key={item.name}
+          // `name` is not guaranteed unique -- compact mode (crosshair tooltips)
+          // renders every row with an empty name, swatch-only.
+          key={`${item.name}-${index}`}
           style={{ display: 'flex', alignItems: 'center', gap: 6 }}
         >
           <span style={{ ...SWATCH_STYLE, backgroundColor: item.color }} />

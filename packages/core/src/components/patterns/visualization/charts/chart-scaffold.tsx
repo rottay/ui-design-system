@@ -50,6 +50,15 @@ interface ChartScaffoldProps {
   hideLegend?: boolean;
   /** Minimum height override for compact mode (applied as CSS min-height on container) */
   minHeight?: number;
+  /**
+   * Absolutely-positioned overlay rendered as a sibling of the svg, inside
+   * the same `position: relative` container -- the seam a chart uses to
+   * mount `<ChartTooltip>`. Kept outside the svg because D3-backed charts
+   * wipe and rebuild their svg subtree imperatively (`selectAll('*').remove()`
+   * on every data change); a React-rendered overlay in that subtree would
+   * fight D3 for DOM ownership of the same nodes.
+   */
+  overlay?: ReactNode;
 }
 
 /**
@@ -130,6 +139,7 @@ export function ChartScaffold({
   legend,
   hideLegend = false,
   minHeight,
+  overlay,
 }: ChartScaffoldProps) {
   const descriptionId = useId();
   const titleId = useId();
@@ -260,7 +270,7 @@ export function ChartScaffold({
         // that set an explicit size (hero gauge value, sized value labels) keep
         // it; only otherwise-unsized labels snap to the detail token.
         style={{
-          fontVariantNumeric: 'tabular-nums',
+          fontVariantNumeric: 'var(--ds-numeric-tabular)' as CSSProperties['fontVariantNumeric'],
           fontSize: 'var(--ds-font-size-xs)',
         }}
         aria-label={ariaLabel}
@@ -272,6 +282,8 @@ export function ChartScaffold({
         <title id={svgTitleId}>{ariaLabel}</title>
         <desc id={svgDescId}>{ariaDescription}</desc>
       </svg>
+
+      {overlay ?? null}
 
       {hideLegend ? null : (legend ?? null)}
     </div>

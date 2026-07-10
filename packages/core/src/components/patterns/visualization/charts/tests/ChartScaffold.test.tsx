@@ -42,8 +42,10 @@ describe('ChartScaffold', () => {
 
     // Axis + value labels inherit tabular figures at the detail-size token from
     // the scaffold svg, so no chart wires it per-screen (WO-DES-12 §8.3/A5.5).
+    // WO-CRA-04: routed through CRA-01's tabular-nums token instead of the
+    // literal 'tabular-nums' string it resolves to.
     const svg = screen.getByRole('img', { name: 'Typography chart' }) as unknown as SVGSVGElement;
-    expect(svg.style.fontVariantNumeric).toBe('tabular-nums');
+    expect(svg.style.fontVariantNumeric).toBe('var(--ds-numeric-tabular)');
     expect(svg.style.fontSize).toBe('var(--ds-font-size-xs)');
   });
 

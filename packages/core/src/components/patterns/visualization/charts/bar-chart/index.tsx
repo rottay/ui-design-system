@@ -46,12 +46,14 @@
  */
 
 import { memo, useEffect, useMemo, useRef } from 'react';
-import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select, stack, sum } from 'd3';
+import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select, stack, sum, type Selection } from 'd3';
 
 import type { ChartBaseProps, DataPoint, Series } from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality, useChartCompact } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
+import { ChartTooltip, TooltipSeries, TooltipValue } from '../tooltip';
+import { createChartCrosshair, pointerToContainerPosition } from '../tooltip/crosshair';
 
 /** Props for the {@link BarChart} component. */
 export interface BarChartProps extends ChartBaseProps {
@@ -112,6 +114,7 @@ export const BarChart = memo(function BarChart({
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
   const palette = colors && colors.length > 0 ? colors : chartPersonality.colors;
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
+  const { show: showTooltip, hide: hideTooltip, tooltipProps } = useChartTooltip();
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
   const tickCount = compactState.isCompact ? compactState.maxTicks : 5;
@@ -207,6 +210,54 @@ export const BarChart = memo(function BarChart({
       .append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
+    // Crosshair is created once every bar is drawn (assigned at the bottom of
+    // this effect) so it paints on top of the bars; `attachBarHover` closures
+    // over the `let` below and only reads it at hover time, once it is set.
+    let crosshair: ReturnType<typeof createChartCrosshair> | null = null;
+
+    // Per-bar hover: crosshair (vertical guide through the bar's center +
+    // horizontal guide at its value) plus the shared tooltip. Attached
+    // directly to each bar (not a continuous mousemove-tracked overlay, the
+    // line/area approach) since bars are discrete marks -- there is no
+    // "in-between" position worth snapping to. `extract`'s datum stays `any`
+    // to match this file's existing casts for the grouped branches, where
+    // `.each()` rebinds each bar's datum to an ad-hoc {category, value,
+    // seriesName} shape D3's static typing does not track.
+    const attachBarHover = (
+      selection: Selection<SVGRectElement, any, any, unknown>,
+      extract: (d: any) => { cx: number; cy: number; label: string; value: number; seriesName?: string },
+    ): void => {
+      if (!chartPersonality.tooltip) return;
+      selection
+        .style('cursor', 'pointer')
+        .on('mouseenter mousemove', (event: MouseEvent, d: any) => {
+          const { cx, cy, label, value, seriesName } = extract(d);
+          const color = String(select(event.currentTarget as SVGRectElement).attr('fill'));
+
+          crosshair?.show(cx, [{ y: cy, color }], cy);
+
+          const pos = pointerToContainerPosition(event, containerRef.current);
+          if (!pos) return;
+          const compact = compactState.compactTooltip;
+          showTooltip(
+            pos.x,
+            pos.y,
+            seriesName ? (
+              <TooltipSeries
+                title={compact ? undefined : label}
+                items={[{ name: compact ? '' : seriesName, value, color }]}
+              />
+            ) : (
+              <TooltipValue label={compact ? '' : label} value={value} color={color} />
+            )
+          );
+        })
+        .on('mouseleave', () => {
+          crosshair?.hide();
+          hideTooltip();
+        });
+    };
+
     // ── Multi-series rendering (grouped or stacked) ─────────────────────────
     if (isMultiSeries) {
       const seriesNames = series!.map((s) => s.name);
@@ -283,13 +334,16 @@ export const BarChart = memo(function BarChart({
               .attr('ry', layerIdx === stackedData.length - 1 ? barRadius : 0)
               .attr('fill', color);
 
-            if (chartPersonality.tooltip) {
-              bars.append('title').text((d) => {
-                const cat = (d.data as Record<string, string>).__category;
-                const val = d[1] - d[0];
-                return compactState.compactTooltip ? String(val) : `${cat} - ${seriesName}: ${val}`;
-              });
-            }
+            attachBarHover(bars, (d) => {
+              const cat = (d.data as Record<string, string>).__category;
+              return {
+                cx: (x0(cat) ?? 0) + x0.bandwidth() / 2,
+                cy: y(d[1]),
+                label: cat,
+                value: d[1] - d[0],
+                seriesName,
+              };
+            });
 
             if (chartPersonality.animate) {
               bars
@@ -383,11 +437,13 @@ export const BarChart = memo(function BarChart({
                 select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesName: s.name });
               });
 
-            if (chartPersonality.tooltip) {
-              bars.append('title').text((d: any) =>
-                compactState.compactTooltip ? String(d.value) : `${d.category} - ${d.seriesName}: ${d.value}`
-              );
-            }
+            attachBarHover(bars, (d: any) => ({
+              cx: (x0(d.category) ?? 0) + (x1(d.seriesName) ?? 0) + x1.bandwidth() / 2,
+              cy: y(d.value),
+              label: d.category,
+              value: d.value,
+              seriesName: d.seriesName,
+            }));
 
             if (chartPersonality.animate) {
               bars
@@ -469,13 +525,16 @@ export const BarChart = memo(function BarChart({
               .attr('ry', layerIdx === stackedData.length - 1 ? barRadius : 0)
               .attr('fill', color);
 
-            if (chartPersonality.tooltip) {
-              bars.append('title').text((d) => {
-                const cat = (d.data as Record<string, string>).__category;
-                const val = d[1] - d[0];
-                return compactState.compactTooltip ? String(val) : `${cat} - ${seriesName}: ${val}`;
-              });
-            }
+            attachBarHover(bars, (d) => {
+              const cat = (d.data as Record<string, string>).__category;
+              return {
+                cx: x(d[1]),
+                cy: (y0(cat) ?? 0) + y0.bandwidth() / 2,
+                label: cat,
+                value: d[1] - d[0],
+                seriesName,
+              };
+            });
 
             if (chartPersonality.animate) {
               bars
@@ -538,11 +597,13 @@ export const BarChart = memo(function BarChart({
                 select(this).datum({ category: _cat, value: pt ? pt.y : 0, seriesName: s.name });
               });
 
-            if (chartPersonality.tooltip) {
-              bars.append('title').text((d: any) =>
-                compactState.compactTooltip ? String(d.value) : `${d.category} - ${d.seriesName}: ${d.value}`
-              );
-            }
+            attachBarHover(bars, (d: any) => ({
+              cx: x(d.value),
+              cy: (y0(d.category) ?? 0) + (y1(d.seriesName) ?? 0) + y1.bandwidth() / 2,
+              label: d.category,
+              value: d.value,
+              seriesName: d.seriesName,
+            }));
 
             if (chartPersonality.animate) {
               bars
@@ -604,9 +665,12 @@ export const BarChart = memo(function BarChart({
           .attr('ry', barRadius)
           .attr('fill', (d, i) => d.color ?? palette[i % palette.length]);
 
-        if (chartPersonality.tooltip) {
-          bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
-        }
+        attachBarHover(bars, (d) => ({
+          cx: (x(d.label) ?? 0) + x.bandwidth() / 2,
+          cy: y(d.value),
+          label: d.label,
+          value: d.value,
+        }));
 
         if (chartPersonality.animate) {
           bars
@@ -670,9 +734,12 @@ export const BarChart = memo(function BarChart({
           .attr('ry', barRadius)
           .attr('fill', (d, i) => d.color ?? palette[i % palette.length]);
 
-        if (chartPersonality.tooltip) {
-          bars.append('title').text((d) => compactState.compactTooltip ? String(d.value) : `${d.label}: ${d.value}`);
-        }
+        attachBarHover(bars, (d) => ({
+          cx: x(d.value),
+          cy: (y(d.label) ?? 0) + y.bandwidth() / 2,
+          label: d.label,
+          value: d.value,
+        }));
 
         if (chartPersonality.animate) {
           bars
@@ -730,7 +797,20 @@ export const BarChart = memo(function BarChart({
     // Style axis lines
     svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
-  }, [data, series, isMultiSeries, singleData, categories, seriesColors, stacked, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip]);
+
+    // Assigned last so the crosshair paints on top of every bar; the
+    // `attachBarHover` closures above only read `crosshair` at hover time.
+    if (chartPersonality.tooltip) {
+      crosshair = createChartCrosshair(g, innerWidth, innerHeight);
+    }
+
+    // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
+    // above), which would otherwise leave a stale React-side tooltip pointing at
+    // removed nodes.
+    return () => {
+      hideTooltip();
+    };
+  }, [data, series, isMultiSeries, singleData, categories, seriesColors, stacked, chartWidth, chartHeight, orientation, barRadius, barGap, showValues, chartPersonality, palette, margin, xAxisLabel, yAxisLabel, tickCount, compactState.compactTooltip, showTooltip, hideTooltip]);
 
   const itemCount = isMultiSeries
     ? series!.reduce((n, s) => n + s.data.length, 0)
@@ -763,6 +843,7 @@ export const BarChart = memo(function BarChart({
       legend={legendNode}
       hideLegend={compactState.hideLegend}
       minHeight={compactState.isCompact ? compactState.minHeight : undefined}
+      overlay={<ChartTooltip {...tooltipProps} />}
     />
   );
 });

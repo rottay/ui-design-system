@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 
 import {
   BarChart,
@@ -45,7 +45,23 @@ describe('chart catalog advanced coverage', () => {
 
     expect(container.querySelectorAll('rect.bar').length).toBe(3);
     expect(container.querySelectorAll('text.value').length).toBe(3);
-    expect(container.querySelectorAll('title').length).toBe(3);
+
+    // WO-CRA-04: native <title> tooltips are replaced by the shared crosshair
+    // + ChartTooltip overlay, attached per-bar since bars are discrete marks.
+    expect(container.querySelectorAll('title').length).toBe(0);
+
+    const firstBar = container.querySelectorAll('rect.bar')[0] as SVGRectElement;
+    fireEvent.mouseEnter(firstBar, { clientX: 10, clientY: 10 });
+
+    const tooltip = screen.getByRole('tooltip');
+    expect(tooltip.style.visibility).toBe('visible');
+    expect(tooltip).toHaveTextContent('VIP');
+    expect(tooltip).toHaveTextContent('200');
+    expect((container.querySelector('.chart-crosshair') as SVGGElement).style.opacity).toBe('1');
+
+    fireEvent.mouseLeave(firstBar);
+    expect(tooltip.style.visibility).toBe('hidden');
+    expect((container.querySelector('.chart-crosshair') as SVGGElement).style.opacity).toBe('0');
   });
 
   it('covers funnel chart horizontal and vertical branches with legend, conversion, and percentage variants', async () => {
