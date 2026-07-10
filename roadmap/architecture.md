@@ -181,6 +181,37 @@ after the fleet is on the core.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the custom-engine skin pack API from proposal P-01's custom slice (`roadmap/proposals.md`, APPROVED 2026-07-07). Depends on WO-ARC-03 being done (the fleet is on the `data-part`/`data-state` anatomy contract). Today `packages/core/src/runtime/engines/custom.ts` only offers `registerCustomComponents({ Button: AcmeButton }, 'pack-id')` (~L201) + a global `configureCustomEngine` — a white-label tenant would need per-component React forks. Add a `SkinPack` contract (`{ id, css, tokens, components? }` — css targets `[data-part]`/`[data-state]`; tokens = a BrandTheme or a BOUNDED `--ds-*` override map validated against the TenantAppearanceAdvanced limits, unbounded overrides rejected) with `registerSkinPack`/`getRegisteredSkinPack` in `custom.ts` (or sibling `skin-pack.ts`); wire the factory's custom resolution (`createCustomWrapper` in `packages/core/src/runtime/engines/`) so a registered pack renders the shared behavior core with the pack's stylesheet + injected tokens, while a bespoke registered React component still wins and unregistered names fall back as today — zero change at `createEngineComponent` call sites. Check in a domain-agnostic example pack under `packages/core/src/tokens/css/engines/custom/example-pack/` and mount a showroom demo page rendering the flagship set (button, input, select, card, badge, table, tabs, modal) under it next to modern, registration code shown; document the contract + escape hatch in in-repo docs/stories (docs-engineering is READ-ONLY — the orchestrator syncs the hub). Unit-test precedence (pack vs bespoke vs fallback) and bounded-token rejection. Gate: `pnpm --filter @rottay/design-system run build` + `pnpm test` green; showroom demo renders the flagship set under the example pack with ZERO bespoke React components, captured to `test-artifacts/architecture/arc-04/` under both tenant palettes (dark-surface rottay + a light-surface tenant) and REVIEWED; the WO-GAT-01 suite green with modern/rustic baselines unchanged; `pnpm --filter @rottay/showroom run build` green. Run the showroom (`pnpm --filter @rottay/showroom run dev`, http://localhost:7001) and LOOK at the PNGs. Fences: bounded tokens only, keep `registerCustomComponents`, no modern/rustic/classic rendering change, no domain semantics, edit-only, no commits, never git-restore directories, app-bithire and docs-engineering read-only, showroom dev server allowed.
 
 ### WO-ARC-05 Container queries + fluid scales
+- **AMENDMENT 2026-07-10 (the dependency is satisfied in the registry and not in the code)** —
+  This WO's `Depends on` line reads "WO-ARC-03 (real CSS skins to hang `@container`
+  rules on)". WO-ARC-03 is `done`, and it explicitly **carved the CSS-first skin
+  migration out into WO-ARC-07** in its own amendment. So the skins this WO needs
+  were never ARC-03's to deliver. Measured on 2026-07-10, after ARC-07's Button
+  slice landed:
+
+  | thing this WO hangs its work on | how many exist |
+  | --- | --- |
+  | CSS skins under `tokens/css/engines/{modern,rustic}/skin/` | 2 (Button, both engines) |
+  | `@container` rules in `packages/core/src` | 1 (`tokens/css/components/patterns.css:926`) |
+  | `container-type` declarations | 1 (the same rule) |
+  | `clamp()` in `tokens/css/foundation/base/typography.css` | 0 |
+
+  Steps 1 and 2 name the card, table/data-table, preview-rail/pane and
+  workspace-region skins. **None of those skins exist.** Those components still
+  paint from inline `style={}` objects, which cannot express an `@container` rule —
+  which is exactly the reason this WO declared the dependency in the first place.
+
+  Two paths, and the WO must pick one before a successor starts:
+
+  1. **Sequence it.** ARC-07 migrates Card, then table/data-table, then the rail and
+     pane, and ARC-05 hangs container contexts on each skin as it lands. Honest, and
+     it makes ARC-05 the tail of ARC-07 rather than a peer.
+  2. **Split it.** Steps 3 and 5 — the `clamp()` fluid ramps in the foundation and the
+     `viewport-mq-in-skins` decrease-only counter — depend on no skin at all and can
+     land now. Steps 1, 2 and 4 wait on the skins.
+
+  Path 2's unblocked half is being executed under this WO; steps 1, 2 and 4 stay
+  open and are blocked on ARC-07, not on ARC-03.
+
 - **Outcome** — Components adapt to their **container**, not the viewport: the CSS-first skins gain named `container-type: inline-size` contexts and `@container` rules for the places the DS renders at many widths inside workspaces (cards, tables, preview rails, split panes), and the foundation gains `clamp()`-based fluid type/space tokens (`--ds-font-size-fluid-*`, `--ds-space-fluid-*`) that skins and surfaces consume opt-in. This EXTENDS the WO-ENG-12 responsive law — which stays intrinsic-sizing based until this WO, per its own Do-NOT ("container-query adoption is proposal P-08, not this WO") — with the deeper mechanism, without loosening any ENG-12 counter.
 - **Why** — P-08 (proposals.md, APPROVED 2026-07-07; scope note: WO-ENG-12 owns the BASIC responsive law, P-08 is the MECHANISM upgrade on top). Verified current state: exactly ONE `@container` rule exists in the entire `packages/core/src` tree (`packages/core/src/tokens/css/components/patterns.css:926`, a 230px max-width special case) — container adaptation is effectively absent; responsiveness is viewport-only via `useBreakpoint` (`packages/core/src/runtime/responsive/ResponsiveProvider.tsx`); and there is NO systematic fluid scale — `packages/core/src/tokens/css/foundation/base/typography.css` contains zero `clamp()`, and the `clamp()` occurrences that do exist sit in `tokens/css/components/patterns.css` and the bithire artifact `_source/extension.css`, not in a foundation token ramp. The same pattern renders at sidebar-width, rail-width, and full-width in the workspace surfaces; only this WO makes it adapt to that fact. It requires WO-ARC-03 because `@container` rules need the real CSS skins — inline `style={}` objects (the pre-ARC mechanism) cannot express them.
 - **Depends on** — WO-ARC-03 (real CSS skins to hang `@container` rules on). Coordinates WO-ENG-12 (its viewport-matrix capture preset and responsive counters are extended, never weakened).
