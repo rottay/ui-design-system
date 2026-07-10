@@ -58,30 +58,58 @@ function relPath(abs) {
 // Rule 1: Premium chrome vars without non-test consumers
 // ============================================================================
 
-// Read the brand compiler to extract chrome CSS variable names. Palette,
-// typography, and surface vars are foundational theme output; this rule guards
-// the explicit chrome channel because those vars should be read by engines,
-// components, surfaces, or component CSS token bridges.
-const compilerPath = join(SRC_ROOT, 'compilers/brand-theme/index.ts');
-const compilerSource = readSafe(compilerPath);
-const chromeStart = compilerSource.indexOf('export function brandThemeToChromeVariables');
-const chromeEnd = compilerSource.indexOf('export const compileBrandTheme', chromeStart);
-const chromeCompilerSource = chromeStart >= 0
-  ? compilerSource.slice(chromeStart, chromeEnd >= 0 ? chromeEnd : undefined)
-  : '';
+// Chrome vars have one canonical emitter (compilers/_shared/chrome-variables,
+// scanned whole -- the entire file IS the chrome channel) plus the two
+// compilers that call it (compilers/brand-theme, compilers/appearance -- each
+// scanned only within its chrome-handling function, so a stray
+// vars['--ds-...'] assignment added directly to either compiler, bypassing
+// the shared module, is caught too). This is a LIST, not one file: a var
+// emitted by any one of these with no consumer is a violation, and the
+// violation names every emitter that produced it. Palette, typography, and
+// surface vars are foundational theme output and out of scope for this rule.
+const CHROME_EMITTERS = [
+  {
+    path: join(SRC_ROOT, 'compilers/_shared/chrome-variables/index.ts'),
+    extract: (source) => source,
+  },
+  {
+    path: join(SRC_ROOT, 'compilers/brand-theme/index.ts'),
+    extract: (source) => {
+      const start = source.indexOf('export function brandThemeToChromeVariables');
+      const end = source.indexOf('export const compileBrandTheme', start);
+      return start >= 0 ? source.slice(start, end >= 0 ? end : undefined) : '';
+    },
+  },
+  {
+    path: join(SRC_ROOT, 'compilers/appearance/index.ts'),
+    extract: (source) => {
+      const start = source.indexOf('export function appearanceAdvancedToVariables');
+      const end = source.indexOf('// ── Combined', start);
+      return start >= 0 ? source.slice(start, end >= 0 ? end : undefined) : '';
+    },
+  },
+];
 
-// Extract all --ds-* chrome variable names emitted by the compiler
-const emittedVars = new Set();
 const varPattern = /vars\['(--ds-[a-z0-9-]+)'\]/g;
-let match;
-while ((match = varPattern.exec(chromeCompilerSource)) !== null) {
-  emittedVars.add(match[1]);
-}
-
 // Also catch the direct string literals like `--ds-sidebar-*`
 const directVarPattern = /['"`](--ds-(?:sidebar|layout|shell|page-shell|button-disabled|button-default|button-ghost|input-disabled|input-bg-disabled|input-color-disabled|input-border-disabled|table)[a-z0-9-]*)['"`]/g;
-while ((match = directVarPattern.exec(chromeCompilerSource)) !== null) {
-  emittedVars.add(match[1]);
+
+// varName -> Set of emitter file paths that emit it, so a violation names
+// every emitter producing an orphan var, not just "the compiler".
+const emittedVars = new Map();
+for (const emitter of CHROME_EMITTERS) {
+  const scoped = emitter.extract(readSafe(emitter.path));
+  if (!scoped) continue;
+
+  for (const pattern of [varPattern, directVarPattern]) {
+    pattern.lastIndex = 0;
+    let match;
+    while ((match = pattern.exec(scoped)) !== null) {
+      const varName = match[1];
+      if (!emittedVars.has(varName)) emittedVars.set(varName, new Set());
+      emittedVars.get(varName).add(relPath(emitter.path));
+    }
+  }
 }
 
 // Known aliases: these vars duplicate a consumed var with a different naming
@@ -113,14 +141,14 @@ if (emittedVars.size > 0) {
 
   const allConsumerContent = nonTestConsumers.map((f) => readSafe(f)).join('\n');
 
-  for (const varName of emittedVars) {
+  for (const [varName, emitterPaths] of emittedVars) {
     if (KNOWN_ALIASES.has(varName)) continue;
     // Check if the var is consumed (referenced via var(--ds-...) or as a property name in CSS)
     if (!allConsumerContent.includes(varName)) {
       violations.push({
         rule: 'orphan-premium-var',
-        path: relPath(compilerPath),
-        message: `Premium chrome var "${varName}" is emitted by the compiler but has no non-test consumer in engines/components/surfaces/token CSS.`,
+        path: [...emitterPaths].join(', '),
+        message: `Premium chrome var "${varName}" is emitted but has no non-test consumer in engines/components/surfaces/token CSS.`,
       });
     }
   }

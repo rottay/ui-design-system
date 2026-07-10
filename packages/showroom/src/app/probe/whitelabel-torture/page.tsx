@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Box, Stack, Text, Button, Badge, Input, Card, Table } from '@rottay/design-system';
+import { Box, Stack, Text, Button, Badge, Input, Card, Table, Toast } from '@rottay/design-system';
 import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
 import { TortureSurface, TORTURE_FIXTURES, type TortureFixture } from '@/components/torture-surface';
 
@@ -72,6 +72,9 @@ function ChromeExtras() {
       </Box>
       <Table rowKey="key" bordered pagination={false} dataSource={EXTRAS_ROWS} columns={EXTRAS_COLUMNS} />
       <Card variant="outlined" title="Outlined" style={{ width: 240 }} />
+      {/* duration=0 keeps this mounted for the probe read; the default variant
+          is the only one with no --ds-toast-* channel of its own (WO-ENG-21). */}
+      <Toast variant="default" title="Default" description="Neutral toast surface" duration={0} />
     </Stack>
   );
 }

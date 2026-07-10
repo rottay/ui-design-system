@@ -61,7 +61,8 @@ import { getToastAnimationStyle } from '../utils/animations';
  * @description
  * Converts the design system's variant to a tinted background and
  * matching text color using CSS custom properties.
- * Unknown variants return an empty object for default styling.
+ * Variants outside this switch (e.g. `primary`, `secondary`, `gradient`)
+ * return an empty object and inherit the `.alert` class's own styling.
  *
  * @param variant - Toast variant
  * @returns React.CSSProperties with background and color
@@ -70,6 +71,13 @@ import { getToastAnimationStyle } from '../utils/animations';
  */
 function getAlertStyle(variant: ToastVariant): React.CSSProperties {
   switch (variant) {
+    case 'default':
+      // Card is the DS's only BrandTheme-reachable neutral elevated surface
+      // today (chrome.cardComponent.bg/color) -- Toast has no chrome.toast.*
+      // section of its own. The foundation --ds-color-bg-elevated/text-primary
+      // literals are not emitted by compileBrandTheme, so they cannot move
+      // for a dynamic tenant; --ds-card-bg/--ds-card-color can.
+      return { background: 'var(--ds-card-bg)', color: 'var(--ds-card-color)' };
     case 'success':
       return { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' };
     case 'error':
@@ -271,7 +279,11 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   // token adds depth so the toast visually floats above the page content
   const alertStyle = getAlertStyle(variant as ToastVariant);
   const baseClasses = 'alert';
-  const animationClass = isExiting ? 'animate-fade-out' : 'animate-fade-in';
+  // Enter/exit motion comes entirely from the inline `animation` set below via
+  // getToastAnimationStyle, which reads --ds-toast-enter/exit-duration/easing
+  // and is neutralized by the global prefers-reduced-motion guard. No
+  // Tailwind animate-* utility class is applied here: this design system does
+  // not define one, and it would carry a literal duration outside that guard.
 
   // ========================================================================
   // Event Handlers for Hover
@@ -293,7 +305,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   return (
     <div
       role="alert"
-      className={`${baseClasses} ${animationClass} ${className}`}
+      className={`${baseClasses} ${className}`}
       style={{
         position: 'relative',
         overflow: 'hidden',

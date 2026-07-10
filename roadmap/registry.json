@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in the engine-modern lane .md file)",
- "updated": "2026-07-09",
+ "updated": "2026-07-10",
  "rules": {
   "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
   "claim_requires": "all dependsOn done",
@@ -1080,13 +1080,17 @@
    "lane": "engine-modern",
    "order": 17,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "owner-2026-07-09"
    ],
-   "notes": "Discovered 2026-07-09: all three verticals declare engine 'modern', all three first-party tenants declare 'classic', and the tenant wins at DesignSystemProvider.tsx:439. app-evnto therefore renders CLASSIC -- sixteen modern-engine WOs are invisible there. app-platform's engine flag is inverted. Contradicts the CLAUDE.md static-first law. OWNER DECISION 2026-07-09: all three verticals go to modern, engine stays changeable. Law = forceEngine > vertical.engine > fallback; tenantConfig.engine REMOVED (legacy, and the cause). app-evnto and app-platform switch to modern; evnto has zero visual baselines so before/after capture is a precondition."
+   "notes": "Discovered 2026-07-09: all three verticals declare engine 'modern', all three first-party tenants declare 'classic', and the tenant wins at DesignSystemProvider.tsx:439. app-evnto therefore renders CLASSIC -- sixteen modern-engine WOs are invisible there. app-platform's engine flag is inverted. Contradicts the CLAUDE.md static-first law. OWNER DECISION 2026-07-09: all three verticals go to modern, engine stays changeable. Law = forceEngine > vertical.engine > fallback; tenantConfig.engine REMOVED (legacy, and the cause). app-evnto and app-platform switch to modern; evnto has zero visual baselines so before/after capture is a precondition.",
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-09",
+   "doneAt": "2026-07-10",
+   "evidence": "The vertical owns the engine. MEASURED BEFORE/AFTER, not predicted: at commit 70460435, rendering evnto, bithire and platform through DesignSystemProvider with no forceEngine and reading <html data-engine> produced classic for ALL THREE. After this WO the same assertion produces modern for all three. The before was measured by copying the new test into a throwaway worktree at that commit and running it -- it failed with \"expected classic to be modern\" six times. THE WO UNDERSTATED ITS OWN FINDING: it said two places decide the engine. There were FOUR -- DesignSystemProvider:439, tenant/schema/index.ts:85 (partial.engine ?? classic), tenant/authoring/create-tenant.ts:86 (a destructuring default), and tenant/defaults/index.ts:28 (DEFAULT_TENANT_CONFIG.engine). All four are gone. runtime/engines/resolution.ts is now the only one, documented as a constraint: forceEngine > vertical > bundled-tenant pin > FALLBACK_ENGINE. TenantConfig.engine is optional and means a deliberate bundled-tenant pin; a DB-driven tenant may not set it and the resolver ignores it rather than trusting it (fail-closed, tested via isBundledTenant). THREE TESTS ENCODED THE BUG: tenant.test.ts x2 and create-tenant.test.ts asserted a materialized tenant claims classic. They now assert it holds no opinion. DRILL: put the tenant back above the vertical, the order test goes red; revert, 13/13 green. Also removed the stale engine:classic from all four registry tenants, INCLUDING themanagementmiami, which I created hours earlier by copying the same stale default -- the bug propagates by imitation. GATE: 5/5 end-to-end engine-ownership, 13/13 resolution+ownership, 649/663 on the runtime+compilers+Toast scope (14 skipped, 0 failed), pnpm typecheck 0, build 0, test:gates 58/58 (the showroom forceEngine capture route still renders modern), engine-token-audit --check green. CROSS-REPO HANDOFF recorded in roadmap/engine-modern.md: app-bithire forceEngine becomes redundant; app-evnto gains modern and MUST capture before/after (zero baselines today); app-platform inverted flag is its own orchestrator fix. Nothing reaches any app until a version bump + publish + repin. Owner delegated approval 2026-07-09."
   },
   {
    "id": "WO-ENG-18",
@@ -1180,13 +1184,17 @@
    "lane": "tokens",
    "order": 7,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "second-emitter-pattern"
    ],
-   "notes": "WO-TOK-04 is INCOMPLETE: it removed the dead table-row aliases from brand-theme; compilers/appearance/index.ts:537,539 still emits both, and audit-integration reports all-checks-passed because it scans one emitter. Fourth instance this session of a second emitter ignoring a rule the first follows."
+   "notes": "WO-TOK-04 is INCOMPLETE: it removed the dead table-row aliases from brand-theme; compilers/appearance/index.ts:537,539 still emits both, and audit-integration reports all-checks-passed because it scans one emitter. Fourth instance this session of a second emitter ignoring a rule the first follows.",
+   "claimedBy": "tok07-emitter",
+   "claimedAt": "2026-07-09",
+   "doneAt": "2026-07-10",
+   "evidence": "One chrome emitter, and a gate that sees all of them. VERIFIED INDEPENDENTLY OF THE EXECUTOR REPORT. Convergence: compilers/_shared/chrome-variables/index.ts (331 emitted keys) is now the single implementation; brand-theme and appearance both call chromeToVariables. The appearance compiler shed 543 lines of duplicated mapping. NO SILENT BEHAVIOUR CHANGE, proven two ways rather than asserted: (1) I snapshotted compileBrandTheme cssVariables for all six themes (rottay, bithire, evnto, themanagementmiami, torture-dark, torture-light) against the pre-convergence dist, rebuilt, and re-snapshotted: ZERO differences across 80,663 bytes. (2) I extracted the OLD appearance compiler from git and diffed its emitted key set against the new (appearance + shared) union: exactly two keys removed -- --ds-table-row-hover-bg and --ds-table-row-striped-bg, the dead aliases -- and ZERO keys added. That is precisely the gate the WO asked for. DRILL, both directions: reintroducing --ds-table-row-hover-bg in compilers/appearance (the emitter the old gate was blind to) turns audit-integration RED with [orphan-premium-var]; reintroducing --ds-table-row-striped-bg in the shared canonical emitter turns it RED too; restoring both returns \"all checks passed\". The old gate scanned one file and reported success while the identical dead code lived in the other -- that blindness is closed. No eslint-disable, no !important, no @ts-ignore in the diff (grepped). GATE: audit-integration green, pnpm typecheck 0, build 0, 649/663 on the compilers+runtime+Toast scope, test:gates 58/58 with zero pixel movement. Owner delegated approval 2026-07-09."
   },
   {
    "id": "WO-TOK-08",
@@ -1213,16 +1221,18 @@
    "lane": "engine-modern",
    "order": 21,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "spec-12"
    ],
    "notes": null,
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "eng21-toast",
+   "claimedAt": "2026-07-09",
+   "progressLog": [],
+   "doneAt": "2026-07-10",
+   "evidence": "The default toast follows the tenant. EVIDENCE THAT PRODUCED THE WO: on rottay (dark) the modern default Toast computed background oklch(0.96 0.005 80) and color oklch(0.12 0.01 260) -- the SAME two literals as on bithire (light). Its success/info siblings computed color(srgb .../0.1) derived from tenant color, so default was the outlier. It carried class=\"alert animate-fade-in\": DaisyUI base-100/base-content plus a Tailwind animation utility. FIX: default now returns background var(--ds-card-bg) / color var(--ds-card-color). The executor justified the channel honestly rather than inventing one -- Toast has no chrome.toast.* section on BrandTheme, and cardComponent is the only BrandTheme-reachable neutral elevated surface, whereas --ds-color-bg-elevated is a foundation literal compileBrandTheme never emits and therefore cannot move for a dynamic tenant. The Tailwind animate-fade-in/out classes are gone: enter/exit motion now comes only from the inline animation reading --ds-toast-enter/exit-duration/easing, inside the global prefers-reduced-motion guard. A Tailwind utility carried a literal duration outside that guard. NEW GATE + DRILL: probe toast/default/background-color, selector [data-testid=probe-extras] [role=alert], themePath chrome.cardComponent.bg, with a real Toast rendered on the probe surface (a missing element is a HARD failure, never a baseline entry). Drilled: put the oklch literal back, rebuild both packages, and the probe goes RED on static-across-tenants; restore, GREEN. The torture baseline stays at ZERO violations, now across 21 probes instead of 20. GATE: test:whitelabel 8/8, test:gates 58/58, pnpm typecheck 0 (core + showroom), build 0, 649/663 unit on scope. Owner delegated approval 2026-07-09."
   }
  ]
 }

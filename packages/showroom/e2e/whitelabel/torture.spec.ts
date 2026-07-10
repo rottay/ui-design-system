@@ -144,6 +144,11 @@ const PROBES: readonly Probe[] = [
   // Modal — portaled, so it is selected at document scope after being opened.
   { key: 'modal/dialog/background-color', selector: '[role="dialog"]', property: 'background-color', themePath: 'chrome.modal.bg', kind: 'color', requiresModal: true },
   { key: 'modal/dialog/border-radius', selector: '[role="dialog"]', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.lg', kind: 'length', requiresModal: true },
+
+  // Toast — the modern engine's `default` variant has no chrome.toast.*
+  // BrandTheme section of its own (WO-ENG-21), so it reads the card surface
+  // pair, the only BrandTheme-reachable neutral elevated surface today.
+  { key: 'toast/default/background-color', selector: '[data-testid="probe-extras"] [role="alert"]', property: 'background-color', themePath: 'chrome.cardComponent.bg', kind: 'color' },
 ];
 
 interface Reading {
