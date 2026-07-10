@@ -13,7 +13,7 @@ import { TortureSurface, TORTURE_FIXTURES, type TortureFixture } from '@/compone
 // fixture per load -- tenant, theme, and text direction are all html-anchored
 // (see components/torture-surface), so there is no side-by-side comparison,
 // only repeat loads driven by query params:
-//   ?fixture=torture-dark|torture-light|rottay|bithire|themanagementmiami
+//   ?fixture=torture-dark|torture-light|rottay|bithire|evnto|themanagementmiami
 //                                                 which fixture owns the page (default torture-dark)
 //   ?rtl=1                                       Arabic locale + RTL proof block
 //   ?slug=button                                 capture a single flagship in isolation

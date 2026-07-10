@@ -38,18 +38,19 @@ import {
 // driven by the ?fixture= query param on the probe page.
 // ---------------------------------------------------------------------------
 
-export type TortureFixture = 'torture-dark' | 'torture-light' | 'rottay' | 'bithire' | 'themanagementmiami';
+export type TortureFixture = 'torture-dark' | 'torture-light' | 'rottay' | 'bithire' | 'evnto' | 'themanagementmiami';
 
 export const TORTURE_FIXTURES: TortureFixture[] = [
   'torture-dark',
   'torture-light',
   'rottay',
   'bithire',
+  'evnto',
   'themanagementmiami',
 ];
 
 /** Fixtures that resolve through the known-tenant registry rather than an inline synthetic config. */
-const KNOWN_TENANT_FIXTURES: ReadonlySet<TortureFixture> = new Set(['rottay', 'bithire', 'themanagementmiami']);
+const KNOWN_TENANT_FIXTURES: ReadonlySet<TortureFixture> = new Set(['rottay', 'bithire', 'evnto', 'themanagementmiami']);
 
 /** Fixtures that render clear-mode (light) rather than the torture fixtures' dark/light pairing. */
 const LIGHT_FORCED_FIXTURES: ReadonlySet<TortureFixture> = new Set(['torture-light', 'bithire', 'themanagementmiami']);
