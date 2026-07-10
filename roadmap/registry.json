@@ -833,7 +833,7 @@
    "lane": "architecture",
    "order": 5,
    "size": "M",
-   "status": "done",
+   "status": "todo",
    "dependsOn": [
     "WO-ARC-03"
    ],
@@ -841,9 +841,9 @@
    "programs": [
     "P-08"
    ],
-   "notes": null,
-   "claimedBy": "daniel",
-   "claimedAt": "2026-07-10",
+   "notes": "Reopening: I marked this done for its actionable half, but its acceptance gate lists a sighted container-axis gallery and @container contexts that were never built. Marking a WO done when its own gate was not met is the false-green this program exists to prevent. The fluid ramps + counter (fd21437a) are real and shipped; the @container half is genuinely blocked on table/rail/pane CSS skins that do not exist yet (ARC-07 migrated Button/Card/Input, not those). Staying in-progress until the container mechanism lands or the owner rescopes it. Filed as P-56 for the owner.",
+   "claimedBy": null,
+   "claimedAt": null,
    "progressLog": [
     {
      "at": "2026-07-10 10:26",
@@ -851,8 +851,8 @@
      "note": "Unblocked half landed (commit fd21437a): fluid clamp() ramps, cqi-based, bounded by adjacent static steps; 35 assertions; 3 drills. Plus responsive.viewportMqInSkins (baseline 0, drilled both ways) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) are blocked on WO-ARC-07's Card/table/rail skins, not on ARC-03 — see the WO amendment."
     }
    ],
-   "doneAt": "2026-07-10",
-   "evidence": "Unblocked half delivered (fd21437a): 16 fluid clamp() ramps (--ds-font-size-fluid-*, --ds-space-fluid-*), cqi-based, each bounded by two adjacent existing static steps so no new magnitude enters, hitting bounds exactly at 360/1280px; 35 assertions re-deriving each ramp, drilled 3 ways. Plus responsive.viewportMqInSkins counter (baseline 0, drilled both directions) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) remain OPEN, blocked on WO-ARC-07's now-existing Button/Card/Input skins extending to table/rail/pane skins that do not yet exist — the dependency was measured and the WO amended (architecture.md). Closing the actionable scope; the @container mechanism is a follow-on WO against the real skins."
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-CRA-06",
