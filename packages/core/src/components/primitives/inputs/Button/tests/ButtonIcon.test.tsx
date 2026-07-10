@@ -18,9 +18,9 @@ describe('ButtonIcon', () => {
     );
 
     const button = screen.getByRole('button', { name: 'Create event' });
-    fireEvent.mouseEnter(button);
-    fireEvent.mouseDown(button);
-    fireEvent.mouseUp(button);
+    fireEvent.pointerEnter(button);
+    fireEvent.pointerDown(button);
+    fireEvent.pointerUp(button);
     fireEvent.click(button);
 
     expect(screen.getByTestId('icon')).toBeInTheDocument();

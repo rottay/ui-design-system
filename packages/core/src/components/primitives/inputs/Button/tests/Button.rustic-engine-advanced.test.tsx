@@ -45,14 +45,14 @@ describe('RusticButton advanced runtime coverage', () => {
     expect(screen.getByTestId('suffix')).toBeInTheDocument();
     expect(screen.getByTestId('end-icon')).toBeInTheDocument();
 
-    fireEvent.mouseEnter(link);
+    fireEvent.pointerEnter(link);
     expect(link.style.textDecoration).toBe('underline');
 
-    fireEvent.mouseDown(link);
+    fireEvent.pointerDown(link);
     expect(link.style.transform).toContain('var(--ds-button-active-transform');
 
-    fireEvent.mouseUp(link);
-    fireEvent.mouseLeave(link);
+    fireEvent.pointerUp(link);
+    fireEvent.pointerLeave(link);
     expect(link.style.transform).toBe('translateY(0) scale(1)');
   });
 

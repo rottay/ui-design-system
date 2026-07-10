@@ -517,7 +517,7 @@
    "lane": "craft",
    "order": 4,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-ENG-01",
     "WO-ENG-02"
@@ -526,7 +526,9 @@
    "programs": [
     "P-18"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "cra04-dataviz",
+   "claimedAt": "2026-07-10"
   },
   {
    "id": "WO-CRA-05",
@@ -760,7 +762,7 @@
    "lane": "architecture",
    "order": 2,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-04",
     "WO-GAT-01",
@@ -771,7 +773,11 @@
     "P-01",
     "P-02"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "The headless behavior core exists and is proven on the Button pilot across modern and rustic. PREMISES VERIFIED: packages/core/src/behavior/ did not exist; no data-part convention existed anywhere (0 files); the pilot four each carry four useState calls per interactive engine while classic delegates to antd and carries none. DELIVERED: behavior/anatomy.ts (the parts-and-states contract, serializing data-state as a token list so a skin matches [data-state~=hovered], absent rather than empty at rest), behavior/interaction-state (the hover/press/focus triad decided once), and Button modern + rustic both reading it. Zero local interaction state remains in either Button engine. TWO DEFECTS THE WO DID NOT NAME, both found by reading: (1) the engines disagreed on what a press IS -- modern scale(var(--ds-state-press-scale)), rustic var(--ds-button-active-transform, scale(0.97)). The tokens stay divergent because changing them is a pixel change; the STATE cannot diverge any more. (2) data-focus-visible was raised on ANY focus, so a mouse click drew a keyboard affordance. VERIFIED IN A BROWSER after the fix: click -> data-state=\"hovered focused\", no ring, no data-focus-visible; keyboard Tab -> data-state=\"focused focus-visible\", data-focus-visible=true. MY OWN FIRST IMPLEMENTATION WAS LOOKING THE WRONG WAY and its own test caught it on the first run: it asked element.matches(\":focus-visible\") and treated \"does not throw\" as \"implements\". Several DOM implementations answer that selector by returning false without implementing it, so a support probe reports support and every keyboard focus silently loses its ring. Input modality decides the ring now, and the comment says how it knows rather than claiming a deference that does not happen. SCOPE, AMENDED IN PLACE AND NOT HIDDEN: the pilot is ONE component, not four, and the inline-style-to-CSS skin migration is not started. Proving the contract on one component with two skins is the smallest thing that can falsify it; a pixel-identical rewrite of four components across two engines cannot be certified in the same pass that introduces the abstraction it depends on, because a pixel diff would then have two possible causes. Both are carried into WO-ARC-03. THE POINTER PRIMITIVE: the core listens on pointer events, which cover mouse, touch and pen in one path. Four Button test files drove mouse events and were moved to the pointer primitive -- the contract changed deliberately and the tests followed it. GATE: behavior 11/11, Button 118/118 across 8 files, pnpm typecheck 0, build 0, engine-token-audit --check green, test:gates 89/89 with ZERO visual baseline movement, which is the whole claim of a behavior extraction. Owner delegated approval 2026-07-10."
   },
   {
    "id": "WO-ARC-03",
@@ -1199,15 +1205,15 @@
    "lane": "architecture",
    "order": 6,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "owner-2026-07-09"
    ],
    "notes": "Owner request. The flat tree produced two naming fictions this session unpicked: platform.css is a byte-identical copy of rottay.css (P-30), and a live customer's theme sat in legacy/ while evnto sat beside rottay as a peer. A structure that cannot express 'this tenant belongs to that vertical' keeps producing decisions that assume they are peers. Pure move: zero token changes, zero pixel movement, public API unchanged.",
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "arc06-tree",
+   "claimedAt": "2026-07-10",
    "doneAt": null,
    "evidence": null
   },

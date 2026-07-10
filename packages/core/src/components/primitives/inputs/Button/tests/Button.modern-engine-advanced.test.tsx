@@ -70,6 +70,8 @@ describe('ModernButton advanced engine coverage', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
+  // Pointer events, not mouse events: the behavior core listens on the pointer
+  // primitive, which covers mouse, touch and pen with one code path.
   it('covers interactive hover, active, focus, type, and suffix fallback branches', () => {
     const handleClick = vi.fn();
 
@@ -91,15 +93,15 @@ describe('ModernButton advanced engine coverage', () => {
     expect(button.className).toContain('rottay-button--sm');
     expect(screen.getByTestId('suffix')).toBeInTheDocument();
 
-    fireEvent.mouseEnter(button);
+    fireEvent.pointerEnter(button);
     expect(button.style.textDecoration).toBe('underline');
 
-    fireEvent.mouseDown(button);
+    fireEvent.pointerDown(button);
     // The press depth is a token, not a literal: a tenant tunes it through
     // --ds-state-press-scale, so the inline style carries the var reference.
     expect(button.style.transform).toBe('scale(var(--ds-state-press-scale))');
 
-    fireEvent.mouseUp(button);
+    fireEvent.pointerUp(button);
     expect(button.style.transform).toBe('');
 
     fireEvent.focus(button);
@@ -108,7 +110,7 @@ describe('ModernButton advanced engine coverage', () => {
     fireEvent.blur(button);
     expect(button).not.toHaveAttribute('data-focus-visible');
 
-    fireEvent.mouseLeave(button);
+    fireEvent.pointerLeave(button);
     expect(button.style.textDecoration).toBe('none');
 
     fireEvent.click(button);

@@ -102,17 +102,17 @@ describe('Button integration', () => {
 
     const button = await screen.findByRole('button', { name: /go/i });
 
-    fireEvent.mouseEnter(button);
+    fireEvent.pointerEnter(button);
     fireEvent.focus(button);
-    fireEvent.mouseDown(button);
+    fireEvent.pointerDown(button);
     expect(button.style.transform).toContain('var(--ds-button-active-transform');
 
-    fireEvent.mouseUp(button);
+    fireEvent.pointerUp(button);
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);
 
     fireEvent.blur(button);
-    fireEvent.mouseLeave(button);
+    fireEvent.pointerLeave(button);
     expect(button.style.transform).toBe('translateY(0) scale(1)');
   });
 });

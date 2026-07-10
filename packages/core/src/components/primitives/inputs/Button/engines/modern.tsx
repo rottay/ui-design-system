@@ -33,7 +33,9 @@
 
 'use client';
 
-import React, { forwardRef, useState, useId } from 'react';
+import React, { forwardRef, useId } from 'react';
+
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { ButtonProps, ButtonSize } from '../Button.types';
 import { BUTTON_DEFAULTS, SIZE_MAP as BUTTON_SIZE_MAP, resolveButtonBusyState } from '../Button.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -265,9 +267,14 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     loadingText,
   });
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [isActive, setIsActive] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  // The hover/press/focus triad is decided once, in the behavior core. The rustic
+  // skin reads the same state, so the two cannot drift apart on what a press is.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState({
+    disabled: disabled || busy,
+  });
+  const isHovered = interaction.hovered;
+  const isActive = interaction.pressed;
+  const isFocused = interaction.focusVisible;
 
   const isFullWidth = fullWidth ?? block;
   const isIconOnly = !children && (icon || prefix || suffix);
@@ -508,12 +515,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         disabled={disabled || busy}
         onClick={onClick}
         style={interactiveStyle}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
-        onMouseDown={() => setIsActive(true)}
-        onMouseUp={() => setIsActive(false)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        {...interactionHandlers}
         aria-disabled={disabled || busy}
         aria-busy={busy}
         data-variant={effectiveVariant}
@@ -523,6 +525,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         data-pending={pending ? 'true' : undefined}
         data-full-width={isFullWidth ? 'true' : undefined}
         data-focus-visible={isFocused && !isInert ? 'true' : undefined}
+        {...partAttributes('trigger', interaction)}
         {...(responsive ? responsive.attrs : {})}
       >
         {widthStable ? (

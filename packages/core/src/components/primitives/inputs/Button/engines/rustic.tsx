@@ -75,7 +75,9 @@
 
 'use client';
 
-import React, { forwardRef, useState, useId, type AnchorHTMLAttributes } from 'react';
+import React, { forwardRef, useId, type AnchorHTMLAttributes } from 'react';
+
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { ButtonProps, ButtonSize } from '../Button.types';
 import { BUTTON_DEFAULTS, SIZE_MAP, VARIANT_MAP, SHAPE_MAP, resolveButtonBusyState } from '../Button.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -189,9 +191,13 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
     // Hover/focus/active are managed in React state because inline styles
     // take precedence over CSS pseudo-classes. This enables smooth
     // three-state transforms (idle -> hover -> active) without stylesheets.
-    const [isHovered, setIsHovered] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
-    const [isActive, setIsActive] = useState(false);
+    // Shared with the modern skin. The two engines paint a press differently --
+    // modern uses --ds-state-press-scale, rustic --ds-button-active-transform --
+    // but they no longer disagree about WHEN a part is pressed.
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
+    const isHovered = interaction.hovered;
+    const isFocused = interaction.focusVisible;
+    const isActive = interaction.pressed;
 
     // Responsive size handling
     const reactId = useId();
@@ -355,12 +361,8 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
             target={target}
             className={classNames}
             style={buttonStyle}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-            onMouseDown={() => setIsActive(true)}
-            onMouseUp={() => setIsActive(false)}
+            {...interactionHandlers}
+            {...partAttributes('trigger', interaction)}
             {...responsiveAttrs}
           >
             {loading && <LoadingSpinner size={size} />}
@@ -384,12 +386,8 @@ const RusticButton = forwardRef<HTMLButtonElement, ButtonProps>(
           style={buttonStyle}
           disabled={disabled || loading}
           onClick={handleClick}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          onMouseDown={() => setIsActive(true)}
-          onMouseUp={() => setIsActive(false)}
+          {...interactionHandlers}
+          {...partAttributes('trigger', interaction)}
           aria-disabled={disabled || loading}
           aria-busy={loading}
           {...responsiveAttrs}
