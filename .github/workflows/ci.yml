@@ -99,6 +99,17 @@ jobs:
       - name: Engine token + APCA audit
         run: pnpm --filter @rottay/design-system run engine-audit:check
 
+      # Must run BEFORE Build. `build` runs `build:vertical-css`, which regenerates
+      # every first-party artifact in place -- so by the time any test runs, a
+      # hand-edited artifact has already been silently overwritten with a correct
+      # one and nothing downstream can observe the bad committed state. The
+      # `pretest` hook that chains `lint:artifacts` never fires either, because
+      # `test:ci` is not named `test`. This step reads the artifacts from source
+      # (it does not need `dist/`, which only Build produces) and is the only slot
+      # in this workflow where the staleness check can actually see anything.
+      - name: Artifact staleness (before Build regenerates them)
+        run: pnpm --filter @rottay/design-system exec vitest run src/tokens/__tests__/first-party-artifacts-generated.test.ts
+
       - name: Build
         run: pnpm --filter @rottay/design-system run build
 
