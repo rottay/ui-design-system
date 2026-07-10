@@ -755,4 +755,17 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **A second, quieter consequence** — `cardStyle`'s focus branch is `isFocused && onClick ? <shadow>, <ring> : <shadow>`. On a `clickable`-only card that branch can never run. It is not merely unreachable in the modern engine: it is unreachable *by construction*, and no test in the suite notices, because no test focuses a Card.
 - **Why ARC-07 did not fix it** — it is behaviour, not paint, and ARC-07's gate is pixel-identical. But it **blocks** the Card skin: a stylesheet that keys the ring on `[data-clickable][data-state~='focus-visible']` would be keying on a state the modern engine cannot enter.
 - **Ask** — one WO. Gate `tabIndex`, `role` and `onKeyDown` on `clickable || onClick` in the modern engine, matching rustic and matching its own cursor. Pin it with a cross-engine parity test in the shape of `Button.busy-parity.test.tsx`. Then add a clickable Card to a probe slug of its own — not to the flagship gallery, whose 48 baselines must not move — so `states.spec.ts` can photograph the focus ring the skin is about to inherit.
+- **CORRECTION 2026-07-10, before any fix was written.** The direction above is wrong, and the code said so. `handleKeyDown` in the modern engine only calls `onClick` when `onClick` exists, so "gate the tab stop on `clickable || onClick`" would have minted a `role="button"`, focusable element with no activation path. Rendered and measured instead:
+
+  | `<Card clickable />` | `role` | `tabindex` | Enter fires `onClick` |
+  | --- | --- | --- | --- |
+  | modern, `clickable` only | absent | absent | n/a |
+  | modern, with `onClick` | `button` | `0` | **yes** |
+  | rustic, `clickable` only | `button` | `0` | no handler exists |
+  | rustic, **with `onClick`** | `button` | `0` | **no** |
+
+  `Card/engines/rustic.tsx` contains **zero** `onKeyDown`. It announces every `clickable || onClick` card as a button, gives it a tab stop, and a keyboard user cannot activate it — not even when a handler is passed. That is WCAG 2.1.1: the function is available to a mouse and not to a keyboard. The modern engine is correct on both counts; a `clickable`-only card is a styling flag, and styling a card as clickable is not a promise that it does anything.
+
+- **Restated ask** — give the rustic engine the modern engine's `handleKeyDown`, and gate its `role` / `tabIndex` on `onClick`, not on `clickable`. Pin both engines with a cross-engine parity test in the shape of `Button.busy-parity.test.tsx`. The Card skin can then key its focus ring on a state both engines can actually enter.
+- **Method note** — this proposal was filed from a rendered `tabindex` and a read of one engine. One more render, of the other engine, reversed it. "A work order is a hypothesis, the code is the law" applies to proposals too, and to the ones this program writes about itself.
 - **Status** — OPEN. Card's CSS-first migration is blocked on it.
