@@ -369,6 +369,23 @@ export const VARIANT_SOFT_TEXT_COLOR_MAP: Record<string, string> = {
 } as const;
 
 /**
+ * The foreground a SOLID badge paints on its own fill, derived per-variant from
+ * an on-primary token rather than a flat value. Shared by the modern and rustic
+ * engines so a tenant whose primary fill is light (rottay) does not get a
+ * near-white label on a near-white badge. `default` reads the primary text
+ * colour because its fill is a neutral surface, not a solid brand colour.
+ */
+export const VARIANT_SOLID_TEXT_COLOR_MAP: Record<string, string> = {
+  default: 'var(--ds-color-text-primary)',
+  primary: 'var(--ds-color-primary-foreground)',
+  secondary: 'var(--ds-color-text-on-primary)',
+  success: 'var(--ds-color-text-on-primary)',
+  warning: 'var(--ds-color-text-on-primary)',
+  error: 'var(--ds-color-text-on-primary)',
+  info: 'var(--ds-color-text-on-primary)',
+} as const;
+
+/**
  * Size configuration mapping.
  * Maps size tokens to their corresponding CSS variable references.
  * @remarks These values reference CSS custom properties defined in design tokens.

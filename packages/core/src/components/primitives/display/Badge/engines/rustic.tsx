@@ -13,7 +13,7 @@
 
 import React, { useId } from 'react';
 import type { BadgeProps, BadgeSize } from '../Badge.types';
-import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP, VARIANT_SOFT_COLOR_MAP, VARIANT_SOFT_TEXT_COLOR_MAP, TONE_TO_BADGE_VARIANT } from '../Badge.types';
+import { BADGE_DEFAULTS, SIZE_MAP, DOT_SIZE_MAP, VARIANT_COLOR_MAP, VARIANT_SOFT_COLOR_MAP, VARIANT_SOFT_TEXT_COLOR_MAP, VARIANT_SOLID_TEXT_COLOR_MAP, TONE_TO_BADGE_VARIANT } from '../Badge.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
@@ -158,7 +158,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
    */
   const cssVars: React.CSSProperties = {
     '--ds-badge-bg': color,
-    '--ds-badge-color': 'var(--ds-badge-text-color, #ffffff)',
+    '--ds-badge-color': VARIANT_SOLID_TEXT_COLOR_MAP[variant!] || VARIANT_SOLID_TEXT_COLOR_MAP.default,
     '--ds-badge-min-width': sizeValues.minWidth,
     '--ds-badge-height': sizeValues.height,
     '--ds-badge-font-size': sizeValues.fontSize,

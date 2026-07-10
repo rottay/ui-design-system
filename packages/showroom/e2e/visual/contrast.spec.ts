@@ -148,21 +148,9 @@ const CONTROLS: readonly {
  * but the fix is outside this file and outside AntdConfigProvider.
  */
 const KNOWN_GAPS: readonly { tenant: string; engine: ProbeEngine; control: string; reason: string }[] = [
-  {
-    tenant: 'rottay',
-    engine: 'rustic',
-    control: 'primary badge',
-    reason:
-      'Measured: background rgb(255,255,255), text rgb(236,236,236), delta 19.0. ' +
-      'RusticBadge is the only engine whose solid variant reads --ds-badge-text-color ' +
-      'for its foreground (ClassicBadge reads antd colorTextLightSolid; ModernBadge reads ' +
-      '--ds-color-primary-foreground). --ds-badge-text-color is a single flat value, not ' +
-      "derived per-tenant from what it sits on, and rottay's own artifact " +
-      '(tokens/css/artifacts/rottay) sets it to a value that does not clear ' +
-      '--ds-badge-primary-bg in either theme scope. A fix belongs in the rottay brand ' +
-      'theme source or in RusticBadge deriving its solid foreground from an on-primary ' +
-      'token the way the other two engines do — neither is this gate nor the antd bridge.',
-  },
+  // P-55 CLOSED: the rustic primary badge on rottay now derives its solid
+  // foreground from an on-primary token, like the other two engines, so this
+  // cell is asserted live below rather than exempted.
 ];
 
 function isKnownGap(tenant: string, engine: ProbeEngine, control: string): boolean {
