@@ -672,7 +672,7 @@ html[data-tenant='bithire'].dark {
   --ds-color-bg-elevated: #ffffff;
   --ds-color-bg-surface: #ffffff;
   --ds-color-bg-overlay: rgba(15, 42, 67, 0.42);
-  --ds-color-bg-input: #ffffff;
+  --ds-color-bg-input: #0F1520;
   --ds-surface-control: #ffffff;
   --ds-surface-card: #ffffff;
   --ds-surface-canvas: #F8FBFF;

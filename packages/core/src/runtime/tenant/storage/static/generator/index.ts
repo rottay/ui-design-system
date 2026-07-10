@@ -546,7 +546,11 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
     '--ds-color-text-secondary': '#cbd5e1',
     '--ds-color-text-tertiary': '#94a3b8',
     '--ds-color-text-muted': '#94a3b8',
-    '--ds-color-text-on-primary': '#ffffff',
+    // Chosen by the primary's own luminance, not asserted. `getReadableForegroundColor`
+    // is already used three lines up for `--ds-color-primary-foreground`; this line
+    // hardcoded white beside it, so a tenant whose dark primary is light -- evnto's
+    // resolves to #e8e8e0 -- painted white text on a near-white badge.
+    '--ds-color-text-on-primary': getReadableForegroundColor(primaryColor),
     '--ds-color-text-inverse': '#0a0a0a',
     '--ds-color-text': '#fafafa',
 
@@ -580,6 +584,13 @@ function darkSemanticVariables(config: TenantConfig): Record<string, string | nu
     '--ds-tooltip-bg': '#0f172a',
 
     /* ── Input ── */
+    // `--ds-color-bg-input` is deliberately NOT emitted here. It carries the
+    // tenant's own control surface from the base block, and a literal in this
+    // dark block would overwrite it -- a dynamic dark tenant that declared
+    // `chrome.controls.input.bg: '#1A0014'` would paint slate instead.
+    // A light-authored chrome on a dark ground is a real defect, but the design
+    // system cannot tell which mode a single-valued chrome was authored for.
+    // That is WO-ENG-22's subject; guessing here would be worse than the bug.
     '--ds-input-bg': '#0f172a',
     '--ds-input-border': 'rgba(255, 255, 255, 0.12)',
     '--ds-input-border-hover': 'rgba(255, 255, 255, 0.2)',

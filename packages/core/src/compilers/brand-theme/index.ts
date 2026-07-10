@@ -198,6 +198,15 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
       vars['--ds-color-background'] = bt.palette.backgroundColor;
     }
     if (bt.palette.darkBackgroundColor) vars['--ds-color-dark-bg'] = bt.palette.darkBackgroundColor;
+
+    // The semantic control surface, which `--ds-surface-control` derives from and
+    // every modern input control falls back to. It belongs here and not in the
+    // chrome emitter: the generator applies chrome into the dark block too, so a
+    // value emitted there is mode-blind and a light-authored tenant would paint
+    // white controls on its own dark ground. The dark twin is emitted by the
+    // generator's dark block, which is the only place that knows the mode.
+    const inputBg = bt.chrome?.controls?.input?.bg;
+    if (inputBg) vars['--ds-color-bg-input'] = inputBg;
   }
   if (bt.typography) {
     const ty = bt.typography;

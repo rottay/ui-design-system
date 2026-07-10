@@ -349,15 +349,6 @@ export function chromeToVariables(chrome: BrandChrome | undefined): Record<strin
     if (c.input) {
       const i = c.input;
       if (i.bg) vars['--ds-input-bg'] = i.bg;
-      // The semantic control surface, not just the Input component's channel.
-      // `--ds-surface-control` is declared inside a `[data-tenant]` selector but
-      // derives from `--ds-color-bg-input`, which nothing used to emit -- so a
-      // rule scoped to the tenant resolved against a value the tenant could not
-      // reach, and every control fell back to the DS dark default. Native
-      // select, Toggle, TreeSelect, TimePicker, DatePicker, Cascader and
-      // InputNumber all read it. Emitting nothing when the tenant declares
-      // nothing keeps the DS default intact.
-      if (i.bg) vars['--ds-color-bg-input'] = i.bg;
       if (i.bgHover) vars['--ds-input-bg-hover'] = i.bgHover;
       if (i.bgFocus) vars['--ds-input-bg-focus'] = i.bgFocus;
       if (i.bgDisabled) vars['--ds-input-bg-disabled'] = i.bgDisabled;

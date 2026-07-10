@@ -308,6 +308,10 @@ html[data-tenant='evnto'].dark {
 
   /* DS semantic tokens - dark variant */
   --ds-color-primary: #E8E8E0;
+  /* The dark primary is near-white; text on it must be the ground, not #fff. */
+  --ds-color-text-on-primary: #131210;
+  /* The Badge and every solid primary surface read this one, not the token above. */
+  --ds-color-primary-foreground: #131210;
   --ds-color-primary-hover: #F0F0E8;
   --ds-color-secondary: #A89880;
   --ds-color-secondary-hover: #B8A890;
@@ -365,6 +369,7 @@ html[data-tenant='evnto'].dark {
   --ds-card-border: #2E2C24;
 
   /* Input tokens - dark */
+  --ds-color-bg-input: #131210;
   --ds-input-bg: #131210;
   --ds-input-border: #2E2C24;
   --ds-input-text: #E8E8E0;
