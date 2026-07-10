@@ -99,13 +99,24 @@ export const PROBE_BRAND_THEME_KEY = '__probeBrandTheme';
 
 type ProbeWindow = Window & { [PROBE_BRAND_THEME_KEY]?: BrandTheme };
 
+/** Engines the probe may render. The spec's own test compares modern against rustic. */
+export type ProbeEngine = 'modern' | 'rustic' | 'classic';
+
 export function TortureSurface({
   fixture,
   rtl,
+  engine = 'modern',
   children,
 }: {
   fixture: TortureFixture;
   rtl?: boolean;
+  /**
+   * The engine to render. Defaults to `modern`: every differential probe on this
+   * surface attributes its readings to the tenant, and a second engine would be a
+   * second variable. WO-ENG-11 overrides it to put modern and rustic side by side,
+   * which is the spec's own falsifiable test for whether modern has a signature.
+   */
+  engine?: ProbeEngine;
   children: ReactNode;
 }) {
   const tenantConfig = tortureTenantConfig(fixture);
@@ -130,7 +141,7 @@ export function TortureSurface({
 
   return (
     <DesignSystemProvider
-      forceEngine="modern"
+      forceEngine={engine}
       forceTheme={surfaceGroundFor(fixture)}
       tenantConfig={tenantConfig}
       locale={rtl ? 'ar' : 'en'}

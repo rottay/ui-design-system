@@ -4,7 +4,12 @@ import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Stack, Text, Button, Badge, Input, Card, Table, Toast } from '@rottay/design-system';
 import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
-import { TortureSurface, TORTURE_FIXTURES, type TortureFixture } from '@/components/torture-surface';
+import {
+  TortureSurface,
+  TORTURE_FIXTURES,
+  type TortureFixture,
+  type ProbeEngine,
+} from '@/components/torture-surface';
 
 // ---------------------------------------------------------------------------
 // Whitelabel torture probe (WO-GAT-03 hostile-tenant whitelabel proof)
@@ -15,6 +20,7 @@ import { TortureSurface, TORTURE_FIXTURES, type TortureFixture } from '@/compone
 // only repeat loads driven by query params:
 //   ?fixture=torture-dark|torture-light|rottay|bithire|evnto|themanagementmiami
 //                                                 which fixture owns the page (default torture-dark)
+//   ?engine=modern|rustic|classic                which engine renders (default modern)
 //   ?rtl=1                                       Arabic locale + RTL proof block
 //   ?slug=button                                 capture a single flagship in isolation
 //   ?w=360|768|1280                              fixed content width for the responsive law
@@ -89,6 +95,12 @@ function TortureContent() {
   const fixture = useMemo(() => sanitizeFixture(searchParams.get('fixture')), [searchParams]);
   const rtl = useMemo(() => searchParams.get('rtl') === '1', [searchParams]);
 
+  // WO-ENG-11 compares engines on an otherwise identical surface.
+  const engine = useMemo<ProbeEngine>(() => {
+    const raw = searchParams.get('engine');
+    return raw === 'rustic' || raw === 'classic' ? raw : 'modern';
+  }, [searchParams]);
+
   const contentWidth = useMemo(() => {
     const raw = searchParams.get('w');
     return raw && CAPTURE_WIDTHS[raw] ? CAPTURE_WIDTHS[raw] : undefined;
@@ -100,7 +112,7 @@ function TortureContent() {
   }, [searchParams]);
 
   return (
-    <TortureSurface fixture={fixture} rtl={rtl}>
+    <TortureSurface fixture={fixture} rtl={rtl} engine={engine}>
       <Box
         data-testid="probe-ground"
         style={{ minHeight: '100vh', padding: 24, background: 'var(--ds-color-bg-primary)' }}
