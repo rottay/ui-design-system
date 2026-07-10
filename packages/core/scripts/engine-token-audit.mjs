@@ -696,14 +696,17 @@ const ARC09_PAINT_KEY_RE = new RegExp(
 const ARC09_PAINT_EXEMPT = new Set(["borderCollapse", "borderSpacing"]);
 
 /**
- * Count paint-named object-literal keys in a TSX source.
+ * Count inline paint in a TSX source: paint-named object-literal keys AND
+ * imperative `el.style.<paint> = …` mutations.
  *
  * Paint does not live only in inline `style={{}}` literals — these engines also
  * assemble it in `const cellStyle = { … }` objects later spread into a style
- * prop, and in conditional spreads `...(cond ? { background } : {})`. All three
- * are object-literal keys, so this scans keys whose innermost open bracket is an
- * object `{`, which a `style={{}}`-span scanner misses (measured: it saw 4 of
- * Table rustic's ~50 consts).
+ * prop, in conditional spreads `...(cond ? { background } : {})`, and in
+ * imperative hover writes (`onMouseEnter` sets `el.style.background` directly
+ * instead of using a `:hover` rule). The first three are object-literal keys,
+ * so this scans keys whose innermost open bracket is an object `{`, which a
+ * `style={{}}`-span scanner misses (measured: it saw 4 of Table rustic's ~50
+ * consts); the fourth is caught by the `.style.` mutation check below.
  *
  * Two false-positive classes are excluded structurally, not by value regex:
  * (1) strings, template-literal text and comments are skipped, so a `@keyframes`
@@ -784,6 +787,27 @@ function countArc09PaintInFile(text) {
     if (c === "]") {
       if (topIs("[")) stack.pop();
       i++;
+      continue;
+    }
+    // Imperative paint mutation: `el.style.background = …` (the onMouseEnter/Leave
+    // hover writes these engines use instead of a `:hover` rule) or
+    // `.style.setProperty('background-color', …)`. These are inline paint too —
+    // a component can reach 0 object-literal paint keys while still mutating
+    // paint imperatively — so the migration must move them to CSS and this must
+    // see them. Reads (`const x = el.style.color`) are not counted: the write
+    // form requires a following `=`.
+    if (c === "." && text.startsWith(".style.", i)) {
+      const after = text.slice(i + 7, i + 60);
+      const setProp = /^setProperty\(\s*(['"])([a-zA-Z-]+)\1/.exec(after);
+      if (setProp) {
+        const camel = setProp[2].replace(/-([a-z])/g, (_, ch) => ch.toUpperCase());
+        if (ARC09_PAINT_KEY_RE.test(camel + ":") && !ARC09_PAINT_EXEMPT.has(camel)) count += 1;
+      } else {
+        const assign = /^([A-Za-z]+)\s*=(?![=])/.exec(after);
+        if (assign && ARC09_PAINT_KEY_RE.test(assign[1] + ":") && !ARC09_PAINT_EXEMPT.has(assign[1]))
+          count += 1;
+      }
+      i += 7;
       continue;
     }
     // a paint key is an object-literal key (innermost bracket is `{`) starting
