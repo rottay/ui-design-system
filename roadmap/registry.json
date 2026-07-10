@@ -707,7 +707,7 @@
    "lane": "tokens",
    "order": 2,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-06",
     "WO-TOK-01"
@@ -718,7 +718,9 @@
    ],
    "notes": null,
    "claimedBy": "tok02-oklch",
-   "claimedAt": "2026-07-10"
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "OKLCH ramps derived per tenant against its own ground; independently verified monotonic with L-step spread <=0.0044 and hue spread <=2.96deg using an external Ottosson conversion. Compile-time APCA gate in build-vertical-artifacts.mjs drilled: damping the endpoint interpolation to 2% failed 21 pairings and exited non-zero; restored, artifacts regenerate byte-identical. Core suite 17 fail = the ledger, test-for-test. Visual 99/99. Coverage gap filed as P-45. Commit 1b39ac12."
   },
   {
    "id": "WO-TOK-03",
@@ -811,7 +813,7 @@
    "lane": "architecture",
    "order": 4,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ARC-03"
    ],
@@ -819,7 +821,11 @@
    "programs": [
     "P-01"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "daniel",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "registerSkinPack/applySkinPack/acquireSkinPack with a --ds- namespaced, 200-entry bounded token contract that throws rather than truncates; CSS keyed to the WO-ARC-02 anatomy contract; bespoke components still win. 34 tests. Found and fixed a real teardown leak: the pack survived an engine switch and repainted the engine that took over. Drilled twice (no-cleanup seam times out; unconditional revoke reddens the reference-count test). Commit c922c722."
   },
   {
    "id": "WO-ARC-05",
@@ -948,7 +954,7 @@
    "lane": "craft",
    "order": 10,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
@@ -956,7 +962,9 @@
    ],
    "notes": null,
    "claimedBy": "cra10-promotion",
-   "claimedAt": "2026-07-10"
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "edit-fields promoted to structures/record: one page-level surface, primary/advanced disclosure, advanced region unmounts while collapsed so hidden controls leave the tab order and validation, labels associate via explicit htmlFor. 329 lines of tests. No raw HTML, no hardcoded colors, domain-free. Commit 05e1b8e5."
   },
   {
    "id": "WO-ENG-13",
@@ -1348,7 +1356,7 @@
    "lane": "architecture",
    "order": 7,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-ARC-03"
    ],
@@ -1357,8 +1365,8 @@
     "spec-12"
    ],
    "notes": null,
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10",
    "progressLog": []
   }
  ]
