@@ -96,6 +96,14 @@ Each of these was paid for. They are not style preferences.
    Regenerate-and-diff proves the artifact is a build product. It proves nothing
    about whether the build product is true.
 
+9. **`dist` drops an export no entry reaches.** A build script imported
+   `APCA_BODY_TEXT_MIN_LC` from `dist/_internal/...`. The constant is exported in
+   the source and Vite tree-shook it out of the bundle, because `_internal` is
+   not a package entry. The script failed at run time with a correct source tree
+   and a green typecheck. If a script must read a value the library owns, that
+   value has to be reachable from a real entry — re-export it from the module
+   whose concern it is, and the bundler will keep it.
+
 ## The pre-existing failure baseline (measured, not assumed)
 
 `pnpm test` in `packages/core` fails **17 tests** at HEAD. All 17 also fail at

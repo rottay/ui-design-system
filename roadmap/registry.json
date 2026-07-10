@@ -707,7 +707,7 @@
    "lane": "tokens",
    "order": 2,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-ENG-06",
     "WO-TOK-01"
@@ -716,14 +716,16 @@
    "programs": [
     "P-04"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "tok02-oklch",
+   "claimedAt": "2026-07-10"
   },
   {
    "id": "WO-TOK-03",
-   "title": "Retire the dead DaisyUI layer from modern",
+   "title": "Decide whether DaisyUI stays",
    "lane": "tokens",
    "order": 3,
-   "size": "M",
+   "size": "S",
    "status": "todo",
    "dependsOn": [
     "WO-ENG-08"
@@ -787,7 +789,7 @@
    "lane": "architecture",
    "order": 3,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ARC-02",
     "WO-ENG-11"
@@ -797,7 +799,11 @@
     "P-01",
     "P-02"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "The interaction triad leaves the engines. MEASURED FIRST: 22 components carry isHovered/isFocused/isActive across 29 engine files, and 17 of them are in `inputs` -- display has two, feedback/layout/overlay have none. So CATEGORY IS THE WRONG CHECKPOINT UNIT and I amended the WO to say so: Tooltip state is visibility, Carousel is which slide, Tree eight useState are expansion and selection. A useState is not an interaction state. DELIVERED: 18 engine files read behavior/interaction-state. A shape-aware migrator refused twelve and printed a reason for each rather than guessing -- a setter called outside a recognised handler (7 files), a component that already distinguishes focusVisible (Checkbox/Radio/Switch modern), a useState<T> the regex could not see. Menu modern uses its setters inside a nested render function; the migrator emitted code that did not compile, and I restored that ONE FILE from HEAD (never a directory) and recorded it as a skip. THE DECISION THAT MATTERED, and it would not have been caught by any gate: isFocused maps to `focused`, NOT `focusVisible`. A button focus RING is a keyboard affordance. A text field focus BORDER must appear when a pointer lands in it. Mapping them together would have deleted the border from every input on click -- and 89 green gate tests would have said nothing, because no visual baseline focuses anything. THE SKIN MIGRATION IS NOT DONE and is not pretended to be: the WO bundled \"every primitive on the headless core\" with \"skins move from inline style to real CSS\". The first is mechanical and provable by zero pixel movement across the whole gate; the second is a pixel-identical rewrite of two engines per component whose only honest gate is per-component. Bundled, a pixel diff has two causes and neither can be ruled out. Carved out as WO-ARC-07. ALSO FIXED, because it blocked everyone: BoxProps extends HTMLAttributes<HTMLElement>, which carries no element-specific attributes, so a polymorphic as=\"label\" could not take an htmlFor. A label without one is not a label and the DS forbids raw HTML. And a build script imported APCA_BODY_TEXT_MIN_LC from dist/_internal -- Vite tree-shakes an export no entry reaches, so the constant vanished from the bundle while remaining in the source, and the script failed at run time against a green typecheck. It is re-exported from the compiler, whose concern it is. GATE: pnpm typecheck 0, build 0, engine-token-audit --check green, audit-integration green, artifact parity green, primitives 3507 passed / 13 failed (all 13 the documented ledger primitives subset, zero new), behavior 11/11, test:gates 89/89 with zero visual baseline movement -- which is the entire claim of a behavior extraction. Owner delegated approval 2026-07-10."
   },
   {
    "id": "WO-ARC-04",
@@ -942,13 +948,15 @@
    "lane": "craft",
    "order": 10,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "P-15"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "cra10-promotion",
+   "claimedAt": "2026-07-10"
   },
   {
    "id": "WO-ENG-13",
@@ -1314,6 +1322,42 @@
    "progressLog": [],
    "doneAt": "2026-07-10",
    "evidence": "The third personality emitter is gone, and the audit can see it if it comes back. The generator personalityVariables() now delegates to resolvePartialPersonalityCssVariables() in runtime/personality/primitives.ts, which is the single canonical source of personality-derived variable names. Both claims the WO carried were confirmed by the executor and re-checked here. NEW GATE, Rule 6 in audit-integration.mjs: a literal --ds-* object key reappearing inside personalityVariables(), OR the delegation call disappearing, is the defect regenerating. DRILL, BOTH DIRECTIONS, run by me: (a) inject a hand-written key -- RED, \"personalityVariables() declares --ds-badge-hover-transform directly instead of solely through resolvePartialPersonalityCssVariables()\"; (b) rename the delegation call away -- RED, \"personalityVariables() no longer delegates ... a hand-written duplicate personality emitter\"; restore -- \"all checks passed\". MY FIRST DRILL DID NOT BITE AND THE GATE WAS RIGHT: I injected the divergence as a bracket assignment, and Rule 6 scans for object-literal keys, which is the shape the real defect takes. I had the wrong drill, not a blind gate; re-run with the right shape it fires on both. GATE: pnpm typecheck 0, build 0, engine-token-audit --check green, audit-integration green, artifact parity green across three slugs, unit green on the runtime+compilers scope, test:gates 89/89 with zero visual baseline movement -- the static path gained the channels it was missing and no first-party pixel moved, which is worth stating rather than assuming. Owner delegated approval 2026-07-10."
+  },
+  {
+   "id": "WO-TOK-10",
+   "title": "Delete the nine dead theme.css sections",
+   "lane": "tokens",
+   "order": 10,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "spec-12"
+   ],
+   "notes": null,
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
+  },
+  {
+   "id": "WO-ARC-07",
+   "title": "CSS-first skins for the primitives on the headless core",
+   "lane": "architecture",
+   "order": 7,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ARC-03"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-12"
+   ],
+   "notes": null,
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
   }
  ]
 }
