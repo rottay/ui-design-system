@@ -20,7 +20,7 @@
  * and is PENDING REGENERATION for these Evidence Ledger deltas (WO-DES-02).
  */
 
-import type { BrandTheme } from '../../../contracts/themes';
+import type { BrandTheme } from '../../../../contracts/themes';
 
 export const bithireBrandTheme: BrandTheme = {
   id: 'bithire',

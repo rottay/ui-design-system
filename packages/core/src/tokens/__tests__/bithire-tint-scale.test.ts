@@ -11,7 +11,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../../compilers/brand-theme';
-import { bithireBrandTheme } from '../ts/brand-themes/bithire';
+import { bithireBrandTheme } from '../ts/brand-themes/bithire/bithire';
 
 const STEPS = [4, 8, 12, 16, 24] as const;
 const TONE_ROLES = [

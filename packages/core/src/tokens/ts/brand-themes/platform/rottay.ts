@@ -13,7 +13,7 @@
  * build:vertical-css`; hand-edits fail `lint:artifacts`.
  */
 
-import type { BrandTheme } from '../../../contracts/themes';
+import type { BrandTheme } from '../../../../contracts/themes';
 
 export const rottayBrandTheme: BrandTheme = {
   id: 'rottay',

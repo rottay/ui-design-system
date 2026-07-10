@@ -13,7 +13,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../../compilers/brand-theme';
-import { bithireBrandTheme } from '../ts/brand-themes/bithire';
+import { bithireBrandTheme } from '../ts/brand-themes/bithire/bithire';
 
 /** design-language §2.1 table — size / line-height / weight / tracking, per entry. */
 const RAMP = [

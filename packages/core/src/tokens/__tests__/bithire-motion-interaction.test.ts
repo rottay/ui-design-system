@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../../compilers/brand-theme';
-import { bithireBrandTheme } from '../ts/brand-themes/bithire';
+import { bithireBrandTheme } from '../ts/brand-themes/bithire/bithire';
 
 const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const ARTIFACT_PATH = resolve(TEST_DIR, '..', 'css/artifacts/bithire/index.css');

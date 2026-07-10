@@ -32,9 +32,9 @@ import {
   FIRST_PARTY_ARTIFACT_SPECS,
   FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND,
 } from '../dist/runtime/tenant/storage/static/generator/index.js';
-import { bithireBrandTheme } from '../dist/tokens/ts/brand-themes/bithire.js';
-import { evntoBrandTheme } from '../dist/tokens/ts/brand-themes/evnto.js';
-import { rottayBrandTheme } from '../dist/tokens/ts/brand-themes/rottay.js';
+import { bithireBrandTheme } from '../dist/tokens/ts/brand-themes/bithire/bithire.js';
+import { evntoBrandTheme } from '../dist/tokens/ts/brand-themes/evnto/evnto.js';
+import { rottayBrandTheme } from '../dist/tokens/ts/brand-themes/platform/rottay.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
@@ -69,13 +69,14 @@ function firstDiff(a, b) {
 
 let stale = 0;
 
-for (const { slug, displayName, selector, brandTheme } of artifacts) {
+for (const { slug, displayName, selector, authoredThemePath, brandTheme } of artifacts) {
   const artifactPath = resolve(root, `src/tokens/css/artifacts/${slug}/index.css`);
   const extensionPath = resolve(root, `src/tokens/css/artifacts/${slug}/_source/extension.css`);
 
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
   const output = renderVerticalArtifact({
     tenantSlug: slug,
+    authoredThemePath,
     displayName,
     selector,
     compiledCssVariables: compiled.cssVariables,

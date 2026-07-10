@@ -17,7 +17,7 @@
  * Playwright context without pulling in the rest of the design system.
  */
 
-import type { BrandTheme } from '../../../contracts/themes';
+import type { BrandTheme } from '../../../../contracts/themes';
 
 /**
  * Torture fixture paired with the `dark` base theme.

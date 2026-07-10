@@ -1205,7 +1205,7 @@
    "lane": "architecture",
    "order": 6,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
@@ -1214,8 +1214,8 @@
    "notes": "Owner request. The flat tree produced two naming fictions this session unpicked: platform.css is a byte-identical copy of rottay.css (P-30), and a live customer's theme sat in legacy/ while evnto sat beside rottay as a peer. A structure that cannot express 'this tenant belongs to that vertical' keeps producing decisions that assume they are peers. Pure move: zero token changes, zero pixel movement, public API unchanged.",
    "claimedBy": "arc06-tree",
    "claimedAt": "2026-07-10",
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-07-10",
+   "evidence": "The file tree says what the architecture says. brand-themes/{platform/rottay, bithire/{bithire,themanagementmiami}, evnto/evnto, _fixtures/torture}. evnto and themanagementmiami no longer sit as peers: one is a product, the other is a customer of a different product. VERIFIED INDEPENDENTLY: all seven public exports unchanged (rottayBrandTheme, bithireBrandTheme, evntoBrandTheme, themanagementmiamiBrandTheme, tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS) -- a moved file is fine, a renamed export would break app-bithire, which pins a published version. Zero lingering imports of the flat paths anywhere in executable code. The structure test walks the real filesystem: every FIRST_PARTY_ARTIFACT_SPECS slug resolves inside its vertical folder, the unbundled tenant resolves inside bithire/, the torture fixtures exist in _fixtures/ and in none of the three vertical folders, and the brand-themes root contains only the barrel plus the four owner folders -- so a regression to flat peers fails immediately. THE EXECUTOR VERIFIED THE WO TWO CLAIMS AND HALF-REFUTED ONE: styles/platform.css and styles/rottay.css are still byte-identical (cmp clean, both md5 b7f608c9e85aeec9967591f21843485e, now 878,519 bytes -- P-30 is real and untouched, it is the CSS-side step). themanagementmiami was NOT exiled to legacy on the TS side any more: WO-ENG-20 had already added it as a fifth flat peer, which is exactly the false peerage this move corrects. Its CSS still sits in tokens/css/legacy/, out of scope. RESIDUE THE EXECUTOR FLAGGED AND I FIXED, because it required a build it was fenced from: the generator header template baked `tokens/ts/brand-themes/${tenantSlug}.ts` into every committed artifact. After the move that line named a file that does not exist, and the parity test stayed GREEN because the generator and the committed file agreed with each other -- both stale, in unison. A test that compares an output against itself cannot see a lie they share. FirstPartyArtifactSpec now carries authoredThemePath, named rather than derived, because a slug cannot tell you which vertical owns a tenant. Artifacts regenerated; the header now names the real file. GATE: tokens+compilers+behavior 656 passed / 3 failed -> 0 failed after fixing the guard test to read the path from the spec instead of a literal; ownership structure test 4/4; pnpm typecheck 0; build 0; engine-token-audit --check green; audit-integration green; artifact parity green across three slugs; test:gates 89/89 with zero visual movement. No escape hatches (files grepped, not the diff). Owner delegated approval 2026-07-10."
   },
   {
    "id": "WO-TOK-07",

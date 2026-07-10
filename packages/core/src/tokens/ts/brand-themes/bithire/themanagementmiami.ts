@@ -45,7 +45,7 @@
  * temporarily colliding successColor with primaryColor and watching it fail.
  */
 
-import type { BrandTheme } from '../../../contracts/themes';
+import type { BrandTheme } from '../../../../contracts/themes';
 
 export const themanagementmiamiBrandTheme: BrandTheme = {
   id: 'themanagementmiami',

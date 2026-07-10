@@ -4,7 +4,7 @@
  *
  * This file is a BUILD OUTPUT assembled from two authored sources; any manual
  * edit is reverted by the DS artifact parity/guard gates:
- *   1. tokens/ts/brand-themes/bithire.ts (compiled via compileBrandTheme)
+ *   1. tokens/ts/brand-themes/bithire/bithire.ts (compiled via compileBrandTheme)
  *   2. tokens/css/artifacts/bithire/_source/extension.css (declared extension)
  *
  * Regenerate: pnpm -C ui-design-system/packages/core build:vertical-css

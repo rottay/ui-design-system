@@ -9,14 +9,14 @@
  * of the system-layers refactor.
  */
 
-export { rottayBrandTheme } from './rottay';
-export { bithireBrandTheme } from './bithire';
-export { evntoBrandTheme } from './evnto';
-export { themanagementmiamiBrandTheme } from './themanagementmiami';
+export { rottayBrandTheme } from './platform/rottay';
+export { bithireBrandTheme } from './bithire/bithire';
+export { evntoBrandTheme } from './evnto/evnto';
+export { themanagementmiamiBrandTheme } from './bithire/themanagementmiami';
 
 /**
  * Hostile-tenant whitelabel PROOF FIXTURES (WO-GAT-03). NOT product tenants —
  * never registered in KNOWN_TENANTS, BUNDLED_TENANT_SLUGS, or
- * FIRST_PARTY_ARTIFACT_SPECS. See torture.ts for the full rationale.
+ * FIRST_PARTY_ARTIFACT_SPECS. See _fixtures/torture.ts for the full rationale.
  */
-export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './torture';
+export { tortureDarkBrandTheme, tortureLightBrandTheme, TORTURE_PROBE_VARS } from './_fixtures/torture';

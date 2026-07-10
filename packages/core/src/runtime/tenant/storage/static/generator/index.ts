@@ -584,6 +584,14 @@ export interface FirstPartyArtifactSpec {
   displayName: string;
   /** Selector the compiled variable block is scoped to. */
   selector: string;
+  /**
+   * Path to the authored theme, relative to `packages/core/src`.
+   *
+   * Named rather than derived from the slug: a tenant lives inside the folder of
+   * the vertical that owns it, so `bithire` and `themanagementmiami` share a
+   * directory and `rottay` sits under `platform`. A slug cannot tell you that.
+   */
+  authoredThemePath: string;
 }
 
 /**
@@ -599,6 +607,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
   {
     slug: 'bithire',
     displayName: 'BitHire',
+    authoredThemePath: 'tokens/ts/brand-themes/bithire/bithire.ts',
     // Compiler-native tenant selector. Dark-mode overrides in the extension use
     // the higher-specificity `.dark` / `[data-theme='dark']` selectors and win.
     selector: "html[data-tenant='bithire']",
@@ -606,6 +615,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
   {
     slug: 'evnto',
     displayName: 'Evnto',
+    authoredThemePath: 'tokens/ts/brand-themes/evnto/evnto.ts',
     // Light-first, same shape as bithire: dark-mode overrides in the extension
     // use the higher-specificity `.dark` / `[data-theme='dark']` selectors.
     selector: "html[data-tenant='evnto']",
@@ -613,6 +623,7 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
   {
     slug: 'rottay',
     displayName: 'Rottay',
+    authoredThemePath: 'tokens/ts/brand-themes/platform/rottay.ts',
     // Rottay is dark-first: the tenant's unscoped default rendering is dark.
     // rottayBrandTheme.chrome (sidebar/layout/table/controls) is single-valued
     // and dark-authored, so compileBrandTheme cannot also produce a light
@@ -639,6 +650,8 @@ export const FIRST_PARTY_ARTIFACT_SPECS: readonly FirstPartyArtifactSpec[] = [
 export interface RenderVerticalArtifactInput {
   /** Tenant slug, e.g. `'bithire'`. */
   tenantSlug: string;
+  /** Path to the authored theme, relative to `packages/core/src`. */
+  authoredThemePath: string;
   /** Human-facing product name for the header banner. */
   displayName: string;
   /** Selector the compiled variable block is scoped to. */
@@ -660,7 +673,7 @@ export interface RenderVerticalArtifactInput {
  * compiler-owned variable; the extension must not redeclare those keys.
  */
 export function renderVerticalArtifact(input: RenderVerticalArtifactInput): string {
-  const { tenantSlug, displayName, selector, compiledCssVariables, extensionCss, regenerateCommand } = input;
+  const { tenantSlug, authoredThemePath, displayName, selector, compiledCssVariables, extensionCss, regenerateCommand } = input;
 
   const header = [
     `/* ${GENERATED_ARTIFACT_BANNER} */`,
@@ -669,7 +682,7 @@ export function renderVerticalArtifact(input: RenderVerticalArtifactInput): stri
     ' *',
     ' * This file is a BUILD OUTPUT assembled from two authored sources; any manual',
     ' * edit is reverted by the DS artifact parity/guard gates:',
-    ` *   1. tokens/ts/brand-themes/${tenantSlug}.ts (compiled via compileBrandTheme)`,
+    ` *   1. ${authoredThemePath} (compiled via compileBrandTheme)`,
     ` *   2. tokens/css/artifacts/${tenantSlug}/_source/extension.css (declared extension)`,
     ' *',
     ` * Regenerate: ${regenerateCommand}`,

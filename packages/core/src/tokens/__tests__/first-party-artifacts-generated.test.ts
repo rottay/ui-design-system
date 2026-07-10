@@ -42,6 +42,7 @@ function generate(slug: string): string {
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
   return renderVerticalArtifact({
     tenantSlug: spec.slug,
+    authoredThemePath: spec.authoredThemePath,
     displayName: spec.displayName,
     selector: spec.selector,
     compiledCssVariables: compiled.cssVariables,

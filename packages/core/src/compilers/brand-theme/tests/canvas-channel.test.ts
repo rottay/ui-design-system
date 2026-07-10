@@ -12,7 +12,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { compileBrandTheme } from '../index';
-import { tortureDarkBrandTheme, tortureLightBrandTheme } from '../../../tokens/ts/brand-themes/torture';
+import { tortureDarkBrandTheme, tortureLightBrandTheme } from '../../../tokens/ts/brand-themes/_fixtures/torture';
 import { bithireBrandTheme, rottayBrandTheme } from '../../../tokens/ts/brand-themes';
 
 describe('the clear-mode ground is a BrandTheme channel', () => {
