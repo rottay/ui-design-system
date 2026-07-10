@@ -26,5 +26,6 @@
   "responsive.overflowCells": 0,
   "vocabulary.rawAntdSizeUnions": 0,
   "vocabulary.duplicateSizeDeclarations": 0,
-  "daisy.classConsumers": 16
+  "daisy.classConsumers": 16,
+  "responsive.viewportMqInSkins": 0
 }

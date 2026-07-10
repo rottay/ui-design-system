@@ -2074,7 +2074,54 @@ const counters = {
   // the @deprecated exemption rule. Both decrease-only.
   "vocabulary.rawAntdSizeUnions": rawAntdSizeUnions,
   "vocabulary.duplicateSizeDeclarations": duplicateSizeVocabDeclarations,
+  // WO-ARC-05: a skin adapts to its container, not to the window. Decrease-only,
+  // and the baseline is 0 -- so the first viewport breakpoint added to a skin
+  // fails the build, which is the point.
+  "responsive.viewportMqInSkins": countViewportMediaQueriesInSkins(),
 };
+
+
+/**
+ * WO-ARC-05: viewport media queries inside the engine SKIN stylesheets.
+ *
+ * A design system renders the same component at rail width, half width and full
+ * width inside one viewport. A viewport media query cannot tell those apart, so
+ * `@container` is the sanctioned mechanism for a skin that must adapt to its box.
+ * This counts only width-conditioned `@media` rules -- `prefers-reduced-motion`,
+ * `pointer: coarse` and `prefers-color-scheme` are answers to the user and the
+ * device, not to a box, and they are not what this gate is about.
+ *
+ * Decrease-only. Baseline measured at 0: the two skins that exist adapt through
+ * their tokens and their anatomy, not through a breakpoint.
+ */
+function countViewportMediaQueriesInSkins() {
+  const skinDir = join(root, "src/tokens/css/engines");
+  const skins = [];
+  const walk = (dir) => {
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.isFile() && entry.name.endsWith(".css") && full.includes(`${sep}skin${sep}`)) skins.push(full);
+    }
+  };
+  walk(skinDir);
+
+  let count = 0;
+  for (const file of skins) {
+    const css = readFileSync(file, "utf8");
+    for (const match of css.matchAll(/@media([^{]*)\{/g)) {
+      const condition = match[1];
+      if (/\b(min-width|max-width|width)\b/.test(condition)) count += 1;
+    }
+  }
+  return count;
+}
 
 /** Invariants checked for exact equality (not just decrease-only) in --check. */
 const EXACT = {
@@ -2217,10 +2264,19 @@ if (mode === "check") {
   }
   const baseline = JSON.parse(readFileSync(baselinePath, "utf8"));
   const risen = [];
+  // A counter the baseline has never heard of used to compare against Infinity,
+  // so it could not rise and could not fail. It measured, printed a number, and
+  // gated nothing. An unbaselined counter is reported as its own failure rather
+  // than defaulted to a value that makes it inert.
+  const unbaselined = [];
   for (const [k, v] of Object.entries(counters)) {
     if (k in MIN) continue; // floor-governed (higher is healthy), not ceiling-governed
-    const base = baseline[k] ?? Infinity;
-    if (v > base) risen.push(`${k}: ${v} > baseline ${base}`);
+    if (k in EXACT) continue; // invariant-governed, checked for equality below
+    if (!(k in baseline)) {
+      unbaselined.push(`${k}: ${v} (run --update-baseline, and say why in the WO)`);
+      continue;
+    }
+    if (v > baseline[k]) risen.push(`${k}: ${v} > baseline ${baseline[k]}`);
   }
   const invariant = [];
   for (const [k, expected] of Object.entries(EXACT)) {
@@ -2230,8 +2286,9 @@ if (mode === "check") {
   for (const [k, min] of Object.entries(MIN)) {
     if ((counters[k] ?? 0) < min) belowFloor.push(`${k}: ${counters[k]} < required >= ${min}`);
   }
-  if (risen.length || invariant.length || belowFloor.length) {
+  if (risen.length || invariant.length || belowFloor.length || unbaselined.length) {
     console.error("engine-token-audit --check FAILED:");
+    for (const u of unbaselined) console.error("  - counter has no baseline, so it gates nothing: " + u);
     for (const r of risen) console.error("  - rose above baseline: " + r);
     for (const r of invariant) console.error("  - invariant broken: " + r);
     for (const r of belowFloor) console.error("  - below required floor: " + r);

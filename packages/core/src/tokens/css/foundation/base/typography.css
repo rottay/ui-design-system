@@ -219,6 +219,32 @@
   --ds-text-wrap-balance: balance;
   --ds-text-wrap-pretty: pretty;
   --ds-hyphens-auto: auto;
+
+  /* ---------------------------------------------------------------------
+   * Fluid type ramp (WO-ARC-05).
+   *
+   * Each fluid step is bounded by two ADJACENT static steps above -- no new
+   * magnitudes enter the system, only the path between two that already exist.
+   * The ramp interpolates linearly between 360px and 1280px, the same widths
+   * the WO-ENG-12 capture law photographs, and hits each bound exactly there.
+   *
+   * The interpolation unit is `cqi`, not `vw`: a design system renders the same
+   * component at rail width, half width and full width inside one viewport, and
+   * a viewport unit cannot tell those apart. Where no ancestor declares
+   * `container-type`, `cqi` resolves against the small viewport, which is the
+   * behaviour a `vw` ramp would have had.
+   *
+   * Opt-in. Nothing consumes these by default; a skin or surface reaches for one
+   * where a static step is cramped at 360px or oversized at 1280px.
+   * ------------------------------------------------------------------------ */
+  --ds-font-size-fluid-sm: clamp(0.75rem, 0.7011rem + 0.2174cqi, 0.875rem);
+  --ds-font-size-fluid-base: clamp(0.875rem, 0.8261rem + 0.2174cqi, 1rem);
+  --ds-font-size-fluid-lg: clamp(1rem, 0.9511rem + 0.2174cqi, 1.125rem);
+  --ds-font-size-fluid-xl: clamp(1.125rem, 1.0761rem + 0.2174cqi, 1.25rem);
+  --ds-font-size-fluid-2xl: clamp(1.25rem, 1.1522rem + 0.4348cqi, 1.5rem);
+  --ds-font-size-fluid-3xl: clamp(1.5rem, 1.3533rem + 0.6522cqi, 1.875rem);
+  --ds-font-size-fluid-4xl: clamp(1.875rem, 1.7283rem + 0.6522cqi, 2.25rem);
+  --ds-font-size-fluid-5xl: clamp(2.25rem, 1.9565rem + 1.3043cqi, 3rem);
 }
 
 /* ==========================================================================
