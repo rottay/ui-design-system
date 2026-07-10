@@ -34,6 +34,7 @@
 import React from 'react';
 import { ColorPicker as AntColorPicker } from 'antd';
 import type { ColorPickerProps } from '../ColorPicker.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Classic engine ColorPicker -- wraps Ant Design's full-featured ColorPicker.
@@ -85,7 +86,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           onFormatChange={onFormatChange as any}
           presets={presets}
           showText={showText as any}
-          size={size}
+          size={toLegacySize(size)}
           disabled={disabled}
           allowClear={allowClear}
           trigger={trigger}

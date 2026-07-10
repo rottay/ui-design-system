@@ -18,6 +18,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { AutoCompleteProps, AutoCompleteOption } from '../AutoComplete.types';
 import { AUTOCOMPLETE_DEFAULTS } from '../AutoComplete.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Modern (DaisyUI) implementation of the AutoComplete input.
@@ -47,11 +48,15 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       autoFocus,
       open: controlledOpen,
       onDropdownVisibleChange,
-      size = AUTOCOMPLETE_DEFAULTS.size,
+      size: sizeProp = AUTOCOMPLETE_DEFAULTS.size,
       notFoundContent = 'No results',
       className,
       style,
     } = props;
+
+    // getSizeStyle's switch below is keyed by the legacy 'small' | 'middle' | 'large'
+    // spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     // Three pieces of internal state mirror what Ant Design manages automatically
     // in the Classic engine: the text value, dropdown visibility, and the

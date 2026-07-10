@@ -34,11 +34,18 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { Size } from '../../../../contracts/common';
 
 /**
- * Size variants for the AutoComplete input.
+ * Size variants for the AutoComplete input, derived from the canonical {@link Size} scale.
  */
-export type AutoCompleteSize = 'small' | 'middle' | 'large';
+export type AutoCompleteSize = Extract<Size, 'sm' | 'md' | 'lg'>;
+
+/**
+ * @deprecated Legacy antd-style spelling; use {@link AutoCompleteSize} ('sm' | 'md' | 'lg')
+ * instead. Retained for one release so existing values keep compiling.
+ */
+export type LegacyAutoCompleteSize = 'small' | 'middle' | 'large';
 
 /**
  * Structure for an autocomplete option.
@@ -114,7 +121,7 @@ export interface AutoCompleteProps {
   /** Callback when dropdown visibility changes */
   onDropdownVisibleChange?: (open: boolean) => void;
   /** Size of input */
-  size?: AutoCompleteSize;
+  size?: AutoCompleteSize | LegacyAutoCompleteSize;
   /** Status */
   status?: 'error' | 'warning';
   /** Not found content */

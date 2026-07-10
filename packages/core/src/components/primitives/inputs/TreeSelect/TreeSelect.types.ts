@@ -40,11 +40,18 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { Size } from '../../../../contracts/common';
 
 /**
- * Size variants for the TreeSelect input.
+ * Size variants for the TreeSelect input, derived from the canonical {@link Size} scale.
  */
-export type TreeSelectSize = 'small' | 'middle' | 'large';
+export type TreeSelectSize = Extract<Size, 'sm' | 'md' | 'lg'>;
+
+/**
+ * @deprecated Legacy antd-style spelling; use {@link TreeSelectSize} ('sm' | 'md' | 'lg')
+ * instead. Retained for one release so existing values keep compiling.
+ */
+export type LegacyTreeSelectSize = 'small' | 'middle' | 'large';
 
 /**
  * Structure for a tree select node with hierarchical children.
@@ -165,7 +172,7 @@ export interface TreeSelectProps {
   /** Allow clear */
   allowClear?: boolean;
   /** Size of input */
-  size?: TreeSelectSize;
+  size?: TreeSelectSize | LegacyTreeSelectSize;
   /** Max tag count (multiple mode) */
   maxTagCount?: number | 'responsive';
   /** Status */

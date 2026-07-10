@@ -4,10 +4,12 @@
  */
 
 export { Avatar, AvatarGroup, AvatarBadge, AvatarFallback } from './Avatar';
-export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant, AvatarGroupProps, AvatarBadgeProps, AvatarFallbackProps } from './Avatar';
+export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant, AvatarTone, AvatarGroupProps, AvatarBadgeProps, AvatarFallbackProps } from './Avatar';
+export { TONE_TO_AVATAR_VARIANT } from './Avatar';
 
 export { Badge } from './Badge';
 export type { BadgeProps, BadgeVariant, BadgeSize } from './Badge';
+export { TONE_TO_BADGE_VARIANT } from './Badge';
 
 export { Card } from './Card';
 export type { CardProps, CardVariant } from './Card';
@@ -16,7 +18,8 @@ export { Image, ImageFallback, ImageSkeleton } from './Image';
 export type { ImageProps, ImageFallbackProps, ImageSkeletonProps, ImageFit, ImageRadius, ImageStatus, ImageGroupProps, ImageLoadState } from './Image';
 
 export { Tag, TagGroup } from './Tag';
-export type { TagProps, TagSize, TagVariant, TagRadius, TagGroupProps } from './Tag';
+export type { TagProps, TagSize, TagVariant, TagTone, TagRadius, TagGroupProps } from './Tag';
+export { TONE_TO_TAG_VARIANT } from './Tag';
 
 export { Tooltip } from './Tooltip';
 export type { TooltipProps, TooltipTriggerProps, TooltipContentProps, TooltipPlacement, TooltipTriggerType } from './Tooltip';
@@ -71,5 +74,5 @@ export { KBD_DEFAULTS } from './Kbd';
 
 // Callout
 export { Callout } from './Callout';
-export type { CalloutProps, CalloutVariant } from './Callout';
-export { CALLOUT_DEFAULTS, CALLOUT_COLORS } from './Callout';
+export type { CalloutProps, CalloutVariant, CalloutTone } from './Callout';
+export { CALLOUT_DEFAULTS, CALLOUT_COLORS, TONE_TO_CALLOUT_VARIANT } from './Callout';

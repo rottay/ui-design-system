@@ -140,6 +140,8 @@ import type { CollapseProps, CollapsePanelProps } from './Collapse.types';
 export {
   type CollapseProps,
   type CollapsePanelProps,
+  type CollapseSize,
+  type LegacyCollapseSize,
   COLLAPSE_DEFAULTS,
 } from './Collapse.types';
 

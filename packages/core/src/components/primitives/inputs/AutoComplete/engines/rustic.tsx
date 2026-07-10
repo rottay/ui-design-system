@@ -22,6 +22,7 @@
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import type { AutoCompleteProps, AutoCompleteOption } from '../AutoComplete.types';
 import { AUTOCOMPLETE_DEFAULTS } from '../AutoComplete.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 // Height tokens per size variant. Values are CSS custom properties so the
 // actual pixel values can be overridden at the tenant/theme level without
@@ -61,12 +62,16 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       autoFocus,
       open: controlledOpen,
       onDropdownVisibleChange,
-      size = AUTOCOMPLETE_DEFAULTS.size,
+      size: sizeProp = AUTOCOMPLETE_DEFAULTS.size,
       status,
       notFoundContent = 'No results found',
       className = '',
       style,
     } = props;
+
+    // SIZE_CONFIG and the BEM class suffix below are keyed by the legacy
+    // 'small' | 'middle' | 'large' spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     // Internal state: text value, dropdown open, keyboard-focused index,
     // and visual focus ring. The extra `isFocused` state (not present in

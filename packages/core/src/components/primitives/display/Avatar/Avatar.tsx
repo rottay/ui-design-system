@@ -26,8 +26,8 @@ import { createEngineComponent } from '../../../../runtime/engines/factory';
 import type { AvatarProps } from './Avatar.types';
 import { AvatarGroup, AvatarBadge, AvatarFallback } from './compound';
 
-export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant } from './Avatar.types';
-export { AVATAR_DEFAULTS } from './Avatar.types';
+export type { AvatarProps, AvatarSize, AvatarShape, AvatarStatus, AvatarVariant, AvatarTone } from './Avatar.types';
+export { AVATAR_DEFAULTS, TONE_TO_AVATAR_VARIANT } from './Avatar.types';
 
 export { AvatarGroup, AvatarBadge, AvatarFallback };
 export type { AvatarGroupProps, AvatarBadgeProps, BadgeStatus, AvatarFallbackProps } from './compound';

@@ -36,6 +36,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ColorPickerProps, Color } from '../ColorPicker.types';
 import { COLORPICKER_DEFAULTS } from '../ColorPicker.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Lightweight Color factory that satisfies the DS `Color` interface.
@@ -74,7 +75,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       format = COLORPICKER_DEFAULTS.format,
       presets,
       showText,
-      size = COLORPICKER_DEFAULTS.size,
+      size: sizeProp = COLORPICKER_DEFAULTS.size,
       disabled,
       allowClear,
       trigger = COLORPICKER_DEFAULTS.trigger,
@@ -84,6 +85,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       className,
       style,
     } = props;
+
+    // getSizeClass's switch below is keyed by the legacy 'small' | 'middle' | 'large'
+    // spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(false);
@@ -214,7 +219,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                   outline: 'none',
                   boxSizing: 'border-box',
                 }}
-                placeholder="#RRGGBB"
+                placeholder="#000000"
                 disabled={disabled}
               />
             </div>

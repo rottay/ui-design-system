@@ -34,6 +34,7 @@
 import React, { Children, Fragment } from 'react';
 import type { SpaceProps } from '../Space.types';
 import { SPACE_DEFAULTS, SPACE_SIZE_MAP } from '../Space.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /** Tailwind utility classes for cross-axis alignment, keyed by SpaceAlign value. */
 const ALIGN_CLASSES: Record<string, string> = {
@@ -92,7 +93,10 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       // CSS gap shorthand: row-gap first, then column-gap
       gapValue = `${size[1]}px ${size[0]}px`;
     } else {
-      gapValue = `${SPACE_SIZE_MAP[size || 'small'] || SPACE_SIZE_MAP.small}px`;
+      // SPACE_SIZE_MAP is keyed by the legacy 'small' | 'middle' | 'large' spelling;
+      // toLegacySize resolves either spelling to it.
+      const legacySize = toLegacySize(size);
+      gapValue = `${SPACE_SIZE_MAP[legacySize || 'small'] || SPACE_SIZE_MAP.small}px`;
     }
 
     const customStyle: React.CSSProperties = {

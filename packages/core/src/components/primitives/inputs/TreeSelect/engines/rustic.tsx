@@ -21,6 +21,7 @@ import { createPortal } from 'react-dom';
 import type { TreeSelectProps, TreeSelectNode, TreeSelectValue } from '../TreeSelect.types';
 import { TREESELECT_DEFAULTS } from '../TreeSelect.types';
 import { useTranslation } from '../../../../../i18n';
+import { toLegacySize } from '../../../../../contracts/common';
 
 // ---------------------------------------------------------------------------
 // Size configuration using CSS variables
@@ -399,7 +400,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       placeholder,
       disabled,
       allowClear = TREESELECT_DEFAULTS.allowClear,
-      size = TREESELECT_DEFAULTS.size,
+      size: sizeProp = TREESELECT_DEFAULTS.size,
       status,
       notFoundContent,
       open: controlledOpen,
@@ -410,6 +411,10 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       className = '',
       style,
     } = props;
+
+    // SIZE_CONFIG and the BEM class suffix below are keyed by the legacy
+    // 'small' | 'middle' | 'large' spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     const displayPlaceholder = placeholder ?? t('treeselect.placeholder');
     const displayNotFound = notFoundContent ?? t('treeselect.not_found');

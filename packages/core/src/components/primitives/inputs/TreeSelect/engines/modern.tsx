@@ -18,6 +18,7 @@ import React, { useState, useRef, useEffect, useCallback, useMemo, type ReactNod
 import type { TreeSelectProps, TreeSelectNode, TreeSelectValue } from '../TreeSelect.types';
 import { TREESELECT_DEFAULTS } from '../TreeSelect.types';
 import { useTranslation } from '../../../../../i18n';
+import { toLegacySize } from '../../../../../contracts/common';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -324,7 +325,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       placeholder,
       disabled,
       allowClear = TREESELECT_DEFAULTS.allowClear,
-      size = TREESELECT_DEFAULTS.size,
+      size: sizeProp = TREESELECT_DEFAULTS.size,
       notFoundContent,
       open: controlledOpen,
       onDropdownVisibleChange,
@@ -334,6 +335,10 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       className,
       style,
     } = props;
+
+    // getSizeStyle's switch below is keyed by the legacy 'small' | 'middle' | 'large'
+    // spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     const displayPlaceholder = placeholder ?? t('treeselect.placeholder');
     const displayNotFound = notFoundContent ?? t('treeselect.not_found');

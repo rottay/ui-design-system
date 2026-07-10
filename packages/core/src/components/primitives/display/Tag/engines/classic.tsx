@@ -41,7 +41,7 @@
 import React, { useCallback } from 'react';
 import { Tag as AntTag } from 'antd';
 import type { TagProps } from '../Tag.types';
-import { TAG_DEFAULTS } from '../Tag.types';
+import { TAG_DEFAULTS, TONE_TO_TAG_VARIANT } from '../Tag.types';
 
 /**
  * Maps design system variants to Ant Design color presets.
@@ -74,7 +74,8 @@ const VARIANT_TO_ANT_COLOR: Record<string, string | undefined> = {
 export default function ClassicTag(props: TagProps): React.ReactElement {
   const {
     size = TAG_DEFAULTS.size,
-    variant = TAG_DEFAULTS.variant,
+    tone,
+    variant: variantProp = TAG_DEFAULTS.variant,
     closable = TAG_DEFAULTS.closable,
     onClose,
     icon,
@@ -89,6 +90,10 @@ export default function ClassicTag(props: TagProps): React.ReactElement {
     style = {},
     ...restProps
   } = props;
+
+  // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_TO_ANT_COLOR
+  // below is keyed by the same internal color-token name either way.
+  const variant = tone ? TONE_TO_TAG_VARIANT[tone] : variantProp;
 
   /**
    * Handles close events with proper callback invocation.

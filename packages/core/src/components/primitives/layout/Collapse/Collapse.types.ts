@@ -32,11 +32,21 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { Size } from '../../../../contracts/common';
 
 /**
  * Supported rendering engines for Collapse components.
  */
 type CollapseEngine = 'classic' | 'modern' | 'rustic';
+
+/** Collapse size, derived from the canonical {@link Size} scale. */
+export type CollapseSize = Extract<Size, 'sm' | 'md' | 'lg'>;
+
+/**
+ * @deprecated Legacy antd-style spelling; use {@link CollapseSize} ('sm' | 'md' | 'lg')
+ * instead. Retained for one release so existing values keep compiling.
+ */
+export type LegacyCollapseSize = 'small' | 'middle' | 'large';
 
 export interface CollapsePanelProps {
   /** Unique key for the panel */
@@ -79,7 +89,7 @@ export interface CollapseProps {
   /** Whether all panels are collapsible */
   collapsible?: 'header' | 'icon' | 'disabled';
   /** Size variant */
-  size?: 'small' | 'middle' | 'large';
+  size?: CollapseSize | LegacyCollapseSize;
   /** Panel children */
   children?: ReactNode;
   /** Custom class name */

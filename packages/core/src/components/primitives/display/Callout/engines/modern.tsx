@@ -19,7 +19,7 @@
 
 import React, { useState } from 'react';
 import type { CalloutProps } from '../Callout.types';
-import { CALLOUT_DEFAULTS, CALLOUT_ICONS } from '../Callout.types';
+import { CALLOUT_DEFAULTS, CALLOUT_ICONS, TONE_TO_CALLOUT_VARIANT } from '../Callout.types';
 
 /**
  * Maps DS variant names to DS token inline styles.
@@ -42,7 +42,8 @@ const VARIANT_STYLES: Record<string, React.CSSProperties> = {
  */
 export default function ModernCallout(props: CalloutProps): React.ReactElement | null {
   const {
-    variant = CALLOUT_DEFAULTS.variant,
+    tone,
+    variant: variantProp = CALLOUT_DEFAULTS.variant,
     title,
     children,
     icon,
@@ -52,6 +53,10 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
     className = '',
     style,
   } = props;
+
+  // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_STYLES
+  // and CALLOUT_ICONS below are keyed by the same internal color-token name either way.
+  const variant = tone ? TONE_TO_CALLOUT_VARIANT[tone] : variantProp;
 
   // Uncontrolled dismiss state -- once closed, the node is removed from the tree
   const [visible, setVisible] = useState(true);

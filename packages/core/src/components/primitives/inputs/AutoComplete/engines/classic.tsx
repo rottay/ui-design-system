@@ -18,6 +18,7 @@
 import React from 'react';
 import { AutoComplete as AntAutoComplete } from 'antd';
 import type { AutoCompleteProps } from '../AutoComplete.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Classic (Ant Design) implementation of the AutoComplete input.
@@ -84,7 +85,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           open={open}
           // DS uses `onDropdownVisibleChange` while Ant v5 renamed to `onOpenChange`.
           onOpenChange={onDropdownVisibleChange}
-          size={size}
+          size={toLegacySize(size)}
           status={status}
           notFoundContent={notFoundContent}
           classNames={popupClassNames as any}

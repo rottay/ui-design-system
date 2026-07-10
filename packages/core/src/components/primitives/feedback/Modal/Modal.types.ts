@@ -50,8 +50,10 @@
  */
 
 import type { ReactNode, MouseEvent } from 'react';
-import type { BaseComponentProps, Size, WithChildren } from '../../../../contracts/common';
+import type { BaseComponentProps, ModalSize, WithChildren } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
+
+export type { ModalSize };
 
 // ============================================================================
 // Shared Modal Types (formerly from contracts/primitives/feedback/Modal)
@@ -193,26 +195,20 @@ export interface ModalConfirmProps extends Omit<ModalProps, 'footer' | 'okText' 
 // Type Definitions
 // ============================================================================
 
-/**
- * Size variants for the Modal component.
- * Extends the base Size type with additional large sizes.
- *
- * @type {string}
- *
- * | Value | Width | Use Case |
- * |-------|-------|----------|
- * | `xs` | 320px | Tooltips, confirmations |
- * | `sm` | 416px | Simple forms |
- * | `md` | 520px | Standard dialogs (default) |
- * | `lg` | 720px | Complex forms |
- * | `xl` | 900px | Multi-section content |
- * | `2xl` | 960px | Wide layouts |
- * | `3xl` | 1120px | Dashboard panels |
- * | `4xl` | 1280px | Full-width content |
- * | `5xl` | 1440px | Near full-screen |
- * | `full` | 100% | Full viewport width |
- */
-export type ModalSize = Size | '4xl' | '5xl' | 'full';
+// ModalSize (imported above from contracts/common, re-exported at the top of this file):
+//
+// | Value | Width | Use Case |
+// |-------|-------|----------|
+// | `xs` | 320px | Tooltips, confirmations |
+// | `sm` | 416px | Simple forms |
+// | `md` | 520px | Standard dialogs (default) |
+// | `lg` | 720px | Complex forms |
+// | `xl` | 900px | Multi-section content |
+// | `2xl` | 960px | Wide layouts |
+// | `3xl` | 1120px | Dashboard panels |
+// | `4xl` | 1280px | Full-width content |
+// | `5xl` | 1440px | Near full-screen |
+// | `full` | 100% | Full viewport width |
 
 // ============================================================================
 // Close Button Props

@@ -85,7 +85,7 @@ export type { FlexProps, FlexDirection, FlexWrap, FlexJustify, FlexAlign } from 
 export { FLEX_DEFAULTS, FLEX_JUSTIFY_MAP, FLEX_ALIGN_MAP } from './Flex';
 
 export { Space } from './Space';
-export type { SpaceProps, SpaceSize, SpaceDirection, SpaceAlign } from './Space';
+export type { SpaceProps, SpaceSize, LegacySpaceSize, SpaceDirection, SpaceAlign } from './Space';
 export { SPACE_DEFAULTS, SPACE_SIZE_MAP, SPACE_ALIGN_MAP } from './Space';
 
 export { Layout } from './Layout';
@@ -103,7 +103,7 @@ export type { SplitterProps, SplitterPanelProps } from './Splitter';
 export { SPLITTER_DEFAULTS } from './Splitter';
 
 export { Collapse } from './Collapse';
-export type { CollapseProps, CollapsePanelProps } from './Collapse';
+export type { CollapseProps, CollapsePanelProps, CollapseSize, LegacyCollapseSize } from './Collapse';
 export { COLLAPSE_DEFAULTS } from './Collapse';
 
 // AspectRatio

@@ -18,6 +18,7 @@
 import React from 'react';
 import { Cascader as AntCascader } from 'antd';
 import type { CascaderProps } from '../Cascader.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Classic Cascader component backed by Ant Design.
@@ -76,7 +77,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           disabled={disabled}
           showSearch={showSearch}
           allowClear={allowClear}
-          size={size}
+          size={toLegacySize(size)}
           notFoundContent={notFoundContent}
           loading={loading}
           status={status}

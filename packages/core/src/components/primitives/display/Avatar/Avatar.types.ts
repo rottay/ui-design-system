@@ -36,16 +36,37 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Size, Variant, Shape, WithChildren, BorderedProps } from '../../../../contracts/common';
+import type { BaseComponentProps, Size, Tone, Variant, Shape, WithChildren, BorderedProps } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
 
 /** Avatar size type alias derived from the global Size scale. */
 export type AvatarSize = Size;
 
 /**
- * Avatar variants.
+ * @deprecated Use {@link Tone} via the `tone` prop instead. Retained for one release so
+ * existing values keep compiling.
  */
 export type AvatarVariant = Variant;
+
+/**
+ * The {@link Tone} values Avatar accepts through the `tone` prop. `'info'` is excluded: no
+ * engine defines `--ds-avatar-info-*` color tokens (unlike Badge, Avatar's variant vocabulary
+ * only ever covered 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' |
+ * 'gradient').
+ */
+export type AvatarTone = Exclude<Tone, 'info'>;
+
+/**
+ * Every {@link AvatarTone} value mapped to the internal color-token key `variant` has always
+ * used ('danger' is the canonical Tone spelling; Avatar's internal key has always been 'error').
+ */
+export const TONE_TO_AVATAR_VARIANT: Record<AvatarTone, AvatarVariant> = {
+  neutral: 'default',
+  primary: 'primary',
+  success: 'success',
+  warning: 'warning',
+  danger: 'error',
+};
 
 /**
  * Avatar shapes.
@@ -68,7 +89,14 @@ export interface AvatarProps extends BaseComponentProps, EngineAwareProps, WithC
   size?: AvatarSize;
 
   /**
-   * Avatar color variant.
+   * Avatar semantic color. Takes precedence over the deprecated `variant` prop when both
+   * are given.
+   * @default 'neutral'
+   */
+  tone?: AvatarTone;
+
+  /**
+   * @deprecated Use `tone` instead. Avatar color variant.
    * @default 'default'
    */
   variant?: AvatarVariant;

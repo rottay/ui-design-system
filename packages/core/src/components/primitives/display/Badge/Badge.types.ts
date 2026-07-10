@@ -36,7 +36,7 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Size, Variant, WithChildren } from '../../../../contracts/common';
+import type { BaseComponentProps, Size, Tone, Variant, WithChildren } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
 import type { ResponsiveValue } from '../../layout/shared/types';
 
@@ -44,9 +44,26 @@ import type { ResponsiveValue } from '../../layout/shared/types';
 export type BadgeSize = Size;
 
 /**
- * Badge variants.
+ * @deprecated Legacy color axis; use {@link Tone} via the `tone` prop instead. Retained for
+ * one release so existing values keep compiling.
  */
 export type BadgeVariant = Variant;
+
+/**
+ * Every {@link Tone} value Badge accepts through the `tone` prop, mapped to the internal
+ * color-token key the engines render ('gradient' and 'secondary' have no Tone equivalent and
+ * remain reachable only through the deprecated `variant` prop). `'info'` is a real, already
+ * color-tokened key the engines' internal `VARIANT_TOKENS` maps define but the deprecated
+ * `BadgeVariant` union never named, so it is typed here rather than narrowed to `BadgeVariant`.
+ */
+export const TONE_TO_BADGE_VARIANT: Record<Tone, BadgeVariant | 'info'> = {
+  neutral: 'default',
+  primary: 'primary',
+  success: 'success',
+  warning: 'warning',
+  danger: 'error',
+  info: 'info',
+};
 
 /**
  * Badge visual style.
@@ -74,7 +91,14 @@ export interface BadgeProps extends BaseComponentProps, EngineAwareProps, WithCh
   size?: ResponsiveValue<BadgeSize>;
 
   /**
-   * Badge color variant.
+   * Badge semantic color. Takes precedence over the deprecated `variant` prop when both
+   * are given.
+   * @default 'neutral'
+   */
+  tone?: Tone;
+
+  /**
+   * @deprecated Use `tone` instead. Badge color variant.
    * @default 'default'
    */
   variant?: BadgeVariant;

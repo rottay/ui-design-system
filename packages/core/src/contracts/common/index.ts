@@ -20,14 +20,68 @@ import type { CSSProperties, ReactNode } from 'react';
 /** Standard size scale used across all DS components. */
 export type Size = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 
-/** Ant Design-compatible size vocabulary used by a few engine bindings. */
+/**
+ * @deprecated Ant Design-compatible size vocabulary. Use {@link Size} ('sm' | 'md' | 'lg')
+ * in public component prop types; the classic engine's antd adapters translate a canonical
+ * `Size` step to this spelling internally via {@link toLegacySize}. Retained for one release
+ * so existing `'small' | 'middle' | 'large' | 'default'` values keep compiling.
+ */
 export type SizeType = 'small' | 'middle' | 'large' | 'default';
+
+/** The `sm | md | lg` subset of {@link Size} that has a legacy `SizeType` counterpart. */
+type CanonicalLegacySizeStep = 'sm' | 'md' | 'lg';
+
+/** Every canonical `sm | md | lg` step mapped to its legacy antd-style spelling. */
+const LEGACY_SIZE_BY_CANON: Record<CanonicalLegacySizeStep, 'small' | 'middle' | 'large'> = {
+  sm: 'small',
+  md: 'middle',
+  lg: 'large',
+};
+
+/**
+ * Resolves a canonical `Size` step to its legacy `SizeType` spelling for engine bindings that
+ * still key an internal lookup table, CSS class suffix, or antd component prop by
+ * `'small' | 'middle' | 'large'`. Any other input -- an already-legacy spelling, `'default'`,
+ * or `undefined` -- passes through unchanged, so calling this once on a `size` prop before it
+ * reaches existing lookup/switch/className logic keeps that logic's existing branches as the
+ * single source of truth for both spellings. Scoped to string inputs: a component whose `size`
+ * prop also accepts a number or tuple (e.g. `Space`) branches on `typeof`/`Array.isArray` first
+ * and calls this only on the remaining string case.
+ */
+export function toLegacySize<T extends string | undefined>(
+  size: T,
+): Exclude<T, CanonicalLegacySizeStep> | 'small' | 'middle' | 'large' {
+  if (size === 'sm' || size === 'md' || size === 'lg') {
+    return LEGACY_SIZE_BY_CANON[size as CanonicalLegacySizeStep];
+  }
+  return size as Exclude<T, CanonicalLegacySizeStep>;
+}
 
 /** Status types for form control validation states. */
 export type StatusType = '' | 'error' | 'warning';
 
-/** Semantic color variants available system-wide. */
+/**
+ * @deprecated Legacy color axis conflating semantic meaning (primary, success, warning, error)
+ * with one structural value (gradient) in a single union. Use {@link Tone} for semantic color;
+ * pair it with a component's own structural variant type (e.g. `BadgeStyle`) for rendering
+ * style. Retained for one release so existing values keep compiling.
+ */
 export type Variant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'gradient';
+
+/**
+ * Semantic color axis: what a component's color communicates, independent of how it renders.
+ * Pairs with a component's own structural variant type (the rendering-style axis, e.g.
+ * `BadgeStyle`'s `'solid' | 'outline' | 'soft' | 'ghost'`) rather than folding both concerns
+ * into one union.
+ */
+export type Tone = 'neutral' | 'primary' | 'success' | 'warning' | 'danger' | 'info';
+
+/**
+ * Modal width scale, shared by both Modal component families
+ * (`primitives/feedback/Modal` and `primitives/overlay/Modal`) so the two parallel component
+ * trees consume one declaration instead of two independently-maintained copies.
+ */
+export type ModalSize = Size | '4xl' | '5xl' | 'full';
 
 /** Shape options for components that support geometric variants. */
 export type Shape = 'circle' | 'square' | 'rounded';

@@ -10,16 +10,45 @@
 
 import type { ReactNode, CSSProperties } from 'react';
 import type { EngineAwareProps } from '../../../../contracts';
+import type { Tone } from '../../../../contracts/common';
 
-/** Variant types for Callout */
+/**
+ * @deprecated Use {@link Tone} via the `tone` prop instead. Retained for one release so
+ * existing values keep compiling.
+ */
 export type CalloutVariant = 'info' | 'warning' | 'error' | 'success';
+
+/**
+ * The {@link Tone} values Callout accepts through the `tone` prop ('neutral' and 'primary'
+ * have no Callout rendering and remain excluded, matching the deprecated `variant`'s vocabulary).
+ */
+export type CalloutTone = 'info' | 'warning' | 'danger' | 'success';
+
+/**
+ * Every {@link CalloutTone} value mapped to the internal color-token key `variant` has always
+ * used ('danger' is the canonical Tone spelling; Callout's internal key has always been 'error').
+ */
+export const TONE_TO_CALLOUT_VARIANT: Record<CalloutTone, CalloutVariant> = {
+  info: 'info',
+  warning: 'warning',
+  danger: 'error',
+  success: 'success',
+};
 
 /**
  * Props for the Callout component.
  * A rich callout box for informational/warning/error/success messages.
  */
 export interface CalloutProps extends EngineAwareProps {
-  /** Visual variant */
+  /**
+   * Callout semantic color. Takes precedence over the deprecated `variant` prop when both
+   * are given.
+   * @default 'info'
+   */
+  tone?: CalloutTone;
+  /**
+   * @deprecated Use `tone` instead. Visual variant.
+   */
   variant?: CalloutVariant;
   /** Callout title */
   title?: ReactNode;

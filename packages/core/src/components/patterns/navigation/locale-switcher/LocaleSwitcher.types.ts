@@ -4,6 +4,7 @@
  * size, flag/label visibility, and locale selection behavior.
  */
 
+import type { Size } from '../../../../contracts/common';
 import type { PatternBaseProps } from '../../foundation/types';
 
 /**
@@ -63,7 +64,7 @@ export interface LocaleSwitcherProps extends PatternBaseProps {
   /** Available locales. Default: all 5 DS locales */
   locales?: LocaleDef[];
   /** Size variant */
-  size?: 'sm' | 'md';
+  size?: Extract<Size, 'sm' | 'md'>;
   /** Show flag emoji. Default: true */
   showFlag?: boolean;
   /** Show label text. Default: true on md, false on sm */

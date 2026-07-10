@@ -5,6 +5,7 @@
  */
 
 import type { ReactNode } from 'react';
+import type { Size } from '../../../../contracts/common';
 import type { PatternBaseProps } from '../../foundation/types';
 
 /**
@@ -70,7 +71,7 @@ export interface UserProfileCardProps extends PatternBaseProps {
   /** Action buttons to display */
   actions?: ProfileAction[];
   /** Card size */
-  size?: 'sm' | 'md' | 'lg';
+  size?: Extract<Size, 'sm' | 'md' | 'lg'>;
   /** Display variant */
   variant?: 'compact' | 'full';
   /** Whether user is online */

@@ -14,7 +14,7 @@
 import React, { useState, useEffect } from 'react';
 import { Avatar as AntAvatar, Badge } from 'antd';
 import type { AvatarProps } from '../Avatar.types';
-import { AVATAR_DEFAULTS, SIZE_MAP } from '../Avatar.types';
+import { AVATAR_DEFAULTS, SIZE_MAP, TONE_TO_AVATAR_VARIANT } from '../Avatar.types';
 
 /**
  * Derives up to two uppercase initials from a display name or alt text.
@@ -52,7 +52,8 @@ export default function ClassicAvatar(props: AvatarProps): React.ReactElement {
     alt,
     size = AVATAR_DEFAULTS.size,
     shape = AVATAR_DEFAULTS.shape,
-    variant = AVATAR_DEFAULTS.variant,
+    tone,
+    variant: variantProp = AVATAR_DEFAULTS.variant,
     name,
     initials,
     status,
@@ -65,6 +66,10 @@ export default function ClassicAvatar(props: AvatarProps): React.ReactElement {
     className,
     style,
   } = props;
+
+  // tone (semantic) takes precedence over the deprecated variant prop; the
+  // --ds-avatar-{variant}-* tokens below are keyed by the same internal name either way.
+  const variant = tone ? TONE_TO_AVATAR_VARIANT[tone] : variantProp;
 
   // Track image load failures so we can fall back to initials/children
   const [imageError, setImageError] = useState(false);

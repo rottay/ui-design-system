@@ -32,16 +32,35 @@
  */
 
 import type { ReactNode } from 'react';
-import type { BaseComponentProps, Size, Variant, WithChildren } from '../../../../contracts/common';
+import type { BaseComponentProps, Size, Tone, Variant, WithChildren } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
 
 /** Tag size type alias derived from the global Size scale. */
 export type TagSize = Size;
 
 /**
- * Tag variants.
+ * @deprecated Legacy color axis; use {@link Tone} via the `tone` prop instead. Retained for
+ * one release so existing values keep compiling.
  */
 export type TagVariant = Variant;
+
+/**
+ * The {@link Tone} values Tag accepts through the `tone` prop. `'info'` is excluded: no engine
+ * defines color tokens for it (unlike Badge/Callout, Tag's variant maps only ever covered
+ * 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error').
+ */
+export type TagTone = Exclude<Tone, 'info'>;
+
+/**
+ * Every {@link TagTone} value mapped to the internal color-token key `variant` has always used.
+ */
+export const TONE_TO_TAG_VARIANT: Record<TagTone, TagVariant> = {
+  neutral: 'default',
+  primary: 'primary',
+  success: 'success',
+  warning: 'warning',
+  danger: 'error',
+};
 
 /**
  * Tag component props.
@@ -54,7 +73,14 @@ export interface TagProps extends BaseComponentProps, EngineAwareProps, WithChil
   size?: TagSize;
 
   /**
-   * Tag color variant.
+   * Tag semantic color. Takes precedence over the deprecated `variant` prop when both
+   * are given.
+   * @default 'neutral'
+   */
+  tone?: TagTone;
+
+  /**
+   * @deprecated Use `tone` instead. Tag color variant.
    * @default 'default'
    */
   variant?: TagVariant;

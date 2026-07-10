@@ -40,11 +40,18 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { Size } from '../../../../contracts/common';
 
 /**
- * Size variants for the Cascader input.
+ * Size variants for the Cascader input, derived from the canonical {@link Size} scale.
  */
-export type CascaderSize = 'small' | 'middle' | 'large';
+export type CascaderSize = Extract<Size, 'sm' | 'md' | 'lg'>;
+
+/**
+ * @deprecated Legacy antd-style spelling; use {@link CascaderSize} ('sm' | 'md' | 'lg')
+ * instead. Retained for one release so existing values keep compiling.
+ */
+export type LegacyCascaderSize = 'small' | 'middle' | 'large';
 
 /**
  * Trigger behavior for expanding child options.
@@ -171,7 +178,7 @@ export interface CascaderProps {
   /** Allow clear */
   allowClear?: boolean;
   /** Size of input */
-  size?: CascaderSize;
+  size?: CascaderSize | LegacyCascaderSize;
   /** Not found content */
   notFoundContent?: ReactNode;
   /** Loading state */

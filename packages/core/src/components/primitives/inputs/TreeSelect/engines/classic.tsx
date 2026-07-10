@@ -17,6 +17,7 @@
 import React from 'react';
 import { TreeSelect as AntTreeSelect } from 'antd';
 import type { TreeSelectProps } from '../TreeSelect.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Classic (Ant Design) engine for the TreeSelect component.
@@ -94,7 +95,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           placeholder={placeholder}
           disabled={disabled}
           allowClear={allowClear}
-          size={size}
+          size={toLegacySize(size)}
           maxTagCount={maxTagCount}
           status={status}
           notFoundContent={notFoundContent}

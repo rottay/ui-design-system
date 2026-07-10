@@ -24,6 +24,7 @@ import React, { useMemo } from 'react';
 import { Collapse as AntCollapse } from 'antd';
 import type { CollapseProps, CollapsePanelProps } from '../Collapse.types';
 import { useCollapseTokens } from '../../../../../hooks/components';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Converts JSX `<Collapse.Panel>` children into the `items` array format
@@ -94,11 +95,15 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
       expandIconPosition,
       onChange,
       collapsible,
-      size = 'middle',
+      size: sizeProp = 'middle',
       children,
       className,
       style,
     } = props;
+
+    // AntCollapse and useCollapseTokens key their size lookups by the legacy
+    // 'small' | 'middle' | 'large' spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     // Derive variant from boolean flags for token resolution:
     // ghost takes priority, then bordered, then default

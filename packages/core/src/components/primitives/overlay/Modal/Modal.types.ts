@@ -5,14 +5,10 @@
  */
 
 import type { ReactNode, MouseEvent } from 'react';
-import type { BaseComponentProps, Size, WithChildren } from '../../../../contracts/common';
+import type { BaseComponentProps, ModalSize, WithChildren } from '../../../../contracts/common';
 import type { EngineAwareProps } from '../../../../contracts/engine';
 
-/**
- * Modal size variants.
- * Extends base sizes with additional large variants and full width option.
- */
-export type ModalSize = Size | '4xl' | '5xl' | 'full';
+export type { ModalSize };
 
 /**
  * Modal placement options.

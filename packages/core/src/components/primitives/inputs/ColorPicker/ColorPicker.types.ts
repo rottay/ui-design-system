@@ -35,6 +35,7 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { Size } from '../../../../contracts/common';
 
 /**
  * Color format types supported by the picker.
@@ -45,12 +46,18 @@ import type { ReactNode, CSSProperties } from 'react';
 export type ColorFormat = 'hex' | 'rgb' | 'hsb';
 
 /**
- * Size variants for the color picker trigger.
- * - 'small': Compact size for dense layouts
- * - 'middle': Default size for most use cases
- * - 'large': Larger size for emphasized selection
+ * Size variants for the color picker trigger, derived from the canonical {@link Size} scale.
+ * - 'sm': Compact size for dense layouts
+ * - 'md': Default size for most use cases
+ * - 'lg': Larger size for emphasized selection
  */
-export type ColorPickerSize = 'small' | 'middle' | 'large';
+export type ColorPickerSize = Extract<Size, 'sm' | 'md' | 'lg'>;
+
+/**
+ * @deprecated Legacy antd-style spelling; use {@link ColorPickerSize} ('sm' | 'md' | 'lg')
+ * instead. Retained for one release so existing values keep compiling.
+ */
+export type LegacyColorPickerSize = 'small' | 'middle' | 'large';
 
 /**
  * Trigger behavior for opening the color panel.
@@ -132,7 +139,7 @@ export interface ColorPickerProps {
   /** Show color value as text (true, false, or custom render function) */
   showText?: boolean | ((color: Color) => ReactNode);
   /** Size of the color picker trigger */
-  size?: ColorPickerSize;
+  size?: ColorPickerSize | LegacyColorPickerSize;
   /** Whether the color picker is disabled */
   disabled?: boolean;
   /** Allow clearing the selected color */

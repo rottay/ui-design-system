@@ -101,6 +101,7 @@ export {
   type TreeSelectNode,
   type TreeSelectValue,
   type TreeSelectSize,
+  type LegacyTreeSelectSize,
   TREESELECT_DEFAULTS,
 } from './TreeSelect.types';
 

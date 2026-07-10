@@ -24,8 +24,10 @@ import type { CalloutProps } from './Callout.types';
 export {
   type CalloutProps,
   type CalloutVariant,
+  type CalloutTone,
   CALLOUT_DEFAULTS,
   CALLOUT_COLORS,
+  TONE_TO_CALLOUT_VARIANT,
 } from './Callout.types';
 
 /** Single engine-routed component with no compound sub-components. */

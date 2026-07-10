@@ -7,7 +7,7 @@ import { renderWithEngine } from '../../../../../_internal/testing/helpers/engin
 
 describe('Sheet real engines', () => {
   it('covers overlay and escape guards in the rustic engine', async () => {
-    await import('./engines/rustic');
+    await import('../engines/rustic');
     const handleLockedChange = vi.fn();
     const handleClosableChange = vi.fn();
 
@@ -53,7 +53,7 @@ describe('Sheet real engines', () => {
   });
 
   it('switches side-specific layout in the rustic engine', async () => {
-    await import('./engines/rustic');
+    await import('../engines/rustic');
     const handleChange = vi.fn();
 
     const { rerender } = renderWithEngine(

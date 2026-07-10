@@ -25,7 +25,7 @@
 
 import React, { useId } from 'react';
 import type { BadgeProps, BadgeSize } from '../Badge.types';
-import { BADGE_DEFAULTS, DOT_SIZE_MAP, SIZE_MAP } from '../Badge.types';
+import { BADGE_DEFAULTS, DOT_SIZE_MAP, SIZE_MAP, TONE_TO_BADGE_VARIANT } from '../Badge.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
@@ -160,7 +160,8 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     dot = BADGE_DEFAULTS.dot,
     showZero = BADGE_DEFAULTS.showZero,
     max = BADGE_DEFAULTS.overflowCount,
-    variant = BADGE_DEFAULTS.variant,
+    tone,
+    variant: variantProp = BADGE_DEFAULTS.variant,
     size: sizeProp = BADGE_DEFAULTS.size,
     badgeStyle: badgeStyleProp,
     visible = BADGE_DEFAULTS.visible,
@@ -175,6 +176,10 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     className = '',
     style,
   } = props;
+
+  // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_TOKENS
+  // and SIZE_SPECS below are keyed by the same internal color-token name either way.
+  const variant = tone ? TONE_TO_BADGE_VARIANT[tone] : variantProp;
 
   // -------------------------------------------------------------------------
   // Responsive size handling

@@ -106,6 +106,7 @@ export {
   type CascaderOption,
   type CascaderValue,
   type CascaderSize,
+  type LegacyCascaderSize,
   type CascaderExpandTrigger,
   CASCADER_DEFAULTS,
 } from './Cascader.types';

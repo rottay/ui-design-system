@@ -39,7 +39,7 @@
 
 import React, { useCallback } from 'react';
 import type { TagProps } from '../Tag.types';
-import { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP } from '../Tag.types';
+import { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP, TONE_TO_TAG_VARIANT } from '../Tag.types';
 
 /**
  * Close icon SVG component for closable tags.
@@ -92,7 +92,8 @@ const VARIANT_COLORS = {
 export default function RusticTag(props: TagProps): React.ReactElement {
   const {
     size = TAG_DEFAULTS.size,
-    variant = TAG_DEFAULTS.variant,
+    tone,
+    variant: variantProp = TAG_DEFAULTS.variant,
     closable = TAG_DEFAULTS.closable,
     onClose,
     icon,
@@ -107,6 +108,10 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     style = {},
     ...restProps
   } = props;
+
+  // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_COLORS
+  // below is keyed by the same internal color-token name either way.
+  const variant = tone ? TONE_TO_TAG_VARIANT[tone] : variantProp;
 
   /**
    * Handles tag click events when clickable.

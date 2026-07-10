@@ -33,6 +33,7 @@ import React from 'react';
 import { Space as AntSpace } from 'antd';
 import type { SpaceProps } from '../Space.types';
 import { SPACE_DEFAULTS } from '../Space.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Classic engine implementation of the Space component.
@@ -56,13 +57,13 @@ export const Space = React.forwardRef<HTMLDivElement, SpaceProps>(
       ...rest
     } = props;
 
-    // Normalize size to a value Ant Design accepts: a preset string, a number,
-    // or a [horizontal, vertical] tuple. The ternary branches are identical here
-    // because Ant Design handles all three forms natively -- the explicit branching
-    // keeps the intent readable for future maintainers adding engine-specific transforms.
+    // Normalize size to a value Ant Design accepts: Ant Design's Space size prop
+    // recognizes the legacy 'small' | 'middle' | 'large' spelling, a number, or a
+    // [horizontal, vertical] tuple -- not the canonical 'sm' | 'md' | 'lg' spelling, so a
+    // string value is resolved to its legacy spelling before reaching AntSpace.
     const computedSize =
       typeof size === 'string'
-        ? size
+        ? toLegacySize(size)
         : Array.isArray(size)
           ? size
           : size;

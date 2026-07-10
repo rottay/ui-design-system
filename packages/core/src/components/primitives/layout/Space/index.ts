@@ -116,6 +116,7 @@ import type { SpaceProps } from './Space.types';
 export {
   type SpaceProps,
   type SpaceSize,
+  type LegacySpaceSize,
   type SpaceDirection,
   type SpaceAlign,
   SPACE_DEFAULTS,

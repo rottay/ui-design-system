@@ -14,7 +14,7 @@
 
 import type React from 'react';
 import type { ReactNode } from 'react';
-import type { EngineAwareProps } from '../../../../contracts';
+import type { EngineAwareProps, Size } from '../../../../contracts';
 import type { ResponsiveValue } from '../../layout/shared/types';
 
 // ============================================================================
@@ -106,7 +106,7 @@ export type TabsType = 'line' | 'card' | 'pills';
  * <Tabs size="lg" items={items} />  // Large
  * ```
  */
-export type TabsSize = 'sm' | 'md' | 'lg';
+export type TabsSize = Extract<Size, 'sm' | 'md' | 'lg'>;
 
 // ============================================================================
 // Main Props Interface

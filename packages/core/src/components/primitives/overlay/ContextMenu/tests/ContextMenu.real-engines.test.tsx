@@ -7,7 +7,7 @@ import { renderWithEngine } from '../../../../../_internal/testing/helpers/engin
 
 describe('ContextMenu real engines', () => {
   it('covers divider, group, disabled, select, outside-click, and escape branches in the rustic engine', async () => {
-    await import('./engines/rustic');
+    await import('../engines/rustic');
     const handleSelect = vi.fn();
     const handleItemClick = vi.fn();
 

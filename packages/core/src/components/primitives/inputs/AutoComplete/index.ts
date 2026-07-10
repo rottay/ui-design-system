@@ -96,6 +96,7 @@ export {
   type AutoCompleteProps,
   type AutoCompleteOption,
   type AutoCompleteSize,
+  type LegacyAutoCompleteSize,
   AUTOCOMPLETE_DEFAULTS,
 } from './AutoComplete.types';
 

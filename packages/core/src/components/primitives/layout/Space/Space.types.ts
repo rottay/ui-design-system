@@ -29,17 +29,24 @@
  * @package @rottay/design-system
  */
 import type { ReactNode, CSSProperties } from 'react';
+import type { Size } from '../../../../contracts/common';
 
 /**
- * Preset size options for Space component.
+ * Preset size options for the Space component, derived from the canonical {@link Size} scale.
  * Each size maps to a CSS variable for consistent theming.
  *
  * @remarks
- * - `small`: Compact spacing (default: 8px)
- * - `middle`: Standard spacing (default: 16px)
- * - `large`: Generous spacing (default: 24px)
+ * - `sm`: Compact spacing (default: 8px)
+ * - `md`: Standard spacing (default: 16px)
+ * - `lg`: Generous spacing (default: 24px)
  */
-export type SpaceSize = 'small' | 'middle' | 'large';
+export type SpaceSize = Extract<Size, 'sm' | 'md' | 'lg'>;
+
+/**
+ * @deprecated Legacy antd-style spelling; use {@link SpaceSize} ('sm' | 'md' | 'lg') instead.
+ * Retained for one release so existing values keep compiling.
+ */
+export type LegacySpaceSize = 'small' | 'middle' | 'large';
 
 /**
  * Flow direction for Space component.
@@ -83,12 +90,12 @@ export type SpaceAlign = 'start' | 'end' | 'center' | 'baseline';
 export interface SpaceProps {
   /**
    * Size of spacing between items.
-   * - Preset: 'small' | 'middle' | 'large'
+   * - Preset: 'sm' | 'md' | 'lg' (or the deprecated 'small' | 'middle' | 'large' spelling)
    * - Number: Custom pixel value (e.g., 16)
    * - Array: [horizontal, vertical] gaps (e.g., [8, 16])
    * @default 'small'
    */
-  size?: SpaceSize | number | [number, number];
+  size?: SpaceSize | LegacySpaceSize | number | [number, number];
 
   /**
    * Direction of item flow.
@@ -151,7 +158,7 @@ export const SPACE_DEFAULTS: Partial<SpaceProps> = {
  * - `--ds-space-middle-size`: Default 16px
  * - `--ds-space-large-size`: Default 24px
  */
-export const SPACE_SIZE_MAP: Record<SpaceSize, string> = {
+export const SPACE_SIZE_MAP: Record<LegacySpaceSize, string> = {
   small: 'var(--ds-space-small-size)',
   middle: 'var(--ds-space-middle-size)',
   large: 'var(--ds-space-large-size)',

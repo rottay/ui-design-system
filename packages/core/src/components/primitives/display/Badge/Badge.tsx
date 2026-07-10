@@ -45,6 +45,7 @@ export {
   SIZE_MAP,
   DOT_SIZE_MAP,
   STATUS_COLOR_MAP,
+  TONE_TO_BADGE_VARIANT,
 } from './Badge.types';
 
 /** Engine-routed base -- consumers should use the public `Badge` export below. */

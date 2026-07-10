@@ -20,7 +20,7 @@
 
 import React, { useState } from 'react';
 import type { CalloutProps } from '../Callout.types';
-import { CALLOUT_DEFAULTS, CALLOUT_COLORS, CALLOUT_ICONS } from '../Callout.types';
+import { CALLOUT_DEFAULTS, CALLOUT_COLORS, CALLOUT_ICONS, TONE_TO_CALLOUT_VARIANT } from '../Callout.types';
 
 /**
  * Rustic (Pure HTML/CSS) implementation of the Callout component.
@@ -34,7 +34,8 @@ import { CALLOUT_DEFAULTS, CALLOUT_COLORS, CALLOUT_ICONS } from '../Callout.type
  */
 export default function RusticCallout(props: CalloutProps): React.ReactElement | null {
   const {
-    variant = CALLOUT_DEFAULTS.variant,
+    tone,
+    variant: variantProp = CALLOUT_DEFAULTS.variant,
     title,
     children,
     icon,
@@ -44,6 +45,10 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
     className = '',
     style,
   } = props;
+
+  // tone (semantic) takes precedence over the deprecated variant prop; CALLOUT_COLORS
+  // and CALLOUT_ICONS below are keyed by the same internal color-token name either way.
+  const variant = tone ? TONE_TO_CALLOUT_VARIANT[tone] : variantProp;
 
   // Uncontrolled dismiss: once closed, the aside is removed from the DOM
   const [visible, setVisible] = useState(true);

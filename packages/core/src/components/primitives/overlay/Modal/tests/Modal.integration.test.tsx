@@ -8,13 +8,13 @@ import { renderWithEngine, STABLE_ENGINES } from '../../../../../_internal/testi
 async function preloadModalEngine(engine: (typeof STABLE_ENGINES)[number]) {
   switch (engine) {
     case 'classic':
-      await import('../../engines/classic');
+      await import('../engines/classic');
       return;
     case 'modern':
-      await import('../../engines/modern');
+      await import('../engines/modern');
       return;
     case 'rustic':
-      await import('../../engines/rustic');
+      await import('../engines/rustic');
       return;
   }
 }

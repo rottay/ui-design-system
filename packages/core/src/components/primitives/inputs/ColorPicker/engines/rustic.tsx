@@ -21,6 +21,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import type { ColorPickerProps, Color } from '../ColorPicker.types';
 import { COLORPICKER_DEFAULTS } from '../ColorPicker.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 /** Swatch size dimensions driven by CSS variables for each size variant. */
 const SIZE_CONFIG: Record<string, { width: string; height: string }> = {
@@ -66,7 +67,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       format = COLORPICKER_DEFAULTS.format,
       presets,
       showText,
-      size = COLORPICKER_DEFAULTS.size,
+      size: sizeProp = COLORPICKER_DEFAULTS.size,
       disabled,
       allowClear,
       trigger = COLORPICKER_DEFAULTS.trigger,
@@ -75,6 +76,10 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       className = '',
       style,
     } = props;
+
+    // SIZE_CONFIG and the BEM class suffix below are keyed by the legacy
+    // 'small' | 'middle' | 'large' spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(false);

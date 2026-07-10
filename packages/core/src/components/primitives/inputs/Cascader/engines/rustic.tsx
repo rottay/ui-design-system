@@ -21,6 +21,7 @@ import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
 import { createPortal } from 'react-dom';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../Cascader.types';
 import { CASCADER_DEFAULTS } from '../Cascader.types';
+import { toLegacySize } from '../../../../../contracts/common';
 
 // ---------------------------------------------------------------------------
 // Helpers for fieldNames mapping
@@ -118,7 +119,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       disabled,
       showSearch,
       allowClear = CASCADER_DEFAULTS.allowClear,
-      size = CASCADER_DEFAULTS.size,
+      size: sizeProp = CASCADER_DEFAULTS.size,
       status,
       notFoundContent = 'No data',
       open: controlledOpen,
@@ -128,6 +129,10 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       className = '',
       style,
     } = props;
+
+    // SIZE_CONFIG and the BEM class suffix below are keyed by the legacy
+    // 'small' | 'middle' | 'large' spelling; toLegacySize resolves either spelling to it.
+    const size = toLegacySize(sizeProp);
 
     const [internalValue, setInternalValue] = useState<CascaderValue>(defaultValue as CascaderValue || []);
     const [internalOpen, setInternalOpen] = useState(false);

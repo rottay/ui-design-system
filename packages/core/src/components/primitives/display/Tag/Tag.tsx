@@ -27,8 +27,8 @@ import { resolveBadgePersonalityDefaults } from '../../../../runtime/personality
 import type { TagProps } from './Tag.types';
 import { TagGroup } from './compound';
 
-export type { TagProps, TagSize, TagVariant, TagRadius } from './Tag.types';
-export { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP, VARIANT_COLORS } from './Tag.types';
+export type { TagProps, TagSize, TagVariant, TagTone, TagRadius } from './Tag.types';
+export { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP, VARIANT_COLORS, TONE_TO_TAG_VARIANT } from './Tag.types';
 
 export { TagGroup };
 export type { TagGroupProps } from './compound';

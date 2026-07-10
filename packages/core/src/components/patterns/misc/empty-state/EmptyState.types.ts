@@ -5,6 +5,7 @@
  */
 
 import type { ReactNode } from 'react';
+import type { Size } from '../../../../contracts/common';
 import type { PatternBaseProps } from '../../foundation/types';
 
 /**
@@ -39,5 +40,5 @@ export interface EmptyStateProps extends PatternBaseProps {
   /** URL to an illustration image displayed instead of or alongside the icon */
   image?: string;
   /** Controls the overall padding and text size of the empty state */
-  size?: 'sm' | 'md' | 'lg';
+  size?: Extract<Size, 'sm' | 'md' | 'lg'>;
 }
