@@ -386,7 +386,7 @@
    "lane": "engine-modern",
    "order": 11,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01",
     "WO-ENG-02",
@@ -407,7 +407,9 @@
    ],
    "notes": "AMENDED 2026-07-09: cues 1-5 already delivered by ENG-01..05 (step 1 is verification, 0 core edits expected); the \"all section-12 counters at target\" gate is UNSATISFIABLE and was amended to \"--check green + the four residuals enumerated and accepted\"; the modern-vs-rustic comparison needs an ?engine= param on the capture route (tenant-axis.tsx:47 hardcodes forceEngine). See the AMENDMENT block in engine-modern.md.",
    "claimedBy": "ds-agent",
-   "claimedAt": "2026-07-10"
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "The premium signature is pinned, not asserted. THE PREMISE AGED AND I SAY SO: \"modern is visually indistinct from rustic\" was true when the WO was written and is not true now -- the earlier WOs shipped the mechanisms and WO-ENG-14 restored the tint by stopping ThemeProvider from stamping `none` over it. So this WO pins the signature instead of applying it. MEASURED on rottay (the tenant that opted into the premium layer), modern vs rustic, on the OVERLAPPING RECTANGLE because two images of different heights differ for reasons that have nothing to do with a signature: button 7.4%, input 5.7%, card 8.3%, badge 9.4%, table 8.6%, tabs 11.6%, select 5.9% of pixels differ. Card top hairline +11 luminance in modern, +0 in rustic. Surface tint 4.0 vs 0.0. Button transition cadence 0.12s vs 0.3s. NEW GATE: e2e/visual/signature.spec.ts, 10 tests, executing the spec own sentence -- \"if a screenshot of modern and rustic side-by-side cannot be told apart, the engine is off-spec\". THE DRILL CAUGHT ME. My first tint assertion read background-image and looked for the word \"gradient\". It PASSED with the intensity dial at 0, because the string still says linear-gradient(...) while every alpha inside is 0 and the face is flat -- verified in a browser: dial 1 measures a tint of 4.0, dial 0 measures 0.0, same string. That is the circular-probe trap in its purest form and I walked into it. It measures decoded pixels now. Drilled: append a rule zeroing rottay intensity, rebuild both packages, and the card reports \"face is flat (delta 0.00)\"; restore, 10/10. TWO CUES ARE NOT PIXEL-MEASURABLE HERE AND THE FILE SAYS SO RATHER THAN PRETENDING: glass lives on the modal backdrop and the gallery renders the trigger button, so asserting there would measure two buttons and call it glass; and element.focus() does not satisfy :focus-visible, so a computed outline reads none in BOTH engines. Both ride source-reading counters instead. GATE CLAUSE AMENDED: \"all spec section 12 counters at target\" cannot pass and never could -- they are decrease-only ratchets at baseline (modernHexLiterals 13, magicZIndex 33, deadSelectorsRustic 146, apcaPairings 6, compositorOnlyViolations 6). The honest clause is at-or-below baseline with --check green, which is what was certified. SIGHTED: test-artifacts/engine-modern/eng-11/{rottay,bithire}-{modern,rustic}-1280.png, each asserted to carry text and buttons at the shutter. Looked at: rustic paints flat white buttons, a grey pill tab and untinted cards; modern carries the cadence, the hairline and the tint. RELEASE NOTE recorded in the lane file, including the external-release marker for app-evnto WO-EXP-10 and app-platform WO-EXP-07, and the warning that app-evnto now renders modern where it rendered classic. No publish, no repin. GATE: test:gates 89/89, engine-token-audit --check green, audit-integration green, artifact parity green, build 0, typecheck 0. Owner approval delegated 2026-07-09. Owner delegated approval 2026-07-10."
   },
   {
    "id": "WO-ENG-12",
