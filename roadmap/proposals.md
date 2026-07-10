@@ -640,3 +640,22 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why it was not fixed** — closing it means wiring it into the Badge component, which was outside that executor's fence. It also could not be added to `audit-integration`'s orphan rule without immediately failing the build, so the rule was scoped to what it could guarantee, and the orphan was reported instead of hidden behind a widened exemption. That was the right call and is worth naming as the right call.
 - **Ask** — either wire the Badge hover transform to it, or delete the emission. Then extend the orphan rule to personality variables, with a drill.
 - **Status** — OPEN.
+
+### P-44 The focus ring is the brand's primary colour, and nothing checks it against the ground
+- **Found** — 2026-07-10, by WO-ARC-07's new interaction-state gate, while capturing what a keyboard focus paints.
+- **Evidence** — measured in a real browser, ring composited over its own page ground, WCAG 1.4.11 relative-luminance contrast:
+
+  | tenant / engine | indicator | composited ring | vs page ground | verdict |
+  | --- | --- | --- | --- | --- |
+  | rottay / modern | `outline 2px`, offset 2px | `rgb(255,255,255)` | 19.14:1 | pass |
+  | bithire / modern | `outline 2px`, offset 2px | `rgb(58,111,176)` | 4.60:1 | pass |
+  | torture-dark / modern | `outline 2px`, offset 2px | `rgb(119,3,89)` | **1.64:1** | FAIL |
+  | rottay / rustic | `box-shadow` ring, α=0.20 | `rgb(63,63,65)` | **1.82:1** | FAIL |
+  | bithire / rustic | `box-shadow` ring, α=0.12 | `rgb(214,213,210)` | **1.31:1** | FAIL |
+  | torture-dark / rustic | `box-shadow` ring, α=0.55 | `rgb(148,11,111)` | **2.14:1** | FAIL |
+
+- **The defect** — the ring is painted in the tenant's primary colour with no contrast guarantee against the surface it is drawn on. `outline-offset: 2px` puts it on the page ground, so the relevant comparison is ring-against-ground, and a tenant whose primary is close to its own ground gets an invisible keyboard affordance. The two engines disagree on the mechanism as well: modern draws an `outline`, rustic draws a low-alpha `box-shadow`, and rustic's alpha (0.12 on bithire) cannot reach 3:1 against anything.
+- **Why the a11y gate is silent** — WO-GAT-04's axe harness has no rule for focus-indicator contrast; no automated axe rule does. The 48 visual baselines never focus a control. Both gates were green while four of six rings were unusable.
+- **Why ARC-07 did not fix it** — ARC-07's own gate is "not one pixel moves". Fixing the ring moves pixels in four of six cells by construction. Repairing it inside a pixel-identical migration would have meant re-recording the very matrix that proves the migration is faithful.
+- **Ask** — one WO. Derive the ring from a contrast-checked token rather than from `--ds-color-primary` directly: pick the tenant's primary when it clears 3:1 against `--ds-color-bg-primary`, otherwise fall back to the ground's own high-contrast ink. Give rustic the same mechanism as modern, or give its `box-shadow` ring an alpha the contrast maths can actually satisfy. The gate already exists: `states.spec.ts` records the ring per tenant per engine, and `_internal/a11y/contrast` already computes the ratio. Ship it with a drill that lowers a tenant's ring contrast and watches the WO's new assertion go red.
+- **Status** — OPEN.
