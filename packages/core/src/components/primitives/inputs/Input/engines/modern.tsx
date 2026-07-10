@@ -5,14 +5,20 @@
  * inspired by Linear, Vercel, and Stripe Dashboard form controls.
  *
  * @remarks
- * All visual properties are driven by CSS variables so tenant themes can
- * override every detail without touching this file.
+ * The Modern engine paints this input entirely from
+ * `tokens/css/engines/modern/skin/input.css`, keyed on the `data-*` contract
+ * this component stamps: `data-variant`, `data-size`, `data-invalid`,
+ * `data-warning`, `data-success`, `data-disabled`, `data-size-responsive`,
+ * and the `data-part` / `data-state` anatomy attributes from
+ * `behavior/anatomy.ts`. A caller's own `style` prop is the only inline
+ * declaration on the shell.
  *
  * **Token Usage:**
  * - Surface: `--ds-surface-control` (field background)
  * - Border: `--ds-color-border` (resting), `--ds-color-primary` (focus)
  * - Radius: `--ds-radius-md` (8px default)
- * - Focus ring: `--ds-focus-ring-width`, `--ds-focus-ring-offset`, `--ds-focus-ring-color`
+ * - Focus ring: the `box-shadow` halo in `runtime/personality.css`, keyed on
+ *   `:focus-visible` -- text inputs match it on a pointer click too, per spec.
  * - Motion: `--ds-motion-fast` (var(--ds-motion-fast)), `--ds-motion-ease-out`
  * - Text: `--ds-color-text-primary`, `--ds-color-text-muted` (placeholder)
  *
@@ -27,6 +33,7 @@
 'use client';
 
 import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } from 'react';
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { InputProps, InputSize } from '../Input.types';
 import { INPUT_DEFAULTS, SIZE_MAP as INPUT_SIZE_MAP } from '../Input.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -36,139 +43,6 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
   if (value === undefined || value === null) return undefined;
   if (isResponsiveValue(value)) return undefined;
   return value as T;
-}
-
-/* ------------------------------------------------------------------ */
-/*  Sizing tokens                                                      */
-/* ------------------------------------------------------------------ */
-
-const SIZES = {
-  xs: { height: '28px', paddingX: '8px',  fontSize: '12px', lineHeight: '16px' },
-  sm: { height: '32px', paddingX: '10px', fontSize: '14px', lineHeight: '20px' },
-  md: { height: '36px', paddingX: '12px', fontSize: '14px', lineHeight: '20px' },
-  lg: { height: '40px', paddingX: '14px', fontSize: '16px', lineHeight: '24px' },
-  xl: { height: '44px', paddingX: '16px', fontSize: '16px', lineHeight: '24px' },
-} as const;
-
-/* ------------------------------------------------------------------ */
-/*  Shared inline styles                                               */
-/* ------------------------------------------------------------------ */
-
-const TRANSITION = 'border-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-offset var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)';
-
-/**
- * Build the shell style object for the input field (or the wrapping label
- * when prefix/suffix are present). Every visual detail is expressed via CSS
- * custom properties so theme overrides work without touching JS.
- */
-function buildShellStyle(
-  size: keyof typeof SIZES,
-  variant: string,
-  isFocused: boolean,
-  isHovered: boolean,
-  hasError: boolean,
-  hasWarning: boolean,
-  isDisabled: boolean,
-): React.CSSProperties {
-  const s = SIZES[size];
-
-  const base: React.CSSProperties = {
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-    width: '100%',
-    height: s.height,
-    paddingLeft: s.paddingX,
-    paddingRight: s.paddingX,
-    fontSize: s.fontSize,
-    lineHeight: s.lineHeight,
-    fontFamily: 'inherit',
-    color: 'var(--ds-input-color, var(--ds-color-text-primary))',
-    backgroundColor: 'var(--ds-input-bg, var(--ds-surface-control))',
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-input-border, var(--ds-color-border))',
-    borderRadius: 'var(--ds-radius-md, 8px)',
-    outline: 'var(--ds-focus-ring-width, 2px) solid transparent',
-    outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
-    transition: TRANSITION,
-    boxSizing: 'border-box',
-  };
-
-  // Variant overrides
-  if (variant === 'filled') {
-    base.backgroundColor = 'var(--ds-input-filled-bg, var(--ds-surface-canvas))';
-    base.borderColor = 'transparent';
-  } else if (variant === 'flushed') {
-    base.borderRadius = '0';
-    base.borderWidth = '0';
-    base.borderColor = 'transparent';
-    base.borderBottomWidth = '1px';
-    base.borderBottomStyle = 'solid';
-    base.borderBottomColor = 'var(--ds-input-border, var(--ds-color-border))';
-    base.paddingLeft = '0';
-    base.paddingRight = '0';
-    base.backgroundColor = 'transparent';
-  } else if (variant === 'unstyled') {
-    base.borderWidth = '0';
-    base.borderColor = 'transparent';
-    base.borderBottomWidth = '0';
-    base.borderBottomColor = 'transparent';
-    base.backgroundColor = 'transparent';
-    base.outline = 'none';
-    base.borderRadius = '0';
-    // Unstyled is a chrome-free field for embedding in a custom control, so it
-    // carries no horizontal inset — the host owns spacing around the text.
-    base.paddingLeft = '0';
-    base.paddingRight = '0';
-  }
-
-  // Hover
-  if (isHovered && !isFocused && !hasError && !hasWarning && !isDisabled && variant !== 'unstyled') {
-    base.borderColor = 'var(--ds-input-border-hover, var(--ds-color-border-hover))';
-  }
-
-  // Focus
-  if (isFocused && variant !== 'unstyled') {
-    base.borderColor = 'var(--ds-input-border-focus, var(--ds-color-primary))';
-    base.outline = 'var(--ds-focus-ring-width, 2px) solid var(--ds-input-shadow-focus, var(--ds-focus-ring-color))';
-    if (variant === 'flushed') {
-      base.outline = 'none';
-      base.borderBottomWidth = '2px';
-      base.borderBottomColor = 'var(--ds-input-border-focus, var(--ds-color-primary))';
-    }
-  }
-
-  // Error
-  if (hasError) {
-    base.borderColor = 'var(--ds-input-error-border, var(--ds-color-error))';
-    base.backgroundColor = variant === 'unstyled'
-      ? 'transparent'
-      : 'color-mix(in srgb, var(--ds-input-error-border, var(--ds-color-error)) 4%, transparent)';
-    if (isFocused) {
-      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-input-error-border, var(--ds-color-error)) 15%, transparent)';
-    }
-  }
-
-  // Warning
-  if (hasWarning && !hasError) {
-    base.borderColor = 'var(--ds-input-warning-border, var(--ds-color-warning))';
-    base.backgroundColor = variant === 'unstyled'
-      ? 'transparent'
-      : 'color-mix(in srgb, var(--ds-input-warning-border, var(--ds-color-warning)) 4%, transparent)';
-    if (isFocused) {
-      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-input-warning-border, var(--ds-color-warning)) 15%, transparent)';
-    }
-  }
-
-  // Disabled
-  if (isDisabled) {
-    base.opacity = 'var(--ds-input-disabled-opacity, 0.5)' as any;
-    base.cursor = 'not-allowed';
-    base.backgroundColor = 'var(--ds-input-bg-disabled, var(--ds-surface-canvas))';
-  }
-
-  return base;
 }
 
 /* ------------------------------------------------------------------ */
@@ -215,10 +89,14 @@ function ClearButton({ onClick, visible }: { onClick: () => void; visible: boole
 /**
  * Modern (premium) engine for the Input component.
  *
- * Renders a native `<input>` styled with CSS custom properties from the
- * design system token layer. When prefix, suffix, or clearable content
- * is present, wraps the input in a `<label>` for correct flex alignment.
- * Otherwise renders a standalone input for minimal DOM.
+ * Renders a native `<input>` painted by the modern skin stylesheet. When
+ * prefix, suffix, or clearable content is present, wraps the input in a
+ * `<label>` for correct flex alignment -- the LABEL is the shell in that
+ * case (it carries the skin's classes, `data-part`, `data-state`, and every
+ * `data-*` paint attribute), while the inner `<input>` stays a transparent,
+ * chrome-free passthrough. In the plain branch the `<input>` itself is both
+ * the shell and the focusable control. Both branches carry the same class
+ * set and the same `data-*` contract, so one stylesheet paints either shape.
  */
 const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const {
@@ -303,8 +181,12 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   const isControlled = controlledValue !== undefined;
   const currentValue = isControlled ? controlledValue : internalValue;
 
-  const [isFocused, setIsFocused] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
+  // The hover/focus triad is decided once, in the behavior core. The rustic
+  // skin reads the same state, so the two cannot drift apart on what a focus
+  // is. A text field's border is not a keyboard-only affordance (unlike a
+  // button's ring), so the skin keys off `focused`, never `focusVisible`.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Merge refs
@@ -329,20 +211,24 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     [isControlled, onChange]
   );
 
+  // Interaction-state tracking and the caller's own onFocus/onBlur prop are
+  // two separate concerns wired to the same real DOM focus target (the
+  // `<input>`, not the wrapping label in the addon branch -- a label is not
+  // itself a focusable element).
   const handleFocus = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(true);
+      interactionHandlers.onFocus(e);
       onFocus?.(e);
     },
-    [onFocus]
+    [interactionHandlers, onFocus]
   );
 
   const handleBlur = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false);
+      interactionHandlers.onBlur(e);
       onBlur?.(e);
     },
-    [onBlur]
+    [interactionHandlers, onBlur]
   );
 
   const handleKeyDown = useCallback(
@@ -368,9 +254,12 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   }, [isControlled, onChange, onClear]);
 
   // Determine status
-  const computedStatus = error ? 'error' : status;
   const hasError = error || status === 'error';
   const hasWarning = !hasError && status === 'warning';
+  // Not painted by the modern skin -- this engine has never rendered a
+  // distinct success posture (unlike rustic). Stamped anyway so the DOM
+  // contract is consistent across engines; see the skin's header comment.
+  const hasSuccess = !hasError && !hasWarning && status === 'success';
 
   const showClearButton = clearable && currentValue && !disabled && !readOnly;
 
@@ -412,20 +301,25 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     );
   }
 
-  const shellStyle = buildShellStyle(
-    size as keyof typeof SIZES,
-    variant,
-    isFocused,
-    isHovered,
-    hasError,
-    hasWarning,
-    disabled,
-  );
-
   const responsiveStyleTag = responsive && responsive.css ? (
     <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
   ) : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
+
+  /** The DOM contract the modern Input skin selects on. Spread onto the
+   *  shell element -- the `<label>` in the addon branch, the `<input>`
+   *  itself otherwise. */
+  const skinAttributes = {
+    'data-variant': variant,
+    'data-size': size,
+    'data-invalid': hasError ? 'true' : undefined,
+    'data-warning': hasWarning ? 'true' : undefined,
+    'data-success': hasSuccess ? 'true' : undefined,
+    'data-disabled': disabled ? 'true' : undefined,
+    'data-size-responsive': sizeIsResponsive ? 'true' : undefined,
+  } as const;
+
+  const shellClassName = 'rottay-input rottay-input--modern';
 
   // Addon (prefix/suffix) style
   const addonStyle: React.CSSProperties = {
@@ -526,10 +420,12 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         {responsiveStyleTag}
         {placeholderStyleTag}
         <label
-          style={shellStyle}
+          className={shellClassName}
           onClick={() => inputRef.current?.focus()}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onPointerEnter={interactionHandlers.onPointerEnter}
+          onPointerLeave={interactionHandlers.onPointerLeave}
+          {...partAttributes('root', interaction)}
+          {...skinAttributes}
         >
           {prefix && (
             <span style={addonStyle}>{prefix}</span>
@@ -537,12 +433,18 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
           <input
             {...inputProps}
-            className={`rottay-input rottay-input--modern ${placeholderStyleId}`}
+            // `rottay-input rottay-input--modern` is carried here too, WITHOUT
+            // `data-part`/`data-state`/the skin attributes: no rule in the skin
+            // matches without `[data-part='root']`, so this is inert for paint,
+            // but it keeps the bare class present on the actual <input> for any
+            // external selector (e.g. a tenant extension sheet) that targets it
+            // there rather than on the shell.
+            className={`${shellClassName} ${placeholderStyleId}`}
             style={innerInputStyle}
           />
 
           {showClearButton && (
-            <ClearButton onClick={handleClear} visible={isHovered || isFocused} />
+            <ClearButton onClick={handleClear} visible={interaction.hovered || interaction.focused} />
           )}
 
           {suffix && (
@@ -564,11 +466,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   }
 
   // Simple input without prefix/suffix -- the shell IS the input element
-  const standaloneStyle: React.CSSProperties = {
-    ...shellStyle,
-    // For standalone, padding is applied directly
-  };
-
   return (
     <div className={className} style={style}>
       {responsiveStyleTag}
@@ -576,10 +473,11 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       <input
         {...inputProps}
         {...responsiveAttrs}
-        className={`rottay-input rottay-input--modern ${placeholderStyleId}`}
-        style={standaloneStyle}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        className={`${shellClassName} ${placeholderStyleId}`}
+        onPointerEnter={interactionHandlers.onPointerEnter}
+        onPointerLeave={interactionHandlers.onPointerLeave}
+        {...partAttributes('root', interaction)}
+        {...skinAttributes}
       />
 
       {showCount && maxLength && (

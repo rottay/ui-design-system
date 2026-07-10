@@ -1,3 +1,6 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -299,5 +302,179 @@ describe('Input real engine coverage', () => {
     expect(handleFocus).toHaveBeenCalledTimes(1);
     expect(handleBlur).toHaveBeenCalledTimes(1);
     expect(textarea.getAttribute('style') ?? '').toContain('resize: none');
+  });
+});
+
+describe('Input CSS-first skin (WO-ARC-07)', () => {
+  it('modern: the plain and addon-wrapped branches stamp the identical shell contract', () => {
+    const { container: plainContainer } = render(
+      <ModernInput variant="filled" size="lg" aria-label="Plain" />
+    );
+    const plainShell = screen.getByRole('textbox', { name: 'Plain' });
+    expect(plainShell.tagName).toBe('INPUT');
+    expect(plainShell.className).toContain('rottay-input');
+    expect(plainShell.className).toContain('rottay-input--modern');
+    expect(plainShell).toHaveAttribute('data-part', 'root');
+    expect(plainShell).toHaveAttribute('data-variant', 'filled');
+    expect(plainShell).toHaveAttribute('data-size', 'lg');
+
+    const { container: wrappedContainer } = render(
+      <ModernInput
+        variant="filled"
+        size="lg"
+        prefix={<span>@</span>}
+        aria-label="Wrapped"
+      />
+    );
+    // The shell in this branch is the <label>, not the <input> -- the skin
+    // paints whichever element carries `data-part='root'`.
+    const wrappedShell = wrappedContainer.querySelector('label') as HTMLLabelElement;
+    expect(wrappedShell).not.toBeNull();
+    expect(wrappedShell.className).toContain('rottay-input');
+    expect(wrappedShell.className).toContain('rottay-input--modern');
+    expect(wrappedShell).toHaveAttribute('data-part', 'root');
+    expect(wrappedShell).toHaveAttribute('data-variant', 'filled');
+    expect(wrappedShell).toHaveAttribute('data-size', 'lg');
+
+    // The inner <input> in the addon branch keeps the bare class (for any
+    // external selector that targets the actual <input>) but never the
+    // paint-triggering data-part, so the skin cannot double-paint it.
+    const innerInput = screen.getByRole('textbox', { name: 'Wrapped' });
+    expect(innerInput.className).toContain('rottay-input--modern');
+    expect(innerInput).not.toHaveAttribute('data-part');
+
+    plainContainer.remove();
+    wrappedContainer.remove();
+  });
+
+  it('modern: hover and focus toggle data-state on the shell, and blur clears it', () => {
+    render(<ModernInput aria-label="Stateful" />);
+    const shell = screen.getByRole('textbox', { name: 'Stateful' });
+
+    expect(shell).not.toHaveAttribute('data-state');
+
+    fireEvent.pointerEnter(shell);
+    expect(shell.getAttribute('data-state')).toContain('hovered');
+
+    fireEvent.focus(shell);
+    expect(shell.getAttribute('data-state')).toContain('focused');
+
+    fireEvent.blur(shell);
+    fireEvent.pointerLeave(shell);
+    expect(shell).not.toHaveAttribute('data-state');
+  });
+
+  it('modern: a disabled input reports no hover or focus state', () => {
+    render(<ModernInput disabled aria-label="Disabled stateful" />);
+    const shell = screen.getByRole('textbox', { name: 'Disabled stateful' });
+
+    fireEvent.pointerEnter(shell);
+    fireEvent.focus(shell);
+    // `disabled` is itself one of the serialized `data-state` flags
+    // (`behavior/anatomy.ts`'s STATE_FLAG_ORDER), so the attribute is
+    // present -- what must be absent is `hovered`/`focused` within it.
+    expect(shell.getAttribute('data-state')).toBe('disabled');
+    expect(shell).toHaveAttribute('data-disabled', 'true');
+  });
+
+  it('modern: error/warning/success stamp the DOM contract the skin (and any consumer) reads', () => {
+    const { rerender } = render(<ModernInput status="error" aria-label="Status" />);
+    expect(screen.getByRole('textbox', { name: 'Status' })).toHaveAttribute('data-invalid', 'true');
+
+    rerender(<ModernInput status="warning" aria-label="Status" />);
+    expect(screen.getByRole('textbox', { name: 'Status' })).toHaveAttribute('data-warning', 'true');
+    expect(screen.getByRole('textbox', { name: 'Status' })).not.toHaveAttribute('data-invalid');
+
+    rerender(<ModernInput status="success" aria-label="Status" />);
+    expect(screen.getByRole('textbox', { name: 'Status' })).toHaveAttribute('data-success', 'true');
+
+    // `error` (the boolean prop) outranks `status`, matching the component's
+    // own `hasError = error || status === 'error'` precedence.
+    rerender(<ModernInput error status="warning" aria-label="Status" />);
+    expect(screen.getByRole('textbox', { name: 'Status' })).toHaveAttribute('data-invalid', 'true');
+    expect(screen.getByRole('textbox', { name: 'Status' })).not.toHaveAttribute('data-warning');
+  });
+
+  it('modern skin: the dead resting outline is deleted, and the error/warning-focused outline is real', () => {
+    // The skin paints from a stylesheet this runtime never loads. What is
+    // assertable here is the CONTRACT the sheet answers to (established in
+    // the component tests above) and the sheet's own content, the way
+    // Card.real-engines.test.tsx reads `skin/card.css` directly. The pixels
+    // themselves are measured against a real cascade by
+    // `packages/showroom/e2e/visual/states.spec.ts`.
+    const skin = readFileSync(
+      join(__dirname, '../../../../../tokens/css/engines/modern/skin/input.css'),
+      'utf-8'
+    );
+
+    // No rule may substitute a box-shadow token into the outline shorthand
+    // (the invalid declaration P-54 found) -- that string must not appear.
+    expect(skin).not.toContain("solid var(--ds-input-shadow-focus");
+
+    // The plain focused case explicitly clears the outline with valid CSS.
+    expect(skin).toContain("[data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {\n  outline: none;");
+
+    // The error/warning-focused ring is a real, separate declaration -- not
+    // deleted, because it is not dead (see the skin's own header comment).
+    expect(skin).toContain("[data-invalid='true'][data-state~='focused']");
+    expect(skin).toContain('color-mix(in srgb, var(--ds-input-error-border, var(--ds-color-error)) 15%, transparent)');
+    expect(skin).toContain("[data-warning='true']:not([data-invalid='true'])[data-state~='focused']");
+    expect(skin).toContain('color-mix(in srgb, var(--ds-input-warning-border, var(--ds-color-warning)) 15%, transparent)');
+  });
+
+  it('rustic: the shell is always the wrapping <div>, in both branches', () => {
+    const { container: plainContainer } = render(<RusticInput aria-label="Plain rustic" />);
+    const plainShell = plainContainer.querySelector('.rottay-input--rustic') as HTMLDivElement;
+    expect(plainShell).not.toBeNull();
+    expect(plainShell.tagName).toBe('DIV');
+    expect(plainShell).toHaveAttribute('data-part', 'root');
+
+    const { container: wrappedContainer } = render(
+      <RusticInput prefix={<span>@</span>} aria-label="Wrapped rustic" />
+    );
+    const wrappedShell = wrappedContainer.querySelector('.rottay-input--rustic') as HTMLDivElement;
+    expect(wrappedShell).not.toBeNull();
+    expect(wrappedShell.tagName).toBe('DIV');
+    expect(wrappedShell).toHaveAttribute('data-part', 'root');
+
+    plainContainer.remove();
+    wrappedContainer.remove();
+  });
+
+  it('rustic: focus/error/warning/success/disabled state classes survive for the skin-pack contract', () => {
+    const { container, rerender } = render(<RusticInput status="error" aria-label="Rustic status" />);
+    let shell = container.querySelector('.rottay-input--rustic') as HTMLDivElement;
+    expect(shell.className).toContain('rottay-input--error');
+    expect(shell).toHaveAttribute('data-invalid', 'true');
+
+    rerender(<RusticInput status="warning" aria-label="Rustic status" />);
+    shell = container.querySelector('.rottay-input--rustic') as HTMLDivElement;
+    expect(shell.className).toContain('rottay-input--warning');
+
+    rerender(<RusticInput status="success" aria-label="Rustic status" />);
+    shell = container.querySelector('.rottay-input--rustic') as HTMLDivElement;
+    expect(shell.className).toContain('rottay-input--success');
+
+    rerender(<RusticInput disabled aria-label="Rustic status" />);
+    shell = container.querySelector('.rottay-input--rustic') as HTMLDivElement;
+    expect(shell.className).toContain('rottay-input--disabled');
+
+    rerender(<RusticInput aria-label="Rustic status" />);
+    shell = container.querySelector('.rottay-input--rustic') as HTMLDivElement;
+    fireEvent.focus(screen.getByRole('textbox', { name: 'Rustic status' }));
+    expect(shell.className).toContain('rottay-input--focused');
+    expect(shell.getAttribute('data-state')).toContain('focused');
+  });
+
+  it('rustic skin: no rule keys on hover -- this engine has never repainted on it', () => {
+    const skin = readFileSync(
+      join(__dirname, '../../../../../tokens/css/engines/rustic/skin/input.css'),
+      'utf-8'
+    );
+    // Strip comments first: the header explains the absence in prose and
+    // therefore mentions the literal selector string -- a real rule using it
+    // would appear outside a `/* ... */` block.
+    const rulesOnly = skin.replace(/\/\*[\s\S]*?\*\//g, '');
+    expect(rulesOnly).not.toContain("[data-state~='hovered']");
   });
 });

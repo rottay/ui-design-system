@@ -4,15 +4,26 @@
  * Part of the Rottay Design System's input primitives collection.
  *
  * @remarks
- * The Rustic engine provides a headless input implementation using only
- * native HTML elements and CSS variables for theming. This ensures
- * multi-tenant support through the CSS cascade.
+ * The Rustic engine paints this input entirely from
+ * `tokens/css/engines/rustic/skin/input.css`, keyed on the `data-*` contract
+ * this component stamps: `data-variant`, `data-size`, `data-invalid`,
+ * `data-warning`, `data-success`, `data-disabled`, `data-size-responsive`,
+ * and the `data-part` / `data-state` anatomy attributes from
+ * `behavior/anatomy.ts`. The outer `<div>` is always the shell -- unlike the
+ * modern engine, there is no branch where the shell is the `<input>` itself.
+ *
+ * The pre-anatomy BEM state classes (`rottay-input--focused`, `--error`,
+ * `--warning`, `--success`, `--disabled`) are still stamped: they are
+ * documented in `runtime/engines/skin-pack.ts` and the example skin pack as
+ * a stable class hook a white-label skin pack may select on. The skin itself
+ * does not key on them.
  *
  * **Key Features:**
  * - Zero UI library dependencies
  * - Full CSS variable theming (var(--ds-input-*))
  * - Controlled and uncontrolled modes
- * - Focus, hover, and disabled state handling
+ * - Focus and disabled state handling (no hover paint -- see the skin's
+ *   header comment: this engine has never repainted on hover)
  * - Clear button with custom SVG icon
  * - Character count display
  * - Error message display
@@ -26,6 +37,7 @@
 'use client';
 
 import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } from 'react';
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { InputProps, InputSize } from '../Input.types';
 import { INPUT_DEFAULTS, SIZE_MAP } from '../Input.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -40,10 +52,9 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
 /**
  * Rustic (vanilla HTML/CSS) engine for the Input component.
  *
- * Uses only native HTML elements styled through CSS variables (`--ds-input-*`)
- * for full multi-tenant theming without any UI library dependency. All visual
- * states (focus ring, validation colors, disabled opacity) are computed inline
- * from the CSS variable palette.
+ * Uses only native HTML elements. The outer `<div>` is always the shell that
+ * the skin paints (border, background, radius, focus ring); the inner
+ * `<input>` stays a transparent, chrome-free passthrough.
  *
  * @param props - Standardized InputProps from the design system contract.
  * @param ref   - Forwarded ref merged with an internal ref for imperative focus.
@@ -120,12 +131,21 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
+  // Get size values from CSS variables
+  const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
+
   // Handle controlled/uncontrolled
   const [internalValue, setInternalValue] = useState(defaultValue ?? '');
   const isControlled = controlledValue !== undefined;
   const currentValue = isControlled ? controlledValue : internalValue;
 
-  const [isFocused, setIsFocused] = useState(false);
+  // The hover/focus triad is decided once, in the behavior core. This engine
+  // never painted on hover (no rule in the skin reads it), but the state is
+  // still tracked so the DOM contract matches modern's. A text field's
+  // border is not a keyboard-only affordance, so the skin keys off
+  // `focused`, never `focusVisible`.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState({ disabled });
+
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Merge refs
@@ -158,20 +178,22 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     [isControlled, onChange]
   );
 
+  // Interaction-state tracking and the caller's own onFocus/onBlur prop are
+  // two separate concerns wired to the same real DOM focus target.
   const handleFocus = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(true);
+      interactionHandlers.onFocus(e);
       onFocus?.(e);
     },
-    [onFocus]
+    [interactionHandlers, onFocus]
   );
 
   const handleBlur = useCallback(
     (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false);
+      interactionHandlers.onBlur(e);
       onBlur?.(e);
     },
-    [onBlur]
+    [interactionHandlers, onBlur]
   );
 
   const handleKeyDown = useCallback(
@@ -201,71 +223,49 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   // Determine if error state
   const hasError = error || status === 'error';
-  const hasWarning = status === 'warning';
-  const hasSuccess = status === 'success';
+  const hasWarning = !hasError && status === 'warning';
+  const hasSuccess = !hasError && !hasWarning && status === 'success';
 
-  // Get size values from CSS variables
-  const sizeValues = SIZE_MAP[size] || SIZE_MAP.md;
+  const showClearButton = clearable && currentValue && !disabled && !readOnly;
 
-  // Border color priority: error > warning > success > focused > default.
-  // Validation status always wins over focus state to ensure errors are visible.
-  const getBorderColor = () => {
-    if (hasError) return 'var(--ds-input-error-border)';
-    if (hasWarning) return 'var(--ds-input-warning-border)';
-    if (hasSuccess) return 'var(--ds-input-success-border)';
-    if (isFocused) return 'var(--ds-input-border-focus)';
-    return 'var(--ds-input-border)';
-  };
+  // Hidden inputs carry no visible chrome: render a bare, form-participating
+  // `<input type="hidden">` so server-action forms receive the value via
+  // FormData without the container/affix markup.
+  if (type === 'hidden') {
+    return (
+      <input
+        type="hidden"
+        name={props.name}
+        id={props.id}
+        value={(currentValue ?? '') as string}
+        readOnly
+        data-testid={dataTestId}
+      />
+    );
+  }
 
-  // Focus ring uses a status-colored glow (3px spread + 8px ambient) to reinforce
-  // the validation state. Unstyled variant disables the ring entirely.
-  const getBoxShadow = () => {
-    if (variant === 'unstyled') return 'none';
-    if (hasError && isFocused) return 'var(--ds-input-error-shadow-focus, 0 0 0 3px rgba(239, 68, 68, 0.15)), 0 0 8px rgba(239, 68, 68, 0.1)';
-    if (hasWarning && isFocused) return 'var(--ds-input-warning-shadow-focus, 0 0 0 3px rgba(245, 158, 11, 0.15)), 0 0 8px rgba(245, 158, 11, 0.1)';
-    if (hasSuccess && isFocused) return 'var(--ds-input-success-shadow-focus, 0 0 0 3px rgba(34, 197, 94, 0.15)), 0 0 8px rgba(34, 197, 94, 0.1)';
-    if (isFocused) return 'var(--ds-input-shadow-focus, 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.15))), 0 0 8px rgba(59, 130, 246, 0.08)';
-    return 'none';
-  };
+  // File inputs are uncontrolled native pickers: render a bare `<input
+  // type="file">` that forwards its ref and native change event. No `value` is
+  // applied — assigning to a file input's value is illegal.
+  if (type === 'file') {
+    return (
+      <input
+        ref={inputRef}
+        type="file"
+        name={props.name}
+        id={props.id}
+        accept={props.accept}
+        multiple={props.multiple}
+        disabled={props.disabled}
+        className={props.className}
+        style={props.style}
+        data-testid={dataTestId}
+        onChange={handleChange}
+      />
+    );
+  }
 
-  // Background varies by variant and interaction state. The "filled" variant
-  // swaps to a lighter background on focus to give the user a visual cue.
-  const getBackground = () => {
-    if (disabled) return 'var(--ds-input-bg-disabled)';
-    if (variant === 'filled') {
-      if (isFocused) return 'var(--ds-input-filled-bg-focus)';
-      return 'var(--ds-input-filled-bg)';
-    }
-    return 'var(--ds-input-bg)';
-  };
-
-  // Flushed variant shows only a bottom border (Material Design-style).
-  // Unstyled removes all borders. All other variants use a full border.
-  const isBorderless = variant === 'flushed' || variant === 'unstyled';
-  const outlineBorder = `1px solid ${getBorderColor()}`;
-  const sideBorder = isBorderless ? 'none' : outlineBorder;
-  const containerStyle: React.CSSProperties = {
-    position: 'relative',
-    display: 'inline-flex',
-    alignItems: 'center',
-    width: '100%',
-    height: sizeValues.height,
-    backgroundColor: getBackground(),
-    borderRadius: variant === 'flushed' ? 0 : 'var(--ds-input-radius)',
-    borderTop: sideBorder,
-    borderRight: sideBorder,
-    borderLeft: sideBorder,
-    borderBottom: variant === 'flushed'
-      ? `${isFocused ? 2 : 1}px solid ${getBorderColor()}`
-      : sideBorder,
-    transition: 'border-color 0.15s, box-shadow 0.2s, background-color 0.1s',
-    opacity: disabled ? 0.6 : 1,
-    cursor: disabled ? 'not-allowed' : 'text',
-    boxShadow: getBoxShadow(),
-    ...style,
-  };
-
-  // The inner <input> is borderless and transparent so the container div
+  // The inner <input> is borderless and transparent so the shell div
   // controls all visual chrome (border, radius, shadow). Padding is removed
   // on the side where a prefix or suffix is present to avoid double-spacing.
   const inputStyle: React.CSSProperties = {
@@ -316,52 +316,28 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     color: hasError ? 'var(--ds-input-error-color)' : 'var(--ds-input-addon-color)',
   };
 
-  const showClearButton = clearable && currentValue && !disabled && !readOnly;
+  /** The DOM contract the rustic Input skin selects on. Spread onto the
+   *  shell -- always the outer <div>. */
+  const skinAttributes = {
+    'data-variant': variant,
+    'data-size': size,
+    'data-invalid': hasError ? 'true' : undefined,
+    'data-warning': hasWarning ? 'true' : undefined,
+    'data-success': hasSuccess ? 'true' : undefined,
+    'data-disabled': disabled ? 'true' : undefined,
+    'data-size-responsive': sizeIsResponsive ? 'true' : undefined,
+  } as const;
 
-  // Hidden inputs carry no visible chrome: render a bare, form-participating
-  // `<input type="hidden">` so server-action forms receive the value via
-  // FormData without the container/affix markup.
-  if (type === 'hidden') {
-    return (
-      <input
-        type="hidden"
-        name={props.name}
-        id={props.id}
-        value={(currentValue ?? '') as string}
-        readOnly
-        data-testid={dataTestId}
-      />
-    );
-  }
-
-  // File inputs are uncontrolled native pickers: render a bare `<input
-  // type="file">` that forwards its ref and native change event. No `value` is
-  // applied — assigning to a file input's value is illegal.
-  if (type === 'file') {
-    return (
-      <input
-        ref={inputRef}
-        type="file"
-        name={props.name}
-        id={props.id}
-        accept={props.accept}
-        multiple={props.multiple}
-        disabled={props.disabled}
-        className={props.className}
-        style={props.style}
-        data-testid={dataTestId}
-        onChange={handleChange}
-      />
-    );
-  }
-
-  // Build class names
+  // Pre-anatomy BEM class hooks, preserved: documented in
+  // `runtime/engines/skin-pack.ts` and the example skin pack as a stable
+  // selector surface for white-label packs. The skin itself keys on the
+  // data-* contract above, not these.
   const containerClasses = [
     'rottay-input',
     'rottay-input--rustic',
     `rottay-input--${size}`,
     `rottay-input--${variant}`,
-    isFocused && 'rottay-input--focused',
+    interaction.focused && 'rottay-input--focused',
     hasError && 'rottay-input--error',
     hasWarning && 'rottay-input--warning',
     hasSuccess && 'rottay-input--success',
@@ -379,9 +355,13 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       )}
       <div
         className={containerClasses}
-        style={containerStyle}
+        style={style}
+        {...skinAttributes}
+        {...partAttributes('root', interaction)}
         {...(responsive ? responsive.attrs : {})}
         onClick={() => inputRef.current?.focus()}
+        onPointerEnter={interactionHandlers.onPointerEnter}
+        onPointerLeave={interactionHandlers.onPointerLeave}
       >
         {prefix && (
           <span style={affixStyle}>

@@ -1,0 +1,188 @@
+/**
+ * Rustic Input skin (WO-ARC-07).
+ *
+ * DELIBERATELY UNLAYERED, at (0,4,0) or higher on every rule that sets
+ * `border-color` -- the same two reasons as the Button/Card rustic skins:
+ * no `rottay-*` layer can paint an element Tailwind's `base` layer also
+ * targets (P-47), and each tenant's unlayered `*` border floor sits at
+ * (0,3,1), outranking a bare two-class rule (P-48). The presence check
+ * `[data-variant]` (true on every render; the prop always resolves to one of
+ * four values) is used purely to add a specificity component where a rule
+ * would otherwise land at (0,3,0) with no natural variant/state qualifier to
+ * borrow one from.
+ *
+ * RUSTIC TRACKS NO HOVER STATE. Read in full: the engine declares
+ * `isFocused` and nothing else -- no `onMouseEnter`/`onMouseLeave`, no
+ * `isHovered`. A hovered rustic Input has never repainted. The migration to
+ * `useInteractionState` below now tracks `hovered` in React state (the hook
+ * always does), but this stylesheet has no rule keyed on
+ * `[data-state~='hovered']` -- adding one would be new behaviour, not a
+ * transcription, and would move a pixel that has never moved.
+ *
+ * FOCUS BORDER IS KEYED ON `[data-state~='focused']`, NOT `focus-visible` --
+ * a text field's border is not a keyboard-only affordance; see the modern
+ * skin's header for the full reasoning (`behavior/anatomy.ts`).
+ *
+ * THE RING IS `box-shadow` ONLY. Rustic's container never set `outline` at
+ * all (the inner `<input>` does, permanently `none`, to suppress the native
+ * UA ring on the wrong element) -- unlike the modern skin, there is no dead
+ * declaration to delete here, and no rule below touches `outline`.
+ *
+ * BACKGROUND HAS NO ERROR/WARNING TINT, unlike the modern skin: rustic's
+ * `getBackground()` never reads `hasError`/`hasWarning`/`hasSuccess` at all.
+ * Only `filled` gets a distinct background (plus its own focus shade);
+ * `outline`, `flushed`, AND `unstyled` all resolve to the SAME
+ * `--ds-input-bg` token -- flushed and unstyled do NOT go transparent in
+ * this engine the way they do in modern. A real, measured cross-engine
+ * divergence, preserved rather than homogenized.
+ *
+ * FLUSHED'S VISIBLE EDGE (border-bottom) DOES TAKE THE ERROR/WARNING/SUCCESS
+ * COLOR here, unlike modern: `getBorderColor()` is one shared priority chain
+ * (error > warning > success > focused > default) called fresh for every
+ * side, including the flushed-specific bottom line, so there is no
+ * shorthand-shadowing artifact to reproduce -- the same five rules that
+ * paint outline/filled's border-color are mirrored one-for-one as
+ * border-bottom-color rules for flushed.
+ *
+ * UNSTYLED SUPPRESSES EVERYTHING, unconditionally: `getBoxShadow()` checks
+ * `variant === 'unstyled'` FIRST and returns `none` before any
+ * error/warning/success/focus check runs, and `isBorderless` (border: none)
+ * includes unstyled with no exception. Unlike the MODERN skin -- where an
+ * error-focused unstyled Input still shows a live outline ring, because that
+ * engine's outline reassignment isn't gated on variant -- rustic's unstyled
+ * truly has no ring, ever.
+ */
+
+/* base: layout, transition, resting border/shadow. Border-COLOR is
+   deliberately absent -- the priority chain below sets it, each rule
+   reaching (0,4,0)+ so it survives the tenant `*` border floor (P-48). */
+.rottay-input.rottay-input--rustic[data-part='root'] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  cursor: text;
+  opacity: 1;
+  transition: border-color 0.15s, box-shadow 0.2s, background-color 0.1s;
+  border-style: solid;
+  border-width: 1px;
+  box-shadow: none;
+}
+
+/* size: CSS custom-property tokens, carried verbatim (rustic already
+   referenced `--ds-input-{size}-height` rather than a literal, so the token
+   reference is what transcribes, not a resolved pixel value -- a fluid or
+   rem-relative token continues to resolve identically at runtime). Excluded
+   when responsive, mirroring the Button skin. */
+.rottay-input.rottay-input--rustic[data-part='root'][data-size='xs']:not([data-size-responsive]) { height: var(--ds-input-xs-height); }
+.rottay-input.rottay-input--rustic[data-part='root'][data-size='sm']:not([data-size-responsive]) { height: var(--ds-input-sm-height); }
+.rottay-input.rottay-input--rustic[data-part='root'][data-size='md']:not([data-size-responsive]) { height: var(--ds-input-md-height); }
+.rottay-input.rottay-input--rustic[data-part='root'][data-size='lg']:not([data-size-responsive]) { height: var(--ds-input-lg-height); }
+.rottay-input.rottay-input--rustic[data-part='root'][data-size='xl']:not([data-size-responsive]) { height: var(--ds-input-xl-height); }
+
+/* radius: every variant except flushed */
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant]:not([data-variant='flushed']) {
+  border-radius: var(--ds-input-radius);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='flushed'] {
+  border-radius: 0;
+}
+
+/* background: only `filled` differs; outline/flushed/unstyled share one
+   token (see header -- no transparent fallback for flushed/unstyled here).
+   `disabled` is excluded from both: `getBackground()` checks it FIRST,
+   unconditionally, so it must win regardless of variant -- the dedicated
+   disabled rule at the end of this file is the only background answer once
+   disabled is true. */
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant]:not([data-variant='filled']):not([data-disabled='true']) {
+  background-color: var(--ds-input-bg);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='filled']:not([data-disabled='true']) {
+  background-color: var(--ds-input-filled-bg);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='filled'][data-state~='focused']:not([data-disabled='true']) {
+  background-color: var(--ds-input-filled-bg-focus);
+}
+
+/* border-color priority (outline, filled): error > warning > success >
+   focused > default. Order below is lowest to highest priority so a later
+   rule wins a tie, mirroring `getBorderColor()`'s own if-chain (error
+   checked first there is error placed last here). Flushed and unstyled are
+   excluded: each gets its own treatment below. */
+.rottay-input.rottay-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled']) {
+  border-color: var(--ds-input-border);
+}
+.rottay-input.rottay-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled'])[data-state~='focused'] {
+  border-color: var(--ds-input-border-focus);
+}
+.rottay-input.rottay-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled'])[data-success='true'] {
+  border-color: var(--ds-input-success-border);
+}
+.rottay-input.rottay-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled'])[data-warning='true'] {
+  border-color: var(--ds-input-warning-border);
+}
+.rottay-input.rottay-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled'])[data-invalid='true'] {
+  border-color: var(--ds-input-error-border);
+}
+
+/* flushed: top/right/left fully reset (full shorthand `none`, matching the
+   original inline `borderTop: 'none'` etc so width/color also revert to
+   their initial values, not merely style); the bottom edge repeats the SAME
+   five-rule priority chain as border-bottom-color, plus a focus-only
+   width step the chain doesn't otherwise carry. */
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='flushed'] {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--ds-input-border);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='flushed'][data-state~='focused'] {
+  border-bottom-width: 2px;
+  border-bottom-color: var(--ds-input-border-focus);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='flushed'][data-success='true'] {
+  border-bottom-color: var(--ds-input-success-border);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='flushed'][data-warning='true'] {
+  border-bottom-color: var(--ds-input-warning-border);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='flushed'][data-invalid='true'] {
+  border-bottom-color: var(--ds-input-error-border);
+}
+
+/* unstyled: fully borderless and shadowless, unconditionally -- see header. */
+.rottay-input.rottay-input--rustic[data-part='root'][data-variant='unstyled'] {
+  border: none;
+  box-shadow: none;
+}
+
+/* the ring: box-shadow only, status-tinted, focus-gated. Same lowest-to-
+   highest priority ordering as the border-color chain. Excluded on unstyled
+   unconditionally, matching `getBoxShadow()` checking variant first. */
+.rottay-input.rottay-input--rustic[data-part='root'][data-state~='focused']:not([data-variant='unstyled']) {
+  box-shadow: var(--ds-input-shadow-focus, 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.15))), 0 0 8px rgba(59, 130, 246, 0.08);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-success='true'][data-state~='focused']:not([data-variant='unstyled']) {
+  box-shadow: var(--ds-input-success-shadow-focus, 0 0 0 3px rgba(34, 197, 94, 0.15)), 0 0 8px rgba(34, 197, 94, 0.1);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-warning='true'][data-state~='focused']:not([data-variant='unstyled']) {
+  box-shadow: var(--ds-input-warning-shadow-focus, 0 0 0 3px rgba(245, 158, 11, 0.15)), 0 0 8px rgba(245, 158, 11, 0.1);
+}
+.rottay-input.rottay-input--rustic[data-part='root'][data-invalid='true'][data-state~='focused']:not([data-variant='unstyled']) {
+  box-shadow: var(--ds-input-error-shadow-focus, 0 0 0 3px rgba(239, 68, 68, 0.15)), 0 0 8px rgba(239, 68, 68, 0.1);
+}
+
+/* disabled: opacity + cursor + background only -- `getBorderColor()` and
+   `getBoxShadow()` never read `disabled`, so a disabled Input keeps whatever
+   border/ring its OTHER state implies (unreachable via a real pointer/
+   keyboard for the focus-ring case, since browsers refuse focus to a
+   disabled control, but the JS itself sets no such guard, so neither does
+   this stylesheet). Background wins unconditionally, including over
+   `filled`'s own focus shade above (that rule excludes `[data-disabled]`). */
+.rottay-input.rottay-input--rustic[data-part='root'][data-disabled='true'] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--ds-input-bg-disabled);
+}
