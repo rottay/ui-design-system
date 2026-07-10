@@ -107,6 +107,9 @@ const BUTTON_STATES: readonly StateName[] = [
 /** A card reacts to a pointer and takes no focus; asking it to Tab would prove nothing. */
 const CARD_STATES: readonly StateName[] = ['rest', 'hovered', 'rest-after-hover'];
 
+/** A table row hovers (bg in modern, bg + shadow in rustic) and takes no focus. */
+const TABLE_ROW_STATES: readonly StateName[] = ['rest', 'hovered', 'rest-after-hover'];
+
 const PROBES: readonly Probe[] = [
   {
     name: 'button',
@@ -161,6 +164,23 @@ const PROBES: readonly Probe[] = [
         // A card has no press posture: nothing in either engine paints one.
         states: ['rest', 'hovered', 'rest-after-hover', 'focus-visible'],
       },
+    ],
+  },
+  {
+    // WO-ARC-09 checkpoint 1. The Table's row-hover and selected-row paint,
+    // rendered behind ?tablestates=1 so no flagship baseline sees it. `r2` is
+    // pre-selected, so the second body row (index 1) is the selected subject;
+    // index 0 is an ordinary row put through the hover cycle. A row takes no
+    // focus and has no press posture, so neither invariant below applies.
+    name: 'table-row',
+    slug: 'table',
+    query: '&tablestates=1',
+    container: '[data-testid="probe-table-states"]',
+    selector: '[data-testid="probe-table-states"] tbody tr',
+    expectedCount: 3,
+    subjects: [
+      { name: 'table-row', index: 0, states: TABLE_ROW_STATES },
+      { name: 'table-row-selected', index: 1, states: ['rest'] },
     ],
   },
 ];
@@ -523,6 +543,10 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
       for (const engine of ENGINES) {
         for (const { subject } of ALL_SUBJECTS) {
           if (subject.name === 'primary-disabled') continue;
+          // A subject that does not declare `hovered` (e.g. a pre-selected row
+          // captured only at rest) is not asserted to react to a hover it never
+          // receives — same `has(...)` guard the other invariants use.
+          if (!has(subject, 'hovered')) continue;
           const rest = source()[cellKey(fixture, engine, subject.name, 'rest')];
           const hovered = source()[cellKey(fixture, engine, subject.name, 'hovered')];
           expect(
