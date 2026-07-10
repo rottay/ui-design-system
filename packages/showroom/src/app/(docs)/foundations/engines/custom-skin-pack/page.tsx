@@ -47,7 +47,7 @@ function FlagshipPreview() {
       <Select
         options={SELECT_OPTIONS}
         value={selectValue}
-        onChange={setSelectValue}
+        onChange={(value) => setSelectValue(String(value))}
         placeholder="Choose a plan"
       />
       <Card
