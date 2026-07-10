@@ -17,6 +17,8 @@
  */
 
 import React, { useState } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { SwitchProps } from '../Switch.types';
 
 /**
@@ -81,7 +83,11 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     const isControlled = checked !== undefined;
     const [internalChecked, setInternalChecked] = useState(defaultChecked);
     // Focus state drives the outline ring on the slider track
-    const [isFocused, setIsFocused] = useState(false);
+    // The triad is decided once, in the behavior core. `focused` is any focus --
+    // a field's focus border must appear when a pointer lands in it. A ring is
+    // `focusVisible`, and this part does not draw one.
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+    const isFocused = interaction.focused;
     const isChecked = isControlled ? checked : internalChecked;
 
     // Guard against state changes while disabled or loading
@@ -192,8 +198,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             checked={isChecked}
             disabled={disabled || loading}
             onChange={handleChange}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            {...interactionHandlers}
             autoFocus={autoFocus}
             tabIndex={tabIndex}
             id={id}

@@ -17,6 +17,8 @@
  */
 
 import React, { useState, useCallback } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { InputNumberProps } from '../InputNumber.types';
 
 /**
@@ -82,7 +84,11 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     // Controlled vs uncontrolled: parent-supplied `value` takes precedence
     const isControlled = value !== undefined;
     const [internalValue, setInternalValue] = useState<number | string | null>(defaultValue ?? null);
-    const [isFocused, setIsFocused] = useState(false);
+    // The triad is decided once, in the behavior core. `focused` is any focus --
+    // a field's focus border must appear when a pointer lands in it. A ring is
+    // `focusVisible`, and this part does not draw one.
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+    const isFocused = interaction.focused;
     const currentValue = isControlled ? value : internalValue;
 
     /** Parse raw string input, returning null for empty/NaN to represent "no value". */
@@ -285,8 +291,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             placeholder={placeholder}
             onChange={handleChange}
             onKeyDown={handleKeyDown}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            {...interactionHandlers}
             autoFocus={autoFocus}
             id={id}
             name={name}

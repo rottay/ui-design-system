@@ -16,6 +16,8 @@
 'use client';
 
 import React, { useState, useCallback, useId } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { ToggleProps } from '../Toggle.types';
 import { TOGGLE_DEFAULTS, SIZE_MAP, SIZE_VALUES, COLOR_MAP } from '../Toggle.types';
 
@@ -65,7 +67,11 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
   // Dual-mode state: controlled when `checked` prop is provided, uncontrolled otherwise
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
   // Focus state drives the outer ring / box-shadow on the track
-  const [isFocused, setIsFocused] = useState(false);
+  // The triad is decided once, in the behavior core. `focused` is any focus --
+  // a field's focus border must appear when a pointer lands in it. A ring is
+  // `focusVisible`, and this part does not draw one.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isFocused = interaction.focused;
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
@@ -232,8 +238,7 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
           disabled={disabled || loading}
           required={required}
           onChange={handleChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          {...interactionHandlers}
           autoFocus={autoFocus}
           style={inputStyle}
           aria-checked={isChecked}

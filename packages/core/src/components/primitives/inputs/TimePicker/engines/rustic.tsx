@@ -17,6 +17,8 @@
  */
 
 import React, { useState } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { TimePickerProps, TimeRangePickerProps } from '../TimePicker.types';
 
 /** Size dimensions driven by CSS variables for each size variant. */
@@ -102,7 +104,11 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<string>(() => parseTime(defaultValue));
   // Focus state drives border color and box-shadow via inline styles
-  const [isFocused, setIsFocused] = useState(false);
+  // The triad is decided once, in the behavior core. `focused` is any focus --
+  // a field's focus border must appear when a pointer lands in it. A ring is
+  // `focusVisible`, and this part does not draw one.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isFocused = interaction.focused;
 
   const displayValue = isControlled ? parseTime(value) : internalValue;
 
@@ -203,8 +209,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
         disabled={disabled}
         placeholder={placeholder}
         onChange={handleChange}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        {...interactionHandlers}
         autoFocus={autoFocus}
         id={id}
         name={name}

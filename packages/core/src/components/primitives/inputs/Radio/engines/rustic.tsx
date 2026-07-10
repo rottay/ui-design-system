@@ -18,6 +18,8 @@
 'use client';
 
 import React, { useState, useId, useCallback } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { RadioProps } from '../Radio.types';
 import { RADIO_DEFAULTS } from '../Radio.types';
 
@@ -81,7 +83,11 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
   // Controlled vs. uncontrolled pattern. `isFocused` drives the focus ring
   // via inline styles since the native input is visually hidden.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  const [isFocused, setIsFocused] = useState(false);
+  // The triad is decided once, in the behavior core. `focused` is any focus --
+  // a field's focus border must appear when a pointer lands in it. A ring is
+  // `focusVisible`, and this part does not draw one.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isFocused = interaction.focused;
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
@@ -251,8 +257,7 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
           disabled={disabled}
           required={required}
           onChange={handleChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          {...interactionHandlers}
           style={inputStyle}
           aria-checked={isChecked}
           aria-invalid={error}

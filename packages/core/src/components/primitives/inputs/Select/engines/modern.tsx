@@ -19,16 +19,9 @@
 
 'use client';
 
-import React, {
-  forwardRef,
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-  useImperativeHandle,
-  useId,
-} from 'react';
+import React, { forwardRef, useState, useRef, useEffect, useCallback, useMemo, useImperativeHandle, useId } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import { createPortal } from 'react-dom';
 import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
@@ -404,7 +397,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
-  const [isHovered, setIsHovered] = useState(false);
+  // The triad is decided once, in the behavior core. `focused` is any focus --
+  // a field's focus border must appear when a pointer lands in it. A ring is
+  // `focusVisible`, and this part does not draw one.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isHovered = interaction.hovered;
   const [internalValue, setInternalValue] = useState<(string | number)[]>(() => {
     const initial = value ?? defaultValue;
     if (initial === undefined) return [];
@@ -1169,8 +1166,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             }
           }
         }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        {...interactionHandlers}
         tabIndex={0}
         role="combobox"
         aria-expanded={isOpen}

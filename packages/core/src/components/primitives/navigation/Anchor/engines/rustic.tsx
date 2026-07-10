@@ -74,6 +74,8 @@
 'use client';
 
 import React, { useState, useEffect, createContext, useContext, useCallback, Children, isValidElement } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { AnchorProps, AnchorLinkProps } from '../Anchor.types';
 import { ANCHOR_DEFAULTS } from '../Anchor.types';
 
@@ -211,7 +213,11 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
 
     // Hover state is managed in JS because inline styles cannot use :hover
     // pseudo-selectors; this is the trade-off for zero-dependency styling
-    const [isHovered, setIsHovered] = useState(false);
+    // The triad is decided once, in the behavior core. `focused` is any focus --
+    // a field's focus border must appear when a pointer lands in it. A ring is
+    // `focusVisible`, and this part does not draw one.
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+    const isHovered = interaction.hovered;
 
     // ---------------------------------------------------------------------------
     // Context
@@ -249,8 +255,7 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
           href={href}
           target={target}
           onClick={handleClick}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          {...interactionHandlers}
           className={className}
           style={{
             ...styles.link,

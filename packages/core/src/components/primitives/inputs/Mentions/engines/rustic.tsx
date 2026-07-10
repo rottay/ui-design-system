@@ -17,6 +17,8 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { MentionsProps, MentionsOption } from '../Mentions.types';
 import { MENTIONS_DEFAULTS } from '../Mentions.types';
 
@@ -61,7 +63,11 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
+    // The triad is decided once, in the behavior core. `focused` is any focus --
+    // a field's focus border must appear when a pointer lands in it. A ring is
+    // `focusVisible`, and this part does not draw one.
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+    const isFocused = interaction.focused;
     const [searchText, setSearchText] = useState('');
     const [currentPrefix, setCurrentPrefix] = useState('');
     const [mentionStart, setMentionStart] = useState(-1);
@@ -310,8 +316,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          {...interactionHandlers}
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}

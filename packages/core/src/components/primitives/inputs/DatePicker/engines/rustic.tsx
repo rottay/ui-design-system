@@ -17,13 +17,9 @@
  * @package @rottay/design-system
  */
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import { createPortal } from 'react-dom';
 import type { DatePickerMode, DatePickerProps, RangePickerProps } from '../DatePicker.types';
 import { useTranslation } from '../../../../../i18n';
@@ -731,7 +727,11 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
     parseDateValue(defaultValue),
   );
   const [internalOpen, setInternalOpen] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  // The triad is decided once, in the behavior core. `focused` is any focus --
+  // a field's focus border must appear when a pointer lands in it. A ring is
+  // `focusVisible`, and this part does not draw one.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isFocused = interaction.focused;
   const [focusedDate, setFocusedDate] = useState<Date | null>(null);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
@@ -966,8 +966,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
           id={id}
           name={name}
           onClick={() => !disabled && !readOnly && setOpen(!isOpen)}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          {...interactionHandlers}
           onKeyDown={(e) => {
             if ((e.key === 'Enter' || e.key === ' ') && !disabled && !readOnly) {
               e.preventDefault();

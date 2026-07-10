@@ -18,6 +18,8 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { CheckboxProps } from '../Checkbox.types';
 import { CHECKBOX_DEFAULTS } from '../Checkbox.types';
 
@@ -85,7 +87,11 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   // ring via inline styles since the native input is visually hidden and
   // its :focus pseudo-class would not be visible.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  const [isFocused, setIsFocused] = useState(false);
+  // The triad is decided once, in the behavior core. `focused` is any focus --
+  // a field's focus border must appear when a pointer lands in it. A ring is
+  // `focusVisible`, and this part does not draw one.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isFocused = interaction.focused;
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
@@ -284,8 +290,7 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
           disabled={disabled}
           required={required}
           onChange={handleChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          {...interactionHandlers}
           style={inputStyle}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-invalid={error}

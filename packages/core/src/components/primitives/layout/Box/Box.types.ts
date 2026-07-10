@@ -81,6 +81,15 @@ export interface BoxProps extends EngineAwareProps, WithChildrenProps, BaseCompo
   as?: ElementType;
 
   /**
+   * Associates a label with a control. Meaningful only when `as="label"`.
+   *
+   * `BoxProps` extends `HTMLAttributes<HTMLElement>`, which carries no
+   * element-specific attributes, so a polymorphic `as` cannot type them. A label
+   * without this is not a label, and the design system forbids raw HTML.
+   */
+  htmlFor?: string;
+
+  /**
    * Padding on all sides. Accepts a responsive object for breakpoint-aware values.
    * @default 'none'
    */

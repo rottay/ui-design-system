@@ -16,6 +16,8 @@
  */
 
 import React, { useState, useCallback, useId, useRef } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { TagInputProps } from '../TagInput.types';
 import { TAGINPUT_DEFAULTS } from '../TagInput.types';
 
@@ -59,7 +61,11 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
 
   const [inputValue, setInputValue] = useState('');
   // Focus state drives the blue ring and border highlight on the container
-  const [isFocused, setIsFocused] = useState(false);
+  // The triad is decided once, in the behavior core. `focused` is any focus --
+  // a field's focus border must appear when a pointer lands in it. A ring is
+  // `focusVisible`, and this part does not draw one.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isFocused = interaction.focused;
   const inputRef = useRef<HTMLInputElement>(null);
   const generatedId = useId();
   const inputId = providedId || `taginput-rustic-${generatedId}`;
@@ -178,8 +184,7 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
           value={inputValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          {...interactionHandlers}
           placeholder={value.length === 0 ? placeholder : ''}
           disabled={disabled}
           autoFocus={autoFocus}

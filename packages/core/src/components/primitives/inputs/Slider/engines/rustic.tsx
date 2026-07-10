@@ -17,6 +17,8 @@
  */
 
 import React, { useState, useCallback } from 'react';
+
+import { useInteractionState } from '../../../../../behavior';
 import type { SliderProps } from '../Slider.types';
 import { SLIDER_DEFAULTS } from '../Slider.types';
 
@@ -61,7 +63,11 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
     const [internalValue, setInternalValue] = useState<number | [number, number]>(getInitialValue);
     // Focus state drives the focus-ring outline on handles via inline styles
-    const [isFocused, setIsFocused] = useState(false);
+    // The triad is decided once, in the behavior core. `focused` is any focus --
+    // a field's focus border must appear when a pointer lands in it. A ring is
+    // `focusVisible`, and this part does not draw one.
+    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+    const isFocused = interaction.focused;
 
     // Controlled vs uncontrolled pattern: external value wins when provided
     const isControlled = controlledValue !== undefined;
@@ -228,8 +234,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onChange={(e) => handleChange([Number(e.target.value), end])}
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            {...interactionHandlers}
             disabled={disabled}
             style={inputStyle}
             aria-valuemin={min}
@@ -245,8 +250,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             onChange={(e) => handleChange([start, Number(e.target.value)])}
             onMouseUp={handleMouseUp}
             onTouchEnd={handleMouseUp}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            {...interactionHandlers}
             disabled={disabled}
             style={inputStyle}
             aria-valuemin={min}
@@ -334,8 +338,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           onChange={(e) => handleChange(Number(e.target.value))}
           onMouseUp={handleMouseUp}
           onTouchEnd={handleMouseUp}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
+          {...interactionHandlers}
           disabled={disabled}
           style={inputStyle}
           aria-valuemin={min}
