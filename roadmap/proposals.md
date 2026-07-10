@@ -720,7 +720,9 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   | --- | --- | --- | --- |
   | `patterns/data/list-toolbar/tests/ListToolbar.integration.test.tsx` | `Unable to find an accessible element with the role "button" and name /create event/i` (×2) | passed | 3/3 passed |
   | `surfaces/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx` | `renders a direct Export button when a single format is configured` | passed | 35/35 passed |
+  | `surfaces/pages/admin/audit/tests/AuditSurface.test.tsx` | `Unable to find an element with the text: user.created` (observed 2026-07-10, during WO-ARC-07's Card certification) | passed on the re-run | 2/2 passed |
 
+- **A third instance, same shape** — every one of them fails to FIND a rendered element under full-suite load and passes alone. That is a rendering or timing leak, not three unrelated bugs.
 - **Why it matters** — the ledger is the contract this program certifies against: "17 failures, and here is each one." A suite that returns 17 or 21 depending on the run makes that contract unfalsifiable, and it is exactly how a real regression gets waved through as "one of the known flaky ones". This program has already been burned once by an inherited failure count (P-40).
 - **Ask** — one WO. Reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
 - **Status** — OPEN.
