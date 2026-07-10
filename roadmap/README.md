@@ -68,6 +68,17 @@ Each of these was paid for. They are not style preferences.
    probe and the single-emitter audit: the check ran, the check was green, and
    the check was not looking where the defect was.
 
+6. **A check that cannot see new files is a check looking where the defect is not.**
+   Three times this program's own verification missed something because of *how*
+   it looked, not because it did not look. `git diff` does not show untracked
+   files, so an escape-hatch grep over the diff reported "none" while two
+   `@ts-expect-error` sat in a new test file. `git show HEAD:` was never run
+   before blaming an executor for a placeholder change that a prior commit had
+   made. And an assertion that read `background-image` for the word "gradient"
+   passed with the effect dial at zero, because the string survives when every
+   alpha inside it does not. **Verify with the instrument that can see the thing
+   you are looking for**, and prefer measuring the artifact over reading its name.
+
 ## The pre-existing failure baseline (measured, not assumed)
 
 `pnpm test` in `packages/core` fails **17 tests** at HEAD. All 17 also fail at

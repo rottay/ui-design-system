@@ -720,7 +720,7 @@
    "lane": "tokens",
    "order": 3,
    "size": "M",
-   "status": "in-progress",
+   "status": "todo",
    "dependsOn": [
     "WO-ENG-08"
    ],
@@ -729,8 +729,10 @@
     "P-03"
    ],
    "notes": "AMENDED 2026-07-09 - DO NOT SCHEDULE AS WRITTEN. Scope wrong in both directions (Segmented renders no join; Pagination/timeline/file-manager do and are unlisted); the load-bearing DaisyUI CSS is 38 selectors in modern/theme.css, absent from Files; the grep==0 gate and pnpm test are mutually unsatisfiable. See the AMENDMENT block in tokens.md.",
-   "claimedBy": "tok03-daisy",
-   "claimedAt": "2026-07-10"
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null
   },
   {
    "id": "WO-ARC-01",

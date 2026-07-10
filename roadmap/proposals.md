@@ -625,3 +625,17 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **A correction to WO-ENG-21's own framing** — its evidence said the Tailwind `animate-fade-in`/`animate-fade-out` classnames bypassed the reduced-motion guard. They did not: `keyframes.css:650` carries a universal `@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: 0.01s !important } }`, which catches the inline animation too. The classnames were, in fact, entirely dead — never defined anywhere in this repo or in DaisyUI. They bypassed the `--ds-motion-*` canon, not the guard. Removed regardless.
 - **Ask** — one WO covering the three remaining variants, the un-tenanted border, and the dead modifier CSS.
 - **Status** — OPEN.
+
+### P-42 `themeCss.unreferencedSelectors` marks a compound selector live when any one of its tokens is
+- **Found** — 2026-07-10, by WO-TOK-03's executor, verified independently.
+- **Evidence** — `engine-token-audit.mjs`'s `auditEngineTheme()` marks a whole compound selector "referenced" if ANY class token inside it matches a rendered `className` anywhere across the 128 modern engine files. So `.join .btn` (`theme.css:688-707`) reads as referenced because `btn` is live elsewhere, while a repo-wide grep proves **no component renders `join` at all**. `.toast .alert-success` (`:841-864`) reads as referenced because `toast` is live via `Notification` and `Message`, while `alert-success` is rendered by nobody. The counter reports `0` and nine whole theme.css sections are dead.
+- **Why it matters** — WO-TOK-03's own `Depends on` line calls this counter "the authoritative inventory of surviving class hooks". It is not. This is the same shape as `effects.gradientConsumers` counting files while the pixels were flat, and `audit-integration` scanning one emitter of two, and `color.modernHexLiterals` counting a placeholder as a colour. Four counters, one disease: **each measures a proxy for the thing it is named after.**
+- **Ask** — require every token in a compound selector to be proven live, not just one. Ship it with a drill: the nine dead sections must appear the moment the rule tightens.
+- **Status** — OPEN.
+
+### P-43 `--ds-badge-hover-transform` is emitted and read by nobody
+- **Found** — 2026-07-10, by WO-TOK-09's executor while deciding what its new audit rule could safely check.
+- **Evidence** — the canonical personality emitter (`runtime/personality/primitives.ts`) emits it. Grep across `packages/core/src` and `packages/showroom/src` finds no CSS file, no component and no helper that reads it. It is a channel a tenant can set and nothing will honour.
+- **Why it was not fixed** — closing it means wiring it into the Badge component, which was outside that executor's fence. It also could not be added to `audit-integration`'s orphan rule without immediately failing the build, so the rule was scoped to what it could guarantee, and the orphan was reported instead of hidden behind a widened exemption. That was the right call and is worth naming as the right call.
+- **Ask** — either wire the Badge hover transform to it, or delete the emission. Then extend the orphan rule to personality variables, with a drill.
+- **Status** — OPEN.

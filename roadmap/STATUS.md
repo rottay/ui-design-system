@@ -9,14 +9,12 @@
 | [engine-modern](./engine-modern.md) | 22 | 0 | 0 | 22 |
 | [craft](./craft.md) | 8 | 0 | 2 | 10 |
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
-| [tokens](./tokens.md) | 7 | 1 | 1 | 9 |
+| [tokens](./tokens.md) | 7 | 0 | 2 | 9 |
 | [architecture](./architecture.md) | 1 | 0 | 5 | 6 |
 
 ## In progress
 
-| WO | Title | Claimed by | Since | Last progress |
-| --- | --- | --- | --- | --- |
-| WO-TOK-03 | Retire the dead DaisyUI layer from modern | tok03-daisy | 2026-07-10 | (no entries — log via `progress`) |
+(none)
 
 ## Next up (todo, dependencies satisfied)
 
@@ -24,6 +22,7 @@
 | --- | --- | --- | --- | --- |
 | WO-CRA-04 | Data-visualization and flagship-primitive craft | L | craft | P-18 |
 | WO-TOK-02 | OKLCH color engine with generated ramps | L | tokens | P-04 |
+| WO-TOK-03 | Retire the dead DaisyUI layer from modern | M | tokens | P-03 |
 | WO-ARC-02 | Headless behavior core + CSS-first pilot | L | architecture | P-01, P-02 |
 | WO-CRA-10 | Promotion pass: proven app kits into the DS | M | craft | P-15 |
 | WO-ARC-06 | Verticals own their tenants in the file tree | M | architecture | owner-2026-07-09 |
