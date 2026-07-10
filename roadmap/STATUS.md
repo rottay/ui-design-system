@@ -10,17 +10,18 @@
 | [craft](./craft.md) | 10 | 0 | 0 | 10 |
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
-| [architecture](./architecture.md) | 7 | 0 | 1 | 8 |
+| [architecture](./architecture.md) | 7 | 1 | 0 | 8 |
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-ARC-08 | Workspace-tier CSS skins + container queries | ds-agent | 2026-07-10 | 2026-07-10 17:51 — MEASURED the surface before executing (rule: a WO is a hypothesis, the code is the law). Workspace tier has ~379 inline-style sites across 6 components (Table 62, data-table 121, detail-panel 74, filter-panel 59, selection-preview-rail 41, field-filters-panel 22) — 10x ARC-07's ~27. Full paint migration is XL. But the container-query VALUE is deliverable ADDITIVELY: the adaptations (column-priority collapse, rail density step-down) change display/density, NOT properties painted inline, so unlayered @container rules can set them once the component stamps a container attribute + column priorities. Decision: scope ARC-08 to the container-query core + fluid consumption (additive); carve the full workspace paint migration into WO-ARC-09. Also measured: the 16 ARC-05 fluid ramps have ZERO consumers (shipped-but-unused tokens). Executing checkpoint 1: wire fluid consumption. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-ARC-08 | Workspace-tier CSS skins + container queries | L | architecture | spec-12 |
 
 ## Blocked (waiting on dependencies)
 

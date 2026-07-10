@@ -287,6 +287,36 @@ after the fleet is on the core.
   the tenant `*` border floor, P-48). Never `git restore` directories.
 - **Size** — L.
 
+### WO-ARC-09 Workspace-tier paint migration to unlayered skins
+- **Provenance** — Carved from WO-ARC-08 on 2026-07-10 after measuring the surface (rule: a WO is a hypothesis,
+  the code is the law). The container-query VALUE (ARC-08) is deliverable additively without this; this WO is
+  the pure paint plumbing, separated because it is XL and has no user-facing change of its own.
+- **Measured surface** — ~379 inline `style={}` sites across six workspace-tier components: `primitives/display/Table`
+  (62), `patterns/data/data-table` (121), `patterns/data/detail-panel` (74), `patterns/forms/filter-panel` (59),
+  `structures/workspace/selection-preview-rail` (41), `structures/workspace/field-filters-panel` (22). Ten times
+  ARC-07's ~27 sites across three primitives.
+- **Outcome** — Each of the six paints from an unlayered engine skin (`tokens/css/engines/{modern,rustic}/skin/*.css`,
+  keyed on the `data-part`/`data-state` contract) instead of inline `style={}`, in the exact WO-ARC-07 pattern:
+  a measured before-table, a mechanical transcription generator, the zero-pixel gate against the WO-GAT-01
+  baselines and the `states.spec.ts` matrix, and positive verification that the shipped component carries no
+  inline paint. The maintainability + white-label-reskin benefit ARC-07 gave the primitives, extended to the
+  workspace tier.
+- **Depends on** — WO-ARC-07 (the skin pattern + machinery; done).
+- **Steps** — One deployable checkpoint per component, in ascending inline-site order so the machinery is proven
+  on the small ones first: Table, then field-filters-panel, filter-panel, detail-panel, selection-preview-rail,
+  and data-table last (the 121-site monster). Each: measure before-table (element screenshot / computed values,
+  shutter-checked), generate the skin CSS mechanically from the component's own style logic, rewrite the engine
+  to stamp the `data-*` contract and drop the inline object, rewrite any test that reads `element.style.*` onto
+  the DOM contract or the shipped stylesheet, build, gate zero-pixel, commit. Expect real defects to surface
+  (ARC-07 found ~6 across three components); each is a fix + a filed proposal, not a papered diff.
+- **Acceptance gate** — per component: build + `pnpm test` green (17-failure ledger unchanged); the WO-GAT-01
+  visual suite + `states.spec.ts` matrix green with that component's baselines byte-identical; positive
+  verification the shipped component carries no inline paint but the caller's own `style` prop; classic
+  untouched. The WO is done when all six are migrated and green.
+- **Do NOT** — Layer the skins (P-47: unlayered, specificity >= (0,4,0) for any `border-color`, P-48). Fudge a
+  pixel diff to hide a token-layer finding — stop and file it. Touch classic. Never `git restore` directories.
+- **Size** — XL.
+
 ## Dependency summary
 
 ```
