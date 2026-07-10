@@ -1111,7 +1111,7 @@
    "lane": "engine-modern",
    "order": 18,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-17",
     "WO-GAT-03"
@@ -1122,7 +1122,9 @@
    ],
    "notes": "Owner decision 2026-07-09: tenants in the same vertical need NOT look alike -- customized experiences are the product. The advisory's convergence set is removed where it was brand (cadence, density, separation, accent grammar, type ramp) and reframed where it was correctness. The gate becomes an INVARIANT matrix: no tenant configuration, however creative, can produce an unusable interface (semantic distinguishability, APCA floors, visible focus, 44px hit areas, RTL, reduced motion). Plus a semantic-collision probe: the legacy blue success at legacy/themanagementmiami/index.css:118 happened because a green brand collided with a green semantic and someone fixed it by breaking the meaning.",
    "claimedBy": "ds-agent",
-   "claimedAt": "2026-07-10"
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "Vertical posture and tenant freedom, proven by a matrix rather than by eye. STEPS 1-2 WERE ALREADY DONE when this WO was scheduled (amended in place): WO-ENG-20 gave themanagementmiami a real BrandTheme and TenantConfig under the bithire vertical and closed the isBundledTenant trap by keeping it OFF the bundled list, so it resolves through the dynamic path a DB-driven tenant uses; the promise-test the WO asked for already existed in host-tenancy-boundary.test.ts, deriving its list from the live set. Step 3 was found already satisfied: the three verticals carry distinct personality baselines in runtime/verticals/registry.ts and none is DB-driven. WHAT THIS WO DELIVERS: the divergence matrix (compilers/brand-theme/tests/tenant-divergence-matrix.test.ts, 21 tests). Two tenants of one vertical must DIVERGE on thirteen bounded channels spread across the six axes a customer can feel -- colour, corner, type, depth, motion, surface -- and 281 of 371 compiled variables actually do. They must CONVERGE on identity: the tint formulas are the SAME color-mix expression for both, so each resolves it against its own palette (a literal there would mean the scale stopped deriving), and both resolve the engine their vertical declares. A tenant cannot carry vertical, engine or productProfile at all -- asserted on the object shape, not trusted from prose. The expectation is anchored on the compiled BrandTheme, never on a --ds-* variable read back off <html>. DRILL: give themanagementmiami bithire radius scale and the matrix names it -- \"this tenant is wearing the vertical clothes\"; revert, 21/21. SIGHTED (test-artifacts/engine-modern/eng-18/, 1280, four tenants through one route): rottay monochrome infra dark; bithire professional blue on white; evnto warm dark (#131210, its own declared ground, now that WO-TOK-01 generates its artifact); themanagementmiami teal-to-terracotta on cream. Each capture asserted to carry text and buttons at the shutter before it was written. FOUND BY LOOKING, filed as WO-ENG-22 with measurements: evnto rendered dark has a Badge computing rgb(232,232,224) under rgb(255,255,255) and a native Select computing rgb(255,255,255) under rgb(232,232,224) -- Rec.709 luminance delta 23.6, unreadable, white on white. Root cause: BrandTheme.chrome is SINGLE-VALUED and evnto authored it light. The rottay artifact spec comment states the mirror of the same hole in its own words. Two tenants, one structural gap, noticed from opposite sides and never named. This program made it visible (WO-ENG-17 gave evnto the modern engine it declares) and partly worse (WO-TOK-08 wired the control surface to the tenant chrome, so evnto white input chrome now lands on its dark ground; before, it fell back to the DS dark default and was legible by accident). The channel is right and the theme is wrong; WO-ENG-22 says so and forbids reverting the channel. GATE: divergence matrix 21/21 with drill, test:gates 63/63, pnpm typecheck 0, build 0, engine-token-audit --check green, roadmap:check green. Owner delegated approval 2026-07-09."
   },
   {
    "id": "WO-ENG-19",
@@ -1252,6 +1254,23 @@
    "progressLog": [],
    "doneAt": "2026-07-10",
    "evidence": "The default toast follows the tenant. EVIDENCE THAT PRODUCED THE WO: on rottay (dark) the modern default Toast computed background oklch(0.96 0.005 80) and color oklch(0.12 0.01 260) -- the SAME two literals as on bithire (light). Its success/info siblings computed color(srgb .../0.1) derived from tenant color, so default was the outlier. It carried class=\"alert animate-fade-in\": DaisyUI base-100/base-content plus a Tailwind animation utility. FIX: default now returns background var(--ds-card-bg) / color var(--ds-card-color). The executor justified the channel honestly rather than inventing one -- Toast has no chrome.toast.* section on BrandTheme, and cardComponent is the only BrandTheme-reachable neutral elevated surface, whereas --ds-color-bg-elevated is a foundation literal compileBrandTheme never emits and therefore cannot move for a dynamic tenant. The Tailwind animate-fade-in/out classes are gone: enter/exit motion now comes only from the inline animation reading --ds-toast-enter/exit-duration/easing, inside the global prefers-reduced-motion guard. A Tailwind utility carried a literal duration outside that guard. NEW GATE + DRILL: probe toast/default/background-color, selector [data-testid=probe-extras] [role=alert], themePath chrome.cardComponent.bg, with a real Toast rendered on the probe surface (a missing element is a HARD failure, never a baseline entry). Drilled: put the oklch literal back, rebuild both packages, and the probe goes RED on static-across-tenants; restore, GREEN. The torture baseline stays at ZERO violations, now across 21 probes instead of 20. GATE: test:whitelabel 8/8, test:gates 58/58, pnpm typecheck 0 (core + showroom), build 0, 649/663 unit on scope. Owner delegated approval 2026-07-09."
+  },
+  {
+   "id": "WO-ENG-22",
+   "title": "BrandTheme.chrome is single-valued, so a two-mode tenant cannot author both",
+   "lane": "engine-modern",
+   "order": 22,
+   "size": "M",
+   "status": "todo",
+   "dependsOn": [],
+   "mustLandWith": [],
+   "programs": [
+    "spec-12"
+   ],
+   "notes": null,
+   "claimedBy": null,
+   "claimedAt": null,
+   "progressLog": []
   }
  ]
 }
