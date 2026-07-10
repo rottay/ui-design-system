@@ -6672,19 +6672,13 @@ html.dark {
   overflow: hidden;
   color: var(--ds-color-text-primary);
   font-family: var(--ds-font-family-display);
-  font-size: var(--ds-metric-card-value-size, 2.25rem);
+  font-size: var(--ds-metric-card-value-size, var(--ds-font-size-fluid-4xl));
   font-weight: 840;
   font-variant-numeric: tabular-nums;
   line-height: 1.05;
   letter-spacing: 0;
   overflow-wrap: anywhere;
   text-wrap: balance;
-}
-
-@container (max-width: 230px) {
-  :where(.ds-metric-card__value, .ds-stat-card__value) {
-    --ds-metric-card-value-size: 1.875rem;
-  }
 }
 
 :where(.ds-metric-card__operational) {

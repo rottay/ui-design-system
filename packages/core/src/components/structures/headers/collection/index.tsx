@@ -238,7 +238,7 @@ export function CollectionHeader({
                     : editorialTech
                       ? 'clamp(40px, 5.2vw, 54px)'
                       : 'clamp(38px, 4.8vw, 52px)'
-                : 'clamp(var(--ds-font-size-3xl, 24px), 2vw, var(--ds-font-size-4xl, 32px))',
+                : 'var(--ds-font-size-fluid-4xl)',
               fontWeight: useDisplayTitle
                 ? ('var(--ds-font-weight-semibold, 600)' as any)
                 : useDottedTitle
