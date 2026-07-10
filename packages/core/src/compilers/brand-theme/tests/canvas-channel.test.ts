@@ -27,8 +27,14 @@ describe('the clear-mode ground is a BrandTheme channel', () => {
   });
 
   it('a theme with no clear ground emits none, leaving the DS default in place', () => {
-    expect(rottayBrandTheme.palette.backgroundColor).toBeUndefined();
-    const { cssVariables } = compileBrandTheme({ brandTheme: rottayBrandTheme });
+    // Synthetic, not a shipped theme: whether rottay declares a clear ground is
+    // a product decision that may change, and an assertion coupled to it would
+    // fail for a reason that has nothing to do with the behaviour under test.
+    const { palette, ...rest } = rottayBrandTheme;
+    const { backgroundColor: _omitted, ...paletteWithoutGround } = palette;
+    const { cssVariables } = compileBrandTheme({
+      brandTheme: { ...rest, palette: paletteWithoutGround },
+    });
     expect(cssVariables['--ds-color-bg-primary']).toBeUndefined();
   });
 

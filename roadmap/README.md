@@ -87,6 +87,17 @@ without being remeasured. The real set:
 | 1 | `PatternCommandPalette` engine-advanced | Test timeout, identical at base. |
 | 1 | `TimePicker` real-engines | Same happy-dom cause. |
 
+**Confirmed by a run that finished (2026-07-09).** `npx vitest run` in `packages/core`:
+`Test Files 22 failed | 430 passed (452)`, `Tests 19 failed | 6432 passed | 21 skipped`.
+Seventeen are the table above. The other two were an executor's in-flight work
+order, not regressions.
+
+Three tests that WERE regressions from this program have since been found and
+fixed, each verified against `9d59a97a` first: `Card.real-engines` (a variant
+token lost its only consumer), `Statistic.modern-engine-advanced` (a motion work
+order retimed a fallback), and `ColorPicker.engine-advanced` (WO-ARC-01). None
+of them were caught by a counter. See P-39 and P-40.
+
 The fix for the twelve is not to weaken the assertions. It is either a
 `happy-dom` upgrade or a longhand emission. Until one of those lands, this table
 is the contract: **17, and no test outside it may go red.**
