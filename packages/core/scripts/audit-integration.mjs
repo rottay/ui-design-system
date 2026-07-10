@@ -357,6 +357,182 @@ if (!readSafe(PERSONALITY_CANONICAL_PATH)) {
 }
 
 // ============================================================================
+// Rule 7: Personality variable orphan guard
+// ============================================================================
+// P-43: resolvePartialPersonalityCssVariables() (runtime/personality/
+// primitives.ts) is the single place a `--ds-*` personality variable comes
+// into existence. Every key in the object it returns is a channel a tenant
+// can set through TenantConfig -- a channel nothing reads is a promise the
+// design system cannot keep, and a rule that cannot see personality
+// variables at all is the hole --ds-badge-hover-transform walked through
+// (Rule 1 above only ever scanned the chrome-variable emitters).
+//
+// A variable counts as READ when a non-emitter, non-test file under
+// packages/core/src/** or packages/showroom/src/** contains either:
+//   (a) `var(--the-name` -- genuine CSS custom-property consumption, in a
+//       .css file or inside a string literal in a .ts/.tsx inline style; or
+//   (b) the quoted literal '--the-name' (or "--the-name") in a file that
+//       ALSO calls `.getPropertyValue(` somewhere -- the JS-side CSSOM-read
+//       idiom this codebase actually uses (Toast/utils/animations.ts reads
+//       --ds-toast-enter-duration this way). The literal is assigned to a
+//       local before being passed to getPropertyValue on a later line, so
+//       the two never sit on the same line; same-file co-occurrence is the
+//       precision this check can actually deliver without a real parser.
+// This deliberately does NOT count:
+//   - anything inside the canonical emitter file itself. Every appearance
+//     of a variable's name there is production -- an object key assigning
+//     it a value, or that value's own string embedding a DIFFERENT
+//     variable's var() reference to build a fallback -- never consumption.
+//     Rule 6 above already owns the one dangerous shape here (a second
+//     hand-written emitter re-declaring the same keys).
+//   - a bare re-declaration of the same key elsewhere, e.g. `'--ds-x': ...`
+//     as an object-literal key, or `--ds-x: ...` as a CSS custom-property
+//     declaration. Under a plain substring search this LOOKS like the name
+//     is "used", but it is a producer, not a reader -- requiring the
+//     literal `var(` immediately before the name (CSS consumption) or a
+//     companion `.getPropertyValue(` call in the same file (the JS idiom)
+//     is what excludes it.
+// This does NOT attempt to prove a matched `var(--the-name...)` call is
+// itself reachable at runtime -- e.g. sitting inside the dead fallback
+// chain of some OTHER variable nothing ever applies to a rendered element.
+// That needs a real CSS/JS evaluator, not a text scan; a variable whose
+// only match is nested inside such a chain reads as "consumed" here.
+// Narrowing further is future work, not silence about the gap.
+//
+// PRE_EXISTING_PERSONALITY_ORPHANS below is exactly what it looks like: an
+// enumerated, dated, reasoned EXEMPTION LIST, not a self-enforcing ratchet.
+// It was called a "decrease-only baseline" in an earlier version of this
+// comment; that claim was wrong -- nothing in this rule counts, compares
+// against a stored number, or otherwise notices if the set grows or
+// shrinks, and it is worth naming precisely rather than describing a
+// mechanism the code does not have.
+//
+// Building the reader search above against the full source tree (not Rule
+// 1's fixed consumerDirs list, per this WO's ask) surfaced 26 personality
+// variables beyond --ds-badge-hover-transform that are ALSO emitted with
+// zero readers under the definition above -- almost entirely the raw
+// `--ds-personality-{animation,chart,card,accent,typography}-*` mirror of
+// each personality field (as opposed to the derived, component-shorthand
+// variables like --ds-card-shadow or --ds-button-hover-transform, which DO
+// have readers), plus the unrelated --ds-duration-normal. Wiring or
+// deleting 26 variables across components this change does not otherwise
+// touch is outside P-43's fence and this WO's scope; hiding them behind a
+// widened, permanent exemption is exactly what WO-TOK-09's executor
+// declined to do for the one orphan they found, and for the same reason
+// (see roadmap/proposals.md P-43 and roadmap/STATUS.md's WO-TOK-09 entry).
+// This list is that same decision made 26 times over, each one named.
+//
+// A count-based ratchet (store N, fail when the live orphan count exceeds
+// N) was the other option and is NOT what this is, on purpose: this repo
+// runs several WOs concurrently against the same tree (five, the day this
+// rule was written), so a count can move in both directions in the same
+// window -- one WO fixes an old orphan while an unrelated one introduces a
+// new one, net count unchanged, and a pure count ratchet would stay green
+// through a real regression. A named list still cannot stop someone from
+// adding a genuinely-new orphan's name to hide it -- nothing except a
+// reviewer reading the diff and asking "why is this here" can -- but it
+// can at least be checked for staleness: PERSONALITY_ORPHAN_EXEMPTION_CHECK
+// below fails if a name in this list is no longer something the emitter
+// even emits, so the list cannot silently drift from reality. Shrinking it
+// (wiring a variable up, or deleting its emission) is always welcome and
+// never required to keep the audit green; growing it is a change a
+// reviewer should see and question, the same as any other exemption list.
+const PERSONALITY_SHOWROOM_ROOT = resolve(__dirname, '../../showroom/src');
+
+const PRE_EXISTING_PERSONALITY_ORPHANS = new Set([
+  '--ds-personality-animation-intensity',
+  '--ds-personality-animation-stagger-delay',
+  '--ds-personality-animation-stagger-max',
+  '--ds-personality-animation-entrance',
+  '--ds-personality-animation-hover-lift',
+  '--ds-personality-animation-hover-scale',
+  '--ds-personality-animation-spring-tension',
+  '--ds-personality-animation-spring-friction',
+  '--ds-personality-animation-pulse-speed',
+  '--ds-personality-animation-skeleton-style',
+  '--ds-personality-animation-count-up-enabled',
+  '--ds-personality-chart-mount-duration',
+  '--ds-personality-chart-line-style',
+  '--ds-personality-chart-tooltip-style',
+  '--ds-personality-card-padding-density',
+  '--ds-personality-card-default-elevation',
+  '--ds-personality-card-hover-elevation',
+  '--ds-personality-card-show-border',
+  '--ds-personality-card-hover-tint',
+  '--ds-personality-accent-bar-position',
+  '--ds-personality-accent-badge-shape',
+  '--ds-personality-accent-icon-shape',
+  '--ds-personality-accent-divider-style',
+  '--ds-personality-typography-heading-weight-bias',
+  '--ds-personality-typography-label-style',
+  '--ds-duration-normal',
+]);
+
+const personalitySourceForReaderCheck = readSafe(PERSONALITY_CANONICAL_PATH);
+const emittedPersonalityVars = extractDsObjectKeysFrom(personalitySourceForReaderCheck);
+
+// PERSONALITY_ORPHAN_EXEMPTION_CHECK: every name in the exemption list must
+// still be something resolvePartialPersonalityCssVariables() actually
+// emits. This does not verify the name is STILL unread (fixing one and
+// forgetting to remove it from the list is harmless -- the exemption just
+// goes unused), only that it has not gone stale by naming a key that was
+// renamed or deleted, which would otherwise sit in this file forever,
+// unnoticed, exempting nothing.
+for (const exemptedName of PRE_EXISTING_PERSONALITY_ORPHANS) {
+  if (!emittedPersonalityVars.has(exemptedName)) {
+    violations.push({
+      rule: 'stale-personality-orphan-exemption',
+      path: relPath(PERSONALITY_CANONICAL_PATH),
+      message: `PRE_EXISTING_PERSONALITY_ORPHANS names "${exemptedName}", which resolvePartialPersonalityCssVariables() no longer emits. Remove it from the exemption list in scripts/audit-integration.mjs.`,
+    });
+  }
+}
+
+if (emittedPersonalityVars.size > 0) {
+  const personalityConsumerFiles = [
+    ...walkFiles(SRC_ROOT, /\.(css|tsx?)$/),
+    ...walkFiles(PERSONALITY_SHOWROOM_ROOT, /\.(css|tsx?)$/),
+  ].filter((f) => {
+    if (f.includes('.test.') || f.includes('.spec.') || f.includes('.stories.')) return false;
+    if (resolve(f) === resolve(PERSONALITY_CANONICAL_PATH)) return false;
+    return true;
+  });
+
+  const personalityConsumerFileContents = personalityConsumerFiles.map((f) => readSafe(f));
+  const personalityAllConsumerContent = personalityConsumerFileContents.join('\n');
+
+  const isPersonalityVarRead = (varName) => {
+    // Fast path: one regex test against the whole joined corpus for the
+    // common case, a real var() consumer somewhere (mirrors Rule 1's
+    // allConsumerContent.includes() idiom).
+    if (new RegExp(`var\\(\\s*${varName}(?![a-z0-9-])`).test(personalityAllConsumerContent)) {
+      return true;
+    }
+    // Slow path: the JS-side CSSOM-read idiom needs same-file precision --
+    // joining all files first would let a quoted literal in one file pair
+    // with an unrelated getPropertyValue( call in another and falsely read
+    // as consumed.
+    for (const content of personalityConsumerFileContents) {
+      if (!content) continue;
+      if (!content.includes(`'${varName}'`) && !content.includes(`"${varName}"`)) continue;
+      if (/\.getPropertyValue\(/.test(content)) return true;
+    }
+    return false;
+  };
+
+  for (const varName of emittedPersonalityVars) {
+    if (isPersonalityVarRead(varName)) continue;
+    if (PRE_EXISTING_PERSONALITY_ORPHANS.has(varName)) continue;
+
+    violations.push({
+      rule: 'orphan-personality-var',
+      path: relPath(PERSONALITY_CANONICAL_PATH),
+      message: `Personality var "${varName}" is emitted by resolvePartialPersonalityCssVariables() but has no reader (no var(${varName}...) and no companion getPropertyValue('${varName}') call) in packages/core/src/** or packages/showroom/src/** outside tests.`,
+    });
+  }
+}
+
+// ============================================================================
 // Report
 // ============================================================================
 

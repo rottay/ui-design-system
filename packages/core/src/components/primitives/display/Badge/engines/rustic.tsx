@@ -24,6 +24,13 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
 }
 
 /**
+ * Carries the indicator badge's per-instance corner-offset transform as a
+ * CSS custom property rather than the `transform` property itself -- see
+ * tokens/css/engines/rustic/skin/badge.css for why.
+ */
+type BadgePositionStyle = React.CSSProperties & Record<'--ds-badge-position-transform', string>;
+
+/**
  * Rustic (pure HTML/CSS) implementation of the Badge component.
  *
  * Supports four style variants (solid, outline, soft, ghost) via computed
@@ -134,6 +141,12 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   const isIndicatorRender = Boolean(children) && !isLabelledChildren;
   const badgeStyle = badgeStyleProp ?? (isIndicatorRender ? 'solid' : BADGE_DEFAULTS.badgeStyle);
 
+  // Single source for the click affordance -- the cursor below and the
+  // data-interactive attribute the skin stylesheet keys its hover rule on
+  // (tokens/css/engines/rustic/skin/badge.css) both read this, so a badge
+  // with neither prop gets neither signal.
+  const isInteractive = Boolean(clickable || onClick);
+
   // Pull size-specific dimensions from the shared constants (height, minWidth, fontSize)
   const sizeValues = SIZE_MAP[size!] || SIZE_MAP.md;
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
@@ -157,13 +170,19 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   } as React.CSSProperties;
 
   /**
-   * Position offset styles for badge placement.
+   * Position offset styles for badge placement. The corner offset is
+   * exposed as the --ds-badge-position-transform CUSTOM PROPERTY, not the
+   * `transform` property itself: `transform` is owned entirely by
+   * tokens/css/engines/rustic/skin/badge.css, so its :hover rule can
+   * compose the personality hover lift onto this offset. An inline
+   * `transform` property here would always beat the stylesheet regardless
+   * of specificity, and the hover rule could never compose onto it.
    */
-  const positionStyles: Record<string, React.CSSProperties> = {
-    'top-right': { top: 0, right: 0, transform: 'translate(50%, -50%)' },
-    'top-left': { top: 0, left: 0, transform: 'translate(-50%, -50%)' },
-    'bottom-right': { bottom: 0, right: 0, transform: 'translate(50%, 50%)' },
-    'bottom-left': { bottom: 0, left: 0, transform: 'translate(-50%, 50%)' },
+  const positionStyles: Record<string, BadgePositionStyle> = {
+    'top-right': { top: 0, right: 0, '--ds-badge-position-transform': 'translate(50%, -50%)' },
+    'top-left': { top: 0, left: 0, '--ds-badge-position-transform': 'translate(-50%, -50%)' },
+    'bottom-right': { bottom: 0, right: 0, '--ds-badge-position-transform': 'translate(50%, 50%)' },
+    'bottom-left': { bottom: 0, left: 0, '--ds-badge-position-transform': 'translate(-50%, 50%)' },
   };
 
   /**
@@ -231,7 +250,7 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     borderRadius: 'var(--ds-badge-border-radius)',
     border: bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : 'none',
     boxShadow: bordered ? `0 0 0 1px ${color}` : 'none',
-    cursor: clickable || onClick ? 'pointer' : 'default',
+    cursor: isInteractive ? 'pointer' : 'default',
     transition: 'var(--ds-badge-transition, all 0.2s ease-in-out)',
     userSelect: 'none',
     whiteSpace: 'nowrap',
@@ -266,9 +285,12 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
           `}</style>
         )}
         <span
-          className={className}
+          className={`rottay-badge rottay-badge--rustic ${className}`}
           style={{ ...badgeIndicatorStyle, ...pulseAnimation, ...style }}
-          onClick={clickable || onClick ? handleClick : undefined}
+          onClick={isInteractive ? handleClick : undefined}
+          // The hover transform itself is CSS (tokens/css/engines/rustic/skin/badge.css),
+          // keyed on this attribute plus :hover -- not a JS mouse handler.
+          data-interactive={isInteractive ? 'true' : undefined}
           {...responsiveAttrs}
         >
           {icon && <span style={{ marginRight: formattedValue !== undefined ? 4 : 0 }}>{icon}</span>}
@@ -320,8 +342,10 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
         {children}
         {shouldShowBadge && (
           <span
+            className="rottay-badge rottay-badge--rustic"
             style={positionedBadgeStyle}
-            onClick={clickable || onClick ? handleClick : undefined}
+            onClick={isInteractive ? handleClick : undefined}
+            data-interactive={isInteractive ? 'true' : undefined}
           >
             {!dot && (
               <>

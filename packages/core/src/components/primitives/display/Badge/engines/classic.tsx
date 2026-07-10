@@ -163,9 +163,15 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
     onClick?.();
   };
 
+  // Single source for the click affordance -- cursor and onClick below both
+  // read this. Unlike the modern/rustic engines, classic has no
+  // --ds-badge-hover-transform treatment at all (see the two comments
+  // below for why), so this only ever gates cursor/onClick here.
+  const isInteractive = Boolean(clickable || onClick);
+
   // Build custom style object
   const badgeStyle: React.CSSProperties = {
-    cursor: clickable || onClick ? 'pointer' : undefined,
+    cursor: isInteractive ? 'pointer' : undefined,
     ...style,
   };
 
@@ -198,7 +204,7 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
         ? `1px solid ${color}`
         : (bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : undefined),
       boxShadow: bordered ? `0 0 0 1px ${color}` : undefined,
-      cursor: clickable || onClick ? 'pointer' : undefined,
+      cursor: isInteractive ? 'pointer' : undefined,
       transition: 'var(--ds-badge-transition, all 0.2s ease-in-out)',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
@@ -211,10 +217,19 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
         {responsive && responsive.css && (
           <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
         )}
+        {/*
+          No --ds-badge-hover-transform treatment on this span: unlike the
+          modern/rustic skin files, there is no classic-engine skin location
+          in this fix's fence to hold an unlayered rule (tokens/css/engines/
+          classic/ has only theme.css, no skin/ directory), and this file
+          owns no CSS to add one to. A plain span with no rule reading it is
+          exactly the orphan channel P-43 exists to prevent, so it stays
+          unwired rather than wired to nothing.
+        */}
         <span
           className={className}
           style={standaloneStyle}
-          onClick={clickable || onClick ? handleClick : undefined}
+          onClick={isInteractive ? handleClick : undefined}
           {...(responsive ? responsive.attrs : {})}
         >
           {icon && <span style={{ marginRight: 4 }}>{icon}</span>}
@@ -234,7 +249,15 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
   }
 
   // Standard path: delegate to antd Badge which handles count overflow,
-  // dot rendering, status animation, and positioning automatically
+  // dot rendering, status animation, and positioning automatically. AntBadge
+  // renders its own internal indicator DOM (ant-badge-count / ant-badge-dot)
+  // that this file does not own the JSX of. A rule could in principle target
+  // those antd class names directly, but they are antd's own global names,
+  // not scoped to this design system's badges -- an unlayered rule on them
+  // would reach every AntBadge the host application renders, including ones
+  // this system does not own. That blast radius, not just DOM ownership, is
+  // why this path stays unwired: any hover chrome on this indicator comes
+  // from antd's own styling, not from this component.
   return (
     <>
       {responsive && responsive.css && (
@@ -251,7 +274,7 @@ export default function ClassicBadge(props: BadgeProps): React.ReactElement {
         status={status}
         className={className}
         style={badgeStyle}
-        onClick={clickable || onClick ? handleClick : undefined}
+        onClick={isInteractive ? handleClick : undefined}
         {...(responsive ? responsive.attrs : {})}
       >
         {children}

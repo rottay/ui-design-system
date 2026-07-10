@@ -1,0 +1,37 @@
+/**
+ * Modern Badge skin (P-43 follow-up).
+ *
+ * DELIBERATELY UNLAYERED, same reasoning as button.css/card.css/input.css:
+ * every `rottay-*` cascade layer sorts before Tailwind's `base`, so a
+ * layered rule cannot paint a component at all (measured proof in
+ * button.css's header comment; P-47). Unlayered outranks preflight and
+ * still yields to a consumer's own inline `style` prop.
+ *
+ * Badge is not on the interaction-state anatomy contract the way Button
+ * (`data-state~='hovered'`, driven by `useInteractionState()`) and Card
+ * are -- this keys on a plain `:hover` pseudo-class instead, which is
+ * honest for what the component currently publishes rather than a
+ * shortcut around a contract that exists for it.
+ *
+ * `transform` here is the ONLY place this engine's Badge sets it. The
+ * indicator badge's per-instance corner offset (top-right/-left/bottom-*)
+ * arrives as the `--ds-badge-position-transform` custom property, set
+ * inline by the component since the offset varies with the `position`
+ * prop and can't be a static rule; the personality hover lift composes
+ * onto it at `:hover`. A standalone badge never sets that property, so it
+ * falls through to the fallback in both rules below.
+ *
+ * Neither fallback is the `none` keyword: `none` cannot be combined with a
+ * transform function in the same value (`none translateY(-2px)` is invalid
+ * CSS and the whole declaration -- not just the invalid part -- is
+ * dropped), so a standalone badge falls back to the identity function
+ * `translateY(0)` instead, which composes safely with the hover lift.
+ */
+
+.rottay-badge.rottay-badge--modern {
+  transform: var(--ds-badge-position-transform, translateY(0));
+}
+
+.rottay-badge.rottay-badge--modern[data-interactive='true']:hover {
+  transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));
+}

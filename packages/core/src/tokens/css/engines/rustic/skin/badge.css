@@ -1,0 +1,23 @@
+/**
+ * Rustic Badge skin (P-43 follow-up).
+ *
+ * DELIBERATELY UNLAYERED, same reasoning as button.css/card.css/input.css:
+ * no `rottay-*` layer can paint a component (Tailwind's `@layer base`
+ * sorts after all seven; P-47). Badge is not on the interaction-state
+ * anatomy contract, so this keys on a plain `:hover` rather than
+ * `[data-state~='hovered']` -- see engines/modern/skin/badge.css for the
+ * full reasoning, identical here.
+ *
+ * The `none`-keyword trap applies here too: a mixed `none translateY(-2px)`
+ * is invalid CSS and the whole declaration is dropped, so the
+ * `--ds-badge-position-transform` fallback is the identity function
+ * `translateY(0)`, never `none` -- see engines/modern/skin/badge.css.
+ */
+
+.rottay-badge.rottay-badge--rustic {
+  transform: var(--ds-badge-position-transform, translateY(0));
+}
+
+.rottay-badge.rottay-badge--rustic[data-interactive='true']:hover {
+  transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));
+}

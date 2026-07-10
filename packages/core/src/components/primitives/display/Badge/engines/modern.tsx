@@ -35,6 +35,13 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
   return value as T;
 }
 
+/**
+ * Carries the indicator badge's per-instance corner-offset transform as a
+ * CSS custom property rather than the `transform` property itself -- see
+ * tokens/css/engines/modern/skin/badge.css for why.
+ */
+type BadgePositionStyle = React.CSSProperties & Record<'--ds-badge-position-transform', string>;
+
 // ---------------------------------------------------------------------------
 // Semantic color tokens per variant
 // ---------------------------------------------------------------------------
@@ -251,6 +258,12 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   const isIndicatorRender = Boolean(children) && !isLabelledChildren;
   const badgeStyle = badgeStyleProp ?? (isIndicatorRender ? 'solid' : BADGE_DEFAULTS.badgeStyle);
 
+  // Single source for the click affordance -- the cursor below and the
+  // data-interactive attribute the skin stylesheet keys its hover rule on
+  // (tokens/css/engines/modern/skin/badge.css) both read this, so a badge
+  // with neither prop gets neither signal.
+  const isInteractive = Boolean(clickable || onClick);
+
   // -------------------------------------------------------------------------
   // Style computation
   // -------------------------------------------------------------------------
@@ -309,7 +322,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     textOverflow: 'ellipsis',
     transition: `all var(--ds-motion-fast) var(--ds-motion-ease-out)`,
     // Clickable cursor
-    ...(clickable || onClick ? { cursor: 'pointer' } : {}),
+    ...(isInteractive ? { cursor: 'pointer' } : {}),
     // Bordered ring
     ...(bordered ? {
       boxShadow: '0 0 0 2px var(--ds-surface-card)',
@@ -347,7 +360,10 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
         <span
           className={`rottay-badge rottay-badge--modern ${pulse ? 'animate-pulse' : ''} ${className}`}
           style={{ ...badgeInlineStyle, ...style }}
-          onClick={clickable || onClick ? handleClick : undefined}
+          onClick={isInteractive ? handleClick : undefined}
+          // The hover transform itself is CSS (tokens/css/engines/modern/skin/badge.css),
+          // keyed on this attribute plus :hover -- not a JS mouse handler.
+          data-interactive={isInteractive ? 'true' : undefined}
           {...responsiveAttrs}
         >
           {icon && (
@@ -396,12 +412,18 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   // =========================================================================
   const dotSize = DOT_SIZE_MAP[size!] || DOT_SIZE_MAP.md;
 
-  // Position style mapping (replaces DaisyUI indicator classes)
-  const positionStyleMap: Record<string, React.CSSProperties> = {
-    'top-right': { top: 0, right: 0, transform: 'translate(50%, -50%)' },
-    'top-left': { top: 0, left: 0, transform: 'translate(-50%, -50%)' },
-    'bottom-right': { bottom: 0, right: 0, transform: 'translate(50%, 50%)' },
-    'bottom-left': { bottom: 0, left: 0, transform: 'translate(-50%, 50%)' },
+  // Position style mapping (replaces DaisyUI indicator classes). The corner
+  // offset is exposed as the --ds-badge-position-transform CUSTOM PROPERTY,
+  // not the `transform` property itself: `transform` is owned entirely by
+  // tokens/css/engines/modern/skin/badge.css, so its :hover rule can compose
+  // the personality hover lift onto this offset. An inline `transform`
+  // property here would always beat the stylesheet regardless of
+  // specificity, and the hover rule could never compose onto it.
+  const positionStyleMap: Record<string, BadgePositionStyle> = {
+    'top-right': { top: 0, right: 0, '--ds-badge-position-transform': 'translate(50%, -50%)' },
+    'top-left': { top: 0, left: 0, '--ds-badge-position-transform': 'translate(-50%, -50%)' },
+    'bottom-right': { bottom: 0, right: 0, '--ds-badge-position-transform': 'translate(50%, 50%)' },
+    'bottom-left': { bottom: 0, left: 0, '--ds-badge-position-transform': 'translate(-50%, 50%)' },
   };
   const positionStyle = positionStyleMap[position!] || positionStyleMap['top-right'];
 
@@ -428,7 +450,8 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
           className={`rottay-badge rottay-badge--modern ${pulse ? 'animate-pulse' : ''}`}
           {...responsiveAttrs}
           style={{ ...indicatorBadgeStyle, position: 'absolute', zIndex: 1, ...positionStyle }}
-          onClick={clickable || onClick ? handleClick : undefined}
+          onClick={isInteractive ? handleClick : undefined}
+          data-interactive={isInteractive ? 'true' : undefined}
         >
           {!dot && (
             <>
