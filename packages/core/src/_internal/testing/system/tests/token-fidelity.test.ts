@@ -76,19 +76,34 @@ const FIDELITY_MATRIX = [
   {
     component: 'Button',
     file: 'components/primitives/inputs/Button/engines/modern.tsx',
+    skin: 'tokens/css/engines/modern/skin/button.css',
     prefix: '--ds-button-',
     minRefs: 3,
   },
 ];
 
+/**
+ * A modern engine is its component AND its skin stylesheet, when it has one.
+ * WO-ARC-07 moves a component's paint out of an inline `style={}` object and
+ * into `tokens/css/engines/modern/skin/<name>.css`, where the same engine
+ * consumes the same tokens. Counting only the `.tsx` would report zero
+ * consumption for a component that consumes every token it defines.
+ *
+ * The identical rule lives in `scripts/audit-integration.mjs`
+ * (`token-consumption-ratio`). The two run in different runtimes and must be
+ * changed together; a rule honoured in one emitter and ignored in its twin is
+ * the defect this design system has found more times than any other.
+ */
 describe('token fidelity', () => {
   it.each(FIDELITY_MATRIX)(
     '$component modern engine references >= $minRefs $prefix tokens',
-    ({ file, prefix, minRefs }) => {
-      const absolutePath = join(SRC_ROOT, file);
-      const src = readFileSync(absolutePath, 'utf-8');
-      const matches = src.match(new RegExp(prefix, 'g'));
-      expect(matches?.length ?? 0).toBeGreaterThanOrEqual(minRefs);
+    ({ file, skin, prefix, minRefs }) => {
+      const countIn = (relativePath: string): number => {
+        const contents = readFileSync(join(SRC_ROOT, relativePath), 'utf-8');
+        return contents.match(new RegExp(prefix, 'g'))?.length ?? 0;
+      };
+      const refs = countIn(file) + (skin ? countIn(skin) : 0);
+      expect(refs).toBeGreaterThanOrEqual(minRefs);
     },
   );
 });

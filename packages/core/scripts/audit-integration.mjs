@@ -273,14 +273,25 @@ for (const tokenFile of componentTokenFiles) {
 
   if (!modernContent) continue; // No modern engine found -- skip silently
 
-  const refMatches = modernContent.match(new RegExp(tokenPrefix, 'g'));
-  const refCount = refMatches ? refMatches.length : 0;
+  // A modern engine is its component AND its skin stylesheet, when it has one.
+  // WO-ARC-07 moves a component's paint out of an inline `style={}` object into
+  // `tokens/css/engines/modern/skin/<name>.css`; the tokens are consumed there,
+  // by the same engine, and a rule that reads only the .tsx would report zero
+  // consumption for a component that consumes every one of them.
+  const skinPath = join(SRC_ROOT, 'tokens', 'css', 'engines', 'modern', 'skin', `${baseName}.css`);
+  const skinContent = readSafe(skinPath) ?? '';
+
+  const countRefs = (text) => (text.match(new RegExp(tokenPrefix, 'g')) ?? []).length;
+  const refCount = countRefs(modernContent) + countRefs(skinContent);
 
   if (refCount < 3) {
+    const searched = skinContent
+      ? `${relPath(modernPath)} + ${relPath(skinPath)}`
+      : relPath(modernPath);
     violations.push({
       rule: 'token-consumption-ratio',
       path: relPath(modernPath),
-      message: `Component "${baseName}" defines ${definedCount} ${tokenPrefix}* tokens but the modern engine only references ${refCount}. Expected >= 3 references.`,
+      message: `Component "${baseName}" defines ${definedCount} ${tokenPrefix}* tokens but the modern engine only references ${refCount} (searched ${searched}). Expected >= 3 references.`,
     });
   }
 }

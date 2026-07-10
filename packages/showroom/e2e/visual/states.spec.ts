@@ -68,14 +68,14 @@ const ENGINES: readonly Engine[] = ['modern', 'rustic'];
  * way to catch that is to hover it and demand nothing moved.
  */
 const SUBJECTS: readonly { name: string; index: number; states: readonly StateName[] }[] = [
-  { name: 'primary', index: 0, states: ['rest', 'hovered', 'pressed', 'focus-visible'] },
-  { name: 'secondary', index: 1, states: ['rest', 'hovered', 'pressed', 'focus-visible'] },
-  { name: 'default', index: 2, states: ['rest', 'hovered', 'pressed', 'focus-visible'] },
-  { name: 'ghost', index: 3, states: ['rest', 'hovered', 'pressed', 'focus-visible'] },
+  { name: 'primary', index: 0, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
+  { name: 'secondary', index: 1, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
+  { name: 'default', index: 2, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
+  { name: 'ghost', index: 3, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
   { name: 'primary-disabled', index: 5, states: ['rest', 'hovered'] },
 ];
 
-type StateName = 'rest' | 'hovered' | 'pressed' | 'focus-visible';
+type StateName = 'rest' | 'hovered' | 'rest-after-hover' | 'pressed' | 'focus-visible';
 
 /**
  * The channels through which a button can express an interaction state. A skin
@@ -124,9 +124,15 @@ function paintOf(cell: Cell): Cell {
 /**
  * Reads the paint channels once the element has stopped moving.
  *
- * "Stopped moving" is two consecutive identical samples, not a delay. The rustic
- * spring needs ~400ms; a modern transition needs ~150ms; a resting element needs
- * none. Polling for agreement serves all three without encoding any of them.
+ * "Stopped moving" is THREE consecutive identical samples, not a delay. The
+ * rustic spring needs ~400ms; a modern transition needs ~150ms; a resting
+ * element needs none. Polling for agreement serves all three without encoding
+ * any of them.
+ *
+ * Three, not two: a spring approaches its target asymptotically, so two samples
+ * 80ms apart can agree on a plateau the animation has not actually left. That
+ * produced a cell recorded mid-flight, and two invariants that failed on data
+ * rather than on the component.
  */
 async function readSettled(page: Page, index: number): Promise<Cell> {
   const sample = () =>
@@ -138,14 +144,23 @@ async function readSettled(page: Page, index: number): Promise<Cell> {
       return cell;
     }, CHANNELS as unknown as string[]);
 
-  let previous = await sample();
-  for (let attempt = 0; attempt < 25; attempt += 1) {
+  const AGREEING_SAMPLES = 3;
+  let previous = JSON.stringify(await sample());
+  let agreements = 1;
+
+  for (let attempt = 0; attempt < 40; attempt += 1) {
     await page.waitForTimeout(80);
     const current = await sample();
-    if (JSON.stringify(current) === JSON.stringify(previous)) return current;
-    previous = current;
+    const serialized = JSON.stringify(current);
+    if (serialized === previous) {
+      agreements += 1;
+      if (agreements >= AGREEING_SAMPLES) return current;
+    } else {
+      agreements = 1;
+      previous = serialized;
+    }
   }
-  throw new Error(`button ${index} never settled: still animating after 2s`);
+  throw new Error(`button ${index} never settled: still animating after 3.2s`);
 }
 
 /** Parks the pointer off every control so no subject is left hovered. */
@@ -208,6 +223,10 @@ async function captureSubject(
       case 'hovered':
         await blurEverything(page);
         await button.hover({ force: true });
+        break;
+      case 'rest-after-hover':
+        await releasePointer(page);
+        await blurEverything(page);
         break;
       case 'pressed':
         await button.hover({ force: true });
@@ -343,6 +362,31 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
             grewOutline || grewShadow,
             `${fixture}/${engine}/${subject.name}: keyboard focus paints nothing`
           ).toBe(true);
+        }
+      }
+    }
+  });
+
+  test('a hover that ends leaves no trace', async () => {
+    // A skin that paints hover by mutating the element's inline style can fail
+    // to put back what it overwrote. The modern Button did exactly that: its
+    // hover set `borderColor` as a longhand over a `border` shorthand, and once
+    // the pointer left, the colour did not come back -- it fell through to
+    // whatever the cascade said, which on a dark tenant is the `*` border floor
+    // and elsewhere is `currentColor`. Nothing photographed it, because no
+    // baseline hovers.
+    const source = RECORDING ? recorded : baseline;
+
+    for (const fixture of FIXTURES) {
+      for (const engine of ENGINES) {
+        for (const subject of SUBJECTS) {
+          if (subject.name === 'primary-disabled') continue;
+          const rest = source[cellKey(fixture, engine, subject.name, 'rest')];
+          const after = source[cellKey(fixture, engine, subject.name, 'rest-after-hover')];
+          expect(
+            paintOf(after),
+            `${fixture}/${engine}/${subject.name}: the control did not return to rest after the pointer left`
+          ).toEqual(paintOf(rest));
         }
       }
     }

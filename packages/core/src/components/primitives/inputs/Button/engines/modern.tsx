@@ -4,10 +4,13 @@
  * from the modern theme token system. Inspired by Linear, Vercel, and Stripe.
  *
  * @remarks
- * The Modern engine implements buttons using pure inline styles driven by
- * --ds-* CSS custom properties. No DaisyUI btn-* classes are used. This
- * provides precise control over every interaction state while maintaining
- * the token-driven theming contract.
+ * The Modern engine paints this button entirely from
+ * `tokens/css/engines/modern/skin/button.css`, keyed on the `data-*` contract
+ * this component stamps: `data-variant`, `data-size`, `data-shape`,
+ * `data-disabled`, `data-loading`, `data-pending`, `data-icon-only`,
+ * `data-size-responsive`, and the `data-part` / `data-state` anatomy attributes
+ * from `behavior/anatomy.ts`. No DaisyUI btn-* classes are used. A caller's own
+ * `style` prop is the only inline declaration on the element.
  *
  * **Design principles:**
  * - Precise, calm, expensive, editorial
@@ -42,131 +45,30 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 import type { ResponsiveValue } from '../../../layout/shared/types';
 import { scalarOrUndefined } from '../../../layout/shared/responsive-helpers.js';
 
-// ---------------------------------------------------------------------------
-// Variant style mapping (pure inline styles, no DaisyUI)
-// ---------------------------------------------------------------------------
-const VARIANT_STYLES: Record<string, React.CSSProperties> = {
-  primary: {
-    // Accent (spec section 5, role 2): --ds-gradient-primary top-light sheen
-    // layered over the primary fill; collapses to flat when --ds-effect-intensity
-    // is 0 (the gradient resolves to fully transparent / none).
-    background: 'var(--ds-gradient-primary), var(--ds-button-primary-bg, var(--ds-color-primary))',
-    color: 'var(--ds-button-primary-color, var(--ds-button-primary-text, var(--ds-color-text-on-primary)))',
-    border: '1px solid var(--ds-button-primary-border, var(--ds-color-primary))',
-    boxShadow: 'var(--ds-button-primary-shadow, none)',
-  },
-  secondary: {
-    background: 'var(--ds-button-secondary-bg, transparent)',
-    color: 'var(--ds-button-secondary-color, var(--ds-button-secondary-text, var(--ds-color-text-primary)))',
-    border: '1px solid var(--ds-button-secondary-border, var(--ds-color-border))',
-  },
-  default: {
-    background: 'var(--ds-button-default-bg, transparent)',
-    color: 'var(--ds-button-default-color, var(--ds-button-default-text, var(--ds-color-text-primary)))',
-    border: '1px solid var(--ds-button-default-border, var(--ds-color-border))',
-  },
-  outline: {
-    background: 'var(--ds-button-default-bg, transparent)',
-    color: 'var(--ds-button-default-color, var(--ds-color-text-primary))',
-    border: '1px solid var(--ds-button-default-border, var(--ds-color-border))',
-  },
-  ghost: {
-    background: 'var(--ds-button-ghost-bg, transparent)',
-    color: 'var(--ds-button-ghost-color, var(--ds-button-ghost-text, var(--ds-color-text-primary)))',
-    border: '1px solid transparent',
-  },
-  text: {
-    background: 'var(--ds-button-text-bg, transparent)',
-    color: 'var(--ds-button-text-color, var(--ds-button-text-text, var(--ds-color-text-primary)))',
-    border: '1px solid transparent',
-  },
-  dashed: {
-    background: 'var(--ds-button-default-bg, transparent)',
-    color: 'var(--ds-button-default-color, var(--ds-color-text-primary))',
-    border: '1px dashed var(--ds-button-default-border, var(--ds-color-border))',
-  },
-  danger: {
-    background: 'var(--ds-button-error-bg, var(--ds-color-error))',
-    color: 'var(--ds-button-error-color, var(--ds-button-error-text, var(--ds-color-text-on-primary)))',
-    border: '1px solid var(--ds-button-error-border, var(--ds-color-error))',
-  },
-  success: {
-    background: 'var(--ds-button-success-bg, var(--ds-color-success))',
-    color: 'var(--ds-button-success-color, var(--ds-button-success-text, var(--ds-color-text-on-primary)))',
-    border: '1px solid var(--ds-button-success-border, var(--ds-color-success))',
-  },
-  warning: {
-    background: 'var(--ds-button-warning-bg, var(--ds-color-warning))',
-    color: 'var(--ds-button-warning-color, var(--ds-button-warning-text, var(--ds-color-text-on-primary)))',
-    border: '1px solid var(--ds-button-warning-border, var(--ds-color-warning))',
-  },
-  info: {
-    background: 'var(--ds-button-info-bg, var(--ds-color-info))',
-    color: 'var(--ds-button-info-color, var(--ds-button-info-text, var(--ds-color-text-on-primary)))',
-    border: '1px solid var(--ds-button-info-border, var(--ds-color-info))',
-  },
-  link: {
-    background: 'transparent',
-    color: 'var(--ds-button-link-color, var(--ds-color-primary))',
-    border: '1px solid transparent',
-  },
-};
-
-// Hover style overrides per variant - uses brand compiler vars with fallbacks
-const VARIANT_HOVER_STYLES: Record<string, React.CSSProperties> = {
-  primary: {
-    // Keep the accent sheen (spec section 5, role 2) on hover.
-    background: 'var(--ds-gradient-primary), var(--ds-button-primary-bg-hover, var(--ds-color-primary))',
-    boxShadow: 'var(--ds-button-primary-shadow-hover, var(--ds-elevation-2))',
-  },
-  secondary: {
-    background: 'var(--ds-button-secondary-bg-hover, var(--ds-color-bg-subtle))',
-    borderColor: 'var(--ds-button-secondary-border-hover, var(--ds-color-border))',
-  },
-  default: {
-    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle))',
-    borderColor: 'var(--ds-button-default-border-hover, var(--ds-color-border))',
-  },
-  outline: {
-    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle))',
-  },
-  ghost: {
-    background: 'var(--ds-button-ghost-bg-hover, var(--ds-color-bg-subtle))',
-  },
-  text: {
-    background: 'var(--ds-button-text-bg-hover, var(--ds-color-bg-subtle))',
-  },
-  dashed: {
-    background: 'var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle))',
-  },
-  danger: {
-    background: 'var(--ds-button-error-bg-hover, var(--ds-color-error))',
-  },
-  success: {
-    background: 'var(--ds-button-success-bg-hover, var(--ds-color-success))',
-  },
-  warning: {
-    background: 'var(--ds-button-warning-bg-hover, var(--ds-color-warning))',
-  },
-  info: {
-    background: 'var(--ds-button-info-bg-hover, var(--ds-color-info))',
-  },
-  link: {
-    color: 'var(--ds-button-link-color-hover, var(--ds-color-primary))',
-    textDecoration: 'underline',
-  },
-};
-
-// ---------------------------------------------------------------------------
-// Size style mapping (pure inline styles, no DaisyUI)
-// ---------------------------------------------------------------------------
-const SIZE_STYLES: Record<string, React.CSSProperties> = {
-  xs: { height: 'var(--ds-button-xs-height, 1.5rem)', padding: '0 var(--ds-button-xs-padding-x, 0.5rem)', fontSize: 'var(--ds-button-xs-font-size, 0.75rem)' },
-  sm: { height: 'var(--ds-button-sm-height, 2rem)', padding: '0 var(--ds-button-sm-padding-x, 0.75rem)', fontSize: 'var(--ds-button-sm-font-size, 0.8125rem)' },
-  md: { height: 'var(--ds-button-md-height, 2.5rem)', padding: '0 var(--ds-button-md-padding-x, 1rem)', fontSize: 'var(--ds-button-md-font-size, 0.875rem)' },
-  lg: { height: 'var(--ds-button-lg-height, 2.75rem)', padding: '0 var(--ds-button-lg-padding-x, 1.25rem)', fontSize: 'var(--ds-button-lg-font-size, 0.9375rem)' },
-  xl: { height: 'var(--ds-button-xl-height, 3rem)', padding: '0 var(--ds-button-xl-padding-x, 1.5rem)', fontSize: 'var(--ds-button-xl-font-size, 1rem)' },
-};
+/**
+ * The variants the modern skin paints. An unknown variant falls back to
+ * `primary` for the className, the `data-variant` attribute and therefore the
+ * paint, all three together.
+ *
+ * The paint itself lives in `tokens/css/engines/modern/skin/button.css`, keyed
+ * on `data-variant`. This set is the contract those rules answer to; a variant
+ * added here without a rule there renders unpainted, and the state matrix in
+ * `packages/showroom/e2e/visual/states.spec.ts` is what says so.
+ */
+const KNOWN_VARIANTS: ReadonlySet<string> = new Set([
+  'primary',
+  'secondary',
+  'default',
+  'outline',
+  'ghost',
+  'text',
+  'dashed',
+  'danger',
+  'success',
+  'warning',
+  'info',
+  'link',
+]);
 
 // ---------------------------------------------------------------------------
 // Loading spinner
@@ -224,9 +126,10 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
 /**
  * Premium modern button implementation.
  *
- * Uses pure inline styles driven by CSS custom properties. Every transition,
- * shadow, and focus ring references --ds-* tokens for consistent theming
- * across tenants.
+ * Every transition, shadow, and focus ring references --ds-* tokens for
+ * consistent theming across tenants. The rules that consume them live in the
+ * modern skin stylesheet; this component's job is to stamp the state that
+ * selects them.
  *
  * @param props - Standardized ButtonProps from the DS type contract.
  * @param ref   - Forwarded ref attached to the native `<button>` element.
@@ -272,8 +175,6 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const { state: interaction, handlers: interactionHandlers } = useInteractionState({
     disabled: disabled || busy,
   });
-  const isHovered = interaction.hovered;
-  const isActive = interaction.pressed;
   const isFocused = interaction.focusVisible;
 
   const isFullWidth = fullWidth ?? block;
@@ -318,7 +219,7 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
   const requestedVariant = variant || 'primary';
   const effectiveVariant = danger
     ? 'danger'
-    : VARIANT_STYLES[requestedVariant]
+    : KNOWN_VARIANTS.has(requestedVariant)
       ? requestedVariant
       : 'primary';
 
@@ -339,120 +240,19 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
     className,
   ].filter(Boolean).join(' ');
 
-  // -------------------------------------------------------------------------
-  // Variant + size + shape inline styles
-  // -------------------------------------------------------------------------
-  const variantStyle = VARIANT_STYLES[effectiveVariant] || VARIANT_STYLES.primary;
-  const sizeStyle = !sizeIsResponsive ? (SIZE_STYLES[size || 'md'] || SIZE_STYLES.md) : {};
-  const hoverOverrides = (isHovered && !disabled && !busy)
-    ? (VARIANT_HOVER_STYLES[effectiveVariant] || {})
-    : {};
-
-  // Shape styles
-  const shapeStyle: React.CSSProperties = {};
-  if (shape === 'circle') {
-    const dim = sizeStyle.height ?? 'var(--ds-button-md-height, 40px)';
-    shapeStyle.borderRadius = '50%';
-    shapeStyle.width = dim;
-    shapeStyle.height = dim;
-    shapeStyle.padding = '0';
-  } else if (shape === 'round') {
-    shapeStyle.borderRadius = 'var(--ds-radius-full, 9999px)';
-  } else {
-    shapeStyle.borderRadius = 'var(--ds-radius-button, var(--ds-radius-md, 8px))';
-  }
-
-  // -------------------------------------------------------------------------
-  // Inline styles - interaction cascade
-  // -------------------------------------------------------------------------
   // `busy` (pending or the deprecated loading) shares the inert interaction
   // model (no press/hover/focus affordance) but keeps its variant colour —
   // only true `disabled` dims to the disabled token.
   const isInert = disabled || busy;
 
-  // Determine if this variant gets an elevation shadow on hover
-  const isElevatedVariant = effectiveVariant === 'primary' || effectiveVariant === 'danger';
-
-  const interactiveStyle: React.CSSProperties = {
-    // Base layout
-    display: isFullWidth ? 'flex' : 'inline-flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 'var(--ds-spacing-2, 8px)',
-    width: isFullWidth ? '100%' : undefined,
-    cursor: isInert ? (busy ? 'wait' : 'not-allowed') : 'pointer',
-    fontWeight: 'var(--ds-font-weight-medium)',
-    lineHeight: 1,
-    textDecoration: 'none',
-    whiteSpace: isFullWidth ? 'normal' : 'nowrap',
-    userSelect: 'none',
-    boxSizing: 'border-box',
-    fontFamily: 'inherit',
-    letterSpacing: 'var(--ds-letter-spacing-subtle-wide)',
-
-    // Variant base styles
-    ...variantStyle,
-
-    // Size styles (unless responsive)
-    ...sizeStyle,
-
-    // Shape styles
-    ...shapeStyle,
-
-    // Transitions
-    transition: [
-      `transform var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-      `box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-      `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-      `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-      `border-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-      `filter var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-      `text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-    ].join(', '),
-
-    // Transform: press = -1 step scale (tokenized) when active, else idle
-    transform:
-      isActive && !isInert
-        ? 'scale(var(--ds-state-press-scale))'
-        : undefined,
-
-    // Resting elevation on raised buttons; hover lifts +1 step via hoverOverrides
-    ...(shadow && !isHovered ? {
-      boxShadow: 'var(--ds-elevation-1)',
-    } : {}),
-
-    // Focus ring: outline-based (not box-shadow, so it stacks with elevation)
-    outline:
-      isFocused && !isInert
-        ? 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)'
-        : 'none',
-    outlineOffset:
-      isFocused && !isInert
-        ? 'var(--ds-focus-ring-offset, 2px)'
-        : undefined,
-
-    // Hover overrides
-    ...hoverOverrides,
-
-    // Disabled state - uses brand compiler vars with fallback. Keyed to true
-    // `disabled` only: a `pending` button keeps its variant colour while busy.
-    ...(disabled && !loading ? {
-      background: 'var(--ds-button-disabled-bg)',
-      color: 'var(--ds-button-disabled-color)',
-      borderColor: 'var(--ds-button-disabled-border-color, var(--ds-button-disabled-border))',
-      opacity: 'var(--ds-button-disabled-opacity, 0.6)' as unknown as number,
-      pointerEvents: 'none' as const,
-    } : {}),
-
-    // Icon-only: force square aspect ratio
-    ...(isIconOnly && shape !== 'circle' ? {
-      aspectRatio: '1',
-      padding: '0',
-      justifyContent: 'center',
-    } : {}),
-
-    ...style,
-  };
+  // -------------------------------------------------------------------------
+  // Paint
+  // -------------------------------------------------------------------------
+  // Every variant, size, shape, state and inert posture is painted by
+  // `tokens/css/engines/modern/skin/button.css`, keyed on the `data-*` contract
+  // stamped below. Only a caller's own `style` prop survives as an inline
+  // declaration, which is the precedence it has always had.
+  const interactiveStyle: React.CSSProperties | undefined = style;
 
   // -------------------------------------------------------------------------
   // Content
@@ -525,6 +325,14 @@ const ModernButton = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => 
         data-pending={pending ? 'true' : undefined}
         data-full-width={isFullWidth ? 'true' : undefined}
         data-focus-visible={isFocused && !isInert ? 'true' : undefined}
+        // The `disabled` PROP, which the DOM `disabled` attribute above cannot
+        // stand in for: that attribute is `disabled || busy`, and a pending
+        // button keeps its variant colour while a disabled one dims.
+        data-disabled={disabled ? 'true' : undefined}
+        data-icon-only={isIconOnly ? 'true' : undefined}
+        // A responsively-sized button takes its box from the generated
+        // breakpoint rules below, not from the skin's static size rules.
+        data-size-responsive={sizeIsResponsive ? 'true' : undefined}
         {...partAttributes('trigger', interaction)}
         {...(responsive ? responsive.attrs : {})}
       >

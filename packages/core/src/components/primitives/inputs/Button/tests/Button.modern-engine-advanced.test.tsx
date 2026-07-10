@@ -93,25 +93,29 @@ describe('ModernButton advanced engine coverage', () => {
     expect(button.className).toContain('rottay-button--sm');
     expect(screen.getByTestId('suffix')).toBeInTheDocument();
 
+    // The skin paints from a stylesheet, keyed on `data-state`. This runtime
+    // never loads that stylesheet, so what is assertable here is the state the
+    // component publishes, not the declaration a browser would resolve from it.
+    // The paint itself is measured against a real cascade, per tenant and per
+    // engine, by `packages/showroom/e2e/visual/states.spec.ts`.
     fireEvent.pointerEnter(button);
-    expect(button.style.textDecoration).toBe('underline');
+    expect(button.getAttribute('data-state')).toContain('hovered');
 
     fireEvent.pointerDown(button);
-    // The press depth is a token, not a literal: a tenant tunes it through
-    // --ds-state-press-scale, so the inline style carries the var reference.
-    expect(button.style.transform).toBe('scale(var(--ds-state-press-scale))');
+    expect(button.getAttribute('data-state')).toContain('pressed');
 
     fireEvent.pointerUp(button);
-    expect(button.style.transform).toBe('');
+    expect(button.getAttribute('data-state') ?? '').not.toContain('pressed');
 
     fireEvent.focus(button);
     expect(button).toHaveAttribute('data-focus-visible', 'true');
+    expect(button.getAttribute('data-state')).toContain('focus-visible');
 
     fireEvent.blur(button);
     expect(button).not.toHaveAttribute('data-focus-visible');
 
     fireEvent.pointerLeave(button);
-    expect(button.style.textDecoration).toBe('none');
+    expect(button.getAttribute('data-state') ?? '').not.toContain('hovered');
 
     fireEvent.click(button);
     expect(handleClick).toHaveBeenCalledTimes(1);

@@ -3,7 +3,7 @@
     "backgroundColor": "rgb(255, 255, 255)",
     "backgroundImage": "none",
     "color": "rgb(22, 42, 67)",
-    "borderColor": "rgb(22, 42, 67)",
+    "borderColor": "rgb(211, 222, 234)",
     "borderTopWidth": "1px",
     "boxShadow": "none",
     "outlineStyle": "solid",
@@ -45,6 +45,21 @@
     "data-state": "hovered pressed focused"
   },
   "bithire/modern/default/rest": {
+    "backgroundColor": "rgb(255, 255, 255)",
+    "backgroundImage": "none",
+    "color": "rgb(22, 42, 67)",
+    "borderColor": "rgb(211, 222, 234)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(22, 42, 67)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "bithire/modern/default/rest-after-hover": {
     "backgroundColor": "rgb(255, 255, 255)",
     "backgroundImage": "none",
     "color": "rgb(22, 42, 67)",
@@ -105,6 +120,21 @@
     "data-state": "hovered pressed focused"
   },
   "bithire/modern/ghost/rest": {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "none",
+    "color": "rgb(82, 103, 126)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(82, 103, 126)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "bithire/modern/ghost/rest-after-hover": {
     "backgroundColor": "rgba(0, 0, 0, 0)",
     "backgroundImage": "none",
     "color": "rgb(82, 103, 126)",
@@ -209,11 +239,26 @@
     "opacity": "1",
     "data-state": ""
   },
+  "bithire/modern/primary/rest-after-hover": {
+    "backgroundColor": "rgb(58, 111, 176)",
+    "backgroundImage": "linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0) 46%, rgba(0, 0, 0, 0) 100%), none",
+    "color": "rgb(255, 255, 255)",
+    "borderColor": "rgb(58, 111, 176)",
+    "borderTopWidth": "1px",
+    "boxShadow": "rgba(22, 42, 67, 0.1) 0px 1px 2px 0px",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(255, 255, 255)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
   "bithire/modern/secondary/focus-visible": {
     "backgroundColor": "color(srgb 0.922745 0.943529 0.96902)",
     "backgroundImage": "none",
     "color": "rgb(58, 111, 176)",
-    "borderColor": "rgb(58, 111, 176)",
+    "borderColor": "color(srgb 0.647451 0.74 0.849412)",
     "borderTopWidth": "1px",
     "boxShadow": "none",
     "outlineStyle": "solid",
@@ -255,6 +300,21 @@
     "data-state": "hovered pressed focused"
   },
   "bithire/modern/secondary/rest": {
+    "backgroundColor": "color(srgb 0.922745 0.943529 0.96902)",
+    "backgroundImage": "none",
+    "color": "rgb(58, 111, 176)",
+    "borderColor": "color(srgb 0.647451 0.74 0.849412)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(58, 111, 176)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "bithire/modern/secondary/rest-after-hover": {
     "backgroundColor": "color(srgb 0.922745 0.943529 0.96902)",
     "backgroundImage": "none",
     "color": "rgb(58, 111, 176)",
@@ -329,6 +389,21 @@
     "opacity": "1",
     "data-state": ""
   },
+  "bithire/rustic/default/rest-after-hover": {
+    "backgroundColor": "rgb(255, 255, 255)",
+    "backgroundImage": "none",
+    "color": "rgb(22, 42, 67)",
+    "borderColor": "rgb(211, 222, 234)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(22, 42, 67)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "bithire/rustic/ghost/focus-visible": {
     "backgroundColor": "rgba(0, 0, 0, 0)",
     "backgroundImage": "none",
@@ -375,6 +450,21 @@
     "data-state": "hovered pressed focused"
   },
   "bithire/rustic/ghost/rest": {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "none",
+    "color": "rgb(82, 103, 126)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(82, 103, 126)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "bithire/rustic/ghost/rest-after-hover": {
     "backgroundColor": "rgba(0, 0, 0, 0)",
     "backgroundImage": "none",
     "color": "rgb(82, 103, 126)",
@@ -479,6 +569,21 @@
     "opacity": "1",
     "data-state": ""
   },
+  "bithire/rustic/primary/rest-after-hover": {
+    "backgroundColor": "rgb(58, 111, 176)",
+    "backgroundImage": "none",
+    "color": "rgb(255, 255, 255)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(255, 255, 255)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "bithire/rustic/secondary/focus-visible": {
     "backgroundColor": "color(srgb 0.922745 0.943529 0.96902)",
     "backgroundImage": "none",
@@ -539,11 +644,26 @@
     "opacity": "1",
     "data-state": ""
   },
+  "bithire/rustic/secondary/rest-after-hover": {
+    "backgroundColor": "color(srgb 0.922745 0.943529 0.96902)",
+    "backgroundImage": "none",
+    "color": "rgb(58, 111, 176)",
+    "borderColor": "color(srgb 0.647451 0.74 0.849412)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(58, 111, 176)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "rottay/modern/default/focus-visible": {
     "backgroundColor": "rgb(24, 24, 27)",
     "backgroundImage": "none",
     "color": "rgb(236, 236, 236)",
-    "borderColor": "rgb(28, 28, 32)",
+    "borderColor": "rgb(58, 58, 64)",
     "borderTopWidth": "1px",
     "boxShadow": "none",
     "outlineStyle": "solid",
@@ -585,6 +705,21 @@
     "data-state": "hovered pressed focused"
   },
   "rottay/modern/default/rest": {
+    "backgroundColor": "rgb(24, 24, 27)",
+    "backgroundImage": "none",
+    "color": "rgb(236, 236, 236)",
+    "borderColor": "rgb(58, 58, 64)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(236, 236, 236)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "rottay/modern/default/rest-after-hover": {
     "backgroundColor": "rgb(24, 24, 27)",
     "backgroundImage": "none",
     "color": "rgb(236, 236, 236)",
@@ -645,6 +780,21 @@
     "data-state": "hovered pressed focused"
   },
   "rottay/modern/ghost/rest": {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "none",
+    "color": "rgb(160, 160, 165)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(160, 160, 165)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "rottay/modern/ghost/rest-after-hover": {
     "backgroundColor": "rgba(0, 0, 0, 0)",
     "backgroundImage": "none",
     "color": "rgb(160, 160, 165)",
@@ -749,11 +899,26 @@
     "opacity": "1",
     "data-state": ""
   },
+  "rottay/modern/primary/rest-after-hover": {
+    "backgroundColor": "rgb(255, 255, 255)",
+    "backgroundImage": "linear-gradient(rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0) 46%, rgba(0, 0, 0, 0.06) 100%), none",
+    "color": "rgb(12, 12, 14)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "rgba(0, 0, 0, 0.3) 0px 1px 2px 0px",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(12, 12, 14)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
   "rottay/modern/secondary/focus-visible": {
     "backgroundColor": "rgb(42, 42, 47)",
     "backgroundImage": "none",
     "color": "rgb(236, 236, 236)",
-    "borderColor": "rgb(28, 28, 32)",
+    "borderColor": "rgb(58, 58, 64)",
     "borderTopWidth": "1px",
     "boxShadow": "none",
     "outlineStyle": "solid",
@@ -795,6 +960,21 @@
     "data-state": "hovered pressed focused"
   },
   "rottay/modern/secondary/rest": {
+    "backgroundColor": "rgb(42, 42, 47)",
+    "backgroundImage": "none",
+    "color": "rgb(236, 236, 236)",
+    "borderColor": "rgb(58, 58, 64)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(236, 236, 236)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "rottay/modern/secondary/rest-after-hover": {
     "backgroundColor": "rgb(42, 42, 47)",
     "backgroundImage": "none",
     "color": "rgb(236, 236, 236)",
@@ -869,6 +1049,21 @@
     "opacity": "1",
     "data-state": ""
   },
+  "rottay/rustic/default/rest-after-hover": {
+    "backgroundColor": "rgb(24, 24, 27)",
+    "backgroundImage": "none",
+    "color": "rgb(236, 236, 236)",
+    "borderColor": "rgb(58, 58, 64)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(236, 236, 236)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "rottay/rustic/ghost/focus-visible": {
     "backgroundColor": "rgba(0, 0, 0, 0)",
     "backgroundImage": "none",
@@ -915,6 +1110,21 @@
     "data-state": "hovered pressed focused"
   },
   "rottay/rustic/ghost/rest": {
+    "backgroundColor": "rgba(0, 0, 0, 0)",
+    "backgroundImage": "none",
+    "color": "rgb(160, 160, 165)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(160, 160, 165)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "rottay/rustic/ghost/rest-after-hover": {
     "backgroundColor": "rgba(0, 0, 0, 0)",
     "backgroundImage": "none",
     "color": "rgb(160, 160, 165)",
@@ -1019,6 +1229,21 @@
     "opacity": "1",
     "data-state": ""
   },
+  "rottay/rustic/primary/rest-after-hover": {
+    "backgroundColor": "rgb(255, 255, 255)",
+    "backgroundImage": "none",
+    "color": "rgb(12, 12, 14)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(12, 12, 14)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "rottay/rustic/secondary/focus-visible": {
     "backgroundColor": "rgb(42, 42, 47)",
     "backgroundImage": "none",
@@ -1079,11 +1304,26 @@
     "opacity": "1",
     "data-state": ""
   },
+  "rottay/rustic/secondary/rest-after-hover": {
+    "backgroundColor": "rgb(42, 42, 47)",
+    "backgroundImage": "none",
+    "color": "rgb(236, 236, 236)",
+    "borderColor": "rgb(58, 58, 64)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(236, 236, 236)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "torture-dark/modern/default/focus-visible": {
     "backgroundColor": "rgb(18, 0, 13)",
     "backgroundImage": "none",
     "color": "rgb(255, 153, 221)",
-    "borderColor": "rgb(255, 153, 221)",
+    "borderColor": "rgb(77, 0, 51)",
     "borderTopWidth": "1px",
     "boxShadow": "none",
     "outlineStyle": "solid",
@@ -1125,6 +1365,21 @@
     "data-state": "hovered pressed focused"
   },
   "torture-dark/modern/default/rest": {
+    "backgroundColor": "rgb(18, 0, 13)",
+    "backgroundImage": "none",
+    "color": "rgb(255, 153, 221)",
+    "borderColor": "rgb(77, 0, 51)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(255, 153, 221)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "torture-dark/modern/default/rest-after-hover": {
     "backgroundColor": "rgb(18, 0, 13)",
     "backgroundImage": "none",
     "color": "rgb(255, 153, 221)",
@@ -1185,6 +1440,21 @@
     "data-state": "hovered pressed focused"
   },
   "torture-dark/modern/ghost/rest": {
+    "backgroundColor": "rgba(255, 0, 170, 0.02)",
+    "backgroundImage": "none",
+    "color": "rgb(255, 179, 0)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(255, 179, 0)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "torture-dark/modern/ghost/rest-after-hover": {
     "backgroundColor": "rgba(255, 0, 170, 0.02)",
     "backgroundImage": "none",
     "color": "rgb(255, 179, 0)",
@@ -1289,11 +1559,26 @@
     "opacity": "1",
     "data-state": ""
   },
+  "torture-dark/modern/primary/rest-after-hover": {
+    "backgroundColor": "rgb(255, 0, 170)",
+    "backgroundImage": "linear-gradient(135deg, rgb(255, 0, 170), rgb(182, 255, 0)), none",
+    "color": "rgb(26, 0, 20)",
+    "borderColor": "rgb(51, 0, 31)",
+    "borderTopWidth": "1px",
+    "boxShadow": "rgba(255, 0, 170, 0.5) 0px 2px 8px 0px",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(26, 0, 20)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
   "torture-dark/modern/secondary/focus-visible": {
     "backgroundColor": "rgb(26, 38, 0)",
     "backgroundImage": "none",
     "color": "rgb(212, 255, 102)",
-    "borderColor": "rgb(212, 255, 102)",
+    "borderColor": "rgb(51, 77, 0)",
     "borderTopWidth": "1px",
     "boxShadow": "none",
     "outlineStyle": "solid",
@@ -1335,6 +1620,21 @@
     "data-state": "hovered pressed focused"
   },
   "torture-dark/modern/secondary/rest": {
+    "backgroundColor": "rgb(26, 38, 0)",
+    "backgroundImage": "none",
+    "color": "rgb(212, 255, 102)",
+    "borderColor": "rgb(51, 77, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(212, 255, 102)",
+    "outlineOffset": "0px",
+    "transform": "none",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "torture-dark/modern/secondary/rest-after-hover": {
     "backgroundColor": "rgb(26, 38, 0)",
     "backgroundImage": "none",
     "color": "rgb(212, 255, 102)",
@@ -1409,6 +1709,21 @@
     "opacity": "1",
     "data-state": ""
   },
+  "torture-dark/rustic/default/rest-after-hover": {
+    "backgroundColor": "rgb(18, 0, 13)",
+    "backgroundImage": "none",
+    "color": "rgb(255, 153, 221)",
+    "borderColor": "rgb(77, 0, 51)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(255, 153, 221)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "torture-dark/rustic/ghost/focus-visible": {
     "backgroundColor": "rgba(255, 0, 170, 0.02)",
     "backgroundImage": "none",
@@ -1455,6 +1770,21 @@
     "data-state": "hovered pressed focused"
   },
   "torture-dark/rustic/ghost/rest": {
+    "backgroundColor": "rgba(255, 0, 170, 0.02)",
+    "backgroundImage": "none",
+    "color": "rgb(255, 179, 0)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(255, 179, 0)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "torture-dark/rustic/ghost/rest-after-hover": {
     "backgroundColor": "rgba(255, 0, 170, 0.02)",
     "backgroundImage": "none",
     "color": "rgb(255, 179, 0)",
@@ -1559,6 +1889,21 @@
     "opacity": "1",
     "data-state": ""
   },
+  "torture-dark/rustic/primary/rest-after-hover": {
+    "backgroundColor": "rgb(255, 0, 170)",
+    "backgroundImage": "none",
+    "color": "rgb(26, 0, 20)",
+    "borderColor": "rgba(0, 0, 0, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(26, 0, 20)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
   "torture-dark/rustic/secondary/focus-visible": {
     "backgroundColor": "rgb(26, 38, 0)",
     "backgroundImage": "none",
@@ -1605,6 +1950,21 @@
     "data-state": "hovered pressed focused"
   },
   "torture-dark/rustic/secondary/rest": {
+    "backgroundColor": "rgb(26, 38, 0)",
+    "backgroundImage": "none",
+    "color": "rgb(212, 255, 102)",
+    "borderColor": "rgb(51, 77, 0)",
+    "borderTopWidth": "1px",
+    "boxShadow": "none",
+    "outlineStyle": "none",
+    "outlineWidth": "3px",
+    "outlineColor": "rgb(212, 255, 102)",
+    "outlineOffset": "0px",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "opacity": "1",
+    "data-state": ""
+  },
+  "torture-dark/rustic/secondary/rest-after-hover": {
     "backgroundColor": "rgb(26, 38, 0)",
     "backgroundImage": "none",
     "color": "rgb(212, 255, 102)",

@@ -1,0 +1,297 @@
+/**
+ * Modern Button skin (WO-ARC-07).
+ *
+ * DELIBERATELY UNLAYERED. `foundation/base.css` declares seven cascade layers
+ * (`rottay-reset` … `rottay-responsive`) and then imports Tailwind, whose own
+ * `theme` / `base` / `utilities` layers are absent from that statement and so
+ * sort after every one of them. Layer order beats specificity, so a rule here in
+ * `@layer rottay-engines` at (0,2,0) loses to Tailwind's preflight at (0,0,1):
+ *
+ *     @layer base { button { background-color: transparent; border-radius: 0 } }
+ *     * { border: 0 solid }
+ *
+ * Measured on the shipped bundle: with this button's inline style removed and a
+ * `@layer rottay-engines` rule applied, the background stayed `rgba(0,0,0,0)`,
+ * the radius stayed `0px` and the border stayed `0px`. The identical rule,
+ * unlayered, painted all three. That is the whole reason this engine painted
+ * inline: inline style was the only position in this cascade a skin could hold.
+ *
+ * Unlayered is the correct position, not a workaround. It outranks preflight and
+ * DaisyUI, and it still yields to a consumer's own inline `style` prop -- the
+ * exact precedence the inline object had. See P-47 for the architecture question
+ * this leaves open.
+ *
+ * The selectors read the DOM contract the behavior core stamps
+ * (`behavior/anatomy.ts`): `data-state~='hovered' | 'pressed' | 'focus-visible'`.
+ * A busy or disabled button reports none of those -- `useInteractionState` is
+ * constructed with `disabled: disabled || busy` -- so no rule below needs to
+ * guard against an inert button reacting.
+ *
+ * Rule order below mirrors the order the inline object spread its fragments, and
+ * ties are broken by position exactly as they were by spread order.
+ *
+ * Every selector carries BOTH classes the element wears. That is not decoration:
+ * each tenant's extension sheet ships an unlayered
+ *
+ *     html[data-tenant='…']:not([data-theme='light']) *, ::after, ::before {
+ *       border-color: var(--ds-color-border);
+ *     }
+ *
+ * to undo Tailwind preflight's `border-color: currentColor`. That selector is
+ * `html[data-tenant]:not([data-theme]):not(.light)`, i.e. (0,3,1), and it is
+ * appended after this file. Any rule below (0,3,1) loses its border colour to a
+ * floor meant for elements that have no opinion. Two classes plus the anatomy
+ * part and the variant reach (0,4,0), so the variant's own border survives.
+ *
+ * A tenant that wants a different button border sets `--ds-button-{variant}-border`.
+ * The `*` rule outranking every single-class component rule in the design system
+ * is filed as P-48; this file does not fix it, it clears it.
+ */
+
+/* base */
+.rottay-button.rottay-button--modern {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-spacing-2, 8px);
+  cursor: pointer;
+  font-weight: var(--ds-font-weight-medium);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  box-sizing: border-box;
+  font-family: inherit;
+  letter-spacing: var(--ds-letter-spacing-subtle-wide);
+  outline: none;
+  transition:
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
+    background-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
+    filter var(--ds-motion-fast) var(--ds-motion-ease-out),
+    text-decoration var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+.rottay-button.rottay-button--modern[data-part='trigger'][data-full-width='true'] {
+  display: flex;
+  width: 100%;
+  white-space: normal;
+}
+
+/* variant, at rest */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='primary'] {
+  background: var(--ds-gradient-primary), var(--ds-button-primary-bg, var(--ds-color-primary));
+  color: var(--ds-button-primary-color, var(--ds-button-primary-text, var(--ds-color-text-on-primary)));
+  border: 1px solid var(--ds-button-primary-border, var(--ds-color-primary));
+  box-shadow: var(--ds-button-primary-shadow, none);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='secondary'] {
+  background: var(--ds-button-secondary-bg, transparent);
+  color: var(--ds-button-secondary-color, var(--ds-button-secondary-text, var(--ds-color-text-primary)));
+  border: 1px solid var(--ds-button-secondary-border, var(--ds-color-border));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='default'] {
+  background: var(--ds-button-default-bg, transparent);
+  color: var(--ds-button-default-color, var(--ds-button-default-text, var(--ds-color-text-primary)));
+  border: 1px solid var(--ds-button-default-border, var(--ds-color-border));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='outline'] {
+  background: var(--ds-button-default-bg, transparent);
+  color: var(--ds-button-default-color, var(--ds-color-text-primary));
+  border: 1px solid var(--ds-button-default-border, var(--ds-color-border));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='ghost'] {
+  background: var(--ds-button-ghost-bg, transparent);
+  color: var(--ds-button-ghost-color, var(--ds-button-ghost-text, var(--ds-color-text-primary)));
+  border: 1px solid transparent;
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='text'] {
+  background: var(--ds-button-text-bg, transparent);
+  color: var(--ds-button-text-color, var(--ds-button-text-text, var(--ds-color-text-primary)));
+  border: 1px solid transparent;
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='dashed'] {
+  background: var(--ds-button-default-bg, transparent);
+  color: var(--ds-button-default-color, var(--ds-color-text-primary));
+  border: 1px dashed var(--ds-button-default-border, var(--ds-color-border));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='danger'] {
+  background: var(--ds-button-error-bg, var(--ds-color-error));
+  color: var(--ds-button-error-color, var(--ds-button-error-text, var(--ds-color-text-on-primary)));
+  border: 1px solid var(--ds-button-error-border, var(--ds-color-error));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='success'] {
+  background: var(--ds-button-success-bg, var(--ds-color-success));
+  color: var(--ds-button-success-color, var(--ds-button-success-text, var(--ds-color-text-on-primary)));
+  border: 1px solid var(--ds-button-success-border, var(--ds-color-success));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='warning'] {
+  background: var(--ds-button-warning-bg, var(--ds-color-warning));
+  color: var(--ds-button-warning-color, var(--ds-button-warning-text, var(--ds-color-text-on-primary)));
+  border: 1px solid var(--ds-button-warning-border, var(--ds-color-warning));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='info'] {
+  background: var(--ds-button-info-bg, var(--ds-color-info));
+  color: var(--ds-button-info-color, var(--ds-button-info-text, var(--ds-color-text-on-primary)));
+  border: 1px solid var(--ds-button-info-border, var(--ds-color-info));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='link'] {
+  background: transparent;
+  color: var(--ds-button-link-color, var(--ds-color-primary));
+  border: 1px solid transparent;
+}
+
+/* size */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-size='xs']:not([data-size-responsive]) {
+  height: var(--ds-button-xs-height, 1.5rem);
+  padding: 0 var(--ds-button-xs-padding-x, 0.5rem);
+  font-size: var(--ds-button-xs-font-size, 0.75rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-size='sm']:not([data-size-responsive]) {
+  height: var(--ds-button-sm-height, 2rem);
+  padding: 0 var(--ds-button-sm-padding-x, 0.75rem);
+  font-size: var(--ds-button-sm-font-size, 0.8125rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-size='md']:not([data-size-responsive]) {
+  height: var(--ds-button-md-height, 2.5rem);
+  padding: 0 var(--ds-button-md-padding-x, 1rem);
+  font-size: var(--ds-button-md-font-size, 0.875rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-size='lg']:not([data-size-responsive]) {
+  height: var(--ds-button-lg-height, 2.75rem);
+  padding: 0 var(--ds-button-lg-padding-x, 1.25rem);
+  font-size: var(--ds-button-lg-font-size, 0.9375rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-size='xl']:not([data-size-responsive]) {
+  height: var(--ds-button-xl-height, 3rem);
+  padding: 0 var(--ds-button-xl-padding-x, 1.5rem);
+  font-size: var(--ds-button-xl-font-size, 1rem);
+}
+
+/* shape: circle takes the size box */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='xs']:not([data-size-responsive]) {
+  width: var(--ds-button-xs-height, 1.5rem);
+  height: var(--ds-button-xs-height, 1.5rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='sm']:not([data-size-responsive]) {
+  width: var(--ds-button-sm-height, 2rem);
+  height: var(--ds-button-sm-height, 2rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='md']:not([data-size-responsive]) {
+  width: var(--ds-button-md-height, 2.5rem);
+  height: var(--ds-button-md-height, 2.5rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='lg']:not([data-size-responsive]) {
+  width: var(--ds-button-lg-height, 2.75rem);
+  height: var(--ds-button-lg-height, 2.75rem);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size='xl']:not([data-size-responsive]) {
+  width: var(--ds-button-xl-height, 3rem);
+  height: var(--ds-button-xl-height, 3rem);
+}
+
+/* shape */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='default'] {
+  border-radius: var(--ds-radius-button, var(--ds-radius-md, 8px));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='round'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'] {
+  border-radius: 50%;
+  padding: 0;
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-shape='circle'][data-size-responsive] {
+  width: var(--ds-button-md-height, 40px);
+  height: var(--ds-button-md-height, 40px);
+}
+
+/* press */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-state~='pressed'] {
+  transform: scale(var(--ds-state-press-scale));
+}
+
+/* resting elevation on a raised button; hover lifts it a step via the hover rule */
+.rottay-button.rottay-button--modern[data-part='trigger'].rottay-button--shadow:not([data-state~='hovered']) {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* focus ring: outline-based, so it stacks with elevation instead of replacing it */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-state~='focus-visible'] {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* variant, hovered */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='primary'][data-state~='hovered'] {
+  background: var(--ds-gradient-primary), var(--ds-button-primary-bg-hover, var(--ds-color-primary));
+  box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-elevation-2));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='secondary'][data-state~='hovered'] {
+  background: var(--ds-button-secondary-bg-hover, var(--ds-color-bg-subtle));
+  border-color: var(--ds-button-secondary-border-hover, var(--ds-color-border));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='default'][data-state~='hovered'] {
+  background: var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle));
+  border-color: var(--ds-button-default-border-hover, var(--ds-color-border));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='outline'][data-state~='hovered'] {
+  background: var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='ghost'][data-state~='hovered'] {
+  background: var(--ds-button-ghost-bg-hover, var(--ds-color-bg-subtle));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='text'][data-state~='hovered'] {
+  background: var(--ds-button-text-bg-hover, var(--ds-color-bg-subtle));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='dashed'][data-state~='hovered'] {
+  background: var(--ds-button-default-bg-hover, var(--ds-color-bg-subtle));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='danger'][data-state~='hovered'] {
+  background: var(--ds-button-error-bg-hover, var(--ds-color-error));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='success'][data-state~='hovered'] {
+  background: var(--ds-button-success-bg-hover, var(--ds-color-success));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='warning'][data-state~='hovered'] {
+  background: var(--ds-button-warning-bg-hover, var(--ds-color-warning));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='info'][data-state~='hovered'] {
+  background: var(--ds-button-info-bg-hover, var(--ds-color-info));
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-variant='link'][data-state~='hovered'] {
+  color: var(--ds-button-link-color-hover, var(--ds-color-primary));
+  text-decoration: underline;
+}
+
+/* inert postures.
+   `data-disabled` carries the `disabled` PROP. The DOM `disabled` attribute
+   cannot stand in for it: the element sets `disabled={disabled || busy}`, so a
+   merely-pending button also carries it, and a pending button keeps its variant
+   colour while a disabled one dims. The two are indistinguishable without this
+   attribute, which is why it exists. */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-disabled='true'] {
+  cursor: not-allowed;
+}
+/* busy outranks disabled on the cursor, and only on the cursor: a button that is
+   both waits, it does not refuse. */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-loading='true'],
+.rottay-button.rottay-button--modern[data-part='trigger'][data-pending='true'] {
+  cursor: wait;
+}
+.rottay-button.rottay-button--modern[data-part='trigger'][data-disabled='true']:not([data-loading='true']) {
+  background: var(--ds-button-disabled-bg);
+  color: var(--ds-button-disabled-color);
+  border-color: var(--ds-button-disabled-border-color, var(--ds-button-disabled-border));
+  opacity: var(--ds-button-disabled-opacity, 0.6);
+  pointer-events: none;
+}
+
+/* icon-only: a square box, whatever the size says about padding */
+.rottay-button.rottay-button--modern[data-part='trigger'][data-icon-only='true']:not([data-shape='circle']) {
+  aspect-ratio: 1;
+  padding: 0;
+  justify-content: center;
+}
