@@ -154,12 +154,16 @@ Each of these was paid for. They are not style preferences.
    any tenant, and the ring the user sees comes from somewhere else entirely. An
    invalid CSS declaration fails silently, in every direction. (P-54.)
 
-16. **A flaky test is a race with a name.** "17 failures on one run, 21 on the
-   next" was treated as noise for months. Two files, run together, fail every time:
-   a `findByRole` with a 1000ms default racing a `React.lazy` engine chunk that
-   needs longer under CPU contention. The fix is determinism, never a wider
-   timeout — a widened window still closes on a slower machine. Reach for a
-   reproducer before you reach for a tolerance. (P-49.)
+16. **A flaky test is a race with a name — and a RATE, not an anecdote.** "17
+   failures on one run, 21 on the next" was treated as noise for months. Two files,
+   run together, expose it: a `findByRole` with a 1000ms default racing a
+   `React.lazy` engine chunk that needs longer under CPU contention. Two failures
+   out of two observations got this written down as "deterministic"; measured, it
+   is 3 in 11. The distinction is load-bearing, because a candidate fix passed that
+   reproducer 15 times in a row while breaking 498 of 795 tests in a subset nobody
+   had run. Measure the class, never the instance. And the fix is determinism,
+   never a wider timeout — a widened window still closes on a slower machine.
+   (P-49.)
 
 17. **A counter the baseline has never heard of gates nothing.** `--check` compared
    an unbaselined counter against `Infinity`, so it could not rise and could not
