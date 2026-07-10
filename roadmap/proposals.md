@@ -829,3 +829,18 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why nothing caught it** — no test focuses an Input, and `outline-style: none` is what the element reports at rest too, so a snapshot of the resting state is identical to a snapshot of the broken focused state on this channel.
 - **Ask** — delete the dead declaration rather than repair it. The ring is already drawn, correctly, one layer up; adding a real outline would double it. If a component ever wants an outline ring it must reference `--ds-focus-ring-color`, and a token whose name ends in `-shadow-` belongs in `box-shadow`. WO-ARC-07's Input skin does this by construction: a reviewer reading `outline: 2px solid var(--ds-input-shadow-focus)` in a stylesheet sees a value that cannot parse.
 - **Status** — OPEN, and owned by WO-ARC-07's Input slice.
+
+### P-55 The rustic Badge's solid foreground is a flat token, not derived from its fill
+- **Found** — 2026-07-10, by WO-P-53's extension of the contrast gate to every engine, and independently confirmed by the orchestrator.
+- **Evidence** — the primary badge, on rottay, measured on the torture probe:
+
+  | engine | background | text | contrast |
+  | --- | --- | --- | --- |
+  | rustic | `rgb(255,255,255)` | `rgb(236,236,236)` | **1.18:1** |
+  | modern | `rgb(255,255,255)` | `rgb(12,12,14)` | 19.54:1 |
+  | classic | `rgb(255,255,255)` | `rgb(12,12,14)` | 19.54:1 |
+
+- **The cause** — three engines, three different sources for the same foreground. `ModernBadge` reads `--ds-color-primary-foreground`; `ClassicBadge` reads antd's `colorTextLightSolid` (which P-52 just wired to `--ds-color-text-on-primary`). `RusticBadge` alone reads `--ds-badge-text-color`, a single flat value that is not derived per-tenant from the fill it sits on. rottay's artifact sets it to a near-white, and rottay's primary badge fill is white, so the label is invisible. The same defect archetype as P-52 and P-44: a foreground colour that does not know what it sits on.
+- **Why the gate now sees it and did not before** — WO-P-53 gave `contrast.spec.ts` a per-engine selector map and a full 4×3×4 matrix. This cell is carried in that file's `KNOWN_GAPS` with the measurement and the reason, rather than as a red assertion that would fail every run — a named gap, not a silent one, and not a broken gate.
+- **Ask** — one WO. Give `RusticBadge`'s solid variant the same on-primary foreground the other two engines already use (`--ds-color-text-on-primary` / `--ds-color-primary-foreground`), or derive `--ds-badge-text-color` per-tenant against `--ds-badge-primary-bg` in the brand-theme source. Then remove the entry from `KNOWN_GAPS` and let the assertion run live; it will be red until the fix and green after, which is the drill.
+- **Status** — OPEN.
