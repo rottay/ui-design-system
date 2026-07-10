@@ -79,6 +79,23 @@ Each of these was paid for. They are not style preferences.
    alpha inside it does not. **Verify with the instrument that can see the thing
    you are looking for**, and prefer measuring the artifact over reading its name.
 
+7. **`git add <paths>` does not un-stage what is already in the index.** `git mv`
+   stages its rename immediately. An agent moved five files while the
+   orchestrator committed an unrelated work order by explicit path, and the
+   commit swept the renames in **without their import fixes** — a commit that
+   does not build on its own, named after a work order that had nothing to do
+   with it. Before committing during a parallel wave, `git status --porcelain`
+   and look for `R`/`A` entries you did not stage. Explicit paths protect the
+   *contents* of a commit, not its *index*.
+
+8. **A parity test that regenerates an output and compares it to the committed
+   copy cannot see a lie the two share.** The generator baked
+   `brand-themes/<slug>.ts` into every artifact header. After the themes moved,
+   that line named a file that does not exist — and `first-party-artifacts-generated`
+   stayed green, because the generator and the artifact were stale *in unison*.
+   Regenerate-and-diff proves the artifact is a build product. It proves nothing
+   about whether the build product is true.
+
 ## The pre-existing failure baseline (measured, not assumed)
 
 `pnpm test` in `packages/core` fails **17 tests** at HEAD. All 17 also fail at
