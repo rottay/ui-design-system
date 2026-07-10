@@ -55,7 +55,7 @@
 
 'use client';
 
-import React, { useId } from 'react';
+import React, { useCallback, useId } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { CardProps } from '../Card.types';
@@ -149,6 +149,16 @@ export default function RusticCard(props: CardProps): React.ReactElement {
   // inline styles cannot respond to pseudo-classes. This lets us apply
   // CSS-variable-driven transforms and shadows dynamically.
   const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (onClick && (event.key === 'Enter' || event.key === ' ')) {
+        event.preventDefault();
+        onClick();
+      }
+    },
+    [onClick]
+  );
   const isHovered = interaction.hovered;
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
@@ -302,10 +312,13 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       onClick={onClick}
       {...interactionHandlers}
       {...partAttributes('root', interaction)}
-      // Clickable cards receive button role + tabIndex for keyboard access.
-      // This is the rustic engine's key a11y advantage over modern/classic.
-      role={clickable || onClick ? 'button' : undefined}
-      tabIndex={clickable || onClick ? 0 : undefined}
+      // The three go together or none of them do. A `role="button"` with a tab
+      // stop and no activation path is a control a pointer can use and a
+      // keyboard cannot. `clickable` is a styling flag, not a promise that the
+      // card does anything, so it does not mint a button.
+      onKeyDown={onClick ? handleKeyDown : undefined}
+      role={onClick ? 'button' : undefined}
+      tabIndex={onClick ? 0 : undefined}
       aria-busy={loading}
       {...(responsive ? responsive.attrs : {})}
     >
