@@ -27,5 +27,18 @@
   "vocabulary.rawAntdSizeUnions": 0,
   "vocabulary.duplicateSizeDeclarations": 0,
   "daisy.classConsumers": 16,
-  "responsive.viewportMqInSkins": 0
+  "responsive.viewportMqInSkins": 0,
+  "arc09.inlinePaint.primitives/display/Table/engines/modern.tsx": 40,
+  "arc09.inlinePaint.primitives/display/Table/engines/rustic.tsx": 55,
+  "arc09.inlinePaint.structures/workspace/field-filters-panel/index.tsx": 40,
+  "arc09.inlinePaint.patterns/forms/filter-panel/engines/modern.tsx": 46,
+  "arc09.inlinePaint.patterns/forms/filter-panel/engines/rustic.tsx": 30,
+  "arc09.inlinePaint.structures/workspace/selection-preview-rail/index.tsx": 36,
+  "arc09.inlinePaint.patterns/data/detail-panel/engines/modern.tsx": 67,
+  "arc09.inlinePaint.patterns/data/detail-panel/engines/rustic.tsx": 36,
+  "arc09.inlinePaint.patterns/data/data-table/engines/modern.tsx": 95,
+  "arc09.inlinePaint.patterns/data/data-table/engines/rustic.tsx": 50,
+  "arc09.inlinePaint.patterns/data/data-table/cell-editors/index.tsx": 8,
+  "arc09.inlinePaint.patterns/data/data-table/DataTableMobileCards.tsx": 7,
+  "arc09.inlinePaint.patterns/data/data-table/PatternDataTable.tsx": 9
 }

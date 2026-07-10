@@ -623,6 +623,193 @@ function countInlineStateLiterals() {
 }
 
 /**
+ * WO-ARC-09: inline PAINT that has not yet moved to an unlayered skin.
+ *
+ * The paint migration's positive "no inline paint" gate (Fable advisory Q4).
+ * Counts paint property NAMES inside `style={{ … }}` object literals in the
+ * migratable files of the six workspace-tier components — the modern + rustic
+ * engine files plus the five engine-agnostic files (the two structures and the
+ * three shared data-table files). classic is excluded BY CONSTRUCTION: Ant
+ * Design keeps its own paint, so a classic `style={{}}` is not a migration
+ * target. Per file, decrease-only; each component's checkpoint drives its files
+ * to 0 (data-table's virtual-offset transform is the one documented residual,
+ * handled at that checkpoint).
+ *
+ * Paint vs layout is decided by the property-NAME class, never by a value regex
+ * (that is the axis `inlineStateLiterals` gets wrong in both directions). The
+ * counted names are background*, border*, outline*, color, boxShadow,
+ * textShadow, fill, stroke, accentColor, filter, backdropFilter and transform
+ * (a state transform is paint — ARC-07 moved `translateY(0)` into CSS). Layout
+ * (size/padding/margin/flex/grid/position/zIndex/display/overflow), the ARC-08
+ * container contract (containerType/containerName), runtime-measured dynamics
+ * (column widths, virtual offsets) and the two residuals ARC-07 kept (opacity,
+ * animation) are NOT paint names, so they never enter the count. `borderCollapse`
+ * and `borderSpacing` match `border*` but are table box-model layout, so they
+ * are subtracted back out.
+ *
+ * Bounding to `style={{}}` spans (not a whole-file regex like fixedWidthLiterals)
+ * matters here: `filter:` and `transform:` are also data-table/filter-panel
+ * config keys, and only the ones inside an inline style object are paint.
+ */
+const ARC09_PAINT_FILES = [
+  // checkpoint 1 — Table (primitive, engine-split, pre-gated by the flagship slug)
+  "primitives/display/Table/engines/modern.tsx",
+  "primitives/display/Table/engines/rustic.tsx",
+  // checkpoint 2 — field-filters-panel (engine-agnostic, single file)
+  "structures/workspace/field-filters-panel/index.tsx",
+  // checkpoint 3 — filter-panel (engine-split; root gets the engine-class pair added)
+  "patterns/forms/filter-panel/engines/modern.tsx",
+  "patterns/forms/filter-panel/engines/rustic.tsx",
+  // checkpoint 4 — selection-preview-rail (engine-agnostic, single file)
+  "structures/workspace/selection-preview-rail/index.tsx",
+  // checkpoint 5 — detail-panel (engine-split)
+  "patterns/data/detail-panel/engines/modern.tsx",
+  "patterns/data/detail-panel/engines/rustic.tsx",
+  // checkpoint 6 — data-table (compound: engines + the three shared agnostic files)
+  "patterns/data/data-table/engines/modern.tsx",
+  "patterns/data/data-table/engines/rustic.tsx",
+  "patterns/data/data-table/cell-editors/index.tsx",
+  "patterns/data/data-table/DataTableMobileCards.tsx",
+  "patterns/data/data-table/PatternDataTable.tsx",
+];
+
+const ARC09_PAINT_KEY_RE = new RegExp(
+  "^(" +
+    [
+      "background[A-Za-z]*",
+      "border[A-Za-z]*",
+      "outline[A-Za-z]*",
+      "color",
+      "boxShadow",
+      "textShadow",
+      "fill",
+      "stroke",
+      "accentColor",
+      "filter",
+      "backdropFilter",
+      "WebkitBackdropFilter",
+      "transform",
+    ].join("|") +
+    ")\\s*:",
+);
+// border*/table box-model that is layout, not paint.
+const ARC09_PAINT_EXEMPT = new Set(["borderCollapse", "borderSpacing"]);
+
+/**
+ * Count paint-named object-literal keys in a TSX source.
+ *
+ * Paint does not live only in inline `style={{}}` literals — these engines also
+ * assemble it in `const cellStyle = { … }` objects later spread into a style
+ * prop, and in conditional spreads `...(cond ? { background } : {})`. All three
+ * are object-literal keys, so this scans keys whose innermost open bracket is an
+ * object `{`, which a `style={{}}`-span scanner misses (measured: it saw 4 of
+ * Table rustic's ~50 consts).
+ *
+ * Two false-positive classes are excluded structurally, not by value regex:
+ * (1) strings, template-literal text and comments are skipped, so a `@keyframes`
+ * CSS string (`'…transform:rotate…'`, the spinner animation — an exempt residual)
+ * and any CSS value with a colon do NOT count; (2) a paint-named key is counted
+ * only when the innermost open bracket is `{`, so a function-parameter type
+ * annotation like `(filter: FilterDef)` (innermost `(`) does not count — that
+ * `filter` is a param name, not paint. `${…}` template expressions are scanned
+ * as code.
+ */
+function countArc09PaintInFile(text) {
+  const n = text.length;
+  let count = 0;
+  let str = null; // "'" | '"' while inside a plain string
+  // Bracket stack: "{" "(" "[" for code brackets, "`" for a template literal,
+  // "$" for a ${…} expression (opened by `${`, closed by its matching `}`).
+  const stack = [];
+  const topIs = (ch) => stack.length > 0 && stack[stack.length - 1] === ch;
+  let i = 0;
+  while (i < n) {
+    const c = text[i];
+    const c2 = text[i + 1];
+    if (str) {
+      if (c === "\\") i += 2;
+      else {
+        if (c === str) str = null;
+        i++;
+      }
+      continue;
+    }
+    if (topIs("`")) {
+      if (c === "\\") i += 2;
+      else if (c === "`") {
+        stack.pop();
+        i++;
+      } else if (c === "$" && c2 === "{") {
+        stack.push("$");
+        i += 2;
+      } else i++;
+      continue;
+    }
+    // code context (stack empty, inside a bracket, or inside a ${…} expression)
+    if (c === "/" && c2 === "/") {
+      while (i < n && text[i] !== "\n") i++;
+      continue;
+    }
+    if (c === "/" && c2 === "*") {
+      i += 2;
+      while (i < n && !(text[i] === "*" && text[i + 1] === "/")) i++;
+      i += 2;
+      continue;
+    }
+    if (c === "'" || c === '"') {
+      str = c;
+      i++;
+      continue;
+    }
+    if (c === "`") {
+      stack.push("`");
+      i++;
+      continue;
+    }
+    if (c === "{" || c === "(" || c === "[") {
+      stack.push(c);
+      i++;
+      continue;
+    }
+    if (c === "}") {
+      if (topIs("{") || topIs("$")) stack.pop();
+      i++;
+      continue;
+    }
+    if (c === ")") {
+      if (topIs("(")) stack.pop();
+      i++;
+      continue;
+    }
+    if (c === "]") {
+      if (topIs("[")) stack.pop();
+      i++;
+      continue;
+    }
+    // a paint key is an object-literal key (innermost bracket is `{`) starting
+    // at an identifier boundary.
+    if (topIs("{") && /[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
+      const m = ARC09_PAINT_KEY_RE.exec(text.slice(i, i + 48));
+      if (m && !ARC09_PAINT_EXEMPT.has(m[1])) count += 1;
+    }
+    i++;
+  }
+  return count;
+}
+
+/** Per-file `arc09.inlinePaint.<path>` counters, spread into the counter map. */
+function arc09InlinePaintCounters() {
+  const out = {};
+  for (const rel of ARC09_PAINT_FILES) {
+    const full = join(componentsDir, rel);
+    out[`arc09.inlinePaint.${rel}`] = existsSync(full)
+      ? countArc09PaintInFile(readFileSync(full, "utf8"))
+      : 0;
+  }
+  return out;
+}
+
+/**
  * Count render-layer files that CONSUME each sanctioned premium effect family
  * (spec section 5): gradient (surface-tint + accent), glass (overlay backdrops),
  * signal-glow. Scans src/components + src/motion (the render layer) and requires
@@ -2078,6 +2265,10 @@ const counters = {
   // and the baseline is 0 -- so the first viewport breakpoint added to a skin
   // fails the build, which is the point.
   "responsive.viewportMqInSkins": countViewportMediaQueriesInSkins(),
+  // WO-ARC-09: per-file inline-paint ratchet over the six workspace-tier
+  // components' migratable files. Decrease-only; each checkpoint's exit is its
+  // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
+  ...arc09InlinePaintCounters(),
 };
 
 
@@ -2095,7 +2286,6 @@ const counters = {
  * their tokens and their anatomy, not through a breakpoint.
  */
 function countViewportMediaQueriesInSkins() {
-  const skinDir = join(root, "src/tokens/css/engines");
   const skins = [];
   const walk = (dir) => {
     let entries;
@@ -2110,7 +2300,9 @@ function countViewportMediaQueriesInSkins() {
       else if (entry.isFile() && entry.name.endsWith(".css") && full.includes(`${sep}skin${sep}`)) skins.push(full);
     }
   };
-  walk(skinDir);
+  walk(join(root, "src/tokens/css/engines"));
+  // WO-ARC-09: the engine-agnostic skin home for structures + shared files.
+  walk(join(root, "src/tokens/css/components/skin"));
 
   let count = 0;
   for (const file of skins) {
