@@ -60,6 +60,7 @@ const workspace: StructureEntry[] = [
 const record: StructureEntry[] = [
   { slug: 'record', name: 'Record', group: 'record', description: 'Record detail layout with field grid and sections', engines: allEngines },
   { slug: 'form-sections', name: 'FormSections', group: 'record', description: 'Grouped form sections with collapsible panels', engines: allEngines },
+  { slug: 'edit-fields', name: 'EditFields', group: 'record', description: 'Single-surface record edit chrome: numbered fields, primary/advanced disclosure, and a save/cancel footer', engines: allEngines },
 ];
 
 // ---------------------------------------------------------------------------

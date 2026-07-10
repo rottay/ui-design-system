@@ -18,9 +18,15 @@ import {
   Flex,
   FormHeader,
   FormSections,
+  InlineEditField,
+  InlineEditFooter,
+  InlineEditGrid,
+  InlineEditor,
+  InlineEditorGroup,
   Input,
   LoadingOverlay,
   MetricsMinimal,
+  MoreFieldsToggle,
   RecordActionBar,
   RecordField,
   RecordFieldGrid,
@@ -1183,6 +1189,44 @@ function FormSectionsPreview() {
   );
 }
 
+function EditFieldsPreview() {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <InlineEditorGroup>
+      <InlineEditor
+        eyebrow="Edit"
+        title="Member profile"
+        description="Fields save to the same record; advanced fields stay collapsed until needed."
+        footerProps={{
+          dirtySummary: '2 fields changed',
+          saveLabel: 'Save changes',
+          onCancel: () => setExpanded(false),
+          onSave: () => setExpanded(false),
+        }}
+      >
+        <InlineEditGrid kind="primary" columns="repeat(2, minmax(0, 1fr))">
+          <InlineEditField label="Full name" htmlFor="preview-name" requirement="required">
+            <Input id="preview-name" value="Alice Johnson" onChange={noop} />
+          </InlineEditField>
+          <InlineEditField label="Work email" htmlFor="preview-email" requirement="required">
+            <Input id="preview-email" value="alice@rottay.com" onChange={noop} />
+          </InlineEditField>
+        </InlineEditGrid>
+        <InlineEditGrid kind="advanced" expanded={expanded} columns="repeat(2, minmax(0, 1fr))">
+          <InlineEditField label="Secondary phone" htmlFor="preview-phone" requirement="optional" hint="Used only for after-hours escalation.">
+            <Input id="preview-phone" placeholder="+1 (555) 000-0000" onChange={noop} />
+          </InlineEditField>
+          <InlineEditField label="Internal notes" htmlFor="preview-notes" requirement="recommended">
+            <Input id="preview-notes" placeholder="Visible to teammates only" onChange={noop} />
+          </InlineEditField>
+        </InlineEditGrid>
+        <MoreFieldsToggle expanded={expanded} onToggle={() => setExpanded((value) => !value)} />
+      </InlineEditor>
+    </InlineEditorGroup>
+  );
+}
+
 function StatsHeaderPreview() {
   return <StatsHeader stats={STATS} />;
 }
@@ -1347,6 +1391,7 @@ export const STRUCTURE_PREVIEWS: Record<string, ReactNode> = {
   'view-mode-switcher': <ViewModeSwitcherPreview />,
   record: <RecordFamilyPreview />,
   'form-sections': <FormSectionsPreview />,
+  'edit-fields': <EditFieldsPreview />,
   'stats-header': <StatsHeaderPreview />,
   'data-terminal-card': <DataTerminalCardPreview />,
   'dashboard-insights': <DashboardInsightsFamilyPreview />,
