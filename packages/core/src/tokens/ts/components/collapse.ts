@@ -16,7 +16,7 @@ import {
   getCollapseSlotTokens,
   getCollapseTokens,
   type CollapseIconPosition,
-  type CollapseSize,
+  type CollapseSizeToken,
   type CollapseSlot,
   type CollapseTokenOptions,
   type CollapseVariant,

@@ -21,5 +21,7 @@
   "layout.crossEngineDivergences": 0,
   "a11y.apcaPairings": 6,
   "responsive.fixedWidthLiterals": 0,
-  "responsive.overflowCells": 0
+  "responsive.overflowCells": 0,
+  "vocabulary.rawAntdSizeUnions": 0,
+  "vocabulary.duplicateSizeDeclarations": 0
 }

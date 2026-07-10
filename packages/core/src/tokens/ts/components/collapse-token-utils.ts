@@ -24,8 +24,15 @@ export type CollapseSlot = 'root' | 'header' | 'content' | 'icon';
 /** Visual variant of the Collapse component. */
 export type CollapseVariant = 'default' | 'bordered' | 'ghost';
 
-/** Size preset controlling padding and font dimensions. */
-export type CollapseSize = 'small' | 'middle' | 'large';
+/**
+ * Size preset controlling padding and font dimensions -- the legacy 'small' | 'middle' |
+ * 'large' spelling this token generator keys its lookups by. The canonical, publicly-exported
+ * Collapse size prop type is `CollapseSize` in
+ * `components/primitives/layout/Collapse/Collapse.types.ts` (derived from the shared `Size`
+ * union); `toLegacySize()` resolves either spelling to this one before it reaches
+ * `useCollapseTokens`.
+ */
+export type CollapseSizeToken = 'small' | 'middle' | 'large';
 
 /** Position of the expand/collapse icon relative to the header text. */
 export type CollapseIconPosition = 'start' | 'end';
@@ -33,7 +40,7 @@ export type CollapseIconPosition = 'start' | 'end';
 /** Options driving the collapse token generator. */
 export interface CollapseTokenOptions {
   variant?: CollapseVariant;
-  size?: CollapseSize;
+  size?: CollapseSizeToken;
   ghost?: boolean;
   bordered?: boolean;
   disabled?: boolean;

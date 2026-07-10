@@ -246,7 +246,13 @@ export const buttonTokens = {
 } as const;
 
 // Type exports
-export type ButtonSize = keyof typeof buttonSize;
+//
+// The canonical, publicly-exported Button size prop type is `ButtonSize` in
+// `components/primitives/inputs/Button/Button.types.ts` (derived from the shared `Size`
+// union). Tokens is the foundation layer components import FROM, never the reverse; this
+// file's own size-key type -- the narrower set this token map defines entries for -- is
+// named distinctly so the two do not share a name.
+export type ButtonSizeToken = keyof typeof buttonSize;
 export type ButtonVariant = keyof typeof buttonVariant;
 export type ButtonSemanticVariant = keyof typeof buttonSemanticVariant;
 export type ButtonShape = keyof typeof buttonShape;
