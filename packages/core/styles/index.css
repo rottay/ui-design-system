@@ -13840,6 +13840,149 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   opacity: 0.5;
 }
 
+/**
+ * Modern Card skin (WO-ARC-07).
+ *
+ * DELIBERATELY UNLAYERED, and every selector carries two classes plus the anatomy
+ * part plus a qualifier, reaching (0,4,0). Both are load-bearing:
+ *
+ *   - no `rottay-*` cascade layer can paint a component at all, because Tailwind's
+ *     `@layer base` sorts after all seven of them (measured; P-47);
+ *   - each tenant ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ *     border floor at (0,3,1) that outranks any single-class component rule (P-48).
+ *
+ * The rules read the `data-*` contract the component stamps. Rest, hover and the
+ * keyboard focus ring are photographed per tenant per engine by
+ * `packages/showroom/e2e/visual/states.spec.ts`; the clickable card that carries
+ * the ring renders behind `?interactive=1`, so no flagship baseline sees it.
+ *
+ * Two behaviours the object this replaces expressed by ORDER, and this file
+ * expresses by name, because order is not a contract a reader can check:
+ *
+ *   - a toned card's border does not react to hover. The tone was spread last, so
+ *     it overwrote the hover border colour. Here the hover rule says
+ *     `:not([data-tone])` and means it.
+ *   - the focus ring stacks onto whatever shadow the card is already wearing,
+ *     which is the variant's at rest and the hover shadow while hovered. That was
+ *     `hoverStyle.boxShadow || variantStyle.boxShadow` inside a template string;
+ *     here it is one rule per variant, plus one for elevated-and-hovered.
+ */
+
+/* base */
+.ds-card.ds-card--modern[data-part='root'] {
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  transition:
+    box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out),
+    transform var(--ds-motion-fast) var(--ds-motion-ease-out),
+    border-color var(--ds-motion-fast) var(--ds-motion-ease-out);
+}
+
+/* a card that paints a pointer; a card that is actually operable */
+.ds-card.ds-card--modern[data-part='root'][data-clickable='true'] {
+  cursor: pointer;
+}
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'] {
+  outline: none;
+}
+
+/* radius */
+.ds-card.ds-card--modern[data-part='root'][data-radius='none'] {
+  border-radius: 0;
+}
+.ds-card.ds-card--modern[data-part='root'][data-radius='sm'] {
+  border-radius: var(--ds-card-radius-sm, 4px);
+}
+.ds-card.ds-card--modern[data-part='root'][data-radius='md'] {
+  border-radius: var(--ds-card-radius, 12px);
+}
+.ds-card.ds-card--modern[data-part='root'][data-radius='lg'] {
+  border-radius: var(--ds-card-radius-lg, 12px);
+}
+.ds-card.ds-card--modern[data-part='root'][data-radius='xl'] {
+  border-radius: var(--ds-card-radius-xl, 16px);
+}
+
+/* variant, at rest */
+.ds-card.ds-card--modern[data-part='root'][data-variant='elevated'] {
+  background-color: var(--ds-card-bg, var(--ds-card-elevated-bg, var(--ds-surface-card)));
+  background-image: var(--ds-gradient-surface);
+  border: var(--ds-card-elevated-border-width, 0) solid var(--ds-card-border, transparent);
+  box-shadow: var(--ds-card-shadow);
+}
+.ds-card.ds-card--modern[data-part='root'][data-variant='outlined'] {
+  background-color: var(--ds-card-bg, var(--ds-card-bordered-bg, var(--ds-surface-card)));
+  background-image: var(--ds-gradient-surface);
+  border: var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px)) solid var(--ds-card-border, var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle))));
+  box-shadow: var(--ds-card-shadow, var(--ds-card-bordered-shadow, none));
+}
+.ds-card.ds-card--modern[data-part='root'][data-variant='filled'] {
+  background-color: var(--ds-card-bg, var(--ds-card-flat-bg, var(--ds-surface-panel)));
+  background-image: var(--ds-gradient-surface);
+  border: var(--ds-card-flat-border-width, 0) solid var(--ds-card-border, transparent);
+  box-shadow: var(--ds-card-shadow, var(--ds-card-flat-shadow, none));
+}
+.ds-card.ds-card--modern[data-part='root'][data-variant='ghost'] {
+  background-color: var(--ds-card-bg, var(--ds-card-ghost-bg, transparent));
+  background-image: none;
+  border: 0 solid var(--ds-card-border, var(--ds-card-ghost-border-color, transparent));
+  box-shadow: var(--ds-card-shadow, var(--ds-card-ghost-shadow, none));
+}
+
+/* hover, only on an interactive card, and only where the variant answers */
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='elevated'][data-state~='hovered'] {
+  box-shadow: var(--ds-card-shadow-hover);
+  transform: var(--ds-card-interactive-transform-hover, translateY(-1px));
+}
+.ds-card.ds-card--modern[data-part='root'][data-interactive='true'][data-variant='outlined'][data-state~='hovered']:not([data-tone]) {
+  border-color: var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))));
+}
+
+/* keyboard focus stacks a ring onto whatever shadow the card is wearing */
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='elevated'][data-state~='focus-visible'] {
+  box-shadow: var(--ds-card-shadow), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='outlined'][data-state~='focus-visible'] {
+  box-shadow: var(--ds-card-shadow, var(--ds-card-bordered-shadow, none)), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='filled'][data-state~='focus-visible'] {
+  box-shadow: var(--ds-card-shadow, var(--ds-card-flat-shadow, none)), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='ghost'][data-state~='focus-visible'] {
+  box-shadow: var(--ds-card-shadow, var(--ds-card-ghost-shadow, none)), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+}
+.ds-card.ds-card--modern[data-part='root'][data-actionable='true'][data-variant='elevated'][data-state~='focus-visible'][data-state~='hovered'] {
+  box-shadow: var(--ds-card-shadow-hover), 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color);
+}
+
+/* colour tone: it wins the border and the fill, and it suppresses the surface tint */
+.ds-card.ds-card--modern[data-part='root'][data-tone='primary'] {
+  border-color: var(--ds-color-primary-500, #3b82f6);
+  background-color: var(--ds-color-primary-50, rgba(59, 130, 246, 0.05));
+  background-image: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='success'] {
+  border-color: var(--ds-color-success-500, #22c55e);
+  background-color: var(--ds-color-success-50, rgba(34, 197, 94, 0.05));
+  background-image: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='warning'] {
+  border-color: var(--ds-color-warning-500, #f59e0b);
+  background-color: var(--ds-color-warning-50, rgba(245, 158, 11, 0.05));
+  background-image: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='error'] {
+  border-color: var(--ds-color-error-500, #ef4444);
+  background-color: var(--ds-color-error-50, rgba(239, 68, 68, 0.05));
+  background-image: none;
+}
+.ds-card.ds-card--modern[data-part='root'][data-tone='info'] {
+  border-color: var(--ds-color-info-500, #3b82f6);
+  background-color: var(--ds-color-info-50, rgba(59, 130, 246, 0.05));
+  background-image: none;
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

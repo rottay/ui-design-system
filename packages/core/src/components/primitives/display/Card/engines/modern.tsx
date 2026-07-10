@@ -42,7 +42,7 @@ import React, { useCallback, useId } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { CardProps } from '../Card.types';
-import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
+import { CARD_DEFAULTS, PADDING_MAP } from '../Card.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 // ============================================================================
@@ -97,76 +97,7 @@ const CardSpinner: React.FC = () => (
 // Variant Styles
 // ============================================================================
 
-interface VariantStyle {
-  backgroundColor: string;
-  /** Surface-tint gradient (spec section 5, role 1) layered over the fill.
-   *  Collapses to flat when --ds-effect-intensity is 0. */
-  backgroundImage?: string;
-  borderWidth: string;
-  borderStyle: 'solid';
-  borderColor: string;
-  boxShadow: string;
-}
 
-interface VariantHoverStyle {
-  boxShadow?: string;
-  borderColor?: string;
-  transform?: string;
-}
-
-const VARIANT_STYLES: Record<string, VariantStyle> = {
-  elevated: {
-    backgroundColor: 'var(--ds-card-bg, var(--ds-card-elevated-bg, var(--ds-surface-card)))',
-    backgroundImage: 'var(--ds-gradient-surface)',
-    borderWidth: 'var(--ds-card-elevated-border-width, 0)',
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-card-border, transparent)',
-    boxShadow: 'var(--ds-card-shadow)',
-  },
-  outlined: {
-    backgroundColor: 'var(--ds-card-bg, var(--ds-card-bordered-bg, var(--ds-surface-card)))',
-    backgroundImage: 'var(--ds-gradient-surface)',
-    borderWidth: 'var(--ds-card-bordered-border-width, var(--ds-card-border-width, 1px))',
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-card-border, var(--ds-card-bordered-border-color, var(--ds-card-border-color, var(--ds-color-border-subtle))))',
-    boxShadow: 'var(--ds-card-shadow, var(--ds-card-bordered-shadow, none))',
-  },
-  filled: {
-    backgroundColor: 'var(--ds-card-bg, var(--ds-card-flat-bg, var(--ds-surface-panel)))',
-    backgroundImage: 'var(--ds-gradient-surface)',
-    borderWidth: 'var(--ds-card-flat-border-width, 0)',
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-card-border, transparent)',
-    boxShadow: 'var(--ds-card-shadow, var(--ds-card-flat-shadow, none))',
-  },
-  ghost: {
-    backgroundColor: 'var(--ds-card-bg, var(--ds-card-ghost-bg, transparent))',
-    borderWidth: '0',
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-card-border, var(--ds-card-ghost-border-color, transparent))',
-    boxShadow: 'var(--ds-card-shadow, var(--ds-card-ghost-shadow, none))',
-  },
-};
-
-export function getModernCardVariantStyle(variant: string): VariantStyle {
-  return VARIANT_STYLES[variant] || VARIANT_STYLES.elevated;
-}
-
-function getHoverStyle(variant: string): VariantHoverStyle {
-  switch (variant) {
-    case 'elevated':
-      return {
-        boxShadow: 'var(--ds-card-shadow-hover)',
-        transform: 'var(--ds-card-interactive-transform-hover, translateY(-1px))',
-      };
-    case 'outlined':
-      return {
-        borderColor: 'var(--ds-card-border-accent-hover, var(--ds-card-border-hover, var(--ds-card-border-color-hover, var(--ds-color-border-secondary))))',
-      };
-    default:
-      return {};
-  }
-}
 
 // ============================================================================
 // Component
@@ -229,8 +160,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   // The triad is decided once, in the behavior core: both skins of this
   // component read the same state, and a focus ring is a keyboard affordance.
   const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-  const isHovered = interaction.hovered;
-  const isFocused = interaction.focusVisible;
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -243,48 +172,35 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   );
 
   const isInteractive = hoverable || clickable;
-  const variantStyle = getModernCardVariantStyle(variant);
-  const hoverStyle = isHovered && isInteractive ? getHoverStyle(variant) : {};
-
-  // Get color variant styles
-  const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
   const cardClassName = [
     'ds-card',
     `ds-card--${variant}`,
     isInteractive ? 'ds-card--interactive' : '',
+    'ds-card--modern',
     hasColorVariant ? `ds-card--tone-${colorVariant}` : '',
     className,
   ].filter(Boolean).join(' ');
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
-  const radiusValue = RADIUS_MAP[radius] || 'var(--ds-radius-lg, 12px)';
-  const borderColor = hoverStyle.borderColor || variantStyle.borderColor;
 
-  const cardStyle: React.CSSProperties = {
-    position: 'relative',
-    borderRadius: radiusValue,
-    backgroundColor: variantStyle.backgroundColor,
-    // Surface-tint (spec section 5, role 1) layered over the fill; color variants
-    // carry their own tone, so the tint is suppressed for them.
-    backgroundImage: hasColorVariant ? undefined : variantStyle.backgroundImage,
-    border: `${variantStyle.borderWidth} ${variantStyle.borderStyle} ${borderColor}`,
-    boxShadow: isFocused && onClick
-      ? `${hoverStyle.boxShadow || variantStyle.boxShadow}, 0 0 0 var(--ds-focus-ring-width, 2px) var(--ds-focus-ring-color)`
-      : hoverStyle.boxShadow || variantStyle.boxShadow,
-    transform: hoverStyle.transform || 'translateY(0)',
-    transition: TRANSITION,
-    cursor: clickable || onClick ? 'pointer' : undefined,
-    outline: onClick ? 'none' : undefined,
-    overflow: 'hidden',
-    // Color variant accent. Keep the signal on the full card frame so tenants
-    // can theme card language without hard-coded side rails.
-    ...(hasColorVariant && {
-      borderColor: colorStyles.borderColor,
-      backgroundColor: colorStyles.background,
-    }),
-    ...style,
-  };
+  // Paint lives in `tokens/css/engines/modern/skin/card.css`, keyed on the
+  // `data-*` contract stamped on the root below. Only a caller's own `style` prop
+  // stays inline, which is the precedence it has always had.
+  const cardStyle: React.CSSProperties | undefined = style;
+
+  /** The DOM contract the modern Card skin selects on. */
+  const skinAttributes = {
+    'data-variant': variant,
+    'data-radius': radius,
+    'data-tone': hasColorVariant ? colorVariant : undefined,
+    // `hoverable || clickable`, the condition the hover paint was gated on.
+    'data-interactive': isInteractive ? 'true' : undefined,
+    // Paints a pointer. Not the same as being operable.
+    'data-clickable': clickable || onClick ? 'true' : undefined,
+    // Actually operable: takes a tab stop, a button role, and a focus ring.
+    'data-actionable': onClick ? 'true' : undefined,
+  } as const;
 
   // ============================================================================
   // Shared sub-elements
@@ -401,6 +317,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         tabIndex={onClick ? 0 : undefined}
         role={onClick ? 'button' : undefined}
         style={cardStyle}
+        {...skinAttributes}
         {...responsiveAttrs}
       >
         {/* Cover image - top */}
