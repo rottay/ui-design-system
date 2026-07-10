@@ -34,6 +34,7 @@ import {
   lazy,
   Suspense,
   useContext,
+  useEffect,
   useMemo,
   ComponentType,
   LazyExoticComponent,
@@ -45,6 +46,7 @@ import {
 } from 'react';
 import { useEngineContext } from './EngineProvider';
 import { createCustomWrapper } from './custom';
+import { acquireSkinPack, getRegisteredSkinPack } from './skin-pack';
 import { EngineErrorBoundary } from './boundary';
 import type { EngineName } from '../../contracts';
 import { TenantContext } from '../tenant/context/TenantProvider';
@@ -143,6 +145,22 @@ export function createEngineComponent<P extends object>(
 
     // Allow engine prop to override context engine
     const activeEngine = props.engine || context.engine;
+
+    // When a skin pack is registered for the active pack key, hold its CSS and
+    // tokens on the document for as long as this component is mounted under
+    // the `custom` engine. `acquireSkinPack` is idempotent on content and
+    // reference-counted, so every engine-component instance running this
+    // effect for the same pack costs one Map lookup after the first, and the
+    // pack is withdrawn only when the last of them releases. Runs whenever a
+    // registered pack is active, independent of whether THIS component
+    // resolves to a bespoke override or the shared fallback — the pack's
+    // tokens are page-wide, not per-component.
+    useEffect(() => {
+      if (activeEngine !== 'custom' || !customEnabled) return;
+      const pack = getRegisteredSkinPack(componentPack);
+      if (!pack) return;
+      return acquireSkinPack(pack);
+    }, [activeEngine, componentPack, customEnabled]);
 
     // Custom engine is the only path that needs tenant-aware component lookup.
     // Standard engines are fully determined by the active engine name.

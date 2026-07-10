@@ -73,8 +73,10 @@ const packRegistries: Map<string, ComponentRegistry> = new Map();
 /**
  * Default pack key used when no explicit pack is specified.
  * Maintains backward compatibility with code that predates pack-scoped registries.
+ * Exported so `skin-pack.ts` resolves the same default pack a caller gets from
+ * `getCustomComponent()`/`registerCustomComponent()` with no explicit pack id.
  */
-const DEFAULT_PACK = '__default__';
+export const DEFAULT_PACK = '__default__';
 
 /**
  * Returns the ComponentRegistry for the given pack, creating one if it doesn't exist.

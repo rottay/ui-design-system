@@ -25,5 +25,7 @@ export * from './binding';
 export * from './boundary';
 export * from './resolution';
 export * from './custom';
+export * from './skin-pack';
+export * from './example-pack';
 export * from './EngineProvider';
 export * from './AntdConfigProvider';
