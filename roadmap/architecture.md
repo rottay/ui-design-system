@@ -346,26 +346,84 @@ after the fleet is on the core.
   (62), `patterns/data/data-table` (121), `patterns/data/detail-panel` (74), `patterns/forms/filter-panel` (59),
   `structures/workspace/selection-preview-rail` (41), `structures/workspace/field-filters-panel` (22). Ten times
   ARC-07's ~27 sites across three primitives.
-- **Outcome** — Each of the six paints from an unlayered engine skin (`tokens/css/engines/{modern,rustic}/skin/*.css`,
-  keyed on the `data-part`/`data-state` contract) instead of inline `style={}`, in the exact WO-ARC-07 pattern:
-  a measured before-table, a mechanical transcription generator, the zero-pixel gate against the WO-GAT-01
-  baselines and the `states.spec.ts` matrix, and positive verification that the shipped component carries no
-  inline paint. The maintainability + white-label-reskin benefit ARC-07 gave the primitives, extended to the
-  workspace tier.
-- **Depends on** — WO-ARC-07 (the skin pattern + machinery; done).
-- **Steps** — One deployable checkpoint per component, in ascending inline-site order so the machinery is proven
-  on the small ones first: Table, then field-filters-panel, filter-panel, detail-panel, selection-preview-rail,
-  and data-table last (the 121-site monster). Each: measure before-table (element screenshot / computed values,
-  shutter-checked), generate the skin CSS mechanically from the component's own style logic, rewrite the engine
-  to stamp the `data-*` contract and drop the inline object, rewrite any test that reads `element.style.*` onto
-  the DOM contract or the shipped stylesheet, build, gate zero-pixel, commit. Expect real defects to surface
-  (ARC-07 found ~6 across three components); each is a fix + a filed proposal, not a papered diff.
-- **Acceptance gate** — per component: build + `pnpm test` green (17-failure ledger unchanged); the WO-GAT-01
-  visual suite + `states.spec.ts` matrix green with that component's baselines byte-identical; positive
-  verification the shipped component carries no inline paint but the caller's own `style` prop; classic
-  untouched. The WO is done when all six are migrated and green.
-- **Do NOT** — Layer the skins (P-47: unlayered, specificity >= (0,4,0) for any `border-color`, P-48). Fudge a
-  pixel diff to hide a token-layer finding — stop and file it. Touch classic. Never `git restore` directories.
+- **Outcome** — Each of the six paints from an UNLAYERED skin keyed on a `data-part`/`data-state` contract
+  instead of inline `style={}`, extending ARC-07's maintainability + white-label-reskin benefit to the workspace
+  tier. Classic is never touched (Ant Design keeps its own paint), so the migratable surface is modern + rustic
+  only (~340 of the 379 sites; the rest are classic).
+- **CONTRACT 2026-07-10 (Fable advisory, supersedes the generator language below).** Verified against the code:
+  - **Two skin homes, both unlayered, both imported in `foundation/base.css` AND `entrypoints/styles.css`** in
+    the existing unlayered block after the `layer(rottay-engines)` import (where the eight ARC-07 skins sit,
+    `base.css:62-69` / `styles.css:78-85`): (a) the four engine-split components (Table, data-table,
+    detail-panel, filter-panel) use `tokens/css/engines/{modern,rustic}/skin/<name>.css` per the ARC-07 idiom;
+    (b) the engine-AGNOSTIC files — the two structures (`selection-preview-rail`, `field-filters-panel`) and the
+    three shared data-table files (`cell-editors`, `DataTableMobileCards`, `PatternDataTable`) — use ONE
+    engine-agnostic `tokens/css/components/skin/<name>.css`, no `--modern`/`--rustic` discriminator. Production
+    proof this home wins: `build-vertical-css.mjs` assembles every dist bundle as `resolveImports(base.css)` +
+    Tailwind modern-engine + the tenant artifact unlayered-and-source-LAST, so an unlayered rule in base.css's
+    skin block beats Tailwind preflight (P-47) and yields to caller inline `style`.
+  - **Two-class roots, specificity >= (0,4,0).** data-table + detail-panel already stamp the engine pair
+    (`ds-pattern-data-table ds-engine-modern`, `ds-pattern-detail-panel ds-engine-modern`); filter-panel's root
+    is bare `className={className}` and gets the pair added; the agnostic files stamp NOTHING today and get a
+    two-class root (`ds-structure ds-selection-preview-rail` etc.) + `data-part`, mirroring
+    `.ds-card.ds-card--modern[data-part='root'][data-variant]` for unit count. Any rule that declares
+    `border`/`border-color` must reach (0,4,0) to clear the source-later (0,3,1) tenant `*` floor (P-48).
+  - **HAND transcription, NO generator.** The paint is not statically extractable (Table's row hover is an
+    `onMouseEnter` DOM mutation, not a style object; object merges are spread-order-dependent — the exact defect
+    class ARC-07 surfaced). A faithful generator is a CSS-in-JS compiler that reproduces the bugs; an unfaithful
+    one is wrong; either needs the same per-cell byte-exact verification the hand path needs. The MEASUREMENT
+    half is already mechanical (`RECORD_STATE_MATRIX=1` records 12 computed channels per subject/state): record
+    subjects, hand-transcribe against the recorded values, let the byte-exact matrix + screenshots catch errors.
+  - **Positive "no inline paint" verification = a NEW audit counter, not a value regex.** Add
+    `arc09.inlinePaintProps` to `engine-token-audit.mjs` over an explicit file list (the six components'
+    modern+rustic engine files + the five agnostic files; classic excluded by construction), counting paint
+    property NAMES inside `style={{…}}` spans — `background*`, `color`, `border*`, `boxShadow`, `outline*`,
+    `textShadow`, `fill`/`stroke`, `accentColor`, `filter`/`backdropFilter`, `transform` (state transforms are
+    paint) — baselined per file, decrease-only, each checkpoint's exit criterion being that component's files at
+    0. Exemptions are property CLASSES, never value patterns: layout (size/padding/margin/flex/grid/position/
+    zIndex/display/overflow), the ARC-08 container contract (`containerType`/`containerName` ride inline until the
+    skin absorbs them), runtime-measured dynamics (column widths, virtual offsets), and the two residuals ARC-07
+    legitimately kept — `opacity` and `animation`. Leave the existing `inlineStateLiterals` counter untouched (it
+    measures something else). TRAP: `countViewportMediaQueriesInSkins` walks only `engines/**/skin/` — extend its
+    walk to `components/skin/` in the same commit or the agnostic skins escape that ratchet.
+  - **Per-component gate.** Table is already gated by the `table` flagship slug (6 committed baselines that
+    exercise the primitive paint), but flagships photograph REST only — ADD a `table` states-matrix subject (row
+    hover, sortable header, selected row) BEFORE migrating. The five uncovered components do NOT get new flagship
+    slugs (heaviest instrument, re-photographs unrelated chrome); use the `container-axis.spec.ts` +
+    `/probe/container-axis` ELEMENT-screenshot idiom (data-table + rail already have 16 committed baselines
+    there): per component, an inert capture-first pre-step committing element-screenshot baselines (2 tenants ×
+    2-3 widths) + states-matrix subjects for every part that paints on hover/focus/press + a Card-pattern
+    `*.real-engines.test.tsx` (reads the shipped skin strings via `readFileSync`, asserts the DOM contract,
+    `data-state` absent at rest). The matrix is the only instrument that sees states, the screenshots the only
+    one that sees rest composition; neither alone is a proof. The real-engines test is required even where the
+    counter reads 0, because the counter proves inline paint is GONE, not that the contract that replaced it is
+    RIGHT.
+- **Depends on** — WO-ARC-07 (the skin pattern + machinery; done). WO-ARC-08 (the container contract data-table
+  must preserve; done).
+- **Steps** — One deployable checkpoint per component, in the Fable order (Table proven first under its
+  pre-existing gate, then the novel agnostic mechanism on the smallest surface, then routine volume, data-table
+  last as the compound case): **Table → field-filters-panel → filter-panel → selection-preview-rail →
+  detail-panel → data-table.** Each: (pre-step, inert) build the gate coverage above and commit the baselines;
+  then record the states subjects, hand-transcribe the skin CSS against the recorded computed values, rewrite the
+  engine(s) to stamp the two-class root + `data-*` contract and drop the inline paint object (keeping layout /
+  container / measured / opacity / animation residuals), rewrite any test that reads `element.style.*` onto the
+  DOM contract or the shipped stylesheet, build, gate zero-pixel, drive the counter for that component's files to
+  0, commit. Expect real defects to surface (ARC-07 found ~6 across three primitives); each is a fix + a filed
+  proposal, not a papered diff.
+- **data-table (the compound case, last)** — its checkpoint MUST carry the three shared files in the same commit
+  (`PatternDataTable` renders `DataTableMobileCards` INSTEAD of the engine table below the mobile breakpoint, so
+  a migration that skips them still paints inline on every phone), preserve the per-instance `<style>` tags
+  (`engines/modern.tsx:904/:1069`), and absorb the ARC-08 `containerType`/`containerName`/`data-col-priority`
+  declarations into the skin UNCHANGED (they are the ARC-08 contract, not paint to delete).
+- **Acceptance gate** — per component: build + `pnpm test` green (17-failure ledger unchanged); the flagship
+  visual suite + the component's element-screenshot baselines byte-identical + its `states.spec.ts` matrix
+  subjects green; `arc09.inlinePaintProps` for that component's files at 0 and `engine-token-audit.mjs --check`
+  green with `viewport-mq-in-skins` at or below baseline (walk extended to `components/skin/`); the Card-pattern
+  real-engines test green; positive verification the shipped component carries no inline paint but the caller's
+  own `style` prop; classic untouched. The WO is done when all six are migrated and green.
+- **Do NOT** — Layer the skins (P-47: unlayered; specificity >= (0,4,0) for any `border-color`, P-48). Build a
+  generator (hand-transcribe; the byte-exact gate is the safety net). Distinguish paint from layout by value
+  regex (use the property-name class). Fudge a pixel diff to hide a token-layer finding — stop and file it. Drop
+  the data-table shared files from its checkpoint. Touch classic. Never `git restore` directories.
 - **Size** — XL.
 
 ## Dependency summary
