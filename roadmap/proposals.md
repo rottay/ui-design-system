@@ -589,8 +589,29 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Status** — OPEN. The stale assertion has been corrected to the shipped contract; the dead tokens are untouched.
 
 ### P-38 There are two Modal component families
-- **Found** — 2026-07-09, while attributing a test failure.
+- **Found** — 2026-07-09, while attributing a test failure. **Not a new discovery:** WO-ARC-01's own "Why" section already names both (`primitives/feedback/Modal/Modal.types.ts:215` and `primitives/overlay/Modal/Modal.types.ts:15`, each with its own `engines/`, `compound/` and `tests/`), and its Do-NOT assigns the merge decision to WO-ARC-03. Recorded here so the finding is not lost between lanes, not as an independent find.
 - **Evidence** — `packages/core/src/components/primitives/overlay/Modal/` and `packages/core/src/components/primitives/feedback/Modal/` both exist, both carry a `Modal.types.ts`, and both are engine-switched. The taxonomy in `CLAUDE.md` puts overlays under `overlay/` and feedback under `feedback/`; a Modal cannot be in both.
 - **Why it matters** — This is the shape of every defect this program has found: one path follows a rule, a duplicated path ignores it, and a gate scans only one. A consumer importing `Modal` gets whichever the barrel exports; a fix applied to one is invisible in the other. The Toast `default` variant and the two chrome compilers were exactly this.
 - **Ask** — Determine which is canonical, whether both are reachable from the public barrel, and whether any app imports the non-canonical one. Then delete or merge. Needs an owner decision because it may be a breaking export change.
 - **Status** — OPEN.
+
+### P-39 Two audit counters are blind to the syntax they exist to police
+- **Found** — 2026-07-09, while attributing regressions in WO-ARC-01's certification.
+- **Evidence** —
+  1. `motion.rawDurationLiterals` reports **0**, while `components/primitives/display/Statistic/engines/modern.tsx:167` contains `animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite'`. The counter scans for a duration in a longhand and cannot see one inside the `animation` shorthand. WO-ENG-01 closed with "all motion literal counters at zero"; that sentence is true and proves less than it sounds like it proves.
+  2. `scale.fallbackParityViolations` reports **0**, while `components/primitives/feedback/Skeleton/engines/modern.tsx` shipped four chains of the form `var(--ds-skeleton-animation-duration, var(--ds-motion-slow))` -- a `var()` chain terminating in a variable with no literal. A consumer that loads the design system's JavaScript but not its stylesheet computes an invalid value. Measured directly against `happy-dom`: `getComputedStyle` resolves `var(--a, 2s)` to `2s` and `var(--a, var(--b))` to the string `"var(--a, )"`. The chains are now terminated with a literal; the counter never saw them.
+- **Why it matters** — Both counters are load-bearing in `--check` and both were green while the defect they name was in the tree. This is the same shape as `effects.gradientConsumers`, which counted files while the pixels were flat, and as `audit-integration`, which scanned one emitter of two.
+- **Ask** — extend `motion.rawDurationLiterals` to parse the `animation`/`transition` shorthands, and `scale.fallbackParityViolations` to require a literal at the end of every `var()` chain in an inline style. Each extension ships with a DRILL.
+- **Status** — OPEN.
+
+### P-40 This program shipped regressions that no gate caught
+- **Found** — 2026-07-09, certifying WO-ARC-01. Three unit tests were RED in the working tree and GREEN at the pre-program commit `9d59a97a`, verified by running them in a throwaway worktree at that commit.
+- **Evidence** —
+  | test | passed at base | broken by |
+  | --- | --- | --- |
+  | `Card.real-engines` hover shadow | yes | `ad501eca` (WO-ENG-06) removed the only consumer of `--ds-card-elevated-shadow-hover` |
+  | `Statistic.modern-engine-advanced` | yes | a motion/scale WO retimed the skeleton fallback from `2s` to `1.5s` |
+  | `ColorPicker.engine-advanced` | yes | WO-ARC-01, in flight |
+- **Why it happened** — the full suite was never run to completion during the program. An earlier session note recorded "3 stable pre-existing failures"; the real pre-existing count is at least 17, and the number was quoted forward without being remeasured. A partial run plus an inherited number is how a regression becomes a "known failure".
+- **Ask** — run `pnpm test` to completion before every close, and keep the failure ledger in `roadmap/README.md` as the contract. Never quote the previous number.
+- **Status** — OPEN. Card and Statistic are corrected; ColorPicker is with its executor.

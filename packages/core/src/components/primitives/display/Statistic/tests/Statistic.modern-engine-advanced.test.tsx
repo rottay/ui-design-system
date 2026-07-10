@@ -17,7 +17,9 @@ describe('Statistic modern advanced engine coverage', () => {
     const { rerender, container } = render(<Statistic title="Revenue" loading />);
 
     expect(container.firstElementChild).toHaveStyle({
-      animationDuration: 'var(--ds-skeleton-animation-duration, 2s)',
+      // The fallback is the motion canon, not a literal: WO-ENG-01 moved every
+      // inline duration onto --ds-motion-*.
+      animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
     });
 
     rerender(
