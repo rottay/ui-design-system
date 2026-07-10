@@ -4,7 +4,7 @@
 
 import { describe, expect, it, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { fireEvent, screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { useCollectionWorkspace } from '../../../../foundation/hooks/useCollectionWorkspace';
 import { CollectionWorkspaceSurface } from '../index';
@@ -299,9 +299,9 @@ describe('CollectionWorkspaceSurface', () => {
       />,
     );
 
-    expect(screen.getByText('Test Collection')).toBeInTheDocument();
-    expect(screen.getByText('Visible context')).toBeInTheDocument();
-    expect(screen.getByText('Visible stats')).toBeInTheDocument();
+    expect(await screen.findByText('Test Collection')).toBeInTheDocument();
+    expect(await screen.findByText('Visible context')).toBeInTheDocument();
+    expect(await screen.findByText('Visible stats')).toBeInTheDocument();
   });
 
   it('renders header and footer slots', async () => {
@@ -402,8 +402,7 @@ describe('CollectionWorkspaceSurface', () => {
     );
 
     await screen.findByText('Test Collection');
-    const exportBtn = container.querySelector('button[aria-label="Export"]');
-    if (!exportBtn) throw new Error('Export CSV button not found');
+    const exportBtn = await screen.findByRole('button', { name: 'Export' });
     expect(exportBtn).toBeInTheDocument();
   });
 
@@ -425,8 +424,7 @@ describe('CollectionWorkspaceSurface', () => {
     );
 
     await screen.findByText('Test Collection');
-    const exportBtn = container.querySelector('button[aria-label="Export"]');
-    if (!exportBtn) throw new Error('Export CSV button not found');
+    const exportBtn = await screen.findByRole('button', { name: 'Export' });
     fireEvent.click(exportBtn);
 
     expect(onExport).toHaveBeenCalledTimes(1);
@@ -450,8 +448,7 @@ describe('CollectionWorkspaceSurface', () => {
     );
 
     await screen.findByText('Test Collection');
-    const exportBtn = container.querySelector('button[aria-label="Export"]');
-    if (!exportBtn) throw new Error('Export CSV button not found');
+    const exportBtn = await screen.findByRole('button', { name: 'Export' });
     fireEvent.click(exportBtn);
 
     expect(onExport).toHaveBeenCalledWith('csv');
@@ -475,8 +472,7 @@ describe('CollectionWorkspaceSurface', () => {
     );
 
     await screen.findByText('Test Collection');
-    const exportBtn = container.querySelector('button[aria-label="Export"]');
-    if (!exportBtn) throw new Error('Export button not found');
+    const exportBtn = await screen.findByRole('button', { name: 'Export' });
     fireEvent.click(exportBtn);
 
     expect(onExport).toHaveBeenCalledTimes(1);
@@ -828,10 +824,12 @@ describe('CollectionWorkspaceSurface', () => {
     expect(await screen.findByText('Test Collection')).toBeInTheDocument();
 
     // All controls should co-exist
-    expect(screen.getByPlaceholderText('Type here...')).toBeInTheDocument();
-    expect(queryButtonByAriaOrText(container, 'List view', /^list$/i)).toBeInTheDocument();
-    expect(queryButtonByAriaOrText(container, 'Card view', /^cards$/i)).toBeInTheDocument();
-    expect(container.querySelector('button[aria-label="Export"]')).toBeInTheDocument();
-    expect(queryDensityControl(container)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByPlaceholderText('Type here...')).toBeInTheDocument();
+      expect(queryButtonByAriaOrText(container, 'List view', /^list$/i)).toBeInTheDocument();
+      expect(queryButtonByAriaOrText(container, 'Card view', /^cards$/i)).toBeInTheDocument();
+      expect(container.querySelector('button[aria-label="Export"]')).toBeInTheDocument();
+      expect(queryDensityControl(container)).toBeInTheDocument();
+    });
   });
 });

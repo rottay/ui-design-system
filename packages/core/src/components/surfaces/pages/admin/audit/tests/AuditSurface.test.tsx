@@ -65,11 +65,11 @@ describe('AuditSurface', () => {
     renderSurface(<AuditSurface config={config} />);
 
     expect(await screen.findByText('Audit Log')).toBeInTheDocument();
-    expect(screen.getByText('user.created')).toBeInTheDocument();
-    expect(screen.getByText('breach.detected')).toBeInTheDocument();
-    expect(screen.getByText(/admin@company\.com/)).toBeInTheDocument();
+    expect(await screen.findByText('user.created')).toBeInTheDocument();
+    expect(await screen.findByText('breach.detected')).toBeInTheDocument();
+    expect(await screen.findByText(/admin@company\.com/)).toBeInTheDocument();
 
-    const csvButton = screen.getByText('CSV').closest('button');
+    const csvButton = (await screen.findByText('CSV')).closest('button');
     if (!csvButton) throw new Error('CSV export button not found');
     fireEvent.click(csvButton);
     expect(config.behavior.onExport).toHaveBeenCalledWith('csv');

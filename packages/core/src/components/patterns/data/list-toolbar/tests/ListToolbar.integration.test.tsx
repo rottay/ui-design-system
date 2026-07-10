@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 
 import { PatternListToolbar } from '..';
 import { STABLE_ENGINES, renderWithEngine } from '../../../../../_internal/testing/helpers/engine-test-utils';
@@ -44,14 +44,16 @@ describe('PatternListToolbar integration', () => {
       );
 
       expect(await screen.findByText('Events')).toBeInTheDocument();
-      expect(screen.getByPlaceholderText('Search...')).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /create event/i })).toBeInTheDocument();
+      expect(await screen.findByPlaceholderText('Search...')).toBeInTheDocument();
+      expect(await screen.findByRole('button', { name: /create event/i })).toBeInTheDocument();
       if (engine === 'modern') {
-        expect(screen.getByRole('button', { name: /status/i })).toBeInTheDocument();
+        expect(await screen.findByRole('button', { name: /status/i })).toBeInTheDocument();
       } else {
-        expect(screen.getByText('All')).toBeInTheDocument();
+        expect(await screen.findByText('All')).toBeInTheDocument();
       }
-      expect(document.querySelector('.toolbar-token-contract')?.getAttribute('style')).toContain('--ds-toolbar-shadow');
+      await waitFor(() => {
+        expect(document.querySelector('.toolbar-token-contract')?.getAttribute('style')).toContain('--ds-toolbar-shadow');
+      });
     },
     45000,
   );
