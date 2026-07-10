@@ -7,6 +7,9 @@ import { test, expect, type Page } from '@playwright/test';
 // ---------------------------------------------------------------------------
 // WO-ARC-07 — the interaction states of a skin, pinned in a real browser.
 //
+// Covers the Button (both interactive engines, five subjects) and the Card
+// (elevated and outlined). One probe page per component per tenant per engine.
+//
 // WHY THIS EXISTS
 // ---------------
 // ARC-07 moves a component's paint out of an inline `style={}` object and into
@@ -67,12 +70,73 @@ const ENGINES: readonly Engine[] = ['modern', 'rustic'];
  * control that reacts to a pointer is lying about being disabled, and the only
  * way to catch that is to hover it and demand nothing moved.
  */
-const SUBJECTS: readonly { name: string; index: number; states: readonly StateName[] }[] = [
-  { name: 'primary', index: 0, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
-  { name: 'secondary', index: 1, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
-  { name: 'default', index: 2, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
-  { name: 'ghost', index: 3, states: ['rest', 'hovered', 'rest-after-hover', 'pressed', 'focus-visible'] },
-  { name: 'primary-disabled', index: 5, states: ['rest', 'hovered'] },
+interface Subject {
+  name: string;
+  index: number;
+  states: readonly StateName[];
+}
+
+/**
+ * A probe page, the elements it exposes, and what each of them is put through.
+ *
+ * `expectedCount` is a shutter check, not a formality: a page that failed to
+ * render would settle instantly and record a matrix of empty strings, which is
+ * how this program once certified a blank PNG as clean.
+ */
+interface Probe {
+  slug: string;
+  selector: string;
+  expectedCount: number;
+  /** Keyboard focus is only meaningful where the element can take it. */
+  focusable: boolean;
+  subjects: readonly Subject[];
+}
+
+const BUTTON_STATES: readonly StateName[] = [
+  'rest',
+  'hovered',
+  'rest-after-hover',
+  'pressed',
+  'focus-visible',
+];
+
+/** A card reacts to a pointer and takes no focus; asking it to Tab would prove nothing. */
+const CARD_STATES: readonly StateName[] = ['rest', 'hovered', 'rest-after-hover'];
+
+const PROBES: readonly Probe[] = [
+  {
+    slug: 'button',
+    selector: '[data-testid="probe-button"] button',
+    expectedCount: 9,
+    focusable: true,
+    subjects: [
+      { name: 'primary', index: 0, states: BUTTON_STATES },
+      { name: 'secondary', index: 1, states: BUTTON_STATES },
+      { name: 'default', index: 2, states: BUTTON_STATES },
+      { name: 'ghost', index: 3, states: BUTTON_STATES },
+      { name: 'primary-disabled', index: 5, states: ['rest', 'hovered'] },
+    ],
+  },
+  {
+    slug: 'card',
+    // The anatomy part, not a class: the two engines do not share a class scheme
+    // for Card at all -- modern renders `ds-card ds-card--outlined`, rustic
+    // renders `rottay-card rottay-card--rustic` and no variant class.
+    selector: '[data-testid="probe-card"] [data-part="root"]',
+    expectedCount: 2,
+    focusable: false,
+    subjects: [{ name: 'card-elevated', index: 0, states: CARD_STATES }],
+  },
+  {
+    // The outlined card is the only variant whose border-width is non-zero, and
+    // therefore the only place `--ds-card-border` is observable -- the very
+    // channel each tenant's unlayered `*` border floor contests (P-48).
+    slug: 'extras',
+    selector: '[data-testid="probe-extras"] [data-part="root"]',
+    expectedCount: 1,
+    focusable: false,
+    subjects: [{ name: 'card-outlined', index: 0, states: CARD_STATES }],
+  },
 ];
 
 type StateName = 'rest' | 'hovered' | 'rest-after-hover' | 'pressed' | 'focus-visible';
@@ -101,8 +165,6 @@ type Matrix = Record<string, Cell>;
 
 const MATRIX_PATH = path.join(path.dirname(fileURLToPath(import.meta.url)), 'state-matrix.json');
 const RECORDING = process.env.RECORD_STATE_MATRIX === '1';
-
-const BUTTONS = '[data-testid="probe-button"] button';
 
 function cellKey(fixture: Fixture, engine: Engine, subject: string, state: StateName): string {
   return `${fixture}/${engine}/${subject}/${state}`;
@@ -134,9 +196,9 @@ function paintOf(cell: Cell): Cell {
  * produced a cell recorded mid-flight, and two invariants that failed on data
  * rather than on the component.
  */
-async function readSettled(page: Page, index: number): Promise<Cell> {
+async function readSettled(page: Page, selector: string, index: number): Promise<Cell> {
   const sample = () =>
-    page.locator(BUTTONS).nth(index).evaluate((el, channels) => {
+    page.locator(selector).nth(index).evaluate((el, channels) => {
       const computed = getComputedStyle(el);
       const cell: Record<string, string> = {};
       for (const channel of channels) cell[channel] = computed[channel as never] as string;
@@ -160,7 +222,7 @@ async function readSettled(page: Page, index: number): Promise<Cell> {
       previous = serialized;
     }
   }
-  throw new Error(`button ${index} never settled: still animating after 3.2s`);
+  throw new Error(`${selector} #${index} never settled: still animating after 3.2s`);
 }
 
 /** Parks the pointer off every control so no subject is left hovered. */
@@ -175,7 +237,7 @@ async function releasePointer(page: Page): Promise<void> {
  * platform's own `:focus-visible` pseudo-class -- and this test must survive
  * that, because ARC-07 may well make that change.
  */
-async function focusByKeyboard(page: Page, index: number): Promise<void> {
+async function focusByKeyboard(page: Page, selector: string, index: number): Promise<void> {
   await releasePointer(page);
   if (index === 0) {
     // The sentinel goes OUTSIDE the probe container. Inside, it would be a
@@ -193,12 +255,12 @@ async function focusByKeyboard(page: Page, index: number): Promise<void> {
     });
     await page.locator('#keyboard-sentinel').focus();
   } else {
-    await page.locator(BUTTONS).nth(index - 1).focus();
+    await page.locator(selector).nth(index - 1).focus();
   }
   await page.keyboard.press('Tab');
 
-  const landed = await page.locator(BUTTONS).nth(index).evaluate((el) => el === document.activeElement);
-  expect(landed, `Tab did not land on button ${index}`).toBe(true);
+  const landed = await page.locator(selector).nth(index).evaluate((el) => el === document.activeElement);
+  expect(landed, `Tab did not land on ${selector} #${index}`).toBe(true);
 }
 
 async function blurEverything(page: Page): Promise<void> {
@@ -209,10 +271,11 @@ async function captureSubject(
   page: Page,
   fixture: Fixture,
   engine: Engine,
-  subject: (typeof SUBJECTS)[number]
+  probe: Probe,
+  subject: Subject
 ): Promise<Matrix> {
   const captured: Matrix = {};
-  const button = page.locator(BUTTONS).nth(subject.index);
+  const element = page.locator(probe.selector).nth(subject.index);
 
   for (const state of subject.states) {
     switch (state) {
@@ -222,22 +285,26 @@ async function captureSubject(
         break;
       case 'hovered':
         await blurEverything(page);
-        await button.hover({ force: true });
+        await element.hover({ force: true });
         break;
       case 'rest-after-hover':
         await releasePointer(page);
         await blurEverything(page);
         break;
       case 'pressed':
-        await button.hover({ force: true });
+        await element.hover({ force: true });
         await page.mouse.down();
         break;
       case 'focus-visible':
-        await focusByKeyboard(page, subject.index);
+        await focusByKeyboard(page, probe.selector, subject.index);
         break;
     }
 
-    captured[cellKey(fixture, engine, subject.name, state)] = await readSettled(page, subject.index);
+    captured[cellKey(fixture, engine, subject.name, state)] = await readSettled(
+      page,
+      probe.selector,
+      subject.index
+    );
 
     if (state === 'pressed') await page.mouse.up();
   }
@@ -247,22 +314,42 @@ async function captureSubject(
   return captured;
 }
 
-async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<void> {
-  await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&slug=button`, {
+async function openProbe(page: Page, fixture: Fixture, engine: Engine, probe: Probe): Promise<void> {
+  await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&slug=${probe.slug}`, {
     waitUntil: 'domcontentloaded',
   });
-  await page.waitForSelector(BUTTONS);
+  await page.waitForSelector(probe.selector);
   await page.waitForFunction(
     (expected) => document.documentElement.getAttribute('data-engine') === expected,
     engine
   );
-  // The probe must actually have painted the subject set. A blank page would
-  // otherwise "settle" instantly and record a matrix of empty strings -- the
-  // exact way this program once certified a blank PNG as clean.
-  await expect(page.locator(BUTTONS)).toHaveCount(9);
+  await expect(page.locator(probe.selector)).toHaveCount(probe.expectedCount);
 }
 
 const recorded: Matrix = {};
+
+/**
+ * Merges a page test's cells into the matrix ON DISK, immediately.
+ *
+ * Playwright starts a fresh worker after a failure, and module scope does not
+ * survive that. An `afterAll` that wrote this file from an in-memory object once
+ * wrote an EMPTY matrix, because it ran in a worker that had captured nothing.
+ * Every page test persists what it measured, so a restart can only re-measure,
+ * never erase. Delete the file before a recording run; nothing else truncates it.
+ */
+function persist(captured: Matrix): void {
+  const onDisk: Matrix = fs.existsSync(MATRIX_PATH)
+    ? (JSON.parse(fs.readFileSync(MATRIX_PATH, 'utf8')) as Matrix)
+    : {};
+  const merged = { ...onDisk, ...captured };
+  const ordered: Matrix = {};
+  for (const key of Object.keys(merged).sort()) ordered[key] = merged[key];
+  fs.writeFileSync(MATRIX_PATH, `${JSON.stringify(ordered, null, 2)}\n`);
+}
+
+function readPersisted(): Matrix {
+  return fs.existsSync(MATRIX_PATH) ? (JSON.parse(fs.readFileSync(MATRIX_PATH, 'utf8')) as Matrix) : {};
+}
 
 function loadMatrix(): Matrix {
   if (!fs.existsSync(MATRIX_PATH)) {
@@ -276,51 +363,66 @@ function loadMatrix(): Matrix {
 
 const baseline: Matrix = RECORDING ? {} : loadMatrix();
 
-test.describe('button interaction states are pinned per tenant and engine', () => {
-  for (const fixture of FIXTURES) {
-    for (const engine of ENGINES) {
-      test(`${fixture} / ${engine}`, async ({ page }) => {
-        await openProbe(page, fixture, engine);
+test.describe('interaction states are pinned per component, tenant and engine', () => {
+  for (const probe of PROBES) {
+    for (const fixture of FIXTURES) {
+      for (const engine of ENGINES) {
+        test(`${probe.slug} / ${fixture} / ${engine}`, async ({ page }) => {
+          await openProbe(page, fixture, engine, probe);
 
-        for (const subject of SUBJECTS) {
-          const captured = await captureSubject(page, fixture, engine, subject);
-          Object.assign(recorded, captured);
+          for (const subject of probe.subjects) {
+            const captured = await captureSubject(page, fixture, engine, probe, subject);
+            Object.assign(recorded, captured);
 
-          if (RECORDING) continue;
+            if (RECORDING) {
+              persist(captured);
+              continue;
+            }
 
-          for (const [key, cell] of Object.entries(captured)) {
-            expect(baseline[key], `${key} is absent from state-matrix.json`).toBeDefined();
-            expect(cell, `${key} moved: the skin no longer paints this state the way it did`).toEqual(
-              baseline[key]
-            );
+            for (const [key, cell] of Object.entries(captured)) {
+              expect(baseline[key], `${key} is absent from state-matrix.json`).toBeDefined();
+              expect(cell, `${key} moved: the skin no longer paints this state the way it did`).toEqual(
+                baseline[key]
+              );
+            }
           }
-        }
-      });
+        });
+      }
     }
   }
 });
 
+/** Every subject, flattened, for the invariants that read the matrix directly. */
+const ALL_SUBJECTS = PROBES.flatMap((probe) =>
+  probe.subjects.map((subject) => ({ probe, subject }))
+);
+
 test.describe('the states mean what the anatomy contract says they mean', () => {
-  test('a pointer press never raises focus-visible, and a disabled button never reacts', async () => {
-    // Read off the matrix that the tests above just captured, so these
-    // invariants are asserted against the same measurements, not a second run.
-    const source = RECORDING ? recorded : baseline;
-    expect(Object.keys(source).length, 'no cells were captured').toBeGreaterThan(0);
+  // While recording, the invariants must read what every worker persisted, not
+  // what this one happens to hold in memory.
+  const source = () => (RECORDING ? readPersisted() : baseline);
+  const has = (subject: Subject, state: StateName) => subject.states.includes(state);
+
+  test('a pointer press never raises focus-visible, and a disabled part never reacts', async () => {
+    // Read off the matrix the tests above just captured, so these invariants are
+    // asserted against the same measurements, not a second run.
+    expect(Object.keys(source()).length, 'no cells were captured').toBeGreaterThan(0);
 
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
-        for (const subject of SUBJECTS) {
-          const at = (state: StateName) => source[cellKey(fixture, engine, subject.name, state)];
+        for (const { subject } of ALL_SUBJECTS) {
+          const at = (state: StateName) => source()[cellKey(fixture, engine, subject.name, state)];
 
           if (subject.name === 'primary-disabled') {
             const rest = at('rest');
-            const hovered = at('hovered');
-            expect(rest['data-state'], `${fixture}/${engine}: disabled button reports extra state`).toBe(
+            expect(rest['data-state'], `${fixture}/${engine}: disabled part reports extra state`).toBe(
               'disabled'
             );
-            expect(hovered, `${fixture}/${engine}: a disabled button reacted to hover`).toEqual(rest);
+            expect(at('hovered'), `${fixture}/${engine}: a disabled part reacted to hover`).toEqual(rest);
             continue;
           }
+
+          if (!has(subject, 'pressed')) continue;
 
           const pressed = at('pressed');
           expect(
@@ -343,15 +445,13 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
     }
   });
 
-  test('every subject paints a keyboard focus indicator', async () => {
-    const source = RECORDING ? recorded : baseline;
-
+  test('every focusable subject paints a keyboard focus indicator', async () => {
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
-        for (const subject of SUBJECTS) {
-          if (subject.name === 'primary-disabled') continue;
-          const rest = source[cellKey(fixture, engine, subject.name, 'rest')];
-          const focused = source[cellKey(fixture, engine, subject.name, 'focus-visible')];
+        for (const { subject } of ALL_SUBJECTS) {
+          if (!has(subject, 'focus-visible')) continue;
+          const rest = source()[cellKey(fixture, engine, subject.name, 'rest')];
+          const focused = source()[cellKey(fixture, engine, subject.name, 'focus-visible')];
 
           // An indicator is an outline the element did not have at rest, or a
           // box-shadow it did not have at rest. Both engines are permitted their
@@ -375,17 +475,15 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
     // whatever the cascade said, which on a dark tenant is the `*` border floor
     // and elsewhere is `currentColor`. Nothing photographed it, because no
     // baseline hovers.
-    const source = RECORDING ? recorded : baseline;
-
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
-        for (const subject of SUBJECTS) {
-          if (subject.name === 'primary-disabled') continue;
-          const rest = source[cellKey(fixture, engine, subject.name, 'rest')];
-          const after = source[cellKey(fixture, engine, subject.name, 'rest-after-hover')];
+        for (const { subject } of ALL_SUBJECTS) {
+          if (!has(subject, 'rest-after-hover')) continue;
+          const rest = source()[cellKey(fixture, engine, subject.name, 'rest')];
+          const after = source()[cellKey(fixture, engine, subject.name, 'rest-after-hover')];
           expect(
             paintOf(after),
-            `${fixture}/${engine}/${subject.name}: the control did not return to rest after the pointer left`
+            `${fixture}/${engine}/${subject.name}: the part did not return to rest after the pointer left`
           ).toEqual(paintOf(rest));
         }
       }
@@ -393,14 +491,12 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
   });
 
   test('every subject reacts to hover', async () => {
-    const source = RECORDING ? recorded : baseline;
-
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
-        for (const subject of SUBJECTS) {
+        for (const { subject } of ALL_SUBJECTS) {
           if (subject.name === 'primary-disabled') continue;
-          const rest = source[cellKey(fixture, engine, subject.name, 'rest')];
-          const hovered = source[cellKey(fixture, engine, subject.name, 'hovered')];
+          const rest = source()[cellKey(fixture, engine, subject.name, 'rest')];
+          const hovered = source()[cellKey(fixture, engine, subject.name, 'hovered')];
           expect(
             paintOf(hovered),
             `${fixture}/${engine}/${subject.name}: hover changed nothing a user can see`
@@ -410,15 +506,13 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
     }
   });
 
-  test('every subject reacts to a press, and the press is a transform', async () => {
-    const source = RECORDING ? recorded : baseline;
-
+  test('every pressable subject reacts to a press, and the press is a transform', async () => {
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
-        for (const subject of SUBJECTS) {
-          if (subject.name === 'primary-disabled') continue;
-          const hovered = source[cellKey(fixture, engine, subject.name, 'hovered')];
-          const pressed = source[cellKey(fixture, engine, subject.name, 'pressed')];
+        for (const { subject } of ALL_SUBJECTS) {
+          if (!has(subject, 'pressed')) continue;
+          const hovered = source()[cellKey(fixture, engine, subject.name, 'hovered')];
+          const pressed = source()[cellKey(fixture, engine, subject.name, 'pressed')];
           expect(
             pressed.transform,
             `${fixture}/${engine}/${subject.name}: a press does not move the control`
@@ -432,9 +526,6 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
 
 test.afterAll(async () => {
   if (!RECORDING) return;
-  const ordered: Matrix = {};
-  for (const key of Object.keys(recorded).sort()) ordered[key] = recorded[key];
-  fs.writeFileSync(MATRIX_PATH, `${JSON.stringify(ordered, null, 2)}\n`);
   // eslint-disable-next-line no-console
-  console.log(`recorded ${Object.keys(ordered).length} cells to ${MATRIX_PATH}`);
+  console.log(`state-matrix.json holds ${Object.keys(readPersisted()).length} cells`);
 });
