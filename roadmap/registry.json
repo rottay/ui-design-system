@@ -960,11 +960,11 @@
    "programs": [
     "P-15"
    ],
-   "notes": null,
-   "claimedBy": "cra10-promotion",
-   "claimedAt": "2026-07-10",
+   "notes": "evidence carried a commit hash that does not exist; re-closing with the real one",
+   "claimedBy": null,
+   "claimedAt": null,
    "doneAt": "2026-07-10",
-   "evidence": "edit-fields promoted to structures/record: one page-level surface, primary/advanced disclosure, advanced region unmounts while collapsed so hidden controls leave the tab order and validation, labels associate via explicit htmlFor. 329 lines of tests. No raw HTML, no hardcoded colors, domain-free. Commit 05e1b8e5."
+   "evidence": "edit-fields promoted to structures/record: one page-level surface, primary/advanced disclosure, advanced region unmounts while collapsed so hidden controls leave the tab order and validation, labels associate via explicit htmlFor. 329 lines of tests. No raw HTML, no hardcoded colors, domain-free. Commit d3c192fa."
   },
   {
    "id": "WO-ENG-13",
