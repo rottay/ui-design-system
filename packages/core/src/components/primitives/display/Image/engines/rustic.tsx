@@ -12,6 +12,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { ImageProps } from '../Image.types';
 import { IMAGE_DEFAULTS, RADIUS_MAP } from '../Image.types';
 import type { ImageRadius, ImageStatus } from '../Image.types';
@@ -50,7 +52,8 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
 
   // Three independent UI states: load lifecycle, hover for overlay, zoom for dialog
   const [status, setStatus] = useState<ImageStatus>('loading');
-  const [isHovered, setIsHovered] = useState(false);
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isHovered = interaction.hovered;
   const [isZoomed, setIsZoomed] = useState(false);
 
   // When the consumer swaps `src`, restart the loading lifecycle
@@ -220,8 +223,8 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
         className={`rottay-image-rustic ${className}`}
         style={containerStyle}
         onClick={handleClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        {...interactionHandlers}
+        {...partAttributes('root', interaction)}
         role={onClick || zoomable ? 'button' : undefined}
         tabIndex={onClick || zoomable ? 0 : undefined}
         aria-label={zoomable ? `${alt} (click to zoom)` : undefined}

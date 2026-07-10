@@ -104,7 +104,7 @@ describe('Card real engine coverage', () => {
     );
 
     const card = container.firstElementChild as HTMLDivElement;
-    fireEvent.mouseEnter(card);
+    fireEvent.pointerEnter(card);
     expect(card.style.transform).toBe('var(--ds-card-interactive-transform-hover, translateY(-1px))');
     // Hover elevation is a personality channel (--ds-card-shadow-hover, driven by
     // CARD_HOVER_ELEVATION_MAP), not a per-variant token. The elevated variant no
@@ -114,7 +114,7 @@ describe('Card real engine coverage', () => {
     fireEvent.click(card);
     expect(handleClick).toHaveBeenCalledTimes(1);
 
-    fireEvent.mouseLeave(card);
+    fireEvent.pointerLeave(card);
     expect(card.style.transform).toBe('translateY(0)');
   });
 
@@ -138,7 +138,7 @@ describe('Card real engine coverage', () => {
     );
 
     const card = container.querySelector('.rottay-card--rustic') as HTMLDivElement;
-    fireEvent.mouseEnter(card);
+    fireEvent.pointerEnter(card);
     fireEvent.click(card);
 
     expect(handleClick).toHaveBeenCalledTimes(1);

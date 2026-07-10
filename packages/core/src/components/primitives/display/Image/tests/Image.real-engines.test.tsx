@@ -59,7 +59,7 @@ describe('Image real engine coverage', () => {
     );
 
     const image = screen.getByAltText('Modern image');
-    fireEvent.mouseEnter(image.parentElement as HTMLElement);
+    fireEvent.pointerEnter(image.parentElement as HTMLElement);
     expect(screen.getByText('Inspect')).toBeInTheDocument();
 
     await act(async () => {
@@ -101,7 +101,7 @@ describe('Image real engine coverage', () => {
     const image = screen.getAllByAltText('Rustic image')[0];
     const wrapper = container.querySelector('div[style]') as HTMLElement;
 
-    fireEvent.mouseEnter(wrapper);
+    fireEvent.pointerEnter(wrapper);
     expect(screen.getByText('Preview')).toBeInTheDocument();
 
     await act(async () => {

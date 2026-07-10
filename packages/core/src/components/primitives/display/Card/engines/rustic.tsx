@@ -55,7 +55,9 @@
 
 'use client';
 
-import React, { useState, useId } from 'react';
+import React, { useId } from 'react';
+
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { CardProps } from '../Card.types';
 import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -146,7 +148,8 @@ export default function RusticCard(props: CardProps): React.ReactElement {
   // Hover state is tracked via React state rather than CSS :hover because
   // inline styles cannot respond to pseudo-classes. This lets us apply
   // CSS-variable-driven transforms and shadows dynamically.
-  const [isHovered, setIsHovered] = useState(false);
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isHovered = interaction.hovered;
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
   const borderRadiusValue = RADIUS_MAP[radius] || RADIUS_MAP.md;
@@ -297,8 +300,8 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       className={`rottay-card rottay-card--rustic ${className}`}
       style={cardStyle}
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      {...interactionHandlers}
+      {...partAttributes('root', interaction)}
       // Clickable cards receive button role + tabIndex for keyboard access.
       // This is the rustic engine's key a11y advantage over modern/classic.
       role={clickable || onClick ? 'button' : undefined}

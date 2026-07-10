@@ -38,7 +38,9 @@
 
 'use client';
 
-import React, { useState, useCallback, useId } from 'react';
+import React, { useCallback, useId } from 'react';
+
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { CardProps } from '../Card.types';
 import { CARD_DEFAULTS, PADDING_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -224,8 +226,11 @@ export default function ModernCard(props: CardProps): React.ReactElement {
 
   const padding = paddingIsResponsive ? CARD_DEFAULTS.padding : (paddingProp as string);
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
+  // The triad is decided once, in the behavior core: both skins of this
+  // component read the same state, and a focus ring is a keyboard affordance.
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isHovered = interaction.hovered;
+  const isFocused = interaction.focusVisible;
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -390,10 +395,8 @@ export default function ModernCard(props: CardProps): React.ReactElement {
       <div
         className={cardClassName}
         onClick={onClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        {...interactionHandlers}
+        {...partAttributes('root', interaction)}
         onKeyDown={onClick ? handleKeyDown : undefined}
         tabIndex={onClick ? 0 : undefined}
         role={onClick ? 'button' : undefined}

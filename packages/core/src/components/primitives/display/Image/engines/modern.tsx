@@ -12,6 +12,8 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+
+import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { ImageProps } from '../Image.types';
 import { IMAGE_DEFAULTS } from '../Image.types';
 import type { ImageRadius, ImageStatus } from '../Image.types';
@@ -58,7 +60,8 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
   // Tracks loading/loaded/error lifecycle for opacity transition and fallback
   const [status, setStatus] = useState<ImageStatus>('loading');
-  const [isHovered, setIsHovered] = useState(false);
+  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
+  const isHovered = interaction.hovered;
 
   // A new src means the image must be re-fetched; reset to loading
   useEffect(() => {
@@ -154,8 +157,8 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
       className={containerClasses}
       style={containerStyle}
       onClick={onClick}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      {...interactionHandlers}
+      {...partAttributes('root', interaction)}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
