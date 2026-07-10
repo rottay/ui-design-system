@@ -833,7 +833,7 @@
    "lane": "architecture",
    "order": 5,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ARC-03"
    ],
@@ -851,8 +851,8 @@
      "note": "Unblocked half landed (commit fd21437a): fluid clamp() ramps, cqi-based, bounded by adjacent static steps; 35 assertions; 3 drills. Plus responsive.viewportMqInSkins (baseline 0, drilled both ways) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) are blocked on WO-ARC-07's Card/table/rail skins, not on ARC-03 — see the WO amendment."
     }
    ],
-   "doneAt": null,
-   "evidence": null
+   "doneAt": "2026-07-10",
+   "evidence": "Owner-delegated split (2026-07-10). ARC-05 scoped to its FOUNDATION half, which is delivered and gated (commit fd21437a): 16 clamp() fluid ramps (--ds-font-size-fluid-*, --ds-space-fluid-*) bounded by adjacent static steps with 35 assertions and 3 drills, plus the viewport-mq-in-skins decrease-only counter and a --check that refuses an unbaselined counter. The CONTAINER half (container-type contexts, @container adaptations, sighted container-axis gallery) is carved into WO-ARC-08, mirroring the WO-ARC-03 -> WO-ARC-07 carve-out, because it needs table/rail/pane CSS skins that do not exist yet. Acceptance gate hereby scoped to the foundation half; container-gallery gate moved to ARC-08. See architecture.md RESOLUTION note and P-56."
   },
   {
    "id": "WO-CRA-06",
@@ -1402,6 +1402,23 @@
    ],
    "doneAt": "2026-07-10",
    "evidence": "CSS-first skins for Button, Card and Input across both interactive engines (modern + rustic), plus the shared unlayered-skin machinery. Every component's paint moved from inline style objects into tokens/css/engines/{modern,rustic}/skin/*.css, unlayered at (0,4,0) to clear Tailwind preflight (P-47) and each tenant's * border floor (P-48). Zero pixels moved: full visual gate 145/145 with a 192-cell interaction-state matrix (states.spec.ts) and all 48 baselines byte-identical, verified positively (shipped components carry no inline paint, only the caller's own style prop). Commits: Button d503605b/e9eb2e48, Card 965e7e9b/5e93c561, Input 825d65ec, state matrix a2d03b06/b6202373. Ten findings surfaced and filed (P-44..P-55); three fixed at root: rustic Card keyboard activation (P-51, bc77aa3f), rustic Button busy posture (P-50, c9535bd5), antd white-on-white button (P-52, 19b891e0). Core suite 17 failures = the ledger test-for-test."
+  },
+  {
+   "id": "WO-ARC-08",
+   "title": "Workspace-tier CSS skins + container queries",
+   "lane": "architecture",
+   "order": 8,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-ARC-07"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "spec-12"
+   ],
+   "notes": "Carved from WO-ARC-05 (2026-07-10, owner-delegated). The container-query half of ARC-05: migrate table/rail/pane paint into unlayered engine skins (ARC-07 pattern), then hang container-type contexts + @container adaptations. ARC-05 shipped the fluid-scale foundation.",
+   "progressLog": []
   }
  ]
 }

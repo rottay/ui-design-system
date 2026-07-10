@@ -181,6 +181,17 @@ after the fleet is on the core.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, build the custom-engine skin pack API from proposal P-01's custom slice (`roadmap/proposals.md`, APPROVED 2026-07-07). Depends on WO-ARC-03 being done (the fleet is on the `data-part`/`data-state` anatomy contract). Today `packages/core/src/runtime/engines/custom.ts` only offers `registerCustomComponents({ Button: AcmeButton }, 'pack-id')` (~L201) + a global `configureCustomEngine` — a white-label tenant would need per-component React forks. Add a `SkinPack` contract (`{ id, css, tokens, components? }` — css targets `[data-part]`/`[data-state]`; tokens = a BrandTheme or a BOUNDED `--ds-*` override map validated against the TenantAppearanceAdvanced limits, unbounded overrides rejected) with `registerSkinPack`/`getRegisteredSkinPack` in `custom.ts` (or sibling `skin-pack.ts`); wire the factory's custom resolution (`createCustomWrapper` in `packages/core/src/runtime/engines/`) so a registered pack renders the shared behavior core with the pack's stylesheet + injected tokens, while a bespoke registered React component still wins and unregistered names fall back as today — zero change at `createEngineComponent` call sites. Check in a domain-agnostic example pack under `packages/core/src/tokens/css/engines/custom/example-pack/` and mount a showroom demo page rendering the flagship set (button, input, select, card, badge, table, tabs, modal) under it next to modern, registration code shown; document the contract + escape hatch in in-repo docs/stories (docs-engineering is READ-ONLY — the orchestrator syncs the hub). Unit-test precedence (pack vs bespoke vs fallback) and bounded-token rejection. Gate: `pnpm --filter @rottay/design-system run build` + `pnpm test` green; showroom demo renders the flagship set under the example pack with ZERO bespoke React components, captured to `test-artifacts/architecture/arc-04/` under both tenant palettes (dark-surface rottay + a light-surface tenant) and REVIEWED; the WO-GAT-01 suite green with modern/rustic baselines unchanged; `pnpm --filter @rottay/showroom run build` green. Run the showroom (`pnpm --filter @rottay/showroom run dev`, http://localhost:7001) and LOOK at the PNGs. Fences: bounded tokens only, keep `registerCustomComponents`, no modern/rustic/classic rendering change, no domain semantics, edit-only, no commits, never git-restore directories, app-bithire and docs-engineering read-only, showroom dev server allowed.
 
 ### WO-ARC-05 Container queries + fluid scales
+- **RESOLUTION 2026-07-10 (owner-delegated: split, mark done for the delivered half).** This WO is
+  two halves (see the amendment below). The FOUNDATION half — steps 3 and 5, the `clamp()` fluid ramps
+  (`--ds-font-size-fluid-*`, `--ds-space-fluid-*`) and the `viewport-mq-in-skins` decrease-only counter —
+  is DELIVERED and gated (commit `fd21437a`): 16 ramps bounded by adjacent static steps, 35 assertions,
+  three drills, plus a `--check` that now refuses an unbaselined counter. That is this WO's closeable scope,
+  and it is marked done against exactly that. The CONTAINER half — steps 1, 2, 4 (`container-type` contexts,
+  `@container` adaptations, the sighted container-axis gallery) — is **carved into WO-ARC-08**, following the
+  same precedent by which WO-ARC-03 carved its CSS-skin migration into WO-ARC-07. The carve-out is not a
+  deferral of convenience: those steps need table/preview-rail/split-pane CSS skins that do not exist, and
+  minting them is itself ARC-07-pattern work (a workspace-tier skin migration), which WO-ARC-08 owns. This
+  WO's acceptance gate is hereby scoped to the foundation half; the container-gallery gate moves to ARC-08.
 - **AMENDMENT 2026-07-10 (the dependency is satisfied in the registry and not in the code)** —
   This WO's `Depends on` line reads "WO-ARC-03 (real CSS skins to hang `@container`
   rules on)". WO-ARC-03 is `done`, and it explicitly **carved the CSS-first skin
@@ -226,6 +237,55 @@ after the fleet is on the core.
 - **Do NOT** — Do not weaken or bypass any WO-ENG-12 counter or its 360/768/1280 capture law. Do not move layout intent into the engine (spec section 10 — adaptations are presentation, the component owns layout). Do not add viewport media queries to engine skins (container queries are the mechanism). Do not invent fluid magnitudes outside the existing static steps. Never `git restore` directories.
 - **Size** — M.
 - **Delegation prompt** — In `/Users/daniel/Developer/Rottay/ui-design-system`, add container-query adaptation + fluid scales from proposal P-08 (`roadmap/proposals.md`, APPROVED 2026-07-07). Depends on WO-ARC-03 (real CSS skins). Today exactly ONE `@container` rule exists in `packages/core/src` (`tokens/css/components/patterns.css:926`) and there is no foundation fluid scale (`foundation/base/typography.css` has zero `clamp()`). (1) Declare named container contexts (`container-type: inline-size`; names card|table|rail|pane) in the card, table/data-table, preview-rail/pane, and workspace-region skins under `packages/core/src/tokens/css/engines/{modern,rustic}/components/**`, folding the lone patterns.css rule into the scheme and documenting containers in the behavior contracts. (2) Add `@container` adaptations — cards stack meta below a named width, data-table collapses low-priority columns, rails/panes step density down — presentation only, layout intent stays component-owned (spec section 10). (3) Add `--ds-font-size-fluid-*` + `--ds-space-fluid-*` `clamp()` ramps to `packages/core/src/tokens/css/foundation/base/typography.css` and the spacing foundation, bounded by adjacent EXISTING static steps (no new magnitudes), consumed opt-in; apply the tenant-artifact rule (regenerate artifacts + `compilers/brand-theme` green) if any fluid token is compiler-emitted. (4) Extend the WO-ENG-12/WO-ENG-02 capture preset with a container-width axis (same component at rail-, half-, and full-width in one viewport) captured to `test-artifacts/architecture/arc-05/` under both tenant palettes (dark-surface rottay `#0A0A0C` + a light-surface tenant — no light/dark toggle, tenant palette decides). (5) Extend `scripts/engine-token-audit.mjs` with a `viewport-mq-in-skins` counter (decrease-only; container queries are the sanctioned mechanism) keeping every ENG-12 responsive counter green unchanged. Gate: build + `pnpm test` green; audit `--check` green (ENG-12 counters unchanged, new counter at/below baseline); sighted container-axis gallery reviewed; the WO-GAT-01 suite (command as registered by WO-GAT-01) green with full-width baselines unchanged and narrow-container adaptations explicitly approved; classic untouched. Run the showroom (`pnpm --filter @rottay/showroom run dev`, http://localhost:7001) and LOOK at the PNGs. Fences: never weaken ENG-12, no viewport media queries in skins, no layout intent in engines, no new magnitudes, edit-only, no commits, never git-restore directories, app-bithire and docs-engineering read-only, showroom dev server allowed.
+
+### WO-ARC-08 Workspace-tier CSS skins + container queries
+- **Provenance** — Carved from WO-ARC-05 on 2026-07-10 (owner-delegated decision), exactly as WO-ARC-07 was
+  carved from WO-ARC-03. ARC-05 shipped the fluid-scale foundation; this WO carries the container-query half
+  it could not, because that half needs CSS skins the workspace tier does not yet have.
+- **Outcome** — The workspace-tier components the DS renders at many widths inside one viewport — the table /
+  data-table, the preview rail, and the split pane — paint from unlayered engine skins in the WO-ARC-07
+  pattern (`tokens/css/engines/{modern,rustic}/skin/*.css`, keyed on the `data-part`/`data-state` contract),
+  instead of inline `style={}`. On those real skins, and on the Card skin ARC-07 already shipped, the WO then
+  hangs named `container-type: inline-size` contexts (`--ds-container: card|table|rail|pane`) and `@container`
+  adaptations: cards stack their meta below a named width, the data-table collapses low-priority columns, and
+  rails/panes step density down — presentation only, layout intent stays component-owned (spec §10). The
+  opt-in fluid ramps ARC-05 shipped get consumed where the ENG-12 evidence showed cramped or oversized
+  extremes. A component adapts to its box, not to the window.
+- **Why** — P-08 (proposals.md, APPROVED 2026-07-07) and the P-56 measurement: after ARC-07, exactly three
+  components have CSS skins (Button, Card, Input), and the workspace tier the container work targets is not
+  among them. `@container` needs a `container-type` ancestor the DS controls; those ancestors are the table
+  and workspace-region skins, which must exist first. This WO makes them exist, then adapts them.
+- **Depends on** — WO-ARC-07 (the skin pattern + the Card skin to build on; done). Coordinates WO-ENG-12
+  (its viewport-matrix capture and responsive counters are extended, never weakened) and consumes WO-ARC-05's
+  shipped fluid ramps.
+- **Steps** —
+  1. Migrate the table/data-table, preview-rail, and split-pane paint from inline `style={}` into unlayered
+     `tokens/css/engines/{modern,rustic}/skin/*.css`, in the WO-ARC-07 pattern (measured before-table, a
+     mechanical transcription generator, zero-pixel gate against the WO-GAT-01 baselines + the states matrix,
+     verified positively that the shipped component carries no inline paint). Each component is a deployable
+     checkpoint.
+  2. Declare named `container-type: inline-size` contexts on those skins and the Card skin, with the
+     `--ds-container: card|table|rail|pane` naming scheme; document which components are containers in the
+     behavior contracts. Fold the lone existing `@container` rule (`tokens/css/components/patterns.css:926`)
+     into the scheme.
+  3. Add the `@container` adaptations (card meta stack, data-table column-priority collapse, rail/pane density
+     step-down) — presentation only. Consume ARC-05's fluid ramps where ENG-12 evidence showed the need.
+  4. Extend the WO-ENG-12/WO-ENG-02 capture preset with a container-width axis (same component at rail-,
+     half-, and full-width in one viewport) under both tenant palettes, to `test-artifacts/architecture/arc-08/`.
+- **Acceptance gate** — build + `pnpm test` green (17-failure ledger unchanged); the WO-GAT-01 visual suite +
+  the `states.spec.ts` interaction-state matrix green with full-width renderings byte-identical and any
+  narrow-container adaptation approved explicitly as a new baseline; `node scripts/engine-token-audit.mjs
+  --check` green with the ENG-12 responsive counters unchanged and `viewport-mq-in-skins` at or below
+  baseline; sighted container-axis gallery in `test-artifacts/architecture/arc-08/` under a dark-surface
+  (rottay) and a light-surface tenant, REVIEWED, showing the same table/rail adapting at rail-width vs
+  full-width in one viewport; classic untouched; artifacts regenerated + compiler suite green if a fluid token
+  is emitted.
+- **Do NOT** — Do not weaken any WO-ENG-12 counter or its 360/768/1280 capture law. Do not move layout intent
+  into the engine (spec §10). Do not add viewport media queries to engine skins (`@container` is the
+  mechanism). Do not invent fluid magnitudes outside ARC-05's existing ramps. Do not layer the skins (P-47:
+  every `rottay-*` layer loses to Tailwind preflight — skins are unlayered, at specificity >= (0,4,0) to clear
+  the tenant `*` border floor, P-48). Never `git restore` directories.
+- **Size** — L.
 
 ## Dependency summary
 
