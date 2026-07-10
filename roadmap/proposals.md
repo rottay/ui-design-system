@@ -693,3 +693,34 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Consequence for WO-ARC-07** — the WO's premise ("move the paint into a stylesheet keyed on the anatomy contract") is sound; its unstated assumption (that a DS layer can hold that stylesheet) is false. A CSS-first skin must be **unlayered** — the one position that beats preflight and DaisyUI while still yielding to a consumer's own inline `style` prop, which is the precedence the inline object has today.
 - **Ask** — beyond ARC-07's own fix: decide the DS's intended relationship to Tailwind's layers. Either name them in the order statement (`@layer theme, base, components, rottay-reset, …, rottay-engines, utilities`) so the engine outranks the reset while Tailwind utilities still win, or accept unlayered engine skins as the contract and say so in the architecture doc. Then audit `engines/modern/theme.css` for rules that can never win, with a drill: a rule that loses on layer order must be reported by the audit, not counted as live.
 - **Status** — OPEN. ARC-07 proceeds with the unlayered skin, which the measurement above justifies and the interaction-state matrix verifies.
+
+### P-48 A tenant's `*` border floor outranks every single-class component rule
+- **Found** — 2026-07-10, by WO-ARC-07, the moment the Button stopped painting inline.
+- **Evidence** — every first-party tenant's `_source/extension.css` ships, unlayered:
+
+  ```css
+  html[data-tenant='rottay']:not([data-theme='light']):not(.light) {
+    *, ::after, ::before, ::backdrop, ::file-selector-button {
+      border-color: var(--ds-color-border);
+    }
+  }
+  ```
+
+  Its own comment explains the intent: Tailwind preflight sets `border: 0 solid` on `*`, which leaves `border-color: currentColor`, and on a dark tenant that is white. The floor replaces it with the tenant's border token.
+- **The defect** — the selector's specificity is **(0,3,1)**. Every design-system component rule written as `.rottay-thing[data-variant='x']` is (0,2,0) and loses its border colour to it. The floor is meant for elements that have no opinion; it currently beats elements that do. The Button never noticed because it painted inline, at a precedence nothing in a stylesheet can reach — which is precisely how a defect of this shape stays invisible for a year.
+- **Confirmed on the real bundle** — with the Button's inline style removed, rottay's primary button rendered `border-top-color: rgb(28,28,32)` (`--ds-color-border`) instead of the `transparent` its own `--ds-button-primary-border` declares. WO-ARC-07 clears it by reaching (0,4,0); it does not fix it.
+- **Ask** — one WO. Wrap the floor's selector so it cannot outrank components: `:where(html[data-tenant='…']:not([data-theme='light']):not(.light)) *, …` drops it to (0,0,0), which still beats preflight's `*` by source order and yields to any component rule. Then audit which components' borders change, because those are the ones the floor has silently been painting. Ship it with a drill: a component that declares its own `border-color` must win, and an element that declares none must still get the tenant's token.
+- **Status** — OPEN.
+
+### P-49 Two tests fail intermittently under full-suite load, and the ledger cannot see it
+- **Found** — 2026-07-10, running `pnpm test` twice in a row on an identical tree during WO-ARC-07's certification.
+- **Evidence** — run A: 21 failures. Run B, same tree, same command: 17 failures, matching `roadmap/README.md`'s ledger test-for-test. The four-test delta was one real regression (`token-fidelity`, fixed in WO-ARC-07) and three intermittent failures across two files:
+
+  | file | failure in run A | in run B | in isolation |
+  | --- | --- | --- | --- |
+  | `patterns/data/list-toolbar/tests/ListToolbar.integration.test.tsx` | `Unable to find an accessible element with the role "button" and name /create event/i` (×2) | passed | 3/3 passed |
+  | `surfaces/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx` | `renders a direct Export button when a single format is configured` | passed | 35/35 passed |
+
+- **Why it matters** — the ledger is the contract this program certifies against: "17 failures, and here is each one." A suite that returns 17 or 21 depending on the run makes that contract unfalsifiable, and it is exactly how a real regression gets waved through as "one of the known flaky ones". This program has already been burned once by an inherited failure count (P-40).
+- **Ask** — one WO. Reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
+- **Status** — OPEN.
