@@ -11,7 +11,15 @@
 
 import type { CSSProperties } from 'react';
 
-import type { DesignTokens } from '../../contracts';
+import type {
+  AccentPersonalityTokens,
+  AnimationPersonalityTokens,
+  CardPersonalityTokens,
+  ChartPersonalityTokens,
+  DesignTokens,
+  TransitionTokens,
+  TypographyPersonalityTokens,
+} from '../../contracts';
 
 type CssVariableMap = Record<`--${string}`, string | number>;
 type VariableStyle = CSSProperties & Record<`--${string}`, string | number>;
@@ -82,31 +90,257 @@ const LABEL_TRANSFORM_MAP = {
 } as const;
 
 /** Build the hover transform shared by buttons, cards, and badges. */
-function buildHoverTransform(tokens: DesignTokens, multiplier: number = 1): string {
+function buildHoverTransform(hoverLift: number, hoverScale: number, multiplier: number = 1): string {
   // Clamp values to sane minimums: negative lift or sub-1 scale would push
   // elements down or shrink them on hover, which is never the intended behavior.
-  const hoverLift = Math.max(tokens.personality.animation.hoverLift * multiplier, 0);
-  const hoverScale = Math.max(tokens.personality.animation.hoverScale, 1);
+  const lift = Math.max(hoverLift * multiplier, 0);
+  const scale = Math.max(hoverScale, 1);
 
   // Identity transform is returned as an explicit string rather than 'none' so
   // that the transition property still animates back from a non-identity state.
-  if (hoverLift === 0 && hoverScale === 1) {
+  if (lift === 0 && scale === 1) {
     return 'translateY(0) scale(1)';
   }
 
-  return `translateY(${hoverLift === 0 ? '0' : `-${hoverLift}px`}) scale(${hoverScale})`;
+  return `translateY(${lift === 0 ? '0' : `-${lift}px`}) scale(${scale})`;
 }
 
 /** Build the pressed-state transform that follows the configured hover scale. */
-function buildActiveTransform(tokens: DesignTokens): string {
-  const hoverScale = Math.max(tokens.personality.animation.hoverScale, 1);
+function buildActiveTransform(hoverScale: number): string {
+  const scale = Math.max(hoverScale, 1);
   // Active (pressed) state subtracts a small amount from the hover scale to
   // give tactile feedback. The 0.97 floor prevents excessive shrinking if
   // the hover scale itself is already close to 1. When hover has no scale
   // effect, a fixed 0.98 provides a subtle press feel.
-  const activeScale = hoverScale > 1 ? Math.max(hoverScale - 0.02, 0.97) : 0.98;
+  const activeScale = scale > 1 ? Math.max(scale - 0.02, 0.97) : 0.98;
 
   return `translateY(0) scale(${activeScale})`;
+}
+
+/**
+ * Deep-partial personality input: every dimension is optional, and every
+ * field within a present dimension is independently optional. A tenant
+ * declares only the fields it customizes, never a full dimension.
+ */
+type PartialPersonalityInput = {
+  animation?: Partial<AnimationPersonalityTokens>;
+  chart?: Partial<ChartPersonalityTokens>;
+  typography?: Partial<TypographyPersonalityTokens>;
+  accent?: Partial<AccentPersonalityTokens>;
+  card?: Partial<CardPersonalityTokens>;
+};
+
+type PartialCssVariableMap = Record<`--${string}`, string | number | undefined>;
+
+/**
+ * Derive personality-driven CSS custom properties from a possibly-partial
+ * personality object. Each variable is emitted only when every field it
+ * depends on is defined -- a field the caller never declared produces no
+ * entry, rather than a guessed default, so a sparse tenant delta never masks
+ * a value an earlier layer of the CSS cascade already supplies.
+ *
+ * `resolvePersonalityCssVariables` below calls this with a fully-resolved
+ * personality (every field always defined), which is why every variable it
+ * documents is always present in its output.
+ *
+ * @param personality - Personality fields to derive variables from; a
+ *   dimension or field the caller has not declared may be omitted
+ * @param transitions - Transition duration/easing tokens; only consulted by
+ *   the button-transition and duration-alias variables
+ * @returns Record of CSS custom property names to computed values, or
+ *   `undefined` for a variable whose source field(s) were not declared
+ */
+export function resolvePartialPersonalityCssVariables(
+  personality: PartialPersonalityInput | undefined,
+  transitions?: Partial<TransitionTokens>,
+): PartialCssVariableMap {
+  if (!personality) {
+    return {};
+  }
+
+  const animation = personality.animation;
+  const chart = personality.chart;
+  const typography = personality.typography;
+  const accent = personality.accent;
+  const card = personality.card;
+
+  const hoverLiftValue = animation?.hoverLift;
+  const hoverScaleValue = animation?.hoverScale;
+  const intensityValue = animation?.intensity;
+  const entranceDurationValue = animation?.entranceDuration;
+  const useSpringValue = animation?.useSpring;
+
+  // Card padding density feeds three separate CSS variables (header/body/
+  // footer), so it is resolved once rather than per-key.
+  const cardPadding = card?.paddingDensity !== undefined ? CARD_PADDING_MAP[card.paddingDensity] : undefined;
+
+  // Shared by card, badge, and button: identical formula, computed once.
+  const hoverTransformValue =
+    hoverLiftValue !== undefined || hoverScaleValue !== undefined
+      ? buildHoverTransform(hoverLiftValue ?? 0, hoverScaleValue ?? 1)
+      : undefined;
+
+  // Spring-enabled personalities use the spring easing for button transitions
+  // to match the bounce feel of their entrance animations. Non-spring
+  // personalities get the standard ease-out to stay visually consistent.
+  const buttonTransitionValue =
+    useSpringValue !== undefined
+      ? useSpringValue
+        ? (transitions?.spring ?? 'var(--ds-transition-spring)')
+        : (transitions?.normal ?? 'var(--ds-transition-normal)')
+      : undefined;
+
+  return {
+    '--ds-personality-animation-intensity': animation?.intensity,
+    '--ds-personality-animation-stagger-delay':
+      animation?.staggerDelay !== undefined ? `${animation.staggerDelay}ms` : undefined,
+    '--ds-personality-animation-stagger-max':
+      animation?.staggerMax !== undefined ? `${animation.staggerMax}ms` : undefined,
+    '--ds-personality-animation-entrance': animation?.entrance,
+    '--ds-personality-animation-entrance-duration':
+      entranceDurationValue !== undefined ? `${entranceDurationValue}ms` : undefined,
+    // Composite of two independent fields with no natural neutral value for
+    // intensity, so both must be declared rather than defaulting either one.
+    '--ds-personality-animation-offset-distance':
+      hoverLiftValue !== undefined && intensityValue !== undefined
+        ? `${hoverLiftValue + intensityValue * 12}px`
+        : undefined,
+    '--ds-personality-animation-hover-lift': hoverLiftValue !== undefined ? `${hoverLiftValue}px` : undefined,
+    '--ds-personality-animation-hover-scale': hoverScaleValue,
+    '--ds-personality-animation-spring-tension': animation?.springTension,
+    '--ds-personality-animation-spring-friction': animation?.springFriction,
+    '--ds-personality-animation-pulse-speed': animation?.pulseSpeed,
+    '--ds-personality-animation-skeleton-style': animation?.skeletonStyle,
+    '--ds-personality-animation-count-up-enabled':
+      animation?.countUpEnabled !== undefined ? (animation.countUpEnabled ? '1' : '0') : undefined,
+    '--ds-personality-chart-mount-duration':
+      chart?.mountDuration !== undefined ? `${chart.mountDuration}ms` : undefined,
+    '--ds-personality-chart-line-style': chart?.lineStyle,
+    '--ds-personality-chart-tooltip-style': chart?.tooltipStyle,
+    '--ds-personality-card-padding-density': card?.paddingDensity,
+    '--ds-personality-card-default-elevation': card?.defaultElevation,
+    '--ds-personality-card-hover-elevation': card?.hoverElevation,
+    '--ds-personality-card-show-border': card?.showBorder !== undefined ? (card.showBorder ? '1' : '0') : undefined,
+    '--ds-personality-card-hover-tint': card?.hoverTint !== undefined ? (card.hoverTint ? '1' : '0') : undefined,
+    '--ds-personality-accent-bar-position': accent?.barPosition,
+    '--ds-personality-accent-bar-style': accent?.barStyle,
+    '--ds-personality-accent-bar-thickness':
+      accent?.barThickness !== undefined ? `${accent.barThickness}px` : undefined,
+    '--ds-personality-accent-badge-shape': accent?.badgeShape,
+    '--ds-personality-accent-icon-shape': accent?.iconContainerShape,
+    '--ds-personality-accent-divider-style': accent?.dividerStyle,
+    '--ds-personality-typography-heading-letter-spacing': typography?.headingLetterSpacing,
+    '--ds-personality-typography-heading-weight-bias': typography?.headingWeightBias,
+    '--ds-personality-typography-label-style': typography?.labelStyle,
+    '--ds-card-shadow': card?.defaultElevation !== undefined ? CARD_ELEVATION_MAP[card.defaultElevation] : undefined,
+    '--ds-card-shadow-hover':
+      card?.hoverElevation !== undefined ? CARD_HOVER_ELEVATION_MAP[card.hoverElevation] : undefined,
+    '--ds-card-border':
+      card?.showBorder !== undefined
+        ? card.showBorder
+          ? 'var(--ds-color-border-primary)'
+          : 'transparent'
+        : undefined,
+    '--ds-card-border-hover':
+      card?.showBorder !== undefined
+        ? card.showBorder
+          ? 'var(--ds-color-border-secondary)'
+          : 'transparent'
+        : undefined,
+    '--ds-card-header-padding': cardPadding?.css,
+    '--ds-card-body-padding': cardPadding?.css,
+    '--ds-card-footer-padding': cardPadding?.css,
+    '--ds-card-bg-hover':
+      card?.hoverTint !== undefined
+        ? card.hoverTint
+          ? 'color-mix(in srgb, var(--ds-card-bg) 90%, var(--ds-color-primary-100) 10%)'
+          : 'var(--ds-card-bg)'
+        : undefined,
+    '--ds-card-hover-transform': hoverTransformValue,
+    '--ds-badge-radius': accent?.badgeShape !== undefined ? BADGE_RADIUS_MAP[accent.badgeShape].css : undefined,
+    '--ds-badge-hover-transform': hoverTransformValue,
+    '--ds-divider-style':
+      accent?.dividerStyle !== undefined
+        ? accent.dividerStyle === 'none'
+          ? 'solid'
+          : accent.dividerStyle
+        : undefined,
+    '--ds-divider-color':
+      accent?.dividerStyle !== undefined
+        ? accent.dividerStyle === 'none'
+          ? 'transparent'
+          : 'var(--ds-color-border-primary)'
+        : undefined,
+    '--ds-skeleton-animation-duration':
+      animation?.pulseSpeed !== undefined ? PULSE_SPEED_MAP[animation.pulseSpeed] : undefined,
+    '--ds-typography-heading-letter-spacing': typography?.headingLetterSpacing,
+    '--ds-typography-heading-font-weight':
+      typography?.headingWeightBias !== undefined
+        ? HEADING_WEIGHT_BIAS_MAP[typography.headingWeightBias]
+        : undefined,
+    '--ds-typography-label-transform':
+      typography?.labelStyle !== undefined ? LABEL_TRANSFORM_MAP[typography.labelStyle] : undefined,
+    '--ds-button-transition': buttonTransitionValue,
+    '--ds-button-hover-transform': hoverTransformValue,
+    '--ds-button-active-transform': hoverScaleValue !== undefined ? buildActiveTransform(hoverScaleValue) : undefined,
+    // Toast/message/notification durations are derived from entrance duration but
+    // clamped to minimums. Too-fast enter animations look broken, and exits are
+    // intentionally shorter (75-80% of enter) so dismissals feel snappy.
+    '--ds-toast-enter-duration':
+      entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 160)}ms` : undefined,
+    '--ds-toast-exit-duration':
+      entranceDurationValue !== undefined
+        ? `${Math.max(Math.round(entranceDurationValue * 0.75), 120)}ms`
+        : undefined,
+    '--ds-toast-enter-easing':
+      useSpringValue !== undefined
+        ? useSpringValue
+          ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+          : 'cubic-bezier(0.4, 0, 0.2, 1)'
+        : undefined,
+    '--ds-toast-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
+    '--ds-message-enter-duration':
+      entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 140)}ms` : undefined,
+    '--ds-message-exit-duration':
+      entranceDurationValue !== undefined
+        ? `${Math.max(Math.round(entranceDurationValue * 0.7), 120)}ms`
+        : undefined,
+    '--ds-message-enter-easing':
+      useSpringValue !== undefined
+        ? useSpringValue
+          ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+          : 'cubic-bezier(0.22, 1, 0.36, 1)'
+        : undefined,
+    '--ds-message-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
+    '--ds-notification-enter-duration':
+      entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 180)}ms` : undefined,
+    '--ds-notification-exit-duration':
+      entranceDurationValue !== undefined
+        ? `${Math.max(Math.round(entranceDurationValue * 0.8), 140)}ms`
+        : undefined,
+    '--ds-notification-enter-easing':
+      useSpringValue !== undefined
+        ? useSpringValue
+          ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+          : 'cubic-bezier(0.22, 1, 0.36, 1)'
+        : undefined,
+    '--ds-notification-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
+    '--ds-modal-animation-duration':
+      entranceDurationValue !== undefined ? `${Math.max(entranceDurationValue, 180)}ms` : undefined,
+    '--ds-modal-animation-timing':
+      useSpringValue !== undefined
+        ? useSpringValue
+          ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
+          : 'cubic-bezier(0.22, 1, 0.36, 1)'
+        : undefined,
+    // Foundation default lives in tokens/css/foundation/animations/transitions.css
+    // (--ds-duration-fast|normal|slow); falling back to that chain's own
+    // underlying primitives here, instead of a re-declared literal, keeps the
+    // foundation file the single numeric source when transitions is absent.
+    '--ds-duration-fast': transitions?.fast ?? 'var(--duration-faster)',
+    '--ds-duration-normal': transitions?.normal ?? 'var(--duration-fast)',
+    '--ds-duration-slow': transitions?.slow ?? 'var(--duration-normal)',
+  };
 }
 
 /**
@@ -119,106 +353,18 @@ function buildActiveTransform(tokens: DesignTokens): string {
  * @returns Record of CSS custom property names to their computed values
  */
 export function resolvePersonalityCssVariables(tokens: DesignTokens): CssVariableMap {
-  const cardPadding = CARD_PADDING_MAP[tokens.personality.card.paddingDensity];
-  const badgeRadius = BADGE_RADIUS_MAP[tokens.personality.accent.badgeShape];
-  const labelTransform = LABEL_TRANSFORM_MAP[tokens.personality.typography.labelStyle];
-  const headingWeight = HEADING_WEIGHT_BIAS_MAP[tokens.personality.typography.headingWeightBias];
-  const dividerStyle =
-    tokens.personality.accent.dividerStyle === 'none'
-      ? 'solid'
-      : tokens.personality.accent.dividerStyle;
-  // Spring-enabled personalities use the spring easing for button transitions
-  // to match the bounce feel of their entrance animations. Non-spring
-  // personalities get the standard ease-out to stay visually consistent.
-  const buttonTransition = tokens.personality.animation.useSpring
-    ? (tokens.transitions?.spring ?? 'var(--ds-transition-spring)')
-    : (tokens.transitions?.normal ?? 'var(--ds-transition-normal)');
-  const hoverTransform = buildHoverTransform(tokens);
+  const resolved = resolvePartialPersonalityCssVariables(tokens.personality, tokens.transitions);
 
-  return {
-    '--ds-personality-animation-intensity': tokens.personality.animation.intensity,
-    '--ds-personality-animation-stagger-delay': `${tokens.personality.animation.staggerDelay}ms`,
-    '--ds-personality-animation-stagger-max': `${tokens.personality.animation.staggerMax}ms`,
-    '--ds-personality-animation-entrance': tokens.personality.animation.entrance,
-    '--ds-personality-animation-entrance-duration': `${tokens.personality.animation.entranceDuration}ms`,
-    '--ds-personality-animation-offset-distance': `${tokens.personality.animation.hoverLift + tokens.personality.animation.intensity * 12}px`,
-    '--ds-personality-animation-hover-lift': `${tokens.personality.animation.hoverLift}px`,
-    '--ds-personality-animation-hover-scale': tokens.personality.animation.hoverScale,
-    '--ds-personality-animation-spring-tension': tokens.personality.animation.springTension,
-    '--ds-personality-animation-spring-friction': tokens.personality.animation.springFriction,
-    '--ds-personality-animation-pulse-speed': tokens.personality.animation.pulseSpeed,
-    '--ds-personality-animation-skeleton-style': tokens.personality.animation.skeletonStyle,
-    '--ds-personality-animation-count-up-enabled': tokens.personality.animation.countUpEnabled ? '1' : '0',
-    '--ds-personality-chart-mount-duration': `${tokens.personality.chart.mountDuration}ms`,
-    '--ds-personality-chart-line-style': tokens.personality.chart.lineStyle,
-    '--ds-personality-chart-tooltip-style': tokens.personality.chart.tooltipStyle,
-    '--ds-personality-card-padding-density': tokens.personality.card.paddingDensity,
-    '--ds-personality-card-default-elevation': tokens.personality.card.defaultElevation,
-    '--ds-personality-card-hover-elevation': tokens.personality.card.hoverElevation,
-    '--ds-personality-card-show-border': tokens.personality.card.showBorder ? '1' : '0',
-    '--ds-personality-card-hover-tint': tokens.personality.card.hoverTint ? '1' : '0',
-    '--ds-personality-accent-bar-position': tokens.personality.accent.barPosition,
-    '--ds-personality-accent-bar-style': tokens.personality.accent.barStyle,
-    '--ds-personality-accent-bar-thickness': `${tokens.personality.accent.barThickness}px`,
-    '--ds-personality-accent-badge-shape': tokens.personality.accent.badgeShape,
-    '--ds-personality-accent-icon-shape': tokens.personality.accent.iconContainerShape,
-    '--ds-personality-accent-divider-style': tokens.personality.accent.dividerStyle,
-    '--ds-personality-typography-heading-letter-spacing': tokens.personality.typography.headingLetterSpacing,
-    '--ds-personality-typography-heading-weight-bias': tokens.personality.typography.headingWeightBias,
-    '--ds-personality-typography-label-style': tokens.personality.typography.labelStyle,
-    '--ds-card-shadow': CARD_ELEVATION_MAP[tokens.personality.card.defaultElevation],
-    '--ds-card-shadow-hover': CARD_HOVER_ELEVATION_MAP[tokens.personality.card.hoverElevation],
-    '--ds-card-border': tokens.personality.card.showBorder ? 'var(--ds-color-border-primary)' : 'transparent',
-    '--ds-card-border-hover': tokens.personality.card.showBorder ? 'var(--ds-color-border-secondary)' : 'transparent',
-    '--ds-card-header-padding': cardPadding.css,
-    '--ds-card-body-padding': cardPadding.css,
-    '--ds-card-footer-padding': cardPadding.css,
-    '--ds-card-bg-hover': tokens.personality.card.hoverTint
-      ? 'color-mix(in srgb, var(--ds-card-bg) 90%, var(--ds-color-primary-100) 10%)'
-      : 'var(--ds-card-bg)',
-    '--ds-card-hover-transform': hoverTransform,
-    '--ds-badge-radius': badgeRadius.css,
-    '--ds-badge-hover-transform': hoverTransform,
-    '--ds-divider-style': dividerStyle,
-    '--ds-divider-color': tokens.personality.accent.dividerStyle === 'none'
-      ? 'transparent'
-      : 'var(--ds-color-border-primary)',
-    '--ds-skeleton-animation-duration': PULSE_SPEED_MAP[tokens.personality.animation.pulseSpeed],
-    '--ds-typography-heading-letter-spacing': tokens.personality.typography.headingLetterSpacing,
-    '--ds-typography-heading-font-weight': headingWeight,
-    '--ds-typography-label-transform': labelTransform,
-    '--ds-button-transition': buttonTransition,
-    '--ds-button-hover-transform': hoverTransform,
-    '--ds-button-active-transform': buildActiveTransform(tokens),
-    // Toast/message/notification durations are derived from entrance duration but
-    // clamped to minimums. Too-fast enter animations look broken, and exits are
-    // intentionally shorter (75-80% of enter) so dismissals feel snappy.
-    '--ds-toast-enter-duration': `${Math.max(tokens.personality.animation.entranceDuration, 160)}ms`,
-    '--ds-toast-exit-duration': `${Math.max(Math.round(tokens.personality.animation.entranceDuration * 0.75), 120)}ms`,
-    '--ds-toast-enter-easing': tokens.personality.animation.useSpring
-      ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
-      : 'cubic-bezier(0.4, 0, 0.2, 1)',
-    '--ds-toast-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
-    '--ds-message-enter-duration': `${Math.max(tokens.personality.animation.entranceDuration, 140)}ms`,
-    '--ds-message-exit-duration': `${Math.max(Math.round(tokens.personality.animation.entranceDuration * 0.7), 120)}ms`,
-    '--ds-message-enter-easing': tokens.personality.animation.useSpring
-      ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
-      : 'cubic-bezier(0.22, 1, 0.36, 1)',
-    '--ds-message-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
-    '--ds-notification-enter-duration': `${Math.max(tokens.personality.animation.entranceDuration, 180)}ms`,
-    '--ds-notification-exit-duration': `${Math.max(Math.round(tokens.personality.animation.entranceDuration * 0.8), 140)}ms`,
-    '--ds-notification-enter-easing': tokens.personality.animation.useSpring
-      ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
-      : 'cubic-bezier(0.22, 1, 0.36, 1)',
-    '--ds-notification-exit-easing': 'cubic-bezier(0.4, 0, 1, 1)',
-    '--ds-modal-animation-duration': `${Math.max(tokens.personality.animation.entranceDuration, 180)}ms`,
-    '--ds-modal-animation-timing': tokens.personality.animation.useSpring
-      ? 'cubic-bezier(0.34, 1.56, 0.64, 1)'
-      : 'cubic-bezier(0.22, 1, 0.36, 1)',
-    '--ds-duration-fast': tokens.transitions?.fast ?? '200ms',
-    '--ds-duration-normal': tokens.transitions?.normal ?? '300ms',
-    '--ds-duration-slow': tokens.transitions?.slow ?? '400ms',
-  };
+  // tokens.personality has every field populated (DEFAULT_PERSONALITY is the
+  // floor of its merge chain), so every key above is always defined here;
+  // this filter exists to satisfy CssVariableMap's non-optional value type.
+  const variables: CssVariableMap = {};
+  for (const [name, value] of Object.entries(resolved)) {
+    if (value !== undefined) {
+      variables[name as `--${string}`] = value;
+    }
+  }
+  return variables;
 }
 
 /**

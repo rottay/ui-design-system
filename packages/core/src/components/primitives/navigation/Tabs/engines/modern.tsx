@@ -408,17 +408,23 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   // Sliding indicator style
   // ============================================================================
 
+  // Compositor-only (transform-only) glide: the indicator's own box stays a
+  // fixed 1px wide; `scaleX` (from a `left`-anchored transform-origin)
+  // supplies the visual width instead of transitioning the `width` property,
+  // which the engine-token-audit.mjs compositor-only counter flags as a
+  // layout-property animation.
   const indicatorStyle: React.CSSProperties | null = (type === 'line' && indicatorPos)
     ? {
         position: 'absolute',
         bottom: 0,
         left: 0,
         height: '2px',
+        width: '1px',
         backgroundColor: 'var(--ds-tab-border-active, var(--ds-color-primary))',
         borderRadius: '1px 1px 0 0',
-        transform: `translateX(${indicatorPos.left}px)`,
-        width: `${indicatorPos.width}px`,
-        transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out), width var(--ds-motion-normal) var(--ds-motion-ease-out)',
+        transformOrigin: 'left',
+        transform: `translateX(${indicatorPos.left}px) scaleX(${indicatorPos.width})`,
+        transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
         pointerEvents: 'none',
       }
     : null;

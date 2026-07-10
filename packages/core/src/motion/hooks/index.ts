@@ -20,3 +20,7 @@ export type {
   StartViewTransitionOptions,
   DsViewTransitionHandle,
 } from './use-view-transition';
+export { usePresence } from './use-presence';
+export type { UsePresenceOptions, UsePresenceResult } from './use-presence';
+export { useFlipLayout } from './use-flip-layout';
+export type { UseFlipLayoutOptions, UseFlipLayoutResult } from './use-flip-layout';

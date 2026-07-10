@@ -14761,7 +14761,13 @@ html {
   /* Easings. ease-out is the premium curve (formerly copy-pasted as a literal). */
   --ds-motion-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ds-motion-ease-in-out: cubic-bezier(0.4, 0, 0.6, 1);
+  /* Fallback only: a tenant BrandTheme with spring physics (springTension +
+     springFriction, useSpring !== false) overrides these with a generated
+     `linear()` curve scoped to its own [data-tenant] selector (see
+     compilers/brand-theme's setMotionVariables / brandThemeToTokenOverrides).
+     A tenant that declares no spring keeps this cubic-bezier approximation. */
   --ds-motion-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ds-motion-spring-gentle: cubic-bezier(0.25, 1.25, 0.5, 1);
 
   /* Entrance geometry — the start offsets a reveal animates FROM (paired with the durations). */
   --ds-motion-scale-in: 0.98;
@@ -22993,7 +22999,7 @@ html[data-tenant='bithire'].dark {
   --ds-color-bg-elevated: #ffffff;
   --ds-color-bg-surface: #ffffff;
   --ds-color-bg-overlay: rgba(15, 42, 67, 0.42);
-  --ds-color-bg-input: #ffffff;
+  --ds-color-bg-input: #0F1520;
   --ds-surface-control: #ffffff;
   --ds-surface-card: #ffffff;
   --ds-surface-canvas: #F8FBFF;

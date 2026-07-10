@@ -22,11 +22,12 @@ import React, { useEffect, useRef } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import type { ToastPosition, ToastState } from '../../Toast.types';
-import { TOAST_CONTAINER_DEFAULTS, TOAST_ANIMATION, POSITION_MAP } from '../../Toast.types';
+import { TOAST_CONTAINER_DEFAULTS, POSITION_MAP } from '../../Toast.types';
 import { useToastContext } from '../../utils/ToastProvider';
 import { injectToastStyles, getToastAnimationStyle } from '../../utils/animations';
 import { BaseToast } from '../../base';
 import { useBreakpoints } from '../../../../../../hooks';
+import { usePresence } from '../../../../../../motion/hooks/use-presence';
 
 // ============================================================================
 // Stacking Physics
@@ -202,6 +203,59 @@ function getContainerPosition(position: ToastPosition): CSSProperties {
 }
 
 // ============================================================================
+// ToastStackItem
+// ============================================================================
+
+interface ToastStackItemProps {
+  toast: ToastState;
+  position: ToastPosition;
+  depth: number;
+  stackStyle: CSSProperties;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  /** Fires once this toast's own exit animation has actually finished playing. */
+  onExited: () => void;
+  children: ReactNode;
+}
+
+/**
+ * One toast's stack slot. The OUTER div carries the compress/fan stacking
+ * transform (repositions as siblings are added/removed); the INNER div
+ * carries the enter/exit `animation` (getToastAnimationStyle) AND the
+ * usePresence ref, so `onExited` fires from THIS toast's own
+ * animationend, not a fixed timer guessed to match the CSS duration.
+ * Kept as separate elements (not merged into one) because the enter/exit
+ * keyframe runs with `animation-fill-mode: forwards`, which would otherwise
+ * permanently pin the outer transform to the animation's final keyframe
+ * value and mask the stacking transform.
+ */
+function ToastStackItem({
+  toast,
+  position,
+  depth,
+  stackStyle,
+  onMouseEnter,
+  onMouseLeave,
+  onExited,
+  children,
+}: ToastStackItemProps): React.ReactElement {
+  const { ref } = usePresence(toast.visible, { onExitComplete: onExited });
+
+  return (
+    <div
+      data-stack-depth={depth}
+      style={{ pointerEvents: 'auto', ...stackStyle }}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div ref={ref} style={getToastAnimationStyle(position, toast.visible ? 'in' : 'out')}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================================
 // Toast Container Component
 // ============================================================================
 
@@ -286,21 +340,25 @@ export function ToastContainer({
   // ========================================================================
 
   /**
-   * Filter toasts by position and limit to max count.
+   * Toasts matching this container's position, in stack order. Includes a
+   * dismissed toast (visible: false) until its own exit choreography
+   * reports completion via usePresence below -- filtering on `t.visible`
+   * here would drop it before its exit animation ever played, which is
+   * exactly the "pops out of existence" defect this container used to have.
    */
-  const visibleToasts = toasts
-    .filter((t) => {
-      const toastPos = t.options.position || config.position;
-      return toastPos === position && t.visible;
-    })
-    .slice(0, max);
+  const positionToasts = toasts.filter((t) => (t.options.position || config.position) === position);
+  const activeIds = new Set(positionToasts.filter((t) => t.visible).slice(0, max).map((t) => t.id));
+  const renderedToasts = positionToasts.filter((t) => activeIds.has(t.id) || !t.visible);
 
   // ========================================================================
   // Event Handlers
   // ========================================================================
 
   /**
-   * Removes a toast from the stack after exit animation.
+   * Removes a toast from the stack. Called once a dismissed toast's own
+   * exit transition/animation has actually finished playing (see
+   * ToastStackItem's usePresence below) -- not on a fixed timer guessed to
+   * match the CSS duration.
    * @param id - Toast ID to remove
    */
   const handleRemove = (id: string) => {
@@ -308,15 +366,13 @@ export function ToastContainer({
   };
 
   /**
-   * Dismisses a toast, triggering exit animation.
+   * Dismisses a toast, triggering its exit animation. Removal from state
+   * happens later, when ToastStackItem's presence gate observes the exit
+   * actually complete.
    * @param id - Toast ID to dismiss
    */
   const handleDismiss = (id: string) => {
     dispatch({ type: 'DISMISS', payload: id });
-    // Remove after animation
-    setTimeout(() => {
-      handleRemove(id);
-    }, TOAST_ANIMATION.exitDuration);
   };
 
   /**
@@ -357,15 +413,10 @@ export function ToastContainer({
   // ========================================================================
 
   // Don't render if no toasts
-  if (visibleToasts.length === 0) {
+  if (renderedToasts.length === 0) {
     return null;
   }
 
-  // ========================================================================
-  // Animation Names
-  // ========================================================================
-
-  // Get animation name based on position
   // ========================================================================
   // Render Content
   // ========================================================================
@@ -378,58 +429,42 @@ export function ToastContainer({
       aria-live="polite"
       aria-atomic="false"
     >
-      {visibleToasts.map((toast, index) => {
+      {renderedToasts.map((toast, index) => {
         // Compress/fan stacking transform, keyed to this toast's distance
-        // from the front (most recent) of the CURRENT visible slice. This is
-        // computed fresh every render, so when a dismissal shrinks
-        // visibleToasts, every surviving toast (same DOM node, same `key`)
-        // recomputes a new depth and transitions to it -- the re-settle.
+        // from the front (most recent) of the CURRENT rendered slice. This is
+        // computed fresh every render, so when a dismissal shrinks (once its
+        // exit completes and it is actually removed) every surviving toast
+        // (same DOM node, same `key`) recomputes a new depth and transitions
+        // to it -- the re-settle.
         const stackStyle = getStackTransform(
           index,
-          visibleToasts.length,
+          renderedToasts.length,
           POSITION_MAP[position].vertical,
           prefersReducedMotion
         );
+        const depth = Math.min(renderedToasts.length - 1 - index, MAX_STACK_DEPTH);
 
-        // Use custom render if provided
-        if (renderToast) {
-          return (
-            <div
-              key={toast.id}
-              data-stack-depth={Math.min(visibleToasts.length - 1 - index, MAX_STACK_DEPTH)}
-              style={{ pointerEvents: 'auto', ...stackStyle }}
-              onMouseEnter={() => handlePause(toast.id)}
-              onMouseLeave={() => handleResume(toast.id)}
-            >
-              {renderToast(toast)}
-            </div>
-          );
-        }
-
-        // Default toast rendering. The stacking transform/transition lives on
-        // this OUTER wrapper; the enter/exit `animation` (getToastAnimationStyle)
-        // stays on the INNER div. Both target `transform`, and the enter/exit
-        // keyframe runs with `animation-fill-mode: forwards`, which would
-        // otherwise permanently pin the outer transform to the animation's
-        // final keyframe value and mask the stacking transform. Separate
-        // elements compose their transforms instead of one overriding the
-        // other.
         return (
-          <div
+          <ToastStackItem
             key={toast.id}
-            data-stack-depth={Math.min(visibleToasts.length - 1 - index, MAX_STACK_DEPTH)}
-            style={{ pointerEvents: 'auto', ...stackStyle }}
+            toast={toast}
+            position={position}
+            depth={depth}
+            stackStyle={stackStyle}
             onMouseEnter={() => handlePause(toast.id)}
             onMouseLeave={() => handleResume(toast.id)}
+            onExited={() => handleRemove(toast.id)}
           >
-            <div style={getToastAnimationStyle(position, toast.visible ? 'in' : 'out')}>
+            {renderToast ? (
+              renderToast(toast)
+            ) : (
               <BaseToast
                 {...toast.options}
                 visible={toast.visible}
                 onClose={() => handleDismiss(toast.id)}
               />
-            </div>
-          </div>
+            )}
+          </ToastStackItem>
         );
       })}
     </div>

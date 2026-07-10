@@ -17,6 +17,7 @@
 import React, { useEffect, useCallback } from 'react';
 import type { DrawerProps, DrawerSize } from '../Drawer.types';
 import { DRAWER_DEFAULTS } from '../Drawer.types';
+import { usePresence } from '../../../../../motion/hooks/use-presence';
 
 // ============================================================================
 // Constants
@@ -26,36 +27,64 @@ import { DRAWER_DEFAULTS } from '../Drawer.types';
 const MOTION_DURATION = 'var(--ds-motion-normal)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
-/** Keyframe animations for all four placement directions + backdrop fade. */
+/** Keyframe animations for all four placement directions + backdrop fade, enter AND exit. */
 const DRAWER_STYLES = `
 @keyframes rottay-drawer-backdrop-fade {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+@keyframes rottay-drawer-backdrop-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
 @keyframes rottay-drawer-slide-left {
   from { transform: translateX(-100%); }
   to   { transform: translateX(0); }
+}
+@keyframes rottay-drawer-slide-out-left {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
 }
 @keyframes rottay-drawer-slide-right {
   from { transform: translateX(100%); }
   to   { transform: translateX(0); }
 }
+@keyframes rottay-drawer-slide-out-right {
+  from { transform: translateX(0); }
+  to   { transform: translateX(100%); }
+}
 @keyframes rottay-drawer-slide-top {
   from { transform: translateY(-100%); }
   to   { transform: translateY(0); }
+}
+@keyframes rottay-drawer-slide-out-top {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-100%); }
 }
 @keyframes rottay-drawer-slide-bottom {
   from { transform: translateY(100%); }
   to   { transform: translateY(0); }
 }
+@keyframes rottay-drawer-slide-out-bottom {
+  from { transform: translateY(0); }
+  to   { transform: translateY(100%); }
+}
 `;
 
-/** Animation name lookup by placement. */
+/** Enter animation name lookup by placement. */
 const SLIDE_ANIMATION: Record<string, string> = {
   left: 'rottay-drawer-slide-left',
   right: 'rottay-drawer-slide-right',
   top: 'rottay-drawer-slide-top',
   bottom: 'rottay-drawer-slide-bottom',
+};
+
+/** Exit animation name lookup by placement -- mirrors SLIDE_ANIMATION. */
+const SLIDE_OUT_ANIMATION: Record<string, string> = {
+  left: 'rottay-drawer-slide-out-left',
+  right: 'rottay-drawer-slide-out-right',
+  top: 'rottay-drawer-slide-out-top',
+  bottom: 'rottay-drawer-slide-out-bottom',
 };
 
 /** Premium size presets shared with the public Drawer contract. */
@@ -158,6 +187,11 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     onOpenChange?.(false);
   }, [onClose, onOpenChange]);
 
+  // Presence: `open` flipping false keeps the drawer mounted (dataState
+  // 'closed') until its own slide-out animation finishes, instead of
+  // vanishing the instant `open` changes.
+  const { shouldRender, dataState, ref: presenceRef } = usePresence(open ?? false);
+
   // -- escape key -------------------------------------------------------------
 
   useEffect(() => {
@@ -172,7 +206,10 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   // -- body scroll lock -------------------------------------------------------
 
   useEffect(() => {
-    if (open) {
+    // Gated on shouldRender (not `open`) so the page behind stays locked
+    // through the exit animation rather than unlocking while the drawer is
+    // still visibly sliding out.
+    if (shouldRender) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -180,11 +217,11 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [open]);
+  }, [shouldRender]);
 
   // -- early return -----------------------------------------------------------
 
-  if (!open) return <></>;
+  if (!shouldRender) return <></>;
 
   // -- size calculations ------------------------------------------------------
 
@@ -192,7 +229,9 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   const isHorizontal = placement === 'left' || placement === 'right';
   const resolvedWidth = width || (isHorizontal ? SIZE_MAP[drawerSize] : '100%');
   const resolvedHeight = height || (!isHorizontal ? SIZE_MAP[drawerSize] : '100%');
-  const animationName = SLIDE_ANIMATION[placement as string] || SLIDE_ANIMATION.right;
+  const animationName =
+    (dataState === 'open' ? SLIDE_ANIMATION[placement as string] : SLIDE_OUT_ANIMATION[placement as string]) ||
+    (dataState === 'open' ? SLIDE_ANIMATION.right : SLIDE_OUT_ANIMATION.right);
   const borderRadius = RADIUS_BY_PLACEMENT[placement as string] || RADIUS_BY_PLACEMENT.right;
 
   // -- position styles --------------------------------------------------------
@@ -289,13 +328,14 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             backgroundImage: 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))',
             backdropFilter: 'var(--ds-glass-backdrop-filter)',
             WebkitBackdropFilter: 'var(--ds-glass-backdrop-filter)',
-            animation: `rottay-drawer-backdrop-fade ${MOTION_DURATION} ${MOTION_EASING}`,
+            animation: `${dataState === 'open' ? 'rottay-drawer-backdrop-fade' : 'rottay-drawer-backdrop-fade-out'} ${MOTION_DURATION} ${MOTION_EASING} both`,
           }}
         />
       )}
 
       {/* Drawer panel */}
       <div
+        ref={presenceRef}
         role="dialog"
         aria-modal="true"
         aria-label={typeof title === 'string' ? title : undefined}

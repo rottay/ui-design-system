@@ -286,6 +286,66 @@ for (const tokenFile of componentTokenFiles) {
 }
 
 // ============================================================================
+// Rule 6: Personality variable duplication guard
+// ============================================================================
+// resolvePartialPersonalityCssVariables (runtime/personality/primitives.ts) is
+// the single canonical source of personality-derived CSS variable names.
+// resolvePersonalityCssVariables (the runtime bridge) and personalityVariables
+// (the static tenant generator, runtime/tenant/storage/static/generator) both
+// delegate to it rather than each declaring these keys by hand. A literal
+// '--ds-...' key reappearing directly inside the generator's function, or the
+// delegation call disappearing, is the WO-TOK-09 defect regenerating: a third
+// hand-written copy the gate would otherwise not see.
+
+const PERSONALITY_CANONICAL_PATH = join(SRC_ROOT, 'runtime/personality/primitives.ts');
+const PERSONALITY_GENERATOR_PATH = join(SRC_ROOT, 'runtime/tenant/storage/static/generator/index.ts');
+const PERSONALITY_DELEGATION_CALL = 'resolvePartialPersonalityCssVariables(';
+
+function extractDsObjectKeysFrom(text) {
+  const keys = new Set();
+  const pattern = /^\s*'(--ds-[a-z0-9-]+)':/gm;
+  let match;
+  while ((match = pattern.exec(text)) !== null) keys.add(match[1]);
+  return keys;
+}
+
+const generatorSource = readSafe(PERSONALITY_GENERATOR_PATH);
+const generatorFnStart = generatorSource.indexOf('function personalityVariables(config: TenantConfig)');
+
+if (!readSafe(PERSONALITY_CANONICAL_PATH)) {
+  violations.push({
+    rule: 'personality-emitter-duplication',
+    path: relPath(PERSONALITY_CANONICAL_PATH),
+    message: 'resolvePartialPersonalityCssVariables not found. This is the canonical personality-variable emitter every other emitter must delegate to.',
+  });
+} else if (generatorFnStart < 0) {
+  violations.push({
+    rule: 'personality-emitter-duplication',
+    path: relPath(PERSONALITY_GENERATOR_PATH),
+    message: 'personalityVariables() not found. The static tenant generator must keep a personality-variable function that delegates to resolvePartialPersonalityCssVariables().',
+  });
+} else {
+  const generatorFnEnd = generatorSource.indexOf('\n}\n', generatorFnStart);
+  const generatorFnBody = generatorSource.slice(generatorFnStart, generatorFnEnd >= 0 ? generatorFnEnd : undefined);
+
+  if (!generatorFnBody.includes(PERSONALITY_DELEGATION_CALL)) {
+    violations.push({
+      rule: 'personality-emitter-duplication',
+      path: relPath(PERSONALITY_GENERATOR_PATH),
+      message: 'personalityVariables() no longer delegates to resolvePartialPersonalityCssVariables(). This is the WO-TOK-09 defect: a hand-written duplicate personality emitter.',
+    });
+  }
+
+  for (const key of extractDsObjectKeysFrom(generatorFnBody)) {
+    violations.push({
+      rule: 'personality-emitter-duplication',
+      path: relPath(PERSONALITY_GENERATOR_PATH),
+      message: `personalityVariables() declares "${key}" directly instead of solely through resolvePartialPersonalityCssVariables(). This re-creates the WO-TOK-09 duplicate-emitter defect.`,
+    });
+  }
+}
+
+// ============================================================================
 // Report
 // ============================================================================
 

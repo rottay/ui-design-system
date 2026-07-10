@@ -16,6 +16,21 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../Dropdown.types';
 import { DROPDOWN_DEFAULTS } from '../Dropdown.types';
+import { usePresence } from '../../../../../motion/hooks/use-presence';
+
+/** Enter/exit keyframes for the floating menu -- injected once via <style>. Shared shape with ContextMenu's popover motion. */
+const DROPDOWN_STYLES = `
+@keyframes rottay-popover-enter {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes rottay-popover-exit {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
+}
+`;
+const MOTION_DURATION = 'var(--ds-motion-fast)';
+const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
 const getPlacementClassName = (placement?: DropdownPlacement): string => {
   if (!placement) return '';
@@ -100,6 +115,8 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
     const isOpen = isControlled ? controlledOpen : internalOpen;
 
     const containerRef = useRef<HTMLDivElement>(null);
+    const hasItems = !!menu?.items;
+    const { shouldRender, dataState, ref: presenceRef } = usePresence(isOpen && hasItems);
 
     const handleOpenChange = useCallback((newOpen: boolean) => {
       if (!isControlled) {
@@ -192,16 +209,34 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         <div tabIndex={0} role="button" className="cursor-pointer">
           {children}
         </div>
-        {isOpen && menu?.items && (
-          <ul
-            tabIndex={0}
-            className={menuClassName}
-            style={{ position: 'absolute', zIndex: 'var(--ds-z-dropdown)', width: 208, padding: 8, borderRadius: 'var(--ds-radius-lg)', listStyle: 'none', margin: 0, background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-1)', ...getPlacementStyle(), ...overlayStyle }}
-          >
-            {menu.items.map((item) => (
-              <MenuItem key={item.key} item={item} onClick={handleItemClick} />
-            ))}
-          </ul>
+        {shouldRender && (
+          <>
+            <style dangerouslySetInnerHTML={{ __html: DROPDOWN_STYLES }} />
+            <ul
+              ref={presenceRef}
+              tabIndex={0}
+              className={menuClassName}
+              style={{
+                position: 'absolute',
+                zIndex: 'var(--ds-z-dropdown)',
+                width: 208,
+                padding: 8,
+                borderRadius: 'var(--ds-radius-lg)',
+                listStyle: 'none',
+                margin: 0,
+                background: 'var(--ds-surface-card)',
+                border: '1px solid var(--ds-color-border-subtle)',
+                boxShadow: 'var(--ds-elevation-1)',
+                animation: `${dataState === 'open' ? 'rottay-popover-enter' : 'rottay-popover-exit'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+                ...getPlacementStyle(),
+                ...overlayStyle,
+              }}
+            >
+              {menu?.items?.map((item) => (
+                <MenuItem key={item.key} item={item} onClick={handleItemClick} />
+              ))}
+            </ul>
+          </>
         )}
       </div>
     );

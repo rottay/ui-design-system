@@ -386,7 +386,7 @@
    "lane": "engine-modern",
    "order": 11,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-ENG-01",
     "WO-ENG-02",
@@ -405,7 +405,9 @@
    "programs": [
     "spec-11"
    ],
-   "notes": "AMENDED 2026-07-09: cues 1-5 already delivered by ENG-01..05 (step 1 is verification, 0 core edits expected); the \"all section-12 counters at target\" gate is UNSATISFIABLE and was amended to \"--check green + the four residuals enumerated and accepted\"; the modern-vs-rustic comparison needs an ?engine= param on the capture route (tenant-axis.tsx:47 hardcodes forceEngine). See the AMENDMENT block in engine-modern.md."
+   "notes": "AMENDED 2026-07-09: cues 1-5 already delivered by ENG-01..05 (step 1 is verification, 0 core edits expected); the \"all section-12 counters at target\" gate is UNSATISFIABLE and was amended to \"--check green + the four residuals enumerated and accepted\"; the modern-vs-rustic comparison needs an ?engine= param on the capture route (tenant-axis.tsx:47 hardcodes forceEngine). See the AMENDMENT block in engine-modern.md.",
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10"
   },
   {
    "id": "WO-ENG-12",
@@ -716,7 +718,7 @@
    "lane": "tokens",
    "order": 3,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-ENG-08"
    ],
@@ -724,7 +726,9 @@
    "programs": [
     "P-03"
    ],
-   "notes": "AMENDED 2026-07-09 - DO NOT SCHEDULE AS WRITTEN. Scope wrong in both directions (Segmented renders no join; Pagination/timeline/file-manager do and are unlisted); the load-bearing DaisyUI CSS is 38 selectors in modern/theme.css, absent from Files; the grep==0 gate and pnpm test are mutually unsatisfiable. See the AMENDMENT block in tokens.md."
+   "notes": "AMENDED 2026-07-09 - DO NOT SCHEDULE AS WRITTEN. Scope wrong in both directions (Segmented renders no join; Pagination/timeline/file-manager do and are unlisted); the load-bearing DaisyUI CSS is 38 selectors in modern/theme.css, absent from Files; the grep==0 gate and pnpm test are mutually unsatisfiable. See the AMENDMENT block in tokens.md.",
+   "claimedBy": "tok03-daisy",
+   "claimedAt": "2026-07-10"
   },
   {
    "id": "WO-ARC-01",
@@ -821,7 +825,7 @@
    "lane": "craft",
    "order": 6,
    "size": "L",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-01"
    ],
@@ -829,7 +833,11 @@
    "programs": [
     "P-21"
    ],
-   "notes": null
+   "notes": null,
+   "claimedBy": "cra06-motion",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "The choreography layer above the motion canon. VERIFIED INDEPENDENTLY OF THE EXECUTOR REPORT. (1) SPRING PHYSICS NOW DRIVE SOMETHING. The WO claim was true: BrandMotion carried springTension/springFriction that compiled into personality and generated no curve, while the modern engine hardcoded one cubic-bezier at theme.css:111. That hardcode is gone. compileBrandTheme now generates a CSS linear() curve from each tenant own physics, and I measured five tenants: rottay (T=170 F=26) -> linear(0, 0.2131, 0.445, ...); evnto (T=200 F=18) -> linear(0, 0.1044, 0.2935, ...); themanagementmiami (T=210 F=24) -> linear(0, 0.1803, ...); torture-dark (T=40 F=4) -> linear(0, 0.1436, 0.447, 0.7544, 0.9879, 1.1171, ...) which OVERSHOOTS PAST 1.0, a real bounce. Five tenants, five distinct curves. bithire declares entrance: fade and emits no spring -- spring-eligible only, which is correct and not an omission. (2) PRESENCE ORCHESTRATION: usePresence keeps Drawer, Modal, Dropdown, ContextMenu and the Toast container mounted through their own exit animation instead of vanishing the instant open flips. (3) FLIP layout motion on Tabs and the kanban board. (4) NEW COUNTER motion.compositorOnlyViolations, seeded at the REAL count of 6, not at a flattering zero. DRILL, run by me: add a transition on `width` in a modern engine file and --check goes RED with \"rose above baseline: 7 > baseline 6\"; revert and it returns to 6 and green. ONE FIX BY ME: usePresence(open) where Drawer open is boolean|undefined -- an undeclared open is closed. GATE: pnpm typecheck 0, build 0, engine-token-audit --check green, audit-integration green, artifact parity green, unit 1472 passed / 2 failed on the motion+runtime+compilers+feedback+overlay+Tabs scope (both failures in the documented 17-failure ledger: Skeleton.integration and Popover, both happy-dom), test:gates 89/89 including the 10 new signature tests and 16 contrast tests, zero visual baseline movement. No eslint-disable, no !important, no @ts-ignore in the diff (grepped). Owner delegated approval 2026-07-10."
   },
   {
    "id": "WO-CRA-07",
@@ -1280,7 +1288,7 @@
    "lane": "tokens",
    "order": 9,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-TOK-07"
    ],
@@ -1289,9 +1297,11 @@
     "spec-12"
    ],
    "notes": null,
-   "claimedBy": null,
-   "claimedAt": null,
-   "progressLog": []
+   "claimedBy": "tok09-personality",
+   "claimedAt": "2026-07-10",
+   "progressLog": [],
+   "doneAt": "2026-07-10",
+   "evidence": "The third personality emitter is gone, and the audit can see it if it comes back. The generator personalityVariables() now delegates to resolvePartialPersonalityCssVariables() in runtime/personality/primitives.ts, which is the single canonical source of personality-derived variable names. Both claims the WO carried were confirmed by the executor and re-checked here. NEW GATE, Rule 6 in audit-integration.mjs: a literal --ds-* object key reappearing inside personalityVariables(), OR the delegation call disappearing, is the defect regenerating. DRILL, BOTH DIRECTIONS, run by me: (a) inject a hand-written key -- RED, \"personalityVariables() declares --ds-badge-hover-transform directly instead of solely through resolvePartialPersonalityCssVariables()\"; (b) rename the delegation call away -- RED, \"personalityVariables() no longer delegates ... a hand-written duplicate personality emitter\"; restore -- \"all checks passed\". MY FIRST DRILL DID NOT BITE AND THE GATE WAS RIGHT: I injected the divergence as a bracket assignment, and Rule 6 scans for object-literal keys, which is the shape the real defect takes. I had the wrong drill, not a blind gate; re-run with the right shape it fires on both. GATE: pnpm typecheck 0, build 0, engine-token-audit --check green, audit-integration green, artifact parity green across three slugs, unit green on the runtime+compilers scope, test:gates 89/89 with zero visual baseline movement -- the static path gained the channels it was missing and no first-party pixel moved, which is worth stating rather than assuming. Owner delegated approval 2026-07-10."
   }
  ]
 }

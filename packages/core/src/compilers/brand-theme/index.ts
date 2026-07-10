@@ -22,24 +22,53 @@ import type { EngineName } from '../../contracts/engine';
 import type { TenantBranding, TenantTokenOverrides } from '../../contracts/tenants';
 import type { PersonalityTokens } from '../../contracts/tokens/personality';
 import { chromeToVariables } from '../_shared/chrome-variables';
+import { springLinearEasing, springLinearEasingGentle } from './spring-easing';
+
+/**
+ * A BrandTheme opts into generated spring physics only when it declares BOTH
+ * tension and friction and does not explicitly disable spring (`useSpring:
+ * false`, e.g. bithire's flat/calm motion law). Absent `useSpring` defaults
+ * to enabled, matching every first-party theme that sets tension/friction.
+ */
+function isSpringEligible(bt: BrandTheme): boolean {
+  const motion = bt.motion;
+  return (
+    !!motion &&
+    typeof motion.springTension === 'number' &&
+    typeof motion.springFriction === 'number' &&
+    motion.useSpring !== false
+  );
+}
 
 /**
  * Extract structural token overrides from a BrandTheme.
  *
  * Maps BrandTheme.surfaces to TenantTokenOverrides so the existing
- * structural merge chain can consume it without changes.
+ * structural merge chain can consume it without changes. When the theme is
+ * spring-eligible, also derives `motion.spring` (a generated `linear()`
+ * curve) so it rides the SAME `TenantTokenOverrides.motion.spring` field the
+ * static generator (`runtime/tenant/storage/static/generator`) already maps
+ * to `--ds-motion-spring` -- this is the only path that reaches the
+ * generated tenant artifact without a tenant manually authoring a literal
+ * override.
  */
 export function brandThemeToTokenOverrides(bt: BrandTheme): Partial<TenantTokenOverrides> {
-  if (!bt.surfaces) return {};
-  return {
-    surface: bt.surfaces.surface,
-    borderRadius: bt.surfaces.borderRadius,
-    shadows: bt.surfaces.shadows,
-    glass: bt.surfaces.glass,
-    gradients: bt.surfaces.gradients,
-    overlays: bt.surfaces.overlays,
-    densityScale: bt.surfaces.densityScale,
-  };
+  const overrides: Partial<TenantTokenOverrides> = {};
+  if (bt.surfaces) {
+    overrides.surface = bt.surfaces.surface;
+    overrides.borderRadius = bt.surfaces.borderRadius;
+    overrides.shadows = bt.surfaces.shadows;
+    overrides.glass = bt.surfaces.glass;
+    overrides.gradients = bt.surfaces.gradients;
+    overrides.overlays = bt.surfaces.overlays;
+    overrides.densityScale = bt.surfaces.densityScale;
+  }
+  if (isSpringEligible(bt)) {
+    overrides.motion = {
+      spring: springLinearEasing(bt.motion!.springTension!, bt.motion!.springFriction!),
+    };
+  }
+  return overrides;
 }
 
 /**
@@ -293,6 +322,22 @@ function setMotionVariables(vars: Record<string, string>, bt: BrandTheme): void 
   vars['--ds-motion-deliberate'] = '320ms';
   vars['--ds-ease-standard'] = 'cubic-bezier(0.2, 0, 0, 1)';
   vars['--ds-ease-exit'] = 'cubic-bezier(0.4, 0, 1, 1)';
+
+  // `--ds-motion-spring-gentle` has no consumer in the static generator's
+  // tokenOverrideVariables() (unlike `--ds-motion-spring`, routed through
+  // brandThemeToTokenOverrides above), so it is emitted directly as a
+  // compiled CSS variable here. It only appears in this compiled block's
+  // light-theme selector, but still resolves correctly for dark-themed
+  // elements: the generator's dark selector block never redeclares this
+  // property, and CSS custom properties fall back to a less-specific rule
+  // on a per-property basis when a more-specific rule for the same element
+  // omits that property entirely.
+  if (isSpringEligible(bt)) {
+    vars['--ds-motion-spring-gentle'] = springLinearEasingGentle(
+      bt.motion!.springTension!,
+      bt.motion!.springFriction!,
+    );
+  }
 }
 
 /** The five closed tint steps of the one-blue scale (design-language §2.5). */

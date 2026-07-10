@@ -26,6 +26,7 @@ import { Portal } from '../utils/Portal';
 import { useModalInertSiblings } from '../utils/useModalInertSiblings';
 import { useTranslation } from '../../../../../i18n';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
+import { usePresence } from '../../../../../motion/hooks/use-presence';
 
 // ============================================================================
 // Constants
@@ -55,9 +56,17 @@ const OVERLAY_MODAL_STYLES = `
   from { opacity: 0; }
   to   { opacity: 1; }
 }
+@keyframes rottay-modal-backdrop-exit {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
 @keyframes rottay-modal-enter {
   from { opacity: 0; transform: scale(0.95); }
   to   { opacity: 1; transform: scale(1); }
+}
+@keyframes rottay-modal-exit {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.95); }
 }
 `;
 
@@ -164,7 +173,18 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   const dialogRef = useRef<HTMLDialogElement>(null);
 
-  useModalInertSiblings(open);
+  // Presence: `open` flipping false keeps the dialog mounted and open in the
+  // native top layer until the PANEL's own exit animation (ref'd below)
+  // finishes; only then does the dialog actually leave the top layer (see
+  // onExitComplete). This is what lets the panel/backdrop fade+scale out
+  // instead of the native <dialog> disappearing the instant `open` changes.
+  const { shouldRender, dataState, ref: presenceRef } = usePresence(open, {
+    onExitComplete: () => {
+      if (dialogRef.current?.open) dialogRef.current.close();
+    },
+  });
+
+  useModalInertSiblings(shouldRender);
 
   // -- ESC key ----------------------------------------------------------------
 
@@ -178,14 +198,15 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     [closeOnEscape, open, onClose],
   );
 
-  // Sync native <dialog> open state with controlled `open` prop.
+  // Open the native <dialog> when `open` becomes true. Closing it is
+  // deliberately NOT symmetric here -- see the usePresence onExitComplete
+  // above, which calls dialog.close() only after the CSS exit animation
+  // finishes, not synchronously with `open` flipping false.
   useEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog) return;
-    if (open) {
-      if (!dialog.open) dialog.showModal();
-    } else {
-      if (dialog.open) dialog.close();
+    if (open && !dialog.open) {
+      dialog.showModal();
     }
   }, [open]);
 
@@ -200,7 +221,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   useEffect(() => {
     if (!preventScroll) return;
-    if (open) {
+    // Gated on shouldRender (not `open`) so the page behind stays locked
+    // through the exit animation instead of becoming scrollable while the
+    // modal is still visibly fading out.
+    if (shouldRender) {
       const scrollbarWidth = getScrollbarWidth();
       const originalOverflow = document.body.style.overflow;
       const originalPaddingRight = document.body.style.paddingRight;
@@ -213,7 +237,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         document.body.style.paddingRight = originalPaddingRight;
       };
     }
-  }, [open, preventScroll]);
+  }, [shouldRender, preventScroll]);
 
   // -- backdrop click ---------------------------------------------------------
 
@@ -242,8 +266,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   const contentPadding = PADDING_MAP[padding] || PADDING_MAP.lg;
 
-  // Don't render if not open
-  if (!open) return null;
+  // Stays mounted while the exit animation plays (usePresence); only unmounts
+  // once dataState has been 'closed' long enough for that animation to finish.
+  if (!shouldRender) return null;
 
   return (
     <Portal>
@@ -294,7 +319,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                 : undefined,
               backdropFilter: blurBackdrop !== false ? 'var(--ds-glass-backdrop-filter)' : undefined,
               WebkitBackdropFilter: blurBackdrop !== false ? 'var(--ds-glass-backdrop-filter)' : undefined,
-              animation: `rottay-modal-backdrop-enter ${MOTION_DURATION} ${MOTION_EASING}`,
+              animation: `${dataState === 'open' ? 'rottay-modal-backdrop-enter' : 'rottay-modal-backdrop-exit'} ${MOTION_DURATION} ${MOTION_EASING} both`,
               pointerEvents: 'none',
             }}
           />
@@ -302,6 +327,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
         {/* ---- Panel ---- */}
         <div
+          ref={presenceRef}
           role="document"
           onClick={(e) => e.stopPropagation()}
           style={{
@@ -318,7 +344,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             border: effectiveFullscreen ? 'none' : '1px solid var(--ds-color-border-subtle)',
             borderRadius: panelRadius,
             boxShadow: isAdaptiveFullscreen ? 'none' : shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-3))' : 'none',
-            animation: isAdaptiveFullscreen ? undefined : `rottay-modal-enter ${MOTION_DURATION} ${MOTION_EASING}`,
+            animation: isAdaptiveFullscreen
+              ? undefined
+              : `${dataState === 'open' ? 'rottay-modal-enter' : 'rottay-modal-exit'} ${MOTION_DURATION} ${MOTION_EASING} both`,
             overflow: 'hidden',
             outline: 'none',
             ...style,

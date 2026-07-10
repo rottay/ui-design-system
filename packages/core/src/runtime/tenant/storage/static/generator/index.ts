@@ -17,6 +17,7 @@ import { appearanceToVariables } from '../../../../../compilers/appearance';
 import { getVerticalPreset } from '../../../../verticals/registry';
 import type { VerticalPreset } from '../../../../verticals/types';
 import { getProductProfile } from '../../../../product-profiles/registry';
+import { resolvePartialPersonalityCssVariables } from '../../../../personality/primitives';
 
 const COLOR_STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
@@ -175,88 +176,6 @@ export function resolveTenantVisualConfig(
 // buildRuntimeScale, buildDarkRuntimeScale, getReadableForegroundColor) imported
 // from compilers/_shared/color-math.ts — single canonical implementation.
 
-/** Convert label-style personality into a CSS `text-transform` value. */
-function labelTransform(style: 'uppercase' | 'sentence' | 'capitalize'): string {
-  switch (style) {
-    case 'uppercase':
-      return 'uppercase';
-    case 'capitalize':
-      return 'capitalize';
-    default:
-      return 'none';
-  }
-}
-
-/** Convert heading-weight personality into the concrete numeric weight used in CSS. */
-function headingWeight(weight: 'lighter' | 'normal' | 'heavier'): number {
-  switch (weight) {
-    case 'lighter':
-      return 500;
-    case 'heavier':
-      return 700;
-    default:
-      return 600;
-  }
-}
-
-/** Map card shadow tokens into the shared DS shadow variable set. */
-function cardShadow(level: 'sm' | 'md' | 'lg'): string {
-  return `var(--ds-shadow-${level})`;
-}
-
-/** Resolve hover elevation into the actual shadow variable used by cards. */
-function hoverCardShadow(level: 'none' | 'lift-one' | 'lift-two'): string {
-  switch (level) {
-    case 'lift-one':
-      return 'var(--ds-shadow-md)';
-    case 'lift-two':
-      return 'var(--ds-shadow-lg)';
-    default:
-      return 'var(--ds-card-shadow)';
-  }
-}
-
-/** Build the standard hover transform used across generated tenant styles. */
-function hoverTransform(hoverLift: number, hoverScale: number): string {
-  if (hoverLift <= 0 && hoverScale <= 1) {
-    return 'translateY(0) scale(1)';
-  }
-
-  return `translateY(${hoverLift > 0 ? `-${hoverLift}px` : '0'}) scale(${Math.max(hoverScale, 1)})`;
-}
-
-/** Build the active-state transform that follows the configured hover scale. */
-function activeTransform(hoverScale: number): string {
-  const normalized = Math.max(hoverScale, 1);
-  return `translateY(0) scale(${normalized > 1 ? Math.max(normalized - 0.02, 0.97) : 0.98})`;
-}
-
-/** Resolve badge shape into the shared DS radius variable set. */
-function badgeRadius(shape: 'rounded' | 'pill' | 'square'): string {
-  switch (shape) {
-    case 'pill':
-      return 'var(--ds-radius-full)';
-    case 'square':
-      return 'var(--ds-radius-sm)';
-    default:
-      return 'var(--ds-radius-lg)';
-  }
-}
-
-/** Convert pulse-speed personality into a CSS duration string. */
-function pulseDuration(speed: 'none' | 'slow' | 'normal' | 'fast'): string {
-  switch (speed) {
-    case 'slow':
-      return '1.9s';
-    case 'fast':
-      return '1.1s';
-    case 'none':
-      return '0s';
-    default:
-      return '1.5s';
-  }
-}
-
 /** Render a selector block from a flat declaration map. */
 function toCssBlock(selector: string, declarations: Record<string, string | number | undefined>): string {
   const lines = Object.entries(declarations)
@@ -362,137 +281,14 @@ function tokenOverrideVariables(config: TenantConfig): Record<string, string | n
   };
 }
 
+/**
+ * Personality-derived CSS variable deltas for the static tenant generator.
+ * Delegates to the same derivation `resolvePersonalityCssVariables` (the
+ * runtime bridge) uses, so a tenant's generated stylesheet and its live
+ * runtime paint the same personality-driven values from one formula.
+ */
 function personalityVariables(config: TenantConfig): Record<string, string | number | undefined> {
-  const personality = config.personality;
-  if (!personality) {
-    return {};
-  }
-
-  const hoverScaleValue = personality.animation?.hoverScale;
-  const hoverLiftValue = personality.animation?.hoverLift;
-
-  return {
-    '--ds-personality-animation-intensity': personality.animation?.intensity,
-    '--ds-personality-animation-stagger-delay':
-      personality.animation?.staggerDelay !== undefined
-        ? `${personality.animation.staggerDelay}ms`
-        : undefined,
-    '--ds-personality-animation-stagger-max':
-      personality.animation?.staggerMax !== undefined
-        ? `${personality.animation.staggerMax}ms`
-        : undefined,
-    '--ds-personality-animation-entrance': personality.animation?.entrance,
-    '--ds-personality-animation-entrance-duration':
-      personality.animation?.entranceDuration !== undefined
-        ? `${personality.animation.entranceDuration}ms`
-        : undefined,
-    '--ds-personality-animation-hover-lift':
-      hoverLiftValue !== undefined ? `${hoverLiftValue}px` : undefined,
-    '--ds-personality-animation-hover-scale': hoverScaleValue,
-    '--ds-personality-animation-spring-tension': personality.animation?.springTension,
-    '--ds-personality-animation-spring-friction': personality.animation?.springFriction,
-    '--ds-personality-animation-pulse-speed': personality.animation?.pulseSpeed,
-    '--ds-personality-animation-skeleton-style': personality.animation?.skeletonStyle,
-    '--ds-personality-animation-count-up-enabled':
-      personality.animation?.countUpEnabled !== undefined
-        ? personality.animation.countUpEnabled
-          ? '1'
-          : '0'
-        : undefined,
-    '--ds-personality-chart-line-style': personality.chart?.lineStyle,
-    '--ds-personality-chart-tooltip-style': personality.chart?.tooltipStyle,
-    '--ds-personality-chart-mount-duration':
-      personality.chart?.mountDuration !== undefined
-        ? `${personality.chart.mountDuration}ms`
-        : undefined,
-    '--ds-personality-card-padding-density': personality.card?.paddingDensity,
-    '--ds-personality-card-default-elevation': personality.card?.defaultElevation,
-    '--ds-personality-card-hover-elevation': personality.card?.hoverElevation,
-    '--ds-personality-card-show-border':
-      personality.card?.showBorder !== undefined ? (personality.card.showBorder ? '1' : '0') : undefined,
-    '--ds-personality-card-hover-tint':
-      personality.card?.hoverTint !== undefined ? (personality.card.hoverTint ? '1' : '0') : undefined,
-    '--ds-personality-accent-bar-position': personality.accent?.barPosition,
-    '--ds-personality-accent-bar-style': personality.accent?.barStyle,
-    '--ds-personality-accent-bar-thickness':
-      personality.accent?.barThickness !== undefined
-        ? `${personality.accent.barThickness}px`
-        : undefined,
-    '--ds-personality-accent-badge-shape': personality.accent?.badgeShape,
-    '--ds-personality-accent-icon-shape': personality.accent?.iconContainerShape,
-    '--ds-personality-accent-divider-style': personality.accent?.dividerStyle,
-    '--ds-personality-typography-heading-letter-spacing':
-      personality.typography?.headingLetterSpacing,
-    '--ds-personality-typography-heading-weight-bias':
-      personality.typography?.headingWeightBias,
-    '--ds-personality-typography-label-style': personality.typography?.labelStyle,
-    '--ds-card-shadow':
-      personality.card?.defaultElevation !== undefined
-        ? cardShadow(personality.card.defaultElevation)
-        : undefined,
-    '--ds-card-shadow-hover':
-      personality.card?.hoverElevation !== undefined
-        ? hoverCardShadow(personality.card.hoverElevation)
-        : undefined,
-    '--ds-card-border':
-      personality.card?.showBorder !== undefined
-        ? personality.card.showBorder
-          ? 'var(--ds-color-border-primary)'
-          : 'transparent'
-        : undefined,
-    '--ds-card-border-hover':
-      personality.card?.showBorder !== undefined
-        ? personality.card.showBorder
-          ? 'var(--ds-color-border-secondary)'
-          : 'transparent'
-        : undefined,
-    '--ds-card-bg-hover':
-      personality.card?.hoverTint !== undefined
-        ? personality.card.hoverTint
-          ? 'color-mix(in srgb, var(--ds-card-bg) 90%, var(--ds-color-primary-100) 10%)'
-          : 'var(--ds-card-bg)'
-        : undefined,
-    '--ds-card-hover-transform':
-      hoverLiftValue !== undefined || hoverScaleValue !== undefined
-        ? hoverTransform(hoverLiftValue ?? 0, hoverScaleValue ?? 1)
-        : undefined,
-    '--ds-badge-radius':
-      personality.accent?.badgeShape !== undefined
-        ? badgeRadius(personality.accent.badgeShape)
-        : undefined,
-    '--ds-divider-style':
-      personality.accent?.dividerStyle !== undefined
-        ? personality.accent.dividerStyle === 'none'
-          ? 'solid'
-          : personality.accent.dividerStyle
-        : undefined,
-    '--ds-divider-color':
-      personality.accent?.dividerStyle !== undefined
-        ? personality.accent.dividerStyle === 'none'
-          ? 'transparent'
-          : 'var(--ds-color-border-primary)'
-        : undefined,
-    '--ds-skeleton-animation-duration':
-      personality.animation?.pulseSpeed !== undefined
-        ? pulseDuration(personality.animation.pulseSpeed)
-        : undefined,
-    '--ds-typography-heading-letter-spacing':
-      personality.typography?.headingLetterSpacing,
-    '--ds-typography-heading-font-weight':
-      personality.typography?.headingWeightBias !== undefined
-        ? headingWeight(personality.typography.headingWeightBias)
-        : undefined,
-    '--ds-typography-label-transform':
-      personality.typography?.labelStyle !== undefined
-        ? labelTransform(personality.typography.labelStyle)
-        : undefined,
-    '--ds-button-hover-transform':
-      hoverLiftValue !== undefined || hoverScaleValue !== undefined
-        ? hoverTransform(hoverLiftValue ?? 0, hoverScaleValue ?? 1)
-        : undefined,
-    '--ds-button-active-transform':
-      hoverScaleValue !== undefined ? activeTransform(hoverScaleValue) : undefined,
-  };
+  return resolvePartialPersonalityCssVariables(config.personality);
 }
 
 function darkPersonalityOverrides(config: TenantConfig): Record<string, string | number | undefined> {

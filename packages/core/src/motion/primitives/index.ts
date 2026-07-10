@@ -20,3 +20,5 @@ export { HamburgerToX } from './morph/HamburgerToX';
 export type { HamburgerToXProps } from './morph/HamburgerToX';
 export { CopyToCheck } from './morph/CopyToCheck';
 export type { CopyToCheckProps } from './morph/CopyToCheck';
+export { Presence } from './presence';
+export type { PresenceProps, PresenceRenderState } from './presence';

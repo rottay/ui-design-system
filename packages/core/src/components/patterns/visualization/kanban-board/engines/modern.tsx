@@ -19,6 +19,7 @@
 import React, { useCallback, useState } from 'react';
 import type { KanbanBoardProps } from '../KanbanBoard.types';
 import { pillBadgeSmStyle, spinnerStyle } from '../../../_internal/engines/modern/styles';
+import { useFlipLayout } from '../../../../../motion/hooks/use-flip-layout';
 
 /**
  * Modern Kanban board built on Tailwind utility classes with DS token styling.
@@ -59,6 +60,14 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     position: number;
   } | null>(null);
 
+  // FLIP layout motion for card moves: a card moving to a different column
+  // re-parents in the DOM (React unmounts it from the old column's subtree
+  // and mounts a new instance in the new one -- no shared fiber to
+  // transition), so without this it teleports. measure() below captures the
+  // dragged card's rect before onItemMove triggers the parent's reorder;
+  // the hook inverts+plays once the new columns prop re-renders it.
+  const { register, measure } = useFlipLayout<string>();
+
   // Store item ID in both dataTransfer (for the native DnD pipeline) and
   // React state (for rendering hover indicators during dragOver).
   const handleDragStart = useCallback(
@@ -88,12 +97,13 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
     (e: React.DragEvent, columnId: string, position: number) => {
       e.preventDefault();
       if (dragData) {
+        measure(); // snapshot every registered card's rect before the parent's reorder
         onItemMove(dragData.itemId, dragData.fromColumn, columnId, position);
       }
       setDragData(null);
       setDropTarget(null);
     },
-    [dragData, onItemMove]
+    [dragData, onItemMove, measure]
   );
 
   // Always clean up drag state on end, even if the drop landed outside a
@@ -204,6 +214,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       {column.items.map((item, index) => (
                         <div
                           key={itemKey(item)}
+                          ref={register(itemKey(item))}
                           draggable
                           onDragStart={(e) =>
                             handleDragStart(e, item, column.id)

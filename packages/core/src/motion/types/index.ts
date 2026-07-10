@@ -20,9 +20,58 @@
  * ```tsx
  * import type { FadeInProps, ParallaxProps } from '@rottay/design-system';
  * ```
+ *
+ * ---
+ *
+ * ## The interruptibility law (choreography layer, WO-CRA-06)
+ *
+ * Interactive motion -- anything that can be re-triggered before it settles
+ * (an overlay closing then reopening, a FLIP-ed element moving again before
+ * its previous move finished) -- MUST be retargetable mid-flight. A fixed-
+ * duration `@keyframes` animation is NOT retargetable: changing its
+ * `animation-name` restarts a new animation from scratch, producing a visible
+ * jump instead of a smooth reversal. Two sanctioned mechanisms:
+ *
+ * 1. **CSS transitions driven by `data-state`.** {@link usePresence} and
+ *    {@link Presence} (`motion/hooks/use-presence`, `motion/primitives/presence`)
+ *    expose `dataState: 'open' | 'closed'` (see {@link MotionDataState}
+ *    below) for exactly this: style both states with plain `transition`, and
+ *    the browser retargets automatically when `dataState` flips again before
+ *    the previous transition finished. This is the preferred mechanism
+ *    whenever a component's motion is a simple two-state (open/closed)
+ *    visual, because it needs no imperative cancellation logic at all.
+ * 2. **Web Animations API with `commitStyles()` where JS drives.**
+ *    {@link useFlipLayout} (`motion/hooks/use-flip-layout`) is the JS-driven
+ *    case: it measures real DOM rects, so it cannot be pure CSS. Before
+ *    starting a new invert-play animation on a node, it calls
+ *    `animation.commitStyles()` (bakes the current mid-flight frame into the
+ *    node's style) then `animation.cancel()` on any animation already
+ *    running there, so the new animation's start point is the node's ACTUAL
+ *    current visual position, not a snap back to its resting state.
+ *
+ * A known, deliberate exception: `Modal`/`Drawer`/`Toast.Container`/
+ * `Dropdown`/`ContextMenu` mirror their existing entrance `@keyframes` with
+ * an exit counterpart (`*-enter` / `*-exit`) driven by `usePresence`, rather
+ * than converting to `data-state` + `transition`. Keyframes here are for a
+ * discrete, non-continuously-interactive state (open vs. closed), not a
+ * value a user drags/hovers/presses through, and reusing the ALREADY-CORRECT
+ * enter keyframe as the exit's mirror was the lower-risk change against
+ * components with native `<dialog>`/portal/focus-trap timing. Re-opening one
+ * of these while its exit keyframe is still playing does not smoothly
+ * reverse -- it restarts. `useFlipLayout` and any NEW `data-state`-driven
+ * component (Dropdown/ContextMenu's popover motion) do not have this gap.
  */
 
 import { CSSProperties, ReactNode } from 'react';
+
+/**
+ * The presence data-state contract: `'open'` while a node should be at its
+ * resting visual state, `'closed'` from the moment exit is requested until
+ * (see {@link usePresence}) its own exit transition/animation completes and
+ * it unmounts. Style both states with a `transition` (not `@keyframes`) to
+ * satisfy the interruptibility law above.
+ */
+export type MotionDataState = 'open' | 'closed';
 
 /** Cardinal direction for directional entrance animations. */
 export type AnimationDirection = 'up' | 'down' | 'left' | 'right';
