@@ -10,17 +10,18 @@
 | [craft](./craft.md) | 10 | 0 | 0 | 10 |
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
-| [architecture](./architecture.md) | 8 | 0 | 1 | 9 |
+| [architecture](./architecture.md) | 8 | 1 | 0 | 9 |
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-ARC-09 | Workspace-tier paint migration to unlayered skins | ds-agent | 2026-07-10 | 2026-07-10 21:46 — Checkpoint 1 (Table) underway. Infra DONE+committed: arc09.inlinePaint per-file counter (object-literal keys + imperative .style.<paint> writes; strings/comments/keyframes/type-annotations excluded structurally; 13 files baselined ~555 total) + viewport-mq walk extended to components/skin/. Table states PRE-STEP DONE+committed on pristine code (32505ffb): whitelabel-torture ?tablestates=1 probe + states.spec table-row probe (row hover + selected row), 24 cells x 3 fixtures x 2 engines; 'reacts to hover' invariant given the has(hovered) guard the other 4 already use. STALE-SERVER TRAP: the visual webServer reuseExistingServer reused a pre-rebuild next-start serving 500s — kill:7001 before every post-rebuild gate run. Compound-component specificity contract derived: painted cells are DESCENDANTS of root (unlike button/card), so a border-color rule needs .ds-table.ds-table--modern [data-part][data-attr] = (0,4,0) to clear the P-48 floor; non-border paint just unlayered. Next: modern skin+engine (delegated), then rustic, then real-engines test + full gate + commit. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-ARC-09 | Workspace-tier paint migration to unlayered skins | XL | architecture | spec-12 |
 
 ## Blocked (waiting on dependencies)
 
