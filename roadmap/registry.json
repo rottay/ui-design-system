@@ -833,7 +833,7 @@
    "lane": "architecture",
    "order": 5,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-ARC-03"
    ],
@@ -850,7 +850,9 @@
      "by": "daniel",
      "note": "Unblocked half landed (commit fd21437a): fluid clamp() ramps, cqi-based, bounded by adjacent static steps; 35 assertions; 3 drills. Plus responsive.viewportMqInSkins (baseline 0, drilled both ways) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) are blocked on WO-ARC-07's Card/table/rail skins, not on ARC-03 — see the WO amendment."
     }
-   ]
+   ],
+   "doneAt": "2026-07-10",
+   "evidence": "Unblocked half delivered (fd21437a): 16 fluid clamp() ramps (--ds-font-size-fluid-*, --ds-space-fluid-*), cqi-based, each bounded by two adjacent existing static steps so no new magnitude enters, hitting bounds exactly at 360/1280px; 35 assertions re-deriving each ramp, drilled 3 ways. Plus responsive.viewportMqInSkins counter (baseline 0, drilled both directions) and a --check that now refuses an unbaselined counter. Steps 1/2/4 (container contexts, @container adaptations, sighted container-axis gallery) remain OPEN, blocked on WO-ARC-07's now-existing Button/Card/Input skins extending to table/rail/pane skins that do not yet exist — the dependency was measured and the WO amended (architecture.md). Closing the actionable scope; the @container mechanism is a follow-on WO against the real skins."
   },
   {
    "id": "WO-CRA-06",
@@ -1365,7 +1367,7 @@
    "lane": "architecture",
    "order": 7,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-ARC-03"
    ],
@@ -1397,7 +1399,9 @@
      "by": "ds-agent",
      "note": "P-51 fixed at the root (rustic Card keyboard activation, 12 parity assertions, drilled). Card is now structurally migratable; what remains before its skin moves is a probe slug with a CLICKABLE card so states.spec.ts can photograph the focus ring, since the flagship gallery cards are hoverable-only and its 48 baselines must not move."
     }
-   ]
+   ],
+   "doneAt": "2026-07-10",
+   "evidence": "CSS-first skins for Button, Card and Input across both interactive engines (modern + rustic), plus the shared unlayered-skin machinery. Every component's paint moved from inline style objects into tokens/css/engines/{modern,rustic}/skin/*.css, unlayered at (0,4,0) to clear Tailwind preflight (P-47) and each tenant's * border floor (P-48). Zero pixels moved: full visual gate 145/145 with a 192-cell interaction-state matrix (states.spec.ts) and all 48 baselines byte-identical, verified positively (shipped components carry no inline paint, only the caller's own style prop). Commits: Button d503605b/e9eb2e48, Card 965e7e9b/5e93c561, Input 825d65ec, state matrix a2d03b06/b6202373. Ten findings surfaced and filed (P-44..P-55); three fixed at root: rustic Card keyboard activation (P-51, bc77aa3f), rustic Button busy posture (P-50, c9535bd5), antd white-on-white button (P-52, 19b891e0). Core suite 17 failures = the ledger test-for-test."
   }
  ]
 }
