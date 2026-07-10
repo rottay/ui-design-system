@@ -106,7 +106,10 @@ describe('Card real engine coverage', () => {
     const card = container.firstElementChild as HTMLDivElement;
     fireEvent.mouseEnter(card);
     expect(card.style.transform).toBe('var(--ds-card-interactive-transform-hover, translateY(-1px))');
-    expect(card.style.boxShadow).toContain('var(--ds-card-elevated-shadow-hover');
+    // Hover elevation is a personality channel (--ds-card-shadow-hover, driven by
+    // CARD_HOVER_ELEVATION_MAP), not a per-variant token. The elevated variant no
+    // longer carries its own hover shadow.
+    expect(card.style.boxShadow).toContain('var(--ds-card-shadow-hover');
 
     fireEvent.click(card);
     expect(handleClick).toHaveBeenCalledTimes(1);

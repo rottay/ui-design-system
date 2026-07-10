@@ -579,3 +579,17 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why it matters** — `CLAUDE.md` states the `.ts` BrandTheme is the source of truth and the CSS artifact is a generated snapshot. For rottay the artifact is neither generated nor in sync. Whichever value is right, the other is a lie that will be copied by the next tenant someone bootstraps from rottay.
 - **Ask** — decide which is canonical, then either regenerate rottay's artifact from its theme or correct the theme. Do not silently align one to the other; one of the two encodes a deliberate choice and the git history will not say which.
 - **Status** — OPEN, needs owner decision.
+
+### P-37 Two card variant tokens are dead, and no gate can see them
+- **Found** — 2026-07-09, while certifying WO-ENG-14. `Card.real-engines.test.tsx` was RED in the working tree and GREEN at the pre-program commit `9d59a97a`. Bisected with `git log -S`: `ad501eca` (WO-ENG-06, "color purity") removed the only consumer of `--ds-card-elevated-shadow-hover` from `Card/engines/modern.tsx` and left the test asserting it. The failure was never attributed because the full suite was not run to completion at the time.
+- **Evidence** — `--ds-card-elevated-shadow-hover` (defined `tokens/css/components/card.css:154`, mirrored `tokens/ts/components/card.ts:131`) and `--ds-card-elevated-shadow` (`card.css:153`) now have ZERO consumers across `packages/core/src` and `packages/showroom/src`. The collapse itself is correct: hover elevation became a personality channel (`--ds-card-shadow-hover`, driven by `CARD_HOVER_ELEVATION_MAP` in `runtime/personality/primitives.ts:170`), which is what WO-ENG-03 set out to do. The tokens are simply orphans now.
+- **Why the gates missed it** — `audit-integration.mjs` has an `orphan-premium-var` check, but it scans variables *emitted by the compilers*. These two are declared in `tokens/css/components/*.css`, a source the orphan check never reads. There is a whole class of DS-declared tokens that no gate can prove are consumed.
+- **Ask** — (a) delete the two dead tokens, or restore them as a real variant channel and decide which layer owns card elevation; (b) extend the orphan check to `tokens/css/components/**`, which is where most of the DS's own tokens live. That is a bigger gate than this WO should grow.
+- **Status** — OPEN. The stale assertion has been corrected to the shipped contract; the dead tokens are untouched.
+
+### P-38 There are two Modal component families
+- **Found** — 2026-07-09, while attributing a test failure.
+- **Evidence** — `packages/core/src/components/primitives/overlay/Modal/` and `packages/core/src/components/primitives/feedback/Modal/` both exist, both carry a `Modal.types.ts`, and both are engine-switched. The taxonomy in `CLAUDE.md` puts overlays under `overlay/` and feedback under `feedback/`; a Modal cannot be in both.
+- **Why it matters** — This is the shape of every defect this program has found: one path follows a rule, a duplicated path ignores it, and a gate scans only one. A consumer importing `Modal` gets whichever the barrel exports; a fix applied to one is invisible in the other. The Toast `default` variant and the two chrome compilers were exactly this.
+- **Ask** — Determine which is canonical, whether both are reachable from the public barrel, and whether any app imports the non-canonical one. Then delete or merge. Needs an owner decision because it may be a breaking export change.
+- **Status** — OPEN.

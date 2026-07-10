@@ -969,26 +969,32 @@ export function ThemeProvider({
     // ── Token overrides: glass, gradients, overlays ────────────────
     if (tokenOverrides?.glass) {
       const glass = tokenOverrides.glass;
-      if (glass.blur) {
+      // 'none' means "no override", not "no effect". The premium.css defaults
+      // plus the --ds-effect-intensity dial own collapse; stamping the literal
+      // 'none' here inline on <html> clobbers those defaults at the highest
+      // precedence CSS offers. `compilers/brand-theme` already guards this way,
+      // and this provider must agree with it: one rule, both emitters.
+      if (glass.blur && glass.blur !== 'none') {
         safeSetProperty('--ds-glass-blur', glass.blur);
       }
-      if (glass.background) {
+      if (glass.background && glass.background !== 'none') {
         safeSetProperty('--ds-glass-bg', glass.background);
       }
-      if (glass.border) {
+      if (glass.border && glass.border !== 'none') {
         safeSetProperty('--ds-glass-border', glass.border);
       }
     }
 
     if (tokenOverrides?.gradients) {
       const gradients = tokenOverrides.gradients;
-      if (gradients.primary) {
+      // Same rule as the glass block above and as `compilers/brand-theme`.
+      if (gradients.primary && gradients.primary !== 'none') {
         safeSetProperty('--ds-gradient-primary', gradients.primary);
       }
-      if (gradients.surface) {
+      if (gradients.surface && gradients.surface !== 'none') {
         safeSetProperty('--ds-gradient-surface', gradients.surface);
       }
-      if (gradients.mesh) {
+      if (gradients.mesh && gradients.mesh !== 'none') {
         safeSetProperty('--ds-gradient-mesh', gradients.mesh);
       }
     }

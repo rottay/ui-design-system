@@ -1747,6 +1747,12 @@ const counters = {
   "scale.fallbackParityViolations": countFallbackParityViolations(),
   "state.darkFocusRingDefects": countDarkFocusRingDefects(),
   "state.inlineStateLiterals": countInlineStateLiterals(),
+  // NOT the authority on whether the effect renders. This is a MIN floor over
+  // the number of FILES that mention var(--ds-gradient-surface); it stayed green
+  // while rottay's card face measured a top-to-bottom luminance delta of exactly
+  // 0.000. The pixel gate is packages/showroom/e2e/visual/effects.spec.ts, which
+  // decodes a screenshot. Keep this floor: it still catches a component that
+  // stops reading the token entirely.
   "effects.gradientConsumers": effects.gradient,
   "effects.glassConsumers": effects.glass,
   "effects.glowConsumers": effects.glow,
