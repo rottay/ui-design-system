@@ -611,7 +611,8 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   | --- | --- | --- |
   | `Card.real-engines` hover shadow | yes | `ad501eca` (WO-ENG-06) removed the only consumer of `--ds-card-elevated-shadow-hover` |
   | `Statistic.modern-engine-advanced` | yes | a motion/scale WO retimed the skeleton fallback from `2s` to `1.5s` |
-  | `ColorPicker.engine-advanced` | yes | WO-ARC-01, in flight |
+  | `ColorPicker.engine-advanced` | yes | `ad501eca` (WO-ENG-06) changed `placeholder="#000000"` to `placeholder="#RRGGBB"` to lower the `color.modernHexLiterals` counter |
 - **Why it happened** — the full suite was never run to completion during the program. An earlier session note recorded "3 stable pre-existing failures"; the real pre-existing count is at least 17, and the number was quoted forward without being remeasured. A partial run plus an inherited number is how a regression becomes a "known failure".
 - **Ask** — run `pnpm test` to completion before every close, and keep the failure ledger in `roadmap/README.md` as the contract. Never quote the previous number.
-- **Status** — OPEN. Card and Statistic are corrected; ColorPicker is with its executor.
+- **The sharpest instance.** The `ColorPicker` break and the `Card` break came from the SAME commit, `ad501eca`, titled "color purity — modern-engine hardcoded colors to tokens". It lowered `color.modernHexLiterals` by editing what the ColorPicker shows the user: the input's placeholder went from `#000000`, a valid example colour, to `#RRGGBB`. The counter was a naive regex over the file text and could not tell a style from a string, so it was paid in copy. The counter now skips content-bearing attributes (`placeholder`, `aria-label`, `title`, `alt`) and is drilled in both directions: a hex in a style position turns it red, a hex in a placeholder does not.
+- **Status** — OPEN as a class; the three instances are fixed. WO-ARC-01's executor restored the placeholder and was briefly mis-attributed the break by this orchestrator; the attribution has been corrected here.
