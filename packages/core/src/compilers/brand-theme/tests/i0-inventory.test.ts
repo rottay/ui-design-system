@@ -138,7 +138,13 @@ function checkPaletteBase(bt: BrandTheme, name: string) {
     it('accentColor', () => expect(bt.palette?.accentColor).toBeTruthy());
     it('darkPrimaryColor', () => expect(bt.palette?.darkPrimaryColor).toBeTruthy());
     it('darkSecondaryColor', () => expect(bt.palette?.darkSecondaryColor).toBeTruthy());
-    it('darkBackgroundColor', () => expect(bt.palette?.darkBackgroundColor).toBeTruthy());
+    // A theme must own the ground for the mode it renders in. `backgroundColor`
+    // is the clear-mode ground and `darkBackgroundColor` its dark twin; before
+    // WO-TOK-06 only the dark name existed and light-first themes stored a
+    // near-white in it. Requiring both would force a dark ground onto a product
+    // that has no dark mode.
+    it('declares a ground for the mode it renders in', () =>
+      expect(bt.palette?.backgroundColor ?? bt.palette?.darkBackgroundColor).toBeTruthy());
   });
 }
 
@@ -410,9 +416,13 @@ describe('H3 contract: bithire', () => {
   });
 
   describe('bithire dark-mode (filled I5)', () => {
-    // BitHire is light-first. Dark palette strategy uses darkPrimary/darkBackground.
+    // BitHire is light-first: its ground is `backgroundColor`, and its dark mode
+    // takes the design system's dark ground. The near-white it used to store in
+    // `darkBackgroundColor` was its CLEAR ground under a dark name.
     it('palette dark strategy: darkPrimaryColor', () => expect(bithireBrandTheme.palette?.darkPrimaryColor).toBeTruthy());
-    it('palette dark strategy: darkBackgroundColor', () => expect(bithireBrandTheme.palette?.darkBackgroundColor).toBeTruthy());
+    it('palette: clear ground declared', () => expect(bithireBrandTheme.palette?.backgroundColor).toBe('#F8FBFF'));
+    it('palette: no dark ground, so the DS default applies', () =>
+      expect(bithireBrandTheme.palette?.darkBackgroundColor).toBeUndefined());
     // Sidebar is light-authored; dark treatment derives from palette.
     it('sidebar authored (light-first)', () => expect(bithireBrandTheme.chrome?.sidebar?.bg).toBe('#ffffff'));
     it('layout authored', () => expect(bithireBrandTheme.chrome?.layout?.bg).toBe('#FFFFFF'));

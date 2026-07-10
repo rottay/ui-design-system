@@ -111,6 +111,14 @@ const PROBES: readonly Probe[] = [
   { key: 'input/default/border-color', selector: '[data-testid="probe-input"] input', property: 'border-top-color', themePath: 'chrome.controls.input.border', kind: 'color' },
   { key: 'input/default/border-radius', selector: '[data-testid="probe-input"] input', property: 'border-top-left-radius', themePath: 'surfaces.borderRadius.md', kind: 'length' },
 
+  // Ground — the page canvas. Before WO-TOK-06 a tenant could not choose the
+  // surface its product sits on: `palette.darkBackgroundColor` compiled only to
+  // --ds-color-dark-bg, which nothing consumes, and the generator's dark block
+  // wrote a literal. torture-dark asked for #050307 and the canvas painted
+  // #0a0a0a. The differential runs on torture-dark, so the channel named here is
+  // the dark ground; torture-light's clear ground is `palette.backgroundColor`.
+  { key: 'ground/canvas/background-color', selector: '[data-testid="probe-ground"]', property: 'background-color', themePath: 'palette.darkBackgroundColor', kind: 'color' },
+
   // Select — the gallery's simple select takes the NATIVE <select> path. It
   // reads --ds-select-bg falling back to --ds-surface-control, which derives
   // from --ds-color-bg-input, which the compiler emits from the tenant's own

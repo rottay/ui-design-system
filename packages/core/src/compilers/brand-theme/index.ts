@@ -190,6 +190,13 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     if (bt.palette.darkPrimaryColor) vars['--ds-color-dark-primary'] = bt.palette.darkPrimaryColor;
     if (bt.palette.darkSecondaryColor) vars['--ds-color-dark-secondary'] = bt.palette.darkSecondaryColor;
     if (bt.palette.darkAccentColor) vars['--ds-color-dark-accent'] = bt.palette.darkAccentColor;
+    // The clear-mode ground. The dark twin is emitted by the generator's dark
+    // block, which is the only place a `[data-theme='dark']` selector exists.
+    if (bt.palette.backgroundColor) {
+      vars['--ds-color-bg-primary'] = bt.palette.backgroundColor;
+      vars['--ds-color-bg'] = bt.palette.backgroundColor;
+      vars['--ds-color-background'] = bt.palette.backgroundColor;
+    }
     if (bt.palette.darkBackgroundColor) vars['--ds-color-dark-bg'] = bt.palette.darkBackgroundColor;
   }
   if (bt.typography) {

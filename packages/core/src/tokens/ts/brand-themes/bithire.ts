@@ -33,7 +33,7 @@ export const bithireBrandTheme: BrandTheme = {
     darkPrimaryColor: '#3A6FB0',
     darkSecondaryColor: '#2F7D5E',
     darkAccentColor: '#6E9A5E',
-    darkBackgroundColor: '#F8FBFF',
+    backgroundColor: '#F8FBFF',
     successColor: '#2F7D5E',
     warningColor: '#D6A04E',
     errorColor: '#C5504C',

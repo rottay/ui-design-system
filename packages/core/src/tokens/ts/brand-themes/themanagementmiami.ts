@@ -58,7 +58,7 @@ export const themanagementmiamiBrandTheme: BrandTheme = {
     darkPrimaryColor: '#0F766E',
     darkSecondaryColor: '#8C6D46',
     darkAccentColor: '#E2725B',
-    darkBackgroundColor: '#FBF6EC',
+    backgroundColor: '#FBF6EC',
     successColor: '#5B8A3A',
     warningColor: '#C39E22',
     errorColor: '#C0392B',

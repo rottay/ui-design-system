@@ -87,6 +87,13 @@ export interface BrandPalette {
   darkPrimaryColor?: string;
   darkSecondaryColor?: string;
   darkAccentColor?: string;
+  /**
+   * The page ground in clear mode. Its dark twin is `darkBackgroundColor`.
+   * Without this field a tenant cannot choose the surface its product sits
+   * on, which is the most visible thing a white-label system owns.
+   */
+  backgroundColor?: string;
+  /** The page ground in dark mode. Reaches `--ds-color-bg-primary`. */
   darkBackgroundColor?: string;
   successColor?: string;
   warningColor?: string;

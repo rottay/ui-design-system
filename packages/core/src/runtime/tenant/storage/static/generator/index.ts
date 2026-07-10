@@ -512,20 +512,28 @@ function darkPersonalityOverrides(config: TenantConfig): Record<string, string |
   };
 }
 
+/** The design system's dark ground, used when a tenant declares none. */
+const DEFAULT_DARK_GROUND = '#0a0a0a';
+
 function darkSemanticVariables(config: TenantConfig): Record<string, string | number | undefined> {
   const primaryColor = config.branding.primaryColor
     ? buildDarkRuntimeScale(config.branding.primaryColor)[300]
     : '#7dd3fc';
 
+  // The tenant's own dark ground. `palette.darkBackgroundColor` used to compile
+  // only to `--ds-color-dark-bg`, which nothing consumes, while the canvas below
+  // was a literal -- so a tenant could declare a ground and never see it.
+  const ground = config.brandTheme?.palette?.darkBackgroundColor ?? DEFAULT_DARK_GROUND;
+
   return {
-    /* ── Background inversion: light bg (#FFFFFF) -> dark bg (#0A0A0A) ── */
-    '--ds-color-bg-primary': '#0a0a0a',
+    /* ── Background inversion: the tenant's ground, or the DS default ── */
+    '--ds-color-bg-primary': ground,
     '--ds-color-bg-secondary': '#111827',
     '--ds-color-bg-tertiary': '#162033',
     '--ds-color-bg-elevated': '#141a2a',
     '--ds-color-bg-overlay': 'rgba(2, 6, 23, 0.78)',
-    '--ds-color-bg': '#0a0a0a',
-    '--ds-color-background': '#0a0a0a',
+    '--ds-color-bg': ground,
+    '--ds-color-background': ground,
 
     /* ── Surfaces ── */
     '--ds-color-surface': '#111827',

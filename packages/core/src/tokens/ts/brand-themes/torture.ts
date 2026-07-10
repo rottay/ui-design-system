@@ -360,7 +360,11 @@ export const tortureLightBrandTheme: BrandTheme = {
     darkPrimaryColor: '#9B33FF',
     darkSecondaryColor: '#FF7A33',
     darkAccentColor: '#33CCBD',
-    darkBackgroundColor: '#FDFDFF',
+    backgroundColor: '#FDFDFF',
+    // A hostile dark ground so the fixture declares BOTH grounds and the probe
+    // list stays fully covered. torture-light is rendered in clear mode, so this
+    // value is never painted -- it exists to be declared.
+    darkBackgroundColor: '#12001F',
     successColor: '#00B37A',
     warningColor: '#E6B800',
     errorColor: '#E60039',
