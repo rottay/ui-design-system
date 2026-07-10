@@ -726,7 +726,7 @@
    "lane": "tokens",
    "order": 3,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-ENG-08"
    ],
@@ -735,10 +735,10 @@
     "P-03"
    ],
    "notes": "AMENDED 2026-07-09 - DO NOT SCHEDULE AS WRITTEN. Scope wrong in both directions (Segmented renders no join; Pagination/timeline/file-manager do and are unlisted); the load-bearing DaisyUI CSS is 38 selectors in modern/theme.css, absent from Files; the grep==0 gate and pnpm test are mutually unsatisfiable. See the AMENDMENT block in tokens.md.",
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "VERDICT: DaisyUI STAYS, and the strings that lied about it are corrected. This WO asked for a decision, not a removal, after its original premise was falsified in a browser. WHY NOT REMOVE: DaisyUI is tenanted -- a bare .alert computes oklch(0.165 0.005 286) on rottay and oklch(0.96 0.005 80) on bithire, each tenant own --color-base-200, declared unlayered in every artifact, outranking DaisyUI @layer base exactly as build-vertical-css.mjs comment says. Removing it is not a white-label correctness fix. Sixteen modern engine files render a class DaisyUI paints; each is a pixel change needing its own gate. modern-bridge.contract.test.ts (62/62) hard-requires theme.css to declare all sixteen DaisyUI-5 --color-* bridge variables, so the engine is DESIGNED around the bridge. WHY THE STRINGS COULD NOT STAY: modern was displayName \"Modern (DaisyUI)\", library \"daisyui\", \"DaisyUI/Tailwind wrapper\" in the contract and in CLAUDE.md. Calling it a DaisyUI wrapper is what invites the next contributor to reach for a DaisyUI class. But calling it \"Rottay-native\" full stop would be a NICER LIE: sixteen files still render those classes. The strings now say both halves. NEW RATCHET, seeded at the measured count: daisy.classConsumers = 16, counting only tokens inside a real className -- never a doc comment, never Array.prototype.join. It can shrink; it cannot grow. DRILL: add className=\"alert\" to a modern engine that has none and --check fails with \"rose above baseline: daisy.classConsumers: 17 > baseline 16\"; revert, green. THREE FICTIONS CONFIRMED DEAD: Segmented, Pagination and Divider carry \"uses DaisyUI join/divider\" comments with zero connection to their render code; a repo-wide grep for join/join-item as a className returns zero hits. The engine identity tests pinned library === daisyui and now pin rottay-native. GATE: pnpm typecheck 0, engines + runtime/engines 24/24, engine-token-audit --check green with the new ratchet. No dependency removed, no lockfile touched. Owner delegated approval 2026-07-10."
   },
   {
    "id": "WO-ARC-01",
@@ -1329,15 +1329,15 @@
    "lane": "tokens",
    "order": 10,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "spec-12"
    ],
    "notes": null,
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-10",
    "progressLog": []
   },
   {

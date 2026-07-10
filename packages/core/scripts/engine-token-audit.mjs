@@ -146,6 +146,46 @@ function stripBlockComments(text) {
  */
 const CONTENT_ATTRIBUTE_RE = /\b(?:placeholder|aria-label|aria-placeholder|title|alt)\s*=\s*(?:"[^"]*"|'[^']*'|\{`[^`]*`\})/g;
 
+/**
+ * Class names DaisyUI actually paints, verified against the `daisyui@5.5.19`
+ * package source rather than this repo's theme.css, which can be stale.
+ *
+ * DaisyUI is TENANTED -- a bare `.alert` computes each tenant's own
+ * `--color-base-200`, which every artifact declares unlayered -- so a class here
+ * is not a white-label defect. It is residue: `modern` is documented as the
+ * Rottay-native premium skin, and every one of these files makes that sentence
+ * less true. Decrease-only, so the residue can only shrink.
+ */
+const DAISY_PAINTED_CLASSES = [
+  "alert", "skeleton", "step", "steps", "link", "breadcrumbs", "rating", "range",
+  "progress", "radial-progress", "stat-title", "stat-value", "carousel",
+  "carousel-item", "timeline", "timeline-middle", "timeline-start", "toast",
+  "toast-top", "toast-bottom", "modal", "modal-open", "modal-box",
+  "modal-backdrop", "modal-action",
+];
+
+/** Engine files that render at least one DaisyUI class in a real `className`. */
+function countDaisyClassConsumers(files) {
+  const painted = new Set(DAISY_PAINTED_CLASSES);
+  let consumers = 0;
+  for (const file of files) {
+    const text = stripBlockComments(readFileSync(file, "utf8"));
+    // Only literal class strings assigned to className, never a doc comment and
+    // never `Array.prototype.join`.
+    const attrs = text.matchAll(/className=(?:\{?\s*)?(?:`([^`]*)`|"([^"]*)"|'([^']*)')/g);
+    let hit = false;
+    for (const m of attrs) {
+      const value = m[1] ?? m[2] ?? m[3] ?? "";
+      for (const token of value.split(/[\s${}]+/)) {
+        if (painted.has(token)) { hit = true; break; }
+      }
+      if (hit) break;
+    }
+    if (hit) consumers += 1;
+  }
+  return consumers;
+}
+
 function countColorLiteralsInText(strippedText) {
   const withoutContentAttributes = strippedText.replace(CONTENT_ATTRIBUTE_RE, "");
   const hexRe = /(?<!&)#[0-9a-fA-F]{3,8}\b/g;
@@ -1938,6 +1978,39 @@ function countCompositorOnlyViolations(fileList) {
   return count;
 }
 
+/**
+ * WO-TOK-02 (perceptual color ramp derivation): counts per-step
+ * `--ds-color-{role}-{50..900}` ramp hex hand-authored in any first-party
+ * artifact's `_source/extension.css`, beyond the sanctioned seeds
+ * (BrandTheme `.ts` palette fields) and `dark*` overrides. `compileBrandTheme`
+ * (deriveTenantColorRamps) now derives this ramp mechanically per tenant
+ * surface, so a hand-authored ramp step here is drift, not intent: it either
+ * duplicates (redundant, will silently rot out of sync) or -- because the
+ * extension's selector always has equal-or-higher specificity than the
+ * compiled block's -- shadows the derivation outright. Decrease-only,
+ * target 0. rottay's dark-default block is the one accepted, documented
+ * exception (WO-TOK-01/WO-ENG-22: its compiled block is scoped to the
+ * explicit light toggle, not its default surface, so the derivation cannot
+ * yet reach rottay's shipped default rendering -- see roadmap/tokens.md
+ * WO-TOK-02 for the full rationale); bithire's and evnto's default (light)
+ * blocks were drained in this WO and must stay at 0.
+ */
+function countHandAuthoredRampHex() {
+  const artifactsDir = join(tokensCssDir, "artifacts");
+  const slugs = ["bithire", "evnto", "rottay"];
+  const rampDecl = /--ds-color-(?:primary|secondary|accent|success|warning|error|info)-(?:50|100|200|300|400|500|600|700|800|900):\s*#[0-9a-fA-F]{3,8}\s*;/g;
+
+  let count = 0;
+  for (const slug of slugs) {
+    const extensionPath = join(artifactsDir, slug, "_source/extension.css");
+    if (!existsSync(extensionPath)) continue;
+    const text = readFileSync(extensionPath, "utf8");
+    const matches = text.match(rampDecl);
+    count += matches ? matches.length : 0;
+  }
+  return count;
+}
+
 const counters = {
   "motion.cubicBezierLiterals": motion.cubicBezier,
   "motion.rawDurationLiterals": motion.rawDuration,
@@ -1960,8 +2033,11 @@ const counters = {
   "effects.gradientConsumers": effects.gradient,
   "effects.glassConsumers": effects.glass,
   "effects.glowConsumers": effects.glow,
+  // WO-TOK-03 verdict 2026-07-10: DaisyUI stays; the residue is ratcheted.
+  "daisy.classConsumers": countDaisyClassConsumers(files),
   "color.modernHexLiterals": color.hex,
   "color.modernRgbaLiterals": color.rgba,
+  "color.handAuthoredRampSteps": countHandAuthoredRampHex(),
   "themeCss.unreferencedSelectors": themeCssAudit.unreferencedSelectors,
   "themeCss.lineCount": themeCssAudit.lineCount,
   // WO-GAT-02: classic/rustic dead-selector counters, generalized from WO-ENG-08's modern scan

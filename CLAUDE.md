@@ -46,7 +46,9 @@ Update the hub `README.md` inventory counts when component totals change.
 
 - Multi-engine design system with four engines:
   - **classic** — Ant Design 5.21 wrapper
-  - **modern** — Tailwind / DaisyUI wrapper
+  - **modern** — the Rottay-native premium skin. A residual DaisyUI class layer survives in
+    sixteen engine files; `daisy.classConsumers` is a decrease-only ratchet that lets it shrink
+    and never grow (WO-TOK-03 verdict, 2026-07-10)
   - **rustic** — Vanilla CSS fallback
   - **custom** — Reserved for white-label tenants (pluggable component pack registered at runtime)
 - Components in `packages/core/src/components/`

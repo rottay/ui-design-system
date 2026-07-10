@@ -32,7 +32,10 @@ describe('Engine Registry', () => {
 
     it('should have correct library assignments', () => {
       expect(ENGINE_REGISTRY.classic.library).toBe('antd');
-      expect(ENGINE_REGISTRY.modern.library).toBe('daisyui');
+      // modern is the Rottay-native premium skin. Sixteen of its files still render a
+// DaisyUI class, which `daisy.classConsumers` ratchets to zero; the engine's
+// identity is not that dependency (WO-TOK-03 verdict, 2026-07-10).
+expect(ENGINE_REGISTRY.modern.library).toBe('rottay-native');
       expect(ENGINE_REGISTRY.rustic.library).toBe('html');
       expect(ENGINE_REGISTRY.custom.library).toBe('custom');
     });
@@ -54,7 +57,7 @@ describe('Engine Registry', () => {
 
     it('should return correct config for each engine', () => {
       expect(getEngine('classic').library).toBe('antd');
-      expect(getEngine('modern').library).toBe('daisyui');
+      expect(getEngine('modern').library).toBe('rottay-native');
       expect(getEngine('rustic').library).toBe('html');
       expect(getEngine('custom').library).toBe('custom');
     });

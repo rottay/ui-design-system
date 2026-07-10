@@ -8,7 +8,8 @@
  * component implementations live under `src/engines/` and individual
  * component folders. Four engines are supported:
  * - **classic**: Ant Design (enterprise, structured, corporate)
- * - **modern**: DaisyUI/Tailwind (contemporary, rounded, glassmorphism)
+ * - **modern**: the Rottay-native premium skin. Sixteen of its files still render a
+ *   DaisyUI class; `daisy.classConsumers` in engine-token-audit ratchets that to zero (contemporary, rounded, glassmorphism)
  * - **rustic**: Vanilla HTML/CSS (minimal, spacious, understated)
  * - **custom**: Pluggable tenant-specific implementations
  *

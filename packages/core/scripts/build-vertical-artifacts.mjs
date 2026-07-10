@@ -26,7 +26,8 @@ import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { compileBrandTheme } from '../dist/compilers/brand-theme/index.js';
+import { compileBrandTheme, isDarkSurfacePalette } from '../dist/compilers/brand-theme/index.js';
+import { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../dist/_internal/a11y/contrast/index.js';
 import {
   renderVerticalArtifact,
   FIRST_PARTY_ARTIFACT_SPECS,
@@ -67,13 +68,50 @@ function firstDiff(a, b) {
   return '  (files differ only in trailing content/length)';
 }
 
+/**
+ * WO-TOK-02 step 5: compile-time APCA pairing check on the GENERATED ramp
+ * (deriveTenantColorRamps, called from compileBrandTheme). Checks each
+ * role's step-900 -- the far-from-ground extreme, meant to be usable as
+ * readable text/icon color -- against the tenant's own ground.
+ *
+ * Deliberately scoped to the ramp this WO generates, not a re-check of
+ * every pre-existing seed color against ground: bithire's own warningColor
+ * (#D6A04E) already fails an APCA-60 check against its ground (#F8FBFF)
+ * today, unrelated to this WO's derivation, and is already tracked by the
+ * pre-existing `a11y.apcaPairings` decrease-only counter in
+ * engine-token-audit.mjs (WO-GAT-04, "extend, never fork" -- this does not
+ * duplicate that ratchet). Hard-failing the build on that pre-existing gap
+ * would block bithire's artifact over a color choice this WO has no mandate
+ * to change. The ramp's own far extreme is a real, always-should-pass
+ * regression check instead: it is anchored to a fixed lightness bound
+ * independent of the seed (see ramp.ts), so a failure here means the
+ * derivation itself broke, not that a tenant chose an unlucky color.
+ */
+function checkGeneratedRampApca(slug, brandTheme, compiledCssVariables) {
+  const dark = isDarkSurfacePalette(brandTheme.palette);
+  const ground = dark ? brandTheme.palette?.darkBackgroundColor : (brandTheme.palette?.backgroundColor ?? '#FFFFFF');
+  if (!ground) return [];
+
+  const failures = [];
+  for (const [name, hex] of Object.entries(compiledCssVariables)) {
+    if (!/^--ds-color-(primary|secondary|accent|success|warning|error|info)-900$/.test(name)) continue;
+    const lc = apcaContrast(hex, ground);
+    if (Math.abs(lc) < APCA_BODY_TEXT_MIN_LC) {
+      failures.push(`${slug}: ${name} (${hex}) vs ground ${ground} -- |Lc|=${Math.abs(lc).toFixed(1)}, needs >=${APCA_BODY_TEXT_MIN_LC}`);
+    }
+  }
+  return failures;
+}
+
 let stale = 0;
+const apcaFailures = [];
 
 for (const { slug, displayName, selector, authoredThemePath, brandTheme } of artifacts) {
   const artifactPath = resolve(root, `src/tokens/css/artifacts/${slug}/index.css`);
   const extensionPath = resolve(root, `src/tokens/css/artifacts/${slug}/_source/extension.css`);
 
   const compiled = compileBrandTheme({ brandTheme, tenantSlug: slug });
+  apcaFailures.push(...checkGeneratedRampApca(slug, brandTheme, compiled.cssVariables));
   const output = renderVerticalArtifact({
     tenantSlug: slug,
     authoredThemePath,
@@ -97,6 +135,12 @@ for (const { slug, displayName, selector, authoredThemePath, brandTheme } of art
     writeFileSync(artifactPath, output);
     console.log(`Generated artifacts/${slug}/index.css (${output.length} bytes, ${Object.keys(compiled.cssVariables).length} compiled vars).`);
   }
+}
+
+if (apcaFailures.length > 0) {
+  console.error(`\n${apcaFailures.length} generated ramp pairing(s) failed the APCA body-text threshold:`);
+  for (const failure of apcaFailures) console.error(`  ✗ ${failure}`);
+  process.exit(1);
 }
 
 if (check && stale > 0) {

@@ -14,6 +14,7 @@
   "effects.glowConsumers": 1,
   "color.modernHexLiterals": 13,
   "color.modernRgbaLiterals": 1,
+  "color.handAuthoredRampSteps": 152,
   "themeCss.unreferencedSelectors": 0,
   "themeCss.lineCount": 1692,
   "themeCss.deadSelectorsClassic": 13,
@@ -24,5 +25,6 @@
   "responsive.fixedWidthLiterals": 0,
   "responsive.overflowCells": 0,
   "vocabulary.rawAntdSizeUnions": 0,
-  "vocabulary.duplicateSizeDeclarations": 0
+  "vocabulary.duplicateSizeDeclarations": 0,
+  "daisy.classConsumers": 16
 }

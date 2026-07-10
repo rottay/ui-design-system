@@ -57,8 +57,8 @@ export const ENGINE_REGISTRY: Record<EngineName, EngineConfig> = {
   },
   modern: {
     name: 'modern',
-    displayName: 'Modern (DaisyUI)',
-    library: 'daisyui',
+    displayName: 'Modern',
+    library: 'rottay-native',
     status: 'stable',
   },
   rustic: {
