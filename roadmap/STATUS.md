@@ -16,7 +16,7 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-ARC-08 | Workspace-tier container queries + fluid consumption (ADDITIVE) | ds-agent | 2026-07-10 | 2026-07-10 18:33 — Checkpoint 1 DONE (commit pending hash): container-axis capture harness. Probe /probe/container-axis?slug&tenant&cw + container-axis.spec.ts, 12 'before' baselines (data-table/rail x rottay/bithire x 380/620/1160), sighted-reviewed. Full visual gate 158/158, 48 flagship baselines unchanged. Evidence base ready. Next: checkpoint 2 (data-table contract: priority?:'low' field + data-col-priority stamp next to the existing data-col-key + container-name:ds-table on both roots + 640px collapse rule in shared unlayered patterns.css + classic-never-collapses divergence). |
+| WO-ARC-08 | Workspace-tier container queries + fluid consumption (ADDITIVE) | ds-agent | 2026-07-10 | 2026-07-10 19:28 — Checkpoint 2 DONE: data-table container-query contract. priority?:'low' field (foundation/types.ts) + data-col-priority stamps (modern/rustic data columns only, classic delegates to antd) + container-name:ds-table on both roots (zero-pixel) + @container ds-table (max-width:640px) collapse rule in patterns.css. Sighted: Status column collapses at cw=380, present at cw=1160. Full gate 162/162 (158 inert byte-unchanged + 4 demo), suite 17=ledger. Contract had 3 factual errors the executor caught (ColumnDef home is foundation/types.ts not DataTable.types.ts; rustic root lacked contain/minWidth; patterns.css is LAYERED not unlayered -- rule wins by author-beats-UA, P-60). Next: checkpoint 3 (rail density + card meta-stack). |
 
 ## Next up (todo, dependencies satisfied)
 
