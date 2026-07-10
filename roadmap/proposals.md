@@ -675,3 +675,21 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **The shape** — this is the same defect the program has now found in `audit-integration` (scanned one emitter of two), in the chrome variables (one compiler honoured a rule, its twin ignored it), and in `ThemeProvider` vs `compilers/brand-theme` (one stamped `'none'`, the other guarded against it). **A rule lives in one emitter and its twin ignores it, while the gate scans only one.**
 - **Ask** — give `build-vertical-css.mjs` the same `--check` mode `build-vertical-artifacts.mjs` has, and chain it into `lint` and `pretest`. Ship it with a drill: hand-edit one byte of `styles/rottay.css` and watch `pnpm lint` reject it.
 - **Status** — OPEN.
+
+### P-47 Every design-system cascade layer loses to Tailwind's reset, so no DS layer can paint a component
+- **Found** — 2026-07-10, by WO-ARC-07, on the first attempt to move a component's paint out of inline styles.
+- **Measured in the shipped bundle**, on the real `rottay/modern` button, not reasoned from the spec:
+
+  | step | `background-color` | `border-radius` | `border-top-width` |
+  | --- | --- | --- | --- |
+  | 1. as shipped (inline `style` present) | `rgb(255,255,255)` | `10px` | `1px` |
+  | 2. inline `style` removed | `rgba(0,0,0,0)` | `0px` | `0px` |
+  | 3. + rule in `@layer rottay-engines`, specificity (0,2,0) | `rgba(0,0,0,0)` | `0px` | `0px` |
+  | 4. + the identical rule, **unlayered** | `rgb(4,5,6)` | `7px` | `6px` |
+
+- **What it means** — with the inline style gone, Tailwind's preflight owns the button: `@layer base { button { background-color: transparent; border-radius: 0 } }` plus `* { border: 0 solid }`. `foundation/base.css` declares seven layers (`rottay-reset … rottay-responsive`) and then imports Tailwind, whose own `theme` / `base` / `utilities` layers are absent from that statement and therefore sort **after** all of them. Layer order beats specificity, so a DS engine rule at (0,2,0) loses to a preflight rule at (0,0,1). Step 4 shows an unlayered rule wins, which is why the modern engine paints inline: **inline style was the only place in this cascade a skin could stand.**
+- **Corollary, also measured** — a `@layer rottay-engines` rule for `.alert` does not move DaisyUI's `.alert` (`oklch(0.165 0.005 286)` before and after); unlayered, it does. `engines/modern/theme.css` lives in `rottay-engines`. Every rule in it that targets a DaisyUI class is structurally incapable of overriding DaisyUI, independent of whether the class is rendered. This is the mechanism behind **P-41**: the modern Toast's variants "inherit DaisyUI's own `.alert` defaults" not because a case was missing, but because theme.css cannot reach them.
+- **And it blinds a counter** — `themeCss.unreferencedSelectors` (WO-TOK-10) asks "does any component render this class?". The load-bearing question is "does this rule win?". A rendered class whose rule is out-layered is exactly as dead as an unrendered one, and the counter reports it live. The fifth instance of the program's recurring disease: **a measure standing in for the thing it is named after.**
+- **Consequence for WO-ARC-07** — the WO's premise ("move the paint into a stylesheet keyed on the anatomy contract") is sound; its unstated assumption (that a DS layer can hold that stylesheet) is false. A CSS-first skin must be **unlayered** — the one position that beats preflight and DaisyUI while still yielding to a consumer's own inline `style` prop, which is the precedence the inline object has today.
+- **Ask** — beyond ARC-07's own fix: decide the DS's intended relationship to Tailwind's layers. Either name them in the order statement (`@layer theme, base, components, rottay-reset, …, rottay-engines, utilities`) so the engine outranks the reset while Tailwind utilities still win, or accept unlayered engine skins as the contract and say so in the architecture doc. Then audit `engines/modern/theme.css` for rules that can never win, with a drill: a rule that loses on layer order must be reported by the audit, not counted as live.
+- **Status** — OPEN. ARC-07 proceeds with the unlayered skin, which the measurement above justifies and the interaction-state matrix verifies.
