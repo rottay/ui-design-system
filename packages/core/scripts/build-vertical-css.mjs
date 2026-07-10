@@ -14,7 +14,16 @@
  * defaults by both higher specificity (html[data-tenant='X'] > :root) and later
  * source order. A @layer wrapper is intentionally NOT used.
  *
- * Run after build:modern-css so dist/modern-engine.css exists.
+ * styles/{index,modern,platform,rottay,bithire,evnto}.css are committed to git.
+ * --check regenerates the bundles in memory and diffs them against those files,
+ * byte for byte, instead of writing.
+ *
+ * Usage:
+ *   node scripts/build-vertical-css.mjs           # write dist/ and styles/ bundles
+ *   node scripts/build-vertical-css.mjs --check    # fail if any styles/*.css is stale
+ *
+ * Run after build:modern-css so dist/modern-engine.css exists; both modes fail
+ * loudly (exit 1) if it is missing.
  */
 
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
@@ -26,6 +35,8 @@ const root = resolve(__dirname, '..');
 const srcCss = resolve(root, 'src/tokens/css');
 const dist = resolve(root, 'dist');
 const styles = resolve(root, 'styles');
+const check = process.argv.includes('--check');
+let stale = 0;
 
 function readFile(path) {
   if (!existsSync(path)) {
@@ -68,10 +79,42 @@ function resolveImports(css, baseDir) {
   );
 }
 
+function firstDiff(a, b) {
+  const al = a.split('\n');
+  const bl = b.split('\n');
+  const max = Math.max(al.length, bl.length);
+  for (let i = 0; i < max; i += 1) {
+    if (al[i] !== bl[i]) {
+      return `  line ${i + 1}:\n    committed: ${JSON.stringify(al[i])}\n    generated: ${JSON.stringify(bl[i])}`;
+    }
+  }
+  return '  (files differ only in trailing content/length)';
+}
+
+/** Compare an in-memory bundle against the committed file at root-relative relPath. */
+function compareToDisk(relPath, expected) {
+  const path = resolve(root, relPath);
+  const current = existsSync(path) ? readFileSync(path, 'utf-8') : '';
+  if (current !== expected) {
+    stale += 1;
+    console.error(`✗ ${relPath} is out of sync with its build inputs.`);
+    console.error(firstDiff(current, expected));
+    return;
+  }
+  console.log(`✓ ${relPath} is up to date.`);
+}
+
 // Read precompiled modern engine CSS
 const modernEnginePath = resolve(dist, 'modern-engine.css');
+if (!existsSync(modernEnginePath)) {
+  console.error(`  ERROR: dist/modern-engine.css does not exist: ${modernEnginePath}`);
+  console.error('  Run `pnpm -C packages/core build:modern-css` first, then retry.');
+  process.exit(1);
+}
 const modernEngine = unwrapRegisteredCustomProperties(readFile(modernEnginePath));
-writeFileSync(modernEnginePath, modernEngine);
+if (!check) {
+  writeFileSync(modernEnginePath, modernEngine);
+}
 
 // Read tenant-free base CSS and resolve its imports
 const baseCssPath = resolve(srcCss, 'foundation/base.css');
@@ -85,10 +128,12 @@ const verticals = [
   { name: 'evnto',   tenantFile: 'artifacts/evnto/index.css' },
 ];
 
-mkdirSync(styles, { recursive: true });
+if (!check) {
+  mkdirSync(styles, { recursive: true });
+}
 
 for (const { name, tenantFile } of verticals) {
-  console.log(`Building dist/${name}.css ...`);
+  if (!check) console.log(`Building dist/${name}.css ...`);
 
   // Read and resolve the tenant-specific CSS
   const tenantPath = resolve(srcCss, tenantFile);
@@ -130,17 +175,24 @@ for (const { name, tenantFile } of verticals) {
     }
   }
 
-  const sizeKB = Math.round(bundle.length / 1024);
-  writeFileSync(resolve(dist, `${name}.css`), bundle);
-  writeFileSync(resolve(styles, `${name}.css`), bundle);
-  if (name === 'platform') {
-    writeFileSync(resolve(styles, 'rottay.css'), bundle);
+  if (check) {
+    compareToDisk(`styles/${name}.css`, bundle);
+    if (name === 'platform') {
+      compareToDisk('styles/rottay.css', bundle);
+    }
+  } else {
+    const sizeKB = Math.round(bundle.length / 1024);
+    writeFileSync(resolve(dist, `${name}.css`), bundle);
+    writeFileSync(resolve(styles, `${name}.css`), bundle);
+    if (name === 'platform') {
+      writeFileSync(resolve(styles, 'rottay.css'), bundle);
+    }
+    console.log(`  -> dist/${name}.css (${sizeKB}KB)`);
   }
-  console.log(`  -> dist/${name}.css (${sizeKB}KB)`);
 }
 
 // === Emit dist/styles.css (all-tenants development/Storybook bundle) ===
-console.log('Building dist/styles.css ...');
+if (!check) console.log('Building dist/styles.css ...');
 
 // Concatenate all tenant artifact CSS (replaces the removed tenants/index.css barrel)
 const allTenantsCss = [
@@ -168,9 +220,19 @@ const stylesBundle = [
   allTenantsCss,
 ].join('\n');
 
-writeFileSync(resolve(dist, 'styles.css'), stylesBundle);
-writeFileSync(resolve(styles, 'index.css'), stylesBundle);
-writeFileSync(resolve(styles, 'modern.css'), modernEngine);
-console.log(`  -> dist/styles.css (${Math.round(stylesBundle.length / 1024)}KB)`);
+if (check) {
+  compareToDisk('styles/index.css', stylesBundle);
+  compareToDisk('styles/modern.css', modernEngine);
+} else {
+  writeFileSync(resolve(dist, 'styles.css'), stylesBundle);
+  writeFileSync(resolve(styles, 'index.css'), stylesBundle);
+  writeFileSync(resolve(styles, 'modern.css'), modernEngine);
+  console.log(`  -> dist/styles.css (${Math.round(stylesBundle.length / 1024)}KB)`);
+}
 
-console.log('Done. All vertical bundles are tenant-scoped.');
+if (!check) console.log('Done. All vertical bundles are tenant-scoped.');
+
+if (check && stale > 0) {
+  console.error(`\n${stale} vertical bundle(s) are stale or hand-edited. Regenerate with:\n  pnpm -C packages/core build:vertical-css`);
+  process.exit(1);
+}
