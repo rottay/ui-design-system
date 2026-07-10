@@ -16,7 +16,7 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-ARC-07 | CSS-first skins for the primitives on the headless core | ds-agent | 2026-07-10 | (no entries — log via `progress`) |
+| WO-ARC-07 | CSS-first skins for the primitives on the headless core | ds-agent | 2026-07-10 | 2026-07-10 09:26 — Button modern landed CSS-first and pixel-verified. Two blocking cascade findings (P-47, P-48) surfaced; Card and Input still to migrate. |
 
 ## Next up (todo, dependencies satisfied)
 
