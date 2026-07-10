@@ -1409,7 +1409,7 @@
    "lane": "architecture",
    "order": 8,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-ARC-07"
    ],
@@ -1446,7 +1446,9 @@
     }
    ],
    "claimedBy": "ds-agent",
-   "claimedAt": "2026-07-10"
+   "claimedAt": "2026-07-10",
+   "doneAt": "2026-07-10",
+   "evidence": "Container-query core + scoped fluid consumption delivered ADDITIVELY (paint migration remains WO-ARC-09). CP1 capture harness: /probe/container-axis + container-axis.spec.ts, 12 before-baselines (data-table/rail x rottay/bithire x cw 380/620/1160) sighted. CP2 data-table contract: priority?:'low' (foundation/types.ts) + data-col-priority stamps (modern/rustic data cols; classic delegates to antd, declared divergence) + container-name:ds-table on both roots (zero-pixel) + @container ds-table (max-width:640px) collapse in shared patterns.css. SIGHTED PROVEN: Status column hidden at cw=380, present at cw=1160. CP3 (rail density + card meta-stack) DROPPED, blocked by code: rail root is width:min(100%,380px) fixed so its container never varies; Card primitive has no meta concept. CP4 fluid: collection default-title branch -> var(--ds-font-size-fluid-4xl) (retires the vw anti-pattern P-08 targets); metric-card value default -> fluid-4xl + removed the unnamed @container 230px step-down (value now continuously fluid, provably in [1.875rem,2.25rem]). Certification: visual gate 162/162 zero regression (158 inert baselines byte-unchanged + 4 demo collapse); full suite = 17-failure ledger test-for-test; engine-token-audit --check + vertical-css --check green; only @container in core is the named ds-table rule. Commits e1d1798a (CP3 note) f9d2f9f6 (CP4). Findings filed: P-60 (collapse wins by author-beats-UA not unlayered), spec-§7 off-scale editorial header magnitudes."
   },
   {
    "id": "WO-ARC-09",
