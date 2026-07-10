@@ -724,3 +724,19 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why it matters** — the ledger is the contract this program certifies against: "17 failures, and here is each one." A suite that returns 17 or 21 depending on the run makes that contract unfalsifiable, and it is exactly how a real regression gets waved through as "one of the known flaky ones". This program has already been burned once by an inherited failure count (P-40).
 - **Ask** — one WO. Reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
 - **Status** — OPEN.
+
+### P-50 The rustic Button drops the busy posture the modern Button honours
+- **Found** — 2026-07-10, by WO-ARC-07, while checking whether the rustic skin could be keyed on `data-state` without guards.
+- **Evidence** — measured, not read:
+
+  | render | `data-state` after `pointerEnter` / `pointerDown` |
+  | --- | --- |
+  | `<ModernButton pending>` | `disabled` — no hover, no press |
+  | `<RusticButton pending>` | **`hovered`** |
+  | `<RusticButton loading>` | **`pressed`** |
+
+- **The cause** — `Button/engines/modern.tsx` constructs the triad with `useInteractionState({ disabled: disabled || busy })`. `Button/engines/rustic.tsx` constructs it with `useInteractionState({ disabled })`. A busy rustic button therefore publishes hover and press on the DOM, and its inline paint only partly compensates: the guards read `!loading`, not `!busy`, so a `pending` rustic button paints its hover background while a `pending` modern button does not.
+- **Why this one stings** — `behavior/anatomy.ts` opens with the sentence this defect violates: *"a state that one engine honours and its twin silently drops is the defect this design system has found nine times."* WO-ARC-02 centralised the triad so the two skins could not disagree about what a press is. They still disagree about whether a busy control has one, because the disagreement moved into the hook's argument.
+- **Consequence for CSS-first skins** — a skin keyed on `[data-state~='hovered']` would animate a busy rustic button. Encoding `:not([data-loading])` into the stylesheet would carry the defect forward into the layer meant to be free of it.
+- **Ask** — pass `disabled: disabled || busy` in the rustic engine, drop the now-redundant `!loading` guards, and pin it with a cross-engine parity test that renders both engines busy and demands the same `data-state`. Any component that takes a busy prop should be swept the same way.
+- **Status** — OPEN.
