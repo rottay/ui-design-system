@@ -84,11 +84,15 @@ interface Subject {
  * how this program once certified a blank PNG as clean.
  */
 interface Probe {
+  /** Unique across probes; two of them share a slug. Used in the test title. */
+  name: string;
   slug: string;
+  /** Extra query the probe page needs to render this subject set. */
+  query?: string;
+  /** The section the subjects live in; a Tab sentinel is injected before it. */
+  container: string;
   selector: string;
   expectedCount: number;
-  /** Keyboard focus is only meaningful where the element can take it. */
-  focusable: boolean;
   subjects: readonly Subject[];
 }
 
@@ -105,10 +109,11 @@ const CARD_STATES: readonly StateName[] = ['rest', 'hovered', 'rest-after-hover'
 
 const PROBES: readonly Probe[] = [
   {
+    name: 'button',
     slug: 'button',
+    container: '[data-testid="probe-button"]',
     selector: '[data-testid="probe-button"] button',
     expectedCount: 9,
-    focusable: true,
     subjects: [
       { name: 'primary', index: 0, states: BUTTON_STATES },
       { name: 'secondary', index: 1, states: BUTTON_STATES },
@@ -118,24 +123,45 @@ const PROBES: readonly Probe[] = [
     ],
   },
   {
+    name: 'card',
     slug: 'card',
     // The anatomy part, not a class: the two engines do not share a class scheme
     // for Card at all -- modern renders `ds-card ds-card--outlined`, rustic
     // renders `rottay-card rottay-card--rustic` and no variant class.
     selector: '[data-testid="probe-card"] [data-part="root"]',
+    container: '[data-testid="probe-card"]',
     expectedCount: 2,
-    focusable: false,
     subjects: [{ name: 'card-elevated', index: 0, states: CARD_STATES }],
   },
   {
     // The outlined card is the only variant whose border-width is non-zero, and
     // therefore the only place `--ds-card-border` is observable -- the very
     // channel each tenant's unlayered `*` border floor contests (P-48).
+    name: 'card-outlined',
     slug: 'extras',
+    container: '[data-testid="probe-extras"]',
     selector: '[data-testid="probe-extras"] [data-part="root"]',
     expectedCount: 1,
-    focusable: false,
     subjects: [{ name: 'card-outlined', index: 0, states: CARD_STATES }],
+  },
+  {
+    // A CLICKABLE card, the only kind that can hold a focus ring. It renders
+    // behind `?interactive=1` and therefore appears in no flagship capture, so
+    // the 48 visual baselines cannot move because this subject exists.
+    name: 'card-clickable',
+    slug: 'card',
+    query: '&interactive=1',
+    container: '[data-testid="probe-interactive"]',
+    selector: '[data-testid="probe-interactive"] [data-part="root"]',
+    expectedCount: 1,
+    subjects: [
+      {
+        name: 'card-clickable',
+        index: 0,
+        // A card has no press posture: nothing in either engine paints one.
+        states: ['rest', 'hovered', 'rest-after-hover', 'focus-visible'],
+      },
+    ],
   },
 ];
 
@@ -237,22 +263,23 @@ async function releasePointer(page: Page): Promise<void> {
  * platform's own `:focus-visible` pseudo-class -- and this test must survive
  * that, because ARC-07 may well make that change.
  */
-async function focusByKeyboard(page: Page, selector: string, index: number): Promise<void> {
+async function focusByKeyboard(page: Page, probe: Probe, index: number): Promise<void> {
+  const { selector, container: containerSelector } = probe;
   await releasePointer(page);
   if (index === 0) {
     // The sentinel goes OUTSIDE the probe container. Inside, it would be a
     // ninth-plus `button` and every `nth(index)` below it would address the
     // wrong subject -- the matrix would still record cleanly, and it would
     // record the wrong control.
-    await page.evaluate(() => {
+    await page.evaluate((selector) => {
       if (document.getElementById('keyboard-sentinel')) return;
-      const container = document.querySelector<HTMLElement>('[data-testid="probe-button"]');
-      if (!container?.parentElement) throw new Error('probe container is missing');
+      const container = document.querySelector<HTMLElement>(selector);
+      if (!container?.parentElement) throw new Error(`probe container is missing: ${selector}`);
       const sentinel = document.createElement('button');
       sentinel.id = 'keyboard-sentinel';
       sentinel.textContent = 'sentinel';
       container.parentElement.insertBefore(sentinel, container);
-    });
+    }, containerSelector);
     await page.locator('#keyboard-sentinel').focus();
   } else {
     await page.locator(selector).nth(index - 1).focus();
@@ -296,7 +323,7 @@ async function captureSubject(
         await page.mouse.down();
         break;
       case 'focus-visible':
-        await focusByKeyboard(page, probe.selector, subject.index);
+        await focusByKeyboard(page, probe, subject.index);
         break;
     }
 
@@ -315,9 +342,10 @@ async function captureSubject(
 }
 
 async function openProbe(page: Page, fixture: Fixture, engine: Engine, probe: Probe): Promise<void> {
-  await page.goto(`/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&slug=${probe.slug}`, {
-    waitUntil: 'domcontentloaded',
-  });
+  await page.goto(
+    `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&slug=${probe.slug}${probe.query ?? ''}`,
+    { waitUntil: 'domcontentloaded' }
+  );
   await page.waitForSelector(probe.selector);
   await page.waitForFunction(
     (expected) => document.documentElement.getAttribute('data-engine') === expected,
@@ -367,7 +395,7 @@ test.describe('interaction states are pinned per component, tenant and engine', 
   for (const probe of PROBES) {
     for (const fixture of FIXTURES) {
       for (const engine of ENGINES) {
-        test(`${probe.slug} / ${fixture} / ${engine}`, async ({ page }) => {
+        test(`${probe.name} / ${fixture} / ${engine}`, async ({ page }) => {
           await openProbe(page, fixture, engine, probe);
 
           for (const subject of probe.subjects) {
