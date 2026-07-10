@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, cloneElement, isValidElement, type ReactNode } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { Box, Text } from '@rottay/design-system';
 import { TenantPaletteSurface, getResponsiveSpec, type SurfaceTenant } from '@/components/state-gallery';
@@ -17,6 +17,13 @@ import { TenantPaletteSurface, getResponsiveSpec, type SurfaceTenant } from '@/c
 //   ?slug=data-table|rail        which workspace component renders (default data-table)
 //   ?tenant=rottay|bithire|evnto which palette owns the page (default rottay)
 //   ?cw=380|620|1160             the wrapper's fixed pixel width (default 1160)
+//   ?demo=collapse                data-table only: clones the fixture's columns
+//                                  and marks the LAST one `priority: 'low'` so
+//                                  the §10 collapse rule has something to hide.
+//                                  The shared fixture (responsive-specs.tsx) is
+//                                  never mutated -- every capture without this
+//                                  param renders the fixture exactly as authored,
+//                                  so the inert baselines are unaffected.
 //
 // Reuses the responsive-set fixtures (state-gallery/responsive-specs.tsx):
 // each slug's first group/first cell is that component's populated state.
@@ -45,14 +52,43 @@ function sanitizeContainerWidth(raw: string | null): number {
   return raw && CONTAINER_WIDTHS[raw] ? CONTAINER_WIDTHS[raw] : 1160;
 }
 
+type DemoVariant = 'none' | 'collapse';
+
+function sanitizeDemo(raw: string | null): DemoVariant {
+  return raw === 'collapse' ? 'collapse' : 'none';
+}
+
+/**
+ * `demo=collapse`, data-table only: clones the fixture's `columns` prop
+ * (via `cloneElement`, never touching the shared fixture array) and marks
+ * the last entry `priority: 'low'`, giving the §10 collapse rule a column to
+ * hide. Every other slug, and every request without `demo=collapse`, returns
+ * `node` untouched.
+ */
+function withCollapseDemo(slug: ContainerAxisSlug, demo: DemoVariant, node: ReactNode): ReactNode {
+  if (slug !== 'data-table' || demo !== 'collapse' || !isValidElement<{ columns?: unknown }>(node)) {
+    return node;
+  }
+  const { columns } = node.props;
+  if (!Array.isArray(columns) || columns.length === 0) return node;
+  const lastIndex = columns.length - 1;
+  const demoColumns = columns.map((col, index) => {
+    if (index !== lastIndex || col === null || typeof col !== 'object') return col;
+    return { ...col, priority: 'low' as const };
+  });
+  return cloneElement(node, { columns: demoColumns });
+}
+
 function ProbeContent() {
   const searchParams = useSearchParams();
 
   const tenant = useMemo(() => sanitizeTenant(searchParams.get('tenant')), [searchParams]);
   const slug = useMemo(() => sanitizeSlug(searchParams.get('slug')), [searchParams]);
   const containerWidth = useMemo(() => sanitizeContainerWidth(searchParams.get('cw')), [searchParams]);
+  const demo = useMemo(() => sanitizeDemo(searchParams.get('demo')), [searchParams]);
 
-  const node = getResponsiveSpec(slug)?.groups[0]?.cells[0]?.node ?? null;
+  const baseNode = getResponsiveSpec(slug)?.groups[0]?.cells[0]?.node ?? null;
+  const node = useMemo(() => withCollapseDemo(slug, demo, baseNode), [slug, demo, baseNode]);
 
   return (
     <TenantPaletteSurface tenant={tenant}>
@@ -65,7 +101,7 @@ function ProbeContent() {
               weight="bold"
               style={{ display: 'block', color: 'var(--ds-color-text-primary)' }}
             >
-              Container axis — {slug} · {tenant} @ {containerWidth}px
+              Container axis — {slug} · {tenant} @ {containerWidth}px{demo === 'collapse' ? ' · collapse demo' : ''}
             </Text>
             <Text size="sm" style={{ display: 'block', marginTop: 4, color: 'var(--ds-color-text-secondary)' }}>
               Same component, same 1280 viewport; wrapper width driven by ?cw.

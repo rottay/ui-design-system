@@ -181,6 +181,23 @@ export interface ColumnDef<T> {
    * ```
    */
   responsive?: ColumnResponsiveConfig;
+  /**
+   * Declares this column as low-priority for the table's CONTAINER-width
+   * adaptive layout (spec §10) -- distinct from `responsive`, which reacts to
+   * the viewport, not the table's own box. When the table's named `ds-table`
+   * container drops below the documented collapse width, every cell stamped
+   * `data-col-priority="low"` (header and body, modern/rustic engines only)
+   * is set to `display: none` -- the column is HIDDEN, not scrolled, and its
+   * data becomes unreachable until the container widens again.
+   *
+   * CONSUMER-assigned opt-in only: never defaulted or inferred from column
+   * order, width, or any other heuristic -- a data-hiding effect must be an
+   * explicit choice. Orthogonal to `pin` (a pinned column never collapses,
+   * regardless of `priority`) and to `mobileCardBreakpoint` (a separate,
+   * viewport-gated switch that replaces the whole table with a card layout).
+   * Classic (antd) does not consume this field.
+   */
+  priority?: 'low';
 }
 
 /**

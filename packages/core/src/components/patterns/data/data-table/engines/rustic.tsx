@@ -71,6 +71,8 @@ const styles = {
     width: '100%',
     fontFamily: 'var(--ds-font-family-base)',
     color: 'var(--ds-color-neutral-900)',
+    containerType: 'inline-size',
+    containerName: 'ds-table',
   } as React.CSSProperties,
   toolbar: {
     display: 'flex',
@@ -744,6 +746,7 @@ export default function RusticDataTable<T extends object>(
                   return (
                     <th
                       key={col.key}
+                      data-col-priority={col.priority || undefined}
                       style={buildThStyle(col, colIdx, isLastDataCol)}
                       onClick={col.sortable ? () => handleSort(col.key) : undefined}
                     >
@@ -822,6 +825,7 @@ export default function RusticDataTable<T extends object>(
                         return (
                           <td
                             key={col.key}
+                            data-col-priority={col.priority || undefined}
                             style={{
                               ...buildTdStyle(col),
                               // When pinned, override row background to avoid

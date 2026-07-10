@@ -298,6 +298,10 @@ export default function ClassicDataTable<T extends object>(
   }, []);
 
   // --- Build Ant columns ---
+  // Classic (antd) never stamps `data-col-priority` and never collapses columns
+  // via `@container` -- this engine delegates responsive column behavior to
+  // antd's own table contract. A declared divergence from `ColumnDef.priority`
+  // (foundation/types.ts), which only the modern and rustic engines consume.
   const antColumns: ColumnsType<T> = useMemo(() => {
     const cols: ColumnsType<T> = processedColumns
       .filter((col) => col.visible !== false)

@@ -76,6 +76,13 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    * Column definitions that control header labels, cell rendering, widths,
    * alignment, sortability, and pinning for each table column.
    * Order in the array determines visual column order.
+   *
+   * Declared adaptive layout axis (spec §10): a column with `priority: 'low'`
+   * (see `ColumnDef.priority`) is a component-owned CONTAINER-width axis --
+   * when this table's `ds-table` named container narrows below the
+   * documented collapse width, that column is hidden (not scrolled) on the
+   * modern and rustic engines. `priority` is consumer-assigned per column,
+   * never a default; classic (antd) does not participate.
    */
   columns: ColumnDef<T>[];
 

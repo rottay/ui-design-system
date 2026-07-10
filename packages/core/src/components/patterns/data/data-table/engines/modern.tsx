@@ -895,6 +895,8 @@ export default function ModernDataTable<T extends object>(
         width: '100%',
         minWidth: 0,
         contain: 'layout style',
+        containerType: 'inline-size',
+        containerName: 'ds-table',
         ...style,
       }}
     >
@@ -1244,6 +1246,7 @@ export default function ModernDataTable<T extends object>(
                           cursor: reorderable && onColumnReorder ? 'grab' : col.sortable ? 'pointer' : undefined,
                         }}
                         data-col-key={col.key}
+                        data-col-priority={col.priority || undefined}
                         data-sortable={col.sortable ? 'true' : undefined}
                         draggable={reorderable && !!onColumnReorder}
                         title={reorderable && onColumnReorder ? `Drag header to move ${typeof col.header === 'string' ? col.header : col.key}` : undefined}
@@ -1596,6 +1599,7 @@ export default function ModernDataTable<T extends object>(
                                 return (
                                   <td
                                     key={col.key}
+                                    data-col-priority={col.priority || undefined}
                                     data-editable={isCellEditable ? 'true' : undefined}
                                     data-editing={isCellEditing ? 'true' : undefined}
                                     title={isCellEditable && !isCellEditing
@@ -1967,6 +1971,7 @@ export default function ModernDataTable<T extends object>(
                           return (
                             <td
                               key={col.key}
+                              data-col-priority={col.priority || undefined}
                               data-editable={isCellEditable ? 'true' : undefined}
                               data-editing={isCellEditing ? 'true' : undefined}
                               title={isCellEditable && !isCellEditing

@@ -11,7 +11,10 @@ import { test, expect, type Page } from '@playwright/test';
 // the component's "before" response to its container's inline size, ahead
 // of the @container adaptations later checkpoints in this WO add -- this is
 // the evidence base every later approval in the WO diffs against. 2 slugs x
-// 2 tenants x 3 widths = 12 screenshots.
+// 2 tenants x 3 widths = 12 screenshots. A second block below captures the
+// data-table column-priority collapse demo (`&demo=collapse`) at 2 tenants x
+// 2 widths = 4 more screenshots -- these are NEW baselines, not part of the
+// inert evidence base above.
 //
 // Baselines are committed under e2e/visual/__screenshots__/ (see
 // playwright.visual.config.ts's snapshotPathTemplate). This spec runs
@@ -75,5 +78,44 @@ for (const tenant of TENANTS) {
         await expect(container).toHaveScreenshot(`${tenant.id}-${slug}-cw${cw}.png`);
       });
     }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Column-priority collapse demo (WO-ARC-08 checkpoint 2).
+//
+// The cases above render the data-table fixture with no column marked
+// `priority: 'low'`, so the §10 collapse rule never fires and every baseline
+// above is inert. These cases add `&demo=collapse`, which clones the
+// fixture's columns and marks the last one low-priority (see
+// probe/container-axis/page.tsx's `withCollapseDemo`) without touching the
+// shared fixture, giving the collapse rule a column to hide. Only cw 380
+// (below the 640px collapse width -- column hidden) and cw 1160 (well above
+// it -- column visible, the control case) are captured; 620 is also below
+// 640 and would just restate the 380 case.
+// ---------------------------------------------------------------------------
+const COLLAPSE_DEMO_WIDTHS = [380, 1160] as const;
+
+for (const tenant of TENANTS) {
+  for (const cw of COLLAPSE_DEMO_WIDTHS) {
+    test(`${tenant.id} (${tenant.ground}) / data-table collapse demo @ container ${cw}`, async ({ page }) => {
+      test.setTimeout(60_000);
+
+      await page.setViewportSize({ width: 1280, height: 900 });
+      await page.goto(`/probe/container-axis?slug=data-table&tenant=${tenant.id}&cw=${cw}&demo=collapse`, {
+        waitUntil: 'networkidle',
+      });
+
+      const container = page.locator('[data-testid="probe-container-axis"]');
+      await container.waitFor({ timeout: 30_000 });
+      await page.evaluate(() => document.fonts.ready);
+      await waitForGroundPaint(page, tenant.ground);
+
+      // Settle any remaining transition tail beyond reducedMotion's
+      // entrance-disable so the final rendered frame is what gets diffed.
+      await page.waitForTimeout(300);
+
+      await expect(container).toHaveScreenshot(`${tenant.id}-data-table-collapse-cw${cw}.png`);
+    });
   }
 }

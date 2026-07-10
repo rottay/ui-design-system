@@ -243,8 +243,7 @@ after the fleet is on the core.
   and does NOT migrate paint — that is WO-ARC-09. The container-query value is delivered on the components AS
   THEY ARE (inline paint intact) by three additive moves, and this is what makes ARC-08 and ARC-09 independent:
   - **Container contexts** on component ROOTS that ALREADY impose their own width (so `container-type: inline-size`
-    changes no sizing): the data-table root (`modern.tsx:893-899` and `rustic.tsx:653` already ship
-    `width:100%; minWidth:0; contain:layout style`) and the rail root (`width:min(100%,380px)`). Pre-ARC-09 the
+    changes no sizing): the data-table root (modern `:893-899` already ships `width:100%; minWidth:0; contain:layout style`; rustic `styles.container` ships only `width:100%` — CORRECTED from the draft, which wrongly claimed rustic had containment too. Zero-pixel holds regardless: `container-type:inline-size` implies the containment, every absolutely-positioned descendant already has a closer positioned ancestor, and the width was already extrinsic) and the rail root (`width:min(100%,380px)`). Pre-ARC-09 the
     declaration rides the existing inline style object (`containerType`/`containerName` in the TSX); ARC-09's
     skins absorb it later, unchanged.
   - **Container NAMES are idents, not custom properties.** A `@container` prelude cannot read a custom property,
@@ -265,8 +264,8 @@ after the fleet is on the core.
     mechanism).
   - **§10 (component-owned layout):** collapse is component-owned IFF the axis is declared in `DataTable.types.ts`
     + the behavior contract, the threshold is a documented component constant, and the rule lives in shared
-    ENGINE-AGNOSTIC pattern CSS (unlayered `patterns.css`, one rule covering both engines via the shared root
-    class), NOT duplicated per-engine skin. Classic (antd) never stamps priorities and never collapses — a
+    ENGINE-AGNOSTIC pattern CSS (`patterns.css`, one `:where()` rule covering both engines via the shared root
+    class), NOT duplicated per-engine skin. NOTE: `patterns.css` imports into `layer(rottay-components)`, NOT unlayered as the draft claimed. This is fine for THIS rule specifically -- `display:none` on a `[data-col-priority]` cell has no author competitor (verified: no `display` rule in theme.css targets table cells; the modern table carries no DaisyUI `.table` class), so it wins over the UA `table-cell` default regardless of layer. It is NOT the general unlayered guarantee P-47 gives a skin; a future later-layer `display` rule on these cells would break it (filed as P-60). Classic (antd) never stamps priorities and never collapses — a
     declared divergence so the §10 metric does not misfire.
   - **Fluid consumption is SCOPED, never blanket** (the ramps ship "opt-in, nothing consumes by default"). First
     spots: `collection/index.tsx:241` default-title branch → `--ds-font-size-fluid-4xl` (moves the 1280 baseline

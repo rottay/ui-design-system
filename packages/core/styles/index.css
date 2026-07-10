@@ -8109,6 +8109,28 @@ html.dark {
   }
 }
 
+/*
+ * Data-table column-priority collapse (spec §10 -- component-owned layout).
+ *
+ * Named-container query: an unnamed `@container` resolves the nearest
+ * ancestor container, which breaks the moment a table renders inside another
+ * container (a rail, a card). `ds-table` is declared by the modern and
+ * rustic engine roots (`container-type: inline-size; container-name:
+ * ds-table`); classic (antd) declares neither and is unaffected by this rule.
+ *
+ * 640px is a documented component constant, not a breakpoint token: it is
+ * the width below which a table built from the design-language's column
+ * widths no longer has room for every column (roughly a half-split of the
+ * 1280 layout). Only columns the consumer marked `priority: 'low'`
+ * (`ColumnDef.priority`) are hidden here -- every other column is unaffected
+ * at any container width.
+ */
+@container ds-table (max-width: 640px) {
+  :where(.ds-pattern-data-table [data-col-priority='low']) {
+    display: none;
+  }
+}
+
 }
 @layer rottay-components {
 /**
