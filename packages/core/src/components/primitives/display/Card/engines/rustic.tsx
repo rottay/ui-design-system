@@ -59,7 +59,7 @@ import React, { useCallback, useId } from 'react';
 
 import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { CardProps } from '../Card.types';
-import { CARD_DEFAULTS, PADDING_MAP, SHADOW_MAP, RADIUS_MAP, COLOR_VARIANT_MAP } from '../Card.types';
+import { CARD_DEFAULTS, PADDING_MAP } from '../Card.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 
 /**
@@ -159,86 +159,33 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     },
     [onClick]
   );
-  const isHovered = interaction.hovered;
 
   const paddingValue = PADDING_MAP[padding] || PADDING_MAP.md;
-  const borderRadiusValue = RADIUS_MAP[radius] || RADIUS_MAP.md;
 
   // Resolve color variant once so the same values are shared between
   // the left-border accent and the tinted background spread below.
-  const colorStyles = COLOR_VARIANT_MAP[colorVariant] || COLOR_VARIANT_MAP.default;
   const hasColorVariant = colorVariant && colorVariant !== 'default';
 
   // Each variant defines its own background, border, and shadow combination.
   // All values reference DS CSS variables with hardcoded fallbacks so the
   // card renders correctly even without a theme provider.
-  const variantStyles: Record<string, React.CSSProperties> = {
-    elevated: {
-      backgroundColor: backgroundColor || 'var(--ds-card-bg, #fff)',
-      borderWidth: 0,
-      borderStyle: 'solid',
-      borderColor: 'transparent',
-      boxShadow: isHovered && hoverable ? SHADOW_MAP.lg : SHADOW_MAP.md,
-    },
-    outlined: {
-      backgroundColor: backgroundColor || 'var(--ds-card-bg, #fff)',
-      borderWidth: 1,
-      borderStyle: 'solid',
-      borderColor: 'var(--ds-card-border, #e5e5e5)',
-      boxShadow: 'none',
-    },
-    filled: {
-      backgroundColor: backgroundColor || 'var(--ds-color-neutral-100, #f5f5f5)',
-      borderWidth: 0,
-      borderStyle: 'solid',
-      borderColor: 'transparent',
-      boxShadow: 'none',
-    },
-    ghost: {
-      backgroundColor: 'transparent',
-      borderWidth: 0,
-      borderStyle: 'solid',
-      borderColor: 'transparent',
-      boxShadow: 'none',
-    },
-  };
-
-  // The container style merges three layers in order of specificity:
-  // 1) Base layout (flex column, overflow hidden, border-radius)
-  // 2) Variant-specific visuals (background, border, shadow)
-  // 3) State overrides (hover transforms, color variant accents, loading dim)
-  // Consumer `style` is spread last so it can override everything.
+  // Paint lives in `tokens/css/engines/rustic/skin/card.css`, keyed on the
+  // `data-*` contract below. `backgroundColor` is a caller's value, like `style`,
+  // and keeps the precedence it always had.
   const cardStyle: React.CSSProperties = {
-    position: 'relative',
-    display: 'flex',
-    flexDirection: 'column',
-    borderRadius: borderRadiusValue,
-    overflow: 'hidden',
-    // The transition references a DS variable so tenants can customize easing.
-    transition: 'var(--ds-card-transition, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s)',
-    cursor: clickable || onClick ? 'pointer' : undefined,
-    // Dim the card and block interactions while content is loading.
-    opacity: loading ? 0.7 : 1,
-    pointerEvents: loading ? 'none' : 'auto',
-    // Slight upward lift + micro-scale on hover for tactile feedback.
-    transform: isHovered && hoverable
-      ? 'var(--ds-card-hover-transform, translateY(-2px) scale(1.005))'
-      : 'translateY(0) scale(1)',
-    ...variantStyles[variant],
-    // Color variant tints the full frame so tenants can theme semantic cues
-    // without inheriting one-sided rails.
-    ...(hasColorVariant && {
-      borderColor: colorStyles.borderColor,
-      backgroundColor: colorStyles.background,
-    }),
-    // Hover background/border shift only for non-color-variant cards,
-    // because color variants already have their own background.
-    ...(isHovered && hoverable && !hasColorVariant && {
-      backgroundColor: 'var(--ds-card-bg-hover, inherit)',
-      borderColor: 'var(--ds-card-border-hover, var(--ds-card-border, transparent))',
-    }),
+    ...(backgroundColor ? { backgroundColor } : {}),
     ...style,
   };
+
+  /** The DOM contract the rustic Card skin selects on. */
+  const skinAttributes = {
+    'data-variant': variant,
+    'data-radius': radius,
+    'data-tone': hasColorVariant ? colorVariant : undefined,
+    'data-hoverable': hoverable ? 'true' : undefined,
+    'data-clickable': clickable || onClick ? 'true' : undefined,
+    'data-loading': loading ? 'true' : undefined,
+  } as const;
 
   // Header style
   const headerStyle: React.CSSProperties = {
@@ -309,6 +256,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     <div
       className={`rottay-card rottay-card--rustic ${className}`}
       style={cardStyle}
+      {...skinAttributes}
       onClick={onClick}
       {...interactionHandlers}
       {...partAttributes('root', interaction)}

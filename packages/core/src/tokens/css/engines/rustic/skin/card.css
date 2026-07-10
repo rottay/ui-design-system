@@ -1,0 +1,106 @@
+/**
+ * Rustic Card skin (WO-ARC-07).
+ *
+ * DELIBERATELY UNLAYERED, at (0,4,0): no `rottay-*` cascade layer can paint a
+ * component (Tailwind's `@layer base` sorts after all seven; P-47), and each
+ * tenant's unlayered `*` border floor sits at (0,3,1) (P-48).
+ *
+ * Two of the object's conditions are named here rather than implied by order:
+ *
+ *   - hover is gated on `hoverable`, not on `clickable`. A clickable card that is
+ *     not hoverable paints a pointer and does not lift.
+ *   - a toned card does not take the hover background or the hover border,
+ *     because its tone already decides both. The object said this by testing
+ *     `!hasColorVariant`; the sheet says `:not([data-tone])`.
+ *
+ * The `backgroundColor` PROP stays inline. It is a caller's value, like `style`,
+ * and it outranked the variant map before this file existed.
+ */
+
+/* base */
+.rottay-card.rottay-card--rustic[data-part='root'] {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  /* references a DS variable so tenants can customize easing */
+  transition: var(--ds-card-transition, box-shadow 0.3s, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s);
+}
+
+.rottay-card.rottay-card--rustic[data-part='root'][data-clickable='true'] {
+  cursor: pointer;
+}
+
+/* radius */
+.rottay-card.rottay-card--rustic[data-part='root'][data-radius='none'] { border-radius: 0; }
+.rottay-card.rottay-card--rustic[data-part='root'][data-radius='sm'] { border-radius: var(--ds-card-radius-sm, 4px); }
+.rottay-card.rottay-card--rustic[data-part='root'][data-radius='md'] { border-radius: var(--ds-card-radius, 12px); }
+.rottay-card.rottay-card--rustic[data-part='root'][data-radius='lg'] { border-radius: var(--ds-card-radius-lg, 12px); }
+.rottay-card.rottay-card--rustic[data-part='root'][data-radius='xl'] { border-radius: var(--ds-card-radius-xl, 16px); }
+
+/* variant, at rest */
+.rottay-card.rottay-card--rustic[data-part='root'][data-variant='elevated'] {
+  background-color: var(--ds-card-bg, #fff);
+  border: 0 solid transparent;
+  box-shadow: var(--ds-card-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1));
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-variant='outlined'] {
+  background-color: var(--ds-card-bg, #fff);
+  border: 1px solid var(--ds-card-border, #e5e5e5);
+  box-shadow: none;
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-variant='filled'] {
+  background-color: var(--ds-color-neutral-100, #f5f5f5);
+  border: 0 solid transparent;
+  box-shadow: none;
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-variant='ghost'] {
+  background-color: transparent;
+  border: 0 solid transparent;
+  box-shadow: none;
+}
+
+/* an elevated card rises a step while hovered */
+.rottay-card.rottay-card--rustic[data-part='root'][data-hoverable='true'][data-variant='elevated'][data-state~='hovered'] {
+  box-shadow: var(--ds-card-shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.1));
+}
+
+/* colour tone: it decides the frame, so hover leaves it alone */
+.rottay-card.rottay-card--rustic[data-part='root'][data-tone='primary'] {
+  border-color: var(--ds-color-primary-500, #3b82f6);
+  background-color: var(--ds-color-primary-50, rgba(59, 130, 246, 0.05));
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-tone='success'] {
+  border-color: var(--ds-color-success-500, #22c55e);
+  background-color: var(--ds-color-success-50, rgba(34, 197, 94, 0.05));
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-tone='warning'] {
+  border-color: var(--ds-color-warning-500, #f59e0b);
+  background-color: var(--ds-color-warning-50, rgba(245, 158, 11, 0.05));
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-tone='error'] {
+  border-color: var(--ds-color-error-500, #ef4444);
+  background-color: var(--ds-color-error-50, rgba(239, 68, 68, 0.05));
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-tone='info'] {
+  border-color: var(--ds-color-info-500, #3b82f6);
+  background-color: var(--ds-color-info-50, rgba(59, 130, 246, 0.05));
+}
+
+/* hover: the lift, and the surface shift an untoned card takes */
+.rottay-card.rottay-card--rustic[data-part='root'][data-hoverable='true'][data-state~='hovered'] {
+  transform: var(--ds-card-hover-transform, translateY(-2px) scale(1.005));
+}
+.rottay-card.rottay-card--rustic[data-part='root'][data-hoverable='true'][data-state~='hovered']:not([data-tone]) {
+  background-color: var(--ds-card-bg-hover, inherit);
+  border-color: var(--ds-card-border-hover, var(--ds-card-border, transparent));
+}
+
+/* loading dims the card and refuses the pointer */
+.rottay-card.rottay-card--rustic[data-part='root'][data-loading='true'] {
+  opacity: 0.7;
+  pointer-events: none;
+}

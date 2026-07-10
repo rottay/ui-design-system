@@ -62,6 +62,7 @@
 @import '../engines/modern/skin/button.css';
 @import '../engines/rustic/skin/button.css';
 @import '../engines/modern/skin/card.css';
+@import '../engines/rustic/skin/card.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
