@@ -10937,17 +10937,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transform: var(--ds-button-active-transform, scale(0.98));
 }
 
-/* Disabled Button */
-[data-tenant] .btn:disabled,
-[data-tenant] .btn-disabled {
-  background-color: var(--ds-button-disabled-bg) !important;
-  border-color: var(--ds-button-disabled-border) !important;
-  color: var(--ds-button-disabled-color) !important;
-  opacity: var(--ds-button-disabled-opacity);
-  cursor: not-allowed;
-  pointer-events: none;
-}
-
 /* =============================================================================
    INPUT - .input
    ============================================================================= */
@@ -11074,11 +11063,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    ============================================================================= */
 
 [data-tenant] .avatar > div {
-  background-color: var(--ds-avatar-default-bg);
-  color: var(--ds-avatar-default-color);
-}
-
-[data-tenant] .avatar.placeholder > div {
   background-color: var(--ds-avatar-default-bg);
   color: var(--ds-avatar-default-color);
 }
@@ -11246,16 +11230,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-border-color);
 }
 
-/* Menu title/group header */
-[data-tenant] .menu li.menu-title {
-  padding: 6px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--ds-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
 /* Base background utility */
 [data-tenant] .bg-base-100 {
   background-color: var(--ds-dropdown-bg);
@@ -11269,10 +11243,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   list-style: none;
   padding: var(--ds-sidebar-shell-padding-inline, 14px);
   margin: 0;
-}
-
-[data-tenant] .rottay-menu.menu-vertical {
-  width: 100%;
 }
 
 [data-tenant] .rottay-menu li {
@@ -11375,17 +11345,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   list-style: none;
 }
 
-/* Menu Title (group header) */
-[data-tenant] .rottay-menu .menu-title {
-  padding: 6px 16px 3px;
-  font-size: 10.75px;
-  font-weight: 600;
-  color: var(--ds-text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.085em;
-  list-style: none;
-}
-
 /* Disabled state */
 [data-tenant] .rottay-menu li > a.disabled,
 [data-tenant] .rottay-menu li > button.disabled,
@@ -11420,15 +11379,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   position: relative;
 }
 
-[data-tenant] td .dropdown-content,
-[data-tenant] .table .dropdown-content,
-[data-tenant] .rottay-table .dropdown-content {
-  z-index: 9999 !important;
-  position: absolute;
-  right: 0;
-  top: 100%;
-}
-
 /* =============================================================================
    BREADCRUMBS - .breadcrumbs
    ============================================================================= */
@@ -11455,30 +11405,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* =============================================================================
-   PAGINATION - .join (used for pagination)
-   ============================================================================= */
-
-[data-tenant] .join .btn {
-  min-width: var(--ds-pagination-item-size);
-  height: var(--ds-pagination-item-size);
-  padding: 0;
-  background-color: var(--ds-pagination-item-bg);
-  border-color: var(--ds-pagination-item-border);
-  color: var(--ds-pagination-item-color);
-  border-radius: var(--ds-pagination-item-radius);
-}
-
-[data-tenant] .join .btn:hover {
-  background-color: var(--ds-pagination-item-bg-hover);
-}
-
-[data-tenant] .join .btn.btn-active {
-  background-color: var(--ds-pagination-item-bg-active);
-  color: var(--ds-pagination-item-color-active);
-  border-color: var(--ds-pagination-item-bg-active);
-}
-
-/* =============================================================================
    STEPS - .steps
    ============================================================================= */
 
@@ -11486,18 +11412,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-steps-line-color);
 }
 
-[data-tenant] .steps .step-primary::before {
-  background-color: var(--ds-steps-line-color-active);
-}
-
 [data-tenant] .steps .step::after {
   background-color: var(--ds-steps-item-bg);
   color: var(--ds-steps-item-color);
-}
-
-[data-tenant] .steps .step-primary::after {
-  background-color: var(--ds-steps-item-bg-active);
-  color: var(--ds-steps-item-color-active);
 }
 
 /* =============================================================================
@@ -11508,15 +11425,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 [data-tenant] .rottay-collapse {
   border-color: var(--ds-collapse-border);
   border-radius: var(--ds-collapse-radius);
-}
-
-[data-tenant] .rottay-collapse .rottay-collapse-header {
-  background-color: var(--ds-collapse-header-bg);
-  color: var(--ds-collapse-header-color);
-}
-
-[data-tenant] .rottay-collapse .rottay-collapse-header:hover {
-  background-color: var(--ds-collapse-header-bg-hover);
 }
 
 [data-tenant] .rottay-collapse .rottay-collapse-content {
@@ -11608,31 +11516,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   z-index: var(--ds-toast-z-index);
 }
 
-/* Toast Variants */
-[data-tenant] .toast .alert-success {
-  background-color: var(--ds-toast-success-bg);
-  color: var(--ds-toast-success-color);
-  border-color: var(--ds-toast-success-border);
-}
-
-[data-tenant] .toast .alert-error {
-  background-color: var(--ds-toast-error-bg);
-  color: var(--ds-toast-error-color);
-  border-color: var(--ds-toast-error-border);
-}
-
-[data-tenant] .toast .alert-warning {
-  background-color: var(--ds-toast-warning-bg);
-  color: var(--ds-toast-warning-color);
-  border-color: var(--ds-toast-warning-border);
-}
-
-[data-tenant] .toast .alert-info {
-  background-color: var(--ds-toast-info-bg);
-  color: var(--ds-toast-info-color);
-  border-color: var(--ds-toast-info-border);
-}
-
 /* =============================================================================
    LINK - a
    ============================================================================= */
@@ -11714,133 +11597,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-tree-node-bg-hover);
 }
 
-[data-tenant] .rottay-tree .rottay-tree-node--selected {
-  background-color: var(--ds-tree-node-bg-selected);
-  color: var(--ds-tree-node-color-selected);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-node--disabled {
-  color: var(--ds-tree-node-color-disabled);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-icon {
-  width: var(--ds-tree-icon-size);
-  height: var(--ds-tree-icon-size);
-  color: var(--ds-tree-icon-color);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-switcher {
-  width: var(--ds-tree-switcher-size);
-  height: var(--ds-tree-switcher-size);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-indent {
-  width: var(--ds-tree-indent);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-line {
-  border-color: var(--ds-tree-line-color);
-  border-width: var(--ds-tree-line-width);
-}
-
-[data-tenant] .rottay-tree .rottay-tree-checkbox {
-  margin-right: var(--ds-tree-checkbox-margin);
-}
-
-/* =============================================================================
-   DESCRIPTIONS - Info panels with label/value pairs
-   ============================================================================= */
-
-[data-tenant] .descriptions,
-[data-tenant] .rottay-descriptions {
-  background-color: var(--ds-card-bg);
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-radius-md, 8px);
-  overflow: hidden;
-}
-
-/* Descriptions title */
-[data-tenant] .descriptions-title,
-[data-tenant] .rottay-descriptions-title {
-  padding: 12px 16px;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ds-text-primary);
-  border-bottom: 1px solid var(--ds-border-color);
-  background-color: var(--ds-color-neutral-50);
-}
-
-/* Descriptions row */
-[data-tenant] .descriptions-row,
-[data-tenant] .rottay-descriptions-row {
-  display: flex;
-  border-bottom: 1px solid var(--ds-border-color);
-}
-
-[data-tenant] .descriptions-row:last-child,
-[data-tenant] .rottay-descriptions-row:last-child {
-  border-bottom: none;
-}
-
-/* Descriptions label */
-[data-tenant] .descriptions-label,
-[data-tenant] .rottay-descriptions-label {
-  flex: 0 0 140px;
-  padding: 12px 16px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--ds-text-secondary);
-  background-color: var(--ds-color-neutral-50);
-  border-right: 1px solid var(--ds-border-color);
-  text-transform: var(--ds-typography-label-transform, uppercase);
-  letter-spacing: var(--ds-personality-typography-heading-letter-spacing, normal);
-}
-
-/* Descriptions content/value */
-[data-tenant] .descriptions-content,
-[data-tenant] .rottay-descriptions-content {
-  flex: 1;
-  padding: 12px 16px;
-  font-size: 14px;
-  color: var(--ds-text-primary);
-}
-
-/* Vertical layout descriptions */
-[data-tenant] .descriptions-vertical .descriptions-row,
-[data-tenant] .rottay-descriptions-vertical .rottay-descriptions-row {
-  flex-direction: column;
-}
-
-[data-tenant] .descriptions-vertical .descriptions-label,
-[data-tenant] .rottay-descriptions-vertical .rottay-descriptions-label {
-  flex: none;
-  border-right: none;
-  border-bottom: none;
-  padding-bottom: 4px;
-}
-
-[data-tenant] .descriptions-vertical .descriptions-content,
-[data-tenant] .rottay-descriptions-vertical .rottay-descriptions-content {
-  padding-top: 0;
-}
-
-/* Borderless variant */
-[data-tenant] .descriptions-borderless,
-[data-tenant] .rottay-descriptions-borderless {
-  border: none;
-}
-
-[data-tenant] .descriptions-borderless .descriptions-row,
-[data-tenant] .rottay-descriptions-borderless .rottay-descriptions-row {
-  border-bottom: none;
-}
-
-[data-tenant] .descriptions-borderless .descriptions-label,
-[data-tenant] .rottay-descriptions-borderless .rottay-descriptions-label {
-  border-right: none;
-  background: transparent;
-}
-
 /* =============================================================================
    EMPTY
    ============================================================================= */
@@ -11853,20 +11609,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   justify-content: center;
   padding: var(--ds-empty-padding);
   color: var(--ds-text-secondary);
-}
-
-[data-tenant] .rottay-empty .rottay-empty-icon {
-  font-size: var(--ds-empty-icon-size);
-  color: var(--ds-empty-icon-color);
-}
-
-[data-tenant] .rottay-empty .rottay-empty-title {
-  color: var(--ds-empty-title-color);
-  margin-top: var(--ds-empty-title-margin-top);
-}
-
-[data-tenant] .rottay-empty .rottay-empty-description {
-  color: var(--ds-empty-description-color);
 }
 
 [data-tenant] .rottay-empty__footer {
@@ -11972,34 +11714,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   font-weight: 500;
 }
 
-/* Card inside stats */
-[data-tenant] .card .stat-title {
-  font-size: 14px;
-  color: var(--ds-text-secondary);
-  margin-bottom: 4px;
-}
-
-[data-tenant] .card .stat-value {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--ds-text-primary);
-}
-
-/* Bordered table */
-[data-tenant] .table.border {
-  border: 1px solid var(--ds-border-color);
-  border-radius: var(--ds-radius-md, 8px);
-  overflow: hidden;
-}
-
-/* Table cell content - ensure inline-flex items have proper gap */
-[data-tenant] .table td .inline-flex,
-[data-tenant] .table td > div {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
 /* Space component in any context - ensure gap works */
 [data-tenant] .inline-flex.flex-row {
   display: inline-flex !important;
@@ -12048,10 +11762,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   cursor: not-allowed;
 }
 
-[data-tenant] .input-group .input {
-  padding-left: 40px;
-}
-
 /* =============================================================================
    BUTTON - Mejoras adicionales
    ============================================================================= */
@@ -12077,18 +11787,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 [data-tenant] .btn:focus-visible {
   outline: none;
   box-shadow: 0 0 0 3px var(--ds-color-primary-100);
-}
-
-/* Default button (outline style) */
-[data-tenant] .btn:not(.btn-primary):not(.btn-secondary):not(.btn-error):not(.btn-success):not(.btn-warning):not(.btn-info):not(.btn-ghost) {
-  background-color: var(--ds-button-default-bg);
-  border-color: var(--ds-border-color);
-  color: var(--ds-text-primary);
-}
-
-[data-tenant] .btn:not(.btn-primary):not(.btn-secondary):not(.btn-error):not(.btn-success):not(.btn-warning):not(.btn-info):not(.btn-ghost):hover:not(:disabled) {
-  background-color: var(--ds-color-neutral-50);
-  border-color: var(--ds-color-neutral-300);
 }
 
 /* Primary button */
@@ -12228,27 +11926,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* =============================================================================
-   HEADER/TOPBAR - Ghost buttons with icons
-   ============================================================================= */
-
-/* Icon-only ghost buttons in header context */
-[data-tenant] .btn-ghost.btn-icon,
-[data-tenant] .btn-ghost:has(> span > svg):not(:has(> span + span)) {
-  padding: 8px;
-  min-width: 36px;
-  min-height: 36px;
-  width: 36px;
-  height: 36px;
-  border-radius: var(--ds-radius-md, 8px);
-}
-
-[data-tenant] .btn-ghost.btn-icon svg,
-[data-tenant] .btn-ghost:has(> span > svg) svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* =============================================================================
    GRID - Responsive grid system
    ============================================================================= */
 
@@ -12375,13 +12052,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   opacity: var(--ds-input-disabled-opacity);
 }
 
-/* Full width inputs */
-[data-tenant] .input,
-[data-tenant] .textarea,
-[data-tenant] .select {
-  width: 100%;
-}
-
 /* Textarea specific */
 [data-tenant] textarea {
   min-height: 100px;
@@ -12396,17 +12066,6 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 /* Ensure buttons have gap when in flex/inline containers */
 [data-tenant] .btn + .btn {
   margin-left: 8px;
-}
-
-/* Space component with buttons */
-[data-tenant] .space-x > .btn,
-[data-tenant] [class*="space"] > .btn {
-  margin-right: 8px;
-}
-
-[data-tenant] .space-x > .btn:last-child,
-[data-tenant] [class*="space"] > .btn:last-child {
-  margin-right: 0;
 }
 
 /* Generic flex gap for button parents */
@@ -20869,6 +20528,13 @@ html {
   .whitespace-pre-wrap {
     white-space: pre-wrap;
   }
+  .alert-success {
+    @layer daisyui.l1.l2 {
+      color: var(--color-success-content);
+      --alert-border-color: var(--color-success);
+      --alert-color: var(--color-success);
+    }
+  }
   .checkbox-primary {
     @layer daisyui.l1.l2 {
       color: var(--color-primary-content);
@@ -21984,6 +21650,16 @@ html[data-tenant='evnto'] {
   --ds-card-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
   --ds-card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.1);
   --ds-color-accent: #7A6A5A;
+  --ds-color-accent-100: #E6DBD0;
+  --ds-color-accent-200: #CBBDAF;
+  --ds-color-accent-300: #AF9F90;
+  --ds-color-accent-400: #948373;
+  --ds-color-accent-50: #FFFBF7;
+  --ds-color-accent-500: #786858;
+  --ds-color-accent-600: #5D4F41;
+  --ds-color-accent-700: #42372B;
+  --ds-color-accent-800: #292018;
+  --ds-color-accent-900: #110C08;
   --ds-color-background: #FFFFFF;
   --ds-color-bg: #FFFFFF;
   --ds-color-bg-input: #ffffff;
@@ -21993,11 +21669,71 @@ html[data-tenant='evnto'] {
   --ds-color-dark-primary: #E8E8E0;
   --ds-color-dark-secondary: #A89880;
   --ds-color-error: #B91C1C;
+  --ds-color-error-100: #FFD1CA;
+  --ds-color-error-200: #FFA398;
+  --ds-color-error-300: #FE6F62;
+  --ds-color-error-400: #E24B41;
+  --ds-color-error-50: #FFFBFA;
+  --ds-color-error-500: #C12825;
+  --ds-color-error-600: #9C030C;
+  --ds-color-error-700: #710005;
+  --ds-color-error-800: #480002;
+  --ds-color-error-900: #230001;
   --ds-color-info: #475569;
+  --ds-color-info-100: #D4DEED;
+  --ds-color-info-200: #B4C1D3;
+  --ds-color-info-300: #95A4B9;
+  --ds-color-info-400: #79889D;
+  --ds-color-info-50: #FAFCFF;
+  --ds-color-info-500: #5E6D81;
+  --ds-color-info-600: #465365;
+  --ds-color-info-700: #2F3A49;
+  --ds-color-info-800: #1B232D;
+  --ds-color-info-900: #0A0E13;
   --ds-color-primary: #171717;
+  --ds-color-primary-100: #DDDDDD;
+  --ds-color-primary-200: #BFBFBF;
+  --ds-color-primary-300: #A2A2A2;
+  --ds-color-primary-400: #868686;
+  --ds-color-primary-50: #FCFCFC;
+  --ds-color-primary-500: #6B6B6B;
+  --ds-color-primary-600: #515151;
+  --ds-color-primary-700: #393939;
+  --ds-color-primary-800: #222222;
+  --ds-color-primary-900: #0D0D0D;
   --ds-color-secondary: #7A6A5A;
+  --ds-color-secondary-100: #E6DBD0;
+  --ds-color-secondary-200: #CBBDAF;
+  --ds-color-secondary-300: #AF9F90;
+  --ds-color-secondary-400: #948373;
+  --ds-color-secondary-50: #FFFBF7;
+  --ds-color-secondary-500: #786858;
+  --ds-color-secondary-600: #5D4F41;
+  --ds-color-secondary-700: #42372B;
+  --ds-color-secondary-800: #292018;
+  --ds-color-secondary-900: #110C08;
   --ds-color-success: #15803D;
+  --ds-color-success-100: #B6EDC1;
+  --ds-color-success-200: #8AD49A;
+  --ds-color-success-300: #62B977;
+  --ds-color-success-400: #3D9D59;
+  --ds-color-success-50: #F5FFF6;
+  --ds-color-success-500: #18803E;
+  --ds-color-success-600: #00632B;
+  --ds-color-success-700: #00461C;
+  --ds-color-success-800: #002B0E;
+  --ds-color-success-900: #001204;
   --ds-color-warning: #A16207;
+  --ds-color-warning-100: #FFD5AA;
+  --ds-color-warning-200: #EAB37B;
+  --ds-color-warning-300: #D29451;
+  --ds-color-warning-400: #B6762A;
+  --ds-color-warning-50: #FFFBF7;
+  --ds-color-warning-500: #985B00;
+  --ds-color-warning-600: #754500;
+  --ds-color-warning-700: #533000;
+  --ds-color-warning-800: #341C00;
+  --ds-color-warning-900: #170A00;
   --ds-ease-exit: cubic-bezier(0.4, 0, 1, 1);
   --ds-ease-standard: cubic-bezier(0.2, 0, 0, 1);
   --ds-effect-intensity: 1;
@@ -22097,31 +21833,31 @@ html[data-tenant='evnto'] {
   --ds-text-title-line-height: 1.75rem;
   --ds-text-title-size: 1.25rem;
   --ds-text-title-weight: 600;
-  --ds-tint-12: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
-  --ds-tint-16: color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
-  --ds-tint-24: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
-  --ds-tint-4: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
-  --ds-tint-8: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
-  --ds-tint-error-12: color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
-  --ds-tint-error-16: color-mix(in srgb, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
-  --ds-tint-error-24: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
-  --ds-tint-error-4: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
-  --ds-tint-error-8: color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
-  --ds-tint-info-12: color-mix(in srgb, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
-  --ds-tint-info-16: color-mix(in srgb, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
-  --ds-tint-info-24: color-mix(in srgb, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
-  --ds-tint-info-4: color-mix(in srgb, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
-  --ds-tint-info-8: color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
-  --ds-tint-success-12: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
-  --ds-tint-success-16: color-mix(in srgb, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
-  --ds-tint-success-24: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
-  --ds-tint-success-4: color-mix(in srgb, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
-  --ds-tint-success-8: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
-  --ds-tint-warning-12: color-mix(in srgb, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
-  --ds-tint-warning-16: color-mix(in srgb, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
-  --ds-tint-warning-24: color-mix(in srgb, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
-  --ds-tint-warning-4: color-mix(in srgb, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
-  --ds-tint-warning-8: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
+  --ds-tint-12: color-mix(in oklch, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in oklch, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in oklch, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in oklch, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in oklch, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in oklch, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in oklch, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in oklch, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in oklch, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in oklch, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in oklch, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in oklch, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in oklch, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in oklch, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in oklch, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in oklch, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in oklch, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in oklch, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in oklch, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in oklch, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in oklch, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in oklch, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in oklch, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in oklch, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
 }
 
 /* === Declared artifact extension (authored source, generator-preserved) === */
@@ -22165,34 +21901,16 @@ html[data-tenant='evnto']:not([data-theme='dark']):not(.dark) {
   --animation-btn: 0.18s;
   --animation-input: 0.18s;
 
-  /* Primary - Black to White scale (inverted for light theme) */
-  --ds-color-primary-50: #171717;
-  --ds-color-primary-100: #262626;
-  --ds-color-primary-200: #404040;
-  --ds-color-primary-300: #525252;
-  --ds-color-primary-400: #737373;
-  --ds-color-primary-500: #a3a3a3;
-  --ds-color-primary-600: #d4d4d4;
-  --ds-color-primary-700: #e5e5e5;
-  --ds-color-primary-800: #f5f5f5;
-  --ds-color-primary-900: #fafafa;
-
-  /* Primary main color - Black */
+  /* Primary main color - Black. The --ds-color-primary-{50..900} ramp is
+     generated by compileBrandTheme (deriveTenantColorRamps, WO-TOK-02) --
+     declaring it here would silently shadow the derivation via this block's
+     higher selector specificity. */
   --ds-color-primary: #171717;
   --ds-color-primary-hover: #262626;
 
-  /* Secondary - Warm Beige/Sand */
-  --ds-color-secondary-50: #fdfcfb;
-  --ds-color-secondary-100: #f9f7f4;
-  --ds-color-secondary-200: #f3efe8;
-  --ds-color-secondary-300: #e8e2d9;
-  --ds-color-secondary-400: #d4ccc0;
-  --ds-color-secondary-500: #b8a898;
-  --ds-color-secondary-600: #9a8a7a;
-  --ds-color-secondary-700: #7a6a5a;
-  --ds-color-secondary-800: #5a4a3a;
-  --ds-color-secondary-900: #3a2a1a;
-
+  /* Secondary main color - Warm Beige/Sand. The
+     --ds-color-secondary-{50..900} ramp is generated by compileBrandTheme
+     (deriveTenantColorRamps, WO-TOK-02). */
   --ds-color-secondary: #7A6A5A;
   --ds-color-secondary-hover: #5A4A3A;
 

@@ -4961,6 +4961,13 @@
   .whitespace-pre-wrap {
     white-space: pre-wrap;
   }
+  .alert-success {
+    @layer daisyui.l1.l2 {
+      color: var(--color-success-content);
+      --alert-border-color: var(--color-success);
+      --alert-color: var(--color-success);
+    }
+  }
   .checkbox-primary {
     @layer daisyui.l1.l2 {
       color: var(--color-primary-content);
