@@ -230,6 +230,95 @@ export function contrastRatio(color1: string, color2: string): number {
 }
 
 // ---------------------------------------------------------------------------
+// APCA (Accessible Perceptual Contrast Algorithm), WO-TOK-02
+// ---------------------------------------------------------------------------
+
+/**
+ * APCA (Lc) contrast, algorithm version 0.1.9 (SAPC-8). This is a from-scratch,
+ * dependency-free implementation of the published APCA-W3 0.1.9 constants and
+ * formula (https://github.com/Myndex/apca-w3) -- reproduced as literals rather
+ * than importing the `apca-w3` package, which is a repo-root dev-only tool
+ * dependency (used by `scripts/engine-token-audit.mjs`), not a dependency of
+ * this published package. Adding it here would make every consumer of
+ * `@rottay/design-system` require it at runtime.
+ *
+ * Unlike WCAG 2 contrast ratio (symmetric, `contrastRatio` above), APCA is
+ * signed and polarity-aware: a positive Lc means dark text on a light
+ * background, negative means light text on a dark background, and the two
+ * polarities use different exponents/offsets because human contrast
+ * perception is not symmetric between them.
+ */
+
+const APCA_TRC = 2.4;
+const APCA_SR_CO = 0.2126729;
+const APCA_SG_CO = 0.7151522;
+const APCA_SB_CO = 0.072175;
+
+const APCA_NORM_BG = 0.56;
+const APCA_NORM_TXT = 0.57;
+const APCA_REV_BG = 0.65;
+const APCA_REV_TXT = 0.62;
+
+const APCA_BLACK_THRESHOLD = 0.022;
+const APCA_BLACK_CLAMP = 1.414;
+const APCA_SCALE = 1.14;
+const APCA_LO_BOW_OFFSET = 0.027;
+const APCA_LO_WOB_OFFSET = 0.027;
+const APCA_DELTA_Y_MIN = 0.0005;
+const APCA_LO_CLIP = 0.1;
+
+/** APCA's own sRGB -> "Y" luminance-like value (its own coefficients and
+ * gamma; NOT the same as WCAG's `relativeLuminance` -- do not conflate them,
+ * mixing the two produces plausible-looking but wrong Lc values. */
+function apcaLuminance(hex: string): number {
+  const rgb = parseHex(hex);
+  if (!rgb) return 0;
+  const chan = (v: number) => Math.pow(v / 255, APCA_TRC);
+  return APCA_SR_CO * chan(rgb.r) + APCA_SG_CO * chan(rgb.g) + APCA_SB_CO * chan(rgb.b);
+}
+
+/** Soft clamp near black: APCA does not treat near-black linearly, it lifts
+ * very dark values slightly so two near-black colors are not reported as
+ * zero contrast. */
+function apcaClampY(y: number): number {
+  return y > APCA_BLACK_THRESHOLD ? y : y + Math.pow(APCA_BLACK_THRESHOLD - y, APCA_BLACK_CLAMP);
+}
+
+/**
+ * Signed APCA Lc contrast between a text color and a background color.
+ * Positive = normal polarity (dark text on light bg). Negative = reverse
+ * polarity (light text on dark bg). Magnitude is what is compared against a
+ * threshold; polarity says which way the pair reads.
+ */
+export function apcaContrast(textHex: string, bgHex: string): number {
+  const txtY = apcaClampY(apcaLuminance(textHex));
+  const bgY = apcaClampY(apcaLuminance(bgHex));
+
+  if (Math.abs(bgY - txtY) < APCA_DELTA_Y_MIN) return 0;
+
+  if (bgY > txtY) {
+    const sapc = (Math.pow(bgY, APCA_NORM_BG) - Math.pow(txtY, APCA_NORM_TXT)) * APCA_SCALE;
+    const output = sapc < APCA_LO_CLIP ? 0 : sapc - APCA_LO_BOW_OFFSET;
+    return output * 100;
+  }
+
+  const sapc = (Math.pow(bgY, APCA_REV_BG) - Math.pow(txtY, APCA_REV_TXT)) * APCA_SCALE;
+  const output = sapc > -APCA_LO_CLIP ? 0 : sapc + APCA_LO_WOB_OFFSET;
+  return output * 100;
+}
+
+/** APCA bronze-tier guidance thresholds (|Lc|): body text needs more contrast
+ * than large text / UI components / low-emphasis content. */
+export const APCA_BODY_TEXT_MIN_LC = 60;
+export const APCA_UI_MIN_LC = 45;
+
+/** True when a text/background pairing clears its APCA Lc threshold. */
+export function passesApca(textHex: string, bgHex: string, kind: 'body' | 'ui'): boolean {
+  const threshold = kind === 'body' ? APCA_BODY_TEXT_MIN_LC : APCA_UI_MIN_LC;
+  return Math.abs(apcaContrast(textHex, bgHex)) >= threshold;
+}
+
+// ---------------------------------------------------------------------------
 // Suggestion engine: adjust lightness to meet target contrast
 // ---------------------------------------------------------------------------
 

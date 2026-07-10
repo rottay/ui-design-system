@@ -56,7 +56,7 @@ const BOUNDED_CHANNELS: readonly string[] = [
 
 /**
  * Structural strings that MUST match. These are formulas, not values: the tint
- * scale is `color-mix(in srgb, var(--ds-color-primary) N%, var(--ds-color-bg-primary))`,
+ * scale is `color-mix(in oklch, var(--ds-color-primary) N%, var(--ds-color-bg-primary))`,
  * so two tenants share the expression and resolve it differently. If a tenant
  * ever compiled a literal here, the scale would stop deriving from its palette
  * and this assertion is what would catch it.

@@ -80,6 +80,16 @@ html[data-tenant='bithire'] {
   --ds-card-title-color: #162A43;
   --ds-card-title-font-weight: 600;
   --ds-color-accent: #6E9A5E;
+  --ds-color-accent-100: #CAE6C0;
+  --ds-color-accent-200: #A6CB9A;
+  --ds-color-accent-300: #86B077;
+  --ds-color-accent-400: #699459;
+  --ds-color-accent-50: #F3FFEF;
+  --ds-color-accent-500: #4E783E;
+  --ds-color-accent-600: #375D28;
+  --ds-color-accent-700: #234216;
+  --ds-color-accent-800: #132809;
+  --ds-color-accent-900: #061103;
   --ds-color-background: #F8FBFF;
   --ds-color-bg: #F8FBFF;
   --ds-color-bg-input: #ffffff;
@@ -88,11 +98,71 @@ html[data-tenant='bithire'] {
   --ds-color-dark-primary: #3A6FB0;
   --ds-color-dark-secondary: #2F7D5E;
   --ds-color-error: #C5504C;
+  --ds-color-error-100: #FFCFCA;
+  --ds-color-error-200: #FFA29A;
+  --ds-color-error-300: #EC7C75;
+  --ds-color-error-400: #D15C57;
+  --ds-color-error-50: #FFF9F9;
+  --ds-color-error-500: #B13F3D;
+  --ds-color-error-600: #8F2627;
+  --ds-color-error-700: #6A1315;
+  --ds-color-error-800: #440609;
+  --ds-color-error-900: #1F0303;
   --ds-color-info: #3A6FB0;
+  --ds-color-info-100: #C6DFFF;
+  --ds-color-info-200: #95C2FB;
+  --ds-color-info-300: #72A5E5;
+  --ds-color-info-400: #5388CA;
+  --ds-color-info-50: #F8FBFF;
+  --ds-color-info-500: #386CAD;
+  --ds-color-info-600: #21528B;
+  --ds-color-info-700: #103968;
+  --ds-color-info-800: #062243;
+  --ds-color-info-900: #020D1E;
   --ds-color-primary: #3A6FB0;
+  --ds-color-primary-100: #C6DFFF;
+  --ds-color-primary-200: #95C2FB;
+  --ds-color-primary-300: #72A5E5;
+  --ds-color-primary-400: #5388CA;
+  --ds-color-primary-50: #F8FBFF;
+  --ds-color-primary-500: #386CAD;
+  --ds-color-primary-600: #21528B;
+  --ds-color-primary-700: #103968;
+  --ds-color-primary-800: #062243;
+  --ds-color-primary-900: #020D1E;
   --ds-color-secondary: #2F7D5E;
+  --ds-color-secondary-100: #BCE9D3;
+  --ds-color-secondary-200: #93CEB2;
+  --ds-color-secondary-300: #6DB394;
+  --ds-color-secondary-400: #4C9777;
+  --ds-color-secondary-50: #F0FFF7;
+  --ds-color-secondary-500: #2E7B5D;
+  --ds-color-secondary-600: #146044;
+  --ds-color-secondary-700: #01442E;
+  --ds-color-secondary-800: #002A1B;
+  --ds-color-secondary-900: #011109;
   --ds-color-success: #2F7D5E;
+  --ds-color-success-100: #BCE9D3;
+  --ds-color-success-200: #93CEB2;
+  --ds-color-success-300: #6DB394;
+  --ds-color-success-400: #4C9777;
+  --ds-color-success-50: #F0FFF7;
+  --ds-color-success-500: #2E7B5D;
+  --ds-color-success-600: #146044;
+  --ds-color-success-700: #01442E;
+  --ds-color-success-800: #002A1B;
+  --ds-color-success-900: #011109;
   --ds-color-warning: #D6A04E;
+  --ds-color-warning-100: #F8D7A8;
+  --ds-color-warning-200: #E2B778;
+  --ds-color-warning-300: #C9984D;
+  --ds-color-warning-400: #AE7B24;
+  --ds-color-warning-50: #FFFAF3;
+  --ds-color-warning-500: #906000;
+  --ds-color-warning-600: #6E4900;
+  --ds-color-warning-700: #4E3300;
+  --ds-color-warning-800: #311E00;
+  --ds-color-warning-900: #150B00;
   --ds-command-font: 'SF Mono', 'Fira Code', Menlo, monospace;
   --ds-command-glow: none;
   --ds-command-grid-bg: none;
@@ -336,31 +406,31 @@ html[data-tenant='bithire'] {
   --ds-text-title-line-height: 1.75rem;
   --ds-text-title-size: 1.25rem;
   --ds-text-title-weight: 600;
-  --ds-tint-12: color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
-  --ds-tint-16: color-mix(in srgb, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
-  --ds-tint-24: color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
-  --ds-tint-4: color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
-  --ds-tint-8: color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
-  --ds-tint-error-12: color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
-  --ds-tint-error-16: color-mix(in srgb, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
-  --ds-tint-error-24: color-mix(in srgb, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
-  --ds-tint-error-4: color-mix(in srgb, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
-  --ds-tint-error-8: color-mix(in srgb, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
-  --ds-tint-info-12: color-mix(in srgb, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
-  --ds-tint-info-16: color-mix(in srgb, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
-  --ds-tint-info-24: color-mix(in srgb, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
-  --ds-tint-info-4: color-mix(in srgb, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
-  --ds-tint-info-8: color-mix(in srgb, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
-  --ds-tint-success-12: color-mix(in srgb, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
-  --ds-tint-success-16: color-mix(in srgb, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
-  --ds-tint-success-24: color-mix(in srgb, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
-  --ds-tint-success-4: color-mix(in srgb, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
-  --ds-tint-success-8: color-mix(in srgb, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
-  --ds-tint-warning-12: color-mix(in srgb, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
-  --ds-tint-warning-16: color-mix(in srgb, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
-  --ds-tint-warning-24: color-mix(in srgb, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
-  --ds-tint-warning-4: color-mix(in srgb, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
-  --ds-tint-warning-8: color-mix(in srgb, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
+  --ds-tint-12: color-mix(in oklch, var(--ds-color-primary) 12%, var(--ds-color-bg-primary));
+  --ds-tint-16: color-mix(in oklch, var(--ds-color-primary) 16%, var(--ds-color-bg-primary));
+  --ds-tint-24: color-mix(in oklch, var(--ds-color-primary) 24%, var(--ds-color-bg-primary));
+  --ds-tint-4: color-mix(in oklch, var(--ds-color-primary) 4%, var(--ds-color-bg-primary));
+  --ds-tint-8: color-mix(in oklch, var(--ds-color-primary) 8%, var(--ds-color-bg-primary));
+  --ds-tint-error-12: color-mix(in oklch, var(--ds-color-error) 12%, var(--ds-color-bg-primary));
+  --ds-tint-error-16: color-mix(in oklch, var(--ds-color-error) 16%, var(--ds-color-bg-primary));
+  --ds-tint-error-24: color-mix(in oklch, var(--ds-color-error) 24%, var(--ds-color-bg-primary));
+  --ds-tint-error-4: color-mix(in oklch, var(--ds-color-error) 4%, var(--ds-color-bg-primary));
+  --ds-tint-error-8: color-mix(in oklch, var(--ds-color-error) 8%, var(--ds-color-bg-primary));
+  --ds-tint-info-12: color-mix(in oklch, var(--ds-color-info) 12%, var(--ds-color-bg-primary));
+  --ds-tint-info-16: color-mix(in oklch, var(--ds-color-info) 16%, var(--ds-color-bg-primary));
+  --ds-tint-info-24: color-mix(in oklch, var(--ds-color-info) 24%, var(--ds-color-bg-primary));
+  --ds-tint-info-4: color-mix(in oklch, var(--ds-color-info) 4%, var(--ds-color-bg-primary));
+  --ds-tint-info-8: color-mix(in oklch, var(--ds-color-info) 8%, var(--ds-color-bg-primary));
+  --ds-tint-success-12: color-mix(in oklch, var(--ds-color-success) 12%, var(--ds-color-bg-primary));
+  --ds-tint-success-16: color-mix(in oklch, var(--ds-color-success) 16%, var(--ds-color-bg-primary));
+  --ds-tint-success-24: color-mix(in oklch, var(--ds-color-success) 24%, var(--ds-color-bg-primary));
+  --ds-tint-success-4: color-mix(in oklch, var(--ds-color-success) 4%, var(--ds-color-bg-primary));
+  --ds-tint-success-8: color-mix(in oklch, var(--ds-color-success) 8%, var(--ds-color-bg-primary));
+  --ds-tint-warning-12: color-mix(in oklch, var(--ds-color-warning) 12%, var(--ds-color-bg-primary));
+  --ds-tint-warning-16: color-mix(in oklch, var(--ds-color-warning) 16%, var(--ds-color-bg-primary));
+  --ds-tint-warning-24: color-mix(in oklch, var(--ds-color-warning) 24%, var(--ds-color-bg-primary));
+  --ds-tint-warning-4: color-mix(in oklch, var(--ds-color-warning) 4%, var(--ds-color-bg-primary));
+  --ds-tint-warning-8: color-mix(in oklch, var(--ds-color-warning) 8%, var(--ds-color-bg-primary));
   --ds-toolbar-bg: color-mix(in srgb, #3A6FB0 4%, #FFFFFF);
   --ds-toolbar-border: #D3DEEA;
   --ds-toolbar-border-bottom: color-mix(in srgb, #D3DEEA 82%, transparent);
@@ -413,32 +483,14 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --animation-btn: 0.18s;
   --animation-input: 0.18s;
 
-  /* Primary - LinkedIn Blue */
-  --ds-color-primary-50: #f0f7ff;
-  --ds-color-primary-100: #e0efff;
-  --ds-color-primary-200: #b8dcff;
-  --ds-color-primary-300: #70b8ff;
-  --ds-color-primary-400: #378fe5;
-  --ds-color-primary-500: #3A6FB0;
-  --ds-color-primary-600: #2C5587;
-  --ds-color-primary-700: #00315f;
-  --ds-color-primary-800: #002244;
-  --ds-color-primary-900: #001830;
-
-  /* Primary main color */
+  /* Primary main color. The --ds-color-primary-{50..900} ramp is generated
+     by compileBrandTheme (deriveTenantColorRamps, WO-TOK-02) -- declaring it
+     here would silently shadow the derivation via this block's higher
+     selector specificity. */
   --ds-color-primary-hover: #2C5587;
 
-  /* Secondary - Dark Blue */
-  --ds-color-secondary-50: #f0fdf4;
-  --ds-color-secondary-100: #dcfce7;
-  --ds-color-secondary-200: #bbf7d0;
-  --ds-color-secondary-300: #86efac;
-  --ds-color-secondary-400: #4ade80;
-  --ds-color-secondary-500: #2F7D5E;
-  --ds-color-secondary-600: #046339;
-  --ds-color-secondary-700: #034d2d;
-  --ds-color-secondary-800: #023621;
-  --ds-color-secondary-900: #012416;
+  /* Secondary main color. The --ds-color-secondary-{50..900} ramp is
+     generated by compileBrandTheme (deriveTenantColorRamps, WO-TOK-02). */
   --ds-color-secondary-hover: #046339;
 
   /* Accent - Green */
@@ -653,21 +705,15 @@ html[data-tenant='bithire']:not([data-theme='dark']):not(.dark) {
   --ds-color-interactive-bg-active: rgba(10, 102, 194, 0.08);
   --ds-color-interactive-bg-muted: #F4F8FD;
 
-  /* Status colors */
-  --ds-color-success-50: #f0fdf4;
-  --ds-color-success-100: #dcfce7;
+  /* Status colors. The --ds-color-{success,warning,error,info}-{50..900}
+     ramps are generated by compileBrandTheme (deriveTenantColorRamps,
+     WO-TOK-02); only the non-ramp -bg/-border tokens stay declared here. */
   --ds-color-success-bg: #f0fdf4;
   --ds-color-success-border: rgba(5, 118, 66, 0.25);
-  --ds-color-warning-50: #fffbeb;
-  --ds-color-warning-100: #fef3c7;
   --ds-color-warning-bg: #fffbeb;
   --ds-color-warning-border: rgba(231, 163, 62, 0.25);
-  --ds-color-error-50: #fef2f2;
-  --ds-color-error-100: #fee2e2;
   --ds-color-error-bg: #fef2f2;
   --ds-color-error-border: rgba(204, 16, 22, 0.25);
-  --ds-color-info-50: #f0f7ff;
-  --ds-color-info-100: #e0efff;
   --ds-color-info-bg: #f0f7ff;
   --ds-color-info-border: rgba(10, 102, 194, 0.25);
 

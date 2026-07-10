@@ -14,6 +14,7 @@
 
 import type {
   BrandTheme,
+  BrandPalette,
   CompileBrandTheme,
   CompiledBrand,
   BrandCompilerInput,
@@ -22,6 +23,7 @@ import type { EngineName } from '../../contracts/engine';
 import type { TenantBranding, TenantTokenOverrides } from '../../contracts/tenants';
 import type { PersonalityTokens } from '../../contracts/tokens/personality';
 import { chromeToVariables } from '../_shared/chrome-variables';
+import { RAMP_STEPS, deriveOklchRamp, type RampSurface } from '../../_internal/color/oklch/ramp';
 import { springLinearEasing, springLinearEasingGentle } from './spring-easing';
 
 /**
@@ -195,6 +197,74 @@ export function mergePartialPersonality(
   };
 }
 
+// ── Perceptual color ramp derivation (WO-TOK-02) ───────────
+
+/** The DS foundation's light canvas -- the ground a light-surface tenant
+ * falls back to when it does not declare its own `backgroundColor`. */
+const LIGHT_DEFAULT_GROUND = '#FFFFFF';
+
+/**
+ * A tenant is dark-surface when it declares ONLY a dark ground
+ * (`darkBackgroundColor` set, `backgroundColor` absent) -- its one true
+ * canvas is dark and there is no light default to fall back to (rottay:
+ * `darkBackgroundColor` set, no `backgroundColor`). A tenant that declares
+ * BOTH stays light-surface: a declared `backgroundColor` is always its own
+ * default ground, and a `darkBackgroundColor` alongside it is an optional
+ * toggle variant, not the tenant's canonical surface (evnto: both set,
+ * light-first). There is no light/dark toggle in the derivation itself --
+ * each tenant gets exactly one ramp, keyed to this classification.
+ */
+export function isDarkSurfacePalette(palette: BrandPalette | undefined): boolean {
+  return !!palette?.darkBackgroundColor && !palette?.backgroundColor;
+}
+
+interface RampRoleSpec {
+  name: string;
+  light: string | undefined;
+  dark: string | undefined;
+}
+
+/** The 7 palette roles a ramp can be derived for. success/warning/error/info
+ * have no dedicated dark seed in the BrandPalette contract, so a dark-surface
+ * tenant re-derives their ramp from the same seed against its dark ground. */
+function rampRoleSpecs(palette: BrandPalette): readonly RampRoleSpec[] {
+  return [
+    { name: 'primary', light: palette.primaryColor, dark: palette.darkPrimaryColor },
+    { name: 'secondary', light: palette.secondaryColor, dark: palette.darkSecondaryColor },
+    { name: 'accent', light: palette.accentColor, dark: palette.darkAccentColor },
+    { name: 'success', light: palette.successColor, dark: undefined },
+    { name: 'warning', light: palette.warningColor, dark: undefined },
+    { name: 'error', light: palette.errorColor, dark: undefined },
+    { name: 'info', light: palette.infoColor, dark: undefined },
+  ];
+}
+
+/**
+ * Derive the perceptually-even `--ds-color-{role}-{50..900}` ramp for every
+ * palette role that declares a seed, keyed to the tenant's OWN surface: any
+ * tenant seed color mechanically yields a full, even, gamut-mapped palette
+ * -- no per-tenant design work. See `deriveOklchRamp` for the derivation
+ * itself (OKLCH lightness/chroma interpolation, hue held constant, gamut
+ * mapped per step).
+ */
+export function deriveTenantColorRamps(palette: BrandPalette | undefined): Record<string, string> {
+  if (!palette) return {};
+  const dark = isDarkSurfacePalette(palette);
+  const surface: RampSurface = dark ? 'dark' : 'light';
+  const ground = dark && palette.darkBackgroundColor ? palette.darkBackgroundColor : (palette.backgroundColor ?? LIGHT_DEFAULT_GROUND);
+
+  const vars: Record<string, string> = {};
+  for (const role of rampRoleSpecs(palette)) {
+    const seed = (dark ? role.dark : undefined) ?? role.light;
+    if (!seed) continue;
+    const ramp = deriveOklchRamp(seed, ground, surface);
+    for (const step of RAMP_STEPS) {
+      vars[`--ds-color-${role.name}-${step}`] = ramp[step];
+    }
+  }
+  return vars;
+}
+
 /**
  * Convert BrandTheme palette to a flat CSS variable map.
  * Emits light-mode vars by default. Dark-mode palette aliases use the
@@ -297,6 +367,7 @@ function brandThemeToCssVariables(bt: BrandTheme): Record<string, string> {
     // Defaults to 1 (full Quiet Premium) when the theme does not set it.
     vars['--ds-effect-intensity'] = String(su.effectIntensity ?? 1);
   }
+  Object.assign(vars, deriveTenantColorRamps(bt.palette));
   setTintScaleVariables(vars, bt);
   setTypeRampVariables(vars);
   setMotionVariables(vars, bt);
@@ -399,9 +470,12 @@ function setTypeRampVariables(vars: Record<string, string>): void {
 /**
  * Emit the closed tint scale --ds-tint-{4,8,12,16,24} per palette role.
  *
- * Each step is `color-mix(in srgb, <role> N%, var(--ds-color-bg-primary))`, so a
+ * Each step is `color-mix(in oklch, <role> N%, var(--ds-color-bg-primary))`, so a
  * single role color (mixed over the page background) generates every interaction
- * tint instead of hand-picked rgba() values. This is what lets a vertical drop a
+ * tint instead of hand-picked rgba() values. Mixing in OKLCH (a perceptually-even
+ * space) rather than sRGB keeps intermediate steps evenly spaced in perceived
+ * lightness -- an sRGB mix compresses/expands unevenly depending on hue, most
+ * visibly on saturated blues and greens. This is what lets a vertical drop a
  * foreign second blue and re-derive hover/active/selected/focus states from its
  * primary alone (one-blue law). The primary role is emitted UNSUFFIXED (the
  * canonical interaction scale — hover=tint-4, active/selected=tint-8, selected
@@ -426,7 +500,7 @@ function setTintScaleVariables(vars: Record<string, string>, bt: BrandTheme): vo
     if (!color) continue;
     for (const step of TINT_STEPS) {
       const name = suffix ? `--ds-tint-${suffix}-${step}` : `--ds-tint-${step}`;
-      vars[name] = `color-mix(in srgb, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`;
+      vars[name] = `color-mix(in oklch, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`;
     }
   }
 }
@@ -465,6 +539,14 @@ export function brandThemeToChromeVariables(bt: BrandTheme): Record<string, stri
  * they are the highest-priority layer applied by useTokens and
  * DesignSystemProvider at runtime.
  */
+/**
+ * Re-exported so the artifact build can gate on the same threshold the compiler
+ * reasons with. `_internal` is not a package entry, and Vite tree-shakes an
+ * export no entry reaches -- the constant vanished from `dist` while remaining
+ * in the source, and the build script that imported it failed at run time.
+ */
+export { apcaContrast, APCA_BODY_TEXT_MIN_LC } from '../../_internal/a11y/contrast';
+
 export const compileBrandTheme: CompileBrandTheme = (input: BrandCompilerInput): CompiledBrand => {
   const { brandTheme, tenantSlug, verticalPersonality, verticalTokenOverrides } = input;
 

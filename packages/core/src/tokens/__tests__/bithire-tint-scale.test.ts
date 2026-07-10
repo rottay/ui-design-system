@@ -3,7 +3,7 @@
  *
  * The brand compiler must emit the closed tint scale --ds-tint-{4,8,12,16,24}
  * for the primary role (unsuffixed) and each status tone (success/warning/error/
- * info), each as `color-mix(in srgb, <role> N%, var(--ds-color-bg-primary))`.
+ * info), each as `color-mix(in oklch, <role> N%, var(--ds-color-bg-primary))`.
  * This is what lets `bithire.ts` drop the retired second blue (#0A66C2 =
  * rgba(10, 102, 194, …)) and re-derive every interaction tint from the single
  * primary (#3A6FB0). See design-language.md §2.5.
@@ -30,7 +30,7 @@ describe('bithire brand compiler emits the one-blue tint scale', () => {
   it('emits --ds-tint-{4,8,12,16,24} for the primary role (unsuffixed)', () => {
     for (const step of STEPS) {
       expect(cssVariables[`--ds-tint-${step}`]).toBe(
-        `color-mix(in srgb, var(--ds-color-primary) ${step}%, var(--ds-color-bg-primary))`,
+        `color-mix(in oklch, var(--ds-color-primary) ${step}%, var(--ds-color-bg-primary))`,
       );
     }
   });
@@ -39,7 +39,7 @@ describe('bithire brand compiler emits the one-blue tint scale', () => {
     for (const { suffix, colorVar } of TONE_ROLES) {
       for (const step of STEPS) {
         expect(cssVariables[`--ds-tint-${suffix}-${step}`]).toBe(
-          `color-mix(in srgb, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`,
+          `color-mix(in oklch, var(${colorVar}) ${step}%, var(--ds-color-bg-primary))`,
         );
       }
     }
