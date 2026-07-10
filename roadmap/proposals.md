@@ -727,7 +727,20 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **A fourth instance, and a mechanism.** `structures/record/edit-fields/tests/EditFields.test.tsx` joined the family on 2026-07-10 (`Unable to find an accessible element with the role "button" and name "Hide more fields"`), and its shape names the cause: it awaits `findByRole`, then calls `rerender`, then queries **synchronously** with `getByRole`. Every component here mounts through an engine's lazy boundary, so a query that does not wait can run before the re-render has resolved -- usually it does not, under full-suite load it does. All four files mix sync `getBy*` with async `findBy*`: EditFields 8/21, ListToolbar 3/1, AuditSurface 4/2, CollectionWorkspace 3/24. The EditFields instance is fixed by awaiting the query, which is strictly more correct and cannot regress anything.
 - **A third instance, same shape** — every one of them fails to FIND a rendered element under full-suite load and passes alone. That is a rendering or timing leak, not three unrelated bugs.
 - **Why it matters** — the ledger is the contract this program certifies against: "17 failures, and here is each one." A suite that returns 17 or 21 depending on the run makes that contract unfalsifiable, and it is exactly how a real regression gets waved through as "one of the known flaky ones". This program has already been burned once by an inherited failure count (P-40).
-- **Ask** — one WO. Sweep every `getBy*` that follows a `rerender` or a preceding `await findBy*` in a `renderSurface`/engine-lazy tree and make it wait. Then, if instances remain, reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
+- **A DETERMINISTIC REPRODUCER, 2026-07-10.** It is not "sometimes under load". Two files, run together, fail every time, in either order:
+
+  ```
+  npx vitest run --config vitest.config.ts \
+    src/components/patterns/data/list-toolbar \
+    src/components/surfaces/pages/workspace/collection-workspace
+  #  x ListToolbar > renders the compact mobile toolbar through the modern engine  (1808ms)
+  #    Unable to find an accessible element with the role "button" and name /create event/i
+  #  Tests  1 failed | 40 passed (41)
+  ```
+
+  Each file alone passes. Order does not matter, so it is not sequential pollution -- vitest runs the two files in parallel threads, and the failing test spends **1808ms** before giving up. `findByRole`'s default timeout is 1000ms. The button it cannot find lives behind an engine's lazy boundary; under CPU contention the chunk does not resolve inside the window.
+- **The fix is not a longer timeout.** Widening a race window hides it. Make the resolution deterministic -- preload the engine module in the test setup, or render through a resolved component -- so the assertion no longer competes with a scheduler.
+- **Ask** — one WO. Start from the reproducer above. Then sweep every `getBy*` that follows a `rerender` or a preceding `await findBy*` in a `renderSurface`/engine-lazy tree and make it wait. Then, if instances remain, reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
 - **Status** — OPEN.
 
 ### P-50 The rustic Button drops the busy posture the modern Button honours
