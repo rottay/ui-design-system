@@ -811,3 +811,19 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why it was not closed in the same pass** — opening the whole gate to classic could turn up several defects at once, and a red gate left standing is worse than a named gap. This is that name.
 - **Ask** — one WO. Give `CONTROLS` a per-engine selector map, run all four controls across all three engines and all four tenants (48 assertions), and fix what turns red. The classic engine is Ant Design's tokens, not the DS's; every one of them that the DS does not map is a default antd chose for a light theme.
 - **Status** — OPEN.
+
+### P-54 The modern Input's focus outline has never rendered
+- **Found** — 2026-07-10, by WO-ARC-07, while measuring what the Input paints before moving its paint into CSS.
+- **Evidence** — focus a modern Input on rottay and read the element back:
+
+  ```
+  inline, after focus : outline: var(--ds-focus-ring-width, 2px) solid var(--ds-input-shadow-focus, var(--ds-focus-ring-color))
+  computed            : outline-style: none
+  ```
+
+  `--ds-input-shadow-focus` is a **box-shadow value**, not a colour: `0 0 0 3px rgba(255,255,255,0.10)` on rottay, `0 0 0 1px #3A6FB0` on bithire, `0 0 0 5px rgba(255,0,170,0.4)` on torture-dark. Substituted into `outline: <width> solid <color>` it makes the declaration invalid at computed-value time, and the browser drops the whole thing. The `var(--ds-focus-ring-color)` fallback never runs, because the custom property IS defined — `tokens/css/components/input.css:121` defines it for every tenant.
+- **What the user actually sees** — a two-layer halo drawn by `box-shadow` from a rule in `@layer rottay-personality` keyed on `:focus-visible`. That rule is correct and is doing the whole job. Text inputs match `:focus-visible` even when focus arrives from a pointer, per the CSS selectors spec, so a click rings them too, which is the right behaviour for a field.
+- **Two smaller consequences** — on focus the element also loses the resting `outline: 2px solid transparent` that `buildShellStyle` sets, because the same declaration is what gets dropped; and the `flushed` variant's `base.outline = 'none'` on focus is a correction to a rule that was never in force.
+- **Why nothing caught it** — no test focuses an Input, and `outline-style: none` is what the element reports at rest too, so a snapshot of the resting state is identical to a snapshot of the broken focused state on this channel.
+- **Ask** — delete the dead declaration rather than repair it. The ring is already drawn, correctly, one layer up; adding a real outline would double it. If a component ever wants an outline ring it must reference `--ds-focus-ring-color`, and a token whose name ends in `-shadow-` belongs in `box-shadow`. WO-ARC-07's Input skin does this by construction: a reviewer reading `outline: 2px solid var(--ds-input-shadow-focus)` in a stylesheet sees a value that cannot parse.
+- **Status** — OPEN, and owned by WO-ARC-07's Input slice.
