@@ -73,6 +73,8 @@
 @import '../engines/modern/skin/filter-panel.css';
 @import '../engines/rustic/skin/filter-panel.css';
 @import '../components/skin/selection-preview-rail.css';
+@import '../engines/modern/skin/detail-panel.css';
+@import '../engines/rustic/skin/detail-panel.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

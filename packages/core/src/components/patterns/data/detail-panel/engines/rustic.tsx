@@ -24,7 +24,7 @@
  */
 
 import React, { useState } from 'react';
-import type { DetailPanelProps, DetailAction } from '../DetailPanel.types';
+import type { DetailPanelProps } from '../DetailPanel.types';
 
 // Animation constants shared across all interactive elements in this engine.
 // Uses a "back-out" easing for a slightly bouncy, organic feel.
@@ -40,34 +40,24 @@ const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
-    color: 'var(--ds-color-neutral-900)',
-    background: 'var(--ds-color-neutral-0, #fff)',
-    border: '1px solid var(--ds-color-neutral-200)',
-    borderRadius: 'var(--ds-radius-lg)',
     padding: 'var(--ds-card-body-padding, 1.25rem)',
-    boxShadow: 'var(--ds-card-shadow, none)',
   } as React.CSSProperties,
   breadcrumbs: {
     display: 'flex',
     alignItems: 'center',
     gap: '0.25rem',
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-color-neutral-500)',
     marginBottom: '1rem',
   } as React.CSSProperties,
   breadcrumbLink: {
-    color: 'var(--ds-color-primary-600)',
     textDecoration: 'none',
     cursor: 'pointer',
-    background: 'none',
-    border: 'none',
     padding: 0,
     font: 'inherit',
     fontSize: 'inherit',
   } as React.CSSProperties,
   breadcrumbSeparator: {
     margin: '0 0.25rem',
-    color: 'var(--ds-color-neutral-400)',
   } as React.CSSProperties,
   header: {
     display: 'flex',
@@ -83,14 +73,10 @@ const s = {
     minWidth: 0,
   } as React.CSSProperties,
   backBtn: {
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
     padding: '0.25rem',
-    color: 'var(--ds-color-neutral-600)',
     fontSize: '1.25rem',
     lineHeight: 1,
-    borderRadius: 'var(--ds-radius-sm)',
     transition: `color ${RUSTIC_DURATION} ${RUSTIC_EASING}, background ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   titleRow: {
@@ -108,58 +94,26 @@ const s = {
   } as React.CSSProperties,
   subtitle: {
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-color-neutral-500)',
     marginTop: '0.25rem',
   } as React.CSSProperties,
-  // Badge factory: when a color is provided, it is used as background with
-  // high-contrast on-primary text. Otherwise falls back to a neutral pill.
-  badge: (color?: string) => ({
-    display: 'inline-block',
-    padding: '0.125rem 0.5rem',
-    borderRadius: 'var(--ds-radius-full, 9999px)',
-    fontSize: 'var(--ds-font-size-xs)',
-    fontWeight: 500,
-    background: color ?? 'var(--ds-color-neutral-200)',
-    color: color ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-neutral-700)',
-  } as React.CSSProperties),
   actions: {
     display: 'flex',
     alignItems: 'center',
     gap: '0.5rem',
     flexShrink: 0,
   } as React.CSSProperties,
-  // Button style factory: builds a base style then overrides color/background
-  // per variant. The "all" transition covers color, background, border, and
-  // box-shadow changes from hover/focus handlers on the rendered button.
-  btn: (variant: DetailAction['variant']) => {
-    const base: React.CSSProperties = {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '0.375rem',
-      padding: '0.375rem 0.75rem',
-      borderRadius: 'var(--ds-radius-md)',
-      fontSize: 'var(--ds-font-size-sm)',
-      fontWeight: 500,
-      cursor: 'pointer',
-      border: '1px solid var(--ds-color-neutral-300)',
-      background: 'var(--ds-color-neutral-0, #fff)',
-      color: 'var(--ds-color-neutral-700)',
-      transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
-    };
-    if (variant === 'primary') {
-      base.background = 'var(--ds-color-primary-600)';
-      base.color = 'var(--ds-color-text-on-primary)';
-      base.borderColor = 'var(--ds-color-primary-600)';
-    } else if (variant === 'danger') {
-      base.background = 'var(--ds-color-error-600, #dc2626)';
-      base.color = 'var(--ds-color-text-on-primary)';
-      base.borderColor = 'var(--ds-color-error-600, #dc2626)';
-    } else if (variant === 'ghost') {
-      base.border = '1px solid transparent';
-      base.background = 'transparent';
-    }
-    return base;
-  },
+  // Button layout shared by all variants; the per-variant chrome, hover tint,
+  // and focus ring live in the rustic detail-panel skin keyed on data-variant.
+  btn: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: '0.375rem',
+    padding: '0.375rem 0.75rem',
+    fontSize: 'var(--ds-font-size-sm)',
+    fontWeight: 500,
+    cursor: 'pointer',
+    transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
+  } as React.CSSProperties,
   body: {
     display: 'flex',
     gap: '1rem',
@@ -172,34 +126,22 @@ const s = {
   sidebar: (width: number | string) => ({
     width: typeof width === 'number' ? `${width}px` : width,
     flexShrink: 0,
-    background: 'var(--ds-color-neutral-50)',
-    borderRadius: 'var(--ds-radius-md)',
     padding: '1rem',
-    border: '1px solid var(--ds-color-neutral-200)',
   } as React.CSSProperties),
   tabsNav: {
     display: 'flex',
-    borderBottom: '2px solid var(--ds-color-neutral-200)',
     marginBottom: '1rem',
     gap: 0,
   } as React.CSSProperties,
-  // Tab button style factory. The active tab gets a colored bottom border and
-  // heavier font weight. marginBottom:-2px offsets the border so it overlaps
-  // the nav's bottom border, creating the "selected tab" underline effect.
+  // Tab layout factory. marginBottom:-2px offsets the skin's bottom border so it
+  // overlaps the nav's bottom border, creating the "selected tab" underline
+  // effect; the active/disabled color and underline live in the skin.
   tab: (active: boolean, disabled?: boolean) => ({
     padding: '0.5rem 1rem',
     fontSize: 'var(--ds-font-size-sm)',
     fontWeight: active ? 'var(--ds-typography-heading-font-weight, 600)' : 400,
     letterSpacing: active ? 'var(--ds-typography-heading-letter-spacing, normal)' : 'normal',
-    color: disabled
-      ? 'var(--ds-color-neutral-400)'
-      : active
-        ? 'var(--ds-color-primary-600)'
-        : 'var(--ds-color-neutral-600)',
     cursor: disabled ? 'not-allowed' : 'pointer',
-    background: 'none',
-    border: 'none',
-    borderBottom: active ? '2px solid var(--ds-color-primary-600)' : '2px solid transparent',
     marginBottom: '-2px',
     display: 'inline-flex',
     alignItems: 'center',
@@ -209,24 +151,19 @@ const s = {
   tabBadge: {
     display: 'inline-block',
     padding: '0 0.375rem',
-    borderRadius: 'var(--ds-radius-full, 9999px)',
     fontSize: 'var(--ds-font-size-xs)',
-    background: 'var(--ds-color-neutral-200)',
-    color: 'var(--ds-color-neutral-600)',
     lineHeight: '1.4',
   } as React.CSSProperties,
   footer: {
     marginTop: 'var(--ds-card-body-padding, 1.25rem)',
     paddingTop: 'var(--ds-card-body-padding, 1.25rem)',
-    borderTop: '1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200))',
   } as React.CSSProperties,
-  // Skeleton factory: pulsing placeholder at given dimensions, used in loading state.
+  // Skeleton factory: pulsing placeholder at given dimensions, used in loading
+  // state; the radius and pulse background live in the skin.
   skeleton: (w: string, h: string) => ({
     width: w,
     height: h,
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-neutral-200)',
-    animation: 'pulse 1.5s ease-in-out infinite',
+    animation: 'ds-detail-panel-pulse 1.5s ease-in-out infinite',
   } as React.CSSProperties),
 };
 
@@ -274,8 +211,8 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
     onTabChange?.(key);
   };
 
-  // Skeleton loading state: injects @keyframes pulse inline since rustic engine
-  // has no external CSS file.
+  // Skeleton loading state. The ds-detail-panel-pulse keyframes the skeleton
+  // animation references live in the rustic detail-panel skin.
   if (loading) {
     return (
       <div
@@ -284,7 +221,6 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
         data-loading="true"
         style={{ ...s.container, ...style }}
       >
-        <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div data-part="skeleton-avatar" style={s.skeleton('3rem', '3rem')} />
           <div style={{ flex: 1 }}>
@@ -366,7 +302,21 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={s.titleRow}>
               <h2 data-part="title" style={s.title}>{title}</h2>
-              {status && <span data-part="status-badge" style={s.badge(status.color)}>{status.label}</span>}
+              {status && (
+                <span
+                  data-part="status-badge"
+                  style={
+                    status.color
+                      ? ({
+                          '--ds-detail-panel-status-bg': status.color,
+                          '--ds-detail-panel-status-fg': 'var(--ds-color-text-on-primary)',
+                        } as React.CSSProperties)
+                      : undefined
+                  }
+                >
+                  {status.label}
+                </span>
+              )}
             </div>
             {subtitle && <div data-part="subtitle" style={s.subtitle}>{subtitle}</div>}
           </div>
@@ -374,9 +324,9 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
         {(actions || headerExtra) && (
           <div style={s.actions}>
             {headerExtra}
-            {/* Action buttons with inline hover/focus handlers because the rustic engine
-                has no CSS hover pseudo-class available. Only default/ghost variants get
-                hover effects -- primary and danger already have strong backgrounds. */}
+            {/* Action buttons. The per-variant chrome, the ghost/default hover tint
+                (primary/danger excluded), and the double-ring focus indicator live in
+                the rustic detail-panel skin keyed on data-variant. */}
             {actions?.map((a) => (
               <button
                 key={a.key}
@@ -384,34 +334,12 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
                 data-variant={a.variant ?? 'default'}
                 data-loading={a.loading ? 'true' : 'false'}
                 style={{
-                  ...s.btn(a.variant),
+                  ...s.btn,
                   opacity: a.disabled ? 0.5 : 1,
                   cursor: a.disabled ? 'not-allowed' : 'pointer',
                 }}
                 disabled={a.disabled || a.loading}
                 onClick={a.onClick}
-                onMouseEnter={(e) => {
-                  // Hover effect only for ghost/default: tint background with primary-50.
-                  if (!a.disabled && (a.variant === 'ghost' || !a.variant)) {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = 'var(--ds-color-primary-600)';
-                    el.style.background = 'var(--ds-color-primary-50, rgba(99,102,241,0.06))';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!a.disabled && (a.variant === 'ghost' || !a.variant)) {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = a.variant === 'ghost' ? 'var(--ds-color-neutral-700)' : '';
-                    el.style.background = a.variant === 'ghost' ? 'transparent' : '';
-                  }
-                }}
-                onFocus={(e) => {
-                  // Double-ring focus indicator: inner ring (bg color) + outer ring (primary).
-                  (e.currentTarget as HTMLElement).style.boxShadow = '0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8)';
-                }}
-                onBlur={(e) => {
-                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-                }}
               >
                 {a.icon}
                 {a.loading ? 'Loading...' : a.label}

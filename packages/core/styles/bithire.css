@@ -15524,6 +15524,431 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
 }
 
+/**
+ * Modern DetailPanel skin (WO-ARC-09 checkpoint 5).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as the other engine skins (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the panel's outer `<div>`, which carries the pair
+ * `ds-pattern-detail-panel ds-engine-modern` + `data-part='root'`; every painted
+ * element is a descendant with its own `data-part`. The engine has two roots —
+ * the content panel and the loading early-return — and both carry the class pair,
+ * `data-part='root'`, and (loading only) `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that paints `border` / `border-color`
+ * must reach (0,4,0): the two root classes (0,2,0) + a `data-part` REPEATED on
+ * the target, or a contract `data-variant`/`data-active`/`data-disabled`, for the
+ * remaining (0,2,0). Rules that set only non-border paint (background, color,
+ * box-shadow, outline, border-radius) beat preflight while unlayered at (0,3,0).
+ * The 4th unit is never bought from an incidental attribute (`role`, `aria-label`,
+ * `placeholder`). Pure `border: none` resets carry no color and are exempt.
+ *
+ * Interaction paint that the removed React hover/focus state used to own now
+ * lives here as `:hover, :focus` rules, gated on `:not(:disabled)` because the
+ * button element is natively `disabled` whenever the action is disabled OR
+ * loading — the exact `isInteractive` gate the JSX evaluated.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root: card surface + radius (was containerStyle) ---- */
+.ds-pattern-detail-panel.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- action-button: shared chrome + per-variant base and merged hover/focus.
+        The JSX merged `vs.hover` over `vs.base` when `isInteractive`
+        (`(hovered || focused) && !disabled && !loading`); the button is natively
+        `disabled` on disabled||loading, so `:not(:disabled)` reproduces it. ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'] {
+  border-radius: var(--ds-radius-md);
+  outline: none;
+}
+
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-color-primary);
+  box-shadow: var(--ds-elevation-1);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary']:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='primary']:focus:not(:disabled) {
+  background: var(--ds-color-primary-600);
+  border-color: var(--ds-color-primary-600);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger'] {
+  background: transparent;
+  color: var(--ds-color-error-600);
+  border: 1px solid var(--ds-color-error-200);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger']:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='danger']:focus:not(:disabled) {
+  background: var(--ds-color-error-50);
+  border-color: var(--ds-color-error-300);
+}
+
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost'] {
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  border: 1px solid transparent;
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost']:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='ghost']:focus:not(:disabled) {
+  background: var(--ds-color-neutral-50);
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default'] {
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  border: 1px solid var(--ds-color-border);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default']:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-button'][data-variant='default']:focus:not(:disabled) {
+  background: var(--ds-color-neutral-50);
+  color: var(--ds-color-text-primary);
+  border-color: var(--ds-color-neutral-300);
+}
+
+/* ---- action spinner (loading): the `animation: spin` reference stays inline
+        (sanctioned residual); its border ring moves here. ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='action-spinner'][data-part='action-spinner'] {
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: var(--ds-radius-full);
+}
+
+/* ---- back-button: ghost, with the `hovered || focused` treatment (no disabled
+        state on this button, so no gate). ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  outline: none;
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button']:hover,
+.ds-pattern-detail-panel.ds-engine-modern [data-part='back-button']:focus {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- tab-button: base + active underline + disabled + hover. The JSX hover gate
+        was `!isActive && !disabled`; disabled is native here. ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-part='tab-button'] {
+  color: var(--ds-color-text-secondary);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  outline: none;
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+  border-bottom: 2px solid var(--ds-color-text-primary);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-disabled='true'] {
+  color: var(--ds-color-text-disabled);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button']:hover:not([data-active='true']):not(:disabled),
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button']:focus:not([data-active='true']):not(:disabled) {
+  color: var(--ds-color-text-primary);
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent);
+}
+
+/* ---- tab-badge: active state keyed on the parent tab-button's data-active ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-badge'] {
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-button'][data-active='true'] [data-part='tab-badge'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- breadcrumbs: separator, link (+ its hover), current (+ its `isLast`
+        emphasis, which is always the last element child of the nav). ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-separator'] {
+  color: var(--ds-color-text-disabled);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-link'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-link']:hover {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-current'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='breadcrumb-current']:last-child {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- title ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- status badge (modern ignores status.color — divergence preserved) ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='status-badge'][data-part='status-badge'] {
+  border-radius: var(--ds-radius-full);
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent);
+  color: var(--ds-color-text-secondary);
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* ---- subtitle ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- tab-list bottom border ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='tab-list'][data-part='tab-list'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+/* ---- sidebar panel ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='sidebar'][data-part='sidebar'] {
+  background: var(--ds-surface-panel);
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- footer top border ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* ---- skeleton parts: per-part radius (was PULSE_STYLE + per-instance override)
+        + shared pulse background. The `animation: pulse` reference to the global
+        keyframes stays inline (sanctioned residual). ---- */
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-breadcrumb'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-avatar'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-badge'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-title'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-subtitle'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-action'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-tab'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-content'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-100);
+}
+.ds-pattern-detail-panel.ds-engine-modern [data-part='skeleton-sidebar'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-color-neutral-100);
+}
+
+/**
+ * Rustic (Vanilla / CSS-variable) DetailPanel skin (WO-ARC-09 checkpoint 5).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the panel's outer `<div>`, carrying the pair
+ * `ds-pattern-detail-panel ds-engine-rustic` + `data-part='root'`; every painted
+ * element is a descendant with a `data-part`.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1), so a
+ * rule that paints `border` / `border-color` must reach (0,4,0) — the two root
+ * classes (0,2,0) + a REPEATED `data-part`, or a contract
+ * `data-variant`/`data-active`/`data-disabled` — never an incidental attribute
+ * (`role`, `aria-label`, `placeholder`). Non-border paint beats preflight while
+ * unlayered at (0,3,0). Pure `border: none` resets carry no color and are exempt;
+ * a `border: 1px solid transparent` does NOT reset — its transparent color would
+ * lose to the tenant floor below (0,4,0), so it repeats the data-part like any
+ * other painting border.
+ *
+ * Interaction paint that the removed imperative `.style.*` handlers used to own
+ * now lives here: the ghost/default hover tint as two `data-variant`-guarded
+ * `:hover:not(:disabled)` rules (primary/danger explicitly excluded, as the JSX
+ * guard was), and the double-ring focus indicator as one unconditional `:focus`
+ * rule (all variants, as `onFocus` was). The old mouse-leave reset for the
+ * `default` variant cleared its inline base to an empty string (a restore bug);
+ * the CSS base rule restores the true factory base after hover instead — a
+ * structural fix, not a reproduced bug.
+ *
+ * Values are transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- pulse keyframes: rustic's skeleton dims to opacity .4 (dimmer than the
+        global keyframes.css `pulse`, which bottoms at .5). Renamed off `pulse`
+        so this globally-loaded definition does not redefine the shared one; the
+        skeleton's inline `animation` references this name. ---- */
+@keyframes ds-detail-panel-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* ---- root: container surface, border, radius, inherited text color, shadow ---- */
+.ds-pattern-detail-panel.ds-engine-rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-color-neutral-900);
+  background: var(--ds-color-neutral-0, #fff);
+  border: 1px solid var(--ds-color-neutral-200);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-card-shadow, none);
+}
+
+/* ---- breadcrumbs ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='breadcrumbs'] {
+  color: var(--ds-color-neutral-500);
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='breadcrumb-link'] {
+  color: var(--ds-color-primary-600);
+  background: none;
+  border: none;
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='breadcrumb-separator'] {
+  color: var(--ds-color-neutral-400);
+}
+
+/* ---- back-button (rustic has no hover/focus paint — divergence preserved) ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='back-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-neutral-600);
+  border-radius: var(--ds-radius-sm);
+}
+
+/* ---- subtitle ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='subtitle'] {
+  color: var(--ds-color-neutral-500);
+}
+
+/* ---- status badge: rustic honors the arbitrary runtime `status.color`, which a
+        static skin cannot bake. The element carries the color as two custom
+        properties inline (only when set); the fallbacks are the neutral pill the
+        factory used when no color was provided. ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='status-badge'] {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  border-radius: var(--ds-radius-full, 9999px);
+  font-size: var(--ds-font-size-xs);
+  font-weight: 500;
+  background: var(--ds-detail-panel-status-bg, var(--ds-color-neutral-200));
+  color: var(--ds-detail-panel-status-fg, var(--ds-color-neutral-700));
+}
+
+/* ---- action-button: per-variant base + ghost/default hover + all-variant focus.
+        The JSX hover guard was `!disabled && (variant==='ghost' || !variant)`; a
+        button with no explicit variant renders `data-variant='default'`, so the
+        default/ghost hover selectors cover it. Native `disabled` covers
+        disabled||loading. ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='action-button'][data-variant='default'] {
+  border: 1px solid var(--ds-color-neutral-300);
+  background: var(--ds-color-neutral-0, #fff);
+  color: var(--ds-color-neutral-700);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='action-button'][data-variant='primary'] {
+  border: 1px solid var(--ds-color-primary-600);
+  background: var(--ds-color-primary-600);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='action-button'][data-variant='danger'] {
+  border: 1px solid var(--ds-color-error-600, #dc2626);
+  background: var(--ds-color-error-600, #dc2626);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='action-button'][data-variant='ghost'] {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ds-color-neutral-700);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='action-button'][data-variant='ghost']:hover:not(:disabled),
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='action-button'][data-variant='default']:hover:not(:disabled) {
+  color: var(--ds-color-primary-600);
+  background: var(--ds-color-primary-50, rgba(99, 102, 241, 0.06));
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='action-button']:focus {
+  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff), 0 0 0 4px var(--ds-color-primary-400, #818cf8);
+}
+
+/* ---- sidebar panel ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='sidebar'][data-part='sidebar'] {
+  background: var(--ds-color-neutral-50);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* ---- tab-list underline track ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='tab-list'][data-part='tab-list'] {
+  border-bottom: 2px solid var(--ds-color-neutral-200);
+}
+
+/* ---- tab-button: base + active underline + disabled (disabled wins ties by
+        ordering last, matching the `disabled ? … : active ? …` ternary). ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='tab-button'][data-part='tab-button'] {
+  color: var(--ds-color-neutral-600);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='tab-button'][data-active='true'] {
+  color: var(--ds-color-primary-600);
+  border-bottom: 2px solid var(--ds-color-primary-600);
+}
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='tab-button'][data-disabled='true'] {
+  color: var(--ds-color-neutral-400);
+}
+
+/* ---- tab-badge ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='tab-badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-neutral-200);
+  color: var(--ds-color-neutral-600);
+}
+
+/* ---- footer top divider ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200));
+}
+
+/* ---- skeleton parts: shared radius + pulse background (the `animation`
+        reference to ds-detail-panel-pulse stays inline). ---- */
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='skeleton-avatar'],
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='skeleton-title'],
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='skeleton-subtitle'],
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='skeleton-tabs'],
+.ds-pattern-detail-panel.ds-engine-rustic [data-part='skeleton-content'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-200);
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

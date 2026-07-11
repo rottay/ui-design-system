@@ -31,8 +31,6 @@ const TRANSITION_FAST =
   'var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
 const PULSE_STYLE: React.CSSProperties = {
-  borderRadius: 'var(--ds-radius-sm)',
-  background: 'var(--ds-color-neutral-100)',
   animation: 'pulse 1.5s ease-in-out infinite',
 };
 
@@ -68,66 +66,7 @@ function SkeletonBlock(props: {
  * Supports primary, danger, ghost, and default variants with hover states.
  */
 function ActionButton({ action }: { action: DetailAction }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const isInteractive = (hovered || focused) && !action.disabled && !action.loading;
-
   const variant = action.variant ?? 'default';
-
-  const variantStyles: Record<
-    string,
-    { base: React.CSSProperties; hover: React.CSSProperties }
-  > = {
-    primary: {
-      base: {
-        background: 'var(--ds-color-primary)',
-        color: 'var(--ds-color-text-on-primary)',
-        border: '1px solid var(--ds-color-primary)',
-        boxShadow: 'var(--ds-elevation-1)',
-      },
-      hover: {
-        background: 'var(--ds-color-primary-600)',
-        borderColor: 'var(--ds-color-primary-600)',
-        boxShadow: 'var(--ds-elevation-2)',
-      },
-    },
-    danger: {
-      base: {
-        background: 'transparent',
-        color: 'var(--ds-color-error-600)',
-        border: '1px solid var(--ds-color-error-200)',
-      },
-      hover: {
-        background: 'var(--ds-color-error-50)',
-        borderColor: 'var(--ds-color-error-300)',
-      },
-    },
-    ghost: {
-      base: {
-        background: 'transparent',
-        color: 'var(--ds-color-text-secondary)',
-        border: '1px solid transparent',
-      },
-      hover: {
-        background: 'var(--ds-color-neutral-50)',
-        color: 'var(--ds-color-text-primary)',
-      },
-    },
-    default: {
-      base: {
-        background: 'transparent',
-        color: 'var(--ds-color-text-secondary)',
-        border: '1px solid var(--ds-color-border)',
-      },
-      hover: {
-        background: 'var(--ds-color-neutral-50)',
-        color: 'var(--ds-color-text-primary)',
-        borderColor: 'var(--ds-color-neutral-300)',
-      },
-    },
-  };
-
-  const vs = variantStyles[variant] ?? variantStyles.default;
 
   return (
     <button
@@ -137,10 +76,6 @@ function ActionButton({ action }: { action: DetailAction }) {
       data-loading={action.loading ? 'true' : 'false'}
       disabled={action.disabled || action.loading}
       onClick={action.onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -149,13 +84,9 @@ function ActionButton({ action }: { action: DetailAction }) {
         fontSize: 13,
         fontWeight: 500,
         lineHeight: 1.4,
-        borderRadius: 'var(--ds-radius-md)',
         cursor: action.disabled || action.loading ? 'not-allowed' : 'pointer',
         opacity: action.disabled ? 0.5 : 1,
-        outline: 'none',
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
-        ...vs.base,
-        ...(isInteractive ? vs.hover : {}),
       }}
     >
       {action.loading && (
@@ -165,9 +96,6 @@ function ActionButton({ action }: { action: DetailAction }) {
             display: 'inline-block',
             width: 14,
             height: 14,
-            border: '2px solid currentColor',
-            borderTopColor: 'transparent',
-            borderRadius: 'var(--ds-radius-full)',
             animation: 'spin var(--ds-motion-glacial) linear infinite',
             flexShrink: 0,
           }}
@@ -191,19 +119,11 @@ function ActionButton({ action }: { action: DetailAction }) {
  * Clean back navigation button with ghost styling.
  */
 function BackButton({ onClick }: { onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const isInteractive = hovered || focused;
-
   return (
     <button
       type="button"
       data-part="back-button"
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       aria-label="Go back"
       style={{
         display: 'inline-flex',
@@ -212,16 +132,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
         width: 32,
         height: 32,
         flexShrink: 0,
-        border: 'none',
-        borderRadius: 'var(--ds-radius-sm)',
-        background: isInteractive
-          ? 'var(--ds-color-neutral-100)'
-          : 'transparent',
-        color: isInteractive
-          ? 'var(--ds-color-text-primary)'
-          : 'var(--ds-color-text-secondary)',
         cursor: 'pointer',
-        outline: 'none',
         padding: 0,
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}`,
       }}
@@ -269,10 +180,6 @@ function TabButton({
   disabled?: boolean;
   onClick: () => void;
 }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const isInteractive = (hovered || focused) && !isActive && !disabled;
-
   return (
     <button
       type="button"
@@ -286,10 +193,6 @@ function TabButton({
       tabIndex={isActive ? 0 : -1}
       disabled={disabled}
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       style={{
         position: 'relative',
         display: 'inline-flex',
@@ -299,25 +202,9 @@ function TabButton({
         fontSize: 13,
         fontWeight: isActive ? 600 : 500,
         lineHeight: 1.4,
-        color: disabled
-          ? 'var(--ds-color-text-disabled)'
-          : isActive
-            ? 'var(--ds-color-text-primary)'
-            : isInteractive
-              ? 'var(--ds-color-text-primary)'
-              : 'var(--ds-color-text-secondary)',
-        background: isInteractive
-          ? 'color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent)'
-          : 'transparent',
-        border: 'none',
-        borderBottom: isActive
-          ? '2px solid var(--ds-color-text-primary)'
-          : '2px solid transparent',
         marginBottom: -1,
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.5 : 1,
-        outline: 'none',
-        borderRadius: 0,
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
       }}
     >
@@ -338,13 +225,6 @@ function TabButton({
             fontSize: 11,
             fontWeight: 600,
             lineHeight: 1.4,
-            borderRadius: 'var(--ds-radius-full)',
-            background: isActive
-              ? 'color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent)'
-              : 'color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent)',
-            color: isActive
-              ? 'var(--ds-color-text-primary)'
-              : 'var(--ds-color-text-secondary)',
             minWidth: 18,
           }}
         >
@@ -390,7 +270,6 @@ function Breadcrumbs({
               <span
                 data-part="breadcrumb-separator"
                 style={{
-                  color: 'var(--ds-color-text-disabled)',
                   userSelect: 'none',
                   fontSize: 11,
                 }}
@@ -405,18 +284,9 @@ function Breadcrumbs({
                 onClick={crumb.onClick}
                 data-part="breadcrumb-link"
                 style={{
-                  color: 'var(--ds-color-text-secondary)',
                   fontWeight: 500,
                   textDecoration: 'none',
                   transition: `color ${TRANSITION_FAST}`,
-                }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.color =
-                    'var(--ds-color-text-primary)';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.color =
-                    'var(--ds-color-text-secondary)';
                 }}
               >
                 {crumb.label}
@@ -425,9 +295,6 @@ function Breadcrumbs({
               <span
                 data-part="breadcrumb-current"
                 style={{
-                  color: isLast
-                    ? 'var(--ds-color-text-primary)'
-                    : 'var(--ds-color-text-secondary)',
                   fontWeight: isLast ? 600 : 500,
                   cursor: isClickable ? 'pointer' : 'default',
                 }}
@@ -504,13 +371,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     onTabChange?.(key);
   };
 
-  /* ---- Container styles ---- */
-  const containerStyle: React.CSSProperties = {
-    background: 'var(--ds-surface-card)',
-    borderRadius: 'var(--ds-radius-lg)',
-    ...style,
-  };
-
   /* ---- Loading skeleton ---- */
   if (loading) {
     return (
@@ -518,7 +378,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
         data-part="root"
         data-loading="true"
-        style={containerStyle}
+        style={style}
       >
         <div style={{ padding: '20px 24px' }}>
           {/* Breadcrumb skeleton */}
@@ -538,7 +398,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               width={48}
               height={48}
               style={{
-                borderRadius: 'var(--ds-radius-full)',
                 flexShrink: 0,
               }}
             />
@@ -549,7 +408,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                   part="skeleton-badge"
                   width={64}
                   height={22}
-                  style={{ borderRadius: 'var(--ds-radius-full)' }}
                 />
               </div>
               <SkeletonBlock part="skeleton-subtitle" width={140} height={14} />
@@ -559,13 +417,11 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                 part="skeleton-action"
                 width={80}
                 height={34}
-                style={{ borderRadius: 'var(--ds-radius-md)' }}
               />
               <SkeletonBlock
                 part="skeleton-action"
                 width={80}
                 height={34}
-                style={{ borderRadius: 'var(--ds-radius-md)' }}
               />
             </div>
           </div>
@@ -580,15 +436,14 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           {/* Content skeleton */}
           <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <SkeletonBlock part="skeleton-content" width="100%" height={120} style={{ borderRadius: 'var(--ds-radius-md)' }} />
-              <SkeletonBlock part="skeleton-content" width="100%" height={80} style={{ borderRadius: 'var(--ds-radius-md)' }} />
+              <SkeletonBlock part="skeleton-content" width="100%" height={120} />
+              <SkeletonBlock part="skeleton-content" width="100%" height={80} />
             </div>
             <SkeletonBlock
               part="skeleton-sidebar"
               width={sidebarWidth}
               height={200}
               style={{
-                borderRadius: 'var(--ds-radius-lg)',
                 flexShrink: 0,
               }}
             />
@@ -605,7 +460,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     <div
       className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
       data-part="root"
-      style={containerStyle}
+      style={style}
     >
       <div style={{ padding: '20px 24px' }}>
         {/* ---- Breadcrumbs ---- */}
@@ -660,7 +515,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                       fontWeight: 600,
                       lineHeight: 1.3,
                       letterSpacing: '-0.02em',
-                      color: 'var(--ds-color-text-primary)',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
@@ -681,11 +535,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                       fontSize: 12,
                       fontWeight: 600,
                       lineHeight: 1.5,
-                      borderRadius: 'var(--ds-radius-full)',
                       whiteSpace: 'nowrap',
-                      background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
-                      color: 'var(--ds-color-text-secondary)',
-                      border: '1px solid var(--ds-color-border-secondary)',
                     }}
                   >
                     {status.label}
@@ -701,7 +551,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                     margin: '4px 0 0',
                     fontSize: 13,
                     lineHeight: 1.4,
-                    color: 'var(--ds-color-text-secondary)',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
@@ -751,7 +600,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                     display: 'flex',
                     alignItems: 'center',
                     gap: 0,
-                    borderBottom: '1px solid var(--ds-color-border)',
                     marginBottom: 16,
                   }}
                   onKeyDown={(e) => {
@@ -815,10 +663,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               <div
                 data-part="sidebar"
                 style={{
-                  background: 'var(--ds-surface-panel)',
                   padding: 16,
-                  borderRadius: 'var(--ds-radius-lg)',
-                  border: '1px solid var(--ds-color-border)',
                 }}
               >
                 {sidebar}
@@ -834,7 +679,6 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
             style={{
               marginTop: 20,
               paddingTop: 16,
-              borderTop: '1px solid var(--ds-color-border)',
             }}
           >
             {footer}
