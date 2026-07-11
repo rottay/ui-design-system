@@ -14580,9 +14580,29 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * transform, accent-color) beat preflight while unlayered and need no more than
  * the two classes + one attribute.
  *
+ * The 4th unit must be bought either by REPEATING the `data-part` attribute
+ * (`[data-part='x'][data-part='x']`, a legal double-count) or by an
+ * EXPLICITLY stamped attribute (e.g. `data-field`, `data-nav`) -- never by an
+ * incidental attribute an unrelated refactor could move or remove (`role`,
+ * `aria-label`, `placeholder`). Pure `border: none` resets carry no color and
+ * are exempt from the (0,4,0) floor. This is the pattern the other five
+ * components will copy.
+ *
  * Values are transcribed verbatim from `engines/modern.tsx`; the rule order
  * mirrors the order that file paints them, so the visual result is byte-identical.
  */
+
+/* ---- keyframes: referenced by the inline `animation` shorthands the engine
+        sets on the spinner and the expanded-row cell (sanctioned inline
+        residuals, WO-ARC-09). Defined globally here, not per table instance. ---- */
+@keyframes rottay-table-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes rottay-table-expand {
+  from { opacity: 0; max-height: 0; transform: translateY(-8px); }
+  to { opacity: 1; max-height: 500px; transform: translateY(0); }
+}
 
 /* ---- table element: border only in `bordered` mode ---- */
 .ds-table.ds-table--modern [data-part='table'][data-bordered='true'] {
@@ -14619,8 +14639,13 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 
 /* ---- fields: filter input, and the editable text/number/date/select cells,
-        which all shared `inlineInputStyle` before the migration ---- */
-.ds-table.ds-table--modern [data-part='field'] {
+        which all shared `inlineInputStyle` before the migration. `data-field`
+        ('filter' | 'edit') is stamped for cross-engine contract parity with
+        rustic, whose two field kinds paint different borders; modern paints
+        both kinds identically, so one declaration block serves both
+        selectors. ---- */
+.ds-table.ds-table--modern [data-part='field'][data-field='filter'],
+.ds-table.ds-table--modern [data-part='field'][data-field='edit'] {
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-card);
@@ -14628,8 +14653,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   outline: none;
 }
 
-/* ---- checkboxes: selection column + editable checkbox cell ---- */
-.ds-table.ds-table--modern [data-part='checkbox'] {
+/* ---- selection controls: checkbox/radio row-selection inputs (including
+        select-all) + the editable checkbox cell ---- */
+.ds-table.ds-table--modern [data-part='selection-control'] {
   accent-color: var(--ds-color-primary);
 }
 
@@ -14690,7 +14716,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .ds-table.ds-table--modern [data-part='loading-overlay'] {
   background: color-mix(in srgb, var(--ds-table-bg, var(--ds-surface-card)) 50%, transparent);
 }
-.ds-table.ds-table--modern [data-part='spinner'][role='status'] {
+.ds-table.ds-table--modern [data-part='spinner'][data-part='spinner'] {
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
@@ -14727,6 +14753,14 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * accent-color) beat preflight while unlayered and need no more than the two
  * classes + one attribute.
  *
+ * The 4th unit must be bought either by REPEATING the `data-part` attribute
+ * (`[data-part='x'][data-part='x']`, a legal double-count) or by an
+ * EXPLICITLY stamped attribute (e.g. `data-field`, `data-nav`) -- never by an
+ * incidental attribute an unrelated refactor could move or remove (`role`,
+ * `aria-label`, `placeholder`). Pure `border: none` resets carry no color and
+ * are exempt from the (0,4,0) floor. This is the pattern the other five
+ * components will copy.
+ *
  * RUSTIC DIFFERS FROM MODERN IN TWO STRUCTURAL WAYS this file encodes:
  *  1. Rustic's header/body separators are UNCONDITIONAL. Rustic has no
  *     `headerBordered` prop, and its per-cell bottom border never read
@@ -14748,6 +14782,14 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * Values are transcribed verbatim from `engines/rustic.tsx`'s (pre-migration)
  * `baseStyles`; the rule order mirrors the order that file painted them.
  */
+
+/* ---- keyframes: referenced by the inline `animation` shorthand the engine
+        sets on the expanded-row cell (a sanctioned inline residual,
+        WO-ARC-09). Defined globally here, not per table instance. ---- */
+@keyframes rottay-table-expand-in {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 500px; }
+}
 
 /* ---- table element: border only in `bordered` mode ---- */
 .ds-table.ds-table--rustic [data-part='table'][data-bordered='true'] {
@@ -14797,27 +14839,29 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-table-filter-row-bg, var(--ds-color-bg-secondary));
 }
 /* filter input: neutral resting border. Distinguished from the edit fields
-   below by `placeholder` -- only the filter input ever sets one. */
-.ds-table.ds-table--rustic [data-part='field'][placeholder] {
+   below by the explicit `data-field='filter'` stamp -- never an incidental
+   attribute like `placeholder`, which an unrelated UX/i18n change could add
+   to or remove from either kind. */
+.ds-table.ds-table--rustic [data-part='field'][data-field='filter'] {
   border: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300));
   border-radius: var(--ds-radius-sm, 6px);
   background-color: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
   outline: none;
 }
-.ds-table.ds-table--rustic [data-part='field'][placeholder]:focus {
+.ds-table.ds-table--rustic [data-part='field'][data-field='filter']:focus {
   border-color: var(--ds-color-primary);
   box-shadow: var(--ds-table-filter-focus-shadow, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200));
 }
 /* edit field (text/number/date/select): primary-colored border is the
-   "you're editing" signal, always on -- these never carry a `placeholder`. */
-.ds-table.ds-table--rustic [data-part='field']:not([placeholder]) {
+   "you're editing" signal, always on -- stamped `data-field='edit'`. */
+.ds-table.ds-table--rustic [data-part='field'][data-field='edit'] {
   border: 1px solid var(--ds-color-primary);
   border-radius: var(--ds-radius-sm, 6px);
   background-color: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
   outline: none;
 }
 
-/* ---- checkboxes: rustic never painted accent-color, nothing to move ---- */
+/* ---- selection controls: rustic never painted accent-color, nothing to move ---- */
 
 /* ---- muted text: empty-state cell + footer share one value; pagination
         range carries its own separate fallback chain ---- */
@@ -14896,15 +14940,21 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-color: var(--ds-table-header-bg, var(--ds-color-bg-secondary));
 }
 
-/* ---- pagination buttons: base chrome, then hover, then active. Active must
-        sort AFTER hover so its transform/box-shadow win when both
+/* ---- pagination buttons: base chrome, then hover, then active. Rustic only
+        ever renders two pagination-button elements (prev/next) -- there is
+        no separate current-page button (rustic shows the current page as a
+        plain, unstyled <span>, not a button) -- so the base-chrome rule below
+        applies to ALL pagination-button elements and reaches (0,4,0) with a
+        repeated `data-part` rather than depending on `aria-label`, which
+        both buttons happen to carry today but neither is required to. Active
+        must sort AFTER hover so its transform/box-shadow win when both
         pseudo-classes match at once (the mouse held down while over the
         button matches both), matching the JS's own spread order
         (`pageButtonHover` before `pageButtonActive`). `:not(:disabled)` is
         redundant with native `:hover`/`:active` behavior (disabled controls
         never match either) but is kept to document that the original JS
         guarded on it explicitly. ---- */
-.ds-table.ds-table--rustic [data-part='pagination-button'][aria-label] {
+.ds-table.ds-table--rustic [data-part='pagination-button'][data-part='pagination-button'] {
   border: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300));
   border-radius: var(--ds-radius-sm, 6px);
   background-color: var(--ds-table-bg, var(--ds-color-bg-elevated));

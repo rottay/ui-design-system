@@ -53,15 +53,12 @@ const inlineSelectStyle: React.CSSProperties = {
   appearance: 'auto' as const,
 };
 
-/** Layout for inline checkboxes; the paint is the modern skin's `[data-part='checkbox']`. */
+/** Layout for inline checkboxes/radios; the paint is the modern skin's `[data-part='selection-control']`. */
 const inlineCheckboxStyle: React.CSSProperties = {
   width: 16,
   height: 16,
   cursor: 'pointer',
 };
-
-/** Keyframes for the inline loading spinner */
-const SPIN_KEYFRAMES = '@keyframes rottay-table-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
 
 /**
  * Modern Table engine backed by DS token inline styles.
@@ -246,7 +243,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
           style={inlineCheckboxStyle}
-          data-part="checkbox"
+          data-part="selection-control"
           checked={!!cellValue}
           onChange={(e) => {
             setCellValue(e.target.checked);
@@ -265,6 +262,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLSelectElement>}
           style={inlineSelectStyle}
           data-part="field"
+          data-field="edit"
           value={String(cellValue ?? '')}
           onChange={(e) => {
             setCellValue(e.target.value);
@@ -290,6 +288,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           type="date"
           style={inlineInputStyle}
           data-part="field"
+          data-field="edit"
           value={String(cellValue ?? '')}
           onChange={(e) => setCellValue(e.target.value)}
           onKeyDown={onKeyDown}
@@ -306,6 +305,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         type={fieldType === 'number' ? 'number' : 'text'}
         style={inlineInputStyle}
         data-part="field"
+        data-field="edit"
         value={cellValue == null ? '' : String(cellValue)}
         onChange={(e) =>
           setCellValue(fieldType === 'number' ? Number(e.target.value) : e.target.value)
@@ -348,7 +348,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           data-sortable={isSortable ? 'true' : undefined}
           data-sticky={stickyConfig.enabled ? 'true' : undefined}
           data-hairline={showHeaderHairline ? 'true' : undefined}
-          data-fixed={column.fixed ? 'true' : undefined}
+          data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
           style={{
             padding: sizeTokens.cell,
             width,
@@ -425,6 +425,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               <input
                 type="text"
                 data-part="field"
+                data-field="filter"
                 style={{ ...inlineInputStyle, transition: 'border-color var(--ds-motion-normal)' }}
                 placeholder={t('table.filter_column', { column: String(col.title || '') })}
                 value={columnFilters[field || ''] || ''}
@@ -510,7 +511,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 <input
                   type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
                   style={inlineCheckboxStyle}
-                  data-part="checkbox"
+                  data-part="selection-control"
                   checked={isSelected}
                   onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
                   name={rowSelection.type === 'radio' ? 'table-row-selection' : undefined}
@@ -548,7 +549,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-part="cell"
                   data-editable={cellEditable && !cellIsEditing ? 'true' : undefined}
                   data-bordered={bordered ? 'true' : undefined}
-                  data-fixed={column.fixed ? 'true' : undefined}
+                  data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
                   style={{
                     padding: sizeTokens.cell,
                     textAlign: column.align,
@@ -623,6 +624,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               {/* Expand + Selection header cells only on first header row */}
               {rowIndex === 0 && showExpandCol && (
                 <th
+                  data-part="header-cell"
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
                   style={{ width: 48, padding: sizeTokens.cell, ...(stickyConfig.enabled ? { position: 'sticky' as const, top: stickyConfig.offsetHeader, zIndex: 20 } : {}) }}
                 >
@@ -631,6 +633,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               )}
               {rowIndex === 0 && rowSelection && (
                 <th
+                  data-part="header-cell"
                   rowSpan={headerRows.length > 1 ? headerRows.length : undefined}
                   style={{ width: 48, padding: sizeTokens.cell, ...(stickyConfig.enabled ? { position: 'sticky' as const, top: stickyConfig.offsetHeader, zIndex: 20 } : {}) }}
                 >
@@ -638,7 +641,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     <input
                       type="checkbox"
                       style={inlineCheckboxStyle}
-                      data-part="checkbox"
+                      data-part="selection-control"
                       checked={isAllSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       aria-label={t('table.select_all')}
@@ -692,9 +695,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
   return (
     <div className={['ds-table', 'ds-table--modern', className].filter(Boolean).join(' ')} style={{ position: 'relative', ...style }} id={id}>
-      {/* Inline keyframes avoid a global CSS file dependency. dangerouslySetInnerHTML
-          is safe here because the content is a static string, not user input. */}
-      <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-table-expand{from{opacity:0;max-height:0;transform:translateY(-8px)}to{opacity:1;max-height:500px;transform:translateY(0)}}${SPIN_KEYFRAMES}` }} />
       {/* Title */}
       {title && (
         <div style={{ marginBottom: 8, fontWeight: 600 }}>

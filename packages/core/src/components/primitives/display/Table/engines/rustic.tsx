@@ -398,7 +398,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
           style={baseStyles.editCheckbox}
-          data-part="checkbox"
+          data-part="selection-control"
           checked={!!cellValue}
           onChange={(e) => {
             setCellValue(e.target.checked);
@@ -417,6 +417,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLSelectElement>}
           style={baseStyles.editSelect}
           data-part="field"
+          data-field="edit"
           value={String(cellValue ?? '')}
           onChange={(e) => {
             setCellValue(e.target.value);
@@ -442,6 +443,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           type="date"
           style={baseStyles.editInput}
           data-part="field"
+          data-field="edit"
           value={String(cellValue ?? '')}
           onChange={(e) => setCellValue(e.target.value)}
           onKeyDown={onKeyDown}
@@ -458,6 +460,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         type={fieldType === 'number' ? 'number' : 'text'}
         style={baseStyles.editInput}
         data-part="field"
+        data-field="edit"
         value={cellValue == null ? '' : String(cellValue)}
         onChange={(e) =>
           setCellValue(fieldType === 'number' ? Number(e.target.value) : e.target.value)
@@ -508,7 +511,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           data-sortable={isSortable ? 'true' : undefined}
           data-sticky={stickyConfig.enabled ? 'true' : undefined}
           data-hairline="true"
-          data-fixed={column.fixed ? 'true' : undefined}
+          data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
           onClick={() => isSortable && handleSort(column)}
           aria-sort={ariaSortValue}
           role="columnheader"
@@ -572,6 +575,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 type="text"
                 style={baseStyles.filterInput}
                 data-part="field"
+                data-field="filter"
                 placeholder={t('table.filter_column', { column: String(col.title || '') })}
                 value={columnFilters[field || ''] || ''}
                 onChange={(e) => field && handleColumnFilter(field, e.target.value)}
@@ -662,7 +666,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 <input
                   type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
                   style={baseStyles.checkbox}
-                  data-part="checkbox"
+                  data-part="selection-control"
                   checked={isSelected}
                   onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
                   name={rowSelection.type === 'radio' ? 'table-row-selection' : undefined}
@@ -717,7 +721,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   data-part="cell"
                   data-bordered="true"
                   data-editable={cellEditable && !cellIsEditing ? 'true' : undefined}
-                  data-fixed={column.fixed ? 'true' : undefined}
+                  data-fixed={column.fixed === true ? 'true' : (column.fixed || undefined)}
                   role="gridcell"
                   onClick={
                     cellEditable && !cellIsEditing
@@ -805,7 +809,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     <input
                       type="checkbox"
                       style={baseStyles.checkbox}
-                      data-part="checkbox"
+                      data-part="selection-control"
                       checked={isAllSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       aria-label={t('table.select_all')}
@@ -891,14 +895,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       {footer && (
         <div style={baseStyles.footerBar} data-part="footer">{footer(processedData)}</div>
       )}
-
-      {/* Rustic animations */}
-      <style>{`
-        @keyframes rottay-table-expand-in {
-          from { opacity: 0; max-height: 0; }
-          to { opacity: 1; max-height: 500px; }
-        }
-      `}</style>
 
       {/* Pagination */}
       {pagination !== false && (

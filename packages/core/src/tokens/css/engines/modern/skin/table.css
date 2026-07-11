@@ -21,9 +21,29 @@
  * transform, accent-color) beat preflight while unlayered and need no more than
  * the two classes + one attribute.
  *
+ * The 4th unit must be bought either by REPEATING the `data-part` attribute
+ * (`[data-part='x'][data-part='x']`, a legal double-count) or by an
+ * EXPLICITLY stamped attribute (e.g. `data-field`, `data-nav`) -- never by an
+ * incidental attribute an unrelated refactor could move or remove (`role`,
+ * `aria-label`, `placeholder`). Pure `border: none` resets carry no color and
+ * are exempt from the (0,4,0) floor. This is the pattern the other five
+ * components will copy.
+ *
  * Values are transcribed verbatim from `engines/modern.tsx`; the rule order
  * mirrors the order that file paints them, so the visual result is byte-identical.
  */
+
+/* ---- keyframes: referenced by the inline `animation` shorthands the engine
+        sets on the spinner and the expanded-row cell (sanctioned inline
+        residuals, WO-ARC-09). Defined globally here, not per table instance. ---- */
+@keyframes rottay-table-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes rottay-table-expand {
+  from { opacity: 0; max-height: 0; transform: translateY(-8px); }
+  to { opacity: 1; max-height: 500px; transform: translateY(0); }
+}
 
 /* ---- table element: border only in `bordered` mode ---- */
 .ds-table.ds-table--modern [data-part='table'][data-bordered='true'] {
@@ -60,8 +80,13 @@
 }
 
 /* ---- fields: filter input, and the editable text/number/date/select cells,
-        which all shared `inlineInputStyle` before the migration ---- */
-.ds-table.ds-table--modern [data-part='field'] {
+        which all shared `inlineInputStyle` before the migration. `data-field`
+        ('filter' | 'edit') is stamped for cross-engine contract parity with
+        rustic, whose two field kinds paint different borders; modern paints
+        both kinds identically, so one declaration block serves both
+        selectors. ---- */
+.ds-table.ds-table--modern [data-part='field'][data-field='filter'],
+.ds-table.ds-table--modern [data-part='field'][data-field='edit'] {
   border: 1px solid var(--ds-color-border);
   border-radius: var(--ds-radius-sm);
   background: var(--ds-surface-card);
@@ -69,8 +94,9 @@
   outline: none;
 }
 
-/* ---- checkboxes: selection column + editable checkbox cell ---- */
-.ds-table.ds-table--modern [data-part='checkbox'] {
+/* ---- selection controls: checkbox/radio row-selection inputs (including
+        select-all) + the editable checkbox cell ---- */
+.ds-table.ds-table--modern [data-part='selection-control'] {
   accent-color: var(--ds-color-primary);
 }
 
@@ -131,7 +157,7 @@
 .ds-table.ds-table--modern [data-part='loading-overlay'] {
   background: color-mix(in srgb, var(--ds-table-bg, var(--ds-surface-card)) 50%, transparent);
 }
-.ds-table.ds-table--modern [data-part='spinner'][role='status'] {
+.ds-table.ds-table--modern [data-part='spinner'][data-part='spinner'] {
   border: 2px solid var(--ds-color-border);
   border-top-color: var(--ds-color-primary);
   border-radius: 50%;
