@@ -2,7 +2,22 @@
 
 import { Suspense, useMemo } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Box, Stack, Text, Button, Badge, Input, Card, Table, Toast } from '@rottay/design-system';
+import {
+  Box,
+  Stack,
+  Text,
+  Button,
+  Badge,
+  Input,
+  Card,
+  Table,
+  Toast,
+  FieldFiltersPanel,
+  type FieldFilterDefinition,
+  type FieldFilterPreset,
+  type FieldFilterVisual,
+} from '@rottay/design-system';
+import { TagIcon } from '@rottay/design-system/icons';
 import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
 import {
   TortureSurface,
@@ -67,6 +82,75 @@ const TABLE_STATE_COLUMNS = [
   { key: 'name', title: 'Name', dataIndex: 'name', sorter: true },
   { key: 'owner', title: 'Owner', dataIndex: 'owner' },
 ];
+
+// Fixed filter set for the FieldFiltersPanel data-part probe (WO-ARC-09
+// checkpoint 2). Covers every branch the panel renders: `status` is a
+// `select` with 7 options (crosses the >6 threshold into the searchable
+// branch), `region` is an `enum` with 3, `joinedAt` is a `date-range`, and
+// `owner` falls through to the free-text Input branch. `status` carries the
+// one active value in FIELD_FILTERS_VALUES, so it also exercises the
+// non-placeholder Select and the primary-tone InlineSignal.
+const FIELD_FILTERS_DEFINITIONS: FieldFilterDefinition[] = [
+  {
+    key: 'status',
+    label: 'Status',
+    type: 'select',
+    placeholder: 'All statuses',
+    options: [
+      { value: 'active', label: 'Active' },
+      { value: 'inactive', label: 'Inactive' },
+      { value: 'pending', label: 'Pending' },
+      { value: 'archived', label: 'Archived' },
+      { value: 'draft', label: 'Draft' },
+      { value: 'review', label: 'In review' },
+      { value: 'expired', label: 'Expired' },
+    ],
+  },
+  {
+    key: 'region',
+    label: 'Region',
+    type: 'enum',
+    placeholder: 'All regions',
+    options: [
+      { value: 'emea', label: 'EMEA' },
+      { value: 'amer', label: 'AMER' },
+      { value: 'apac', label: 'APAC' },
+    ],
+  },
+  {
+    key: 'joinedAt',
+    label: 'Joined',
+    type: 'date-range',
+    placeholder: 'Any time',
+    options: [
+      { value: '7d', label: 'Last 7 days' },
+      { value: '30d', label: 'Last 30 days' },
+      { value: '90d', label: 'Last 90 days' },
+    ],
+  },
+  {
+    key: 'owner',
+    label: 'Owner',
+    type: 'multi-select',
+    placeholder: 'Search owner',
+  },
+];
+
+const FIELD_FILTERS_PRESETS: FieldFilterPreset[] = [
+  { key: 'active-emea', label: 'Active in EMEA', values: { status: 'active', region: 'emea' } },
+  { key: 'new-joins', label: 'New joins', values: { joinedAt: '30d', status: 'active' } },
+];
+
+const FIELD_FILTERS_VALUES: Record<string, string> = {
+  status: 'active',
+  region: '',
+  joinedAt: '',
+  owner: '',
+};
+
+const FIELD_FILTERS_VISUALS: Record<string, FieldFilterVisual> = {
+  status: { icon: <TagIcon style={{ width: 15, height: 15 }} />, description: 'Filter by lifecycle status.' },
+};
 
 // Chrome the WO-ENG-02 flagship galleries never reach, rendered so the probe
 // can prove those tenant channels too:
@@ -151,6 +235,34 @@ function TableStates() {
   );
 }
 
+// A FieldFiltersPanel with every filter branch, a preset pair, and one
+// active value, rendered only behind `?fieldfilters=1` so no flagship
+// capture sees it. WO-ARC-09 checkpoint 2 moves this panel's paint out of
+// inline `style={}` objects into the unlayered field-filters-panel skin,
+// keyed on the `data-part` attributes the pre-step stamps. This section is
+// what `field-filters.spec.ts` photographs and reads computed styles from.
+function FieldFiltersStates() {
+  return (
+    <Box
+      data-testid="probe-field-filters"
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
+    >
+      <FieldFiltersPanel
+        filters={FIELD_FILTERS_DEFINITIONS}
+        presets={FIELD_FILTERS_PRESETS}
+        values={FIELD_FILTERS_VALUES}
+        onChange={() => undefined}
+        filterVisuals={FIELD_FILTERS_VISUALS}
+      />
+    </Box>
+  );
+}
+
 function sanitizeFixture(raw: string | null): TortureFixture {
   return raw && (TORTURE_FIXTURES as string[]).includes(raw) ? (raw as TortureFixture) : 'torture-dark';
 }
@@ -162,6 +274,7 @@ function TortureContent() {
   const rtl = useMemo(() => searchParams.get('rtl') === '1', [searchParams]);
   const interactive = useMemo(() => searchParams.get('interactive') === '1', [searchParams]);
   const tableStates = useMemo(() => searchParams.get('tablestates') === '1', [searchParams]);
+  const fieldFilters = useMemo(() => searchParams.get('fieldfilters') === '1', [searchParams]);
 
   // WO-ENG-11 compares engines on an otherwise identical surface.
   const engine = useMemo<ProbeEngine>(() => {
@@ -205,6 +318,8 @@ function TortureContent() {
             {interactive && <InteractiveCards />}
 
             {tableStates && <TableStates />}
+
+            {fieldFilters && <FieldFiltersStates />}
 
             <Box
               data-testid="probe-extras"

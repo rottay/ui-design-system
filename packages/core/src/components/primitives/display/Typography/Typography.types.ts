@@ -77,7 +77,7 @@ export type TextAlign = 'left' | 'center' | 'right' | 'justify';
  * Semantic text color options.
  * Maps to design system color tokens for consistent theming.
  */
-export type TextColor = 'default' | 'secondary' | 'tertiary' | 'muted' | 'primary' | 'success' | 'warning' | 'error';
+export type TextColor = 'default' | 'secondary' | 'tertiary' | 'muted' | 'subtle' | 'inherit' | 'primary' | 'success' | 'warning' | 'error';
 
 /**
  * Props for the Heading component.
@@ -527,6 +527,10 @@ export const COLOR_MAP = {
   tertiary: 'var(--ds-color-text-tertiary)',
   /** Muted / secondary text color - lower contrast for supporting text. */
   muted: 'var(--ds-color-text-secondary)',
+  /** Subtle text color - the text-muted token itself, for micro-labels and metadata. */
+  subtle: 'var(--ds-color-text-muted)',
+  /** Inherit the parent's color - for text inside a tone-colored container. */
+  inherit: 'inherit',
   /** Primary brand color - links, key labels, and interactive highlights. */
   primary: 'var(--ds-color-primary-500)',
   /** Success / positive color - confirmation messages, status indicators. */

@@ -76,6 +76,8 @@ export function FieldFiltersPanel({
 
   return (
     <Box
+      className="ds-structure ds-field-filters-panel"
+      data-part="root"
       style={{
         padding: '12px 16px 14px',
         borderBottom: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
@@ -87,6 +89,7 @@ export function FieldFiltersPanel({
         <Box style={{ minWidth: 0, flex: '1 1 540px' }}>
           <Flex align="center" gap={8} wrap="wrap">
             <Text
+              data-part="title-pill"
               size="xs"
               style={{
                 display: 'inline-flex',
@@ -105,7 +108,11 @@ export function FieldFiltersPanel({
             >
               Advanced filters
             </Text>
-            <Text size="xs" style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--ds-color-text-secondary)' }}>
+            <Text
+              data-part="subtitle"
+              size="xs"
+              style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--ds-color-text-secondary)' }}
+            >
               Precision filters for the current slice.
             </Text>
           </Flex>
@@ -120,6 +127,7 @@ export function FieldFiltersPanel({
         <Box style={{ marginBottom: 12 }}>
           <Flex align="center" gap={10} wrap="wrap">
             <Text
+              data-part="presets-pill"
               size="xs"
               style={{
                 display: 'inline-flex',
@@ -154,6 +162,7 @@ export function FieldFiltersPanel({
       )}
 
       <Box
+        data-part="grid"
         style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(230px, 1fr))',
@@ -185,6 +194,7 @@ export function FieldFiltersPanel({
                 description={visual.description}
               >
                 <Select
+                  className="ds-field-filters-panel__control"
                   value={value || 'all'}
                   onChange={(next) => onChange(filter.key, String(next === 'all' ? '' : next))}
                   searchable={Boolean((filter.options?.length ?? 0) > 6)}
@@ -209,6 +219,7 @@ export function FieldFiltersPanel({
                 description={visual.description}
               >
                 <Select
+                  className="ds-field-filters-panel__control"
                   value={value || 'all'}
                   onChange={(next) => onChange(filter.key, String(next === 'all' ? '' : next))}
                   clearable
@@ -231,6 +242,7 @@ export function FieldFiltersPanel({
               description={visual.description}
             >
               <Input
+                className="ds-field-filters-panel__control"
                 value={value}
                 onChange={(next) => onChange(filter.key, next)}
                 placeholder={filter.placeholder}
@@ -254,6 +266,7 @@ function PresetChip({
   return (
     <Box
       as="button"
+      data-part="preset-chip"
       onClick={onClick}
       style={{
         display: 'inline-flex',
@@ -274,6 +287,7 @@ function PresetChip({
       }}
     >
       <Box
+        data-part="preset-chip-icon"
         style={{
           width: 16,
           height: 16,
@@ -304,6 +318,8 @@ function InlineSignal({
 }) {
   return (
     <Box
+      data-part="signal"
+      data-tone={tone}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -324,6 +340,7 @@ function InlineSignal({
       }}
     >
       <Text
+        data-part="signal-label"
         size="xs"
         style={{
           fontSize: 11,
@@ -353,6 +370,7 @@ function FilterCard({
 }) {
   return (
     <Box
+      data-part="filter-card"
       style={{
         padding: 12,
         borderRadius: 18,
@@ -367,6 +385,7 @@ function FilterCard({
     >
       <Flex align="start" gap={10} style={{ marginBottom: 8 }}>
         <Box
+          data-part="filter-card-icon"
           style={{
             width: 30,
             height: 30,
@@ -384,6 +403,7 @@ function FilterCard({
         </Box>
         <Box style={{ minWidth: 0, flex: 1 }}>
           <Text
+            data-part="filter-card-label"
             size="xs"
             style={{
               display: 'block',
@@ -397,6 +417,7 @@ function FilterCard({
             {label}
           </Text>
           <Text
+            data-part="filter-card-description"
             size="xs"
             style={{
               display: 'block',
@@ -410,7 +431,7 @@ function FilterCard({
           </Text>
         </Box>
       </Flex>
-      <Box style={{ marginTop: 'auto' }}>{children}</Box>
+      <Box data-part="control-slot" style={{ marginTop: 'auto' }}>{children}</Box>
     </Box>
   );
 }

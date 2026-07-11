@@ -110,6 +110,8 @@ export interface BaseComponentProps {
   id?: string;
   /** Data attribute for testing */
   'data-testid'?: string;
+  /** Skin anatomy hook: identifies a component part for tenant CSS selectors */
+  'data-part'?: string;
   /** Accessible label for non-textual or landmark-style containers */
   'aria-label'?: string;
   /** Accessible description relationship for richer semantics */

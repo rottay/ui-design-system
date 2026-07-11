@@ -157,6 +157,8 @@ const COLOR_STYLES: Record<string, React.CSSProperties> = {
   secondary: { color: 'var(--ds-color-text-secondary)' },
   tertiary: { color: 'var(--ds-color-text-tertiary)' },
   muted: { color: 'var(--ds-color-text-secondary)' },
+  subtle: { color: 'var(--ds-color-text-muted)' },
+  inherit: { color: 'inherit' },
   primary: { color: 'var(--ds-color-primary)' },
   success: { color: 'var(--ds-color-success)' },
   warning: { color: 'var(--ds-color-warning)' },

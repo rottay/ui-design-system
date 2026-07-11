@@ -22044,14 +22044,6 @@ html {
       --size: calc(var(--size-selector, 0.25rem) * 5);
     }
   }
-  .radio-sm {
-    @layer daisyui.l1.l2 {
-      padding: 0.1875rem;
-      &:is([type="radio"]) {
-        --size: calc(var(--size-selector, 0.25rem) * 5);
-      }
-    }
-  }
   .p-1 {
     padding: calc(var(--spacing) * 1);
   }

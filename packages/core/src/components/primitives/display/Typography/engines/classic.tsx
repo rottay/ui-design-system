@@ -76,6 +76,8 @@ const LEVEL_MAP: Record<string, 1 | 2 | 3 | 4 | 5> = {
 const TYPE_MAP: Record<string, 'secondary' | 'success' | 'warning' | 'danger' | undefined> = {
   default: undefined,
   muted: 'secondary',
+  subtle: 'secondary',
+  inherit: undefined,
   primary: undefined,
   success: 'success',
   warning: 'warning',
