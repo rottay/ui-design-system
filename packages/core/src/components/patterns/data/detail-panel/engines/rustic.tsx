@@ -278,17 +278,22 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
   // has no external CSS file.
   if (loading) {
     return (
-      <div className={className} style={{ ...s.container, ...style }}>
+      <div
+        className={`ds-pattern-detail-panel ds-engine-rustic ${className ?? ''}`}
+        data-part="root"
+        data-loading="true"
+        style={{ ...s.container, ...style }}
+      >
         <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={s.skeleton('3rem', '3rem')} />
+          <div data-part="skeleton-avatar" style={s.skeleton('3rem', '3rem')} />
           <div style={{ flex: 1 }}>
-            <div style={s.skeleton('40%', '1.25rem')} />
-            <div style={{ ...s.skeleton('25%', '0.875rem'), marginTop: '0.5rem' }} />
+            <div data-part="skeleton-title" style={s.skeleton('40%', '1.25rem')} />
+            <div data-part="skeleton-subtitle" style={{ ...s.skeleton('25%', '0.875rem'), marginTop: '0.5rem' }} />
           </div>
         </div>
-        <div style={{ ...s.skeleton('100%', '2rem'), marginTop: '1.5rem' }} />
-        <div style={{ ...s.skeleton('100%', '10rem'), marginTop: '0.75rem' }} />
+        <div data-part="skeleton-tabs" style={{ ...s.skeleton('100%', '2rem'), marginTop: '1.5rem' }} />
+        <div data-part="skeleton-content" style={{ ...s.skeleton('100%', '10rem'), marginTop: '0.75rem' }} />
       </div>
     );
   }
@@ -298,42 +303,49 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
 
   // Sidebar wrapped in a bordered panel. Width can be a number (px) or CSS string.
   const sidebarNode = sidebar ? (
-    <div style={s.sidebar(sidebarWidth)}>{sidebar}</div>
+    <div data-part="sidebar" style={s.sidebar(sidebarWidth)}>{sidebar}</div>
   ) : null;
 
   const mainNode = (
     <div style={s.main}>
       {tabs && tabs.length > 0 && (
         <>
-          <div style={s.tabsNav}>
+          <div data-part="tab-list" style={s.tabsNav}>
             {tabs.map((tab) => (
               <button
                 key={tab.key}
+                data-part="tab-button"
+                data-active={activeTab === tab.key ? 'true' : 'false'}
+                data-disabled={tab.disabled ? 'true' : 'false'}
                 style={s.tab(activeTab === tab.key, tab.disabled)}
                 onClick={() => !tab.disabled && handleTabChange(tab.key)}
               >
                 {tab.icon}
                 {tab.label}
-                {tab.badge != null && <span style={s.tabBadge}>{tab.badge}</span>}
+                {tab.badge != null && <span data-part="tab-badge" style={s.tabBadge}>{tab.badge}</span>}
               </button>
             ))}
           </div>
-          <div>{activeTabObj?.content}</div>
+          <div data-part="tab-panel">{activeTabObj?.content}</div>
         </>
       )}
     </div>
   );
 
   return (
-    <div className={className} style={{ ...s.container, ...style }}>
+    <div
+      className={`ds-pattern-detail-panel ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
+      style={{ ...s.container, ...style }}
+    >
       {/* Breadcrumbs */}
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <div style={s.breadcrumbs}>
+        <div data-part="breadcrumbs" style={s.breadcrumbs}>
           {breadcrumbs.map((b, i) => (
             <React.Fragment key={i}>
-              {i > 0 && <span style={s.breadcrumbSeparator}>/</span>}
+              {i > 0 && <span data-part="breadcrumb-separator" style={s.breadcrumbSeparator}>/</span>}
               {b.href || b.onClick ? (
-                <a href={b.href ?? '#'} style={s.breadcrumbLink} onClick={b.onClick}>{b.label}</a>
+                <a href={b.href ?? '#'} data-part="breadcrumb-link" style={s.breadcrumbLink} onClick={b.onClick}>{b.label}</a>
               ) : (
                 <span>{b.label}</span>
               )}
@@ -343,20 +355,20 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
       )}
 
       {/* Header */}
-      <div style={s.header}>
+      <div data-part="header" style={s.header}>
         <div style={s.headerLeft}>
           {onBack && (
-            <button style={s.backBtn} onClick={onBack} aria-label="Back">
+            <button data-part="back-button" style={s.backBtn} onClick={onBack} aria-label="Back">
               &#8592;
             </button>
           )}
           {avatar && <div style={{ flexShrink: 0 }}>{avatar}</div>}
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={s.titleRow}>
-              <h2 style={s.title}>{title}</h2>
-              {status && <span style={s.badge(status.color)}>{status.label}</span>}
+              <h2 data-part="title" style={s.title}>{title}</h2>
+              {status && <span data-part="status-badge" style={s.badge(status.color)}>{status.label}</span>}
             </div>
-            {subtitle && <div style={s.subtitle}>{subtitle}</div>}
+            {subtitle && <div data-part="subtitle" style={s.subtitle}>{subtitle}</div>}
           </div>
         </div>
         {(actions || headerExtra) && (
@@ -368,6 +380,9 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
             {actions?.map((a) => (
               <button
                 key={a.key}
+                data-part="action-button"
+                data-variant={a.variant ?? 'default'}
+                data-loading={a.loading ? 'true' : 'false'}
                 style={{
                   ...s.btn(a.variant),
                   opacity: a.disabled ? 0.5 : 1,
@@ -417,7 +432,7 @@ export default function RusticDetailPanel<T>(props: DetailPanelProps<T>) {
       </div>
 
       {/* Footer */}
-      {footer && <div style={s.footer}>{footer}</div>}
+      {footer && <div data-part="footer" style={s.footer}>{footer}</div>}
     </div>
   );
 }

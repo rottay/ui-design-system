@@ -43,10 +43,12 @@ const PULSE_STYLE: React.CSSProperties = {
 function SkeletonBlock(props: {
   width: number | string;
   height: number;
+  part: string;
   style?: React.CSSProperties;
 }) {
   return (
     <div
+      data-part={props.part}
       style={{
         width: props.width,
         height: props.height,
@@ -130,6 +132,9 @@ function ActionButton({ action }: { action: DetailAction }) {
   return (
     <button
       type="button"
+      data-part="action-button"
+      data-variant={variant}
+      data-loading={action.loading ? 'true' : 'false'}
       disabled={action.disabled || action.loading}
       onClick={action.onClick}
       onMouseEnter={() => setHovered(true)}
@@ -155,6 +160,7 @@ function ActionButton({ action }: { action: DetailAction }) {
     >
       {action.loading && (
         <span
+          data-part="action-spinner"
           style={{
             display: 'inline-block',
             width: 14,
@@ -192,6 +198,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
+      data-part="back-button"
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -271,6 +278,9 @@ function TabButton({
       type="button"
       role="tab"
       id={`tab-${tabKey}`}
+      data-part="tab-button"
+      data-active={isActive ? 'true' : 'false'}
+      data-disabled={disabled ? 'true' : 'false'}
       aria-selected={isActive}
       aria-controls={`panel-${tabKey}`}
       tabIndex={isActive ? 0 : -1}
@@ -319,6 +329,7 @@ function TabButton({
       {label}
       {badge != null && (
         <span
+          data-part="tab-badge"
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -359,6 +370,7 @@ function Breadcrumbs({
   return (
     <nav
       aria-label="Breadcrumb"
+      data-part="breadcrumbs"
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -376,6 +388,7 @@ function Breadcrumbs({
           <React.Fragment key={`crumb-${idx}`}>
             {idx > 0 && (
               <span
+                data-part="breadcrumb-separator"
                 style={{
                   color: 'var(--ds-color-text-disabled)',
                   userSelect: 'none',
@@ -390,6 +403,7 @@ function Breadcrumbs({
               <a
                 href={crumb.href}
                 onClick={crumb.onClick}
+                data-part="breadcrumb-link"
                 style={{
                   color: 'var(--ds-color-text-secondary)',
                   fontWeight: 500,
@@ -409,6 +423,7 @@ function Breadcrumbs({
               </a>
             ) : (
               <span
+                data-part="breadcrumb-current"
                 style={{
                   color: isLast
                     ? 'var(--ds-color-text-primary)'
@@ -501,11 +516,13 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
     return (
       <div
         className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
+        data-part="root"
+        data-loading="true"
         style={containerStyle}
       >
         <div style={{ padding: '20px 24px' }}>
           {/* Breadcrumb skeleton */}
-          <SkeletonBlock width={180} height={12} style={{ marginBottom: 14 }} />
+          <SkeletonBlock part="skeleton-breadcrumb" width={180} height={12} style={{ marginBottom: 14 }} />
 
           {/* Header skeleton */}
           <div
@@ -517,6 +534,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
           >
             {/* Avatar skeleton */}
             <SkeletonBlock
+              part="skeleton-avatar"
               width={48}
               height={48}
               style={{
@@ -526,22 +544,25 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
             />
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <SkeletonBlock width={180} height={22} />
+                <SkeletonBlock part="skeleton-title" width={180} height={22} />
                 <SkeletonBlock
+                  part="skeleton-badge"
                   width={64}
                   height={22}
                   style={{ borderRadius: 'var(--ds-radius-full)' }}
                 />
               </div>
-              <SkeletonBlock width={140} height={14} />
+              <SkeletonBlock part="skeleton-subtitle" width={140} height={14} />
             </div>
             <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
               <SkeletonBlock
+                part="skeleton-action"
                 width={80}
                 height={34}
                 style={{ borderRadius: 'var(--ds-radius-md)' }}
               />
               <SkeletonBlock
+                part="skeleton-action"
                 width={80}
                 height={34}
                 style={{ borderRadius: 'var(--ds-radius-md)' }}
@@ -551,18 +572,19 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
 
           {/* Tab bar skeleton */}
           <div style={{ marginTop: 20, display: 'flex', gap: 4 }}>
-            <SkeletonBlock width={72} height={34} />
-            <SkeletonBlock width={72} height={34} />
-            <SkeletonBlock width={72} height={34} />
+            <SkeletonBlock part="skeleton-tab" width={72} height={34} />
+            <SkeletonBlock part="skeleton-tab" width={72} height={34} />
+            <SkeletonBlock part="skeleton-tab" width={72} height={34} />
           </div>
 
           {/* Content skeleton */}
           <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12 }}>
-              <SkeletonBlock width="100%" height={120} style={{ borderRadius: 'var(--ds-radius-md)' }} />
-              <SkeletonBlock width="100%" height={80} style={{ borderRadius: 'var(--ds-radius-md)' }} />
+              <SkeletonBlock part="skeleton-content" width="100%" height={120} style={{ borderRadius: 'var(--ds-radius-md)' }} />
+              <SkeletonBlock part="skeleton-content" width="100%" height={80} style={{ borderRadius: 'var(--ds-radius-md)' }} />
             </div>
             <SkeletonBlock
+              part="skeleton-sidebar"
               width={sidebarWidth}
               height={200}
               style={{
@@ -582,6 +604,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
   return (
     <div
       className={`ds-pattern-detail-panel ds-engine-modern ${className ?? ''}`}
+      data-part="root"
       style={containerStyle}
     >
       <div style={{ padding: '20px 24px' }}>
@@ -592,6 +615,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
 
         {/* ---- Header ---- */}
         <div
+          data-part="header"
           style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -629,6 +653,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                     to avoid a double heading -- the shell owns the page title. */}
                 {title != null && title !== '' && (
                   <h2
+                    data-part="title"
                     style={{
                       margin: 0,
                       fontSize: 20,
@@ -648,6 +673,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                 {/* Status pill badge */}
                 {status && (
                   <span
+                    data-part="status-badge"
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -670,6 +696,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               {/* Subtitle */}
               {subtitle && (
                 <p
+                  data-part="subtitle"
                   style={{
                     margin: '4px 0 0',
                     fontSize: 13,
@@ -719,6 +746,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                 <div
                   role="tablist"
                   aria-label="Detail panel tabs"
+                  data-part="tab-list"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -767,6 +795,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
                   role="tabpanel"
                   id={`panel-${activeTab}`}
                   aria-labelledby={`tab-${activeTab}`}
+                  data-part="tab-panel"
                 >
                   {activeTabObj?.content}
                 </div>
@@ -784,6 +813,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
               }}
             >
               <div
+                data-part="sidebar"
                 style={{
                   background: 'var(--ds-surface-panel)',
                   padding: 16,
@@ -800,6 +830,7 @@ export default function ModernDetailPanel<T>(props: DetailPanelProps<T>) {
         {/* ---- Footer ---- */}
         {footer && (
           <div
+            data-part="footer"
             style={{
               marginTop: 20,
               paddingTop: 16,
