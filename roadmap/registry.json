@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in the engine-modern lane .md file)",
- "updated": "2026-07-10",
+ "updated": "2026-07-11",
  "rules": {
   "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
   "claim_requires": "all dependsOn done",
@@ -1470,6 +1470,11 @@
      "at": "2026-07-10 21:46",
      "by": "ds-agent",
      "note": "Checkpoint 1 (Table) underway. Infra DONE+committed: arc09.inlinePaint per-file counter (object-literal keys + imperative .style.<paint> writes; strings/comments/keyframes/type-annotations excluded structurally; 13 files baselined ~555 total) + viewport-mq walk extended to components/skin/. Table states PRE-STEP DONE+committed on pristine code (32505ffb): whitelabel-torture ?tablestates=1 probe + states.spec table-row probe (row hover + selected row), 24 cells x 3 fixtures x 2 engines; 'reacts to hover' invariant given the has(hovered) guard the other 4 already use. STALE-SERVER TRAP: the visual webServer reuseExistingServer reused a pre-rebuild next-start serving 500s — kill:7001 before every post-rebuild gate run. Compound-component specificity contract derived: painted cells are DESCENDANTS of root (unlike button/card), so a border-color rule needs .ds-table.ds-table--modern [data-part][data-attr] = (0,4,0) to clear the P-48 floor; non-border paint just unlayered. Next: modern skin+engine (delegated), then rustic, then real-engines test + full gate + commit."
+    },
+    {
+     "at": "2026-07-11 01:11",
+     "by": "ds-agent",
+     "note": "Checkpoint 1 MODERN half DONE + gated + committed (28f9e8ae skin, d7189325 engine). Did it in the main loop (subagents rate-limited until 7:40pm ET). arc09.inlinePaint modern 50->0 (object paint + imperative onMouseEnter .style.background writes on rows/editable-cells/resize-handle, all now CSS :hover). Contract: scope root = outer <div> (ds-table ds-table--modern) so overlay/spinner/pagination (siblings of <table>) are covered; ~20 data-part parts; border rules reach (0,4,0) via 2 div classes + 2 target attrs to clear the P-48 floor; non-border paint wins unlayered. Caller className/style + every column.style PRESERVED (unlayered yields to inline) — zero prop/slot/action/render change, all functional handlers kept (resize onMouseDown, cell-edit onClick, expand, onRow, onCell). Table.header-hairline.test rewritten onto the data-hairline/data-bordered DOM contract (ARC-07 rule). GATED BYTE-EXACT: 6 flagship  baselines byte-identical + 6 table-row state cells match; 51/51 Table unit tests; full core suite = 17 ledger, zero new; typecheck clean (only pre-existing src/commercial .css TS2882). NEXT: rustic half (55 sites, uses React hover STATE not imperative — remove hoveredRow/hoveredSortCol/hoveredPageBtn + conditional paint -> CSS :hover), then real-engines test, then Fable reviews BOTH engines before propagating the pattern to components 2-6."
     }
    ],
    "claimedBy": "ds-agent",
