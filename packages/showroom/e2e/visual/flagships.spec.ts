@@ -62,7 +62,12 @@ for (const tenant of TENANTS) {
           waitUntil: 'networkidle',
         });
         await page.getByRole('heading', { name: /modern engine evidence/i }).waitFor({ timeout: 30_000 });
-        await page.evaluate(() => document.fonts.ready);
+        // `document.fonts.ready` resolves for the faces that have STARTED
+        // loading; a face first referenced by late-painting content can still
+        // be pending, so a run can photograph the fallback metrics (~3.7-4k px
+        // of text ghosting against a webfont baseline). Force every registered
+        // face to load before trusting ready.
+        await page.evaluate(() => Promise.all([...document.fonts].map((f) => f.load())).then(() => document.fonts.ready));
         await waitForGroundPaint(page, tenant.ground);
 
         // The modal flagship's real surface only exists once opened — open it
