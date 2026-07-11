@@ -64,13 +64,15 @@ const DENSITY_STYLES = {
 // ---------------------------------------------------------------------------
 // Style dictionary
 // ---------------------------------------------------------------------------
-// All visual tokens reference `--ds-*` CSS custom properties with sensible
-// fallbacks so the table renders correctly even without a theme provider.
+// Layout + non-paint channels only. All paint (borders, backgrounds, text
+// colors, the loading scrim/spinner ring) lives in the unlayered rustic skin
+// (tokens/css/engines/rustic/skin/data-table.css), keyed on the data-part /
+// data-state / data-variant / data-bordered contract stamped below. The
+// `styles.td` background-color transition stays here (transition is not paint).
 const styles = {
   container: {
     width: '100%',
     fontFamily: 'var(--ds-font-family-base)',
-    color: 'var(--ds-color-neutral-900)',
     containerType: 'inline-size',
     containerName: 'ds-table',
   } as React.CSSProperties,
@@ -81,7 +83,6 @@ const styles = {
     marginBottom: 'var(--ds-card-body-padding, 1.25rem)',
     gap: '0.75rem',
     paddingBottom: '0.75rem',
-    borderBottom: '1px solid var(--ds-color-neutral-100)',
   } as React.CSSProperties,
   bulkBar: {
     display: 'flex',
@@ -92,17 +93,12 @@ const styles = {
   } as React.CSSProperties,
   bulkBtn: {
     padding: '0.25rem 0.75rem',
-    border: '1px solid var(--ds-color-neutral-300)',
-    borderRadius: 'var(--ds-radius-sm)',
-    background: 'transparent',
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm)',
     transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   tableWrap: {
     overflowX: 'auto' as const,
-    border: '1px solid var(--ds-color-neutral-200)',
-    borderRadius: 'var(--ds-radius-md)',
     position: 'relative' as const,
   } as React.CSSProperties,
   table: {
@@ -115,25 +111,16 @@ const styles = {
     fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
     textTransform: 'var(--ds-typography-label-transform, uppercase)' as unknown as React.CSSProperties['textTransform'],
     letterSpacing: 'var(--ds-typography-heading-letter-spacing, 0.05em)',
-    color: 'var(--ds-color-neutral-500)',
-    borderBottom: '1px solid var(--ds-color-neutral-200)',
-    borderRight: '1px solid var(--ds-color-neutral-100)',
-    background: 'var(--ds-color-neutral-50)',
     whiteSpace: 'nowrap' as const,
     userSelect: 'none' as const,
     position: 'relative' as const,
   } as React.CSSProperties,
-  thLast: {
-    borderRight: 'none',
-  } as React.CSSProperties,
   td: {
-    borderBottom: '1px solid var(--ds-color-neutral-100)',
     transition: `background-color ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
   empty: {
     padding: '4rem 2rem',
     textAlign: 'center' as const,
-    color: 'var(--ds-color-neutral-400)',
     display: 'flex',
     flexDirection: 'column' as const,
     alignItems: 'center',
@@ -147,24 +134,16 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'var(--ds-table-loading-overlay-bg, var(--ds-modal-loading-overlay-bg))',
-    backdropFilter: 'blur(2px)',
-    WebkitBackdropFilter: 'blur(2px)',
     zIndex: 5,
-    borderRadius: 'var(--ds-radius-md)',
   } as React.CSSProperties,
   loadingSpinner: {
     width: 28,
     height: 28,
-    border: '3px solid var(--ds-color-neutral-200)',
-    borderTopColor: 'var(--ds-color-primary-500)',
-    borderRadius: '50%',
     animation: 'ds-spin 0.6s linear infinite',
   } as React.CSSProperties,
   loadingFallback: {
     padding: '3rem',
     textAlign: 'center' as const,
-    color: 'var(--ds-color-neutral-400)',
   } as React.CSSProperties,
   pagination: {
     display: 'flex',
@@ -172,13 +151,9 @@ const styles = {
     alignItems: 'center',
     padding: '0.75rem 0',
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-color-neutral-500)',
   } as React.CSSProperties,
   pageBtn: {
     padding: '0.375rem 0.75rem',
-    border: '1px solid var(--ds-color-neutral-300)',
-    borderRadius: 'var(--ds-radius-sm)',
-    background: 'var(--ds-color-neutral-50)',
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm)',
     transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
@@ -189,11 +164,8 @@ const styles = {
     cursor: 'pointer',
   } as React.CSSProperties,
   expandBtn: {
-    background: 'transparent',
-    border: 'none',
     cursor: 'pointer',
     padding: '0.25rem',
-    color: 'var(--ds-color-neutral-500)',
     transition: `color ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as React.CSSProperties,
 };
@@ -445,9 +417,6 @@ export default function RusticDataTable<T extends object>(
         position: 'sticky',
         [side]: 0,
         zIndex: isHeader ? 12 : 2,
-        background: isHeader
-          ? 'var(--ds-color-neutral-50)'
-          : 'var(--ds-color-surface, #fff)',
       };
     },
     []
@@ -474,7 +443,6 @@ export default function RusticDataTable<T extends object>(
       return {
         ...styles.th,
         ...densityTh,
-        ...(isLastDataCol && !actions ? styles.thLast : {}),
         width,
         textAlign: col.align ?? 'left',
         cursor: col.sortable ? 'pointer' : undefined,
@@ -538,10 +506,6 @@ export default function RusticDataTable<T extends object>(
                 fontSize: 10,
                 lineHeight: 1,
                 flexShrink: 0,
-                borderRadius: 5,
-                border: '1px solid var(--ds-color-border-secondary, rgba(148, 163, 184, 0.55))',
-                background: 'color-mix(in srgb, var(--ds-surface-inset, #f8fafc) 72%, transparent)',
-                color: 'var(--ds-color-text-secondary, #475569)',
               }}
               aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
               role="button"
@@ -565,8 +529,6 @@ export default function RusticDataTable<T extends object>(
                   top: 0,
                   bottom: 0,
                   width: 2,
-                  background: 'var(--ds-color-primary, #1677ff)',
-                  borderRadius: 1,
                 }}
               />
             )}
@@ -643,8 +605,6 @@ export default function RusticDataTable<T extends object>(
             style={{
               width: 1,
               height: '60%',
-              background: 'rgba(0,0,0,0.12)',
-              borderRadius: 1,
               transition: 'background 150ms ease',
             }}
           />
@@ -673,17 +633,7 @@ export default function RusticDataTable<T extends object>(
                   key={action.key}
                   data-part="bulk-bar-action"
                   data-variant={action.variant ?? 'default'}
-                  style={{
-                    ...styles.bulkBtn,
-                    ...(action.variant === 'danger' ? { color: 'var(--ds-color-error-600)', borderColor: 'var(--ds-color-error-300)' } : {}),
-                    ...(action.variant === 'primary'
-                      ? {
-                          background: 'var(--ds-color-primary-500)',
-                          color: 'var(--ds-color-text-on-primary)',
-                          borderColor: 'var(--ds-color-primary-500)',
-                        }
-                      : {}),
-                  }}
+                  style={styles.bulkBtn}
                   disabled={action.disabled}
                   onClick={() => {
                     const selectedRows = data.filter((row, i) => selectedKeys.includes(getRowKey(row, i)));
@@ -700,14 +650,14 @@ export default function RusticDataTable<T extends object>(
 
       {/* Table wrapper merges maxHeight for scrollable body and conditionally
           removes the border when the `bordered` prop is false. */}
-      <div data-part="wrap" style={{ ...styles.tableWrap, ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}), ...(bordered ? {} : { border: 'none' }) }}>
+      <div data-part="wrap" data-bordered={bordered ? 'true' : 'false'} style={{ ...styles.tableWrap, ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}) }}>
         {/* Inline keyframes: Rustic engine cannot depend on global CSS, so animation
             definitions must be co-located here. */}
         <style>{`@keyframes ds-spin { to { transform: rotate(360deg); } } @keyframes ds-bulk-slide-down { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
         {/* Loading overlay renders on top of existing data to avoid layout jump;
             when data is empty, a centered spinner replaces the table entirely. */}
         {loading && data.length > 0 && (
-          <div data-part="loading-overlay" style={styles.loadingOverlay} role="status" aria-label="Loading">
+          <div data-part="loading-overlay" data-scrim="true" style={styles.loadingOverlay} role="status" aria-label="Loading">
             <div data-part="loading-spinner" style={styles.loadingSpinner} aria-hidden="true" />
           </div>
         )}
@@ -773,7 +723,6 @@ export default function RusticDataTable<T extends object>(
                     style={{
                       ...styles.th,
                       ...densityTh,
-                      ...styles.thLast,
                       width: 120,
                       textAlign: 'right',
                       ...(stickyHeader ? { position: 'sticky', top: 0, zIndex: 10 } : {}),
@@ -803,11 +752,6 @@ export default function RusticDataTable<T extends object>(
                       }
                       style={{
                         cursor: onRowClick ? 'pointer' : undefined,
-                        background: selectedKeys.includes(key)
-                          ? 'var(--ds-color-primary-50)'
-                          : striped && index % 2 === 1
-                            ? 'var(--ds-color-neutral-50)'
-                            : undefined,
                       }}
                       onClick={onRowClick ? () => onRowClick(row, index) : undefined}
                     >
@@ -851,17 +795,7 @@ export default function RusticDataTable<T extends object>(
                             data-col-priority={col.priority || undefined}
                             data-part="data-cell"
                             data-pinned={pinSide ? 'true' : 'false'}
-                            style={{
-                              ...buildTdStyle(col),
-                              // When pinned, override row background to avoid
-                              // transparency showing scrolled content beneath.
-                              ...(pinSide && selectedKeys.includes(key)
-                                ? { background: 'var(--ds-color-primary-50)' }
-                                : {}),
-                              ...(pinSide && striped && index % 2 === 1 && !selectedKeys.includes(key)
-                                ? { background: 'var(--ds-color-neutral-50)' }
-                                : {}),
-                            }}
+                            style={buildTdStyle(col)}
                           >
                             {col.render
                               ? col.render(resolveAccessor(col, row), row, index)
@@ -872,18 +806,13 @@ export default function RusticDataTable<T extends object>(
                       {actions && (
                         <td
                           data-part="actions-cell"
+                          data-pinned="true"
                           style={{
                             ...styles.td,
                             ...densityTd,
                             width: 120,
                             textAlign: 'right',
                             ...buildPinStyle('right', false),
-                            // Preserve row background on pinned actions column
-                            ...(selectedKeys.includes(key)
-                              ? { background: 'var(--ds-color-primary-50)' }
-                              : striped && index % 2 === 1
-                                ? { background: 'var(--ds-color-neutral-50)' }
-                                : {}),
                           }}
                           onClick={(e) => e.stopPropagation()}
                         >
@@ -893,7 +822,7 @@ export default function RusticDataTable<T extends object>(
                     </tr>
                     {expandedRow && isExpanded && (
                       <tr>
-                        <td data-part="expanded-row-content" colSpan={colCount} style={{ padding: '1rem', background: 'var(--ds-color-neutral-50)' }}>
+                        <td data-part="expanded-row-content" colSpan={colCount} style={{ padding: '1rem' }}>
                           {expandedRow(row)}
                         </td>
                       </tr>

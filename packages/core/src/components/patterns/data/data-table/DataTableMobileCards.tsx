@@ -120,14 +120,6 @@ export function DataTableMobileCards<T extends object>({
             className={`ds-data-table__mobile-card${isSelected ? ' ds-data-table__mobile-card--selected' : ''}`}
             style={{
               overflow: 'hidden',
-              background: 'var(--ds-collection-card-bg, var(--ds-card-bg))',
-              borderRadius: 'var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)))',
-              borderColor: isSelected
-                ? 'var(--ds-collection-card-selected-border, var(--ds-color-primary))'
-                : 'var(--ds-collection-card-border, var(--ds-card-border-color))',
-              boxShadow: isSelected
-                ? 'var(--ds-collection-card-selected-ring, 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent))'
-                : 'var(--ds-collection-card-shadow, none)',
             }}
           >
             <Card.Body>
@@ -135,7 +127,7 @@ export function DataTableMobileCards<T extends object>({
                 <Flex justify="between" align="start" gap={12}>
                   <Stack spacing="xs" style={{ flex: 1, minWidth: 0 }}>
                     {titleColumn && (
-                      <Box data-part="mobile-card-title" style={{ color: 'var(--ds-color-text-primary)' }}>
+                      <Box data-part="mobile-card-title">
                         {renderDefaultField(titleColumn, row, index)}
                       </Box>
                     )}
@@ -158,12 +150,12 @@ export function DataTableMobileCards<T extends object>({
                       <Flex key={column.key} justify="between" align="start" gap={12}>
                         <Text
                           data-part="mobile-card-summary-label"
+                          color="subtle"
                           style={{
                             fontSize: 11,
                             fontWeight: 600,
                             letterSpacing: '0.04em',
                             textTransform: 'uppercase',
-                            color: 'var(--ds-color-text-muted)',
                             flexShrink: 0,
                           }}
                         >
@@ -174,7 +166,6 @@ export function DataTableMobileCards<T extends object>({
                           style={{
                             textAlign: 'right',
                             minWidth: 0,
-                            color: 'var(--ds-color-text-secondary)',
                           }}
                         >
                           {renderDefaultField(column, row, index)}

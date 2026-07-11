@@ -1,0 +1,294 @@
+/**
+ * Modern DataTable skin (WO-ARC-09 checkpoint 6).
+ *
+ * DELIBERATELY UNLAYERED, same rationale the other engine skins state in full
+ * (P-47): every `rottay-*` cascade layer sorts before Tailwind's `base` layer,
+ * so a layered rule loses to preflight regardless of specificity. Unlayered
+ * outranks preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the engine's outer `<div>`, which carries the pair
+ * `ds-pattern-data-table ds-engine-modern` (plus a third `ds-table-density-*`
+ * segment this skin never keys on) + `data-part='root'`. Every painted element
+ * is a descendant with its own `data-part`. The card surface, the loading/empty
+ * states, the pagination bar and the bulk bar are all descendants of that div.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A descendant rule that paints `border` /
+ * `border-color` / a `border-*-color` longhand must therefore reach (0,4,0):
+ * the two root classes (0,2,0) + a second attribute on the target — the
+ * `data-part` REPEATED (a legal double-count) or a contract
+ * `data-variant`/`data-pinned`/`data-divider`/`data-last`. Rules that paint
+ * only non-border channels (background, color, box-shadow, border-radius,
+ * transform) beat preflight while unlayered at (0,3,0) and need no repeat. The
+ * 4th unit is never bought from an incidental attribute (`role`, `aria-label`).
+ * Pure `border: none` / `border-width`+`border-style` resets carry no color and
+ * are exempt from the floor.
+ *
+ * Interaction paint the removed imperative row-hover handlers used to own now
+ * lives here as ONE `:hover` rule, gated `[data-hoverable='true']:not(
+ * [data-selected='true'])` — the exact `hoverable && !isSelected` guard the two
+ * (grouped + flat) `onMouseEnter` handlers evaluated.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`; the per-instance
+ * `<style>` blocks (resize/sortable/focus/editable/editing pseudo-selectors +
+ * `@keyframes ds-inline-edit-enter`, and the loading `@keyframes ds-shimmer`)
+ * stay in the tsx by WO law and are NOT absorbed here.
+ */
+
+/* ---- card surface ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='card'] {
+  background: var(--ds-table-bg, var(--ds-surface-card));
+  border-radius: var(--ds-radius-lg);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='card'][data-part='card'] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+
+/* ---- loading skeleton parts ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header'] {
+  background: var(--ds-table-header-bg, var(--ds-surface-inset, var(--ds-surface-panel)));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header'][data-part='skeleton-header'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header-col'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-row'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-cell'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+}
+
+/* ---- empty state (container tint + default icon-tile/title/description) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-state'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-icon-tile'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-title'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- thead sticky shadow (position/top/z-index stay inline; only the shadow
+        the `stickyHeader` branch painted moves here) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='table-head'][data-sticky='true'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* ---- header row ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='header-row'] {
+  background: var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='header-row'][data-part='header-row'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+
+/* ---- header cells: shared label color, then the 3-way background
+        (pinned > drag-over > default). `data-pinned='true'` is also stamped on
+        the always-sticky actions header, so one pinned rule serves both. Order
+        matters: drag-over first, pinned last, so a cell that is BOTH resolves to
+        the pinned fill, exactly as the JSX ternary did. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'] {
+  color: var(--ds-table-header-color, var(--ds-color-text-secondary));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'][data-drag-over='true'] {
+  background-color: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'][data-pinned='true'] {
+  background-color: var(--ds-surface-inset, var(--ds-surface-panel));
+}
+
+/* ---- reorder drag grip ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='drag-grip'] {
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='drag-grip'][data-part='drag-grip'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent);
+}
+
+/* ---- reorder drop indicator ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='drop-indicator'] {
+  background: var(--ds-color-primary);
+  border-radius: 1px;
+}
+
+/* ---- resize handle bar (rest; the :hover width/color swap stays in the
+        per-instance `<style>`) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='resize-handle-bar'] {
+  border-radius: 1px;
+  background: var(--ds-color-border);
+}
+
+/* ---- body row: rest fill (selected > striped > transparent) + the one hover
+        rule replacing both imperative handler pairs + the not-last divider.
+        striped before selected so a selected+striped row lands on selected. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+  background-color: var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-selected='true'] {
+  background-color: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-hoverable='true']:not([data-selected='true']):hover {
+  background-color: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+
+/* ---- expand toggle column ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='expand-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- data cells: text color always; pinned cells take an opaque card fill so
+        scrolled content cannot bleed through ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='data-cell'] {
+  color: var(--ds-table-cell-color, var(--ds-color-text-primary));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='data-cell'][data-pinned='true'] {
+  background-color: var(--ds-surface-card);
+}
+
+/* ---- actions cell (always sticky/opaque) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='actions-cell'] {
+  background-color: var(--ds-surface-card);
+}
+
+/* ---- expanded row: the wrapper td's not-last divider + the inner content fill ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='expanded-row'][data-last='false'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='expanded-row-content'] {
+  background: var(--ds-surface-inset);
+}
+
+/* ---- group header row + its cell, chevron (rotates with data-collapsed),
+        count pill and aggregate summary ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-row'] {
+  background: var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-row'][data-part='group-header-row'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-cell'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-chevron'] {
+  color: var(--ds-color-text-secondary);
+  transform: rotate(0deg);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-chevron'][data-collapsed='true'] {
+  transform: rotate(-90deg);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-count-pill'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-aggregate'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- inline-edit action buttons: shared chrome (the base border sets only
+        width/style so it carries no color and needs no (0,4,0) floor; the
+        variant supplies the border color, at (0,4,0)) + save/cancel variants ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  border-width: 1px;
+  border-style: solid;
+  background: var(--ds-surface-card);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'][data-variant='save'] {
+  color: var(--ds-color-success);
+  border-color: color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-subtle));
+  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'][data-variant='cancel'] {
+  color: var(--ds-color-error);
+  border-color: color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border-subtle));
+  background: color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card));
+}
+
+/* ---- pagination bar + controls. nav buttons carry a border, so their color
+        rule (rest + native :disabled) and border sit on (0,4,0). page buttons
+        reset their border to none (exempt) and flip to primary when current. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-bar'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-bar'][data-part='pagination-bar'] {
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button'][data-part='pagination-nav-button'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button']:disabled {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-ellipsis'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-page-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-page-button'][data-current='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- bulk selection bar + count label + per-variant action buttons ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar'][data-part='bulk-bar'] {
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-count'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='default'] {
+  border: 1px solid var(--ds-color-border-subtle);
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='danger'] {
+  border: 1px solid var(--ds-color-error);
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='primary'] {
+  border: 1px solid var(--ds-color-primary);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- virtual-scroll spacer rows/cells: the defensive `border: none` reset ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='virtual-spacer'] {
+  border: none;
+}

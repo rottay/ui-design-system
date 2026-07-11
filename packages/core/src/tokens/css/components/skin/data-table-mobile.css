@@ -1,0 +1,95 @@
+/**
+ * DataTable agnostic skin (WO-ARC-09 checkpoint 6) — the engine-free leaves of
+ * the data-table family: the inline cell editors (rendered inside the modern
+ * engine, but with engine-free markup) and the mobile-card fallback + mobile
+ * state panels (rendered by PatternDataTable/DataTableMobileCards under BOTH
+ * engines, below the window-width breakpoint). Home in components/skin/ because
+ * these render one DOM under every engine; no --modern/--rustic discriminator.
+ *
+ * DELIBERATELY UNLAYERED (P-47). SPECIFICITY (P-48): the tenant `*` border floor
+ * sits at (0,3,1); a border-painting rule must reach (0,4,0).
+ *
+ * CELL EDITORS scope on `.ds-pattern-data-table [data-part='editor-*']` — they
+ * render inside the pattern root. The editor input's rest AND error borders both
+ * paint a color, so both reach (0,4,0) by repeating `data-part`/`data-invalid`;
+ * non-border channels win at (0,2,0). The error border keys on the stamped
+ * `data-invalid='true'` and sits after the rest border so it wins on the invalid
+ * cell.
+ *
+ * MOBILE CARD (trap-1): the caller previously froze the Card's
+ * background/border-color/border-radius/box-shadow with an inline `style` that
+ * beat ALL of card.css — including its hover/focus rules. Preserving that
+ * byte-exact means an unlayered rule that outranks card.css's MAX specificity on
+ * those channels. Measured (via the test's bColumn) across modern + rustic
+ * card.css: MAX = 9 (the modern outlined-hover `:not([data-tone])` border rule).
+ * This rule escalates the `ds-data-table__mobile-card` class to a bColumn of 10
+ * (2 scope classes + the card class repeated 8x) — the FFP suppression idiom —
+ * so it wins at rest and in the (unphotographed) hover/focus a clickable card
+ * could take, exactly as the inline style did. Card sets border-WIDTH/STYLE via
+ * its variant; this rule overrides only border-COLOR, matching the inline
+ * `borderColor` it replaces. The `--selected` modifier repeats the same way and
+ * follows the base rule so it wins the conditional border-color/box-shadow.
+ *
+ * MOBILE STATE PANEL: the loading and empty panels share `data-part=
+ * 'mobile-state-panel'` and carry byte-identical values (verified); one rule.
+ *
+ * Values are transcribed verbatim from cell-editors/index.tsx,
+ * DataTableMobileCards.tsx and PatternDataTable.tsx.
+ */
+
+/* ---- inline cell editor input: rest + error border, plus the shared chrome --- */
+.ds-pattern-data-table [data-part='editor-input'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-surface-card, #fff);
+  color: var(--ds-color-text-primary, #1a1a1a);
+  outline: none;
+}
+.ds-pattern-data-table [data-part='editor-input'][data-part='editor-input'][data-part='editor-input'] {
+  border: 1.5px solid var(--ds-color-primary, #3b82f6);
+}
+.ds-pattern-data-table [data-part='editor-input'][data-part='editor-input'][data-invalid='true'] {
+  border: 1.5px solid var(--ds-color-error, #e53e3e);
+}
+
+/* ---- checkbox editor + error message ---- */
+.ds-pattern-data-table [data-part='editor-checkbox'] {
+  accent-color: var(--ds-color-primary, #3b82f6);
+}
+.ds-pattern-data-table [data-part='editor-error'] {
+  color: var(--ds-color-error, #e53e3e);
+}
+
+/* ---- mobile card chrome (FFP suppression: beats card.css MAX = 9) ---- */
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
+  background: var(--ds-collection-card-bg, var(--ds-card-bg));
+  border-radius: var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  border-color: var(--ds-collection-card-border, var(--ds-card-border-color));
+  box-shadow: var(--ds-collection-card-shadow, none);
+}
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected {
+  border-color: var(--ds-collection-card-selected-border, var(--ds-color-primary));
+  box-shadow: var(--ds-collection-card-selected-ring, 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
+}
+
+/* ---- mobile card text (title + summary value Boxes; the summary LABEL is a
+        Text prop-swapped to color="subtle", not a rule) ---- */
+.ds-pattern-data-table.ds-data-table--mobile [data-part='mobile-card-title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-data-table.ds-data-table--mobile [data-part='mobile-card-summary-value'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- mobile loading/empty state panels (one rule, both panels) ----
+   COMPOUND selectors, no descendant combinator: the state panels CARRY the
+   scope pair themselves (they are top-level mobile elements, not children of
+   the cards Stack), so a descendant form would never match them. */
+.ds-pattern-data-table.ds-data-table--mobile[data-part='mobile-state-panel'] {
+  border-radius: 16px;
+  background: var(--ds-color-bg-primary);
+}
+.ds-pattern-data-table.ds-data-table--mobile[data-part='mobile-state-panel'][data-part='mobile-state-panel'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+}

@@ -612,7 +612,6 @@ export default function ModernDataTable<T extends object>(
         position: 'sticky',
         [side]: 0,
         zIndex: 2,
-        backgroundColor: 'inherit',
       };
     },
     []
@@ -782,9 +781,6 @@ export default function ModernDataTable<T extends object>(
         width: 30,
         height: 30,
         padding: 0,
-        borderRadius: 'var(--ds-radius-sm, 6px)',
-        border: '1px solid var(--ds-color-border-subtle)',
-        background: 'var(--ds-surface-card)',
         cursor: isSaving ? 'wait' : 'pointer',
         transition: 'background var(--ds-motion-fast) ease, border-color var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease, opacity var(--ds-motion-fast) ease',
       };
@@ -812,6 +808,7 @@ export default function ModernDataTable<T extends object>(
             title={isSaving ? 'Saving edit' : 'Save edit'}
             disabled={isSaving}
             data-part="inline-edit-action"
+            data-variant="save"
             onPointerDown={stopActionEvent}
             onMouseDown={stopActionEvent}
             onClick={(event) => {
@@ -820,9 +817,6 @@ export default function ModernDataTable<T extends object>(
             }}
             style={{
               ...buttonBaseStyle,
-              color: 'var(--ds-color-success)',
-              borderColor: 'color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-subtle))',
-              background: 'color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card))',
               opacity: isSaving ? 0.72 : 1,
             }}
           >
@@ -834,6 +828,7 @@ export default function ModernDataTable<T extends object>(
             title="Cancel edit"
             disabled={isSaving}
             data-part="inline-edit-action"
+            data-variant="cancel"
             onPointerDown={stopActionEvent}
             onMouseDown={stopActionEvent}
             onClick={(event) => {
@@ -842,9 +837,6 @@ export default function ModernDataTable<T extends object>(
             }}
             style={{
               ...buttonBaseStyle,
-              color: 'var(--ds-color-error)',
-              borderColor: 'color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border-subtle))',
-              background: 'color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card))',
               opacity: isSaving ? 0.5 : 1,
             }}
           >
@@ -992,9 +984,6 @@ export default function ModernDataTable<T extends object>(
         data-ds-table-card="true"
         data-part="card"
         style={{
-          background: 'var(--ds-table-bg, var(--ds-surface-card))',
-          borderRadius: 'var(--ds-radius-lg)',
-          border: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
           overflow: 'hidden',
           minWidth: 0,
         }}
@@ -1025,8 +1014,6 @@ export default function ModernDataTable<T extends object>(
                   display: 'flex',
                   gap: 16,
                   padding: '14px 16px',
-                  background: 'var(--ds-table-header-bg, var(--ds-surface-inset, var(--ds-surface-panel)))',
-                  borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
                 }}
               >
                 {visibleColumns.slice(0, 5).map((col, ci) => (
@@ -1036,8 +1023,6 @@ export default function ModernDataTable<T extends object>(
                     style={{
                       flex: ci === 0 ? 1.5 : 1,
                       height: 10,
-                      borderRadius: 'var(--ds-radius-sm, 6px)',
-                      background: 'var(--ds-color-border-subtle)',
                       opacity: 0.5,
                     }}
                   />
@@ -1049,13 +1034,11 @@ export default function ModernDataTable<T extends object>(
                   key={i}
                   className="ds-skeleton-row"
                   data-part="skeleton-row"
+                  data-divider={i < skeletonRowCount - 1 ? 'true' : 'false'}
                   style={{
                     display: 'flex',
                     gap: 16,
                     padding: '16px 16px',
-                    borderBottom: i < skeletonRowCount - 1
-                      ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
-                      : 'none',
                     animation: 'ds-shimmer 1.8s ease-in-out infinite',
                     animationDelay: `${i * 100}ms`,
                   }}
@@ -1067,8 +1050,6 @@ export default function ModernDataTable<T extends object>(
                       style={{
                         flex: ci === 0 ? 1.5 : 1,
                         height: 14,
-                        borderRadius: 'var(--ds-radius-sm, 6px)',
-                        background: 'color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
                       }}
                     />
                   ))}
@@ -1085,24 +1066,23 @@ export default function ModernDataTable<T extends object>(
           ) : data.length === 0 ? (
             /* Empty state: centered, muted, generous padding */
             <div
+              data-part="empty-state"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: '64px 24px',
-                color: 'var(--ds-color-text-muted)',
                 gap: 12,
               }}
             >
               {emptyState ?? (
                 <>
                   <div
+                    data-part="empty-icon-tile"
                     style={{
                       width: 56,
                       height: 56,
-                      borderRadius: 'var(--ds-radius-lg, 12px)',
-                      background: 'color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -1126,18 +1106,18 @@ export default function ModernDataTable<T extends object>(
                     </svg>
                   </div>
                   <span
+                    data-part="empty-title"
                     style={{
                       fontSize: 14,
                       fontWeight: 500,
-                      color: 'var(--ds-color-text-secondary)',
                     }}
                   >
                     No data to display
                   </span>
                   <span
+                    data-part="empty-description"
                     style={{
                       fontSize: 13,
-                      color: 'var(--ds-color-text-muted)',
                       lineHeight: 1.5,
                     }}
                   >
@@ -1160,22 +1140,17 @@ export default function ModernDataTable<T extends object>(
             >
               {/* Table header: panel surface, uppercase labels */}
               <thead
+                data-part="table-head"
+                data-sticky={stickyHeader ? 'true' : 'false'}
                 style={{
                   position: stickyHeader ? 'sticky' : undefined,
                   top: stickyHeader ? 0 : undefined,
                   zIndex: stickyHeader ? 10 : undefined,
-                  boxShadow: stickyHeader
-                    ? 'var(--ds-elevation-1)'
-                    : undefined,
                 }}
               >
                 <tr
                   ref={headerRowRef}
                   data-part="header-row"
-                  style={{
-                    background: 'var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%))',
-                    borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
-                  }}
                 >
                   {/* Select-all checkbox */}
                   {selectable && (
@@ -1187,7 +1162,6 @@ export default function ModernDataTable<T extends object>(
                         minWidth: resolvedSelectionColumnWidth,
                         maxWidth: resolvedSelectionColumnWidth,
                         boxSizing: 'border-box',
-                        color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                         fontWeight: 500,
                         fontSize: 12,
                         letterSpacing: '0.05em',
@@ -1239,7 +1213,6 @@ export default function ModernDataTable<T extends object>(
                           maxWidth: col.maxWidth,
                           textAlign: col.align,
                           padding: isLeadingDataColumn && selectable ? leadingDataColumnPadding : densityPadding,
-                          color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                           fontWeight: 500,
                           fontSize: 11,
                           letterSpacing: '0.05em',
@@ -1248,11 +1221,6 @@ export default function ModernDataTable<T extends object>(
                           left: pinnedStyle.left as any,
                           right: pinnedStyle.right as any,
                           zIndex: pinnedStyle.zIndex as any,
-                          backgroundColor: pinSide
-                            ? 'var(--ds-surface-inset, var(--ds-surface-panel))'
-                            : dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key
-                              ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)'
-                              : undefined,
                           userSelect: col.sortable || reorderable || resizable ? 'none' : undefined,
                           opacity: dragSourceKey === col.key ? 0.45 : 1,
                           transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
@@ -1287,6 +1255,7 @@ export default function ModernDataTable<T extends object>(
                             <span
                               onMouseDown={(e) => handleReorderStart(e, col.key)}
                               title={`Drag to move ${typeof col.header === 'string' ? col.header : col.key}`}
+                              data-part="drag-grip"
                               style={{
                                 display: 'inline-flex',
                                 alignItems: 'center',
@@ -1300,10 +1269,6 @@ export default function ModernDataTable<T extends object>(
                                 flexShrink: 0,
                                 marginRight: 4,
                                 padding: 0,
-                                borderRadius: 5,
-                                border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent)',
-                                background: 'color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)',
-                                color: 'var(--ds-color-text-secondary)',
                                 transition: `opacity var(--ds-motion-fast), border-color var(--ds-motion-fast), background-color var(--ds-motion-fast)`,
                               }}
                               aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
@@ -1369,8 +1334,6 @@ export default function ModernDataTable<T extends object>(
                                 top: 0,
                                 bottom: 0,
                                 width: 3,
-                                background: 'var(--ds-color-primary)',
-                                borderRadius: 1,
                               }}
                             />
                           )}
@@ -1430,8 +1393,6 @@ export default function ModernDataTable<T extends object>(
                               style={{
                                 width: 1,
                                 height: '50%',
-                                borderRadius: 1,
-                                background: 'var(--ds-color-border)',
                                 transition: 'width var(--ds-motion-fast) ease, background var(--ds-motion-fast) ease',
                               }}
                             />
@@ -1444,6 +1405,7 @@ export default function ModernDataTable<T extends object>(
                   {actions && (
                     <th
                       data-part="header-cell"
+                      data-pinned="true"
                       style={{
                         width: resolvedActionsColumnWidth,
                         minWidth: resolvedActionsColumnWidth,
@@ -1452,8 +1414,6 @@ export default function ModernDataTable<T extends object>(
                         position: 'sticky',
                         right: 0,
                         zIndex: 2,
-                        backgroundColor: 'var(--ds-surface-inset, var(--ds-surface-panel))',
-                        color: 'var(--ds-table-header-color, var(--ds-color-text-secondary))',
                         fontWeight: 500,
                         fontSize: 12,
                         letterSpacing: '0.05em',
@@ -1509,6 +1469,8 @@ export default function ModernDataTable<T extends object>(
                               data-part="body-row"
                               data-selected={isSelected ? 'true' : 'false'}
                               data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
+                              data-hoverable={hoverable ? 'true' : 'false'}
+                              data-last={isLastRowOverall ? 'true' : 'false'}
                               tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
                               role="row"
                               onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
@@ -1517,28 +1479,7 @@ export default function ModernDataTable<T extends object>(
                               onFocus={() => setActiveRowIndex(index)}
                               style={{
                                 cursor: onRowClick ? 'pointer' : undefined,
-                                backgroundColor: isSelected
-                                  ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
-                                  : striped && index % 2 === 1
-                                    ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
-                                    : 'transparent',
                                 transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                                borderBottom: !isLastRowOverall
-                                  ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
-                                  : 'none',
-                              }}
-                              onMouseEnter={(e) => {
-                                if (hoverable && !isSelected) {
-                                  (e.currentTarget as HTMLElement).style.backgroundColor =
-                                    'var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))';
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLElement).style.backgroundColor = isSelected
-                                  ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
-                                  : striped && index % 2 === 1
-                                    ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
-                                    : 'transparent';
                               }}
                             >
                               {selectable && (
@@ -1580,10 +1521,6 @@ export default function ModernDataTable<T extends object>(
                                       justifyContent: 'center',
                                       width: 24,
                                       height: 24,
-                                      border: 'none',
-                                      borderRadius: 'var(--ds-radius-sm, 6px)',
-                                      background: 'transparent',
-                                      color: 'var(--ds-color-text-secondary)',
                                       cursor: 'pointer',
                                       fontSize: 12,
                                       transition: `background var(--ds-motion-fast)`,
@@ -1652,14 +1589,10 @@ export default function ModernDataTable<T extends object>(
                                       left: pinnedStyle.left as any,
                                       right: pinnedStyle.right as any,
                                       zIndex: pinnedStyle.zIndex as any,
-                                      backgroundColor: pinSide
-                                        ? 'var(--ds-surface-card)'
-                                        : undefined,
                                       overflow: isCellEditing ? 'visible' : 'hidden',
                                       textOverflow: isCellEditing ? undefined : 'ellipsis',
                                       whiteSpace: isCellEditing ? undefined : 'nowrap',
                                       fontSize: 14,
-                                      color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
                                     }}
                                   >
                                     {isCellEditing && editableCfg ? (
@@ -1723,7 +1656,6 @@ export default function ModernDataTable<T extends object>(
                                     position: 'sticky',
                                     right: 0,
                                     zIndex: 2,
-                                    backgroundColor: 'var(--ds-surface-card)',
                                     whiteSpace: 'nowrap',
                                   }}
                                   onClick={(e) => e.stopPropagation()}
@@ -1738,11 +1670,10 @@ export default function ModernDataTable<T extends object>(
                               <tr>
                                 <td
                                   colSpan={totalColSpan}
+                                  data-part="expanded-row"
+                                  data-last={isLastRowOverall ? 'true' : 'false'}
                                   style={{
                                     padding: 0,
-                                    borderBottom: !isLastRowOverall
-                                      ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
-                                      : 'none',
                                   }}
                                 >
                                   <div
@@ -1750,7 +1681,6 @@ export default function ModernDataTable<T extends object>(
                                     style={{
                                       width: '100%',
                                       padding: '12px 16px',
-                                      background: 'var(--ds-surface-inset)',
                                     }}
                                   >
                                     {expandedRow(row)}
@@ -1776,17 +1706,15 @@ export default function ModernDataTable<T extends object>(
                           onClick={() => toggleGroup(section.groupValue)}
                           style={{
                             cursor: 'pointer',
-                            background: 'var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%))',
-                            borderBottom: '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))',
                           }}
                         >
                           <td
                             colSpan={totalColSpan}
+                            data-part="group-header-cell"
                             style={{
                               padding: densityPadding,
                               fontSize: 13,
                               fontWeight: 600,
-                              color: 'var(--ds-color-text-primary)',
                             }}
                           >
                             {renderGroupHeader
@@ -1803,9 +1731,7 @@ export default function ModernDataTable<T extends object>(
                                       width: 18,
                                       height: 18,
                                       fontSize: 10,
-                                      color: 'var(--ds-color-text-secondary)',
                                       transition: 'transform var(--ds-motion-fast) ease',
-                                      transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
                                     }}
                                   >
                                     {'\u25BC'}
@@ -1820,17 +1746,15 @@ export default function ModernDataTable<T extends object>(
                                       height: 20,
                                       minWidth: 20,
                                       padding: '0 6px',
-                                      borderRadius: 'var(--ds-radius-full, 9999px)',
-                                      background: 'color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
                                       fontSize: 11,
                                       fontWeight: 500,
-                                      color: 'var(--ds-color-text-secondary)',
                                     }}
                                   >
                                     {section.items.length}
                                   </span>
                                   {aggregateChips.length > 0 && (
                                     <span
+                                      data-part="group-header-aggregate"
                                       style={{
                                         display: 'inline-flex',
                                         alignItems: 'center',
@@ -1838,7 +1762,6 @@ export default function ModernDataTable<T extends object>(
                                         marginLeft: 4,
                                         fontSize: 12,
                                         fontWeight: 400,
-                                        color: 'var(--ds-color-text-muted)',
                                       }}
                                     >
                                       {aggregateChips.map((chip, ci) => (
@@ -1868,8 +1791,8 @@ export default function ModernDataTable<T extends object>(
                   <>
                 {/* Virtual scroll: top spacer row to push visible content down */}
                 {virtualized && virtualScroll.offsetTop > 0 && (
-                  <tr aria-hidden="true" style={{ height: virtualScroll.offsetTop, border: 'none' }}>
-                    <td colSpan={totalColSpan} style={{ padding: 0, border: 'none' }} />
+                  <tr aria-hidden="true" data-part="virtual-spacer" style={{ height: virtualScroll.offsetTop }}>
+                    <td colSpan={totalColSpan} data-part="virtual-spacer" style={{ padding: 0 }} />
                   </tr>
                 )}
                 {virtualizedData.map((row, sliceIndex) => {
@@ -1889,6 +1812,8 @@ export default function ModernDataTable<T extends object>(
                         data-part="body-row"
                         data-selected={isSelected ? 'true' : 'false'}
                         data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
+                        data-hoverable={hoverable ? 'true' : 'false'}
+                        data-last={isLastRow ? 'true' : 'false'}
                         tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
                         role="row"
                         onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
@@ -1899,28 +1824,7 @@ export default function ModernDataTable<T extends object>(
                           cursor: onRowClick ? 'pointer' : undefined,
                           height: virtualized ? virtualRowHeight : undefined,
                           boxSizing: virtualized ? 'border-box' : undefined,
-                          backgroundColor: isSelected
-                            ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
-                            : striped && index % 2 === 1
-                              ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
-                              : 'transparent',
                           transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                          borderBottom: !isLastRow
-                            ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
-                            : 'none',
-                        }}
-                        onMouseEnter={(e) => {
-                          if (hoverable && !isSelected) {
-                            (e.currentTarget as HTMLElement).style.backgroundColor =
-                              'var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent))';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLElement).style.backgroundColor = isSelected
-                            ? 'var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent))'
-                            : striped && index % 2 === 1
-                              ? 'var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent))'
-                              : 'transparent';
                         }}
                       >
                         {/* Selection checkbox */}
@@ -1964,10 +1868,6 @@ export default function ModernDataTable<T extends object>(
                                 justifyContent: 'center',
                                 width: 24,
                                 height: 24,
-                                border: 'none',
-                                borderRadius: 'var(--ds-radius-sm, 6px)',
-                                background: 'transparent',
-                                color: 'var(--ds-color-text-secondary)',
                                 cursor: 'pointer',
                                 fontSize: 12,
                                 transition: `background var(--ds-motion-fast)`,
@@ -2038,14 +1938,10 @@ export default function ModernDataTable<T extends object>(
                                 left: pinnedStyle.left as any,
                                 right: pinnedStyle.right as any,
                                 zIndex: pinnedStyle.zIndex as any,
-                                backgroundColor: pinSide
-                                  ? 'var(--ds-surface-card)'
-                                  : undefined,
                                 overflow: isCellEditing ? 'visible' : 'hidden',
                                 textOverflow: isCellEditing ? undefined : 'ellipsis',
                                 whiteSpace: isCellEditing ? undefined : 'nowrap',
                                 fontSize: 14,
-                                color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
                               }}
                             >
                               {isCellEditing && editableCfg ? (
@@ -2110,7 +2006,6 @@ export default function ModernDataTable<T extends object>(
                               position: 'sticky',
                               right: 0,
                               zIndex: 2,
-                              backgroundColor: 'var(--ds-surface-card)',
                               whiteSpace: 'nowrap',
                             }}
                             onClick={(e) => e.stopPropagation()}
@@ -2126,11 +2021,10 @@ export default function ModernDataTable<T extends object>(
                         <tr>
                           <td
                             colSpan={totalColSpan}
+                            data-part="expanded-row"
+                            data-last={isLastRow ? 'true' : 'false'}
                             style={{
                               padding: 0,
-                              borderBottom: !isLastRow
-                                ? '1px solid var(--ds-table-row-border, var(--ds-color-border-subtle))'
-                                : 'none',
                             }}
                           >
                             <div
@@ -2138,7 +2032,6 @@ export default function ModernDataTable<T extends object>(
                               style={{
                                 width: '100%',
                                 padding: '12px 16px',
-                                background: 'var(--ds-surface-inset)',
                               }}
                             >
                               {expandedRow(row)}
@@ -2151,8 +2044,8 @@ export default function ModernDataTable<T extends object>(
                 })}
                 {/* Virtual scroll: bottom spacer row to maintain total scroll height */}
                 {virtualized && virtualBottomSpacerHeight > 0 && (
-                  <tr aria-hidden="true" style={{ height: virtualBottomSpacerHeight, border: 'none' }}>
-                    <td colSpan={totalColSpan} style={{ padding: 0, border: 'none' }} />
+                  <tr aria-hidden="true" data-part="virtual-spacer" style={{ height: virtualBottomSpacerHeight }}>
+                    <td colSpan={totalColSpan} data-part="virtual-spacer" style={{ padding: 0 }} />
                   </tr>
                 )}
                   </>
@@ -2190,12 +2083,6 @@ export default function ModernDataTable<T extends object>(
             justifyContent: 'center',
             height: 32,
             padding: '0 10px',
-            border: '1px solid var(--ds-color-border-subtle)',
-            borderRadius: 'var(--ds-radius-sm, 6px)',
-            background: 'transparent',
-            color: disabled
-              ? 'var(--ds-color-text-muted)'
-              : 'var(--ds-color-text-secondary)',
             fontSize: 13,
             fontWeight: 500,
             cursor: disabled ? 'not-allowed' : 'pointer',
@@ -2211,9 +2098,7 @@ export default function ModernDataTable<T extends object>(
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '10px 16px',
-                borderTop: '1px solid var(--ds-color-border-subtle)',
                 fontSize: 13,
-                color: 'var(--ds-color-text-secondary)',
               }}
             >
               <span style={{ fontVariantNumeric: 'tabular-nums' }}>
@@ -2241,6 +2126,7 @@ export default function ModernDataTable<T extends object>(
                   page === 'ellipsis' ? (
                     <span
                       key={`ellipsis-${idx}`}
+                      data-part="pagination-ellipsis"
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -2248,7 +2134,6 @@ export default function ModernDataTable<T extends object>(
                         width: 32,
                         height: 32,
                         fontSize: 13,
-                        color: 'var(--ds-color-text-muted)',
                         userSelect: 'none',
                       }}
                     >
@@ -2266,14 +2151,6 @@ export default function ModernDataTable<T extends object>(
                         justifyContent: 'center',
                         width: 32,
                         height: 32,
-                        border: 'none',
-                        borderRadius: 'var(--ds-radius-sm, 6px)',
-                        background: page === pagination.current
-                          ? 'var(--ds-color-primary)'
-                          : 'transparent',
-                        color: page === pagination.current
-                          ? 'var(--ds-color-text-on-primary)'
-                          : 'var(--ds-color-text-secondary)',
                         fontSize: 13,
                         fontWeight: page === pagination.current ? 600 : 400,
                         cursor: 'pointer',
@@ -2313,18 +2190,15 @@ export default function ModernDataTable<T extends object>(
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '10px 16px',
-              background: 'var(--ds-surface-card)',
-              borderTop: '1px solid var(--ds-color-border-subtle)',
-              boxShadow: 'var(--ds-elevation-2)',
               zIndex: 20,
               gap: 12,
             }}
           >
             <span
+              data-part="bulk-bar-count"
               style={{
                 fontSize: 13,
                 fontWeight: 500,
-                color: 'var(--ds-color-text-secondary)',
               }}
             >
               {selectedKeys.length} item{selectedKeys.length !== 1 ? 's' : ''} selected
@@ -2348,20 +2222,6 @@ export default function ModernDataTable<T extends object>(
                     gap: 6,
                     height: 32,
                     padding: '0 12px',
-                    borderRadius: 'var(--ds-radius-sm, 6px)',
-                    border: action.variant === 'danger'
-                      ? '1px solid var(--ds-color-error)'
-                      : action.variant === 'primary'
-                        ? '1px solid var(--ds-color-primary)'
-                        : '1px solid var(--ds-color-border-subtle)',
-                    background: action.variant === 'danger'
-                      ? 'var(--ds-color-error)'
-                      : action.variant === 'primary'
-                        ? 'var(--ds-color-primary)'
-                        : 'var(--ds-surface-card)',
-                    color: action.variant === 'danger' || action.variant === 'primary'
-                      ? 'var(--ds-color-text-on-primary)'
-                      : 'var(--ds-color-text-primary)',
                     fontSize: 13,
                     fontWeight: 500,
                     cursor: action.disabled ? 'not-allowed' : 'pointer',

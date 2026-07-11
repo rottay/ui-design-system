@@ -15950,6 +15950,579 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background: var(--ds-color-neutral-200);
 }
 
+/**
+ * Modern DataTable skin (WO-ARC-09 checkpoint 6).
+ *
+ * DELIBERATELY UNLAYERED, same rationale the other engine skins state in full
+ * (P-47): every `rottay-*` cascade layer sorts before Tailwind's `base` layer,
+ * so a layered rule loses to preflight regardless of specificity. Unlayered
+ * outranks preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the engine's outer `<div>`, which carries the pair
+ * `ds-pattern-data-table ds-engine-modern` (plus a third `ds-table-density-*`
+ * segment this skin never keys on) + `data-part='root'`. Every painted element
+ * is a descendant with its own `data-part`. The card surface, the loading/empty
+ * states, the pagination bar and the bulk bar are all descendants of that div.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A descendant rule that paints `border` /
+ * `border-color` / a `border-*-color` longhand must therefore reach (0,4,0):
+ * the two root classes (0,2,0) + a second attribute on the target — the
+ * `data-part` REPEATED (a legal double-count) or a contract
+ * `data-variant`/`data-pinned`/`data-divider`/`data-last`. Rules that paint
+ * only non-border channels (background, color, box-shadow, border-radius,
+ * transform) beat preflight while unlayered at (0,3,0) and need no repeat. The
+ * 4th unit is never bought from an incidental attribute (`role`, `aria-label`).
+ * Pure `border: none` / `border-width`+`border-style` resets carry no color and
+ * are exempt from the floor.
+ *
+ * Interaction paint the removed imperative row-hover handlers used to own now
+ * lives here as ONE `:hover` rule, gated `[data-hoverable='true']:not(
+ * [data-selected='true'])` — the exact `hoverable && !isSelected` guard the two
+ * (grouped + flat) `onMouseEnter` handlers evaluated.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`; the per-instance
+ * `<style>` blocks (resize/sortable/focus/editable/editing pseudo-selectors +
+ * `@keyframes ds-inline-edit-enter`, and the loading `@keyframes ds-shimmer`)
+ * stay in the tsx by WO law and are NOT absorbed here.
+ */
+
+/* ---- card surface ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='card'] {
+  background: var(--ds-table-bg, var(--ds-surface-card));
+  border-radius: var(--ds-radius-lg);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='card'][data-part='card'] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+
+/* ---- loading skeleton parts ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header'] {
+  background: var(--ds-table-header-bg, var(--ds-surface-inset, var(--ds-surface-panel)));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header'][data-part='skeleton-header'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-header-col'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-row'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='skeleton-cell'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent);
+}
+
+/* ---- empty state (container tint + default icon-tile/title/description) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-state'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-icon-tile'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-title'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='empty-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- thead sticky shadow (position/top/z-index stay inline; only the shadow
+        the `stickyHeader` branch painted moves here) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='table-head'][data-sticky='true'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* ---- header row ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='header-row'] {
+  background: var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='header-row'][data-part='header-row'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-subtle));
+}
+
+/* ---- header cells: shared label color, then the 3-way background
+        (pinned > drag-over > default). `data-pinned='true'` is also stamped on
+        the always-sticky actions header, so one pinned rule serves both. Order
+        matters: drag-over first, pinned last, so a cell that is BOTH resolves to
+        the pinned fill, exactly as the JSX ternary did. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'] {
+  color: var(--ds-table-header-color, var(--ds-color-text-secondary));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'][data-drag-over='true'] {
+  background-color: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='header-cell'][data-pinned='true'] {
+  background-color: var(--ds-surface-inset, var(--ds-surface-panel));
+}
+
+/* ---- reorder drag grip ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='drag-grip'] {
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='drag-grip'][data-part='drag-grip'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 76%, transparent);
+}
+
+/* ---- reorder drop indicator ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='drop-indicator'] {
+  background: var(--ds-color-primary);
+  border-radius: 1px;
+}
+
+/* ---- resize handle bar (rest; the :hover width/color swap stays in the
+        per-instance `<style>`) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='resize-handle-bar'] {
+  border-radius: 1px;
+  background: var(--ds-color-border);
+}
+
+/* ---- body row: rest fill (selected > striped > transparent) + the one hover
+        rule replacing both imperative handler pairs + the not-last divider.
+        striped before selected so a selected+striped row lands on selected. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-striped='true'] {
+  background-color: var(--ds-table-row-bg-striped, color-mix(in srgb, var(--ds-surface-panel, var(--ds-color-text-primary)) 4%, transparent));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-selected='true'] {
+  background-color: var(--ds-table-row-bg-selected, color-mix(in srgb, var(--ds-color-primary) 9%, transparent));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-hoverable='true']:not([data-selected='true']):hover {
+  background-color: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='body-row'][data-last='false'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+
+/* ---- expand toggle column ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='expand-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- data cells: text color always; pinned cells take an opaque card fill so
+        scrolled content cannot bleed through ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='data-cell'] {
+  color: var(--ds-table-cell-color, var(--ds-color-text-primary));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='data-cell'][data-pinned='true'] {
+  background-color: var(--ds-surface-card);
+}
+
+/* ---- actions cell (always sticky/opaque) ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='actions-cell'] {
+  background-color: var(--ds-surface-card);
+}
+
+/* ---- expanded row: the wrapper td's not-last divider + the inner content fill ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='expanded-row'][data-last='false'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='expanded-row-content'] {
+  background: var(--ds-surface-inset);
+}
+
+/* ---- group header row + its cell, chevron (rotates with data-collapsed),
+        count pill and aggregate summary ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-row'] {
+  background: var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-row'][data-part='group-header-row'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-subtle));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-cell'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-chevron'] {
+  color: var(--ds-color-text-secondary);
+  transform: rotate(0deg);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-chevron'][data-collapsed='true'] {
+  transform: rotate(-90deg);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-count-pill'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='group-header-aggregate'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- inline-edit action buttons: shared chrome (the base border sets only
+        width/style so it carries no color and needs no (0,4,0) floor; the
+        variant supplies the border color, at (0,4,0)) + save/cancel variants ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  border-width: 1px;
+  border-style: solid;
+  background: var(--ds-surface-card);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'][data-variant='save'] {
+  color: var(--ds-color-success);
+  border-color: color-mix(in srgb, var(--ds-color-success) 34%, var(--ds-color-border-subtle));
+  background: color-mix(in srgb, var(--ds-color-success) 9%, var(--ds-surface-card));
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='inline-edit-action'][data-variant='cancel'] {
+  color: var(--ds-color-error);
+  border-color: color-mix(in srgb, var(--ds-color-error) 30%, var(--ds-color-border-subtle));
+  background: color-mix(in srgb, var(--ds-color-error) 7%, var(--ds-surface-card));
+}
+
+/* ---- pagination bar + controls. nav buttons carry a border, so their color
+        rule (rest + native :disabled) and border sit on (0,4,0). page buttons
+        reset their border to none (exempt) and flip to primary when current. ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-bar'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-bar'][data-part='pagination-bar'] {
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button'][data-part='pagination-nav-button'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-nav-button']:disabled {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-ellipsis'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-page-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='pagination-page-button'][data-current='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- bulk selection bar + count label + per-variant action buttons ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar'][data-part='bulk-bar'] {
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-count'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='default'] {
+  border: 1px solid var(--ds-color-border-subtle);
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='danger'] {
+  border: 1px solid var(--ds-color-error);
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+.ds-pattern-data-table.ds-engine-modern [data-part='bulk-bar-action'][data-variant='primary'] {
+  border: 1px solid var(--ds-color-primary);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- virtual-scroll spacer rows/cells: the defensive `border: none` reset ---- */
+.ds-pattern-data-table.ds-engine-modern [data-part='virtual-spacer'] {
+  border: none;
+}
+
+/**
+ * Rustic DataTable skin (WO-ARC-09 checkpoint 6).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the other engine skins: a
+ * `rottay-*` layer loses to Tailwind preflight; unlayered outranks it and still
+ * yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the engine's outer `<div>` carrying `ds-pattern-data-table
+ * ds-engine-rustic` + `data-part='root'` (no density class — rustic reads
+ * density from its own lookup, an asymmetry this skin never keys on). All paint
+ * that lived in the module-level `styles` dict and the inline sites moves here.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border floor sits at (0,3,1); a rule that
+ * paints `border` / `border-color` / a `border-*-color` longhand must reach
+ * (0,4,0) — the two root classes + a second attribute (the `data-part`
+ * REPEATED, or a `data-variant`/`data-bordered`). Non-border paint wins
+ * unlayered at (0,3,0). Pure `border: none` resets are exempt.
+ *
+ * DIVERGENCE FROM MODERN, preserved: rustic paints NO row hover — there are
+ * ZERO `:hover` rules in this file. `styles.td`'s `background-color` transition
+ * stays inline (exempt, not dropped). The resize bar's hardcoded
+ * `rgba(0,0,0,0.12)` is transcribed AS-IS (pre-existing token-purity residual,
+ * filed as a proposal, not fixed here). The `@keyframes ds-spin` /
+ * `ds-bulk-slide-down` per-instance `<style>` stays in the tsx by WO law.
+ *
+ * PINNED-TD RULE: the row's `data-state` enum (selected|striped|default) plus
+ * the cell's `data-pinned='true'` drive ONE rule set that replaces the ternary
+ * the JSX re-derived at three sites (data-cell override, actions-cell override,
+ * and the `buildPinStyle` base) — verified byte-identical before collapsing.
+ *
+ * Values are transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root text color (was styles.container) ---- */
+.ds-pattern-data-table.ds-engine-rustic[data-part='root'] {
+  color: var(--ds-color-neutral-900);
+}
+
+/* ---- toolbar bottom rule ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='toolbar'][data-part='toolbar'] {
+  border-bottom: 1px solid var(--ds-color-neutral-100);
+}
+
+/* ---- bulk action buttons (base chrome + per-variant overrides) ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'] {
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'][data-part='bulk-bar-action'] {
+  border: 1px solid var(--ds-color-neutral-300);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'][data-variant='danger'] {
+  color: var(--ds-color-error-600);
+  border-color: var(--ds-color-error-300);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'][data-variant='primary'] {
+  background: var(--ds-color-primary-500);
+  color: var(--ds-color-text-on-primary);
+  border-color: var(--ds-color-primary-500);
+}
+
+/* ---- table wrapper: radius always; border only in `bordered` mode ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='wrap'] {
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='wrap'][data-bordered='true'] {
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* ---- header cells: label color + surface, the two hairlines, and the
+        last-cell right-border reset (was styles.thLast). ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell'] {
+  color: var(--ds-color-neutral-500);
+  background: var(--ds-color-neutral-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell'][data-part='header-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-200);
+  border-right: 1px solid var(--ds-color-neutral-100);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell']:last-child {
+  border-right: none;
+}
+
+/* ---- body cells: the shared bottom hairline (was styles.td.borderBottom) ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='selection-cell'][data-part='selection-cell'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='expand-cell'][data-part='expand-cell'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='data-cell'][data-part='data-cell'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='actions-cell'][data-part='actions-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-100);
+}
+
+/* ---- empty state ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='empty-state'] {
+  color: var(--ds-color-neutral-400);
+}
+
+/* ---- loading: the scrim overlay (data-scrim distinguishes it from the
+        centered fallback that shares data-part) + the spinner ring ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='loading-overlay'][data-scrim='true'] {
+  background: var(--ds-table-loading-overlay-bg, var(--ds-modal-loading-overlay-bg));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='loading-spinner'][data-part='loading-spinner'] {
+  border: 3px solid var(--ds-color-neutral-200);
+  border-top-color: var(--ds-color-primary-500);
+  border-radius: 50%;
+}
+
+/* ---- pagination bar + buttons ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='pagination-bar'] {
+  color: var(--ds-color-neutral-500);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='pagination-button'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-neutral-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='pagination-button'][data-part='pagination-button'] {
+  border: 1px solid var(--ds-color-neutral-300);
+}
+
+/* ---- expand toggle ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='expand-button'] {
+  background: transparent;
+  border: none;
+  color: var(--ds-color-neutral-500);
+}
+
+/* ---- reorder drag grip (its border carries a hardcoded rgba fallback,
+        transcribed as-is) ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell-drag-grip'] {
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--ds-surface-inset, #f8fafc) 72%, transparent);
+  color: var(--ds-color-text-secondary, #475569);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell-drag-grip'][data-part='header-cell-drag-grip'] {
+  border: 1px solid var(--ds-color-border-secondary, rgba(148, 163, 184, 0.55));
+}
+
+/* ---- reorder drop indicator ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='drop-indicator'] {
+  background: var(--ds-color-primary, #1677ff);
+  border-radius: 1px;
+}
+
+/* ---- resize handle bar: the hardcoded rgba(0,0,0,0.12) is a pre-existing
+        token-purity residual, transcribed AS-IS ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='resize-handle-bar'] {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 1px;
+}
+
+/* ---- body row rest fill (selected > striped > default), keyed on the
+        engine-split data-state enum. No :hover — divergence preserved. ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] {
+  background: var(--ds-color-primary-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] {
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- pinned cell fill: one rule set (base + the two row-state overrides)
+        replacing the 3x-duplicated ternary. actions-cell is always pinned. ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='data-cell'][data-pinned='true'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='actions-cell'][data-pinned='true'] {
+  background: var(--ds-color-surface, #fff);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] [data-part='data-cell'][data-pinned='true'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] [data-part='actions-cell'][data-pinned='true'] {
+  background: var(--ds-color-primary-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] [data-part='data-cell'][data-pinned='true'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] [data-part='actions-cell'][data-pinned='true'] {
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- expanded row content ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='expanded-row-content'] {
+  background: var(--ds-color-neutral-50);
+}
+
+/**
+ * DataTable agnostic skin (WO-ARC-09 checkpoint 6) — the engine-free leaves of
+ * the data-table family: the inline cell editors (rendered inside the modern
+ * engine, but with engine-free markup) and the mobile-card fallback + mobile
+ * state panels (rendered by PatternDataTable/DataTableMobileCards under BOTH
+ * engines, below the window-width breakpoint). Home in components/skin/ because
+ * these render one DOM under every engine; no --modern/--rustic discriminator.
+ *
+ * DELIBERATELY UNLAYERED (P-47). SPECIFICITY (P-48): the tenant `*` border floor
+ * sits at (0,3,1); a border-painting rule must reach (0,4,0).
+ *
+ * CELL EDITORS scope on `.ds-pattern-data-table [data-part='editor-*']` — they
+ * render inside the pattern root. The editor input's rest AND error borders both
+ * paint a color, so both reach (0,4,0) by repeating `data-part`/`data-invalid`;
+ * non-border channels win at (0,2,0). The error border keys on the stamped
+ * `data-invalid='true'` and sits after the rest border so it wins on the invalid
+ * cell.
+ *
+ * MOBILE CARD (trap-1): the caller previously froze the Card's
+ * background/border-color/border-radius/box-shadow with an inline `style` that
+ * beat ALL of card.css — including its hover/focus rules. Preserving that
+ * byte-exact means an unlayered rule that outranks card.css's MAX specificity on
+ * those channels. Measured (via the test's bColumn) across modern + rustic
+ * card.css: MAX = 9 (the modern outlined-hover `:not([data-tone])` border rule).
+ * This rule escalates the `ds-data-table__mobile-card` class to a bColumn of 10
+ * (2 scope classes + the card class repeated 8x) — the FFP suppression idiom —
+ * so it wins at rest and in the (unphotographed) hover/focus a clickable card
+ * could take, exactly as the inline style did. Card sets border-WIDTH/STYLE via
+ * its variant; this rule overrides only border-COLOR, matching the inline
+ * `borderColor` it replaces. The `--selected` modifier repeats the same way and
+ * follows the base rule so it wins the conditional border-color/box-shadow.
+ *
+ * MOBILE STATE PANEL: the loading and empty panels share `data-part=
+ * 'mobile-state-panel'` and carry byte-identical values (verified); one rule.
+ *
+ * Values are transcribed verbatim from cell-editors/index.tsx,
+ * DataTableMobileCards.tsx and PatternDataTable.tsx.
+ */
+
+/* ---- inline cell editor input: rest + error border, plus the shared chrome --- */
+.ds-pattern-data-table [data-part='editor-input'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-surface-card, #fff);
+  color: var(--ds-color-text-primary, #1a1a1a);
+  outline: none;
+}
+.ds-pattern-data-table [data-part='editor-input'][data-part='editor-input'][data-part='editor-input'] {
+  border: 1.5px solid var(--ds-color-primary, #3b82f6);
+}
+.ds-pattern-data-table [data-part='editor-input'][data-part='editor-input'][data-invalid='true'] {
+  border: 1.5px solid var(--ds-color-error, #e53e3e);
+}
+
+/* ---- checkbox editor + error message ---- */
+.ds-pattern-data-table [data-part='editor-checkbox'] {
+  accent-color: var(--ds-color-primary, #3b82f6);
+}
+.ds-pattern-data-table [data-part='editor-error'] {
+  color: var(--ds-color-error, #e53e3e);
+}
+
+/* ---- mobile card chrome (FFP suppression: beats card.css MAX = 9) ---- */
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card.ds-data-table__mobile-card {
+  background: var(--ds-collection-card-bg, var(--ds-card-bg));
+  border-radius: var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  border-color: var(--ds-collection-card-border, var(--ds-card-border-color));
+  box-shadow: var(--ds-collection-card-shadow, none);
+}
+.ds-pattern-data-table.ds-data-table--mobile
+  .ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected.ds-data-table__mobile-card--selected {
+  border-color: var(--ds-collection-card-selected-border, var(--ds-color-primary));
+  box-shadow: var(--ds-collection-card-selected-ring, 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
+}
+
+/* ---- mobile card text (title + summary value Boxes; the summary LABEL is a
+        Text prop-swapped to color="subtle", not a rule) ---- */
+.ds-pattern-data-table.ds-data-table--mobile [data-part='mobile-card-title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-data-table.ds-data-table--mobile [data-part='mobile-card-summary-value'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- mobile loading/empty state panels (one rule, both panels) ----
+   COMPOUND selectors, no descendant combinator: the state panels CARRY the
+   scope pair themselves (they are top-level mobile elements, not children of
+   the cards Stack), so a descendant form would never match them. */
+.ds-pattern-data-table.ds-data-table--mobile[data-part='mobile-state-panel'] {
+  border-radius: 16px;
+  background: var(--ds-color-bg-primary);
+}
+.ds-pattern-data-table.ds-data-table--mobile[data-part='mobile-state-panel'][data-part='mobile-state-panel'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

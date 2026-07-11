@@ -75,6 +75,9 @@
 @import '../components/skin/selection-preview-rail.css';
 @import '../engines/modern/skin/detail-panel.css';
 @import '../engines/rustic/skin/detail-panel.css';
+@import '../engines/modern/skin/data-table.css';
+@import '../engines/rustic/skin/data-table.css';
+@import '../components/skin/data-table-mobile.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

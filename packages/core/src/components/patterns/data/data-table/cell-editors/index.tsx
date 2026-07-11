@@ -131,19 +131,14 @@ export function InlineCellEditor<T>({
 
   const editorType = config.type ?? 'text';
 
-  // Shared input styles
+  // Shared input layout. Paint (border rest/error, radius, background, color,
+  // outline) lives in the agnostic data-table-mobile skin, keyed on data-part=
+  // 'editor-input' and the data-invalid stamp.
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '4px 8px',
     fontSize: 14,
     fontFamily: 'inherit',
-    border: error
-      ? '1.5px solid var(--ds-color-error, #e53e3e)'
-      : '1.5px solid var(--ds-color-primary, #3b82f6)',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
-    background: 'var(--ds-surface-card, #fff)',
-    color: 'var(--ds-color-text-primary, #1a1a1a)',
-    outline: 'none',
     boxSizing: 'border-box' as const,
     lineHeight: 1.5,
   };
@@ -186,7 +181,6 @@ export function InlineCellEditor<T>({
             width: 16,
             height: 16,
             cursor: 'pointer',
-            accentColor: 'var(--ds-color-primary, #3b82f6)',
           }}
         />
       </div>
@@ -227,7 +221,6 @@ export function InlineCellEditor<T>({
               bottom: -18,
               left: 0,
               fontSize: 11,
-              color: 'var(--ds-color-error, #e53e3e)',
               whiteSpace: 'nowrap',
             }}
           >
@@ -270,7 +263,6 @@ export function InlineCellEditor<T>({
             bottom: -18,
             left: 0,
             fontSize: 11,
-            color: 'var(--ds-color-error, #e53e3e)',
             whiteSpace: 'nowrap',
           }}
         >

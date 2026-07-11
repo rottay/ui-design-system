@@ -69,7 +69,7 @@ function MobileBulkActions<T extends object>({
       className="ds-pattern-data-table ds-data-table--mobile"
       data-part="mobile-bulk-actions"
     >
-      <Text style={{ fontSize: 13, color: 'var(--ds-color-text-muted)' }}>
+      <Text color="subtle" style={{ fontSize: 13 }}>
         {`${selectedKeys.length} selected`}
       </Text>
       <Flex gap={8} wrap="wrap">
@@ -182,12 +182,9 @@ export function PatternDataTable<T extends object>(
             className="ds-pattern-data-table ds-data-table--mobile"
             style={{
               padding: '32px 20px',
-              borderRadius: 16,
-              border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
-              background: 'var(--ds-color-bg-primary)',
             }}
           >
-            <Text style={{ color: 'var(--ds-color-text-muted)' }}>Loading…</Text>
+            <Text color="subtle">Loading…</Text>
           </Box>
         ) : data.length === 0 ? (
           <Box
@@ -195,12 +192,9 @@ export function PatternDataTable<T extends object>(
             className="ds-pattern-data-table ds-data-table--mobile"
             style={{
               padding: '32px 20px',
-              borderRadius: 16,
-              border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
-              background: 'var(--ds-color-bg-primary)',
             }}
           >
-            {emptyState ?? <Text style={{ color: 'var(--ds-color-text-muted)' }}>No data</Text>}
+            {emptyState ?? <Text color="subtle">No data</Text>}
           </Box>
         ) : (
           <DataTableMobileCards

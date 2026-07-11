@@ -1,0 +1,181 @@
+/**
+ * Rustic DataTable skin (WO-ARC-09 checkpoint 6).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the other engine skins: a
+ * `rottay-*` layer loses to Tailwind preflight; unlayered outranks it and still
+ * yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the engine's outer `<div>` carrying `ds-pattern-data-table
+ * ds-engine-rustic` + `data-part='root'` (no density class — rustic reads
+ * density from its own lookup, an asymmetry this skin never keys on). All paint
+ * that lived in the module-level `styles` dict and the inline sites moves here.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border floor sits at (0,3,1); a rule that
+ * paints `border` / `border-color` / a `border-*-color` longhand must reach
+ * (0,4,0) — the two root classes + a second attribute (the `data-part`
+ * REPEATED, or a `data-variant`/`data-bordered`). Non-border paint wins
+ * unlayered at (0,3,0). Pure `border: none` resets are exempt.
+ *
+ * DIVERGENCE FROM MODERN, preserved: rustic paints NO row hover — there are
+ * ZERO `:hover` rules in this file. `styles.td`'s `background-color` transition
+ * stays inline (exempt, not dropped). The resize bar's hardcoded
+ * `rgba(0,0,0,0.12)` is transcribed AS-IS (pre-existing token-purity residual,
+ * filed as a proposal, not fixed here). The `@keyframes ds-spin` /
+ * `ds-bulk-slide-down` per-instance `<style>` stays in the tsx by WO law.
+ *
+ * PINNED-TD RULE: the row's `data-state` enum (selected|striped|default) plus
+ * the cell's `data-pinned='true'` drive ONE rule set that replaces the ternary
+ * the JSX re-derived at three sites (data-cell override, actions-cell override,
+ * and the `buildPinStyle` base) — verified byte-identical before collapsing.
+ *
+ * Values are transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root text color (was styles.container) ---- */
+.ds-pattern-data-table.ds-engine-rustic[data-part='root'] {
+  color: var(--ds-color-neutral-900);
+}
+
+/* ---- toolbar bottom rule ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='toolbar'][data-part='toolbar'] {
+  border-bottom: 1px solid var(--ds-color-neutral-100);
+}
+
+/* ---- bulk action buttons (base chrome + per-variant overrides) ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'] {
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'][data-part='bulk-bar-action'] {
+  border: 1px solid var(--ds-color-neutral-300);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'][data-variant='danger'] {
+  color: var(--ds-color-error-600);
+  border-color: var(--ds-color-error-300);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='bulk-bar-action'][data-variant='primary'] {
+  background: var(--ds-color-primary-500);
+  color: var(--ds-color-text-on-primary);
+  border-color: var(--ds-color-primary-500);
+}
+
+/* ---- table wrapper: radius always; border only in `bordered` mode ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='wrap'] {
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='wrap'][data-bordered='true'] {
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* ---- header cells: label color + surface, the two hairlines, and the
+        last-cell right-border reset (was styles.thLast). ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell'] {
+  color: var(--ds-color-neutral-500);
+  background: var(--ds-color-neutral-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell'][data-part='header-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-200);
+  border-right: 1px solid var(--ds-color-neutral-100);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell']:last-child {
+  border-right: none;
+}
+
+/* ---- body cells: the shared bottom hairline (was styles.td.borderBottom) ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='selection-cell'][data-part='selection-cell'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='expand-cell'][data-part='expand-cell'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='data-cell'][data-part='data-cell'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='actions-cell'][data-part='actions-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-100);
+}
+
+/* ---- empty state ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='empty-state'] {
+  color: var(--ds-color-neutral-400);
+}
+
+/* ---- loading: the scrim overlay (data-scrim distinguishes it from the
+        centered fallback that shares data-part) + the spinner ring ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='loading-overlay'][data-scrim='true'] {
+  background: var(--ds-table-loading-overlay-bg, var(--ds-modal-loading-overlay-bg));
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='loading-spinner'][data-part='loading-spinner'] {
+  border: 3px solid var(--ds-color-neutral-200);
+  border-top-color: var(--ds-color-primary-500);
+  border-radius: 50%;
+}
+
+/* ---- pagination bar + buttons ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='pagination-bar'] {
+  color: var(--ds-color-neutral-500);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='pagination-button'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-neutral-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='pagination-button'][data-part='pagination-button'] {
+  border: 1px solid var(--ds-color-neutral-300);
+}
+
+/* ---- expand toggle ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='expand-button'] {
+  background: transparent;
+  border: none;
+  color: var(--ds-color-neutral-500);
+}
+
+/* ---- reorder drag grip (its border carries a hardcoded rgba fallback,
+        transcribed as-is) ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell-drag-grip'] {
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--ds-surface-inset, #f8fafc) 72%, transparent);
+  color: var(--ds-color-text-secondary, #475569);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='header-cell-drag-grip'][data-part='header-cell-drag-grip'] {
+  border: 1px solid var(--ds-color-border-secondary, rgba(148, 163, 184, 0.55));
+}
+
+/* ---- reorder drop indicator ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='drop-indicator'] {
+  background: var(--ds-color-primary, #1677ff);
+  border-radius: 1px;
+}
+
+/* ---- resize handle bar: the hardcoded rgba(0,0,0,0.12) is a pre-existing
+        token-purity residual, transcribed AS-IS ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='resize-handle-bar'] {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 1px;
+}
+
+/* ---- body row rest fill (selected > striped > default), keyed on the
+        engine-split data-state enum. No :hover — divergence preserved. ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] {
+  background: var(--ds-color-primary-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] {
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- pinned cell fill: one rule set (base + the two row-state overrides)
+        replacing the 3x-duplicated ternary. actions-cell is always pinned. ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='data-cell'][data-pinned='true'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'] [data-part='actions-cell'][data-pinned='true'] {
+  background: var(--ds-color-surface, #fff);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] [data-part='data-cell'][data-pinned='true'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='selected'] [data-part='actions-cell'][data-pinned='true'] {
+  background: var(--ds-color-primary-50);
+}
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] [data-part='data-cell'][data-pinned='true'],
+.ds-pattern-data-table.ds-engine-rustic [data-part='body-row'][data-state='striped'] [data-part='actions-cell'][data-pinned='true'] {
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- expanded row content ---- */
+.ds-pattern-data-table.ds-engine-rustic [data-part='expanded-row-content'] {
+  background: var(--ds-color-neutral-50);
+}
