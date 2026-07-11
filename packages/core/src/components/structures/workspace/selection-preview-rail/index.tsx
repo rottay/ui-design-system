@@ -121,6 +121,7 @@ function renderFallbackValue(value: unknown): ReactNode {
     return (
       <Text
         size="sm"
+        data-part="fallback-empty"
         style={{
           color: 'var(--ds-color-text-muted)',
           fontStyle: 'italic',
@@ -133,7 +134,7 @@ function renderFallbackValue(value: unknown): ReactNode {
 
   if (typeof value === 'boolean') {
     return (
-      <Text size="sm" style={{ color: 'var(--ds-color-text-primary)' }}>
+      <Text size="sm" data-part="fallback-boolean" style={{ color: 'var(--ds-color-text-primary)' }}>
         {value ? 'Yes' : 'No'}
       </Text>
     );
@@ -142,6 +143,7 @@ function renderFallbackValue(value: unknown): ReactNode {
   return (
     <Text
       size="sm"
+      data-part="fallback-string"
       style={{
         color: 'var(--ds-color-text-primary)',
         lineHeight: 1.45,
@@ -225,6 +227,9 @@ export function SelectionPreviewRail<T extends object>({
   if (customPreview) {
     return (
       <Box
+        className="ds-structure ds-selection-preview-rail"
+        data-part="root"
+        data-preview="custom"
         style={{
           flex: '0 1 clamp(320px, 29vw, 380px)',
           width: 'min(100%, 380px)',
@@ -241,6 +246,7 @@ export function SelectionPreviewRail<T extends object>({
           }}
         >
           <Box
+            data-part="custom-sticky-card"
             style={{
               position: 'relative',
               overflow: 'hidden',
@@ -266,6 +272,7 @@ export function SelectionPreviewRail<T extends object>({
                 icon={<PanelRightClose style={{ width: 16, height: 16 }} />}
                 aria-label="Close preview"
                 onClick={onClose}
+                className="ds-selection-preview-rail__close"
                 style={{
                   width: 34,
                   minWidth: 34,
@@ -287,6 +294,9 @@ export function SelectionPreviewRail<T extends object>({
 
   return (
     <Box
+      className="ds-structure ds-selection-preview-rail"
+      data-part="root"
+      data-preview="default"
       style={{
         flex: '0 1 clamp(320px, 29vw, 380px)',
         width: 'min(100%, 380px)',
@@ -307,6 +317,7 @@ export function SelectionPreviewRail<T extends object>({
         }}
       >
         <Box
+          data-part="identity-card"
           style={{
             position: 'relative',
             overflow: 'hidden',
@@ -319,6 +330,7 @@ export function SelectionPreviewRail<T extends object>({
           }}
         >
           <Box
+            data-part="identity-card-accent"
             style={{
               height: 3,
               background:
@@ -345,6 +357,7 @@ export function SelectionPreviewRail<T extends object>({
               <Text
                 size="xl"
                 weight="semibold"
+                data-part="identity-title"
                 style={{
                   display: 'block',
                   color: 'var(--ds-color-text-primary)',
@@ -357,6 +370,7 @@ export function SelectionPreviewRail<T extends object>({
               {identity.subtitle && (
                 <Text
                   size="sm"
+                  data-part="identity-subtitle"
                   style={{
                     display: 'block',
                     marginTop: 6,
@@ -371,6 +385,7 @@ export function SelectionPreviewRail<T extends object>({
 
             {matchReason && (
               <Box
+                data-part="match-reason-panel"
                 style={{
                   marginTop: 16,
                   padding: '14px 14px 14px 16px',
@@ -382,6 +397,7 @@ export function SelectionPreviewRail<T extends object>({
               >
                 <Flex align="start" gap={10}>
                   <ScanSearch
+                    data-part="match-reason-icon"
                     style={{
                       width: 15,
                       height: 15,
@@ -398,6 +414,7 @@ export function SelectionPreviewRail<T extends object>({
                       <Text
                         size="xs"
                         weight="medium"
+                        data-part="match-reason-eyebrow"
                         style={{
                           display: 'block',
                           color: 'var(--ds-color-text-muted)',
@@ -410,6 +427,7 @@ export function SelectionPreviewRail<T extends object>({
                     </Flex>
                     <Text
                       size="sm"
+                      data-part="match-reason-body"
                       style={{
                         display: 'block',
                         marginTop: 6,
@@ -473,6 +491,7 @@ export function SelectionPreviewRail<T extends object>({
         </Box>
 
         <Box
+          data-part="snapshot-card"
           style={{
             borderRadius: 'var(--ds-radius-xl, 16px)',
             border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
@@ -482,6 +501,7 @@ export function SelectionPreviewRail<T extends object>({
           }}
         >
           <Box
+            data-part="snapshot-header"
             style={{
               padding: '14px 18px',
               borderBottom: '1px solid var(--ds-color-border-subtle)',
@@ -490,6 +510,7 @@ export function SelectionPreviewRail<T extends object>({
             <Text
               size="sm"
               weight="medium"
+              data-part="snapshot-title"
               style={{
                 display: 'block',
                 color: 'var(--ds-color-text-primary)',
@@ -499,6 +520,7 @@ export function SelectionPreviewRail<T extends object>({
             </Text>
             <Text
               size="xs"
+              data-part="snapshot-subtitle"
               style={{
                 display: 'block',
                 marginTop: 4,
@@ -519,6 +541,7 @@ export function SelectionPreviewRail<T extends object>({
               return (
                 <Box
                   key={column.key}
+                  data-part="snapshot-row"
                   style={{
                     padding: '12px 18px',
                     borderTop: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent)',
@@ -527,6 +550,7 @@ export function SelectionPreviewRail<T extends object>({
                   <Text
                     size="xs"
                     weight="medium"
+                    data-part="snapshot-row-label"
                     style={{
                       display: 'block',
                       marginBottom: 6,
@@ -546,6 +570,7 @@ export function SelectionPreviewRail<T extends object>({
               <Box style={{ padding: '18px' }}>
                 <Text
                   size="sm"
+                  data-part="snapshot-empty"
                   style={{
                     color: 'var(--ds-color-text-muted)',
                     lineHeight: 1.45,
