@@ -100,6 +100,8 @@ const inlineLabelStyle: React.CSSProperties = {
   flexShrink: 0,
 };
 
+const ROOT_CLASS_NAME = 'ds-pattern-filter-panel ds-engine-modern';
+
 type FilterOption = NonNullable<FilterDef['options']>[number];
 type FilterOptionTone = NonNullable<FilterOption['tone']>;
 type FilterIconComponent = React.ComponentType<{ size?: number; strokeWidth?: number }>;
@@ -262,6 +264,9 @@ function renderOptionIcon(filter: FilterDef, option: FilterOption) {
   return (
     <span
       aria-hidden
+      className="ds-pattern-filter-panel__option-icon"
+      data-part="option-icon-badge"
+      data-tone={tone}
       style={{
         width: 22,
         height: 22,
@@ -308,6 +313,7 @@ function renderFilterControl(
       return (
         <input
           type="text"
+          data-part="input"
           style={baseInputStyle}
           placeholder={filter.placeholder}
           value={(value as string) ?? ''}
@@ -364,6 +370,7 @@ function renderFilterControl(
       return (
         <input
           type="date"
+          data-part="input"
           style={baseInputStyle}
           value={(value as string) ?? ''}
           onChange={(e) => onChange(filter.key, e.target.value)}
@@ -377,6 +384,7 @@ function renderFilterControl(
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <input
             type="date"
+            data-part="input"
             style={{ ...baseInputStyle, flex: 1 }}
             value={range[0] ?? ''}
             onChange={(e) => onChange(filter.key, [e.target.value, range[1]])}
@@ -384,6 +392,7 @@ function renderFilterControl(
             onBlur={blurHandler}
           />
           <span
+            data-part="range-separator"
             style={{
               fontSize: 12,
               color: 'var(--ds-color-text-muted)',
@@ -394,6 +403,7 @@ function renderFilterControl(
           </span>
           <input
             type="date"
+            data-part="input"
             style={{ ...baseInputStyle, flex: 1 }}
             value={range[1] ?? ''}
             onChange={(e) => onChange(filter.key, [range[0], e.target.value])}
@@ -407,6 +417,7 @@ function renderFilterControl(
       return (
         <input
           type="number"
+          data-part="input"
           style={baseInputStyle}
           placeholder={filter.placeholder}
           value={(value as number | '') ?? ''}
@@ -426,6 +437,7 @@ function renderFilterControl(
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
           <input
             type="number"
+            data-part="input"
             style={{ ...baseInputStyle, flex: 1 }}
             placeholder="Min"
             value={range[0] ?? ''}
@@ -439,6 +451,7 @@ function renderFilterControl(
             onBlur={blurHandler}
           />
           <span
+            data-part="range-separator"
             style={{
               fontSize: 12,
               color: 'var(--ds-color-text-muted)',
@@ -449,6 +462,7 @@ function renderFilterControl(
           </span>
           <input
             type="number"
+            data-part="input"
             style={{ ...baseInputStyle, flex: 1 }}
             placeholder="Max"
             value={range[1] ?? ''}
@@ -534,6 +548,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
       {filters.map((filter) => (
         <div
           key={filter.key}
+          data-part="field-row"
           style={
             isInline
               ? {
@@ -548,7 +563,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
               : undefined
           }
         >
-          <span style={isInline ? inlineLabelStyle : labelStyle}>{filter.label}</span>
+          <span data-part="field-label" style={isInline ? inlineLabelStyle : labelStyle}>{filter.label}</span>
           <div
             style={
               isInline
@@ -570,7 +585,9 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
   if (loading) {
     return (
       <div
-        className={className}
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+        data-part="root"
+        data-loading="true"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -584,6 +601,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
           height="18"
           viewBox="0 0 24 24"
           xmlns="http://www.w3.org/2000/svg"
+          data-part="loading-spinner"
           style={{
             animation: 'ds-filter-spin 1s linear infinite',
             color: 'var(--ds-color-primary)',
@@ -617,10 +635,16 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
   };
 
   return (
-    <div className={className} style={rootStyle}>
+    <div
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-sidebar={isSidebar ? 'true' : 'false'}
+      style={rootStyle}
+    >
       {/* Header: title, collapse toggle, active count badge, clear all */}
       {(title || collapsible || (activeCount != null && activeCount > 0) || showReset) && (
         <div
+          data-part="header"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -632,6 +656,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
             {collapsible && (
               <button
                 type="button"
+                data-part="collapse-toggle"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -669,6 +694,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
             )}
             {title && (
               <span
+                data-part="title"
                 style={{
                   fontSize: 13,
                   fontWeight: 600,
@@ -680,6 +706,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
             )}
             {activeCount != null && activeCount > 0 && (
               <span
+                data-part="active-count-badge"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -704,6 +731,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
           {showReset && !(collapsible && collapsed) && (
             <button
               type="button"
+              data-part="reset-button"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -751,6 +779,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
       {/* Collapsible content area with smooth height transition */}
       <div
         ref={contentRef}
+        data-part="content"
         style={{
           overflow: 'hidden',
           transition: `max-height var(--ds-motion-normal) var(--ds-motion-ease-out),
@@ -772,6 +801,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
           >
             <button
               type="button"
+              data-part="apply-button"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',

@@ -26,6 +26,8 @@ import React, { useState } from 'react';
 import type { FilterPanelProps } from '../FilterPanel.types';
 import type { FilterDef } from '../../../foundation/types';
 
+const ROOT_CLASS_NAME = 'ds-pattern-filter-panel ds-engine-rustic';
+
 // Shared base style for native inputs. All visual tokens reference --ds-*
 // variables with fallbacks so the component works even with partial themes.
 const baseInput: React.CSSProperties = {
@@ -54,6 +56,7 @@ function renderFilterControl(
       return (
         <input
           type="text"
+          data-part="input"
           style={baseInput}
           placeholder={filter.placeholder}
           value={(value as string) ?? ''}
@@ -63,6 +66,7 @@ function renderFilterControl(
     case 'select':
       return (
         <select
+          data-part="select"
           style={{
             ...baseInput,
             appearance: 'none' as const,
@@ -119,6 +123,7 @@ function renderFilterControl(
       return (
         <input
           type="date"
+          data-part="input"
           style={baseInput}
           value={(value as string) ?? ''}
           onChange={(e) => onChange(filter.key, e.target.value)}
@@ -130,13 +135,15 @@ function renderFilterControl(
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <input
             type="date"
+            data-part="input"
             style={{ ...baseInput, flex: 1 }}
             value={range[0] ?? ''}
             onChange={(e) => onChange(filter.key, [e.target.value, range[1]])}
           />
-          <span style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>to</span>
+          <span data-part="range-separator" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>to</span>
           <input
             type="date"
+            data-part="input"
             style={{ ...baseInput, flex: 1 }}
             value={range[1] ?? ''}
             onChange={(e) => onChange(filter.key, [range[0], e.target.value])}
@@ -148,6 +155,7 @@ function renderFilterControl(
       return (
         <input
           type="number"
+          data-part="input"
           style={baseInput}
           placeholder={filter.placeholder}
           value={(value as number | '') ?? ''}
@@ -164,6 +172,7 @@ function renderFilterControl(
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <input
             type="number"
+            data-part="input"
             style={{ ...baseInput, flex: 1 }}
             placeholder="Min"
             value={range[0] ?? ''}
@@ -174,9 +183,10 @@ function renderFilterControl(
               ])
             }
           />
-          <span style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>-</span>
+          <span data-part="range-separator" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>-</span>
           <input
             type="number"
+            data-part="input"
             style={{ ...baseInput, flex: 1 }}
             placeholder="Max"
             value={range[1] ?? ''}
@@ -267,7 +277,9 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
 
   return (
     <div
-      className={className}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-sidebar={isSidebar ? 'true' : 'false'}
       style={{
         ...(isSidebar ? { borderRight: '1px solid var(--ds-color-border-primary, var(--ds-color-border))', paddingRight: 16 } : {}),
         ...style,
@@ -278,9 +290,10 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
           and CSS-in-JS libraries entirely. */}
       <style>{`@keyframes ds-filter-slide-down { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       {(title || collapsible) && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <div data-part="header" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
           {collapsible && (
             <button
+              data-part="collapse-toggle"
               style={{ ...btnBase, padding: '2px 8px', fontSize: 12, transition: `transform ${RUSTIC_DURATION} ${RUSTIC_EASING}` }}
               onClick={() => setCollapsed(!collapsed)}
             >
@@ -288,7 +301,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
             </button>
           )}
           {title && (
-            <span style={{
+            <span data-part="title" style={{
               fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
               fontSize: 14,
               letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
@@ -299,6 +312,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
           )}
           {activeCount != null && activeCount > 0 && (
             <span
+              data-part="active-count-badge"
               style={{
                 background: 'var(--ds-color-primary)',
                 color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
@@ -325,6 +339,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
             return (
               <span
                 key={key}
+                data-part="filter-chip"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -348,7 +363,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
                 }}
               >
                 {filter.label}
-                <span style={{ fontSize: 14, lineHeight: 1, marginLeft: 2 }}>x</span>
+                <span data-part="filter-chip-remove" style={{ fontSize: 14, lineHeight: 1, marginLeft: 2 }}>x</span>
               </span>
             );
           })}
@@ -356,7 +371,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
       )}
 
       {loading && (
-        <div style={{ textAlign: 'center', padding: 16, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+        <div data-part="loading-text" style={{ textAlign: 'center', padding: 16, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
           Loading...
         </div>
       )}
@@ -374,8 +389,9 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
             }}
           >
             {filters.map((filter) => (
-              <div key={filter.key} style={{ minWidth: isInline ? 180 : undefined }}>
+              <div key={filter.key} data-part="field-row" style={{ minWidth: isInline ? 180 : undefined }}>
                 <div
+                  data-part="field-label"
                   style={{
                     marginBottom: 4,
                     fontWeight: 500,
@@ -394,7 +410,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
           {(showReset || showApply) && (
             <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
               {showApply && (
-                <button style={btnPrimary} onClick={() => onApply?.(values)}>
+                <button data-part="apply-button" style={btnPrimary} onClick={() => onApply?.(values)}>
                   Apply
                 </button>
               )}
@@ -404,6 +420,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
                   reference token variables in an inline-only engine. */}
               {showReset && (
                 <button
+                  data-part="reset-button"
                   style={{ ...btnBase, border: '1px solid transparent', background: 'transparent' }}
                   onClick={onReset}
                   onMouseEnter={(e) => {
