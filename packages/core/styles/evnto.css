@@ -15404,6 +15404,126 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
 }
 
+/**
+ * SelectionPreviewRail skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/selection-preview-rail.css — the second
+ * consumer of the structures/ shared-file home after field-filters-panel.css;
+ * no --modern/--rustic discriminator because the component renders one DOM
+ * under every engine.
+ *
+ * TWO ROOTS (never merged): the component returns one of two mutually-exclusive
+ * trees. `[data-part='root'][data-preview='custom']` wraps a consumer-supplied
+ * render in a transparent sticky card; `[data-part='root'][data-preview='default']`
+ * assembles the generic identity + snapshot rail on a gradient. Their card
+ * treatments differ (custom-sticky-card mixes surface-panel 90/10 with a 7%/44px
+ * shadow; identity-card mixes 88/12 with an 8%/48px shadow), so the two roots and
+ * their two cards are separate rules — a merged rule would be a silent pixel change.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule here that paints a `border` /
+ * `border-color` must reach (0,4,0): on the root that is the two root classes +
+ * `[data-part='root'][data-preview]` (0,4,0); on a descendant part it is the two
+ * root classes + the data-part REPEATED per the P-64 law (0,4,0), never an
+ * incidental attribute. Non-border paint (background / box-shadow / border-radius /
+ * color) wins unlayered at (0,3,0): two root classes + one attribute.
+ *
+ * CLOSE-BUTTON SUPPRESSION: the customPreview close is a `variant="ghost"` Button
+ * whose inline style froze `background` + `backdrop-filter` over the engine's own
+ * button skin in every state. That skin paints the ghost background at rest (0,4,0)
+ * and on hover (0,5,0) in both modern and rustic; no button rule paints
+ * backdrop-filter. The Button primitive spreads its own `data-part='trigger'` after
+ * caller props, so the landing hook is `className` (the FFP __control mechanism),
+ * and the suppression rule escalates to (0,6,0) by repeating the close class four
+ * times so it outranks rest AND hover exactly as the inline object did.
+ */
+
+/* roots — two mutually-exclusive trees, keyed on data-preview ---------------- */
+
+.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] {
+  border-left: 1px solid var(--ds-color-border-subtle);
+  background: transparent;
+}
+
+.ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default'] {
+  border-left: 1px solid var(--ds-color-border-subtle);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), var(--ds-surface-card));
+}
+
+/* customPreview branch ------------------------------------------------------- */
+
+.ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card'] {
+  border-radius: var(--ds-radius-xl, 16px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 90%, white 10%), var(--ds-surface-card));
+  box-shadow: 0 18px 44px color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
+}
+
+.ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card'][data-part='custom-sticky-card'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+}
+
+/* The ghost close button: its inline style froze background + backdrop-filter in
+   every state. The engine button skin paints ghost background at (0,5,0) on hover,
+   so this rule escalates to (0,6,0) via the repeated close class to hold in rest
+   AND hover, exactly as the inline object did. */
+.ds-structure.ds-selection-preview-rail
+  .ds-selection-preview-rail__close.ds-selection-preview-rail__close.ds-selection-preview-rail__close.ds-selection-preview-rail__close {
+  background: color-mix(in srgb, var(--ds-surface-card) 80%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+/* default branch — identity card --------------------------------------------- */
+
+.ds-structure.ds-selection-preview-rail [data-part='identity-card'] {
+  border-radius: var(--ds-radius-xl, 16px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 88%, white 12%), var(--ds-surface-card));
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+}
+
+.ds-structure.ds-selection-preview-rail [data-part='identity-card'][data-part='identity-card'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+}
+
+.ds-structure.ds-selection-preview-rail [data-part='identity-card-accent'] {
+  background: linear-gradient(90deg, var(--ds-color-primary), color-mix(in srgb, var(--ds-color-primary) 28%, transparent));
+}
+
+/* default branch — match-reason panel ---------------------------------------- */
+
+.ds-structure.ds-selection-preview-rail [data-part='match-reason-panel'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 4%, transparent));
+}
+
+.ds-structure.ds-selection-preview-rail [data-part='match-reason-panel'][data-part='match-reason-panel'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+}
+
+/* the raw lucide icon paints via currentColor, so `color` on the svg is its stroke */
+.ds-structure.ds-selection-preview-rail [data-part='match-reason-icon'] {
+  color: var(--ds-color-primary);
+}
+
+/* default branch — snapshot card --------------------------------------------- */
+
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-card'] {
+  border-radius: var(--ds-radius-xl, 16px);
+  background: var(--ds-surface-card);
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+}
+
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-card'][data-part='snapshot-card'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent);
+}
+
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-header'][data-part='snapshot-header'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-structure.ds-selection-preview-rail [data-part='snapshot-row'][data-part='snapshot-row'] {
+  border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent);
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

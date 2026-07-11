@@ -121,9 +121,9 @@ function renderFallbackValue(value: unknown): ReactNode {
     return (
       <Text
         size="sm"
+        color="subtle"
         data-part="fallback-empty"
         style={{
-          color: 'var(--ds-color-text-muted)',
           fontStyle: 'italic',
         }}
       >
@@ -134,7 +134,7 @@ function renderFallbackValue(value: unknown): ReactNode {
 
   if (typeof value === 'boolean') {
     return (
-      <Text size="sm" data-part="fallback-boolean" style={{ color: 'var(--ds-color-text-primary)' }}>
+      <Text size="sm" data-part="fallback-boolean">
         {value ? 'Yes' : 'No'}
       </Text>
     );
@@ -145,7 +145,6 @@ function renderFallbackValue(value: unknown): ReactNode {
       size="sm"
       data-part="fallback-string"
       style={{
-        color: 'var(--ds-color-text-primary)',
         lineHeight: 1.45,
       }}
     >
@@ -235,8 +234,6 @@ export function SelectionPreviewRail<T extends object>({
           width: 'min(100%, 380px)',
           minWidth: 'min(100%, 320px)',
           padding: '14px 16px 14px 14px',
-          borderLeft: '1px solid var(--ds-color-border-subtle)',
-          background: 'transparent',
         }}
       >
         <Box
@@ -250,12 +247,6 @@ export function SelectionPreviewRail<T extends object>({
             style={{
               position: 'relative',
               overflow: 'hidden',
-              borderRadius: 'var(--ds-radius-xl, 16px)',
-              border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
-              background:
-                'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 90%, white 10%), var(--ds-surface-card))',
-              boxShadow:
-                '0 18px 44px color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)',
             }}
           >
             <Box
@@ -277,8 +268,6 @@ export function SelectionPreviewRail<T extends object>({
                   width: 34,
                   minWidth: 34,
                   padding: 0,
-                  background: 'color-mix(in srgb, var(--ds-surface-card) 80%, transparent)',
-                  backdropFilter: 'blur(8px)',
                 }}
               />
             </Box>
@@ -302,9 +291,6 @@ export function SelectionPreviewRail<T extends object>({
         width: 'min(100%, 380px)',
         minWidth: 'min(100%, 320px)',
         padding: '18px 18px 18px 16px',
-        borderLeft: '1px solid var(--ds-color-border-subtle)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), var(--ds-surface-card))',
       }}
     >
       <Box
@@ -321,20 +307,12 @@ export function SelectionPreviewRail<T extends object>({
           style={{
             position: 'relative',
             overflow: 'hidden',
-            borderRadius: 'var(--ds-radius-xl, 16px)',
-            border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
-            background:
-              'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 88%, white 12%), var(--ds-surface-card))',
-            boxShadow:
-              '0 18px 48px color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
           }}
         >
           <Box
             data-part="identity-card-accent"
             style={{
               height: 3,
-              background:
-                'linear-gradient(90deg, var(--ds-color-primary), color-mix(in srgb, var(--ds-color-primary) 28%, transparent))',
             }}
           />
 
@@ -360,7 +338,6 @@ export function SelectionPreviewRail<T extends object>({
                 data-part="identity-title"
                 style={{
                   display: 'block',
-                  color: 'var(--ds-color-text-primary)',
                   letterSpacing: '-0.02em',
                   lineHeight: 1.12,
                 }}
@@ -370,11 +347,11 @@ export function SelectionPreviewRail<T extends object>({
               {identity.subtitle && (
                 <Text
                   size="sm"
+                  color="secondary"
                   data-part="identity-subtitle"
                   style={{
                     display: 'block',
                     marginTop: 6,
-                    color: 'var(--ds-color-text-secondary)',
                     lineHeight: 1.4,
                   }}
                 >
@@ -389,10 +366,6 @@ export function SelectionPreviewRail<T extends object>({
                 style={{
                   marginTop: 16,
                   padding: '14px 14px 14px 16px',
-                  borderRadius: 'var(--ds-radius-lg, 12px)',
-                  border: '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)',
-                  background:
-                    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), color-mix(in srgb, var(--ds-color-primary) 4%, transparent))',
                 }}
               >
                 <Flex align="start" gap={10}>
@@ -402,7 +375,6 @@ export function SelectionPreviewRail<T extends object>({
                       width: 15,
                       height: 15,
                       marginTop: 2,
-                      color: 'var(--ds-color-primary)',
                       flexShrink: 0,
                     }}
                   />
@@ -414,10 +386,10 @@ export function SelectionPreviewRail<T extends object>({
                       <Text
                         size="xs"
                         weight="medium"
+                        color="subtle"
                         data-part="match-reason-eyebrow"
                         style={{
                           display: 'block',
-                          color: 'var(--ds-color-text-muted)',
                           textTransform: 'uppercase',
                           letterSpacing: '0.06em',
                         }}
@@ -427,11 +399,11 @@ export function SelectionPreviewRail<T extends object>({
                     </Flex>
                     <Text
                       size="sm"
+                      color="secondary"
                       data-part="match-reason-body"
                       style={{
                         display: 'block',
                         marginTop: 6,
-                        color: 'var(--ds-color-text-secondary)',
                         lineHeight: 1.5,
                       }}
                     >
@@ -493,10 +465,6 @@ export function SelectionPreviewRail<T extends object>({
         <Box
           data-part="snapshot-card"
           style={{
-            borderRadius: 'var(--ds-radius-xl, 16px)',
-            border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)',
-            background: 'var(--ds-surface-card)',
-            boxShadow: '0 10px 30px color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent)',
             overflow: 'hidden',
           }}
         >
@@ -504,7 +472,6 @@ export function SelectionPreviewRail<T extends object>({
             data-part="snapshot-header"
             style={{
               padding: '14px 18px',
-              borderBottom: '1px solid var(--ds-color-border-subtle)',
             }}
           >
             <Text
@@ -513,18 +480,17 @@ export function SelectionPreviewRail<T extends object>({
               data-part="snapshot-title"
               style={{
                 display: 'block',
-                color: 'var(--ds-color-text-primary)',
               }}
             >
               {preview?.title ?? 'Snapshot'}
             </Text>
             <Text
               size="xs"
+              color="subtle"
               data-part="snapshot-subtitle"
               style={{
                 display: 'block',
                 marginTop: 4,
-                color: 'var(--ds-color-text-muted)',
               }}
             >
               {preview?.description ?? `Key ${itemKey} · Row ${itemIndex + 1}`}
@@ -544,17 +510,16 @@ export function SelectionPreviewRail<T extends object>({
                   data-part="snapshot-row"
                   style={{
                     padding: '12px 18px',
-                    borderTop: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 60%, transparent)',
                   }}
                 >
                   <Text
                     size="xs"
                     weight="medium"
+                    color="subtle"
                     data-part="snapshot-row-label"
                     style={{
                       display: 'block',
                       marginBottom: 6,
-                      color: 'var(--ds-color-text-muted)',
                       textTransform: 'uppercase',
                       letterSpacing: '0.05em',
                     }}
@@ -570,9 +535,9 @@ export function SelectionPreviewRail<T extends object>({
               <Box style={{ padding: '18px' }}>
                 <Text
                   size="sm"
+                  color="subtle"
                   data-part="snapshot-empty"
                   style={{
-                    color: 'var(--ds-color-text-muted)',
                     lineHeight: 1.45,
                   }}
                 >
