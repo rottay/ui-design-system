@@ -66,29 +66,37 @@ function styleOf(html: string, tag: 'th' | 'td', role: string): string {
   return match[1];
 }
 
-function tableStyle(html: string): string {
-  const match = /<table[^>]*\sstyle="([^"]*)"/.exec(html);
-  if (!match) throw new Error('No <table style="..."> found in markup');
-  return match[1];
+/**
+ * The full opening tag for the first `<tag>` (optionally matching a role). The
+ * modern engine's border treatment moved from an inline `style` to the unlayered
+ * `table.css` skin (WO-ARC-09), keyed on the data attributes the engine stamps,
+ * so its tests read those attributes instead of a style string. Rustic is still
+ * inline and keeps `styleOf`.
+ */
+function openTag(html: string, tag: 'table' | 'th' | 'td', role?: string): string {
+  const re = role
+    ? new RegExp(`<${tag}\\b[^>]*role="${role}"[^>]*>`)
+    : new RegExp(`<${tag}\\b[^>]*>`);
+  const match = re.exec(html);
+  if (!match) throw new Error(`No <${tag}${role ? ` role="${role}"` : ''}> found in markup`);
+  return match[0];
 }
 
-const MODERN_HEADER_HAIRLINE = 'border-bottom:1px solid var(--ds-table-border, var(--ds-color-border))';
-const MODERN_TABLE_BORDER = 'border:1px solid var(--ds-table-border, var(--ds-color-border))';
 const RUSTIC_HEADER_HAIRLINE = 'border-bottom:1px solid var(--ds-table-border, var(--ds-color-border-primary))';
 
 describe('Table modern engine -- header hairline default (WO-ENG-16)', () => {
-  it('draws the header bottom hairline by default, with no cell or outer table border', () => {
+  it('flags the header bottom hairline by default, with no cell or outer table border', () => {
     const html = renderMarkup(
       'modern',
       <ModernTable columns={COLUMNS} dataSource={DATA} pagination={false} />
     );
 
-    expect(styleOf(html, 'th', 'columnheader')).toContain(MODERN_HEADER_HAIRLINE);
+    expect(openTag(html, 'th', 'columnheader')).toContain('data-hairline="true"');
 
     // Only the header/body separator is on by default -- no per-row cell
     // borders and no outer table border. Those stay behind `bordered`.
-    expect(styleOf(html, 'td', 'gridcell')).not.toContain(MODERN_HEADER_HAIRLINE);
-    expect(tableStyle(html)).not.toContain(MODERN_TABLE_BORDER);
+    expect(openTag(html, 'td', 'gridcell')).not.toContain('data-bordered="true"');
+    expect(openTag(html, 'table', 'grid')).not.toContain('data-bordered="true"');
   });
 
   it('removes the header hairline only via the explicit headerBordered={false} opt-out', () => {
@@ -97,7 +105,7 @@ describe('Table modern engine -- header hairline default (WO-ENG-16)', () => {
       <ModernTable columns={COLUMNS} dataSource={DATA} pagination={false} headerBordered={false} />
     );
 
-    expect(styleOf(html, 'th', 'columnheader')).not.toContain(MODERN_HEADER_HAIRLINE);
+    expect(openTag(html, 'th', 'columnheader')).not.toContain('data-hairline');
   });
 
   it('keeps the full bordered treatment: outer border, header hairline, and per-cell borders', () => {
@@ -106,9 +114,9 @@ describe('Table modern engine -- header hairline default (WO-ENG-16)', () => {
       <ModernTable columns={COLUMNS} dataSource={DATA} pagination={false} bordered />
     );
 
-    expect(tableStyle(html)).toContain(MODERN_TABLE_BORDER);
-    expect(styleOf(html, 'th', 'columnheader')).toContain(MODERN_HEADER_HAIRLINE);
-    expect(styleOf(html, 'td', 'gridcell')).toContain(MODERN_HEADER_HAIRLINE);
+    expect(openTag(html, 'table', 'grid')).toContain('data-bordered="true"');
+    expect(openTag(html, 'th', 'columnheader')).toContain('data-hairline="true"');
+    expect(openTag(html, 'td', 'gridcell')).toContain('data-bordered="true"');
   });
 
   it('keeps the header hairline when bordered=true even if headerBordered={false} is also passed', () => {
@@ -125,7 +133,7 @@ describe('Table modern engine -- header hairline default (WO-ENG-16)', () => {
       />
     );
 
-    expect(styleOf(html, 'th', 'columnheader')).toContain(MODERN_HEADER_HAIRLINE);
+    expect(openTag(html, 'th', 'columnheader')).toContain('data-hairline="true"');
   });
 
   it('does not change the rustic engine, whose header separator is unconditional', () => {

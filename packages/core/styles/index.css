@@ -14634,8 +14634,10 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   accent-color: var(--ds-color-primary);
 }
 
-/* ---- empty-state cell ---- */
-.ds-table.ds-table--modern [data-part='empty-cell'] {
+/* ---- muted text: empty-state cell, footer, pagination range ---- */
+.ds-table.ds-table--modern [data-part='empty-cell'],
+.ds-table.ds-table--modern [data-part='footer'],
+.ds-table.ds-table--modern [data-part='pagination-range'] {
   color: var(--ds-color-text-secondary);
 }
 

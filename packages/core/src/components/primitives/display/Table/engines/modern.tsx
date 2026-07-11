@@ -40,29 +40,23 @@ const SIZE_PADDING: Record<string, { cell: string; fontSize: number }> = {
   large: { cell: '12px 16px', fontSize: 16 },
 };
 
-/** Inline input styles replacing DaisyUI `input input-bordered input-xs` */
+/** Layout for inline inputs; the paint is the modern skin's `[data-part='field']`. */
 const inlineInputStyle: React.CSSProperties = {
   width: '100%',
   padding: '2px 6px',
   fontSize: 12,
-  border: '1px solid var(--ds-color-border)',
-  borderRadius: 'var(--ds-radius-sm)',
-  background: 'var(--ds-surface-card)',
-  color: 'var(--ds-color-text-primary)',
-  outline: 'none',
 };
 
-/** Inline select styles replacing DaisyUI `select select-bordered select-xs` */
+/** Layout for inline selects; `[data-part='field']` paints them, `appearance` stays inline. */
 const inlineSelectStyle: React.CSSProperties = {
   ...inlineInputStyle,
   appearance: 'auto' as const,
 };
 
-/** Inline checkbox/radio styles replacing DaisyUI `checkbox checkbox-sm` / `radio radio-sm` */
+/** Layout for inline checkboxes; the paint is the modern skin's `[data-part='checkbox']`. */
 const inlineCheckboxStyle: React.CSSProperties = {
   width: 16,
   height: 16,
-  accentColor: 'var(--ds-color-primary)',
   cursor: 'pointer',
 };
 
@@ -176,7 +170,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     const base: React.CSSProperties = {
       position: 'sticky',
       zIndex: 10,
-      background: 'var(--ds-table-bg, var(--ds-surface-card))',
     };
     if (position === 'left' || position === true) return { ...base, left: 0 };
     if (position === 'right') return { ...base, right: 0 };
@@ -253,6 +246,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
           style={inlineCheckboxStyle}
+          data-part="checkbox"
           checked={!!cellValue}
           onChange={(e) => {
             setCellValue(e.target.checked);
@@ -270,6 +264,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <select
           ref={inputRef as React.RefObject<HTMLSelectElement>}
           style={inlineSelectStyle}
+          data-part="field"
           value={String(cellValue ?? '')}
           onChange={(e) => {
             setCellValue(e.target.value);
@@ -294,6 +289,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="date"
           style={inlineInputStyle}
+          data-part="field"
           value={String(cellValue ?? '')}
           onChange={(e) => setCellValue(e.target.value)}
           onKeyDown={onKeyDown}
@@ -309,6 +305,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         ref={inputRef as React.RefObject<HTMLInputElement>}
         type={fieldType === 'number' ? 'number' : 'text'}
         style={inlineInputStyle}
+        data-part="field"
         value={cellValue == null ? '' : String(cellValue)}
         onChange={(e) =>
           setCellValue(fieldType === 'number' ? Number(e.target.value) : e.target.value)
@@ -347,16 +344,20 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           colSpan={colSpan > 1 ? colSpan : undefined}
           rowSpan={rowSpan > 1 ? rowSpan : undefined}
           className={column.className || undefined}
+          data-part="header-cell"
+          data-sortable={isSortable ? 'true' : undefined}
+          data-sticky={stickyConfig.enabled ? 'true' : undefined}
+          data-hairline={showHeaderHairline ? 'true' : undefined}
+          data-fixed={column.fixed ? 'true' : undefined}
           style={{
             padding: sizeTokens.cell,
             width,
             minWidth: column.minWidth,
             textAlign: column.align,
             position: stickyConfig.enabled || column.fixed ? 'sticky' : undefined,
-            ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40, zIndex: 20, background: 'var(--ds-table-header-bg, var(--ds-surface-inset))' } : {}),
+            ...(stickyConfig.enabled ? { top: stickyConfig.offsetHeader + rowIndex * 40, zIndex: 20 } : {}),
             ...getFixedStyle(column.fixed),
             ...(isSortable ? { cursor: 'pointer', userSelect: 'none' as const, transition: 'color var(--ds-motion-fast)' } : {}),
-            ...(showHeaderHairline ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
             ...column.style,
           }}
           onClick={() => isSortable && handleSort(column)}
@@ -366,7 +367,11 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: 4, position: 'relative' }}>
             <span style={{ flex: 1 }}>{column.title}</span>
             {isSortable && (
-              <span style={{ fontSize: 12, opacity: 0.6, display: 'inline-block', transition: 'transform var(--ds-motion-normal)', transform: isCurrentSort && sortState.order === 'descend' ? 'rotate(180deg)' : 'rotate(0deg)' }}>
+              <span
+                data-part="sort-indicator"
+                data-order={isCurrentSort ? sortState.order : 'none'}
+                style={{ fontSize: 12, opacity: 0.6, display: 'inline-block', transition: 'transform var(--ds-motion-normal)' }}
+              >
                 {isCurrentSort
                   ? '\u25B2'
                   : '\u21C5'}
@@ -377,6 +382,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 column should resize. */}
             {colSpan <= 1 && (
               <span
+                data-part="resize-handle"
+                data-resizing={resizingColumn === field ? 'true' : undefined}
                 style={{
                   position: 'absolute',
                   right: 0,
@@ -384,17 +391,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   bottom: 0,
                   width: 4,
                   cursor: 'col-resize',
-                  background: resizingColumn === field ? 'color-mix(in srgb, var(--ds-color-primary) 60%, transparent)' : undefined,
                 }}
                 onMouseDown={(e) => {
                   e.stopPropagation();
                   if (field) handleResizeStart(field, e.clientX);
-                }}
-                onMouseEnter={(e) => {
-                  if (resizingColumn !== field) (e.currentTarget as HTMLElement).style.background = 'color-mix(in srgb, var(--ds-color-primary) 40%, transparent)';
-                }}
-                onMouseLeave={(e) => {
-                  if (resizingColumn !== field) (e.currentTarget as HTMLElement).style.background = '';
                 }}
                 role="separator"
                 aria-label={t('table.resize_column', { column: String(column.title || '') })}
@@ -412,7 +412,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     return (
-      <tr style={{ background: 'var(--ds-table-header-bg, var(--ds-surface-inset))', transition: 'background-color var(--ds-motion-normal)' }}>
+      <tr data-part="filter-row" style={{ transition: 'background-color var(--ds-motion-normal)' }}>
         {rowSelection && <th style={{ width: 48 }} />}
         {showExpandCol && <th style={{ width: 48 }} />}
         {leafColumns.map((col, i) => {
@@ -424,6 +424,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             <th key={col.key || field || i} style={{ padding: 4 }}>
               <input
                 type="text"
+                data-part="field"
                 style={{ ...inlineInputStyle, transition: 'border-color var(--ds-motion-normal)' }}
                 placeholder={t('table.filter_column', { column: String(col.title || '') })}
                 value={columnFilters[field || ''] || ''}
@@ -444,7 +445,8 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <tr>
           <td
             colSpan={totalColSpan}
-            style={{ textAlign: 'center', padding: '32px 0', color: 'var(--ds-color-text-secondary)' }}
+            data-part="empty-cell"
+            style={{ textAlign: 'center', padding: '32px 0' }}
           >
             {locale?.emptyText || t('table.empty')}
           </td>
@@ -469,18 +471,14 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <Fragment key={key}>
           <tr
             className={rowClass || undefined}
+            data-part="row"
+            data-selected={isSelected ? 'true' : undefined}
+            data-hoverable={rowHoverable ? 'true' : undefined}
             style={{
               transition: rowHoverable ? 'background-color var(--ds-motion-normal)' : undefined,
-              ...(isSelected ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' } : {}),
             }}
             aria-expanded={hasExpandable ? isExpanded : undefined}
             {...(onRow?.(record, actualIndex) || {})}
-            onMouseEnter={rowHoverable ? (e) => {
-              if (!isSelected) (e.currentTarget as HTMLElement).style.background = 'var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent))';
-            } : undefined}
-            onMouseLeave={rowHoverable ? (e) => {
-              (e.currentTarget as HTMLElement).style.background = isSelected ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' : '';
-            } : undefined}
           >
             {/* Expand column */}
             {showExpandCol && (
@@ -494,11 +492,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     })
                   ) : (
                     <button
-                      style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
+                      data-part="expand-button"
+                      style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
                       onClick={() => handleToggleExpand(record, actualIndex)}
                       aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
                     >
-                      <span style={{ display: 'inline-block', transition: 'transform var(--ds-motion-normal)', transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)' }}>{'\u25B6'}</span>
+                      <span data-part="expand-indicator" data-expanded={isExpanded ? 'true' : undefined} style={{ display: 'inline-block', transition: 'transform var(--ds-motion-normal)' }}>{'\u25B6'}</span>
                     </button>
                   )
                 ) : null}
@@ -511,6 +510,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 <input
                   type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
                   style={inlineCheckboxStyle}
+                  data-part="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
                   name={rowSelection.type === 'radio' ? 'table-row-selection' : undefined}
@@ -545,6 +545,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                 <td
                   key={column.key || field || colIndex}
                   className={column.className || undefined}
+                  data-part="cell"
+                  data-editable={cellEditable && !cellIsEditing ? 'true' : undefined}
+                  data-bordered={bordered ? 'true' : undefined}
+                  data-fixed={column.fixed ? 'true' : undefined}
                   style={{
                     padding: sizeTokens.cell,
                     textAlign: column.align,
@@ -552,7 +556,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     ...(column.ellipsis ? { overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' as const, maxWidth: 320 } : {}),
                     ...getFixedStyle(column.fixed),
                     ...(cellEditable && !cellIsEditing ? { cursor: 'pointer', transition: 'all var(--ds-motion-fast)' } : {}),
-                    ...(bordered ? { borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
                     ...column.style,
                   }}
                   role="gridcell"
@@ -561,18 +564,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                       ? () => handleCellClick(record, actualIndex, column)
                       : undefined
                   }
-                  onMouseEnter={cellEditable && !cellIsEditing ? (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.outline = '1px dashed color-mix(in srgb, var(--ds-color-primary) 30%, transparent)';
-                    el.style.outlineOffset = '-1px';
-                    el.style.background = 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)';
-                  } : undefined}
-                  onMouseLeave={cellEditable && !cellIsEditing ? (e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.outline = '';
-                    el.style.outlineOffset = '';
-                    el.style.background = '';
-                  } : undefined}
                   {...(column.onCell?.(record, actualIndex) || {})}
                 >
                   {content}
@@ -583,7 +574,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
           {/* Expanded row content */}
           {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
-            <tr style={{ background: 'var(--ds-table-row-bg-striped, var(--ds-surface-inset))' }}>
+            <tr data-part="expanded-row">
               <td colSpan={totalColSpan} style={{ padding: 16, animation: 'rottay-table-expand var(--ds-motion-slow) ease-out' }}>
                 {expandable.expandedRowRender(record, actualIndex, expandable.indentSize || 0, true)}
               </td>
@@ -603,12 +594,14 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const tableContent = (
     <table
       role="grid"
+      data-part="table"
+      data-bordered={bordered ? 'true' : undefined}
+      data-size={sizeKey}
       style={{
         width: scrollXValue ? (typeof scrollXValue === 'number' ? scrollXValue : scrollXValue === true ? '100%' : scrollXValue) : '100%',
         borderCollapse: 'collapse',
         fontSize: sizeTokens.fontSize,
         tableLayout: props.tableLayout === 'fixed' ? 'fixed' : undefined,
-        ...(bordered ? { border: '1px solid var(--ds-table-border, var(--ds-color-border))' } : {}),
       }}
     >
       {/* Column group for widths */}
@@ -645,6 +638,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     <input
                       type="checkbox"
                       style={inlineCheckboxStyle}
+                      data-part="checkbox"
                       checked={isAllSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       aria-label={t('table.select_all')}
@@ -697,7 +691,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   );
 
   return (
-    <div className={className || undefined} style={{ position: 'relative', ...style }} id={id}>
+    <div className={['ds-table', 'ds-table--modern', className].filter(Boolean).join(' ')} style={{ position: 'relative', ...style }} id={id}>
       {/* Inline keyframes avoid a global CSS file dependency. dangerouslySetInnerHTML
           is safe here because the content is a static string, not user input. */}
       <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-table-expand{from{opacity:0;max-height:0;transform:translateY(-8px)}to{opacity:1;max-height:500px;transform:translateY(0)}}${SPIN_KEYFRAMES}` }} />
@@ -710,15 +704,13 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       {/* Loading overlay */}
       {loading && (
-        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 30, background: 'color-mix(in srgb, var(--ds-table-bg, var(--ds-surface-card)) 50%, transparent)' }}>
+        <div data-part="loading-overlay" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 30 }}>
           <span
+            data-part="spinner"
             style={{
               display: 'inline-block',
               width: 24,
               height: 24,
-              border: '2px solid var(--ds-color-border)',
-              borderTopColor: 'var(--ds-color-primary)',
-              borderRadius: '50%',
               animation: 'rottay-table-spin var(--ds-motion-glacial) linear infinite',
             }}
             role="status"
@@ -743,7 +735,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       {/* Footer */}
       {footer && (
-        <div style={{ marginTop: 8, fontSize: 14, color: 'var(--ds-color-text-secondary)' }}>
+        <div data-part="footer" style={{ marginTop: 8, fontSize: 14 }}>
           {footer(processedData)}
         </div>
       )}
@@ -753,21 +745,23 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           `false` hides them for cases like infinite scroll or server-side paging. */}
       {pagination !== false && (
         <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 8, marginTop: 16 }}>
-          <span style={{ fontSize: 14, color: 'var(--ds-color-text-secondary)' }}>{paginationRange}</span>
+          <span data-part="pagination-range" style={{ fontSize: 14 }}>{paginationRange}</span>
           <div style={{ display: 'inline-flex' }}>
             <button
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
+              data-part="pagination-button"
+              style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
               disabled={currentPage === 1}
               onClick={() => setCurrentPage(currentPage - 1)}
               aria-label={t('table.previous_page')}
             >
               &#171;
             </button>
-            <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', pointerEvents: 'none', fontWeight: 600 }} aria-current="page">
+            <button data-part="pagination-button" style={{ height: 32, padding: '0 12px', fontSize: 13, pointerEvents: 'none', fontWeight: 600 }} aria-current="page">
               {t('table.page', { current: currentPage })}
             </button>
             <button
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
+              data-part="pagination-button"
+              style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', transition: 'all var(--ds-motion-normal)' }}
               disabled={currentPage * pageSize >= totalItems}
               onClick={() => setCurrentPage(currentPage + 1)}
               aria-label={t('table.next_page')}
