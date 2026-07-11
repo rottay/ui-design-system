@@ -44,7 +44,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ROADMAP = path.join(ROOT, "roadmap");
 const REGISTRY_PATH = path.join(ROADMAP, "registry.json");
 const STATUS_PATH = path.join(ROADMAP, "STATUS.md");
-const LANES = ["engine-modern", "craft", "gates", "tokens", "architecture"];
+const LANES = ["engine-modern", "craft", "gates", "tokens", "architecture", "skin-adoption"];
 const STATUSES = ["todo", "in-progress", "done"];
 
 const loadRegistry = () => JSON.parse(fs.readFileSync(REGISTRY_PATH, "utf8"));
