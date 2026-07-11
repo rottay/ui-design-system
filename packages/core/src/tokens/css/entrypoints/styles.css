@@ -86,6 +86,8 @@
 @import '../engines/modern/skin/table.css';
 @import '../engines/rustic/skin/table.css';
 @import '../components/skin/field-filters-panel.css';
+@import '../engines/modern/skin/filter-panel.css';
+@import '../engines/rustic/skin/filter-panel.css';
 
 
 /* =============================================================================

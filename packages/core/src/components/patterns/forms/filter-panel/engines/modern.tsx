@@ -2,12 +2,13 @@
 
 /**
  * @fileoverview Modern engine for the FilterPanel pattern.
- * Renders a configurable panel of filter controls using pure DS token inline
- * styles (no DaisyUI, no Tailwind). Supports inline (toolbar), stacked, and
- * sidebar layouts, an optional collapsible header with smooth transition, an
- * active-filter count badge, and Apply/Reset action buttons.
+ * Renders a configurable panel of filter controls with inline layout and paint
+ * driven by the unlayered modern filter-panel skin (no DaisyUI, no Tailwind).
+ * Supports inline (toolbar), stacked, and sidebar layouts, an optional
+ * collapsible header with smooth transition, an active-filter count badge, and
+ * Apply/Reset action buttons.
  *
- * All styling uses CSS custom properties from the design system:
+ * The skin consumes these design-system custom properties:
  * - Surfaces: --ds-surface-card, --ds-surface-highlight, --ds-surface-inset
  * - Borders: --ds-color-border
  * - Radius: --ds-radius-sm, --ds-radius-md
@@ -59,35 +60,18 @@ import ModernSelect from '../../../../primitives/inputs/Select/engines/modern';
 
 const baseInputStyle: React.CSSProperties = {
   padding: '6px 10px',
-  border: '1px solid var(--ds-color-border)',
-  borderRadius: 'var(--ds-radius-sm)',
   fontSize: 13,
   lineHeight: '20px',
-  background: 'var(--ds-surface-inset)',
-  color: 'inherit',
   width: '100%',
   boxSizing: 'border-box' as const,
-  outline: 'none',
   transition: `border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
                box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-};
-
-const focusHandler = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
-  e.currentTarget.style.borderColor = 'var(--ds-focus-ring-color)';
-  e.currentTarget.style.boxShadow =
-    '0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color)';
-};
-
-const blurHandler = (e: React.FocusEvent<HTMLInputElement | HTMLSelectElement>) => {
-  e.currentTarget.style.borderColor = 'var(--ds-color-border)';
-  e.currentTarget.style.boxShadow = 'none';
 };
 
 const labelStyle: React.CSSProperties = {
   display: 'block',
   fontSize: 12,
   fontWeight: 500,
-  color: 'var(--ds-color-text-muted)',
   marginBottom: 4,
   lineHeight: '16px',
 };
@@ -95,7 +79,6 @@ const labelStyle: React.CSSProperties = {
 const inlineLabelStyle: React.CSSProperties = {
   fontSize: 11,
   fontWeight: 600,
-  color: 'var(--ds-color-text-muted)',
   whiteSpace: 'nowrap',
   flexShrink: 0,
 };
@@ -121,39 +104,6 @@ function SlidersFallbackIcon({ size = 14, strokeWidth = 2 }: { size?: number; st
     </svg>
   );
 }
-
-const OPTION_TONE_STYLES: Record<FilterOptionTone, { color: string; bg: string; border: string }> = {
-  neutral: {
-    color: 'var(--ds-color-text-secondary)',
-    bg: 'color-mix(in srgb, var(--ds-color-bg-primary) 64%, transparent)',
-    border: 'color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-  },
-  primary: {
-    color: 'var(--ds-color-primary)',
-    bg: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
-    border: 'color-mix(in srgb, var(--ds-color-primary) 24%, transparent)',
-  },
-  success: {
-    color: 'var(--ds-color-success)',
-    bg: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)',
-    border: 'color-mix(in srgb, var(--ds-color-success) 24%, transparent)',
-  },
-  warning: {
-    color: 'var(--ds-color-warning)',
-    bg: 'color-mix(in srgb, var(--ds-color-warning) 12%, transparent)',
-    border: 'color-mix(in srgb, var(--ds-color-warning) 28%, transparent)',
-  },
-  danger: {
-    color: 'var(--ds-color-error)',
-    bg: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)',
-    border: 'color-mix(in srgb, var(--ds-color-error) 24%, transparent)',
-  },
-  info: {
-    color: 'var(--ds-color-info, var(--ds-color-primary))',
-    bg: 'color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 10%, transparent)',
-    border: 'color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent)',
-  },
-};
 
 function normalizeFilterToken(value: unknown): string {
   return String(value ?? '')
@@ -258,7 +208,6 @@ function renderOptionIcon(filter: FilterDef, option: FilterOption) {
   if (option.icon) return option.icon;
 
   const tone = inferOptionTone(filter, option);
-  const toneStyle = OPTION_TONE_STYLES[tone];
   const Icon = inferOptionIcon(filter, option);
 
   return (
@@ -270,10 +219,6 @@ function renderOptionIcon(filter: FilterDef, option: FilterOption) {
       style={{
         width: 22,
         height: 22,
-        borderRadius: 8,
-        border: `1px solid ${toneStyle.border}`,
-        background: toneStyle.bg,
-        color: toneStyle.color,
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -317,10 +262,7 @@ function renderFilterControl(
           style={baseInputStyle}
           placeholder={filter.placeholder}
           value={(value as string) ?? ''}
-          onChange={(e) => onChange(filter.key, e.target.value)}
-          onFocus={focusHandler}
-          onBlur={blurHandler}
-        />
+          onChange={(e) => onChange(filter.key, e.target.value)}        />
       );
     case 'select':
       return (
@@ -373,10 +315,7 @@ function renderFilterControl(
           data-part="input"
           style={baseInputStyle}
           value={(value as string) ?? ''}
-          onChange={(e) => onChange(filter.key, e.target.value)}
-          onFocus={focusHandler}
-          onBlur={blurHandler}
-        />
+          onChange={(e) => onChange(filter.key, e.target.value)}        />
       );
     case 'date-range': {
       const range = (value as [string, string]) ?? ['', ''];
@@ -387,15 +326,11 @@ function renderFilterControl(
             data-part="input"
             style={{ ...baseInputStyle, flex: 1 }}
             value={range[0] ?? ''}
-            onChange={(e) => onChange(filter.key, [e.target.value, range[1]])}
-            onFocus={focusHandler}
-            onBlur={blurHandler}
-          />
+            onChange={(e) => onChange(filter.key, [e.target.value, range[1]])}          />
           <span
             data-part="range-separator"
             style={{
               fontSize: 12,
-              color: 'var(--ds-color-text-muted)',
               flexShrink: 0,
             }}
           >
@@ -406,10 +341,7 @@ function renderFilterControl(
             data-part="input"
             style={{ ...baseInputStyle, flex: 1 }}
             value={range[1] ?? ''}
-            onChange={(e) => onChange(filter.key, [range[0], e.target.value])}
-            onFocus={focusHandler}
-            onBlur={blurHandler}
-          />
+            onChange={(e) => onChange(filter.key, [range[0], e.target.value])}          />
         </div>
       );
     }
@@ -426,10 +358,7 @@ function renderFilterControl(
               filter.key,
               e.target.value === '' ? undefined : Number(e.target.value),
             )
-          }
-          onFocus={focusHandler}
-          onBlur={blurHandler}
-        />
+          }        />
       );
     case 'number-range': {
       const range = (value as [number | '', number | '']) ?? ['', ''];
@@ -446,15 +375,11 @@ function renderFilterControl(
                 e.target.value === '' ? undefined : Number(e.target.value),
                 range[1],
               ])
-            }
-            onFocus={focusHandler}
-            onBlur={blurHandler}
-          />
+            }          />
           <span
             data-part="range-separator"
             style={{
               fontSize: 12,
-              color: 'var(--ds-color-text-muted)',
               flexShrink: 0,
             }}
           >
@@ -471,10 +396,7 @@ function renderFilterControl(
                 range[0],
                 e.target.value === '' ? undefined : Number(e.target.value),
               ])
-            }
-            onFocus={focusHandler}
-            onBlur={blurHandler}
-          />
+            }          />
         </div>
       );
     }
@@ -488,9 +410,15 @@ function renderFilterControl(
  * ----------------------------------------------------------------------- */
 
 /**
- * Modern FilterPanel using pure DS token inline styles.
+ * Modern FilterPanel.
  * Supports inline, stacked, and sidebar layouts with optional collapse,
  * active filter count badge, and clear-all / apply buttons.
+ *
+ * Layout and behavior use inline styles and CSS custom properties; paint
+ * (color, background, border, box-shadow, and the input focus + reset hover
+ * states) is driven by the unlayered modern filter-panel skin
+ * (`tokens/css/engines/modern/skin/filter-panel.css`), keyed on the
+ * `data-part`/`data-*` contract this file stamps.
  *
  * @param props - See {@link FilterPanelProps} for full prop documentation.
  * @returns A DS-token-styled filter panel with configurable layout.
@@ -604,7 +532,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
           data-part="loading-spinner"
           style={{
             animation: 'ds-filter-spin 1s linear infinite',
-            color: 'var(--ds-color-primary)',
           }}
         >
           <circle
@@ -618,7 +545,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
             strokeLinecap="round"
           />
         </svg>
-        <style>{`@keyframes ds-filter-spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
@@ -627,7 +553,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
   const rootStyle: React.CSSProperties = {
     ...(isSidebar
       ? {
-          borderRight: '1px solid var(--ds-color-border)',
           paddingRight: 16,
         }
       : {}),
@@ -657,6 +582,7 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
               <button
                 type="button"
                 data-part="collapse-toggle"
+                data-collapsed={collapsed ? 'true' : 'false'}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -664,14 +590,9 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                   width: 24,
                   height: 24,
                   padding: 0,
-                  border: 'none',
-                  background: 'transparent',
-                  borderRadius: 'var(--ds-radius-sm)',
                   cursor: 'pointer',
-                  color: 'var(--ds-color-text-muted)',
                   transition: `transform var(--ds-motion-fast) var(--ds-motion-ease-out),
                                background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                  transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
                 }}
                 onClick={() => setCollapsed(!collapsed)}
                 aria-expanded={!collapsed}
@@ -698,7 +619,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                 style={{
                   fontSize: 13,
                   fontWeight: 600,
-                  color: 'var(--ds-color-text)',
                 }}
               >
                 {title}
@@ -717,9 +637,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                   fontSize: 11,
                   fontWeight: 600,
                   lineHeight: 1,
-                  borderRadius: 9,
-                  background: 'var(--ds-color-primary)',
-                  color: 'var(--ds-color-primary-foreground)',
                 }}
               >
                 {activeCount}
@@ -739,23 +656,11 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                 padding: '4px 8px',
                 fontSize: 12,
                 fontWeight: 500,
-                border: 'none',
-                background: 'transparent',
-                borderRadius: 'var(--ds-radius-sm)',
                 cursor: 'pointer',
-                color: 'var(--ds-color-text-muted)',
                 transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out),
                              background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
               }}
               onClick={onReset}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = 'var(--ds-color-error)';
-                e.currentTarget.style.background = 'var(--ds-surface-highlight)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = 'var(--ds-color-text-muted)';
-                e.currentTarget.style.background = 'transparent';
-              }}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -809,10 +714,6 @@ export default function ModernFilterPanel(props: FilterPanelProps) {
                 padding: '6px 16px',
                 fontSize: 13,
                 fontWeight: 500,
-                border: 'none',
-                borderRadius: 'var(--ds-radius-sm)',
-                background: 'var(--ds-color-primary)',
-                color: 'var(--ds-color-primary-foreground)',
                 cursor: 'pointer',
                 transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
               }}

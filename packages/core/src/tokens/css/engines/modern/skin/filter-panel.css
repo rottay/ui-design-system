@@ -1,0 +1,150 @@
+/**
+ * Modern FilterPanel skin (WO-ARC-09 checkpoint 3).
+ *
+ * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
+ * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule
+ * loses to preflight regardless of specificity (P-47). Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the panel's outer `<div>`, which carries the pair
+ * `ds-pattern-filter-panel ds-engine-modern`; every painted element is a
+ * descendant with a `data-part`. The engine has two roots — the main panel and
+ * the loading early-return — and both carry the class pair + `data-part='root'`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that sets `border` / `border-color`
+ * must reach (0,4,0): the two root classes (0,2,0) + the `data-part` REPEATED on
+ * the target (0,2,0). Rules that set only non-border paint (background, color,
+ * box-shadow, outline, transform) beat preflight while unlayered at (0,3,0). The
+ * 4th unit is bought by REPEATING the `data-part`, never by an incidental
+ * attribute a refactor could move (`role`, `aria-label`, `placeholder`). Pure
+ * `border: none` resets carry no color and are exempt from the (0,4,0) floor.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- keyframes: referenced by the inline `animation` shorthand the engine
+        sets on the loading spinner (a sanctioned inline residual, WO-ARC-09). ---- */
+@keyframes ds-filter-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- root: right border only in the sidebar layout ---- */
+.ds-pattern-filter-panel.ds-engine-modern[data-part='root'][data-sidebar='true'] {
+  border-right: 1px solid var(--ds-color-border);
+}
+
+/* ---- collapse toggle: a ghost button that rotates -90deg when collapsed ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] {
+  border: none;
+  background: transparent;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-color-text-muted);
+  transform: rotate(0deg);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] {
+  transform: rotate(-90deg);
+}
+
+/* ---- title ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text);
+}
+
+/* ---- active-count badge ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='active-count-badge'] {
+  border-radius: 9px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground);
+}
+
+/* ---- reset (clear-all) ghost button + its pointer hover ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'] {
+  border: none;
+  background: transparent;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:hover {
+  color: var(--ds-color-error);
+  background: var(--ds-surface-highlight);
+}
+
+/* ---- native filter inputs (text/date/number/range), and the focus ring the
+        removed onFocus/onBlur handlers used to paint imperatively ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='input'][data-part='input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-inset);
+  color: inherit;
+  outline: none;
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='input'][data-part='input']:focus {
+  border-color: var(--ds-focus-ring-color);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
+}
+
+/* ---- range separator ("to" / "-") ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='range-separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- field label (stacked + inline both resolve to the same muted color) ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='field-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- apply button ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='apply-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground);
+}
+
+/* ---- loading spinner ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='loading-spinner'] {
+  color: var(--ds-color-primary);
+}
+
+/* ---- option-icon-badge: the per-tone swatch handed to ModernSelect via
+        `options[].icon`, which renders inside the child's dropdown PORTAL — out
+        of reach of the panel root. It carries a self-sufficient class hook
+        (`ds-pattern-filter-panel__option-icon`) plus `data-part` + `data-tone`,
+        so its rules stand alone. Non-border paint reaches (0,3,0) via
+        class + data-part + data-tone; the per-tone border folds in at (0,4,0)
+        with one data-part repeat. ---- */
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'] {
+  border-radius: 8px;
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='neutral'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 64%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='primary'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  color: var(--ds-color-primary);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='success'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='warning'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
+  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+  color: var(--ds-color-warning);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='danger'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='info'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 10%, transparent);
+  color: var(--ds-color-info, var(--ds-color-primary));
+}

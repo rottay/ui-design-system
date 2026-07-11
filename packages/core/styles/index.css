@@ -15116,6 +15116,295 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
 }
 
+/**
+ * Modern FilterPanel skin (WO-ARC-09 checkpoint 3).
+ *
+ * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
+ * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule
+ * loses to preflight regardless of specificity (P-47). Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the panel's outer `<div>`, which carries the pair
+ * `ds-pattern-filter-panel ds-engine-modern`; every painted element is a
+ * descendant with a `data-part`. The engine has two roots — the main panel and
+ * the loading early-return — and both carry the class pair + `data-part='root'`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that sets `border` / `border-color`
+ * must reach (0,4,0): the two root classes (0,2,0) + the `data-part` REPEATED on
+ * the target (0,2,0). Rules that set only non-border paint (background, color,
+ * box-shadow, outline, transform) beat preflight while unlayered at (0,3,0). The
+ * 4th unit is bought by REPEATING the `data-part`, never by an incidental
+ * attribute a refactor could move (`role`, `aria-label`, `placeholder`). Pure
+ * `border: none` resets carry no color and are exempt from the (0,4,0) floor.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- keyframes: referenced by the inline `animation` shorthand the engine
+        sets on the loading spinner (a sanctioned inline residual, WO-ARC-09). ---- */
+@keyframes ds-filter-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---- root: right border only in the sidebar layout ---- */
+.ds-pattern-filter-panel.ds-engine-modern[data-part='root'][data-sidebar='true'] {
+  border-right: 1px solid var(--ds-color-border);
+}
+
+/* ---- collapse toggle: a ghost button that rotates -90deg when collapsed ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'] {
+  border: none;
+  background: transparent;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-color-text-muted);
+  transform: rotate(0deg);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='collapse-toggle'][data-collapsed='true'] {
+  transform: rotate(-90deg);
+}
+
+/* ---- title ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text);
+}
+
+/* ---- active-count badge ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='active-count-badge'] {
+  border-radius: 9px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground);
+}
+
+/* ---- reset (clear-all) ghost button + its pointer hover ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button'] {
+  border: none;
+  background: transparent;
+  border-radius: var(--ds-radius-sm);
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='reset-button']:hover {
+  color: var(--ds-color-error);
+  background: var(--ds-surface-highlight);
+}
+
+/* ---- native filter inputs (text/date/number/range), and the focus ring the
+        removed onFocus/onBlur handlers used to paint imperatively ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='input'][data-part='input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-inset);
+  color: inherit;
+  outline: none;
+}
+.ds-pattern-filter-panel.ds-engine-modern [data-part='input'][data-part='input']:focus {
+  border-color: var(--ds-focus-ring-color);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
+}
+
+/* ---- range separator ("to" / "-") ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='range-separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- field label (stacked + inline both resolve to the same muted color) ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='field-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- apply button ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='apply-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground);
+}
+
+/* ---- loading spinner ---- */
+.ds-pattern-filter-panel.ds-engine-modern [data-part='loading-spinner'] {
+  color: var(--ds-color-primary);
+}
+
+/* ---- option-icon-badge: the per-tone swatch handed to ModernSelect via
+        `options[].icon`, which renders inside the child's dropdown PORTAL — out
+        of reach of the panel root. It carries a self-sufficient class hook
+        (`ds-pattern-filter-panel__option-icon`) plus `data-part` + `data-tone`,
+        so its rules stand alone. Non-border paint reaches (0,3,0) via
+        class + data-part + data-tone; the per-tone border folds in at (0,4,0)
+        with one data-part repeat. ---- */
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'] {
+  border-radius: 8px;
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='neutral'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 64%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='primary'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  color: var(--ds-color-primary);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='success'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='warning'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-warning) 28%, transparent);
+  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+  color: var(--ds-color-warning);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='danger'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.ds-pattern-filter-panel__option-icon[data-part='option-icon-badge'][data-part='option-icon-badge'][data-tone='info'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-info, var(--ds-color-primary)) 10%, transparent);
+  color: var(--ds-color-info, var(--ds-color-primary));
+}
+
+/**
+ * Rustic FilterPanel skin (WO-ARC-09 checkpoint 3).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the panel's outer `<div>`, carrying the pair
+ * `ds-pattern-filter-panel ds-engine-rustic`; every painted element is a
+ * descendant with a `data-part`.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1), so a
+ * rule that sets `border` / `border-color` must reach (0,4,0) — the two root
+ * classes (0,2,0) + the `data-part` REPEATED on the target (0,2,0) — never an
+ * incidental attribute (`role`, `aria-label`, `placeholder`). Non-border paint
+ * beats preflight while unlayered at (0,3,0). Pure `border: none` resets carry
+ * no color and are exempt; a `border: 1px solid transparent` does NOT reset —
+ * its transparent color would lose to the tenant floor below (0,4,0), so it
+ * repeats the data-part like any other painting border.
+ *
+ * Values are transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- keyframes: referenced by the inline `animation` shorthand the engine
+        sets on the collapsible field group (a sanctioned inline residual). ---- */
+@keyframes ds-filter-slide-down {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- root: right border only in the sidebar layout ---- */
+.ds-pattern-filter-panel.ds-engine-rustic[data-part='root'][data-sidebar='true'] {
+  border-right: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+/* ---- collapse toggle: shares the base button chrome ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='collapse-toggle'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='collapse-toggle'][data-part='collapse-toggle'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+/* ---- title ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='title'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- active-count badge ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='active-count-badge'] {
+  border-radius: var(--ds-badge-radius, 9999px);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* ---- active filter chip + its pointer hover (a scale, not paint per se, but a
+        counted transform channel — moved off the imperative handler pair) ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='filter-chip'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+  color: var(--ds-color-primary-700, var(--ds-color-primary));
+}
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='filter-chip'][data-part='filter-chip'] {
+  border: 1px solid var(--ds-color-primary-200, var(--ds-color-border-primary));
+}
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='filter-chip']:hover {
+  transform: scale(1.05);
+}
+
+/* ---- native filter inputs (text/date/number/range). No focus rule: the engine
+        set `outline: none` with nothing replacing it (faithful port; the missing
+        focus indicator is filed as an a11y proposal, not fixed here). ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='input'][data-part='input'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-input));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  outline: none;
+}
+
+/* ---- native <select>: the input chrome plus the custom chevron data-URI and
+        the appearance/color-scheme reset that makes the native control themeable ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='select'][data-part='select'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-input));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  color-scheme: dark light;
+}
+
+/* ---- range separator ("to" / "-") ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='range-separator'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+/* ---- field label ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='field-label'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- loading text ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='loading-text'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+/* ---- apply button (primary) ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='apply-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* ---- reset (clear-all): transparent at rest, primary tint on pointer hover
+        (moved off the imperative onMouseEnter/Leave pair). The rest border is a
+        painting `1px solid transparent`, so it clears the (0,4,0) floor. ---- */
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='reset-button'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='reset-button'][data-part='reset-button'] {
+  border: 1px solid transparent;
+}
+.ds-pattern-filter-panel.ds-engine-rustic [data-part='reset-button']:hover {
+  color: var(--ds-color-primary);
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

@@ -1485,6 +1485,11 @@
      "at": "2026-07-11 05:36",
      "by": "ds-agent",
      "note": "CHECKPOINT 1 (Table) COMPLETE + certified 10/10 + committed fe6ed898. Both engines migrated (counters 0), Fable's F1-F5 reconciliation applied byte-identical (F1 real cascade bug: modern field border was (0,3,0) losing to P-48 floor -> now (0,4,0) via data-field; F2 specificity off incidental role/aria-label/placeholder; F3 data-fixed left|right; F4 checkbox->selection-control; F5 keyframes into skins), D2 header-th onto contract. Table.real-engines.test ratchets the (0,4,0) law for the other 5. Gate: 12 flagship+state table byte-identical, 61/61 Table tests, ledger 17. Proposals P-63 (pre-existing visual defects) + P-64 (skin naming/law + docs) filed. NEXT: component 2 = field-filters-panel (agnostic single-file, 40 sites, skin goes in tokens/css/components/skin/ per Fable Q1 -- NEW home, extend the viewport-mq walk already done). Same pipeline: Sonnet transcribes the proven pattern, Fable reviews, orchestrator gates byte-exact. Then filter-panel, selection-preview-rail, detail-panel, data-table."
+    },
+    {
+     "at": "2026-07-11 16:06",
+     "by": "ds-agent",
+     "note": "CKPT 2 (field-filters-panel) COMPLETE: pre-step 446dda94 (contract stamp + data-part in BaseComponentProps + Typography subtle/inherit + 8 element baselines + 4 focus-suppression pins) + migration 1c3fea93 (FIRST AGNOSTIC-HOME SKIN tokens/css/components/skin/, counter 40->0, Text colors via color prop, rustic-input (0,8,0) suppression rule reproduces the frozen focus). Gate 12/12 byte-identical FIRST TRY. real-engines test ratchets the agnostic pattern for rail + data-table shared files. NEXT: ckpt 3 filter-panel (pre-step stamped on disk, recording baselines); rail + detail-panel Fable contracts written in scratchpad; data-table inventory in flight. Owner 2026-07-11: full suites only at program end; fleet-wide adoption WO approved for after ARC-09."
     }
    ],
    "claimedBy": "ds-agent",

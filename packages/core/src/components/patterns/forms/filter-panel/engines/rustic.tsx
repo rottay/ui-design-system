@@ -2,10 +2,11 @@
 
 /**
  * @fileoverview Rustic (Vanilla / CSS variables) engine for the FilterPanel pattern.
- * Uses zero third-party UI libraries -- all styling is expressed through inline
- * styles referencing `--ds-*` design-token CSS variables. Includes active filter
- * chips (inline layout), a slide-down entrance animation for collapsible panels,
- * and hover effects via direct DOM style manipulation. Fully themeable through
+ * Uses zero third-party UI libraries -- native HTML with inline layout, and paint
+ * (color/background/border, the native-select chevron, the reset/chip hover
+ * states) driven by the unlayered rustic filter-panel skin referencing `--ds-*`
+ * design-token CSS variables. Includes active filter chips (inline layout) and a
+ * slide-down entrance animation for collapsible panels. Fully themeable through
  * CSS variable overrides without any build-time CSS framework.
  *
  * @example
@@ -28,18 +29,12 @@ import type { FilterDef } from '../../../foundation/types';
 
 const ROOT_CLASS_NAME = 'ds-pattern-filter-panel ds-engine-rustic';
 
-// Shared base style for native inputs. All visual tokens reference --ds-*
-// variables with fallbacks so the component works even with partial themes.
+// Shared layout for native inputs; paint lives in the rustic filter-panel skin.
 const baseInput: React.CSSProperties = {
   padding: '6px 10px',
-  border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-  borderRadius: 'var(--ds-radius-sm, 6px)',
   fontSize: 13,
-  background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-input))',
-  color: 'var(--ds-color-text-primary, var(--ds-color-text))',
   width: '100%',
   boxSizing: 'border-box' as const,
-  outline: 'none',
 };
 
 /**
@@ -69,13 +64,7 @@ function renderFilterControl(
           data-part="select"
           style={{
             ...baseInput,
-            appearance: 'none' as const,
-            WebkitAppearance: 'none' as const,
-            backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'right 8px center',
             paddingRight: 28,
-            colorScheme: 'dark light',
           }}
           value={(value as string) ?? ''}
           onChange={(e) => onChange(filter.key, e.target.value || undefined)}
@@ -140,7 +129,7 @@ function renderFilterControl(
             value={range[0] ?? ''}
             onChange={(e) => onChange(filter.key, [e.target.value, range[1]])}
           />
-          <span data-part="range-separator" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>to</span>
+          <span data-part="range-separator" style={{ fontSize: 12 }}>to</span>
           <input
             type="date"
             data-part="input"
@@ -183,7 +172,7 @@ function renderFilterControl(
               ])
             }
           />
-          <span data-part="range-separator" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>-</span>
+          <span data-part="range-separator" style={{ fontSize: 12 }}>-</span>
           <input
             type="number"
             data-part="input"
@@ -212,9 +201,15 @@ const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
 
 /**
- * Rustic FilterPanel using only inline styles and `--ds-*` CSS variables.
+ * Rustic FilterPanel.
  * Supports inline, stacked, and sidebar layouts with active filter chips,
  * collapsible sections, and animated transitions.
+ *
+ * Layout and behavior use inline styles and CSS custom properties; paint
+ * (color, background, border, the native-select chevron, and the reset + chip
+ * hover states) is driven by the unlayered rustic filter-panel skin
+ * (`tokens/css/engines/rustic/skin/filter-panel.css`), keyed on the
+ * `data-part`/`data-*` contract this file stamps.
  *
  * @param props - See {@link FilterPanelProps} for full prop documentation.
  * @returns A themeable, framework-free filter panel.
@@ -251,23 +246,12 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
   const isInline = layout === 'inline';
   const isSidebar = layout === 'sidebar';
 
-  // Base button style for action buttons (Apply, Reset).
+  // Base button layout for action buttons (Apply, Reset).
   const btnBase: React.CSSProperties = {
     padding: '6px 14px',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
     fontSize: 13,
     cursor: 'pointer',
-    border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    color: 'var(--ds-color-text-primary, var(--ds-color-text))',
     transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
-  };
-
-  const btnPrimary: React.CSSProperties = {
-    ...btnBase,
-    background: 'var(--ds-color-primary)',
-    color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
-    border: 'none',
   };
 
   // Compute active filters for chip rendering. A filter is "active" when
@@ -281,14 +265,10 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
       data-part="root"
       data-sidebar={isSidebar ? 'true' : 'false'}
       style={{
-        ...(isSidebar ? { borderRight: '1px solid var(--ds-color-border-primary, var(--ds-color-border))', paddingRight: 16 } : {}),
+        ...(isSidebar ? { paddingRight: 16 } : {}),
         ...style,
       }}
     >
-      {/* Injected keyframes for the collapsible slide-down animation.
-          Defined inline because the rustic engine avoids external stylesheets
-          and CSS-in-JS libraries entirely. */}
-      <style>{`@keyframes ds-filter-slide-down { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       {(title || collapsible) && (
         <div data-part="header" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
           {collapsible && (
@@ -305,7 +285,6 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
               fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
               fontSize: 14,
               letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
-              color: 'var(--ds-color-text-primary, var(--ds-color-text))',
             }}>
               {title}
             </span>
@@ -314,9 +293,6 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
             <span
               data-part="active-count-badge"
               style={{
-                background: 'var(--ds-color-primary)',
-                color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
-                borderRadius: 'var(--ds-badge-radius, 9999px)',
                 padding: '1px 8px',
                 fontSize: 11,
                 fontWeight: 600,
@@ -345,22 +321,12 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
                   alignItems: 'center',
                   gap: 4,
                   padding: '3px 10px',
-                  borderRadius: 'var(--ds-radius-full, 9999px)',
                   fontSize: 12,
                   fontWeight: 500,
-                  background: 'var(--ds-color-primary-50, var(--ds-color-bg-muted))',
-                  color: 'var(--ds-color-primary-700, var(--ds-color-primary))',
-                  border: '1px solid var(--ds-color-primary-200, var(--ds-color-border-primary))',
                   cursor: 'pointer',
                   transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
                 }}
                 onClick={() => handleChange(key, undefined)}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = 'scale(1.05)';
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.transform = 'scale(1)';
-                }}
               >
                 {filter.label}
                 <span data-part="filter-chip-remove" style={{ fontSize: 14, lineHeight: 1, marginLeft: 2 }}>x</span>
@@ -371,7 +337,7 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
       )}
 
       {loading && (
-        <div data-part="loading-text" style={{ textAlign: 'center', padding: 16, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+        <div data-part="loading-text" style={{ textAlign: 'center', padding: 16 }}>
           Loading...
         </div>
       )}
@@ -398,7 +364,6 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
                     fontSize: 13,
                     letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
                     textTransform: 'var(--ds-typography-label-transform, none)' as React.CSSProperties['textTransform'],
-                    color: 'var(--ds-color-text-primary, var(--ds-color-text))',
                   }}
                 >
                   {filter.label}
@@ -410,29 +375,15 @@ export default function RusticFilterPanel(props: FilterPanelProps) {
           {(showReset || showApply) && (
             <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
               {showApply && (
-                <button data-part="apply-button" style={btnPrimary} onClick={() => onApply?.(values)}>
+                <button data-part="apply-button" style={btnBase} onClick={() => onApply?.(values)}>
                   Apply
                 </button>
               )}
-              {/* Reset button uses transparent styling at rest and
-                  transitions to a primary tint on hover via direct DOM
-                  manipulation because CSS :hover cannot conditionally
-                  reference token variables in an inline-only engine. */}
               {showReset && (
                 <button
                   data-part="reset-button"
-                  style={{ ...btnBase, border: '1px solid transparent', background: 'transparent' }}
+                  style={btnBase}
                   onClick={onReset}
-                  onMouseEnter={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = 'var(--ds-color-primary)';
-                    el.style.background = 'var(--ds-color-primary-50, var(--ds-color-bg-muted))';
-                  }}
-                  onMouseLeave={(e) => {
-                    const el = e.currentTarget as HTMLElement;
-                    el.style.color = 'var(--ds-color-text-primary, var(--ds-color-text))';
-                    el.style.background = 'transparent';
-                  }}
                 >
                   Clear all
                 </button>
