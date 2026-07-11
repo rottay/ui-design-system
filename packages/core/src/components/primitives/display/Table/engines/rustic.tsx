@@ -40,6 +40,12 @@ import { useTranslation } from '../../../../../i18n';
 // All styles use CSS custom properties with sensible fallbacks so tenant themes
 // can override any visual aspect (colors, spacing, borders) without JS changes.
 // The `as const` casts prevent TypeScript from widening string literal types.
+//
+// PAINT (color, background, border, shadow, outline, transform, hover/focus/
+// active states) is NOT here -- it lives in the unlayered rustic table skin
+// (`tokens/css/engines/rustic/skin/table.css`), keyed on the `data-part`/
+// `data-*` contract stamped below (WO-ARC-09). Only layout, typography sizing,
+// opacity, and animation stay inline.
 const baseStyles = {
   wrapper: {
     position: 'relative' as const,
@@ -58,16 +64,10 @@ const baseStyles = {
   tableLarge: {
     fontSize: 'var(--ds-font-size-lg, 16px)',
   },
-  tableBordered: {
-    border: '1px solid var(--ds-table-border, var(--ds-color-border-primary))',
-  },
   th: {
     padding: 'var(--ds-table-cell-padding, 12px 16px)',
-    backgroundColor: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
-    borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border-primary))',
     textAlign: 'left' as const,
     fontWeight: 'var(--ds-table-header-font-weight, 500)' as any,
-    color: 'var(--ds-table-header-color)',
     position: 'relative' as const,
   },
   // userSelect: none prevents text selection during rapid sort toggling
@@ -76,16 +76,15 @@ const baseStyles = {
     userSelect: 'none' as const,
     transition: 'background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), color 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
   },
-  // Sticky headers need an explicit background to prevent body rows from
-  // bleeding through when scrolling. zIndex 20 sits above fixed columns (10).
+  // zIndex 20 sits above fixed columns (10). The opaque header background that
+  // prevents body rows from bleeding through while scrolling is painted
+  // unconditionally by the rustic table skin's header-cell rule, not here.
   thSticky: {
     position: 'sticky' as const,
     zIndex: 20,
-    backgroundColor: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
   },
   td: {
     padding: 'var(--ds-table-cell-padding, 12px 16px)',
-    borderBottom: '1px solid var(--ds-table-row-border, var(--ds-color-border-primary))',
   },
   tdSmall: {
     padding: '8px 12px',
@@ -98,13 +97,9 @@ const baseStyles = {
   rowHover: {
     transition: 'background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
   },
-  rowSelected: {
-    backgroundColor: 'var(--ds-table-row-bg-selected, var(--ds-color-info-bg))',
-  },
   emptyCell: {
     textAlign: 'center' as const,
     padding: '48px 32px',
-    color: 'var(--ds-color-text-secondary)',
     fontStyle: 'italic',
     letterSpacing: '0.01em',
   },
@@ -113,7 +108,6 @@ const baseStyles = {
   loading: {
     position: 'absolute' as const,
     inset: 0,
-    backgroundColor: 'var(--ds-table-loading-overlay-bg, var(--ds-color-alpha-white-70))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -129,21 +123,9 @@ const baseStyles = {
   },
   pageButton: {
     padding: '4px 12px',
-    border: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300))',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
-    backgroundColor: 'var(--ds-table-bg, var(--ds-color-bg-elevated))',
     cursor: 'pointer',
     fontSize: 'inherit',
     transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
-  },
-  pageButtonHover: {
-    transform: 'translateY(-1px) scale(1.02)',
-    boxShadow: 'var(--ds-table-page-button-hover-shadow, var(--ds-shadow-sm))',
-    borderColor: 'var(--ds-color-primary)',
-  },
-  pageButtonActive: {
-    transform: 'scale(0.97)',
-    boxShadow: 'none',
   },
   pageButtonDisabled: {
     opacity: 0.5,
@@ -173,30 +155,18 @@ const baseStyles = {
     userSelect: 'none' as const,
   },
   resizeHandleActive: {
-    backgroundColor: 'var(--ds-color-primary)',
     opacity: 0.6,
   },
   filterInput: {
     width: '100%',
     padding: '2px 6px',
-    border: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300))',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
     fontSize: 'var(--ds-font-size-xs, 12px)',
-    backgroundColor: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    outline: 'none',
     transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-  },
-  filterInputFocus: {
-    borderColor: 'var(--ds-color-primary)',
-    boxShadow: 'var(--ds-shadow-focus-ring)',
   },
   expandButton: {
     padding: '2px 6px',
-    border: 'none',
-    background: 'none',
     cursor: 'pointer',
     fontSize: '12px',
-    color: 'var(--ds-color-text-secondary)',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -204,66 +174,42 @@ const baseStyles = {
   },
   expandedRowCell: {
     padding: '16px',
-    backgroundColor: 'var(--ds-table-row-bg-expanded, var(--ds-color-bg-secondary, var(--ds-color-bg-muted)))',
     animation: 'var(--ds-personality-animation-entrance-duration, 0.2s) cubic-bezier(0.16, 1, 0.3, 1) rottay-table-expand-in',
   },
   // Fixed (sticky) columns need an opaque background to obscure scrolling
-  // content underneath. Falls through three CSS variable levels for maximum
-  // compatibility with different theme configurations.
+  // content underneath; that background is painted by the rustic table skin's
+  // `[data-fixed]` rule (three CSS variable fallback levels).
   fixedLeft: {
     position: 'sticky' as const,
     left: 0,
     zIndex: 10,
-    backgroundColor: 'var(--ds-table-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
   },
   fixedRight: {
     position: 'sticky' as const,
     right: 0,
     zIndex: 10,
-    backgroundColor: 'var(--ds-table-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
   },
   titleBar: {
     marginBottom: '8px',
     fontWeight: 600,
-    color: 'var(--ds-color-text-primary)',
   },
   footerBar: {
     marginTop: '8px',
     fontSize: 'var(--ds-font-size-sm, 14px)',
-    color: 'var(--ds-color-text-secondary)',
   },
   tfoot: {
     fontWeight: 600,
-    backgroundColor: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
-  },
-  // Dashed outline on hover signals that the cell is editable (click to edit).
-  // outlineOffset: -1px keeps the outline inside the cell boundary so it does
-  // not cause a layout shift on neighboring cells.
-  editableCellHover: {
-    outline: '1px dashed var(--ds-color-primary-200, var(--ds-color-primary))',
-    outlineOffset: '-1px',
-    cursor: 'pointer',
-    backgroundColor: 'var(--ds-color-alpha-primary-5)',
-    transition: 'outline 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
   },
   editInput: {
     width: '100%',
     padding: '2px 6px',
-    border: '1px solid var(--ds-color-primary)',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
     fontSize: 'inherit',
-    backgroundColor: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    outline: 'none',
     boxSizing: 'border-box' as const,
   },
   editSelect: {
     width: '100%',
     padding: '2px 6px',
-    border: '1px solid var(--ds-color-primary)',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
     fontSize: 'inherit',
-    backgroundColor: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    outline: 'none',
     boxSizing: 'border-box' as const,
   },
   editCheckbox: {
@@ -274,11 +220,13 @@ const baseStyles = {
 };
 
 /**
- * Rustic Table engine -- dependency-free, inline-styled data grid.
+ * Rustic Table engine -- dependency-free data grid.
  *
- * Uses only CSS custom properties and semantic HTML. Hover states are managed
- * via React state (hoveredRow, hoveredEditableCell, etc.) because inline
- * styles cannot express `:hover` pseudo-selectors.
+ * Layout and behavior use inline styles and CSS custom properties; paint
+ * (color, background, border, shadow, and the hover/focus/active states) is
+ * driven by the unlayered rustic table skin
+ * (`tokens/css/engines/rustic/skin/table.css`), keyed on the
+ * `data-part`/`data-*` contract this file stamps.
  *
  * @param props - Unified DS TableProps (see Table.types.ts)
  * @returns A vanilla HTML table element with pagination controls
@@ -351,15 +299,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   } = features;
 
   const { onCellEdit } = props;
-  // Rustic engine tracks hover states in React because inline styles cannot
-  // use CSS :hover pseudo-selectors. Each hover state variable maps to a
-  // specific visual feedback (row highlight, editable cell outline, sort
-  // header underline, pagination button lift).
-  const [hoveredRow, setHoveredRow] = useState<string | number | null>(null);
-  const [hoveredEditableCell, setHoveredEditableCell] = useState<string | null>(null);
-  const [hoveredSortCol, setHoveredSortCol] = useState<string | null>(null);
-  const [activePageBtn, setActivePageBtn] = useState<'prev' | 'next' | null>(null);
-  const [hoveredPageBtn, setHoveredPageBtn] = useState<'prev' | 'next' | null>(null);
 
   const hasExpandable = !!expandable?.expandedRowRender;
   const showExpandCol = hasExpandable && expandable?.showExpandColumn !== false;
@@ -373,7 +312,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     const base: CSSProperties = { ...baseStyles.table };
     if (size === 'small') Object.assign(base, baseStyles.tableSmall);
     if (size === 'large') Object.assign(base, baseStyles.tableLarge);
-    if (bordered) Object.assign(base, baseStyles.tableBordered);
     if (props.tableLayout === 'fixed') base.tableLayout = 'fixed';
     const scrollXValue = scroll?.x;
     if (scrollXValue) {
@@ -460,6 +398,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
           style={baseStyles.editCheckbox}
+          data-part="checkbox"
           checked={!!cellValue}
           onChange={(e) => {
             setCellValue(e.target.checked);
@@ -477,6 +416,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         <select
           ref={inputRef as React.RefObject<HTMLSelectElement>}
           style={baseStyles.editSelect}
+          data-part="field"
           value={String(cellValue ?? '')}
           onChange={(e) => {
             setCellValue(e.target.value);
@@ -501,6 +441,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="date"
           style={baseStyles.editInput}
+          data-part="field"
           value={String(cellValue ?? '')}
           onChange={(e) => setCellValue(e.target.value)}
           onKeyDown={onKeyDown}
@@ -516,6 +457,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         ref={inputRef as React.RefObject<HTMLInputElement>}
         type={fieldType === 'number' ? 'number' : 'text'}
         style={baseStyles.editInput}
+        data-part="field"
         value={cellValue == null ? '' : String(cellValue)}
         onChange={(e) =>
           setCellValue(fieldType === 'number' ? Number(e.target.value) : e.target.value)
@@ -543,16 +485,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
         else ariaSortValue = 'none';
       }
 
-      const isSortHovered = isSortable && hoveredSortCol === (field || String(column.key));
       const thStyle: CSSProperties = {
         ...baseStyles.th,
         width,
         minWidth: column.minWidth,
         textAlign: column.align,
         ...(isSortable ? baseStyles.thSortable : {}),
-        ...(isSortHovered ? {
-          backgroundColor: 'var(--ds-table-header-bg-hover, var(--ds-color-bg-tertiary))',
-        } : {}),
         ...getFixedStyle(column),
         ...(stickyConfig.enabled
           ? { ...baseStyles.thSticky, top: stickyConfig.offsetHeader + rowIndex * 40 }
@@ -566,30 +504,35 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           colSpan={colSpan > 1 ? colSpan : undefined}
           rowSpan={rowSpan > 1 ? rowSpan : undefined}
           style={thStyle}
+          data-part="header-cell"
+          data-sortable={isSortable ? 'true' : undefined}
+          data-sticky={stickyConfig.enabled ? 'true' : undefined}
+          data-hairline="true"
+          data-fixed={column.fixed ? 'true' : undefined}
           onClick={() => isSortable && handleSort(column)}
-          onMouseEnter={() => isSortable && setHoveredSortCol(field || String(column.key))}
-          onMouseLeave={() => isSortable && setHoveredSortCol(null)}
           aria-sort={ariaSortValue}
           role="columnheader"
         >
           <span style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <span style={{
-              flex: 1,
-              ...(isSortHovered ? { textDecoration: 'underline', textUnderlineOffset: '3px' } : {}),
-            }}>{column.title}</span>
+            <span style={{ flex: 1 }}>{column.title}</span>
             {isSortable && (
-              <span style={{
-                ...baseStyles.sortIcon,
-                transform: isCurrentSort && sortState.order === 'descend' ? 'rotate(180deg)' : 'rotate(0deg)',
-                opacity: isCurrentSort ? 1 : isSortHovered ? 0.8 : 0.4,
-              }}>
-                {isCurrentSort ? '\u25B2' : '\u21C5'}
+              <span
+                data-part="sort-indicator"
+                data-order={isCurrentSort ? sortState.order : 'none'}
+                style={{
+                  ...baseStyles.sortIcon,
+                  opacity: isCurrentSort ? 1 : 0.4,
+                }}
+              >
+                {isCurrentSort ? '▲' : '⇅'}
               </span>
             )}
           </span>
           {/* Resize handle */}
           {colSpan <= 1 && (
             <span
+              data-part="resize-handle"
+              data-resizing={resizingColumn === field ? 'true' : undefined}
               style={{
                 ...baseStyles.resizeHandle,
                 ...(resizingColumn === field ? baseStyles.resizeHandleActive : {}),
@@ -608,38 +551,30 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   };
 
   // ---- Filter row ----
-  // Per-column text inputs for client-side filtering. The focus/blur handlers
-  // mutate e.currentTarget.style directly (imperative DOM) because inline
-  // styles cannot express :focus pseudo-selectors.
+  // Per-column text inputs for client-side filtering. Focus/hover paint is
+  // driven by the rustic table skin's `:focus`/`:hover` rules, keyed on
+  // `data-part="field"`.
   const renderFilterRow = () => {
     if (!hasFilters) return null;
     const cellStyle = getCellStyle();
     return (
-      <tr style={{ backgroundColor: 'var(--ds-table-filter-row-bg, var(--ds-color-bg-secondary))' }}>
-        {rowSelection && <th style={{ ...cellStyle, width: '48px' }} />}
-        {showExpandCol && <th style={{ ...cellStyle, width: '48px' }} />}
+      <tr data-part="filter-row">
+        {rowSelection && <th data-part="cell" data-bordered="true" style={{ ...cellStyle, width: '48px' }} />}
+        {showExpandCol && <th data-part="cell" data-bordered="true" style={{ ...cellStyle, width: '48px' }} />}
         {leafColumns.map((col, i) => {
           const field = columnFieldKey(col);
           if (!col.filterSearch && !col.filters) {
-            return <th key={col.key || field || i} style={cellStyle} />;
+            return <th key={col.key || field || i} data-part="cell" data-bordered="true" style={cellStyle} />;
           }
           return (
-            <th key={col.key || field || i} style={{ ...cellStyle, padding: '4px 8px' }}>
+            <th key={col.key || field || i} data-part="cell" data-bordered="true" style={{ ...cellStyle, padding: '4px 8px' }}>
               <input
                 type="text"
                 style={baseStyles.filterInput}
+                data-part="field"
                 placeholder={t('table.filter_column', { column: String(col.title || '') })}
                 value={columnFilters[field || ''] || ''}
                 onChange={(e) => field && handleColumnFilter(field, e.target.value)}
-                onFocus={(e) => Object.assign(e.currentTarget.style, {
-                  borderColor: 'var(--ds-color-primary)',
-                  boxShadow:
-                    'var(--ds-table-filter-focus-shadow, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200))',
-                })}
-                onBlur={(e) => Object.assign(e.currentTarget.style, {
-                  borderColor: 'var(--ds-color-border-secondary, var(--ds-color-neutral-300))',
-                  boxShadow: 'none',
-                })}
                 aria-label={t('table.filter_column', { column: String(col.title || '') })}
               />
             </th>
@@ -656,7 +591,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
     if (displayData.length === 0) {
       return (
         <tr>
-          <td colSpan={totalColSpan} style={baseStyles.emptyCell}>
+          <td colSpan={totalColSpan} style={baseStyles.emptyCell} data-part="empty-cell">
             {locale?.emptyText || t('table.empty')}
           </td>
         </tr>
@@ -669,27 +604,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       const actualIndex = indexOffset + displayIdx;
       const key = getRowKey(record, actualIndex);
       const isSelected = selectedRowKeys.includes(key);
-      const isHovered = hoveredRow === key;
       const isExpanded = expandedRowKeys.has(key);
       const canExpand = isRowExpandable(record);
       const rowClass = typeof rowClassName === 'function' ? rowClassName(record, actualIndex) : rowClassName;
 
-      // Row style priority: hover > selected > default. The inset box-shadow
-      // creates a left-side accent bar on hover without affecting cell padding
-      // (a real border-left would shift content by 3px).
       const rowStyle: CSSProperties = {
-        ...(isSelected
-          ? baseStyles.rowSelected
-          : {}),
         ...(rowHoverable ? baseStyles.rowHover : {}),
-        backgroundColor: isHovered && rowHoverable
-          ? 'var(--ds-table-row-bg-hover, var(--ds-color-bg-secondary))'
-          : isSelected
-            ? 'var(--ds-table-row-bg-selected, var(--ds-color-primary-100))'
-            : undefined,
-        boxShadow: isHovered && rowHoverable && !isSelected
-          ? 'inset 3px 0 0 var(--ds-color-primary)'
-          : undefined,
       };
 
       return (
@@ -697,14 +617,19 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
           <tr
             className={rowClass || undefined}
             style={rowStyle}
-            onMouseEnter={() => rowHoverable && setHoveredRow(key)}
-            onMouseLeave={() => rowHoverable && setHoveredRow(null)}
+            data-part="row"
+            data-selected={isSelected ? 'true' : undefined}
+            data-hoverable={rowHoverable ? 'true' : undefined}
             aria-expanded={hasExpandable ? isExpanded : undefined}
             {...(onRow?.(record, actualIndex) || {})}
           >
             {/* Expand column */}
             {showExpandCol && (
-              <td style={{ ...cellStyle, width: expandable?.columnWidth || '48px', textAlign: 'center' }}>
+              <td
+                style={{ ...cellStyle, width: expandable?.columnWidth || '48px', textAlign: 'center' }}
+                data-part="cell"
+                data-bordered="true"
+              >
                 {canExpand ? (
                   expandable?.expandIcon ? (
                     expandable.expandIcon({
@@ -714,14 +639,13 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     })
                   ) : (
                     <button
-                      style={{
-                        ...baseStyles.expandButton,
-                        transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
-                      }}
+                      style={baseStyles.expandButton}
+                      data-part="expand-button"
+                      data-expanded={isExpanded ? 'true' : undefined}
                       onClick={() => handleToggleExpand(record, actualIndex)}
                       aria-label={isExpanded ? t('table.collapse_row') : t('table.expand_row')}
                     >
-                      {'\u25B6'}
+                      {'▶'}
                     </button>
                   )
                 ) : null}
@@ -730,10 +654,15 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
             {/* Selection column */}
             {rowSelection && (
-              <td style={{ ...cellStyle, width: rowSelection.columnWidth || '48px' }}>
+              <td
+                style={{ ...cellStyle, width: rowSelection.columnWidth || '48px' }}
+                data-part="cell"
+                data-bordered="true"
+              >
                 <input
                   type={rowSelection.type === 'radio' ? 'radio' : 'checkbox'}
                   style={baseStyles.checkbox}
+                  data-part="checkbox"
                   checked={isSelected}
                   onChange={(e) => handleSelectRow(record, actualIndex, e.target.checked)}
                   name={rowSelection.type === 'radio' ? 'table-row-selection' : undefined}
@@ -749,8 +678,6 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
               const width = getColumnWidth(column);
               const cellEditable = onCellEdit && isCellEditable(column, record, actualIndex);
               const cellIsEditing = isCellEditing(key, field);
-              const cellHoverKey = `${key}-${field}`;
-              const isCellHovered = hoveredEditableCell === cellHoverKey;
 
               const content = cellIsEditing ? (
                 <EditableCellInput
@@ -775,30 +702,26 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                   : {}),
                 ...getFixedStyle(column),
                 ...column.style,
-                ...(cellEditable && !cellIsEditing && isCellHovered
-                  ? baseStyles.editableCellHover
+                ...(cellEditable && !cellIsEditing
+                  ? {
+                      cursor: 'pointer',
+                      transition: 'outline 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }
                   : {}),
-                ...(cellEditable && !cellIsEditing ? { cursor: 'pointer' } : {}),
               };
 
               return (
                 <td
                   key={column.key || field || colIndex}
                   style={tdStyle}
+                  data-part="cell"
+                  data-bordered="true"
+                  data-editable={cellEditable && !cellIsEditing ? 'true' : undefined}
+                  data-fixed={column.fixed ? 'true' : undefined}
                   role="gridcell"
                   onClick={
                     cellEditable && !cellIsEditing
                       ? () => handleCellClick(record, actualIndex, column)
-                      : undefined
-                  }
-                  onMouseEnter={
-                    cellEditable && !cellIsEditing
-                      ? () => setHoveredEditableCell(cellHoverKey)
-                      : undefined
-                  }
-                  onMouseLeave={
-                    cellEditable && !cellIsEditing
-                      ? () => setHoveredEditableCell(null)
                       : undefined
                   }
                   {...(column.onCell?.(record, actualIndex) || {})}
@@ -811,7 +734,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
           {/* Expanded row content */}
           {hasExpandable && isExpanded && canExpand && expandable?.expandedRowRender && (
-            <tr>
+            <tr data-part="expanded-row">
               <td colSpan={totalColSpan} style={baseStyles.expandedRowCell}>
                 {expandable.expandedRowRender(record, actualIndex, expandable.indentSize || 0, true)}
               </td>
@@ -828,7 +751,12 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
   const scrollYValue = typeof scroll?.y === 'number' ? scroll.y : typeof scroll?.y === 'string' ? scroll.y : undefined;
 
   const tableElement = (
-    <table style={getTableStyle()} role="grid">
+    <table
+      style={getTableStyle()}
+      role="grid"
+      data-part="table"
+      data-bordered={bordered ? 'true' : undefined}
+    >
       {/* colgroup */}
       <colgroup>
         {showExpandCol && <col style={{ width: expandable?.columnWidth || 48 }} />}
@@ -854,6 +782,9 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     width: expandable?.columnWidth || '48px',
                     ...(stickyConfig.enabled ? { ...baseStyles.thSticky, top: stickyConfig.offsetHeader } : {}),
                   }}
+                  data-part="header-cell"
+                  data-hairline="true"
+                  data-sticky={stickyConfig.enabled ? 'true' : undefined}
                 >
                   {expandable?.columnTitle || ''}
                 </th>
@@ -866,11 +797,15 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
                     width: rowSelection.columnWidth || '48px',
                     ...(stickyConfig.enabled ? { ...baseStyles.thSticky, top: stickyConfig.offsetHeader } : {}),
                   }}
+                  data-part="header-cell"
+                  data-hairline="true"
+                  data-sticky={stickyConfig.enabled ? 'true' : undefined}
                 >
                   {rowSelection.type !== 'radio' && !rowSelection.hideSelectAll && (
                     <input
                       type="checkbox"
                       style={baseStyles.checkbox}
+                      data-part="checkbox"
                       checked={isAllSelected}
                       onChange={(e) => handleSelectAll(e.target.checked)}
                       aria-label={t('table.select_all')}
@@ -915,22 +850,26 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       {/* Summary / tfoot */}
       {hasSummary && summary && (
-        <tfoot style={baseStyles.tfoot}>{summary(processedData)}</tfoot>
+        <tfoot style={baseStyles.tfoot} data-part="summary-row">{summary(processedData)}</tfoot>
       )}
     </table>
   );
 
   return (
-    <div className={className} style={{ ...baseStyles.wrapper, ...style }} id={id}>
+    <div
+      className={['ds-table', 'ds-table--rustic', className].filter(Boolean).join(' ')}
+      style={{ ...baseStyles.wrapper, ...style }}
+      id={id}
+    >
       {/* Title */}
       {title && (
-        <div style={baseStyles.titleBar}>{title(processedData)}</div>
+        <div style={baseStyles.titleBar} data-part="title">{title(processedData)}</div>
       )}
 
       {/* Loading overlay */}
       {loading && (
-        <div style={baseStyles.loading}>
-          <span>{t('table.loading')}</span>
+        <div style={baseStyles.loading} data-part="loading-overlay">
+          <span data-part="spinner">{t('table.loading')}</span>
         </div>
       )}
 
@@ -950,7 +889,7 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
 
       {/* Footer */}
       {footer && (
-        <div style={baseStyles.footerBar}>{footer(processedData)}</div>
+        <div style={baseStyles.footerBar} data-part="footer">{footer(processedData)}</div>
       )}
 
       {/* Rustic animations */}
@@ -964,22 +903,17 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
       {/* Pagination */}
       {pagination !== false && (
         <div style={baseStyles.pagination}>
-          <span style={{ color: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))' }}>
+          <span data-part="pagination-range">
             {paginationRange}
           </span>
           <button
             style={{
               ...baseStyles.pageButton,
               ...(currentPage === 1 ? baseStyles.pageButtonDisabled : {}),
-              ...(hoveredPageBtn === 'prev' && currentPage !== 1 ? baseStyles.pageButtonHover : {}),
-              ...(activePageBtn === 'prev' && currentPage !== 1 ? baseStyles.pageButtonActive : {}),
             }}
+            data-part="pagination-button"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage(currentPage - 1)}
-            onMouseEnter={() => setHoveredPageBtn('prev')}
-            onMouseLeave={() => { setHoveredPageBtn(null); setActivePageBtn(null); }}
-            onMouseDown={() => setActivePageBtn('prev')}
-            onMouseUp={() => setActivePageBtn(null)}
             aria-label={t('table.previous_page')}
           >
             &#171;
@@ -989,15 +923,10 @@ export const Table = <T extends object = object>(props: TableProps<T>) => {
             style={{
               ...baseStyles.pageButton,
               ...(currentPage * pageSize >= totalItems ? baseStyles.pageButtonDisabled : {}),
-              ...(hoveredPageBtn === 'next' && currentPage * pageSize < totalItems ? baseStyles.pageButtonHover : {}),
-              ...(activePageBtn === 'next' && currentPage * pageSize < totalItems ? baseStyles.pageButtonActive : {}),
             }}
+            data-part="pagination-button"
             disabled={currentPage * pageSize >= totalItems}
             onClick={() => setCurrentPage(currentPage + 1)}
-            onMouseEnter={() => setHoveredPageBtn('next')}
-            onMouseLeave={() => { setHoveredPageBtn(null); setActivePageBtn(null); }}
-            onMouseDown={() => setActivePageBtn('next')}
-            onMouseUp={() => setActivePageBtn(null)}
             aria-label={t('table.next_page')}
           >
             &#187;

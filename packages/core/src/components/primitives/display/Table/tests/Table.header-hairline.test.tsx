@@ -42,12 +42,6 @@ const TEST_TENANT_CONFIG: TenantConfig = {
   },
 };
 
-// happy-dom's CSSOM cannot parse a style value containing a nested var()
-// fallback (e.g. `var(--a, var(--b))`) -- it silently drops the whole
-// declaration, so `.style.borderBottom` reads back empty even when the
-// element genuinely carries it. React's SSR serializer writes the literal
-// value straight into the `style="..."` attribute string with no CSS parsing
-// involved, so these tests assert against that string instead of the DOM.
 function renderMarkup(engine: 'modern' | 'rustic', ui: React.ReactElement): string {
   return renderToStaticMarkup(
     <DesignSystemProvider
@@ -60,18 +54,12 @@ function renderMarkup(engine: 'modern' | 'rustic', ui: React.ReactElement): stri
   );
 }
 
-function styleOf(html: string, tag: 'th' | 'td', role: string): string {
-  const match = new RegExp(`<${tag}[^>]*\\sstyle="([^"]*)"[^>]*role="${role}"`).exec(html);
-  if (!match) throw new Error(`No <${tag} role="${role}"> found in markup`);
-  return match[1];
-}
-
 /**
- * The full opening tag for the first `<tag>` (optionally matching a role). The
- * modern engine's border treatment moved from an inline `style` to the unlayered
- * `table.css` skin (WO-ARC-09), keyed on the data attributes the engine stamps,
- * so its tests read those attributes instead of a style string. Rustic is still
- * inline and keeps `styleOf`.
+ * The full opening tag for the first `<tag>` (optionally matching a role).
+ * Both engines' border treatment moved from an inline `style` to their
+ * respective unlayered `table.css` skin (WO-ARC-09: modern, then rustic), so
+ * these tests read the data attributes each engine stamps rather than a
+ * style string.
  */
 function openTag(html: string, tag: 'table' | 'th' | 'td', role?: string): string {
   const re = role
@@ -81,8 +69,6 @@ function openTag(html: string, tag: 'table' | 'th' | 'td', role?: string): strin
   if (!match) throw new Error(`No <${tag}${role ? ` role="${role}"` : ''}> found in markup`);
   return match[0];
 }
-
-const RUSTIC_HEADER_HAIRLINE = 'border-bottom:1px solid var(--ds-table-border, var(--ds-color-border-primary))';
 
 describe('Table modern engine -- header hairline default (WO-ENG-16)', () => {
   it('flags the header bottom hairline by default, with no cell or outer table border', () => {
@@ -137,19 +123,21 @@ describe('Table modern engine -- header hairline default (WO-ENG-16)', () => {
   });
 
   it('does not change the rustic engine, whose header separator is unconditional', () => {
-    // Rustic's <th> bottom border comes from a static style object that never
-    // reads `bordered` or `headerBordered` -- it renders identically either way.
+    // Rustic's <th> stamps `data-hairline="true"` unconditionally -- it never
+    // reads `bordered` or `headerBordered` -- so it renders identically either
+    // way. The rustic table skin (WO-ARC-09) paints the border off that
+    // attribute, same contract shape as modern's own `data-hairline`.
     const defaultHtml = renderMarkup(
       'rustic',
       <RusticTable columns={COLUMNS} dataSource={DATA} pagination={false} />
     );
-    expect(styleOf(defaultHtml, 'th', 'columnheader')).toContain(RUSTIC_HEADER_HAIRLINE);
+    expect(openTag(defaultHtml, 'th', 'columnheader')).toContain('data-hairline="true"');
 
     const optOutHtml = renderMarkup(
       'rustic',
       <RusticTable columns={COLUMNS} dataSource={DATA} pagination={false} headerBordered={false} />
     );
-    expect(styleOf(optOutHtml, 'th', 'columnheader')).toContain(RUSTIC_HEADER_HAIRLINE);
+    expect(openTag(optOutHtml, 'th', 'columnheader')).toContain('data-hairline="true"');
   });
 
   it.each(STABLE_ENGINES)(

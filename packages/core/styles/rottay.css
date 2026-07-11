@@ -14704,6 +14704,221 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border-radius: var(--ds-radius-md);
 }
 
+/**
+ * Rustic Table skin (WO-ARC-09 checkpoint 1).
+ *
+ * DELIBERATELY UNLAYERED -- mirrors `engines/modern/skin/table.css`'s reasoning
+ * verbatim: every `rottay-*` layer sorts before Tailwind's `base` layer, so a
+ * layered rule loses to preflight regardless of specificity (P-47). Unlayered
+ * outranks preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT IS THE OUTER `<div>`, not the `<table>`. The loading overlay, the
+ * title/footer and the pagination controls are SIBLINGS of the `<table>` under
+ * that div, so scoping on the table would leave them unpainted. The div
+ * carries `ds-table ds-table--rustic`; every painted element is a descendant
+ * with a `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). A descendant rule that sets `border` / `border-color` / a
+ * `border-*-color` longhand must therefore reach (0,4,0): the div's two
+ * classes (0,2,0) + two attributes on the target (0,2,0). Rules that set only
+ * non-border paint (background, color, box-shadow, outline, transform,
+ * accent-color) beat preflight while unlayered and need no more than the two
+ * classes + one attribute.
+ *
+ * RUSTIC DIFFERS FROM MODERN IN TWO STRUCTURAL WAYS this file encodes:
+ *  1. Rustic's header/body separators are UNCONDITIONAL. Rustic has no
+ *     `headerBordered` prop, and its per-cell bottom border never read
+ *     `bordered` either -- so `data-hairline` (header) and `data-bordered`
+ *     (body cell) are stamped "true" unconditionally in the engine file,
+ *     rather than tracking a prop the way modern's do. Only the OUTER
+ *     `<table>`'s `data-bordered` tracks the `bordered` prop, matching
+ *     modern exactly.
+ *  2. Hover in rustic was previously five pieces of React state (`hoveredRow`,
+ *     `hoveredEditableCell`, `hoveredSortCol`, `activePageBtn`,
+ *     `hoveredPageBtn`) driving imperative paint because inline styles cannot
+ *     express `:hover`. All five are gone; every hover/active/focus effect
+ *     below is a real pseudo-class keyed on the same data-part contract.
+ *     Where rustic's hover priority differs from modern's (a selected AND
+ *     hovered row shows the HOVER background in rustic; modern's shows the
+ *     SELECTED background), the rule specificity below reproduces rustic's
+ *     own prior behavior, not modern's -- see the body-row block.
+ *
+ * Values are transcribed verbatim from `engines/rustic.tsx`'s (pre-migration)
+ * `baseStyles`; the rule order mirrors the order that file painted them.
+ */
+
+/* ---- table element: border only in `bordered` mode ---- */
+.ds-table.ds-table--rustic [data-part='table'][data-bordered='true'] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border-primary));
+}
+
+/* ---- header cells: background + text color are unconditional in rustic ---- */
+.ds-table.ds-table--rustic [data-part='header-cell'] {
+  background-color: var(--ds-table-header-bg, var(--ds-color-bg-secondary));
+  color: var(--ds-table-header-color);
+}
+.ds-table.ds-table--rustic [data-part='header-cell'][data-hairline='true'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border-primary));
+}
+.ds-table.ds-table--rustic [data-part='header-cell'][data-sortable='true']:hover {
+  background-color: var(--ds-table-header-bg-hover, var(--ds-color-bg-tertiary));
+}
+/* the sort column title underlines on hover -- rustic-only, no modern analog
+   (see the migration report). Structural child selector: the title span is
+   always the first child of the header cell's first child (the flex
+   wrapper), regardless of whether the sort-icon sibling is present. */
+.ds-table.ds-table--rustic [data-part='header-cell'][data-sortable='true']:hover > span:first-child > span:first-child {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ---- sort indicator: rotates with the sort order; dims unless current or
+        its header is hovered (rustic-only hover dim step, no modern analog) ---- */
+.ds-table.ds-table--rustic [data-part='sort-indicator'] {
+  transform: rotate(0deg);
+}
+.ds-table.ds-table--rustic [data-part='sort-indicator'][data-order='descend'] {
+  transform: rotate(180deg);
+}
+.ds-table.ds-table--rustic [data-part='header-cell'][data-sortable='true']:hover [data-part='sort-indicator'][data-order='none'] {
+  opacity: 0.8;
+}
+
+/* ---- resize handle: only a live drag paints in rustic -- there is no
+        separate hover-only tint the way modern has ---- */
+.ds-table.ds-table--rustic [data-part='resize-handle'][data-resizing='true'] {
+  background-color: var(--ds-color-primary);
+}
+
+/* ---- filter row + its input ---- */
+.ds-table.ds-table--rustic [data-part='filter-row'] {
+  background-color: var(--ds-table-filter-row-bg, var(--ds-color-bg-secondary));
+}
+/* filter input: neutral resting border. Distinguished from the edit fields
+   below by `placeholder` -- only the filter input ever sets one. */
+.ds-table.ds-table--rustic [data-part='field'][placeholder] {
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-sm, 6px);
+  background-color: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  outline: none;
+}
+.ds-table.ds-table--rustic [data-part='field'][placeholder]:focus {
+  border-color: var(--ds-color-primary);
+  box-shadow: var(--ds-table-filter-focus-shadow, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200));
+}
+/* edit field (text/number/date/select): primary-colored border is the
+   "you're editing" signal, always on -- these never carry a `placeholder`. */
+.ds-table.ds-table--rustic [data-part='field']:not([placeholder]) {
+  border: 1px solid var(--ds-color-primary);
+  border-radius: var(--ds-radius-sm, 6px);
+  background-color: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  outline: none;
+}
+
+/* ---- checkboxes: rustic never painted accent-color, nothing to move ---- */
+
+/* ---- muted text: empty-state cell + footer share one value; pagination
+        range carries its own separate fallback chain ---- */
+.ds-table.ds-table--rustic [data-part='empty-cell'],
+.ds-table.ds-table--rustic [data-part='footer'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-table.ds-table--rustic [data-part='pagination-range'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+/* ---- title bar: rustic colors it, modern does not (no analog) ---- */
+.ds-table.ds-table--rustic [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- body row: hover ALWAYS wins over selected in rustic (the pre-migration
+        JS checked `isHovered` before `isSelected`), so the hover background
+        rule below is NOT qualified with `:not([data-selected])` -- its added
+        `:hover` pseudo-class already gives it higher specificity than the
+        selected rule, so it wins regardless of source order. The inset
+        left-accent bar, by contrast, only ever showed when hovered AND NOT
+        selected, so that one rule keeps the qualifier. ---- */
+.ds-table.ds-table--rustic [data-part='row'][data-selected='true'] {
+  background-color: var(--ds-table-row-bg-selected, var(--ds-color-primary-100));
+}
+.ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:hover {
+  background-color: var(--ds-table-row-bg-hover, var(--ds-color-bg-secondary));
+}
+.ds-table.ds-table--rustic [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
+  box-shadow: inset 3px 0 0 var(--ds-color-primary);
+}
+
+/* ---- body cell: bottom border is unconditional in rustic (data-bordered is
+        stamped "true" on every cell, not gated on the `bordered` prop), and
+        the editable-cell hover ---- */
+.ds-table.ds-table--rustic [data-part='cell'][data-bordered='true'] {
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border-primary));
+}
+.ds-table.ds-table--rustic [data-part='cell'][data-editable='true']:hover {
+  outline: 1px dashed var(--ds-color-primary-200, var(--ds-color-primary));
+  outline-offset: -1px;
+  background-color: var(--ds-color-alpha-primary-5);
+}
+
+/* ---- pinned/fixed columns: an opaque fill so scrolled content cannot bleed
+        through. Applies to both header and body cells. ---- */
+.ds-table.ds-table--rustic [data-part='cell'][data-fixed],
+.ds-table.ds-table--rustic [data-part='header-cell'][data-fixed] {
+  background-color: var(--ds-table-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+}
+
+/* ---- expand column: rustic rotates the button itself directly -- there is
+        no separate indicator element the way modern has (no analog) ---- */
+.ds-table.ds-table--rustic [data-part='expand-button'] {
+  transform: rotate(0deg);
+}
+.ds-table.ds-table--rustic [data-part='expand-button'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+/* ---- expanded row content ---- */
+.ds-table.ds-table--rustic [data-part='expanded-row'] {
+  background-color: var(--ds-table-row-bg-expanded, var(--ds-color-bg-secondary, var(--ds-color-bg-muted)));
+}
+
+/* ---- loading overlay. Rustic shows a text label, not a spinner glyph --
+        `data-part='spinner'` is stamped on that label for contract parity
+        but paints nothing here, since rustic never painted it. ---- */
+.ds-table.ds-table--rustic [data-part='loading-overlay'] {
+  background-color: var(--ds-table-loading-overlay-bg, var(--ds-color-alpha-white-70));
+}
+
+/* ---- summary / tfoot: rustic colors it, modern does not (no analog) ---- */
+.ds-table.ds-table--rustic [data-part='summary-row'] {
+  background-color: var(--ds-table-header-bg, var(--ds-color-bg-secondary));
+}
+
+/* ---- pagination buttons: base chrome, then hover, then active. Active must
+        sort AFTER hover so its transform/box-shadow win when both
+        pseudo-classes match at once (the mouse held down while over the
+        button matches both), matching the JS's own spread order
+        (`pageButtonHover` before `pageButtonActive`). `:not(:disabled)` is
+        redundant with native `:hover`/`:active` behavior (disabled controls
+        never match either) but is kept to document that the original JS
+        guarded on it explicitly. ---- */
+.ds-table.ds-table--rustic [data-part='pagination-button'][aria-label] {
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-sm, 6px);
+  background-color: var(--ds-table-bg, var(--ds-color-bg-elevated));
+}
+.ds-table.ds-table--rustic [data-part='pagination-button']:not(:disabled):hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: var(--ds-table-page-button-hover-shadow, var(--ds-shadow-sm));
+  border-color: var(--ds-color-primary);
+}
+.ds-table.ds-table--rustic [data-part='pagination-button']:not(:disabled):active {
+  transform: scale(0.97);
+  box-shadow: none;
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
