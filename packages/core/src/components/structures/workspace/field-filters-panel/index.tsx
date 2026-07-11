@@ -80,9 +80,6 @@ export function FieldFiltersPanel({
       data-part="root"
       style={{
         padding: '12px 16px 14px',
-        borderBottom: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-surface-card) 93%, var(--ds-color-bg-primary) 7%))',
       }}
     >
       <Flex align="center" justify="between" gap={12} wrap="wrap" style={{ marginBottom: 12 }}>
@@ -91,19 +88,16 @@ export function FieldFiltersPanel({
             <Text
               data-part="title-pill"
               size="xs"
+              color="subtle"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 minHeight: 22,
                 padding: '0 8px',
-                borderRadius: 999,
-                border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-                background: 'color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent)',
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: 'uppercase' as const,
                 letterSpacing: '0.11em',
-                color: 'var(--ds-color-text-muted)',
               }}
             >
               Advanced filters
@@ -111,7 +105,8 @@ export function FieldFiltersPanel({
             <Text
               data-part="subtitle"
               size="xs"
-              style={{ fontSize: 12, lineHeight: 1.45, color: 'var(--ds-color-text-secondary)' }}
+              color="secondary"
+              style={{ fontSize: 12, lineHeight: 1.45 }}
             >
               Precision filters for the current slice.
             </Text>
@@ -129,19 +124,16 @@ export function FieldFiltersPanel({
             <Text
               data-part="presets-pill"
               size="xs"
+              color="subtle"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 minHeight: 20,
                 padding: '0 8px',
-                borderRadius: 999,
-                border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-                background: 'color-mix(in srgb, var(--ds-color-bg-primary) 48%, transparent)',
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: 'uppercase' as const,
                 letterSpacing: '0.11em',
-                color: 'var(--ds-color-text-muted)',
               }}
             >
               Quick slices
@@ -176,14 +168,7 @@ export function FieldFiltersPanel({
             filter.type === 'date-range'
               ? filter.placeholder ?? `Any ${filter.label}`
               : filter.placeholder ?? `All ${filter.label}`;
-          const controlStyle = {
-            width: '100%',
-            minHeight: 40,
-            borderRadius: 12,
-            background: 'color-mix(in srgb, var(--ds-color-bg-primary) 72%, var(--ds-surface-card))',
-            border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 88%, transparent)',
-            boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 4%, transparent)',
-          } as const;
+          const controlStyle = { width: '100%', minHeight: 40 } as const;
 
           if (filter.type === 'select' || filter.type === 'enum') {
             return (
@@ -273,17 +258,11 @@ function PresetChip({
         alignItems: 'center',
         minHeight: 30,
         padding: '0 10px',
-        borderRadius: 999,
-        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))',
-        color: 'var(--ds-color-text-secondary)',
         cursor: 'pointer',
         fontSize: 12,
         fontWeight: 700,
         letterSpacing: '0.01em',
         transition: 'border-color 0.12s ease, background 0.12s ease, color 0.12s ease, transform 0.12s ease',
-        boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 4%, transparent)',
       }}
     >
       <Box
@@ -291,15 +270,11 @@ function PresetChip({
         style={{
           width: 16,
           height: 16,
-          borderRadius: 999,
           marginRight: 7,
           flexShrink: 0,
-          border: '1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent)',
-          background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          color: 'var(--ds-color-primary)',
         }}
       >
         <Sparkles style={{ width: 10, height: 10 }} />
@@ -326,28 +301,17 @@ function InlineSignal({
         gap: 6,
         minHeight: 24,
         padding: '0 9px',
-        borderRadius: 12,
-        border:
-          tone === 'primary'
-            ? '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)'
-            : '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-        background:
-          tone === 'primary'
-            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card)))'
-            : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))',
-        color: tone === 'primary' ? 'var(--ds-color-primary)' : 'var(--ds-color-text-secondary)',
-        boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 4%, transparent)',
       }}
     >
       <Text
         data-part="signal-label"
         size="xs"
+        color="inherit"
         style={{
           fontSize: 11,
           fontWeight: 700,
           textTransform: 'uppercase' as const,
           letterSpacing: '0.09em',
-          color: 'inherit',
           lineHeight: 1,
         }}
       >
@@ -373,11 +337,6 @@ function FilterCard({
       data-part="filter-card"
       style={{
         padding: 12,
-        borderRadius: 18,
-        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-        background:
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, white 5%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))',
-        boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 4%, transparent)',
         minHeight: 118,
         display: 'flex',
         flexDirection: 'column',
@@ -389,14 +348,10 @@ function FilterCard({
           style={{
             width: 30,
             height: 30,
-            borderRadius: 12,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexShrink: 0,
-            border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-            background: 'color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent)',
-            color: 'var(--ds-color-text-secondary)',
           }}
         >
           {icon}
@@ -405,13 +360,13 @@ function FilterCard({
           <Text
             data-part="filter-card-label"
             size="xs"
+            color="subtle"
             style={{
               display: 'block',
               fontSize: 10,
               fontWeight: 700,
               textTransform: 'uppercase' as const,
               letterSpacing: '0.11em',
-              color: 'var(--ds-color-text-muted)',
             }}
           >
             {label}
@@ -419,12 +374,12 @@ function FilterCard({
           <Text
             data-part="filter-card-description"
             size="xs"
+            color="secondary"
             style={{
               display: 'block',
               marginTop: 3,
               fontSize: 11,
               lineHeight: 1.35,
-              color: 'var(--ds-color-text-secondary)',
             }}
           >
             {description}

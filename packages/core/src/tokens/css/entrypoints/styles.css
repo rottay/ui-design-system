@@ -85,6 +85,7 @@
 @import '../engines/rustic/skin/badge.css';
 @import '../engines/modern/skin/table.css';
 @import '../engines/rustic/skin/table.css';
+@import '../components/skin/field-filters-panel.css';
 
 
 /* =============================================================================
