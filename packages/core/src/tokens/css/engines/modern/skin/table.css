@@ -1,0 +1,144 @@
+/**
+ * Modern Table skin (WO-ARC-09 checkpoint 1).
+ *
+ * DELIBERATELY UNLAYERED, for the reason button.css states in full: every
+ * `rottay-*` layer sorts before Tailwind's `base` layer, so a layered rule loses
+ * to preflight regardless of specificity (P-47). Unlayered outranks preflight +
+ * DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT IS THE OUTER `<div>`, not the `<table>`. The loading overlay, the
+ * spinner, the title/footer and the pagination controls are SIBLINGS of the
+ * `<table>` under that div, so scoping on the table would leave them unpainted.
+ * The div carries `ds-table ds-table--modern`; every painted element is a
+ * descendant with a `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A descendant rule that sets `border` /
+ * `border-color` / a `border-*-color` longhand must therefore reach (0,4,0):
+ * the div's two classes (0,2,0) + two attributes on the target (0,2,0). Rules
+ * that set only non-border paint (background, color, box-shadow, outline,
+ * transform, accent-color) beat preflight while unlayered and need no more than
+ * the two classes + one attribute.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`; the rule order
+ * mirrors the order that file paints them, so the visual result is byte-identical.
+ */
+
+/* ---- table element: border only in `bordered` mode ---- */
+.ds-table.ds-table--modern [data-part='table'][data-bordered='true'] {
+  border: 1px solid var(--ds-table-border, var(--ds-color-border));
+}
+
+/* ---- header cells ---- */
+.ds-table.ds-table--modern [data-part='header-cell'][data-sticky='true'] {
+  background: var(--ds-table-header-bg, var(--ds-surface-inset));
+}
+.ds-table.ds-table--modern [data-part='header-cell'][data-hairline='true'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+}
+
+/* ---- sort indicator: rotates with the sort order ---- */
+.ds-table.ds-table--modern [data-part='sort-indicator'] {
+  transform: rotate(0deg);
+}
+.ds-table.ds-table--modern [data-part='sort-indicator'][data-order='descend'] {
+  transform: rotate(180deg);
+}
+
+/* ---- resize handle: a live drag, and a hover the pointer paints ---- */
+.ds-table.ds-table--modern [data-part='resize-handle'][data-resizing='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 60%, transparent);
+}
+.ds-table.ds-table--modern [data-part='resize-handle']:not([data-resizing='true']):hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 40%, transparent);
+}
+
+/* ---- filter row + its inputs ---- */
+.ds-table.ds-table--modern [data-part='filter-row'] {
+  background: var(--ds-table-header-bg, var(--ds-surface-inset));
+}
+
+/* ---- fields: filter input, and the editable text/number/date/select cells,
+        which all shared `inlineInputStyle` before the migration ---- */
+.ds-table.ds-table--modern [data-part='field'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+/* ---- checkboxes: selection column + editable checkbox cell ---- */
+.ds-table.ds-table--modern [data-part='checkbox'] {
+  accent-color: var(--ds-color-primary);
+}
+
+/* ---- empty-state cell ---- */
+.ds-table.ds-table--modern [data-part='empty-cell'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- body row: selected fill, and the hover a non-selected hoverable row takes ---- */
+.ds-table.ds-table--modern [data-part='row'][data-selected='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+.ds-table.ds-table--modern [data-part='row'][data-hoverable='true']:not([data-selected='true']):hover {
+  background: var(--ds-table-row-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
+}
+
+/* ---- body cell: bottom border in `bordered` mode, and the editable-cell hover ---- */
+.ds-table.ds-table--modern [data-part='cell'][data-bordered='true'] {
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+}
+.ds-table.ds-table--modern [data-part='cell'][data-editable='true']:hover {
+  outline: 1px dashed color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  outline-offset: -1px;
+  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+}
+
+/* ---- pinned/fixed columns: an opaque fill so scrolled content cannot bleed
+        through. Applies to both header and body cells. ---- */
+.ds-table.ds-table--modern [data-part='cell'][data-fixed],
+.ds-table.ds-table--modern [data-part='header-cell'][data-fixed] {
+  background: var(--ds-table-bg, var(--ds-surface-card));
+}
+
+/* ---- expand column ---- */
+.ds-table.ds-table--modern [data-part='expand-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+.ds-table.ds-table--modern [data-part='expand-indicator'] {
+  transform: rotate(0deg);
+}
+.ds-table.ds-table--modern [data-part='expand-indicator'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+/* ---- expanded row content ---- */
+.ds-table.ds-table--modern [data-part='expanded-row'] {
+  background: var(--ds-table-row-bg-striped, var(--ds-surface-inset));
+}
+
+/* ---- loading overlay + spinner. The spinner needs (0,4,0): its
+        `border-top-color` longhand would otherwise lose to the tenant `*`
+        border-color floor and never show the primary colour. ---- */
+.ds-table.ds-table--modern [data-part='loading-overlay'] {
+  background: color-mix(in srgb, var(--ds-table-bg, var(--ds-surface-card)) 50%, transparent);
+}
+.ds-table.ds-table--modern [data-part='spinner'][role='status'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+/* ---- pagination controls ---- */
+.ds-table.ds-table--modern [data-part='pagination-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
