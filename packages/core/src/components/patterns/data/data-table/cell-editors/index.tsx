@@ -174,6 +174,7 @@ export function InlineCellEditor<T>({
         <input
           ref={inputRef as React.RefObject<HTMLInputElement>}
           type="checkbox"
+          data-part="editor-checkbox"
           checked={Boolean(editValue)}
           onChange={(e) => {
             setEditValue(e.target.checked);
@@ -199,6 +200,8 @@ export function InlineCellEditor<T>({
         <select
           ref={inputRef as React.RefObject<HTMLSelectElement>}
           value={String(editValue ?? '')}
+          data-part="editor-input"
+          data-invalid={error ? 'true' : 'false'}
           onChange={(e) => {
             const selected = config.options?.find((o) => String(o.value) === e.target.value);
             setEditValue(selected ? selected.value : e.target.value);
@@ -218,6 +221,7 @@ export function InlineCellEditor<T>({
         </select>
         {error && (
           <span
+            data-part="editor-error"
             style={{
               position: 'absolute',
               bottom: -18,
@@ -244,6 +248,8 @@ export function InlineCellEditor<T>({
         placeholder={config.placeholder}
         min={config.min}
         max={config.max}
+        data-part="editor-input"
+        data-invalid={error ? 'true' : 'false'}
         onChange={(e) => {
           const raw = e.target.value;
           if (editorType === 'number') {
@@ -258,6 +264,7 @@ export function InlineCellEditor<T>({
       />
       {error && (
         <span
+          data-part="editor-error"
           style={{
             position: 'absolute',
             bottom: -18,

@@ -811,6 +811,7 @@ export default function ModernDataTable<T extends object>(
             aria-label={isSaving ? 'Saving edit' : 'Save edit'}
             title={isSaving ? 'Saving edit' : 'Save edit'}
             disabled={isSaving}
+            data-part="inline-edit-action"
             onPointerDown={stopActionEvent}
             onMouseDown={stopActionEvent}
             onClick={(event) => {
@@ -832,6 +833,7 @@ export default function ModernDataTable<T extends object>(
             aria-label="Cancel edit"
             title="Cancel edit"
             disabled={isSaving}
+            data-part="inline-edit-action"
             onPointerDown={stopActionEvent}
             onMouseDown={stopActionEvent}
             onClick={(event) => {
@@ -891,6 +893,7 @@ export default function ModernDataTable<T extends object>(
   return (
     <div
       className={`ds-pattern-data-table ds-engine-modern ds-table-density-${density} ${className ?? ''}`}
+      data-part="root"
       style={{
         width: '100%',
         minWidth: 0,
@@ -987,6 +990,7 @@ export default function ModernDataTable<T extends object>(
           (WO-UX-03) — apps must never target the inline-style values. */}
       <div
         data-ds-table-card="true"
+        data-part="card"
         style={{
           background: 'var(--ds-table-bg, var(--ds-surface-card))',
           borderRadius: 'var(--ds-radius-lg)',
@@ -1000,6 +1004,7 @@ export default function ModernDataTable<T extends object>(
           ref={virtualized ? virtualScroll.scrollRef : undefined}
           onScroll={virtualized ? virtualScroll.onScroll : undefined}
           data-ds-table-scroll="true"
+          data-part="scroll"
           style={{
             overflowX: 'auto',
             scrollbarGutter: 'stable both-edges',
@@ -1015,6 +1020,7 @@ export default function ModernDataTable<T extends object>(
             <div role="status" aria-label="Loading" style={{ width: '100%' }}>
               {/* Skeleton header */}
               <div
+                data-part="skeleton-header"
                 style={{
                   display: 'flex',
                   gap: 16,
@@ -1026,6 +1032,7 @@ export default function ModernDataTable<T extends object>(
                 {visibleColumns.slice(0, 5).map((col, ci) => (
                   <div
                     key={col.key}
+                    data-part="skeleton-header-col"
                     style={{
                       flex: ci === 0 ? 1.5 : 1,
                       height: 10,
@@ -1041,6 +1048,7 @@ export default function ModernDataTable<T extends object>(
                 <div
                   key={i}
                   className="ds-skeleton-row"
+                  data-part="skeleton-row"
                   style={{
                     display: 'flex',
                     gap: 16,
@@ -1055,6 +1063,7 @@ export default function ModernDataTable<T extends object>(
                   {visibleColumns.slice(0, 5).map((col, ci) => (
                     <div
                       key={col.key}
+                      data-part="skeleton-cell"
                       style={{
                         flex: ci === 0 ? 1.5 : 1,
                         height: 14,
@@ -1142,6 +1151,7 @@ export default function ModernDataTable<T extends object>(
               className={tableClasses}
               role="grid"
               aria-label="Data table"
+              data-part="table"
               style={{
                 width: '100%',
                 borderCollapse: 'collapse',
@@ -1161,6 +1171,7 @@ export default function ModernDataTable<T extends object>(
               >
                 <tr
                   ref={headerRowRef}
+                  data-part="header-row"
                   style={{
                     background: 'var(--ds-table-header-bg, color-mix(in srgb, var(--ds-surface-inset, var(--ds-surface-panel)) 92%, var(--ds-color-text-primary) 8%))',
                     borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border-subtle))',
@@ -1169,6 +1180,7 @@ export default function ModernDataTable<T extends object>(
                   {/* Select-all checkbox */}
                   {selectable && (
                     <th
+                      data-part="header-cell"
                       style={{
                         padding: selectionCellPadding,
                         width: resolvedSelectionColumnWidth,
@@ -1194,6 +1206,7 @@ export default function ModernDataTable<T extends object>(
                   )}
                   {expandedRow && (
                     <th
+                      data-part="header-cell"
                       style={{
                         padding: densityPadding,
                         width: 40,
@@ -1248,6 +1261,9 @@ export default function ModernDataTable<T extends object>(
                         data-col-key={col.key}
                         data-col-priority={col.priority || undefined}
                         data-sortable={col.sortable ? 'true' : undefined}
+                        data-part="header-cell"
+                        data-pinned={pinSide ? 'true' : 'false'}
+                        data-drag-over={dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key ? 'true' : 'false'}
                         draggable={reorderable && !!onColumnReorder}
                         title={reorderable && onColumnReorder ? `Drag header to move ${typeof col.header === 'string' ? col.header : col.key}` : undefined}
                         onDragStart={reorderable && onColumnReorder ? (e) => handleHeaderDragStart(e, col.key) : undefined}
@@ -1308,6 +1324,7 @@ export default function ModernDataTable<T extends object>(
                           </span>
                           {col.sortable && (
                             <span
+                              data-part="sort-icon"
                               style={{
                                 display: 'inline-flex',
                                 flexDirection: 'column',
@@ -1345,6 +1362,7 @@ export default function ModernDataTable<T extends object>(
                           {/* Drop indicator line */}
                           {dragOverKey === col.key && dragSourceKey !== col.key && (
                             <span
+                              data-part="drop-indicator"
                               style={{
                                 position: 'absolute',
                                 left: -2,
@@ -1362,6 +1380,7 @@ export default function ModernDataTable<T extends object>(
                           <span
                             className="ds-resize-handle"
                             data-column-resize-handle="true"
+                            data-part="resize-handle"
                             role="separator"
                             aria-label={`Resize column ${typeof col.header === 'string' ? col.header : col.key}`}
                             tabIndex={0}
@@ -1407,6 +1426,7 @@ export default function ModernDataTable<T extends object>(
                           >
                             <span
                               className="ds-resize-handle__bar"
+                              data-part="resize-handle-bar"
                               style={{
                                 width: 1,
                                 height: '50%',
@@ -1423,6 +1443,7 @@ export default function ModernDataTable<T extends object>(
                   {/* Actions column header */}
                   {actions && (
                     <th
+                      data-part="header-cell"
                       style={{
                         width: resolvedActionsColumnWidth,
                         minWidth: resolvedActionsColumnWidth,
@@ -1485,6 +1506,9 @@ export default function ModernDataTable<T extends object>(
                           <React.Fragment key={key}>
                             <tr
                               data-row-index={index}
+                              data-part="body-row"
+                              data-selected={isSelected ? 'true' : 'false'}
+                              data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
                               tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
                               role="row"
                               onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
@@ -1519,6 +1543,7 @@ export default function ModernDataTable<T extends object>(
                             >
                               {selectable && (
                                 <td
+                                  data-part="selection-cell"
                                   style={{
                                     padding: selectionCellPadding,
                                     width: resolvedSelectionColumnWidth,
@@ -1538,8 +1563,9 @@ export default function ModernDataTable<T extends object>(
                                 </td>
                               )}
                               {expandedRow && (
-                                <td style={{ padding: densityPadding }}>
+                                <td data-part="expand-cell" style={{ padding: densityPadding }}>
                                   <button
+                                    data-part="expand-button"
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       setExpandedKeys((prev) => {
@@ -1602,6 +1628,8 @@ export default function ModernDataTable<T extends object>(
                                     data-col-priority={col.priority || undefined}
                                     data-editable={isCellEditable ? 'true' : undefined}
                                     data-editing={isCellEditing ? 'true' : undefined}
+                                    data-part="data-cell"
+                                    data-pinned={pinSide ? 'true' : 'false'}
                                     title={isCellEditable && !isCellEditing
                                       ? editTrigger === 'click'
                                         ? 'Click to edit'
@@ -1686,6 +1714,7 @@ export default function ModernDataTable<T extends object>(
                               })}
                               {actions && (
                                 <td
+                                  data-part="actions-cell"
                                   style={{
                                     textAlign: 'right',
                                     width: resolvedActionsColumnWidth,
@@ -1717,6 +1746,7 @@ export default function ModernDataTable<T extends object>(
                                   }}
                                 >
                                   <div
+                                    data-part="expanded-row-content"
                                     style={{
                                       width: '100%',
                                       padding: '12px 16px',
@@ -1741,6 +1771,8 @@ export default function ModernDataTable<T extends object>(
                         <tr
                           role="row"
                           aria-expanded={!isCollapsed}
+                          data-part="group-header-row"
+                          data-collapsed={isCollapsed ? 'true' : 'false'}
                           onClick={() => toggleGroup(section.groupValue)}
                           style={{
                             cursor: 'pointer',
@@ -1762,6 +1794,8 @@ export default function ModernDataTable<T extends object>(
                               : (
                                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
                                   <span
+                                    data-part="group-header-chevron"
+                                    data-collapsed={isCollapsed ? 'true' : 'false'}
                                     style={{
                                       display: 'inline-flex',
                                       alignItems: 'center',
@@ -1778,6 +1812,7 @@ export default function ModernDataTable<T extends object>(
                                   </span>
                                   <span>{section.groupValue || '(empty)'}</span>
                                   <span
+                                    data-part="group-header-count-pill"
                                     style={{
                                       display: 'inline-flex',
                                       alignItems: 'center',
@@ -1851,6 +1886,9 @@ export default function ModernDataTable<T extends object>(
                     <React.Fragment key={key}>
                       <tr
                         data-row-index={index}
+                        data-part="body-row"
+                        data-selected={isSelected ? 'true' : 'false'}
+                        data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
                         tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
                         role="row"
                         onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
@@ -1888,6 +1926,7 @@ export default function ModernDataTable<T extends object>(
                         {/* Selection checkbox */}
                         {selectable && (
                           <td
+                            data-part="selection-cell"
                             style={{
                               padding: selectionCellPadding,
                               width: resolvedSelectionColumnWidth,
@@ -1908,8 +1947,9 @@ export default function ModernDataTable<T extends object>(
                         )}
                         {/* Expand toggle */}
                         {expandedRow && (
-                          <td style={{ padding: densityPadding }}>
+                          <td data-part="expand-cell" style={{ padding: densityPadding }}>
                             <button
+                              data-part="expand-button"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 setExpandedKeys((prev) => {
@@ -1974,6 +2014,8 @@ export default function ModernDataTable<T extends object>(
                               data-col-priority={col.priority || undefined}
                               data-editable={isCellEditable ? 'true' : undefined}
                               data-editing={isCellEditing ? 'true' : undefined}
+                              data-part="data-cell"
+                              data-pinned={pinSide ? 'true' : 'false'}
                               title={isCellEditable && !isCellEditing
                                 ? editTrigger === 'click'
                                   ? 'Click to edit'
@@ -2059,6 +2101,7 @@ export default function ModernDataTable<T extends object>(
                         {/* Actions cell */}
                         {actions && (
                           <td
+                            data-part="actions-cell"
                             style={{
                               textAlign: 'right',
                               width: resolvedActionsColumnWidth,
@@ -2091,6 +2134,7 @@ export default function ModernDataTable<T extends object>(
                             }}
                           >
                             <div
+                              data-part="expanded-row-content"
                               style={{
                                 width: '100%',
                                 padding: '12px 16px',
@@ -2161,6 +2205,7 @@ export default function ModernDataTable<T extends object>(
 
           return (
             <div
+              data-part="pagination-bar"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -2182,6 +2227,7 @@ export default function ModernDataTable<T extends object>(
                 {/* Previous */}
                 <button
                   disabled={isFirstPage}
+                  data-part="pagination-nav-button"
                   onClick={() => pagination.onChange(pagination.current - 1, pagination.pageSize)}
                   style={navBtnStyle(isFirstPage)}
                   aria-label="Previous page"
@@ -2211,6 +2257,8 @@ export default function ModernDataTable<T extends object>(
                   ) : (
                     <button
                       key={page}
+                      data-part="pagination-page-button"
+                      data-current={page === pagination.current ? 'true' : 'false'}
                       onClick={() => pagination.onChange(page, pagination.pageSize)}
                       style={{
                         display: 'inline-flex',
@@ -2240,6 +2288,7 @@ export default function ModernDataTable<T extends object>(
                 {/* Next */}
                 <button
                   disabled={isLastPage}
+                  data-part="pagination-nav-button"
                   onClick={() => pagination.onChange(pagination.current + 1, pagination.pageSize)}
                   style={navBtnStyle(isLastPage)}
                   aria-label="Next page"
@@ -2256,6 +2305,7 @@ export default function ModernDataTable<T extends object>(
         {/* Bulk selection bar: sticky at bottom with elevation */}
         {bulkActions && selectedKeys.length > 0 && (
           <div
+            data-part="bulk-bar"
             style={{
               position: 'sticky',
               bottom: 0,
@@ -2284,6 +2334,8 @@ export default function ModernDataTable<T extends object>(
                 <button
                   key={action.key}
                   disabled={action.disabled}
+                  data-part="bulk-bar-action"
+                  data-variant={action.variant ?? 'default'}
                   onClick={() => {
                     const selectedRows = data.filter((row, i) =>
                       selectedKeys.includes(getRowKey(row, i))

@@ -526,6 +526,7 @@ export default function RusticDataTable<T extends object>(
           >
             <span
               title={`Drag to move ${typeof col.header === 'string' ? col.header : col.key}`}
+              data-part="header-cell-drag-grip"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -557,6 +558,7 @@ export default function RusticDataTable<T extends object>(
             </span>
             {dragOverKey === col.key && dragSourceKey !== col.key && (
               <span
+                data-part="drop-indicator"
                 style={{
                   position: 'absolute',
                   left: -2,
@@ -611,6 +613,7 @@ export default function RusticDataTable<T extends object>(
           role="separator"
           aria-label={`Resize column ${typeof col.header === 'string' ? col.header : col.key}`}
           tabIndex={0}
+          data-part="resize-handle"
           style={{
             position: 'absolute',
             right: -4,
@@ -636,6 +639,7 @@ export default function RusticDataTable<T extends object>(
           }}
         >
           <span
+            data-part="resize-handle-bar"
             style={{
               width: 1,
               height: '60%',
@@ -653,19 +657,22 @@ export default function RusticDataTable<T extends object>(
   return (
     <div
       className={`ds-pattern-data-table ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
       style={{ ...styles.container, ...style }}
     >
       {header}
 
       {(toolbar || (bulkActions && selectedKeys.length > 0)) && (
-        <div style={styles.toolbar}>
+        <div data-part="toolbar" style={styles.toolbar}>
           <div style={{ flex: 1 }}>{toolbar}</div>
           {bulkActions && selectedKeys.length > 0 && (
-            <div style={styles.bulkBar}>
+            <div data-part="bulk-bar" style={styles.bulkBar}>
               <span>{selectedKeys.length} selected</span>
               {bulkActions.map((action) => (
                 <button
                   key={action.key}
+                  data-part="bulk-bar-action"
+                  data-variant={action.variant ?? 'default'}
                   style={{
                     ...styles.bulkBtn,
                     ...(action.variant === 'danger' ? { color: 'var(--ds-color-error-600)', borderColor: 'var(--ds-color-error-300)' } : {}),
@@ -693,29 +700,30 @@ export default function RusticDataTable<T extends object>(
 
       {/* Table wrapper merges maxHeight for scrollable body and conditionally
           removes the border when the `bordered` prop is false. */}
-      <div style={{ ...styles.tableWrap, ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}), ...(bordered ? {} : { border: 'none' }) }}>
+      <div data-part="wrap" style={{ ...styles.tableWrap, ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}), ...(bordered ? {} : { border: 'none' }) }}>
         {/* Inline keyframes: Rustic engine cannot depend on global CSS, so animation
             definitions must be co-located here. */}
         <style>{`@keyframes ds-spin { to { transform: rotate(360deg); } } @keyframes ds-bulk-slide-down { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
         {/* Loading overlay renders on top of existing data to avoid layout jump;
             when data is empty, a centered spinner replaces the table entirely. */}
         {loading && data.length > 0 && (
-          <div style={styles.loadingOverlay} role="status" aria-label="Loading">
-            <div style={styles.loadingSpinner} aria-hidden="true" />
+          <div data-part="loading-overlay" style={styles.loadingOverlay} role="status" aria-label="Loading">
+            <div data-part="loading-spinner" style={styles.loadingSpinner} aria-hidden="true" />
           </div>
         )}
         {loading && data.length === 0 ? (
-          <div style={styles.loadingFallback} role="status" aria-label="Loading">
-            <div style={{ ...styles.loadingSpinner, margin: '0 auto' }} aria-hidden="true" />
+          <div data-part="loading-overlay" style={styles.loadingFallback} role="status" aria-label="Loading">
+            <div data-part="loading-spinner" style={{ ...styles.loadingSpinner, margin: '0 auto' }} aria-hidden="true" />
           </div>
         ) : data.length === 0 ? (
-          <div style={styles.empty}>{emptyState ?? 'No data'}</div>
+          <div data-part="empty-state" style={styles.empty}>{emptyState ?? 'No data'}</div>
         ) : (
-          <table style={styles.table}>
+          <table data-part="table" style={styles.table}>
             <thead>
-              <tr>
+              <tr data-part="header-row">
                 {selectable && (
                   <th
+                    data-part="header-cell"
                     style={{
                       ...styles.th,
                       ...densityTh,
@@ -733,6 +741,7 @@ export default function RusticDataTable<T extends object>(
                 )}
                 {expandedRow && (
                   <th
+                    data-part="header-cell"
                     style={{
                       ...styles.th,
                       ...densityTh,
@@ -743,10 +752,13 @@ export default function RusticDataTable<T extends object>(
                 )}
                 {processedColumns.map((col, colIdx) => {
                   const isLastDataCol = colIdx === processedColumns.length - 1;
+                  const pinSide = resolvePinSide(col.key, col.pin);
                   return (
                     <th
                       key={col.key}
                       data-col-priority={col.priority || undefined}
+                      data-part="header-cell"
+                      data-pinned={pinSide ? 'true' : 'false'}
                       style={buildThStyle(col, colIdx, isLastDataCol)}
                       onClick={col.sortable ? () => handleSort(col.key) : undefined}
                     >
@@ -757,6 +769,7 @@ export default function RusticDataTable<T extends object>(
                 })}
                 {actions && (
                   <th
+                    data-part="header-cell"
                     style={{
                       ...styles.th,
                       ...densityTh,
@@ -780,6 +793,14 @@ export default function RusticDataTable<T extends object>(
                         Selection uses primary-50 for a subtle highlight, striping
                         uses neutral-50 for alternating rows. */}
                     <tr
+                      data-part="body-row"
+                      data-state={
+                        selectedKeys.includes(key)
+                          ? 'selected'
+                          : striped && index % 2 === 1
+                            ? 'striped'
+                            : 'default'
+                      }
                       style={{
                         cursor: onRowClick ? 'pointer' : undefined,
                         background: selectedKeys.includes(key)
@@ -792,6 +813,7 @@ export default function RusticDataTable<T extends object>(
                     >
                       {selectable && (
                         <td
+                          data-part="selection-cell"
                           style={{ ...styles.td, ...densityTd }}
                           onClick={(e) => e.stopPropagation()}
                         >
@@ -804,8 +826,9 @@ export default function RusticDataTable<T extends object>(
                         </td>
                       )}
                       {expandedRow && (
-                        <td style={{ ...styles.td, ...densityTd }}>
+                        <td data-part="expand-cell" style={{ ...styles.td, ...densityTd }}>
                           <button
+                            data-part="expand-button"
                             style={styles.expandBtn}
                             onClick={(e) => {
                               e.stopPropagation();
@@ -826,6 +849,8 @@ export default function RusticDataTable<T extends object>(
                           <td
                             key={col.key}
                             data-col-priority={col.priority || undefined}
+                            data-part="data-cell"
+                            data-pinned={pinSide ? 'true' : 'false'}
                             style={{
                               ...buildTdStyle(col),
                               // When pinned, override row background to avoid
@@ -846,6 +871,7 @@ export default function RusticDataTable<T extends object>(
                       })}
                       {actions && (
                         <td
+                          data-part="actions-cell"
                           style={{
                             ...styles.td,
                             ...densityTd,
@@ -867,7 +893,7 @@ export default function RusticDataTable<T extends object>(
                     </tr>
                     {expandedRow && isExpanded && (
                       <tr>
-                        <td colSpan={colCount} style={{ padding: '1rem', background: 'var(--ds-color-neutral-50)' }}>
+                        <td data-part="expanded-row-content" colSpan={colCount} style={{ padding: '1rem', background: 'var(--ds-color-neutral-50)' }}>
                           {expandedRow(row)}
                         </td>
                       </tr>
@@ -883,12 +909,13 @@ export default function RusticDataTable<T extends object>(
       {/* Pagination strip: range label is clamped with Math.min so the last
           page does not show an end index beyond the total record count. */}
       {pagination && (
-        <div style={styles.pagination}>
+        <div data-part="pagination-bar" style={styles.pagination}>
           <span>
             {((pagination.current - 1) * pagination.pageSize) + 1}-{Math.min(pagination.current * pagination.pageSize, pagination.total)} of {pagination.total}
           </span>
           <div style={{ display: 'flex', gap: '0.25rem' }}>
             <button
+              data-part="pagination-button"
               style={styles.pageBtn}
               disabled={pagination.current <= 1}
               onClick={() => pagination.onChange(pagination.current - 1, pagination.pageSize)}
@@ -896,6 +923,7 @@ export default function RusticDataTable<T extends object>(
               Previous
             </button>
             <button
+              data-part="pagination-button"
               style={styles.pageBtn}
               disabled={pagination.current * pagination.pageSize >= pagination.total}
               onClick={() => pagination.onChange(pagination.current + 1, pagination.pageSize)}

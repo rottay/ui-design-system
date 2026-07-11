@@ -61,7 +61,14 @@ function MobileBulkActions<T extends object>({
   );
 
   return (
-    <Flex align="center" justify="between" gap={12} wrap="wrap">
+    <Flex
+      align="center"
+      justify="between"
+      gap={12}
+      wrap="wrap"
+      className="ds-pattern-data-table ds-data-table--mobile"
+      data-part="mobile-bulk-actions"
+    >
       <Text style={{ fontSize: 13, color: 'var(--ds-color-text-muted)' }}>
         {`${selectedKeys.length} selected`}
       </Text>
@@ -171,6 +178,8 @@ export function PatternDataTable<T extends object>(
 
         {loading && data.length === 0 ? (
           <Box
+            data-part="mobile-state-panel"
+            className="ds-pattern-data-table ds-data-table--mobile"
             style={{
               padding: '32px 20px',
               borderRadius: 16,
@@ -182,6 +191,8 @@ export function PatternDataTable<T extends object>(
           </Box>
         ) : data.length === 0 ? (
           <Box
+            data-part="mobile-state-panel"
+            className="ds-pattern-data-table ds-data-table--mobile"
             style={{
               padding: '32px 20px',
               borderRadius: 16,

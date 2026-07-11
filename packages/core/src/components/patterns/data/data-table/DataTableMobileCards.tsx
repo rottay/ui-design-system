@@ -97,7 +97,7 @@ export function DataTableMobileCards<T extends object>({
   }
 
   return (
-    <Stack spacing="md">
+    <Stack spacing="md" className="ds-pattern-data-table ds-data-table--mobile">
       {data.map((row, index) => {
         const rowKey = getRowKey(row, index);
         const isSelected = selectedKeys.includes(rowKey);
@@ -117,6 +117,7 @@ export function DataTableMobileCards<T extends object>({
             hoverable={!!onRowClick}
             clickable={!!onRowClick}
             onClick={() => onRowClick?.(row, index)}
+            className={`ds-data-table__mobile-card${isSelected ? ' ds-data-table__mobile-card--selected' : ''}`}
             style={{
               overflow: 'hidden',
               background: 'var(--ds-collection-card-bg, var(--ds-card-bg))',
@@ -134,7 +135,7 @@ export function DataTableMobileCards<T extends object>({
                 <Flex justify="between" align="start" gap={12}>
                   <Stack spacing="xs" style={{ flex: 1, minWidth: 0 }}>
                     {titleColumn && (
-                      <Box style={{ color: 'var(--ds-color-text-primary)' }}>
+                      <Box data-part="mobile-card-title" style={{ color: 'var(--ds-color-text-primary)' }}>
                         {renderDefaultField(titleColumn, row, index)}
                       </Box>
                     )}
@@ -156,6 +157,7 @@ export function DataTableMobileCards<T extends object>({
                     {summaryColumns.map((column) => (
                       <Flex key={column.key} justify="between" align="start" gap={12}>
                         <Text
+                          data-part="mobile-card-summary-label"
                           style={{
                             fontSize: 11,
                             fontWeight: 600,
@@ -168,6 +170,7 @@ export function DataTableMobileCards<T extends object>({
                           {column.header}
                         </Text>
                         <Box
+                          data-part="mobile-card-summary-value"
                           style={{
                             textAlign: 'right',
                             minWidth: 0,
