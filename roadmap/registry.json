@@ -1508,12 +1508,16 @@
    "lane": "skin-adoption",
    "order": 1,
    "size": "M",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [],
    "mustLandWith": [],
    "programs": [],
    "notes": "Owner-approved 2026-07-11 (stage-1 byte-exact plumbing; stage-2 visual improvement is a later program). Normative lane doc: roadmap/skin-adoption.md; authoring law: docs-engineering/engineering/design-system/runtime/skins/README.md. File lists are hypotheses until WO-SKIN-01 census corrects them.",
-   "progressLog": []
+   "progressLog": [],
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-11",
+   "doneAt": "2026-07-11",
+   "evidence": "Census measured by the ratchet's own lexer (extracted to scripts/lib/inline-paint-counter.mjs, single source shared with engine-token-audit): 164 components / 376 files / 6300 paint sites, per-component batch assignment + script-detected trap markers -> model tier (111 opus-tier, 53 sonnet-tier). Machine artifact roadmap/skin-census.json; fleet.inlinePaint.* decrease-only ratchet live with 376 surgically-added baselines (418 total keys, --check green, arc09 counters untouched). Lane doc updated hypothesis->measured; WO-SKIN-06 flagged for split at claim (57% of the fleet)."
   },
   {
    "id": "WO-SKIN-02",

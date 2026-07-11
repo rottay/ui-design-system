@@ -76,6 +76,28 @@ classic untouched; caller className/style semantics unchanged.
   version publish + app repins, and the stage-2 backlog handoff (consolidated proposals list).
 - **Size** — M.
 
+
+## Measured census (2026-07-11, WO-SKIN-01 — roadmap/skin-census.json is the machine artifact)
+
+Fleet: **164 components, 376 files, 6300 paint sites** (~11x the ARC-09 surface). Ratchet live:
+`fleet.inlinePaint.<file>` decrease-only counters, same lexer as arc09 (shared module
+`scripts/lib/inline-paint-counter.mjs`). Model tier from script-detected trap markers
+(imperative paint, hover handlers, state-hover, Text color, style-into-child, keyframes tags,
+portals); the per-batch contract still resolves each collision exactly.
+
+| Batch | Scope | Comp | Files | Sites | opus-tier |
+|---|---|---|---|---|---|
+| WO-SKIN-02 | primitives/inputs | 25 | 56 | 1133 | 18 |
+| WO-SKIN-03 | primitives/feedback | 11 | 41 | 351 | 10 |
+| WO-SKIN-04 | primitives/overlay+navigation | 28 | 64 | 606 | 22 |
+| WO-SKIN-05 | primitives/display+layout | 23 | 57 | 628 | 12 |
+| WO-SKIN-06 | patterns+structures+surfaces | 77 | 158 | 3582 | 59 |
+
+WO-SKIN-06 is 57% of the fleet — SPLIT IT at claim time (recommendation: 06a patterns/data+forms,
+06b patterns remainder, 06c structures+surfaces; the census JSON carries the per-component
+assignment either way). Top single components: dashboard-insights 259, DatePicker 154,
+data-terminal-card 149, tenant-preview 147, Select 143, surfaces/pages/workspace 141.
+
 Start order: 01 strictly first (everything else derives its file lists from it); 02 before the
 rest (it dissolves suppression interplays the later batches would otherwise have to reproduce);
 03-06 parallelizable pairwise where files are disjoint; 07 last. Statuses change ONLY via
