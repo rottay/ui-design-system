@@ -148,15 +148,20 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
   return (
     <div className={`rottay-taginput-rustic ${className}`}>
       <div
+        className="ds-tag-input ds-tag-input--rustic"
+        data-part="root"
+        data-error={error ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
         style={containerStyle}
         onClick={() => inputRef.current?.focus()}
       >
         {value.map((tag, index) => (
-          <span key={`${tag}-${index}`} style={tagStyle}>
+          <span key={`${tag}-${index}`} data-part="tag-chip" style={tagStyle}>
             {tag}
             {!disabled && (
               <button
                 type="button"
+                data-part="tag-remove"
                 onClick={(e) => { e.stopPropagation(); removeTag(index); }}
                 aria-label={`Remove ${tag}`}
                 style={{
@@ -181,6 +186,7 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
           id={inputId}
           name={name}
           type="text"
+          data-part="input"
           value={inputValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -201,7 +207,7 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
         />
       </div>
       {error && errorMessage && (
-        <span style={{
+        <span data-part="error-message" style={{
           fontSize: 12,
           color: 'var(--ds-color-error-500, #ef4444)',
           marginTop: 4,

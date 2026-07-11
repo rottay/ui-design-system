@@ -229,6 +229,8 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
   const containerClasses = [
     'rottay-radio',
     'rottay-radio--rustic',
+    'ds-radio',
+    'ds-radio--rustic',
     `rottay-radio--${size}`,
     `rottay-radio--${color}`,
     isChecked && 'rottay-radio--checked',
@@ -240,11 +242,16 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
   return (
     <label
       className={containerClasses}
+      data-part="root"
+      data-checked={isChecked ? 'true' : 'false'}
+      data-disabled={disabled ? 'true' : 'false'}
+      data-error={error ? 'true' : 'false'}
       style={containerStyle}
       onKeyDown={handleKeyDown}
     >
       <span
         className="rottay-radio__circle"
+        data-part="circle"
         style={radioCircleStyle}
         role="presentation"
       >
@@ -263,7 +270,7 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
           aria-invalid={error}
           aria-describedby={displayLabel ? `${inputId}-label` : undefined}
         />
-        <span className="rottay-radio__dot" style={dotStyle} />
+        <span className="rottay-radio__dot" data-part="dot" style={dotStyle} />
       </span>
       {(displayLabel || description) && (
         <span
@@ -272,12 +279,12 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
           style={labelContainerStyle}
         >
           {displayLabel && (
-            <span className="rottay-radio__label" style={labelStyle}>
+            <span className="rottay-radio__label" data-part="label" style={labelStyle}>
               {displayLabel}
             </span>
           )}
           {description && (
-            <span className="rottay-radio__description" style={descriptionStyle}>
+            <span className="rottay-radio__description" data-part="description" style={descriptionStyle}>
               {description}
             </span>
           )}

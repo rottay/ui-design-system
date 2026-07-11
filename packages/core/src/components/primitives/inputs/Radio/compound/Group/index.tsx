@@ -169,6 +169,9 @@ export function RadioGroup({
           <label
             key={String(option.value)}
             data-testid={`radio-option-${option.value}`}
+            data-part="option"
+            data-checked={isChecked ? 'true' : 'false'}
+            data-disabled={isDisabled ? 'true' : 'false'}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -214,6 +217,9 @@ export function RadioGroup({
         <label
           key={String(option.value)}
           data-testid={`radio-option-${option.value}`}
+          data-part="option"
+          data-checked={isChecked ? 'true' : 'false'}
+          data-disabled={isDisabled ? 'true' : 'false'}
           style={{
             display: 'inline-flex',
             alignItems: 'flex-start',
@@ -223,6 +229,7 @@ export function RadioGroup({
           }}
         >
           <span
+            data-part="option-dot"
             style={{
               position: 'relative',
               display: 'inline-flex',
@@ -257,6 +264,7 @@ export function RadioGroup({
             />
             {isChecked && (
               <span
+                data-part="option-fill"
                 style={{
                   width: sizeNumeric * 0.5,
                   height: sizeNumeric * 0.5,
@@ -285,6 +293,7 @@ export function RadioGroup({
     <RadioGroupContext.Provider value={contextValue}>
       <div
         data-testid="radio-group"
+        data-part="root"
         data-direction={direction}
         data-disabled={disabled || undefined}
         className={`rottay-radio-group rottay-radio-group--${direction} ${buttonStyle ? 'rottay-radio-group--button' : ''} ${className}`}

@@ -32,6 +32,17 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
     divider,
     className = '',
     children,
+    align: _align,
+    justify: _justify,
+    wrap: _wrap,
+    reverse: _reverse,
+    fullWidth: _fullWidth,
+    fullHeight: _fullHeight,
+    style: _style,
+    engine: _engine,
+    // StackProps extends HTMLAttributes: the remaining keys are real DOM
+    // attributes (data-*, aria-*, id, handlers) and must reach the element.
+    ...htmlAttributes
   } = props;
 
   const scalarDirection = scalarOrDefault<StackDirection>(direction, 'vertical');
@@ -76,6 +87,7 @@ const HermesStack = forwardRef<HTMLElement, StackProps>((props, ref) => {
       {React.createElement(
         ElementType,
         {
+          ...htmlAttributes,
           ref: ref as Ref<HTMLElement>,
           className: classNames,
           style: computedStyle,

@@ -188,11 +188,16 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
           autoFocus={autoFocus}
           aria-label={ariaLabel}
           aria-invalid={error}
+          className="ds-password-input ds-password-input--rustic"
+          data-part="root"
+          data-error={error ? 'true' : 'false'}
+          data-disabled={disabled ? 'true' : 'false'}
           style={inputStyle}
         />
         {showToggle && (
           <button
             type="button"
+            data-part="visibility-toggle"
             style={toggleButtonStyle}
             onClick={() => setVisible(!visible)}
             tabIndex={-1}
@@ -214,6 +219,7 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
       </div>
       {strengthIndicator && strengthLevel && (
         <div
+          data-part="strength-track"
           style={{
             marginTop: '4px',
             height: '4px',
@@ -223,6 +229,7 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
           }}
         >
           <div
+            data-part="strength-fill"
             style={{
               height: '100%',
               width: STRENGTH_WIDTHS[strengthLevel],
@@ -235,6 +242,7 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
       )}
       {error && errorMessage && (
         <span
+          data-part="error-message"
           style={{
             marginTop: '4px',
             fontSize: '12px',

@@ -68,7 +68,8 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
 
   return (
     <div
-      className={className}
+      className={`ds-form-field ds-form-field--modern ${className}`}
+      data-part="root"
       style={{
         display: 'flex',
         width: '100%',
@@ -89,10 +90,10 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
           ...(isHorizontal ? { flexShrink: 0, width: labelWidth, paddingRight: 12 } : {}),
         }}
       >
-        <span style={{ fontSize: sizeStyle.label.fontSize, fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>
+        <span data-part="label" style={{ fontSize: sizeStyle.label.fontSize, fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>
           {label}
           {required && (
-            <span aria-hidden="true" style={{ marginLeft: 4, color: 'var(--ds-color-error)' }}>*</span>
+            <span data-part="required-mark" aria-hidden="true" style={{ marginLeft: 4, color: 'var(--ds-color-error)' }}>*</span>
           )}
         </span>
       </label>
@@ -111,13 +112,13 @@ export default function ModernFormField(props: FormFieldProps): React.ReactEleme
         })}
 
         {error && (
-          <p id={errorId} role="alert" style={{ ...sizeStyle.help, color: 'var(--ds-color-error)' }}>
+          <p id={errorId} data-part="error-message" role="alert" style={{ ...sizeStyle.help, color: 'var(--ds-color-error)' }}>
             {error}
           </p>
         )}
 
         {!error && help && (
-          <p id={helpId} style={{ ...sizeStyle.help, color: 'var(--ds-color-text-secondary)' }}>
+          <p id={helpId} data-part="help-text" style={{ ...sizeStyle.help, color: 'var(--ds-color-text-secondary)' }}>
             {help}
           </p>
         )}

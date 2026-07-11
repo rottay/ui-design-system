@@ -143,7 +143,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
 
   return (
     <div className={`${className || ''}`} style={style}>
-      <div style={{ display: 'flex', gap: 8 }}>
+      <div className="ds-otp-input ds-otp-input--modern" data-part="root" data-disabled={disabled ? 'true' : 'false'} style={{ display: 'flex', gap: 8 }}>
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
@@ -152,6 +152,9 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             type={mask ? 'password' : 'text'}
             inputMode={type === 'numeric' ? 'numeric' : 'text'}
             maxLength={1}
+            data-part="slot"
+            data-error={error ? 'true' : 'false'}
+            data-filled={internalValues[index] ? 'true' : 'false'}
             value={internalValues[index] || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
@@ -170,7 +173,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
       </div>
       {error && errorMessage && (
         <div style={{ marginTop: 4 }}>
-          <span style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
+          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
         </div>
       )}
     </div>

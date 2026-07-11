@@ -113,6 +113,8 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     const containerClasses = [
       'rottay-switch',
       'rottay-switch--rustic',
+      'ds-switch',
+      'ds-switch--rustic',
       `rottay-switch--${size}`,
       isChecked && 'rottay-switch--checked',
       disabled && 'rottay-switch--disabled',
@@ -184,11 +186,14 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     return (
       <label
         className={containerClasses}
+        data-part="root"
+        data-checked={isChecked ? 'true' : 'false'}
+        data-disabled={disabled || loading ? 'true' : 'false'}
         style={wrapperStyle}
         onClick={handleClick}
       >
         {!isChecked && unCheckedChildren && (
-          <span style={labelStyle}>{unCheckedChildren}</span>
+          <span data-part="label" style={labelStyle}>{unCheckedChildren}</span>
         )}
         <span style={switchStyle}>
           <input
@@ -206,12 +211,12 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             aria-checked={isChecked}
             role="switch"
           />
-          <span style={sliderStyle}>
-            <span style={knobStyle} />
+          <span data-part="track" style={sliderStyle}>
+            <span data-part="thumb" style={knobStyle} />
           </span>
         </span>
         {isChecked && checkedChildren && (
-          <span style={labelStyle}>{checkedChildren}</span>
+          <span data-part="label" style={labelStyle}>{checkedChildren}</span>
         )}
         {/* Inline SVG spinner shown during async operations (e.g., saving state) */}
         {loading && (

@@ -120,14 +120,16 @@ export default function RusticFormField(props: FormFieldProps): React.ReactEleme
 
   return (
     <div
-      className={`rottay-form-field ${className}`}
+      className={`rottay-form-field ds-form-field ds-form-field--rustic ${className}`}
+      data-part="root"
       style={containerStyle}
       data-testid={testId}
     >
-      <label htmlFor={fieldId} style={labelStyle}>
+      <label htmlFor={fieldId} data-part="label" style={labelStyle}>
         {label}
         {required && (
           <span
+            data-part="required-mark"
             style={{ color: 'var(--ds-form-required-color, #ef4444)', marginLeft: '2px' }}
             aria-hidden="true"
           >
@@ -150,13 +152,13 @@ export default function RusticFormField(props: FormFieldProps): React.ReactEleme
         })}
 
         {error && (
-          <p id={errorId} style={errorStyle} role="alert">
+          <p id={errorId} data-part="error-message" style={errorStyle} role="alert">
             {error}
           </p>
         )}
 
         {!error && help && (
-          <p id={helpId} style={helpStyle}>
+          <p id={helpId} data-part="help-text" style={helpStyle}>
             {help}
           </p>
         )}

@@ -125,6 +125,11 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     <div className={className || ''} style={{ display: 'flex', flexDirection: 'column', width: '100%', ...(disabled ? { opacity: 0.5, cursor: 'not-allowed' } : {}), ...style }}>
       <label
         htmlFor={inputId}
+        className="ds-toggle ds-toggle--modern"
+        data-part="root"
+        data-checked={isChecked ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
+        data-error={error ? 'true' : 'false'}
         style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', gap: 8, ...(labelPlacement === 'start' ? { flexDirection: 'row-reverse', justifyContent: 'flex-end' } : { justifyContent: 'flex-start' }) }}
       >
         <input
@@ -142,18 +147,18 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
           aria-invalid={error}
           {...rest}
         />
-        <span style={trackStyle} aria-hidden="true">
-          <span style={thumbStyle} />
+        <span data-part="track" style={trackStyle} aria-hidden="true">
+          <span data-part="thumb" style={thumbStyle} />
         </span>
         {(displayLabel || description) && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {displayLabel && (
-              <span style={{ fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 500, color: error ? 'var(--ds-color-error)' : 'var(--ds-color-text-primary)' }}>
+              <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 500, color: error ? 'var(--ds-color-error)' : 'var(--ds-color-text-primary)' }}>
                 {displayLabel}
               </span>
             )}
             {description && (
-              <span style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+              <span data-part="description" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
                 {description}
               </span>
             )}

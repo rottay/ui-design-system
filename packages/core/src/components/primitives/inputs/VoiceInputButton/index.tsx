@@ -129,6 +129,12 @@ export function VoiceInputButton({
       >
         <Box
           as="button"
+          className="ds-voice-input-button"
+          data-part="root"
+          data-status={status}
+          data-active={isActive ? 'true' : 'false'}
+          data-error={isError ? 'true' : 'false'}
+          data-blocked={isBlocked ? 'true' : 'false'}
           onClick={handleClick}
           aria-label={resolvedAriaLabel}
           title={title}

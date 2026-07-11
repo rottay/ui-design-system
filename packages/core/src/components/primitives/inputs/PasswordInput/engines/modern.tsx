@@ -128,11 +128,16 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           autoFocus={autoFocus}
           aria-label={ariaLabel}
           aria-invalid={error}
+          className="ds-password-input ds-password-input--modern"
+          data-part="root"
+          data-error={error ? 'true' : 'false'}
+          data-disabled={disabled ? 'true' : 'false'}
           style={inputStyle}
         />
         {showToggle && (
           <button
             type="button"
+            data-part="visibility-toggle"
             style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
             onClick={() => setVisible(!visible)}
             tabIndex={-1}
@@ -154,8 +159,9 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
       </div>
       {/* Strength indicator bar: width and color driven by STRENGTH_WIDTHS/STRENGTH_COLORS constants */}
       {strengthIndicator && strengthLevel && (
-        <div style={{ width: '100%', height: 4, borderRadius: 9999, marginTop: 4, overflow: 'hidden', background: 'var(--ds-surface-panel)' }}>
+        <div data-part="strength-track" style={{ width: '100%', height: 4, borderRadius: 9999, marginTop: 4, overflow: 'hidden', background: 'var(--ds-surface-panel)' }}>
           <div
+            data-part="strength-fill"
             style={{
               height: '100%',
               borderRadius: 9999,
@@ -168,7 +174,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
       )}
       {error && errorMessage && (
         <div style={{ paddingTop: 4 }}>
-          <span style={{ color: 'var(--ds-color-error)', fontSize: 12 }}>{errorMessage}</span>
+          <span data-part="error-message" style={{ color: 'var(--ds-color-error)', fontSize: 12 }}>{errorMessage}</span>
         </div>
       )}
     </div>

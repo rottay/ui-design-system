@@ -104,6 +104,7 @@ export const InputPassword = (props: InputPasswordProps) => {
   const toggleButton = visibilityToggle ? (
     <button
       type="button"
+      data-part="visibility-toggle"
       onClick={() => setVisible(!visible)}
       style={{
         background: 'none',

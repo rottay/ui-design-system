@@ -98,6 +98,7 @@ export const InputSearch = (props: InputSearchProps) => {
   const searchButton = showSearchButton ? (
     <button
       type="button"
+      data-part="search-button"
       onClick={() => onSearch?.((inputProps as any).value || '')}
       style={{
         background: 'none',

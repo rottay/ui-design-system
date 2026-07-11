@@ -167,6 +167,9 @@ export function CheckboxGroup({
         <label
           key={String(option.value)}
           data-testid={`checkbox-option-${option.value}`}
+          data-part="option"
+          data-checked={isChecked ? 'true' : 'false'}
+          data-disabled={isDisabled ? 'true' : 'false'}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -235,6 +238,7 @@ export function CheckboxGroup({
     <CheckboxGroupContext.Provider value={contextValue}>
       <div
         data-testid="checkbox-group"
+        data-part="root"
         data-direction={direction}
         data-disabled={disabled || undefined}
         className={`rottay-checkbox-group rottay-checkbox-group--${direction} ${className}`}

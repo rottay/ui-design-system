@@ -181,7 +181,10 @@ export default function ModernTextarea(props: TextareaProps): React.ReactElement
   return (
     <textarea
       ref={textareaRef}
-      className={className}
+      className={`ds-textarea ds-textarea--modern ${className || ''}`}
+      data-part="root"
+      data-status={statusKey}
+      data-disabled={disabled ? 'true' : 'false'}
       placeholder={placeholder}
       value={value}
       defaultValue={defaultValue}

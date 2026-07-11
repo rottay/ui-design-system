@@ -96,7 +96,8 @@ export function InputAddon({
 
   return (
     <span
-      className={`rottay-input-addon rottay-input-addon--${position} ${className}`}
+      className={`rottay-input-addon ds-input-addon rottay-input-addon--${position} ${className}`}
+      data-part="root"
       style={addonStyle}
     >
       {children}

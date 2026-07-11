@@ -158,6 +158,10 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   return (
     <div className={className} style={style}>
       <label
+        className="ds-radio ds-radio--modern"
+        data-part="root"
+        data-checked={isChecked ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
         style={labelRowStyle}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -188,18 +192,18 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
         />
 
         {/* Custom visual indicator */}
-        <span style={circleStyle}>
-          <span style={dotStyle} />
+        <span data-part="circle" style={circleStyle}>
+          <span data-part="dot" style={dotStyle} />
         </span>
 
         {/* Label + optional description */}
         {(displayLabel || description) && (
           <span style={{ display: 'flex', flexDirection: 'column' }}>
             {displayLabel && (
-              <span style={labelTextStyle}>{displayLabel}</span>
+              <span data-part="label" style={labelTextStyle}>{displayLabel}</span>
             )}
             {description && (
-              <span style={descriptionStyle}>{description}</span>
+              <span data-part="description" style={descriptionStyle}>{description}</span>
             )}
           </span>
         )}

@@ -218,13 +218,19 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
 
   return (
     <label
-      className={`rottay-toggle-rustic rottay-toggle--${size} rottay-toggle--${color} ${isChecked ? 'rottay-toggle--checked' : ''} ${disabled ? 'rottay-toggle--disabled' : ''} ${loading ? 'rottay-toggle--loading' : ''} ${error ? 'rottay-toggle--error' : ''} ${className}`}
+      className={`rottay-toggle-rustic ds-toggle ds-toggle--rustic rottay-toggle--${size} rottay-toggle--${color} ${isChecked ? 'rottay-toggle--checked' : ''} ${disabled ? 'rottay-toggle--disabled' : ''} ${loading ? 'rottay-toggle--loading' : ''} ${error ? 'rottay-toggle--error' : ''} ${className}`}
+      data-part="root"
+      data-checked={isChecked ? 'true' : 'false'}
+      data-disabled={disabled ? 'true' : 'false'}
+      data-error={error ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
       style={containerStyle}
       onKeyDown={handleKeyDown}
       {...rest}
     >
       <span
         className="rottay-toggle__track"
+        data-part="track"
         style={trackStyle}
         role="presentation"
       >
@@ -246,10 +252,11 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
           aria-busy={loading}
           aria-describedby={displayLabel ? `${inputId}-label` : undefined}
         />
-        <span className="rottay-toggle__dot" style={dotStyle}>
+        <span className="rottay-toggle__dot" data-part="thumb" style={dotStyle}>
           {loading && (
             <svg
               className="rottay-toggle__spinner"
+              data-part="spinner"
               width={sizeValues.dot * 0.6}
               height={sizeValues.dot * 0.6}
               viewBox="0 0 16 16"
@@ -272,6 +279,7 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
         {(checkedLabel || uncheckedLabel) && (
           <span
             className="rottay-toggle__inner-label"
+            data-part="inner-label"
             style={{
               position: 'absolute',
               left: isChecked ? '6px' : 'auto',
@@ -293,12 +301,12 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
           style={labelContainerStyle}
         >
           {displayLabel && (
-            <span className="rottay-toggle__label" style={labelStyle}>
+            <span className="rottay-toggle__label" data-part="label" style={labelStyle}>
               {displayLabel}
             </span>
           )}
           {description && (
-            <span className="rottay-toggle__description" style={descriptionStyle}>
+            <span className="rottay-toggle__description" data-part="description" style={descriptionStyle}>
               {description}
             </span>
           )}

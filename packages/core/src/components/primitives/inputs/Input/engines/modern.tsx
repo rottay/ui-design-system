@@ -53,6 +53,7 @@ function ClearButton({ onClick, visible }: { onClick: () => void; visible: boole
   return (
     <button
       type="button"
+      data-part="clear-button"
       onClick={onClick}
       aria-label="Clear input"
       tabIndex={-1}
@@ -428,7 +429,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           {...skinAttributes}
         >
           {prefix && (
-            <span style={addonStyle}>{prefix}</span>
+            <span data-part="affix-prefix" style={addonStyle}>{prefix}</span>
           )}
 
           <input
@@ -448,18 +449,18 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           )}
 
           {suffix && (
-            <span style={addonStyle}>{suffix}</span>
+            <span data-part="affix-suffix" style={addonStyle}>{suffix}</span>
           )}
         </label>
 
         {showCount && maxLength && (
-          <div style={countStyle}>
+          <div data-part="count" style={countStyle}>
             {currentValue.length}/{maxLength}
           </div>
         )}
 
         {hasError && errorMessage && (
-          <span style={errorMessageStyle}>{errorMessage}</span>
+          <span data-part="error-message" style={errorMessageStyle}>{errorMessage}</span>
         )}
       </div>
     );
@@ -481,13 +482,13 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       />
 
       {showCount && maxLength && (
-        <div style={countStyle}>
+        <div data-part="count" style={countStyle}>
           {currentValue.length}/{maxLength}
         </div>
       )}
 
       {hasError && errorMessage && (
-        <span style={errorMessageStyle}>{errorMessage}</span>
+        <span data-part="error-message" style={errorMessageStyle}>{errorMessage}</span>
       )}
     </div>
   );

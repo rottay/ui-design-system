@@ -136,17 +136,21 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       return (
         <div
           ref={ref}
-          className={`relative ${vertical ? 'h-full w-4' : 'w-full h-4'} ${className || ''}`}
+          className={`ds-slider ds-slider--modern relative ${vertical ? 'h-full w-4' : 'w-full h-4'} ${className || ''}`}
+          data-part="root"
+          data-disabled={disabled ? 'true' : 'false'}
           style={style}
         >
           {/* Track */}
           <div
+            data-part="rail"
             className={`absolute rounded-full ${vertical ? 'w-1 h-full left-1/2 -translate-x-1/2' : 'h-1 w-full top-1/2 -translate-y-1/2'}`}
             style={{ background: 'var(--ds-surface-panel)' }}
           />
 
           {/* Active range */}
           <div
+            data-part="track"
             className="absolute rounded-full"
             style={vertical ? {
               background: 'var(--ds-color-primary)',
@@ -202,10 +206,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
           {/* Handles */}
           <div
+            data-part="handle"
             className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={vertical ? { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', left: '50%', bottom: `${startPercent}%` } : { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', top: '50%', left: `${startPercent}%` }}
           />
           <div
+            data-part="handle"
             className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={vertical ? { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', left: '50%', bottom: `${endPercent}%` } : { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', top: '50%', left: `${endPercent}%` }}
           />
@@ -220,6 +226,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             return (
               <div
                 key={key}
+                data-part="mark-label"
                 className="absolute text-xs"
                 style={vertical ? {
                   color: 'var(--ds-color-text-secondary)',
@@ -249,7 +256,9 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     return (
       <div
         ref={ref}
-        className={`relative ${vertical ? 'h-full w-4' : 'w-full'} ${className || ''}`}
+        className={`ds-slider ds-slider--modern relative ${vertical ? 'h-full w-4' : 'w-full'} ${className || ''}`}
+        data-part="root"
+        data-disabled={disabled ? 'true' : 'false'}
         style={style}
       >
         <input
@@ -274,6 +283,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           return (
             <div
               key={key}
+              data-part="mark-label"
               className="absolute text-xs"
               style={{
                 color: 'var(--ds-color-text-secondary)',

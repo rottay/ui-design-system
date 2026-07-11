@@ -94,6 +94,8 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const containerClasses = [
       'rottay-slider',
       'rottay-slider--rustic',
+      'ds-slider',
+      'ds-slider--rustic',
       disabled && 'rottay-slider--disabled',
       vertical && 'rottay-slider--vertical',
       isFocused && 'rottay-slider--focused',
@@ -216,13 +218,15 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         <div
           ref={ref}
           className={containerClasses}
+          data-part="root"
+          data-disabled={disabled ? 'true' : 'false'}
           style={containerStyle}
         >
           {/* Rail */}
-          <div className="rottay-slider__rail" style={railBaseStyle} />
+          <div className="rottay-slider__rail" data-part="rail" style={railBaseStyle} />
 
           {/* Track (active range) */}
-          <div className="rottay-slider__track" style={trackActiveStyle} />
+          <div className="rottay-slider__track" data-part="track" style={trackActiveStyle} />
 
           {/* Range inputs */}
           <input
@@ -261,10 +265,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           {/* Handles */}
           <div
             className="rottay-slider__handle"
+            data-part="handle"
             style={getHandleBaseStyle(startPercent, Array.isArray(handleStyle) ? handleStyle[0] : handleStyle)}
           />
           <div
             className="rottay-slider__handle"
+            data-part="handle"
             style={getHandleBaseStyle(endPercent, Array.isArray(handleStyle) ? handleStyle[1] : handleStyle)}
           />
 
@@ -279,6 +285,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
               <div
                 key={key}
                 className="rottay-slider__mark"
+                data-part="mark-label"
                 style={markStyle(percent, customMarkStyle)}
               >
                 {label}
@@ -320,13 +327,15 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       <div
         ref={ref}
         className={containerClasses}
+        data-part="root"
+        data-disabled={disabled ? 'true' : 'false'}
         style={containerStyle}
       >
         {/* Rail */}
-        <div className="rottay-slider__rail" style={railBaseStyle} />
+        <div className="rottay-slider__rail" data-part="rail" style={railBaseStyle} />
 
         {/* Track */}
-        <div className="rottay-slider__track" style={trackActiveStyle} />
+        <div className="rottay-slider__track" data-part="track" style={trackActiveStyle} />
 
         {/* Input */}
         <input
@@ -349,6 +358,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         {/* Handle */}
         <div
           className="rottay-slider__handle"
+          data-part="handle"
           style={getHandleBaseStyle(percent, Array.isArray(handleStyle) ? handleStyle[0] : handleStyle)}
         />
 
@@ -363,6 +373,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             <div
               key={key}
               className="rottay-slider__mark"
+              data-part="mark-label"
               style={markStyle(markPercent, customMarkStyle)}
             >
               {label}

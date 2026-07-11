@@ -39,6 +39,7 @@ const CheckIcon = ({ size }: { size: number }) => {
   const svgSize = Math.max(10, Math.round(size * 0.6));
   return (
     <svg
+      data-part="checkmark"
       width={svgSize}
       height={svgSize}
       viewBox="0 0 12 12"
@@ -66,6 +67,7 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
   const svgSize = Math.max(10, Math.round(size * 0.6));
   return (
     <svg
+      data-part="checkmark"
       width={svgSize}
       height={svgSize}
       viewBox="0 0 12 12"
@@ -239,6 +241,11 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   return (
     <div className={className} style={style}>
       <label
+        className="ds-checkbox ds-checkbox--modern"
+        data-part="root"
+        data-checked={isChecked ? 'true' : 'false'}
+        data-indeterminate={indeterminate ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
         style={labelRowStyle}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -270,7 +277,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
         />
 
         {/* Custom visual indicator */}
-        <span style={boxStyle}>
+        <span data-part="box" style={boxStyle}>
           {active && (
             indeterminate
               ? <IndeterminateIcon size={boxSizeNumeric} />
@@ -279,7 +286,7 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
         </span>
 
         {displayLabel && (
-          <span style={labelTextStyle}>{displayLabel}</span>
+          <span data-part="label" style={labelTextStyle}>{displayLabel}</span>
         )}
       </label>
     </div>

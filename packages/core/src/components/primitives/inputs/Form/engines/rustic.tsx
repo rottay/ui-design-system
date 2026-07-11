@@ -113,7 +113,7 @@ const RusticFeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | '
       : 'rottay-form-feedback-in 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
   };
   return (
-    <span style={iconStyle} aria-label={label}>
+    <span data-part="feedback-icon" style={iconStyle} aria-label={label}>
       <svg width={16} height={16} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={svg} />
       </svg>
@@ -552,7 +552,8 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
       <form
         ref={formElementRef}
         name={name}
-        className={className}
+        className={`ds-form ds-form--rustic ${className}`}
+        data-part="root"
         style={formStyle}
         onSubmit={handleSubmit}
         autoComplete={autoComplete}
@@ -728,13 +729,13 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   const feedbackStatus = computedFeedbackStatus();
 
   return (
-    <div className={className} style={itemStyle}>
+    <div className={`ds-form-item ds-form-item--rustic ${className}`} data-part="item" style={itemStyle}>
       {label && (
-        <label style={labelStyle} htmlFor={generatedControlId}>
+        <label style={labelStyle} data-part="label" htmlFor={generatedControlId}>
           {label}
           {showColon && ':'}
-          {isRequired && requiredMark && <span style={styles.required}>*</span>}
-          {tooltip && <span title={String(tooltip)} style={{ marginLeft: '4px', cursor: 'help' }}>?</span>}
+          {isRequired && requiredMark && <span data-part="required-mark" style={styles.required}>*</span>}
+          {tooltip && <span data-part="tooltip-icon" title={String(tooltip)} style={{ marginLeft: '4px', cursor: 'help' }}>?</span>}
         </label>
       )}
       <div style={styles.inputWrapper}>
@@ -745,9 +746,9 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           )}
         </div>
         {(help || fieldErrors.length > 0) && (
-          <div style={helpStyle}>{help || fieldErrors[0]}</div>
+          <div data-part="help-text" data-error={hasError ? 'true' : 'false'} style={helpStyle}>{help || fieldErrors[0]}</div>
         )}
-        {extra && <div style={styles.extra}>{extra}</div>}
+        {extra && <div data-part="extra-text" style={styles.extra}>{extra}</div>}
       </div>
     </div>
   );
@@ -826,7 +827,7 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   if (fieldErrors.length === 0) return null;
 
   return (
-    <ul className={className} style={{ ...styles.errorList, ...style }} role="alert">
+    <ul data-part="error-list" className={className} style={{ ...styles.errorList, ...style }} role="alert">
       {fieldErrors.map((error, index) => (
         <li key={index}>{error}</li>
       ))}

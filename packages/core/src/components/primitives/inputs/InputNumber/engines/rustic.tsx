@@ -267,20 +267,23 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
     return (
       <div className={containerClasses} style={wrapperStyle}>
         {addonBefore && (
-          <span className="rottay-inputnumber__addon-before" style={addonBeforeStyle}>
+          <span className="rottay-inputnumber__addon-before" data-part="addon-before" style={addonBeforeStyle}>
             {addonBefore}
           </span>
         )}
         <div style={inputWrapperStyle}>
           {prefix && (
-            <span className="rottay-inputnumber__prefix" style={prefixStyle}>
+            <span className="rottay-inputnumber__prefix" data-part="prefix" style={prefixStyle}>
               {prefix}
             </span>
           )}
           <input
             ref={ref}
             type="number"
-            className="rottay-inputnumber__input"
+            className="rottay-inputnumber__input ds-input-number ds-input-number--rustic"
+            data-part="root"
+            data-status={status ?? 'default'}
+            data-disabled={disabled ? 'true' : 'false'}
             style={inputStyle}
             value={formatValue(currentValue)}
             min={min}
@@ -300,7 +303,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             aria-valuenow={typeof currentValue === 'number' ? currentValue : undefined}
           />
           {suffix && (
-            <span className="rottay-inputnumber__suffix" style={suffixStyle}>
+            <span className="rottay-inputnumber__suffix" data-part="suffix" style={suffixStyle}>
               {suffix}
             </span>
           )}
@@ -308,6 +311,8 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             <div className="rottay-inputnumber__controls" style={controlsStyle}>
               <button
                 type="button"
+                data-part="stepper-button"
+                data-direction="up"
                 style={controlButtonStyle}
                 onClick={() => handleStep('up')}
                 tabIndex={-1}
@@ -317,6 +322,8 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
               </button>
               <button
                 type="button"
+                data-part="stepper-button"
+                data-direction="down"
                 style={controlButtonStyle}
                 onClick={() => handleStep('down')}
                 tabIndex={-1}
@@ -328,7 +335,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
           )}
         </div>
         {addonAfter && (
-          <span className="rottay-inputnumber__addon-after" style={addonAfterStyle}>
+          <span className="rottay-inputnumber__addon-after" data-part="addon-after" style={addonAfterStyle}>
             {addonAfter}
           </span>
         )}

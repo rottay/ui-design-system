@@ -116,6 +116,8 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
   const containerClasses = [
     'rottay-textarea',
     'rottay-textarea--rustic',
+    'ds-textarea',
+    'ds-textarea--rustic',
     `rottay-textarea--${size}`,
     `rottay-textarea--${variant}`,
     status !== 'default' && `rottay-textarea--${status}`,
@@ -177,6 +179,9 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
     <div className="rottay-textarea-wrapper" style={wrapperStyle}>
       <textarea
         className={containerClasses}
+        data-part="root"
+        data-status={status ?? 'default'}
+        data-disabled={disabled ? 'true' : 'false'}
         placeholder={placeholder}
         value={value}
         defaultValue={defaultValue}
@@ -197,7 +202,7 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
         {...rest}
       />
       {showCount && (
-        <div className="rottay-textarea__count" style={countStyle}>
+        <div className="rottay-textarea__count" data-part="count" style={countStyle}>
           {charCount}
           {maxLength && ` / ${maxLength}`}
         </div>

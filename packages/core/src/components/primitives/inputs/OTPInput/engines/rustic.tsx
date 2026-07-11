@@ -174,8 +174,8 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
   });
 
   return (
-    <div className={`rottay-otp-rustic ${className}`} style={style}>
-      <div style={{ display: 'flex', gap: 8 }}>
+    <div className={`rottay-otp-rustic ds-otp-input ds-otp-input--rustic ${className}`} style={style}>
+      <div className="ds-otp-input__row" data-part="root" data-disabled={disabled ? 'true' : 'false'} style={{ display: 'flex', gap: 8 }}>
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
@@ -184,6 +184,9 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
             type={mask ? 'password' : 'text'}
             inputMode={type === 'numeric' ? 'numeric' : 'text'}
             maxLength={1}
+            data-part="slot"
+            data-error={error ? 'true' : 'false'}
+            data-filled={internalValues[index] ? 'true' : 'false'}
             value={internalValues[index] || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
@@ -204,7 +207,7 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
         ))}
       </div>
       {error && errorMessage && (
-        <span style={{
+        <span data-part="error-message" style={{
           fontSize: 12,
           color: 'var(--ds-color-error-500, #ef4444)',
           marginTop: 6,

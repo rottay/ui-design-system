@@ -167,14 +167,17 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
 
     return (
       <label
-        className={className}
+        className={`ds-switch ds-switch--modern ${className}`}
+        data-part="root"
+        data-checked={isChecked ? 'true' : 'false'}
+        data-disabled={isDisabled ? 'true' : 'false'}
         style={wrapperStyle}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* Unchecked label (before track) */}
         {!isChecked && unCheckedChildren && (
-          <span style={labelTextStyle}>{unCheckedChildren}</span>
+          <span data-part="label" style={labelTextStyle}>{unCheckedChildren}</span>
         )}
 
         {/* Hidden native input for accessibility + form participation */}
@@ -207,13 +210,13 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         />
 
         {/* Custom visual track + thumb */}
-        <span style={trackStyle}>
-          <span style={thumbStyle} />
+        <span data-part="track" style={trackStyle}>
+          <span data-part="thumb" style={thumbStyle} />
         </span>
 
         {/* Checked label (after track) */}
         {isChecked && checkedChildren && (
-          <span style={labelTextStyle}>{checkedChildren}</span>
+          <span data-part="label" style={labelTextStyle}>{checkedChildren}</span>
         )}
 
         {/* Loading spinner */}

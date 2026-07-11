@@ -113,6 +113,7 @@ const LoadingSpinner: React.FC<{ size: keyof typeof SPINNER_SIZE_MAP }> = ({ siz
   const spinnerSize = SPINNER_SIZE_MAP[size] || SPINNER_SIZE_MAP.md;
   return (
     <svg
+      data-part="spinner"
       width={spinnerSize}
       height={spinnerSize}
       viewBox="0 0 24 24"
@@ -201,7 +202,11 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       <button
         ref={ref}
         type="button"
-        className={`rottay-button-icon rottay-button-icon--${size} rottay-button-icon--${variant} ${className}`}
+        className={`rottay-button-icon ds-button-icon rottay-button-icon--${size} rottay-button-icon--${variant} ${className}`}
+        data-part="trigger"
+        data-variant={variant}
+        data-disabled={disabled || loading ? 'true' : 'false'}
+        data-loading={loading ? 'true' : 'false'}
         style={buttonStyle}
         onClick={handleClick}
         onMouseEnter={() => setIsHovered(true)}

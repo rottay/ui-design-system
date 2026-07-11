@@ -257,6 +257,7 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
     // produce `false` when inactive, which filter(Boolean) strips out.
     const containerClasses = [
       'rottay-textarea',
+      'ds-input-textarea',
       `rottay-textarea--${size}`,
       `rottay-textarea--${variant}`,
       isFocused && 'rottay-textarea--focused',
@@ -268,7 +269,7 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       .join(' ');
 
     return (
-      <div className={containerClasses} style={containerStyle}>
+      <div className={containerClasses} data-part="root" style={containerStyle}>
         <textarea
           ref={textareaRef}
           id={id}
@@ -287,6 +288,7 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
           aria-describedby={ariaDescribedBy}
           aria-invalid={hasError}
           data-testid={dataTestId}
+          data-part="control"
           style={textareaStyle}
           onChange={handleChange}
           onFocus={handleFocus}
@@ -296,6 +298,7 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
 
         {showCount && maxLength && (
           <span
+            data-part="count"
             style={{
               position: 'absolute',
               right: 8,
@@ -312,6 +315,7 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
 
         {hasError && errorMessage && (
           <span
+            data-part="error-message"
             style={{
               display: 'block',
               marginTop: 4,

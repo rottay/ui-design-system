@@ -364,7 +364,7 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         onPointerLeave={interactionHandlers.onPointerLeave}
       >
         {prefix && (
-          <span style={affixStyle}>
+          <span data-part="affix-prefix" style={affixStyle}>
             {prefix}
           </span>
         )}
@@ -403,6 +403,7 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         {showClearButton && (
           <button
             type="button"
+            data-part="clear-button"
             style={clearButtonStyle}
             onClick={handleClear}
             aria-label="Clear input"
@@ -434,20 +435,21 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         )}
 
         {suffix && (
-          <span style={affixStyle}>
+          <span data-part="affix-suffix" style={affixStyle}>
             {suffix}
           </span>
         )}
       </div>
 
       {showCount && maxLength && (
-        <span style={countStyle}>
+        <span data-part="count" style={countStyle}>
           {currentValue.length}/{maxLength}
         </span>
       )}
 
       {hasError && errorMessage && (
         <span
+          data-part="error-message"
           style={{
             display: 'block',
             marginTop: '0.25rem',

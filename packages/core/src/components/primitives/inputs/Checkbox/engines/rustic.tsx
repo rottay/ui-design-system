@@ -221,6 +221,7 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   // cubic-bezier overshoot easing creates a satisfying "bounce" effect.
   const CheckmarkIcon = () => (
     <svg
+      data-part="checkmark"
       width={sizeNumeric * 0.6}
       height={sizeNumeric * 0.6}
       viewBox="0 0 12 12"
@@ -245,6 +246,7 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   // a partial/mixed selection (e.g., "select all" with some items checked).
   const IndeterminateLine = () => (
     <div
+      data-part="checkmark"
       style={{
         display: indeterminate ? 'block' : 'none',
         width: sizeNumeric * 0.6,
@@ -260,6 +262,8 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   const containerClasses = [
     'rottay-checkbox',
     'rottay-checkbox--rustic',
+    'ds-checkbox',
+    'ds-checkbox--rustic',
     `rottay-checkbox--${size}`,
     `rottay-checkbox--${color}`,
     isChecked && 'rottay-checkbox--checked',
@@ -272,11 +276,17 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   return (
     <label
       className={containerClasses}
+      data-part="root"
+      data-checked={isChecked ? 'true' : 'false'}
+      data-indeterminate={indeterminate ? 'true' : 'false'}
+      data-disabled={disabled ? 'true' : 'false'}
+      data-error={error ? 'true' : 'false'}
       style={containerStyle}
       onKeyDown={handleKeyDown}
     >
       <span
         className="rottay-checkbox__box"
+        data-part="box"
         style={checkboxBoxStyle}
         role="presentation"
       >
@@ -303,6 +313,7 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
         <span
           id={`${inputId}-label`}
           className="rottay-checkbox__label"
+          data-part="label"
           style={labelStyle}
         >
           {displayLabel}

@@ -116,15 +116,20 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
     <div className={className || ''} style={{ display: 'flex', flexDirection: 'column', width: '100%', ...style }}>
       {/* Container mimics a DaisyUI input but uses flex-wrap so tags flow naturally */}
       <div
+        className="ds-tag-input ds-tag-input--modern"
+        data-part="root"
+        data-error={error ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
         style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4, border: error ? '1px solid var(--ds-color-error)' : '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--ds-color-bg-input)', height: 'auto', minHeight: SIZE_MIN_HEIGHTS[size] || 40, paddingBlock: 4, paddingInline: 8, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
         onClick={() => inputRef.current?.focus()}
       >
         {value.map((tag, index) => (
-          <span key={`${tag}-${index}`} style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 9999, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', ...(BADGE_SIZE_STYLES[size] || BADGE_SIZE_STYLES.md) }}>
+          <span key={`${tag}-${index}`} data-part="tag-chip" style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 9999, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', ...(BADGE_SIZE_STYLES[size] || BADGE_SIZE_STYLES.md) }}>
             {tag}
             {!disabled && (
               <button
                 type="button"
+                data-part="tag-remove"
                 style={{ background: 'transparent', color: 'inherit', height: 'auto', padding: 0, fontSize: 12, border: 'none', cursor: 'pointer', minHeight: 0, lineHeight: 1 }}
                 onClick={(e) => { e.stopPropagation(); removeTag(index); }}
                 aria-label={`Remove ${tag}`}
@@ -140,6 +145,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
           id={inputId}
           name={name}
           type="text"
+          data-part="input"
           value={inputValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -151,7 +157,7 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
       </div>
       {error && errorMessage && (
         <div style={{ marginTop: 4 }}>
-          <span style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
+          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
         </div>
       )}
     </div>
