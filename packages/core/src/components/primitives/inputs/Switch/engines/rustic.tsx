@@ -18,7 +18,6 @@
 
 import React, { useState } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import type { SwitchProps } from '../Switch.types';
 
 /**
@@ -82,12 +81,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     // Controlled vs uncontrolled: external `checked` prop takes precedence
     const isControlled = checked !== undefined;
     const [internalChecked, setInternalChecked] = useState(defaultChecked);
-    // Focus state drives the outline ring on the slider track
-    // The triad is decided once, in the behavior core. `focused` is any focus --
-    // a field's focus border must appear when a pointer lands in it. A ring is
-    // `focusVisible`, and this part does not draw one.
-    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-    const isFocused = interaction.focused;
     const isChecked = isControlled ? checked : internalChecked;
 
     // Guard against state changes while disabled or loading
@@ -153,14 +146,8 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundColor: isChecked
-        ? 'var(--ds-switch-checked-bg)'
-        : 'var(--ds-switch-bg)',
       transition: 'var(--ds-switch-transition)',
-      borderRadius: 'var(--ds-switch-radius)',
       opacity: disabled || loading ? 0.5 : 1,
-      outline: isFocused ? 'var(--ds-switch-focus-ring)' : 'none',
-      outlineOffset: '2px',
     };
 
     // Knob = the circular thumb that slides between checked/unchecked positions
@@ -170,16 +157,12 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       width: sizeConfig.thumbSize,
       left: 'var(--ds-switch-thumb-offset)',
       bottom: 'var(--ds-switch-thumb-offset)',
-      backgroundColor: 'var(--ds-switch-thumb-bg)',
       transition: 'var(--ds-switch-transition)',
-      borderRadius: '50%',
-      boxShadow: 'var(--ds-switch-thumb-shadow)',
-      transform: isChecked ? `translateX(${sizeConfig.translate})` : 'translateX(0)',
+      ...({ '--ds-switch-thumb-x': isChecked ? sizeConfig.translate : '0' } as React.CSSProperties),
     };
 
     const labelStyle: React.CSSProperties = {
       fontSize: 'var(--ds-font-size-sm)',
-      color: 'var(--ds-switch-label-color)',
       userSelect: 'none',
     };
 
@@ -203,7 +186,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             checked={isChecked}
             disabled={disabled || loading}
             onChange={handleChange}
-            {...interactionHandlers}
             autoFocus={autoFocus}
             tabIndex={tabIndex}
             id={id}
@@ -224,7 +206,7 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             width="14"
             height="14"
             viewBox="0 0 24 24"
-            style={{ marginLeft: '4px', animation: 'spin 1s linear infinite' }}
+            style={{ marginLeft: '4px', animation: 'ds-switch-spin 1s linear infinite' }}
           >
             <circle
               cx="12"
@@ -237,13 +219,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             />
           </svg>
         )}
-        {/* Inject keyframes for the loading spinner animation */}
-        <style>{`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-        `}</style>
       </label>
     );
   }

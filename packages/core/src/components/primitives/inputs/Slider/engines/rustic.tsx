@@ -114,18 +114,14 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     // Rail = the full-length background bar behind the active track
     const railBaseStyle: React.CSSProperties = {
       position: 'absolute',
-      backgroundColor: 'var(--ds-slider-rail-color)',
-      borderRadius: 'var(--ds-slider-track-radius)',
       ...(vertical ? {
         width: 'var(--ds-slider-track-height)',
         height: '100%',
         left: '50%',
-        transform: 'translateX(-50%)',
       } : {
         height: 'var(--ds-slider-track-height)',
         width: '100%',
         top: '50%',
-        transform: 'translateY(-50%)',
       }),
       ...railStyle,
     };
@@ -135,24 +131,14 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
       position: 'absolute',
       width: 'var(--ds-slider-handle-size)',
       height: 'var(--ds-slider-handle-size)',
-      backgroundColor: disabled
-        ? 'var(--ds-slider-handle-bg-disabled)'
-        : 'var(--ds-slider-handle-bg)',
-      borderRadius: '50%',
-      border: `var(--ds-slider-handle-border-width) solid var(--ds-slider-handle-border)`,
-      boxShadow: 'var(--ds-slider-handle-shadow)',
       pointerEvents: 'none',
       transition: 'box-shadow 0.15s ease',
-      outline: isFocused ? 'var(--ds-slider-focus-ring)' : 'none',
-      outlineOffset: '2px',
       ...(vertical ? {
         left: '50%',
         bottom: `${position}%`,
-        transform: 'translate(-50%, 50%)',
       } : {
         top: '50%',
         left: `${position}%`,
-        transform: 'translate(-50%, -50%)',
       }),
       ...extraStyle,
     });
@@ -171,18 +157,15 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     const markStyle = (percent: number, customStyle?: React.CSSProperties): React.CSSProperties => ({
       position: 'absolute',
       fontSize: 'var(--ds-slider-mark-font-size)',
-      color: 'var(--ds-slider-mark-color)',
       whiteSpace: 'nowrap',
       ...(vertical ? {
         left: '100%',
         bottom: `${percent}%`,
         marginLeft: '8px',
-        transform: 'translateY(50%)',
       } : {
         top: '100%',
         left: `${percent}%`,
         marginTop: '4px',
-        transform: 'translateX(-50%)',
       }),
       ...customStyle,
     });
@@ -194,20 +177,14 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
 
       const trackActiveStyle: React.CSSProperties = {
         position: 'absolute',
-        backgroundColor: disabled
-          ? 'var(--ds-slider-track-color-disabled)'
-          : 'var(--ds-slider-track-color)',
-        borderRadius: 'var(--ds-slider-track-radius)',
         ...(vertical ? {
           width: 'var(--ds-slider-track-height)',
           left: '50%',
-          transform: 'translateX(-50%)',
           bottom: `${startPercent}%`,
           height: `${endPercent - startPercent}%`,
         } : {
           height: 'var(--ds-slider-track-height)',
           top: '50%',
-          transform: 'translateY(-50%)',
           left: `${startPercent}%`,
           width: `${endPercent - startPercent}%`,
         }),
@@ -220,6 +197,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           className={containerClasses}
           data-part="root"
           data-disabled={disabled ? 'true' : 'false'}
+          data-orientation={vertical ? 'vertical' : 'horizontal'}
           style={containerStyle}
         >
           {/* Rail */}
@@ -303,20 +281,14 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
     // Active track fills from the start (0%) up to the current value
     const trackActiveStyle: React.CSSProperties = {
       position: 'absolute',
-      backgroundColor: disabled
-        ? 'var(--ds-slider-track-color-disabled)'
-        : 'var(--ds-slider-track-color)',
-      borderRadius: 'var(--ds-slider-track-radius)',
       ...(vertical ? {
         width: 'var(--ds-slider-track-height)',
         left: '50%',
-        transform: 'translateX(-50%)',
         bottom: 0,
         height: `${percent}%`,
       } : {
         height: 'var(--ds-slider-track-height)',
         top: '50%',
-        transform: 'translateY(-50%)',
         left: 0,
         width: `${percent}%`,
       }),
@@ -329,6 +301,7 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
         className={containerClasses}
         data-part="root"
         data-disabled={disabled ? 'true' : 'false'}
+        data-orientation={vertical ? 'vertical' : 'horizontal'}
         style={containerStyle}
       >
         {/* Rail */}

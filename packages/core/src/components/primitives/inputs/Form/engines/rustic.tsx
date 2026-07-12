@@ -73,25 +73,21 @@ import { useTranslation } from '../../../../../i18n';
 // Feedback icon data keyed by validation status. Using a static lookup table
 // instead of a switch statement keeps the rendering logic minimal and lets us
 // share the same SVG rendering path for all statuses.
-const feedbackIcons: Record<string, { svg: string; color: string; label: string }> = {
+const feedbackIcons: Record<string, { svg: string; label: string }> = {
   success: {
     svg: 'M5 13l4 4L19 7',
-    color: 'var(--ds-form-success-color, #22c55e)',
     label: 'Validation passed',
   },
   error: {
     svg: 'M6 18L18 6M6 6l12 12',
-    color: 'var(--ds-form-error-color, #ef4444)',
     label: 'Validation failed',
   },
   warning: {
     svg: 'M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.832c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z',
-    color: 'var(--ds-form-warning-color, #f59e0b)',
     label: 'Validation warning',
   },
   validating: {
     svg: 'M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15',
-    color: 'var(--ds-form-info-color, #3b82f6)',
     label: 'Validating',
   },
 };
@@ -102,18 +98,17 @@ const feedbackIcons: Record<string, { svg: string; color: string; label: string 
  * The validating status uses a spin animation; others use a scale-in entrance.
  */
 const RusticFeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'validating' }> = ({ status }) => {
-  const { svg, color, label } = feedbackIcons[status];
+  const { svg, label } = feedbackIcons[status];
   const iconStyle: React.CSSProperties = {
     marginLeft: 8,
     display: 'inline-flex',
     alignItems: 'center',
-    color,
     animation: status === 'validating'
-      ? 'spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite'
-      : 'rottay-form-feedback-in 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+      ? 'ds-form-rustic-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite'
+      : 'ds-form-rustic-feedback-in 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
   };
   return (
-    <span data-part="feedback-icon" style={iconStyle} aria-label={label}>
+    <span data-part="feedback-icon" data-status={status} style={iconStyle} aria-label={label}>
       <svg width={16} height={16} fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={svg} />
       </svg>
@@ -159,7 +154,6 @@ const styles = {
   label: {
     fontSize: 'var(--ds-form-label-font-size)',
     fontWeight: 'var(--ds-form-label-font-weight)' as unknown as number,
-    color: 'var(--ds-form-label-color)',
     marginBottom: 'var(--ds-form-item-gap)',
     letterSpacing: '0.01em',
   },
@@ -169,39 +163,26 @@ const styles = {
     paddingRight: '8px',
   },
   required: {
-    color: 'var(--ds-form-required-color)',
     marginLeft: '2px',
-    animation: 'rottay-form-required-pulse 2s ease-in-out infinite',
+    animation: 'ds-form-rustic-required-pulse 2s ease-in-out infinite',
   },
   inputWrapper: {
     flex: 1,
   },
   extra: {
     fontSize: 'var(--ds-form-extra-font-size)',
-    color: 'var(--ds-form-extra-color)',
     marginTop: 'var(--ds-form-item-gap)',
   },
   help: {
     fontSize: 'var(--ds-form-help-font-size)',
     marginTop: 'var(--ds-form-item-gap)',
-    color: 'var(--ds-form-help-color)',
-    animation: 'rottay-form-help-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-  },
-  helpError: {
-    color: 'var(--ds-form-error-color)',
-  },
-  helpWarning: {
-    color: 'var(--ds-form-warning-color)',
-  },
-  helpSuccess: {
-    color: 'var(--ds-form-success-color)',
+    animation: 'ds-form-rustic-help-slide-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
   },
   errorList: {
     listStyle: 'disc',
     paddingLeft: '16px',
     margin: 0,
     fontSize: 'var(--ds-form-help-font-size)',
-    color: 'var(--ds-form-error-color)',
   },
 };
 
@@ -560,24 +541,6 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
         role="form"
       >
         {children}
-        <style>{`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-          @keyframes rottay-form-help-slide-in {
-            from { opacity: 0; transform: translateY(-4px); max-height: 0; }
-            to { opacity: 1; transform: translateY(0); max-height: 100px; }
-          }
-          @keyframes rottay-form-feedback-in {
-            from { opacity: 0; transform: scale(0); }
-            to { opacity: 1; transform: scale(1); }
-          }
-          @keyframes rottay-form-required-pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-          }
-        `}</style>
       </form>
     </FormContext.Provider>
   );
@@ -706,7 +669,6 @@ const FormItem: React.FC<FormItemProps> = (props) => {
 
   const helpStyle = {
     ...styles.help,
-    ...(hasError ? styles.helpError : validateStatus === 'warning' ? styles.helpWarning : validateStatus === 'success' ? styles.helpSuccess : {}),
   };
 
   const childrenWithProps = React.Children.map(children, (child) => {
@@ -746,7 +708,7 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           )}
         </div>
         {(help || fieldErrors.length > 0) && (
-          <div data-part="help-text" data-error={hasError ? 'true' : 'false'} style={helpStyle}>{help || fieldErrors[0]}</div>
+          <div data-part="help-text" data-error={hasError ? 'true' : 'false'} data-status={validateStatus} style={helpStyle}>{help || fieldErrors[0]}</div>
         )}
         {extra && <div data-part="extra-text" style={styles.extra}>{extra}</div>}
       </div>
@@ -827,7 +789,7 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   if (fieldErrors.length === 0) return null;
 
   return (
-    <ul data-part="error-list" className={className} style={{ ...styles.errorList, ...style }} role="alert">
+    <ul data-part="error-list" className={`ds-form-error-list ds-form-error-list--rustic ${className}`} style={{ ...styles.errorList, ...style }} role="alert">
       {fieldErrors.map((error, index) => (
         <li key={index}>{error}</li>
       ))}

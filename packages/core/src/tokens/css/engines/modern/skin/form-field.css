@@ -1,0 +1,30 @@
+/**
+ * Modern FormField skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * `base` layer, so a layered rule can't paint these elements at all; unlayered
+ * outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-form-field.ds-form-field--modern[data-part='root']`; every
+ * painted element below is a descendant carrying its own `data-part` (`label`,
+ * `required-mark`, `error-message`, `help-text`). All four are STATIC `color`
+ * only -- no conditionals, no state, no hover -- so every rule here wins
+ * unlayered at (0,3,0): two root classes + one attribute (P-48; none of these
+ * paint a border, so the (0,4,0) border floor does not apply).
+ */
+
+.ds-form-field.ds-form-field--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-form-field.ds-form-field--modern [data-part='required-mark'] {
+  color: var(--ds-color-error);
+}
+
+.ds-form-field.ds-form-field--modern [data-part='error-message'] {
+  color: var(--ds-color-error);
+}
+
+.ds-form-field.ds-form-field--modern [data-part='help-text'] {
+  color: var(--ds-color-text-secondary);
+}

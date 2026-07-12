@@ -47,7 +47,6 @@ const CheckIcon = ({ size }: { size: number }) => {
       xmlns="http://www.w3.org/2000/svg"
       style={{
         display: 'block',
-        transform: 'scale(1)',
         transition: 'transform var(--ds-motion-fast) ease-out',
       }}
     >
@@ -75,7 +74,6 @@ const IndeterminateIcon = ({ size }: { size: number }) => {
       xmlns="http://www.w3.org/2000/svg"
       style={{
         display: 'block',
-        transform: 'scale(1)',
         transition: 'transform var(--ds-motion-fast) ease-out',
       }}
     >
@@ -131,9 +129,6 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocusVisible, setIsFocusVisible] = useState(false);
-
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.indeterminate = indeterminate;
@@ -147,17 +142,6 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     }
     onChange?.(newChecked, e);
   }, [isControlled, onChange]);
-
-  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-    // Only show focus ring for keyboard navigation (focus-visible behavior)
-    if (e.target.matches(':focus-visible')) {
-      setIsFocusVisible(true);
-    }
-  }, []);
-
-  const handleBlur = useCallback(() => {
-    setIsFocusVisible(false);
-  }, []);
 
   /* -- Sizes -------------------------------------------------------- */
   // Numeric fallback for SVG icon sizing (cannot use CSS vars in SVG attributes)
@@ -179,39 +163,11 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
     width: boxSizeToken,
     height: boxSizeToken,
     minWidth: boxSizeToken,
-    borderRadius: isStandaloneIndicator ? '999px' : 'var(--ds-radius-sm)',
-    border: `2px solid ${
-      active
-        ? 'var(--ds-checkbox-checked-bg, var(--ds-color-primary))'
-        : isStandaloneIndicator
-          ? 'color-mix(in srgb, var(--ds-checkbox-border, var(--ds-color-border)) 88%, var(--ds-surface-panel) 12%)'
-          : 'var(--ds-checkbox-border, var(--ds-color-border-secondary))'
-    }`,
-    backgroundColor: active
-      ? 'var(--ds-checkbox-checked-bg, var(--ds-color-primary))'
-      : isStandaloneIndicator
-        ? 'color-mix(in srgb, var(--ds-surface-panel) 76%, var(--ds-color-text-primary) 24%)'
-        : 'transparent',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     transition: `background-color ${transitionTiming}, border-color ${transitionTiming}, transform ${transitionTiming}, box-shadow ${transitionTiming}`,
     flexShrink: 0,
-    transform: active ? 'scale(1)' : 'scale(1)',
-    ...(isHovered && !disabled && !active && {
-      borderColor: isStandaloneIndicator ? 'var(--ds-color-text-secondary)' : 'var(--ds-checkbox-border, var(--ds-color-border))',
-      backgroundColor: isStandaloneIndicator
-        ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%)'
-        : undefined,
-    }),
-    ...(isHovered && !disabled && active && {
-      borderColor: 'var(--ds-color-primary-hover)',
-      backgroundColor: 'var(--ds-color-primary-hover)',
-    }),
-    ...(isFocusVisible && !disabled && {
-      outline: '2px solid var(--ds-color-primary)',
-      outlineOffset: '2px',
-    }),
     ...(disabled && {
       opacity: 'var(--ds-checkbox-disabled-opacity, 0.5)' as unknown as number,
       cursor: 'not-allowed',
@@ -233,9 +189,6 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
   const labelTextStyle: React.CSSProperties = {
     fontSize: 14,
     lineHeight: '20px',
-    color: disabled
-      ? 'var(--ds-color-text-disabled)'
-      : 'var(--ds-color-text-primary)',
   };
 
   return (
@@ -245,10 +198,10 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
         data-part="root"
         data-checked={isChecked ? 'true' : 'false'}
         data-indeterminate={indeterminate ? 'true' : 'false'}
+        data-active={active ? 'true' : 'false'}
+        data-standalone={isStandaloneIndicator ? 'true' : 'false'}
         data-disabled={disabled ? 'true' : 'false'}
         style={labelRowStyle}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         {/* Hidden native input for accessibility + form participation */}
         <input
@@ -260,8 +213,6 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
           checked={isChecked}
           disabled={disabled}
           onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           style={{
             position: 'absolute',
@@ -272,7 +223,6 @@ export default function ModernCheckbox(props: CheckboxProps): React.ReactElement
             overflow: 'hidden',
             clip: 'rect(0, 0, 0, 0)',
             whiteSpace: 'nowrap',
-            border: 0,
           }}
         />
 

@@ -1,0 +1,67 @@
+/**
+ * Modern Radio skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-radio.ds-radio--modern[data-part='root']` (a `<label>`),
+ * carrying `data-checked` and `data-disabled`. `circle`, `dot`, `label`,
+ * `description` are descendants; the hidden `<input>` is a sibling of `circle`.
+ *
+ * Hover (the removed `isHovered` state, driven by onMouseEnter/onMouseLeave on
+ * the root) -> `:hover`, gated `:not([data-disabled='true'])` exactly where the
+ * JS gated `!disabled`. The focus ring (removed `isFocusVisible`) was set from
+ * the input's `:focus-visible` -> `input:focus-visible ~ [data-part='circle']`.
+ * The dot scale is keyed on `data-checked`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via `[data-checked]` (+ `:hover`)
+ * beyond the two root classes + `[data-part='circle']`. Non-border paint wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-radio.ds-radio--modern [data-part='circle'] {
+  border-radius: 50%;
+  background-color: transparent;
+}
+.ds-radio.ds-radio--modern[data-checked='false'] [data-part='circle'] {
+  border: 2px solid var(--ds-radio-border, var(--ds-color-border-secondary));
+}
+.ds-radio.ds-radio--modern[data-checked='true'] [data-part='circle'] {
+  border: 2px solid var(--ds-radio-checked-bg, var(--ds-color-primary));
+}
+.ds-radio.ds-radio--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: var(--ds-radio-border, var(--ds-color-border));
+}
+.ds-radio.ds-radio--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: var(--ds-color-primary-hover);
+}
+.ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 2px;
+}
+
+.ds-radio.ds-radio--modern [data-part='dot'] {
+  border-radius: 50%;
+  background-color: var(--ds-color-text-on-primary);
+  transform: scale(0);
+}
+.ds-radio.ds-radio--modern[data-checked='true'] [data-part='dot'] {
+  transform: scale(1);
+}
+
+.ds-radio.ds-radio--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-radio.ds-radio--modern[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-color-text-disabled);
+}
+.ds-radio.ds-radio--modern [data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* hidden accessibility input (visually clipped): no border. */
+.ds-radio.ds-radio--modern input {
+  border: 0;
+}

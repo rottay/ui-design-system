@@ -120,17 +120,17 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
         data-part="root"
         data-error={error ? 'true' : 'false'}
         data-disabled={disabled ? 'true' : 'false'}
-        style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4, border: error ? '1px solid var(--ds-color-error)' : '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--ds-color-bg-input)', height: 'auto', minHeight: SIZE_MIN_HEIGHTS[size] || 40, paddingBlock: 4, paddingInline: 8, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
+        style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 4, height: 'auto', minHeight: SIZE_MIN_HEIGHTS[size] || 40, paddingBlock: 4, paddingInline: 8, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
         onClick={() => inputRef.current?.focus()}
       >
         {value.map((tag, index) => (
-          <span key={`${tag}-${index}`} data-part="tag-chip" style={{ display: 'inline-flex', alignItems: 'center', borderRadius: 9999, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', ...(BADGE_SIZE_STYLES[size] || BADGE_SIZE_STYLES.md) }}>
+          <span key={`${tag}-${index}`} data-part="tag-chip" style={{ display: 'inline-flex', alignItems: 'center', ...(BADGE_SIZE_STYLES[size] || BADGE_SIZE_STYLES.md) }}>
             {tag}
             {!disabled && (
               <button
                 type="button"
                 data-part="tag-remove"
-                style={{ background: 'transparent', color: 'inherit', height: 'auto', padding: 0, fontSize: 12, border: 'none', cursor: 'pointer', minHeight: 0, lineHeight: 1 }}
+                style={{ height: 'auto', padding: 0, fontSize: 12, cursor: 'pointer', minHeight: 0, lineHeight: 1 }}
                 onClick={(e) => { e.stopPropagation(); removeTag(index); }}
                 aria-label={`Remove ${tag}`}
               >
@@ -152,12 +152,12 @@ export default function ModernTagInput(props: TagInputProps): React.ReactElement
           placeholder={value.length === 0 ? placeholder : ''}
           disabled={disabled}
           autoFocus={autoFocus}
-          style={{ flex: 1, outline: 'none', background: 'transparent', minWidth: 60, border: 'none', padding: 0 }}
+          style={{ flex: 1, minWidth: 60, padding: 0 }}
         />
       </div>
       {error && errorMessage && (
         <div style={{ marginTop: 4 }}>
-          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
+          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px' }}>{errorMessage}</span>
         </div>
       )}
     </div>

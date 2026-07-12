@@ -1,0 +1,59 @@
+/**
+ * Rustic Switch skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-switch.ds-switch--rustic[data-part='root']` (a `<label>`),
+ * carrying `data-checked` and `data-disabled`. `track`, `thumb`, and `label`
+ * are descendants; the hidden `<input>` is a sibling of `track` inside the
+ * switch span.
+ *
+ * FOCUS: the removed `useInteractionState()` `focused` value (the only reader
+ * of that hook, spread onto the input) was "any focus" -- the outline showed
+ * on a mouse click too -- so it maps to native `:focus`, not `:focus-visible`:
+ * `input:focus ~ [data-part='track']`.
+ *
+ * The thumb slide is `translateX` of a per-size calc travel, carried via the
+ * runtime custom property `--ds-switch-thumb-x` (uncounted).
+ *
+ * The loading spinner's `@keyframes spin` was injected per-mount via a
+ * `<style>` tag; it is renamed `ds-switch-spin` here so it does not redefine
+ * the globally-loaded `spin`, and the svg's inline `animation` references the
+ * new name.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+/* track ------------------------------------------------------------------- */
+.ds-switch.ds-switch--rustic [data-part='track'] {
+  border-radius: var(--ds-switch-radius);
+}
+.ds-switch.ds-switch--rustic[data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-switch-checked-bg);
+}
+.ds-switch.ds-switch--rustic[data-checked='false'] [data-part='track'] {
+  background-color: var(--ds-switch-bg);
+}
+.ds-switch.ds-switch--rustic input:focus ~ [data-part='track'] {
+  outline: var(--ds-switch-focus-ring);
+  outline-offset: 2px;
+}
+
+/* thumb ------------------------------------------------------------------- */
+.ds-switch.ds-switch--rustic [data-part='thumb'] {
+  border-radius: 50%;
+  background-color: var(--ds-switch-thumb-bg);
+  box-shadow: var(--ds-switch-thumb-shadow);
+  transform: translateX(var(--ds-switch-thumb-x));
+}
+
+/* label ------------------------------------------------------------------- */
+.ds-switch.ds-switch--rustic [data-part='label'] {
+  color: var(--ds-switch-label-color);
+}
+
+@keyframes ds-switch-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

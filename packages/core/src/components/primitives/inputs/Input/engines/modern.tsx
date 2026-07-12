@@ -64,17 +64,11 @@ function ClearButton({ onClick, visible }: { onClick: () => void; visible: boole
         width: 'var(--ds-icon-size-sm, 20px)',
         height: 'var(--ds-icon-size-sm, 20px)',
         padding: 0,
-        border: 'none',
-        borderRadius: 'var(--ds-radius-sm, 6px)',
-        backgroundColor: 'transparent',
-        color: 'var(--ds-color-text-muted)',
         cursor: 'pointer',
         opacity: visible ? 1 : 0,
         transition: 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast)',
         flexShrink: 0,
       }}
-      onMouseEnter={(e) => { (e.currentTarget.style.backgroundColor as any) = 'var(--ds-surface-canvas)'; }}
-      onMouseLeave={(e) => { (e.currentTarget.style.backgroundColor as any) = 'transparent'; }}
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M18 6L6 18M6 6l12 12" />
@@ -327,7 +321,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     display: 'inline-flex',
     alignItems: 'center',
     flexShrink: 0,
-    color: 'var(--ds-input-addon-color, var(--ds-color-text-muted))',
     lineHeight: 1,
   };
 
@@ -336,10 +329,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     flex: 1,
     minWidth: 0,
     width: '100%',
-    border: 'none',
-    outline: 'none',
-    backgroundColor: 'transparent',
-    color: 'inherit',
     fontSize: 'inherit',
     lineHeight: 'inherit',
     fontFamily: 'inherit',
@@ -364,14 +353,12 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     lineHeight: 'var(--ds-line-height-xs, 16px)',
     marginTop: 'var(--ds-spacing-1, 4px)',
     textAlign: 'right' as const,
-    color: hasError ? 'var(--ds-color-error)' : 'var(--ds-color-text-muted)',
   };
 
   const errorMessageStyle: React.CSSProperties = {
     fontSize: 'var(--ds-font-size-xs, 12px)',
     lineHeight: 'var(--ds-line-height-xs, 16px)',
     marginTop: 'var(--ds-spacing-1, 4px)',
-    color: 'var(--ds-color-error)',
     display: 'block',
   };
 
@@ -454,7 +441,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         </label>
 
         {showCount && maxLength && (
-          <div data-part="count" style={countStyle}>
+          <div data-part="count" data-error={hasError ? 'true' : 'false'} style={countStyle}>
             {currentValue.length}/{maxLength}
           </div>
         )}

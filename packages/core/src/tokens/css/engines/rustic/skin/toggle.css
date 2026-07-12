@@ -1,0 +1,66 @@
+/**
+ * Rustic Toggle skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-toggle.ds-toggle--rustic[data-part='root']` (a `<label>`),
+ * carrying `data-checked`, `data-disabled`, `data-error`. `track`, `thumb`,
+ * `inner-label`, `label`, `description` are descendants; the hidden `<input>`
+ * is a direct child of `track`.
+ *
+ * The track background (`getTrackBg`: checked x color) is runtime-computed,
+ * carried via the uncounted `--ds-toggle-track-fill`. The error border and the
+ * focus ring reproduce `error ? … : none` and `isFocused ? … : none`; focus is
+ * the input's native focus, mapped via the track's `:focus-within` (the input
+ * is its only focusable descendant, so this is exactly the "any focus" the
+ * removed `useInteractionState().focused` tracked).
+ *
+ * SPECIFICITY (P-48): the error border paints a color, so it reaches (0,4,0)
+ * via `[data-error]` beyond the two root classes + `[data-part='track']`.
+ * Everything else is non-border paint and wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`rgba(59, 130, 246, 0.2)`, `rgba(59, 130, 246, 0.1)`,
+ * `rgba(0, 0, 0, 0.2)`, `rgba(0, 0, 0, 0.1)`, `rgba(0, 0, 0, 0.15)`) are
+ * transcribed byte-exact from the source.
+ */
+
+.ds-toggle.ds-toggle--rustic [data-part='track'] {
+  border-radius: var(--ds-toggle-track-radius);
+  background-color: var(--ds-toggle-track-fill);
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+.ds-toggle.ds-toggle--rustic[data-error='true'] [data-part='track'] {
+  border: 2px solid var(--ds-toggle-error-color);
+}
+.ds-toggle.ds-toggle--rustic [data-part='track']:focus-within {
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='thumb'] {
+  border-radius: 50%;
+  background-color: var(--ds-toggle-dot-bg);
+  transform: translateY(-50%);
+}
+.ds-toggle.ds-toggle--rustic[data-checked='false'] [data-part='thumb'] {
+  box-shadow: var(--ds-toggle-dot-shadow, 0 1px 2px rgba(0, 0, 0, 0.15));
+}
+.ds-toggle.ds-toggle--rustic[data-checked='true'] [data-part='thumb'] {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='inner-label'] {
+  color: var(--ds-toggle-inner-label-color);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='label'] {
+  color: var(--ds-toggle-label-color);
+}
+.ds-toggle.ds-toggle--rustic[data-error='true'] [data-part='label'] {
+  color: var(--ds-toggle-error-color);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='description'] {
+  color: var(--ds-toggle-description-color);
+}

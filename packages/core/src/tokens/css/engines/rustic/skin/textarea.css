@@ -1,0 +1,78 @@
+/**
+ * Rustic Textarea skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the `<textarea>` itself: `.ds-textarea.ds-textarea--rustic
+ * [data-part='root']`, carrying `data-status` and `data-disabled`. `variant`
+ * ('outlined'|'filled'|'borderless') has no data-attribute but IS exposed as
+ * a real rendered class, `rottay-textarea--${variant}`, unconditionally
+ * present in the element's className -- used below instead of inventing new
+ * anatomy.
+ *
+ * FOCUS is native `:focus`: `isFocused` (kept in local state only to feed
+ * the `rottay-textarea--focused` external-override class hook, see the
+ * component) is set unconditionally in onFocus/onBlur, matching `:focus`'s
+ * semantics exactly.
+ *
+ * BORDER COLOR priority, transcribed byte-exact from the removed
+ * `getBorderColor()`: status (error/warning/success) > focus > default;
+ * `variant=borderless` overrides ALL of the above to `border: none`. Each
+ * non-borderless rule below carries `:not(.rottay-textarea--borderless)` so
+ * at most one rule ever wins per state (the P-48 guard idiom) rather than
+ * relying on cascade order -- without it, the focus rule's extra `:not()`
+ * chain would out-specify the borderless override.
+ *
+ * `count` (the optional char-counter div) is a DOM SIBLING of the root
+ * textarea, not a descendant -- both are children of the wrapper div --
+ * so it is selected via the general sibling combinator, which still lets it
+ * carry the two root classes for the (0,3,0) floor.
+ *
+ * SPECIFICITY (P-48): `border` paints a color, so its rules reach (0,4,0)
+ * via the repeated `[data-part='root']`. Every other rule here is
+ * non-border paint and wins unlayered at (0,3,0).
+ */
+
+.ds-textarea.ds-textarea--rustic[data-part='root'] {
+  outline: none;
+  border-radius: var(--ds-textarea-radius);
+  background-color: var(--ds-textarea-bg);
+  color: var(--ds-textarea-color);
+  box-shadow: none;
+}
+
+.ds-textarea.ds-textarea--rustic.rottay-textarea--filled[data-part='root']:not([data-disabled='true']) {
+  background-color: var(--ds-textarea-filled-bg);
+}
+
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-disabled='true'] {
+  background-color: var(--ds-textarea-bg-disabled);
+}
+
+.ds-textarea.ds-textarea--rustic[data-part='root']:focus:not(.rottay-textarea--borderless) {
+  box-shadow: var(--ds-textarea-shadow-focus);
+}
+
+/* border color: status > focus > default; borderless wins over all of them */
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-textarea-border);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root']:focus:not(.rottay-textarea--borderless):not([data-status='error']):not([data-status='warning']):not([data-status='success']) {
+  border: 1px solid var(--ds-textarea-border-focus);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'][data-status='error']:not(.rottay-textarea--borderless) {
+  border: 1px solid var(--ds-textarea-error-border);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'][data-status='warning']:not(.rottay-textarea--borderless) {
+  border: 1px solid var(--ds-textarea-warning-border);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'][data-status='success']:not(.rottay-textarea--borderless) {
+  border: 1px solid var(--ds-textarea-success-border);
+}
+.ds-textarea.ds-textarea--rustic.rottay-textarea--borderless[data-part='root'][data-part='root'] {
+  border: none;
+}
+
+.ds-textarea.ds-textarea--rustic ~ [data-part='count'] {
+  color: var(--ds-textarea-count-color);
+}

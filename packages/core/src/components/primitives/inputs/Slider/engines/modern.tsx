@@ -139,13 +139,13 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           className={`ds-slider ds-slider--modern relative ${vertical ? 'h-full w-4' : 'w-full h-4'} ${className || ''}`}
           data-part="root"
           data-disabled={disabled ? 'true' : 'false'}
+          data-orientation={vertical ? 'vertical' : 'horizontal'}
           style={style}
         >
           {/* Track */}
           <div
             data-part="rail"
             className={`absolute rounded-full ${vertical ? 'w-1 h-full left-1/2 -translate-x-1/2' : 'h-1 w-full top-1/2 -translate-y-1/2'}`}
-            style={{ background: 'var(--ds-surface-panel)' }}
           />
 
           {/* Active range */}
@@ -153,16 +153,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             data-part="track"
             className="absolute rounded-full"
             style={vertical ? {
-              background: 'var(--ds-color-primary)',
               left: '50%',
-              transform: 'translateX(-50%)',
               bottom: `${startPercent}%`,
               height: `${endPercent - startPercent}%`,
               width: '4px',
             } : {
-              background: 'var(--ds-color-primary)',
               top: '50%',
-              transform: 'translateY(-50%)',
               left: `${startPercent}%`,
               width: `${endPercent - startPercent}%`,
               height: '4px',
@@ -208,12 +204,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
           <div
             data-part="handle"
             className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', left: '50%', bottom: `${startPercent}%` } : { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', top: '50%', left: `${startPercent}%` }}
+            style={vertical ? { left: '50%', bottom: `${startPercent}%` } : { top: '50%', left: `${startPercent}%` }}
           />
           <div
             data-part="handle"
             className="absolute w-4 h-4 rounded-full border-2 shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            style={vertical ? { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', left: '50%', bottom: `${endPercent}%` } : { background: 'var(--ds-color-primary)', borderColor: 'var(--ds-color-bg-primary, white)', top: '50%', left: `${endPercent}%` }}
+            style={vertical ? { left: '50%', bottom: `${endPercent}%` } : { top: '50%', left: `${endPercent}%` }}
           />
 
           {/* Marks -- positioned absolutely; supports both string and {label,style} shapes */}
@@ -227,19 +223,16 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
               <div
                 key={key}
                 data-part="mark-label"
+                data-axis={vertical ? 'y' : 'x'}
                 className="absolute text-xs"
                 style={vertical ? {
-                  color: 'var(--ds-color-text-secondary)',
                   left: '100%',
                   bottom: `${percent}%`,
                   marginLeft: '8px',
-                  transform: 'translateY(50%)',
                 } : {
-                  color: 'var(--ds-color-text-secondary)',
                   top: '100%',
                   left: `${percent}%`,
                   marginTop: '8px',
-                  transform: 'translateX(-50%)',
                 }}
               >
                 {label}
@@ -284,13 +277,12 @@ export const Slider = React.forwardRef<HTMLDivElement, SliderProps>(
             <div
               key={key}
               data-part="mark-label"
+              data-axis="x"
               className="absolute text-xs"
               style={{
-                color: 'var(--ds-color-text-secondary)',
                 top: '100%',
                 left: `${markPercent}%`,
                 marginTop: '4px',
-                transform: 'translateX(-50%)',
               }}
             >
               {label}

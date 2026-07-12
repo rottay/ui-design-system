@@ -95,26 +95,6 @@ export function VoiceInputButton({
     ariaLabel ??
     (isActive ? 'Stop voice input' : 'Start voice input');
 
-  const borderColor = isError
-    ? 'color-mix(in srgb, var(--ds-color-error) 36%, transparent)'
-    : isActive
-      ? 'color-mix(in srgb, var(--ds-color-primary) 44%, transparent)'
-      : 'color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)';
-
-  const bgColor = variant === 'filled'
-    ? isError
-      ? 'color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-surface-card))'
-      : isActive
-        ? 'color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card))'
-        : 'color-mix(in srgb, var(--ds-surface-card) 85%, var(--ds-color-bg-primary) 15%)'
-    : 'transparent';
-
-  const textColor = isError
-    ? 'var(--ds-color-error)'
-    : isActive
-      ? 'var(--ds-color-primary)'
-      : 'var(--ds-color-text-muted)';
-
   const tooltipContent = isError ? errorMessage ?? '' : transcriptPreview ?? '';
   const tooltipDisabled = !isError && !transcriptPreview;
 
@@ -134,6 +114,7 @@ export function VoiceInputButton({
           data-status={status}
           data-active={isActive ? 'true' : 'false'}
           data-error={isError ? 'true' : 'false'}
+          data-variant={variant}
           data-blocked={isBlocked ? 'true' : 'false'}
           onClick={handleClick}
           aria-label={resolvedAriaLabel}
@@ -146,13 +127,9 @@ export function VoiceInputButton({
             height: dims.button,
             minWidth: dims.button,
             padding: 0,
-            borderRadius: 999,
-            border: `1px solid ${borderColor}`,
-            background: bgColor,
-            color: textColor,
             cursor: 'pointer',
             transition: 'background 0.14s ease, border-color 0.14s ease, color 0.14s ease',
-            animation: status === 'listening' ? 'voiceInputPulse 1.6s ease-out infinite' : undefined,
+            animation: status === 'listening' ? 'ds-voice-input-button-pulse 1.6s ease-out infinite' : undefined,
             flexShrink: 0,
           }}
         >
@@ -161,7 +138,7 @@ export function VoiceInputButton({
               style={{
                 width: dims.icon,
                 height: dims.icon,
-                animation: 'voiceInputSpin 1s linear infinite',
+                animation: 'ds-voice-input-button-spin 1s linear infinite',
               }}
             />
           ) : status === 'listening' ? (
@@ -173,20 +150,6 @@ export function VoiceInputButton({
           )}
         </Box>
       </Tooltip>
-
-      <style>
-        {`
-          @keyframes voiceInputPulse {
-            0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 22%, transparent); }
-            70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
-            100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
-          }
-          @keyframes voiceInputSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-        `}
-      </style>
     </>
   );
 }

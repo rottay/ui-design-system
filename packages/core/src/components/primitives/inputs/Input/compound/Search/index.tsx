@@ -101,12 +101,9 @@ export const InputSearch = (props: InputSearchProps) => {
       data-part="search-button"
       onClick={() => onSearch?.((inputProps as any).value || '')}
       style={{
-        background: 'none',
-        border: 'none',
         cursor: 'pointer',
         padding: '4px',
         display: 'flex',
-        color: 'var(--ds-input-search-icon-color, var(--ds-search-icon-color, var(--ds-input-border-focus)))',
       }}
       aria-label="Search"
     >

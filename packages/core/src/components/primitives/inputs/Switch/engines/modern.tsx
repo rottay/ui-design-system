@@ -74,9 +74,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     const [internalChecked, setInternalChecked] = useState(defaultChecked);
     const isChecked = isControlled ? checked : internalChecked;
 
-    const [isHovered, setIsHovered] = useState(false);
-    const [isFocusVisible, setIsFocusVisible] = useState(false);
-
     const isDisabled = disabled || loading;
 
     const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,16 +87,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
     const handleClick = useCallback((e: React.MouseEvent<HTMLInputElement>) => {
       onClick?.(isChecked, e as unknown as React.MouseEvent);
     }, [isChecked, onClick]);
-
-    const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-      if (e.target.matches(':focus-visible')) {
-        setIsFocusVisible(true);
-      }
-    }, []);
-
-    const handleBlur = useCallback(() => {
-      setIsFocusVisible(false);
-    }, []);
 
     /* -- Dimensions ------------------------------------------------- */
     const sizeKey = size === 'large' ? 'large' : size === 'small' ? 'small' : 'default';
@@ -120,28 +107,13 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       ...style,
     };
 
-    const trackBg = (() => {
-      if (isChecked) {
-        if (isHovered && !isDisabled) return 'var(--ds-color-primary-hover)';
-        return 'var(--ds-color-primary)';
-      }
-      if (isHovered && !isDisabled) return 'var(--ds-color-border)';
-      return 'var(--ds-color-border-secondary)';
-    })();
-
     const trackStyle: React.CSSProperties = {
       position: 'relative',
       width: dim.trackW,
       height: dim.trackH,
-      borderRadius: 'var(--ds-radius-full)',
-      backgroundColor: trackBg,
       transition: `background-color ${transitionTiming}`,
       flexShrink: 0,
       ...(isDisabled && { opacity: 0.5 }),
-      ...(isFocusVisible && !isDisabled && {
-        outline: '2px solid var(--ds-color-primary)',
-        outlineOffset: '2px',
-      }),
     };
 
     const thumbStyle: React.CSSProperties = {
@@ -150,19 +122,13 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       left: dim.thumbInset,
       width: dim.thumbSize,
       height: dim.thumbSize,
-      borderRadius: '50%',
-      backgroundColor: 'var(--ds-surface-control, var(--ds-color-text-on-primary))',
-      transform: isChecked ? `translateX(${thumbTravel}px)` : 'translateX(0)',
       transition: `transform ${transitionTiming}, box-shadow ${transitionTiming}`,
-      boxShadow: 'var(--ds-elevation-1)',
+      ...({ '--ds-switch-thumb-x': isChecked ? `${thumbTravel}px` : '0px' } as React.CSSProperties),
     };
 
     const labelTextStyle: React.CSSProperties = {
       fontSize: 14,
       lineHeight: '20px',
-      color: isDisabled
-        ? 'var(--ds-color-text-disabled)'
-        : 'var(--ds-color-text-primary)',
     };
 
     return (
@@ -172,8 +138,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
         data-checked={isChecked ? 'true' : 'false'}
         data-disabled={isDisabled ? 'true' : 'false'}
         style={wrapperStyle}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         {/* Unchecked label (before track) */}
         {!isChecked && unCheckedChildren && (
@@ -188,8 +152,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
           disabled={isDisabled}
           onChange={handleChange}
           onClick={handleClick}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           autoFocus={autoFocus}
           tabIndex={tabIndex}
           id={id}
@@ -205,7 +167,6 @@ export const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
             overflow: 'hidden',
             clip: 'rect(0, 0, 0, 0)',
             whiteSpace: 'nowrap',
-            border: 0,
           }}
         />
 

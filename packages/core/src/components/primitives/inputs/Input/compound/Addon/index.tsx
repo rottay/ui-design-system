@@ -80,15 +80,6 @@ export function InputAddon({
     height: sizeValues.height,
     padding: `0 ${sizeValues.paddingX}`,
     fontSize: sizeValues.fontSize,
-    backgroundColor: variant === 'transparent' ? 'transparent' : 'var(--ds-color-bg-secondary)',
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-color-border-secondary)',
-    borderTopLeftRadius: 6,
-    borderTopRightRadius: 6,
-    borderBottomRightRadius: 6,
-    borderBottomLeftRadius: 6,
-    color: 'var(--ds-color-text-secondary)',
     whiteSpace: 'nowrap',
     transition: 'all 0.2s',
     ...style,
@@ -98,6 +89,7 @@ export function InputAddon({
     <span
       className={`rottay-input-addon ds-input-addon rottay-input-addon--${position} ${className}`}
       data-part="root"
+      data-variant={variant}
       style={addonStyle}
     >
       {children}

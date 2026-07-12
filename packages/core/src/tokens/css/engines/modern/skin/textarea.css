@@ -1,0 +1,96 @@
+/**
+ * Modern Textarea skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the `<textarea>` itself: `.ds-textarea.ds-textarea--modern
+ * [data-part='root']`, carrying `data-variant` ('outlined'|'filled'|
+ * 'borderless'), `data-status` ('default'|'error'|'warning'|'success') and
+ * `data-disabled`.
+ *
+ * FOCUS is native `:focus`, not `:focus-visible`: `isFocused` is set
+ * unconditionally in `onFocus`/`onBlur`, so the ring shows on any focus,
+ * mouse or keyboard. The file's own JSDoc previously claimed ":focus-visible
+ * only", which was stale relative to the actual handler and is corrected in
+ * the same pass.
+ *
+ * BORDER COLOR reproduces the `computedBorderColor` chain: `variant=borderless`
+ * resolves FIRST (-> transparent, wins over status and focus); otherwise a
+ * focused, non-disabled field maps the DEFAULT status to primary while
+ * error/warning/success keep their own color (identical focused or not, so
+ * only default needs a focus override); at rest each status paints its own
+ * color. Every non-borderless rule carries `:not([data-variant='borderless'])`
+ * so at most one rule wins per (variant x status x focus) combination.
+ *
+ * BACKGROUND reproduces the `backgroundColor` chain: disabled (checked FIRST in
+ * the JS) > filled > default. The disabled rule is ordered after filled so it
+ * wins the (0,4,0) tie when a field is both.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border floor at (0,3,1);
+ * every border-color rule below reaches (0,4,0) via a variant/status attribute
+ * beyond the two root classes + `[data-part='root']`. Non-border paint
+ * (background, color, outline, border-radius) wins unlayered at (0,3,0).
+ */
+
+.ds-textarea.ds-textarea--modern[data-part='root'] {
+  color: var(--ds-color-text-primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--ds-radius-md);
+  background-color: var(--ds-color-bg-input, var(--ds-surface-control, transparent));
+  outline: none;
+}
+
+/* background: filled, then disabled (disabled is checked first in the JS, so
+   it is ordered last here to win the tie against filled). */
+.ds-textarea.ds-textarea--modern[data-part='root'][data-variant='filled'] {
+  background-color: var(--ds-color-bg-input, var(--ds-surface-control, var(--ds-color-bg-secondary)));
+}
+.ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
+  color: var(--ds-color-text-disabled);
+  background-color: var(--ds-color-bg-disabled, var(--ds-color-bg-secondary));
+}
+
+/* border color: borderless (transparent, wins over all), then per-status rest,
+   then the default-status focus override. */
+.ds-textarea.ds-textarea--modern[data-part='root'][data-variant='borderless'] {
+  border-color: transparent;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default'] {
+  border-color: var(--ds-color-border);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='success'] {
+  border-color: var(--ds-color-success);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:focus:not([data-disabled='true']) {
+  border-color: var(--ds-color-primary);
+}
+
+/* Focus ring: base (status=default) + per-status override. `outline-offset`
+   is constant across every branch; only the color channel varies. */
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true']) {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -1px;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='error'] {
+  outline: 2px solid var(--ds-color-error);
+  outline-offset: -1px;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='warning'] {
+  outline: 2px solid var(--ds-color-warning);
+  outline-offset: -1px;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='success'] {
+  outline: 2px solid var(--ds-color-success);
+  outline-offset: -1px;
+}

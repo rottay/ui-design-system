@@ -90,7 +90,6 @@ export default function RusticFormField(props: FormFieldProps): React.ReactEleme
   const labelStyle: React.CSSProperties = {
     ...sizeStyles.label,
     fontWeight: 500,
-    color: 'var(--ds-form-label-color, #374151)',
     ...(isHorizontal ? {
       width: labelWidth,
       flexShrink: 0,
@@ -108,13 +107,11 @@ export default function RusticFormField(props: FormFieldProps): React.ReactEleme
 
   const errorStyle: React.CSSProperties = {
     ...sizeStyles.help,
-    color: 'var(--ds-form-error-color, #ef4444)',
     margin: 0,
   };
 
   const helpStyle: React.CSSProperties = {
     ...sizeStyles.help,
-    color: 'var(--ds-form-help-color, #6b7280)',
     margin: 0,
   };
 
@@ -130,7 +127,7 @@ export default function RusticFormField(props: FormFieldProps): React.ReactEleme
         {required && (
           <span
             data-part="required-mark"
-            style={{ color: 'var(--ds-form-required-color, #ef4444)', marginLeft: '2px' }}
+            style={{ marginLeft: '2px' }}
             aria-hidden="true"
           >
             *

@@ -1,0 +1,52 @@
+/**
+ * Rustic Input RESIDUAL skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * COMPOSES with engines/rustic/skin/input.css (WO-ARC-07), which paints only
+ * the shell `[data-part='root']` (always the outer `<div>` here). This file
+ * paints the inner `<input>` passthrough, the affix spans, the clear button,
+ * and the count / error-message siblings. No selector touches `[data-part=
+ * 'root']` itself.
+ *
+ * DELIBERATELY UNLAYERED (P-47). The clear button's hover was four IMPERATIVE
+ * `.style.transform`/`.style.color` writes -> a `:hover` rule (byte-exact
+ * scale + color). The inner input is the chrome-free passthrough the shell
+ * paints around.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border COLOR (all borders are
+ * `none` resets), so every rule wins unlayered at (0,3,0) or higher.
+ */
+
+.rottay-input.rottay-input--rustic[data-part='root'] input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--ds-input-color);
+}
+.rottay-input.rottay-input--rustic[data-part='root'] input:disabled {
+  color: var(--ds-input-color-disabled);
+}
+
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='affix-prefix'],
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='affix-suffix'] {
+  color: var(--ds-input-addon-color);
+}
+
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='clear-button'] {
+  color: var(--ds-input-clear-color);
+  background: none;
+  border: none;
+}
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='clear-button']:hover {
+  transform: scale(1.1);
+  color: var(--ds-input-color, currentColor);
+}
+
+.rottay-input.rottay-input--rustic[data-part='root'] ~ [data-part='count'] {
+  color: var(--ds-input-addon-color);
+}
+.rottay-input.rottay-input--rustic[data-part='root'] ~ [data-part='count'][data-error='true'] {
+  color: var(--ds-input-error-color);
+}
+.rottay-input.rottay-input--rustic[data-part='root'] ~ [data-part='error-message'] {
+  color: var(--ds-input-error-color);
+}

@@ -1,0 +1,71 @@
+/**
+ * Rustic Radio skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-radio.ds-radio--rustic[data-part='root']` (a `<label>`),
+ * carrying `data-checked`, `data-disabled`, `data-error`. `circle`, `dot`,
+ * `label`, `description` are descendants; the hidden `<input>` is a child of
+ * `circle`.
+ *
+ * NO HOVER: this engine tracked none (preserved -- no invented rule). The focus
+ * ring (removed `useInteractionState().focused`, "any focus") maps to the
+ * circle's `:focus-within` (the input is its only focusable descendant). The
+ * checked circle border AND the dot share `getCheckedDot()` (color-prop
+ * dependent), carried once via the uncounted root custom property
+ * `--ds-radio-dot-fill`. Border priority reproduces the JS ternary
+ * error > checked(dot-fill) > default; the checked rule carries
+ * `:not([data-error='true'])` so error wins.
+ *
+ * SPECIFICITY (P-48): border-color rules reach (0,4,0) via a state attribute
+ * (or the repeated `[data-part='circle']`) beyond the two root classes.
+ * Non-border paint wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`rgba(59, 130, 246, 0.2)`, `rgba(59, 130, 246, 0.1)`)
+ * transcribed byte-exact from the source.
+ */
+
+.ds-radio.ds-radio--rustic [data-part='circle'] {
+  border-radius: 50%;
+  background-color: var(--ds-radio-bg);
+  outline: none;
+  box-shadow: none;
+}
+.ds-radio.ds-radio--rustic[data-disabled='true'] [data-part='circle'] {
+  background-color: var(--ds-radio-bg-disabled);
+}
+.ds-radio.ds-radio--rustic [data-part='circle']:focus-within {
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1);
+}
+.ds-radio.ds-radio--rustic [data-part='circle'][data-part='circle'] {
+  border: 2px solid var(--ds-radio-border);
+}
+.ds-radio.ds-radio--rustic[data-checked='true']:not([data-error='true']) [data-part='circle'] {
+  border-color: var(--ds-radio-dot-fill);
+}
+.ds-radio.ds-radio--rustic[data-error='true'] [data-part='circle'] {
+  border-color: var(--ds-radio-error-border);
+}
+
+.ds-radio.ds-radio--rustic [data-part='dot'] {
+  border-radius: 50%;
+  background-color: var(--ds-radio-dot-fill);
+  transform: scale(0);
+}
+.ds-radio.ds-radio--rustic[data-checked='true'] [data-part='dot'] {
+  transform: scale(1);
+}
+
+.ds-radio.ds-radio--rustic [data-part='label'] {
+  color: var(--ds-radio-label-color);
+}
+.ds-radio.ds-radio--rustic[data-disabled='true']:not([data-error='true']) [data-part='label'] {
+  color: var(--ds-radio-label-color-disabled);
+}
+.ds-radio.ds-radio--rustic[data-error='true'] [data-part='label'] {
+  color: var(--ds-radio-error-color);
+}
+
+.ds-radio.ds-radio--rustic [data-part='description'] {
+  color: var(--ds-radio-description-color);
+}

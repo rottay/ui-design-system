@@ -1,0 +1,32 @@
+/**
+ * CheckboxGroup skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/checkbox-group.css -- the compound renders
+ * one DOM under every engine, so there is no --modern/--rustic discriminator.
+ *
+ * SCOPE ROOT is `.rottay-checkbox-group[data-part='root']`. Each option stamps
+ * `[data-part='option']` (with `data-checked`/`data-disabled`) wrapping
+ * `[data-part='option-box']` (the indicator; a `data-part` added for this
+ * migration). The svg tick's color is an SVG `stroke` attribute, not a style
+ * key, so it stays in the JSX (out of scope, same as other spinner/icon
+ * attributes).
+ *
+ * The active color variant (`COLOR_MAP[color]` -> border/bg) is a per-group
+ * runtime value carried once, on the root, via the uncounted custom properties
+ * `--ds-cbg-color-border` / `--ds-cbg-color-bg`.
+ *
+ * SPECIFICITY (P-48): the option-box border reaches (0,4,0) via the
+ * `[data-part='option']` ancestor plus a repeated/qualifying attribute. Non-
+ * border paint wins unlayered at (0,3,0) or lower.
+ */
+
+.rottay-checkbox-group [data-part='option-box'] {
+  border-radius: 2px;
+  background-color: transparent;
+}
+.rottay-checkbox-group [data-part='option'] [data-part='option-box'][data-part='option-box'] {
+  border: 2px solid var(--ds-color-border-secondary);
+}
+.rottay-checkbox-group [data-part='option'][data-checked='true'] [data-part='option-box'] {
+  border-color: var(--ds-cbg-color-border);
+  background-color: var(--ds-cbg-color-bg);
+}

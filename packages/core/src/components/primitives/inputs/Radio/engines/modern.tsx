@@ -57,25 +57,12 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
-  const [isHovered, setIsHovered] = useState(false);
-  const [isFocusVisible, setIsFocusVisible] = useState(false);
-
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isControlled) {
       setInternalChecked(e.target.checked);
     }
     onChange?.(e);
   }, [isControlled, onChange]);
-
-  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-    if (e.target.matches(':focus-visible')) {
-      setIsFocusVisible(true);
-    }
-  }, []);
-
-  const handleBlur = useCallback(() => {
-    setIsFocusVisible(false);
-  }, []);
 
   /* -- Sizes -------------------------------------------------------- */
   // TODO: migrate to CSS custom properties (--ds-radio-size-xs through --ds-radio-size-xl)
@@ -96,24 +83,11 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
     width: circleSize,
     height: circleSize,
     minWidth: circleSize,
-    borderRadius: '50%',
-    border: `2px solid ${isChecked ? 'var(--ds-radio-checked-bg, var(--ds-color-primary))' : 'var(--ds-radio-border, var(--ds-color-border-secondary))'}`,
-    backgroundColor: 'transparent',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     transition: `border-color ${transitionTiming}, box-shadow ${transitionTiming}`,
     flexShrink: 0,
-    ...(isHovered && !disabled && !isChecked && {
-      borderColor: 'var(--ds-radio-border, var(--ds-color-border))',
-    }),
-    ...(isHovered && !disabled && isChecked && {
-      borderColor: 'var(--ds-color-primary-hover)',
-    }),
-    ...(isFocusVisible && !disabled && {
-      outline: '2px solid var(--ds-color-primary)',
-      outlineOffset: '2px',
-    }),
     ...(disabled && {
       opacity: 'var(--ds-radio-disabled-opacity, 0.5)' as unknown as number,
       cursor: 'not-allowed',
@@ -123,9 +97,6 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   const dotStyle: React.CSSProperties = {
     width: dotSize,
     height: dotSize,
-    borderRadius: '50%',
-    backgroundColor: 'var(--ds-color-text-on-primary)',
-    transform: isChecked ? 'scale(1)' : 'scale(0)',
     transition: `transform ${transitionTiming}`,
   };
 
@@ -143,15 +114,11 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
   const labelTextStyle: React.CSSProperties = {
     fontSize: 14,
     lineHeight: '20px',
-    color: disabled
-      ? 'var(--ds-color-text-disabled)'
-      : 'var(--ds-color-text-primary)',
   };
 
   const descriptionStyle: React.CSSProperties = {
     fontSize: 12,
     lineHeight: '16px',
-    color: 'var(--ds-color-text-muted)',
     marginTop: 1,
   };
 
@@ -163,8 +130,6 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
         data-checked={isChecked ? 'true' : 'false'}
         data-disabled={disabled ? 'true' : 'false'}
         style={labelRowStyle}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
       >
         {/* Hidden native input for accessibility + form participation */}
         <input
@@ -175,8 +140,6 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
           checked={isChecked}
           disabled={disabled}
           onChange={handleChange}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
           aria-checked={isChecked}
           style={{
             position: 'absolute',
@@ -187,7 +150,6 @@ export default function ModernRadio(props: RadioProps): React.ReactElement {
             overflow: 'hidden',
             clip: 'rect(0, 0, 0, 0)',
             whiteSpace: 'nowrap',
-            border: 0,
           }}
         />
 

@@ -143,17 +143,21 @@ export function CheckboxGroup({
     lg: '16px',
   };
 
+  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
+  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+
   const containerStyle: CSSProperties = {
     display: 'flex',
     flexDirection: direction === 'horizontal' ? 'row' : 'column',
     gap: spacingMap[spacing] || spacingMap.md,
     flexWrap: direction === 'horizontal' ? 'wrap' : 'nowrap',
+    ...({
+      '--ds-cbg-color-border': colors.border,
+      '--ds-cbg-color-bg': colors.bg,
+    } as CSSProperties),
     ...style,
   };
-
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
-  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   // Render options if provided
   const renderOptions = () => {
@@ -179,6 +183,7 @@ export function CheckboxGroup({
           }}
         >
           <span
+            data-part="option-box"
             style={{
               position: 'relative',
               display: 'inline-flex',
@@ -186,9 +191,6 @@ export function CheckboxGroup({
               justifyContent: 'center',
               width: sizeValue,
               height: sizeValue,
-              borderRadius: '2px',
-              border: `2px solid ${isChecked ? colors.border : 'var(--ds-color-border-secondary)'}`,
-              backgroundColor: isChecked ? colors.bg : 'transparent',
               transition: 'all 0.2s ease-in-out',
             }}
           >

@@ -1,0 +1,72 @@
+/**
+ * Modern Form skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style` (the error-list keeps
+ * its caller `...style` spread, which still wins).
+ *
+ * SCOPE: the field-level parts are scoped on the FORM ITEM's own class
+ * `.ds-form-item.ds-form-item--modern` (a FormItem can render outside a `<form>`).
+ * `feedback-icon` carries `data-status` ('success'|'error'|'warning'|'validating'),
+ * added for this migration; `label-text` is the label's inner text span (a
+ * `data-part` added for this migration); `help-text` carries `data-error`. The
+ * error list is a separate component with its own `.ds-form-error-list--modern`
+ * class (added so this skin can reach it without a form ancestor).
+ *
+ * The two per-mount `<style>` keyframes are moved here renamed
+ * `ds-form-modern-*` (engine-namespaced: the rustic Form defines a
+ * `feedback-in` with different content, so a bare `ds-form-feedback-in` would
+ * collide across the two globally-imported skins). The inline `animation`
+ * references the new names.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='success'] {
+  color: var(--ds-color-success);
+}
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='error'] {
+  color: var(--ds-color-error);
+}
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='validating'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='label-text'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-form-item.ds-form-item--modern [data-part='required-mark'] {
+  color: var(--ds-color-error);
+}
+.ds-form-item.ds-form-item--modern [data-part='tooltip-icon'] {
+  border-radius: 50%;
+  background: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-secondary);
+}
+.ds-form-item.ds-form-item--modern [data-part='help-text'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-form-item.ds-form-item--modern [data-part='help-text'][data-error='true'] {
+  color: var(--ds-color-error);
+}
+.ds-form-item.ds-form-item--modern [data-part='extra-text'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-form-error-list.ds-form-error-list--modern[data-part='error-list'] {
+  color: var(--ds-color-error);
+}
+
+@keyframes ds-form-modern-error-slide {
+  from { opacity: 0; transform: translateY(-4px); max-height: 0; }
+  to { opacity: 1; transform: translateY(0); max-height: 40px; }
+}
+@keyframes ds-form-modern-feedback-in {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}

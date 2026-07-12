@@ -1,0 +1,82 @@
+/**
+ * Modern Checkbox skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-checkbox.ds-checkbox--modern[data-part='root']` (a
+ * `<label>`), carrying `data-checked`, `data-indeterminate`, `data-disabled`,
+ * plus `data-active` (checked || indeterminate) and `data-standalone` (no label
+ * -> circular indicator) added for this migration to give the box's three-way
+ * branch a CSS discriminator. `box`, `checkmark`, `label` are descendants; the
+ * hidden `<input>` is a sibling of `box`.
+ *
+ * Box border/background reproduce the JS chain active > standalone > normal;
+ * the standalone rule carries `:not([data-active='true'])` so active wins.
+ * Hover (removed `isHovered`, onMouseEnter/onMouseLeave on the root) -> `:hover`
+ * gated `:not([data-disabled='true'])`; the focus ring (removed
+ * `isFocusVisible`) -> `input:focus-visible ~ [data-part='box']`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via a state attribute (or the
+ * repeated `[data-part='box']`) beyond the two root classes. Non-border paint
+ * wins unlayered at (0,3,0) or higher.
+ */
+
+.ds-checkbox.ds-checkbox--modern [data-part='box'] {
+  border-radius: var(--ds-radius-sm);
+  background-color: transparent;
+  transform: scale(1);
+}
+.ds-checkbox.ds-checkbox--modern[data-standalone='true'] [data-part='box'] {
+  border-radius: 999px;
+}
+
+/* box border: normal (base), standalone (not active), active. */
+.ds-checkbox.ds-checkbox--modern [data-part='box'][data-part='box'] {
+  border: 2px solid var(--ds-checkbox-border, var(--ds-color-border-secondary));
+}
+.ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']) [data-part='box'] {
+  border-color: color-mix(in srgb, var(--ds-checkbox-border, var(--ds-color-border)) 88%, var(--ds-surface-panel) 12%);
+  background-color: color-mix(in srgb, var(--ds-surface-panel) 76%, var(--ds-color-text-primary) 24%);
+}
+.ds-checkbox.ds-checkbox--modern[data-active='true'] [data-part='box'] {
+  border-color: var(--ds-checkbox-checked-bg, var(--ds-color-primary));
+  background-color: var(--ds-checkbox-checked-bg, var(--ds-color-primary));
+}
+
+/* hover (not disabled): active, standalone-not-active, normal-not-active. */
+.ds-checkbox.ds-checkbox--modern[data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  border-color: var(--ds-color-primary-hover);
+  background-color: var(--ds-color-primary-hover);
+}
+.ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']):hover:not([data-disabled='true']) [data-part='box'] {
+  border-color: var(--ds-color-text-secondary);
+  background-color: color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%);
+}
+.ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):hover:not([data-disabled='true']) [data-part='box'] {
+  border-color: var(--ds-checkbox-border, var(--ds-color-border));
+}
+
+/* focus ring from the hidden input's :focus-visible. */
+.ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 2px;
+}
+
+.ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
+  transform: scale(1);
+}
+
+.ds-checkbox.ds-checkbox--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-checkbox.ds-checkbox--modern[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-color-text-disabled);
+}
+
+/* hidden accessibility input (visually clipped): no border. */
+.ds-checkbox.ds-checkbox--modern input {
+  border: 0;
+}

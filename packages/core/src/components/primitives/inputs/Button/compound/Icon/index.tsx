@@ -67,10 +67,10 @@
 
 'use client';
 
-import React, { forwardRef, useState } from 'react';
+import React, { forwardRef } from 'react';
 import type { ReactNode, CSSProperties, MouseEvent } from 'react';
 import type { ButtonSize, ButtonVariant } from '../../Button.types';
-import { SIZE_MAP, VARIANT_MAP, SHAPE_MAP } from '../../Button.types';
+import { SIZE_MAP, VARIANT_MAP } from '../../Button.types';
 
 export interface ButtonIconProps {
   /** Icon to display */
@@ -153,20 +153,12 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
     },
     ref
   ) => {
-    const [isHovered, setIsHovered] = useState(false);
-    const [isActive, setIsActive] = useState(false);
-
     // Get size configuration
     const sizeConfig = SIZE_MAP[size as keyof typeof SIZE_MAP] || SIZE_MAP.md;
     const buttonSize = sizeConfig.height;
 
     // Get variant colors
     const variantConfig = VARIANT_MAP[variant as keyof typeof VARIANT_MAP] || VARIANT_MAP.default;
-
-    // Compute effective background with hover state
-    const effectiveBg = isHovered && !disabled && !loading
-      ? variantConfig.hoverBg
-      : variantConfig.bg;
 
     const buttonStyle: CSSProperties = {
       display: 'inline-flex',
@@ -176,17 +168,17 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
       height: buttonSize,
       minWidth: buttonSize,
       padding: 0,
-      borderRadius: SHAPE_MAP.default,
-      border: variant === 'ghost' || variant === 'text' || variant === 'link'
-        ? 'none'
-        : `1px solid ${variantConfig.borderColor}`,
-      background: effectiveBg,
-      color: variantConfig.color,
       cursor: disabled || loading ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
       transition: 'all 0.2s ease',
-      outline: 'none',
-      transform: isActive && !disabled && !loading ? 'scale(0.95)' : 'scale(1)',
+      ...({
+        '--ds-button-icon-bg': variantConfig.bg,
+        '--ds-button-icon-hover-bg': variantConfig.hoverBg,
+        '--ds-button-icon-border': variant === 'ghost' || variant === 'text' || variant === 'link'
+          ? 'none'
+          : `1px solid ${variantConfig.borderColor}`,
+        '--ds-button-icon-color': variantConfig.color,
+      } as CSSProperties),
       ...style,
     };
 
@@ -209,10 +201,6 @@ export const ButtonIcon = forwardRef<HTMLButtonElement, ButtonIconProps>(
         data-loading={loading ? 'true' : 'false'}
         style={buttonStyle}
         onClick={handleClick}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => { setIsHovered(false); setIsActive(false); }}
-        onMouseDown={() => setIsActive(true)}
-        onMouseUp={() => setIsActive(false)}
         disabled={disabled || loading}
         aria-label={ariaLabel}
         aria-disabled={disabled || loading}

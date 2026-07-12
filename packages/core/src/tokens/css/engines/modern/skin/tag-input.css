@@ -1,0 +1,57 @@
+/**
+ * Modern TagInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-tag-input.ds-tag-input--modern[data-part='root']`,
+ * carrying `data-error` ('true'|'false') and `data-disabled`. `tag-chip`,
+ * `tag-remove`, and `input` are descendants of root. `error-message` is a
+ * DOM NEPHEW of root, not a descendant: the JSX wraps it in an unclassed
+ * `<div style={{marginTop:4}}>` that is itself a sibling of root (both
+ * children of the component's outer wrapper) -- selected via the general
+ * sibling combinator plus one descendant hop through that wrapper.
+ *
+ * This engine has no focus-driven paint at all (no `useInteractionState`,
+ * no `isFocused`) -- the container's border only ever reacts to `data-error`.
+ *
+ * SPECIFICITY (P-48): the container's `border` paints a color, so its rules
+ * reach (0,4,0) via the repeated `[data-part='root']`. Everything else here
+ * is non-border paint (background, color, border-radius) and wins unlayered
+ * at (0,3,0).
+ */
+
+.ds-tag-input.ds-tag-input--modern[data-part='root'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'][data-error='true'] {
+  border: 1px solid var(--ds-color-error);
+}
+
+.ds-tag-input.ds-tag-input--modern [data-part='tag-chip'] {
+  border-radius: 9999px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-tag-input.ds-tag-input--modern [data-part='tag-remove'] {
+  background: transparent;
+  color: inherit;
+  border: none;
+}
+
+.ds-tag-input.ds-tag-input--modern [data-part='input'] {
+  outline: none;
+  background: transparent;
+  border: none;
+}
+
+.ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message'] {
+  color: var(--ds-color-error);
+}

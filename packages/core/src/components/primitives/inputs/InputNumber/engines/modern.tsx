@@ -160,20 +160,16 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       }
     };
 
-    // Resolve size and status to inline style values
+    // Resolve size to inline style values (paint is in the modern skin, keyed
+    // on the `data-status` attribute stamped on root below)
     const sizeKey = size === 'large' ? 'large' : size === 'small' ? 'small' : 'default';
     const sizeStyle = sizeStyles[sizeKey];
-    const statusStyle: React.CSSProperties = status === 'error'
-      ? { borderColor: 'var(--ds-color-error)' }
-      : status === 'warning'
-        ? { borderColor: 'var(--ds-color-warning)' }
-        : {};
 
     return (
       <div className="flex items-center gap-1" style={style}>
-        {addonBefore && <span data-part="addon-before" className="px-2 py-1 rounded-l" style={{ background: 'var(--ds-surface-inset)' }}>{addonBefore}</span>}
+        {addonBefore && <span data-part="addon-before" className="px-2 py-1 rounded-l">{addonBefore}</span>}
         <div className="relative flex items-center">
-          {prefix && <span data-part="prefix" className="absolute left-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{prefix}</span>}
+          {prefix && <span data-part="prefix" className="absolute left-2">{prefix}</span>}
           <input
             ref={ref}
             type="number"
@@ -182,17 +178,9 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             data-status={status ?? 'default'}
             data-disabled={disabled ? 'true' : 'false'}
             style={{
-              borderWidth: '1px',
-              borderStyle: 'solid',
-              borderColor: 'var(--ds-color-border)',
-              borderRadius: 'var(--ds-radius-md)',
-              background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-              color: 'var(--ds-color-text-primary)',
-              outline: 'none',
               boxSizing: 'border-box',
               width: '100%',
               ...sizeStyle,
-              ...statusStyle,
             }}
             value={formatValue(currentValue)}
             min={min}
@@ -208,14 +196,14 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             name={name}
           />
           <div className="absolute right-2 flex items-center gap-1">
-            {suffix && <span data-part="suffix" style={{ color: 'var(--ds-color-text-secondary)' }}>{suffix}</span>}
+            {suffix && <span data-part="suffix">{suffix}</span>}
             {controls && !disabled && !readOnly && (
               <div className="flex flex-col">
                 <button
                   type="button"
                   data-part="stepper-button"
                   data-direction="up"
-                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 6px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
+                  style={{ height: 16, padding: '0 4px', fontSize: 12, cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('up')}
                   tabIndex={-1}
                 >
@@ -225,7 +213,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
                   type="button"
                   data-part="stepper-button"
                   data-direction="down"
-                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 16, padding: '0 4px', fontSize: 12, borderRadius: 'var(--ds-radius-sm, 6px)', border: 'none', cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
+                  style={{ height: 16, padding: '0 4px', fontSize: 12, cursor: 'pointer', lineHeight: 1, minHeight: 0 }}
                   onClick={() => handleStep('down')}
                   tabIndex={-1}
                 >
@@ -235,7 +223,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
             )}
           </div>
         </div>
-        {addonAfter && <span data-part="addon-after" className="px-2 py-1 rounded-r" style={{ background: 'var(--ds-surface-inset)' }}>{addonAfter}</span>}
+        {addonAfter && <span data-part="addon-after" className="px-2 py-1 rounded-r">{addonAfter}</span>}
       </div>
     );
   }

@@ -85,18 +85,13 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
     }
   }, [onKeyDown, onPressEnter]);
 
-  // Merge DS size styles with conditional error/disabled overrides
+  // Merge DS size styles with conditional disabled overrides; border/background
+  // (error, disabled) live in the modern skin, keyed on the `data-error`/
+  // `data-disabled` attributes stamped on root below
   const inputStyle: React.CSSProperties = {
     width: '100%',
     paddingRight: 40,
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: error ? 'var(--ds-color-error)' : 'var(--ds-color-border)',
-    background: disabled ? 'var(--ds-color-alpha-black-50)' : 'var(--ds-surface-input, var(--ds-surface-card))',
-    borderRadius: 'var(--ds-radius-md)',
-    outline: 'none',
     boxSizing: 'border-box',
-    color: 'var(--ds-color-text-primary)',
     opacity: disabled ? 0.6 : 1,
     cursor: disabled ? 'not-allowed' : undefined,
     ...(SIZE_STYLES[size] || SIZE_STYLES.md),
@@ -138,7 +133,7 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
           <button
             type="button"
             data-part="visibility-toggle"
-            style={{ position: 'absolute', right: 8, top: '50%', transform: 'translateY(-50%)', background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+            style={{ position: 'absolute', right: 8, top: '50%', height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
             onClick={() => setVisible(!visible)}
             tabIndex={-1}
             aria-label={visible ? 'Hide password' : 'Show password'}
@@ -159,22 +154,21 @@ export default function ModernPasswordInput(props: PasswordInputProps): React.Re
       </div>
       {/* Strength indicator bar: width and color driven by STRENGTH_WIDTHS/STRENGTH_COLORS constants */}
       {strengthIndicator && strengthLevel && (
-        <div data-part="strength-track" style={{ width: '100%', height: 4, borderRadius: 9999, marginTop: 4, overflow: 'hidden', background: 'var(--ds-surface-panel)' }}>
+        <div data-part="strength-track" style={{ width: '100%', height: 4, marginTop: 4, overflow: 'hidden' }}>
           <div
             data-part="strength-fill"
             style={{
               height: '100%',
-              borderRadius: 9999,
               transition: 'all var(--ds-motion-slow)',
               width: STRENGTH_WIDTHS[strengthLevel],
-              backgroundColor: STRENGTH_COLORS[strengthLevel],
+              ...({ '--ds-password-strength-fill': STRENGTH_COLORS[strengthLevel] } as React.CSSProperties),
             }}
           />
         </div>
       )}
       {error && errorMessage && (
         <div style={{ paddingTop: 4 }}>
-          <span data-part="error-message" style={{ color: 'var(--ds-color-error)', fontSize: 12 }}>{errorMessage}</span>
+          <span data-part="error-message" style={{ fontSize: 12 }}>{errorMessage}</span>
         </div>
       )}
     </div>

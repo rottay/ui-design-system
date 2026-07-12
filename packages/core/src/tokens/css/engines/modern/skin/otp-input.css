@@ -1,0 +1,41 @@
+/**
+ * Modern OTPInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-otp-input.ds-otp-input--modern[data-part='root']`, carrying
+ * `data-disabled`. Each digit is a `[data-part='slot']` (`data-error`,
+ * `data-filled`); `error-message` is a nephew (inside an unclassed div that is a
+ * sibling of root), reached via `root ~ * [data-part='error-message']`.
+ *
+ * The slot's focus border reproduces the removed IMPERATIVE handlers
+ * (`onFocus`/`onBlur` wrote `.style.borderColor` directly, gated `!error`) as a
+ * `:focus:not([data-error='true'])` rule; the blurred border returns to the base
+ * rule. `onFocus`'s `.select()` is kept.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * the slot border reaches (0,4,0) via the repeated `[data-part='slot']`.
+ * Non-border paint wins unlayered at (0,3,0).
+ */
+
+.ds-otp-input.ds-otp-input--modern [data-part='slot'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-error='true'] {
+  border: 1px solid var(--ds-color-error);
+}
+.ds-otp-input.ds-otp-input--modern [data-part='slot']:focus:not([data-error='true']) {
+  border-color: var(--ds-color-primary);
+}
+
+.ds-otp-input.ds-otp-input--modern ~ * [data-part='error-message'] {
+  color: var(--ds-color-error);
+}

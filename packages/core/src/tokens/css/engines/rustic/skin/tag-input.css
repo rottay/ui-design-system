@@ -1,0 +1,77 @@
+/**
+ * Rustic TagInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-tag-input.ds-tag-input--rustic[data-part='root']`,
+ * carrying `data-error` and `data-disabled`. `error-message` IS a direct DOM
+ * sibling of root here (no intermediate wrapper, unlike the modern engine)
+ * -- selected via a plain general sibling combinator.
+ *
+ * FOCUS: the removed `useInteractionState()` call's `focused` (read only to
+ * drive the border/box-shadow this skin now paints) was set exclusively by
+ * `onFocus`/`onBlur` spread onto `[data-part='input']` -- never onto the
+ * tag-remove buttons -- so it tracked ONLY that one descendant's native
+ * focus (interaction-state's own doc: "`focused` is any focus"). A plain
+ * `:focus-within` on root would also fire when a remove button is
+ * tab-focused, which the removed state never did; `:has([data-part='input']
+ * :focus)` reproduces the original scope exactly.
+ *
+ * BORDER COLOR priority, byte-exact from the removed inline ternary:
+ * error > focused > default. `box-shadow` (the focus ring) has no error
+ * dependency -- it shows on focus regardless of error state, matching the
+ * original.
+ *
+ * SPECIFICITY (P-48): border paints a color, so its rules reach (0,4,0) via
+ * the repeated `[data-part='root']`. Everything else here is non-border
+ * paint (background, color, box-shadow, border-radius) and wins unlayered
+ * at (0,3,0).
+ *
+ * Fallback literals (`#ef4444`, `#3b82f6`, `#d1d5db`, `#f3f4f6`, `#fff`,
+ * `#dbeafe`, `#1d4ed8`, `rgba(59, 130, 246, 0.2)`) are transcribed
+ * byte-exact from the source `var(--ds-color-*, #hex)` declarations.
+ */
+
+.ds-tag-input.ds-tag-input--rustic[data-part='root'] {
+  border-radius: 8px;
+  background-color: var(--ds-color-bg-input, #fff);
+  box-shadow: none;
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-disabled='true'] {
+  background-color: var(--ds-color-neutral-100, #f3f4f6);
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root']:has([data-part='input']:focus) {
+  box-shadow: 0 0 0 2px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2));
+}
+
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root']:has([data-part='input']:focus):not([data-error='true']) {
+  border: 1px solid var(--ds-color-primary-500, #3b82f6);
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root'][data-error='true'] {
+  border: 1px solid var(--ds-color-error-500, #ef4444);
+}
+
+.ds-tag-input.ds-tag-input--rustic [data-part='tag-chip'] {
+  background-color: var(--ds-color-primary-100, #dbeafe);
+  color: var(--ds-color-primary-700, #1d4ed8);
+  border-radius: 4px;
+}
+
+.ds-tag-input.ds-tag-input--rustic [data-part='tag-remove'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+.ds-tag-input.ds-tag-input--rustic [data-part='input'] {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.ds-tag-input.ds-tag-input--rustic ~ [data-part='error-message'] {
+  color: var(--ds-color-error-500, #ef4444);
+}

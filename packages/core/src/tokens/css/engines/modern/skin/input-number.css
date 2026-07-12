@@ -1,0 +1,70 @@
+/**
+ * Modern InputNumber skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-input-number.ds-input-number--modern[data-part='root']`,
+ * the `<input>` itself -- carrying `data-status` ('default'|'error'|'warning')
+ * and `data-disabled`. Unlike a container-root component (TagInput, Textarea),
+ * a void `<input>` cannot have descendants, so every other part
+ * (`addon-before`, `prefix`, `suffix`, `stepper-button`, `addon-after`) is a
+ * SIBLING or NEPHEW of root, not a child -- some of them (`addon-before`,
+ * `prefix`) precede root in the DOM, which a forward-only `~`/descendant
+ * combinator anchored ON root cannot reach. Each such part is instead
+ * anchored on ITSELF and reaches forward with `:has()` to confirm it shares
+ * the component's wrapper (`[part]:has(~ … root)`); parts that follow root
+ * are still reached the ordinary way (`root ~ …`). This reproduces the exact
+ * JSX nesting (`<div addon-before?><div middle><span prefix?><input root>
+ * <div><span suffix?><div stepper?></div></div></div><div addon-after?>`)
+ * so no rule can bleed into an unrelated component that happens to reuse the
+ * same `data-part` name elsewhere on the page.
+ *
+ * This engine has no focus-driven paint (no `useInteractionState`) -- the
+ * root's border only ever reacts to `data-status`.
+ *
+ * SPECIFICITY (P-48): the root's `border` paints a color, so its rules reach
+ * (0,4,0) via the repeated `[data-part='root']`. Everything else here is
+ * non-border paint (background, color, outline, border-radius) and wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-input-number.ds-input-number--modern[data-part='root'] {
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='error'] {
+  border: 1px solid var(--ds-color-error);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='warning'] {
+  border: 1px solid var(--ds-color-warning);
+}
+
+[data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--modern[data-part='root']) {
+  background: var(--ds-surface-inset);
+}
+div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-part='addon-after'] {
+  background: var(--ds-surface-inset);
+}
+
+[data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {
+  color: var(--ds-color-text-secondary);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='suffix'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-sm, 6px);
+  border: none;
+}

@@ -99,11 +99,10 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     display: 'inline-block',
     width: dims.trackW,
     height: dims.trackH,
-    borderRadius: dims.trackH,
-    background: trackColor,
     cursor: disabled ? 'not-allowed' : 'pointer',
     transition: 'background var(--ds-motion-normal) var(--ds-motion-ease-out)',
     flexShrink: 0,
+    ...({ '--ds-toggle-track-r': dims.trackH, '--ds-toggle-track-fill': trackColor } as React.CSSProperties),
   };
 
   const thumbStyle: React.CSSProperties = {
@@ -112,11 +111,8 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
     left: `calc((${dims.trackH} - ${dims.thumbSize}) / 2)`,
     width: dims.thumbSize,
     height: dims.thumbSize,
-    borderRadius: '50%',
-    background: 'var(--ds-surface-control, var(--ds-color-text-on-primary))',
-    transform: isChecked ? `translateX(calc(${dims.trackW} - ${dims.trackH}))` : 'translateX(0)',
     transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
-    boxShadow: 'var(--ds-elevation-1)',
+    ...({ '--ds-toggle-thumb-x': isChecked ? `calc(${dims.trackW} - ${dims.trackH})` : '0' } as React.CSSProperties),
   };
 
   const displayLabel = label || children;
@@ -153,12 +149,12 @@ export default function ModernToggle(props: ToggleProps): React.ReactElement {
         {(displayLabel || description) && (
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             {displayLabel && (
-              <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 500, color: error ? 'var(--ds-color-error)' : 'var(--ds-color-text-primary)' }}>
+              <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 500 }}>
                 {displayLabel}
               </span>
             )}
             {description && (
-              <span data-part="description" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+              <span data-part="description" style={{ fontSize: 'var(--ds-font-size-xs, 12px)' }}>
                 {description}
               </span>
             )}

@@ -167,14 +167,6 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       className,
     ].filter(Boolean).join(' ');
 
-    /** Resolve border color from CSS variables based on status/focus priority. */
-    const getBorderColor = () => {
-      if (status === 'error') return 'var(--ds-inputnumber-error-border)';
-      if (status === 'warning') return 'var(--ds-inputnumber-warning-border)';
-      if (isFocused) return 'var(--ds-inputnumber-border-focus)';
-      return 'var(--ds-inputnumber-border)';
-    };
-
     const wrapperStyle: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
@@ -189,35 +181,33 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       alignItems: 'center',
     };
 
-    // Adjust border-radius depending on addon presence so edges merge seamlessly
+    // border-radius is genuinely prop-derived (addon presence stamps no
+    // anatomy of its own to key a CSS selector on) -- carried to the skin via
+    // a quoted custom property so the same ternary this line always computed
+    // still drives the value, just through CSS instead of an inline style key
     const inputStyle: React.CSSProperties = {
       padding: sizeConfig.padding,
       paddingLeft: prefix ? '28px' : undefined,
       paddingRight: suffix || controls ? (controls ? '36px' : '28px') : undefined,
       fontSize: sizeConfig.fontSize,
-      border: `1px solid ${getBorderColor()}`,
-      borderRadius: addonBefore && addonAfter ? '0' : addonBefore ? '0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0' : addonAfter ? 'var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius)' : 'var(--ds-inputnumber-radius)',
-      outline: 'none',
       transition: 'var(--ds-inputnumber-transition)',
       width: sizeConfig.width,
-      backgroundColor: disabled ? 'var(--ds-inputnumber-bg-disabled)' : 'var(--ds-inputnumber-bg)',
-      color: 'var(--ds-inputnumber-color)',
       cursor: disabled ? 'not-allowed' : 'text',
       opacity: disabled ? 0.6 : 1,
-      boxShadow: isFocused ? 'var(--ds-inputnumber-shadow-focus)' : 'none',
+      ...({
+        '--ds-input-number-radius': addonBefore && addonAfter ? '0' : addonBefore ? '0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0' : addonAfter ? 'var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius)' : 'var(--ds-inputnumber-radius)',
+      } as React.CSSProperties),
     };
 
     const prefixStyle: React.CSSProperties = {
       position: 'absolute',
       left: '8px',
-      color: 'var(--ds-inputnumber-affix-color)',
       pointerEvents: 'none',
     };
 
     const suffixStyle: React.CSSProperties = {
       position: 'absolute',
       right: controls ? '32px' : '8px',
-      color: 'var(--ds-inputnumber-affix-color)',
       pointerEvents: 'none',
     };
 
@@ -235,39 +225,21 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      border: 'none',
-      background: 'var(--ds-inputnumber-control-bg)',
       cursor: 'pointer',
       fontSize: '8px',
-      color: 'var(--ds-inputnumber-control-color)',
       padding: 0,
       transition: 'color 0.2s',
     };
 
     const addonStyle: React.CSSProperties = {
       padding: sizeConfig.padding,
-      backgroundColor: 'var(--ds-inputnumber-addon-bg)',
-      border: `1px solid var(--ds-inputnumber-addon-border)`,
       fontSize: sizeConfig.fontSize,
-      color: 'var(--ds-inputnumber-addon-color)',
-    };
-
-    const addonBeforeStyle: React.CSSProperties = {
-      ...addonStyle,
-      borderRight: 'none',
-      borderRadius: 'var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius)',
-    };
-
-    const addonAfterStyle: React.CSSProperties = {
-      ...addonStyle,
-      borderLeft: 'none',
-      borderRadius: '0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0',
     };
 
     return (
       <div className={containerClasses} style={wrapperStyle}>
         {addonBefore && (
-          <span className="rottay-inputnumber__addon-before" data-part="addon-before" style={addonBeforeStyle}>
+          <span className="rottay-inputnumber__addon-before" data-part="addon-before" style={addonStyle}>
             {addonBefore}
           </span>
         )}
@@ -335,7 +307,7 @@ export const InputNumber = React.forwardRef<HTMLInputElement, InputNumberProps>(
           )}
         </div>
         {addonAfter && (
-          <span className="rottay-inputnumber__addon-after" data-part="addon-after" style={addonAfterStyle}>
+          <span className="rottay-inputnumber__addon-after" data-part="addon-after" style={addonStyle}>
             {addonAfter}
           </span>
         )}

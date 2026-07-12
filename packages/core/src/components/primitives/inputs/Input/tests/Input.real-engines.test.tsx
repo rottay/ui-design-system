@@ -274,7 +274,7 @@ describe('Input real engine coverage', () => {
     );
 
     const nonCompactAddons = container.querySelectorAll('.rottay-input-addon');
-    expect(nonCompactAddons[0].getAttribute('style') ?? '').toContain('background-color: transparent');
+    expect(nonCompactAddons[0]).toHaveAttribute('data-variant', 'transparent');
     expect(nonCompactAddons[1]).toHaveStyle({ marginLeft: '8px' });
   });
 

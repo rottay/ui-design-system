@@ -1,0 +1,90 @@
+/**
+ * Rustic InputNumber skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-input-number.ds-input-number--rustic[data-part='root']`,
+ * the `<input>` itself -- carrying `data-status` and `data-disabled`. Same
+ * DOM shape as the modern skin (see its header comment for the full
+ * rationale): a void `<input>` cannot have descendants, so `addon-before`
+ * and `prefix` (which precede root in the DOM) are reached by anchoring the
+ * rule on the part itself and looking forward with `:has()`; `suffix` and
+ * `stepper-button` (which follow root) and `addon-after` (a sibling of
+ * root's own parent) are reached the ordinary forward way.
+ *
+ * FOCUS: the removed `useInteractionState()` `focused` value is kept in
+ * local state ONLY to drive the `rottay-inputnumber--focused` external class
+ * hook on the outer wrapper (non-paint, untouched) -- its own `onFocus`/
+ * `onBlur` handlers are spread exclusively onto `[data-part='root']`, so
+ * native `:focus` on root reproduces the removed paint exactly.
+ *
+ * BORDER COLOR priority, byte-exact from the removed `getBorderColor()`:
+ * error > warning > focused > default. `box-shadow` (the focus ring) has no
+ * status dependency -- it shows on focus regardless of status, matching the
+ * original (`isFocused ? shadow-focus : 'none'`, no status branch).
+ *
+ * BORDER-RADIUS is genuinely prop-derived (depends on whether `addonBefore`/
+ * `addonAfter` are present, which stamp no anatomy of their own to key a CSS
+ * selector on) -- carried via the quoted custom property
+ * `--ds-input-number-radius`, set inline (uncounted) from the SAME ternary
+ * the JSX always computed, consumed here by a static rule.
+ *
+ * SPECIFICITY (P-48): border paints a color, so its rules reach (0,4,0) via
+ * the repeated `[data-part='root']`. Everything else here is non-border
+ * paint (background, color, box-shadow, border-radius) and wins unlayered at
+ * (0,3,0) or higher.
+ */
+
+.ds-input-number.ds-input-number--rustic[data-part='root'] {
+  outline: none;
+  color: var(--ds-inputnumber-color);
+  background-color: var(--ds-inputnumber-bg);
+  box-shadow: none;
+  border-radius: var(--ds-input-number-radius);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-disabled='true'] {
+  background-color: var(--ds-inputnumber-bg-disabled);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root']:focus {
+  box-shadow: var(--ds-inputnumber-shadow-focus);
+}
+
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-inputnumber-border);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root']:focus:not([data-status='error']):not([data-status='warning']) {
+  border: 1px solid var(--ds-inputnumber-border-focus);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'][data-status='warning'] {
+  border: 1px solid var(--ds-inputnumber-warning-border);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'][data-status='error'] {
+  border: 1px solid var(--ds-inputnumber-error-border);
+}
+
+[data-part='addon-before'][data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--rustic[data-part='root']) {
+  background-color: var(--ds-inputnumber-addon-bg);
+  border: 1px solid var(--ds-inputnumber-addon-border);
+  border-right: none;
+  border-radius: var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius);
+  color: var(--ds-inputnumber-addon-color);
+}
+div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-part='addon-after'][data-part='addon-after'] {
+  background-color: var(--ds-inputnumber-addon-bg);
+  border: 1px solid var(--ds-inputnumber-addon-border);
+  border-left: none;
+  border-radius: 0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0;
+  color: var(--ds-inputnumber-addon-color);
+}
+
+[data-part='prefix']:has(~ .ds-input-number.ds-input-number--rustic[data-part='root']) {
+  color: var(--ds-inputnumber-affix-color);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'] ~ [data-part='suffix'] {
+  color: var(--ds-inputnumber-affix-color);
+}
+
+.ds-input-number.ds-input-number--rustic[data-part='root'] ~ * [data-part='stepper-button'] {
+  background: var(--ds-inputnumber-control-bg);
+  color: var(--ds-inputnumber-control-color);
+}

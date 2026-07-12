@@ -1,0 +1,53 @@
+/**
+ * Rustic OTPInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE: the two root classes `.ds-otp-input.ds-otp-input--rustic` sit on the
+ * OUTER wrapper; the `[data-part='root']` row (carrying `data-disabled`) and the
+ * `[data-part='error-message']` are its descendants, and each digit is a
+ * `[data-part='slot']` (`data-error`, `data-filled`) inside the row.
+ *
+ * The slot border reproduces the removed `getInputStyle` priority chain
+ * error > focus > filled > default, transcribed with a `:focus` rule (the
+ * removed `focusedIndex` state was "any focus") ordered so error wins; the
+ * focus box-shadow ring has no error gate, matching the original. `caretColor:
+ * transparent` is not a paint channel the census counts and stays inline.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every slot border rule reaches (0,4,0) via the repeated `[data-part='slot']`
+ * (or a state attribute). Non-border paint wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`#d1d5db`, `#9ca3af`, `#3b82f6`, `#ef4444`, `#fff`,
+ * `#f3f4f6`, `rgba(59, 130, 246, 0.2)`) are transcribed byte-exact.
+ */
+
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'] {
+  border-radius: 8px;
+  outline: none;
+  background-color: var(--ds-color-bg-input, #fff);
+  box-shadow: none;
+}
+.ds-otp-input.ds-otp-input--rustic [data-disabled='true'] [data-part='slot'] {
+  background-color: var(--ds-color-neutral-100, #f3f4f6);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot']:focus {
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2));
+}
+
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'][data-part='slot'] {
+  border: 2px solid var(--ds-color-neutral-300, #d1d5db);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'][data-part='slot'][data-filled='true'] {
+  border-color: var(--ds-color-neutral-400, #9ca3af);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot']:focus:not([data-error='true']) {
+  border-color: var(--ds-color-primary-500, #3b82f6);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'][data-part='slot'][data-error='true'] {
+  border-color: var(--ds-color-error-500, #ef4444);
+}
+
+.ds-otp-input.ds-otp-input--rustic [data-part='error-message'] {
+  color: var(--ds-color-error-500, #ef4444);
+}

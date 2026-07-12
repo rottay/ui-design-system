@@ -99,13 +99,6 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
 
   const sizeStyle = SIZE_STYLES[size] || SIZE_STYLES.md;
 
-  /** Resolve border color from CSS variables based on error/focus priority. */
-  const getBorderColor = () => {
-    if (error) return 'var(--ds-color-error-500, #ff4d4f)';
-    if (isFocused) return 'var(--ds-color-primary-500, #1890ff)';
-    return 'var(--ds-color-neutral-300, #d9d9d9)';
-  };
-
   const containerStyle: React.CSSProperties = {
     display: 'inline-flex',
     flexDirection: 'column',
@@ -120,46 +113,26 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
     alignItems: 'center',
   };
 
-  // Variant-aware border and border-radius: flushed shows only a bottom border,
-  // unstyled removes all borders, filled adds a background tint
   const inputStyle: React.CSSProperties = {
     ...sizeStyle,
     width: '100%',
     paddingRight: showToggle ? '36px' : sizeStyle.padding,
-    border: variant === 'unstyled' ? 'none' : variant === 'flushed'
-      ? 'none'
-      : `1px solid ${getBorderColor()}`,
-    borderBottom: variant === 'flushed' ? `2px solid ${getBorderColor()}` : undefined,
-    borderRadius: variant === 'flushed' || variant === 'unstyled' ? '0' : 'var(--ds-radius-md, 8px)',
-    backgroundColor: variant === 'filled'
-      ? 'var(--ds-color-neutral-100, #f5f5f5)'
-      : 'transparent',
-    color: 'var(--ds-color-text-primary, #1a1a1a)',
-    outline: 'none',
     opacity: disabled ? 0.5 : 1,
     cursor: disabled ? 'not-allowed' : 'text',
     transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-    boxShadow: isFocused && !error
-      ? '0 0 0 2px var(--ds-color-primary-100, rgba(24, 144, 255, 0.2))'
-      : 'none',
   };
 
   const toggleButtonStyle: React.CSSProperties = {
     position: 'absolute',
     right: '8px',
     top: '50%',
-    transform: 'translateY(-50%)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '24px',
     height: '24px',
-    border: 'none',
-    background: 'none',
     cursor: 'pointer',
-    color: 'var(--ds-color-text-secondary, #666)',
     padding: 0,
-    borderRadius: 'var(--ds-radius-sm, 6px)',
   };
 
   return (
@@ -190,6 +163,7 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
           aria-invalid={error}
           className="ds-password-input ds-password-input--rustic"
           data-part="root"
+          data-variant={variant}
           data-error={error ? 'true' : 'false'}
           data-disabled={disabled ? 'true' : 'false'}
           style={inputStyle}
@@ -223,8 +197,6 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
           style={{
             marginTop: '4px',
             height: '4px',
-            borderRadius: '2px',
-            backgroundColor: 'var(--ds-color-neutral-200, #e8e8e8)',
             overflow: 'hidden',
           }}
         >
@@ -233,9 +205,8 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
             style={{
               height: '100%',
               width: STRENGTH_WIDTHS[strengthLevel],
-              backgroundColor: STRENGTH_COLORS[strengthLevel],
-              borderRadius: '2px',
               transition: 'width 0.3s ease, background-color 0.3s ease',
+              ...({ '--ds-password-strength-fill': STRENGTH_COLORS[strengthLevel] } as React.CSSProperties),
             }}
           />
         </div>
@@ -246,7 +217,6 @@ export default function RusticPasswordInput(props: PasswordInputProps): React.Re
           style={{
             marginTop: '4px',
             fontSize: '12px',
-            color: 'var(--ds-color-error-500, #ff4d4f)',
             lineHeight: 1.4,
           }}
         >

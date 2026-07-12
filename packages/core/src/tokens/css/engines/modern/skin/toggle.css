@@ -1,0 +1,42 @@
+/**
+ * Modern Toggle skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-toggle.ds-toggle--modern[data-part='root']` (a `<label>`),
+ * carrying `data-checked`, `data-disabled`, `data-error`. `track`, `thumb`,
+ * `label`, `description` are descendants.
+ *
+ * The track background (`trackColor`: error > checked-color > unchecked) and the
+ * pill radius (the per-size track height) are runtime-computed, carried via the
+ * uncounted custom properties `--ds-toggle-track-fill` / `--ds-toggle-track-r`;
+ * the thumb slide (a per-size calc) via `--ds-toggle-thumb-x`.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-toggle.ds-toggle--modern [data-part='track'] {
+  border-radius: var(--ds-toggle-track-r);
+  background: var(--ds-toggle-track-fill);
+}
+
+.ds-toggle.ds-toggle--modern [data-part='thumb'] {
+  border-radius: 50%;
+  background: var(--ds-surface-control, var(--ds-color-text-on-primary));
+  box-shadow: var(--ds-elevation-1);
+  transform: translateX(var(--ds-toggle-thumb-x));
+}
+
+.ds-toggle.ds-toggle--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-toggle.ds-toggle--modern[data-error='true'] [data-part='label'] {
+  color: var(--ds-color-error);
+}
+
+.ds-toggle.ds-toggle--modern [data-part='description'] {
+  color: var(--ds-color-text-muted);
+}

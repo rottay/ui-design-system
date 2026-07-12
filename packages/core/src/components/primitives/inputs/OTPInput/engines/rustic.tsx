@@ -56,7 +56,6 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
   const generatedId = useId();
   const idPrefix = providedId || `otp-rustic-${generatedId}`;
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
   const sizeConfig = SIZE_STYLES[size] || SIZE_STYLES.md;
 
   // Initialize per-slot values by splitting the controlled value and padding with empty strings
@@ -146,30 +145,15 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
    * Compute per-slot inline styles: border color varies by error/focus/filled state,
    * and a focus ring shadow is applied via JS since :focus-visible is not fully portable.
    */
-  const getInputStyle = (index: number): React.CSSProperties => ({
+  const getInputStyle = (): React.CSSProperties => ({
     width: sizeConfig.width,
     height: sizeConfig.height,
     fontSize: sizeConfig.fontSize,
     textAlign: 'center',
-    border: `2px solid ${
-      error
-        ? 'var(--ds-color-error-500, #ef4444)'
-        : focusedIndex === index
-          ? 'var(--ds-color-primary-500, #3b82f6)'
-          : internalValues[index]
-            ? 'var(--ds-color-neutral-400, #9ca3af)'
-            : 'var(--ds-color-neutral-300, #d1d5db)'
-    }`,
-    borderRadius: 8,
-    outline: 'none',
     fontFamily: 'var(--ds-font-family-mono, monospace)',
     fontWeight: 700,
-    backgroundColor: disabled ? 'var(--ds-color-neutral-100, #f3f4f6)' : 'var(--ds-color-bg-input, #fff)',
     cursor: disabled ? 'not-allowed' : 'text',
     transition: 'border-color 0.2s, box-shadow 0.2s',
-    boxShadow: focusedIndex === index
-      ? '0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2))'
-      : 'none',
     caretColor: 'transparent',
   });
 
@@ -190,12 +174,10 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
             value={internalValues[index] || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
-            style={getInputStyle(index)}
+            style={getInputStyle()}
             onFocus={(e) => {
-              setFocusedIndex(index);
               e.target.select();
             }}
-            onBlur={() => setFocusedIndex(-1)}
             onChange={(e) => {
               const char = e.target.value.slice(-1);
               if (char) handleChange(index, char);
@@ -209,7 +191,6 @@ export default function RusticOTPInput(props: OTPInputProps): React.ReactElement
       {error && errorMessage && (
         <span data-part="error-message" style={{
           fontSize: 12,
-          color: 'var(--ds-color-error-500, #ef4444)',
           marginTop: 6,
           display: 'block',
         }}>

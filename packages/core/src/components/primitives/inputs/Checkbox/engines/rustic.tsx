@@ -19,7 +19,6 @@
 
 import React, { useState, useRef, useEffect, useId, useCallback } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import type { CheckboxProps } from '../Checkbox.types';
 import { CHECKBOX_DEFAULTS } from '../Checkbox.types';
 
@@ -87,11 +86,6 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
   // ring via inline styles since the native input is visually hidden and
   // its :focus pseudo-class would not be visible.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  // The triad is decided once, in the behavior core. `focused` is any focus --
-  // a field's focus border must appear when a pointer lands in it. A ring is
-  // `focusVisible`, and this part does not draw one.
-  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-  const isFocused = interaction.focused;
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
@@ -161,6 +155,10 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
     opacity: disabled ? 0.5 : 1,
     flexDirection: labelPlacement === 'start' ? 'row-reverse' : 'row',
     fontFamily: 'var(--ds-font-family-base)',
+    ...({
+      '--ds-checkbox-fill': getCheckedBg(),
+      '--ds-checkbox-box-radius': getRadius(),
+    } as React.CSSProperties),
     ...style,
   };
 
@@ -174,22 +172,7 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
     justifyContent: 'center',
     width: sizeVar,
     height: sizeVar,
-    borderRadius: getRadius(),
-    border: `2px solid ${error
-      ? 'var(--ds-checkbox-error-border)'
-      : (isChecked || indeterminate
-          ? getCheckedBg()
-          : 'var(--ds-checkbox-border)')}`,
-    backgroundColor: isChecked || indeterminate
-      ? getCheckedBg()
-      : disabled
-        ? 'var(--ds-checkbox-bg-disabled)'
-        : 'var(--ds-checkbox-bg)',
     transition: 'border-color 0.15s, background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s',
-    outline: 'none',
-    boxShadow: isFocused
-      ? '0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1)'
-      : 'none',
   };
 
   // The native input is visually hidden (opacity: 0) but stretched to fill
@@ -207,11 +190,6 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
 
   const labelStyle: React.CSSProperties = {
     fontSize: `${sizeNumeric * 0.9}px`,
-    color: error
-      ? 'var(--ds-checkbox-error-color)'
-      : disabled
-        ? 'var(--ds-checkbox-label-color-disabled)'
-        : 'var(--ds-checkbox-label-color)',
     userSelect: 'none',
   };
 
@@ -228,7 +206,6 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
       fill="none"
       style={{
         display: isChecked && !indeterminate ? 'block' : 'none',
-        transform: isChecked ? 'scale(1)' : 'scale(0)',
         transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
       }}
     >
@@ -251,8 +228,6 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
         display: indeterminate ? 'block' : 'none',
         width: sizeNumeric * 0.6,
         height: 2,
-        backgroundColor: 'var(--ds-checkbox-checked-color)',
-        borderRadius: 1,
       }}
     />
   );
@@ -279,6 +254,7 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
       data-part="root"
       data-checked={isChecked ? 'true' : 'false'}
       data-indeterminate={indeterminate ? 'true' : 'false'}
+      data-active={isChecked || indeterminate ? 'true' : 'false'}
       data-disabled={disabled ? 'true' : 'false'}
       data-error={error ? 'true' : 'false'}
       style={containerStyle}
@@ -300,7 +276,6 @@ export default function RusticCheckbox(props: CheckboxProps): React.ReactElement
           disabled={disabled}
           required={required}
           onChange={handleChange}
-          {...interactionHandlers}
           style={inputStyle}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-invalid={error}

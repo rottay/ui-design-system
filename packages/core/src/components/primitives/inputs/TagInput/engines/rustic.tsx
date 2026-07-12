@@ -17,7 +17,6 @@
 
 import React, { useState, useCallback, useId, useRef } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import type { TagInputProps } from '../TagInput.types';
 import { TAGINPUT_DEFAULTS } from '../TagInput.types';
 
@@ -31,9 +30,9 @@ const SIZE_STYLES: Record<string, { minHeight: number; fontSize: number; tagPadd
 /**
  * Rustic (vanilla HTML/CSS) implementation of TagInput.
  *
- * All styling is handled through inline CSSProperties and DS CSS variables,
- * so it works without any CSS framework. Focus state is tracked locally to
- * apply a highlight ring, and border color changes for error status.
+ * All non-paint layout is handled through inline CSSProperties; border,
+ * background, and the focus ring are painted by the unlayered skin CSS from
+ * native `:focus`/`:has()` and the `data-error`/`data-disabled` attributes.
  *
  * @param props - Standard TagInputProps shared across all engines.
  * @returns A styled container of tag chips with an inline text input and optional error span.
@@ -60,12 +59,6 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
   } = props;
 
   const [inputValue, setInputValue] = useState('');
-  // Focus state drives the blue ring and border highlight on the container
-  // The triad is decided once, in the behavior core. `focused` is any focus --
-  // a field's focus border must appear when a pointer lands in it. A ring is
-  // `focusVisible`, and this part does not draw one.
-  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-  const isFocused = interaction.focused;
   const inputRef = useRef<HTMLInputElement>(null);
   const generatedId = useId();
   const inputId = providedId || `taginput-rustic-${generatedId}`;
@@ -112,7 +105,6 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
     }
   }, [separator, addTag]);
 
-  // Border color priority: error > focused > default neutral, mirroring standard input UX
   const containerStyle: React.CSSProperties = {
     display: 'flex',
     flexWrap: 'wrap',
@@ -120,27 +112,20 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
     gap: 4,
     minHeight: sizeConfig.minHeight,
     padding: '4px 8px',
-    border: `1px solid ${error ? 'var(--ds-color-error-500, #ef4444)' : isFocused ? 'var(--ds-color-primary-500, #3b82f6)' : 'var(--ds-color-neutral-300, #d1d5db)'}`,
-    borderRadius: 8,
-    backgroundColor: disabled ? 'var(--ds-color-neutral-100, #f3f4f6)' : 'var(--ds-color-bg-input, #fff)',
     cursor: disabled ? 'not-allowed' : 'text',
     opacity: disabled ? 0.6 : 1,
-    boxShadow: isFocused ? '0 0 0 2px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2))' : 'none',
     transition: 'border-color 0.2s, box-shadow 0.2s',
     fontFamily: 'var(--ds-font-family-base, inherit)',
     ...style,
   };
 
-  /** Each tag chip is styled with primary palette colors and compact padding. */
+  /** Each tag chip uses compact padding; color comes from the skin. */
   const tagStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
     gap: 4,
     padding: sizeConfig.tagPadding,
     fontSize: sizeConfig.fontSize - 2,
-    backgroundColor: 'var(--ds-color-primary-100, #dbeafe)',
-    color: 'var(--ds-color-primary-700, #1d4ed8)',
-    borderRadius: 4,
     lineHeight: 1.4,
     userSelect: 'none',
   };
@@ -165,12 +150,9 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
                 onClick={(e) => { e.stopPropagation(); removeTag(index); }}
                 aria-label={`Remove ${tag}`}
                 style={{
-                  border: 'none',
-                  background: 'transparent',
                   cursor: 'pointer',
                   padding: 0,
                   fontSize: sizeConfig.fontSize - 2,
-                  color: 'inherit',
                   lineHeight: 1,
                   display: 'flex',
                   alignItems: 'center',
@@ -190,16 +172,12 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
           value={inputValue}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          {...interactionHandlers}
           placeholder={value.length === 0 ? placeholder : ''}
           disabled={disabled}
           autoFocus={autoFocus}
           style={{
             flex: 1,
             minWidth: 60,
-            border: 'none',
-            outline: 'none',
-            background: 'transparent',
             fontSize: sizeConfig.fontSize,
             padding: 0,
             fontFamily: 'inherit',
@@ -209,7 +187,6 @@ export default function RusticTagInput(props: TagInputProps): React.ReactElement
       {error && errorMessage && (
         <span data-part="error-message" style={{
           fontSize: 12,
-          color: 'var(--ds-color-error-500, #ef4444)',
           marginTop: 4,
           display: 'block',
         }}>

@@ -16523,6 +16523,2076 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
 }
 
+/**
+ * Modern FormField skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * `base` layer, so a layered rule can't paint these elements at all; unlayered
+ * outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-form-field.ds-form-field--modern[data-part='root']`; every
+ * painted element below is a descendant carrying its own `data-part` (`label`,
+ * `required-mark`, `error-message`, `help-text`). All four are STATIC `color`
+ * only -- no conditionals, no state, no hover -- so every rule here wins
+ * unlayered at (0,3,0): two root classes + one attribute (P-48; none of these
+ * paint a border, so the (0,4,0) border floor does not apply).
+ */
+
+.ds-form-field.ds-form-field--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-form-field.ds-form-field--modern [data-part='required-mark'] {
+  color: var(--ds-color-error);
+}
+
+.ds-form-field.ds-form-field--modern [data-part='error-message'] {
+  color: var(--ds-color-error);
+}
+
+.ds-form-field.ds-form-field--modern [data-part='help-text'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic FormField skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin --
+ * unlayered beats Tailwind's `base` layer regardless of specificity, and still
+ * yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-form-field.ds-form-field--rustic[data-part='root']`
+ * (the element also carries a legacy `rottay-form-field` class, not part of
+ * the two-class root contract). Every painted element below is a descendant
+ * carrying its own `data-part` (`label`, `required-mark`, `error-message`,
+ * `help-text`). All four are STATIC `color` only -- no conditionals, no
+ * state, no hover -- so every rule here wins unlayered at (0,3,0): two root
+ * classes + one attribute (P-48; none of these paint a border, so the
+ * (0,4,0) border floor does not apply).
+ *
+ * Fallback literals (`#374151`, `#ef4444`, `#6b7280`) are transcribed
+ * byte-exact from the source `var(--ds-form-*-color, #hex)` declarations.
+ */
+
+.ds-form-field.ds-form-field--rustic [data-part='label'] {
+  color: var(--ds-form-label-color, #374151);
+}
+
+.ds-form-field.ds-form-field--rustic [data-part='required-mark'] {
+  color: var(--ds-form-required-color, #ef4444);
+}
+
+.ds-form-field.ds-form-field--rustic [data-part='error-message'] {
+  color: var(--ds-form-error-color, #ef4444);
+}
+
+.ds-form-field.ds-form-field--rustic [data-part='help-text'] {
+  color: var(--ds-form-help-color, #6b7280);
+}
+
+/**
+ * Modern Textarea skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the `<textarea>` itself: `.ds-textarea.ds-textarea--modern
+ * [data-part='root']`, carrying `data-variant` ('outlined'|'filled'|
+ * 'borderless'), `data-status` ('default'|'error'|'warning'|'success') and
+ * `data-disabled`.
+ *
+ * FOCUS is native `:focus`, not `:focus-visible`: `isFocused` is set
+ * unconditionally in `onFocus`/`onBlur`, so the ring shows on any focus,
+ * mouse or keyboard. The file's own JSDoc previously claimed ":focus-visible
+ * only", which was stale relative to the actual handler and is corrected in
+ * the same pass.
+ *
+ * BORDER COLOR reproduces the `computedBorderColor` chain: `variant=borderless`
+ * resolves FIRST (-> transparent, wins over status and focus); otherwise a
+ * focused, non-disabled field maps the DEFAULT status to primary while
+ * error/warning/success keep their own color (identical focused or not, so
+ * only default needs a focus override); at rest each status paints its own
+ * color. Every non-borderless rule carries `:not([data-variant='borderless'])`
+ * so at most one rule wins per (variant x status x focus) combination.
+ *
+ * BACKGROUND reproduces the `backgroundColor` chain: disabled (checked FIRST in
+ * the JS) > filled > default. The disabled rule is ordered after filled so it
+ * wins the (0,4,0) tie when a field is both.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border floor at (0,3,1);
+ * every border-color rule below reaches (0,4,0) via a variant/status attribute
+ * beyond the two root classes + `[data-part='root']`. Non-border paint
+ * (background, color, outline, border-radius) wins unlayered at (0,3,0).
+ */
+
+.ds-textarea.ds-textarea--modern[data-part='root'] {
+  color: var(--ds-color-text-primary);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--ds-radius-md);
+  background-color: var(--ds-color-bg-input, var(--ds-surface-control, transparent));
+  outline: none;
+}
+
+/* background: filled, then disabled (disabled is checked first in the JS, so
+   it is ordered last here to win the tie against filled). */
+.ds-textarea.ds-textarea--modern[data-part='root'][data-variant='filled'] {
+  background-color: var(--ds-color-bg-input, var(--ds-surface-control, var(--ds-color-bg-secondary)));
+}
+.ds-textarea.ds-textarea--modern[data-part='root'][data-disabled='true'] {
+  color: var(--ds-color-text-disabled);
+  background-color: var(--ds-color-bg-disabled, var(--ds-color-bg-secondary));
+}
+
+/* border color: borderless (transparent, wins over all), then per-status rest,
+   then the default-status focus override. */
+.ds-textarea.ds-textarea--modern[data-part='root'][data-variant='borderless'] {
+  border-color: transparent;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default'] {
+  border-color: var(--ds-color-border);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='success'] {
+  border-color: var(--ds-color-success);
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:not([data-variant='borderless'])[data-status='default']:focus:not([data-disabled='true']) {
+  border-color: var(--ds-color-primary);
+}
+
+/* Focus ring: base (status=default) + per-status override. `outline-offset`
+   is constant across every branch; only the color channel varies. */
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true']) {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -1px;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='error'] {
+  outline: 2px solid var(--ds-color-error);
+  outline-offset: -1px;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='warning'] {
+  outline: 2px solid var(--ds-color-warning);
+  outline-offset: -1px;
+}
+.ds-textarea.ds-textarea--modern[data-part='root']:focus:not([data-disabled='true'])[data-status='success'] {
+  outline: 2px solid var(--ds-color-success);
+  outline-offset: -1px;
+}
+
+/**
+ * Rustic Textarea skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the `<textarea>` itself: `.ds-textarea.ds-textarea--rustic
+ * [data-part='root']`, carrying `data-status` and `data-disabled`. `variant`
+ * ('outlined'|'filled'|'borderless') has no data-attribute but IS exposed as
+ * a real rendered class, `rottay-textarea--${variant}`, unconditionally
+ * present in the element's className -- used below instead of inventing new
+ * anatomy.
+ *
+ * FOCUS is native `:focus`: `isFocused` (kept in local state only to feed
+ * the `rottay-textarea--focused` external-override class hook, see the
+ * component) is set unconditionally in onFocus/onBlur, matching `:focus`'s
+ * semantics exactly.
+ *
+ * BORDER COLOR priority, transcribed byte-exact from the removed
+ * `getBorderColor()`: status (error/warning/success) > focus > default;
+ * `variant=borderless` overrides ALL of the above to `border: none`. Each
+ * non-borderless rule below carries `:not(.rottay-textarea--borderless)` so
+ * at most one rule ever wins per state (the P-48 guard idiom) rather than
+ * relying on cascade order -- without it, the focus rule's extra `:not()`
+ * chain would out-specify the borderless override.
+ *
+ * `count` (the optional char-counter div) is a DOM SIBLING of the root
+ * textarea, not a descendant -- both are children of the wrapper div --
+ * so it is selected via the general sibling combinator, which still lets it
+ * carry the two root classes for the (0,3,0) floor.
+ *
+ * SPECIFICITY (P-48): `border` paints a color, so its rules reach (0,4,0)
+ * via the repeated `[data-part='root']`. Every other rule here is
+ * non-border paint and wins unlayered at (0,3,0).
+ */
+
+.ds-textarea.ds-textarea--rustic[data-part='root'] {
+  outline: none;
+  border-radius: var(--ds-textarea-radius);
+  background-color: var(--ds-textarea-bg);
+  color: var(--ds-textarea-color);
+  box-shadow: none;
+}
+
+.ds-textarea.ds-textarea--rustic.rottay-textarea--filled[data-part='root']:not([data-disabled='true']) {
+  background-color: var(--ds-textarea-filled-bg);
+}
+
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-disabled='true'] {
+  background-color: var(--ds-textarea-bg-disabled);
+}
+
+.ds-textarea.ds-textarea--rustic[data-part='root']:focus:not(.rottay-textarea--borderless) {
+  box-shadow: var(--ds-textarea-shadow-focus);
+}
+
+/* border color: status > focus > default; borderless wins over all of them */
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-textarea-border);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root']:focus:not(.rottay-textarea--borderless):not([data-status='error']):not([data-status='warning']):not([data-status='success']) {
+  border: 1px solid var(--ds-textarea-border-focus);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'][data-status='error']:not(.rottay-textarea--borderless) {
+  border: 1px solid var(--ds-textarea-error-border);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'][data-status='warning']:not(.rottay-textarea--borderless) {
+  border: 1px solid var(--ds-textarea-warning-border);
+}
+.ds-textarea.ds-textarea--rustic[data-part='root'][data-part='root'][data-status='success']:not(.rottay-textarea--borderless) {
+  border: 1px solid var(--ds-textarea-success-border);
+}
+.ds-textarea.ds-textarea--rustic.rottay-textarea--borderless[data-part='root'][data-part='root'] {
+  border: none;
+}
+
+.ds-textarea.ds-textarea--rustic ~ [data-part='count'] {
+  color: var(--ds-textarea-count-color);
+}
+
+/**
+ * Modern TagInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-tag-input.ds-tag-input--modern[data-part='root']`,
+ * carrying `data-error` ('true'|'false') and `data-disabled`. `tag-chip`,
+ * `tag-remove`, and `input` are descendants of root. `error-message` is a
+ * DOM NEPHEW of root, not a descendant: the JSX wraps it in an unclassed
+ * `<div style={{marginTop:4}}>` that is itself a sibling of root (both
+ * children of the component's outer wrapper) -- selected via the general
+ * sibling combinator plus one descendant hop through that wrapper.
+ *
+ * This engine has no focus-driven paint at all (no `useInteractionState`,
+ * no `isFocused`) -- the container's border only ever reacts to `data-error`.
+ *
+ * SPECIFICITY (P-48): the container's `border` paints a color, so its rules
+ * reach (0,4,0) via the repeated `[data-part='root']`. Everything else here
+ * is non-border paint (background, color, border-radius) and wins unlayered
+ * at (0,3,0).
+ */
+
+.ds-tag-input.ds-tag-input--modern[data-part='root'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-tag-input.ds-tag-input--modern[data-part='root'][data-part='root'][data-error='true'] {
+  border: 1px solid var(--ds-color-error);
+}
+
+.ds-tag-input.ds-tag-input--modern [data-part='tag-chip'] {
+  border-radius: 9999px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-tag-input.ds-tag-input--modern [data-part='tag-remove'] {
+  background: transparent;
+  color: inherit;
+  border: none;
+}
+
+.ds-tag-input.ds-tag-input--modern [data-part='input'] {
+  outline: none;
+  background: transparent;
+  border: none;
+}
+
+.ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message'] {
+  color: var(--ds-color-error);
+}
+
+/**
+ * Rustic TagInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-tag-input.ds-tag-input--rustic[data-part='root']`,
+ * carrying `data-error` and `data-disabled`. `error-message` IS a direct DOM
+ * sibling of root here (no intermediate wrapper, unlike the modern engine)
+ * -- selected via a plain general sibling combinator.
+ *
+ * FOCUS: the removed `useInteractionState()` call's `focused` (read only to
+ * drive the border/box-shadow this skin now paints) was set exclusively by
+ * `onFocus`/`onBlur` spread onto `[data-part='input']` -- never onto the
+ * tag-remove buttons -- so it tracked ONLY that one descendant's native
+ * focus (interaction-state's own doc: "`focused` is any focus"). A plain
+ * `:focus-within` on root would also fire when a remove button is
+ * tab-focused, which the removed state never did; `:has([data-part='input']
+ * :focus)` reproduces the original scope exactly.
+ *
+ * BORDER COLOR priority, byte-exact from the removed inline ternary:
+ * error > focused > default. `box-shadow` (the focus ring) has no error
+ * dependency -- it shows on focus regardless of error state, matching the
+ * original.
+ *
+ * SPECIFICITY (P-48): border paints a color, so its rules reach (0,4,0) via
+ * the repeated `[data-part='root']`. Everything else here is non-border
+ * paint (background, color, box-shadow, border-radius) and wins unlayered
+ * at (0,3,0).
+ *
+ * Fallback literals (`#ef4444`, `#3b82f6`, `#d1d5db`, `#f3f4f6`, `#fff`,
+ * `#dbeafe`, `#1d4ed8`, `rgba(59, 130, 246, 0.2)`) are transcribed
+ * byte-exact from the source `var(--ds-color-*, #hex)` declarations.
+ */
+
+.ds-tag-input.ds-tag-input--rustic[data-part='root'] {
+  border-radius: 8px;
+  background-color: var(--ds-color-bg-input, #fff);
+  box-shadow: none;
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-disabled='true'] {
+  background-color: var(--ds-color-neutral-100, #f3f4f6);
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root']:has([data-part='input']:focus) {
+  box-shadow: 0 0 0 2px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2));
+}
+
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root']:has([data-part='input']:focus):not([data-error='true']) {
+  border: 1px solid var(--ds-color-primary-500, #3b82f6);
+}
+.ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root'][data-error='true'] {
+  border: 1px solid var(--ds-color-error-500, #ef4444);
+}
+
+.ds-tag-input.ds-tag-input--rustic [data-part='tag-chip'] {
+  background-color: var(--ds-color-primary-100, #dbeafe);
+  color: var(--ds-color-primary-700, #1d4ed8);
+  border-radius: 4px;
+}
+
+.ds-tag-input.ds-tag-input--rustic [data-part='tag-remove'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+.ds-tag-input.ds-tag-input--rustic [data-part='input'] {
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.ds-tag-input.ds-tag-input--rustic ~ [data-part='error-message'] {
+  color: var(--ds-color-error-500, #ef4444);
+}
+
+/**
+ * Modern InputNumber skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-input-number.ds-input-number--modern[data-part='root']`,
+ * the `<input>` itself -- carrying `data-status` ('default'|'error'|'warning')
+ * and `data-disabled`. Unlike a container-root component (TagInput, Textarea),
+ * a void `<input>` cannot have descendants, so every other part
+ * (`addon-before`, `prefix`, `suffix`, `stepper-button`, `addon-after`) is a
+ * SIBLING or NEPHEW of root, not a child -- some of them (`addon-before`,
+ * `prefix`) precede root in the DOM, which a forward-only `~`/descendant
+ * combinator anchored ON root cannot reach. Each such part is instead
+ * anchored on ITSELF and reaches forward with `:has()` to confirm it shares
+ * the component's wrapper (`[part]:has(~ … root)`); parts that follow root
+ * are still reached the ordinary way (`root ~ …`). This reproduces the exact
+ * JSX nesting (`<div addon-before?><div middle><span prefix?><input root>
+ * <div><span suffix?><div stepper?></div></div></div><div addon-after?>`)
+ * so no rule can bleed into an unrelated component that happens to reuse the
+ * same `data-part` name elsewhere on the page.
+ *
+ * This engine has no focus-driven paint (no `useInteractionState`) -- the
+ * root's border only ever reacts to `data-status`.
+ *
+ * SPECIFICITY (P-48): the root's `border` paints a color, so its rules reach
+ * (0,4,0) via the repeated `[data-part='root']`. Everything else here is
+ * non-border paint (background, color, outline, border-radius) and wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-input-number.ds-input-number--modern[data-part='root'] {
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='error'] {
+  border: 1px solid var(--ds-color-error);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'][data-part='root'][data-status='warning'] {
+  border: 1px solid var(--ds-color-warning);
+}
+
+[data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--modern[data-part='root']) {
+  background: var(--ds-surface-inset);
+}
+div:has(> .ds-input-number.ds-input-number--modern[data-part='root']) ~ [data-part='addon-after'] {
+  background: var(--ds-surface-inset);
+}
+
+[data-part='prefix']:has(~ .ds-input-number.ds-input-number--modern[data-part='root']) {
+  color: var(--ds-color-text-secondary);
+}
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='suffix'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-input-number.ds-input-number--modern[data-part='root'] ~ * [data-part='stepper-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-sm, 6px);
+  border: none;
+}
+
+/**
+ * Rustic InputNumber skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-input-number.ds-input-number--rustic[data-part='root']`,
+ * the `<input>` itself -- carrying `data-status` and `data-disabled`. Same
+ * DOM shape as the modern skin (see its header comment for the full
+ * rationale): a void `<input>` cannot have descendants, so `addon-before`
+ * and `prefix` (which precede root in the DOM) are reached by anchoring the
+ * rule on the part itself and looking forward with `:has()`; `suffix` and
+ * `stepper-button` (which follow root) and `addon-after` (a sibling of
+ * root's own parent) are reached the ordinary forward way.
+ *
+ * FOCUS: the removed `useInteractionState()` `focused` value is kept in
+ * local state ONLY to drive the `rottay-inputnumber--focused` external class
+ * hook on the outer wrapper (non-paint, untouched) -- its own `onFocus`/
+ * `onBlur` handlers are spread exclusively onto `[data-part='root']`, so
+ * native `:focus` on root reproduces the removed paint exactly.
+ *
+ * BORDER COLOR priority, byte-exact from the removed `getBorderColor()`:
+ * error > warning > focused > default. `box-shadow` (the focus ring) has no
+ * status dependency -- it shows on focus regardless of status, matching the
+ * original (`isFocused ? shadow-focus : 'none'`, no status branch).
+ *
+ * BORDER-RADIUS is genuinely prop-derived (depends on whether `addonBefore`/
+ * `addonAfter` are present, which stamp no anatomy of their own to key a CSS
+ * selector on) -- carried via the quoted custom property
+ * `--ds-input-number-radius`, set inline (uncounted) from the SAME ternary
+ * the JSX always computed, consumed here by a static rule.
+ *
+ * SPECIFICITY (P-48): border paints a color, so its rules reach (0,4,0) via
+ * the repeated `[data-part='root']`. Everything else here is non-border
+ * paint (background, color, box-shadow, border-radius) and wins unlayered at
+ * (0,3,0) or higher.
+ */
+
+.ds-input-number.ds-input-number--rustic[data-part='root'] {
+  outline: none;
+  color: var(--ds-inputnumber-color);
+  background-color: var(--ds-inputnumber-bg);
+  box-shadow: none;
+  border-radius: var(--ds-input-number-radius);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-disabled='true'] {
+  background-color: var(--ds-inputnumber-bg-disabled);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root']:focus {
+  box-shadow: var(--ds-inputnumber-shadow-focus);
+}
+
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-inputnumber-border);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root']:focus:not([data-status='error']):not([data-status='warning']) {
+  border: 1px solid var(--ds-inputnumber-border-focus);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'][data-status='warning'] {
+  border: 1px solid var(--ds-inputnumber-warning-border);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'][data-part='root'][data-status='error'] {
+  border: 1px solid var(--ds-inputnumber-error-border);
+}
+
+[data-part='addon-before'][data-part='addon-before']:has(~ div > .ds-input-number.ds-input-number--rustic[data-part='root']) {
+  background-color: var(--ds-inputnumber-addon-bg);
+  border: 1px solid var(--ds-inputnumber-addon-border);
+  border-right: none;
+  border-radius: var(--ds-inputnumber-radius) 0 0 var(--ds-inputnumber-radius);
+  color: var(--ds-inputnumber-addon-color);
+}
+div:has(> .ds-input-number.ds-input-number--rustic[data-part='root']) ~ [data-part='addon-after'][data-part='addon-after'] {
+  background-color: var(--ds-inputnumber-addon-bg);
+  border: 1px solid var(--ds-inputnumber-addon-border);
+  border-left: none;
+  border-radius: 0 var(--ds-inputnumber-radius) var(--ds-inputnumber-radius) 0;
+  color: var(--ds-inputnumber-addon-color);
+}
+
+[data-part='prefix']:has(~ .ds-input-number.ds-input-number--rustic[data-part='root']) {
+  color: var(--ds-inputnumber-affix-color);
+}
+.ds-input-number.ds-input-number--rustic[data-part='root'] ~ [data-part='suffix'] {
+  color: var(--ds-inputnumber-affix-color);
+}
+
+.ds-input-number.ds-input-number--rustic[data-part='root'] ~ * [data-part='stepper-button'] {
+  background: var(--ds-inputnumber-control-bg);
+  color: var(--ds-inputnumber-control-color);
+}
+
+/**
+ * Modern PasswordInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-password-input.ds-password-input--modern[data-part='root']`,
+ * the `<input>` itself -- carrying `data-error` and `data-disabled`. A void
+ * `<input>` cannot have descendants: `visibility-toggle` IS a real direct
+ * sibling of root (both children of the `position:relative` wrapper, toggle
+ * AFTER root) and is reached the ordinary way; `strength-track` and
+ * `error-message`'s wrapper are siblings of root's OWN PARENT (nephews, not
+ * siblings), reached by anchoring on that parent via
+ * `div:has(> root) ~ …`, the same idiom the sibling input-number skins use.
+ *
+ * This engine has no focus-driven paint (no `useInteractionState`) -- the
+ * root's border only ever reacts to `data-error`.
+ *
+ * STRENGTH-FILL's color is the one runtime-driven paint (a discrete
+ * `STRENGTH_COLORS[level]` lookup) -- carried via the quoted custom property
+ * `--ds-password-strength-fill`, set inline by the component, consumed here
+ * by a static rule.
+ *
+ * SPECIFICITY (P-48): the root's `border` paints a color, so its rules reach
+ * (0,4,0) via the repeated `[data-part='root']`. Everything else here is
+ * non-border paint (background, color, border-radius, transform) and wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-password-input.ds-password-input--modern[data-part='root'] {
+  background: var(--ds-surface-input, var(--ds-surface-card));
+  border-radius: var(--ds-radius-md);
+  outline: none;
+  color: var(--ds-color-text-primary);
+}
+.ds-password-input.ds-password-input--modern[data-part='root'][data-disabled='true'] {
+  background: var(--ds-color-alpha-black-50);
+}
+
+.ds-password-input.ds-password-input--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-password-input.ds-password-input--modern[data-part='root'][data-part='root'][data-error='true'] {
+  border: 1px solid var(--ds-color-error);
+}
+
+.ds-password-input.ds-password-input--modern[data-part='root'] ~ [data-part='visibility-toggle'] {
+  transform: translateY(-50%);
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+div:has(> .ds-password-input.ds-password-input--modern[data-part='root']) ~ [data-part='strength-track'] {
+  border-radius: 9999px;
+  background: var(--ds-surface-panel);
+}
+div:has(> .ds-password-input.ds-password-input--modern[data-part='root']) ~ [data-part='strength-track'] > [data-part='strength-fill'] {
+  border-radius: 9999px;
+  background: var(--ds-password-strength-fill);
+}
+
+div:has(> .ds-password-input.ds-password-input--modern[data-part='root']) ~ * [data-part='error-message'] {
+  color: var(--ds-color-error);
+}
+
+/**
+ * Rustic PasswordInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-password-input.ds-password-input--rustic[data-part='root']`,
+ * the `<input>` itself -- carrying `data-variant` ('outlined'|'filled'|
+ * 'flushed'|'unstyled'), `data-error` and `data-disabled`. `visibility-toggle`
+ * is a real direct sibling of root (both children of the wrapper, toggle AFTER
+ * root); `strength-track` and `error-message` are nephews (siblings of root's
+ * own parent), reached by anchoring on that parent via `div:has(> root) ~ …`.
+ *
+ * BORDER reproduces the `inputStyle`/`getBorderColor` chain: outlined/filled
+ * get a 1px box border, flushed only a 2px bottom edge, unstyled none; in
+ * every case the edge color follows error > focus > default. The box-border
+ * rules carry `:not([data-variant='flushed']):not([data-variant='unstyled'])`
+ * mirroring the JS variant ternary so at most one border rule wins per
+ * (variant x error x focus) combination.
+ *
+ * FOCUS: `isFocused` (set unconditionally in onFocus/onBlur on root) matched
+ * native `:focus` exactly; `box-shadow` reproduces `isFocused && !error` via
+ * `:focus:not([data-error='true'])`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule below reaches (0,4,0) via a variant/error attribute
+ * (or `:not()` chain) beyond the two root classes + `[data-part='root']`.
+ * Non-border paint (background, color, outline, box-shadow, border-radius)
+ * wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`#1a1a1a`, `#666`, `#d9d9d9`, `#1890ff`, `#ff4d4f`,
+ * `#f5f5f5`, `#e8e8e8`, `rgba(24, 144, 255, 0.2)`) are transcribed byte-exact
+ * from the source `var(--ds-color-*, #hex)` declarations.
+ */
+
+.ds-password-input.ds-password-input--rustic[data-part='root'] {
+  color: var(--ds-color-text-primary, #1a1a1a);
+  outline: none;
+  box-shadow: none;
+}
+.ds-password-input.ds-password-input--rustic[data-part='root']:focus:not([data-error='true']) {
+  box-shadow: 0 0 0 2px var(--ds-color-primary-100, rgba(24, 144, 255, 0.2));
+}
+
+/* background: filled tint, else transparent. */
+.ds-password-input.ds-password-input--rustic[data-part='root'][data-variant='filled'] {
+  background-color: var(--ds-color-neutral-100, #f5f5f5);
+}
+.ds-password-input.ds-password-input--rustic[data-part='root']:not([data-variant='filled']) {
+  background-color: transparent;
+}
+
+/* border-radius: flushed/unstyled square, everything else md. */
+.ds-password-input.ds-password-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled']) {
+  border-radius: var(--ds-radius-md, 8px);
+}
+.ds-password-input.ds-password-input--rustic[data-part='root'][data-variant='flushed'] {
+  border-radius: 0;
+}
+.ds-password-input.ds-password-input--rustic[data-part='root'][data-variant='unstyled'] {
+  border-radius: 0;
+}
+
+/* border box: outlined/filled get a 1px border; color error > focus > default.
+   border-bottom is NONE, not painted: the pre-migration engine wrote
+   `border` then `borderBottom: undefined`, and ReactDOM removes an
+   undefined-valued longhand (`style.borderBottom = ''`), erasing the
+   shorthand's bottom side — the shipped look has never had a bottom edge
+   on the box variants. Reproduced byte-exact; filed as a proposal. */
+.ds-password-input.ds-password-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled']) {
+  border: 1px solid var(--ds-color-neutral-300, #d9d9d9);
+  border-bottom: none;
+}
+.ds-password-input.ds-password-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled']):focus:not([data-error='true']) {
+  border-color: var(--ds-color-primary-500, #1890ff);
+}
+.ds-password-input.ds-password-input--rustic[data-part='root']:not([data-variant='flushed']):not([data-variant='unstyled'])[data-error='true'] {
+  border-color: var(--ds-color-error-500, #ff4d4f);
+}
+
+/* flushed: no box, only a 2px bottom edge (same color priority). */
+.ds-password-input.ds-password-input--rustic[data-part='root'][data-variant='flushed'] {
+  border: none;
+  border-bottom: 2px solid var(--ds-color-neutral-300, #d9d9d9);
+}
+.ds-password-input.ds-password-input--rustic[data-part='root'][data-variant='flushed']:focus:not([data-error='true']) {
+  border-bottom-color: var(--ds-color-primary-500, #1890ff);
+}
+.ds-password-input.ds-password-input--rustic[data-part='root'][data-variant='flushed'][data-error='true'] {
+  border-bottom-color: var(--ds-color-error-500, #ff4d4f);
+}
+
+/* unstyled: no border at all. */
+.ds-password-input.ds-password-input--rustic[data-part='root'][data-variant='unstyled'] {
+  border: none;
+}
+
+.ds-password-input.ds-password-input--rustic[data-part='root'] ~ [data-part='visibility-toggle'] {
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--ds-color-text-secondary, #666);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [data-part='strength-track'] {
+  border-radius: 2px;
+  background-color: var(--ds-color-neutral-200, #e8e8e8);
+}
+div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [data-part='strength-track'] > [data-part='strength-fill'] {
+  border-radius: 2px;
+  background: var(--ds-password-strength-fill);
+}
+
+div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [data-part='error-message'] {
+  color: var(--ds-color-error-500, #ff4d4f);
+}
+
+/**
+ * Modern Switch skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-switch.ds-switch--modern[data-part='root']` (a `<label>`),
+ * carrying `data-checked` and `data-disabled`. `track`, `thumb`, and `label`
+ * are descendants; the hidden accessibility `<input>` is a direct child.
+ *
+ * The track background reproduces the removed `trackBg` IIFE (checked/hover/
+ * disabled). Hover was the removed `isHovered` state, driven by
+ * onMouseEnter/onMouseLeave on the label root -> `:hover` here, gated
+ * `:not([data-disabled='true'])` exactly where the JS gated `!isDisabled`.
+ * The focus ring was the removed `isFocusVisible` state, set from the input's
+ * `:focus-visible` -> `input:focus-visible ~ [data-part='track']` (a disabled
+ * input cannot be focused, so the `!isDisabled` guard is implicit).
+ *
+ * The thumb slide is `translateX` of a per-size travel distance, carried via
+ * the runtime custom property `--ds-switch-thumb-x` (uncounted) since the
+ * value is computed per size.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+/* track ------------------------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='track'] {
+  border-radius: var(--ds-radius-full);
+}
+.ds-switch.ds-switch--modern[data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-color-primary);
+}
+.ds-switch.ds-switch--modern[data-checked='false'] [data-part='track'] {
+  background-color: var(--ds-color-border-secondary);
+}
+.ds-switch.ds-switch--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-color-primary-hover);
+}
+.ds-switch.ds-switch--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-color-border);
+}
+.ds-switch.ds-switch--modern input:focus-visible ~ [data-part='track'] {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 2px;
+}
+
+/* thumb ------------------------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='thumb'] {
+  border-radius: 50%;
+  background-color: var(--ds-surface-control, var(--ds-color-text-on-primary));
+  box-shadow: var(--ds-elevation-1);
+  transform: translateX(var(--ds-switch-thumb-x));
+}
+
+/* label ------------------------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-switch.ds-switch--modern[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-color-text-disabled);
+}
+
+/* hidden accessibility input (visually clipped): no border. */
+.ds-switch.ds-switch--modern input {
+  border: 0;
+}
+
+/**
+ * Rustic Switch skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-switch.ds-switch--rustic[data-part='root']` (a `<label>`),
+ * carrying `data-checked` and `data-disabled`. `track`, `thumb`, and `label`
+ * are descendants; the hidden `<input>` is a sibling of `track` inside the
+ * switch span.
+ *
+ * FOCUS: the removed `useInteractionState()` `focused` value (the only reader
+ * of that hook, spread onto the input) was "any focus" -- the outline showed
+ * on a mouse click too -- so it maps to native `:focus`, not `:focus-visible`:
+ * `input:focus ~ [data-part='track']`.
+ *
+ * The thumb slide is `translateX` of a per-size calc travel, carried via the
+ * runtime custom property `--ds-switch-thumb-x` (uncounted).
+ *
+ * The loading spinner's `@keyframes spin` was injected per-mount via a
+ * `<style>` tag; it is renamed `ds-switch-spin` here so it does not redefine
+ * the globally-loaded `spin`, and the svg's inline `animation` references the
+ * new name.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+/* track ------------------------------------------------------------------- */
+.ds-switch.ds-switch--rustic [data-part='track'] {
+  border-radius: var(--ds-switch-radius);
+}
+.ds-switch.ds-switch--rustic[data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-switch-checked-bg);
+}
+.ds-switch.ds-switch--rustic[data-checked='false'] [data-part='track'] {
+  background-color: var(--ds-switch-bg);
+}
+.ds-switch.ds-switch--rustic input:focus ~ [data-part='track'] {
+  outline: var(--ds-switch-focus-ring);
+  outline-offset: 2px;
+}
+
+/* thumb ------------------------------------------------------------------- */
+.ds-switch.ds-switch--rustic [data-part='thumb'] {
+  border-radius: 50%;
+  background-color: var(--ds-switch-thumb-bg);
+  box-shadow: var(--ds-switch-thumb-shadow);
+  transform: translateX(var(--ds-switch-thumb-x));
+}
+
+/* label ------------------------------------------------------------------- */
+.ds-switch.ds-switch--rustic [data-part='label'] {
+  color: var(--ds-switch-label-color);
+}
+
+@keyframes ds-switch-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/**
+ * Modern Toggle skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-toggle.ds-toggle--modern[data-part='root']` (a `<label>`),
+ * carrying `data-checked`, `data-disabled`, `data-error`. `track`, `thumb`,
+ * `label`, `description` are descendants.
+ *
+ * The track background (`trackColor`: error > checked-color > unchecked) and the
+ * pill radius (the per-size track height) are runtime-computed, carried via the
+ * uncounted custom properties `--ds-toggle-track-fill` / `--ds-toggle-track-r`;
+ * the thumb slide (a per-size calc) via `--ds-toggle-thumb-x`.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-toggle.ds-toggle--modern [data-part='track'] {
+  border-radius: var(--ds-toggle-track-r);
+  background: var(--ds-toggle-track-fill);
+}
+
+.ds-toggle.ds-toggle--modern [data-part='thumb'] {
+  border-radius: 50%;
+  background: var(--ds-surface-control, var(--ds-color-text-on-primary));
+  box-shadow: var(--ds-elevation-1);
+  transform: translateX(var(--ds-toggle-thumb-x));
+}
+
+.ds-toggle.ds-toggle--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-toggle.ds-toggle--modern[data-error='true'] [data-part='label'] {
+  color: var(--ds-color-error);
+}
+
+.ds-toggle.ds-toggle--modern [data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Rustic Toggle skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-toggle.ds-toggle--rustic[data-part='root']` (a `<label>`),
+ * carrying `data-checked`, `data-disabled`, `data-error`. `track`, `thumb`,
+ * `inner-label`, `label`, `description` are descendants; the hidden `<input>`
+ * is a direct child of `track`.
+ *
+ * The track background (`getTrackBg`: checked x color) is runtime-computed,
+ * carried via the uncounted `--ds-toggle-track-fill`. The error border and the
+ * focus ring reproduce `error ? … : none` and `isFocused ? … : none`; focus is
+ * the input's native focus, mapped via the track's `:focus-within` (the input
+ * is its only focusable descendant, so this is exactly the "any focus" the
+ * removed `useInteractionState().focused` tracked).
+ *
+ * SPECIFICITY (P-48): the error border paints a color, so it reaches (0,4,0)
+ * via `[data-error]` beyond the two root classes + `[data-part='track']`.
+ * Everything else is non-border paint and wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`rgba(59, 130, 246, 0.2)`, `rgba(59, 130, 246, 0.1)`,
+ * `rgba(0, 0, 0, 0.2)`, `rgba(0, 0, 0, 0.1)`, `rgba(0, 0, 0, 0.15)`) are
+ * transcribed byte-exact from the source.
+ */
+
+.ds-toggle.ds-toggle--rustic [data-part='track'] {
+  border-radius: var(--ds-toggle-track-radius);
+  background-color: var(--ds-toggle-track-fill);
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+.ds-toggle.ds-toggle--rustic[data-error='true'] [data-part='track'] {
+  border: 2px solid var(--ds-toggle-error-color);
+}
+.ds-toggle.ds-toggle--rustic [data-part='track']:focus-within {
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='thumb'] {
+  border-radius: 50%;
+  background-color: var(--ds-toggle-dot-bg);
+  transform: translateY(-50%);
+}
+.ds-toggle.ds-toggle--rustic[data-checked='false'] [data-part='thumb'] {
+  box-shadow: var(--ds-toggle-dot-shadow, 0 1px 2px rgba(0, 0, 0, 0.15));
+}
+.ds-toggle.ds-toggle--rustic[data-checked='true'] [data-part='thumb'] {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='inner-label'] {
+  color: var(--ds-toggle-inner-label-color);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='label'] {
+  color: var(--ds-toggle-label-color);
+}
+.ds-toggle.ds-toggle--rustic[data-error='true'] [data-part='label'] {
+  color: var(--ds-toggle-error-color);
+}
+
+.ds-toggle.ds-toggle--rustic [data-part='description'] {
+  color: var(--ds-toggle-description-color);
+}
+
+/**
+ * Modern Radio skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-radio.ds-radio--modern[data-part='root']` (a `<label>`),
+ * carrying `data-checked` and `data-disabled`. `circle`, `dot`, `label`,
+ * `description` are descendants; the hidden `<input>` is a sibling of `circle`.
+ *
+ * Hover (the removed `isHovered` state, driven by onMouseEnter/onMouseLeave on
+ * the root) -> `:hover`, gated `:not([data-disabled='true'])` exactly where the
+ * JS gated `!disabled`. The focus ring (removed `isFocusVisible`) was set from
+ * the input's `:focus-visible` -> `input:focus-visible ~ [data-part='circle']`.
+ * The dot scale is keyed on `data-checked`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via `[data-checked]` (+ `:hover`)
+ * beyond the two root classes + `[data-part='circle']`. Non-border paint wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-radio.ds-radio--modern [data-part='circle'] {
+  border-radius: 50%;
+  background-color: transparent;
+}
+.ds-radio.ds-radio--modern[data-checked='false'] [data-part='circle'] {
+  border: 2px solid var(--ds-radio-border, var(--ds-color-border-secondary));
+}
+.ds-radio.ds-radio--modern[data-checked='true'] [data-part='circle'] {
+  border: 2px solid var(--ds-radio-checked-bg, var(--ds-color-primary));
+}
+.ds-radio.ds-radio--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: var(--ds-radio-border, var(--ds-color-border));
+}
+.ds-radio.ds-radio--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='circle'] {
+  border-color: var(--ds-color-primary-hover);
+}
+.ds-radio.ds-radio--modern input:focus-visible ~ [data-part='circle'] {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 2px;
+}
+
+.ds-radio.ds-radio--modern [data-part='dot'] {
+  border-radius: 50%;
+  background-color: var(--ds-color-text-on-primary);
+  transform: scale(0);
+}
+.ds-radio.ds-radio--modern[data-checked='true'] [data-part='dot'] {
+  transform: scale(1);
+}
+
+.ds-radio.ds-radio--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-radio.ds-radio--modern[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-color-text-disabled);
+}
+.ds-radio.ds-radio--modern [data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* hidden accessibility input (visually clipped): no border. */
+.ds-radio.ds-radio--modern input {
+  border: 0;
+}
+
+/**
+ * Rustic Radio skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-radio.ds-radio--rustic[data-part='root']` (a `<label>`),
+ * carrying `data-checked`, `data-disabled`, `data-error`. `circle`, `dot`,
+ * `label`, `description` are descendants; the hidden `<input>` is a child of
+ * `circle`.
+ *
+ * NO HOVER: this engine tracked none (preserved -- no invented rule). The focus
+ * ring (removed `useInteractionState().focused`, "any focus") maps to the
+ * circle's `:focus-within` (the input is its only focusable descendant). The
+ * checked circle border AND the dot share `getCheckedDot()` (color-prop
+ * dependent), carried once via the uncounted root custom property
+ * `--ds-radio-dot-fill`. Border priority reproduces the JS ternary
+ * error > checked(dot-fill) > default; the checked rule carries
+ * `:not([data-error='true'])` so error wins.
+ *
+ * SPECIFICITY (P-48): border-color rules reach (0,4,0) via a state attribute
+ * (or the repeated `[data-part='circle']`) beyond the two root classes.
+ * Non-border paint wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`rgba(59, 130, 246, 0.2)`, `rgba(59, 130, 246, 0.1)`)
+ * transcribed byte-exact from the source.
+ */
+
+.ds-radio.ds-radio--rustic [data-part='circle'] {
+  border-radius: 50%;
+  background-color: var(--ds-radio-bg);
+  outline: none;
+  box-shadow: none;
+}
+.ds-radio.ds-radio--rustic[data-disabled='true'] [data-part='circle'] {
+  background-color: var(--ds-radio-bg-disabled);
+}
+.ds-radio.ds-radio--rustic [data-part='circle']:focus-within {
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1);
+}
+.ds-radio.ds-radio--rustic [data-part='circle'][data-part='circle'] {
+  border: 2px solid var(--ds-radio-border);
+}
+.ds-radio.ds-radio--rustic[data-checked='true']:not([data-error='true']) [data-part='circle'] {
+  border-color: var(--ds-radio-dot-fill);
+}
+.ds-radio.ds-radio--rustic[data-error='true'] [data-part='circle'] {
+  border-color: var(--ds-radio-error-border);
+}
+
+.ds-radio.ds-radio--rustic [data-part='dot'] {
+  border-radius: 50%;
+  background-color: var(--ds-radio-dot-fill);
+  transform: scale(0);
+}
+.ds-radio.ds-radio--rustic[data-checked='true'] [data-part='dot'] {
+  transform: scale(1);
+}
+
+.ds-radio.ds-radio--rustic [data-part='label'] {
+  color: var(--ds-radio-label-color);
+}
+.ds-radio.ds-radio--rustic[data-disabled='true']:not([data-error='true']) [data-part='label'] {
+  color: var(--ds-radio-label-color-disabled);
+}
+.ds-radio.ds-radio--rustic[data-error='true'] [data-part='label'] {
+  color: var(--ds-radio-error-color);
+}
+
+.ds-radio.ds-radio--rustic [data-part='description'] {
+  color: var(--ds-radio-description-color);
+}
+
+/**
+ * Modern Checkbox skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-checkbox.ds-checkbox--modern[data-part='root']` (a
+ * `<label>`), carrying `data-checked`, `data-indeterminate`, `data-disabled`,
+ * plus `data-active` (checked || indeterminate) and `data-standalone` (no label
+ * -> circular indicator) added for this migration to give the box's three-way
+ * branch a CSS discriminator. `box`, `checkmark`, `label` are descendants; the
+ * hidden `<input>` is a sibling of `box`.
+ *
+ * Box border/background reproduce the JS chain active > standalone > normal;
+ * the standalone rule carries `:not([data-active='true'])` so active wins.
+ * Hover (removed `isHovered`, onMouseEnter/onMouseLeave on the root) -> `:hover`
+ * gated `:not([data-disabled='true'])`; the focus ring (removed
+ * `isFocusVisible`) -> `input:focus-visible ~ [data-part='box']`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via a state attribute (or the
+ * repeated `[data-part='box']`) beyond the two root classes. Non-border paint
+ * wins unlayered at (0,3,0) or higher.
+ */
+
+.ds-checkbox.ds-checkbox--modern [data-part='box'] {
+  border-radius: var(--ds-radius-sm);
+  background-color: transparent;
+  transform: scale(1);
+}
+.ds-checkbox.ds-checkbox--modern[data-standalone='true'] [data-part='box'] {
+  border-radius: 999px;
+}
+
+/* box border: normal (base), standalone (not active), active. */
+.ds-checkbox.ds-checkbox--modern [data-part='box'][data-part='box'] {
+  border: 2px solid var(--ds-checkbox-border, var(--ds-color-border-secondary));
+}
+.ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']) [data-part='box'] {
+  border-color: color-mix(in srgb, var(--ds-checkbox-border, var(--ds-color-border)) 88%, var(--ds-surface-panel) 12%);
+  background-color: color-mix(in srgb, var(--ds-surface-panel) 76%, var(--ds-color-text-primary) 24%);
+}
+.ds-checkbox.ds-checkbox--modern[data-active='true'] [data-part='box'] {
+  border-color: var(--ds-checkbox-checked-bg, var(--ds-color-primary));
+  background-color: var(--ds-checkbox-checked-bg, var(--ds-color-primary));
+}
+
+/* hover (not disabled): active, standalone-not-active, normal-not-active. */
+.ds-checkbox.ds-checkbox--modern[data-active='true']:hover:not([data-disabled='true']) [data-part='box'] {
+  border-color: var(--ds-color-primary-hover);
+  background-color: var(--ds-color-primary-hover);
+}
+.ds-checkbox.ds-checkbox--modern[data-standalone='true']:not([data-active='true']):hover:not([data-disabled='true']) [data-part='box'] {
+  border-color: var(--ds-color-text-secondary);
+  background-color: color-mix(in srgb, var(--ds-surface-panel) 68%, var(--ds-color-text-primary) 32%);
+}
+.ds-checkbox.ds-checkbox--modern:not([data-active='true']):not([data-standalone='true']):hover:not([data-disabled='true']) [data-part='box'] {
+  border-color: var(--ds-checkbox-border, var(--ds-color-border));
+}
+
+/* focus ring from the hidden input's :focus-visible. */
+.ds-checkbox.ds-checkbox--modern input:focus-visible ~ [data-part='box'] {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 2px;
+}
+
+.ds-checkbox.ds-checkbox--modern [data-part='checkmark'] {
+  transform: scale(1);
+}
+
+.ds-checkbox.ds-checkbox--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-checkbox.ds-checkbox--modern[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-color-text-disabled);
+}
+
+/* hidden accessibility input (visually clipped): no border. */
+.ds-checkbox.ds-checkbox--modern input {
+  border: 0;
+}
+
+/**
+ * Rustic Checkbox skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.ds-checkbox.ds-checkbox--rustic[data-part='root']` (a
+ * `<label>`), carrying `data-checked`, `data-indeterminate`, `data-disabled`,
+ * `data-error`, plus `data-active` (checked || indeterminate) added for this
+ * migration. `box`, `checkmark`, `label` are descendants; the hidden `<input>`
+ * is a child of `box`. Two `[data-part='checkmark']` nodes exist -- the `<svg>`
+ * tick (scaled by `data-checked`) and the `<div>` indeterminate dash (its own
+ * background/radius) -- disambiguated by element type so neither inherits the
+ * other's paint.
+ *
+ * NO HOVER: this engine tracked none (preserved). The focus ring (removed
+ * `useInteractionState().focused`, "any focus") maps to the box's
+ * `:focus-within` (the input is its only focusable descendant). `getCheckedBg()`
+ * (color-prop) and `getRadius()` (radius-prop) are runtime, carried once via
+ * the uncounted root custom properties `--ds-checkbox-fill` /
+ * `--ds-checkbox-box-radius`. Border priority error > active(fill) > default;
+ * the active rule carries `:not([data-error='true'])` so error wins.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via a state attribute (or the
+ * repeated `[data-part='box']`) beyond the two root classes. Non-border paint
+ * wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`rgba(59, 130, 246, 0.2)`, `rgba(59, 130, 246, 0.1)`)
+ * transcribed byte-exact from the source.
+ */
+
+.ds-checkbox.ds-checkbox--rustic [data-part='box'] {
+  border-radius: var(--ds-checkbox-box-radius);
+  background-color: var(--ds-checkbox-bg);
+  outline: none;
+  box-shadow: none;
+}
+.ds-checkbox.ds-checkbox--rustic[data-disabled='true']:not([data-active='true']) [data-part='box'] {
+  background-color: var(--ds-checkbox-bg-disabled);
+}
+.ds-checkbox.ds-checkbox--rustic[data-active='true'] [data-part='box'] {
+  background-color: var(--ds-checkbox-fill);
+}
+.ds-checkbox.ds-checkbox--rustic [data-part='box']:focus-within {
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1);
+}
+
+.ds-checkbox.ds-checkbox--rustic [data-part='box'][data-part='box'] {
+  border: 2px solid var(--ds-checkbox-border);
+}
+.ds-checkbox.ds-checkbox--rustic[data-active='true']:not([data-error='true']) [data-part='box'] {
+  border-color: var(--ds-checkbox-fill);
+}
+.ds-checkbox.ds-checkbox--rustic[data-error='true'] [data-part='box'] {
+  border-color: var(--ds-checkbox-error-border);
+}
+
+.ds-checkbox.ds-checkbox--rustic svg[data-part='checkmark'] {
+  transform: scale(0);
+}
+.ds-checkbox.ds-checkbox--rustic[data-checked='true'] svg[data-part='checkmark'] {
+  transform: scale(1);
+}
+.ds-checkbox.ds-checkbox--rustic div[data-part='checkmark'] {
+  background-color: var(--ds-checkbox-checked-color);
+  border-radius: 1px;
+}
+
+.ds-checkbox.ds-checkbox--rustic [data-part='label'] {
+  color: var(--ds-checkbox-label-color);
+}
+.ds-checkbox.ds-checkbox--rustic[data-disabled='true']:not([data-error='true']) [data-part='label'] {
+  color: var(--ds-checkbox-label-color-disabled);
+}
+.ds-checkbox.ds-checkbox--rustic[data-error='true'] [data-part='label'] {
+  color: var(--ds-checkbox-error-color);
+}
+
+/**
+ * Modern Slider skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style` (the runtime position
+ * percentages stay inline and are unaffected).
+ *
+ * SCOPE ROOT is `.ds-slider.ds-slider--modern[data-part='root']`, carrying
+ * `data-disabled` and (range mode) `data-orientation` ('vertical'|'horizontal').
+ * `rail`, `track`, `handle`, `mark-label` are descendants. This engine has NO
+ * interaction paint (no hover/focus state; the native range thumb is styled by
+ * the DaisyUI `range` classes) -- a real modern/rustic divergence, preserved.
+ *
+ * The only paint here is the static rail/track/handle colours plus the
+ * centering transforms, which differ by orientation (track) or by the per-mark
+ * `data-axis` ('x'|'y', reproducing the range-vertical vs range-horizontal/
+ * single split exactly). Position percentages are runtime and remain inline.
+ *
+ * SPECIFICITY (P-48): the handle border-color reaches (0,4,0) via the repeated
+ * `[data-part='handle']`. Non-border paint wins unlayered at (0,3,0).
+ */
+
+.ds-slider.ds-slider--modern [data-part='rail'] {
+  background: var(--ds-surface-panel);
+}
+
+.ds-slider.ds-slider--modern [data-part='track'] {
+  background: var(--ds-color-primary);
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='track'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='track'] {
+  transform: translateY(-50%);
+}
+
+.ds-slider.ds-slider--modern [data-part='handle'] {
+  background: var(--ds-color-primary);
+}
+.ds-slider.ds-slider--modern [data-part='handle'][data-part='handle'] {
+  border-color: var(--ds-color-bg-primary, white);
+}
+
+.ds-slider.ds-slider--modern [data-part='mark-label'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='x'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='y'] {
+  transform: translateY(50%);
+}
+
+/**
+ * Rustic Slider skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * Runtime position percentages and any caller-supplied `railStyle`/`trackStyle`/
+ * `handleStyle`/`mark.style` overrides stay inline and still win over this skin
+ * (inline > stylesheet), exactly as they overrode the base style object before.
+ *
+ * SCOPE ROOT is `.ds-slider.ds-slider--rustic[data-part='root']`, carrying
+ * `data-disabled` and `data-orientation` ('vertical'|'horizontal'). `rail`,
+ * `track`, `handle`, `mark-label` are descendants.
+ *
+ * FOCUS RING: unlike the modern engine (which draws none), rustic paints a ring
+ * on the handles when focused -- the divergence the inventory flagged, preserved.
+ * `isFocused` (any focus, from `useInteractionState`) still drives the external
+ * `rottay-slider--focused` class, which this skin keys the ring on; the ring
+ * paint itself is no longer inline.
+ *
+ * SPECIFICITY (P-48): the handle border reaches (0,4,0) via the repeated
+ * `[data-part='handle']`. Non-border paint wins unlayered at (0,3,0) or higher.
+ */
+
+.ds-slider.ds-slider--rustic [data-part='rail'] {
+  background-color: var(--ds-slider-rail-color);
+  border-radius: var(--ds-slider-track-radius);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='rail'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='rail'] {
+  transform: translateY(-50%);
+}
+
+.ds-slider.ds-slider--rustic [data-part='track'] {
+  background-color: var(--ds-slider-track-color);
+  border-radius: var(--ds-slider-track-radius);
+}
+.ds-slider.ds-slider--rustic[data-disabled='true'] [data-part='track'] {
+  background-color: var(--ds-slider-track-color-disabled);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='track'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='track'] {
+  transform: translateY(-50%);
+}
+
+.ds-slider.ds-slider--rustic [data-part='handle'] {
+  background-color: var(--ds-slider-handle-bg);
+  border-radius: 50%;
+  box-shadow: var(--ds-slider-handle-shadow);
+  outline: none;
+  outline-offset: 2px;
+}
+.ds-slider.ds-slider--rustic [data-part='handle'][data-part='handle'] {
+  border: var(--ds-slider-handle-border-width) solid var(--ds-slider-handle-border);
+}
+.ds-slider.ds-slider--rustic[data-disabled='true'] [data-part='handle'] {
+  background-color: var(--ds-slider-handle-bg-disabled);
+}
+.ds-slider.ds-slider--rustic.rottay-slider--focused [data-part='handle'] {
+  outline: var(--ds-slider-focus-ring);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='handle'] {
+  transform: translate(-50%, 50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='handle'] {
+  transform: translate(-50%, -50%);
+}
+
+.ds-slider.ds-slider--rustic [data-part='mark-label'] {
+  color: var(--ds-slider-mark-color);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='mark-label'] {
+  transform: translateY(50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='mark-label'] {
+  transform: translateX(-50%);
+}
+
+/**
+ * Modern OTPInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-otp-input.ds-otp-input--modern[data-part='root']`, carrying
+ * `data-disabled`. Each digit is a `[data-part='slot']` (`data-error`,
+ * `data-filled`); `error-message` is a nephew (inside an unclassed div that is a
+ * sibling of root), reached via `root ~ * [data-part='error-message']`.
+ *
+ * The slot's focus border reproduces the removed IMPERATIVE handlers
+ * (`onFocus`/`onBlur` wrote `.style.borderColor` directly, gated `!error`) as a
+ * `:focus:not([data-error='true'])` rule; the blurred border returns to the base
+ * rule. `onFocus`'s `.select()` is kept.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * the slot border reaches (0,4,0) via the repeated `[data-part='slot']`.
+ * Non-border paint wins unlayered at (0,3,0).
+ */
+
+.ds-otp-input.ds-otp-input--modern [data-part='slot'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-otp-input.ds-otp-input--modern [data-part='slot'][data-part='slot'][data-error='true'] {
+  border: 1px solid var(--ds-color-error);
+}
+.ds-otp-input.ds-otp-input--modern [data-part='slot']:focus:not([data-error='true']) {
+  border-color: var(--ds-color-primary);
+}
+
+.ds-otp-input.ds-otp-input--modern ~ * [data-part='error-message'] {
+  color: var(--ds-color-error);
+}
+
+/**
+ * Rustic OTPInput skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE: the two root classes `.ds-otp-input.ds-otp-input--rustic` sit on the
+ * OUTER wrapper; the `[data-part='root']` row (carrying `data-disabled`) and the
+ * `[data-part='error-message']` are its descendants, and each digit is a
+ * `[data-part='slot']` (`data-error`, `data-filled`) inside the row.
+ *
+ * The slot border reproduces the removed `getInputStyle` priority chain
+ * error > focus > filled > default, transcribed with a `:focus` rule (the
+ * removed `focusedIndex` state was "any focus") ordered so error wins; the
+ * focus box-shadow ring has no error gate, matching the original. `caretColor:
+ * transparent` is not a paint channel the census counts and stays inline.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every slot border rule reaches (0,4,0) via the repeated `[data-part='slot']`
+ * (or a state attribute). Non-border paint wins unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`#d1d5db`, `#9ca3af`, `#3b82f6`, `#ef4444`, `#fff`,
+ * `#f3f4f6`, `rgba(59, 130, 246, 0.2)`) are transcribed byte-exact.
+ */
+
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'] {
+  border-radius: 8px;
+  outline: none;
+  background-color: var(--ds-color-bg-input, #fff);
+  box-shadow: none;
+}
+.ds-otp-input.ds-otp-input--rustic [data-disabled='true'] [data-part='slot'] {
+  background-color: var(--ds-color-neutral-100, #f3f4f6);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot']:focus {
+  box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2));
+}
+
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'][data-part='slot'] {
+  border: 2px solid var(--ds-color-neutral-300, #d1d5db);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'][data-part='slot'][data-filled='true'] {
+  border-color: var(--ds-color-neutral-400, #9ca3af);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot']:focus:not([data-error='true']) {
+  border-color: var(--ds-color-primary-500, #3b82f6);
+}
+.ds-otp-input.ds-otp-input--rustic [data-part='slot'][data-part='slot'][data-error='true'] {
+  border-color: var(--ds-color-error-500, #ef4444);
+}
+
+.ds-otp-input.ds-otp-input--rustic [data-part='error-message'] {
+  color: var(--ds-color-error-500, #ef4444);
+}
+
+/**
+ * Modern Form skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style` (the error-list keeps
+ * its caller `...style` spread, which still wins).
+ *
+ * SCOPE: the field-level parts are scoped on the FORM ITEM's own class
+ * `.ds-form-item.ds-form-item--modern` (a FormItem can render outside a `<form>`).
+ * `feedback-icon` carries `data-status` ('success'|'error'|'warning'|'validating'),
+ * added for this migration; `label-text` is the label's inner text span (a
+ * `data-part` added for this migration); `help-text` carries `data-error`. The
+ * error list is a separate component with its own `.ds-form-error-list--modern`
+ * class (added so this skin can reach it without a form ancestor).
+ *
+ * The two per-mount `<style>` keyframes are moved here renamed
+ * `ds-form-modern-*` (engine-namespaced: the rustic Form defines a
+ * `feedback-in` with different content, so a bare `ds-form-feedback-in` would
+ * collide across the two globally-imported skins). The inline `animation`
+ * references the new names.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='success'] {
+  color: var(--ds-color-success);
+}
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='error'] {
+  color: var(--ds-color-error);
+}
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-form-item.ds-form-item--modern [data-part='feedback-icon'][data-status='validating'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-form-item.ds-form-item--modern [data-part='label-text'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-form-item.ds-form-item--modern [data-part='required-mark'] {
+  color: var(--ds-color-error);
+}
+.ds-form-item.ds-form-item--modern [data-part='tooltip-icon'] {
+  border-radius: 50%;
+  background: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-secondary);
+}
+.ds-form-item.ds-form-item--modern [data-part='help-text'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-form-item.ds-form-item--modern [data-part='help-text'][data-error='true'] {
+  color: var(--ds-color-error);
+}
+.ds-form-item.ds-form-item--modern [data-part='extra-text'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-form-error-list.ds-form-error-list--modern[data-part='error-list'] {
+  color: var(--ds-color-error);
+}
+
+@keyframes ds-form-modern-error-slide {
+  from { opacity: 0; transform: translateY(-4px); max-height: 0; }
+  to { opacity: 1; transform: translateY(0); max-height: 40px; }
+}
+@keyframes ds-form-modern-feedback-in {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/**
+ * Rustic Form skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * The error list keeps its caller `...style` spread, which still wins.
+ *
+ * SCOPE: field-level parts are scoped on the FormItem's own class
+ * `.ds-form-item.ds-form-item--rustic` (a FormItem can render outside a
+ * `<form>`). `feedback-icon` carries `data-status` (added for this migration);
+ * `label` is the `<label>` element itself; `help-text` carries `data-error`
+ * plus `data-status` (added for this migration) to reproduce the
+ * error > warning > success > default help colour chain. The error list has its
+ * own `.ds-form-error-list--rustic` class.
+ *
+ * The four per-mount `<style>` keyframes are moved here renamed
+ * `ds-form-rustic-*` (engine-namespaced: the modern Form's `feedback-in` has
+ * different content, and the local `spin` shadowed the global one). The inline
+ * `animation` references the new names.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`#22c55e`, `#ef4444`, `#f59e0b`, `#3b82f6`) transcribed
+ * byte-exact from the source feedback-icon config.
+ */
+
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='success'] {
+  color: var(--ds-form-success-color, #22c55e);
+}
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='error'] {
+  color: var(--ds-form-error-color, #ef4444);
+}
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='warning'] {
+  color: var(--ds-form-warning-color, #f59e0b);
+}
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='validating'] {
+  color: var(--ds-form-info-color, #3b82f6);
+}
+
+.ds-form-item.ds-form-item--rustic [data-part='label'] {
+  color: var(--ds-form-label-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='required-mark'] {
+  color: var(--ds-form-required-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='extra-text'] {
+  color: var(--ds-form-extra-color);
+}
+
+.ds-form-item.ds-form-item--rustic [data-part='help-text'] {
+  color: var(--ds-form-help-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='help-text'][data-status='warning'] {
+  color: var(--ds-form-warning-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='help-text'][data-status='success'] {
+  color: var(--ds-form-success-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='help-text'][data-error='true'] {
+  color: var(--ds-form-error-color);
+}
+
+.ds-form-error-list.ds-form-error-list--rustic[data-part='error-list'] {
+  color: var(--ds-form-error-color);
+}
+
+@keyframes ds-form-rustic-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes ds-form-rustic-help-slide-in {
+  from { opacity: 0; transform: translateY(-4px); max-height: 0; }
+  to { opacity: 1; transform: translateY(0); max-height: 100px; }
+}
+@keyframes ds-form-rustic-feedback-in {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes ds-form-rustic-required-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/**
+ * Modern Input RESIDUAL skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * COMPOSES with engines/modern/skin/input.css (WO-ARC-07), which paints only
+ * the shell `[data-part='root']`. This file paints the parts that skin never
+ * scoped: the affix spans, the clear button, the inert inner `<input>` (shell
+ * branch only), and the count / error-message siblings. No selector here
+ * touches `[data-part='root']` itself, so there is no collision.
+ *
+ * DELIBERATELY UNLAYERED (P-47). The clear button's hover was two IMPERATIVE
+ * `.style.backgroundColor` writes (`as any`-cast, which the census lexer could
+ * not see, but still inline paint) -> a `:hover` rule. The inert inner input is
+ * a documented exclusion in the engine: it carries the skin classes but no
+ * `data-part`, so the shell skin never matches it; the rule below is scoped to
+ * `[data-part='root'] input`, which matches ONLY the inner input of the label
+ * shell (in the simple branch the root IS the input, with no descendant input),
+ * reproducing its chrome-free reset.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border COLOR (the inner-input and
+ * clear-button borders are `none` resets), so every rule wins unlayered at
+ * (0,3,0) or higher.
+ */
+
+.rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background-color: transparent;
+  color: var(--ds-color-text-muted);
+}
+.rottay-input.rottay-input--modern[data-part='root'] [data-part='clear-button']:hover {
+  background-color: var(--ds-surface-canvas);
+}
+
+.rottay-input.rottay-input--modern[data-part='root'] [data-part='affix-prefix'],
+.rottay-input.rottay-input--modern[data-part='root'] [data-part='affix-suffix'] {
+  color: var(--ds-input-addon-color, var(--ds-color-text-muted));
+}
+
+.rottay-input.rottay-input--modern[data-part='root'] input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+}
+
+.rottay-input.rottay-input--modern[data-part='root'] ~ [data-part='count'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-input.rottay-input--modern[data-part='root'] ~ [data-part='count'][data-error='true'] {
+  color: var(--ds-color-error);
+}
+.rottay-input.rottay-input--modern[data-part='root'] ~ [data-part='error-message'] {
+  color: var(--ds-color-error);
+}
+
+/**
+ * Rustic Input RESIDUAL skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * COMPOSES with engines/rustic/skin/input.css (WO-ARC-07), which paints only
+ * the shell `[data-part='root']` (always the outer `<div>` here). This file
+ * paints the inner `<input>` passthrough, the affix spans, the clear button,
+ * and the count / error-message siblings. No selector touches `[data-part=
+ * 'root']` itself.
+ *
+ * DELIBERATELY UNLAYERED (P-47). The clear button's hover was four IMPERATIVE
+ * `.style.transform`/`.style.color` writes -> a `:hover` rule (byte-exact
+ * scale + color). The inner input is the chrome-free passthrough the shell
+ * paints around.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border COLOR (all borders are
+ * `none` resets), so every rule wins unlayered at (0,3,0) or higher.
+ */
+
+.rottay-input.rottay-input--rustic[data-part='root'] input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: var(--ds-input-color);
+}
+.rottay-input.rottay-input--rustic[data-part='root'] input:disabled {
+  color: var(--ds-input-color-disabled);
+}
+
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='affix-prefix'],
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='affix-suffix'] {
+  color: var(--ds-input-addon-color);
+}
+
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='clear-button'] {
+  color: var(--ds-input-clear-color);
+  background: none;
+  border: none;
+}
+.rottay-input.rottay-input--rustic[data-part='root'] [data-part='clear-button']:hover {
+  transform: scale(1.1);
+  color: var(--ds-input-color, currentColor);
+}
+
+.rottay-input.rottay-input--rustic[data-part='root'] ~ [data-part='count'] {
+  color: var(--ds-input-addon-color);
+}
+.rottay-input.rottay-input--rustic[data-part='root'] ~ [data-part='count'][data-error='true'] {
+  color: var(--ds-input-error-color);
+}
+.rottay-input.rottay-input--rustic[data-part='root'] ~ [data-part='error-message'] {
+  color: var(--ds-input-error-color);
+}
+
+/**
+ * RadioGroup skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/radio-group.css -- the compound renders one
+ * DOM under every engine, so there is no --modern/--rustic discriminator.
+ *
+ * SCOPE ROOT is `.rottay-radio-group[data-part='root']`, carrying
+ * `rottay-radio-group--<direction>`, (in button mode) `rottay-radio-group--button`
+ * and `data-button-style` ('solid'|'outline'). The two option render modes stamp
+ * `[data-part='option']` (button/segmented) with `[data-part='option-dot']` +
+ * `[data-part='option-fill']` + `[data-part='option-description']` (dot mode);
+ * `data-checked`/`data-disabled` ride on each option.
+ *
+ * The active color variant (`COLOR_MAP[color]` -> border/bg/dot) is a per-group
+ * runtime value carried once, on the root, via the uncounted custom properties
+ * `--ds-rg-color-border` / `--ds-rg-color-bg` / `--ds-rg-color-dot`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule below reaches (0,4,0) via the `--button` class or the
+ * `[data-part='option']` ancestor plus a repeated/qualifying attribute. Non-
+ * border paint wins unlayered at (0,3,0) or lower (no universal floor).
+ */
+
+/* button-style option (segmented control) --------------------------------- */
+.rottay-radio-group.rottay-radio-group--button [data-part='option'] {
+  border-radius: 4px;
+  background-color: transparent;
+  color: inherit;
+}
+.rottay-radio-group.rottay-radio-group--button [data-part='option'][data-part='option'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.rottay-radio-group.rottay-radio-group--button [data-part='option'][data-part='option'][data-checked='true'] {
+  border-color: var(--ds-rg-color-border);
+}
+.rottay-radio-group.rottay-radio-group--button[data-button-style='solid'] [data-part='option'][data-checked='true'] {
+  background-color: var(--ds-rg-color-bg);
+  color: var(--ds-rg-color-dot);
+}
+
+/* dot-style option indicator ---------------------------------------------- */
+.rottay-radio-group [data-part='option-dot'] {
+  border-radius: 50%;
+  background-color: transparent;
+}
+.rottay-radio-group [data-part='option'] [data-part='option-dot'][data-part='option-dot'] {
+  border: 2px solid var(--ds-color-border-secondary);
+}
+.rottay-radio-group [data-part='option'][data-checked='true'] [data-part='option-dot'] {
+  border-color: var(--ds-rg-color-border);
+}
+.rottay-radio-group [data-part='option-fill'] {
+  border-radius: 50%;
+  background-color: var(--ds-rg-color-bg);
+}
+.rottay-radio-group [data-part='option-description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * CheckboxGroup skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/checkbox-group.css -- the compound renders
+ * one DOM under every engine, so there is no --modern/--rustic discriminator.
+ *
+ * SCOPE ROOT is `.rottay-checkbox-group[data-part='root']`. Each option stamps
+ * `[data-part='option']` (with `data-checked`/`data-disabled`) wrapping
+ * `[data-part='option-box']` (the indicator; a `data-part` added for this
+ * migration). The svg tick's color is an SVG `stroke` attribute, not a style
+ * key, so it stays in the JSX (out of scope, same as other spinner/icon
+ * attributes).
+ *
+ * The active color variant (`COLOR_MAP[color]` -> border/bg) is a per-group
+ * runtime value carried once, on the root, via the uncounted custom properties
+ * `--ds-cbg-color-border` / `--ds-cbg-color-bg`.
+ *
+ * SPECIFICITY (P-48): the option-box border reaches (0,4,0) via the
+ * `[data-part='option']` ancestor plus a repeated/qualifying attribute. Non-
+ * border paint wins unlayered at (0,3,0) or lower.
+ */
+
+.rottay-checkbox-group [data-part='option-box'] {
+  border-radius: 2px;
+  background-color: transparent;
+}
+.rottay-checkbox-group [data-part='option'] [data-part='option-box'][data-part='option-box'] {
+  border: 2px solid var(--ds-color-border-secondary);
+}
+.rottay-checkbox-group [data-part='option'][data-checked='true'] [data-part='option-box'] {
+  border-color: var(--ds-cbg-color-border);
+  background-color: var(--ds-cbg-color-bg);
+}
+
+/**
+ * Button.Icon skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: components/skin/button-icon.css -- Button.Icon renders one bare
+ * `<button>` under every engine (it is NOT the Button engine, and nothing in
+ * the engine `button.css` skins targets it).
+ *
+ * SCOPE ROOT is `.rottay-button-icon.ds-button-icon[data-part='trigger']`,
+ * carrying `data-variant`, `data-disabled`, `data-loading`. It reuses the same
+ * `--ds-button-*` token surface as the rustic Button skin but has its own
+ * ruleset from scratch.
+ *
+ * The removed `isHovered`/`isActive` React state maps to `:hover`/`:active`
+ * gated `:not(:disabled)` -- the `<button>` is natively `disabled` whenever
+ * `disabled || loading`, the exact `!disabled && !loading` gate the JS
+ * evaluated. The per-variant `bg`/`hoverBg`/`border`/`color` (from
+ * `VARIANT_MAP`, all `var(--ds-button-<variant>-*, #hex)` references) are
+ * carried byte-exact via the uncounted custom properties `--ds-button-icon-*`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * the border reaches (0,4,0) via the repeated `[data-part='trigger']` beyond
+ * the two root classes. Non-border paint wins unlayered at (0,3,0) or higher.
+ */
+
+.rottay-button-icon.ds-button-icon[data-part='trigger'] {
+  border-radius: var(--ds-button-radius, 6px);
+  background: var(--ds-button-icon-bg);
+  color: var(--ds-button-icon-color);
+  outline: none;
+  transform: scale(1);
+}
+.rottay-button-icon.ds-button-icon[data-part='trigger'][data-part='trigger'] {
+  border: var(--ds-button-icon-border);
+}
+.rottay-button-icon.ds-button-icon[data-part='trigger']:hover:not(:disabled) {
+  background: var(--ds-button-icon-hover-bg);
+}
+.rottay-button-icon.ds-button-icon[data-part='trigger']:active:not(:disabled) {
+  transform: scale(0.95);
+}
+
+/**
+ * VoiceInputButton skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/voice-input-button.css -- this component has
+ * no engine split (one `index.tsx` renders under every engine).
+ *
+ * SCOPE ROOT is `.ds-voice-input-button[data-part='root']` (a `<button>`),
+ * carrying `data-status`, `data-active`, `data-error`, `data-blocked`, plus
+ * `data-variant` ('ghost'|'filled') added for this migration. All paint lives on
+ * the root: the border reproduces the `borderColor` chain (error > active >
+ * default), the background the `bgColor` chain (ghost transparent; filled by
+ * state), the text the `textColor` chain.
+ *
+ * The two per-mount `<style>` keyframes are moved here renamed
+ * `ds-voice-input-button-pulse` / `-spin`; the inline `animation` references the
+ * new names, and `-spin` no longer shadows the global `spin`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * (0,3,1); with only ONE root class, the border rules reach (0,4,0) via a
+ * thrice-repeated `[data-part='root']` (base) or twice plus a state attribute.
+ * Non-border paint wins unlayered at (0,2,0)+.
+ */
+
+.ds-voice-input-button[data-part='root'] {
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ds-color-text-muted);
+}
+
+/* border color: default (base) > active > error (error wins the tie, last). */
+.ds-voice-input-button[data-part='root'][data-part='root'][data-part='root'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+}
+.ds-voice-input-button[data-part='root'][data-part='root'][data-active='true'] {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 44%, transparent);
+}
+.ds-voice-input-button[data-part='root'][data-part='root'][data-error='true'] {
+  border-color: color-mix(in srgb, var(--ds-color-error) 36%, transparent);
+}
+
+/* background: only the filled variant tints; state overrides in error>active order. */
+.ds-voice-input-button[data-part='root'][data-variant='filled'] {
+  background: color-mix(in srgb, var(--ds-surface-card) 85%, var(--ds-color-bg-primary) 15%);
+}
+.ds-voice-input-button[data-part='root'][data-variant='filled'][data-active='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card));
+}
+.ds-voice-input-button[data-part='root'][data-variant='filled'][data-error='true'] {
+  background: color-mix(in srgb, var(--ds-color-error) 12%, var(--ds-surface-card));
+}
+
+/* text color */
+.ds-voice-input-button[data-part='root'][data-active='true'] {
+  color: var(--ds-color-primary);
+}
+.ds-voice-input-button[data-part='root'][data-error='true'] {
+  color: var(--ds-color-error);
+}
+
+@keyframes ds-voice-input-button-pulse {
+  0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 22%, transparent); }
+  70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
+  100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
+}
+@keyframes ds-voice-input-button-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/**
+ * Input compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Covers the four Input compounds (Addon, Password toggle, Search button,
+ * TextArea), each a structurally separate render tree with its own tokens; none
+ * is wired into the Input engine, so each carries its own scope here.
+ *
+ * SCOPES:
+ *  - Addon: `.rottay-input-addon.ds-input-addon[data-part='root']`, plus
+ *    `data-variant` ('default'|'transparent') added for this migration.
+ *  - Password/Search buttons render INSIDE a BaseInput shell as affix slots, so
+ *    they are reached as `.rottay-input [data-part='visibility-toggle'|
+ *    'search-button']` (descendants of the shared `rottay-input` shell class).
+ *  - TextArea: root `.rottay-textarea.ds-input-textarea[data-part='root']` with
+ *    the existing rendered classes `rottay-textarea--<variant>` /
+ *    `--focused` / `--error`; the `<textarea>` is `[data-part='control']`,
+ *    with `count` / `error-message` siblings.
+ *
+ * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via the two root
+ * classes + a variant/state class (or the repeated data-part). Non-border paint
+ * wins unlayered at (0,3,0) or higher.
+ */
+
+/* Addon ------------------------------------------------------------------- */
+.rottay-input-addon.ds-input-addon[data-part='root'] {
+  background-color: var(--ds-color-bg-secondary);
+  border-radius: 6px;
+  color: var(--ds-color-text-secondary);
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-variant='transparent'] {
+  background-color: transparent;
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* Password toggle + Search button ----------------------------------------- */
+.rottay-input [data-part='visibility-toggle'] {
+  background: none;
+  border: none;
+  color: var(--ds-input-addon-color);
+}
+.rottay-input [data-part='search-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-input-search-icon-color, var(--ds-search-icon-color, var(--ds-input-border-focus)));
+}
+
+/* TextArea ---------------------------------------------------------------- */
+.rottay-textarea.ds-input-textarea [data-part='control'] {
+  background-color: transparent;
+  border-radius: 6px;
+  outline: none;
+  box-shadow: none;
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--filled [data-part='control'] {
+  background-color: var(--ds-color-bg-secondary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed [data-part='control'] {
+  border-radius: 0;
+}
+
+/* border box: outline/filled full 1px (color error>focus>neutral); unstyled
+   none; flushed suppresses sides and keeps a bottom edge that thickens on focus. */
+.rottay-textarea.ds-input-textarea:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled) [data-part='control'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--focused:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled):not(.rottay-textarea--error) [data-part='control'] {
+  border-color: var(--ds-color-primary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--error:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled) [data-part='control'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--unstyled [data-part='control'] {
+  border: none;
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed [data-part='control'] {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--focused [data-part='control'] {
+  border-bottom-width: 2px;
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--focused:not(.rottay-textarea--error) [data-part='control'] {
+  border-bottom-color: var(--ds-color-primary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--error [data-part='control'] {
+  border-bottom-color: var(--ds-color-error);
+}
+
+/* focus/error ring, suppressed on unstyled (error ring wins over focus). */
+.rottay-textarea.ds-input-textarea.rottay-textarea--focused:not(.rottay-textarea--error):not(.rottay-textarea--unstyled) [data-part='control'] {
+  box-shadow: 0 0 0 2px var(--ds-color-alpha-primary-20);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--error:not(.rottay-textarea--unstyled) [data-part='control'] {
+  box-shadow: 0 0 0 2px var(--ds-color-alpha-error-20);
+}
+
+.rottay-textarea.ds-input-textarea [data-part='count'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--error [data-part='count'] {
+  color: var(--ds-color-error);
+}
+.rottay-textarea.ds-input-textarea [data-part='error-message'] {
+  color: var(--ds-color-error);
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

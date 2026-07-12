@@ -67,7 +67,7 @@ describe('RusticTextarea advanced engine coverage', () => {
     );
 
     const textarea = screen.getByRole('textbox');
-    expect(textarea).toHaveStyle({ border: 'none' });
+    expect(textarea).toHaveClass('rottay-textarea--borderless');
     expect(textarea).toHaveAttribute('rows', '6');
     expect(textarea).toHaveAttribute('autocomplete', 'off');
     expect(textarea).toHaveAttribute('name', 'notes');
@@ -85,9 +85,7 @@ describe('RusticTextarea advanced engine coverage', () => {
 
     expect(screen.getByRole('textbox')).toBeDisabled();
     expect(screen.getByRole('textbox')).toHaveAttribute('readonly');
-    expect(screen.getByRole('textbox')).toHaveStyle({
-      backgroundColor: 'var(--ds-textarea-bg-disabled)',
-      cursor: 'not-allowed',
-    });
+    expect(screen.getByRole('textbox')).toHaveAttribute('data-disabled', 'true');
+    expect(screen.getByRole('textbox')).toHaveStyle({ cursor: 'not-allowed' });
   });
 });

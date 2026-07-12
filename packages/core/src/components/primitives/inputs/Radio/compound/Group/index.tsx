@@ -136,17 +136,22 @@ export function RadioGroup({
     lg: '16px',
   };
 
+  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
+  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
+  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
+
   const containerStyle: CSSProperties = {
     display: 'flex',
     flexDirection: direction === 'horizontal' ? 'row' : 'column',
     gap: spacingMap[spacing] || spacingMap.md,
     flexWrap: direction === 'horizontal' ? 'wrap' : 'nowrap',
+    ...({
+      '--ds-rg-color-border': colors.border,
+      '--ds-rg-color-bg': colors.bg,
+      '--ds-rg-color-dot': colors.dot,
+    } as CSSProperties),
     ...style,
   };
-
-  const sizeValue = SIZE_MAP[size] || SIZE_MAP.md;
-  const sizeNumeric = SIZE_MAP_NUMERIC[size] || SIZE_MAP_NUMERIC.md;
-  const colors = COLOR_MAP[color] || COLOR_MAP.primary;
 
   // Render options if provided
   const renderOptions = () => {
@@ -179,10 +184,6 @@ export function RadioGroup({
               padding: paddingMap[size] || paddingMap.md,
               cursor: isDisabled ? 'not-allowed' : 'pointer',
               opacity: isDisabled ? 0.5 : 1,
-              border: `1px solid ${isChecked ? colors.border : 'var(--ds-color-border-secondary)'}`,
-              borderRadius: '4px',
-              backgroundColor: buttonStyle === 'solid' && isChecked ? colors.bg : 'transparent',
-              color: buttonStyle === 'solid' && isChecked ? colors.dot : 'inherit',
               transition: 'all 0.2s ease-in-out',
               fontSize: sizeNumeric * 0.85,
               fontWeight: 500,
@@ -237,9 +238,6 @@ export function RadioGroup({
               justifyContent: 'center',
               width: sizeValue,
               height: sizeValue,
-              borderRadius: '50%',
-              border: `2px solid ${isChecked ? colors.border : 'var(--ds-color-border-secondary)'}`,
-              backgroundColor: 'transparent',
               transition: 'all 0.2s ease-in-out',
               flexShrink: 0,
               marginTop: option.description ? '2px' : 0,
@@ -268,8 +266,6 @@ export function RadioGroup({
                 style={{
                   width: sizeNumeric * 0.5,
                   height: sizeNumeric * 0.5,
-                  borderRadius: '50%',
-                  backgroundColor: colors.bg,
                 }}
               />
             )}
@@ -279,7 +275,7 @@ export function RadioGroup({
               {option.label}
             </span>
             {option.description && (
-              <span style={{ fontSize: sizeNumeric * 0.75, color: 'var(--ds-color-text-secondary)', userSelect: 'none', lineHeight: 1.4 }}>
+              <span data-part="option-description" style={{ fontSize: sizeNumeric * 0.75, userSelect: 'none', lineHeight: 1.4 }}>
                 {option.description}
               </span>
             )}
@@ -296,6 +292,7 @@ export function RadioGroup({
         data-part="root"
         data-direction={direction}
         data-disabled={disabled || undefined}
+        data-button-style={buttonStyle}
         className={`rottay-radio-group rottay-radio-group--${direction} ${buttonStyle ? 'rottay-radio-group--button' : ''} ${className}`}
         style={containerStyle}
         role="radiogroup"

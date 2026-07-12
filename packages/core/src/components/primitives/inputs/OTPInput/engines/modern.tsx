@@ -158,9 +158,8 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
             value={internalValues[index] || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
-            style={{ ...sizeStyle, padding: 0, textAlign: 'center', fontFamily: 'monospace', fontWeight: 700, border: error ? '1px solid var(--ds-color-error)' : '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
-            onFocus={(e) => { if (!error) e.currentTarget.style.borderColor = 'var(--ds-color-primary)'; e.target.select(); }}
-            onBlur={(e) => { if (!error) e.currentTarget.style.borderColor = 'var(--ds-color-border)'; }}
+            style={{ ...sizeStyle, padding: 0, textAlign: 'center', fontFamily: 'monospace', fontWeight: 700, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}
+            onFocus={(e) => { e.target.select(); }}
             onChange={(e) => {
               const char = e.target.value.slice(-1);
               if (char) handleChange(index, char);
@@ -173,7 +172,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
       </div>
       {error && errorMessage && (
         <div style={{ marginTop: 4 }}>
-          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)' }}>{errorMessage}</span>
+          <span data-part="error-message" style={{ fontSize: 12, lineHeight: '16px' }}>{errorMessage}</span>
         </div>
       )}
     </div>

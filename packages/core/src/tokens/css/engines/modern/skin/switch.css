@@ -1,0 +1,69 @@
+/**
+ * Modern Switch skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is `.ds-switch.ds-switch--modern[data-part='root']` (a `<label>`),
+ * carrying `data-checked` and `data-disabled`. `track`, `thumb`, and `label`
+ * are descendants; the hidden accessibility `<input>` is a direct child.
+ *
+ * The track background reproduces the removed `trackBg` IIFE (checked/hover/
+ * disabled). Hover was the removed `isHovered` state, driven by
+ * onMouseEnter/onMouseLeave on the label root -> `:hover` here, gated
+ * `:not([data-disabled='true'])` exactly where the JS gated `!isDisabled`.
+ * The focus ring was the removed `isFocusVisible` state, set from the input's
+ * `:focus-visible` -> `input:focus-visible ~ [data-part='track']` (a disabled
+ * input cannot be focused, so the `!isDisabled` guard is implicit).
+ *
+ * The thumb slide is `translateX` of a per-size travel distance, carried via
+ * the runtime custom property `--ds-switch-thumb-x` (uncounted) since the
+ * value is computed per size.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ */
+
+/* track ------------------------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='track'] {
+  border-radius: var(--ds-radius-full);
+}
+.ds-switch.ds-switch--modern[data-checked='true'] [data-part='track'] {
+  background-color: var(--ds-color-primary);
+}
+.ds-switch.ds-switch--modern[data-checked='false'] [data-part='track'] {
+  background-color: var(--ds-color-border-secondary);
+}
+.ds-switch.ds-switch--modern[data-checked='true']:hover:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-color-primary-hover);
+}
+.ds-switch.ds-switch--modern[data-checked='false']:hover:not([data-disabled='true']) [data-part='track'] {
+  background-color: var(--ds-color-border);
+}
+.ds-switch.ds-switch--modern input:focus-visible ~ [data-part='track'] {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: 2px;
+}
+
+/* thumb ------------------------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='thumb'] {
+  border-radius: 50%;
+  background-color: var(--ds-surface-control, var(--ds-color-text-on-primary));
+  box-shadow: var(--ds-elevation-1);
+  transform: translateX(var(--ds-switch-thumb-x));
+}
+
+/* label ------------------------------------------------------------------- */
+.ds-switch.ds-switch--modern [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-switch.ds-switch--modern[data-disabled='true'] [data-part='label'] {
+  color: var(--ds-color-text-disabled);
+}
+
+/* hidden accessibility input (visually clipped): no border. */
+.ds-switch.ds-switch--modern input {
+  border: 0;
+}

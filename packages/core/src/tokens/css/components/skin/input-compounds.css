@@ -1,0 +1,108 @@
+/**
+ * Input compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Covers the four Input compounds (Addon, Password toggle, Search button,
+ * TextArea), each a structurally separate render tree with its own tokens; none
+ * is wired into the Input engine, so each carries its own scope here.
+ *
+ * SCOPES:
+ *  - Addon: `.rottay-input-addon.ds-input-addon[data-part='root']`, plus
+ *    `data-variant` ('default'|'transparent') added for this migration.
+ *  - Password/Search buttons render INSIDE a BaseInput shell as affix slots, so
+ *    they are reached as `.rottay-input [data-part='visibility-toggle'|
+ *    'search-button']` (descendants of the shared `rottay-input` shell class).
+ *  - TextArea: root `.rottay-textarea.ds-input-textarea[data-part='root']` with
+ *    the existing rendered classes `rottay-textarea--<variant>` /
+ *    `--focused` / `--error`; the `<textarea>` is `[data-part='control']`,
+ *    with `count` / `error-message` siblings.
+ *
+ * SPECIFICITY (P-48): every border-color rule reaches (0,4,0) via the two root
+ * classes + a variant/state class (or the repeated data-part). Non-border paint
+ * wins unlayered at (0,3,0) or higher.
+ */
+
+/* Addon ------------------------------------------------------------------- */
+.rottay-input-addon.ds-input-addon[data-part='root'] {
+  background-color: var(--ds-color-bg-secondary);
+  border-radius: 6px;
+  color: var(--ds-color-text-secondary);
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-variant='transparent'] {
+  background-color: transparent;
+}
+.rottay-input-addon.ds-input-addon[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* Password toggle + Search button ----------------------------------------- */
+.rottay-input [data-part='visibility-toggle'] {
+  background: none;
+  border: none;
+  color: var(--ds-input-addon-color);
+}
+.rottay-input [data-part='search-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-input-search-icon-color, var(--ds-search-icon-color, var(--ds-input-border-focus)));
+}
+
+/* TextArea ---------------------------------------------------------------- */
+.rottay-textarea.ds-input-textarea [data-part='control'] {
+  background-color: transparent;
+  border-radius: 6px;
+  outline: none;
+  box-shadow: none;
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--filled [data-part='control'] {
+  background-color: var(--ds-color-bg-secondary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed [data-part='control'] {
+  border-radius: 0;
+}
+
+/* border box: outline/filled full 1px (color error>focus>neutral); unstyled
+   none; flushed suppresses sides and keeps a bottom edge that thickens on focus. */
+.rottay-textarea.ds-input-textarea:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled) [data-part='control'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--focused:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled):not(.rottay-textarea--error) [data-part='control'] {
+  border-color: var(--ds-color-primary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--error:not(.rottay-textarea--flushed):not(.rottay-textarea--unstyled) [data-part='control'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--unstyled [data-part='control'] {
+  border: none;
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed [data-part='control'] {
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--focused [data-part='control'] {
+  border-bottom-width: 2px;
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--focused:not(.rottay-textarea--error) [data-part='control'] {
+  border-bottom-color: var(--ds-color-primary);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--flushed.rottay-textarea--error [data-part='control'] {
+  border-bottom-color: var(--ds-color-error);
+}
+
+/* focus/error ring, suppressed on unstyled (error ring wins over focus). */
+.rottay-textarea.ds-input-textarea.rottay-textarea--focused:not(.rottay-textarea--error):not(.rottay-textarea--unstyled) [data-part='control'] {
+  box-shadow: 0 0 0 2px var(--ds-color-alpha-primary-20);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--error:not(.rottay-textarea--unstyled) [data-part='control'] {
+  box-shadow: 0 0 0 2px var(--ds-color-alpha-error-20);
+}
+
+.rottay-textarea.ds-input-textarea [data-part='count'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-textarea.ds-input-textarea.rottay-textarea--error [data-part='count'] {
+  color: var(--ds-color-error);
+}
+.rottay-textarea.ds-input-textarea [data-part='error-message'] {
+  color: var(--ds-color-error);
+}

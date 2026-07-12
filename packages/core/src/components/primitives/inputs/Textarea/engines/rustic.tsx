@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Rustic (zero-dependency) engine for Textarea, using inline CSS and DS CSS variables.
- * Implements showCount natively (unlike Modern) and manages focus/blur state internally
- * to drive border color and shadow changes without any CSS framework.
+ * Implements showCount natively (unlike Modern). Border color and box-shadow are painted
+ * by the unlayered skin CSS on native `:focus`/`[data-status]`, not by inline styles.
  *
  * @example
  * ```tsx
@@ -73,7 +73,8 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
 
   // Character count for the optional showCount feature -- kept in sync with value
   const [charCount, setCharCount] = useState(value?.length || defaultValue?.length || 0);
-  // Focus drives border color and box-shadow transitions
+  // Retained for the `rottay-textarea--focused` class hook (external override
+  // surface); the skin CSS paints border/box-shadow from native `:focus` directly.
   const [isFocused, setIsFocused] = useState(false);
 
   // Sync charCount whenever the controlled value or defaultValue changes externally
@@ -127,22 +128,6 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
     className,
   ].filter(Boolean).join(' ');
 
-  /** Resolves border color from status > focus > default priority chain. */
-  const getBorderColor = () => {
-    if (status === 'error') return 'var(--ds-textarea-error-border)';
-    if (status === 'warning') return 'var(--ds-textarea-warning-border)';
-    if (status === 'success') return 'var(--ds-textarea-success-border)';
-    if (isFocused) return 'var(--ds-textarea-border-focus)';
-    return 'var(--ds-textarea-border)';
-  };
-
-  /** Resolves background from disabled > variant > default priority chain. */
-  const getBackground = () => {
-    if (disabled) return 'var(--ds-textarea-bg-disabled)';
-    if (variant === 'filled') return 'var(--ds-textarea-filled-bg)';
-    return 'var(--ds-textarea-bg)';
-  };
-
   const wrapperStyle: React.CSSProperties = {
     display: 'inline-flex',
     flexDirection: 'column',
@@ -153,15 +138,9 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
   const textareaStyle: React.CSSProperties = {
     padding: sizeConfig.padding,
     fontSize: sizeConfig.fontSize,
-    border: variant === 'borderless' ? 'none' : `1px solid ${getBorderColor()}`,
-    borderRadius: 'var(--ds-textarea-radius)',
-    outline: 'none',
     transition: 'var(--ds-textarea-transition)',
-    backgroundColor: getBackground(),
-    color: 'var(--ds-textarea-color)',
     cursor: disabled ? 'not-allowed' : 'text',
     opacity: disabled ? 0.6 : 1,
-    boxShadow: isFocused && variant !== 'borderless' ? 'var(--ds-textarea-shadow-focus)' : 'none',
     resize: 'vertical',
     minHeight: '80px',
     width: '100%',
@@ -170,7 +149,6 @@ export default function RusticTextarea(props: TextareaProps): React.ReactElement
 
   const countStyle: React.CSSProperties = {
     fontSize: 'var(--ds-textarea-count-font-size)',
-    color: 'var(--ds-textarea-count-color)',
     textAlign: 'right',
     userSelect: 'none',
   };

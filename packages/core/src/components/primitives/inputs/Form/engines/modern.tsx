@@ -73,25 +73,25 @@ const FeedbackIcon: React.FC<{ status: 'success' | 'error' | 'warning' | 'valida
   switch (status) {
     case 'success':
       return (
-        <span data-part="feedback-icon" className="ml-2 inline-flex items-center" aria-label="Validation passed" style={{ color: 'var(--ds-color-success)', animation: 'rottay-form-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
+        <span data-part="feedback-icon" data-status="success" className="ml-2 inline-flex items-center" aria-label="Validation passed" style={{ animation: 'ds-form-modern-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
         </span>
       );
     case 'error':
       return (
-        <span data-part="feedback-icon" className="ml-2 inline-flex items-center" aria-label="Validation failed" style={{ color: 'var(--ds-color-error)', animation: 'rottay-form-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
+        <span data-part="feedback-icon" data-status="error" className="ml-2 inline-flex items-center" aria-label="Validation failed" style={{ animation: 'ds-form-modern-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
         </span>
       );
     case 'warning':
       return (
-        <span data-part="feedback-icon" className="ml-2 inline-flex items-center" aria-label="Validation warning" style={{ color: 'var(--ds-color-warning)', animation: 'rottay-form-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
+        <span data-part="feedback-icon" data-status="warning" className="ml-2 inline-flex items-center" aria-label="Validation warning" style={{ animation: 'ds-form-modern-feedback-in var(--ds-motion-slow) var(--ds-motion-ease-out)' }}>
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4.832c-.77-.833-2.694-.833-3.464 0L3.34 16.5c-.77.833.192 2.5 1.732 2.5z" /></svg>
         </span>
       );
     case 'validating':
       return (
-        <span data-part="feedback-icon" className="ml-2 inline-flex items-center animate-spin" aria-label="Validating" style={{ color: 'var(--ds-color-primary)' }}>
+        <span data-part="feedback-icon" data-status="validating" className="ml-2 inline-flex items-center animate-spin" aria-label="Validating">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
         </span>
       );
@@ -475,7 +475,6 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
 
   return (
     <FormContext.Provider value={contextValue}>
-      <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-form-error-slide{from{opacity:0;transform:translateY(-4px);max-height:0}to{opacity:1;transform:translateY(0);max-height:40px}}@keyframes rottay-form-feedback-in{from{opacity:0;transform:scale(0.5)}to{opacity:1;transform:scale(1)}}` }} />
       <form
         ref={formElementRef}
         name={name}
@@ -654,10 +653,10 @@ const FormItem: React.FC<FormItemProps> = (props) => {
             ...(layout === 'horizontal' ? { width: '25%' } : {}),
           }}
         >
-          <span style={{ fontWeight: 500, letterSpacing: '-0.01em', fontSize: sizeFontMap[size || 'default'] || 16, color: 'var(--ds-color-text-primary)' }}>
+          <span data-part="label-text" style={{ fontWeight: 500, letterSpacing: '-0.01em', fontSize: sizeFontMap[size || 'default'] || 16 }}>
             {label}
             {isRequired && requiredMark && (
-              <span data-part="required-mark" style={{ marginLeft: 4, color: 'var(--ds-color-error)' }}>*</span>
+              <span data-part="required-mark" style={{ marginLeft: 4 }}>*</span>
             )}
             {showColon && ':'}
           </span>
@@ -672,11 +671,8 @@ const FormItem: React.FC<FormItemProps> = (props) => {
                 justifyContent: 'center',
                 width: 16,
                 height: 16,
-                borderRadius: '50%',
                 fontSize: 11,
                 fontWeight: 600,
-                background: 'var(--ds-color-alpha-black-100)',
-                color: 'var(--ds-color-text-secondary)',
                 cursor: 'help',
               }}
             >
@@ -693,15 +689,15 @@ const FormItem: React.FC<FormItemProps> = (props) => {
           )}
         </div>
         {(help || fieldErrors.length > 0) && (
-          <div style={{ paddingTop: 4, animation: hasError ? 'rottay-form-error-slide var(--ds-motion-normal) ease-out' : undefined }}>
-            <span data-part="help-text" data-error={hasError ? 'true' : 'false'} style={{ fontSize: 12, color: hasError ? 'var(--ds-color-error)' : 'var(--ds-color-text-secondary)' }}>
+          <div style={{ paddingTop: 4, animation: hasError ? 'ds-form-modern-error-slide var(--ds-motion-normal) ease-out' : undefined }}>
+            <span data-part="help-text" data-error={hasError ? 'true' : 'false'} style={{ fontSize: 12 }}>
               {help || fieldErrors[0]}
             </span>
           </div>
         )}
         {extra && (
           <div style={{ paddingTop: 4 }}>
-            <span data-part="extra-text" style={{ fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>{extra}</span>
+            <span data-part="extra-text" style={{ fontSize: 12 }}>{extra}</span>
           </div>
         )}
       </div>
@@ -786,7 +782,7 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   if (errors.length === 0) return null;
 
   return (
-    <ul data-part="error-list" className={`text-sm list-disc pl-4 ${className}`} style={{ color: 'var(--ds-color-error)', ...style }}>
+    <ul data-part="error-list" className={`ds-form-error-list ds-form-error-list--modern text-sm list-disc pl-4 ${className}`} style={{ ...style }}>
       {errors.map((error, index) => (
         <li key={index}>{error}</li>
       ))}

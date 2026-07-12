@@ -107,12 +107,9 @@ export const InputPassword = (props: InputPasswordProps) => {
       data-part="visibility-toggle"
       onClick={() => setVisible(!visible)}
       style={{
-        background: 'none',
-        border: 'none',
         cursor: 'pointer',
         padding: '4px',
         display: 'flex',
-        color: 'var(--ds-input-addon-color)',
       }}
       aria-label={visible ? 'Hide password' : 'Show password'}
       tabIndex={-1}

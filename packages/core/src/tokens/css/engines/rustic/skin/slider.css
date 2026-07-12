@@ -1,0 +1,79 @@
+/**
+ * Rustic Slider skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * Runtime position percentages and any caller-supplied `railStyle`/`trackStyle`/
+ * `handleStyle`/`mark.style` overrides stay inline and still win over this skin
+ * (inline > stylesheet), exactly as they overrode the base style object before.
+ *
+ * SCOPE ROOT is `.ds-slider.ds-slider--rustic[data-part='root']`, carrying
+ * `data-disabled` and `data-orientation` ('vertical'|'horizontal'). `rail`,
+ * `track`, `handle`, `mark-label` are descendants.
+ *
+ * FOCUS RING: unlike the modern engine (which draws none), rustic paints a ring
+ * on the handles when focused -- the divergence the inventory flagged, preserved.
+ * `isFocused` (any focus, from `useInteractionState`) still drives the external
+ * `rottay-slider--focused` class, which this skin keys the ring on; the ring
+ * paint itself is no longer inline.
+ *
+ * SPECIFICITY (P-48): the handle border reaches (0,4,0) via the repeated
+ * `[data-part='handle']`. Non-border paint wins unlayered at (0,3,0) or higher.
+ */
+
+.ds-slider.ds-slider--rustic [data-part='rail'] {
+  background-color: var(--ds-slider-rail-color);
+  border-radius: var(--ds-slider-track-radius);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='rail'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='rail'] {
+  transform: translateY(-50%);
+}
+
+.ds-slider.ds-slider--rustic [data-part='track'] {
+  background-color: var(--ds-slider-track-color);
+  border-radius: var(--ds-slider-track-radius);
+}
+.ds-slider.ds-slider--rustic[data-disabled='true'] [data-part='track'] {
+  background-color: var(--ds-slider-track-color-disabled);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='track'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='track'] {
+  transform: translateY(-50%);
+}
+
+.ds-slider.ds-slider--rustic [data-part='handle'] {
+  background-color: var(--ds-slider-handle-bg);
+  border-radius: 50%;
+  box-shadow: var(--ds-slider-handle-shadow);
+  outline: none;
+  outline-offset: 2px;
+}
+.ds-slider.ds-slider--rustic [data-part='handle'][data-part='handle'] {
+  border: var(--ds-slider-handle-border-width) solid var(--ds-slider-handle-border);
+}
+.ds-slider.ds-slider--rustic[data-disabled='true'] [data-part='handle'] {
+  background-color: var(--ds-slider-handle-bg-disabled);
+}
+.ds-slider.ds-slider--rustic.rottay-slider--focused [data-part='handle'] {
+  outline: var(--ds-slider-focus-ring);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='handle'] {
+  transform: translate(-50%, 50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='handle'] {
+  transform: translate(-50%, -50%);
+}
+
+.ds-slider.ds-slider--rustic [data-part='mark-label'] {
+  color: var(--ds-slider-mark-color);
+}
+.ds-slider.ds-slider--rustic[data-orientation='vertical'] [data-part='mark-label'] {
+  transform: translateY(50%);
+}
+.ds-slider.ds-slider--rustic[data-orientation='horizontal'] [data-part='mark-label'] {
+  transform: translateX(-50%);
+}

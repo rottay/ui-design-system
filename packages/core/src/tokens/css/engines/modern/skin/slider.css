@@ -1,0 +1,53 @@
+/**
+ * Modern Slider skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements; unlayered outranks
+ * preflight and still yields to a caller's inline `style` (the runtime position
+ * percentages stay inline and are unaffected).
+ *
+ * SCOPE ROOT is `.ds-slider.ds-slider--modern[data-part='root']`, carrying
+ * `data-disabled` and (range mode) `data-orientation` ('vertical'|'horizontal').
+ * `rail`, `track`, `handle`, `mark-label` are descendants. This engine has NO
+ * interaction paint (no hover/focus state; the native range thumb is styled by
+ * the DaisyUI `range` classes) -- a real modern/rustic divergence, preserved.
+ *
+ * The only paint here is the static rail/track/handle colours plus the
+ * centering transforms, which differ by orientation (track) or by the per-mark
+ * `data-axis` ('x'|'y', reproducing the range-vertical vs range-horizontal/
+ * single split exactly). Position percentages are runtime and remain inline.
+ *
+ * SPECIFICITY (P-48): the handle border-color reaches (0,4,0) via the repeated
+ * `[data-part='handle']`. Non-border paint wins unlayered at (0,3,0).
+ */
+
+.ds-slider.ds-slider--modern [data-part='rail'] {
+  background: var(--ds-surface-panel);
+}
+
+.ds-slider.ds-slider--modern [data-part='track'] {
+  background: var(--ds-color-primary);
+}
+.ds-slider.ds-slider--modern[data-orientation='vertical'] [data-part='track'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--modern[data-orientation='horizontal'] [data-part='track'] {
+  transform: translateY(-50%);
+}
+
+.ds-slider.ds-slider--modern [data-part='handle'] {
+  background: var(--ds-color-primary);
+}
+.ds-slider.ds-slider--modern [data-part='handle'][data-part='handle'] {
+  border-color: var(--ds-color-bg-primary, white);
+}
+
+.ds-slider.ds-slider--modern [data-part='mark-label'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='x'] {
+  transform: translateX(-50%);
+}
+.ds-slider.ds-slider--modern [data-part='mark-label'][data-axis='y'] {
+  transform: translateY(50%);
+}

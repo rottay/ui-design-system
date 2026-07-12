@@ -277,10 +277,6 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     paddingRight: suffix || (clearable && currentValue) ? 0 : undefined,
     fontSize: sizeValues.fontSize,
     fontFamily: 'var(--ds-font-family-base)',
-    backgroundColor: 'transparent',
-    border: 'none',
-    outline: 'none',
-    color: disabled ? 'var(--ds-input-color-disabled)' : 'var(--ds-input-color)',
     cursor: disabled ? 'not-allowed' : 'text',
   };
 
@@ -290,7 +286,6 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '0 0.5rem',
-    color: 'var(--ds-input-addon-color)',
     userSelect: 'none',
   };
 
@@ -300,11 +295,8 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     alignItems: 'center',
     justifyContent: 'center',
     padding: '0 0.5rem',
-    color: 'var(--ds-input-clear-color)',
     cursor: 'pointer',
     transition: 'color 0.15s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
-    background: 'none',
-    border: 'none',
   };
 
   // Character count styles using CSS variables
@@ -313,7 +305,6 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     right: 0,
     bottom: '-1.25rem',
     fontSize: 'var(--ds-input-helper-font-size)',
-    color: hasError ? 'var(--ds-input-error-color)' : 'var(--ds-input-addon-color)',
   };
 
   /** The DOM contract the rustic Input skin selects on. Spread onto the
@@ -408,14 +399,6 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
             onClick={handleClear}
             aria-label="Clear input"
             tabIndex={-1}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'scale(1.1)';
-              e.currentTarget.style.color = 'var(--ds-input-color, currentColor)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'scale(1)';
-              e.currentTarget.style.color = 'var(--ds-input-clear-color)';
-            }}
           >
             <svg
               width="14"
@@ -442,7 +425,7 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       </div>
 
       {showCount && maxLength && (
-        <span data-part="count" style={countStyle}>
+        <span data-part="count" data-error={hasError ? 'true' : 'false'} style={countStyle}>
           {currentValue.length}/{maxLength}
         </span>
       )}
@@ -454,7 +437,6 @@ const RusticInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
             display: 'block',
             marginTop: '0.25rem',
             fontSize: 'var(--ds-input-helper-font-size)',
-            color: 'var(--ds-input-error-color)',
           }}
         >
           {errorMessage}

@@ -19,7 +19,6 @@
 
 import React, { useState, useId, useCallback } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import type { RadioProps } from '../Radio.types';
 import { RADIO_DEFAULTS } from '../Radio.types';
 
@@ -83,11 +82,6 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
   // Controlled vs. uncontrolled pattern. `isFocused` drives the focus ring
   // via inline styles since the native input is visually hidden.
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  // The triad is decided once, in the behavior core. `focused` is any focus --
-  // a field's focus border must appear when a pointer lands in it. A ring is
-  // `focusVisible`, and this part does not draw one.
-  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-  const isFocused = interaction.focused;
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
@@ -139,6 +133,7 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
     opacity: disabled ? 0.5 : 1,
     flexDirection: labelPlacement === 'start' ? 'row-reverse' : 'row',
     fontFamily: 'var(--ds-font-family-base)',
+    ...({ '--ds-radio-dot-fill': getCheckedDot() } as React.CSSProperties),
     ...style,
   };
 
@@ -154,22 +149,9 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
     justifyContent: 'center',
     width: sizeVar,
     height: sizeVar,
-    borderRadius: '50%',
-    border: `2px solid ${error
-      ? 'var(--ds-radio-error-border)'
-      : isChecked
-        ? getCheckedDot()
-        : 'var(--ds-radio-border)'}`,
-    backgroundColor: disabled
-      ? 'var(--ds-radio-bg-disabled)'
-      : 'var(--ds-radio-bg)',
     transition: 'border-color 0.15s, box-shadow 0.2s',
     flexShrink: 0,
     marginTop: description ? '2px' : 0,
-    outline: 'none',
-    boxShadow: isFocused
-      ? '0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1)'
-      : 'none',
   };
 
   // The native input is visually hidden but stretched to fill the circle
@@ -192,9 +174,6 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
     display: 'block',
     width: sizeNumeric * 0.5,
     height: sizeNumeric * 0.5,
-    borderRadius: '50%',
-    backgroundColor: getCheckedDot(),
-    transform: isChecked ? 'scale(1)' : 'scale(0)',
     transition: 'transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
   };
 
@@ -206,18 +185,12 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
 
   const labelStyle: React.CSSProperties = {
     fontSize: `${sizeNumeric * 0.9}px`,
-    color: error
-      ? 'var(--ds-radio-error-color)'
-      : disabled
-        ? 'var(--ds-radio-label-color-disabled)'
-        : 'var(--ds-radio-label-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
 
   const descriptionStyle: React.CSSProperties = {
     fontSize: `${sizeNumeric * 0.75}px`,
-    color: 'var(--ds-radio-description-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
@@ -264,7 +237,6 @@ export default function RusticRadio(props: RadioProps): React.ReactElement {
           disabled={disabled}
           required={required}
           onChange={handleChange}
-          {...interactionHandlers}
           style={inputStyle}
           aria-checked={isChecked}
           aria-invalid={error}

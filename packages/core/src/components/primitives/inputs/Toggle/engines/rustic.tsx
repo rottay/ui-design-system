@@ -17,7 +17,6 @@
 
 import React, { useState, useCallback, useId } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import type { ToggleProps } from '../Toggle.types';
 import { TOGGLE_DEFAULTS, SIZE_MAP, SIZE_VALUES, COLOR_MAP } from '../Toggle.types';
 
@@ -66,12 +65,6 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
 
   // Dual-mode state: controlled when `checked` prop is provided, uncontrolled otherwise
   const [internalChecked, setInternalChecked] = useState(defaultChecked);
-  // Focus state drives the outer ring / box-shadow on the track
-  // The triad is decided once, in the behavior core. `focused` is any focus --
-  // a field's focus border must appear when a pointer lands in it. A ring is
-  // `focusVisible`, and this part does not draw one.
-  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-  const isFocused = interaction.focused;
   const isControlled = controlledChecked !== undefined;
   const isChecked = isControlled ? controlledChecked : internalChecked;
 
@@ -152,15 +145,9 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
     alignItems: 'center',
     width: sizeVars.width,
     height: sizeVars.height,
-    borderRadius: 'var(--ds-toggle-track-radius)',
-    backgroundColor: getTrackBg(),
     transition: 'var(--ds-toggle-transition)',
     flexShrink: 0,
-    border: error ? '2px solid var(--ds-toggle-error-color)' : 'none',
-    outline: 'none',
-    boxShadow: isFocused
-      ? '0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1)'
-      : 'none',
+    ...({ '--ds-toggle-track-fill': getTrackBg() } as React.CSSProperties),
   };
 
   // Dot slides left/right via `left` transition with a spring-like cubic-bezier
@@ -169,15 +156,9 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
     position: 'absolute',
     top: '50%',
     left: isChecked ? `calc(100% - ${sizeTokens.dot} - 2px)` : '2px',
-    transform: 'translateY(-50%)',
     width: sizeVars.dot,
     height: sizeVars.dot,
-    borderRadius: '50%',
-    backgroundColor: 'var(--ds-toggle-dot-bg)',
     transition: 'left 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s, background-color 0.15s',
-    boxShadow: isChecked
-      ? '0 1px 3px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1)'
-      : 'var(--ds-toggle-dot-shadow, 0 1px 2px rgba(0, 0, 0, 0.15))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -202,14 +183,12 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
 
   const labelStyle: React.CSSProperties = {
     fontSize: 'var(--ds-toggle-label-font-size)',
-    color: error ? 'var(--ds-toggle-error-color)' : 'var(--ds-toggle-label-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
 
   const descriptionStyle: React.CSSProperties = {
     fontSize: 'var(--ds-toggle-description-font-size)',
-    color: 'var(--ds-toggle-description-color)',
     userSelect: 'none',
     lineHeight: 1.4,
   };
@@ -244,7 +223,6 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
           disabled={disabled || loading}
           required={required}
           onChange={handleChange}
-          {...interactionHandlers}
           autoFocus={autoFocus}
           style={inputStyle}
           aria-checked={isChecked}
@@ -285,7 +263,6 @@ export default function RusticToggle(props: ToggleProps): React.ReactElement {
               left: isChecked ? '6px' : 'auto',
               right: isChecked ? 'auto' : '6px',
               fontSize: 'var(--ds-toggle-inner-label-font-size)',
-              color: 'var(--ds-toggle-inner-label-color)',
               fontWeight: 500,
               userSelect: 'none',
             }}

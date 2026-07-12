@@ -210,47 +210,15 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
       ...style,
     };
 
-    // Pre-compute border/ring token values so the style object below stays readable.
-    // Each variant (outline, filled, flushed, unstyled) composes these differently.
-    const neutralBorder = 'var(--ds-color-border-secondary)';
-    const focusBorder = 'var(--ds-color-primary)';
-    const errorBorder = 'var(--ds-color-error)';
-    const focusRing = '0 0 0 2px var(--ds-color-alpha-primary-20)';
-    const errorRing = '0 0 0 2px var(--ds-color-alpha-error-20)';
-    // "unstyled" and "flushed" variants suppress side borders entirely;
-    // flushed only shows a bottom border that thickens on focus.
-    const isBorderless = variant === 'unstyled' || variant === 'flushed';
-    const outlineBorder = `1px solid ${hasError ? errorBorder : isFocused ? focusBorder : neutralBorder}`;
-    const sideBorder = isBorderless ? 'none' : outlineBorder;
-
     const textareaStyle: CSSProperties = {
       width: '100%',
       padding: sizeValues.paddingX,
       fontSize: sizeValues.fontSize,
       fontFamily: 'inherit',
-      backgroundColor:
-        variant === 'filled' ? 'var(--ds-color-bg-secondary)' : 'transparent',
-      borderRadius: variant === 'flushed' ? 0 : 6,
-      borderTop: sideBorder,
-      borderRight: sideBorder,
-      borderLeft: sideBorder,
-      borderBottom:
-        variant === 'flushed'
-          ? `${isFocused ? 2 : 1}px solid ${
-              hasError ? errorBorder : isFocused ? focusBorder : neutralBorder
-            }`
-          : sideBorder,
-      outline: 'none',
       resize: resize ? 'vertical' : 'none',
       transition: 'all 0.2s ease',
       opacity: disabled ? 0.6 : 1,
       cursor: disabled ? 'not-allowed' : 'text',
-      boxShadow:
-        isFocused && !hasError && variant !== 'unstyled'
-          ? focusRing
-          : hasError && variant !== 'unstyled'
-            ? errorRing
-            : 'none',
     };
 
     // Build BEM-style class list. Boolean entries (e.g. `isFocused && '...'`)
@@ -304,9 +272,6 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
               right: 8,
               bottom: -20,
               fontSize: 12,
-              color: hasError
-                ? 'var(--ds-color-error)'
-                : 'var(--ds-color-text-muted)',
             }}
           >
             {currentValue.length}/{maxLength}
@@ -320,7 +285,6 @@ export const InputTextArea = forwardRef<HTMLTextAreaElement, InputTextAreaProps>
               display: 'block',
               marginTop: 4,
               fontSize: 12,
-              color: 'var(--ds-color-error)',
             }}
           >
             {errorMessage}

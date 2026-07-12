@@ -1,0 +1,82 @@
+/**
+ * Rustic Form skin (WO-SKIN-02 checkpoint A, fields batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ * The error list keeps its caller `...style` spread, which still wins.
+ *
+ * SCOPE: field-level parts are scoped on the FormItem's own class
+ * `.ds-form-item.ds-form-item--rustic` (a FormItem can render outside a
+ * `<form>`). `feedback-icon` carries `data-status` (added for this migration);
+ * `label` is the `<label>` element itself; `help-text` carries `data-error`
+ * plus `data-status` (added for this migration) to reproduce the
+ * error > warning > success > default help colour chain. The error list has its
+ * own `.ds-form-error-list--rustic` class.
+ *
+ * The four per-mount `<style>` keyframes are moved here renamed
+ * `ds-form-rustic-*` (engine-namespaced: the modern Form's `feedback-in` has
+ * different content, and the local `spin` shadowed the global one). The inline
+ * `animation` references the new names.
+ *
+ * SPECIFICITY (P-48): no rule here paints a border color, so every rule wins
+ * unlayered at (0,3,0) or higher.
+ *
+ * Fallback literals (`#22c55e`, `#ef4444`, `#f59e0b`, `#3b82f6`) transcribed
+ * byte-exact from the source feedback-icon config.
+ */
+
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='success'] {
+  color: var(--ds-form-success-color, #22c55e);
+}
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='error'] {
+  color: var(--ds-form-error-color, #ef4444);
+}
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='warning'] {
+  color: var(--ds-form-warning-color, #f59e0b);
+}
+.ds-form-item.ds-form-item--rustic [data-part='feedback-icon'][data-status='validating'] {
+  color: var(--ds-form-info-color, #3b82f6);
+}
+
+.ds-form-item.ds-form-item--rustic [data-part='label'] {
+  color: var(--ds-form-label-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='required-mark'] {
+  color: var(--ds-form-required-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='extra-text'] {
+  color: var(--ds-form-extra-color);
+}
+
+.ds-form-item.ds-form-item--rustic [data-part='help-text'] {
+  color: var(--ds-form-help-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='help-text'][data-status='warning'] {
+  color: var(--ds-form-warning-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='help-text'][data-status='success'] {
+  color: var(--ds-form-success-color);
+}
+.ds-form-item.ds-form-item--rustic [data-part='help-text'][data-error='true'] {
+  color: var(--ds-form-error-color);
+}
+
+.ds-form-error-list.ds-form-error-list--rustic[data-part='error-list'] {
+  color: var(--ds-form-error-color);
+}
+
+@keyframes ds-form-rustic-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes ds-form-rustic-help-slide-in {
+  from { opacity: 0; transform: translateY(-4px); max-height: 0; }
+  to { opacity: 1; transform: translateY(0); max-height: 100px; }
+}
+@keyframes ds-form-rustic-feedback-in {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes ds-form-rustic-required-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
