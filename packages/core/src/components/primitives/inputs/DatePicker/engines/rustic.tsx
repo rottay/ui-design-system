@@ -404,17 +404,17 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   // positioned using coordinates computed from the trigger's bounding rect.
   if (picker === 'month') {
     return createPortal(
-      <div ref={panelRef} style={panelStyle} role="dialog" aria-label="Month picker">
-        <div style={headerStyle}>
-          <button type="button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+      <div ref={panelRef} data-part="panel" data-mode="month" style={panelStyle} role="dialog" aria-label="Month picker">
+        <div data-part="header" style={headerStyle}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             <ChevronLeftSvg />
           </button>
-          <span style={headerTitleStyle}>{viewYear}</span>
-          <button type="button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <span data-part="panel-title" style={headerTitleStyle}>{viewYear}</span>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             <ChevronRightSvg />
           </button>
         </div>
-        <div style={monthGridStyle}>
+        <div data-part="grid" style={monthGridStyle}>
           {MONTHS_SHORT.map((m, i) => {
             const isSelected = selectedDate
               ? selectedDate.getMonth() === i && selectedDate.getFullYear() === viewYear
@@ -424,6 +424,9 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
               <button
                 key={m}
                 type="button"
+                data-part="cell"
+                data-selected={isSelected || undefined}
+                data-today={isCurrent || undefined}
                 style={getMonthCellStyle(isSelected, isCurrent)}
                 onClick={() => {
                   const date = new Date(viewYear, i, 1);
@@ -437,7 +440,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
           })}
         </div>
         {renderExtraFooter && (
-          <div style={{ ...footerStyle, fontSize: '12px' }}>{renderExtraFooter()}</div>
+          <div data-part="footer" style={{ ...footerStyle, fontSize: '12px' }}>{renderExtraFooter()}</div>
         )}
       </div>,
       document.body,
@@ -448,17 +451,17 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   if (picker === 'year') {
     const startYear = Math.floor(viewYear / 10) * 10;
     return createPortal(
-      <div ref={panelRef} style={panelStyle} role="dialog" aria-label="Year picker">
-        <div style={headerStyle}>
-          <button type="button" style={navBtnStyle} onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
+      <div ref={panelRef} data-part="panel" data-mode="year" style={panelStyle} role="dialog" aria-label="Year picker">
+        <div data-part="header" style={headerStyle}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
             <ChevronLeftSvg />
           </button>
-          <span style={headerTitleStyle}>{startYear} - {startYear + 9}</span>
-          <button type="button" style={navBtnStyle} onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
+          <span data-part="panel-title" style={headerTitleStyle}>{startYear} - {startYear + 9}</span>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
             <ChevronRightSvg />
           </button>
         </div>
-        <div style={monthGridStyle}>
+        <div data-part="grid" style={monthGridStyle}>
           {Array.from({ length: 12 }, (_, i) => {
             const yr = startYear - 1 + i;
             const isSelected = selectedDate ? selectedDate.getFullYear() === yr : false;
@@ -468,6 +471,9 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
               <button
                 key={yr}
                 type="button"
+                data-part="cell"
+                data-selected={isSelected || undefined}
+                data-today={isCurrent || undefined}
                 style={{
                   ...getMonthCellStyle(isSelected, isCurrent),
                   opacity: isOutOfRange ? 0.4 : 1,
@@ -484,7 +490,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
           })}
         </div>
         {renderExtraFooter && (
-          <div style={{ ...footerStyle, fontSize: '12px' }}>{renderExtraFooter()}</div>
+          <div data-part="footer" style={{ ...footerStyle, fontSize: '12px' }}>{renderExtraFooter()}</div>
         )}
       </div>,
       document.body,
@@ -495,25 +501,25 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   const grid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
 
   return createPortal(
-    <div ref={panelRef} style={panelStyle} role="dialog" aria-label={t('datepicker.date_picker')}>
+    <div ref={panelRef} data-part="panel" data-mode="date" style={panelStyle} role="dialog" aria-label={t('datepicker.date_picker')}>
       {/* Header */}
-      <div style={headerStyle}>
+      <div data-part="header" style={headerStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-          <button type="button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             &#171;
           </button>
-          <button type="button" style={navBtnStyle} onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
             <ChevronLeftSvg />
           </button>
         </div>
-        <span style={headerTitleStyle}>
+        <span data-part="panel-title" style={headerTitleStyle}>
           {MONTHS_FULL[viewMonth]} {viewYear}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
-          <button type="button" style={navBtnStyle} onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
             <ChevronRightSvg />
           </button>
-          <button type="button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             &#187;
           </button>
         </div>
@@ -522,7 +528,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
       {/* Day-of-week headers */}
       <div style={dayHeaderStyle} role="row">
         {DAYS_SHORT.map((d) => (
-          <div key={d} style={dayHeaderCellStyle} role="columnheader" aria-label={d}>
+          <div key={d} data-part="weekday-header" style={dayHeaderCellStyle} role="columnheader" aria-label={d}>
             {d}
           </div>
         ))}
@@ -530,6 +536,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
 
       {/* Grid */}
       <div
+        data-part="grid"
         style={gridStyle}
         role="grid"
         tabIndex={0}
@@ -558,6 +565,11 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
               aria-disabled={cell.isDisabled}
               aria-label={formatDateStr(cell.date)}
               tabIndex={isFocusedCell ? 0 : -1}
+              data-part="cell"
+              data-today={cell.isToday || undefined}
+              data-selected={(isSelected || !!isEndpoint) || undefined}
+              data-in-range={inRange || undefined}
+              data-disabled={cell.isDisabled || undefined}
               style={getCellStyle(cell, isSelected, isFocusedCell, inRange, !!isEndpoint)}
               onClick={() => {
                 if (!cell.isDisabled) onDateSelect(cell.date);
@@ -589,7 +601,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
 
       {/* Time picker */}
       {showTime && (
-        <div style={timeRowStyle}>
+        <div data-part="time-column" style={timeRowStyle}>
           <ClockSvg />
           <select
             style={selectStyle}
@@ -638,10 +650,11 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
       )}
 
       {/* Footer */}
-      <div style={footerStyle}>
+      <div data-part="footer" style={footerStyle}>
         {showToday && (
           <button
             type="button"
+            data-part="today-button"
             style={footerBtnStyle}
             onClick={onTodayClick}
             onMouseEnter={(e) => {
@@ -953,11 +966,12 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
 
   return (
     <>
-      <div ref={triggerRef} className={containerClasses} style={wrapperStyle}>
+      <div ref={triggerRef} data-part="root" className={containerClasses} style={wrapperStyle}>
         <input
           ref={setInputRef}
           type="text"
           readOnly
+          data-part="trigger-input"
           style={inputStyle}
           value={displayText}
           disabled={disabled}
@@ -981,6 +995,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
         {allowClear && displayText && !disabled && (
           <button
             type="button"
+            data-part="clear-button"
             style={clearBtnStyle}
             onClick={handleClear}
             tabIndex={-1}
@@ -989,7 +1004,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
             ×
           </button>
         )}
-        <span style={iconStyle} aria-hidden="true">
+        <span data-part="calendar-icon" style={iconStyle} aria-hidden="true">
           <CalendarSvg />
         </span>
       </div>
@@ -1278,6 +1293,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
           if (typeof ref === 'function') ref(node);
           else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
+        data-part="root"
         className={containerClasses}
         style={wrapperStyle}
         id={id}
@@ -1285,6 +1301,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
         <input
           type="text"
           readOnly
+          data-part="trigger-input"
+          data-range-input="start"
           style={getInputStyle('start')}
           value={startText}
           disabled={disabled}
@@ -1299,10 +1317,12 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
           aria-expanded={isOpen}
           aria-label={displayPlaceholder[0]}
         />
-        <span style={separatorStyle}>{separator}</span>
+        <span data-part="separator" style={separatorStyle}>{separator}</span>
         <input
           type="text"
           readOnly
+          data-part="trigger-input"
+          data-range-input="end"
           style={getInputStyle('end')}
           value={endText}
           disabled={disabled}
@@ -1320,6 +1340,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
         {allowClear && (startText || endText) && !disabled && (
           <button
             type="button"
+            data-part="clear-button"
             style={clearBtnStyle}
             onClick={handleClear}
             tabIndex={-1}

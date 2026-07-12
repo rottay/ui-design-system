@@ -266,12 +266,14 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       createPortal(
         <div
           ref={dropdownRef}
+          data-part="dropdown"
           className="rottay-colorpicker__dropdown"
           style={dropdownStyle}
         >
           {/* Color input */}
           <input
             type="color"
+            data-part="native-color-input"
             value={currentValue || '#000000'}
             onChange={(e) => handleChange(e.target.value)}
             disabled={disabled}
@@ -282,6 +284,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           <div style={{ marginTop: '8px' }}>
             <input
               type="text"
+              data-part="hex-input"
               value={currentValue}
               onChange={(e) => handleChange(e.target.value)}
               placeholder="#000000"
@@ -294,9 +297,9 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           {presets && presets.length > 0 && (
             <div style={dividerStyle}>
               {presets.map((preset, idx) => (
-                <div key={idx} style={{ marginBottom: '8px' }}>
+                <div key={idx} data-part="preset-group" style={{ marginBottom: '8px' }}>
                   {preset.label && (
-                    <div style={presetLabelStyle}>
+                    <div data-part="preset-label" style={presetLabelStyle}>
                       {preset.label}
                     </div>
                   )}
@@ -305,6 +308,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                       <button
                         key={color}
                         type="button"
+                        data-part="preset-swatch"
                         onClick={() => handleChange(color)}
                         disabled={disabled}
                         style={{
@@ -325,6 +329,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             <div style={{ ...dividerStyle, marginTop: '8px', paddingTop: '8px' }}>
               <button
                 type="button"
+                data-part="clear-button"
                 onClick={handleClear}
                 disabled={disabled}
                 style={clearButtonStyle}
@@ -346,15 +351,16 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
+          data-part="root"
           className={containerClasses}
           style={triggerStyle}
           onClick={() => !disabled && trigger === 'click' && handleOpenChange(!isOpen)}
           onMouseEnter={() => !disabled && trigger === 'hover' && handleOpenChange(true)}
           onMouseLeave={() => !disabled && trigger === 'hover' && handleOpenChange(false)}
         >
-          <div className="rottay-colorpicker__swatch" style={swatchStyle} />
+          <div data-part="swatch" className="rottay-colorpicker__swatch" style={swatchStyle} />
           {displayText && (
-            <span className="rottay-colorpicker__text" style={textStyle}>{displayText}</span>
+            <span data-part="display-text" className="rottay-colorpicker__text" style={textStyle}>{displayText}</span>
           )}
         </div>
         {dropdownContent}

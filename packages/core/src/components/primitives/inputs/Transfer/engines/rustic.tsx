@@ -22,6 +22,7 @@ import { TRANSFER_DEFAULTS } from '../Transfer.types';
 import { useTranslation } from '../../../../../i18n';
 
 interface TransferListProps {
+  side: 'source' | 'target';
   title: React.ReactNode;
   items: TransferItem[];
   selectedKeys: Set<string>;
@@ -48,6 +49,7 @@ const DEFAULT_PAGE_SIZE = 10;
  * Includes optional search, select-all, paginated item list, and empty state.
  */
 const TransferListComponent: React.FC<TransferListProps> = ({
+  side,
   title,
   items,
   selectedKeys,
@@ -208,13 +210,14 @@ const TransferListComponent: React.FC<TransferListProps> = ({
   };
 
   return (
-    <div className="rottay-transfer__list" style={containerStyle}>
+    <div className="rottay-transfer__list" data-part="panel" data-panel={side} style={containerStyle}>
       {/* Header */}
-      <div className="rottay-transfer__header" style={headerStyle}>
+      <div className="rottay-transfer__header" data-part="panel-header" style={headerStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {showSelectAll && (
             <input
               type="checkbox"
+              data-part="panel-select-all"
               checked={allSelected}
               onChange={handleSelectAll}
               disabled={disabled || selectableItems.length === 0}
@@ -222,7 +225,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
           )}
           <span style={titleStyle}>{title}</span>
         </div>
-        <span style={countStyle}>
+        <span data-part="panel-count" style={countStyle}>
           {selectedKeys.size}/{items.length}
         </span>
       </div>
@@ -232,6 +235,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
         <div className="rottay-transfer__search" style={searchContainerStyle}>
           <input
             type="text"
+            data-part="panel-search"
             placeholder={locale?.searchPlaceholder || t('transfer.search_placeholder')}
             value={searchValue}
             onChange={(e) => onSearch(e.target.value)}
@@ -250,12 +254,15 @@ const TransferListComponent: React.FC<TransferListProps> = ({
       )}
 
       {/* Items */}
-      <div className="rottay-transfer__items" style={itemsContainerStyle}>
+      <div className="rottay-transfer__items" data-part="panel-list" style={itemsContainerStyle}>
         {paginatedItems.length > 0 ? (
           paginatedItems.map((item) => (
             <label
               key={item.key}
               className="rottay-transfer__item"
+              data-part="panel-item"
+              data-selected={selectedKeys.has(item.key) || undefined}
+              data-disabled={item.disabled || undefined}
               style={{
                 ...getItemStyle(),
                 cursor: item.disabled || disabled ? 'not-allowed' : 'pointer',
@@ -274,6 +281,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
             >
               <input
                 type="checkbox"
+                data-part="panel-item-checkbox"
                 checked={selectedKeys.has(item.key)}
                 onChange={() => handleSelect(item.key)}
                 disabled={disabled || item.disabled}
@@ -284,7 +292,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
             </label>
           ))
         ) : (
-          <div className="rottay-transfer__empty" style={emptyStyle}>
+          <div className="rottay-transfer__empty" data-part="panel-empty" style={emptyStyle}>
             {locale?.notFoundContent || t('transfer.not_found')}
           </div>
         )}
@@ -292,9 +300,10 @@ const TransferListComponent: React.FC<TransferListProps> = ({
 
       {/* Pagination */}
       {pagination && totalPages > 1 && (
-        <div className="rottay-transfer__pagination" style={paginationContainerStyle}>
+        <div className="rottay-transfer__pagination" data-part="panel-pagination" style={paginationContainerStyle}>
           <button
             type="button"
+            data-part="pagination-button"
             style={paginationButtonStyle(currentPage <= 1)}
             disabled={currentPage <= 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
@@ -306,6 +315,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
           </span>
           <button
             type="button"
+            data-part="pagination-button"
             style={paginationButtonStyle(currentPage >= totalPages)}
             disabled={currentPage >= totalPages}
             onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
@@ -466,10 +476,12 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
     return (
       <div
         ref={ref}
+        data-part="root"
         className={containerClasses}
         style={containerStyle}
       >
         <TransferListComponent
+          side="source"
           title={titles![0]}
           items={sourceItems}
           selectedKeys={sourceSelectedKeys}
@@ -486,10 +498,12 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
           pagination={pagination}
         />
 
-        <div className="rottay-transfer__operations" style={operationsContainerStyle}>
+        <div className="rottay-transfer__operations" data-part="operations" style={operationsContainerStyle}>
           <button
             type="button"
             className="rottay-transfer__button"
+            data-part="move-button"
+            data-direction="right"
             style={disabled || sourceSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
@@ -518,6 +532,8 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
             <button
               type="button"
               className="rottay-transfer__button"
+              data-part="move-button"
+              data-direction="left"
               style={disabled || targetSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}
@@ -546,6 +562,7 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
         </div>
 
         <TransferListComponent
+          side="target"
           title={titles![1]}
           items={targetItems}
           selectedKeys={targetSelectedKeys}

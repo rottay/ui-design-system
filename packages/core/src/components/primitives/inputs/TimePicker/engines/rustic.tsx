@@ -199,11 +199,12 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   };
 
   return (
-    <div className={containerClasses} style={wrapperStyle}>
+    <div data-part="root" className={containerClasses} style={wrapperStyle}>
       <input
         ref={ref}
         type="time"
         step={showSeconds ? 1 : 60}
+        data-part="trigger-input"
         style={inputStyle}
         value={displayValue}
         disabled={disabled}
@@ -218,6 +219,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
       {allowClear && displayValue && !disabled && (
         <button
           type="button"
+          data-part="clear-button"
           style={clearBtnStyle}
           onClick={handleClear}
           tabIndex={-1}
@@ -226,7 +228,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           ×
         </button>
       )}
-      <span style={iconStyle}>🕐</span>
+      <span data-part="clock-icon" style={iconStyle}>🕐</span>
     </div>
   );
 });
@@ -369,10 +371,12 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
   };
 
   return (
-    <div ref={ref} className={containerClasses} style={wrapperStyle} id={id}>
+    <div ref={ref} data-part="root" className={containerClasses} style={wrapperStyle} id={id}>
       <input
         type="time"
         step={showSeconds ? 1 : 60}
+        data-part="trigger-input"
+        data-range-input="start"
         style={getInputStyle('start')}
         value={displayValue[0]}
         disabled={disabled}
@@ -382,10 +386,12 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         onBlur={() => setFocusedInput(null)}
         aria-label={placeholder[0]}
       />
-      <span style={separatorStyle}>{separator}</span>
+      <span data-part="separator" style={separatorStyle}>{separator}</span>
       <input
         type="time"
         step={showSeconds ? 1 : 60}
+        data-part="trigger-input"
+        data-range-input="end"
         style={getInputStyle('end')}
         value={displayValue[1]}
         disabled={disabled}

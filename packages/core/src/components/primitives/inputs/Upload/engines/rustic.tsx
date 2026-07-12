@@ -193,6 +193,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
 
   return (
     <div
+      data-part="preview-modal"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -202,6 +203,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
       <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }} onClick={(e) => e.stopPropagation()}>
         <button
           type="button"
+          data-part="preview-close-button"
           onClick={onClose}
           aria-label={t('upload.close_preview')}
           style={{ position: 'absolute', top: -12, right: -12, border: 'none', borderRadius: '50%', width: 28, height: 28, background: 'var(--ds-upload-preview-close-bg)', color: 'var(--ds-upload-preview-close-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}
@@ -223,8 +225,9 @@ const ProgressBar: React.FC<{ percent?: number; strokeColor?: string | { from: s
     ? `linear-gradient(to right, ${strokeColor.from}, ${strokeColor.to})`
     : strokeColor || 'var(--ds-upload-progress-bar)';
   return (
-    <div style={{ ...sharedStyles.progressTrack, height: strokeWidth + 4 }}>
+    <div data-part="progress-track" style={{ ...sharedStyles.progressTrack, height: strokeWidth + 4 }}>
       <div
+        data-part="progress-bar"
         style={{ height: '100%', width: `${Math.min(percent, 100)}%`, background: bg, borderRadius: 4, transition: 'width var(--ds-transition-fast)' }}
         role="progressbar"
         aria-valuenow={percent}
@@ -292,6 +295,8 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
   if (listType === 'picture-card' || listType === 'picture-circle') {
     const originNode = (
       <div
+        data-part="file-item"
+        data-status={file.status || undefined}
         style={sharedStyles.cardContainer(isCircle, file.status === 'error')}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
@@ -309,13 +314,13 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
           </div>
         )}
         {hovered && !isUploading && (
-          <div style={sharedStyles.cardOverlay(isCircle)}>
+          <div data-part="file-item-overlay" style={sharedStyles.cardOverlay(isCircle)}>
             {isImg && (
-              <button type="button" style={sharedStyles.overlayBtn} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
+              <button type="button" data-part="file-item-action" data-action="preview" style={sharedStyles.overlayBtn} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
                 <EyeIcon />
               </button>
             )}
-            <button type="button" style={sharedStyles.overlayBtn} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
+            <button type="button" data-part="file-item-action" data-action="remove" style={sharedStyles.overlayBtn} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
               {isCircle ? <CloseIcon /> : <TrashIcon />}
             </button>
           </div>
@@ -328,7 +333,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
   // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
-      <div style={{ ...sharedStyles.pictureRow, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
+      <div data-part="file-item" data-status={file.status || undefined} style={{ ...sharedStyles.pictureRow, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} style={sharedStyles.pictureThumb} onClick={() => onPreview?.(file)} />
         ) : (
@@ -338,7 +343,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
           <span style={sharedStyles.fileName}>{file.name}</span>
           {isUploading && <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
         </div>
-        <button type="button" onClick={() => onRemove(file)} style={sharedStyles.removeBtn} aria-label={`Remove ${file.name}`}>x</button>
+        <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} style={sharedStyles.removeBtn} aria-label={`Remove ${file.name}`}>x</button>
       </div>
     );
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -346,12 +351,12 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
 
   // -- text (default): simple filename row with remove button --
   const originNode = (
-    <div style={{ ...sharedStyles.fileItemText, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
+    <div data-part="file-item" data-status={file.status || undefined} style={{ ...sharedStyles.fileItemText, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <span style={sharedStyles.fileName}>{file.name}</span>
         {isUploading && <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
       </div>
-      <button type="button" onClick={() => onRemove(file)} style={sharedStyles.removeBtn} aria-label={`Remove ${file.name}`}>x</button>
+      <button type="button" data-part="file-item-action" data-action="remove" onClick={() => onRemove(file)} style={sharedStyles.removeBtn} aria-label={`Remove ${file.name}`}>x</button>
     </div>
   );
   return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -499,6 +504,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
         {isPictureCardOrCircle ? (
           canAdd && (
             <div
+              data-part="add-button"
               style={sharedStyles.addButton(listType === 'picture-circle', !!disabled)}
               onClick={() => !disabled && inputRef.current?.click()}
               role="button"
@@ -512,7 +518,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
             </div>
           )
         ) : (
-          <div onClick={() => !disabled && inputRef.current?.click()}>
+          <div data-part="trigger" onClick={() => !disabled && inputRef.current?.click()}>
             {children || (
               <button type="button" style={buttonStyle} disabled={disabled}>{t('upload.button')}</button>
             )}
@@ -522,9 +528,9 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     );
 
     return (
-      <div ref={ref} className={containerClasses} style={style}>
+      <div ref={ref} data-part="root" className={containerClasses} style={style}>
         {isPictureCardOrCircle ? (
-          <div style={sharedStyles.grid} role="list" aria-label="Uploaded files">
+          <div data-part="file-list" style={sharedStyles.grid} role="list" aria-label="Uploaded files">
             {showUploadList && fileItems}
             {uploadTrigger}
           </div>
@@ -532,7 +538,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
           <>
             {uploadTrigger}
             {showUploadList && actualFileList.length > 0 && (
-              <div className="rottay-upload__file-list" style={{ marginTop: 8 }} role="list" aria-label="Uploaded files">
+              <div data-part="file-list" className="rottay-upload__file-list" style={{ marginTop: 8 }} role="list" aria-label="Uploaded files">
                 {fileItems}
               </div>
             )}
@@ -679,7 +685,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       : {};
 
     return (
-      <div ref={ref} className={containerClasses} style={style}>
+      <div ref={ref} data-part="root" className={containerClasses} style={style}>
         <div
           onDragOver={(e) => { e.preventDefault(); if (!disabled) setIsDragOver(true); }}
           onDragLeave={() => { if (!disabled) setIsDragOver(false); }}
@@ -689,6 +695,8 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           role="button"
           tabIndex={disabled ? -1 : 0}
           aria-label={t('upload.drop_hint')}
+          data-part="dropzone"
+          data-state={isDragOver ? 'dragging' : 'idle'}
           onKeyDown={(e) => {
             if (!disabled && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); inputRef.current?.click(); }
           }}
@@ -715,7 +723,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
         </div>
 
         {showUploadList && actualFileList.length > 0 && (
-          <div className="rottay-upload-dragger__file-list" style={{ marginTop: 8 }} role="list" aria-label="Uploaded files">
+          <div data-part="file-list" className="rottay-upload-dragger__file-list" style={{ marginTop: 8 }} role="list" aria-label="Uploaded files">
             {actualFileList.map(file => (
               <RusticFileItem
                 key={file.uid}

@@ -143,11 +143,11 @@ const TimePanel: React.FC<TimePanelProps> = ({
   });
 
   return (
-    <div style={panelStyle}>
+    <div data-part="panel" style={panelStyle}>
       <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
 
       {/* Column headers */}
-      <div style={headerStyle}>
+      <div data-part="header" style={headerStyle}>
         <span style={labelStyle}>Hr</span>
         <span style={{ ...labelStyle, flex: 0, width: 1 }} />
         <span style={labelStyle}>Min</span>
@@ -162,11 +162,13 @@ const TimePanel: React.FC<TimePanelProps> = ({
       {/* Scrollable columns */}
       <div style={{ display: 'flex', padding: 'var(--ds-spacing-1, 4px)' }}>
         {/* Hours column */}
-        <div ref={hoursRef} style={colStyle}>
+        <div ref={hoursRef} data-part="time-column" style={colStyle}>
           {Array.from({ length: 24 }, (_, i) => (
             <button
               key={i}
               type="button"
+              data-part="time-option"
+              data-selected={i === hours || undefined}
               style={getItemStyle(i === hours)}
               onMouseEnter={(e) => {
                 if (i !== hours) (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-hover)';
@@ -184,11 +186,13 @@ const TimePanel: React.FC<TimePanelProps> = ({
         <div style={dividerStyle} />
 
         {/* Minutes column */}
-        <div ref={minutesRef} style={colStyle}>
+        <div ref={minutesRef} data-part="time-column" style={colStyle}>
           {Array.from({ length: 60 }, (_, i) => (
             <button
               key={i}
               type="button"
+              data-part="time-option"
+              data-selected={i === minutes || undefined}
               style={getItemStyle(i === minutes)}
               onMouseEnter={(e) => {
                 if (i !== minutes) (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-hover)';
@@ -207,11 +211,13 @@ const TimePanel: React.FC<TimePanelProps> = ({
         {showSeconds && (
           <>
             <div style={dividerStyle} />
-            <div ref={secondsRef} style={colStyle}>
+            <div ref={secondsRef} data-part="time-column" style={colStyle}>
               {Array.from({ length: 60 }, (_, i) => (
                 <button
                   key={i}
                   type="button"
+                  data-part="time-option"
+                  data-selected={i === seconds || undefined}
                   style={getItemStyle(i === seconds)}
                   onMouseEnter={(e) => {
                     if (i !== seconds) (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-hover)';
@@ -231,9 +237,10 @@ const TimePanel: React.FC<TimePanelProps> = ({
 
       {/* Now button */}
       {showNow && (
-        <div style={{ borderTop: '1px solid var(--ds-color-border)', padding: 'var(--ds-spacing-1-5, 6px) var(--ds-spacing-2, 8px)' }}>
+        <div data-part="footer" style={{ borderTop: '1px solid var(--ds-color-border)', padding: 'var(--ds-spacing-1-5, 6px) var(--ds-spacing-2, 8px)' }}>
           <button
             type="button"
+            data-part="now-button"
             style={{
               width: '100%',
               padding: '4px var(--ds-spacing-3, 12px)',
@@ -390,11 +397,12 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
 
   return (
     <>
-      <div ref={triggerRef} className={`relative w-full ${className}`} style={style}>
+      <div ref={triggerRef} data-part="root" className={`relative w-full ${className}`} style={style}>
         <input
           ref={setInputRef}
           type="text"
           readOnly
+          data-part="trigger-input"
           className="w-full cursor-pointer"
           style={{
             border: '1px solid var(--ds-color-border)',
@@ -428,6 +436,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
         {allowClear && displayText && !disabled && (
           <button
             type="button"
+            data-part="clear-button"
             style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClear}
             tabIndex={-1}
@@ -436,6 +445,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           </button>
         )}
         <span
+          data-part="clock-icon"
           style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ds-color-text-muted)', display: 'flex' }}
           aria-hidden="true"
         >
@@ -622,6 +632,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           if (typeof ref === 'function') ref(node);
           else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
+        data-part="root"
         className={`flex items-center gap-2 w-full ${className}`}
         style={style}
         id={id}
@@ -629,6 +640,8 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         <input
           type="text"
           readOnly
+          data-part="trigger-input"
+          data-range-input="start"
           style={{
             ...rangeInputBaseStyle,
             ...(activeInput === 'start' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
@@ -643,10 +656,12 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           aria-expanded={isOpen && activeInput === 'start'}
           aria-label={placeholder[0]}
         />
-        <span className="shrink-0" style={{ color: 'var(--ds-color-text-secondary)' }}>{separator}</span>
+        <span data-part="separator" className="shrink-0" style={{ color: 'var(--ds-color-text-secondary)' }}>{separator}</span>
         <input
           type="text"
           readOnly
+          data-part="trigger-input"
+          data-range-input="end"
           style={{
             ...rangeInputBaseStyle,
             ...(activeInput === 'end' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),

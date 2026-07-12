@@ -185,7 +185,7 @@ const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
   onHoursChange,
   onMinutesChange,
 }) => (
-  <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-2, 8px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', borderTop: '1px solid var(--ds-color-border)' }}>
+  <div data-part="time-column" style={{ display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-2, 8px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', borderTop: '1px solid var(--ds-color-border)' }}>
     <ClockIcon />
     <select
       style={{ padding: '2px var(--ds-spacing-2, 8px)', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md, 8px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', height: 'var(--ds-input-sm-height, 32px)', background: 'var(--ds-color-bg-elevated)', color: 'var(--ds-color-text-primary)' }}
@@ -416,17 +416,17 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   // Month picker mode
   if (picker === 'month') {
     return (
-      <div style={{ ...panelStyle, width: 256 }}>
-        <div style={headerStyle}>
-          <button type="button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+      <div data-part="panel" data-mode="month" style={{ ...panelStyle, width: 256 }}>
+        <div data-part="header" style={headerStyle}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             <ChevronLeft />
           </button>
-          <span style={{ fontWeight: 600, fontSize: 'var(--ds-input-md-font-size, 14px)', color: 'var(--ds-color-text-primary)' }}>{viewYear}</span>
-          <button type="button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <span data-part="panel-title" style={{ fontWeight: 600, fontSize: 'var(--ds-input-md-font-size, 14px)', color: 'var(--ds-color-text-primary)' }}>{viewYear}</span>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             <ChevronRight />
           </button>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--ds-spacing-1, 4px)' }}>
+        <div data-part="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--ds-spacing-1, 4px)' }}>
           {MONTHS_SHORT.map((m, i) => {
             const isSelected = selectedDate
               ? selectedDate.getMonth() === i && selectedDate.getFullYear() === viewYear
@@ -436,6 +436,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               <button
                 key={m}
                 type="button"
+                data-part="cell"
+                data-selected={isSelected || undefined}
+                data-today={isCurrent || undefined}
                 style={{
                   ...gridBtnStyle,
                   padding: '8px 0',
@@ -457,7 +460,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
           })}
         </div>
         {renderExtraFooter && (
-          <div style={{ borderTop: '1px solid var(--ds-color-border)', marginTop: 'var(--ds-spacing-2, 8px)', paddingTop: 'var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)' }}>
+          <div data-part="footer" style={{ borderTop: '1px solid var(--ds-color-border)', marginTop: 'var(--ds-spacing-2, 8px)', paddingTop: 'var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)' }}>
             {renderExtraFooter()}
           </div>
         )}
@@ -469,19 +472,19 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   if (picker === 'year') {
     const startYear = Math.floor(viewYear / 10) * 10;
     return (
-      <div style={{ ...panelStyle, width: 256 }}>
-        <div style={headerStyle}>
-          <button type="button" style={navBtnStyle} onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
+      <div data-part="panel" data-mode="year" style={{ ...panelStyle, width: 256 }}>
+        <div data-part="header" style={headerStyle}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
             <ChevronLeft />
           </button>
-          <span style={{ fontWeight: 600, fontSize: 'var(--ds-input-md-font-size, 14px)', color: 'var(--ds-color-text-primary)' }}>
+          <span data-part="panel-title" style={{ fontWeight: 600, fontSize: 'var(--ds-input-md-font-size, 14px)', color: 'var(--ds-color-text-primary)' }}>
             {startYear} - {startYear + 9}
           </span>
-          <button type="button" style={navBtnStyle} onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={() => onViewChange(viewYear + 10, viewMonth)} aria-label={t('datepicker.next_decade')}>
             <ChevronRight />
           </button>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--ds-spacing-1, 4px)' }}>
+        <div data-part="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'var(--ds-spacing-1, 4px)' }}>
           {Array.from({ length: 12 }, (_, i) => {
             const yr = startYear - 1 + i;
             const isSelected = selectedDate ? selectedDate.getFullYear() === yr : false;
@@ -491,6 +494,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               <button
                 key={yr}
                 type="button"
+                data-part="cell"
+                data-selected={isSelected || undefined}
+                data-today={isCurrent || undefined}
                 style={{
                   ...gridBtnStyle,
                   padding: '8px 0',
@@ -513,7 +519,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
           })}
         </div>
         {renderExtraFooter && (
-          <div style={{ borderTop: '1px solid var(--ds-color-border)', marginTop: 'var(--ds-spacing-2, 8px)', paddingTop: 'var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)' }}>
+          <div data-part="footer" style={{ borderTop: '1px solid var(--ds-color-border)', marginTop: 'var(--ds-spacing-2, 8px)', paddingTop: 'var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)' }}>
             {renderExtraFooter()}
           </div>
         )}
@@ -525,25 +531,25 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   const grid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
 
   return (
-    <div style={panelStyle} role="dialog" aria-label={t('datepicker.date_picker')}>
+    <div data-part="panel" data-mode="date" style={panelStyle} role="dialog" aria-label={t('datepicker.date_picker')}>
       {/* Header navigation */}
-      <div style={headerStyle}>
+      <div data-part="header" style={headerStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <button type="button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             «
           </button>
-          <button type="button" style={navBtnStyle} onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevMonth} aria-label={t('datepicker.previous_month')}>
             <ChevronLeft />
           </button>
         </div>
-        <span style={{ fontWeight: 600, fontSize: 'var(--ds-input-md-font-size, 14px)', color: 'var(--ds-color-text-primary)' }}>
+        <span data-part="panel-title" style={{ fontWeight: 600, fontSize: 'var(--ds-input-md-font-size, 14px)', color: 'var(--ds-color-text-primary)' }}>
           {MONTHS_FULL[viewMonth]} {viewYear}
         </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <button type="button" style={navBtnStyle} onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextMonth} aria-label={t('datepicker.next_month')}>
             <ChevronRight />
           </button>
-          <button type="button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
+          <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handleNextYear} aria-label={t('datepicker.next_year')}>
             »
           </button>
         </div>
@@ -554,6 +560,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
         {DAYS_SHORT.map((d) => (
           <div
             key={d}
+            data-part="weekday-header"
             style={{ textAlign: 'center', fontSize: 'var(--ds-font-size-xs, 12px)', fontWeight: 500, color: 'var(--ds-color-text-muted)', padding: 'var(--ds-spacing-1, 4px) 0' }}
             role="columnheader"
             aria-label={d}
@@ -566,6 +573,7 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
       {/* Calendar grid */}
       <div
         ref={gridRef}
+        data-part="grid"
         style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 2 }}
         role="grid"
         tabIndex={0}
@@ -595,6 +603,11 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
               aria-disabled={cell.isDisabled}
               aria-label={formatDateStr(cell.date)}
               tabIndex={isFocused ? 0 : -1}
+              data-part="cell"
+              data-today={cell.isToday || undefined}
+              data-selected={(isSelected || !!isEndpoint) || undefined}
+              data-in-range={inRange || undefined}
+              data-disabled={cell.isDisabled || undefined}
               style={gridCellStyle(isSelected, cell.isToday, cell.isDisabled, cell.isCurrentMonth, inRange, isEndpoint)}
               onMouseEnter={(e) => {
                 if (!cell.isDisabled && !isSelected && !isEndpoint) {
@@ -631,10 +644,11 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
       )}
 
       {/* Footer */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'var(--ds-spacing-2, 8px)', paddingTop: 'var(--ds-spacing-2, 8px)', borderTop: '1px solid var(--ds-color-border)' }}>
+      <div data-part="footer" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'var(--ds-spacing-2, 8px)', paddingTop: 'var(--ds-spacing-2, 8px)', borderTop: '1px solid var(--ds-color-border)' }}>
         {showToday && (
           <button
             type="button"
+            data-part="today-button"
             style={{
               padding: '4px var(--ds-spacing-3, 12px)',
               fontSize: 'var(--ds-font-size-xs, 12px)',
@@ -890,6 +904,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
         <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
         <div
           ref={triggerRef}
+          data-part="root"
           className={`relative w-full ${className}`}
           style={style}
         >
@@ -899,6 +914,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             // readOnly prevents keyboard input -- dates must be selected via the
             // calendar panel. paddingRight reserves space for the clear + calendar icons.
             readOnly
+            data-part="trigger-input"
             className={dateInputClassName}
             style={{
               borderWidth: 1,
@@ -936,6 +952,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
           {allowClear && displayText && !disabled && (
             <button
               type="button"
+              data-part="clear-button"
               style={{ position: 'absolute', right: 'var(--ds-spacing-4, 16px)', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={handleClear}
               tabIndex={-1}
@@ -945,6 +962,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>(
             </button>
           )}
           <span
+            data-part="calendar-icon"
             style={{ position: 'absolute', right: 'var(--ds-spacing-2, 8px)', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ds-color-text-muted)', display: 'flex' }}
             aria-hidden="true"
           >
@@ -1205,6 +1223,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
           }}
+          data-part="root"
           className={`flex items-center gap-2 w-full ${className}`}
           style={style}
           id={id}
@@ -1212,6 +1231,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           <input
             type="text"
             readOnly
+            data-part="trigger-input"
+            data-range-input="start"
             className={rangeInputClassName}
             style={{
               ...rangeInputBaseStyle,
@@ -1230,10 +1251,12 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
             aria-expanded={isOpen}
             aria-label={displayPlaceholder[0]}
           />
-          <span className="shrink-0" style={{ color: 'var(--ds-color-text-secondary)' }}>{separator}</span>
+          <span data-part="separator" className="shrink-0" style={{ color: 'var(--ds-color-text-secondary)' }}>{separator}</span>
           <input
             type="text"
             readOnly
+            data-part="trigger-input"
+            data-range-input="end"
             className={rangeInputClassName}
             style={{
               ...rangeInputBaseStyle,
@@ -1255,6 +1278,7 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>(
           {allowClear && (startText || endText) && !disabled && (
             <button
               type="button"
+              data-part="clear-button"
               style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', opacity: 0.5 }}
               onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.5'; }}
