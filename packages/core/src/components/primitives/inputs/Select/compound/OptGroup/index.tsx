@@ -79,12 +79,13 @@ export function SelectOptGroup({
     <div
       className={`rottay-select-optgroup ${disabled ? 'rottay-select-optgroup--disabled' : ''} ${className}`}
       style={groupStyle}
+      data-part="option-group"
       role="group"
       aria-label={label}
       aria-disabled={disabled}
       data-disabled={disabled}
     >
-      <div className="rottay-select-optgroup__label" style={labelStyle}>
+      <div className="rottay-select-optgroup__label" data-part="group-label" style={labelStyle}>
         {label}
       </div>
       <div className="rottay-select-optgroup__options" style={optionsStyle}>

@@ -236,6 +236,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         ref={containerRef}
         className={`relative ${className || ''}`}
         style={style}
+        data-part="root"
       >
         <textarea
           ref={(node) => {
@@ -256,12 +257,16 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           aria-multiline="true"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
+          data-part="textarea"
+          data-disabled={disabled || undefined}
+          data-status={status || undefined}
         />
 
         {isOpen && (
           <ul
             className={['rottay-mentions__popup', `rottay-mentions__popup--${placement}`, popupClassName].filter(Boolean).join(' ')}
             data-placement={placement}
+            data-part="dropdown"
             style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 'var(--ds-dropdown-padding, 6px)', maxHeight: 'var(--ds-dropdown-max-height, 192px)', overflowY: 'auto', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', ...(placement === 'top' ? { bottom: '100%', marginBottom: 'var(--ds-spacing-1, 4px)' } : { top: '100%', marginTop: 'var(--ds-spacing-1, 4px)' }) }}
             role="listbox"
             aria-label="Mention suggestions"
@@ -275,13 +280,16 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                     disabled={option.disabled}
                     onClick={() => handleSelect(option)}
                     onMouseEnter={() => setFocusedIndex(index)}
+                    data-part="option"
+                    data-active={focusedIndex === index || undefined}
+                    data-disabled={option.disabled || undefined}
                   >
                     {option.label ?? option.value}
                   </button>
                 </li>
               ))
             ) : (
-              <li className="p-3 text-center" role="option" aria-disabled="true" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <li className="p-3 text-center" role="option" aria-disabled="true" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {notFoundContent}
               </li>
             )}

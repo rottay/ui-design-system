@@ -216,6 +216,7 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
       strokeWidth={2}
       strokeLinecap="round"
       strokeLinejoin="round"
+      data-part="arrow-icon"
       style={{
         flexShrink: 0,
         color: 'var(--ds-color-text-muted)',
@@ -234,7 +235,7 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
 
 function SearchIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, color: 'var(--ds-color-text-muted)' }}>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" data-part="search-icon" style={{ flexShrink: 0, color: 'var(--ds-color-text-muted)' }}>
       <circle cx="11" cy="11" r="8" />
       <path d="M21 21l-4.35-4.35" />
     </svg>
@@ -252,6 +253,7 @@ function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
       onClick={onClick}
       aria-label="Clear selection"
       tabIndex={-1}
+      data-part="clear-button"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -704,10 +706,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       const hiddenCount = selectedOptions.length - visibleTags.length;
 
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ds-spacing-1, 4px)', alignItems: 'center' }}>
+        <div data-part="value" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ds-spacing-1, 4px)', alignItems: 'center' }}>
           {visibleTags.map((opt) => (
             <span
               key={opt.value}
+              data-part="tag"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -732,6 +735,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   e.stopPropagation();
                   handleSelect(opt.value, opt);
                 }}
+                data-part="tag-remove"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -757,7 +761,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             </span>
           ))}
           {hiddenCount > 0 && (
-            <span style={{
+            <span data-part="tag-count" style={{
               display: 'inline-flex',
               alignItems: 'center',
               padding: '1px var(--ds-spacing-2, 8px)',
@@ -774,7 +778,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       );
     }
 
-    return <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedOptions[0].label}</span>;
+    return <span data-part="value" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedOptions[0].label}</span>;
   }, [selectedOptions, multiple, maxTagCount, handleSelect]);
 
   /* ---------------------------------------------------------------- */
@@ -882,7 +886,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     `;
 
     return (
-      <div className={className} style={{ ...style, position: 'relative' }}>
+      <div className={className} data-part="root" style={{ ...style, position: 'relative' }}>
         {responsiveCSS && responsiveCSS.css && (
           <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
         )}
@@ -891,6 +895,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           ref={nativeSelectRef}
           {...(responsiveCSS ? responsiveCSS.attrs : {})}
           className={nativeFocusId}
+          data-part="trigger"
+          data-disabled={disabled || undefined}
           style={nativeSelectStyle}
           value={internalValue[0] ?? ''}
           disabled={disabled}
@@ -917,6 +923,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         {loading && (
           <span
             className="rottay-select__loading-indicator"
+            data-part="loading"
             aria-hidden="true"
             style={{
               position: 'absolute',
@@ -1015,6 +1022,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       return (
         <div
           key={`gh-${idx}`}
+          data-part="group-label"
           style={{
             ...groupHeaderStyle,
             ...(idx > 0 ? { marginTop: '4px', paddingTop: '8px', borderTop: '1px solid var(--ds-color-border)' } : {}),
@@ -1031,6 +1039,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         key={option.value}
         role="option"
         aria-selected={isSelected}
+        data-part="option"
+        data-selected={isSelected || undefined}
+        data-active={isFocusedItem || undefined}
+        data-disabled={option.disabled || undefined}
         style={{
           ...optionBaseStyle,
           ...(idx > 0 && item.type === 'option'
@@ -1057,7 +1069,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         onMouseEnter={() => setFocusedIndex(idx)}
       >
         {multiple && (
-          <span style={{
+          <span data-part="option-icon" style={{
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -1078,7 +1090,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             )}
           </span>
         )}
-        {option.icon && <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
+        {option.icon && <span data-part="option-icon" style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
         <span
           style={{
             flex: 1,
@@ -1092,6 +1104,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
           {option.description && (
             <span
+              data-part="option-description"
               style={{
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -1107,7 +1120,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           )}
         </span>
         {!multiple && isSelected && (
-          <span style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+          <span data-part="option-icon" style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
             <CheckIcon />
           </span>
         )}
@@ -1147,7 +1160,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   `;
 
   return (
-    <div ref={containerRef} className={className} style={{ ...style, position: 'relative', width: '100%' }} onKeyDown={handleKeyDown}>
+    <div ref={containerRef} className={className} data-part="root" data-open={isOpen || undefined} data-disabled={disabled || undefined} style={{ ...style, position: 'relative', width: '100%' }} onKeyDown={handleKeyDown}>
       {responsiveCSS && responsiveCSS.css && (
         <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
       )}
@@ -1157,6 +1170,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       <div
         {...triggerHtmlProps}
         className="rottay-select__trigger"
+        data-part="trigger"
+        data-open={isOpen || undefined}
+        data-disabled={disabled || undefined}
+        data-status={hasError ? 'error' : hasWarning ? 'warning' : undefined}
         style={triggerStyle}
         onClick={() => {
           if (!disabled && !loading) {
@@ -1181,6 +1198,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               ref={inputRef}
               type="text"
               className={searchPlaceholderId}
+              data-part="search-input"
               style={{
                 flex: 1,
                 minWidth: 0,
@@ -1199,7 +1217,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               onClick={(e) => e.stopPropagation()}
             />
           ) : displayValue || (
-            <span style={{ color: 'var(--ds-color-text-muted)' }}>{displayPlaceholder}</span>
+            <span data-part="placeholder" style={{ color: 'var(--ds-color-text-muted)' }}>{displayPlaceholder}</span>
           )}
         </div>
 
@@ -1207,7 +1225,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           {isClearable && internalValue.length > 0 && !disabled && (
             <ClearButton onClick={handleClear} />
           )}
-          {loading && <span className="rottay-select__loading-indicator" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />}
+          {loading && <span className="rottay-select__loading-indicator" data-part="loading" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />}
           <ChevronIcon isOpen={isOpen} />
         </div>
       </div>
@@ -1225,6 +1243,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       {isOpen && typeof document !== 'undefined' && createPortal(
         <div
           ref={dropdownRef}
+          className="rottay-select__dropdown"
+          data-part="dropdown"
           data-rottay-portal="true"
           role="listbox"
           style={{
@@ -1240,12 +1260,13 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         >
           {/* Search input inside dropdown */}
           {isSearchable && (
-            <div style={searchInputContainerStyle}>
+            <div data-part="search-input-wrapper" style={searchInputContainerStyle}>
               <SearchIcon />
               <input
                 ref={!isOpen ? undefined : inputRef}
                 type="text"
                 className={searchPlaceholderId}
+                data-part="search-input"
                 style={searchInputStyle}
                 value={searchValue}
                 onChange={handleSearchInput}
@@ -1258,6 +1279,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
           {/* Options list */}
           <div
+            data-part="option-list"
             style={{
               ...(virtualEnabled ? {
                 maxHeight: `${containerHeight}px`,
@@ -1274,7 +1296,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               <div style={{ height: `${totalHeight}px`, position: 'relative' }}>
                 <div style={{ position: 'absolute', top: `${offsetY}px`, left: 0, right: 0 }}>
                   {visibleItems.length === 0 ? (
-                    <div style={{ padding: '12px 16px', color: 'var(--ds-color-text-muted)', fontSize: '14px' }}>
+                    <div data-part="empty" data-virtual="true" style={{ padding: '12px 16px', color: 'var(--ds-color-text-muted)', fontSize: '14px' }}>
                       {noOptionsText}
                     </div>
                   ) : (
@@ -1284,6 +1306,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                         return (
                           <div
                             key={`gh-${idx}`}
+                            data-part="group-label"
+                            data-virtual="true"
                             style={{
                               ...groupHeaderStyle,
                               height: `${itemHeight}px`,
@@ -1304,6 +1328,11 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                           key={option.value}
                           role="option"
                           aria-selected={isSelected}
+                          data-part="option"
+                          data-virtual="true"
+                          data-selected={isSelected || undefined}
+                          data-active={isFocusedItem || undefined}
+                          data-disabled={option.disabled || undefined}
                           style={{
                             ...optionBaseStyle,
                             height: `${itemHeight}px`,
@@ -1329,7 +1358,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                           onMouseEnter={() => setFocusedIndex(realIdx)}
                         >
                           {multiple && (
-                            <span style={{
+                            <span data-part="option-icon" style={{
                               display: 'inline-flex',
                               alignItems: 'center',
                               justifyContent: 'center',
@@ -1350,7 +1379,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                               )}
                             </span>
                           )}
-                          {option.icon && <span style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
+                          {option.icon && <span data-part="option-icon" style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
                           <span
                             style={{
                               flex: 1,
@@ -1364,6 +1393,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
                             {option.description && (
                               <span
+                                data-part="option-description"
                                 style={{
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
@@ -1379,7 +1409,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             )}
                           </span>
                           {!multiple && isSelected && (
-                            <span style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+                            <span data-part="option-icon" style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
                               <CheckIcon />
                             </span>
                           )}
@@ -1391,7 +1421,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               </div>
             ) : (
               renderableItems.length === 0 ? (
-                <div style={{ padding: '12px 16px', color: 'var(--ds-color-text-muted)', fontSize: '14px' }}>
+                <div data-part="empty" style={{ padding: '12px 16px', color: 'var(--ds-color-text-muted)', fontSize: '14px' }}>
                   {noOptionsText}
                 </div>
               ) : (

@@ -190,8 +190,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         }}
         className={`relative ${className || ''}`}
         style={style}
+        data-part="root"
       >
-        <div className="relative">
+        <div className="relative" data-part="input-wrapper">
           <input
             ref={inputRef}
             type="text"
@@ -203,6 +204,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             placeholder={placeholder}
             disabled={disabled}
             autoFocus={autoFocus}
+            data-part="input"
+            data-open={isOpen || undefined}
+            data-disabled={disabled || undefined}
           />
           {/* Clear button only visible when there is a non-empty value and the input is interactive. */}
           {allowClear && value && !disabled && (
@@ -211,6 +215,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
               className="absolute right-2 top-1/2 -translate-y-1/2"
               style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
               onClick={() => handleChange('')}
+              data-part="clear-button"
             >
               ✕
             </button>
@@ -221,7 +226,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             `menu` + `rounded-box` for consistent theming and `max-h-60` to
             keep the list scrollable when there are many options. */}
         {isOpen && (
-          <ul style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, listStyle: 'none', margin: 0, marginBlockStart: 4, padding: 4, borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-2)' }}>
+          <ul data-part="dropdown" style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, listStyle: 'none', margin: 0, marginBlockStart: 4, padding: 4, borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-2)' }}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li key={option.value}>
@@ -233,13 +238,16 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                     // Sync keyboard focus index on hover so mouse and keyboard
                     // navigation stay coordinated.
                     onMouseEnter={() => setFocusedIndex(index)}
+                    data-part="option"
+                    data-active={focusedIndex === index || undefined}
+                    data-disabled={option.disabled || undefined}
                   >
                     {option.label ?? option.value}
                   </button>
                 </li>
               ))
             ) : (
-              <li className="p-2 text-center" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <li className="p-2 text-center" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {notFoundContent}
               </li>
             )}

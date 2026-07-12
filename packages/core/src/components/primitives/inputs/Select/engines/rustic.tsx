@@ -507,10 +507,11 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       const hiddenCount = selectedOptions.length - visibleTags.length;
 
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
+        <div data-part="value" style={{ display: 'flex', flexWrap: 'wrap', gap: '0.25rem' }}>
           {visibleTags.map((opt) => (
             <span
               key={opt.value}
+              data-part="tag"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -530,6 +531,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               {opt.label}
               <button
                 type="button"
+                data-part="tag-remove"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleSelect(opt.value, opt);
@@ -554,6 +556,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           ))}
           {hiddenCount > 0 && (
             <span
+              data-part="tag-count"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -572,7 +575,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     }
 
     return (
-      <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <span data-part="value" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         {selectedOptions[0].icon && <span>{selectedOptions[0].icon}</span>}
         {selectedOptions[0].label}
       </span>
@@ -616,6 +619,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           option.disabled && 'rottay-select__option--disabled',
           isFocused && 'rottay-select__option--focused',
         ].filter(Boolean).join(' ')}
+        data-part="option"
+        data-selected={isSelected || undefined}
+        data-active={isFocused || undefined}
+        data-disabled={option.disabled || undefined}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -653,6 +660,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       >
         {multiple && (
           <span
+            data-part="option-icon"
             style={{
               width: '1rem',
               height: '1rem',
@@ -672,10 +680,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             {isSelected && <span style={{ animation: 'rottay-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}>✓</span>}
           </span>
         )}
-        {option.icon && <span style={{ flexShrink: 0 }}>{option.icon}</span>}
+        {option.icon && <span data-part="option-icon" style={{ flexShrink: 0 }}>{option.icon}</span>}
         <span>{option.label}</span>
         {!multiple && isSelected && (
-          <span style={{
+          <span data-part="option-icon" style={{
             marginLeft: 'auto',
             color: 'var(--ds-select-check-color)',
             animation: 'rottay-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -691,6 +699,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const renderGroupHeader = (label: React.ReactNode, key: string | number) => (
     <div
       key={key}
+      data-part="group-label"
       style={{
         padding: '0.5rem 0.75rem 0.25rem',
         fontSize: '0.7rem',
@@ -712,6 +721,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     <div
       ref={containerRef}
       className={containerClasses}
+      data-part="root"
+      data-open={isOpen || undefined}
+      data-disabled={disabled || undefined}
+      data-status={effectiveStatus !== 'default' ? effectiveStatus : undefined}
       style={containerStyle}
       onKeyDown={handleKeyDown}
     >
@@ -732,6 +745,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       <div
         id={id}
         className="rottay-select__trigger"
+        data-part="trigger"
+        data-open={isOpen || undefined}
+        data-disabled={disabled || undefined}
         style={triggerStyle}
         onClick={() => {
           if (!disabled && !loading) {
@@ -754,6 +770,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             ref={inputRef}
             type="text"
             className="rottay-select__search"
+            data-part="search-input"
             value={searchValue}
             onChange={handleSearchInput}
             placeholder={selectedOptions.length === 0 ? displayPlaceholder : ''}
@@ -772,7 +789,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             aria-controls={`${id || 'select'}-listbox`}
           />
         ) : displayValue || (
-          <span style={{ color: 'var(--ds-select-color-placeholder)' }}>{displayPlaceholder}</span>
+          <span data-part="placeholder" style={{ color: 'var(--ds-select-color-placeholder)' }}>{displayPlaceholder}</span>
         )}
 
         {/* Spacer */}
@@ -783,6 +800,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           <button
             type="button"
             className="rottay-select__clear"
+            data-part="clear-button"
             onClick={handleClear}
             aria-label={t('select.clear')}
             style={{
@@ -808,6 +826,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             width="14"
             height="14"
             viewBox="0 0 24 24"
+            data-part="loading"
             style={{ animation: 'spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite' }}
           >
             <circle
@@ -830,6 +849,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           fill="none"
           stroke="var(--ds-select-arrow-color)"
           strokeWidth="2"
+          data-part="arrow-icon"
           style={{
             marginLeft: '0.5rem',
             transition: 'var(--ds-select-transition)',
@@ -846,6 +866,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           ref={listRef}
           id={`${id || 'select'}-listbox`}
           className="rottay-select__dropdown"
+          data-part="dropdown"
           style={dropdownStyle}
           role="listbox"
           aria-multiselectable={multiple}
@@ -858,6 +879,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               <div style={{ position: 'absolute', top: `${offsetY}px`, left: 0, right: 0 }}>
                 {visibleItems.length === 0 ? (
                   <div
+                    data-part="empty"
                     style={{
                       padding: '0.5rem 0.75rem',
                       color: 'var(--ds-select-color-placeholder)',
@@ -882,6 +904,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             <>
               {renderableItems.length === 0 ? (
                 <div
+                  data-part="empty"
                   style={{
                     padding: '0.5rem 0.75rem',
                     color: 'var(--ds-select-color-placeholder)',

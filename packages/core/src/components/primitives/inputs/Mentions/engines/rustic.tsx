@@ -306,6 +306,10 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
         ref={containerRef}
         className={containerClasses}
         style={wrapperStyle}
+        data-part="root"
+        data-open={isOpen || undefined}
+        data-disabled={disabled || undefined}
+        data-status={status || undefined}
       >
         <textarea
           ref={(node) => {
@@ -330,6 +334,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           aria-multiline="true"
           aria-haspopup="listbox"
           aria-expanded={isOpen}
+          data-part="textarea"
         />
 
         {isOpen && (
@@ -337,6 +342,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             className="rottay-mentions__dropdown"
             style={dropdownStyle}
             role="listbox"
+            data-part="dropdown"
           >
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
@@ -348,12 +354,15 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                   onMouseEnter={() => setFocusedIndex(index)}
                   style={getOptionStyle(index, option.disabled)}
                   className="rottay-mentions__option"
+                  data-part="option"
+                  data-active={focusedIndex === index || undefined}
+                  data-disabled={option.disabled || undefined}
                 >
                   {option.label ?? option.value}
                 </li>
               ))
             ) : (
-              <li style={emptyStyle} className="rottay-mentions__empty">
+              <li style={emptyStyle} className="rottay-mentions__empty" data-part="empty">
                 {notFoundContent}
               </li>
             )}

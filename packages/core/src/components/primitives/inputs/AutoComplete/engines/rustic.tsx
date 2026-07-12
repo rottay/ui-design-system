@@ -288,8 +288,12 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         }}
         className={containerClasses}
         style={wrapperStyle}
+        data-part="root"
+        data-open={isOpen || undefined}
+        data-disabled={disabled || undefined}
+        data-status={status || undefined}
       >
-        <div style={{ position: 'relative' }}>
+        <div style={{ position: 'relative' }} data-part="input-wrapper">
           <input
             type="text"
             value={value}
@@ -306,6 +310,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             aria-expanded={isOpen}
             aria-haspopup="listbox"
             role="combobox"
+            data-part="input"
           />
           {allowClear && value && !disabled && (
             <button
@@ -313,6 +318,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
               onClick={() => handleChange('')}
               style={clearButtonStyle}
               aria-label="Clear"
+              data-part="clear-button"
             >
               ✕
             </button>
@@ -320,7 +326,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
         </div>
 
         {isOpen && (
-          <ul role="listbox" style={dropdownStyle}>
+          <ul role="listbox" style={dropdownStyle} data-part="dropdown">
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li
@@ -330,12 +336,15 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                   onClick={() => !option.disabled && handleSelect(option)}
                   onMouseEnter={() => setFocusedIndex(index)}
                   style={optionStyle(index, option.disabled)}
+                  data-part="option"
+                  data-active={focusedIndex === index || undefined}
+                  data-disabled={option.disabled || undefined}
                 >
                   {option.label ?? option.value}
                 </li>
               ))
             ) : (
-              <li style={emptyStyle}>{notFoundContent}</li>
+              <li style={emptyStyle} data-part="empty">{notFoundContent}</li>
             )}
           </ul>
         )}

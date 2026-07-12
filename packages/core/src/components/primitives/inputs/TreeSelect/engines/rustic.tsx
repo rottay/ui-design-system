@@ -229,7 +229,7 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
     return (
       <>
         {title.slice(0, idx)}
-        <span style={{ color: 'var(--ds-color-primary)', fontWeight: 600 }}>
+        <span style={{ color: 'var(--ds-color-primary)', fontWeight: 600 }} data-part="tree-node-highlight">
           {title.slice(idx, idx + searchValue.length)}
         </span>
         {title.slice(idx + searchValue.length)}
@@ -305,6 +305,9 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
             e.currentTarget.style.backgroundColor = 'transparent';
           }
         }}
+        data-part="option"
+        data-selected={isSelected || undefined}
+        data-disabled={node.disabled || undefined}
       >
         {/* Expand/collapse or leaf spacer */}
         {!isLeaf ? (
@@ -313,9 +316,10 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
             onClick={handleExpand}
             style={expandButtonStyle}
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
+            data-part="tree-node-toggle"
           >
             {isLoading ? (
-              <span style={loadingSpinnerStyle} />
+              <span style={loadingSpinnerStyle} data-part="loading" />
             ) : '▶'}
           </button>
         ) : (
@@ -331,14 +335,15 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
             onChange={() => !node.disabled && onSelect(node)}
             onClick={(e) => e.stopPropagation()}
             style={{ marginRight: '8px' }}
+            data-part="option-icon"
           />
         )}
-        <span style={{ color: isSelected ? 'var(--ds-treeselect-node-color-selected)' : 'inherit' }}>
+        <span style={{ color: isSelected ? 'var(--ds-treeselect-node-color-selected)' : 'inherit' }} data-part="tree-node-label">
           {renderTitle()}
         </span>
       </div>
       {hasChildren && isExpanded && (
-        <ul style={treeLineStyle}>
+        <ul style={treeLineStyle} data-part="tree-list">
           {node.children!.map((child) => (
             <TreeNodeItem
               key={child.key ?? child.value}
@@ -758,11 +763,12 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         <div
           ref={dropdownRef}
           className="rottay-treeselect__dropdown"
+          data-part="dropdown"
           style={dropdownStyle}
         >
           {/* Search input */}
           {showSearch && (
-            <div style={searchContainerStyle}>
+            <div style={searchContainerStyle} data-part="search-input-wrapper">
               <input
                 ref={searchInputRef}
                 type="text"
@@ -771,6 +777,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                 onChange={(e) => setSearchValue(e.target.value)}
                 onClick={(e) => e.stopPropagation()}
                 style={searchInputStyle}
+                data-part="search-input"
                 onFocus={(e) => {
                   e.currentTarget.style.borderColor = 'var(--ds-color-primary, #1677ff)';
                   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08)';
@@ -783,7 +790,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
             </div>
           )}
           {treeData.length > 0 ? (
-            <ul style={{ margin: 0, padding: '8px' }}>
+            <ul style={{ margin: 0, padding: '8px' }} data-part="tree-list">
               {treeData.map((node) => (
                 <TreeNodeItem
                   key={node.key ?? node.value}
@@ -804,7 +811,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               ))}
             </ul>
           ) : (
-            <div className="rottay-treeselect__empty" style={emptyStyle}>
+            <div className="rottay-treeselect__empty" data-part="empty" style={emptyStyle}>
               {displayNotFound}
             </div>
           )}
@@ -824,8 +831,12 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           className={containerClasses}
           style={triggerStyle}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
+          data-part="trigger"
+          data-open={isOpen || undefined}
+          data-disabled={disabled || undefined}
+          data-status={status || undefined}
         >
-          <span style={valueStyle}>
+          <span style={valueStyle} data-part={selectedKeys.size > 0 ? 'value' : 'placeholder'}>
             {selectedKeys.size > 0 ? getDisplayValue() : displayPlaceholder}
           </span>
           {allowClear && selectedKeys.size > 0 && !disabled && (
@@ -834,11 +845,12 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
               onClick={handleClear}
               style={clearButtonStyle}
               aria-label="Clear"
+              data-part="clear-button"
             >
               ✕
             </button>
           )}
-          <span style={arrowStyle}>▼</span>
+          <span style={arrowStyle} data-part="arrow-icon">▼</span>
         </div>
         {dropdownContent}
       </>

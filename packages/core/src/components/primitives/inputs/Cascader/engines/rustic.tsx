@@ -497,11 +497,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         <div
           ref={dropdownRef}
           className="rottay-cascader__dropdown"
+          data-part="dropdown"
           style={dropdownStyle}
         >
           {/* Search input */}
           {showSearch && (
-            <div style={searchContainerStyle}>
+            <div style={searchContainerStyle} data-part="search-input-wrapper">
               <input
                 ref={searchInputRef}
                 type="text"
@@ -510,6 +511,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                 onChange={(e) => setSearchValue(e.target.value)}
                 onClick={(e) => e.stopPropagation()}
                 style={searchInputStyle}
+                data-part="search-input"
                 onFocus={(e) => {
                   e.currentTarget.style.borderColor = 'var(--ds-color-primary, #1677ff)';
                   e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08)';
@@ -526,6 +528,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             /* Flat search results */
             <ul
               className="rottay-cascader__menu"
+              data-part="option-list"
               style={{
                 listStyle: 'none',
                 margin: 0,
@@ -550,21 +553,23 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                       e.currentTarget.style.backgroundColor = 'transparent';
                       e.currentTarget.style.borderLeft = '3px solid transparent';
                     }}
+                    data-part="option"
                   >
                     <span>{fo.labels.join(' / ')}</span>
                   </li>
                 ))
               ) : (
-                <li style={emptyStyle}>{notFoundContent}</li>
+                <li style={emptyStyle} data-part="empty">{notFoundContent}</li>
               )}
             </ul>
           ) : (
             /* Normal cascading columns */
-            <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex' }} data-part="option-list">
               {activeColumns.map((column, colIndex) => (
                 <ul
                   key={colIndex}
                   className="rottay-cascader__menu"
+                  data-part="menu-column"
                   style={menuStyle(colIndex, activeColumns.length)}
                 >
                   {column.length > 0 ? (
@@ -595,20 +600,23 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                             }
                           }}
                           style={getItemStyle(!!isSelected, option.disabled)}
+                          data-part="option"
+                          data-selected={isSelected || undefined}
+                          data-disabled={option.disabled || undefined}
                         >
                           <span>{optLabel}</span>
                           {isLoading ? (
-                            <span style={spinnerStyle} />
+                            <span style={spinnerStyle} data-part="loading" />
                           ) : (
                             hasExpandIndicator && (
-                              <span style={{ color: 'var(--ds-cascader-arrow-color)' }}>›</span>
+                              <span style={{ color: 'var(--ds-cascader-arrow-color)' }} data-part="menu-item-arrow">›</span>
                             )
                           )}
                         </li>
                       );
                     })
                   ) : (
-                    <li style={emptyStyle}>{notFoundContent}</li>
+                    <li style={emptyStyle} data-part="empty">{notFoundContent}</li>
                   )}
                 </ul>
               ))}
@@ -642,8 +650,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           className={containerClasses}
           style={triggerStyle}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
+          data-part="trigger"
+          data-open={isOpen || undefined}
+          data-disabled={disabled || undefined}
+          data-status={status || undefined}
         >
-          <span style={valueStyle}>
+          <span style={valueStyle} data-part={selectedPath.length > 0 ? 'value' : 'placeholder'}>
             {selectedPath.length > 0 ? getDisplayValue() : placeholder}
           </span>
           {allowClear && selectedPath.length > 0 && !disabled && (
@@ -652,11 +664,12 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
               onClick={handleClear}
               style={clearButtonStyle}
               aria-label="Clear"
+              data-part="clear-button"
             >
               ✕
             </button>
           )}
-          <span style={arrowStyle}>▼</span>
+          <span style={arrowStyle} data-part="arrow-icon">▼</span>
         </div>
         {dropdownContent}
       </>

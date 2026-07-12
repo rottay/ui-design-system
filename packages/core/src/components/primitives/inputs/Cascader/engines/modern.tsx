@@ -335,6 +335,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         }}
         className={`relative ${className || ''}`}
         style={style}
+        data-part="root"
       >
         <div
           className={`flex items-center cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -348,8 +349,15 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             ...getSizeStyle(),
           }}
           onClick={() => !disabled && handleOpenChange(!isOpen)}
+          data-part="trigger"
+          data-open={isOpen || undefined}
+          data-disabled={disabled || undefined}
         >
-          <span className="flex-1 truncate" style={!selectedPath.length ? { color: 'var(--ds-color-text-secondary)' } : undefined}>
+          <span
+            className="flex-1 truncate"
+            style={!selectedPath.length ? { color: 'var(--ds-color-text-secondary)' } : undefined}
+            data-part={selectedPath.length > 0 ? 'value' : 'placeholder'}
+          >
             {selectedPath.length > 0 ? getDisplayValue() : placeholder}
           </span>
           {allowClear && selectedPath.length > 0 && !disabled && (
@@ -357,24 +365,26 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
               type="button"
               style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={handleClear}
+              data-part="clear-button"
             >
               ✕
             </button>
           )}
-          <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`${isOpen ? 'rotate-180' : ''}`}>&#9660;</span>
+          <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`${isOpen ? 'rotate-180' : ''}`} data-part="arrow-icon">&#9660;</span>
         </div>
 
         {isOpen && (
           <>
             <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes rottay-cascader-panel-in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}` }} />
-            <div style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
+            <div data-part="dropdown" style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
             {/* Search input */}
             {showSearch && (
-              <div className="p-2" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
+              <div className="p-2" data-part="search-input-wrapper" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
                 <input
                   ref={searchInputRef}
                   type="text"
                   className="w-full"
+                  data-part="search-input"
                   style={{
                     border: '1px solid var(--ds-color-border)',
                     borderRadius: 'var(--ds-radius-md)',
@@ -398,7 +408,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             {isSearchMode ? (
               <>
                 {/* Flat search results */}
-                <ul style={{ listStyle: 'none', margin: 0, padding: 'var(--ds-spacing-1, 4px)', width: 256, maxHeight: 240, overflowY: 'auto' }}>
+                <ul data-part="option-list" style={{ listStyle: 'none', margin: 0, padding: 'var(--ds-spacing-1, 4px)', width: 256, maxHeight: 240, overflowY: 'auto' }}>
                   {filteredFlatOptions.length > 0 ? (
                     filteredFlatOptions.map((fo, idx) => (
                       <li key={idx}>
@@ -406,23 +416,25 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                           type="button"
                           className="flex justify-between"
                           onClick={() => handleSearchSelect(fo)}
+                          data-part="option"
                         >
                           <span className="truncate">{fo.labels.join(' / ')}</span>
                         </button>
                       </li>
                     ))
                   ) : (
-                    <li className="p-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{notFoundContent}</li>
+                    <li className="p-2" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>{notFoundContent}</li>
                   )}
                 </ul>
               </>
             ) : (
               <>
                 {/* Normal cascading columns */}
-                <div className="flex">
+                <div className="flex" data-part="option-list">
                   {activeColumns.map((column, colIndex) => (
                     <ul
                       key={colIndex}
+                      data-part="menu-column"
                       style={{
                         listStyle: 'none',
                         margin: 0,
@@ -450,13 +462,16 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                                 disabled={option.disabled}
                                 onClick={() => handleOptionClick(option, colIndex)}
                                 onMouseEnter={() => handleOptionHover(option, colIndex)}
+                                data-part="option"
+                                data-selected={isSelected || undefined}
+                                data-disabled={option.disabled || undefined}
                               >
                                 <span className="truncate">{optLabel}</span>
                                 {isLoading ? (
-                                  <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
-                                    <span>›</span>
+                                    <span data-part="menu-item-arrow">›</span>
                                   )
                                 )}
                               </button>
@@ -464,7 +479,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                           );
                         })
                       ) : (
-                        <li className="p-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{notFoundContent}</li>
+                        <li className="p-2" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>{notFoundContent}</li>
                       )}
                     </ul>
                   ))}

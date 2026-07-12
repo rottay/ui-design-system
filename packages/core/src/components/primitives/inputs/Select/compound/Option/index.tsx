@@ -61,12 +61,13 @@ export function SelectOption({
     <div
       className={`rottay-select-option ${disabled ? 'rottay-select-option--disabled' : ''} ${className}`}
       style={optionStyle}
+      data-part="option"
       data-value={value}
       data-disabled={disabled}
       role="option"
       aria-disabled={disabled}
     >
-      {icon && <span className="rottay-select-option__icon">{icon}</span>}
+      {icon && <span className="rottay-select-option__icon" data-part="option-icon">{icon}</span>}
       <span className="rottay-select-option__label">{children}</span>
     </div>
   );
