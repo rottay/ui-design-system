@@ -52,6 +52,15 @@ export function countArc09PaintInFile(text) {
   // "$" for a ${…} expression (opened by `${`, closed by its matching `}`).
   const stack = [];
   const topIs = (ch) => stack.length > 0 && stack[stack.length - 1] === ch;
+  // Stack depths at which a TYPE body opened (`interface X {`, `type X = {`).
+  // A member named `color`/`background`/`fill` inside one is a type annotation,
+  // not paint -- it cannot be migrated to a skin, so counting it would leave the
+  // file permanently unable to reach 0. The parameter case (`(filter: FilterDef)`)
+  // is already excluded structurally by the innermost-bracket rule; interface and
+  // type-alias bodies are not, because their innermost bracket IS `{`.
+  const typeBodyDepths = [];
+  const inTypeBody = () => typeBodyDepths.length > 0;
+  let pendingTypeBody = false;
   let i = 0;
   while (i < n) {
     const c = text[i];
@@ -96,13 +105,44 @@ export function countArc09PaintInFile(text) {
       i++;
       continue;
     }
+    // `interface X {` / `type X = {` open a type body, not an object literal.
+    if (/[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
+      // `interface X {` and `type X = {` -- and ONLY those. A bare `type` is an
+      // extremely common object KEY (`{ type: 'success' }`); matching it would
+      // silence the whole object literal that follows and hide real paint.
+      const ahead = text.slice(i, i + 120);
+      const kw =
+        /^interface\s+[A-Za-z_$]/.test(ahead) ? "interface"
+        : /^type\s+[A-Za-z_$][\w$]*\s*(<[^=<>]*>)?\s*=/.test(ahead) ? "type"
+        : null;
+      if (kw && !inTypeBody()) {
+        pendingTypeBody = true;
+        i += kw.length;
+        continue;
+      }
+    }
     if (c === "{" || c === "(" || c === "[") {
+      if (c === "{" && pendingTypeBody) {
+        typeBodyDepths.push(stack.length);
+        pendingTypeBody = false;
+      }
       stack.push(c);
       i++;
       continue;
     }
+    if (c === ";" && pendingTypeBody && !inTypeBody()) {
+      // `type Alias = string;` -- never opened a body.
+      pendingTypeBody = false;
+      i++;
+      continue;
+    }
     if (c === "}") {
-      if (topIs("{") || topIs("$")) stack.pop();
+      if (topIs("{") || topIs("$")) {
+        stack.pop();
+        if (typeBodyDepths.length > 0 && typeBodyDepths[typeBodyDepths.length - 1] === stack.length) {
+          typeBodyDepths.pop();
+        }
+      }
       i++;
       continue;
     }
@@ -139,7 +179,7 @@ export function countArc09PaintInFile(text) {
     }
     // a paint key is an object-literal key (innermost bracket is `{`) starting
     // at an identifier boundary.
-    if (topIs("{") && /[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
+    if (topIs("{") && !inTypeBody() && /[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
       const m = ARC09_PAINT_KEY_RE.exec(text.slice(i, i + 48));
       if (m && !ARC09_PAINT_EXEMPT.has(m[1])) count += 1;
     }
