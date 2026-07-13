@@ -11,17 +11,18 @@
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
 | [architecture](./architecture.md) | 9 | 0 | 0 | 9 |
-| [skin-adoption](./skin-adoption.md) | 4 | 0 | 3 | 7 |
+| [skin-adoption](./skin-adoption.md) | 4 | 1 | 2 | 7 |
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-SKIN-05 | Skin adoption: display + layout batch | ds-agent | 2026-07-13 | (no entries — log via `progress`) |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-SKIN-05 | Skin adoption: display + layout batch | L | skin-adoption |  |
 | WO-SKIN-06 | Skin adoption: patterns + structures remainder | XL | skin-adoption |  |
 
 ## Blocked (waiting on dependencies)
