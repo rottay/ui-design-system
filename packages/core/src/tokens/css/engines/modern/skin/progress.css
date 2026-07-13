@@ -1,0 +1,61 @@
+/**
+ * Modern Progress skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight/DaisyUI; unlayered outranks them and still yields
+ * to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-progress-shell rottay-progress-shell--modern` +
+ * `data-part='root'` + `data-status`. The circle root additionally carries the
+ * DaisyUI `radial-progress` class (its arc reads `currentColor`); the line root
+ * carries `w-full` and holds a native `<progress data-part='fill'>` + optional
+ * `[data-part='label']`.
+ *
+ * The status color is status-driven with a `strokeColor` prop override: the prop
+ * rides the `--ds-progress-arc-color` custom-property hatch stamped inline (only
+ * when set), and each `[data-status]` rule falls back to the status token. The
+ * circle arc uses `color`, the line fill uses `accent-color` — neither is a
+ * border COLOR, so (0,3,0)+ suffices (the tenant `* { border-color }` floor does
+ * not apply). Runtime `--value` (circle) / `value=` attribute (line) stay inline.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- circle arc + center text: `color` drives DaisyUI's conic-gradient.
+        Scoped to `.radial-progress` so the line root's color is untouched. ---- */
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='normal'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='success'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-success));
+}
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='error'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-error));
+}
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='active'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+
+/* ---- line fill: status-driven accent-color (was accentColor) ---- */
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='normal'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='success'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-success));
+}
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='error'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-error));
+}
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+
+/* ---- line fill surface: status-independent track background + radius ---- */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill'] {
+  background: var(--ds-progress-bg);
+  border-radius: var(--ds-progress-radius);
+}
+
+/* ---- line label (info text) ---- */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}

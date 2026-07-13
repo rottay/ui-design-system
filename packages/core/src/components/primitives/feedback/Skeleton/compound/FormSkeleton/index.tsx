@@ -88,14 +88,13 @@ export interface SkeletonFormProps {
 // ============================================================================
 
 /**
- * Shared shimmer animation styles reused by all skeleton elements.
- * Uses a sweeping gradient that animates horizontally via `backgroundSize: 200%`.
+ * Shared shimmer animation reused by all skeleton elements. The sweeping
+ * gradient background + its 200% sizing paint from the unlayered
+ * skeleton-compounds skin; only the animation reference (which drives the
+ * background-position slide) stays inline.
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  background:
-    'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-  backgroundSize: '200% 100%',
   animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
 };
 
@@ -167,7 +166,6 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
                 ...shimmerStyle,
                 height: '14px',
                 width: `${60 + (index % 3) * 15}px`,
-                borderRadius: '4px',
               }}
             />
             {/* Input placeholder - full width, matches typical input height */}
@@ -177,7 +175,6 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
                 ...shimmerStyle,
                 height: '38px',
                 width: '100%',
-                borderRadius: '6px',
               }}
             />
           </div>
@@ -189,7 +186,6 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
             ...shimmerStyle,
             height: '38px',
             width: '100px',
-            borderRadius: '6px',
             marginTop: '4px',
           }}
         />

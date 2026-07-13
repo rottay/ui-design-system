@@ -1,0 +1,78 @@
+/**
+ * Rustic Skeleton skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * The 4-way Skeleton animation split is PRESERVED mechanism-by-mechanism. This
+ * file owns ONLY the rustic engine's local pulse + wave. The two keyframes moved
+ * out of the engine's per-mount <style> and are RENAMED + engine-namespaced:
+ * `ds-skeleton-pulse-rustic` (opacity floor 0.4) MUST NOT collide with the DEAD
+ * `ds-skeleton-pulse` (floor 0.5) in engines/rustic/theme.css, which is left
+ * untouched; `ds-skeleton-wave-rustic` is likewise a fresh name. The engine keeps
+ * the `animation` reference inline (non-paint) and stamps `data-animation` so the
+ * wave gradient can be applied here without a foreign inline value.
+ *
+ * SCOPE: the shape-variant root carries the block on itself
+ * (`.rottay-skeleton[data-part='root']`); the text/default avatar/title/line are
+ * blocks inside `.rottay-skeleton-wrapper` (the wrapper root itself is a flex
+ * container, not a block). Base fill is `background-color` (the engine used the
+ * longhand); the wave rule is a `background` SHORTHAND at higher specificity so
+ * it wipes that flat fill down to the sliding gradient — exactly the inline order
+ * (backgroundColor then the wave `background`).
+ *
+ * SPECIFICITY (P-48): background(-color) and border-radius are non-border paint,
+ * so (0,3,0)+ unlayered clears preflight; none touches the tenant
+ * `* { border-color }` floor. Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-skeleton-pulse-rustic {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes ds-skeleton-wave-rustic {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+/* ---- base fill on every rustic skeleton block ---- */
+.rottay-skeleton.rottay-skeleton--rustic[data-part='root'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='avatar'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='line'] {
+  background-color: var(--ds-skeleton-bg);
+}
+
+/* ---- wave gradient (higher specificity via [data-animation='wave']; the
+        `background` shorthand wipes the flat fill, matching the inline order) ---- */
+.rottay-skeleton.rottay-skeleton--rustic[data-part='root'][data-animation='wave'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='avatar'][data-animation='wave'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='title'][data-animation='wave'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='line'][data-animation='wave'] {
+  background: var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%));
+  background-size: 400% 100%;
+}
+
+/* ---- corner radius: shape-variant root + avatar ride hatches (variant/shape
+        conditional); title/line are the static 4px ---- */
+.rottay-skeleton.rottay-skeleton--rustic[data-part='root'] {
+  border-radius: var(--ds-skeleton-shape-radius);
+}
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='avatar'] {
+  border-radius: var(--ds-skeleton-avatar-radius);
+}
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='line'] {
+  border-radius: 4px;
+}

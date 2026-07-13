@@ -1,0 +1,46 @@
+/**
+ * Rustic Rate skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-rate rottay-rate--rustic` (+ `--<size>` and, when
+ * inactive, `--disabled`/`--readonly`) and `data-part='root'`; each star is a
+ * `<span data-part='star' data-state>`.
+ *
+ * Per-star fill color is runtime (follows `displayValue`, hover included) and
+ * rides `--ds-rate-star-fill` stamped on each star; the half foreground inherits
+ * it (active for a half star). The constant active/inactive colors ride
+ * `--ds-rate-star-active` / `--ds-rate-star-inactive` stamped on the root: the
+ * inactive drives the half background via the `rottay-rate-star-track` marker,
+ * the active drives the focus outline.
+ *
+ * INTERACTION (rustic was 100% React-state): the hover `scale(1.1)` becomes a
+ * `:hover` rule gated on `:not(--disabled):not(--readonly)` — the exact
+ * `isHovered && isInteractive` guard; hovering the star or its half-click child
+ * both bubble to the star's `:hover`, matching the split hoverValue logic. The
+ * focus outline stays React-driven (the ROOT owns focus and highlights one star
+ * by index, so no star is ever `:focus-visible`); it is keyed on the
+ * `data-focused` attribute stamped when `isFocused`. `color`/`border-radius` are
+ * non-border; `outline`/`transform` are non-border — none touches the tenant
+ * `* { border-color }` floor. Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+.rottay-rate.rottay-rate--rustic [data-part='star'] {
+  border-radius: 2px;
+  color: var(--ds-rate-star-fill);
+}
+
+.rottay-rate.rottay-rate--rustic:not(.rottay-rate--disabled):not(.rottay-rate--readonly) [data-part='star']:hover {
+  transform: scale(1.1);
+}
+
+.rottay-rate.rottay-rate--rustic [data-part='star'][data-focused='true'] {
+  outline: 2px solid var(--ds-rate-star-active);
+  outline-offset: 2px;
+}
+
+.rottay-rate.rottay-rate--rustic [data-part='star'] .rottay-rate-star-track {
+  color: var(--ds-rate-star-inactive);
+}

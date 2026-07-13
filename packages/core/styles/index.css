@@ -21706,6 +21706,709 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-top-color: transparent;
 }
 
+/* Status family (WO-SKIN-03 checkpoint S). */
+/**
+ * Modern Alert skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight/DaisyUI regardless of
+ * specificity. Unlayered outranks preflight + DaisyUI's `.alert` and still
+ * yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-alert-shell rottay-alert-shell--modern` alongside
+ * the DaisyUI `.alert` class and `data-part='root'` + `data-tone`. The dedicated
+ * `-shell` scope (not bare `.rottay-alert`) is required: `.rottay-alert` is
+ * already claimed by the ALERT PERSONALITY rule in runtime/personality.css
+ * (border-left accent + transition), so anchoring on it would activate that
+ * rule's paint. `-shell` is collision-free (grep-verified), mirroring the
+ * `rottay-progress-shell` precedent.
+ *
+ * SPECIFICITY (P-48): non-border paint (background, color, border-radius) beats
+ * preflight unlayered at (0,3,0)+. None of Modern Alert's moved paint touches a
+ * border COLOR (the close button's `border: none` is a color-free reset, exempt
+ * from the (0,4,0) floor). Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root surface: per-tone tinted background + matching text color
+        (was TYPE_STYLES; caller `style` still wins as inline). ---- */
+.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='info'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  color: var(--ds-color-warning);
+}
+.rottay-alert-shell.rottay-alert-shell--modern[data-part='root'][data-tone='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+
+/* ---- close button: ghost circle (was the inline button `style`; layout keys
+        stay inline). `border: none` is a color-free reset (exempt). ---- */
+.rottay-alert-shell.rottay-alert-shell--modern [data-part='action'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/**
+ * Rustic Alert skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-alert-shell rottay-alert-shell--rustic` +
+ * `data-part='root'` + `data-tone`. The `-shell` scope is deliberate: bare
+ * `.rottay-alert` is claimed by the ALERT PERSONALITY rule in
+ * runtime/personality.css (border-left accent + transition) which today does NOT
+ * apply to Rustic (its root carries no alert class), so anchoring on
+ * `.rottay-alert` would introduce that rule's paint. `-shell` is collision-free
+ * (grep-verified), mirroring `rottay-progress-shell`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element. Per-tone `border-color` therefore reaches
+ * (0,4,0) via the two shell classes + `[data-part='root']` + `[data-tone]`.
+ * The left accent's width/style are longhands (never the shorthand) so they do
+ * not reset border-left-COLOR out from under the per-tone rule; the color-free
+ * close-button `border: none` reset is exempt from the floor. Values transcribed
+ * verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root: radius + left accent width/style (was baseStyle). Longhands keep
+        border-left-color untouched so the per-tone rule owns it. ---- */
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'] {
+  border-radius: var(--ds-radius-md, 0.5rem);
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+/* ---- per-tone surface + accent color + text color (was TYPE_STYLES).
+        border-color at (0,4,0) to clear the tenant border-color floor. ---- */
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='info'] {
+  background-color: var(--ds-alert-info-bg, var(--ds-color-info-bg));
+  border-color: var(--ds-alert-info-border, var(--ds-color-info-border));
+  color: var(--ds-alert-info-color, var(--ds-color-info-700));
+}
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='success'] {
+  background-color: var(--ds-alert-success-bg, var(--ds-color-success-bg));
+  border-color: var(--ds-alert-success-border, var(--ds-color-success-border));
+  color: var(--ds-alert-success-color, var(--ds-color-success-700));
+}
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='warning'] {
+  background-color: var(--ds-alert-warning-bg, var(--ds-color-warning-bg));
+  border-color: var(--ds-alert-warning-border, var(--ds-color-warning-border));
+  color: var(--ds-alert-warning-color, var(--ds-color-warning-700));
+}
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='error'] {
+  background-color: var(--ds-alert-error-bg, var(--ds-color-error-bg));
+  border-color: var(--ds-alert-error-border, var(--ds-color-error-border));
+  color: var(--ds-alert-error-color, var(--ds-color-error-700));
+}
+
+/* ---- close button: transparent, borderless (was closeButtonStyle; opacity +
+        cursor stay inline). `border: none` is a color-free reset (exempt). ---- */
+.rottay-alert-shell.rottay-alert-shell--rustic [data-part='action'] {
+  background: none;
+  border: none;
+}
+
+/**
+ * Modern Progress skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight/DaisyUI; unlayered outranks them and still yields
+ * to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-progress-shell rottay-progress-shell--modern` +
+ * `data-part='root'` + `data-status`. The circle root additionally carries the
+ * DaisyUI `radial-progress` class (its arc reads `currentColor`); the line root
+ * carries `w-full` and holds a native `<progress data-part='fill'>` + optional
+ * `[data-part='label']`.
+ *
+ * The status color is status-driven with a `strokeColor` prop override: the prop
+ * rides the `--ds-progress-arc-color` custom-property hatch stamped inline (only
+ * when set), and each `[data-status]` rule falls back to the status token. The
+ * circle arc uses `color`, the line fill uses `accent-color` — neither is a
+ * border COLOR, so (0,3,0)+ suffices (the tenant `* { border-color }` floor does
+ * not apply). Runtime `--value` (circle) / `value=` attribute (line) stay inline.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- circle arc + center text: `color` drives DaisyUI's conic-gradient.
+        Scoped to `.radial-progress` so the line root's color is untouched. ---- */
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='normal'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='success'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-success));
+}
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='error'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-error));
+}
+.rottay-progress-shell.rottay-progress-shell--modern.radial-progress[data-status='active'] {
+  color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+
+/* ---- line fill: status-driven accent-color (was accentColor) ---- */
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='normal'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='success'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-success));
+}
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='error'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-error));
+}
+.rottay-progress-shell.rottay-progress-shell--modern[data-status='active'] [data-part='fill'] {
+  accent-color: var(--ds-progress-arc-color, var(--ds-color-primary));
+}
+
+/* ---- line fill surface: status-independent track background + radius ---- */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='fill'] {
+  background: var(--ds-progress-bg);
+  border-radius: var(--ds-progress-radius);
+}
+
+/* ---- line label (info text) ---- */
+.rottay-progress-shell.rottay-progress-shell--modern [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic Progress skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-progress-shell rottay-progress-shell--rustic` +
+ * `data-part='root'` + `data-status`. The circle renders SVG `[data-part='track']`
+ * + `[data-part='fill']` `<circle>`s and a `[data-part='label']`; the line renders
+ * a `[data-part='track']` div wrapping a `[data-part='fill']` div, plus an
+ * optional `[data-part='label']`.
+ *
+ * The status color drives THREE consumers off one value (`strokeColor ||
+ * STATUS_COLORS[status]`): the circle arc `stroke`, the circle label `color`, and
+ * the line bar `background-color`. The `strokeColor` prop rides the
+ * `--ds-progress-arc-color` hatch (stamped inline only when set); each
+ * `[data-status]` rule falls back to the STATUS_COLORS string transcribed
+ * VERBATIM (the undefined `--ds-progress-*-color` tokens keep the tenant hook and
+ * resolve through their fallbacks today). The fill rule sets BOTH `stroke` and
+ * `background-color`: the SVG circle paints `stroke` and ignores background; the
+ * line div paints `background-color` and ignores stroke — one rule serves both.
+ *
+ * Runtime `strokeDashoffset`/`strokeDasharray` (geometry) and `width: %` stay
+ * inline as SVG attributes / layout. Corner radius is strokeWidth-derived so it
+ * rides `--ds-progress-bar-radius`; the active barbershop stripe is static and
+ * lives in the `[data-status='active']` rule with its renamed keyframe. Values
+ * transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-progress-rustic-active {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1rem 0;
+  }
+}
+
+/* ---- status color: circle arc stroke, circle label, line bar background ---- */
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='normal'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-normal-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-normal-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='success'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-success-color, var(--ds-color-success-500, var(--ds-color-success))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-success-color, var(--ds-color-success-500, var(--ds-color-success))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='error'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-error-color, var(--ds-color-error-500, var(--ds-color-error))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-error-color, var(--ds-color-error-500, var(--ds-color-error))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='active'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-active-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-active-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+
+/* Only the CIRCLE label is status-colored inline; it is the sole `[data-part=
+   'label']` preceded by the SVG sibling. The line label carries no color (keeps
+   its inherited default), so `svg ~` must isolate the circle label here. */
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='normal'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-normal-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='success'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-success-color, var(--ds-color-success-500, var(--ds-color-success))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='error'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-error-color, var(--ds-color-error-500, var(--ds-color-error))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='active'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-active-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+
+/* ---- line track background (status-independent) + strokeWidth-derived radius.
+        The bar radius is nested under `[data-part='track']` so it lands on the
+        LINE bar only (the circle's SVG fill is a track sibling, not a child, and
+        must not take these). Setting background-color/border-radius on the SVG
+        circle track is inert (SVG paints via stroke), so the track rule is safe. ---- */
+.rottay-progress-shell.rottay-progress-shell--rustic [data-part='track'] {
+  background-color: var(--ds-progress-track-color, var(--ds-color-bg-secondary, var(--ds-color-neutral-100)));
+  border-radius: var(--ds-progress-bar-radius);
+}
+.rottay-progress-shell.rottay-progress-shell--rustic [data-part='track'] [data-part='fill'] {
+  border-radius: var(--ds-progress-bar-radius);
+}
+
+/* ---- active barbershop stripe (was the status==='active' conditional spread),
+        line-only via the nested `[data-part='track']` so the circle fill (which
+        never carried the stripe) gains no inert animation. ---- */
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='active'] [data-part='track'] [data-part='fill'] {
+  background-image: linear-gradient(
+    45deg,
+    var(--ds-color-alpha-white-20) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--ds-color-alpha-white-20) 50%,
+    var(--ds-color-alpha-white-20) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: ds-progress-rustic-active 1s linear infinite;
+}
+
+/**
+ * Progress compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Covers Progress.Line (`.rottay-progress-line`) and Progress.Circle
+ * (`.rottay-progress-circle`), each a standalone render tree with no engine
+ * switch and its own scope class + `data-part`s.
+ *
+ * Progress.Line's paint is entirely prop-driven: `strokeColor`/`trailColor` and
+ * the size-derived corner radius (`height / 2`) ride custom-property hatches
+ * (`--ds-progress-line-fill` / `-trail` / `-radius`) stamped on the root and
+ * consumed here. None is a border COLOR, so (0,2,0)+ suffices — the tenant
+ * `* { border-color }` floor does not apply. The bar `width: %` stays inline.
+ *
+ * Progress.Circle's only counted paint was two STATIC `transform`s (the arc
+ * colors are uncounted SVG `stroke` attributes and stay inline): the SVG's
+ * `rotate(-90deg)` and the centered label's `translate(-50%, -50%)`. Moving a
+ * transform inline->rule does not change its transform-origin, so both render
+ * identically. Values transcribed verbatim from the compound sources.
+ */
+
+/* Progress.Line -------------------------------------------------------------- */
+.rottay-progress-line [data-part='track'] {
+  background-color: var(--ds-progress-line-trail);
+  border-radius: var(--ds-progress-line-radius);
+}
+.rottay-progress-line [data-part='fill'] {
+  background-color: var(--ds-progress-line-fill);
+  border-radius: var(--ds-progress-line-radius);
+}
+
+/* Progress.Circle ------------------------------------------------------------ */
+.rottay-progress-circle > svg {
+  transform: rotate(-90deg);
+}
+.rottay-progress-circle [data-part='label'] {
+  transform: translate(-50%, -50%);
+}
+
+/**
+ * Modern Spinner skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-spinner rottay-spinner--modern` + `data-part='root'`;
+ * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.
+ *
+ * SPECIFICITY (P-48): the ring paints a border COLOR (track + colored top), so
+ * its rule reaches (0,4,0) via the two root classes + the repeated
+ * `[data-part='indicator']`, clearing the tenant `* { border-color }` floor
+ * (0,3,1). The label's `color` is non-border and wins unlayered at (0,3,0).
+ *
+ * RUNTIME: the ring WIDTH varies by `size` (2px/3px) so it rides the
+ * `--ds-spinner-ring-width` custom-property hatch stamped inline; the shorthand
+ * keeps width+style+color atomic (an undefined var would drop the whole
+ * declaration). Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-spinner-modern-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
+  border: var(--ds-spinner-ring-width) solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+.rottay-spinner.rottay-spinner--modern [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic Spinner skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-spinner rottay-spinner--rustic` + `data-part='root'`;
+ * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.
+ *
+ * SPECIFICITY (P-48): the ring paints a border COLOR (track + colored top), so
+ * its rule reaches (0,4,0) via the two root classes + the repeated
+ * `[data-part='indicator']`, clearing the tenant `* { border-color }` floor
+ * (0,3,1). The label's `color` is non-border and wins unlayered at (0,3,0).
+ *
+ * RUNTIME: the colored top can be an author-supplied `color` prop, so it rides
+ * the `--ds-spinner-ring-color` custom-property hatch stamped inline. Values
+ * transcribed verbatim from `engines/rustic.tsx` (the `inherit` label fallback
+ * resolves against the same DOM parent inline or in a rule — identical).
+ */
+
+@keyframes ds-spinner-rustic-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rottay-spinner.rottay-spinner--rustic [data-part='indicator'][data-part='indicator'] {
+  border: var(--ds-spinner-stroke-width, 2px) solid var(--ds-spinner-track-color, rgba(0, 0, 0, 0.1));
+  border-top-color: var(--ds-spinner-ring-color);
+  border-radius: 50%;
+}
+
+.rottay-spinner.rottay-spinner--rustic [data-part='label'] {
+  color: var(--ds-spinner-label-color, inherit);
+}
+
+/**
+ * Modern Rate skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight/DaisyUI; unlayered outranks them and still yields
+ * to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-rate rottay-rate--modern` + `data-part='root'`; each
+ * star is a `<label data-part='star' data-state>`.
+ *
+ * Per-star fill color is runtime (it follows `displayValue`, hover included), so
+ * it rides the `--ds-rate-star-fill` custom-property hatch stamped on each star.
+ * The half-star foreground inherits that fill (active for a half star); the
+ * half-star background is the constant inactive color, which rides
+ * `--ds-rate-star-inactive` stamped on the root and is applied via the
+ * `rottay-rate-star-track` marker. `color` is non-border, so (0,3,0)+ suffices.
+ * The hover scale (`hover:scale-110`) and focus ring (`ring-2`, `--tw-ring-color`
+ * hatch) stay as Tailwind classes/hatch inline — they were never counted paint.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-rate.rottay-rate--modern [data-part='star'] {
+  color: var(--ds-rate-star-fill);
+}
+
+.rottay-rate.rottay-rate--modern [data-part='star'] .rottay-rate-star-track {
+  color: var(--ds-rate-star-inactive);
+}
+
+/**
+ * Rustic Rate skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-rate rottay-rate--rustic` (+ `--<size>` and, when
+ * inactive, `--disabled`/`--readonly`) and `data-part='root'`; each star is a
+ * `<span data-part='star' data-state>`.
+ *
+ * Per-star fill color is runtime (follows `displayValue`, hover included) and
+ * rides `--ds-rate-star-fill` stamped on each star; the half foreground inherits
+ * it (active for a half star). The constant active/inactive colors ride
+ * `--ds-rate-star-active` / `--ds-rate-star-inactive` stamped on the root: the
+ * inactive drives the half background via the `rottay-rate-star-track` marker,
+ * the active drives the focus outline.
+ *
+ * INTERACTION (rustic was 100% React-state): the hover `scale(1.1)` becomes a
+ * `:hover` rule gated on `:not(--disabled):not(--readonly)` — the exact
+ * `isHovered && isInteractive` guard; hovering the star or its half-click child
+ * both bubble to the star's `:hover`, matching the split hoverValue logic. The
+ * focus outline stays React-driven (the ROOT owns focus and highlights one star
+ * by index, so no star is ever `:focus-visible`); it is keyed on the
+ * `data-focused` attribute stamped when `isFocused`. `color`/`border-radius` are
+ * non-border; `outline`/`transform` are non-border — none touches the tenant
+ * `* { border-color }` floor. Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+.rottay-rate.rottay-rate--rustic [data-part='star'] {
+  border-radius: 2px;
+  color: var(--ds-rate-star-fill);
+}
+
+.rottay-rate.rottay-rate--rustic:not(.rottay-rate--disabled):not(.rottay-rate--readonly) [data-part='star']:hover {
+  transform: scale(1.1);
+}
+
+.rottay-rate.rottay-rate--rustic [data-part='star'][data-focused='true'] {
+  outline: 2px solid var(--ds-rate-star-active);
+  outline-offset: 2px;
+}
+
+.rottay-rate.rottay-rate--rustic [data-part='star'] .rottay-rate-star-track {
+  color: var(--ds-rate-star-inactive);
+}
+
+/**
+ * Modern Skeleton skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer and DaisyUI's own
+ * `.skeleton` sort before Tailwind's base layer, so a layered rule cannot paint
+ * these blocks. Unlayered outranks preflight + DaisyUI and still yields to a
+ * caller's inline `style`.
+ *
+ * The 4-way Skeleton animation split is PRESERVED mechanism-by-mechanism: modern
+ * stays DaisyUI-owned (the `.skeleton` class supplies animation-name; the engine
+ * keeps animation-duration/-easing inline). Only the moved paint lives here:
+ *  - Every skeleton block reads the tenant background. It is a `background`
+ *    SHORTHAND (not `background-color`) because the engine used the shorthand,
+ *    which wipes DaisyUI's shimmer GRADIENT down to a flat fill — reproduce that
+ *    exactly or the gradient reappears.
+ *  - The shape-variant root and the avatar carry a variant/shape-conditional
+ *    corner radius, so each rides a custom-property hatch stamped inline
+ *    (--ds-skeleton-shape-radius / --ds-skeleton-avatar-radius). Title/line have
+ *    no radius (DaisyUI's `.skeleton` default), so none is set here.
+ *
+ * SPECIFICITY (P-48): background and border-radius are non-border paint, so
+ * (0,2,0)+ unlayered clears preflight; unlayered clears DaisyUI (layered)
+ * regardless. None touches the tenant `* { border-color }` floor.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- tenant fill on every DaisyUI skeleton block: the shape-variant root
+        carries `.skeleton` directly, the text/default avatar/title/line carry it
+        as descendants. `background` shorthand mirrors the inline wipe. ---- */
+.rottay-skeleton--modern.skeleton,
+.rottay-skeleton--modern .skeleton {
+  background: var(--ds-skeleton-bg, var(--ds-color-neutral-100));
+}
+
+/* ---- shape-variant root radius (circular/rounded/rectangular) ---- */
+.rottay-skeleton--modern.skeleton[data-part='root'] {
+  border-radius: var(--ds-skeleton-shape-radius);
+}
+
+/* ---- avatar radius (circle/rounded) ---- */
+.rottay-skeleton--modern .skeleton[data-part='avatar'] {
+  border-radius: var(--ds-skeleton-avatar-radius);
+}
+
+/**
+ * Rustic Skeleton skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * The 4-way Skeleton animation split is PRESERVED mechanism-by-mechanism. This
+ * file owns ONLY the rustic engine's local pulse + wave. The two keyframes moved
+ * out of the engine's per-mount <style> and are RENAMED + engine-namespaced:
+ * `ds-skeleton-pulse-rustic` (opacity floor 0.4) MUST NOT collide with the DEAD
+ * `ds-skeleton-pulse` (floor 0.5) in engines/rustic/theme.css, which is left
+ * untouched; `ds-skeleton-wave-rustic` is likewise a fresh name. The engine keeps
+ * the `animation` reference inline (non-paint) and stamps `data-animation` so the
+ * wave gradient can be applied here without a foreign inline value.
+ *
+ * SCOPE: the shape-variant root carries the block on itself
+ * (`.rottay-skeleton[data-part='root']`); the text/default avatar/title/line are
+ * blocks inside `.rottay-skeleton-wrapper` (the wrapper root itself is a flex
+ * container, not a block). Base fill is `background-color` (the engine used the
+ * longhand); the wave rule is a `background` SHORTHAND at higher specificity so
+ * it wipes that flat fill down to the sliding gradient — exactly the inline order
+ * (backgroundColor then the wave `background`).
+ *
+ * SPECIFICITY (P-48): background(-color) and border-radius are non-border paint,
+ * so (0,3,0)+ unlayered clears preflight; none touches the tenant
+ * `* { border-color }` floor. Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-skeleton-pulse-rustic {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes ds-skeleton-wave-rustic {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+/* ---- base fill on every rustic skeleton block ---- */
+.rottay-skeleton.rottay-skeleton--rustic[data-part='root'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='avatar'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='line'] {
+  background-color: var(--ds-skeleton-bg);
+}
+
+/* ---- wave gradient (higher specificity via [data-animation='wave']; the
+        `background` shorthand wipes the flat fill, matching the inline order) ---- */
+.rottay-skeleton.rottay-skeleton--rustic[data-part='root'][data-animation='wave'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='avatar'][data-animation='wave'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='title'][data-animation='wave'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='line'][data-animation='wave'] {
+  background: var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%));
+  background-size: 400% 100%;
+}
+
+/* ---- corner radius: shape-variant root + avatar ride hatches (variant/shape
+        conditional); title/line are the static 4px ---- */
+.rottay-skeleton.rottay-skeleton--rustic[data-part='root'] {
+  border-radius: var(--ds-skeleton-shape-radius);
+}
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='avatar'] {
+  border-radius: var(--ds-skeleton-avatar-radius);
+}
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='title'],
+.rottay-skeleton-wrapper.rottay-skeleton--rustic [data-part='line'] {
+  border-radius: 4px;
+}
+
+/**
+ * Skeleton compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Covers the eight Skeleton compounds (Avatar, Button, Card, FormSkeleton,
+ * ListItem, Paragraph, Table, Text), each a standalone render tree with no
+ * engine switch, its own scope class, and `data-part` anatomy.
+ *
+ * Every compound shares ONE shimmer: the sweeping gradient `background` + its
+ * `200% 100%` sizing (identical across all eight, so one selector list owns it);
+ * the `skeleton-loading` animation reference stays inline on each block (the
+ * global keyframe is reused as-is — that reference is a contract-exempt residual,
+ * not migrated). Corner radii are per-part static values except Avatar/Button,
+ * whose shape-conditional radius rides a hatch stamped inline
+ * (--ds-skeleton-avatar-radius / --ds-skeleton-button-radius).
+ *
+ * SPECIFICITY (P-48): background and border-radius are non-border paint, so
+ * (0,2,0)+ unlayered clears preflight. The Card + Table containers and the Table
+ * row dividers paint a border COLOR, so each of those reaches (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) * { border-color }`
+ * floor (0,3,1) -- bought by repeating the scope class + the data-part (Card/Table
+ * root) or by data-part + data-row on the row. Every border shorthand carries a
+ * real color fallback, so the shorthand is atomic (never dropped by an undefined
+ * token). Values transcribed verbatim from the compound sources.
+ */
+
+/* ---- shared shimmer: every shimmer-bearing block across the eight compounds ---- */
+.rottay-skeleton-avatar[data-part='root'],
+.rottay-skeleton-button[data-part='root'],
+.rottay-skeleton-card [data-part='image'],
+.rottay-skeleton-card [data-part='title'],
+.rottay-skeleton-card [data-part='line'],
+.rottay-skeleton-form [data-part='label'],
+.rottay-skeleton-form [data-part='input'],
+.rottay-skeleton-form [data-part='action'],
+.rottay-skeleton-list-item [data-part='avatar'],
+.rottay-skeleton-list-item [data-part='line'],
+.rottay-skeleton-paragraph [data-part='line'],
+.rottay-skeleton-text [data-part='line'],
+.rottay-skeleton-table [data-part='cell'] {
+  background: var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%));
+  background-size: 200% 100%;
+}
+
+/* ---- Avatar -------------------------------------------------------------- */
+.rottay-skeleton-avatar[data-part='root'] {
+  border-radius: var(--ds-skeleton-avatar-radius);
+}
+
+/* ---- Button -------------------------------------------------------------- */
+.rottay-skeleton-button[data-part='root'] {
+  border-radius: var(--ds-skeleton-button-radius);
+}
+
+/* ---- Card ---------------------------------------------------------------- */
+.rottay-skeleton-card.rottay-skeleton-card[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+.rottay-skeleton-card [data-part='title'],
+.rottay-skeleton-card [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- FormSkeleton -------------------------------------------------------- */
+.rottay-skeleton-form [data-part='label'] {
+  border-radius: 4px;
+}
+.rottay-skeleton-form [data-part='input'],
+.rottay-skeleton-form [data-part='action'] {
+  border-radius: 6px;
+}
+
+/* ---- ListItem ------------------------------------------------------------ */
+.rottay-skeleton-list-item [data-part='avatar'] {
+  border-radius: 50%;
+}
+.rottay-skeleton-list-item [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- Paragraph ----------------------------------------------------------- */
+.rottay-skeleton-paragraph [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- Text ---------------------------------------------------------------- */
+.rottay-skeleton-text [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- Table --------------------------------------------------------------- */
+.rottay-skeleton-table.rottay-skeleton-table[data-part='root'][data-part='root'] {
+  border-radius: 8px;
+  border: 1px solid var(--ds-skeleton-border, #e5e7eb);
+}
+.rottay-skeleton-table [data-part='cell'] {
+  border-radius: 4px;
+}
+/* header row: divider + distinct surface. Divider color reaches (0,4,0). */
+.rottay-skeleton-table [data-part='row'][data-part='row'][data-row='header'] {
+  border-bottom: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+.rottay-skeleton-table [data-part='row'][data-row='header'] {
+  background-color: var(--ds-skeleton-header-bg, var(--ds-color-bg-secondary));
+}
+/* body rows: divider between rows, not after the last (`row < rows - 1`). */
+.rottay-skeleton-table [data-part='row'][data-part='row'][data-row='body']:not(:last-child) {
+  border-bottom: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

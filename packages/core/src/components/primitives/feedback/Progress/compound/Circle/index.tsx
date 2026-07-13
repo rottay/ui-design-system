@@ -246,7 +246,7 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
         style={{ position: 'relative', width: size, height: size, ...style }}
       >
         {/* SVG Circle Container */}
-        <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
+        <svg width={size} height={size}>
           {/* Background Trail Circle */}
           <circle
             data-part="track"
@@ -282,7 +282,6 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
               position: 'absolute',
               top: '50%',
               left: '50%',
-              transform: 'translate(-50%, -50%)',
               fontSize: size * 0.2,
               fontWeight: 500,
             }}

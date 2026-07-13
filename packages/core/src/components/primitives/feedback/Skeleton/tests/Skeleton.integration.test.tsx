@@ -71,10 +71,19 @@ describe('Skeleton integration', () => {
       </div>
     );
 
-    const avatar = container.querySelector('.rottay-skeleton-avatar');
-    const button = container.querySelector('.rottay-skeleton-button');
+    // The shimmer gradient (--ds-skeleton-wave-gradient) paints from
+    // skeleton-compounds.css hooked on the class + data-part pair below; only
+    // the shared skeleton-loading animation reference stays inline.
+    const avatar = container.querySelector('.rottay-skeleton-avatar[data-part="root"]');
+    const button = container.querySelector('.rottay-skeleton-button[data-part="root"]');
 
-    expect(avatar?.getAttribute('style') ?? '').toContain('var(--ds-skeleton-wave-gradient');
-    expect(button?.getAttribute('style') ?? '').toContain('var(--ds-skeleton-wave-gradient');
+    expect(avatar).toBeTruthy();
+    expect(button).toBeTruthy();
+    expect(avatar?.getAttribute('style') ?? '').toContain(
+      'skeleton-loading var(--ds-skeleton-animation-duration'
+    );
+    expect(button?.getAttribute('style') ?? '').toContain(
+      'skeleton-loading var(--ds-skeleton-animation-duration'
+    );
   });
 });

@@ -100,14 +100,13 @@ export interface SkeletonListItemProps {
 // ============================================================================
 
 /**
- * Shared shimmer animation styles reused by all skeleton elements.
- * Uses a sweeping gradient that animates horizontally via `backgroundSize: 200%`.
+ * Shared shimmer animation reused by all skeleton elements. The sweeping
+ * gradient background + its 200% sizing paint from the unlayered
+ * skeleton-compounds skin; only the animation reference (which drives the
+ * background-position slide) stays inline.
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  background:
-    'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-  backgroundSize: '200% 100%',
   animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
 };
 
@@ -177,7 +176,6 @@ export const SkeletonListItem = forwardRef<HTMLDivElement, SkeletonListItemProps
               ...shimmerStyle,
               width: 40,
               height: 40,
-              borderRadius: '50%',
               flexShrink: 0,
             }}
           />
@@ -195,7 +193,6 @@ export const SkeletonListItem = forwardRef<HTMLDivElement, SkeletonListItemProps
                 height: index === 0 ? '14px' : '12px',
                 // Width varies: 40% for title, 60% for last line, 80% for middle
                 width: index === 0 ? '40%' : index === lines - 1 ? '60%' : '80%',
-                borderRadius: '4px',
               }}
             />
           ))}

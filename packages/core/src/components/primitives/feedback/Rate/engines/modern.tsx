@@ -334,7 +334,9 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           style={{
             width: `${sizeValue}px`,
             height: `${sizeValue}px`,
-            color: isFilled || isHalfFilled
+            // Runtime per-star fill (active when filled/half, else inactive)
+            // rides the hatch consumed by the unlayered skin's star color rule.
+            '--ds-rate-star-fill': isFilled || isHalfFilled
               ? activeColor || 'var(--ds-rate-active-color)'
               : inactiveColor || 'var(--ds-rate-inactive-color)',
             // DS token override for the focus ring color; Tailwind's
@@ -381,20 +383,15 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           {/* Half star visual - overlay technique */}
           {isHalfFilled ? (
             <span className="relative inline-flex w-full h-full">
-              {/* Background (inactive) star */}
-              <span
-                className="absolute inset-0"
-                style={{ color: inactiveColor || 'var(--ds-rate-inactive-color)' }}
-              >
+              {/* Background (inactive) star: constant inactive color via the
+                  track marker; --ds-rate-star-inactive is stamped on the root. */}
+              <span className="absolute inset-0 rottay-rate-star-track">
                 {renderCharacter(index)}
               </span>
-              {/* Foreground (active) half star */}
+              {/* Foreground (active) half star inherits the star's active fill. */}
               <span
                 className="absolute inset-0 overflow-hidden"
-                style={{
-                  width: '50%',
-                  color: activeColor || 'var(--ds-rate-active-color)',
-                }}
+                style={{ width: '50%' }}
               >
                 {renderCharacter(index)}
               </span>
@@ -437,6 +434,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         style={{
           direction,
           ...style,
+          ...({ '--ds-rate-star-inactive': inactiveColor || 'var(--ds-rate-inactive-color)' } as React.CSSProperties),
         }}
         role="radiogroup"
         aria-label="Rating"

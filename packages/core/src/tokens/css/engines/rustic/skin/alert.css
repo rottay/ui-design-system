@@ -1,0 +1,62 @@
+/**
+ * Rustic Alert skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-alert-shell rottay-alert-shell--rustic` +
+ * `data-part='root'` + `data-tone`. The `-shell` scope is deliberate: bare
+ * `.rottay-alert` is claimed by the ALERT PERSONALITY rule in
+ * runtime/personality.css (border-left accent + transition) which today does NOT
+ * apply to Rustic (its root carries no alert class), so anchoring on
+ * `.rottay-alert` would introduce that rule's paint. `-shell` is collision-free
+ * (grep-verified), mirroring `rottay-progress-shell`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element. Per-tone `border-color` therefore reaches
+ * (0,4,0) via the two shell classes + `[data-part='root']` + `[data-tone]`.
+ * The left accent's width/style are longhands (never the shorthand) so they do
+ * not reset border-left-COLOR out from under the per-tone rule; the color-free
+ * close-button `border: none` reset is exempt from the floor. Values transcribed
+ * verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root: radius + left accent width/style (was baseStyle). Longhands keep
+        border-left-color untouched so the per-tone rule owns it. ---- */
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'] {
+  border-radius: var(--ds-radius-md, 0.5rem);
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+/* ---- per-tone surface + accent color + text color (was TYPE_STYLES).
+        border-color at (0,4,0) to clear the tenant border-color floor. ---- */
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='info'] {
+  background-color: var(--ds-alert-info-bg, var(--ds-color-info-bg));
+  border-color: var(--ds-alert-info-border, var(--ds-color-info-border));
+  color: var(--ds-alert-info-color, var(--ds-color-info-700));
+}
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='success'] {
+  background-color: var(--ds-alert-success-bg, var(--ds-color-success-bg));
+  border-color: var(--ds-alert-success-border, var(--ds-color-success-border));
+  color: var(--ds-alert-success-color, var(--ds-color-success-700));
+}
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='warning'] {
+  background-color: var(--ds-alert-warning-bg, var(--ds-color-warning-bg));
+  border-color: var(--ds-alert-warning-border, var(--ds-color-warning-border));
+  color: var(--ds-alert-warning-color, var(--ds-color-warning-700));
+}
+.rottay-alert-shell.rottay-alert-shell--rustic[data-part='root'][data-tone='error'] {
+  background-color: var(--ds-alert-error-bg, var(--ds-color-error-bg));
+  border-color: var(--ds-alert-error-border, var(--ds-color-error-border));
+  color: var(--ds-alert-error-color, var(--ds-color-error-700));
+}
+
+/* ---- close button: transparent, borderless (was closeButtonStyle; opacity +
+        cursor stay inline). `border: none` is a color-free reset (exempt). ---- */
+.rottay-alert-shell.rottay-alert-shell--rustic [data-part='action'] {
+  background: none;
+  border: none;
+}

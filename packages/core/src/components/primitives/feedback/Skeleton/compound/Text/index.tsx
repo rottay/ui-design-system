@@ -157,15 +157,12 @@ export const SkeletonText = forwardRef<HTMLDivElement, SkeletonTextProps>(
     };
 
     /**
-     * Individual line styles with animation.
-     * Uses CSS gradient for shimmer effect.
+     * Individual line styles. The shimmer gradient background + 200% sizing and
+     * the corner radius paint from the unlayered skeleton-compounds skin; only
+     * the animation reference (which drives the slide) stays inline.
      */
     const lineStyle: React.CSSProperties = {
       height: '16px',
-      borderRadius: '4px',
-      background:
-        'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-      backgroundSize: '200% 100%',
       animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
     };
 

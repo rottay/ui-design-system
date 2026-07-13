@@ -1,0 +1,36 @@
+/**
+ * Progress compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Covers Progress.Line (`.rottay-progress-line`) and Progress.Circle
+ * (`.rottay-progress-circle`), each a standalone render tree with no engine
+ * switch and its own scope class + `data-part`s.
+ *
+ * Progress.Line's paint is entirely prop-driven: `strokeColor`/`trailColor` and
+ * the size-derived corner radius (`height / 2`) ride custom-property hatches
+ * (`--ds-progress-line-fill` / `-trail` / `-radius`) stamped on the root and
+ * consumed here. None is a border COLOR, so (0,2,0)+ suffices — the tenant
+ * `* { border-color }` floor does not apply. The bar `width: %` stays inline.
+ *
+ * Progress.Circle's only counted paint was two STATIC `transform`s (the arc
+ * colors are uncounted SVG `stroke` attributes and stay inline): the SVG's
+ * `rotate(-90deg)` and the centered label's `translate(-50%, -50%)`. Moving a
+ * transform inline->rule does not change its transform-origin, so both render
+ * identically. Values transcribed verbatim from the compound sources.
+ */
+
+/* Progress.Line -------------------------------------------------------------- */
+.rottay-progress-line [data-part='track'] {
+  background-color: var(--ds-progress-line-trail);
+  border-radius: var(--ds-progress-line-radius);
+}
+.rottay-progress-line [data-part='fill'] {
+  background-color: var(--ds-progress-line-fill);
+  border-radius: var(--ds-progress-line-radius);
+}
+
+/* Progress.Circle ------------------------------------------------------------ */
+.rottay-progress-circle > svg {
+  transform: rotate(-90deg);
+}
+.rottay-progress-circle [data-part='label'] {
+  transform: translate(-50%, -50%);
+}

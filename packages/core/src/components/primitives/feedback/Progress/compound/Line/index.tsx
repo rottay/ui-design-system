@@ -249,7 +249,17 @@ export const ProgressLine = forwardRef<HTMLDivElement, ProgressLineProps>(
         ref={ref}
         data-part="root"
         className={`rottay-progress-line ${className}`}
-        style={{ display: 'flex', alignItems: 'center', gap: '8px', ...style }}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '8px',
+          ...style,
+          ...({
+            '--ds-progress-line-fill': strokeColor,
+            '--ds-progress-line-trail': trailColor,
+            '--ds-progress-line-radius': `${height / 2}px`,
+          } as React.CSSProperties),
+        }}
       >
         {/* Track Container */}
         <div
@@ -257,8 +267,6 @@ export const ProgressLine = forwardRef<HTMLDivElement, ProgressLineProps>(
           style={{
             flex: 1,
             height,
-            borderRadius: height / 2,
-            backgroundColor: trailColor,
             overflow: 'hidden',
           }}
         >
@@ -268,8 +276,6 @@ export const ProgressLine = forwardRef<HTMLDivElement, ProgressLineProps>(
             style={{
               width: `${Math.min(100, Math.max(0, percent))}%`,
               height: '100%',
-              borderRadius: height / 2,
-              backgroundColor: strokeColor,
               transition: 'width 0.3s ease',
             }}
           />

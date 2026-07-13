@@ -83,9 +83,9 @@ import { SKELETON_DEFAULTS } from '../Skeleton.types';
  * - Uses flexbox for layout structure
  * - Dynamic border-radius for shape variants
  *
- * **CSS Keyframes:**
- * - `rottay-skeleton-pulse`: Opacity animation 1-0.4-1
- * - `rottay-skeleton-wave`: Background position animation
+ * **CSS Keyframes (defined in the unlayered rustic Skeleton skin):**
+ * - `ds-skeleton-pulse-rustic`: Opacity animation 1-0.4-1
+ * - `ds-skeleton-wave-rustic`: Background position animation
  *
  * **Accessibility Features:**
  * - Semantic div structure
@@ -151,17 +151,13 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
     if (!active || !animation) return {};
 
     if (animation === 'pulse') {
-      return { animation: 'rottay-skeleton-pulse 1.5s ease-in-out infinite' };
+      return { animation: 'ds-skeleton-pulse-rustic 1.5s ease-in-out infinite' };
     }
 
-    // Wave uses a wide gradient that slides across the element, creating
-    // a shimmer effect that better suggests content is loading
-    return {
-      background:
-        'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-      backgroundSize: '400% 100%',
-      animation: 'rottay-skeleton-wave 1.4s ease-in-out infinite',
-    };
+    // Wave: the sliding gradient background + its 400% sizing paint from the
+    // rustic Skeleton skin (keyed on data-animation='wave'); only the animation
+    // reference — which drives the background-position slide — stays inline.
+    return { animation: 'ds-skeleton-wave-rustic 1.4s ease-in-out infinite' };
   };
 
   // ---------------------------------------------------------------------------
@@ -169,25 +165,19 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   /**
-   * Base skeleton element styles.
-   * Includes background color and animation.
+   * Base skeleton element styles. The tenant background-color and (for wave) the
+   * gradient background paint from the unlayered rustic Skeleton skin; only the
+   * animation reference stays inline. Blocks carry `data-animation` so the skin
+   * can apply the wave gradient without a foreign engine's inline value.
    */
   const baseSkeletonStyle: React.CSSProperties = {
-    backgroundColor: 'var(--ds-skeleton-bg)',
     ...getAnimationStyle(),
   };
 
-  // ---------------------------------------------------------------------------
-  // CSS Keyframes
-  // ---------------------------------------------------------------------------
-
-  // Keyframes are injected as an inline <style> tag because the rustic
-  // engine cannot rely on external CSS files or preprocessors.
-  // Pulse fades opacity; wave slides a gradient across the element.
-  const keyframeStyles = `
-    @keyframes rottay-skeleton-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-    @keyframes rottay-skeleton-wave { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
-  `;
+  // Resolved animation kind, stamped on each block so the skin can key the wave
+  // gradient (mirrors getAnimationStyle's branch: pulse stays pulse, any other
+  // active animation is the wave).
+  const animationAttr = active && animation ? (animation === 'pulse' ? 'pulse' : 'wave') : undefined;
 
   // ---------------------------------------------------------------------------
   // Shape Variant Rendering
@@ -197,21 +187,19 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
   // differentiates circles from rectangles and rounded rectangles
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
-      <>
-        <style>{keyframeStyles}</style>
-        <div
-          data-part="root"
-          data-active={active}
-          className={`rottay-skeleton rottay-skeleton--rustic ${className}`}
-          style={{
-            ...baseSkeletonStyle,
-            width: typeof width === 'number' ? `${width}px` : width || '100%',
-            height: typeof height === 'number' ? `${height}px` : height || '20px',
-            borderRadius: variant === 'circular' ? '50%' : variant === 'rounded' ? '6px' : '0',
-            ...style,
-          }}
-        />
-      </>
+      <div
+        data-part="root"
+        data-active={active}
+        data-animation={animationAttr}
+        className={`rottay-skeleton rottay-skeleton--rustic ${className}`}
+        style={{
+          ...baseSkeletonStyle,
+          width: typeof width === 'number' ? `${width}px` : width || '100%',
+          height: typeof height === 'number' ? `${height}px` : height || '20px',
+          '--ds-skeleton-shape-radius': variant === 'circular' ? '50%' : variant === 'rounded' ? '6px' : '0',
+          ...style,
+        } as React.CSSProperties}
+      />
     );
   }
 
@@ -220,40 +208,38 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   return (
-    <>
-      <style>{keyframeStyles}</style>
-      <div
-        data-part="root"
-        data-active={active}
-        className={`rottay-skeleton-wrapper rottay-skeleton--rustic ${className}`}
-        style={{ display: 'flex', gap: '16px', ...style }}
-      >
-        {/* Avatar placeholder */}
-        {avatar && (
-          <div
-            data-part="avatar"
-            style={{
-              ...baseSkeletonStyle,
-              width: avatarSize,
-              height: avatarSize,
-              borderRadius: avatarShape === 'circle' ? '50%' : '6px',
-              flexShrink: 0,
-            }}
-          />
-        )}
+    <div
+      data-part="root"
+      data-active={active}
+      className={`rottay-skeleton-wrapper rottay-skeleton--rustic ${className}`}
+      style={{ display: 'flex', gap: '16px', ...style }}
+    >
+      {/* Avatar placeholder */}
+      {avatar && (
+        <div
+          data-part="avatar"
+          data-animation={animationAttr}
+          style={{
+            ...baseSkeletonStyle,
+            width: avatarSize,
+            height: avatarSize,
+            '--ds-skeleton-avatar-radius': avatarShape === 'circle' ? '50%' : '6px',
+            flexShrink: 0,
+          } as React.CSSProperties}
+        />
+      )}
 
-        {/* Content section with title and paragraph lines */}
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          {/* Title line */}
-          {title && (<div data-part="title" style={{ ...baseSkeletonStyle, height: '20px', width: '60%', borderRadius: '4px' }} />)}
+      {/* Content section with title and paragraph lines */}
+      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+        {/* Title line */}
+        {title && (<div data-part="title" data-animation={animationAttr} style={{ ...baseSkeletonStyle, height: '20px', width: '60%' }} />)}
 
-          {/* Paragraph lines with varying widths */}
-          {paragraph &&
-            Array.from({ length: typeof paragraph === 'object' ? paragraph.rows || rows! : rows! }).map((_, i) => (
-              <div key={i} data-part="line" style={{ ...baseSkeletonStyle, height: '16px', width: i === rows! - 1 ? '80%' : '100%', borderRadius: '4px' }} />
-            ))}
-        </div>
+        {/* Paragraph lines with varying widths */}
+        {paragraph &&
+          Array.from({ length: typeof paragraph === 'object' ? paragraph.rows || rows! : rows! }).map((_, i) => (
+            <div key={i} data-part="line" data-animation={animationAttr} style={{ ...baseSkeletonStyle, height: '16px', width: i === rows! - 1 ? '80%' : '100%' }} />
+          ))}
       </div>
-    </>
+    </div>
   );
 }

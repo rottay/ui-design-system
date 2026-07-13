@@ -182,11 +182,14 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
     // Get dimensions from size preset
     const dimensions = SIZE_MAP[size];
 
-    // Calculate border-radius based on shape
+    // Calculate border-radius based on shape. The round case is emitted as an
+    // explicit px string (not a bare number) because it rides the
+    // --ds-skeleton-button-radius custom-property hatch, which — unlike a React
+    // style value — is not auto-suffixed with px.
     const borderRadius = shape === 'circle'
       ? '50%'
       : shape === 'round'
-        ? dimensions.height / 2
+        ? `${dimensions.height / 2}px`
         : '4px';
 
     // -------------------------------------------------------------------------
@@ -197,17 +200,17 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
      * Button skeleton styles with animation.
      * Uses CSS gradient for shimmer effect.
      */
-    const buttonStyle: React.CSSProperties = {
+    // The shimmer gradient background + 200% sizing paint from the unlayered
+    // skeleton-compounds skin; the shape-conditional corner radius rides the
+    // --ds-skeleton-button-radius hatch; only the animation reference stays inline.
+    const buttonStyle = {
       // Circle shape uses height for both dimensions
       width: shape === 'circle' ? dimensions.height : dimensions.width,
       height: dimensions.height,
-      borderRadius,
-      background:
-        'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-      backgroundSize: '200% 100%',
+      '--ds-skeleton-button-radius': borderRadius,
       animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
       ...style,
-    };
+    } as React.CSSProperties;
 
     // -------------------------------------------------------------------------
     // Render

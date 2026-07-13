@@ -178,16 +178,16 @@ export const SkeletonAvatar = forwardRef<HTMLDivElement, SkeletonAvatarProps>(
      * Avatar skeleton styles with animation.
      * Uses CSS gradient for shimmer effect.
      */
-    const avatarStyle: React.CSSProperties = {
+    // The shimmer gradient background + 200% sizing paint from the unlayered
+    // skeleton-compounds skin; the shape-conditional corner radius rides the
+    // --ds-skeleton-avatar-radius hatch; only the animation reference stays inline.
+    const avatarStyle = {
       width: sizeValue,
       height: sizeValue,
-      borderRadius: shape === 'circle' ? '50%' : '4px',
-      background:
-        'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-      backgroundSize: '200% 100%',
+      '--ds-skeleton-avatar-radius': shape === 'circle' ? '50%' : '4px',
       animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
       ...style,
-    };
+    } as React.CSSProperties;
 
     // -------------------------------------------------------------------------
     // Render

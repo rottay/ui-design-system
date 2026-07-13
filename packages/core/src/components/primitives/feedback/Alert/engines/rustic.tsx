@@ -94,33 +94,6 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
  *
  * @internal
  */
-const TYPE_STYLES: Record<AlertType, React.CSSProperties> = {
-  /** Blue theme for informational messages */
-  info: {
-    backgroundColor: 'var(--ds-alert-info-bg, var(--ds-color-info-bg))',
-    borderColor: 'var(--ds-alert-info-border, var(--ds-color-info-border))',
-    color: 'var(--ds-alert-info-color, var(--ds-color-info-700))',
-  },
-  /** Green theme for success confirmations */
-  success: {
-    backgroundColor: 'var(--ds-alert-success-bg, var(--ds-color-success-bg))',
-    borderColor: 'var(--ds-alert-success-border, var(--ds-color-success-border))',
-    color: 'var(--ds-alert-success-color, var(--ds-color-success-700))',
-  },
-  /** Yellow/orange theme for warnings */
-  warning: {
-    backgroundColor: 'var(--ds-alert-warning-bg, var(--ds-color-warning-bg))',
-    borderColor: 'var(--ds-alert-warning-border, var(--ds-color-warning-border))',
-    color: 'var(--ds-alert-warning-color, var(--ds-color-warning-700))',
-  },
-  /** Red theme for errors and failures */
-  error: {
-    backgroundColor: 'var(--ds-alert-error-bg, var(--ds-color-error-bg))',
-    borderColor: 'var(--ds-alert-error-border, var(--ds-color-error-border))',
-    color: 'var(--ds-alert-error-color, var(--ds-color-error-700))',
-  },
-};
-
 /**
  * Default icons for each alert type.
  * Simple Unicode characters for zero-dependency rendering.
@@ -272,9 +245,6 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
     gap: isCompact ? '0.5rem' : '0.75rem',
     padding: isCompact ? '0.5rem 0.75rem' : '1rem',
     fontSize: isCompact ? '0.8125rem' : undefined,
-    borderRadius: 'var(--ds-radius-md, 0.5rem)',
-    borderLeft: '4px solid',
-    ...TYPE_STYLES[alertType],
     ...style,
   };
 
@@ -311,8 +281,6 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
    * Close button styles for minimal appearance.
    */
   const closeButtonStyle: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
     opacity: 0.7,
   };
@@ -339,7 +307,7 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
     {responsive && responsive.css && (
       <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
     )}
-    <div data-part="root" data-tone={alertType} className={className} style={baseStyle} role="alert" {...(responsive ? responsive.attrs : {})}>
+    <div data-part="root" data-tone={alertType} className={`rottay-alert-shell rottay-alert-shell--rustic ${className ?? ''}`} style={baseStyle} role="alert" {...(responsive ? responsive.attrs : {})}>
       {/* Icon Section */}
       {showIcon && (
         <span data-part="icon" style={iconStyle}>

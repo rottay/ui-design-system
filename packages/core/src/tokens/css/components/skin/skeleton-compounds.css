@@ -1,0 +1,108 @@
+/**
+ * Skeleton compounds skin -- engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Covers the eight Skeleton compounds (Avatar, Button, Card, FormSkeleton,
+ * ListItem, Paragraph, Table, Text), each a standalone render tree with no
+ * engine switch, its own scope class, and `data-part` anatomy.
+ *
+ * Every compound shares ONE shimmer: the sweeping gradient `background` + its
+ * `200% 100%` sizing (identical across all eight, so one selector list owns it);
+ * the `skeleton-loading` animation reference stays inline on each block (the
+ * global keyframe is reused as-is — that reference is a contract-exempt residual,
+ * not migrated). Corner radii are per-part static values except Avatar/Button,
+ * whose shape-conditional radius rides a hatch stamped inline
+ * (--ds-skeleton-avatar-radius / --ds-skeleton-button-radius).
+ *
+ * SPECIFICITY (P-48): background and border-radius are non-border paint, so
+ * (0,2,0)+ unlayered clears preflight. The Card + Table containers and the Table
+ * row dividers paint a border COLOR, so each of those reaches (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) * { border-color }`
+ * floor (0,3,1) -- bought by repeating the scope class + the data-part (Card/Table
+ * root) or by data-part + data-row on the row. Every border shorthand carries a
+ * real color fallback, so the shorthand is atomic (never dropped by an undefined
+ * token). Values transcribed verbatim from the compound sources.
+ */
+
+/* ---- shared shimmer: every shimmer-bearing block across the eight compounds ---- */
+.rottay-skeleton-avatar[data-part='root'],
+.rottay-skeleton-button[data-part='root'],
+.rottay-skeleton-card [data-part='image'],
+.rottay-skeleton-card [data-part='title'],
+.rottay-skeleton-card [data-part='line'],
+.rottay-skeleton-form [data-part='label'],
+.rottay-skeleton-form [data-part='input'],
+.rottay-skeleton-form [data-part='action'],
+.rottay-skeleton-list-item [data-part='avatar'],
+.rottay-skeleton-list-item [data-part='line'],
+.rottay-skeleton-paragraph [data-part='line'],
+.rottay-skeleton-text [data-part='line'],
+.rottay-skeleton-table [data-part='cell'] {
+  background: var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%));
+  background-size: 200% 100%;
+}
+
+/* ---- Avatar -------------------------------------------------------------- */
+.rottay-skeleton-avatar[data-part='root'] {
+  border-radius: var(--ds-skeleton-avatar-radius);
+}
+
+/* ---- Button -------------------------------------------------------------- */
+.rottay-skeleton-button[data-part='root'] {
+  border-radius: var(--ds-skeleton-button-radius);
+}
+
+/* ---- Card ---------------------------------------------------------------- */
+.rottay-skeleton-card.rottay-skeleton-card[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  border: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+.rottay-skeleton-card [data-part='title'],
+.rottay-skeleton-card [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- FormSkeleton -------------------------------------------------------- */
+.rottay-skeleton-form [data-part='label'] {
+  border-radius: 4px;
+}
+.rottay-skeleton-form [data-part='input'],
+.rottay-skeleton-form [data-part='action'] {
+  border-radius: 6px;
+}
+
+/* ---- ListItem ------------------------------------------------------------ */
+.rottay-skeleton-list-item [data-part='avatar'] {
+  border-radius: 50%;
+}
+.rottay-skeleton-list-item [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- Paragraph ----------------------------------------------------------- */
+.rottay-skeleton-paragraph [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- Text ---------------------------------------------------------------- */
+.rottay-skeleton-text [data-part='line'] {
+  border-radius: 4px;
+}
+
+/* ---- Table --------------------------------------------------------------- */
+.rottay-skeleton-table.rottay-skeleton-table[data-part='root'][data-part='root'] {
+  border-radius: 8px;
+  border: 1px solid var(--ds-skeleton-border, #e5e7eb);
+}
+.rottay-skeleton-table [data-part='cell'] {
+  border-radius: 4px;
+}
+/* header row: divider + distinct surface. Divider color reaches (0,4,0). */
+.rottay-skeleton-table [data-part='row'][data-part='row'][data-row='header'] {
+  border-bottom: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}
+.rottay-skeleton-table [data-part='row'][data-row='header'] {
+  background-color: var(--ds-skeleton-header-bg, var(--ds-color-bg-secondary));
+}
+/* body rows: divider between rows, not after the last (`row < rows - 1`). */
+.rottay-skeleton-table [data-part='row'][data-part='row'][data-row='body']:not(:last-child) {
+  border-bottom: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
+}

@@ -99,14 +99,13 @@ export interface SkeletonCardProps {
 // ============================================================================
 
 /**
- * Shared shimmer animation styles reused by all skeleton elements.
- * Uses a sweeping gradient that animates horizontally via `backgroundSize: 200%`.
+ * Shared shimmer animation reused by all skeleton elements. The sweeping
+ * gradient background + its 200% sizing paint from the unlayered
+ * skeleton-compounds skin; only the animation reference (which drives the
+ * background-position slide) stays inline.
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  background:
-    'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-  backgroundSize: '200% 100%',
   animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
 };
 
@@ -155,10 +154,10 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
      * Container styles with rounded corners and themed border.
      * Overflow hidden ensures the image placeholder respects border-radius.
      */
+    // Rounded corners + themed border paint from the skeleton-compounds skin
+    // (the border-color reaches the tenant (0,4,0) floor there).
     const containerStyle: React.CSSProperties = {
-      borderRadius: 'var(--ds-radius-lg, 12px)',
       overflow: 'hidden',
-      border: '1px solid var(--ds-skeleton-border, var(--ds-color-border))',
       ...style,
     };
 
@@ -196,7 +195,6 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
               ...shimmerStyle,
               height: '20px',
               width: '60%',
-              borderRadius: '4px',
             }}
           />
           {/* Body lines - last line is shorter for realistic appearance */}
@@ -208,7 +206,6 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
                 ...shimmerStyle,
                 height: '14px',
                 width: index === lines - 1 ? '80%' : '100%',
-                borderRadius: '4px',
               }}
             />
           ))}

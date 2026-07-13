@@ -80,10 +80,8 @@ export default function RusticSpinner(props: SpinnerProps): React.ReactElement {
   const spinnerStyle: React.CSSProperties = {
     width: spinnerSize,
     height: spinnerSize,
-    border: 'var(--ds-spinner-stroke-width, 2px) solid var(--ds-spinner-track-color, rgba(0, 0, 0, 0.1))',
-    borderTopColor: spinnerColor,
-    borderRadius: '50%',
-    animation: 'rustic-spin var(--ds-spinner-duration, 0.8s) linear infinite',
+    animation: 'ds-spinner-rustic-spin var(--ds-spinner-duration, 0.8s) linear infinite',
+    ...({ '--ds-spinner-ring-color': spinnerColor } as React.CSSProperties),
   };
 
   /** Container styles for centering and spacing */
@@ -105,16 +103,10 @@ export default function RusticSpinner(props: SpinnerProps): React.ReactElement {
       className={['rottay-spinner', 'rottay-spinner--rustic', className].filter(Boolean).join(' ')}
       style={containerStyle}
     >
-      {/* Keyframe animation definition */}
-      <style>{`
-        @keyframes rustic-spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
       {/* Animated spinner circle */}
       <div data-part="indicator" style={spinnerStyle} />
       {/* Optional label text */}
-      {label && <div data-part="label" style={{ fontSize: 'var(--ds-spinner-label-size, 0.875rem)', color: 'var(--ds-spinner-label-color, inherit)' }}>{label}</div>}
+      {label && <div data-part="label" style={{ fontSize: 'var(--ds-spinner-label-size, 0.875rem)' }}>{label}</div>}
     </div>
   );
 }

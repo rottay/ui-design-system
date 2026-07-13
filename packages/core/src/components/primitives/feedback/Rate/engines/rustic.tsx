@@ -79,19 +79,16 @@ import { RATE_DEFAULTS, RATE_SIZE_MAP } from '../Rate.types';
 // ============================================================================
 
 /**
- * Create inline styles for the Rustic Rate component.
- * All styles are computed at render time for maximum flexibility.
+ * Create inline layout styles for the Rustic Rate component.
+ * Star fill/active/inactive color is runtime (skin hatch), so it is not
+ * computed here — see the render for the --ds-rate-star-* hatches.
  *
  * @internal
  * @param size - The size preset to use
- * @param activeColor - Color for filled stars
- * @param inactiveColor - Color for empty stars
  * @returns Object containing all style definitions
  */
 const createStyles = (
-  size: keyof typeof RATE_SIZE_MAP,
-  activeColor?: string,
-  inactiveColor?: string
+  size: keyof typeof RATE_SIZE_MAP
 ) => {
   const sizeValue = RATE_SIZE_MAP[size];
 
@@ -103,7 +100,10 @@ const createStyles = (
       alignItems: 'center',
     } as React.CSSProperties,
 
-    /** Star element styles */
+    /** Star element styles. Border-radius, the runtime fill color, the hover
+     *  scale and the focus outline are painted by the unlayered rustic Rate
+     *  skin (keyed on data-part='star', :hover, [data-focused] and the
+     *  --ds-rate-star-* hatches); only layout/cursor/transition stay inline. */
     star: {
       /** Base star styles */
       base: {
@@ -117,15 +117,6 @@ const createStyles = (
         height: sizeValue,
         lineHeight: 1,
         userSelect: 'none' as const,
-        borderRadius: '2px',
-      },
-      /** Active (filled) star color */
-      active: {
-        color: activeColor || 'var(--ds-rate-active-color, #facc15)',
-      },
-      /** Inactive (empty) star color */
-      inactive: {
-        color: inactiveColor || 'var(--ds-rate-inactive-color, #d1d5db)',
       },
       /** Disabled state styles */
       disabled: {
@@ -135,15 +126,6 @@ const createStyles = (
       /** Read-only state styles */
       readOnly: {
         cursor: 'default',
-      },
-      /** Hover state transform */
-      hover: {
-        transform: 'scale(1.1)',
-      },
-      /** Focus indicator styles */
-      focus: {
-        outline: `2px solid ${activeColor || 'var(--ds-rate-active-color, #facc15)'}`,
-        outlineOffset: '2px',
       },
     },
 
@@ -260,7 +242,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
     // Styles
     // -------------------------------------------------------------------------
 
-    const styles = createStyles(size, activeColor, inactiveColor);
+    const styles = createStyles(size);
 
     // -------------------------------------------------------------------------
     // State Management
@@ -414,25 +396,27 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       const starIndex = index + 1;
       const isFilled = (displayValue || 0) >= starIndex;
       const isHalfFilled = allowHalf && (displayValue || 0) >= starIndex - 0.5 && (displayValue || 0) < starIndex;
-      const isHovered = hoverValue === starIndex || (allowHalf && hoverValue === starIndex - 0.5);
       const isFocused = focusIndex === starIndex;
 
-      // Style merging follows a specificity cascade: base -> color -> state.
-      // Later spreads override earlier ones, so hover/focus take priority.
-      const starStyle: React.CSSProperties = {
+      // Per-star fill color is runtime (follows displayValue, hover included);
+      // it rides the --ds-rate-star-fill hatch the unlayered skin consumes.
+      // Hover scale (:hover, gated on interactive), the focus outline
+      // ([data-focused]) and border-radius are skin rules, not inline paint.
+      const starStyle = {
         ...styles.star.base,
-        ...(isFilled || isHalfFilled ? styles.star.active : styles.star.inactive),
         ...(disabled ? styles.star.disabled : {}),
         ...(readOnly ? styles.star.readOnly : {}),
-        ...(isHovered && isInteractive ? styles.star.hover : {}),
-        ...(isFocused ? styles.star.focus : {}),
-      };
+        '--ds-rate-star-fill': isFilled || isHalfFilled
+          ? (activeColor || 'var(--ds-rate-active-color, #facc15)')
+          : (inactiveColor || 'var(--ds-rate-inactive-color, #d1d5db)'),
+      } as React.CSSProperties;
 
       return (
         <span
           key={index}
           data-part="star"
           data-state={isFilled && !isHalfFilled ? 'full' : isHalfFilled ? 'half' : 'empty'}
+          data-focused={isFocused ? 'true' : undefined}
           style={starStyle}
           title={tooltips?.[index]}
           onMouseEnter={() => handleMouseEnter(starIndex)}
@@ -466,12 +450,13 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           {/* Render star with half support */}
           {isHalfFilled ? (
             <span style={{ position: 'relative', display: 'inline-flex', width: '100%', height: '100%' }}>
-              {/* Background (inactive) star */}
-              <span style={{ position: 'absolute', inset: 0, ...styles.star.inactive }}>
+              {/* Background (inactive) star: constant inactive color via the
+                  track marker; --ds-rate-star-inactive is stamped on the root. */}
+              <span className="rottay-rate-star-track" style={{ position: 'absolute', inset: 0 }}>
                 {renderCharacter(index)}
               </span>
-              {/* Foreground (active) half star */}
-              <span style={{ ...styles.halfStar, ...styles.star.active }}>
+              {/* Foreground (active) half star inherits the star's active fill. */}
+              <span style={styles.halfStar}>
                 {renderCharacter(index)}
               </span>
             </span>
@@ -500,7 +485,18 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
         }}
         data-part="root"
         className={`rottay-rate rottay-rate--${size} rottay-rate--rustic ${disabled ? 'rottay-rate--disabled' : ''} ${readOnly ? 'rottay-rate--readonly' : ''} ${className}`}
-        style={{ ...styles.container, direction, ...style }}
+        style={{
+          ...styles.container,
+          direction,
+          ...style,
+          // Constant active/inactive colors ride the root: the focus outline
+          // reads --ds-rate-star-active, the half background reads
+          // --ds-rate-star-inactive via the track marker.
+          ...({
+            '--ds-rate-star-active': activeColor || 'var(--ds-rate-active-color, #facc15)',
+            '--ds-rate-star-inactive': inactiveColor || 'var(--ds-rate-inactive-color, #d1d5db)',
+          } as React.CSSProperties),
+        }}
         role="radiogroup"
         aria-label="Rating"
         aria-disabled={disabled}

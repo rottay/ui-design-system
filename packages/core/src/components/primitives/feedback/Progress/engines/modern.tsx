@@ -91,19 +91,6 @@ const STATUS_CLASSES: Record<ProgressStatus, string> = {
   active: 'progress-primary',
 };
 
-/**
- * Maps progress status to DS color token references.
- * Inline styles ensure tenant-aware theming takes precedence
- * over DaisyUI's built-in color classes.
- * @internal
- */
-const STATUS_TOKEN_COLORS: Record<ProgressStatus, string> = {
-  normal: 'var(--ds-color-primary)',
-  success: 'var(--ds-color-success)',
-  error: 'var(--ds-color-error)',
-  active: 'var(--ds-color-primary)',
-};
-
 // ============================================================================
 // Component
 // ============================================================================
@@ -169,8 +156,8 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
     const circleStyle: React.CSSProperties = {
       '--value': percent,
       '--size': 'var(--ds-progress-circle-size, 6rem)',
-      color: strokeColor || STATUS_TOKEN_COLORS[status!],
       ...style,
+      ...(strokeColor ? { '--ds-progress-arc-color': strokeColor } : {}),
     } as React.CSSProperties;
 
     // role="progressbar" provides semantic accessibility information.
@@ -195,15 +182,12 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   const progressStyle: React.CSSProperties = {
-    accentColor: strokeColor || STATUS_TOKEN_COLORS[status!],
-    // Align with modern/theme.css bridge (lines 728-731) which reads
-    // --ds-progress-bg, --ds-progress-radius, --ds-progress-height.
-    // The inline style reinforces the same tokens for cases where the
-    // CSS bridge doesn't reach (e.g., missing [data-tenant] attribute).
-    background: 'var(--ds-progress-bg)',
-    borderRadius: 'var(--ds-progress-radius)',
+    // The line's height rides --ds-progress-height, aligning with the
+    // modern/theme.css bridge (lines 728-731); its accent/background/radius
+    // paint lives in the unlayered skin keyed on data-status.
     height: 'var(--ds-progress-height)',
     ...style,
+    ...(strokeColor ? { '--ds-progress-arc-color': strokeColor } : {}),
   } as React.CSSProperties;
 
   return (
@@ -222,7 +206,7 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
 
       {/* Percentage info display */}
       {showInfo && (
-        <div data-part="label" className="text-sm text-center mt-1" style={{ color: 'var(--ds-color-text-secondary)', fontSize: 'var(--ds-font-size-sm, 14px)' }}>{percent}%</div>
+        <div data-part="label" className="text-sm text-center mt-1" style={{ fontSize: 'var(--ds-font-size-sm, 14px)' }}>{percent}%</div>
       )}
     </div>
   );

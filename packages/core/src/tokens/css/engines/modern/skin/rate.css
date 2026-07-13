@@ -1,0 +1,28 @@
+/**
+ * Modern Rate skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight/DaisyUI; unlayered outranks them and still yields
+ * to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-rate rottay-rate--modern` + `data-part='root'`; each
+ * star is a `<label data-part='star' data-state>`.
+ *
+ * Per-star fill color is runtime (it follows `displayValue`, hover included), so
+ * it rides the `--ds-rate-star-fill` custom-property hatch stamped on each star.
+ * The half-star foreground inherits that fill (active for a half star); the
+ * half-star background is the constant inactive color, which rides
+ * `--ds-rate-star-inactive` stamped on the root and is applied via the
+ * `rottay-rate-star-track` marker. `color` is non-border, so (0,3,0)+ suffices.
+ * The hover scale (`hover:scale-110`) and focus ring (`ring-2`, `--tw-ring-color`
+ * hatch) stay as Tailwind classes/hatch inline — they were never counted paint.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-rate.rottay-rate--modern [data-part='star'] {
+  color: var(--ds-rate-star-fill);
+}
+
+.rottay-rate.rottay-rate--modern [data-part='star'] .rottay-rate-star-track {
+  color: var(--ds-rate-star-inactive);
+}

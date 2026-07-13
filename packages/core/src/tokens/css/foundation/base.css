@@ -131,6 +131,19 @@
 @import '../engines/rustic/skin/tree-select.css';
 @import '../engines/modern/skin/cascader.css';
 @import '../engines/rustic/skin/cascader.css';
+/* Status family (WO-SKIN-03 checkpoint S). */
+@import '../engines/modern/skin/alert.css';
+@import '../engines/rustic/skin/alert.css';
+@import '../engines/modern/skin/progress.css';
+@import '../engines/rustic/skin/progress.css';
+@import '../components/skin/progress-compounds.css';
+@import '../engines/modern/skin/spinner.css';
+@import '../engines/rustic/skin/spinner.css';
+@import '../engines/modern/skin/rate.css';
+@import '../engines/rustic/skin/rate.css';
+@import '../engines/modern/skin/skeleton.css';
+@import '../engines/rustic/skin/skeleton.css';
+@import '../components/skin/skeleton-compounds.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

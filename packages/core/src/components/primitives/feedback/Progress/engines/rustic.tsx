@@ -63,29 +63,12 @@
  */
 
 import React from 'react';
-import type { ProgressProps, ProgressStatus } from '../Progress.types';
+import type { ProgressProps } from '../Progress.types';
 import { PROGRESS_DEFAULTS } from '../Progress.types';
 
 // ============================================================================
 // Constants
 // ============================================================================
-
-/**
- * Status to color mappings.
- * Maps Rottay status values to CSS variable references for theming.
- *
- * @internal
- */
-const STATUS_COLORS: Record<ProgressStatus, string> = {
-  /** Normal state - primary blue */
-  normal: 'var(--ds-progress-normal-color, var(--ds-color-primary-500, var(--ds-color-primary)))',
-  /** Success state - green */
-  success: 'var(--ds-progress-success-color, var(--ds-color-success-500, var(--ds-color-success)))',
-  /** Error state - red */
-  error: 'var(--ds-progress-error-color, var(--ds-color-error-500, var(--ds-color-error)))',
-  /** Active state - primary blue (with animation) */
-  active: 'var(--ds-progress-active-color, var(--ds-color-primary-500, var(--ds-color-primary)))',
-};
 
 // ============================================================================
 // Component
@@ -155,11 +138,6 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   // Derived Values
   // ---------------------------------------------------------------------------
 
-  // Custom strokeColor takes precedence over status-derived colors,
-  // allowing consumers to use brand colors or gradients that don't
-  // fit the predefined status palette.
-  const color = strokeColor || STATUS_COLORS[status!];
-
   // Defensive clamping prevents visual overflow (bar exceeding track)
   // and negative values that would cause SVG rendering artifacts.
   const clampedPercent = Math.min(100, Math.max(0, percent));
@@ -188,7 +166,8 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
       width: size,
       height: size,
       ...style,
-    };
+      ...(strokeColor ? { '--ds-progress-arc-color': strokeColor } : {}),
+    } as React.CSSProperties;
 
     return (
       <div
@@ -220,7 +199,6 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
             cy={center}
             r={radius}
             fill="none"
-            stroke={color}
             strokeWidth={strokeWidth}
             strokeDasharray={circumference}
             strokeDashoffset={offset}
@@ -238,7 +216,6 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
               position: 'absolute',
               fontSize: '1.5rem',
               fontWeight: 600,
-              color: color,
             }}
           >
             {clampedPercent}%
@@ -252,18 +229,22 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   // Line Type Rendering
   // ---------------------------------------------------------------------------
 
-  // Container styles for line type
+  // Container styles for line type. The strokeWidth-derived corner radius rides
+  // a custom-property hatch consumed by the skin's track/bar rules; the optional
+  // strokeColor override rides --ds-progress-arc-color (status color otherwise).
   const containerStyle: React.CSSProperties = {
     width: '100%',
     ...style,
+    ...({
+      '--ds-progress-bar-radius': `${strokeWidth! / 2}px`,
+      ...(strokeColor ? { '--ds-progress-arc-color': strokeColor } : {}),
+    } as React.CSSProperties),
   };
 
   // Track (background) styles
   const trackStyle: React.CSSProperties = {
     width: '100%',
     height: strokeWidth,
-    backgroundColor: 'var(--ds-progress-track-color, var(--ds-color-bg-secondary, var(--ds-color-neutral-100)))',
-    borderRadius: strokeWidth! / 2,
     overflow: 'hidden',
     position: 'relative',
   };
@@ -275,23 +256,7 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   const barStyle: React.CSSProperties = {
     height: '100%',
     width: `${clampedPercent}%`,
-    backgroundColor: color,
-    borderRadius: strokeWidth! / 2,
     transition: 'width 0.3s ease',
-    ...(status === 'active' ? {
-      backgroundImage: `linear-gradient(
-        45deg,
-        var(--ds-color-alpha-white-20) 25%,
-        transparent 25%,
-        transparent 50%,
-        var(--ds-color-alpha-white-20) 50%,
-        var(--ds-color-alpha-white-20) 75%,
-        transparent 75%,
-        transparent
-      )`,
-      backgroundSize: '1rem 1rem',
-      animation: 'rustic-progress-active 1s linear infinite',
-    } : {}),
   };
 
   return (
@@ -301,19 +266,6 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
       className={['rottay-progress-shell', 'rottay-progress-shell--rustic', className].filter(Boolean).join(' ')}
       style={containerStyle}
     >
-      {/* Inline <style> tag for active animation keyframes. Unlike the
-          Notification/Message engines which inject styles once via document.head,
-          Progress uses a co-located <style> tag because the animation is only
-          needed when status="active", avoiding unnecessary global CSS. */}
-      {status === 'active' && (
-        <style>{`
-          @keyframes rustic-progress-active {
-            0% { background-position: 0 0; }
-            100% { background-position: 1rem 0; }
-          }
-        `}</style>
-      )}
-
       {/* Track with Progress Bar */}
       <div data-part="track" style={trackStyle}>
         <div data-part="fill" style={barStyle} />

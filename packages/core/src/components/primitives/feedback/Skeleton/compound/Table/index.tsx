@@ -99,14 +99,13 @@ export interface SkeletonTableProps {
 // ============================================================================
 
 /**
- * Shared shimmer animation styles reused by all skeleton elements.
- * Uses a sweeping gradient that animates horizontally via `backgroundSize: 200%`.
+ * Shared shimmer animation reused by all skeleton cells. The sweeping gradient
+ * background + its 200% sizing paint from the unlayered skeleton-compounds skin;
+ * only the animation reference (which drives the background-position slide) stays
+ * inline.
  * @internal
  */
 const shimmerStyle: React.CSSProperties = {
-  background:
-    'var(--ds-skeleton-wave-gradient, linear-gradient(90deg, var(--ds-skeleton-bg) 25%, var(--ds-skeleton-highlight) 50%, var(--ds-skeleton-bg) 75%))',
-  backgroundSize: '200% 100%',
   animation: 'skeleton-loading var(--ds-skeleton-animation-duration, 1.5s) infinite',
 };
 
@@ -156,11 +155,11 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
     /**
      * Outer container with rounded corners and themed border.
      */
+    // Rounded corners + themed border paint from the skeleton-compounds skin
+    // (the border-color reaches the tenant (0,4,0) floor there).
     const containerStyle: React.CSSProperties = {
       width: '100%',
-      borderRadius: '8px',
       overflow: 'hidden',
-      border: '1px solid var(--ds-skeleton-border, #e5e7eb)',
       ...style,
     };
 
@@ -184,11 +183,7 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
         <div
           data-part="row"
           data-row="header"
-          style={{
-            ...rowStyle,
-            borderBottom: '1px solid var(--ds-skeleton-border, var(--ds-color-border))',
-            backgroundColor: 'var(--ds-skeleton-header-bg, var(--ds-color-bg-secondary))',
-          }}
+          style={rowStyle}
         >
           {Array.from({ length: columns }).map((_, col) => (
             <div
@@ -198,7 +193,6 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
                 ...shimmerStyle,
                 height: '14px',
                 width: '70%',
-                borderRadius: '4px',
               }}
             />
           ))}
@@ -210,14 +204,7 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
             key={`row-${row}`}
             data-part="row"
             data-row="body"
-            style={{
-              ...rowStyle,
-              // Divider between rows, but not after the last row
-              borderBottom:
-                row < rows - 1
-                  ? '1px solid var(--ds-skeleton-border, var(--ds-color-border))'
-                  : undefined,
-            }}
+            style={rowStyle}
           >
             {Array.from({ length: columns }).map((_, col) => (
               <div
@@ -228,7 +215,6 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
                   height: '12px',
                   // First column narrower to mimic ID/key columns
                   width: col === 0 ? '50%' : '80%',
-                  borderRadius: '4px',
                 }}
               />
             ))}

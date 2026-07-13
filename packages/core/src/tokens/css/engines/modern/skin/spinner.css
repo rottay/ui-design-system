@@ -1,0 +1,39 @@
+/**
+ * Modern Spinner skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-spinner rottay-spinner--modern` + `data-part='root'`;
+ * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.
+ *
+ * SPECIFICITY (P-48): the ring paints a border COLOR (track + colored top), so
+ * its rule reaches (0,4,0) via the two root classes + the repeated
+ * `[data-part='indicator']`, clearing the tenant `* { border-color }` floor
+ * (0,3,1). The label's `color` is non-border and wins unlayered at (0,3,0).
+ *
+ * RUNTIME: the ring WIDTH varies by `size` (2px/3px) so it rides the
+ * `--ds-spinner-ring-width` custom-property hatch stamped inline; the shorthand
+ * keeps width+style+color atomic (an undefined var would drop the whole
+ * declaration). Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-spinner-modern-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rottay-spinner.rottay-spinner--modern [data-part='indicator'][data-part='indicator'] {
+  border: var(--ds-spinner-ring-width) solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+.rottay-spinner.rottay-spinner--modern [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}

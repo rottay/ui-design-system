@@ -76,23 +76,6 @@ import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } fr
 // ============================================================================
 
 /**
- * DS token inline styles for alert types.
- * Each type maps to a tinted background and matching text color.
- *
- * @internal
- */
-const TYPE_STYLES: Record<AlertType, React.CSSProperties> = {
-  /** Blue tint for informational messages */
-  info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
-  /** Green tint for success confirmations */
-  success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
-  /** Yellow/orange tint for warnings */
-  warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
-  /** Red tint for error messages */
-  error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
-};
-
-/**
  * Default icons for each alert type.
  * Used when `showIcon` is true and no custom `icon` is provided.
  * Using inline SVGs for consistent rendering across themes.
@@ -270,8 +253,8 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
     <div
       data-part="root"
       data-tone={alertType}
-      className={`alert ${isCompact ? 'p-2 text-sm' : ''} ${className}`}
-      style={{ ...TYPE_STYLES[alertType], ...style }}
+      className={`rottay-alert-shell rottay-alert-shell--modern alert ${isCompact ? 'p-2 text-sm' : ''} ${className}`}
+      style={style}
       {...(responsive ? responsive.attrs : {})}
     >
       {/* Icon Section */}
@@ -285,7 +268,7 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
 
       {/* Close Button */}
       {closable && (
-        <button data-part="action" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={handleClose} aria-label="Close">
+        <button data-part="action" style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={handleClose} aria-label="Close">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current w-4 h-4">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
           </svg>

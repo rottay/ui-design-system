@@ -1,0 +1,36 @@
+/**
+ * Rustic Spinner skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-spinner rottay-spinner--rustic` + `data-part='root'`;
+ * the ring is `[data-part='indicator']`, the caption `[data-part='label']`.
+ *
+ * SPECIFICITY (P-48): the ring paints a border COLOR (track + colored top), so
+ * its rule reaches (0,4,0) via the two root classes + the repeated
+ * `[data-part='indicator']`, clearing the tenant `* { border-color }` floor
+ * (0,3,1). The label's `color` is non-border and wins unlayered at (0,3,0).
+ *
+ * RUNTIME: the colored top can be an author-supplied `color` prop, so it rides
+ * the `--ds-spinner-ring-color` custom-property hatch stamped inline. Values
+ * transcribed verbatim from `engines/rustic.tsx` (the `inherit` label fallback
+ * resolves against the same DOM parent inline or in a rule — identical).
+ */
+
+@keyframes ds-spinner-rustic-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.rottay-spinner.rottay-spinner--rustic [data-part='indicator'][data-part='indicator'] {
+  border: var(--ds-spinner-stroke-width, 2px) solid var(--ds-spinner-track-color, rgba(0, 0, 0, 0.1));
+  border-top-color: var(--ds-spinner-ring-color);
+  border-radius: 50%;
+}
+
+.rottay-spinner.rottay-spinner--rustic [data-part='label'] {
+  color: var(--ds-spinner-label-color, inherit);
+}

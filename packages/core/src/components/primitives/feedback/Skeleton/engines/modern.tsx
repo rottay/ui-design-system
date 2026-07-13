@@ -155,9 +155,11 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // Shape Variant Rendering
   // ---------------------------------------------------------------------------
 
-  // Shape variants render a single div with the DaisyUI skeleton class
-  // and a dynamic border-radius to achieve the desired geometry.
-  // DS tokens for background and radius ensure tenant-aware theming.
+  // Shape variants render a single div with the DaisyUI skeleton class. The
+  // tenant background (a `background` SHORTHAND that intentionally overrides
+  // DaisyUI's shimmer gradient) and the variant-driven corner radius paint from
+  // the unlayered modern Skeleton skin; the radius rides the
+  // --ds-skeleton-shape-radius hatch because it is variant-conditional.
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
       <div
@@ -165,15 +167,14 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
         className={`skeleton rottay-skeleton--modern ${className}`}
         style={{
           ...getSkeletonStyle(),
-          background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))',
-          borderRadius: variant === 'circular'
+          '--ds-skeleton-shape-radius': variant === 'circular'
             ? '50%'
             : variant === 'rounded'
               ? 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))'
               : '0',
           animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
           animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)',
-        }}
+        } as React.CSSProperties}
       />
     );
   }
@@ -192,19 +193,18 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
           style={{
             width: avatarSize,
             height: avatarSize,
-            background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))',
-            borderRadius: avatarShape === 'circle' ? '50%' : 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))',
+            '--ds-skeleton-avatar-radius': avatarShape === 'circle' ? '50%' : 'var(--ds-skeleton-radius, var(--ds-radius-md, 0.5rem))',
             flexShrink: 0,
             animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
             animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)',
-          }}
+          } as React.CSSProperties}
         />
       )}
 
       {/* Content section with title and paragraph lines */}
       <div className="flex-1 space-y-2">
         {/* Title line is 60% width to visually distinguish it from body text */}
-        {title && <div data-part="title" className="skeleton" style={{ height: '1.25rem', width: '60%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }} />}
+        {title && <div data-part="title" className="skeleton" style={{ height: '1.25rem', width: '60%', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }} />}
 
         {/* Last paragraph line is 80% width to simulate a natural text ending,
             preventing the skeleton from looking like a uniform block */}
@@ -216,7 +216,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
               key={i}
               data-part="line"
               className="skeleton"
-              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }}
+              style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }}
             />
           ))}
       </div>

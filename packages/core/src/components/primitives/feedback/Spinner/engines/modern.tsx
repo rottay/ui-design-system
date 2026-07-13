@@ -42,15 +42,12 @@ import { SPINNER_DEFAULTS } from '../Spinner.types';
  * Maps Rottay size variants to DS token dimensions and border widths.
  * Dimension uses --ds-spinner-*-size tokens with pixel fallbacks.
  */
-const SIZE_MAP: Record<string, { dimension: string; borderWidth: number }> = {
-  sm: { dimension: 'var(--ds-spinner-sm-size, 20px)', borderWidth: 2 },
-  md: { dimension: 'var(--ds-spinner-md-size, 24px)', borderWidth: 2 },
-  lg: { dimension: 'var(--ds-spinner-lg-size, 32px)', borderWidth: 3 },
-  xl: { dimension: 'var(--ds-spinner-xl-size, 40px)', borderWidth: 3 },
+const SIZE_MAP: Record<string, { dimension: string; ringWidth: number }> = {
+  sm: { dimension: 'var(--ds-spinner-sm-size, 20px)', ringWidth: 2 },
+  md: { dimension: 'var(--ds-spinner-md-size, 24px)', ringWidth: 2 },
+  lg: { dimension: 'var(--ds-spinner-lg-size, 32px)', ringWidth: 3 },
+  xl: { dimension: 'var(--ds-spinner-xl-size, 40px)', ringWidth: 3 },
 };
-
-/** Keyframes injected once per render tree via <style> tag */
-const SPIN_KEYFRAMES = '@keyframes rottay-ds-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
 
 // ============================================================================
 // Modern Engine Implementation
@@ -97,24 +94,20 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
         ...style,
       }}
     >
-      {/* Inject spin keyframes -- safe static string, no user input */}
-      <style dangerouslySetInnerHTML={{ __html: SPIN_KEYFRAMES }} />
       <span
         data-part="indicator"
         style={{
           display: 'inline-block',
           width: sizeConfig.dimension,
           height: sizeConfig.dimension,
-          border: `${sizeConfig.borderWidth}px solid var(--ds-color-border)`,
-          borderTopColor: 'var(--ds-color-primary)',
-          borderRadius: '50%',
-          animation: `rottay-ds-spin var(--ds-motion-slow) linear infinite`,
-        }}
+          '--ds-spinner-ring-width': `${sizeConfig.ringWidth}px`,
+          animation: `ds-spinner-modern-spin var(--ds-motion-slow) linear infinite`,
+        } as React.CSSProperties}
         role="status"
         aria-label={label || 'Loading'}
       />
       {label && (
-        <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-secondary)' }}>{label}</span>
+        <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)' }}>{label}</span>
       )}
     </div>
   );

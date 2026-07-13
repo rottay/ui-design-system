@@ -1,0 +1,103 @@
+/**
+ * Rustic Progress skin (WO-SKIN-03 checkpoint S).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks it and still yields to the
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-progress-shell rottay-progress-shell--rustic` +
+ * `data-part='root'` + `data-status`. The circle renders SVG `[data-part='track']`
+ * + `[data-part='fill']` `<circle>`s and a `[data-part='label']`; the line renders
+ * a `[data-part='track']` div wrapping a `[data-part='fill']` div, plus an
+ * optional `[data-part='label']`.
+ *
+ * The status color drives THREE consumers off one value (`strokeColor ||
+ * STATUS_COLORS[status]`): the circle arc `stroke`, the circle label `color`, and
+ * the line bar `background-color`. The `strokeColor` prop rides the
+ * `--ds-progress-arc-color` hatch (stamped inline only when set); each
+ * `[data-status]` rule falls back to the STATUS_COLORS string transcribed
+ * VERBATIM (the undefined `--ds-progress-*-color` tokens keep the tenant hook and
+ * resolve through their fallbacks today). The fill rule sets BOTH `stroke` and
+ * `background-color`: the SVG circle paints `stroke` and ignores background; the
+ * line div paints `background-color` and ignores stroke — one rule serves both.
+ *
+ * Runtime `strokeDashoffset`/`strokeDasharray` (geometry) and `width: %` stay
+ * inline as SVG attributes / layout. Corner radius is strokeWidth-derived so it
+ * rides `--ds-progress-bar-radius`; the active barbershop stripe is static and
+ * lives in the `[data-status='active']` rule with its renamed keyframe. Values
+ * transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-progress-rustic-active {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1rem 0;
+  }
+}
+
+/* ---- status color: circle arc stroke, circle label, line bar background ---- */
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='normal'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-normal-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-normal-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='success'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-success-color, var(--ds-color-success-500, var(--ds-color-success))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-success-color, var(--ds-color-success-500, var(--ds-color-success))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='error'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-error-color, var(--ds-color-error-500, var(--ds-color-error))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-error-color, var(--ds-color-error-500, var(--ds-color-error))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='active'] [data-part='fill'] {
+  stroke: var(--ds-progress-arc-color, var(--ds-progress-active-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+  background-color: var(--ds-progress-arc-color, var(--ds-progress-active-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+
+/* Only the CIRCLE label is status-colored inline; it is the sole `[data-part=
+   'label']` preceded by the SVG sibling. The line label carries no color (keeps
+   its inherited default), so `svg ~` must isolate the circle label here. */
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='normal'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-normal-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='success'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-success-color, var(--ds-color-success-500, var(--ds-color-success))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='error'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-error-color, var(--ds-color-error-500, var(--ds-color-error))));
+}
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='active'] svg ~ [data-part='label'] {
+  color: var(--ds-progress-arc-color, var(--ds-progress-active-color, var(--ds-color-primary-500, var(--ds-color-primary))));
+}
+
+/* ---- line track background (status-independent) + strokeWidth-derived radius.
+        The bar radius is nested under `[data-part='track']` so it lands on the
+        LINE bar only (the circle's SVG fill is a track sibling, not a child, and
+        must not take these). Setting background-color/border-radius on the SVG
+        circle track is inert (SVG paints via stroke), so the track rule is safe. ---- */
+.rottay-progress-shell.rottay-progress-shell--rustic [data-part='track'] {
+  background-color: var(--ds-progress-track-color, var(--ds-color-bg-secondary, var(--ds-color-neutral-100)));
+  border-radius: var(--ds-progress-bar-radius);
+}
+.rottay-progress-shell.rottay-progress-shell--rustic [data-part='track'] [data-part='fill'] {
+  border-radius: var(--ds-progress-bar-radius);
+}
+
+/* ---- active barbershop stripe (was the status==='active' conditional spread),
+        line-only via the nested `[data-part='track']` so the circle fill (which
+        never carried the stripe) gains no inert animation. ---- */
+.rottay-progress-shell.rottay-progress-shell--rustic[data-status='active'] [data-part='track'] [data-part='fill'] {
+  background-image: linear-gradient(
+    45deg,
+    var(--ds-color-alpha-white-20) 25%,
+    transparent 25%,
+    transparent 50%,
+    var(--ds-color-alpha-white-20) 50%,
+    var(--ds-color-alpha-white-20) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: ds-progress-rustic-active 1s linear infinite;
+}
