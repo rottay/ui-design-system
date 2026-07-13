@@ -1550,7 +1550,7 @@
    "lane": "skin-adoption",
    "order": 3,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-SKIN-01",
     "WO-SKIN-02"
@@ -1558,9 +1558,22 @@
    "mustLandWith": [],
    "programs": [],
    "notes": "Owner-approved 2026-07-11 (stage-1 byte-exact plumbing; stage-2 visual improvement is a later program). Normative lane doc: roadmap/skin-adoption.md; authoring law: docs-engineering/engineering/design-system/runtime/skins/README.md. File lists are hypotheses until WO-SKIN-01 census corrects them.",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-07-13 11:17",
+     "by": "ds-agent",
+     "note": "ckpt S pre-step landed (49857694): 5 status-family components stamped, torture ?statusfb=1, 6 baselines recorded stable, contract test 29/29; Progress scope class renamed rottay-progress-shell (oauth-transition collision). Next: ckpt S migration + ckpt O pre-step in parallel."
+    },
+    {
+     "at": "2026-07-13 17:32",
+     "by": "ds-agent",
+     "note": "ckpt S migration CERTIFIED + committed (88de787e): 20 status files at 0 inline paint, 12 skins wired into base.css + styles.css, visual suite 285 pass / 1 red (P-69 hairline, ledger-known pre-existing). ckpt O pre-step committed (df39c67a): 6 overlay components stamped, 14 baselines recorded stable (toast progress clock-pinned), contract test 22/22 incl portal-posture pins. Gate-caught law: states.spec card probes anchored to Card scope class — a shared data-part=root selector silently widened when the Toast stamp landed. Next: ckpt O migration (personality.css suppression)."
+    }
+   ],
    "claimedBy": "ds-agent",
-   "claimedAt": "2026-07-13"
+   "claimedAt": "2026-07-13",
+   "doneAt": "2026-07-13",
+   "evidence": "The feedback family paints from unlayered skins. 11 components (Skeleton+8 compounds, Alert, Progress+2, Spinner, Rate, Modal, Drawer, Toast+2, Message, Notification, Result), 41 files at fleet.inlinePaint 0, 20 new skins wired into base.css + entrypoints/styles.css. Two pipelined checkpoints, each pre-step+migration committed pairwise: S 49857694/88de787e, O df39c67a/6eb977b8. CERTIFICATION: full visual suite 299 pass / 1 red (P-69 hairline, ledger-known); the 14 overlay + 6 status baselines recorded on production builds and stability-re-run, byte-exact after migration; full core suite 15 fail = THE LEDGER, worktree-proven test-for-test at 52d1804d (12 files, 15 tests, identical); feedback unit suite 447 green; engine-token-audit --check green; both typechecks clean; lint:artifacts green. THE SUPPRESSION PREMISE WAS INVERTED AND THAT IS WHY THIS IS SAFE: personality.css is imported layer(rottay-personality), and an unlayered declaration outranks any layer regardless of specificity, so inline-suppression becomes skin-suppression by construction. The real hazard was the inverse (killing a personality rule that legitimately wins today): Drawer rustic declares NO backdrop-filter so personality keeps painting its blur, and Toast/Message/Notification modern borders stay SHORTHAND so DaisyUI's .alert accent bar stays suppressed. Both are documented as hard runtime constraints. NEW GATE: skins.parseErrors exact-0 (postcss parse of every skin), drilled by injecting the exact defect that voided a whole skin file this batch. GATE-CAUGHT LAW: data-part is a shared vocabulary, not an identifier -- a states.spec card probe silently widened from 1 match to 2 when the Toast stamp landed; every selector is now anchored to the component scope class. Docs: data-part contracts extended with the inputs + feedback vocabularies and the three hard constraints (docs-engineering 54ac13c); working papers moved in-repo (1f44ccd0)."
   },
   {
    "id": "WO-SKIN-04",
