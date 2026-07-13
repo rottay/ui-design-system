@@ -103,7 +103,8 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
 
   return (
     <div
-      className={className}
+      data-part="backdrop"
+      className={`rottay-confirm-dialog--modern ${className}`}
       style={{
         position: 'fixed',
         inset: 0,
@@ -123,6 +124,9 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
         onClick={onCancel}
       />
       <div
+        data-part="surface"
+        data-open="true"
+        data-variant={variant}
         style={{
           position: 'relative',
           maxWidth: 384,
@@ -135,16 +139,16 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
       >
         <div className="flex gap-3">
           {displayIcon && (
-            <div className="flex-shrink-0 mt-0.5" style={{ color: colors.icon }}>
+            <div data-part="icon" className="flex-shrink-0 mt-0.5" style={{ color: colors.icon }}>
               {displayIcon}
             </div>
           )}
           <div className="flex-1">
             {title && (
-              <h3 className="font-bold text-lg mb-2">{title}</h3>
+              <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
             )}
             {description && (
-              <p className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</p>
+              <p data-part="description" className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</p>
             )}
           </div>
         </div>
@@ -152,6 +156,8 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 16 }}>
           <button
             type="button"
+            data-part="action"
+            data-action="cancel"
             onClick={onCancel}
             disabled={loading}
             style={{
@@ -169,6 +175,9 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
           </button>
           <button
             type="button"
+            data-part="action"
+            data-action="confirm"
+            data-loading={loading ? 'true' : 'false'}
             onClick={handleConfirm}
             disabled={loading}
             style={{
@@ -186,6 +195,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
           >
             {loading && (
               <span
+                data-part="spinner"
                 style={{
                   display: 'inline-block',
                   width: 16,

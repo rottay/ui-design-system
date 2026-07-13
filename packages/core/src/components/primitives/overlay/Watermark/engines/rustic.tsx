@@ -142,7 +142,8 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
     return (
       <div
         ref={ref}
-        className={className}
+        data-part="root"
+        className={`rottay-watermark--rustic ${className || ''}`}
         style={{
           position: 'relative',
           ...style,
@@ -152,6 +153,7 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
         {/* Non-interactive overlay renders the repeating watermark pattern via CSS background.
             backgroundPosition uses the offset prop for fine-grained initial placement. */}
         <div
+          data-part="pattern"
           style={{
             position: 'absolute',
             inset: 0,

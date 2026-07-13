@@ -85,7 +85,9 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
 
   return (
     <div
-      className={`relative inline-block ${className || ''}`}
+      data-part="trigger"
+      data-open={isOpen ? 'true' : 'false'}
+      className={`relative inline-block rottay-hover-card--modern ${className || ''}`}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -97,6 +99,8 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
           onMouseLeave={handleMouseLeave}
         >
           <div
+            data-part="surface"
+            data-open="true"
             className={overlayClassName || undefined}
             style={{ background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', padding: 16, width: 288, boxShadow: 'var(--ds-elevation-3)', ...overlayStyle }}
           >

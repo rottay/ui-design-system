@@ -33,6 +33,7 @@ const MenuItem: React.FC<{
     return (
       <div
         role="separator"
+        data-part="divider"
         style={{
           height: 1,
           backgroundColor: 'var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb))',
@@ -45,6 +46,7 @@ const MenuItem: React.FC<{
   if (item.type === 'group') {
     return (
       <div
+        data-part="group-label"
         style={{
           padding: '6px 12px 4px',
           fontSize: 12,
@@ -63,6 +65,9 @@ const MenuItem: React.FC<{
     <button
       type="button"
       role="menuitem"
+      data-part="item"
+      data-tone={item.danger ? 'danger' : undefined}
+      data-disabled={item.disabled ? 'true' : undefined}
       disabled={item.disabled}
       onClick={() => {
         if (item.disabled) return;
@@ -186,7 +191,9 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
         <div
           ref={menuRef}
           role="menu"
-          className={overlayClassName}
+          data-part="surface"
+          data-open="true"
+          className={`rottay-context-menu--rustic ${overlayClassName || ''}`}
           style={{
             position: 'absolute',
             top: position.top,
@@ -215,6 +222,8 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
     <>
       <div
         ref={triggerRef}
+        data-part="trigger"
+        data-open={isOpen ? 'true' : 'false'}
         className={className}
         style={{ display: 'inline-block', ...style }}
         onContextMenu={handleContextMenu}

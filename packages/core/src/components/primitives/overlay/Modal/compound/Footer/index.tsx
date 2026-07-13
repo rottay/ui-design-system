@@ -103,7 +103,8 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
     return (
       <div
         ref={ref}
-        className={`rottay-modal-footer ${className}`}
+        data-part="footer"
+        className={`rottay-overlay-modal-footer ${className}`}
         style={footerStyle}
       >
         {children}

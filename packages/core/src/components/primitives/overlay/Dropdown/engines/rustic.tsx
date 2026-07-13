@@ -29,6 +29,7 @@ const MenuItem: React.FC<{
     return (
       <div
         role="separator"
+        data-part="divider"
         style={{
           height: '1px',
           backgroundColor: 'var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb))',
@@ -41,6 +42,7 @@ const MenuItem: React.FC<{
   if (item.type === 'group') {
     return (
       <div
+        data-part="group-label"
         style={{
           padding: '4px 12px',
           fontSize: '12px',
@@ -57,6 +59,9 @@ const MenuItem: React.FC<{
     <button
       type="button"
       role="menuitem"
+      data-part="item"
+      data-tone={item.danger ? 'danger' : undefined}
+      data-disabled={item.disabled ? 'true' : undefined}
       disabled={item.disabled}
       onClick={() => {
         item.onClick?.();
@@ -232,7 +237,9 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
         <div
           ref={menuRef}
           role="menu"
-          className={overlayClassName}
+          data-part="surface"
+          data-open="true"
+          className={`rottay-dropdown--rustic ${overlayClassName || ''}`}
           style={{
             position: 'absolute',
             top: position.top,
@@ -265,6 +272,8 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
+          data-part="trigger"
+          data-open={isOpen ? 'true' : 'false'}
           className={className}
           style={{ display: 'inline-block', ...style }}
           onClick={handleClick}

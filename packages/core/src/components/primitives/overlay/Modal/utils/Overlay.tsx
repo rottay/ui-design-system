@@ -38,6 +38,8 @@ export interface OverlayProps {
   disableAnimation?: boolean;
   /** Children to render on top of overlay */
   children?: React.ReactNode;
+  /** Optional `data-part` stamp for callers that need to anchor a skin selector to this backdrop node. */
+  dataPart?: string;
 }
 
 /**
@@ -58,6 +60,7 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       style = {},
       disableAnimation = false,
       children,
+      dataPart,
     } = props;
 
     // Guard against clicks that bubble up from modal content.
@@ -102,6 +105,7 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
     return (
       <div
         ref={ref}
+        data-part={dataPart}
         className={`rottay-overlay ${className}`}
         style={overlayStyle}
         onClick={handleClick}

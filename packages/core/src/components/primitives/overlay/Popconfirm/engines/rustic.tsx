@@ -169,7 +169,9 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
           ref={popoverRef}
           role="dialog"
           aria-modal="true"
-          className={overlayClassName}
+          data-part="surface"
+          data-open="true"
+          className={`rottay-popconfirm--rustic ${overlayClassName || ''}`}
           style={{
             position: 'absolute',
             top: position.top,
@@ -189,14 +191,14 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
         >
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
             {icon && (
-              <span style={{ color: 'var(--ds-popconfirm-icon-color, var(--ds-color-warning-500, #f59e0b))', marginTop: '2px' }}>
+              <span data-part="icon" style={{ color: 'var(--ds-popconfirm-icon-color, var(--ds-color-warning-500, #f59e0b))', marginTop: '2px' }}>
                 {icon}
               </span>
             )}
             <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 500, color: 'var(--ds-popconfirm-title-color, var(--ds-color-neutral-900, #111827))' }}>{title}</div>
+              <div data-part="title" style={{ fontWeight: 500, color: 'var(--ds-popconfirm-title-color, var(--ds-color-neutral-900, #111827))' }}>{title}</div>
               {description && (
-                <div style={{ fontSize: '14px', color: 'var(--ds-popconfirm-description-color, var(--ds-color-neutral-500, #6b7280))', marginTop: '4px' }}>
+                <div data-part="description" style={{ fontSize: '14px', color: 'var(--ds-popconfirm-description-color, var(--ds-color-neutral-500, #6b7280))', marginTop: '4px' }}>
                   {description}
                 </div>
               )}
@@ -212,6 +214,8 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
           >
             <button
               type="button"
+              data-part="action"
+              data-action="cancel"
               onClick={handleCancel}
               style={{
                 padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
@@ -227,6 +231,10 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             </button>
             <button
               type="button"
+              data-part="action"
+              data-action="confirm"
+              data-ok-type={okType}
+              data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
               onClick={handleConfirm}
               disabled={loading || okButtonLoading}
               style={{
@@ -250,6 +258,8 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
+          data-part="trigger"
+          data-open={isOpen ? 'true' : 'false'}
           className={className}
           style={{ display: 'inline-block', ...style }}
           onClick={handleTriggerClick}

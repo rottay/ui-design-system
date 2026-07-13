@@ -260,7 +260,9 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         <div
           ref={popoverRef}
           role="tooltip"
-          className={overlayClassName}
+          data-part="surface"
+          data-open="true"
+          className={`rottay-popover--rustic ${overlayClassName || ''}`}
           style={{
             position: 'fixed',
             zIndex,
@@ -282,6 +284,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         >
           {title && (
             <div
+              data-part="title"
               style={{
                 fontWeight: 600,
                 marginBottom: '8px',
@@ -296,6 +299,7 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           <div>{content}</div>
           {arrow && (
             <div
+              data-part="arrow"
               style={{
                 position: 'absolute',
                 width: 'var(--ds-popover-arrow-size, 10px)',
@@ -319,6 +323,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
             if (typeof ref === 'function') ref(node);
             else if (ref) ref.current = node;
           }}
+          data-part="trigger"
+          data-open={isOpen ? 'true' : 'false'}
           className={className}
           style={{ display: 'inline-block', ...style }}
           onClick={handleClick}

@@ -74,6 +74,7 @@ function CloseButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
+      data-part="close-button"
       onClick={onClick}
       aria-label="Close"
       style={{
@@ -237,7 +238,8 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
 
       {/* ---- Wrapper ---- */}
       <div
-        className={className || undefined}
+        data-part="root"
+        className={`rottay-sheet--modern ${className || ''}`}
         style={{
           position: 'fixed',
           inset: 0,
@@ -249,6 +251,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         {/* ---- Backdrop overlay ---- */}
         {showOverlay && (
           <div
+            data-part="backdrop"
             onClick={closeOnOverlayClick ? handleClose : undefined}
             style={{
               position: 'fixed',
@@ -266,6 +269,9 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
           role="dialog"
           aria-modal="true"
           aria-label={typeof title === 'string' ? title : undefined}
+          data-part="surface"
+          data-open="true"
+          data-placement={side}
           className={panelClassName || undefined}
           style={getPanelPositionStyles()}
         >
@@ -281,6 +287,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
               }}
             >
               <div
+                data-part="handle"
                 style={{
                   width: '40px',
                   height: '4px',
@@ -294,6 +301,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
           {/* Title area */}
           {title && (
             <div
+              data-part="header"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -304,6 +312,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
               }}
             >
               <div
+                data-part="title"
                 style={{
                   fontSize: '16px',
                   fontWeight: 600,
@@ -321,6 +330,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
 
           {/* Scrollable content area */}
           <div
+            data-part="body"
             style={{
               flex: '1 1 auto',
               overflowY: 'auto',

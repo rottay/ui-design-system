@@ -133,7 +133,9 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`relative inline-block ${className || ''}`}
+        data-part="trigger"
+        data-open={isOpen ? 'true' : 'false'}
+        className={`relative inline-block rottay-popconfirm--modern ${className || ''}`}
       >
         <div onClick={handleTriggerClick}>{children}</div>
 
@@ -142,13 +144,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             className={`absolute z-50 ${getPlacementClasses()} ${overlayClassName || ''}`}
             style={overlayStyle}
           >
-            <div style={{ padding: 16, minWidth: 200, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-3)' }}>
+            <div data-part="surface" data-open="true" style={{ padding: 16, minWidth: 200, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-3)' }}>
               <div className="flex items-start gap-2">
-                {icon && <span className="mt-0.5" style={{ color: 'var(--ds-color-warning)' }}>{icon}</span>}
+                {icon && <span data-part="icon" className="mt-0.5" style={{ color: 'var(--ds-color-warning)' }}>{icon}</span>}
                 <div className="flex-1">
-                  <div className="font-medium">{title}</div>
+                  <div data-part="title" className="font-medium">{title}</div>
                   {description && (
-                    <div className="text-sm mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                    <div data-part="description" className="text-sm mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
                       {description}
                     </div>
                   )}
@@ -157,6 +159,8 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
               <div className="flex justify-end gap-2 mt-4">
                 <button
                   type="button"
+                  data-part="action"
+                  data-action="cancel"
                   onClick={handleCancel}
                   style={{
                     height: 32,
@@ -173,6 +177,10 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                 </button>
                 <button
                   type="button"
+                  data-part="action"
+                  data-action="confirm"
+                  data-ok-type={okType}
+                  data-loading={(loading || okButtonLoading) ? 'true' : 'false'}
                   onClick={handleConfirm}
                   disabled={loading || okButtonLoading}
                   style={{
@@ -190,6 +198,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                 >
                   {(loading || okButtonLoading) && (
                     <span
+                      data-part="spinner"
                       style={{
                         display: 'inline-block',
                         width: 14,

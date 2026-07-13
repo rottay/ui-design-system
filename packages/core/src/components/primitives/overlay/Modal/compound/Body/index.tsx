@@ -92,7 +92,8 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
     return (
       <div
         ref={ref}
-        className={`rottay-modal-body ${className}`}
+        data-part="body"
+        className={`rottay-overlay-modal-body ${className}`}
         style={bodyStyle}
       >
         {children}

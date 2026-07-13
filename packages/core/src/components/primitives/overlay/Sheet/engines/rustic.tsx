@@ -133,10 +133,11 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
   };
 
   return createPortal(
-    <div className={className} style={style}>
+    <div data-part="root" className={`rottay-sheet--rustic ${className || ''}`} style={style}>
       {/* Overlay sits one z-index below the panel so clicks land on it for dismissal */}
       {showOverlay && (
         <div
+          data-part="backdrop"
           style={{
             position: 'fixed',
             inset: 0,
@@ -152,6 +153,9 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
         ref={panelRef}
         role="dialog"
         aria-modal="true"
+        data-part="surface"
+        data-open="true"
+        data-placement={side}
         className={panelClassName}
         style={{ ...getPanelStyle(), ...panelStyle }}
       >
@@ -167,6 +171,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
             }}
           >
             <div
+              data-part="handle"
               style={{
                 width: 40,
                 height: 4,
@@ -178,6 +183,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
         )}
         {title && (
           <div
+            data-part="header"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -186,9 +192,10 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
               borderBottom: '1px solid var(--ds-modal-header-border, var(--ds-color-neutral-200, #e5e7eb))',
             }}
           >
-            <span style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', color: 'var(--ds-modal-title-color, inherit)' }}>{title}</span>
+            <span data-part="title" style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', color: 'var(--ds-modal-title-color, inherit)' }}>{title}</span>
             <button
               type="button"
+              data-part="close-button"
               onClick={() => onOpenChange(false)}
               aria-label="Close"
               style={{
@@ -207,6 +214,7 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           </div>
         )}
         <div
+          data-part="body"
           style={{
             padding: 16,
             overflowY: 'auto',

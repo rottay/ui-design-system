@@ -107,10 +107,11 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
     return (
       <div
         ref={ref}
-        className={`rottay-modal-header ${className}`}
+        data-part="header"
+        className={`rottay-overlay-modal-header ${className}`}
         style={headerStyle}
       >
-        <div style={titleStyle}>{children}</div>
+        <div data-part="title" style={titleStyle}>{children}</div>
         {closable && onClose && (
           <ModalCloseButton onClose={onClose} />
         )}

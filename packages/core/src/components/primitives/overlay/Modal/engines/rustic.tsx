@@ -266,6 +266,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
   return (
     <Portal>
       <Overlay
+        dataPart="backdrop"
         visible={open && showBackdrop}
         onClick={handleBackdropClick}
         clickable={closeOnBackdropClick}
@@ -277,7 +278,9 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
         <div style={modalContainerStyle}>
           <FocusTrap active={open} autoFocus restoreFocus>
             <div
-              className={`rottay-modal rottay-modal--rustic rottay-modal--${size} ${className}`}
+              data-part="surface"
+              data-open="true"
+              className={`rottay-modal rottay-modal--rustic rottay-modal--${size} rottay-overlay-modal-shell--rustic ${className}`}
               style={modalStyle}
               role="dialog"
               aria-modal="true"
@@ -287,8 +290,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
             >
               {/* Header */}
               {(title || header || closable) && (
-                <div style={headerStyle}>
-                  <div style={titleStyle}>
+                <div data-part="header" style={headerStyle}>
+                  <div data-part="title" style={titleStyle}>
                     {header || (
                       title && <span id="modal-title">{title}</span>
                     )}
@@ -296,6 +299,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
                   {closable && (
                     <button
                       type="button"
+                      data-part="close-button"
                       style={closeButtonStyle}
                       onClick={onClose}
                       aria-label={t('modal.close')}
@@ -330,10 +334,11 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
               )}
 
               {/* Body */}
-              <div style={bodyStyle}>
+              <div data-part="body" style={bodyStyle}>
                 {description && (
                   <p
                     id="modal-description"
+                    data-part="description"
                     style={{
                       marginTop: 0,
                       color: 'var(--ds-modal-body-color, var(--ds-color-text-secondary))',
@@ -347,7 +352,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
 
               {/* Footer */}
               {footer && (
-                <div style={footerStyle}>
+                <div data-part="footer" style={footerStyle}>
                   {footer}
                 </div>
               )}

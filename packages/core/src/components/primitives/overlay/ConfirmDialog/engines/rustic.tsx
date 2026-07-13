@@ -144,6 +144,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
 
   return (
     <div
+      data-part="backdrop"
       className={`rottay-confirm-dialog-rustic ${className}`}
       style={backdropStyle}
       onClick={onCancel}
@@ -155,12 +156,16 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
         aria-modal="true"
         aria-labelledby="confirm-title"
         aria-describedby="confirm-desc"
+        data-part="surface"
+        data-open="true"
+        data-variant={variant}
         style={dialogStyle}
         onClick={(e) => e.stopPropagation()}
       >
         <div style={{ display: 'flex', gap: '12px' }}>
           {displayIcon && (
             <div
+              data-part="icon"
               style={{
                 color: colors.icon,
                 backgroundColor: colors.bg,
@@ -182,6 +187,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
             {title && (
               <div
                 id="confirm-title"
+                data-part="title"
                 style={{
                   fontSize: '16px',
                   fontWeight: 600,
@@ -195,6 +201,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
             {description && (
               <div
                 id="confirm-desc"
+                data-part="description"
                 style={{
                   fontSize: '14px',
                   color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666))',
@@ -209,6 +216,8 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '24px' }}>
           <button
             type="button"
+            data-part="action"
+            data-action="cancel"
             style={{
               ...buttonBaseStyle,
               backgroundColor: 'var(--ds-color-bg-primary, transparent)',
@@ -222,6 +231,9 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
           </button>
           <button
             type="button"
+            data-part="action"
+            data-action="confirm"
+            data-loading={loading ? 'true' : 'false'}
             style={{
               ...buttonBaseStyle,
               backgroundColor: colors.button,
@@ -234,6 +246,7 @@ export default function RusticConfirmDialog(props: ConfirmDialogProps): React.Re
           >
             {loading && (
               <svg
+                data-part="spinner"
                 width="14"
                 height="14"
                 viewBox="0 0 16 16"

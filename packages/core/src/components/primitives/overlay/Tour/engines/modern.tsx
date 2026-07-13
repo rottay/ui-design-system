@@ -146,10 +146,11 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     const maskColor = typeof mask === 'object' ? mask.color : 'var(--ds-color-alpha-black-50)';
 
     return createPortal(
-      <div ref={ref} className={className} style={{ zIndex }}>
+      <div ref={ref} data-part="root" className={`rottay-tour--modern ${className || ''}`} style={{ zIndex }}>
         {/* Mask */}
         {mask && (
           <div
+            data-part="backdrop"
             className="fixed inset-0"
             style={{
               backgroundColor: maskColor,
@@ -163,6 +164,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
             The 9999px spread covers the entire viewport while the element itself stays transparent. */}
         {targetRect && (
           <div
+            data-part="spotlight"
             className="fixed rounded-lg pointer-events-none"
             style={{
               top: targetRect.top - padding,
@@ -177,6 +179,9 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
         {/* Step popover: positioned below the target when available, centered in viewport otherwise */}
         <div
+          data-part="surface"
+          data-open="true"
+          data-type={type}
           style={{
             position: 'fixed',
             padding: 16,
@@ -194,6 +199,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           {/* Close button */}
           <button
             type="button"
+            data-part="close-button"
             onClick={onClose}
             style={{
               position: 'absolute',
@@ -217,18 +223,20 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
           {/* Content */}
           {step?.cover && <div className="mb-3">{step.cover}</div>}
-          <h3 className="font-bold text-lg">{step?.title}</h3>
+          <h3 data-part="title" className="font-bold text-lg">{step?.title}</h3>
           {step?.description && (
-            <p className="mt-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</p>
+            <p data-part="description" className="mt-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</p>
           )}
 
           {/* Footer */}
-          <div className="flex items-center justify-between mt-4">
+          <div data-part="footer" className="flex items-center justify-between mt-4">
             {/* Indicators */}
             <div className="flex gap-1">
               {steps.map((_, index) => (
                 <div
                   key={index}
+                  data-part="indicator"
+                  data-current={index === currentStep ? 'true' : 'false'}
                   className="w-2 h-2 rounded-full"
                   style={{ background: index === currentStep ? 'var(--ds-color-primary)' : 'var(--ds-surface-panel)' }}
                 />
@@ -240,6 +248,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               {currentStep > 0 && (
                 <button
                   type="button"
+                  data-part="action"
+                  data-action="prev"
                   onClick={handlePrev}
                   style={{
                     height: 32,
@@ -257,6 +267,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               )}
               <button
                 type="button"
+                data-part="action"
+                data-action="next"
                 onClick={handleNext}
                 style={{
                   height: 32,

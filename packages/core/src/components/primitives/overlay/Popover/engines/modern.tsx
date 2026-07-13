@@ -189,7 +189,9 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={className || ''}
+        data-part="trigger"
+        data-open={isOpen ? 'true' : 'false'}
+        className={`rottay-popover--modern ${className || ''}`}
         style={{ position: 'relative', display: 'inline-flex' }}
         onClick={handleClick}
         onMouseEnter={handleMouseEnter}
@@ -201,6 +203,8 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
         {/* Content panel rendered conditionally, absolutely positioned relative to the wrapper */}
         {isOpen && (
           <div
+            data-part="surface"
+            data-open="true"
             className={overlayClassName || ''}
             style={{
               ...getContentPositionStyles(),
@@ -213,13 +217,13 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
             }}
           >
             {title && (
-              <div style={{ fontWeight: 600, marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--ds-color-border)' }}>
+              <div data-part="title" style={{ fontWeight: 600, marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--ds-color-border)' }}>
                 {title}
               </div>
             )}
             <div>{content}</div>
             {arrow && (
-              <div style={{ position: 'absolute', width: 12, height: 12, transform: 'rotate(45deg)', zIndex: -1, background: 'var(--ds-surface-card)' }} />
+              <div data-part="arrow" style={{ position: 'absolute', width: 12, height: 12, transform: 'rotate(45deg)', zIndex: -1, background: 'var(--ds-surface-card)' }} />
             )}
           </div>
         )}

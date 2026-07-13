@@ -126,7 +126,9 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
     ? createPortal(
         <div
           ref={cardRef}
-          className={overlayClassName}
+          data-part="surface"
+          data-open="true"
+          className={`rottay-hover-card--rustic ${overlayClassName || ''}`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           style={{
@@ -157,6 +159,8 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
     <>
       <div
         ref={triggerRef}
+        data-part="trigger"
+        data-open={isOpen ? 'true' : 'false'}
         className={className}
         style={{ display: 'inline-block', ...style }}
         onMouseEnter={handleMouseEnter}

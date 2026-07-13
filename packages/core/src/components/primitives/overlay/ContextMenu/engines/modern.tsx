@@ -39,12 +39,12 @@ const MenuItem: React.FC<{
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
   if (item.type === 'divider') {
-    return <li style={{ height: 1, margin: '4px 0', background: 'var(--ds-color-border-subtle)' }} />;
+    return <li data-part="divider" style={{ height: 1, margin: '4px 0', background: 'var(--ds-color-border-subtle)' }} />;
   }
 
   if (item.type === 'group') {
     return (
-      <li style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, color: 'var(--ds-color-text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+      <li data-part="group-label" style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, color: 'var(--ds-color-text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
         <span>{item.label}</span>
       </li>
     );
@@ -54,6 +54,9 @@ const MenuItem: React.FC<{
     <li>
       <button
         type="button"
+        data-part="item"
+        data-tone={item.danger ? 'danger' : undefined}
+        data-disabled={item.disabled ? 'true' : undefined}
         className={`flex items-center justify-between gap-2 ${item.disabled ? 'disabled opacity-50' : ''}`}
         style={item.danger ? { color: 'var(--ds-color-error)' } : undefined}
         disabled={item.disabled}
@@ -141,7 +144,9 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
   return (
     <div
       ref={containerRef}
-      className={`relative ${className || ''}`}
+      data-part="trigger"
+      data-open={isOpen ? 'true' : 'false'}
+      className={`relative rottay-context-menu--modern ${className || ''}`}
       onContextMenu={handleContextMenu}
     >
       {trigger}
@@ -153,6 +158,8 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
               menuRef.current = node;
               presenceRef(node);
             }}
+            data-part="surface"
+            data-open={dataState === 'open' ? 'true' : 'false'}
             className={overlayClassName || undefined}
             style={{
               position: 'absolute',

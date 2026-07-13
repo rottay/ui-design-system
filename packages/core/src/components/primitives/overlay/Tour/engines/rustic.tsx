@@ -167,10 +167,16 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     const isPrimary = type === 'primary';
 
     return createPortal(
-      <div ref={ref} className={className} style={{ ...style, position: 'relative', zIndex }}>
+      <div
+        ref={ref}
+        data-part="root"
+        className={`rottay-tour--rustic ${className || ''}`}
+        style={{ ...style, position: 'relative', zIndex }}
+      >
         {/* Mask */}
         {mask && (
           <div
+            data-part="backdrop"
             style={{
               position: 'fixed',
               inset: 0,
@@ -184,6 +190,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
             The 9999px spread covers the entire viewport while the element itself stays transparent. */}
         {targetRect && (
           <div
+            data-part="spotlight"
             style={{
               position: 'fixed',
               top: targetRect.top - padding,
@@ -203,6 +210,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
         <div
           role="dialog"
           aria-modal="true"
+          data-part="surface"
+          data-open="true"
           className={`rottay-tour-dialog rottay-tour-dialog--${type}`}
           data-type={type}
           style={{
@@ -227,6 +236,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           {/* Close button */}
           <button
             type="button"
+            data-part="close-button"
             onClick={onClose}
             style={{
               position: 'absolute',
@@ -245,17 +255,18 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
           {/* Content */}
           {step?.cover && <div style={{ marginBottom: '12px' }}>{step.cover}</div>}
-          <h3 style={{ margin: 0, fontSize: 'var(--ds-tour-title-size, 18px)', fontWeight: 600, color: 'var(--ds-tour-title-color, var(--ds-color-neutral-900, #111827))' }}>
+          <h3 data-part="title" style={{ margin: 0, fontSize: 'var(--ds-tour-title-size, 18px)', fontWeight: 600, color: 'var(--ds-tour-title-color, var(--ds-color-neutral-900, #111827))' }}>
             {step?.title}
           </h3>
           {step?.description && (
-            <p style={{ margin: '8px 0 0', fontSize: 'var(--ds-tour-description-size, 14px)', color: 'var(--ds-tour-description-color, var(--ds-color-neutral-500, #6b7280))' }}>
+            <p data-part="description" style={{ margin: '8px 0 0', fontSize: 'var(--ds-tour-description-size, 14px)', color: 'var(--ds-tour-description-color, var(--ds-color-neutral-500, #6b7280))' }}>
               {step.description}
             </p>
           )}
 
           {/* Footer */}
           <div
+            data-part="footer"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -268,6 +279,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               {steps.map((_, index) => (
                 <div
                   key={index}
+                  data-part="indicator"
+                  data-current={index === currentStep ? 'true' : 'false'}
                   style={{
                     width: '8px',
                     height: '8px',
@@ -283,6 +296,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               {currentStep > 0 && (
                 <button
                   type="button"
+                  data-part="action"
+                  data-action="prev"
                   onClick={handlePrev}
                   style={{
                     padding: '8px 16px',
@@ -299,6 +314,8 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               )}
               <button
                 type="button"
+                data-part="action"
+                data-action="next"
                 onClick={handleNext}
                 style={{
                   padding: '8px 16px',

@@ -86,6 +86,7 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
   return (
     <button
       type="button"
+      data-part="close-button"
       onClick={onClick}
       aria-label={label}
       style={{
@@ -277,7 +278,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
       <dialog
         ref={dialogRef}
-        className={`rottay-modal rottay-modal--modern ${className}`}
+        data-part="root"
+        className={`rottay-modal rottay-modal--modern rottay-overlay-modal-shell--modern ${className}`}
         aria-modal="true"
         style={{
           /* Reset native dialog styling */
@@ -306,6 +308,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         {/* ---- Backdrop ---- */}
         {showBackdrop && (
           <div
+            data-part="backdrop"
             style={{
               position: 'fixed',
               inset: 0,
@@ -328,6 +331,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         {/* ---- Panel ---- */}
         <div
           ref={presenceRef}
+          data-part="surface"
+          data-open={dataState === 'open' ? 'true' : 'false'}
           role="document"
           onClick={(e) => e.stopPropagation()}
           style={{
@@ -355,6 +360,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           {/* ---- Header ---- */}
           {(title || description || header || closable) && (
             <div
+              data-part="header"
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -372,6 +378,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                   <>
                     {title && (
                       <div
+                        data-part="title"
                         style={{
                           fontSize: '16px',
                           fontWeight: 600,
@@ -384,6 +391,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                     )}
                     {description && (
                       <div
+                        data-part="description"
                         style={{
                           fontSize: '13px',
                           lineHeight: '18px',
@@ -405,6 +413,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
           {/* ---- Body ---- */}
           <div
+            data-part="body"
             style={{
               flex: '1 1 auto',
               overflowY: 'auto',
@@ -418,6 +427,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           {/* ---- Footer ---- */}
           {footer && (
             <div
+              data-part="footer"
               style={{
                 display: 'flex',
                 alignItems: 'center',
