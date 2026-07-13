@@ -1840,7 +1840,7 @@ injection than modern's for the same underlying need.
   guard" pattern found repeatedly in Card/Badge/Image, here appearing on
   modern for the first time rather than only rustic.
 
-## Divider (8 sites, 2 files) — a second candidate defect on par with Avatar's: modern's WITH-TEXT divider likely renders an extra, uncontested full-width border on the root, on top of the intended text-flanking line segments
+## Divider (8 sites, 2 files) — a suspected extra root border was checked live and REFUTED: Tailwind's own preflight zeroes the bridge's border-width before it ever paints (see below — this also surfaced a much bigger, program-wide finding, reported separately)
 
 Root landing: `engines/modern.tsx` (3), `engines/rustic.tsx` (5).
 `compound/index.ts` is an explicit, self-documented placeholder (`Divider.Text`/
@@ -1852,79 +1852,58 @@ root** — modern via DaisyUI's own class (`divider divider-horizontal|
 divider--horizontal divider--<variant> [divider--with-text] [divider--ds-
 text-<pos>]`) — the SAME first word, different vocabularies layered onto it.
 
-### STOP-AND-REPORT: modern's with-text divider likely double-borders — a real, uncontested bridge rule targets the exact classnames the component's own DaisyUI convention stamps
+### CHECKED LIVE, REFUTED: no extra border renders on the with-text divider — Tailwind's own preflight zeroes the bridge's border-width before it ever reaches the component
 
-`tokens/css/engines/modern/theme.css` carries a **second-emitter pair** for
-`.divider` (the same "two independent blocks, same bare classname, later
-wins ties" shape as FloatButton's `.btn`/Avatar's `.avatar`):
-1. Lines 340-352 (early): `.divider { margin: var(--ds-divider-spacing) 0;
-   }` plus `.divider::before/::after { background-color; height; }` —
-   the `::before`/`::after` portion targets pseudo-elements the component
-   never gives `content` to render (our ModernDivider uses real child
-   `<span>` line elements instead of DaisyUI's stock pseudo-element
-   approach), so that half is structurally inert regardless of suppression.
-2. Lines 876-894 (late, therefore wins the tie): `.divider { border-color;
-   margin; }`, **`.divider-horizontal { width:100%; height:0; border-top:
-   var(--ds-divider-width) solid var(--ds-divider-color); }`**, **`.divider-
-   vertical { ...border-left: var(--ds-divider-width) solid var(--ds-
-   divider-color); margin; }`**. These class names — `divider-horizontal`/
-   `divider-vertical` — are **exactly** what `getClassNames()` in
-   modern.tsx:78 stamps on the root.
+`tokens/css/engines/modern/theme.css` carries a second-emitter pair for
+`.divider` (lines 340-352 early / 876-894 late, the same shape as
+FloatButton's `.btn`/Avatar's `.avatar`), and the late block's
+`.divider-horizontal { border-top: var(--ds-divider-width) solid
+var(--ds-divider-color); }` / `.divider-vertical { border-left: ...; }`
+target exactly the classnames `getClassNames()` stamps on the with-text
+root, which carries no inline border of its own (the visible segments are
+drawn by two child `<span>`s instead). Static reading flagged this as a
+live, uncontested hazard — **measured in a real browser (production build,
+CDP `CSS.getMatchedStylesForNode`, a plain-divider control to prove the
+harness itself was sound) and refuted**: the root's computed
+`border-top-width` (horizontal) / `border-left-width` (vertical) is `0px`,
+both orientations. `tokens/css/entrypoints/styles.css:19` declares `@layer
+rottay-reset, rottay-tokens, rottay-components, rottay-engines,
+rottay-tenants, rottay-personality, rottay-responsive;` — theme.css's
+bridge rules live in `rottay-engines`. Tailwind's own preflight
+(`*, ::backdrop, ::after, ::before { border: 0 solid; margin: 0; padding: 0
+}`) is declared in a SEPARATE, LATER `@layer` statement inside the DS's own
+compiled bundle (confirmed directly in `dist/bithire.css`/`dist/platform.css`:
+`@layer theme, base, components, utilities;` at a later line than the
+rottay declaration) — per the cascade-layer spec, a layer named later sorts
+after layers already positioned, so Tailwind's `base` (where preflight
+lives) outranks EVERY `rottay-*` layer, including `rottay-engines`,
+**by layer order alone, independent of specificity**. The bridge rule
+matches, and is completely real — it simply never wins. This is the exact
+same "unlayered beats layered" law this whole program is built on, just
+running one level up: Tailwind's own preflight is what plays the unlayered
+role here, and `rottay-engines` is what loses. **No line renders beyond the
+two intended text-flanking segments, on either orientation. There is
+nothing for a migration to preserve on this channel.**
 
-**For the simple (no-children) divider**, the root's own inline style is
-`{ ...containerStyle, ...lineStyle }` (modern.tsx:162) — `lineStyle` sets a
-real `borderTop`/`borderLeft` shorthand inline, which suppresses the
-bridge's border-top/border-left on that same element. **Safe.**
+Rustic is unaffected for an unrelated, independent reason (its root never
+carries the single-dash `divider-horizontal`/`divider-vertical` classnames
+the bridge targets — only the double-dash BEM `divider--horizontal`).
 
-**For the WITH-TEXT divider** (`hasChildren` true, modern.tsx:139-154), the
-root only receives `containerStyle` (modern.tsx:142) — no `border` property
-of any kind. The actual visible line segments are drawn by two CHILD
-`<span className="divider-line divider-line-before/-after">` elements, each
-with their own inline `borderTop`/`borderLeft` (modern.tsx:148,152). **The
-root itself — which still carries `divider-horizontal`/`divider-vertical`
-and therefore still matches the bridge rule — has nothing inline to contest
-`border-top: var(--ds-divider-width) solid var(--ds-divider-color)` (or
-`border-left` for vertical).** Traced structurally (not confirmed via a live
-browser/CDP the way the N3/P-73 precedents were): if `--ds-divider-width`/
-`--ds-divider-color` resolve to non-zero/non-transparent values — which the
-simple-divider path's own successful rendering proves they do — **the
-with-text divider likely paints an extra full-width border across the top
-(or full-height border down the left, for vertical) of the entire flex row,
-IN ADDITION TO the two intended line segments flanking the text**, since
-the child spans' own borders paint inside a container that ALSO now has its
-own top/left border from the uncontested bridge rule. This is the batch's
-second candidate live defect at Avatar's caliber (an uncontested rule with a
-plausible, traceable visual consequence) — record and flag for empirical
-verification in a real browser before the migration touches this component;
-do not silently drop the bridge rule (it might be intentional overlap-hiding
-if the two borders happen to coincide pixel-for-pixel) or silently "fix" it
-as a byproduct of unrelated work.
-
-**Rustic is not exposed to this specific defect**: rustic's root never
-carries single-dash `divider-horizontal`/`divider-vertical` (only the
-double-dash BEM `divider--horizontal` etc.), so it never matches the second
-bridge block's `.divider-horizontal`/`.divider-vertical` rules. Rustic's
-root DOES still match the bare `.divider { border-color; margin; }` portion
-(shared word), but with-text rustic sets no border-WIDTH/style on the root
-either, and a `border-color` alone with no width/style pairing produces no
-visible border — inert, same disposition as Collapse's root-level bridge
-finding.
-
-### `personality.css` also targets the shared bare word
+### `personality.css` targets the shared bare word too, and is subject to the identical fate
 
 `personality.css:105-115` ("DIVIDER PERSONALITY"): `.ant-divider, .divider,
-[data-engine] .ds-divider { border-style: var(--ds-divider-style); border-
-color: var(--ds-divider-color); }` — layered, targets the same bare
-`divider` both engines share. For the simple-divider path (both engines),
-fully suppressed by the inline `borderTop`/`borderLeft` shorthand. For the
-with-text path, redundant with (and weaker than, being layered) the modern
-bridge's own `.divider-horizontal`/`-vertical` unlayered-equivalent... no —
-`theme.css` itself is layered too (per this report's established treatment
-of every `theme.css` bridge rule as layered, consistent with QRCode/Tree/
-Empty/Collapse) — both this personality rule and the theme.css bridge are
-layered and neither out-ranks the other structurally; standard CSS source-
-order/specificity tie-breaking applies between them, not resolved further
-here. Either way, the ROOT hazard is the same one identified above.
+[data-engine] .ds-divider { border-style: var(--ds-divider-style);
+border-color: var(--ds-divider-color); }` — `personality.css` sits in
+`rottay-personality`, one of the same seven layers, so its `border-style`
+declaration is subject to the identical preflight-wins mechanism (preflight
+forces `border-style: solid` regardless). Its `border-color` declaration,
+however, is a different story — see the cross-component finding below: this
+program's live measurement of a DIFFERENT component (Alert) shows
+`border-color` specifically survives the preflight layer fight (preflight's
+reset does not touch it), it is only `border-width`/`border-style` that
+preflight wins on. For Divider this is moot either way (nothing supplies a
+surviving width on the with-text root in either engine), but it is the
+general shape worth carrying into any future channel-safety judgment call.
 
 ### Paint sites — `engines/modern.tsx` (3)
 
@@ -1952,9 +1931,8 @@ an accident.
 
 ### Engine asymmetries, dead code, pre-existing defects (record only)
 
-- **The with-text double-border candidate defect is the priority finding**
-  for this component — record for empirical verification, do not fix or
-  drop silently.
+- The with-text double-border suspicion was checked live and refuted (see
+  above) — no fix, no migration hazard on this channel.
 - Both engines' `lineStyle` defensively sets the unused border sides to
   `'none'`/explicit-none — rustic explicit, modern implicit (via `'none'`
   string literal on the unused axis) — worth preserving exactly, it prevents
@@ -2173,11 +2151,16 @@ collision risk from any of them today.
   live bridge rule exists but every uncontested channel traces to zero
   visible effect today — a methodology lesson (uncontested ≠ consequential),
   not a defect; rustic's root has no scope class at all, unlike modern's.
-- Divider: 8 sites / 2 files — **a second candidate live defect on par with
-  Avatar's**: the with-text divider's root likely renders an extra,
-  uncontested full-width/height border from a second-emitter `theme.css`
-  bridge, on top of the two intended text-flanking line segments — traced
-  structurally, not yet confirmed in a live browser.
+- Divider: 8 sites / 2 files — a suspected extra root border (with-text
+  variant, second-emitter `theme.css` bridge) was checked live in a
+  production browser via CDP and REFUTED — the root's computed
+  border-width is 0px on both orientations. Root cause: Tailwind's own
+  preflight reset outranks every `rottay-*` layer (including
+  `rottay-engines`, where theme.css bridges live) by cascade-layer order
+  alone, independent of specificity. This generalizes far beyond Divider —
+  reported to the team as its own finding, since it affects a large
+  fraction of theme.css's border/margin/padding declarations program-wide,
+  not just this component.
 - Splitter: 3 sites, 2 files — smallest component in the entire inventory;
   fully greenfield; modern's drag-handle gutter carries a `transition-
   colors` class but never actually changes color on hover, unlike rustic's
