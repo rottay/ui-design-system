@@ -168,10 +168,11 @@ export const SkeletonListItem = forwardRef<HTMLDivElement, SkeletonListItemProps
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-list-item ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-list-item ${className}`} style={containerStyle}>
         {/* Optional circular avatar placeholder */}
         {hasAvatar && (
           <div
+            data-part="avatar"
             style={{
               ...shimmerStyle,
               width: 40,
@@ -187,6 +188,7 @@ export const SkeletonListItem = forwardRef<HTMLDivElement, SkeletonListItemProps
           {Array.from({ length: lines }).map((_, index) => (
             <div
               key={index}
+              data-part="line"
               style={{
                 ...shimmerStyle,
                 // First line is taller (title), rest are shorter (subtitle/meta)

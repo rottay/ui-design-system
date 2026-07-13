@@ -87,7 +87,8 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
 
   return (
     <div
-      className={className || undefined}
+      data-part="root"
+      className={['rottay-spinner', 'rottay-spinner--modern', className].filter(Boolean).join(' ')}
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -99,6 +100,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
       {/* Inject spin keyframes -- safe static string, no user input */}
       <style dangerouslySetInnerHTML={{ __html: SPIN_KEYFRAMES }} />
       <span
+        data-part="indicator"
         style={{
           display: 'inline-block',
           width: sizeConfig.dimension,
@@ -112,7 +114,7 @@ export default function ModernSpinner(props: SpinnerProps): React.ReactElement {
         aria-label={label || 'Loading'}
       />
       {label && (
-        <span style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-secondary)' }}>{label}</span>
+        <span data-part="label" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-secondary)' }}>{label}</span>
       )}
     </div>
   );

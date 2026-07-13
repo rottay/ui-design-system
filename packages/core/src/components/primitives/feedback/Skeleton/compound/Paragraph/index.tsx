@@ -168,10 +168,11 @@ export const SkeletonParagraph = forwardRef<HTMLDivElement, SkeletonParagraphPro
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-paragraph ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-paragraph ${className}`} style={containerStyle}>
         {Array.from({ length: lines }).map((_, index) => (
           <div
             key={index}
+            data-part="line"
             style={{
               ...shimmerStyle,
               height: '16px',

@@ -214,7 +214,7 @@ export const SkeletonButton = forwardRef<HTMLDivElement, SkeletonButtonProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-button ${className}`} style={buttonStyle} />
+      <div ref={ref} data-part="root" className={`rottay-skeleton-button ${className}`} style={buttonStyle} />
     );
   }
 );

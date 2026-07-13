@@ -194,7 +194,7 @@ export const SkeletonAvatar = forwardRef<HTMLDivElement, SkeletonAvatarProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-avatar ${className}`} style={avatarStyle} />
+      <div ref={ref} data-part="root" className={`rottay-skeleton-avatar ${className}`} style={avatarStyle} />
     );
   }
 );

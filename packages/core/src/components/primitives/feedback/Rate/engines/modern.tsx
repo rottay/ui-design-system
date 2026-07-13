@@ -323,6 +323,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       return (
         <label
           key={index}
+          data-part="star"
+          data-state={isFilled && !isHalfFilled ? 'full' : isHalfFilled ? 'half' : 'empty'}
           className={`
             relative inline-flex items-center justify-center
             transition-all duration-200
@@ -413,6 +415,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       'rating',
       SIZE_CLASSES[size] || SIZE_CLASSES.md,
       'gap-1',
+      'rottay-rate',
+      'rottay-rate--modern',
       className,
     ].filter(Boolean).join(' ');
 
@@ -428,6 +432,7 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           }
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
+        data-part="root"
         className={ratingClasses}
         style={{
           direction,

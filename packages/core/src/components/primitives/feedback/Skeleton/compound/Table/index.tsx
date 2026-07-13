@@ -179,9 +179,11 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-table ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-table ${className}`} style={containerStyle}>
         {/* Header row - distinct background, taller cells */}
         <div
+          data-part="row"
+          data-row="header"
           style={{
             ...rowStyle,
             borderBottom: '1px solid var(--ds-skeleton-border, var(--ds-color-border))',
@@ -191,6 +193,7 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
           {Array.from({ length: columns }).map((_, col) => (
             <div
               key={`header-${col}`}
+              data-part="cell"
               style={{
                 ...shimmerStyle,
                 height: '14px',
@@ -205,6 +208,8 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
         {Array.from({ length: rows }).map((_, row) => (
           <div
             key={`row-${row}`}
+            data-part="row"
+            data-row="body"
             style={{
               ...rowStyle,
               // Divider between rows, but not after the last row
@@ -217,6 +222,7 @@ export const SkeletonTable = forwardRef<HTMLDivElement, SkeletonTableProps>(
             {Array.from({ length: columns }).map((_, col) => (
               <div
                 key={`cell-${row}-${col}`}
+                data-part="cell"
                 style={{
                   ...shimmerStyle,
                   height: '12px',

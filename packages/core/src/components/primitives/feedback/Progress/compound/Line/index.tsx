@@ -247,11 +247,13 @@ export const ProgressLine = forwardRef<HTMLDivElement, ProgressLineProps>(
     return (
       <div
         ref={ref}
+        data-part="root"
         className={`rottay-progress-line ${className}`}
         style={{ display: 'flex', alignItems: 'center', gap: '8px', ...style }}
       >
         {/* Track Container */}
         <div
+          data-part="track"
           style={{
             flex: 1,
             height,
@@ -262,6 +264,7 @@ export const ProgressLine = forwardRef<HTMLDivElement, ProgressLineProps>(
         >
           {/* Progress Bar Fill */}
           <div
+            data-part="fill"
             style={{
               width: `${Math.min(100, Math.max(0, percent))}%`,
               height: '100%',
@@ -274,7 +277,7 @@ export const ProgressLine = forwardRef<HTMLDivElement, ProgressLineProps>(
 
         {/* Percentage Info */}
         {showInfo && (
-          <span style={{ fontSize: '14px', minWidth: '40px', textAlign: 'right' }}>
+          <span data-part="label" style={{ fontSize: '14px', minWidth: '40px', textAlign: 'right' }}>
             {format ? format(percent) : `${percent}%`}
           </span>
         )}

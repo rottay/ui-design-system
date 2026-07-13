@@ -179,7 +179,9 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
     // as a progress indicator rather than generic content.
     return (
       <div
-        className={`radial-progress ${STATUS_CLASSES[status!]} ${className}`}
+        data-part="root"
+        data-status={status}
+        className={`radial-progress ${STATUS_CLASSES[status!]} rottay-progress-shell rottay-progress-shell--modern ${className}`}
         style={circleStyle}
         role="progressbar"
       >
@@ -205,12 +207,13 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
   } as React.CSSProperties;
 
   return (
-    <div className="w-full">
+    <div data-part="root" data-status={status} className="w-full rottay-progress-shell rottay-progress-shell--modern">
       {/* Native <progress> element provides built-in accessibility (no ARIA
           needed) and works with browser defaults when CSS fails to load.
           DaisyUI progress classes override the native appearance while
           preserving the semantic meaning for assistive technologies. */}
       <progress
+        data-part="fill"
         className={`progress ${STATUS_CLASSES[status!]} w-full ${className}`}
         value={percent}
         max="100"
@@ -219,7 +222,7 @@ export default function ModernProgress(props: ProgressProps): React.ReactElement
 
       {/* Percentage info display */}
       {showInfo && (
-        <div className="text-sm text-center mt-1" style={{ color: 'var(--ds-color-text-secondary)', fontSize: 'var(--ds-font-size-sm, 14px)' }}>{percent}%</div>
+        <div data-part="label" className="text-sm text-center mt-1" style={{ color: 'var(--ds-color-text-secondary)', fontSize: 'var(--ds-font-size-sm, 14px)' }}>{percent}%</div>
       )}
     </div>
   );

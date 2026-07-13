@@ -268,22 +268,24 @@ export default function ModernAlert(props: AlertProps): React.ReactElement | nul
       <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
     )}
     <div
+      data-part="root"
+      data-tone={alertType}
       className={`alert ${isCompact ? 'p-2 text-sm' : ''} ${className}`}
       style={{ ...TYPE_STYLES[alertType], ...style }}
       {...(responsive ? responsive.attrs : {})}
     >
       {/* Icon Section */}
-      {showIcon && <span>{icon || TYPE_ICONS[alertType]}</span>}
+      {showIcon && <span data-part="icon">{icon || TYPE_ICONS[alertType]}</span>}
 
       {/* Content Section */}
       <div>
-        <div className="font-bold">{message}</div>
-        {description && <div className="text-sm">{description}</div>}
+        <div data-part="label" className="font-bold">{message}</div>
+        {description && <div data-part="description" className="text-sm">{description}</div>}
       </div>
 
       {/* Close Button */}
       {closable && (
-        <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={handleClose} aria-label="Close">
+        <button data-part="action" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={handleClose} aria-label="Close">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-current w-4 h-4">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
           </svg>

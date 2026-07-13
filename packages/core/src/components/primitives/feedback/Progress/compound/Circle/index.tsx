@@ -241,6 +241,7 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
     return (
       <div
         ref={ref}
+        data-part="root"
         className={`rottay-progress-circle ${className}`}
         style={{ position: 'relative', width: size, height: size, ...style }}
       >
@@ -248,6 +249,7 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
         <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
           {/* Background Trail Circle */}
           <circle
+            data-part="track"
             cx={size / 2}
             cy={size / 2}
             r={radius}
@@ -258,6 +260,7 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
 
           {/* Progress Circle */}
           <circle
+            data-part="fill"
             cx={size / 2}
             cy={size / 2}
             r={radius}
@@ -274,6 +277,7 @@ export const ProgressCircle = forwardRef<HTMLDivElement, ProgressCircleProps>(
         {/* Center Percentage Display */}
         {showInfo && (
           <div
+            data-part="label"
             style={{
               position: 'absolute',
               top: '50%',

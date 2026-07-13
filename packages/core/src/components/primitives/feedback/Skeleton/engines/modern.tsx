@@ -161,7 +161,8 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   if (variant === 'circular' || variant === 'rectangular' || variant === 'rounded') {
     return (
       <div
-        className={`skeleton ${className}`}
+        data-part="root"
+        className={`skeleton rottay-skeleton--modern ${className}`}
         style={{
           ...getSkeletonStyle(),
           background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))',
@@ -182,10 +183,11 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
   // ---------------------------------------------------------------------------
 
   return (
-    <div className={`flex gap-4 ${className}`} style={style}>
+    <div data-part="root" className={`flex gap-4 rottay-skeleton--modern ${className}`} style={style}>
       {/* Avatar placeholder */}
       {avatar && (
         <div
+          data-part="avatar"
           className="skeleton"
           style={{
             width: avatarSize,
@@ -202,7 +204,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
       {/* Content section with title and paragraph lines */}
       <div className="flex-1 space-y-2">
         {/* Title line is 60% width to visually distinguish it from body text */}
-        {title && <div className="skeleton" style={{ height: '1.25rem', width: '60%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }} />}
+        {title && <div data-part="title" className="skeleton" style={{ height: '1.25rem', width: '60%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }} />}
 
         {/* Last paragraph line is 80% width to simulate a natural text ending,
             preventing the skeleton from looking like a uniform block */}
@@ -212,6 +214,7 @@ export default function ModernSkeleton(props: SkeletonProps): React.ReactElement
           }).map((_, i) => (
             <div
               key={i}
+              data-part="line"
               className="skeleton"
               style={{ height: '1rem', width: i === rows! - 1 ? '80%' : '100%', background: 'var(--ds-skeleton-bg, var(--ds-color-neutral-100))', animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)', animationTimingFunction: 'var(--ds-skeleton-animation-easing, ease-in-out)' }}
             />

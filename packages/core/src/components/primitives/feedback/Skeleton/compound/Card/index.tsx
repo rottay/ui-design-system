@@ -167,10 +167,11 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-card ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-card ${className}`} style={containerStyle}>
         {/* Optional image placeholder at top of card */}
         {hasImage && (
           <div
+            data-part="image"
             style={{
               ...shimmerStyle,
               width: '100%',
@@ -190,6 +191,7 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
         >
           {/* Title line - wider height, partial width */}
           <div
+            data-part="title"
             style={{
               ...shimmerStyle,
               height: '20px',
@@ -201,6 +203,7 @@ export const SkeletonCard = forwardRef<HTMLDivElement, SkeletonCardProps>(
           {Array.from({ length: lines }).map((_, index) => (
             <div
               key={index}
+              data-part="line"
               style={{
                 ...shimmerStyle,
                 height: '14px',

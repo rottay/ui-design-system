@@ -174,10 +174,11 @@ export const SkeletonText = forwardRef<HTMLDivElement, SkeletonTextProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-text ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-text ${className}`} style={containerStyle}>
         {Array.from({ length: lines }).map((_, index) => (
           <div
             key={index}
+            data-part="line"
             style={{
               ...lineStyle,
               // Last line is shorter for realistic text appearance

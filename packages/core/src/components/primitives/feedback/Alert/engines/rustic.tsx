@@ -339,23 +339,23 @@ export default function RusticAlert(props: AlertProps): React.ReactElement | nul
     {responsive && responsive.css && (
       <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
     )}
-    <div className={className} style={baseStyle} role="alert" {...(responsive ? responsive.attrs : {})}>
+    <div data-part="root" data-tone={alertType} className={className} style={baseStyle} role="alert" {...(responsive ? responsive.attrs : {})}>
       {/* Icon Section */}
       {showIcon && (
-        <span style={iconStyle}>
+        <span data-part="icon" style={iconStyle}>
           {icon || TYPE_ICONS[alertType]}
         </span>
       )}
 
       {/* Content Section */}
       <div style={contentStyle}>
-        <div style={messageStyle}>{message}</div>
-        {description && <div style={descriptionStyle}>{description}</div>}
+        <div data-part="label" style={messageStyle}>{message}</div>
+        {description && <div data-part="description" style={descriptionStyle}>{description}</div>}
       </div>
 
       {/* Close Button */}
       {closable && (
-        <button onClick={handleClose} style={closeButtonStyle}>
+        <button data-part="action" onClick={handleClose} style={closeButtonStyle}>
           x
         </button>
       )}

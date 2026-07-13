@@ -157,11 +157,12 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
     // -------------------------------------------------------------------------
 
     return (
-      <div ref={ref} className={`rottay-skeleton-form ${className}`} style={containerStyle}>
+      <div ref={ref} data-part="root" className={`rottay-skeleton-form ${className}`} style={containerStyle}>
         {Array.from({ length: fields }).map((_, index) => (
-          <div key={index} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <div key={index} data-part="field" style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
             {/* Label placeholder - width varies by index for visual variety */}
             <div
+              data-part="label"
               style={{
                 ...shimmerStyle,
                 height: '14px',
@@ -171,6 +172,7 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
             />
             {/* Input placeholder - full width, matches typical input height */}
             <div
+              data-part="input"
               style={{
                 ...shimmerStyle,
                 height: '38px',
@@ -182,6 +184,7 @@ export const SkeletonForm = forwardRef<HTMLDivElement, SkeletonFormProps>(
         ))}
         {/* Submit button placeholder */}
         <div
+          data-part="action"
           style={{
             ...shimmerStyle,
             height: '38px',

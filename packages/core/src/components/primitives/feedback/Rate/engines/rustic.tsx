@@ -431,6 +431,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
       return (
         <span
           key={index}
+          data-part="star"
+          data-state={isFilled && !isHalfFilled ? 'full' : isHalfFilled ? 'half' : 'empty'}
           style={starStyle}
           title={tooltips?.[index]}
           onMouseEnter={() => handleMouseEnter(starIndex)}
@@ -496,7 +498,8 @@ export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
           }
           (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
-        className={`rottay-rate rottay-rate--${size} ${disabled ? 'rottay-rate--disabled' : ''} ${readOnly ? 'rottay-rate--readonly' : ''} ${className}`}
+        data-part="root"
+        className={`rottay-rate rottay-rate--${size} rottay-rate--rustic ${disabled ? 'rottay-rate--disabled' : ''} ${readOnly ? 'rottay-rate--readonly' : ''} ${className}`}
         style={{ ...styles.container, direction, ...style }}
         role="radiogroup"
         aria-label="Rating"

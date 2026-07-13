@@ -100,7 +100,11 @@ export default function RusticSpinner(props: SpinnerProps): React.ReactElement {
   // ============================================================================
 
   return (
-    <div className={className} style={containerStyle}>
+    <div
+      data-part="root"
+      className={['rottay-spinner', 'rottay-spinner--rustic', className].filter(Boolean).join(' ')}
+      style={containerStyle}
+    >
       {/* Keyframe animation definition */}
       <style>{`
         @keyframes rustic-spin {
@@ -108,9 +112,9 @@ export default function RusticSpinner(props: SpinnerProps): React.ReactElement {
         }
       `}</style>
       {/* Animated spinner circle */}
-      <div style={spinnerStyle} />
+      <div data-part="indicator" style={spinnerStyle} />
       {/* Optional label text */}
-      {label && <div style={{ fontSize: 'var(--ds-spinner-label-size, 0.875rem)', color: 'var(--ds-spinner-label-color, inherit)' }}>{label}</div>}
+      {label && <div data-part="label" style={{ fontSize: 'var(--ds-spinner-label-size, 0.875rem)', color: 'var(--ds-spinner-label-color, inherit)' }}>{label}</div>}
     </div>
   );
 }

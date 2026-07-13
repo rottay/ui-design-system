@@ -1550,7 +1550,7 @@
    "lane": "skin-adoption",
    "order": 3,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-SKIN-01",
     "WO-SKIN-02"
@@ -1558,7 +1558,9 @@
    "mustLandWith": [],
    "programs": [],
    "notes": "Owner-approved 2026-07-11 (stage-1 byte-exact plumbing; stage-2 visual improvement is a later program). Normative lane doc: roadmap/skin-adoption.md; authoring law: docs-engineering/engineering/design-system/runtime/skins/README.md. File lists are hypotheses until WO-SKIN-01 census corrects them.",
-   "progressLog": []
+   "progressLog": [],
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-13"
   },
   {
    "id": "WO-SKIN-04",

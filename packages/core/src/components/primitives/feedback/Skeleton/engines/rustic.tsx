@@ -200,7 +200,9 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
       <>
         <style>{keyframeStyles}</style>
         <div
-          className={`rottay-skeleton ${className}`}
+          data-part="root"
+          data-active={active}
+          className={`rottay-skeleton rottay-skeleton--rustic ${className}`}
           style={{
             ...baseSkeletonStyle,
             width: typeof width === 'number' ? `${width}px` : width || '100%',
@@ -220,10 +222,16 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
   return (
     <>
       <style>{keyframeStyles}</style>
-      <div className={`rottay-skeleton-wrapper ${className}`} style={{ display: 'flex', gap: '16px', ...style }}>
+      <div
+        data-part="root"
+        data-active={active}
+        className={`rottay-skeleton-wrapper rottay-skeleton--rustic ${className}`}
+        style={{ display: 'flex', gap: '16px', ...style }}
+      >
         {/* Avatar placeholder */}
         {avatar && (
           <div
+            data-part="avatar"
             style={{
               ...baseSkeletonStyle,
               width: avatarSize,
@@ -237,12 +245,12 @@ export default function RusticSkeleton(props: SkeletonProps): React.ReactElement
         {/* Content section with title and paragraph lines */}
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {/* Title line */}
-          {title && (<div style={{ ...baseSkeletonStyle, height: '20px', width: '60%', borderRadius: '4px' }} />)}
+          {title && (<div data-part="title" style={{ ...baseSkeletonStyle, height: '20px', width: '60%', borderRadius: '4px' }} />)}
 
           {/* Paragraph lines with varying widths */}
           {paragraph &&
             Array.from({ length: typeof paragraph === 'object' ? paragraph.rows || rows! : rows! }).map((_, i) => (
-              <div key={i} style={{ ...baseSkeletonStyle, height: '16px', width: i === rows! - 1 ? '80%' : '100%', borderRadius: '4px' }} />
+              <div key={i} data-part="line" style={{ ...baseSkeletonStyle, height: '16px', width: i === rows! - 1 ? '80%' : '100%', borderRadius: '4px' }} />
             ))}
         </div>
       </div>

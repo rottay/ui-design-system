@@ -191,11 +191,17 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
     };
 
     return (
-      <div className={className} style={containerStyle}>
+      <div
+        data-part="root"
+        data-status={status}
+        className={['rottay-progress-shell', 'rottay-progress-shell--rustic', className].filter(Boolean).join(' ')}
+        style={containerStyle}
+      >
         {/* SVG Circle Container */}
         <svg width={size} height={size}>
           {/* Background Track Circle */}
           <circle
+            data-part="track"
             cx={center}
             cy={center}
             r={radius}
@@ -209,6 +215,7 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
               percent changes rather than jumping, providing visual feedback
               during incremental progress updates. */}
           <circle
+            data-part="fill"
             cx={center}
             cy={center}
             r={radius}
@@ -226,6 +233,7 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
         {/* Center Percentage Display */}
         {showInfo && (
           <div
+            data-part="label"
             style={{
               position: 'absolute',
               fontSize: '1.5rem',
@@ -287,7 +295,12 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
   };
 
   return (
-    <div className={className} style={containerStyle}>
+    <div
+      data-part="root"
+      data-status={status}
+      className={['rottay-progress-shell', 'rottay-progress-shell--rustic', className].filter(Boolean).join(' ')}
+      style={containerStyle}
+    >
       {/* Inline <style> tag for active animation keyframes. Unlike the
           Notification/Message engines which inject styles once via document.head,
           Progress uses a co-located <style> tag because the animation is only
@@ -302,13 +315,13 @@ export default function RusticProgress(props: ProgressProps): React.ReactElement
       )}
 
       {/* Track with Progress Bar */}
-      <div style={trackStyle}>
-        <div style={barStyle} />
+      <div data-part="track" style={trackStyle}>
+        <div data-part="fill" style={barStyle} />
       </div>
 
       {/* Percentage Info Display */}
       {showInfo && (
-        <div style={{ marginTop: '0.25rem', fontSize: '0.875rem', textAlign: 'right' }}>
+        <div data-part="label" style={{ marginTop: '0.25rem', fontSize: '0.875rem', textAlign: 'right' }}>
           {clampedPercent}%
         </div>
       )}
