@@ -317,8 +317,8 @@ each one. This is the single most likely source of a non-obvious visual regressi
 ## CORRECTION (2026-07-13, orchestrator) — CK-C's shared-vocabulary premise is FALSE
 
 §6 grouped CK-C as "the single biggest shared-vocabulary cluster" on the strength of
-`patterns/data/list-toolbar/tokens.ts` EXISTING. A partial inventory of six of its thirteen
-files checked whether anything ADOPTS it. Nothing does.
+`patterns/data/list-toolbar/tokens.ts` EXISTING. A partial inventory of seven of its thirteen
+files checked whether anything ADOPTS it. Nothing does — seven for seven.
 
 | file | imports `list-toolbar/tokens.ts`? | verdict |
 | --- | --- | --- |
@@ -327,7 +327,8 @@ files checked whether anything ADOPTS it. Nothing does.
 | scope-switcher | no | **DIVERGED** — active pill is a two-stop gradient at 14%/9% primary vs the canonical flat 8%; its border is a 42% mix vs the canonical full-opacity token; and its pills are NEVER transparent at rest, where the canonical default is `transparent`. A "glass pill" language, not a variant. |
 | view-mode-switcher | no | **DIVERGED** (narrowly) — same SHAPE as the canonical active fill (a primary-tinted `color-mix` over a surface) at a different percentage (14% vs 8%) and a different base (`--ds-surface-card` vs `transparent`), plus an active `boxShadow` the canonical default does not have. |
 | table-toolbar | no | **DIVERGED** — its divider is a fading gradient line with a highlight shadow; the canonical `TOOLBAR_DIVIDER` is a flat color. Its search input has a solid fill where the canonical search recipe defaults to transparent. |
-| saved-views-menu, search-command-bar, active-filters-bar, list-toolbar, saved-views, status-filter-pills | not yet inventoried | — |
+| saved-views-menu | no | **DIVERGED** — an ad hoc "primary-tinted vertical gradient" language whose opacities are an unstructured spread (4, 8, 9, 12, 14, 16, 18, 20, 26, 28, 34%): every primary-tinted surface in the file picked its own percentage. Its closest cousin to the canonical token differs at 12% vs 8%. Also carries a real (invisible) CSS defect: `borderColor` is assigned the full `border` SHORTHAND string in its false branch (index.tsx:344-346), which the browser drops as invalid; the base shorthand's color happens to win, so nothing looks wrong today, but any reorder of the spread breaks the closed-state border silently. |
+| search-command-bar, active-filters-bar, list-toolbar, saved-views, status-filter-pills | not yet inventoried | — |
 
 **Consequence for the contract.** CK-C is not one skin with one vocabulary. It is several
 components that sit next to each other and independently reinvented the same concepts with
