@@ -1,0 +1,230 @@
+/**
+ * Modern DatePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements at all; unlayered
+ * outranks preflight and still yields to a caller's inline `style`.
+ *
+ * TWO SCOPE ROOTS:
+ * - The trigger (`DatePickerBase` root `<div data-part='root'>`, `RangePicker`
+ *   root) stays IN-TREE. Neither root carried a first-party class before this
+ *   migration -- both were Tailwind-only passthrough -- so this migration adds
+ *   `rottay-datepicker`/`rottay-datepicker--modern` (single) and
+ *   `rottay-datepicker-range`/`rottay-datepicker-range--modern` (range),
+ *   mirroring the BEM family the rustic engine already carries for this same
+ *   component.
+ * - `CalendarPanel` (the month/year/date dropdown) is `createPortal(...,
+ *   document.body)` by BOTH `DatePickerBase` and `RangePicker` -- it is NOT a
+ *   DOM descendant of either trigger root, so it cannot be scoped under a
+ *   trigger class. It carried only `data-part='panel'` (plus `data-mode`) with
+ *   no class; this migration adds the self-sufficient
+ *   `rottay-datepicker-panel`/`rottay-datepicker-panel--modern` pair so panel
+ *   rules can scope standalone, mirroring TimePicker modern's
+ *   `rottay-timepicker__panel`. The SAME panel + `TimePickerPanel` (the
+ *   embedded hour/minute row) is shared verbatim by `DatePickerBase` and
+ *   `RangePicker`, so one panel ruleset serves both.
+ *
+ * CELL RULE IS SHARED ACROSS date/month/year MODES: `gridCellStyle` (day grid)
+ * and the month/year cell buttons resolved to byte-identical border/background/
+ * color/border-radius/box-shadow values (verified against the pre-migration
+ * source), so one `[data-part='cell']` ruleset below serves all three --
+ * discriminated only by the `data-today`/`data-selected`/`data-in-range` state
+ * attributes already stamped on each cell, which month/year cells simply never
+ * carry `data-in-range` on. The one real per-mode difference is `outline: none`,
+ * which only the day-grid cell's original `gridCellStyle` set (month/year cell
+ * buttons never had an inline `outline` at all) -- kept scoped to
+ * `[data-mode='date']` so month/year buttons retain their un-suppressed native
+ * focus outline exactly as before.
+ *
+ * STATUS: neither trigger root carried a status/disabled modifier class
+ * pre-migration -- the border-color override was pure inline JS keyed on the
+ * `status` prop. This migration adds `data-status` ('default'|'error'|'warning')
+ * to each trigger-input, the same discriminator idiom InputNumber/TimePicker's
+ * modern skins use.
+ *
+ * ACTIVE RANGE INPUT: `RangePicker`'s start/end box-shadow ring was never
+ * native focus -- it painted whichever input `activeInput` currently targets
+ * while the panel is open. `data-active` (added here) reproduces the removed
+ * inline ternary's condition exactly: `activeInput === 'start' && isOpen` (and
+ * the `'end'` counterpart) -- same idiom as TimePicker modern's range input.
+ *
+ * KEYFRAME: `rottay-select-slide-in` was injected per-mount via a `<style>` tag
+ * inside `DatePickerBase`'s own return only -- `RangePicker` never rendered
+ * that tag despite its panel referencing the same animation name (a real
+ * missing-keyframe dependency gap). Renamed `ds-date-picker-slide-in` and moved
+ * here (loads once, globally, for both `DatePickerBase` and `RangePicker`,
+ * structurally fixing the gap); `panelStyle.animation`'s inline reference was
+ * updated to match.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
+ * two root classes + the target's own `data-part` repeated. Under the
+ * standalone panel there is no trigger root pair to draw on, so the panel's
+ * own class pair (`rottay-datepicker-panel.rottay-datepicker-panel--modern`)
+ * plays that role, plus the target's own `data-part` repeated -- matching
+ * TimePicker modern's `.rottay-timepicker__panel.rottay-timepicker__panel
+ * [data-part='x'][data-part='x']` idiom. Non-border paint (background, color,
+ * box-shadow, outline, border-radius) and pure `border: none` resets win
+ * unlayered at (0,3,0) or lower.
+ */
+
+/* ---- trigger (in-tree): single ---- */
+
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+
+.rottay-datepicker.rottay-datepicker--modern [data-part='clear-button'] {
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker.rottay-datepicker--modern [data-part='calendar-icon'] {
+  transform: translateY(-50%);
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- trigger (in-tree): range ---- */
+
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-active='true'] {
+  box-shadow: 0 0 0 2px var(--ds-color-primary);
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='separator'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* ---------------------------------------------------------------------
+   Panel (portal, standalone) -- shared by DatePickerBase and RangePicker,
+   all three modes (month/year/date).
+   --------------------------------------------------------------------- */
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern {
+  background: var(--ds-color-bg-elevated);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-datepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='panel-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='weekday-header'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* Cell -- shared by the date/month/year grids (see header comment). */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell'] {
+  outline: none;
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
+  background: var(--ds-color-bg-hover);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-selected='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border: 1px solid var(--ds-color-primary);
+}
+/* Day-grid cell hover: guarded exactly like the removed onMouseEnter/onMouseLeave
+   (`!cell.isDisabled && !isSelected && !isEndpoint`, `isEndpoint` folded into
+   `data-selected`) -- the un-hovered rest value is whatever the rules above
+   already resolve to (transparent, or the in-range hover-tinted background),
+   so no separate "leave" rule is needed. */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell']:hover:not([data-disabled='true']):not([data-selected='true']) {
+  background: var(--ds-color-bg-hover);
+  transform: scale(1.1);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'][data-part='time-column'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'] select {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-bg-elevated);
+  color: var(--ds-color-text-primary);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'][data-part='time-column'] select {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'] span {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* today-button: static, no hover -- matches TimePicker's now-button gap. */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+
+@keyframes ds-date-picker-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

@@ -109,19 +109,10 @@ const ClockSvg: React.FC = () => (
 
 // ---------------------------------------------------------------------------
 // Shared inline styles (CSS-variable based)
-// The border color cascade: validation status > focus > default. This ordering
-// ensures error/warning states are always visible even when the input is focused.
+// The border color cascade (validation status > focus/active > default) now
+// lives in the unlayered skin CSS (date-picker.css), keyed on the BEM status
+// modifier classes plus `:focus` (single trigger) / `data-active` (range).
 // ---------------------------------------------------------------------------
-
-function getBorderColor(
-  status: string | undefined,
-  isFocused: boolean,
-): string {
-  if (status === 'error') return 'var(--ds-datepicker-error-border, var(--ds-color-error))';
-  if (status === 'warning') return 'var(--ds-datepicker-warning-border, var(--ds-color-warning))';
-  if (isFocused) return 'var(--ds-datepicker-border-focus, var(--ds-color-primary-500))';
-  return 'var(--ds-datepicker-border, var(--ds-color-border))';
-}
 
 // ---------------------------------------------------------------------------
 // Rustic CalendarPanel (portal-based dropdown)
@@ -237,13 +228,9 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
     left: position.left,
     zIndex: 1050,
     padding: '12px',
-    backgroundColor: 'var(--ds-datepicker-panel-bg, var(--ds-color-bg-elevated))',
-    borderRadius: 'var(--ds-datepicker-panel-radius, 8px)',
-    boxShadow: 'var(--ds-datepicker-panel-shadow, var(--ds-shadow-lg))',
-    border: '1px solid var(--ds-datepicker-panel-border, var(--ds-color-border))',
     fontFamily: 'var(--ds-font-family-base, sans-serif)',
     width: '280px',
-    animation: 'rottay-dp-panel-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
+    animation: 'ds-date-picker-panel-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
     transformOrigin: 'top center',
   };
 
@@ -255,12 +242,8 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   };
 
   const navBtnStyle: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
     padding: '4px',
-    borderRadius: 'var(--ds-datepicker-radius, 8px)',
-    color: 'var(--ds-datepicker-nav-color, var(--ds-color-text-secondary))',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -270,7 +253,6 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   const headerTitleStyle: React.CSSProperties = {
     fontWeight: 600,
     fontSize: '14px',
-    color: 'var(--ds-datepicker-header-color, var(--ds-color-text-primary))',
   };
 
   const dayHeaderStyle: React.CSSProperties = {
@@ -284,7 +266,6 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
     textAlign: 'center',
     fontSize: '12px',
     fontWeight: 500,
-    color: 'var(--ds-datepicker-day-header-color, var(--ds-color-text-tertiary))',
     padding: '4px 0',
   };
 
@@ -297,38 +278,18 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   // Cell style function is computed per-cell to handle the layered visual states:
   // selected, range endpoint, in-range fill, today indicator, focused, disabled.
   // Each state uses CSS variables so tenant themes override colors automatically.
-  const getCellStyle = (cell: CalendarDay, isSelected: boolean, isFocused: boolean, inRange: boolean, isEndpoint: boolean): React.CSSProperties => ({
+  const getCellStyle = (cell: CalendarDay): React.CSSProperties => ({
     width: '36px',
     height: '36px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: '13px',
-    borderRadius: 'var(--ds-datepicker-cell-radius, 4px)',
-    border: cell.isToday && !isSelected && !isEndpoint
-      ? '1px solid var(--ds-datepicker-today-border, var(--ds-color-primary-500))'
-      : isFocused
-        ? '2px solid var(--ds-datepicker-focus-ring, var(--ds-color-primary-500))'
-        : 'none',
-    backgroundColor: isSelected || isEndpoint
-      ? 'var(--ds-datepicker-selected-bg, var(--ds-color-primary-500))'
-      : inRange && !isEndpoint
-        ? 'var(--ds-datepicker-range-bg, var(--ds-color-primary-100))'
-        : 'transparent',
-    color: isSelected || isEndpoint
-      ? 'var(--ds-datepicker-selected-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)))'
-      : !cell.isCurrentMonth
-        ? 'var(--ds-datepicker-outside-color, var(--ds-color-text-tertiary))'
-        : 'var(--ds-datepicker-cell-color, var(--ds-color-text-primary))',
     cursor: cell.isDisabled ? 'not-allowed' : 'pointer',
     opacity: cell.isDisabled ? 0.25 : 1,
     transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s, transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s',
     padding: 0,
-    outline: 'none',
     margin: '0 auto',
-    boxShadow: isSelected || isEndpoint
-      ? 'var(--ds-datepicker-selected-shadow, 0 0 0 2px var(--ds-color-primary-200))'
-      : 'none',
   });
 
   const footerStyle: React.CSSProperties = {
@@ -337,17 +298,12 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
     justifyContent: 'space-between',
     marginTop: '8px',
     paddingTop: '8px',
-    borderTop: '1px solid var(--ds-datepicker-panel-border, var(--ds-color-border))',
   };
 
   const footerBtnStyle: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
-    color: 'var(--ds-datepicker-today-color, var(--ds-color-primary-500))',
     fontSize: '13px',
     padding: '4px 12px',
-    borderRadius: 'var(--ds-datepicker-radius, 8px)',
     fontWeight: 500,
     transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, transform 0.15s',
   };
@@ -358,43 +314,25 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
     gap: '4px',
   };
 
-  const getMonthCellStyle = (isSelected: boolean, isCurrent: boolean): React.CSSProperties => ({
+  const monthCellStyle: React.CSSProperties = {
     padding: '10px 4px',
     textAlign: 'center',
     fontSize: '13px',
-    borderRadius: 'var(--ds-datepicker-cell-radius, 4px)',
-    border: isCurrent && !isSelected
-      ? '1px solid var(--ds-datepicker-today-border, var(--ds-color-primary-500))'
-      : 'none',
-    backgroundColor: isSelected
-      ? 'var(--ds-datepicker-selected-bg, var(--ds-color-primary-500))'
-      : 'transparent',
-    color: isSelected
-      ? 'var(--ds-datepicker-selected-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)))'
-      : 'var(--ds-datepicker-cell-color, var(--ds-color-text-primary))',
     cursor: 'pointer',
     transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s',
-    outline: 'none',
-    boxShadow: isSelected ? 'var(--ds-datepicker-selected-shadow, 0 0 0 2px var(--ds-color-primary-200))' : 'none',
-  });
+  };
 
   const timeRowStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
     padding: '8px 4px',
-    borderTop: '1px solid var(--ds-datepicker-panel-border, var(--ds-color-border))',
   };
 
   const selectStyle: React.CSSProperties = {
     padding: '2px 4px',
     fontSize: '13px',
-    border: '1px solid var(--ds-datepicker-border, var(--ds-color-border))',
-    borderRadius: 'var(--ds-datepicker-radius, 8px)',
-    backgroundColor: 'var(--ds-datepicker-bg, var(--ds-color-bg-elevated))',
-    color: 'var(--ds-datepicker-color, var(--ds-color-text-primary))',
     width: '56px',
-    outline: 'none',
     transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s',
   };
 
@@ -404,7 +342,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   // positioned using coordinates computed from the trigger's bounding rect.
   if (picker === 'month') {
     return createPortal(
-      <div ref={panelRef} data-part="panel" data-mode="month" style={panelStyle} role="dialog" aria-label="Month picker">
+      <div ref={panelRef} data-part="panel" data-mode="month" className="rottay-datepicker-panel rottay-datepicker-panel--rustic" style={panelStyle} role="dialog" aria-label="Month picker">
         <div data-part="header" style={headerStyle}>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={handlePrevYear} aria-label={t('datepicker.previous_year')}>
             <ChevronLeftSvg />
@@ -427,7 +365,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
                 data-part="cell"
                 data-selected={isSelected || undefined}
                 data-today={isCurrent || undefined}
-                style={getMonthCellStyle(isSelected, isCurrent)}
+                style={monthCellStyle}
                 onClick={() => {
                   const date = new Date(viewYear, i, 1);
                   onDateSelect(date);
@@ -451,7 +389,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   if (picker === 'year') {
     const startYear = Math.floor(viewYear / 10) * 10;
     return createPortal(
-      <div ref={panelRef} data-part="panel" data-mode="year" style={panelStyle} role="dialog" aria-label="Year picker">
+      <div ref={panelRef} data-part="panel" data-mode="year" className="rottay-datepicker-panel rottay-datepicker-panel--rustic" style={panelStyle} role="dialog" aria-label="Year picker">
         <div data-part="header" style={headerStyle}>
           <button type="button" data-part="nav-button" style={navBtnStyle} onClick={() => onViewChange(viewYear - 10, viewMonth)} aria-label={t('datepicker.previous_decade')}>
             <ChevronLeftSvg />
@@ -475,7 +413,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
                 data-selected={isSelected || undefined}
                 data-today={isCurrent || undefined}
                 style={{
-                  ...getMonthCellStyle(isSelected, isCurrent),
+                  ...monthCellStyle,
                   opacity: isOutOfRange ? 0.4 : 1,
                 }}
                 onClick={() => {
@@ -501,7 +439,7 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
   const grid = generateCalendarGrid(viewYear, viewMonth, disabledDate);
 
   return createPortal(
-    <div ref={panelRef} data-part="panel" data-mode="date" style={panelStyle} role="dialog" aria-label={t('datepicker.date_picker')}>
+    <div ref={panelRef} data-part="panel" data-mode="date" className="rottay-datepicker-panel rottay-datepicker-panel--rustic" style={panelStyle} role="dialog" aria-label={t('datepicker.date_picker')}>
       {/* Header */}
       <div data-part="header" style={headerStyle}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
@@ -570,27 +508,11 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
               data-selected={(isSelected || !!isEndpoint) || undefined}
               data-in-range={inRange || undefined}
               data-disabled={cell.isDisabled || undefined}
-              style={getCellStyle(cell, isSelected, isFocusedCell, inRange, !!isEndpoint)}
+              data-focused={isFocusedCell || undefined}
+              data-outside-month={!cell.isCurrentMonth || undefined}
+              style={getCellStyle(cell)}
               onClick={() => {
                 if (!cell.isDisabled) onDateSelect(cell.date);
-              }}
-              // Hover effects are applied via inline style mutations instead of CSS
-              // :hover because inline styles (needed for CSS variable theming) have
-              // higher specificity than pseudo-classes in stylesheets.
-              onMouseEnter={(e) => {
-                if (!cell.isDisabled) {
-                  e.currentTarget.style.transform = 'scale(1.1)';
-                  if (!isSelected && !isEndpoint) {
-                    e.currentTarget.style.backgroundColor =
-                      'var(--ds-datepicker-cell-hover-bg, var(--ds-color-primary-50))';
-                  }
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1)';
-                if (!isSelected && !isEndpoint && !inRange) {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                }
               }}
             >
               {content}
@@ -607,39 +529,17 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
             style={selectStyle}
             value={hours}
             onChange={(e) => onHoursChange(Number(e.target.value))}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor =
-                'var(--ds-datepicker-border-focus, var(--ds-color-primary-500))';
-              e.currentTarget.style.boxShadow =
-                'var(--ds-datepicker-shadow-focus, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200))';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor =
-                'var(--ds-datepicker-border, var(--ds-color-border))';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
             aria-label={t('datepicker.hour')}
           >
             {Array.from({ length: 24 }, (_, i) => (
               <option key={i} value={i}>{pad2(i)}</option>
             ))}
           </select>
-          <span style={{ fontWeight: 600, color: 'var(--ds-datepicker-color, var(--ds-color-text-primary))' }}>:</span>
+          <span style={{ fontWeight: 600 }}>:</span>
           <select
             style={selectStyle}
             value={minutes}
             onChange={(e) => onMinutesChange(Number(e.target.value))}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor =
-                'var(--ds-datepicker-border-focus, var(--ds-color-primary-500))';
-              e.currentTarget.style.boxShadow =
-                'var(--ds-datepicker-shadow-focus, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200))';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor =
-                'var(--ds-datepicker-border, var(--ds-color-border))';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
             aria-label={t('datepicker.minute')}
           >
             {Array.from({ length: 60 }, (_, i) => (
@@ -657,18 +557,6 @@ const RusticCalendarPanel: React.FC<RusticCalendarPanelProps> = ({
             data-part="today-button"
             style={footerBtnStyle}
             onClick={onTodayClick}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor =
-                'var(--ds-datepicker-today-hover-bg, var(--ds-color-primary-50))';
-              e.currentTarget.style.boxShadow =
-                'var(--ds-datepicker-today-hover-shadow, var(--ds-shadow-sm))';
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-              e.currentTarget.style.boxShadow = 'none';
-              e.currentTarget.style.transform = 'translateY(0)';
-            }}
           >
             {showTime && showNow ? t('datepicker.now') : t('datepicker.today')}
           </button>
@@ -925,26 +813,15 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
     padding: sizeConfig.padding,
     paddingRight: '2.5rem',
     fontSize: sizeConfig.fontSize,
-    border: `1px solid ${getBorderColor(status, isFocused)}`,
-    borderRadius: 'var(--ds-datepicker-radius, 8px)',
-    outline: 'none',
     transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
     minWidth: sizeConfig.minWidth,
-    backgroundColor: disabled
-      ? 'var(--ds-datepicker-bg-disabled, var(--ds-color-bg-secondary))'
-      : 'var(--ds-datepicker-bg, var(--ds-color-bg-elevated))',
-    color: 'var(--ds-datepicker-color, var(--ds-color-text-primary))',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,
-    boxShadow: isFocused
-      ? 'var(--ds-datepicker-shadow-focus, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200))'
-      : 'none',
   };
 
   const iconStyle: React.CSSProperties = {
     position: 'absolute',
     right: '8px',
-    color: 'var(--ds-datepicker-icon-color, var(--ds-color-text-tertiary))',
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
@@ -953,10 +830,7 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
   const clearBtnStyle: React.CSSProperties = {
     position: 'absolute',
     right: '28px',
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
-    color: 'var(--ds-datepicker-clear-color, var(--ds-color-text-tertiary))',
     fontSize: sizeConfig.fontSize,
     padding: '0 4px',
     transition: 'color 0.2s',
@@ -1035,14 +909,6 @@ const DatePickerBase = React.forwardRef<HTMLInputElement, DatePickerProps>((prop
           onPanelChange={onPanelChange}
         />
       )}
-
-      {/* Rustic animations */}
-      <style>{`
-        @keyframes rottay-dp-panel-in {
-          from { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
-          to { opacity: 1; transform: scaleY(1) translateY(0); }
-        }
-      `}</style>
     </>
   );
 });
@@ -1252,34 +1118,17 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
     ...style,
   };
 
-  const getInputStyle = (inputType: 'start' | 'end'): React.CSSProperties => ({
+  const getInputStyle = (): React.CSSProperties => ({
     padding: sizeConfig.padding,
     fontSize: sizeConfig.fontSize,
-    border: `1px solid ${getBorderColor(status, activeInput === inputType && isOpen)}`,
-    borderRadius: 'var(--ds-datepicker-radius, 8px)',
-    outline: 'none',
     transition: 'var(--ds-datepicker-transition, border-color 0.2s, box-shadow 0.2s)',
     minWidth: sizeConfig.minWidth,
-    backgroundColor: disabled
-      ? 'var(--ds-datepicker-bg-disabled, var(--ds-color-bg-secondary))'
-      : 'var(--ds-datepicker-bg, var(--ds-color-bg-elevated))',
-    color: 'var(--ds-datepicker-color, var(--ds-color-text-primary))',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,
-    boxShadow: activeInput === inputType && isOpen
-      ? 'var(--ds-datepicker-shadow-focus, 0 0 0 2px var(--ds-color-primary-100))'
-      : 'none',
   });
 
-  const separatorStyle: React.CSSProperties = {
-    color: 'var(--ds-datepicker-separator-color, var(--ds-color-text-tertiary))',
-  };
-
   const clearBtnStyle: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
-    color: 'var(--ds-datepicker-clear-color, var(--ds-color-text-tertiary))',
     fontSize: sizeConfig.fontSize,
     padding: '0 4px',
     transition: 'color 0.2s',
@@ -1303,7 +1152,8 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
           readOnly
           data-part="trigger-input"
           data-range-input="start"
-          style={getInputStyle('start')}
+          data-active={(activeInput === 'start' && isOpen) || undefined}
+          style={getInputStyle()}
           value={startText}
           disabled={disabled}
           placeholder={displayPlaceholder[0]}
@@ -1317,13 +1167,14 @@ const RangePicker = React.forwardRef<HTMLDivElement, RangePickerProps>((props, r
           aria-expanded={isOpen}
           aria-label={displayPlaceholder[0]}
         />
-        <span data-part="separator" style={separatorStyle}>{separator}</span>
+        <span data-part="separator">{separator}</span>
         <input
           type="text"
           readOnly
           data-part="trigger-input"
           data-range-input="end"
-          style={getInputStyle('end')}
+          data-active={(activeInput === 'end' && isOpen) || undefined}
+          style={getInputStyle()}
           value={endText}
           disabled={disabled}
           placeholder={displayPlaceholder[1]}

@@ -57,7 +57,7 @@ describe.each([
     expect(itemRender).toHaveBeenCalledTimes(2);
 
     const progressbar = screen.getByRole('progressbar', { name: /42%/ });
-    expect(progressbar).toHaveStyle({ background: 'linear-gradient(to right, #111111, #999999)' });
+    expect(progressbar.style.getPropertyValue('--ds-upload-progress-fill')).toBe('linear-gradient(to right, #111111, #999999)');
 
     const imageItem = screen.getByRole('listitem', { name: 'avatar.png' });
     fireEvent.mouseEnter(imageItem);

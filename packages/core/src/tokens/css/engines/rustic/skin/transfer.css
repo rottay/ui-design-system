@@ -1,0 +1,124 @@
+/**
+ * Rustic Transfer skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.rottay-transfer.rottay-transfer--rustic[data-part='root']`,
+ * carrying `rottay-transfer--disabled` when the whole Transfer is disabled.
+ * Every painted part below is a descendant, reached via
+ * `.rottay-transfer.rottay-transfer--rustic [data-part='...']`. The search
+ * cell (`rottay-transfer__search`) and the pagination page-count `<span>`
+ * carry no `data-part`; the search cell already has its own BEM class
+ * (repeated for the border floor), the page-count span is reached as the
+ * lone child of `panel-pagination`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
+ * classes + the target's own `data-part`/class REPEATED. Non-border paint
+ * (background, color, outline, border-radius) and pure `border: none`
+ * resets win unlayered at (0,3,0).
+ *
+ * TWO DEFECTS FIXED STRUCTURALLY (both pre-existing, not introduced here):
+ * (1) the search input's `onBlur` used to clear `borderColor` to the empty
+ * string, which -- because React never re-renders on focus/blur -- left the
+ * border on the browser's initial `currentColor` instead of restoring the
+ * `--ds-transfer-search-input-border` token; deleting the imperative
+ * handlers and shipping a rest border rule here restores the real default.
+ * (2) the item-row hover's `#1677ff` hex fallback and the move-button
+ * hover/press shadows were magic literals duplicated inline; they are
+ * transcribed byte-exact below (still not tokenized -- filed as a proposal).
+ *
+ * INTERACTION MAPPING: the search focus ring, the item-row hover, and the
+ * move-button hover/press all used to be imperative `.style.*` writes keyed
+ * on native `:focus`/`:hover`/`:active` (and, for the move buttons, the
+ * native `disabled` attribute the JS handlers also gated on --
+ * `:not(:disabled)` reproduces `!disabled && count > 0` exactly). The item
+ * hover additionally gated on the item's own `data-disabled` and the whole
+ * Transfer's `disabled` state (`rottay-transfer--disabled` on root).
+ */
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel'] {
+  border-radius: var(--ds-transfer-radius);
+  background-color: var(--ds-transfer-bg);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-transfer-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-header'] {
+  background-color: var(--ds-transfer-header-bg);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-header'][data-part='panel-header'] {
+  border-bottom: 2px solid var(--ds-transfer-header-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-count'] {
+  color: var(--ds-transfer-count-color);
+}
+
+.rottay-transfer.rottay-transfer--rustic .rottay-transfer__search.rottay-transfer__search {
+  border-bottom: 1px solid var(--ds-transfer-header-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-search'] {
+  border-radius: var(--ds-transfer-search-input-radius);
+  outline: none;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-search'][data-part='panel-search'] {
+  border: 1px solid var(--ds-transfer-search-input-border);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-search'][data-part='panel-search']:focus {
+  border-color: var(--ds-color-primary, #1677ff);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-item'] {
+  border-radius: var(--ds-transfer-item-radius);
+  background-color: transparent;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-item'][data-part='panel-item'] {
+  border-left: 3px solid transparent;
+}
+.rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item']:not([data-disabled='true']):hover {
+  background-color: var(--ds-transfer-item-bg-hover);
+}
+.rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item'][data-part='panel-item']:not([data-disabled='true']):hover {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-empty'] {
+  color: var(--ds-transfer-empty-color);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-pagination'][data-part='panel-pagination'] {
+  border-top: 1px solid var(--ds-transfer-header-border);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-pagination'] > span {
+  color: var(--ds-transfer-count-color);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='pagination-button'] {
+  background: none;
+  border-radius: 4px;
+  color: inherit;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='pagination-button'][data-part='pagination-button'] {
+  border: 1px solid var(--ds-transfer-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='move-button'] {
+  background-color: var(--ds-transfer-button-bg);
+  color: var(--ds-transfer-button-color);
+  border-radius: var(--ds-transfer-button-radius);
+  border: none;
+  transform: translateY(0) scale(1);
+  box-shadow: none;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='move-button']:not(:disabled):hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='move-button']:not(:disabled):active {
+  transform: scale(0.97);
+}

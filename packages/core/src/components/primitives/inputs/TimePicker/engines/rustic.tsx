@@ -103,7 +103,9 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   // Controlled vs uncontrolled: external `value` takes precedence
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<string>(() => parseTime(defaultValue));
-  // Focus state drives border color and box-shadow via inline styles
+  // `focused` also drives the `rottay-timepicker--focused` root modifier class
+  // below; border color and box-shadow paint come from the skin's native
+  // `:focus` rule on `[data-part='trigger-input']`, the same element.
   // The triad is decided once, in the behavior core. `focused` is any focus --
   // a field's focus border must appear when a pointer lands in it. A ring is
   // `focusVisible`, and this part does not draw one.
@@ -148,14 +150,6 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
     className,
   ].filter(Boolean).join(' ');
 
-  /** Resolves border color based on validation status and focus state priority. */
-  const getBorderColor = () => {
-    if (status === 'error') return 'var(--ds-timepicker-error-border)';
-    if (status === 'warning') return 'var(--ds-timepicker-warning-border)';
-    if (isFocused) return 'var(--ds-timepicker-border-focus)';
-    return 'var(--ds-timepicker-border)';
-  };
-
   const wrapperStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-flex',
@@ -167,22 +161,15 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   const inputStyle: React.CSSProperties = {
     ...resolveInputPadding(sizeConfig.padding, '2rem'),
     fontSize: sizeConfig.fontSize,
-    border: `1px solid ${getBorderColor()}`,
-    borderRadius: 'var(--ds-timepicker-radius)',
-    outline: 'none',
     transition: 'var(--ds-timepicker-transition)',
     minWidth: sizeConfig.minWidth,
-    backgroundColor: disabled ? 'var(--ds-timepicker-bg-disabled)' : 'var(--ds-timepicker-bg)',
-    color: 'var(--ds-timepicker-color)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,
-    boxShadow: isFocused ? 'var(--ds-timepicker-shadow-focus)' : 'none',
   };
 
   const iconStyle: React.CSSProperties = {
     position: 'absolute',
     right: '8px',
-    color: 'var(--ds-timepicker-icon-color)',
     pointerEvents: 'none',
     fontSize: sizeConfig.fontSize,
   };
@@ -190,10 +177,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   const clearBtnStyle: React.CSSProperties = {
     position: 'absolute',
     right: '28px',
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
-    color: 'var(--ds-timepicker-clear-color)',
     fontSize: sizeConfig.fontSize,
     padding: '0 4px',
   };
@@ -237,8 +221,9 @@ TimePickerBase.displayName = 'TimePicker.Rustic';
 
 /**
  * Range variant with two paired native time inputs and a separator.
- * Each input independently updates its half of the `[start, end]` tuple
- * and tracks its own focus state for individual border highlighting.
+ * Each input independently updates its half of the `[start, end]` tuple.
+ * Border/box-shadow highlighting on focus comes from the skin's native
+ * `:focus` rule on `[data-part='trigger-input']`, not `focusedInput`.
  *
  * @param props - {@link TimeRangePickerProps} unified range picker props.
  * @returns A ref-forwarding time range input pair with pure CSS variable styling.
@@ -343,32 +328,14 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
     ...style,
   };
 
-  /** Resolves border color based on validation status and per-input focus state. */
-  const getBorderColor = (isFocused: boolean) => {
-    if (status === 'error') return 'var(--ds-timepicker-error-border)';
-    if (status === 'warning') return 'var(--ds-timepicker-warning-border)';
-    if (isFocused) return 'var(--ds-timepicker-border-focus)';
-    return 'var(--ds-timepicker-border)';
-  };
-
-  const getInputStyle = (inputType: 'start' | 'end'): React.CSSProperties => ({
+  const getInputStyle = (): React.CSSProperties => ({
     ...resolveInputPadding(sizeConfig.padding, sizeConfig.padding.split(' ')[1] || sizeConfig.padding),
     fontSize: sizeConfig.fontSize,
-    border: `1px solid ${getBorderColor(focusedInput === inputType)}`,
-    borderRadius: 'var(--ds-timepicker-radius)',
-    outline: 'none',
     transition: 'var(--ds-timepicker-transition)',
     minWidth: sizeConfig.minWidth,
-    backgroundColor: disabled ? 'var(--ds-timepicker-bg-disabled)' : 'var(--ds-timepicker-bg)',
-    color: 'var(--ds-timepicker-color)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.6 : 1,
-    boxShadow: focusedInput === inputType ? 'var(--ds-timepicker-shadow-focus)' : 'none',
   });
-
-  const separatorStyle: React.CSSProperties = {
-    color: 'var(--ds-timepicker-separator-color)',
-  };
 
   return (
     <div ref={ref} data-part="root" className={containerClasses} style={wrapperStyle} id={id}>
@@ -377,7 +344,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         step={showSeconds ? 1 : 60}
         data-part="trigger-input"
         data-range-input="start"
-        style={getInputStyle('start')}
+        style={getInputStyle()}
         value={displayValue[0]}
         disabled={disabled}
         placeholder={placeholder[0]}
@@ -386,13 +353,13 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
         onBlur={() => setFocusedInput(null)}
         aria-label={placeholder[0]}
       />
-      <span data-part="separator" style={separatorStyle}>{separator}</span>
+      <span data-part="separator">{separator}</span>
       <input
         type="time"
         step={showSeconds ? 1 : 60}
         data-part="trigger-input"
         data-range-input="end"
-        style={getInputStyle('end')}
+        style={getInputStyle()}
         value={displayValue[1]}
         disabled={disabled}
         placeholder={placeholder[1]}

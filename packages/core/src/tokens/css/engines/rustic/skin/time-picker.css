@@ -1,0 +1,88 @@
+/**
+ * Rustic TimePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * NO PORTAL: this engine delegates the whole time-selection UI to the native
+ * `<input type='time'>`; there is no custom dropdown to scope standalone.
+ *
+ * SCOPE ROOTS: `.rottay-timepicker.rottay-timepicker--rustic[data-part='root']`
+ * (single) and `.rottay-timepicker-range.rottay-timepicker-range--rustic
+ * [data-part='root']` (range) -- both pre-existing BEM families, unchanged by
+ * this migration.
+ *
+ * FOCUS: the paint (border color, box-shadow) applies directly to
+ * `[data-part='trigger-input']`, the SAME element that receives native focus
+ * -- not a container painting for a nested input -- so a plain `:focus`
+ * pseudo-class reproduces the removed `useInteractionState()`/`focusedInput`
+ * -driven paint exactly, with no React-render-timing gap. `TimePickerBase`
+ * keeps `useInteractionState()`; its `focused` flag still drives the
+ * `rottay-timepicker--focused` root modifier class, unrelated to paint.
+ * `TimeRangePicker` keeps its `focusedInput` state and `onFocus`/`onBlur`
+ * setters undisturbed; the paint below keys off native `:focus` on each input
+ * independently, which fires on the identical DOM event the state setters do.
+ *
+ * STATUS PRIORITY: error > warning > focused > default, matching the removed
+ * `getBorderColor()` priority chain byte-exact. The focus border rule is
+ * guarded with `:not(...--error):not(...--warning)` so a status root modifier
+ * always outranks focus, regardless of selector order. The box-shadow focus
+ * ring has no status dependency in the original -- it shows on focus
+ * regardless of status, so it carries no such guard.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Border-color rules reach (0,4,0) via the two root classes + the
+ * target's own `data-part` repeated. Non-border paint (background-color,
+ * color, box-shadow, outline, border-radius) and pure `border: none`/
+ * `background: none` resets win unlayered at (0,3,0) or lower.
+ */
+
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input'] {
+  border-radius: var(--ds-timepicker-radius);
+  outline: none;
+  background-color: var(--ds-timepicker-bg);
+  color: var(--ds-timepicker-color);
+  box-shadow: none;
+}
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input']:disabled,
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input']:disabled {
+  background-color: var(--ds-timepicker-bg-disabled);
+}
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input']:focus,
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input']:focus {
+  box-shadow: var(--ds-timepicker-shadow-focus);
+}
+
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-timepicker-border);
+}
+.rottay-timepicker.rottay-timepicker--rustic:not(.rottay-timepicker--error):not(.rottay-timepicker--warning) [data-part='trigger-input'][data-part='trigger-input']:focus,
+.rottay-timepicker-range.rottay-timepicker-range--rustic:not(.rottay-timepicker-range--error):not(.rottay-timepicker-range--warning) [data-part='trigger-input'][data-part='trigger-input']:focus {
+  border: 1px solid var(--ds-timepicker-border-focus);
+}
+.rottay-timepicker.rottay-timepicker--rustic.rottay-timepicker--error [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic.rottay-timepicker-range--error [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-timepicker-error-border);
+}
+.rottay-timepicker.rottay-timepicker--rustic.rottay-timepicker--warning [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic.rottay-timepicker-range--warning [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-timepicker-warning-border);
+}
+
+/* clock-icon / clear-button: `TimePickerBase` only -- `TimeRangePicker`
+   renders neither. */
+.rottay-timepicker.rottay-timepicker--rustic [data-part='clock-icon'] {
+  color: var(--ds-timepicker-icon-color);
+}
+
+.rottay-timepicker.rottay-timepicker--rustic [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-timepicker-clear-color);
+}
+
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='separator'] {
+  color: var(--ds-timepicker-separator-color);
+}

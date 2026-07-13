@@ -138,16 +138,6 @@ describe('Transfer runtime engine coverage', () => {
     expect(handleSelectChange).toHaveBeenLastCalledWith(['alpha'], []);
     expect(addButton).not.toBeDisabled();
 
-    const sourceLabel = screen.getByText('Alpha rustic').closest('label');
-    if (!(sourceLabel instanceof HTMLElement)) {
-      throw new Error('Expected rustic source label');
-    }
-
-    fireEvent.mouseEnter(sourceLabel);
-    expect(sourceLabel.style.backgroundColor).toBe('var(--ds-transfer-item-bg-hover)');
-    fireEvent.mouseLeave(sourceLabel);
-    expect(sourceLabel.style.backgroundColor).toBe('transparent');
-
     fireEvent.click(addButton);
     expect(handleChange).toHaveBeenCalledWith(['beta', 'alpha'], 'right', ['alpha']);
 
@@ -197,7 +187,7 @@ describe('Transfer runtime engine coverage', () => {
     expect(container.querySelector('.rottay-transfer--rustic')).toBeTruthy();
   });
 
-  it('covers rustic pagination, default filtering, select-all toggles, focus rings, and button interaction states', () => {
+  it('covers rustic pagination, default filtering, and select-all toggles', () => {
     const handleChange = vi.fn();
     const handleSelectChange = vi.fn();
     const handleSearch = vi.fn();
@@ -222,13 +212,7 @@ describe('Transfer runtime engine coverage', () => {
     );
 
     const searchBoxes = screen.getAllByPlaceholderText('Search');
-    const sourceSearch = searchBoxes[0] as HTMLInputElement;
     const targetSearch = searchBoxes[1] as HTMLInputElement;
-
-    fireEvent.focus(sourceSearch);
-    expect(sourceSearch.style.boxShadow).toContain('rgba(22, 119, 255, 0.15)');
-    fireEvent.blur(sourceSearch);
-    expect(sourceSearch.style.boxShadow).toBe('none');
 
     fireEvent.change(targetSearch, { target: { value: 'ec' } });
     expect(handleSearch).toHaveBeenCalledWith('right', 'ec');
@@ -250,14 +234,6 @@ describe('Transfer runtime engine coverage', () => {
     fireEvent.click(selectAllBoxes[0]);
     expect(handleSelectChange).toHaveBeenCalledWith(['alpha', 'beta'], []);
 
-    const pushButton = screen.getByRole('button', { name: '>' });
-    fireEvent.mouseEnter(pushButton);
-    expect(pushButton.style.transform).toBe('translateY(-1px) scale(1.02)');
-    fireEvent.mouseDown(pushButton);
-    expect(pushButton.style.transform).toBe('scale(0.97)');
-    fireEvent.mouseUp(pushButton);
-    expect(pushButton.style.transform).toBe('translateY(-1px) scale(1.02)');
-    fireEvent.mouseLeave(pushButton);
-    expect(pushButton.style.transform).toBe('translateY(0) scale(1)');
+    expect(screen.getByRole('button', { name: '>' })).toBeInTheDocument();
   });
 });

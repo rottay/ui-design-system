@@ -185,10 +185,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
     const swatchStyle: React.CSSProperties = {
       ...sizeConfig,
-      borderRadius: 'var(--ds-colorpicker-swatch-radius)',
-      border: `1px solid var(--ds-colorpicker-swatch-border)`,
-      boxShadow: 'var(--ds-colorpicker-swatch-shadow)',
-      backgroundColor: currentValue || 'var(--ds-color-white)',
+      ...({ '--ds-colorpicker-swatch-color': currentValue || 'var(--ds-color-white)' } as React.CSSProperties),
     };
 
     const textStyle: React.CSSProperties = {
@@ -200,9 +197,6 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       top: position.top,
       left: position.left,
       padding: 'var(--ds-colorpicker-dropdown-padding)',
-      backgroundColor: 'var(--ds-colorpicker-dropdown-bg)',
-      borderRadius: 'var(--ds-colorpicker-dropdown-radius)',
-      boxShadow: 'var(--ds-colorpicker-dropdown-shadow)',
       zIndex: 1050,
       minWidth: 'var(--ds-colorpicker-dropdown-min-width)',
     };
@@ -211,23 +205,18 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
       width: '100%',
       height: 'var(--ds-colorpicker-palette-height)',
       cursor: 'pointer',
-      border: 'none',
       padding: 0,
     };
 
     const hexInputStyle: React.CSSProperties = {
       width: '100%',
       padding: '6px 10px',
-      border: `1px solid var(--ds-colorpicker-input-border)`,
-      borderRadius: 'var(--ds-colorpicker-input-radius)',
       fontSize: 'var(--ds-font-size-sm)',
       fontFamily: 'monospace',
-      backgroundColor: 'var(--ds-colorpicker-input-bg)',
     };
 
     const presetLabelStyle: React.CSSProperties = {
       fontSize: 'var(--ds-colorpicker-label-font-size)',
-      color: 'var(--ds-colorpicker-label-color)',
       marginBottom: '4px',
     };
 
@@ -240,22 +229,16 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
     const getPresetButtonStyle = (): React.CSSProperties => ({
       width: 'var(--ds-colorpicker-preset-size)',
       height: 'var(--ds-colorpicker-preset-size)',
-      borderRadius: 'var(--ds-colorpicker-preset-radius)',
-      border: `1px solid var(--ds-colorpicker-preset-border)`,
       cursor: disabled ? 'not-allowed' : 'pointer',
     });
 
     const dividerStyle: React.CSSProperties = {
-      borderTop: `1px solid var(--ds-colorpicker-divider-color)`,
       marginTop: '12px',
       paddingTop: '12px',
     };
 
     const clearButtonStyle: React.CSSProperties = {
       padding: '4px 12px',
-      border: `1px solid var(--ds-colorpicker-clear-border)`,
-      borderRadius: 'var(--ds-colorpicker-clear-radius)',
-      backgroundColor: 'var(--ds-colorpicker-clear-bg)',
       cursor: 'pointer',
       fontSize: 'var(--ds-font-size-sm)',
     };
@@ -313,7 +296,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                         disabled={disabled}
                         style={{
                           ...getPresetButtonStyle(),
-                          backgroundColor: color,
+                          ...({ '--ds-colorpicker-preset-color': color } as React.CSSProperties),
                         }}
                         aria-label={`Select color ${color}`}
                       />

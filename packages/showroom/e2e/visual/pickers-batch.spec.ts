@@ -58,6 +58,13 @@ async function waitForGroundPaint(page: Page, ground: 'dark' | 'light'): Promise
 }
 
 async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<Locator> {
+  // The DatePicker panel paints its today-cell ring from the wall clock, so
+  // an un-frozen clock makes the open-panel baselines expire at midnight
+  // (the ring visibly moved from the 11th to the 12th between recording and
+  // the first gate run a day later). Pin the clock to the recording day —
+  // late evening local on 2026-07-11 — so the committed baselines stay the
+  // pre-migration truth they were captured as.
+  await page.clock.setFixedTime(new Date('2026-07-11T20:00:00'));
   await page.setViewportSize({ width: 1280, height: 1400 });
   await page.goto(
     `/probe/whitelabel-torture?fixture=${fixture}&engine=${engine}&w=1280&slug=button&pickers=1`,

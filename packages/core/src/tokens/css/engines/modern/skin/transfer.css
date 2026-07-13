@@ -1,0 +1,99 @@
+/**
+ * Modern Transfer skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT: the outer `<div data-part='root'>` was Tailwind-only before
+ * this migration (no component class at all). `rottay-transfer
+ * rottay-transfer--modern` is added on it here -- the same
+ * `rottay-<comp> rottay-<comp>--modern` idiom the modern Button/Input skins
+ * already use, and matching the class family the sibling rustic engine
+ * already carries (`rottay-transfer rottay-transfer--rustic`). Every other
+ * painted part is a descendant, reached via
+ * `.rottay-transfer.rottay-transfer--modern [data-part='...']`. Two wrapper
+ * `<div>`s (the search cell, the pagination page-count `<span>`) carry no
+ * `data-part` of their own; the search cell is reached structurally via
+ * `:has()` (the `input-number.css` idiom), the page-count span via a
+ * scoped child combinator off `panel-pagination`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
+ * classes + the target's own `data-part` REPEATED (or a repeated `:has()`,
+ * same unit cost). Non-border paint (background, color, outline,
+ * border-radius) and pure `border: none` resets win unlayered at (0,3,0).
+ *
+ * The search input's `onFocus`/`onBlur` handlers wrote `borderColor` only;
+ * they are replaced by a rest border rule and a `:focus` override -- no
+ * other property changed on focus. The move/pagination buttons are static
+ * in this engine (no hover in the source); none is invented here.
+ */
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-header'] {
+  background: var(--ds-surface-inset);
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-header'][data-part='panel-header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-select-all'] {
+  accent-color: var(--ds-color-primary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-count'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-transfer.rottay-transfer--modern div:has(> [data-part='panel-search']):has(> [data-part='panel-search']) {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search'] {
+  border-radius: var(--ds-input-radius, var(--ds-radius-md));
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search'][data-part='panel-search'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search'][data-part='panel-search']:focus {
+  border-color: var(--ds-color-primary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-checkbox'] {
+  accent-color: var(--ds-color-primary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'][data-part='panel-pagination'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'] > span {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}

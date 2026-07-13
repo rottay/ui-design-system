@@ -85,12 +85,8 @@ const TimePanel: React.FC<TimePanelProps> = ({
   }, []);
 
   const panelStyle: React.CSSProperties = {
-    background: 'var(--ds-color-bg-elevated)',
-    borderRadius: 'var(--ds-radius-lg, 12px)',
-    boxShadow: 'var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)))',
-    border: '1px solid var(--ds-color-border)',
     fontFamily: 'inherit',
-    animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out',
+    animation: 'ds-time-picker-slide-in var(--ds-motion-fast) ease-out',
     overflow: 'hidden',
   };
 
@@ -102,7 +98,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
 
   const dividerStyle: React.CSSProperties = {
     width: 1,
-    background: 'var(--ds-color-border)',
     flexShrink: 0,
   };
 
@@ -111,13 +106,11 @@ const TimePanel: React.FC<TimePanelProps> = ({
     alignItems: 'center',
     padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px)',
     gap: 'var(--ds-spacing-2, 8px)',
-    borderBottom: '1px solid var(--ds-color-border)',
   };
 
   const labelStyle: React.CSSProperties = {
     fontSize: 'var(--ds-font-size-2xs, 11px)',
     fontWeight: 600,
-    color: 'var(--ds-color-text-muted)',
     textTransform: 'uppercase' as const,
     letterSpacing: 'var(--ds-letter-spacing-wide, 0.025em)',
     textAlign: 'center' as const,
@@ -131,21 +124,14 @@ const TimePanel: React.FC<TimePanelProps> = ({
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 'var(--ds-input-sm-font-size, 13px)',
-    borderRadius: 'var(--ds-radius-md, 8px)',
     cursor: 'pointer',
-    border: 'none',
     fontWeight: isActive ? 600 : 400,
-    background: isActive ? 'var(--ds-color-primary)' : 'transparent',
-    color: isActive ? 'var(--ds-color-white)' : 'var(--ds-color-text-primary)',
     transition: 'all var(--ds-motion-fast)',
     margin: '1px auto',
-    outline: 'none',
   });
 
   return (
-    <div data-part="panel" style={panelStyle}>
-      <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
-
+    <div data-part="panel" className="rottay-timepicker__panel" style={panelStyle}>
       {/* Column headers */}
       <div data-part="header" style={headerStyle}>
         <span style={labelStyle}>Hr</span>
@@ -170,12 +156,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
               data-part="time-option"
               data-selected={i === hours || undefined}
               style={getItemStyle(i === hours)}
-              onMouseEnter={(e) => {
-                if (i !== hours) (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-hover)';
-              }}
-              onMouseLeave={(e) => {
-                if (i !== hours) (e.currentTarget as HTMLElement).style.background = 'transparent';
-              }}
               onClick={() => onSelect(i, minutes, seconds)}
             >
               {pad2(i)}
@@ -194,12 +174,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
               data-part="time-option"
               data-selected={i === minutes || undefined}
               style={getItemStyle(i === minutes)}
-              onMouseEnter={(e) => {
-                if (i !== minutes) (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-hover)';
-              }}
-              onMouseLeave={(e) => {
-                if (i !== minutes) (e.currentTarget as HTMLElement).style.background = 'transparent';
-              }}
               onClick={() => onSelect(hours, i, seconds)}
             >
               {pad2(i)}
@@ -219,12 +193,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
                   data-part="time-option"
                   data-selected={i === seconds || undefined}
                   style={getItemStyle(i === seconds)}
-                  onMouseEnter={(e) => {
-                    if (i !== seconds) (e.currentTarget as HTMLElement).style.background = 'var(--ds-color-bg-hover)';
-                  }}
-                  onMouseLeave={(e) => {
-                    if (i !== seconds) (e.currentTarget as HTMLElement).style.background = 'transparent';
-                  }}
                   onClick={() => onSelect(hours, minutes, i)}
                 >
                   {pad2(i)}
@@ -237,7 +205,7 @@ const TimePanel: React.FC<TimePanelProps> = ({
 
       {/* Now button */}
       {showNow && (
-        <div data-part="footer" style={{ borderTop: '1px solid var(--ds-color-border)', padding: 'var(--ds-spacing-1-5, 6px) var(--ds-spacing-2, 8px)' }}>
+        <div data-part="footer" style={{ padding: 'var(--ds-spacing-1-5, 6px) var(--ds-spacing-2, 8px)' }}>
           <button
             type="button"
             data-part="now-button"
@@ -246,10 +214,6 @@ const TimePanel: React.FC<TimePanelProps> = ({
               padding: '4px var(--ds-spacing-3, 12px)',
               fontSize: 'var(--ds-font-size-xs, 12px)',
               fontWeight: 500,
-              borderRadius: 'var(--ds-radius-md, 8px)',
-              border: 'none',
-              background: 'var(--ds-color-primary)',
-              color: 'var(--ds-color-white)',
               cursor: 'pointer',
               transition: 'opacity var(--ds-motion-fast)',
             }}
@@ -389,31 +353,21 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
   }, [isControlled, onChange]);
 
   const sizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-  const statusStyle: React.CSSProperties = status === 'error'
-    ? { borderColor: 'var(--ds-color-error)' }
-    : status === 'warning'
-      ? { borderColor: 'var(--ds-color-warning)' }
-      : {};
 
   return (
     <>
-      <div ref={triggerRef} data-part="root" className={`relative w-full ${className}`} style={style}>
+      <div ref={triggerRef} data-part="root" className={`rottay-timepicker rottay-timepicker--modern relative w-full ${className}`} style={style}>
         <input
           ref={setInputRef}
           type="text"
           readOnly
           data-part="trigger-input"
+          data-status={status ?? 'default'}
           className="w-full cursor-pointer"
           style={{
-            border: '1px solid var(--ds-color-border)',
-            borderRadius: 'var(--ds-radius-md)',
-            background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-            color: 'var(--ds-color-text-primary)',
-            outline: 'none',
             boxSizing: 'border-box',
             paddingRight: 48,
             ...sizeStyle,
-            ...statusStyle,
           }}
           value={displayText}
           disabled={disabled}
@@ -437,7 +391,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
           <button
             type="button"
             data-part="clear-button"
-            style={{ position: 'absolute', right: 28, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', borderRadius: '50%', opacity: 0.5, color: 'var(--ds-color-text-primary)', fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            style={{ position: 'absolute', right: 28, top: '50%', cursor: 'pointer', padding: 'var(--ds-spacing-1, 4px)', opacity: 0.5, fontSize: 16, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClear}
             tabIndex={-1}
           >
@@ -446,7 +400,7 @@ const TimePickerBase = React.forwardRef<HTMLInputElement, TimePickerProps>((prop
         )}
         <span
           data-part="clock-icon"
-          style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--ds-color-text-muted)', display: 'flex' }}
+          style={{ position: 'absolute', right: 10, top: '50%', pointerEvents: 'none', display: 'flex' }}
           aria-hidden="true"
         >
           <ClockIcon />
@@ -604,24 +558,13 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
   }, [handleSelect]);
 
   const rangeSizeStyle = sizeStyleMap[size === 'large' ? 'large' : size === 'small' ? 'small' : 'default'];
-  const rangeStatusStyle: React.CSSProperties = status === 'error'
-    ? { borderColor: 'var(--ds-color-error)' }
-    : status === 'warning'
-      ? { borderColor: 'var(--ds-color-warning)' }
-      : {};
   const activeTime = activeInput === 'start' ? displayValue[0] : displayValue[1];
 
   const rangeInputBaseStyle: React.CSSProperties = {
-    border: '1px solid var(--ds-color-border)',
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-    color: 'var(--ds-color-text-primary)',
-    outline: 'none',
     boxSizing: 'border-box' as const,
     width: '100%',
     cursor: 'pointer',
     ...rangeSizeStyle,
-    ...rangeStatusStyle,
   };
 
   return (
@@ -633,7 +576,7 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           else if (ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
         data-part="root"
-        className={`flex items-center gap-2 w-full ${className}`}
+        className={`rottay-timepicker-range rottay-timepicker-range--modern flex items-center gap-2 w-full ${className}`}
         style={style}
         id={id}
       >
@@ -642,10 +585,9 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           readOnly
           data-part="trigger-input"
           data-range-input="start"
-          style={{
-            ...rangeInputBaseStyle,
-            ...(activeInput === 'start' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
-          }}
+          data-status={status ?? 'default'}
+          data-active={(activeInput === 'start' && isOpen) || undefined}
+          style={rangeInputBaseStyle}
           value={startText}
           disabled={disabled}
           placeholder={placeholder[0]}
@@ -656,16 +598,15 @@ const TimeRangePicker = React.forwardRef<HTMLDivElement, TimeRangePickerProps>((
           aria-expanded={isOpen && activeInput === 'start'}
           aria-label={placeholder[0]}
         />
-        <span data-part="separator" className="shrink-0" style={{ color: 'var(--ds-color-text-secondary)' }}>{separator}</span>
+        <span data-part="separator" className="shrink-0">{separator}</span>
         <input
           type="text"
           readOnly
           data-part="trigger-input"
           data-range-input="end"
-          style={{
-            ...rangeInputBaseStyle,
-            ...(activeInput === 'end' && isOpen ? { boxShadow: '0 0 0 2px var(--ds-color-primary)' } : {}),
-          }}
+          data-status={status ?? 'default'}
+          data-active={(activeInput === 'end' && isOpen) || undefined}
+          style={rangeInputBaseStyle}
           value={endText}
           disabled={disabled}
           placeholder={placeholder[1]}

@@ -170,7 +170,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           else if (ref) ref.current = node;
         }}
         data-part="root"
-        className={`relative inline-block ${className || ''}`}
+        className={`relative inline-block rottay-colorpicker rottay-colorpicker--modern ${className || ''}`}
         style={style}
       >
         {/* Trigger area: opens/closes dropdown on click or hover depending on `trigger` prop */}
@@ -184,7 +184,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           <div
             data-part="swatch"
             className={`${getSizeClass()} rounded`}
-            style={{ backgroundColor: currentValue || 'var(--ds-color-white)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid', boxShadow: 'var(--ds-elevation-1)' }}
+            style={{ '--ds-colorpicker-swatch-color': currentValue || 'var(--ds-color-white)' } as React.CSSProperties}
           />
           {displayText && <span data-part="display-text" className="text-sm">{displayText}</span>}
         </div>
@@ -193,7 +193,6 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
           <div
             data-part="dropdown"
             className={`absolute z-50 mt-1 p-3 rounded-lg ${placement?.includes('top') ? 'bottom-full mb-1' : ''}`}
-            style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)' }}
           >
             {/* Color input */}
             <input
@@ -215,14 +214,9 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                 onChange={(e) => handleChange(e.target.value)}
                 className="w-full font-mono"
                 style={{
-                  border: '1px solid var(--ds-color-border)',
-                  borderRadius: 'var(--ds-radius-md)',
                   padding: '4px var(--ds-input-sm-padding-x, 10px)',
                   fontSize: 'var(--ds-input-sm-font-size, 13px)',
                   height: 'var(--ds-input-sm-height, 32px)',
-                  background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-                  color: 'var(--ds-color-text-primary)',
-                  outline: 'none',
                   boxSizing: 'border-box',
                 }}
                 placeholder="#000000"
@@ -232,11 +226,11 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
             {/* Presets */}
             {presets && presets.length > 0 && (
-              <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--ds-color-border)' }}>
+              <div className="mt-3 pt-3">
                 {presets.map((preset, idx) => (
                   <div key={idx} data-part="preset-group" className="mb-2">
                     {preset.label && (
-                      <div data-part="preset-label" className="text-xs mb-1" style={{ color: 'var(--ds-color-text-secondary)' }}>{preset.label}</div>
+                      <div data-part="preset-label" className="text-xs mb-1">{preset.label}</div>
                     )}
                     <div className="flex flex-wrap gap-1">
                       {preset.colors.map((color) => (
@@ -245,7 +239,7 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
                           type="button"
                           data-part="preset-swatch"
                           className="w-5 h-5 rounded cursor-pointer hover:scale-110 transition-transform"
-                          style={{ backgroundColor: color, borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}
+                          style={{ '--ds-colorpicker-preset-color': color } as React.CSSProperties}
                           onClick={() => handleChange(color)}
                           disabled={disabled}
                         />
@@ -258,11 +252,11 @@ export const ColorPicker = React.forwardRef<HTMLDivElement, ColorPickerProps>(
 
             {/* Actions */}
             {allowClear && (
-              <div className="mt-2 pt-2" style={{ borderTop: '1px solid var(--ds-color-border)' }}>
+              <div className="mt-2 pt-2">
                 <button
                   type="button"
                   data-part="clear-button"
-                  style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-input-sm-height, 32px)', padding: '0 var(--ds-input-sm-padding-x, 10px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+                  style={{ height: 'var(--ds-input-sm-height, 32px)', padding: '0 var(--ds-input-sm-padding-x, 10px)', fontSize: 'var(--ds-input-sm-font-size, 13px)', cursor: 'pointer' }}
                   onClick={handleClear}
                   disabled={disabled}
                 >

@@ -1,0 +1,16 @@
+/**
+ * Select compound skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other skin (P-47). ENGINE-
+ * AGNOSTIC: `Select.OptGroup` is a declarative-API component with no engine
+ * fork, so its one paint site (the group label color) lives in `components/skin`
+ * rather than an `engines/*` home, scoped on the compound's own class hook
+ * `.rottay-select-optgroup__label` + its `data-part='group-label'`.
+ *
+ * The `#666` fallback is transcribed byte-exact from the source
+ * `var(--ds-color-text-secondary, #666)`; filed as a proposal.
+ */
+
+.rottay-select-optgroup__label[data-part='group-label'] {
+  color: var(--ds-color-text-secondary, #666);
+}

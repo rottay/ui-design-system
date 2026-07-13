@@ -116,10 +116,7 @@ const TransferListComponent: React.FC<TransferListProps> = ({
   const containerStyle: React.CSSProperties = {
     display: 'flex',
     flexDirection: 'column',
-    border: `1px solid var(--ds-transfer-border)`,
-    borderRadius: 'var(--ds-transfer-radius)',
     width: 'var(--ds-transfer-width)',
-    backgroundColor: 'var(--ds-transfer-bg)',
     fontFamily: 'var(--ds-font-family-base)',
     ...listStyle,
   };
@@ -129,8 +126,6 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: 'var(--ds-transfer-header-padding)',
-    borderBottom: `2px solid var(--ds-transfer-header-border)`,
-    backgroundColor: 'var(--ds-transfer-header-bg)',
   };
 
   const titleStyle: React.CSSProperties = {
@@ -140,21 +135,16 @@ const TransferListComponent: React.FC<TransferListProps> = ({
 
   const countStyle: React.CSSProperties = {
     fontSize: 'var(--ds-transfer-count-font-size)',
-    color: 'var(--ds-transfer-count-color)',
   };
 
   const searchContainerStyle: React.CSSProperties = {
     padding: 'var(--ds-transfer-search-padding)',
-    borderBottom: `1px solid var(--ds-transfer-header-border)`,
   };
 
   const searchInputStyle: React.CSSProperties = {
     width: '100%',
     padding: '6px 10px',
-    border: `1px solid var(--ds-transfer-search-input-border)`,
-    borderRadius: 'var(--ds-transfer-search-input-radius)',
     fontSize: 'var(--ds-font-size-sm)',
-    outline: 'none',
     transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
   };
 
@@ -170,16 +160,13 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     alignItems: 'center',
     gap: '8px',
     padding: 'var(--ds-transfer-item-padding)',
-    borderRadius: 'var(--ds-transfer-item-radius)',
     fontSize: 'var(--ds-font-size-sm)',
     transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
-    borderLeft: '3px solid transparent',
   });
 
   const emptyStyle: React.CSSProperties = {
     padding: '16px',
     textAlign: 'center',
-    color: 'var(--ds-transfer-empty-color)',
     fontSize: 'var(--ds-font-size-sm)',
   };
 
@@ -189,24 +176,18 @@ const TransferListComponent: React.FC<TransferListProps> = ({
     justifyContent: 'center',
     gap: '8px',
     padding: '8px',
-    borderTop: '1px solid var(--ds-transfer-header-border)',
   };
 
   const paginationButtonStyle = (isDisabled: boolean): React.CSSProperties => ({
-    background: 'none',
-    border: '1px solid var(--ds-transfer-border)',
-    borderRadius: '4px',
     padding: '2px 8px',
     cursor: isDisabled ? 'not-allowed' : 'pointer',
     opacity: isDisabled ? 0.4 : 1,
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'inherit',
     transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s, border-color 0.15s',
   });
 
   const paginationTextStyle: React.CSSProperties = {
     fontSize: 'var(--ds-transfer-count-font-size)',
-    color: 'var(--ds-transfer-count-color)',
   };
 
   return (
@@ -241,14 +222,6 @@ const TransferListComponent: React.FC<TransferListProps> = ({
             onChange={(e) => onSearch(e.target.value)}
             disabled={disabled}
             style={searchInputStyle}
-            onFocus={(e) => {
-              e.currentTarget.style.borderColor = 'var(--ds-color-primary, #1677ff)';
-              e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08)';
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderColor = '';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
           />
         </div>
       )}
@@ -267,16 +240,6 @@ const TransferListComponent: React.FC<TransferListProps> = ({
                 ...getItemStyle(),
                 cursor: item.disabled || disabled ? 'not-allowed' : 'pointer',
                 opacity: item.disabled ? 0.5 : 1,
-              }}
-              onMouseEnter={(e) => {
-                if (!item.disabled && !disabled) {
-                  e.currentTarget.style.backgroundColor = 'var(--ds-transfer-item-bg-hover)';
-                  e.currentTarget.style.borderLeft = '3px solid var(--ds-color-primary, #1677ff)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.borderLeft = '3px solid transparent';
               }}
             >
               <input
@@ -451,10 +414,6 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
 
     const buttonStyle: React.CSSProperties = {
       padding: 'var(--ds-transfer-button-padding)',
-      border: 'none',
-      borderRadius: 'var(--ds-transfer-button-radius)',
-      backgroundColor: 'var(--ds-transfer-button-bg)',
-      color: 'var(--ds-transfer-button-color)',
       cursor: 'pointer',
       fontWeight: 'var(--ds-font-weight-medium)' as React.CSSProperties['fontWeight'],
       fontSize: 'var(--ds-font-size-sm)',
@@ -507,24 +466,6 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
             style={disabled || sourceSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
             disabled={disabled || sourceSelectedKeys.size === 0}
             onClick={() => handleMove('right')}
-            onMouseEnter={(e) => {
-              if (!disabled && sourceSelectedKeys.size > 0) {
-                e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
-                e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.1)';
-              }
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0) scale(1)';
-              e.currentTarget.style.boxShadow = 'none';
-            }}
-            onMouseDown={(e) => {
-              if (!disabled && sourceSelectedKeys.size > 0) {
-                e.currentTarget.style.transform = 'scale(0.97)';
-              }
-            }}
-            onMouseUp={(e) => {
-              e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
-            }}
           >
             {operations![0]}
           </button>
@@ -537,24 +478,6 @@ export const Transfer = React.forwardRef<HTMLDivElement, TransferProps>(
               style={disabled || targetSelectedKeys.size === 0 ? disabledButtonStyle : buttonStyle}
               disabled={disabled || targetSelectedKeys.size === 0}
               onClick={() => handleMove('left')}
-              onMouseEnter={(e) => {
-                if (!disabled && targetSelectedKeys.size > 0) {
-                  e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
-                  e.currentTarget.style.boxShadow = '0 2px 6px rgba(0, 0, 0, 0.1)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
-              onMouseDown={(e) => {
-                if (!disabled && targetSelectedKeys.size > 0) {
-                  e.currentTarget.style.transform = 'scale(0.97)';
-                }
-              }}
-              onMouseUp={(e) => {
-                e.currentTarget.style.transform = 'translateY(-1px) scale(1.02)';
-              }}
             >
               {operations![1]}
             </button>

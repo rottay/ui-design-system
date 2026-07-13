@@ -1,0 +1,90 @@
+/**
+ * Rustic ColorPicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS, not one:
+ * - The trigger (swatch + text) stays IN-TREE, scoped the usual way:
+ *   `.rottay-colorpicker.rottay-colorpicker--rustic[data-part='root']`.
+ * - The dropdown panel is `createPortal(..., document.body)` -- it is NOT a
+ *   DOM descendant of root, so it CANNOT be scoped under the trigger's
+ *   class (a genuine cross-engine asymmetry vs. the modern engine, whose
+ *   dropdown is in-tree; preserved, not unified). It carries its own
+ *   self-sufficient class, `rottay-colorpicker__dropdown`, stamped by the
+ *   pre-step; every dropdown-descendant rule below is scoped standalone on
+ *   that class instead of the trigger root pair.
+ *
+ * SWATCH CUSTOM-PROPERTY HATCH: the trigger swatch's `backgroundColor`
+ * (live selected color) and each preset swatch's `backgroundColor`
+ * (author-supplied palette color) are runtime values that cannot become a
+ * static class. Both are passed via a quoted custom-property key
+ * (`--ds-colorpicker-swatch-color`, `--ds-colorpicker-preset-color`, not
+ * counted by the fleet audit), consumed here by a static rule -- same idiom
+ * as PasswordInput's strength-fill / Toggle's track-fill.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via
+ * the two root classes + the target's `data-part` REPEATED, same as every
+ * other engine skin. Under the standalone dropdown class there is no root
+ * PAIR to draw on, so the SAME single class is repeated twice in its place
+ * (`.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown`) to buy the
+ * same 2 specificity units, plus the target's own `data-part` repeated for
+ * the remaining 2. Non-border paint (background, border-radius) needs only
+ * enough selector to beat Tailwind preflight, which any unlayered rule does
+ * regardless of specificity (P-47) -- a single class/attribute is used. The
+ * native `<input type='color'>` picker chrome is UA-rendered and untouched;
+ * its own `border: none` reset is a pure reset, exempt from the floor.
+ */
+
+.rottay-colorpicker.rottay-colorpicker--rustic [data-part='swatch'] {
+  border-radius: var(--ds-colorpicker-swatch-radius);
+  box-shadow: var(--ds-colorpicker-swatch-shadow);
+  background-color: var(--ds-colorpicker-swatch-color);
+}
+.rottay-colorpicker.rottay-colorpicker--rustic [data-part='swatch'][data-part='swatch'] {
+  border: 1px solid var(--ds-colorpicker-swatch-border);
+}
+
+.rottay-colorpicker__dropdown {
+  background-color: var(--ds-colorpicker-dropdown-bg);
+  border-radius: var(--ds-colorpicker-dropdown-radius);
+  box-shadow: var(--ds-colorpicker-dropdown-shadow);
+}
+
+.rottay-colorpicker__dropdown [data-part='native-color-input'] {
+  border: none;
+}
+
+.rottay-colorpicker__dropdown [data-part='hex-input'] {
+  border-radius: var(--ds-colorpicker-input-radius);
+  background-color: var(--ds-colorpicker-input-bg);
+}
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown [data-part='hex-input'][data-part='hex-input'] {
+  border: 1px solid var(--ds-colorpicker-input-border);
+}
+
+.rottay-colorpicker__dropdown [data-part='preset-label'] {
+  color: var(--ds-colorpicker-label-color);
+}
+
+.rottay-colorpicker__dropdown [data-part='preset-swatch'] {
+  border-radius: var(--ds-colorpicker-preset-radius);
+  background-color: var(--ds-colorpicker-preset-color);
+}
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown [data-part='preset-swatch'][data-part='preset-swatch'] {
+  border: 1px solid var(--ds-colorpicker-preset-border);
+}
+
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown div:has(> [data-part='preset-group']):has(> [data-part='preset-group']),
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown div:has(> [data-part='clear-button']):has(> [data-part='clear-button']) {
+  border-top: 1px solid var(--ds-colorpicker-divider-color);
+}
+
+.rottay-colorpicker__dropdown [data-part='clear-button'] {
+  background-color: var(--ds-colorpicker-clear-bg);
+  border-radius: var(--ds-colorpicker-clear-radius);
+}
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown [data-part='clear-button'][data-part='clear-button'] {
+  border: 1px solid var(--ds-colorpicker-clear-border);
+}

@@ -61,29 +61,21 @@ const sharedStyles = {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '8px',
-    background: 'var(--ds-upload-file-bg)',
-    borderRadius: 'var(--ds-upload-file-radius)',
     marginBottom: '4px',
   } as React.CSSProperties,
   fileName: {
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-upload-file-color)',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',
   } as React.CSSProperties,
   removeBtn: {
-    border: 'none',
-    background: 'transparent',
-    color: 'var(--ds-upload-file-remove-color)',
     cursor: 'pointer',
     fontSize: '16px',
     padding: '0 4px',
   } as React.CSSProperties,
   progressTrack: {
     width: '100%',
-    background: 'var(--ds-upload-progress-track)',
-    borderRadius: '4px',
     overflow: 'hidden',
     marginTop: '4px',
   } as React.CSSProperties,
@@ -93,31 +85,22 @@ const sharedStyles = {
     position: 'relative',
     width: 104,
     height: 104,
-    borderRadius: isCircle ? '50%' : 'var(--ds-upload-file-radius)',
-    border: `${hasError ? '2px' : '1px'} solid ${hasError ? 'var(--ds-upload-error-border)' : 'var(--ds-upload-card-border)'}`,
     overflow: 'hidden',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'var(--ds-upload-card-bg)',
   }),
   cardOverlay: (isCircle: boolean): React.CSSProperties => ({
     position: 'absolute',
     inset: 0,
-    background: 'var(--ds-upload-preview-overlay)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     gap: '4px',
-    borderRadius: isCircle ? '50%' : '0',
   }),
   overlayBtn: {
-    border: 'none',
-    background: 'transparent',
-    color: 'var(--ds-upload-overlay-action-color)',
     cursor: 'pointer',
     padding: '4px',
-    borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -126,7 +109,6 @@ const sharedStyles = {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
-    borderRadius: isCircle ? '50%' : '0',
   }),
   grid: {
     display: 'flex',
@@ -136,14 +118,11 @@ const sharedStyles = {
   addButton: (isCircle: boolean, isDisabled: boolean): React.CSSProperties => ({
     width: 104,
     height: 104,
-    border: '2px dashed var(--ds-upload-card-border)',
-    borderRadius: isCircle ? '50%' : 'var(--ds-upload-file-radius)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     cursor: isDisabled ? 'not-allowed' : 'pointer',
     opacity: isDisabled ? 0.5 : 1,
-    background: 'transparent',
     transition: 'var(--ds-transition-fast)',
     fontFamily: 'var(--ds-font-family-base)',
   }),
@@ -151,15 +130,12 @@ const sharedStyles = {
     width: 48,
     height: 48,
     objectFit: 'cover',
-    borderRadius: 'var(--ds-upload-file-radius)',
     flexShrink: 0,
     cursor: 'pointer',
   } as React.CSSProperties,
   pictureIcon: {
     width: 48,
     height: 48,
-    borderRadius: 'var(--ds-upload-file-radius)',
-    background: 'var(--ds-upload-file-bg)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -170,8 +146,6 @@ const sharedStyles = {
     alignItems: 'center',
     gap: '8px',
     padding: '8px',
-    background: 'var(--ds-upload-file-bg)',
-    borderRadius: 'var(--ds-upload-file-radius)',
     marginBottom: '4px',
   } as React.CSSProperties,
 };
@@ -198,7 +172,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
       role="dialog"
       aria-modal="true"
       aria-label={t('upload.preview', { name: alt })}
-      style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--ds-upload-preview-backdrop)' }}
+      style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     >
       <div style={{ position: 'relative', maxWidth: '90vw', maxHeight: '90vh' }} onClick={(e) => e.stopPropagation()}>
         <button
@@ -206,11 +180,11 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
           data-part="preview-close-button"
           onClick={onClose}
           aria-label={t('upload.close_preview')}
-          style={{ position: 'absolute', top: -12, right: -12, border: 'none', borderRadius: '50%', width: 28, height: 28, background: 'var(--ds-upload-preview-close-bg)', color: 'var(--ds-upload-preview-close-color)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}
+          style={{ position: 'absolute', top: -12, right: -12, width: 28, height: 28, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14 }}
         >
           x
         </button>
-        <img src={src} alt={alt} style={{ maxWidth: '100%', maxHeight: '85vh', borderRadius: 'var(--ds-radius-lg)', objectFit: 'contain' }} />
+        <img src={src} alt={alt} style={{ maxWidth: '100%', maxHeight: '85vh', objectFit: 'contain' }} />
       </div>
     </div>
   );
@@ -228,7 +202,7 @@ const ProgressBar: React.FC<{ percent?: number; strokeColor?: string | { from: s
     <div data-part="progress-track" style={{ ...sharedStyles.progressTrack, height: strokeWidth + 4 }}>
       <div
         data-part="progress-bar"
-        style={{ height: '100%', width: `${Math.min(percent, 100)}%`, background: bg, borderRadius: 4, transition: 'width var(--ds-transition-fast)' }}
+        style={{ height: '100%', width: `${Math.min(percent, 100)}%`, transition: 'width var(--ds-transition-fast)', ...({ '--ds-upload-progress-fill': bg } as React.CSSProperties) }}
         role="progressbar"
         aria-valuenow={percent}
         aria-valuemin={0}
@@ -253,10 +227,10 @@ const CloseIcon = () => (
   <svg width={14} height={14} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
 );
 const PlusIcon = () => (
-  <svg width={32} height={32} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" style={{ color: 'var(--ds-upload-dragger-icon-color)' }}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+  <svg width={32} height={32} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
 );
 const FileIcon = () => (
-  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" style={{ color: 'var(--ds-upload-dragger-icon-color)' }}><path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+  <svg width={24} height={24} fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
 );
 
 // ---------------------------------------------------------------------------
@@ -306,7 +280,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} style={sharedStyles.thumbImg(isCircle)} />
         ) : (
-          <span style={{ fontSize: 'var(--ds-font-size-sm)', color: 'var(--ds-upload-file-color)', textAlign: 'center', padding: '0 4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
+          <span style={{ fontSize: 'var(--ds-font-size-sm)', textAlign: 'center', padding: '0 4px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{file.name}</span>
         )}
         {isUploading && (
           <div style={{ position: 'absolute', bottom: isCircle ? 8 : 0, left: isCircle ? 8 : 0, right: isCircle ? 8 : 0, padding: '4px' }}>
@@ -333,7 +307,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
   // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
-      <div data-part="file-item" data-status={file.status || undefined} style={{ ...sharedStyles.pictureRow, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
+      <div data-part="file-item" data-status={file.status || undefined} style={sharedStyles.pictureRow} role="listitem" aria-label={file.name}>
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} style={sharedStyles.pictureThumb} onClick={() => onPreview?.(file)} />
         ) : (
@@ -351,7 +325,7 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
 
   // -- text (default): simple filename row with remove button --
   const originNode = (
-    <div data-part="file-item" data-status={file.status || undefined} style={{ ...sharedStyles.fileItemText, ...(file.status === 'error' ? { border: '1px solid var(--ds-upload-error-border)' } : {}) }} role="listitem" aria-label={file.name}>
+    <div data-part="file-item" data-status={file.status || undefined} style={sharedStyles.fileItemText} role="listitem" aria-label={file.name}>
       <div style={{ flex: 1, minWidth: 0 }}>
         <span style={sharedStyles.fileName}>{file.name}</span>
         {isUploading && <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
@@ -465,10 +439,6 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
 
     const buttonStyle: React.CSSProperties = {
       padding: 'var(--ds-upload-button-padding)',
-      border: '1px solid var(--ds-upload-button-border)',
-      borderRadius: 'var(--ds-upload-button-radius)',
-      background: 'var(--ds-upload-button-bg)',
-      color: 'var(--ds-upload-button-color)',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
       fontFamily: 'var(--ds-font-family-base)',
@@ -645,10 +615,13 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       if (src && isImageFile(file)) setPreviewImage({ src, alt: file.name });
     }, [onPreview, thumbUrls]);
 
-    // BEM-style class names for optional external CSS targeting
+    // BEM-style class names for optional external CSS targeting. The
+    // `--${listType}` modifier mirrors the equivalent Upload root modifier
+    // above -- RusticFileItem renders the same four listType variants here.
     const containerClasses = [
       'rottay-upload-dragger',
       'rottay-upload-dragger--rustic',
+      listType !== 'text' && `rottay-upload-dragger--${listType}`,
       disabled && 'rottay-upload-dragger--disabled',
       isDragOver && 'rottay-upload-dragger--drag-over',
       className,
@@ -656,27 +629,22 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
 
     const dropzoneStyle: React.CSSProperties = {
       height,
-      border: `2px dashed ${isDragOver ? 'var(--ds-upload-dragger-border-active)' : 'var(--ds-upload-dragger-border)'}`,
-      borderRadius: 'var(--ds-upload-dragger-radius)',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
       cursor: disabled ? 'not-allowed' : 'pointer',
-      background: isDragOver ? 'var(--ds-upload-dragger-bg-hover)' : 'var(--ds-upload-dragger-bg)',
       transition: 'var(--ds-transition-fast)',
       opacity: disabled ? 0.5 : 1,
       fontFamily: 'var(--ds-font-family-base)',
     };
 
     const iconStyle: React.CSSProperties = {
-      color: 'var(--ds-upload-dragger-icon-color)',
       marginBottom: '8px',
     };
 
     const textStyle: React.CSSProperties = {
       margin: 0,
-      color: 'var(--ds-upload-dragger-text-color)',
       fontSize: 'var(--ds-font-size-sm)',
     };
 

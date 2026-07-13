@@ -1,0 +1,167 @@
+/**
+ * Modern TimePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements at all; unlayered
+ * outranks preflight and still yields to a caller's inline `style`.
+ *
+ * TWO SCOPE ROOTS:
+ * - The trigger (`TimePickerBase`/`TimeRangePicker` root `<div data-part='root'>`)
+ *   stays IN-TREE. Neither root carried a first-party class before this
+ *   migration -- both were Tailwind-only passthrough -- so this migration adds
+ *   `rottay-timepicker`/`rottay-timepicker--modern` (single) and
+ *   `rottay-timepicker-range`/`rottay-timepicker-range--modern` (range),
+ *   mirroring the BEM family the rustic engine already carries for this same
+ *   component (not a `ds-` prefix).
+ * - `TimePanel` (the hour/minute/second dropdown) is `createPortal(...,
+ *   document.body)` -- it is NOT a DOM descendant of the trigger root, so it
+ *   cannot be scoped under the trigger's class. It carried only
+ *   `data-part='panel'` with no class; this migration adds the self-sufficient
+ *   `rottay-timepicker__panel` class so panel rules can scope standalone,
+ *   mirroring ColorPicker rustic's `rottay-colorpicker__dropdown`. `TimePanel`
+ *   is shared verbatim by `TimePickerBase` and `TimeRangePicker`, so one panel
+ *   ruleset serves both.
+ *
+ * STATUS: neither trigger root carried a status/disabled modifier class
+ * pre-migration (unlike the rustic engine's BEM modifiers) -- the border-color
+ * override was pure inline JS keyed on the `status` prop. This migration adds
+ * `data-status` ('default'|'error'|'warning') to each trigger-input, the same
+ * discriminator idiom InputNumber's modern skin uses.
+ *
+ * ACTIVE RANGE INPUT: `TimeRangePicker`'s start/end box-shadow ring was never
+ * native focus -- it painted whichever input `activeInput` currently targets
+ * while the panel is open. `data-active` (added here) reproduces the removed
+ * inline ternary's condition exactly: `activeInput === 'start' && isOpen`
+ * (and the `'end'` counterpart).
+ *
+ * KEYFRAME: `rottay-select-slide-in` was injected per-mount via a `<style>`
+ * tag inside `TimePanel` itself. Renamed `ds-time-picker-slide-in` and moved
+ * here (loads once, globally, instead of re-injecting on every panel mount);
+ * `TimePanel`'s inline `animation` reference was updated to match.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via the
+ * two root classes + the target's own `data-part` repeated, same as every
+ * other engine skin. Under the standalone panel there is no root PAIR to draw
+ * on, so the single `rottay-timepicker__panel` class is repeated twice in its
+ * place, plus the target's own `data-part` repeated twice -- matching
+ * ColorPicker rustic's `.dropdown.dropdown [data-part='x'][data-part='x']`
+ * idiom. Non-border paint (background, color, box-shadow, outline,
+ * border-radius) and pure `border: none` resets win unlayered at (0,3,0) or a
+ * single class.
+ */
+
+/* ---- trigger (in-tree): base + range share identical rest-state paint ---- */
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-active='true'] {
+  box-shadow: 0 0 0 2px var(--ds-color-primary);
+}
+
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='separator'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- clear-button / clock-icon: `TimePickerBase` only -- `TimeRangePicker`
+        renders neither. ---- */
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='clear-button'] {
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='clock-icon'] {
+  transform: translateY(-50%);
+  color: var(--ds-color-text-muted);
+}
+
+/* ---------------------------------------------------------------------
+   Panel (portal, standalone) -- shared by TimePickerBase and TimeRangePicker
+   --------------------------------------------------------------------- */
+
+.rottay-timepicker__panel {
+  background: var(--ds-color-bg-elevated);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
+}
+.rottay-timepicker__panel.rottay-timepicker__panel[data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/* column divider: a bare `<div>` with no data-part, always the immediate next
+   sibling of a `[data-part='time-column']` in both the 2-column and 3-column
+   (showSeconds) layouts. */
+.rottay-timepicker__panel [data-part='time-column'] + div {
+  background: var(--ds-color-border);
+}
+
+.rottay-timepicker__panel.rottay-timepicker__panel [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+/* column-label spans (Hr/Min/Sec + the two zero-width spacer spans) share one
+   color; all are bare `<span>` children of header, no individual data-part. */
+.rottay-timepicker__panel [data-part='header'] > span {
+  color: var(--ds-color-text-muted);
+}
+
+.rottay-timepicker__panel [data-part='time-option'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-timepicker__panel [data-part='time-option'][data-selected='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+.rottay-timepicker__panel [data-part='time-option']:hover:not([data-selected='true']) {
+  background: var(--ds-color-bg-hover);
+}
+
+.rottay-timepicker__panel.rottay-timepicker__panel [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* now-button: static, no hover -- matches DatePicker's Today-button gap. */
+.rottay-timepicker__panel [data-part='now-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+
+@keyframes ds-time-picker-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

@@ -1,0 +1,82 @@
+/**
+ * Modern ColorPicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT: the outer `<div data-part='root'>` was Tailwind-only before
+ * this migration (no component class at all). `rottay-colorpicker
+ * rottay-colorpicker--modern` is added on it here, matching the class
+ * family the sibling rustic engine already carries (`rottay-colorpicker
+ * rottay-colorpicker--rustic`) and the `rottay-<comp> rottay-<comp>--modern`
+ * idiom the modern Button/Input skins already use.
+ *
+ * PORTAL POSTURE: this engine's dropdown renders IN-TREE (a normal DOM
+ * descendant of root, absolutely positioned by Tailwind utilities) --
+ * unlike rustic, which portals to `document.body`. It stays root-scoped,
+ * `.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown']`.
+ * Two divider `<div>`s (above the presets block, above the clear button)
+ * carry no `data-part`; both are reached structurally via `:has()`, the
+ * `input-number.css` idiom.
+ *
+ * SWATCH CUSTOM-PROPERTY HATCH: the trigger swatch's `backgroundColor`
+ * (the live selected color) and each preset swatch's `backgroundColor`
+ * (an author-supplied palette color) are both runtime values that cannot
+ * become a static class. Each is still passed via a quoted custom-property
+ * key (`--ds-colorpicker-swatch-color`, `--ds-colorpicker-preset-color`),
+ * which the counter does not count, consumed here by a static rule -- same
+ * idiom as PasswordInput's strength-fill / Toggle's track-fill.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
+ * classes + the target's own `data-part` REPEATED (or a repeated `:has()`).
+ * Non-border paint (background, color, outline, border-radius) wins
+ * unlayered at (0,3,0). The native `<input type='color'>` picker chrome is
+ * UA-rendered and untouched.
+ */
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'] {
+  background-color: var(--ds-colorpicker-swatch-color);
+  box-shadow: var(--ds-elevation-1);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-part='swatch'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][data-part='hex-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='preset-group']):has(> [data-part='preset-group']),
+.rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='clear-button']):has(> [data-part='clear-button']) {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'] {
+  background-color: var(--ds-colorpicker-preset-color);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][data-part='preset-swatch'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}

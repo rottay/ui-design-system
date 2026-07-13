@@ -1,0 +1,276 @@
+/**
+ * Rustic DatePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS, three total root pairs:
+ * - The trigger stays IN-TREE: `.rottay-datepicker.rottay-datepicker--rustic`
+ *   (single) and `.rottay-datepicker-range.rottay-datepicker-range--rustic`
+ *   (range) -- both pre-existing BEM families, unchanged by this migration.
+ * - `RusticCalendarPanel` is `createPortal(..., document.body)` from THREE
+ *   separate branches (month/year/day), each duplicating its own `panelStyle`
+ *   merge -- none carried a class before this migration (only
+ *   `data-part='panel'` + `data-mode`). This migration adds the
+ *   self-sufficient `rottay-datepicker-panel`/`rottay-datepicker-panel--rustic`
+ *   pair to all three branches so panel rules can scope standalone, mirroring
+ *   the modern engine's identical panel-class idiom and ColorPicker rustic's
+ *   `rottay-colorpicker__dropdown`.
+ *
+ * CELL RULE IS SHARED ACROSS date/month/year MODES: `getCellStyle` (day grid)
+ * and `getMonthCellStyle` (month/year) resolved to byte-identical
+ * border/background-color/color/border-radius/box-shadow values for every
+ * state they share, so one `[data-part='cell']` ruleset below serves all
+ * three -- discriminated only by state attributes already stamped (`data-
+ * today`, `data-selected`, `data-in-range`), which month/year cells simply
+ * never carry `data-in-range` on.
+ *
+ * TWO NEW STATE ATTRIBUTES (not in the pre-existing BEM contract, added here
+ * because their JS drove real counted paint with no attribute to key on):
+ * - `data-outside-month`: `getCellStyle`'s `color` ternary branched on
+ *   `!cell.isCurrentMonth` (padding days from the adjacent month render
+ *   dimmer) -- a real color dependency, unlike the modern engine, where the
+ *   equivalent state only ever drove `opacity` (uncounted). Maps 1:1 to
+ *   `!cell.isCurrentMonth`, stamped only on the day-grid cell.
+ * - `data-focused`: `getCellStyle`'s `border` ternary's second branch keyed
+ *   on the keyboard-nav "focused cell" (`isFocusedCell`, from `focusedDate`)
+ *   -- a roving-tabindex target, NOT real DOM `:focus` (no `.focus()` call
+ *   exists anywhere in this file for grid cells), so a `:focus` pseudo-class
+ *   cannot reproduce it. Maps 1:1 to `isFocusedCell`, stamped only on the
+ *   day-grid cell. Priority vs. the today-ring is preserved via the
+ *   `:not([data-today='true']), […][data-selected='true']` OR-split below
+ *   (see the two-selector focus-ring rule), matching the original ternary's
+ *   `isToday && !isSelected && !isEndpoint ? todayRing : isFocused ?
+ *   focusRing : none` exactly (`isEndpoint` folded into `data-selected`).
+ *
+ * ACTIVE RANGE INPUT: `RangePicker`'s start/end border+box-shadow ring was
+ * never real DOM focus -- `getBorderColor(status, activeInput === inputType
+ * && isOpen)` painted whichever input `activeInput` currently targets while
+ * the panel is open (no `onFocus`/`onBlur` on these inputs at all). `data-
+ * active` (added here) reproduces that condition exactly, replacing
+ * `isFocused` as the third priority tier in the border-color cascade (see
+ * STATUS PRIORITY below) -- same idiom as the modern engine's own
+ * `data-active`, and as TimePicker modern's range input.
+ *
+ * FOCUS (single trigger only): the paint (border color, box-shadow) applies
+ * directly to `[data-part='trigger-input']`, the SAME element that receives
+ * native focus -- not a container painting for a nested input -- so a plain
+ * `:focus` pseudo-class reproduces the removed `useInteractionState()`/
+ * `isFocused`-driven paint exactly, with no React-render-timing gap.
+ * `DatePickerBase` keeps `useInteractionState()`; its `focused` flag still
+ * drives the `rottay-datepicker--focused` root modifier class, unrelated to
+ * paint (RangePicker has no such state at all -- it never had a `--focused`
+ * modifier, only `data-active` above).
+ *
+ * STATUS PRIORITY: error > warning > focused/active > default, matching the
+ * removed `getBorderColor()` priority chain byte-exact. The focus/active
+ * border rule is guarded with `:not(...--error):not(...--warning)` so a
+ * status root modifier always outranks it, regardless of selector order. The
+ * box-shadow ring has no status dependency in the original -- it shows
+ * regardless of status, so it carries no such guard.
+ *
+ * DAY-GRID CELL HOVER: the removed `onMouseEnter`/`onMouseLeave` applied
+ * `transform: scale(1.1)` unconditionally for any non-disabled cell
+ * (including selected/endpoint ones), but only repainted `backgroundColor`
+ * when NOT selected/endpoint -- an asymmetric guard, preserved exactly below
+ * (two separate `:hover` rules, transform ungated, background gated). The
+ * leave-state resets to the resting value the rules above already provide.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
+ * two root classes + the target's own `data-part` repeated. Under the
+ * standalone panel there is no trigger root pair to draw on, so the panel's
+ * own class pair plays that role, plus the target's own `data-part`
+ * repeated -- matching the modern engine's identical panel idiom. Non-border
+ * paint (background-color, color, box-shadow, outline, border-radius) and
+ * pure `border: none`/`background: none` resets win unlayered at (0,3,0) or
+ * lower.
+ */
+
+/* ---- trigger (in-tree): single ---- */
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input'] {
+  border-radius: var(--ds-datepicker-radius, 8px);
+  outline: none;
+  background-color: var(--ds-datepicker-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+  box-shadow: none;
+}
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input']:disabled {
+  background-color: var(--ds-datepicker-bg-disabled, var(--ds-color-bg-secondary));
+}
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input']:focus {
+  box-shadow: var(--ds-datepicker-shadow-focus, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200));
+}
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-border, var(--ds-color-border));
+}
+.rottay-datepicker.rottay-datepicker--rustic:not(.rottay-datepicker--error):not(.rottay-datepicker--warning) [data-part='trigger-input'][data-part='trigger-input']:focus {
+  border: 1px solid var(--ds-datepicker-border-focus, var(--ds-color-primary-500));
+}
+.rottay-datepicker.rottay-datepicker--rustic.rottay-datepicker--error [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-error-border, var(--ds-color-error));
+}
+.rottay-datepicker.rottay-datepicker--rustic.rottay-datepicker--warning [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-warning-border, var(--ds-color-warning));
+}
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-datepicker-clear-color, var(--ds-color-text-tertiary));
+}
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='calendar-icon'] {
+  color: var(--ds-datepicker-icon-color, var(--ds-color-text-tertiary));
+}
+
+/* ---- trigger (in-tree): range ---- */
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input'] {
+  border-radius: var(--ds-datepicker-radius, 8px);
+  outline: none;
+  background-color: var(--ds-datepicker-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+  box-shadow: none;
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input']:disabled {
+  background-color: var(--ds-datepicker-bg-disabled, var(--ds-color-bg-secondary));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input'][data-active='true'] {
+  box-shadow: var(--ds-datepicker-shadow-focus, 0 0 0 2px var(--ds-color-primary-100));
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-border, var(--ds-color-border));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic:not(.rottay-datepicker-range--error):not(.rottay-datepicker-range--warning) [data-part='trigger-input'][data-part='trigger-input'][data-active='true'] {
+  border: 1px solid var(--ds-datepicker-border-focus, var(--ds-color-primary-500));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic.rottay-datepicker-range--error [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-error-border, var(--ds-color-error));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic.rottay-datepicker-range--warning [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-warning-border, var(--ds-color-warning));
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='separator'] {
+  color: var(--ds-datepicker-separator-color, var(--ds-color-text-tertiary));
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-datepicker-clear-color, var(--ds-color-text-tertiary));
+}
+
+/* ---------------------------------------------------------------------
+   Panel (portal, standalone) -- shared by DatePickerBase and RangePicker,
+   all three modes (month/year/date).
+   --------------------------------------------------------------------- */
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic {
+  background-color: var(--ds-datepicker-panel-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-datepicker-panel-radius, 8px);
+  box-shadow: var(--ds-datepicker-panel-shadow, var(--ds-shadow-lg));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic[data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-datepicker-panel-border, var(--ds-color-border));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='nav-button'] {
+  background: none;
+  border: none;
+  border-radius: var(--ds-datepicker-radius, 8px);
+  color: var(--ds-datepicker-nav-color, var(--ds-color-text-secondary));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='panel-title'] {
+  color: var(--ds-datepicker-header-color, var(--ds-color-text-primary));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='weekday-header'] {
+  color: var(--ds-datepicker-day-header-color, var(--ds-color-text-tertiary));
+}
+
+/* Cell -- shared by the date/month/year grids (see header comment). */
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'] {
+  border-radius: var(--ds-datepicker-cell-radius, 4px);
+  border: none;
+  background-color: transparent;
+  color: var(--ds-datepicker-cell-color, var(--ds-color-text-primary));
+  outline: none;
+  box-shadow: none;
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-outside-month='true']:not([data-selected='true']) {
+  color: var(--ds-datepicker-outside-color, var(--ds-color-text-tertiary));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
+  background-color: var(--ds-datepicker-range-bg, var(--ds-color-primary-100));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-selected='true'] {
+  background-color: var(--ds-datepicker-selected-bg, var(--ds-color-primary-500));
+  color: var(--ds-datepicker-selected-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+  box-shadow: var(--ds-datepicker-selected-shadow, 0 0 0 2px var(--ds-color-primary-200));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border: 1px solid var(--ds-datepicker-today-border, var(--ds-color-primary-500));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-part='cell'][data-focused='true']:not([data-today='true']),
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-part='cell'][data-focused='true'][data-selected='true'] {
+  border: 2px solid var(--ds-datepicker-focus-ring, var(--ds-color-primary-500));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell']:hover:not([data-disabled='true']) {
+  transform: scale(1.1);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell']:hover:not([data-disabled='true']):not([data-selected='true']) {
+  background-color: var(--ds-datepicker-cell-hover-bg, var(--ds-color-primary-50));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'][data-part='time-column'] {
+  border-top: 1px solid var(--ds-datepicker-panel-border, var(--ds-color-border));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'] select {
+  border-radius: var(--ds-datepicker-radius, 8px);
+  background-color: var(--ds-datepicker-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+  outline: none;
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'][data-part='time-column'] select {
+  border: 1px solid var(--ds-datepicker-border, var(--ds-color-border));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'][data-part='time-column'] select:focus {
+  border-color: var(--ds-datepicker-border-focus, var(--ds-color-primary-500));
+  box-shadow: var(--ds-datepicker-shadow-focus, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'] span {
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-datepicker-panel-border, var(--ds-color-border));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='today-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-datepicker-today-color, var(--ds-color-primary-500));
+  border-radius: var(--ds-datepicker-radius, 8px);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='today-button']:hover {
+  background-color: var(--ds-datepicker-today-hover-bg, var(--ds-color-primary-50));
+  box-shadow: var(--ds-datepicker-today-hover-shadow, var(--ds-shadow-sm));
+  transform: translateY(-1px);
+}
+
+@keyframes ds-date-picker-panel-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}

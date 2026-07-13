@@ -104,7 +104,6 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
     <div
       data-part="preview-modal"
       className="fixed inset-0 z-[9999] flex items-center justify-center"
-      style={{ background: 'var(--ds-upload-preview-backdrop)' }}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -114,7 +113,7 @@ const PreviewModal: React.FC<PreviewModalProps> = ({ src, alt, onClose }) => {
         <button
           type="button"
           data-part="preview-close-button"
-          style={{ position: 'absolute', top: -12, right: -12, background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, padding: 0 }}
+          style={{ position: 'absolute', top: -12, right: -12, width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, padding: 0 }}
           onClick={onClose}
           aria-label={t('upload.close_preview')}
         >
@@ -143,11 +142,11 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ percent = 0, strokeColor, str
     : strokeColor || undefined;
 
   return (
-    <div data-part="progress-track" className="w-full rounded-full overflow-hidden" style={{ height: strokeWidth + 4, background: 'var(--ds-surface-panel)' }}>
+    <div data-part="progress-track" className="w-full rounded-full overflow-hidden" style={{ height: strokeWidth + 4 }}>
       <div
         data-part="progress-bar"
         className="h-full rounded-full transition-all duration-300 ease-out"
-        style={{ width: `${Math.min(percent, 100)}%`, background: bg ?? 'var(--ds-color-primary)' }}
+        style={{ width: `${Math.min(percent, 100)}%`, ...({ '--ds-upload-progress-fill': bg ?? 'var(--ds-color-primary)' } as React.CSSProperties) }}
         role="progressbar"
         aria-valuenow={percent}
         aria-valuemin={0}
@@ -204,20 +203,16 @@ const FileItem: React.FC<FileItemProps> = ({
       position: 'relative',
       width: 104,
       height: 104,
-      borderRadius: 'var(--ds-upload-file-radius, 6px)',
       overflow: 'hidden',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'var(--ds-color-bg-secondary)',
-      border: `1px solid ${file.status === 'error' ? 'var(--ds-color-error)' : 'var(--ds-color-border)'}`,
       transition: 'box-shadow var(--ds-motion-normal), transform var(--ds-motion-normal)',
       cursor: 'pointer',
     };
     const overlayStyle: React.CSSProperties = {
       position: 'absolute',
       inset: 0,
-      background: 'var(--ds-upload-preview-overlay)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -226,10 +221,6 @@ const FileItem: React.FC<FileItemProps> = ({
     const overlayBtnStyle: React.CSSProperties = {
       width: 32,
       height: 32,
-      borderRadius: '50%',
-      border: 'none',
-      background: 'var(--ds-color-alpha-white-20)',
-      color: 'var(--ds-upload-overlay-action-color)',
       cursor: 'pointer',
       display: 'flex',
       alignItems: 'center',
@@ -249,10 +240,10 @@ const FileItem: React.FC<FileItemProps> = ({
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
-          <span style={{ fontSize: 12, color: 'var(--ds-color-text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '0 4px', textAlign: 'center' }}>{file.name}</span>
+          <span style={{ fontSize: 12, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', padding: '0 4px', textAlign: 'center' }}>{file.name}</span>
         )}
         {isUploading && (
-          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 4, background: 'var(--ds-color-alpha-black-40)' }}>
+          <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: 4 }}>
             <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />
           </div>
         )}
@@ -278,7 +269,7 @@ const FileItem: React.FC<FileItemProps> = ({
     const originNode = (
       <div
         className={`relative group rounded-full overflow-hidden flex items-center justify-center border-2`}
-        style={{ width: 104, height: 104, background: 'var(--ds-surface-inset)', borderColor: file.status === 'error' ? 'var(--ds-color-error)' : 'var(--ds-color-border)' }}
+        style={{ width: 104, height: 104 }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         role="listitem"
@@ -289,7 +280,7 @@ const FileItem: React.FC<FileItemProps> = ({
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} className="w-full h-full object-cover" />
         ) : (
-          <span className="text-xs truncate px-2 text-center" style={{ color: 'var(--ds-color-text-secondary)' }}>{file.name}</span>
+          <span className="text-xs truncate px-2 text-center">{file.name}</span>
         )}
         {isUploading && (
           <div className="absolute inset-x-2 bottom-2">
@@ -297,13 +288,13 @@ const FileItem: React.FC<FileItemProps> = ({
           </div>
         )}
         {hovered && !isUploading && (
-          <div data-part="file-item-overlay" className="absolute inset-0 rounded-full flex items-center justify-center gap-1" style={{ background: 'var(--ds-upload-preview-overlay)' }}>
+          <div data-part="file-item-overlay" className="absolute inset-0 rounded-full flex items-center justify-center gap-1">
             {isImg && (
-              <button type="button" data-part="file-item-action" data-action="preview" style={{ background: 'transparent', color: 'var(--ds-upload-overlay-action-color)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
+              <button type="button" data-part="file-item-action" data-action="preview" style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onPreview?.(file)} aria-label={`Preview ${file.name}`}>
                 <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
               </button>
             )}
-            <button type="button" data-part="file-item-action" data-action="remove" style={{ background: 'transparent', color: 'var(--ds-upload-overlay-action-color)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
+            <button type="button" data-part="file-item-action" data-action="remove" style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>
               <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
@@ -316,19 +307,19 @@ const FileItem: React.FC<FileItemProps> = ({
   // -- picture: horizontal row with a small thumbnail on the left --
   if (listType === 'picture') {
     const originNode = (
-      <div data-part="file-item" data-status={file.status || undefined} className={`flex items-center gap-2 p-2 rounded transition-colors duration-200 ${file.status === 'error' ? 'border border-error' : ''}`} style={{ background: 'var(--ds-surface-inset)' }} role="listitem" aria-label={file.name}>
+      <div data-part="file-item" data-status={file.status || undefined} className={`flex items-center gap-2 p-2 rounded transition-colors duration-200 ${file.status === 'error' ? 'border border-error' : ''}`} role="listitem" aria-label={file.name}>
         {isImg && thumb ? (
           <img src={thumb} alt={file.name} className="w-12 h-12 object-cover rounded flex-shrink-0 cursor-pointer" onClick={() => onPreview?.(file)} />
         ) : (
-          <div className="w-12 h-12 rounded flex items-center justify-center flex-shrink-0" style={{ background: 'var(--ds-surface-panel)' }}>
-            <svg className="w-6 h-6" style={{ color: 'var(--ds-color-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+          <div className="w-12 h-12 rounded flex items-center justify-center flex-shrink-0">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
           </div>
         )}
         <div className="flex-1 min-w-0">
           <span className="text-sm truncate block">{file.name}</span>
           {isUploading && <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
         </div>
-        <button type="button" data-part="file-item-action" data-action="remove" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', flexShrink: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>x</button>
+        <button type="button" data-part="file-item-action" data-action="remove" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', flexShrink: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>x</button>
       </div>
     );
     return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -336,12 +327,12 @@ const FileItem: React.FC<FileItemProps> = ({
 
   // -- text (default): simple filename row with remove button --
   const originNode = (
-    <div data-part="file-item" data-status={file.status || undefined} className={`flex items-center justify-between p-2 rounded transition-colors duration-200 ${file.status === 'error' ? 'border border-error' : ''}`} style={{ background: 'var(--ds-surface-inset)' }} role="listitem" aria-label={file.name}>
+    <div data-part="file-item" data-status={file.status || undefined} className={`flex items-center justify-between p-2 rounded transition-colors duration-200 ${file.status === 'error' ? 'border border-error' : ''}`} role="listitem" aria-label={file.name}>
       <div className="flex-1 min-w-0">
         <span className="text-sm truncate block">{file.name}</span>
         {isUploading && <ProgressBar percent={file.percent} strokeColor={progress?.strokeColor} strokeWidth={progress?.strokeWidth} />}
       </div>
-      <button type="button" data-part="file-item-action" data-action="remove" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', flexShrink: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>x</button>
+      <button type="button" data-part="file-item-action" data-action="remove" style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer', flexShrink: 0 }} onClick={() => onRemove(file)} aria-label={`Remove ${file.name}`}>x</button>
     </div>
   );
   return itemRender ? <>{itemRender(originNode, file, [], actions)}</> : originNode;
@@ -451,6 +442,15 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
       ? { webkitdirectory: '', directory: '' } as unknown as React.InputHTMLAttributes<HTMLInputElement>
       : {};
 
+    // Root scope class + the listType discriminator the skin CSS keys file-item
+    // variants on (mirrors rustic's pre-existing `rottay-upload--${listType}` BEM modifier).
+    const rootClassName = [
+      'ds-upload',
+      'ds-upload--modern',
+      listType !== 'text' && `ds-upload--${listType}`,
+      className,
+    ].filter(Boolean).join(' ');
+
     const uploadTrigger = (
       <>
         <input
@@ -473,7 +473,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               className={`flex items-center justify-center border-2 border-dashed hover:border-primary hover:bg-primary/5 transition-all duration-300 ${
                 listType === 'picture-circle' ? 'rounded-full' : 'rounded-lg'
               } ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
-              style={{ minWidth: 104, minHeight: 104, padding: 16, borderColor: 'var(--ds-color-border)' }}
+              style={{ minWidth: 104, minHeight: 104, padding: 16 }}
               role="button"
               tabIndex={disabled ? -1 : 0}
               aria-label={t('upload.add_file')}
@@ -482,7 +482,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
               }}
             >
               {children || (
-                <svg className="w-8 h-8" style={{ color: 'var(--ds-color-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                 </svg>
               )}
@@ -495,7 +495,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
             style={{ cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1 }}
           >
             {children || (
-              <button type="button" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 36, padding: '0 16px', fontSize: 14, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1 }} disabled={disabled}>{t('upload.button')}</button>
+              <button type="button" style={{ height: 36, padding: '0 16px', fontSize: 14, cursor: disabled ? 'not-allowed' : 'pointer', opacity: disabled ? 0.5 : 1 }} disabled={disabled}>{t('upload.button')}</button>
             )}
           </span>
         )}
@@ -516,7 +516,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     ));
 
     return (
-      <div ref={ref} data-part="root" className={className} style={style}>
+      <div ref={ref} data-part="root" className={rootClassName} style={style}>
         {isPictureCardOrCircle ? (
           <div data-part="file-list" className="flex flex-wrap gap-2" role="list" aria-label="Uploaded files">
             {showUploadList && fileItems}
@@ -638,8 +638,17 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
       ? { webkitdirectory: '', directory: '' } as unknown as React.InputHTMLAttributes<HTMLInputElement>
       : {};
 
+    // Root scope class + the listType discriminator the skin CSS keys file-item
+    // variants on (mirrors rustic's pre-existing `rottay-upload--${listType}` BEM modifier).
+    const rootClassName = [
+      'ds-upload-dragger',
+      'ds-upload-dragger--modern',
+      listType !== 'text' && `ds-upload-dragger--${listType}`,
+      className,
+    ].filter(Boolean).join(' ');
+
     return (
-      <div ref={ref} data-part="root" className={className} style={style}>
+      <div ref={ref} data-part="root" className={rootClassName} style={style}>
         <div
           onDragOver={(e) => { e.preventDefault(); if (!disabled) setIsDragOver(true); }}
           onDragLeave={() => { if (!disabled) setIsDragOver(false); }}
@@ -656,7 +665,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           className={`border-2 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
             isDragOver ? 'border-primary bg-primary/5 shadow-lg scale-[1.01]' : 'hover:border-primary hover:bg-primary/5'
           } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-          style={{ height, ...(!isDragOver ? { borderColor: 'var(--ds-color-border)' } : {}) }}
+          style={{ height }}
         >
           <input
             ref={inputRef}
@@ -671,10 +680,10 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
           />
           {children || (
             <>
-              <svg className="w-12 h-12 mb-2" style={{ color: 'var(--ds-color-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-12 h-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
               </svg>
-              <p style={{ color: 'var(--ds-color-text-secondary)' }}>{t('upload.drag_drop')}</p>
+              <p>{t('upload.drag_drop')}</p>
             </>
           )}
         </div>

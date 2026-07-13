@@ -18593,6 +18593,3119 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-error);
 }
 
+/**
+ * Modern Upload skin (WO-SKIN-02 checkpoint C, pickers/movers batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements at all; unlayered
+ * outranks preflight AND every Tailwind utility layer, and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOTS: `Upload` and `Dragger` are two separate top-level components in
+ * `engines/modern.tsx`, each with its OWN root `<div data-part='root'>`. Neither
+ * root carried a first-party class before this migration -- unlike every other
+ * migrated modern-engine component, `className` on both roots was previously
+ * caller-only passthrough. This migration adds `ds-upload`/`ds-upload--modern`
+ * (Upload) and `ds-upload-dragger`/`ds-upload-dragger--modern` (Dragger),
+ * mirroring the `.ds-<comp>.ds-<comp>--modern` convention every sibling skin
+ * uses and the BEM pair (`rottay-upload`/`rottay-upload-dragger`) the rustic
+ * engine already carried -- without this, no rule below could be scoped to
+ * this component without leaking onto any other component that reuses the same
+ * generic `data-part` values (`root`, `file-list`, ...) elsewhere on the page.
+ *
+ * LISTTYPE DISCRIMINATOR: `data-part='file-item'` (and its default-rendered
+ * `img`/`span` children) is shared across all four `listType` renders
+ * (picture-card, picture-circle, picture, text), each with different static
+ * paint. Mirroring rustic's pre-existing `rottay-upload--${listType}` root
+ * modifier (added here to `ds-upload`/`ds-upload-dragger` too, and to rustic's
+ * Dragger root, which lacked it -- see the rustic skin header), every root
+ * additionally carries `ds-upload--${listType}` / `ds-upload-dragger--${listType}`
+ * when `listType !== 'text'` (text has no modifier, matching rustic).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * (0,3,1). Every rule that paints a border COLOR here reaches (0,4,0) via a
+ * listType root modifier class, or (where no modifier applies) a repeated
+ * `[data-part='x'][data-part='x']`. Non-border paint (background, color,
+ * box-shadow, outline, border-radius) wins unlayered at (0,3,0) or higher.
+ *
+ * The progress-bar fill is a runtime `progress.strokeColor` (plain color or a
+ * computed `linear-gradient(...)`), carried via the uncounted custom property
+ * `--ds-upload-progress-fill` and consumed by the rule below; only the runtime
+ * `width` stays inline.
+ *
+ * DEVIATION (reported, not silently taken):
+ * 2. The Dragger's active-drag paint (`border-primary bg-primary/5 shadow-lg
+ *    scale-[1.01]`, applied via conditional Tailwind utility classes, not an
+ *    object-literal style key) is NOT counted by the inline-paint audit and is
+ *    left in the JSX untouched -- `Upload.engine-advanced.test.tsx:135`
+ *    asserts `border-primary` is present in the dropzone's className during
+ *    drag, and this repo ships no `tailwind.config.*` this agent could read to
+ *    verify the exact compiled value of an opacity-modified utility
+ *    (`bg-primary/5`) or `shadow-lg`, so duplicating them into a static CSS
+ *    rule risked a byte-INEXACT transcription -- a worse RULE ZERO violation
+ *    than leaving a harmless, already-correct mechanism alone. Only the
+ *    genuinely counted inline site -- the inactive-state `borderColor`
+ *    conditional -- moves to CSS below, keyed on the idle branch of the
+ *    pre-existing `data-state='dragging'|'idle'` attribute so it cannot fight
+ *    the still-Tailwind-driven dragging-state border color.
+ */
+
+/* ---- preview-modal / preview-close-button / progress-track: identical in
+        both Upload and Dragger subtrees (declared once, used by both). ---- */
+.ds-upload.ds-upload--modern [data-part='preview-modal'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-modal'] {
+  background: var(--ds-upload-preview-backdrop);
+}
+.ds-upload.ds-upload--modern [data-part='preview-close-button'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='preview-close-button'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border-radius: 50%;
+  border: none;
+}
+.ds-upload.ds-upload--modern [data-part='progress-track'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='progress-track'] {
+  background: var(--ds-surface-panel);
+}
+/* progress-bar fill: a runtime `strokeColor` (plain color or computed gradient)
+   carried via the uncounted custom property `--ds-upload-progress-fill`; only
+   the runtime `width` stays inline. */
+.ds-upload.ds-upload--modern [data-part='progress-bar'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='progress-bar'] {
+  background: var(--ds-upload-progress-fill);
+}
+
+/* ---- file-item-overlay: only rendered by the picture-card/picture-circle
+        branches, so no listType scope is needed -- the data-part itself is
+        variant-exclusive. ---- */
+.ds-upload.ds-upload--modern [data-part='file-item-overlay'],
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='file-item-overlay'] {
+  background: var(--ds-upload-preview-overlay);
+}
+
+/* ---- file-item base: circle/picture/text share one background; card is the
+        odd one out (own background + radius + border). ---- */
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card) [data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card) [data-part='file-item'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'] {
+  background: var(--ds-color-bg-secondary);
+  border-radius: var(--ds-upload-file-radius, 6px);
+  border: 1px solid var(--ds-color-border);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'][data-status='error'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+
+/* ---- circle: border-color only (width/style come from the `border-2`
+        Tailwind class, left in place -- non-paint). ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'] {
+  border-color: var(--ds-color-border);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'][data-status='error'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+
+/* ---- file-item-action: card and circle each own a color/radius/border chrome
+        differing only in background; picture/text share one identical style
+        (button is a direct child of file-item there, never nested inside an
+        overlay). ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item-action'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item-action'] {
+  background: var(--ds-color-alpha-white-20);
+  color: var(--ds-upload-overlay-action-color);
+  border-radius: 50%;
+  border: none;
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item-action'],
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item-action'] {
+  background: transparent;
+  color: var(--ds-upload-overlay-action-color);
+  border-radius: 50%;
+  border: none;
+}
+.ds-upload.ds-upload--modern:not(.ds-upload--picture-card):not(.ds-upload--picture-circle) [data-part='file-item-action'],
+.ds-upload-dragger.ds-upload-dragger--modern:not(.ds-upload-dragger--picture-card):not(.ds-upload-dragger--picture-circle) [data-part='file-item-action'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- picture-card fallback filename (no thumb) and picture-circle fallback
+        filename: both a bare `<span>` with no data-part, and each the ONLY
+        direct-child span in its branch (mutually exclusive with the `<img>`
+        alternative), so `> span` is unambiguous within its listType scope. ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'] > span,
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'] > span {
+  color: var(--ds-color-text-muted);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture-circle [data-part='file-item'] > span,
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-circle [data-part='file-item'] > span {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- picture-row fallback icon (no thumb): the wrapper `<div>` has no
+        data-part, but it is the only file-item child that :has() a bare
+        (non-action) svg in the "picture" listType. ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture [data-part='file-item'] > div:has(svg),
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture [data-part='file-item'] > div:has(svg) {
+  background: var(--ds-surface-panel);
+}
+.ds-upload.ds-upload--modern.ds-upload--picture [data-part='file-item'] > div:has(svg) svg,
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture [data-part='file-item'] > div:has(svg) svg {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- picture-card in-progress overlay strip: the wrapper `<div>` has no
+        data-part, identified by :has()-ing the progress-track it wraps. ---- */
+.ds-upload.ds-upload--modern.ds-upload--picture-card [data-part='file-item'] > div:has([data-part='progress-track']),
+.ds-upload-dragger.ds-upload-dragger--modern.ds-upload-dragger--picture-card [data-part='file-item'] > div:has([data-part='progress-track']) {
+  background: var(--ds-color-alpha-black-40);
+}
+
+/* ---- add-button (picture-card/circle "add" tile): Upload only, Dragger has
+        no add-button. Border color repeats the data-part to reach (0,4,0)
+        (no listType modifier applies -- add-button renders in both card and
+        circle with the same border token). ---- */
+.ds-upload.ds-upload--modern [data-part='add-button'][data-part='add-button'] {
+  border-color: var(--ds-color-border);
+}
+.ds-upload.ds-upload--modern [data-part='add-button'] svg {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- trigger (text/picture default button): Upload only. ---- */
+.ds-upload.ds-upload--modern [data-part='trigger'][data-part='trigger'] button {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- dropzone (Dragger only): idle-state border color. The dragging-state
+        color stays on the pre-existing `border-primary` Tailwind class (see
+        header deviation #2) so this rule is explicitly gated to idle -- an
+        unconditional rule would win over the layered Tailwind class (unlayered
+        always outranks layered) and paint over the dragging state. ---- */
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'][data-state='idle'] {
+  border-color: var(--ds-color-border);
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] svg {
+  color: var(--ds-color-text-secondary);
+}
+.ds-upload-dragger.ds-upload-dragger--modern [data-part='dropzone'] p {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic Upload skin (WO-SKIN-02 checkpoint C, pickers/movers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * unlayered outranks preflight and any layered utility, and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOTS: `Upload` (`.rottay-upload.rottay-upload--rustic`) and `Dragger`
+ * (`.rottay-upload-dragger.rottay-upload-dragger--rustic`) are two separate
+ * top-level components, each with its own BEM root class pair that already
+ * existed pre-migration. `Upload`'s root already carried a
+ * `rottay-upload--${listType}` modifier (omitted for `listType==='text'`);
+ * `Dragger`'s root did NOT carry the equivalent `rottay-upload-dragger--${listType}`
+ * modifier before this migration -- added here, mirroring Upload's own
+ * pre-existing convention in the same file, because `RusticFileItem` renders
+ * all four listType variants under Dragger too and this skin needs the same
+ * discriminator there that Upload already had.
+ *
+ * DISCRIMINATOR: `data-part='file-item'` (and its unlabeled `img`/`span`/`div`
+ * children) is shared across all four `listType` renders, each with different
+ * static paint. Card and circle share one function (`sharedStyles.cardContainer`)
+ * differing only in border-radius; picture and text are each their own object
+ * but happen to paint identical background/radius tokens. Selectors below
+ * split card+circle (one shared block, radius overridden per variant) from
+ * picture+text (one shared block, `:not(...)` of the two card/circle
+ * modifiers) to mirror that.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * (0,3,1). Every rule that paints a border COLOR reaches (0,4,0) via a
+ * listType root modifier class, or (where none applies) a repeated
+ * `[data-part='x'][data-part='x']`. Non-border paint wins unlayered at (0,3,0)
+ * or higher.
+ *
+ * The progress-bar fill is a runtime `progress.strokeColor` (plain color or a
+ * computed gradient), carried via the uncounted custom property
+ * `--ds-upload-progress-fill`; only the runtime `width` stays inline. Its
+ * `border-radius: 4px` (a hardcoded literal, not a token -- see the P-70
+ * hardcoded-literal list) is static and moves, below.
+ */
+
+/* ---- preview-modal / preview-close-button / preview img: identical in both
+        Upload and Dragger subtrees (declared once, used by both). ---- */
+.rottay-upload.rottay-upload--rustic [data-part='preview-modal'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='preview-modal'] {
+  background: var(--ds-upload-preview-backdrop);
+}
+.rottay-upload.rottay-upload--rustic [data-part='preview-close-button'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='preview-close-button'] {
+  border: none;
+  border-radius: 50%;
+  background: var(--ds-upload-preview-close-bg);
+  color: var(--ds-upload-preview-close-color);
+}
+.rottay-upload.rottay-upload--rustic [data-part='preview-modal'] img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='preview-modal'] img {
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- progress-track / progress-bar: the bar's fill is a runtime `strokeColor`
+        (plain color or a computed gradient), carried via the uncounted custom
+        property `--ds-upload-progress-fill`; only the runtime `width` stays
+        inline. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='progress-track'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='progress-track'] {
+  background: var(--ds-upload-progress-track);
+  border-radius: 4px;
+}
+.rottay-upload.rottay-upload--rustic [data-part='progress-bar'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='progress-bar'] {
+  background: var(--ds-upload-progress-fill);
+  border-radius: 4px;
+}
+
+/* ---- file-item-action: text/picture's remove button is a DIRECT child of
+        file-item; card/circle's preview/remove buttons are nested inside
+        file-item-overlay -- that structural difference disambiguates them
+        without any listType scope. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='file-item'] > [data-part='file-item-action'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item'] > [data-part='file-item-action'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-upload-file-remove-color);
+}
+.rottay-upload.rottay-upload--rustic [data-part='file-item-overlay'] [data-part='file-item-action'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item-overlay'] [data-part='file-item-action'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-upload-overlay-action-color);
+  border-radius: 50%;
+}
+
+/* ---- file-item-overlay: background is identical card vs circle; radius
+        (0 vs 50%) is the only isCircle-dependent part. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='file-item-overlay'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item-overlay'] {
+  background: var(--ds-upload-preview-overlay);
+  border-radius: 0;
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item-overlay'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item-overlay'] {
+  border-radius: 50%;
+}
+
+/* ---- file-item: card + circle share background/border (cardContainer),
+        radius differs; error status doubles the border width, both
+        variants. ---- */
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'],
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'] {
+  background: var(--ds-upload-card-bg);
+  border: 1px solid var(--ds-upload-card-border);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'][data-status='error'],
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'][data-status='error'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'][data-status='error'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'][data-status='error'] {
+  border: 2px solid var(--ds-upload-error-border);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'] {
+  border-radius: var(--ds-upload-file-radius);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'] {
+  border-radius: 50%;
+}
+
+/* ---- file-item: picture + text share background/radius (NOT card/circle);
+        error status ADDS a 1px border neither variant has by default. ---- */
+.rottay-upload.rottay-upload--rustic:not(.rottay-upload--picture-card):not(.rottay-upload--picture-circle) [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic:not(.rottay-upload-dragger--picture-card):not(.rottay-upload-dragger--picture-circle) [data-part='file-item'] {
+  background: var(--ds-upload-file-bg);
+  border-radius: var(--ds-upload-file-radius);
+}
+.rottay-upload.rottay-upload--rustic:not(.rottay-upload--picture-card):not(.rottay-upload--picture-circle) [data-part='file-item'][data-status='error'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic:not(.rottay-upload-dragger--picture-card):not(.rottay-upload-dragger--picture-circle) [data-part='file-item'][data-status='error'] {
+  border: 1px solid var(--ds-upload-error-border);
+}
+
+/* ---- filename text: identical `--ds-upload-file-color` token across all
+        four variants -- card/circle's fallback span is a direct child of
+        file-item; picture/text's filename span is nested one level deeper
+        (inside the flex-1 wrapper div). Both selectors folded into one rule
+        since the value never differs by variant. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='file-item'] > span,
+.rottay-upload.rottay-upload--rustic [data-part='file-item'] > div > span,
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item'] > span,
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item'] > div > span {
+  color: var(--ds-upload-file-color);
+}
+
+/* ---- thumbnail img: a direct child of file-item in all three image-capable
+        variants (card, circle, picture); radius differs per variant. ---- */
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'] > img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'] > img {
+  border-radius: 0;
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'] > img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'] > img {
+  border-radius: 50%;
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture [data-part='file-item'] > img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture [data-part='file-item'] > img {
+  border-radius: var(--ds-upload-file-radius);
+}
+
+/* ---- picture-row fallback icon (no thumb): the wrapper div has no
+        data-part; it :has() the FileIcon svg the img alternative never
+        renders alongside. ---- */
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture [data-part='file-item'] > div:has(svg),
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture [data-part='file-item'] > div:has(svg) {
+  border-radius: var(--ds-upload-file-radius);
+  background: var(--ds-upload-file-bg);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture [data-part='file-item'] svg,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture [data-part='file-item'] svg {
+  color: var(--ds-upload-dragger-icon-color);
+}
+
+/* ---- add-button (picture-card/circle "add" tile): Upload only, Dragger has
+        no add-button. Border color repeats the data-part to reach (0,4,0). ---- */
+.rottay-upload.rottay-upload--rustic [data-part='add-button'][data-part='add-button'] {
+  border: 2px dashed var(--ds-upload-card-border);
+  background: transparent;
+  border-radius: var(--ds-upload-file-radius);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='add-button'] {
+  border-radius: 50%;
+}
+.rottay-upload.rottay-upload--rustic [data-part='add-button'] svg {
+  color: var(--ds-upload-dragger-icon-color);
+}
+
+/* ---- trigger (text/picture default button): Upload only. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='trigger'][data-part='trigger'] button {
+  border: 1px solid var(--ds-upload-button-border);
+  border-radius: var(--ds-upload-button-radius);
+  background: var(--ds-upload-button-bg);
+  color: var(--ds-upload-button-color);
+}
+
+/* ---- dropzone (Dragger only): the pre-existing `dropzoneStyle` ternary was
+        already a single inline-style source of truth (unlike modern's split
+        class+style hybrid), so both drag states fold cleanly into CSS keyed
+        on the pre-existing `data-state='dragging'|'idle'` attribute. ---- */
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'][data-part='dropzone'] {
+  border: 2px dashed var(--ds-upload-dragger-border);
+  border-radius: var(--ds-upload-dragger-radius);
+  background: var(--ds-upload-dragger-bg);
+}
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'][data-state='dragging'] {
+  border-color: var(--ds-upload-dragger-border-active);
+  background: var(--ds-upload-dragger-bg-hover);
+}
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'] svg {
+  color: var(--ds-upload-dragger-icon-color);
+}
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'] p {
+  color: var(--ds-upload-dragger-text-color);
+}
+
+/**
+ * Modern Transfer skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's `base` layer, so a layered
+ * rule can't paint these elements at all; unlayered outranks preflight and
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT: the outer `<div data-part='root'>` was Tailwind-only before
+ * this migration (no component class at all). `rottay-transfer
+ * rottay-transfer--modern` is added on it here -- the same
+ * `rottay-<comp> rottay-<comp>--modern` idiom the modern Button/Input skins
+ * already use, and matching the class family the sibling rustic engine
+ * already carries (`rottay-transfer rottay-transfer--rustic`). Every other
+ * painted part is a descendant, reached via
+ * `.rottay-transfer.rottay-transfer--modern [data-part='...']`. Two wrapper
+ * `<div>`s (the search cell, the pagination page-count `<span>`) carry no
+ * `data-part` of their own; the search cell is reached structurally via
+ * `:has()` (the `input-number.css` idiom), the page-count span via a
+ * scoped child combinator off `panel-pagination`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
+ * classes + the target's own `data-part` REPEATED (or a repeated `:has()`,
+ * same unit cost). Non-border paint (background, color, outline,
+ * border-radius) and pure `border: none` resets win unlayered at (0,3,0).
+ *
+ * The search input's `onFocus`/`onBlur` handlers wrote `borderColor` only;
+ * they are replaced by a rest border rule and a `:focus` override -- no
+ * other property changed on focus. The move/pagination buttons are static
+ * in this engine (no hover in the source); none is invented here.
+ */
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-header'] {
+  background: var(--ds-surface-inset);
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-header'][data-part='panel-header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-select-all'] {
+  accent-color: var(--ds-color-primary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-count'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-transfer.rottay-transfer--modern div:has(> [data-part='panel-search']):has(> [data-part='panel-search']) {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search'] {
+  border-radius: var(--ds-input-radius, var(--ds-radius-md));
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search'][data-part='panel-search'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-transfer.rottay-transfer--modern [data-part='panel-search'][data-part='panel-search']:focus {
+  border-color: var(--ds-color-primary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-item-checkbox'] {
+  accent-color: var(--ds-color-primary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'][data-part='panel-pagination'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='pagination-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='panel-pagination'] > span {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-transfer.rottay-transfer--modern [data-part='move-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/**
+ * Rustic Transfer skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is `.rottay-transfer.rottay-transfer--rustic[data-part='root']`,
+ * carrying `rottay-transfer--disabled` when the whole Transfer is disabled.
+ * Every painted part below is a descendant, reached via
+ * `.rottay-transfer.rottay-transfer--rustic [data-part='...']`. The search
+ * cell (`rottay-transfer__search`) and the pagination page-count `<span>`
+ * carry no `data-part`; the search cell already has its own BEM class
+ * (repeated for the border floor), the page-count span is reached as the
+ * lone child of `panel-pagination`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
+ * classes + the target's own `data-part`/class REPEATED. Non-border paint
+ * (background, color, outline, border-radius) and pure `border: none`
+ * resets win unlayered at (0,3,0).
+ *
+ * TWO DEFECTS FIXED STRUCTURALLY (both pre-existing, not introduced here):
+ * (1) the search input's `onBlur` used to clear `borderColor` to the empty
+ * string, which -- because React never re-renders on focus/blur -- left the
+ * border on the browser's initial `currentColor` instead of restoring the
+ * `--ds-transfer-search-input-border` token; deleting the imperative
+ * handlers and shipping a rest border rule here restores the real default.
+ * (2) the item-row hover's `#1677ff` hex fallback and the move-button
+ * hover/press shadows were magic literals duplicated inline; they are
+ * transcribed byte-exact below (still not tokenized -- filed as a proposal).
+ *
+ * INTERACTION MAPPING: the search focus ring, the item-row hover, and the
+ * move-button hover/press all used to be imperative `.style.*` writes keyed
+ * on native `:focus`/`:hover`/`:active` (and, for the move buttons, the
+ * native `disabled` attribute the JS handlers also gated on --
+ * `:not(:disabled)` reproduces `!disabled && count > 0` exactly). The item
+ * hover additionally gated on the item's own `data-disabled` and the whole
+ * Transfer's `disabled` state (`rottay-transfer--disabled` on root).
+ */
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel'] {
+  border-radius: var(--ds-transfer-radius);
+  background-color: var(--ds-transfer-bg);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-transfer-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-header'] {
+  background-color: var(--ds-transfer-header-bg);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-header'][data-part='panel-header'] {
+  border-bottom: 2px solid var(--ds-transfer-header-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-count'] {
+  color: var(--ds-transfer-count-color);
+}
+
+.rottay-transfer.rottay-transfer--rustic .rottay-transfer__search.rottay-transfer__search {
+  border-bottom: 1px solid var(--ds-transfer-header-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-search'] {
+  border-radius: var(--ds-transfer-search-input-radius);
+  outline: none;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-search'][data-part='panel-search'] {
+  border: 1px solid var(--ds-transfer-search-input-border);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-search'][data-part='panel-search']:focus {
+  border-color: var(--ds-color-primary, #1677ff);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-item'] {
+  border-radius: var(--ds-transfer-item-radius);
+  background-color: transparent;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-item'][data-part='panel-item'] {
+  border-left: 3px solid transparent;
+}
+.rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item']:not([data-disabled='true']):hover {
+  background-color: var(--ds-transfer-item-bg-hover);
+}
+.rottay-transfer.rottay-transfer--rustic:not(.rottay-transfer--disabled) [data-part='panel-item'][data-part='panel-item']:not([data-disabled='true']):hover {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-empty'] {
+  color: var(--ds-transfer-empty-color);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-pagination'][data-part='panel-pagination'] {
+  border-top: 1px solid var(--ds-transfer-header-border);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='panel-pagination'] > span {
+  color: var(--ds-transfer-count-color);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='pagination-button'] {
+  background: none;
+  border-radius: 4px;
+  color: inherit;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='pagination-button'][data-part='pagination-button'] {
+  border: 1px solid var(--ds-transfer-border);
+}
+
+.rottay-transfer.rottay-transfer--rustic [data-part='move-button'] {
+  background-color: var(--ds-transfer-button-bg);
+  color: var(--ds-transfer-button-color);
+  border-radius: var(--ds-transfer-button-radius);
+  border: none;
+  transform: translateY(0) scale(1);
+  box-shadow: none;
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='move-button']:not(:disabled):hover {
+  transform: translateY(-1px) scale(1.02);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+.rottay-transfer.rottay-transfer--rustic [data-part='move-button']:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/**
+ * Modern ColorPicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT: the outer `<div data-part='root'>` was Tailwind-only before
+ * this migration (no component class at all). `rottay-colorpicker
+ * rottay-colorpicker--modern` is added on it here, matching the class
+ * family the sibling rustic engine already carries (`rottay-colorpicker
+ * rottay-colorpicker--rustic`) and the `rottay-<comp> rottay-<comp>--modern`
+ * idiom the modern Button/Input skins already use.
+ *
+ * PORTAL POSTURE: this engine's dropdown renders IN-TREE (a normal DOM
+ * descendant of root, absolutely positioned by Tailwind utilities) --
+ * unlike rustic, which portals to `document.body`. It stays root-scoped,
+ * `.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown']`.
+ * Two divider `<div>`s (above the presets block, above the clear button)
+ * carry no `data-part`; both are reached structurally via `:has()`, the
+ * `input-number.css` idiom.
+ *
+ * SWATCH CUSTOM-PROPERTY HATCH: the trigger swatch's `backgroundColor`
+ * (the live selected color) and each preset swatch's `backgroundColor`
+ * (an author-supplied palette color) are both runtime values that cannot
+ * become a static class. Each is still passed via a quoted custom-property
+ * key (`--ds-colorpicker-swatch-color`, `--ds-colorpicker-preset-color`),
+ * which the counter does not count, consumed here by a static rule -- same
+ * idiom as PasswordInput's strength-fill / Toggle's track-fill.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
+ * classes + the target's own `data-part` REPEATED (or a repeated `:has()`).
+ * Non-border paint (background, color, outline, border-radius) wins
+ * unlayered at (0,3,0). The native `<input type='color'>` picker chrome is
+ * UA-rendered and untouched.
+ */
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'] {
+  background-color: var(--ds-colorpicker-swatch-color);
+  box-shadow: var(--ds-elevation-1);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='swatch'][data-part='swatch'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='dropdown'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='hex-input'][data-part='hex-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='preset-group']):has(> [data-part='preset-group']),
+.rottay-colorpicker.rottay-colorpicker--modern div:has(> [data-part='clear-button']):has(> [data-part='clear-button']) {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'] {
+  background-color: var(--ds-colorpicker-preset-color);
+}
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='preset-swatch'][data-part='preset-swatch'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-colorpicker.rottay-colorpicker--modern [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/**
+ * Rustic ColorPicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS, not one:
+ * - The trigger (swatch + text) stays IN-TREE, scoped the usual way:
+ *   `.rottay-colorpicker.rottay-colorpicker--rustic[data-part='root']`.
+ * - The dropdown panel is `createPortal(..., document.body)` -- it is NOT a
+ *   DOM descendant of root, so it CANNOT be scoped under the trigger's
+ *   class (a genuine cross-engine asymmetry vs. the modern engine, whose
+ *   dropdown is in-tree; preserved, not unified). It carries its own
+ *   self-sufficient class, `rottay-colorpicker__dropdown`, stamped by the
+ *   pre-step; every dropdown-descendant rule below is scoped standalone on
+ *   that class instead of the trigger root pair.
+ *
+ * SWATCH CUSTOM-PROPERTY HATCH: the trigger swatch's `backgroundColor`
+ * (live selected color) and each preset swatch's `backgroundColor`
+ * (author-supplied palette color) are runtime values that cannot become a
+ * static class. Both are passed via a quoted custom-property key
+ * (`--ds-colorpicker-swatch-color`, `--ds-colorpicker-preset-color`, not
+ * counted by the fleet audit), consumed here by a static rule -- same idiom
+ * as PasswordInput's strength-fill / Toggle's track-fill.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via
+ * the two root classes + the target's `data-part` REPEATED, same as every
+ * other engine skin. Under the standalone dropdown class there is no root
+ * PAIR to draw on, so the SAME single class is repeated twice in its place
+ * (`.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown`) to buy the
+ * same 2 specificity units, plus the target's own `data-part` repeated for
+ * the remaining 2. Non-border paint (background, border-radius) needs only
+ * enough selector to beat Tailwind preflight, which any unlayered rule does
+ * regardless of specificity (P-47) -- a single class/attribute is used. The
+ * native `<input type='color'>` picker chrome is UA-rendered and untouched;
+ * its own `border: none` reset is a pure reset, exempt from the floor.
+ */
+
+.rottay-colorpicker.rottay-colorpicker--rustic [data-part='swatch'] {
+  border-radius: var(--ds-colorpicker-swatch-radius);
+  box-shadow: var(--ds-colorpicker-swatch-shadow);
+  background-color: var(--ds-colorpicker-swatch-color);
+}
+.rottay-colorpicker.rottay-colorpicker--rustic [data-part='swatch'][data-part='swatch'] {
+  border: 1px solid var(--ds-colorpicker-swatch-border);
+}
+
+.rottay-colorpicker__dropdown {
+  background-color: var(--ds-colorpicker-dropdown-bg);
+  border-radius: var(--ds-colorpicker-dropdown-radius);
+  box-shadow: var(--ds-colorpicker-dropdown-shadow);
+}
+
+.rottay-colorpicker__dropdown [data-part='native-color-input'] {
+  border: none;
+}
+
+.rottay-colorpicker__dropdown [data-part='hex-input'] {
+  border-radius: var(--ds-colorpicker-input-radius);
+  background-color: var(--ds-colorpicker-input-bg);
+}
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown [data-part='hex-input'][data-part='hex-input'] {
+  border: 1px solid var(--ds-colorpicker-input-border);
+}
+
+.rottay-colorpicker__dropdown [data-part='preset-label'] {
+  color: var(--ds-colorpicker-label-color);
+}
+
+.rottay-colorpicker__dropdown [data-part='preset-swatch'] {
+  border-radius: var(--ds-colorpicker-preset-radius);
+  background-color: var(--ds-colorpicker-preset-color);
+}
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown [data-part='preset-swatch'][data-part='preset-swatch'] {
+  border: 1px solid var(--ds-colorpicker-preset-border);
+}
+
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown div:has(> [data-part='preset-group']):has(> [data-part='preset-group']),
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown div:has(> [data-part='clear-button']):has(> [data-part='clear-button']) {
+  border-top: 1px solid var(--ds-colorpicker-divider-color);
+}
+
+.rottay-colorpicker__dropdown [data-part='clear-button'] {
+  background-color: var(--ds-colorpicker-clear-bg);
+  border-radius: var(--ds-colorpicker-clear-radius);
+}
+.rottay-colorpicker__dropdown.rottay-colorpicker__dropdown [data-part='clear-button'][data-part='clear-button'] {
+  border: 1px solid var(--ds-colorpicker-clear-border);
+}
+
+/**
+ * Modern TimePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements at all; unlayered
+ * outranks preflight and still yields to a caller's inline `style`.
+ *
+ * TWO SCOPE ROOTS:
+ * - The trigger (`TimePickerBase`/`TimeRangePicker` root `<div data-part='root'>`)
+ *   stays IN-TREE. Neither root carried a first-party class before this
+ *   migration -- both were Tailwind-only passthrough -- so this migration adds
+ *   `rottay-timepicker`/`rottay-timepicker--modern` (single) and
+ *   `rottay-timepicker-range`/`rottay-timepicker-range--modern` (range),
+ *   mirroring the BEM family the rustic engine already carries for this same
+ *   component (not a `ds-` prefix).
+ * - `TimePanel` (the hour/minute/second dropdown) is `createPortal(...,
+ *   document.body)` -- it is NOT a DOM descendant of the trigger root, so it
+ *   cannot be scoped under the trigger's class. It carried only
+ *   `data-part='panel'` with no class; this migration adds the self-sufficient
+ *   `rottay-timepicker__panel` class so panel rules can scope standalone,
+ *   mirroring ColorPicker rustic's `rottay-colorpicker__dropdown`. `TimePanel`
+ *   is shared verbatim by `TimePickerBase` and `TimeRangePicker`, so one panel
+ *   ruleset serves both.
+ *
+ * STATUS: neither trigger root carried a status/disabled modifier class
+ * pre-migration (unlike the rustic engine's BEM modifiers) -- the border-color
+ * override was pure inline JS keyed on the `status` prop. This migration adds
+ * `data-status` ('default'|'error'|'warning') to each trigger-input, the same
+ * discriminator idiom InputNumber's modern skin uses.
+ *
+ * ACTIVE RANGE INPUT: `TimeRangePicker`'s start/end box-shadow ring was never
+ * native focus -- it painted whichever input `activeInput` currently targets
+ * while the panel is open. `data-active` (added here) reproduces the removed
+ * inline ternary's condition exactly: `activeInput === 'start' && isOpen`
+ * (and the `'end'` counterpart).
+ *
+ * KEYFRAME: `rottay-select-slide-in` was injected per-mount via a `<style>`
+ * tag inside `TimePanel` itself. Renamed `ds-time-picker-slide-in` and moved
+ * here (loads once, globally, instead of re-injecting on every panel mount);
+ * `TimePanel`'s inline `animation` reference was updated to match.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via the
+ * two root classes + the target's own `data-part` repeated, same as every
+ * other engine skin. Under the standalone panel there is no root PAIR to draw
+ * on, so the single `rottay-timepicker__panel` class is repeated twice in its
+ * place, plus the target's own `data-part` repeated twice -- matching
+ * ColorPicker rustic's `.dropdown.dropdown [data-part='x'][data-part='x']`
+ * idiom. Non-border paint (background, color, box-shadow, outline,
+ * border-radius) and pure `border: none` resets win unlayered at (0,3,0) or a
+ * single class.
+ */
+
+/* ---- trigger (in-tree): base + range share identical rest-state paint ---- */
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-timepicker.rottay-timepicker--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'],
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='trigger-input'][data-active='true'] {
+  box-shadow: 0 0 0 2px var(--ds-color-primary);
+}
+
+.rottay-timepicker-range.rottay-timepicker-range--modern [data-part='separator'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- clear-button / clock-icon: `TimePickerBase` only -- `TimeRangePicker`
+        renders neither. ---- */
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='clear-button'] {
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-timepicker.rottay-timepicker--modern [data-part='clock-icon'] {
+  transform: translateY(-50%);
+  color: var(--ds-color-text-muted);
+}
+
+/* ---------------------------------------------------------------------
+   Panel (portal, standalone) -- shared by TimePickerBase and TimeRangePicker
+   --------------------------------------------------------------------- */
+
+.rottay-timepicker__panel {
+  background: var(--ds-color-bg-elevated);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-timepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
+}
+.rottay-timepicker__panel.rottay-timepicker__panel[data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/* column divider: a bare `<div>` with no data-part, always the immediate next
+   sibling of a `[data-part='time-column']` in both the 2-column and 3-column
+   (showSeconds) layouts. */
+.rottay-timepicker__panel [data-part='time-column'] + div {
+  background: var(--ds-color-border);
+}
+
+.rottay-timepicker__panel.rottay-timepicker__panel [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+/* column-label spans (Hr/Min/Sec + the two zero-width spacer spans) share one
+   color; all are bare `<span>` children of header, no individual data-part. */
+.rottay-timepicker__panel [data-part='header'] > span {
+  color: var(--ds-color-text-muted);
+}
+
+.rottay-timepicker__panel [data-part='time-option'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-timepicker__panel [data-part='time-option'][data-selected='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+.rottay-timepicker__panel [data-part='time-option']:hover:not([data-selected='true']) {
+  background: var(--ds-color-bg-hover);
+}
+
+.rottay-timepicker__panel.rottay-timepicker__panel [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* now-button: static, no hover -- matches DatePicker's Today-button gap. */
+.rottay-timepicker__panel [data-part='now-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+
+@keyframes ds-time-picker-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/**
+ * Rustic TimePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * NO PORTAL: this engine delegates the whole time-selection UI to the native
+ * `<input type='time'>`; there is no custom dropdown to scope standalone.
+ *
+ * SCOPE ROOTS: `.rottay-timepicker.rottay-timepicker--rustic[data-part='root']`
+ * (single) and `.rottay-timepicker-range.rottay-timepicker-range--rustic
+ * [data-part='root']` (range) -- both pre-existing BEM families, unchanged by
+ * this migration.
+ *
+ * FOCUS: the paint (border color, box-shadow) applies directly to
+ * `[data-part='trigger-input']`, the SAME element that receives native focus
+ * -- not a container painting for a nested input -- so a plain `:focus`
+ * pseudo-class reproduces the removed `useInteractionState()`/`focusedInput`
+ * -driven paint exactly, with no React-render-timing gap. `TimePickerBase`
+ * keeps `useInteractionState()`; its `focused` flag still drives the
+ * `rottay-timepicker--focused` root modifier class, unrelated to paint.
+ * `TimeRangePicker` keeps its `focusedInput` state and `onFocus`/`onBlur`
+ * setters undisturbed; the paint below keys off native `:focus` on each input
+ * independently, which fires on the identical DOM event the state setters do.
+ *
+ * STATUS PRIORITY: error > warning > focused > default, matching the removed
+ * `getBorderColor()` priority chain byte-exact. The focus border rule is
+ * guarded with `:not(...--error):not(...--warning)` so a status root modifier
+ * always outranks focus, regardless of selector order. The box-shadow focus
+ * ring has no status dependency in the original -- it shows on focus
+ * regardless of status, so it carries no such guard.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Border-color rules reach (0,4,0) via the two root classes + the
+ * target's own `data-part` repeated. Non-border paint (background-color,
+ * color, box-shadow, outline, border-radius) and pure `border: none`/
+ * `background: none` resets win unlayered at (0,3,0) or lower.
+ */
+
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input'] {
+  border-radius: var(--ds-timepicker-radius);
+  outline: none;
+  background-color: var(--ds-timepicker-bg);
+  color: var(--ds-timepicker-color);
+  box-shadow: none;
+}
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input']:disabled,
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input']:disabled {
+  background-color: var(--ds-timepicker-bg-disabled);
+}
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input']:focus,
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input']:focus {
+  box-shadow: var(--ds-timepicker-shadow-focus);
+}
+
+.rottay-timepicker.rottay-timepicker--rustic [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-timepicker-border);
+}
+.rottay-timepicker.rottay-timepicker--rustic:not(.rottay-timepicker--error):not(.rottay-timepicker--warning) [data-part='trigger-input'][data-part='trigger-input']:focus,
+.rottay-timepicker-range.rottay-timepicker-range--rustic:not(.rottay-timepicker-range--error):not(.rottay-timepicker-range--warning) [data-part='trigger-input'][data-part='trigger-input']:focus {
+  border: 1px solid var(--ds-timepicker-border-focus);
+}
+.rottay-timepicker.rottay-timepicker--rustic.rottay-timepicker--error [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic.rottay-timepicker-range--error [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-timepicker-error-border);
+}
+.rottay-timepicker.rottay-timepicker--rustic.rottay-timepicker--warning [data-part='trigger-input'][data-part='trigger-input'],
+.rottay-timepicker-range.rottay-timepicker-range--rustic.rottay-timepicker-range--warning [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-timepicker-warning-border);
+}
+
+/* clock-icon / clear-button: `TimePickerBase` only -- `TimeRangePicker`
+   renders neither. */
+.rottay-timepicker.rottay-timepicker--rustic [data-part='clock-icon'] {
+  color: var(--ds-timepicker-icon-color);
+}
+
+.rottay-timepicker.rottay-timepicker--rustic [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-timepicker-clear-color);
+}
+
+.rottay-timepicker-range.rottay-timepicker-range--rustic [data-part='separator'] {
+  color: var(--ds-timepicker-separator-color);
+}
+
+/**
+ * Modern DatePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule can't paint these elements at all; unlayered
+ * outranks preflight and still yields to a caller's inline `style`.
+ *
+ * TWO SCOPE ROOTS:
+ * - The trigger (`DatePickerBase` root `<div data-part='root'>`, `RangePicker`
+ *   root) stays IN-TREE. Neither root carried a first-party class before this
+ *   migration -- both were Tailwind-only passthrough -- so this migration adds
+ *   `rottay-datepicker`/`rottay-datepicker--modern` (single) and
+ *   `rottay-datepicker-range`/`rottay-datepicker-range--modern` (range),
+ *   mirroring the BEM family the rustic engine already carries for this same
+ *   component.
+ * - `CalendarPanel` (the month/year/date dropdown) is `createPortal(...,
+ *   document.body)` by BOTH `DatePickerBase` and `RangePicker` -- it is NOT a
+ *   DOM descendant of either trigger root, so it cannot be scoped under a
+ *   trigger class. It carried only `data-part='panel'` (plus `data-mode`) with
+ *   no class; this migration adds the self-sufficient
+ *   `rottay-datepicker-panel`/`rottay-datepicker-panel--modern` pair so panel
+ *   rules can scope standalone, mirroring TimePicker modern's
+ *   `rottay-timepicker__panel`. The SAME panel + `TimePickerPanel` (the
+ *   embedded hour/minute row) is shared verbatim by `DatePickerBase` and
+ *   `RangePicker`, so one panel ruleset serves both.
+ *
+ * CELL RULE IS SHARED ACROSS date/month/year MODES: `gridCellStyle` (day grid)
+ * and the month/year cell buttons resolved to byte-identical border/background/
+ * color/border-radius/box-shadow values (verified against the pre-migration
+ * source), so one `[data-part='cell']` ruleset below serves all three --
+ * discriminated only by the `data-today`/`data-selected`/`data-in-range` state
+ * attributes already stamped on each cell, which month/year cells simply never
+ * carry `data-in-range` on. The one real per-mode difference is `outline: none`,
+ * which only the day-grid cell's original `gridCellStyle` set (month/year cell
+ * buttons never had an inline `outline` at all) -- kept scoped to
+ * `[data-mode='date']` so month/year buttons retain their un-suppressed native
+ * focus outline exactly as before.
+ *
+ * STATUS: neither trigger root carried a status/disabled modifier class
+ * pre-migration -- the border-color override was pure inline JS keyed on the
+ * `status` prop. This migration adds `data-status` ('default'|'error'|'warning')
+ * to each trigger-input, the same discriminator idiom InputNumber/TimePicker's
+ * modern skins use.
+ *
+ * ACTIVE RANGE INPUT: `RangePicker`'s start/end box-shadow ring was never
+ * native focus -- it painted whichever input `activeInput` currently targets
+ * while the panel is open. `data-active` (added here) reproduces the removed
+ * inline ternary's condition exactly: `activeInput === 'start' && isOpen` (and
+ * the `'end'` counterpart) -- same idiom as TimePicker modern's range input.
+ *
+ * KEYFRAME: `rottay-select-slide-in` was injected per-mount via a `<style>` tag
+ * inside `DatePickerBase`'s own return only -- `RangePicker` never rendered
+ * that tag despite its panel referencing the same animation name (a real
+ * missing-keyframe dependency gap). Renamed `ds-date-picker-slide-in` and moved
+ * here (loads once, globally, for both `DatePickerBase` and `RangePicker`,
+ * structurally fixing the gap); `panelStyle.animation`'s inline reference was
+ * updated to match.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
+ * two root classes + the target's own `data-part` repeated. Under the
+ * standalone panel there is no trigger root pair to draw on, so the panel's
+ * own class pair (`rottay-datepicker-panel.rottay-datepicker-panel--modern`)
+ * plays that role, plus the target's own `data-part` repeated -- matching
+ * TimePicker modern's `.rottay-timepicker__panel.rottay-timepicker__panel
+ * [data-part='x'][data-part='x']` idiom. Non-border paint (background, color,
+ * box-shadow, outline, border-radius) and pure `border: none` resets win
+ * unlayered at (0,3,0) or lower.
+ */
+
+/* ---- trigger (in-tree): single ---- */
+
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-datepicker.rottay-datepicker--modern [data-part='trigger-input'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+
+.rottay-datepicker.rottay-datepicker--modern [data-part='clear-button'] {
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  border-radius: 50%;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker.rottay-datepicker--modern [data-part='calendar-icon'] {
+  transform: translateY(-50%);
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- trigger (in-tree): range ---- */
+
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='trigger-input'][data-active='true'] {
+  box-shadow: 0 0 0 2px var(--ds-color-primary);
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='separator'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--modern [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* ---------------------------------------------------------------------
+   Panel (portal, standalone) -- shared by DatePickerBase and RangePicker,
+   all three modes (month/year/date).
+   --------------------------------------------------------------------- */
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern {
+  background: var(--ds-color-bg-elevated);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-datepicker-panel-shadow, var(--ds-shadow-popover, var(--ds-card-shadow)));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='nav-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='panel-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='weekday-header'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* Cell -- shared by the date/month/year grids (see header comment). */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell'] {
+  outline: none;
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
+  background: var(--ds-color-bg-hover);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-selected='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='cell'][data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border: 1px solid var(--ds-color-primary);
+}
+/* Day-grid cell hover: guarded exactly like the removed onMouseEnter/onMouseLeave
+   (`!cell.isDisabled && !isSelected && !isEndpoint`, `isEndpoint` folded into
+   `data-selected`) -- the un-hovered rest value is whatever the rules above
+   already resolve to (transparent, or the in-range hover-tinted background),
+   so no separate "leave" rule is needed. */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern[data-mode='date'] [data-part='cell']:hover:not([data-disabled='true']):not([data-selected='true']) {
+  background: var(--ds-color-bg-hover);
+  transform: scale(1.1);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'][data-part='time-column'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'] select {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-bg-elevated);
+  color: var(--ds-color-text-primary);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'][data-part='time-column'] select {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='time-column'] span {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* today-button: static, no hover -- matches TimePicker's now-button gap. */
+.rottay-datepicker-panel.rottay-datepicker-panel--modern [data-part='today-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-white);
+}
+
+@keyframes ds-date-picker-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/**
+ * Rustic DatePicker skin (WO-SKIN-02 checkpoint C, pickers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS, three total root pairs:
+ * - The trigger stays IN-TREE: `.rottay-datepicker.rottay-datepicker--rustic`
+ *   (single) and `.rottay-datepicker-range.rottay-datepicker-range--rustic`
+ *   (range) -- both pre-existing BEM families, unchanged by this migration.
+ * - `RusticCalendarPanel` is `createPortal(..., document.body)` from THREE
+ *   separate branches (month/year/day), each duplicating its own `panelStyle`
+ *   merge -- none carried a class before this migration (only
+ *   `data-part='panel'` + `data-mode`). This migration adds the
+ *   self-sufficient `rottay-datepicker-panel`/`rottay-datepicker-panel--rustic`
+ *   pair to all three branches so panel rules can scope standalone, mirroring
+ *   the modern engine's identical panel-class idiom and ColorPicker rustic's
+ *   `rottay-colorpicker__dropdown`.
+ *
+ * CELL RULE IS SHARED ACROSS date/month/year MODES: `getCellStyle` (day grid)
+ * and `getMonthCellStyle` (month/year) resolved to byte-identical
+ * border/background-color/color/border-radius/box-shadow values for every
+ * state they share, so one `[data-part='cell']` ruleset below serves all
+ * three -- discriminated only by state attributes already stamped (`data-
+ * today`, `data-selected`, `data-in-range`), which month/year cells simply
+ * never carry `data-in-range` on.
+ *
+ * TWO NEW STATE ATTRIBUTES (not in the pre-existing BEM contract, added here
+ * because their JS drove real counted paint with no attribute to key on):
+ * - `data-outside-month`: `getCellStyle`'s `color` ternary branched on
+ *   `!cell.isCurrentMonth` (padding days from the adjacent month render
+ *   dimmer) -- a real color dependency, unlike the modern engine, where the
+ *   equivalent state only ever drove `opacity` (uncounted). Maps 1:1 to
+ *   `!cell.isCurrentMonth`, stamped only on the day-grid cell.
+ * - `data-focused`: `getCellStyle`'s `border` ternary's second branch keyed
+ *   on the keyboard-nav "focused cell" (`isFocusedCell`, from `focusedDate`)
+ *   -- a roving-tabindex target, NOT real DOM `:focus` (no `.focus()` call
+ *   exists anywhere in this file for grid cells), so a `:focus` pseudo-class
+ *   cannot reproduce it. Maps 1:1 to `isFocusedCell`, stamped only on the
+ *   day-grid cell. Priority vs. the today-ring is preserved via the
+ *   `:not([data-today='true']), […][data-selected='true']` OR-split below
+ *   (see the two-selector focus-ring rule), matching the original ternary's
+ *   `isToday && !isSelected && !isEndpoint ? todayRing : isFocused ?
+ *   focusRing : none` exactly (`isEndpoint` folded into `data-selected`).
+ *
+ * ACTIVE RANGE INPUT: `RangePicker`'s start/end border+box-shadow ring was
+ * never real DOM focus -- `getBorderColor(status, activeInput === inputType
+ * && isOpen)` painted whichever input `activeInput` currently targets while
+ * the panel is open (no `onFocus`/`onBlur` on these inputs at all). `data-
+ * active` (added here) reproduces that condition exactly, replacing
+ * `isFocused` as the third priority tier in the border-color cascade (see
+ * STATUS PRIORITY below) -- same idiom as the modern engine's own
+ * `data-active`, and as TimePicker modern's range input.
+ *
+ * FOCUS (single trigger only): the paint (border color, box-shadow) applies
+ * directly to `[data-part='trigger-input']`, the SAME element that receives
+ * native focus -- not a container painting for a nested input -- so a plain
+ * `:focus` pseudo-class reproduces the removed `useInteractionState()`/
+ * `isFocused`-driven paint exactly, with no React-render-timing gap.
+ * `DatePickerBase` keeps `useInteractionState()`; its `focused` flag still
+ * drives the `rottay-datepicker--focused` root modifier class, unrelated to
+ * paint (RangePicker has no such state at all -- it never had a `--focused`
+ * modifier, only `data-active` above).
+ *
+ * STATUS PRIORITY: error > warning > focused/active > default, matching the
+ * removed `getBorderColor()` priority chain byte-exact. The focus/active
+ * border rule is guarded with `:not(...--error):not(...--warning)` so a
+ * status root modifier always outranks it, regardless of selector order. The
+ * box-shadow ring has no status dependency in the original -- it shows
+ * regardless of status, so it carries no such guard.
+ *
+ * DAY-GRID CELL HOVER: the removed `onMouseEnter`/`onMouseLeave` applied
+ * `transform: scale(1.1)` unconditionally for any non-disabled cell
+ * (including selected/endpoint ones), but only repainted `backgroundColor`
+ * when NOT selected/endpoint -- an asymmetric guard, preserved exactly below
+ * (two separate `:hover` rules, transform ungated, background gated). The
+ * leave-state resets to the resting value the rules above already provide.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
+ * two root classes + the target's own `data-part` repeated. Under the
+ * standalone panel there is no trigger root pair to draw on, so the panel's
+ * own class pair plays that role, plus the target's own `data-part`
+ * repeated -- matching the modern engine's identical panel idiom. Non-border
+ * paint (background-color, color, box-shadow, outline, border-radius) and
+ * pure `border: none`/`background: none` resets win unlayered at (0,3,0) or
+ * lower.
+ */
+
+/* ---- trigger (in-tree): single ---- */
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input'] {
+  border-radius: var(--ds-datepicker-radius, 8px);
+  outline: none;
+  background-color: var(--ds-datepicker-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+  box-shadow: none;
+}
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input']:disabled {
+  background-color: var(--ds-datepicker-bg-disabled, var(--ds-color-bg-secondary));
+}
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input']:focus {
+  box-shadow: var(--ds-datepicker-shadow-focus, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200));
+}
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-border, var(--ds-color-border));
+}
+.rottay-datepicker.rottay-datepicker--rustic:not(.rottay-datepicker--error):not(.rottay-datepicker--warning) [data-part='trigger-input'][data-part='trigger-input']:focus {
+  border: 1px solid var(--ds-datepicker-border-focus, var(--ds-color-primary-500));
+}
+.rottay-datepicker.rottay-datepicker--rustic.rottay-datepicker--error [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-error-border, var(--ds-color-error));
+}
+.rottay-datepicker.rottay-datepicker--rustic.rottay-datepicker--warning [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-warning-border, var(--ds-color-warning));
+}
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-datepicker-clear-color, var(--ds-color-text-tertiary));
+}
+
+.rottay-datepicker.rottay-datepicker--rustic [data-part='calendar-icon'] {
+  color: var(--ds-datepicker-icon-color, var(--ds-color-text-tertiary));
+}
+
+/* ---- trigger (in-tree): range ---- */
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input'] {
+  border-radius: var(--ds-datepicker-radius, 8px);
+  outline: none;
+  background-color: var(--ds-datepicker-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+  box-shadow: none;
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input']:disabled {
+  background-color: var(--ds-datepicker-bg-disabled, var(--ds-color-bg-secondary));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input'][data-active='true'] {
+  box-shadow: var(--ds-datepicker-shadow-focus, 0 0 0 2px var(--ds-color-primary-100));
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-border, var(--ds-color-border));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic:not(.rottay-datepicker-range--error):not(.rottay-datepicker-range--warning) [data-part='trigger-input'][data-part='trigger-input'][data-active='true'] {
+  border: 1px solid var(--ds-datepicker-border-focus, var(--ds-color-primary-500));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic.rottay-datepicker-range--error [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-error-border, var(--ds-color-error));
+}
+.rottay-datepicker-range.rottay-datepicker-range--rustic.rottay-datepicker-range--warning [data-part='trigger-input'][data-part='trigger-input'] {
+  border: 1px solid var(--ds-datepicker-warning-border, var(--ds-color-warning));
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='separator'] {
+  color: var(--ds-datepicker-separator-color, var(--ds-color-text-tertiary));
+}
+
+.rottay-datepicker-range.rottay-datepicker-range--rustic [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-datepicker-clear-color, var(--ds-color-text-tertiary));
+}
+
+/* ---------------------------------------------------------------------
+   Panel (portal, standalone) -- shared by DatePickerBase and RangePicker,
+   all three modes (month/year/date).
+   --------------------------------------------------------------------- */
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic {
+  background-color: var(--ds-datepicker-panel-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-datepicker-panel-radius, 8px);
+  box-shadow: var(--ds-datepicker-panel-shadow, var(--ds-shadow-lg));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic[data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-datepicker-panel-border, var(--ds-color-border));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='nav-button'] {
+  background: none;
+  border: none;
+  border-radius: var(--ds-datepicker-radius, 8px);
+  color: var(--ds-datepicker-nav-color, var(--ds-color-text-secondary));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='panel-title'] {
+  color: var(--ds-datepicker-header-color, var(--ds-color-text-primary));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='weekday-header'] {
+  color: var(--ds-datepicker-day-header-color, var(--ds-color-text-tertiary));
+}
+
+/* Cell -- shared by the date/month/year grids (see header comment). */
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'] {
+  border-radius: var(--ds-datepicker-cell-radius, 4px);
+  border: none;
+  background-color: transparent;
+  color: var(--ds-datepicker-cell-color, var(--ds-color-text-primary));
+  outline: none;
+  box-shadow: none;
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-outside-month='true']:not([data-selected='true']) {
+  color: var(--ds-datepicker-outside-color, var(--ds-color-text-tertiary));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-in-range='true']:not([data-selected='true']) {
+  background-color: var(--ds-datepicker-range-bg, var(--ds-color-primary-100));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-selected='true'] {
+  background-color: var(--ds-datepicker-selected-bg, var(--ds-color-primary-500));
+  color: var(--ds-datepicker-selected-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+  box-shadow: var(--ds-datepicker-selected-shadow, 0 0 0 2px var(--ds-color-primary-200));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border: 1px solid var(--ds-datepicker-today-border, var(--ds-color-primary-500));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-part='cell'][data-focused='true']:not([data-today='true']),
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell'][data-part='cell'][data-focused='true'][data-selected='true'] {
+  border: 2px solid var(--ds-datepicker-focus-ring, var(--ds-color-primary-500));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell']:hover:not([data-disabled='true']) {
+  transform: scale(1.1);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='cell']:hover:not([data-disabled='true']):not([data-selected='true']) {
+  background-color: var(--ds-datepicker-cell-hover-bg, var(--ds-color-primary-50));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'][data-part='time-column'] {
+  border-top: 1px solid var(--ds-datepicker-panel-border, var(--ds-color-border));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'] select {
+  border-radius: var(--ds-datepicker-radius, 8px);
+  background-color: var(--ds-datepicker-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+  outline: none;
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'][data-part='time-column'] select {
+  border: 1px solid var(--ds-datepicker-border, var(--ds-color-border));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'][data-part='time-column'] select:focus {
+  border-color: var(--ds-datepicker-border-focus, var(--ds-color-primary-500));
+  box-shadow: var(--ds-datepicker-shadow-focus, 0 0 0 3px var(--ds-color-primary-100), 0 0 8px var(--ds-color-primary-200));
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='time-column'] span {
+  color: var(--ds-datepicker-color, var(--ds-color-text-primary));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-datepicker-panel-border, var(--ds-color-border));
+}
+
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='today-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-datepicker-today-color, var(--ds-color-primary-500));
+  border-radius: var(--ds-datepicker-radius, 8px);
+}
+.rottay-datepicker-panel.rottay-datepicker-panel--rustic [data-part='today-button']:hover {
+  background-color: var(--ds-datepicker-today-hover-bg, var(--ds-color-primary-50));
+  box-shadow: var(--ds-datepicker-today-hover-shadow, var(--ds-shadow-sm));
+  transform: translateY(-1px);
+}
+
+@keyframes ds-date-picker-panel-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* Dropdown family (WO-SKIN-02 checkpoint B). */
+/**
+ * Modern AutoComplete skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the wrapper `<div>`, which carries the pair
+ * `ds-autocomplete ds-autocomplete--modern` + `data-part='root'`; every painted
+ * element is an IN-TREE descendant with a `data-part` (AutoComplete never
+ * portals in either engine). The `input` border reaches (0,4,0) via the two
+ * root classes (0,2,0) + `[data-part='root']` + the descendant `[data-part]`.
+ *
+ * The modern engine's suggestion `option` carries no inline paint (its
+ * hover/active highlight rides the external `active`/`disabled` DaisyUI classes,
+ * unchanged by this migration), so it has no rule here.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: 50%;
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border-subtle);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic AutoComplete skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the wrapper `<div>`, carrying the BEM pair
+ * `.rottay-autocomplete.rottay-autocomplete--rustic` + `data-part='root'`
+ * (plus `data-status`/`data-open`/`data-disabled` state modifiers); every
+ * painted element is an IN-TREE descendant with a `data-part` (AutoComplete
+ * never portals in either engine).
+ *
+ * BORDER reproduces `getBorderColor()`'s priority chain error > warning >
+ * focus > default. The focus rule carries `:not([data-status='error'])
+ * :not([data-status='warning'])` so it never coexists with a status border --
+ * the JS ternary checks status FIRST, so a focused error/warning field keeps
+ * its status color. `isFocused` was set unconditionally in `onFocus`/`onBlur`,
+ * so native `:focus` matches it exactly; the imperative state is removed.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via the two root classes +
+ * `[data-part='root']` + the descendant `[data-part='input']` (status rules go
+ * higher via the extra status attribute). Non-border paint (background, color,
+ * outline, box-shadow, border-radius, transform) wins unlayered at (0,4,0).
+ *
+ * The option highlight follows `focusedIndex` (set by both keyboard nav and the
+ * retained `onMouseEnter`), mirrored onto `data-active`; the CSS reads that
+ * attribute rather than an inline background.
+ *
+ * The input `color` is transcribed byte-exact from the source's
+ * `var(--ds-color-neutral-900)` -- a non-themeable literal where every sibling
+ * property reads a `--ds-autocomplete-*` token; filed as a proposal.
+ */
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='input'] {
+  border: 1px solid var(--ds-autocomplete-border);
+  border-radius: var(--ds-autocomplete-radius);
+  outline: none;
+  background-color: var(--ds-autocomplete-bg);
+  color: var(--ds-color-neutral-900);
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root']:not([data-status='error']):not([data-status='warning']) [data-part='input']:focus {
+  border-color: var(--ds-autocomplete-border-focus);
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'][data-status='error'] [data-part='input'] {
+  border-color: var(--ds-autocomplete-error-border);
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'][data-status='warning'] [data-part='input'] {
+  border-color: var(--ds-autocomplete-warning-border);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='clear-button'] {
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--ds-autocomplete-clear-color);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='dropdown'] {
+  background-color: var(--ds-autocomplete-dropdown-bg);
+  border-radius: var(--ds-autocomplete-dropdown-radius);
+  box-shadow: var(--ds-autocomplete-dropdown-shadow);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='option'] {
+  background-color: transparent;
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='option'][data-active='true'] {
+  background-color: var(--ds-autocomplete-option-bg-hover);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='empty'] {
+  color: var(--ds-autocomplete-empty-color);
+}
+
+/**
+ * Modern Mentions skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the wrapper `<div>`, carrying the pair
+ * `ds-mentions ds-mentions--modern` + `data-part='root'`; the textarea and its
+ * suggestion popup are IN-TREE descendants with a `data-part` (Mentions never
+ * portals -- the popup anchors to the textarea box, not the caret).
+ *
+ * The textarea border reproduces `getStatusBorderColor()`'s 3-way chain
+ * error > warning > default, read off the textarea's `data-status`. The
+ * suggestion `option` carries no inline paint (its highlight rides the external
+ * `active`/`disabled` classes, unchanged), so it has no rule here.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-color-border-subtle);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic Mentions skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the wrapper `<div>`, carrying the BEM pair
+ * `.rottay-mentions.rottay-mentions--rustic` + `data-part='root'` (plus
+ * `data-status`/`data-open`/`data-disabled` modifiers); the textarea and popup
+ * are IN-TREE descendants with a `data-part` (Mentions never portals).
+ *
+ * BORDER reproduces `getBorderColor()`'s priority chain error > warning >
+ * focus > default. The focus rule carries `:not([data-status='error'])
+ * :not([data-status='warning'])` so it never coexists with a status border.
+ * The focus flag came from the shared `useInteractionState()` hook's `focused`
+ * (any focus, mouse or keyboard); native `:focus` matches it exactly, so the
+ * hook and its handler spread are removed.
+ *
+ * The textarea sets NO `color` channel -- transcribed byte-exact from the source
+ * (the text color inherits the browser default there); filed as a proposal.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via the two root classes +
+ * `[data-part='root']` + `[data-part='textarea']`. Non-border paint wins
+ * unlayered at (0,4,0).
+ */
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='textarea'] {
+  border: 1px solid var(--ds-mentions-border);
+  border-radius: var(--ds-mentions-radius);
+  background-color: var(--ds-mentions-bg);
+  outline: none;
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root']:not([data-status='error']):not([data-status='warning']) [data-part='textarea']:focus {
+  border-color: var(--ds-mentions-border-focus);
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root'][data-status='error'] [data-part='textarea'] {
+  border-color: var(--ds-mentions-border-error);
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root'][data-status='warning'] [data-part='textarea'] {
+  border-color: var(--ds-mentions-border-warning);
+}
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='dropdown'] {
+  background-color: var(--ds-mentions-dropdown-bg);
+  border-radius: var(--ds-mentions-dropdown-radius);
+  box-shadow: var(--ds-mentions-dropdown-shadow);
+}
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='option'] {
+  background-color: transparent;
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='option'][data-active='true'] {
+  background-color: var(--ds-mentions-option-bg-hover);
+}
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='empty'] {
+  color: var(--ds-mentions-empty-color);
+}
+
+/**
+ * Modern Select skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * TWO IMPLEMENTATIONS share this file. The engine renders EITHER a styled
+ * native `<select>` (simple case: not searchable/multiple/grouped/virtual) OR a
+ * custom `<div>` trigger + PORTALED dropdown (advanced case). Both roots carry
+ * the pair `ds-select-shell ds-select-shell--modern` + `data-part='root'`
+ * (NOT `ds-select`: that bare class is the legacy rustic/personality select
+ * hook carrying `font-size: var(--ds-input-md-font-size)`, which would shrink
+ * this wrapper's inherited font and reflow the trigger text -- WO-SKIN-02 B).
+ *   - native trigger  -> `select[data-part='trigger']`   (element-qualified)
+ *   - custom trigger  -> `div[data-part='trigger']`      (element-qualified)
+ * They are mutually exclusive per instance but both stamp `data-part='trigger'`,
+ * so the element qualifier keeps their divergent paint apart.
+ *
+ * PORTAL: the custom dropdown mounts via `createPortal(document.body)`, so it is
+ * NOT a descendant of the root. Its rules are STANDALONE on the popup's own
+ * class `.ds-select-shell__dropdown[data-part='dropdown']`; parts inside it
+ * (search-input, option, group-label, empty) are descendants of THAT.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). In-tree parts get
+ * it from the two root classes (0,2,0) + `[data-part='root']` + descendant
+ * `[data-part]`. Standalone portal parts have only one class, so the 4th unit is
+ * bought by REPEATING the target `[data-part]` (filter-panel precedent). Pure
+ * `border: none` resets carry no color and are exempt. `border: … transparent`
+ * DOES paint (it wins the tenant color) and is held to the floor.
+ *
+ * The trigger state machine mirrors the Input modern skin exactly (Select's
+ * `buildTriggerStyle` "matches Input shell exactly"); Select's "focus" is
+ * `data-open`, hover is native `:hover`, status lives on `data-status`. Values
+ * are transcribed verbatim from `engines/modern.tsx`; the native arrow SVG data
+ * URI (stroke `%23A0A0A5`) and its size-parameterised inset are carried byte-
+ * exact (the inset rides an inline `--ds-select-native-arrow-inset` custom
+ * property, not a paint key).
+ */
+
+@keyframes ds-select-appear {
+  from {
+    opacity: 0;
+    transform: scale(var(--ds-motion-scale-in)) translateY(var(--ds-motion-offset-in));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================================================
+   CUSTOM TRIGGER (div) — buildTriggerStyle state machine
+   ============================================================================ */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'] {
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-select-bg, var(--ds-surface-control));
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border);
+  border-radius: var(--ds-radius-md, 8px);
+  outline: var(--ds-focus-ring-width, 2px) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* variant at rest (default keeps the base border-color) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='filled'] {
+  background-color: var(--ds-select-filled-bg, var(--ds-surface-canvas));
+  border-color: transparent;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='flushed'] {
+  border-radius: 0;
+  border-width: 0;
+  border-color: transparent;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--ds-color-border);
+  background-color: transparent;
+}
+
+/* hover: only where nothing later in the mutation order overwrites it
+   (JS gate: isHovered && !isOpen && !hasError && !hasWarning && !isDisabled). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger']:hover:not([data-open='true']):not([data-status]):not([data-disabled='true']) {
+  border-color: var(--ds-color-border-hover);
+  background-color: var(--ds-select-bg-hover, var(--ds-select-bg, var(--ds-surface-control)));
+}
+
+/* open (Select's focus) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'] {
+  border-color: var(--ds-color-primary);
+  background-color: var(--ds-select-bg-focus, var(--ds-select-bg, var(--ds-surface-control)));
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='flushed'][data-open='true'] {
+  outline: none;
+  border-bottom-width: 2px;
+  border-bottom-color: var(--ds-color-primary);
+}
+
+/* error, then warning (JS: hasError, then hasWarning && !hasError) — ordered
+   after open so the status color wins the equal-specificity tie. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'] {
+  border-color: var(--ds-color-error);
+  background-color: color-mix(in srgb, var(--ds-color-error) 4%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'][data-open='true'] {
+  outline: var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+  background-color: color-mix(in srgb, var(--ds-color-warning) 4%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'][data-open='true'] {
+  outline: var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+}
+
+/* disabled: background only (the JS disabled block never touches border-color);
+   ordered last so it wins the bg tie against filled/error/warning. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-disabled='true'] {
+  background-color: var(--ds-select-bg-disabled, var(--ds-surface-canvas));
+}
+
+/* ============================================================================
+   NATIVE <select> TRIGGER — nativeSelectStyle state machine + injected focus CSS
+   ============================================================================ */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-select-bg, var(--ds-surface-control));
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border);
+  border-radius: var(--ds-radius-md, 8px);
+  outline: var(--ds-focus-ring-width, 2px) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A0A0A5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--ds-select-native-arrow-inset, 12px) center;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-variant='filled'] {
+  background-color: var(--ds-surface-canvas);
+  border-color: transparent;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-variant='flushed'] {
+  border-radius: 0;
+  border-width: 0;
+  border-color: transparent;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--ds-color-border);
+  background-color: transparent;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-status='error'] {
+  border-color: var(--ds-color-error);
+  background-color: color-mix(in srgb, var(--ds-color-error) 4%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+  background-color: color-mix(in srgb, var(--ds-color-warning) 4%, transparent);
+}
+/* the injected nativeFocusCSS, verbatim */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:focus {
+  border-color: var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:hover:not(:focus):not(:disabled) {
+  border-color: var(--ds-color-border-hover);
+}
+
+/* ============================================================================
+   TRIGGER SUB-PARTS (in-tree, custom branch)
+   ============================================================================ */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* the search input rendered INSIDE the trigger (color: inherit) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] [data-part='search-input'] {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+}
+
+/* chevron: color + open-driven rotation (state transform is paint) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'] {
+  color: var(--ds-color-text-muted);
+  transform: rotate(0deg);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* clear button: the removed imperative hover becomes a :hover rule */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background-color: transparent;
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:hover {
+  background-color: var(--ds-surface-canvas);
+}
+
+/* selected-value tag chip + count + its remove button */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'] {
+  background-color: var(--ds-surface-canvas);
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
+  background-color: var(--ds-surface-canvas);
+  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'] {
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:hover {
+  color: var(--ds-color-text-primary);
+}
+
+/* native loading wrapper: static vertical centering (a state-free transform) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading'] {
+  transform: translateY(-50%);
+}
+
+/* loading spinner dot — the painted element in both the native branch (an inner
+   span) and the custom branch (the loading span itself) carries
+   `data-part='loading-spinner'`; one rule serves both. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+
+/* ============================================================================
+   PORTALED DROPDOWN + contents (standalone on the popup class)
+   ============================================================================ */
+
+.ds-select-shell__dropdown[data-part='dropdown'] {
+  background: var(--ds-select-dropdown-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-color-bg-primary) 22%, var(--ds-surface-card))));
+  border-radius: 14px;
+  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-shadow-popover, var(--ds-shadow-lg, var(--ds-card-shadow))));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.ds-select-shell__dropdown[data-part='dropdown'][data-part='dropdown'][data-part='dropdown'] {
+  border: 1px solid var(--ds-select-dropdown-border-color, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent));
+}
+
+/* search wrapper + search input inside the dropdown (color: text-primary) */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input'] {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--ds-color-text-primary);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* group header divider + label color */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'][data-part='group-label'][data-divider='true'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* option rows: base + inset divider + focused + selected. The base border is
+   `1px solid transparent`, which paints (holds the tenant color) so it takes
+   the doubled-[data-part] (0,4,0) form; the focused/selected borders inherit
+   that base and add their state attr. */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
+  color: var(--ds-color-text-primary);
+  background: transparent;
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:not(:first-child):not([data-selected='true']):not([data-virtual='true']) {
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-border-subtle) 68%, transparent);
+}
+/* non-virtual focused (not selected) */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true']:not([data-selected='true']):not([data-virtual='true']) {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-active='true']:not([data-selected='true']):not([data-virtual='true']) {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+/* non-virtual selected */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true']:not([data-virtual='true']) {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  box-shadow: inset 2px 0 0 var(--ds-color-primary);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-selected='true']:not([data-virtual='true']) {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+}
+/* virtual focused (not selected) — divergent gradient + lift */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-virtual='true'][data-active='true']:not([data-selected='true']) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-color-bg-primary) 20%, var(--ds-surface-card)));
+  transform: translateY(-1px);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-virtual='true'][data-active='true']:not([data-selected='true']) {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+}
+/* virtual selected — divergent gradient */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-virtual='true'][data-selected='true'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-virtual='true'][data-selected='true'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+}
+
+/* option multi-checkbox: border + fill by selected */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-checkbox'] {
+  background-color: transparent;
+  border-radius: 4px;
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-checkbox'][data-part='option-checkbox'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'] {
+  background-color: var(--ds-color-primary);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'][data-part='option-checkbox'] {
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* option description + the single-select checkmark tick */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-description'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-check'] {
+  color: var(--ds-color-primary);
+}
+
+/* empty state */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Rustic Select skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the container `<div>`, carrying the BEM pair
+ * `.rottay-select.rottay-select--rustic` + `data-part='root'` plus the variant
+ * class (`--filled`/`--flushed`/…), `data-open`, `data-disabled` and
+ * `data-status`. The dropdown is IN-TREE (rustic never portals), so every part
+ * is a descendant of the root and the two root classes already lift each rule
+ * to (0,4,0) — no repeated-`data-part` trick is needed here.
+ *
+ * TRIGGER reproduces `getBorderColor()`'s priority error > warning > success >
+ * open > default. The open rule carries `:not([data-status])` so a field with a
+ * status keeps its status border even while open (the JS checks status first).
+ * `border-color` is set on all four sides; the `--flushed` variant zeroes the
+ * box and shows only a 2px bottom edge, so the same color surfaces there.
+ *
+ * The imperative hover handlers are removed and transcribed verbatim as `:hover`
+ * rules: the selected-tag chip's `transform: scale(1.05)`, and the tag-remove
+ * button's `color: var(--ds-form-error-color, #ef4444)`. The option row's
+ * highlight rides `data-active`/`data-selected` (set from `focusedIndex` by the
+ * retained `onMouseEnter`), and the arrow's open rotation rides `data-open`.
+ *
+ * Hardcoded literals transcribed byte-exact from the source `var(--…, #hex)`
+ * fallbacks: `#1677ff` (option focus border-left, tag-remove uses
+ * `#ef4444`), `rgba(22, 119, 255, 0.15)` (option focus box-shadow).
+ *
+ * Keyframes moved out of the engine's `<style>` tag, renamed `ds-select-spin`,
+ * `ds-select-dropdown-in`, `ds-select-check-in`.
+ */
+
+@keyframes ds-select-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes ds-select-dropdown-in {
+  from { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
+  to { opacity: 1; transform: scaleY(1) translateY(0); }
+}
+@keyframes ds-select-check-in {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ---- trigger: box, radius, colors ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='trigger'] {
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--ds-select-border);
+  border-radius: var(--ds-select-radius);
+  background-color: var(--ds-select-bg);
+  color: var(--ds-select-color);
+  outline: none;
+  box-shadow: none;
+}
+/* flushed: only a 2px bottom edge, square corners */
+.rottay-select.rottay-select--rustic.rottay-select--flushed[data-part='root'] [data-part='trigger'] {
+  border-width: 0;
+  border-bottom-width: 2px;
+  border-radius: 0;
+}
+
+/* trigger border-color by state (all sides; --flushed shows only the bottom) */
+.rottay-select.rottay-select--rustic[data-part='root'][data-open='true']:not([data-status]) [data-part='trigger'] {
+  border-color: var(--ds-select-border-focus);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-status='error'] [data-part='trigger'] {
+  border-color: var(--ds-select-error-border);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-status='warning'] [data-part='trigger'] {
+  border-color: var(--ds-select-warning-border);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-status='success'] [data-part='trigger'] {
+  border-color: var(--ds-select-success-border);
+}
+/* trigger open shadow + variant/disabled background */
+.rottay-select.rottay-select--rustic[data-part='root'][data-open='true'] [data-part='trigger'] {
+  box-shadow: var(--ds-select-shadow-focus);
+}
+.rottay-select.rottay-select--rustic.rottay-select--filled[data-part='root'] [data-part='trigger'] {
+  background-color: var(--ds-select-filled-bg);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-disabled='true'] [data-part='trigger'] {
+  background-color: var(--ds-select-bg-disabled);
+}
+
+/* ---- placeholder + value ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-select-color-placeholder);
+}
+
+/* ---- arrow: open-driven rotation ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='arrow-icon'] {
+  transform: rotate(0deg);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ---- selected-value tag chip + count + remove (imperative hover -> :hover) ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag'] {
+  background-color: var(--ds-select-tag-bg);
+  color: var(--ds-select-tag-color);
+  border-radius: var(--ds-select-tag-radius);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag']:hover {
+  transform: scale(1.05);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag-count'] {
+  background-color: var(--ds-select-tag-bg);
+  color: var(--ds-select-tag-color);
+  border-radius: var(--ds-select-tag-radius);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag-remove'] {
+  border: none;
+  background: none;
+  color: var(--ds-select-clear-color);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag-remove']:hover {
+  color: var(--ds-form-error-color, #ef4444);
+}
+
+/* ---- search input inside the trigger ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='search-input'] {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--ds-select-color);
+}
+
+/* ---- clear button ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='clear-button'] {
+  border: none;
+  background: none;
+  color: var(--ds-select-clear-color);
+}
+
+/* ---- dropdown panel (in-tree) ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='dropdown'] {
+  background-color: var(--ds-select-dropdown-bg);
+  border: 1px solid var(--ds-select-dropdown-border);
+  border-radius: var(--ds-select-dropdown-radius);
+  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-card-shadow-hover, var(--ds-shadow-lg)));
+}
+
+/* ---- group header ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='group-label'] {
+  color: var(--ds-select-color-placeholder);
+  border-top: 1px solid var(--ds-select-dropdown-border);
+}
+
+/* ---- option row: selected > focused > default across bg/color/border/shadow ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'] {
+  background-color: transparent;
+  color: var(--ds-select-color);
+  border-left: 3px solid transparent;
+  box-shadow: none;
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-disabled='true'] {
+  color: var(--ds-select-option-color-disabled);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-active='true'] {
+  background-color: var(--ds-select-option-bg-hover);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-active='true']:not([data-selected='true']) {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+  box-shadow: inset 0 0 0 1px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15));
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-selected='true'] {
+  background-color: var(--ds-select-option-bg-selected);
+  color: var(--ds-select-option-color-selected);
+  border-left: 3px solid var(--ds-select-check-color, var(--ds-color-primary));
+}
+
+/* ---- option multi-checkbox + single-select tick ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'] [data-part='option-checkbox'] {
+  border: 1px solid var(--ds-select-border);
+  border-radius: 0.1875rem;
+  background-color: transparent;
+  color: white;
+  transform: scale(0.9);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'] {
+  background-color: var(--ds-select-check-color);
+  transform: scale(1);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'] [data-part='option-check'] {
+  color: var(--ds-select-check-color);
+}
+
+/* ---- empty state ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='empty'] {
+  color: var(--ds-select-color-placeholder);
+}
+
+/**
+ * Select compound skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other skin (P-47). ENGINE-
+ * AGNOSTIC: `Select.OptGroup` is a declarative-API component with no engine
+ * fork, so its one paint site (the group label color) lives in `components/skin`
+ * rather than an `engines/*` home, scoped on the compound's own class hook
+ * `.rottay-select-optgroup__label` + its `data-part='group-label'`.
+ *
+ * The `#666` fallback is transcribed byte-exact from the source
+ * `var(--ds-color-text-secondary, #666)`; filed as a proposal.
+ */
+
+.rottay-select-optgroup__label[data-part='group-label'] {
+  color: var(--ds-color-text-secondary, #666);
+}
+
+/**
+ * Modern TreeSelect skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the outer `<div>`, which now carries the pair
+ * `ds-tree-select ds-tree-select--modern` + `data-part='root'` (stamped by
+ * this migration -- the pre-step had left the root component-scope-class-
+ * free, unlike Select's root). The trigger, dropdown, tree list, and every
+ * node row are IN-TREE descendants with their own `data-part` (TreeSelect
+ * modern never portals -- the mirror image of Select, whose custom-dropdown
+ * branch does).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
+ * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
+ * already reach (0,4,0) with a single descendant hop, so no part here needs
+ * the repeated-`[data-part]` trick.
+ *
+ * The tree-node row's selected background/color/border-left and the
+ * tree-line indent's border-left are transcribed verbatim from
+ * `engines/modern.tsx` (both were plain conditional inline styles -- this
+ * file has no imperative `.style.` writes anywhere). `treeLine` (a static
+ * per-instance prop, not per-node) is threaded onto the recursive child
+ * `<ul>` as `data-tree-line` so CSS can key off it; the outer (non-recursive)
+ * tree list never carried a border regardless of `treeLine` and is left
+ * unmatched.
+ *
+ * KEYFRAMES: `@keyframes rottay-select-slide-in`, previously an inline
+ * `<style dangerouslySetInnerHTML>` re-injected on every open, is moved here
+ * renamed `ds-tree-select-slide-in`; the dropdown's `animation:` reference
+ * (an inline, non-paint key) is updated to match. The loading spinner's bare
+ * `animation: 'spin …'` has no local `@keyframes` in the source and resolves
+ * against the global foundation `spin` keyframe -- left inline, untouched.
+ */
+
+@keyframes ds-tree-select-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- trigger ---- */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* ---- dropdown panel (in-tree) ---- */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+  border-color: var(--ds-color-border);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border);
+  background: var(--ds-surface-card);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='search-input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- tree node row ---- */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+  background: var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
+  color: var(--ds-color-primary);
+  border-left: 2px solid var(--ds-color-border-selected, var(--ds-color-primary));
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='tree-node-highlight'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='tree-node-toggle'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='loading'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='option-icon'] {
+  accent-color: var(--ds-color-primary);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='tree-list'][data-tree-line='true'] {
+  border-left: 2px solid var(--ds-color-border-subtle, var(--ds-color-border));
+}
+
+/**
+ * Rustic TreeSelect skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS. The trigger IS the root element -- there is no separate
+ * wrapper -- and carries `.rottay-treeselect.rottay-treeselect--rustic
+ * [data-part='trigger']` (the pre-step stamped `data-part='trigger'`, not
+ * `'root'`; code is ground truth over the checkpoint brief's generic
+ * "[data-part='root']" phrasing -- this component has no wrapper div for a
+ * `'root'` part to live on). The dropdown is PORTALED via
+ * `createPortal(document.body)` to a standalone subtree carrying
+ * `.rottay-treeselect__dropdown[data-part='dropdown']` -- everything inside
+ * it (search input, tree list, node rows, checkbox, empty, spinner) is
+ * OUTSIDE the trigger's DOM subtree, so those rules are standalone, never
+ * `[data-part='trigger'] …` descendants (ARC-09 precedent).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR (incl. `transparent`, excl.
+ * `none`/`0`) must reach (0,4,0).
+ *   - TRIGGER is a single element with 2 classes + 1 `[data-part]` attr ->
+ *     (0,3,0) at its own selector, one short of the floor. The base
+ *     border-color rule buys the 4th unit by repeating `[data-part='trigger']`;
+ *     every state override (`[data-open='true']`, `[data-status='error'
+ *     |'warning']`) already carries a second attribute/pseudo of its own and
+ *     reaches (0,4,0) or higher naturally, so it needs no repeat -- the tie
+ *     between the repeated base rule and the equal-specificity status rules
+ *     is broken by source order (state rules declared after the base).
+ *   - DROPDOWN (portal root) has 1 class + 1 attr -> (0,2,0); its descendants
+ *     add one more attr -> (0,3,0), also one short. Any border-color rule
+ *     without an extra distinguishing attribute/pseudo (search-input-
+ *     wrapper's border-bottom, search-input's rest-state border-color, the
+ *     loading spinner's border, the option row's base transparent
+ *     border-left) buys the 4th unit by repeating its own `[data-part='x']`.
+ *     Rules that already carry a second attribute or pseudo-class (`:focus`,
+ *     `[data-selected='true']`, `[data-tree-line='true']`,
+ *     `[data-nested='true']`) reach (0,4,0) naturally and are left unrepeated.
+ *
+ * INTERACTION MECHANISM: the tree-node row's imperative
+ * `onMouseEnter`/`onMouseLeave` (writing `.style.backgroundColor`, guarded
+ * `!node.disabled && !isSelected`) are deleted and replaced by
+ * `:hover:not([data-selected='true']):not([data-disabled='true'])`; the
+ * `onMouseLeave` reset only ever restored the same `transparent` value the
+ * base (non-hover) rule already produces, so no separate rule is needed for
+ * it. The expand-button's state rotation (`isExpanded ? rotate(90deg) :
+ * rotate(0deg)`) is transcribed as `transform`, keyed off a new
+ * `data-expanded` attribute added to the toggle button. The arrow's open
+ * rotation (`isOpen ? rotate(180deg) : none`) is keyed off the trigger's
+ * existing `data-open` attribute (already stamped by the pre-step). The
+ * search input's imperative `onFocus`/`onBlur` (writing `.style.borderColor`
+ * / `.style.boxShadow`, hardcoded `#1677ff`/`rgba(22,119,255,…)` literals)
+ * are deleted and replaced by `:focus`; the `onBlur` values exactly match
+ * this file's rest-state rule (`var(--ds-color-border-primary)` / no
+ * box-shadow), so there is no rest-after-blur delta.
+ *
+ * The trigger's `getBorderColor()` priority chain (error > warning > focus >
+ * default) is reproduced via `[data-status]`/`[data-open]`, both already
+ * stamped on the trigger by the pre-step; `isFocused` (a piece of removed
+ * dead state that only ever mirrored `isOpen`, set in the same
+ * `handleOpenChange` call) is superseded by the existing `data-open`
+ * attribute and was deleted from the component along with `getBorderColor()`.
+ *
+ * Hardcoded literals transcribed byte-exact from the source
+ * `var(--…, #hex)`/raw-literal fallbacks: `#1677ff` (option-row selected
+ * border-left and search-input `:focus` border-color), `rgba(0, 0, 0, 0.06)`
+ * (tree-line indent, non-`treeLine` nested case), `rgba(22, 119, 255, 0.15)`
+ * + `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
+ *
+ * KEYFRAMES: `@keyframes rottay-treeselect-spin` /
+ * `rottay-treeselect-dropdown-in`, previously imperatively injected into
+ * `document.head` by a `useEffect` (deleted), are moved here renamed
+ * `ds-tree-select-spin` / `ds-tree-select-dropdown-in`; the loading
+ * spinner's and dropdown's inline `animation:` references (non-paint keys)
+ * are updated to match.
+ */
+
+@keyframes ds-tree-select-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ds-tree-select-dropdown-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* ============================================================================
+   TRIGGER (in-tree, IS the root)
+   ============================================================================ */
+
+/* BORDER IS THE FULL SHORTHAND, NEVER SPLIT: the engine wrote
+   `border: 1px solid var(--ds-treeselect-border[-state])` and the
+   --ds-treeselect-* tokens are UNDEFINED on today's tenants, so the whole
+   inline declaration was invalid-at-computed-value and the trigger shipped
+   BORDERLESS. Splitting width/style from the var color re-grows a 1px
+   floor-colored border the component never had; the shorthand dies (or
+   applies, on a tenant that defines the tokens) atomically, exactly as the
+   inline did. */
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] {
+  border-radius: var(--ds-treeselect-radius);
+  background-color: var(--ds-treeselect-bg);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-treeselect-border);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-open='true']:not([data-status]) {
+  border: 1px solid var(--ds-treeselect-border-focus);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-status='error'] {
+  border: 1px solid var(--ds-treeselect-border-error);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-status='warning'] {
+  border: 1px solid var(--ds-treeselect-border-warning);
+}
+
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] [data-part='placeholder'] {
+  color: var(--ds-treeselect-placeholder-color);
+}
+
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-treeselect-clear-color);
+}
+
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] [data-part='arrow-icon'] {
+  color: var(--ds-treeselect-arrow-color);
+  transform: none;
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ============================================================================
+   DROPDOWN (portal root, standalone) + contents
+   ============================================================================ */
+
+.rottay-treeselect__dropdown[data-part='dropdown'] {
+  background-color: var(--ds-treeselect-dropdown-bg);
+  border-radius: var(--ds-treeselect-dropdown-radius);
+  box-shadow: var(--ds-card-shadow, var(--ds-treeselect-dropdown-shadow));
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'] {
+  background-color: var(--ds-treeselect-dropdown-bg);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input'] {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--ds-radius-sm);
+  background-color: var(--ds-input-bg);
+  color: inherit;
+  outline: none;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input'][data-part='search-input'] {
+  border-color: var(--ds-color-border-primary);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input']:focus {
+  border-color: var(--ds-color-primary, #1677ff);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='empty'] {
+  color: var(--ds-treeselect-empty-color);
+}
+
+/* ---- tree node row ---- */
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'] {
+  background-color: transparent;
+  border-radius: var(--ds-treeselect-node-radius);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border-left: 3px solid transparent;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
+  background-color: var(--ds-treeselect-node-bg-hover);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
+  background-color: var(--ds-treeselect-node-bg-selected);
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'] [data-part='tree-node-label'] {
+  color: inherit;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='tree-node-label'] {
+  color: var(--ds-treeselect-node-color-selected);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-node-highlight'] {
+  color: var(--ds-color-primary);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-node-toggle'] {
+  background: none;
+  border: none;
+  color: var(--ds-treeselect-expand-color);
+  transform: rotate(0deg);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-node-toggle'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='loading'] {
+  border-radius: 50%;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='loading'][data-part='loading'] {
+  border: 2px solid var(--ds-color-border-primary);
+  border-top-color: var(--ds-color-primary);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-list'][data-tree-line='true'] {
+  border-left: 1px solid var(--ds-color-border-primary);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-list']:not([data-tree-line='true'])[data-nested='true'] {
+  border-left: 1px solid var(--ds-color-border-secondary, rgba(0, 0, 0, 0.06));
+}
+
+/**
+ * Modern Cascader skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the outer `<div>`, which now carries the pair
+ * `ds-cascader ds-cascader--modern` (stamped by this migration -- the
+ * pre-step had left the root component-scope-class-free, like TreeSelect's
+ * root) alongside its pre-existing `data-part='root'`. **NO PORTAL**: the
+ * trigger, dropdown, search input, columns, and every option row are IN-TREE
+ * descendants of the root with their own `data-part` (grep-verified -- this
+ * file has no `createPortal` import, unlike the rustic sibling below).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
+ * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
+ * already reach (0,4,0) with a single descendant hop, so nothing here needs
+ * the repeated-`[data-part]` trick, including selectors that add a further
+ * `:not()`/state attribute (they only exceed the floor further).
+ *
+ * Every value below is transcribed verbatim from `engines/modern.tsx`'s
+ * inline `style={{...}}` objects -- this file has zero imperative `.style.`
+ * writes (grep-confirmed), so there is no hover-handler deletion to record.
+ *
+ * RE-STAMPED DATA-PART: the cascading menu columns (`data-part='menu-column'`)
+ * conditionally painted a `borderRight` only when `colIndex < activeColumns.
+ * length - 1` ("not the last column") -- a runtime boolean with no existing
+ * DOM hook. A new `data-last` boolean attribute (`colIndex === activeColumns.
+ * length - 1 || undefined`, mirroring this file's existing `data-open`/
+ * `data-selected` idiom) was added to the `<ul data-part='menu-column'>` so
+ * CSS can key off it; `menu-column` itself is unchanged (it is one of the
+ * contract-test-pinned parts).
+ *
+ * KEYFRAMES: the conditional `<style dangerouslySetInnerHTML>` (mounted only
+ * while `isOpen`) defined two keyframes consumed by two different elements --
+ * `rottay-select-slide-in` (the dropdown panel's entrance) and
+ * `rottay-cascader-panel-in` (each non-first column's entrance, `colIndex >
+ * 0`). Both are moved here renamed `ds-cascader-slide-in` /
+ * `ds-cascader-panel-in`; the `<style>` tag is deleted and both inline
+ * `animation:` references (non-paint keys, left inline) are updated to match.
+ * The loading spinner's bare `animation: 'spin ...'` has no local `@keyframes`
+ * in the source and resolves against the global foundation `spin` keyframe --
+ * left inline, untouched.
+ *
+ * WON'T-TRANSCRIBE / NOT INVENTED: the option row's dead `active`/`disabled`
+ * className tokens (no in-file stylesheet target) and the search-mode result
+ * row (zero paint in source) are preserved exactly as-is -- no CSS invented
+ * for either.
+ */
+
+@keyframes ds-cascader-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes ds-cascader-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---- trigger ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='trigger'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* ---- dropdown panel (in-tree) ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+  border-color: var(--ds-color-border);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='search-input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- menu column (not-last gets the divider) ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='menu-column']:not([data-last='true']) {
+  border-right: 1px solid var(--ds-color-border);
+}
+
+/* ---- option row ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+  background: var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
+  border-left: 2px solid var(--ds-color-primary);
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='loading'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+/**
+ * Rustic Cascader skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS. The trigger IS the root element -- there is no separate
+ * wrapper -- and carries `.rottay-cascader.rottay-cascader--rustic
+ * [data-part='trigger']` (the pre-step stamped `data-part='trigger'`, not
+ * `'root'`; code is ground truth over the checkpoint brief's generic
+ * "[data-part='root']" phrasing, same situation as TreeSelect rustic). The
+ * dropdown is PORTALED via `createPortal(document.body)` (import L21, used
+ * L496/L639) to a standalone subtree carrying
+ * `.rottay-cascader__dropdown[data-part='dropdown']` -- everything inside it
+ * (search input, menu columns, option rows, checkbox-free rows, empty state,
+ * loading spinner) is OUTSIDE the trigger's DOM subtree, so those rules are
+ * standalone, never `[data-part='trigger'] …` descendants (ARC-09 precedent,
+ * matches TreeSelect rustic's portal posture exactly).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR (incl. `transparent`, excl.
+ * `none`/`0`) must reach (0,4,0).
+ *   - TRIGGER is a single element with 2 classes + 1 `[data-part]` attr ->
+ *     (0,3,0) at its own selector, one short of the floor. The base
+ *     border-color rule buys the 4th unit by repeating `[data-part='trigger']`;
+ *     every state override (`[data-status='error'|'warning']`,
+ *     `[data-open='true']:not([data-status])`) already carries a second
+ *     attribute/pseudo of its own and reaches (0,4,0) naturally, so none of
+ *     them needs the repeat trick. The rules are mutually exclusive (status
+ *     vs. no-status), so declaration order does not matter for the cascade.
+ *   - DROPDOWN (portal root) has 1 class + 1 attr -> (0,2,0); its descendants
+ *     add one more attr -> (0,3,0), also one short. Any border-color
+ *     declaration without an extra distinguishing attribute/pseudo
+ *     (search-input-wrapper's border-bottom, search-input's rest-state
+ *     border-color, the loading spinner's border, the option row's base
+ *     transparent border-left) buys the 4th unit by repeating its own
+ *     `[data-part='x']` -- following the Select-rustic/TreeSelect-rustic
+ *     convention of splitting a background/border-color pair into two
+ *     declarations so only the border one needs the repeat. Rules that
+ *     already carry a second attribute or pseudo-class (`:focus`,
+ *     `[data-selected='true']`, `:hover:not(...):not(...)`) reach (0,4,0)
+ *     naturally and are left unrepeated.
+ *
+ * INTERACTION MECHANISM -- three independent imperative sites, all deleted:
+ *   1. Trigger border color: `getBorderColor()` (error > warning > focus >
+ *      default) fed a template-literal `border` shorthand. `isFocused` was
+ *      local state set ONLY inside `handleOpenChange` as
+ *      `setIsFocused(newOpen)` -- i.e. it always mirrored `isOpen` exactly, no
+ *      other setter existed. Both `isFocused` state and `getBorderColor()`
+ *      are deleted from the component; the priority chain is reproduced via
+ *      the trigger's pre-existing `data-status`/`data-open` attributes
+ *      (same supersession as TreeSelect rustic's `isFocused`).
+ *   2. Search-input focus/blur (onFocus/onBlur, L515-522): wrote
+ *      `.style.borderColor`/`.style.boxShadow` with hardcoded `#1677ff`/
+ *      `rgba(22, 119, 255, …)` literals. DELETED; replaced by
+ *      `[data-part='search-input']:focus`. The `onBlur` reset values
+ *      (`var(--ds-cascader-border)`, `boxShadow: 'none'`) are byte-identical
+ *      to this file's rest-state rule for the same part -- NO rest-after-blur
+ *      delta.
+ *   3. Menu-item hover, both variants, both DELETED and replaced by one rule
+ *      `[data-part='option']:hover:not([data-selected='true']):not([data-disabled='true'])`
+ *      (the shared selector correctly serves both call sites below):
+ *      - Search-mode row (onMouseEnter/onMouseLeave, L548-555): NO guard at
+ *        all in source (search results are never selected/disabled) -- both
+ *        handlers held ONLY paint writes, so both are deleted outright.
+ *      - Column-mode row (onMouseEnter/onMouseLeave, L589-601): guard is
+ *        `!option.disabled && !isSelected` on enter, `!isSelected` on leave
+ *        (leaf paint-reset only, no independent effect since disabled rows
+ *        never got the enter-paint in the first place). `handleOptionHover
+ *        (option, colIndex)` in onMouseEnter is called UNCONDITIONALLY
+ *        (outside the `if`, guards its own disabled-check internally) and is
+ *        NON-paint (drives column expansion) -- it is KEPT, onMouseEnter
+ *        reduces to `() => handleOptionHover(option, colIndex)`; onMouseLeave
+ *        held only the paint reset and is deleted entirely.
+ *
+ * RE-STAMPED DATA-PART: same `data-last` addition as the modern sibling, for
+ * the same reason (`menuStyle(colIndex, totalCols)`'s conditional
+ * `borderRight`, "not the last column") -- `data-last={colIndex ===
+ * activeColumns.length - 1 || undefined}` on `<ul data-part='menu-column'>`;
+ * `menu-column` itself (contract-test-pinned) is unchanged.
+ *
+ * Hardcoded literals transcribed byte-exact from the source `var(--…, #hex)`
+ * fallbacks: `#1677ff` (search-input `:focus` border-color, option-row
+ * selected/hover border-left), `rgba(22, 119, 255, 0.15)` +
+ * `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
+ *
+ * KEYFRAMES: `@keyframes rottay-cascader-spin` / `rottay-cascader-dropdown-in`,
+ * previously a plain `<style>` tag rendered inside the portal (remounting on
+ * every open), are moved here renamed `ds-cascader-spin` /
+ * `ds-cascader-dropdown-in`; the `<style>` tag is deleted and the spinner's
+ * and dropdown's inline `animation:` references (non-paint keys) are updated
+ * to match.
+ */
+
+@keyframes ds-cascader-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ds-cascader-dropdown-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* ============================================================================
+   TRIGGER (in-tree, IS the root)
+   ============================================================================ */
+
+/* BORDER IS THE FULL SHORTHAND, NEVER SPLIT: the engine wrote
+   `border: 1px solid var(--ds-cascader-border[-state])` and the
+   --ds-cascader-* tokens are UNDEFINED on today's tenants, so the whole
+   inline declaration was invalid-at-computed-value and the trigger shipped
+   BORDERLESS. Splitting width/style from the var color re-grows a 1px
+   floor-colored border the component never had; the shorthand dies (or
+   applies, on a tenant that defines the tokens) atomically, exactly as the
+   inline did. */
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] {
+  border-radius: var(--ds-cascader-radius);
+  background-color: var(--ds-cascader-bg);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-cascader-border);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-status='error'] {
+  border: 1px solid var(--ds-cascader-border-error);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-status='warning'] {
+  border: 1px solid var(--ds-cascader-border-warning);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-open='true']:not([data-status]) {
+  border: 1px solid var(--ds-cascader-border-focus);
+}
+
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] [data-part='placeholder'] {
+  color: var(--ds-cascader-placeholder-color);
+}
+
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-cascader-clear-color);
+}
+
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] [data-part='arrow-icon'] {
+  color: var(--ds-cascader-arrow-color);
+  transform: none;
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ============================================================================
+   DROPDOWN (portal root, standalone) + contents
+   ============================================================================ */
+
+.rottay-cascader__dropdown[data-part='dropdown'] {
+  background-color: var(--ds-cascader-dropdown-bg);
+  border-radius: var(--ds-cascader-dropdown-radius);
+  box-shadow: var(--ds-card-shadow, var(--ds-cascader-dropdown-shadow));
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-cascader-menu-border);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input'] {
+  border-radius: var(--ds-cascader-radius);
+  outline: none;
+  background-color: var(--ds-cascader-bg);
+}
+/* Full shorthand, same undefined-token atomicity as the trigger above. */
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input'][data-part='search-input'] {
+  border: 1px solid var(--ds-cascader-border);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input']:focus {
+  border-color: var(--ds-color-primary, #1677ff);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='empty'] {
+  color: var(--ds-cascader-empty-color);
+}
+
+/* ---- menu column (not-last gets the divider) ---- */
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='menu-column'] {
+  border-right: none;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='menu-column']:not([data-last='true']) {
+  border-right: 1px solid var(--ds-cascader-menu-border);
+}
+
+/* ---- option row: base (transparent) < hover (not selected/disabled) < selected ---- */
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'] {
+  background-color: transparent;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border-left: 3px solid transparent;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
+  background-color: var(--ds-cascader-item-bg-hover);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
+  background-color: var(--ds-cascader-item-bg-selected);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-selected='true'] {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='menu-item-arrow'] {
+  color: var(--ds-cascader-arrow-color);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='loading'] {
+  border-radius: 50%;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='loading'][data-part='loading'] {
+  border: 2px solid var(--ds-cascader-arrow-color);
+  border-top-color: transparent;
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

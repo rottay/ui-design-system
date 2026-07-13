@@ -1,0 +1,221 @@
+/**
+ * Rustic Upload skin (WO-SKIN-02 checkpoint C, pickers/movers batch).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * unlayered outranks preflight and any layered utility, and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOTS: `Upload` (`.rottay-upload.rottay-upload--rustic`) and `Dragger`
+ * (`.rottay-upload-dragger.rottay-upload-dragger--rustic`) are two separate
+ * top-level components, each with its own BEM root class pair that already
+ * existed pre-migration. `Upload`'s root already carried a
+ * `rottay-upload--${listType}` modifier (omitted for `listType==='text'`);
+ * `Dragger`'s root did NOT carry the equivalent `rottay-upload-dragger--${listType}`
+ * modifier before this migration -- added here, mirroring Upload's own
+ * pre-existing convention in the same file, because `RusticFileItem` renders
+ * all four listType variants under Dragger too and this skin needs the same
+ * discriminator there that Upload already had.
+ *
+ * DISCRIMINATOR: `data-part='file-item'` (and its unlabeled `img`/`span`/`div`
+ * children) is shared across all four `listType` renders, each with different
+ * static paint. Card and circle share one function (`sharedStyles.cardContainer`)
+ * differing only in border-radius; picture and text are each their own object
+ * but happen to paint identical background/radius tokens. Selectors below
+ * split card+circle (one shared block, radius overridden per variant) from
+ * picture+text (one shared block, `:not(...)` of the two card/circle
+ * modifiers) to mirror that.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * (0,3,1). Every rule that paints a border COLOR reaches (0,4,0) via a
+ * listType root modifier class, or (where none applies) a repeated
+ * `[data-part='x'][data-part='x']`. Non-border paint wins unlayered at (0,3,0)
+ * or higher.
+ *
+ * The progress-bar fill is a runtime `progress.strokeColor` (plain color or a
+ * computed gradient), carried via the uncounted custom property
+ * `--ds-upload-progress-fill`; only the runtime `width` stays inline. Its
+ * `border-radius: 4px` (a hardcoded literal, not a token -- see the P-70
+ * hardcoded-literal list) is static and moves, below.
+ */
+
+/* ---- preview-modal / preview-close-button / preview img: identical in both
+        Upload and Dragger subtrees (declared once, used by both). ---- */
+.rottay-upload.rottay-upload--rustic [data-part='preview-modal'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='preview-modal'] {
+  background: var(--ds-upload-preview-backdrop);
+}
+.rottay-upload.rottay-upload--rustic [data-part='preview-close-button'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='preview-close-button'] {
+  border: none;
+  border-radius: 50%;
+  background: var(--ds-upload-preview-close-bg);
+  color: var(--ds-upload-preview-close-color);
+}
+.rottay-upload.rottay-upload--rustic [data-part='preview-modal'] img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='preview-modal'] img {
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- progress-track / progress-bar: the bar's fill is a runtime `strokeColor`
+        (plain color or a computed gradient), carried via the uncounted custom
+        property `--ds-upload-progress-fill`; only the runtime `width` stays
+        inline. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='progress-track'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='progress-track'] {
+  background: var(--ds-upload-progress-track);
+  border-radius: 4px;
+}
+.rottay-upload.rottay-upload--rustic [data-part='progress-bar'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='progress-bar'] {
+  background: var(--ds-upload-progress-fill);
+  border-radius: 4px;
+}
+
+/* ---- file-item-action: text/picture's remove button is a DIRECT child of
+        file-item; card/circle's preview/remove buttons are nested inside
+        file-item-overlay -- that structural difference disambiguates them
+        without any listType scope. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='file-item'] > [data-part='file-item-action'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item'] > [data-part='file-item-action'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-upload-file-remove-color);
+}
+.rottay-upload.rottay-upload--rustic [data-part='file-item-overlay'] [data-part='file-item-action'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item-overlay'] [data-part='file-item-action'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-upload-overlay-action-color);
+  border-radius: 50%;
+}
+
+/* ---- file-item-overlay: background is identical card vs circle; radius
+        (0 vs 50%) is the only isCircle-dependent part. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='file-item-overlay'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item-overlay'] {
+  background: var(--ds-upload-preview-overlay);
+  border-radius: 0;
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item-overlay'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item-overlay'] {
+  border-radius: 50%;
+}
+
+/* ---- file-item: card + circle share background/border (cardContainer),
+        radius differs; error status doubles the border width, both
+        variants. ---- */
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'],
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'] {
+  background: var(--ds-upload-card-bg);
+  border: 1px solid var(--ds-upload-card-border);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'][data-status='error'],
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'][data-status='error'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'][data-status='error'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'][data-status='error'] {
+  border: 2px solid var(--ds-upload-error-border);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'] {
+  border-radius: var(--ds-upload-file-radius);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'] {
+  border-radius: 50%;
+}
+
+/* ---- file-item: picture + text share background/radius (NOT card/circle);
+        error status ADDS a 1px border neither variant has by default. ---- */
+.rottay-upload.rottay-upload--rustic:not(.rottay-upload--picture-card):not(.rottay-upload--picture-circle) [data-part='file-item'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic:not(.rottay-upload-dragger--picture-card):not(.rottay-upload-dragger--picture-circle) [data-part='file-item'] {
+  background: var(--ds-upload-file-bg);
+  border-radius: var(--ds-upload-file-radius);
+}
+.rottay-upload.rottay-upload--rustic:not(.rottay-upload--picture-card):not(.rottay-upload--picture-circle) [data-part='file-item'][data-status='error'],
+.rottay-upload-dragger.rottay-upload-dragger--rustic:not(.rottay-upload-dragger--picture-card):not(.rottay-upload-dragger--picture-circle) [data-part='file-item'][data-status='error'] {
+  border: 1px solid var(--ds-upload-error-border);
+}
+
+/* ---- filename text: identical `--ds-upload-file-color` token across all
+        four variants -- card/circle's fallback span is a direct child of
+        file-item; picture/text's filename span is nested one level deeper
+        (inside the flex-1 wrapper div). Both selectors folded into one rule
+        since the value never differs by variant. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='file-item'] > span,
+.rottay-upload.rottay-upload--rustic [data-part='file-item'] > div > span,
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item'] > span,
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='file-item'] > div > span {
+  color: var(--ds-upload-file-color);
+}
+
+/* ---- thumbnail img: a direct child of file-item in all three image-capable
+        variants (card, circle, picture); radius differs per variant. ---- */
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-card [data-part='file-item'] > img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-card [data-part='file-item'] > img {
+  border-radius: 0;
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='file-item'] > img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture-circle [data-part='file-item'] > img {
+  border-radius: 50%;
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture [data-part='file-item'] > img,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture [data-part='file-item'] > img {
+  border-radius: var(--ds-upload-file-radius);
+}
+
+/* ---- picture-row fallback icon (no thumb): the wrapper div has no
+        data-part; it :has() the FileIcon svg the img alternative never
+        renders alongside. ---- */
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture [data-part='file-item'] > div:has(svg),
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture [data-part='file-item'] > div:has(svg) {
+  border-radius: var(--ds-upload-file-radius);
+  background: var(--ds-upload-file-bg);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture [data-part='file-item'] svg,
+.rottay-upload-dragger.rottay-upload-dragger--rustic.rottay-upload-dragger--picture [data-part='file-item'] svg {
+  color: var(--ds-upload-dragger-icon-color);
+}
+
+/* ---- add-button (picture-card/circle "add" tile): Upload only, Dragger has
+        no add-button. Border color repeats the data-part to reach (0,4,0). ---- */
+.rottay-upload.rottay-upload--rustic [data-part='add-button'][data-part='add-button'] {
+  border: 2px dashed var(--ds-upload-card-border);
+  background: transparent;
+  border-radius: var(--ds-upload-file-radius);
+}
+.rottay-upload.rottay-upload--rustic.rottay-upload--picture-circle [data-part='add-button'] {
+  border-radius: 50%;
+}
+.rottay-upload.rottay-upload--rustic [data-part='add-button'] svg {
+  color: var(--ds-upload-dragger-icon-color);
+}
+
+/* ---- trigger (text/picture default button): Upload only. ---- */
+.rottay-upload.rottay-upload--rustic [data-part='trigger'][data-part='trigger'] button {
+  border: 1px solid var(--ds-upload-button-border);
+  border-radius: var(--ds-upload-button-radius);
+  background: var(--ds-upload-button-bg);
+  color: var(--ds-upload-button-color);
+}
+
+/* ---- dropzone (Dragger only): the pre-existing `dropzoneStyle` ternary was
+        already a single inline-style source of truth (unlike modern's split
+        class+style hybrid), so both drag states fold cleanly into CSS keyed
+        on the pre-existing `data-state='dragging'|'idle'` attribute. ---- */
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'][data-part='dropzone'] {
+  border: 2px dashed var(--ds-upload-dragger-border);
+  border-radius: var(--ds-upload-dragger-radius);
+  background: var(--ds-upload-dragger-bg);
+}
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'][data-state='dragging'] {
+  border-color: var(--ds-upload-dragger-border-active);
+  background: var(--ds-upload-dragger-bg-hover);
+}
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'] svg {
+  color: var(--ds-upload-dragger-icon-color);
+}
+.rottay-upload-dragger.rottay-upload-dragger--rustic [data-part='dropzone'] p {
+  color: var(--ds-upload-dragger-text-color);
+}
