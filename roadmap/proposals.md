@@ -982,3 +982,12 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Frozen for WO-SKIN-04** — the migration is byte-exact, so it must PRESERVE this outcome: the skin must not out-specificity DaisyUI on those pseudo-element channels, and must not "fix" the undefined token. Doing either changes the shipped color under the guise of a cleanup. The component's inline custom properties move to the skin as-is.
 - **Ask** — decide the mechanism (own the pseudo-elements with a first-party rule that beats DaisyUI on both channels, or delete the dead bridge and the token family and let DaisyUI own it), then land it as a VISUAL change with its own baselines, not inside a byte-exact migration.
 - **Status** — OPEN.
+
+### P-74 Two navigation compounds are documented, typed, and never rendered
+
+- **Context** — Surfaced by WO-SKIN-04's navigation pre-step while stamping anatomy: two compound components have a public, documented composition API that silently does nothing. Found by test, not by reading — the pre-step's contract test asserted the compounds' stamps reach the DOM and they did not.
+- **Evidence** — (1) `Stepper.Step`: composing `<Stepper><Stepper.Step/></Stepper>` never mounts `Stepper.Step`. Both root engines convert the children into a plain items array (extracting title/description/subTitle/icon/status/disabled — and NOT `active`) and re-render through their own internal path, so the compound's own render, its props, and its `active` state are unreachable in the documented usage. It only renders standalone. (2) `Breadcrumb.Item`: `BreadcrumbProps.children` is typed, and `compound/Item`'s own header comment shows `<Breadcrumb items={[]}><Breadcrumb.Item/></Breadcrumb>` as the basic usage — but neither engine destructures or renders `children` at all. A `Breadcrumb.Item` passed as a child is silently dropped.
+- **Impact** — Both are the same defect class: an API that typechecks, is documented, and produces nothing. A consumer following the docs gets an empty render with no error. `Stepper.Step`'s `active` prop is dead in every usage.
+- **Frozen for WO-SKIN-04** — the migration is byte-exact and does not fix this. The pre-step stamps the compounds anyway (their anatomy is correct when they DO render), and the contract test pins the reality rather than the documentation.
+- **Ask** — decide per component: wire the children path, or delete the compound and the documentation that promises it. Do not leave a third state.
+- **Status** — OPEN.
