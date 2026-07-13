@@ -21,7 +21,6 @@
 
 import React, { forwardRef, useState, useRef, useEffect, useCallback, useMemo, useImperativeHandle, useId } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import { createPortal } from 'react-dom';
 import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
@@ -69,10 +68,6 @@ const TRANSITION = 'border-color var(--ds-motion-fast) var(--ds-motion-ease-out)
 function buildTriggerStyle(
   size: keyof typeof SIZES,
   variant: string,
-  isOpen: boolean,
-  isHovered: boolean,
-  hasError: boolean,
-  hasWarning: boolean,
   isDisabled: boolean,
 ): React.CSSProperties {
   const s = SIZES[size];
@@ -88,14 +83,6 @@ function buildTriggerStyle(
     fontSize: s.fontSize,
     lineHeight: s.lineHeight,
     fontFamily: 'inherit',
-    color: 'var(--ds-color-text-primary)',
-    backgroundColor: 'var(--ds-select-bg, var(--ds-surface-control))',
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-color-border)',
-    borderRadius: 'var(--ds-radius-md, 8px)',
-    outline: 'var(--ds-focus-ring-width, 2px) solid transparent',
-    outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
     transition: TRANSITION,
     boxSizing: 'border-box',
     cursor: 'pointer',
@@ -103,65 +90,14 @@ function buildTriggerStyle(
     position: 'relative',
   };
 
-  // Variant overrides
-  if (variant === 'filled') {
-    base.backgroundColor = 'var(--ds-select-filled-bg, var(--ds-surface-canvas))';
-    base.borderColor = 'transparent';
-  } else if (variant === 'flushed') {
-    base.borderRadius = '0';
-    base.borderWidth = '0';
-    base.borderColor = 'transparent';
-    base.borderBottomWidth = '1px';
-    base.borderBottomStyle = 'solid';
-    base.borderBottomColor = 'var(--ds-color-border)';
+  if (variant === 'flushed') {
     base.paddingLeft = '0';
     base.paddingRight = '0';
-    base.backgroundColor = 'transparent';
-  } else if (variant === 'default') {
-    // Same as outline
   }
 
-  // Hover
-  if (isHovered && !isOpen && !hasError && !hasWarning && !isDisabled) {
-    base.borderColor = 'var(--ds-color-border-hover)';
-    base.backgroundColor = 'var(--ds-select-bg-hover, var(--ds-select-bg, var(--ds-surface-control)))';
-  }
-
-  // Open (focus)
-  if (isOpen) {
-    base.borderColor = 'var(--ds-color-primary)';
-    base.backgroundColor = 'var(--ds-select-bg-focus, var(--ds-select-bg, var(--ds-surface-control)))';
-    base.outline = 'var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color)';
-    if (variant === 'flushed') {
-      base.outline = 'none';
-      base.borderBottomWidth = '2px';
-      base.borderBottomColor = 'var(--ds-color-primary)';
-    }
-  }
-
-  // Error
-  if (hasError) {
-    base.borderColor = 'var(--ds-color-error)';
-    base.backgroundColor = 'color-mix(in srgb, var(--ds-color-error) 4%, transparent)';
-    if (isOpen) {
-      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-error) 15%, transparent)';
-    }
-  }
-
-  // Warning
-  if (hasWarning && !hasError) {
-    base.borderColor = 'var(--ds-color-warning)';
-    base.backgroundColor = 'color-mix(in srgb, var(--ds-color-warning) 4%, transparent)';
-    if (isOpen) {
-      base.outline = 'var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-warning) 15%, transparent)';
-    }
-  }
-
-  // Disabled
   if (isDisabled) {
     base.opacity = 0.5;
     base.cursor = 'not-allowed';
-    base.backgroundColor = 'var(--ds-select-bg-disabled, var(--ds-surface-canvas))';
   }
 
   return base;
@@ -177,13 +113,6 @@ const DROPDOWN_STYLE: React.CSSProperties = {
   left: 0,
   right: 0,
   zIndex: 180,
-  background:
-    'var(--ds-select-dropdown-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-color-bg-primary) 22%, var(--ds-surface-card))))',
-  border: '1px solid var(--ds-select-dropdown-border-color, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent))',
-  borderRadius: 14,
-  boxShadow: 'var(--ds-select-dropdown-shadow, var(--ds-shadow-popover, var(--ds-shadow-lg, var(--ds-card-shadow))))',
-  backdropFilter: 'blur(16px)',
-  WebkitBackdropFilter: 'blur(16px)',
   padding: '4px',
   overflow: 'hidden',
   transformOrigin: 'top center',
@@ -219,9 +148,7 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
       data-part="arrow-icon"
       style={{
         flexShrink: 0,
-        color: 'var(--ds-color-text-muted)',
         transition: 'transform var(--ds-motion-fast) var(--ds-motion-ease-out)',
-        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
       }}
     >
       <path d="M6 9l6 6 6-6" />
@@ -235,7 +162,7 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
 
 function SearchIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" data-part="search-icon" style={{ flexShrink: 0, color: 'var(--ds-color-text-muted)' }}>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" data-part="search-icon" style={{ flexShrink: 0 }}>
       <circle cx="11" cy="11" r="8" />
       <path d="M21 21l-4.35-4.35" />
     </svg>
@@ -261,16 +188,10 @@ function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
         width: '20px',
         height: '20px',
         padding: 0,
-        border: 'none',
-        borderRadius: 'var(--ds-radius-sm, 6px)',
-        backgroundColor: 'transparent',
-        color: 'var(--ds-color-text-muted)',
         cursor: 'pointer',
         flexShrink: 0,
         transition: 'background-color var(--ds-motion-fast)',
       }}
-      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--ds-surface-canvas)'; }}
-      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
     >
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
         <path d="M18 6L6 18M6 6l12 12" />
@@ -282,19 +203,6 @@ function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
 /* ------------------------------------------------------------------ */
 /*  Keyframe injection (once)                                          */
 /* ------------------------------------------------------------------ */
-
-const KEYFRAME_CSS = `
-@keyframes rottay-select-appear {
-  from {
-    opacity: 0;
-    transform: scale(var(--ds-motion-scale-in)) translateY(var(--ds-motion-offset-in));
-  }
-  to {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
-}
-`;
 
 /* ------------------------------------------------------------------ */
 /*  Component                                                          */
@@ -399,11 +307,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [focusedIndex, setFocusedIndex] = useState(-1);
-  // The triad is decided once, in the behavior core. `focused` is any focus --
-  // a field's focus border must appear when a pointer lands in it. A ring is
-  // `focusVisible`, and this part does not draw one.
-  const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-  const isHovered = interaction.hovered;
   const [internalValue, setInternalValue] = useState<(string | number)[]>(() => {
     const initial = value ?? defaultValue;
     if (initial === undefined) return [];
@@ -718,9 +621,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 padding: '1px var(--ds-spacing-2, 8px)',
                 fontSize: 'var(--ds-font-size-xs, 12px)',
                 lineHeight: 'var(--ds-line-height-xs, 20px)',
-                borderRadius: 'var(--ds-radius-sm, 6px)',
-                backgroundColor: 'var(--ds-surface-canvas)',
-                color: 'var(--ds-color-text-primary)',
                 maxWidth: '150px',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
@@ -743,16 +643,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   width: '14px',
                   height: '14px',
                   padding: 0,
-                  border: 'none',
-                  borderRadius: '50%',
-                  backgroundColor: 'transparent',
-                  color: 'var(--ds-color-text-muted)',
                   cursor: 'pointer',
                   flexShrink: 0,
                   transition: 'color var(--ds-motion-fast)',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ds-color-text-primary)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ds-color-text-muted)'; }}
               >
                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 6L6 18M6 6l12 12" />
@@ -767,9 +661,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               padding: '1px var(--ds-spacing-2, 8px)',
               fontSize: 'var(--ds-font-size-xs, 12px)',
               lineHeight: 'var(--ds-line-height-xs, 20px)',
-              borderRadius: 'var(--ds-radius-sm, 6px)',
-              backgroundColor: 'var(--ds-surface-canvas)',
-              color: 'var(--ds-color-text-muted)',
             }}>
               +{hiddenCount}
             </span>
@@ -828,74 +719,33 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       fontSize: s.fontSize,
       lineHeight: s.lineHeight,
       fontFamily: 'inherit',
-      color: 'var(--ds-color-text-primary)',
-      // Same chain as the custom trigger above. The native path used to read
-      // `--ds-surface-control` directly, so a tenant that set `--ds-select-bg`
-      // moved one of this file's two selects and not the other.
-      backgroundColor: 'var(--ds-select-bg, var(--ds-surface-control))',
-      borderWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: 'var(--ds-color-border)',
-      borderRadius: 'var(--ds-radius-md, 8px)',
-      outline: 'var(--ds-focus-ring-width, 2px) solid transparent',
-      outlineOffset: 'var(--ds-focus-ring-offset, 2px)',
       transition: TRANSITION,
       boxSizing: 'border-box',
       appearance: 'none',
-      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A0A0A5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E")`,
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: `right ${s.paddingX} center`,
+      // The native arrow's horizontal inset tracks the size's paddingX; the
+      // skin's background-position reads this custom property (not a paint key).
+      ['--ds-select-native-arrow-inset' as any]: s.paddingX,
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
     };
 
-    // Variant overrides for native
-    if (variant === 'filled') {
-      nativeSelectStyle.backgroundColor = 'var(--ds-surface-canvas)';
-      nativeSelectStyle.borderColor = 'transparent';
-    } else if (variant === 'flushed') {
-      nativeSelectStyle.borderRadius = '0';
-      nativeSelectStyle.borderWidth = '0';
-      nativeSelectStyle.borderColor = 'transparent';
-      nativeSelectStyle.borderBottomWidth = '1px';
-      nativeSelectStyle.borderBottomStyle = 'solid';
-      nativeSelectStyle.borderBottomColor = 'var(--ds-color-border)';
+    // Variant padding for native (all native paint lives in the skin, keyed on
+    // data-variant / data-status).
+    if (variant === 'flushed') {
       nativeSelectStyle.paddingLeft = '0';
-      nativeSelectStyle.backgroundColor = 'transparent';
     }
-
-    // Error/warning for native
-    if (hasError) {
-      nativeSelectStyle.borderColor = 'var(--ds-color-error)';
-      nativeSelectStyle.backgroundColor = 'color-mix(in srgb, var(--ds-color-error) 4%, transparent)';
-    } else if (hasWarning) {
-      nativeSelectStyle.borderColor = 'var(--ds-color-warning)';
-      nativeSelectStyle.backgroundColor = 'color-mix(in srgb, var(--ds-color-warning) 4%, transparent)';
-    }
-
-    // Focus style for native select via CSS class
-    const nativeFocusId = `ds-sel-${reactId.replace(/:/g, '')}`;
-    const nativeFocusCSS = `
-      .${nativeFocusId}:focus {
-        border-color: var(--ds-color-primary);
-        outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
-      }
-      .${nativeFocusId}:hover:not(:focus):not(:disabled) {
-        border-color: var(--ds-color-border-hover);
-      }
-    `;
 
     return (
-      <div className={className} data-part="root" style={{ ...style, position: 'relative' }}>
+      <div className={`ds-select-shell ds-select-shell--modern ${className || ''}`} data-part="root" style={{ ...style, position: 'relative' }}>
         {responsiveCSS && responsiveCSS.css && (
           <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
         )}
-        <style dangerouslySetInnerHTML={{ __html: nativeFocusCSS }} />
         <select
           ref={nativeSelectRef}
           {...(responsiveCSS ? responsiveCSS.attrs : {})}
-          className={nativeFocusId}
           data-part="trigger"
+          data-variant={variant}
+          data-status={hasError ? 'error' : hasWarning ? 'warning' : undefined}
           data-disabled={disabled || undefined}
           style={nativeSelectStyle}
           value={internalValue[0] ?? ''}
@@ -929,11 +779,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               position: 'absolute',
               right: '32px',
               top: '50%',
-              transform: 'translateY(-50%)',
               display: 'inline-flex',
             }}
           >
-            <span style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+            <span data-part="loading-spinner" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
           </span>
         )}
       </div>
@@ -947,10 +796,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const triggerStyle = buildTriggerStyle(
     size as keyof typeof SIZES,
     variant,
-    isOpen,
-    isHovered,
-    hasError,
-    hasWarning,
     disabled,
   );
 
@@ -988,16 +833,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     alignItems: 'center',
     gap: '8px',
     padding: '10px 12px',
-    borderRadius: 8,
     cursor: 'pointer',
     fontSize: '14px',
     lineHeight: '20px',
-    color: 'var(--ds-color-text-primary)',
     transition:
       'background-color var(--ds-motion-fast) var(--ds-motion-ease-out), border-color var(--ds-motion-fast) var(--ds-motion-ease-out), box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)',
     userSelect: 'none',
-    border: '1px solid transparent',
-    background: 'transparent',
     width: '100%',
     textAlign: 'left',
     fontFamily: 'inherit',
@@ -1011,7 +852,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     fontWeight: 500,
     letterSpacing: '0.05em',
     textTransform: 'uppercase',
-    color: 'var(--ds-color-text-muted)',
     padding: '8px 12px 4px 12px',
     userSelect: 'none',
   };
@@ -1023,9 +863,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         <div
           key={`gh-${idx}`}
           data-part="group-label"
+          data-divider={idx > 0 ? 'true' : undefined}
           style={{
             ...groupHeaderStyle,
-            ...(idx > 0 ? { marginTop: '4px', paddingTop: '8px', borderTop: '1px solid var(--ds-color-border)' } : {}),
+            ...(idx > 0 ? { marginTop: '4px', paddingTop: '8px' } : {}),
           }}
         >
           {item.groupLabel}
@@ -1045,20 +886,8 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         data-disabled={option.disabled || undefined}
         style={{
           ...optionBaseStyle,
-          ...(idx > 0 && item.type === 'option'
-            ? { boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-border-subtle) 68%, transparent)' }
-            : {}),
           ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
-          ...(isFocusedItem && !isSelected ? {
-            background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
-            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
-          } : {}),
-          ...(isSelected ? {
-            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 14%, transparent)',
-            background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
-            fontWeight: 500,
-            boxShadow: 'inset 2px 0 0 var(--ds-color-primary)',
-          } : {}),
+          ...(isSelected ? { fontWeight: 500 } : {}),
         }}
         onClick={(e) => {
           e.preventDefault();
@@ -1069,17 +898,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         onMouseEnter={() => setFocusedIndex(idx)}
       >
         {multiple && (
-          <span data-part="option-icon" style={{
+          <span data-part="option-checkbox" style={{
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
             width: '14px',
             height: '14px',
-            borderRadius: '4px',
-            border: isSelected
-              ? '1px solid var(--ds-color-primary)'
-              : '1px solid var(--ds-color-border)',
-            backgroundColor: isSelected ? 'var(--ds-color-primary)' : 'transparent',
             flexShrink: 0,
             transition: 'all var(--ds-motion-fast)',
           }}>
@@ -1109,7 +933,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
-                color: 'var(--ds-color-text-muted)',
                 fontSize: 11,
                 lineHeight: '14px',
                 fontWeight: 450,
@@ -1120,7 +943,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           )}
         </span>
         {!multiple && isSelected && (
-          <span data-part="option-icon" style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+          <span data-part="option-check" style={{ display: 'inline-flex', flexShrink: 0 }}>
             <CheckIcon />
           </span>
         )}
@@ -1134,17 +957,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     alignItems: 'center',
     gap: '8px',
     padding: '8px 12px',
-    borderBottom: '1px solid var(--ds-color-border)',
   };
 
   const searchInputStyle: React.CSSProperties = {
     flex: 1,
-    border: 'none',
-    outline: 'none',
-    backgroundColor: 'transparent',
     fontSize: '14px',
     lineHeight: '20px',
-    color: 'var(--ds-color-text-primary)',
     fontFamily: 'inherit',
     padding: 0,
     minWidth: 0,
@@ -1160,17 +978,18 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   `;
 
   return (
-    <div ref={containerRef} className={className} data-part="root" data-open={isOpen || undefined} data-disabled={disabled || undefined} style={{ ...style, position: 'relative', width: '100%' }} onKeyDown={handleKeyDown}>
+    <div ref={containerRef} className={`ds-select-shell ds-select-shell--modern ${className || ''}`} data-part="root" data-open={isOpen || undefined} data-disabled={disabled || undefined} style={{ ...style, position: 'relative', width: '100%' }} onKeyDown={handleKeyDown}>
       {responsiveCSS && responsiveCSS.css && (
         <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
       )}
-      <style dangerouslySetInnerHTML={{ __html: KEYFRAME_CSS + searchPlaceholderCSS }} />
+      <style dangerouslySetInnerHTML={{ __html: searchPlaceholderCSS }} />
 
       {/* Trigger */}
       <div
         {...triggerHtmlProps}
         className="rottay-select__trigger"
         data-part="trigger"
+        data-variant={variant}
         data-open={isOpen || undefined}
         data-disabled={disabled || undefined}
         data-status={hasError ? 'error' : hasWarning ? 'warning' : undefined}
@@ -1183,7 +1002,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             }
           }
         }}
-        {...interactionHandlers}
         tabIndex={0}
         role="combobox"
         aria-expanded={isOpen}
@@ -1202,10 +1020,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               style={{
                 flex: 1,
                 minWidth: 0,
-                border: 'none',
-                outline: 'none',
-                backgroundColor: 'transparent',
-                color: 'inherit',
                 fontSize: 'inherit',
                 lineHeight: 'inherit',
                 fontFamily: 'inherit',
@@ -1217,7 +1031,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               onClick={(e) => e.stopPropagation()}
             />
           ) : displayValue || (
-            <span data-part="placeholder" style={{ color: 'var(--ds-color-text-muted)' }}>{displayPlaceholder}</span>
+            <span data-part="placeholder">{displayPlaceholder}</span>
           )}
         </div>
 
@@ -1225,7 +1039,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           {isClearable && internalValue.length > 0 && !disabled && (
             <ClearButton onClick={handleClear} />
           )}
-          {loading && <span className="rottay-select__loading-indicator" data-part="loading" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />}
+          {loading && <span className="rottay-select__loading-indicator" data-part="loading-spinner" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />}
           <ChevronIcon isOpen={isOpen} />
         </div>
       </div>
@@ -1243,7 +1057,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       {isOpen && typeof document !== 'undefined' && createPortal(
         <div
           ref={dropdownRef}
-          className="rottay-select__dropdown"
+          className="ds-select-shell__dropdown"
           data-part="dropdown"
           data-rottay-portal="true"
           role="listbox"
@@ -1255,7 +1069,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             right: 'auto',
             width: dropdownPosition.width || undefined,
             zIndex: 2400,
-            animation: 'rottay-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
+            animation: 'ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
           }}
         >
           {/* Search input inside dropdown */}
@@ -1296,7 +1110,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               <div style={{ height: `${totalHeight}px`, position: 'relative' }}>
                 <div style={{ position: 'absolute', top: `${offsetY}px`, left: 0, right: 0 }}>
                   {visibleItems.length === 0 ? (
-                    <div data-part="empty" data-virtual="true" style={{ padding: '12px 16px', color: 'var(--ds-color-text-muted)', fontSize: '14px' }}>
+                    <div data-part="empty" data-virtual="true" style={{ padding: '12px 16px', fontSize: '14px' }}>
                       {noOptionsText}
                     </div>
                   ) : (
@@ -1308,12 +1122,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             key={`gh-${idx}`}
                             data-part="group-label"
                             data-virtual="true"
+                            data-divider={realIdx > 0 ? 'true' : undefined}
                             style={{
                               ...groupHeaderStyle,
                               height: `${itemHeight}px`,
                               display: 'flex',
                               alignItems: 'center',
-                              ...(realIdx > 0 ? { borderTop: '1px solid var(--ds-color-border)' } : {}),
                             }}
                           >
                             {item.groupLabel}
@@ -1338,16 +1152,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             height: `${itemHeight}px`,
                             boxSizing: 'border-box',
                             ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
-                            ...(isFocusedItem && !isSelected ? {
-                              border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-                              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-color-bg-primary) 20%, var(--ds-surface-card)))',
-                              transform: 'translateY(-1px)',
-                            } : {}),
-                            ...(isSelected ? {
-                              border: '1px solid color-mix(in srgb, var(--ds-color-primary) 18%, transparent)',
-                              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))',
-                              fontWeight: 500,
-                            } : {}),
+                            ...(isSelected ? { fontWeight: 500 } : {}),
                           }}
                           onClick={(e) => {
                             e.preventDefault();
@@ -1358,17 +1163,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                           onMouseEnter={() => setFocusedIndex(realIdx)}
                         >
                           {multiple && (
-                            <span data-part="option-icon" style={{
+                            <span data-part="option-checkbox" style={{
                               display: 'inline-flex',
                               alignItems: 'center',
                               justifyContent: 'center',
                               width: '16px',
                               height: '16px',
-                              borderRadius: '4px',
-                              border: isSelected
-                                ? '1px solid var(--ds-color-primary)'
-                                : '1px solid var(--ds-color-border)',
-                              backgroundColor: isSelected ? 'var(--ds-color-primary)' : 'transparent',
                               flexShrink: 0,
                               transition: 'all var(--ds-motion-fast)',
                             }}>
@@ -1398,7 +1198,6 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
                                   whiteSpace: 'nowrap',
-                                  color: 'var(--ds-color-text-muted)',
                                   fontSize: 11,
                                   lineHeight: '14px',
                                   fontWeight: 450,
@@ -1409,7 +1208,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                             )}
                           </span>
                           {!multiple && isSelected && (
-                            <span data-part="option-icon" style={{ display: 'inline-flex', color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+                            <span data-part="option-check" style={{ display: 'inline-flex', flexShrink: 0 }}>
                               <CheckIcon />
                             </span>
                           )}
@@ -1421,7 +1220,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               </div>
             ) : (
               renderableItems.length === 0 ? (
-                <div data-part="empty" style={{ padding: '12px 16px', color: 'var(--ds-color-text-muted)', fontSize: '14px' }}>
+                <div data-part="empty" style={{ padding: '12px 16px', fontSize: '14px' }}>
                   {noOptionsText}
                 </div>
               ) : (

@@ -80,7 +80,6 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [internalOpen, setInternalOpen] = useState(false);
     const [focusedIndex, setFocusedIndex] = useState(-1);
-    const [isFocused, setIsFocused] = useState(false);
 
     const isControlled = controlledValue !== undefined;
     const value = isControlled ? controlledValue : internalValue;
@@ -196,15 +195,6 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       className,
     ].filter(Boolean).join(' ');
 
-    // Border color priority: validation status (error/warning) overrides
-    // the focus highlight, which in turn overrides the default border.
-    const getBorderColor = () => {
-      if (status === 'error') return 'var(--ds-autocomplete-error-border)';
-      if (status === 'warning') return 'var(--ds-autocomplete-warning-border)';
-      if (isFocused) return 'var(--ds-autocomplete-border-focus)';
-      return 'var(--ds-autocomplete-border)';
-    };
-
     const wrapperStyle: React.CSSProperties = {
       position: 'relative',
       fontFamily: 'var(--ds-font-family-base)',
@@ -216,14 +206,9 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       height: sizeConfig.height,
       padding: '0 12px',
       paddingRight: allowClear && value ? '32px' : '12px',
-      border: `1px solid ${getBorderColor()}`,
-      borderRadius: 'var(--ds-autocomplete-radius)',
       fontSize: 'var(--ds-font-size-sm)',
-      outline: 'none',
       opacity: disabled ? 0.5 : 1,
       cursor: disabled ? 'not-allowed' : 'text',
-      backgroundColor: 'var(--ds-autocomplete-bg)',
-      color: 'var(--ds-color-neutral-900)',
       transition: 'var(--ds-transition-fast)',
     };
 
@@ -231,11 +216,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       position: 'absolute',
       right: '8px',
       top: '50%',
-      transform: 'translateY(-50%)',
-      background: 'none',
-      border: 'none',
       cursor: 'pointer',
-      color: 'var(--ds-autocomplete-clear-color)',
       fontSize: '14px',
       padding: '0 4px',
     };
@@ -248,9 +229,6 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       left: 0,
       right: 0,
       marginTop: '4px',
-      backgroundColor: 'var(--ds-autocomplete-dropdown-bg)',
-      borderRadius: 'var(--ds-autocomplete-dropdown-radius)',
-      boxShadow: 'var(--ds-autocomplete-dropdown-shadow)',
       maxHeight: '240px',
       overflowY: 'auto',
       zIndex: 1050,
@@ -259,12 +237,12 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
       margin: 0,
     };
 
-    // Per-option style factory. Highlight follows `focusedIndex` which is
-    // updated by both keyboard and mouse, keeping them in sync.
-    const optionStyle = (index: number, isDisabled?: boolean): React.CSSProperties => ({
+    // Per-option style factory. The highlight follows `focusedIndex` (updated by
+    // both keyboard and the retained `onMouseEnter`) via the `data-active`
+    // attribute the skin reads; only non-paint sizing stays inline here.
+    const optionStyle = (isDisabled?: boolean): React.CSSProperties => ({
       padding: '8px 12px',
       cursor: isDisabled ? 'not-allowed' : 'pointer',
-      backgroundColor: focusedIndex === index ? 'var(--ds-autocomplete-option-bg-hover)' : 'transparent',
       opacity: isDisabled ? 0.5 : 1,
       fontSize: 'var(--ds-font-size-sm)',
       transition: 'background-color 0.15s',
@@ -272,7 +250,6 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
 
     const emptyStyle: React.CSSProperties = {
       padding: '8px 12px',
-      color: 'var(--ds-autocomplete-empty-color)',
       textAlign: 'center',
       fontSize: 'var(--ds-font-size-sm)',
     };
@@ -298,8 +275,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             type="text"
             value={value}
             onChange={(e) => handleChange(e.target.value)}
-            onFocus={() => { setIsFocused(true); handleOpenChange(true); }}
-            onBlur={() => setIsFocused(false)}
+            onFocus={() => handleOpenChange(true)}
             onKeyDown={handleKeyDown}
             placeholder={placeholder}
             disabled={disabled}
@@ -335,7 +311,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                   aria-selected={focusedIndex === index}
                   onClick={() => !option.disabled && handleSelect(option)}
                   onMouseEnter={() => setFocusedIndex(index)}
-                  style={optionStyle(index, option.disabled)}
+                  style={optionStyle(option.disabled)}
                   data-part="option"
                   data-active={focusedIndex === index || undefined}
                   data-disabled={option.disabled || undefined}

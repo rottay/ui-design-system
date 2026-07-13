@@ -1,0 +1,136 @@
+/**
+ * Modern Cascader skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the outer `<div>`, which now carries the pair
+ * `ds-cascader ds-cascader--modern` (stamped by this migration -- the
+ * pre-step had left the root component-scope-class-free, like TreeSelect's
+ * root) alongside its pre-existing `data-part='root'`. **NO PORTAL**: the
+ * trigger, dropdown, search input, columns, and every option row are IN-TREE
+ * descendants of the root with their own `data-part` (grep-verified -- this
+ * file has no `createPortal` import, unlike the rustic sibling below).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
+ * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
+ * already reach (0,4,0) with a single descendant hop, so nothing here needs
+ * the repeated-`[data-part]` trick, including selectors that add a further
+ * `:not()`/state attribute (they only exceed the floor further).
+ *
+ * Every value below is transcribed verbatim from `engines/modern.tsx`'s
+ * inline `style={{...}}` objects -- this file has zero imperative `.style.`
+ * writes (grep-confirmed), so there is no hover-handler deletion to record.
+ *
+ * RE-STAMPED DATA-PART: the cascading menu columns (`data-part='menu-column'`)
+ * conditionally painted a `borderRight` only when `colIndex < activeColumns.
+ * length - 1` ("not the last column") -- a runtime boolean with no existing
+ * DOM hook. A new `data-last` boolean attribute (`colIndex === activeColumns.
+ * length - 1 || undefined`, mirroring this file's existing `data-open`/
+ * `data-selected` idiom) was added to the `<ul data-part='menu-column'>` so
+ * CSS can key off it; `menu-column` itself is unchanged (it is one of the
+ * contract-test-pinned parts).
+ *
+ * KEYFRAMES: the conditional `<style dangerouslySetInnerHTML>` (mounted only
+ * while `isOpen`) defined two keyframes consumed by two different elements --
+ * `rottay-select-slide-in` (the dropdown panel's entrance) and
+ * `rottay-cascader-panel-in` (each non-first column's entrance, `colIndex >
+ * 0`). Both are moved here renamed `ds-cascader-slide-in` /
+ * `ds-cascader-panel-in`; the `<style>` tag is deleted and both inline
+ * `animation:` references (non-paint keys, left inline) are updated to match.
+ * The loading spinner's bare `animation: 'spin ...'` has no local `@keyframes`
+ * in the source and resolves against the global foundation `spin` keyframe --
+ * left inline, untouched.
+ *
+ * WON'T-TRANSCRIBE / NOT INVENTED: the option row's dead `active`/`disabled`
+ * className tokens (no in-file stylesheet target) and the search-mode result
+ * row (zero paint in source) are preserved exactly as-is -- no CSS invented
+ * for either.
+ */
+
+@keyframes ds-cascader-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes ds-cascader-panel-in {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ---- trigger ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='trigger'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* ---- dropdown panel (in-tree) ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+  border-color: var(--ds-color-border);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='search-input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- menu column (not-last gets the divider) ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='menu-column']:not([data-last='true']) {
+  border-right: 1px solid var(--ds-color-border);
+}
+
+/* ---- option row ---- */
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+  background: var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
+  border-left: 2px solid var(--ds-color-primary);
+}
+
+.ds-cascader.ds-cascader--modern[data-part='root'] [data-part='loading'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}

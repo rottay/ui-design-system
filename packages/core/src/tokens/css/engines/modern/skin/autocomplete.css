@@ -1,0 +1,46 @@
+/**
+ * Modern AutoComplete skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the wrapper `<div>`, which carries the pair
+ * `ds-autocomplete ds-autocomplete--modern` + `data-part='root'`; every painted
+ * element is an IN-TREE descendant with a `data-part` (AutoComplete never
+ * portals in either engine). The `input` border reaches (0,4,0) via the two
+ * root classes (0,2,0) + `[data-part='root']` + the descendant `[data-part]`.
+ *
+ * The modern engine's suggestion `option` carries no inline paint (its
+ * hover/active highlight rides the external `active`/`disabled` DaisyUI classes,
+ * unchanged by this migration), so it has no rule here.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: 50%;
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border-subtle);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.ds-autocomplete.ds-autocomplete--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}

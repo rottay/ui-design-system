@@ -1,0 +1,58 @@
+/**
+ * Rustic Mentions skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the wrapper `<div>`, carrying the BEM pair
+ * `.rottay-mentions.rottay-mentions--rustic` + `data-part='root'` (plus
+ * `data-status`/`data-open`/`data-disabled` modifiers); the textarea and popup
+ * are IN-TREE descendants with a `data-part` (Mentions never portals).
+ *
+ * BORDER reproduces `getBorderColor()`'s priority chain error > warning >
+ * focus > default. The focus rule carries `:not([data-status='error'])
+ * :not([data-status='warning'])` so it never coexists with a status border.
+ * The focus flag came from the shared `useInteractionState()` hook's `focused`
+ * (any focus, mouse or keyboard); native `:focus` matches it exactly, so the
+ * hook and its handler spread are removed.
+ *
+ * The textarea sets NO `color` channel -- transcribed byte-exact from the source
+ * (the text color inherits the browser default there); filed as a proposal.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via the two root classes +
+ * `[data-part='root']` + `[data-part='textarea']`. Non-border paint wins
+ * unlayered at (0,4,0).
+ */
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='textarea'] {
+  border: 1px solid var(--ds-mentions-border);
+  border-radius: var(--ds-mentions-radius);
+  background-color: var(--ds-mentions-bg);
+  outline: none;
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root']:not([data-status='error']):not([data-status='warning']) [data-part='textarea']:focus {
+  border-color: var(--ds-mentions-border-focus);
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root'][data-status='error'] [data-part='textarea'] {
+  border-color: var(--ds-mentions-border-error);
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root'][data-status='warning'] [data-part='textarea'] {
+  border-color: var(--ds-mentions-border-warning);
+}
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='dropdown'] {
+  background-color: var(--ds-mentions-dropdown-bg);
+  border-radius: var(--ds-mentions-dropdown-radius);
+  box-shadow: var(--ds-mentions-dropdown-shadow);
+}
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='option'] {
+  background-color: transparent;
+}
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='option'][data-active='true'] {
+  background-color: var(--ds-mentions-option-bg-hover);
+}
+
+.rottay-mentions.rottay-mentions--rustic[data-part='root'] [data-part='empty'] {
+  color: var(--ds-mentions-empty-color);
+}

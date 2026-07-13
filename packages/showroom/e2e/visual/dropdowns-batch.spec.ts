@@ -123,7 +123,7 @@ for (const engine of ENGINES) {
     await clickTrigger(container, 'probe-dropdowns-select', 'trigger', 2);
 
     const popup = engine === 'modern'
-      ? page.locator('.rottay-select__dropdown[data-part="dropdown"]')
+      ? page.locator('.ds-select-shell__dropdown[data-part="dropdown"]')
       : container.locator('[data-testid="probe-dropdowns-select"] [data-part="dropdown"]');
     await popup.waitFor({ timeout: 10_000 });
     await page.waitForTimeout(300);
@@ -206,33 +206,15 @@ for (const engine of ENGINES) {
 // interaction-paint sites, ~6 shots.
 // ---------------------------------------------------------------------------
 
-test('rottay (dark) / dropdowns / rustic: TreeSelect search-input focused (hardcoded ring)', async ({ page }) => {
-  test.setTimeout(60_000);
-
-  const container = await openProbe(page, 'rottay', 'rustic');
-  await clickTrigger(container, 'probe-dropdowns-treeselect', 'trigger', 0);
-
-  const searchInput = page.locator('.rottay-treeselect__dropdown [data-part="search-input"]').first();
-  await searchInput.waitFor({ timeout: 10_000 });
-  await searchInput.focus();
-  await page.waitForTimeout(300);
-
-  await expect(searchInput).toHaveScreenshot('rottay-dropdowns-treeselect-rustic-search-focused.png');
-});
-
-test('rottay (dark) / dropdowns / rustic: Cascader search-input focused (hardcoded ring)', async ({ page }) => {
-  test.setTimeout(60_000);
-
-  const container = await openProbe(page, 'rottay', 'rustic');
-  await clickTrigger(container, 'probe-dropdowns-cascader', 'trigger', 0);
-
-  const searchInput = page.locator('.rottay-cascader__dropdown [data-part="search-input"]').first();
-  await searchInput.waitFor({ timeout: 10_000 });
-  await searchInput.focus();
-  await page.waitForTimeout(300);
-
-  await expect(searchInput).toHaveScreenshot('rottay-dropdowns-cascader-rustic-search-focused.png');
-});
+// TreeSelect/Cascader search-input focus pins DO NOT EXIST here: both
+// components gate their search input behind `showSearch` (default false) and
+// the torture instances render without it, so the element never mounts —
+// the two pins written for it never recorded a baseline. The hardcoded
+// #1677ff focus ring those pins meant to guard is pinned structurally by
+// DropdownsBatch.real-engines.test.tsx instead; photographing it needs
+// showSearch torture instances (a follow-up coverage step, filed in the
+// batch proposal — adding them changes the grid and would re-baseline the
+// rest shots, so it must not ride a migration gate).
 
 for (const engine of ENGINES) {
   test(`rottay (dark) / dropdowns / ${engine}: Select option hovered`, async ({ page }) => {
@@ -242,7 +224,7 @@ for (const engine of ENGINES) {
     await clickTrigger(container, 'probe-dropdowns-select', 'trigger', 2);
 
     const option = engine === 'modern'
-      ? page.locator('.rottay-select__dropdown [data-part="option"]').first()
+      ? page.locator('.ds-select-shell__dropdown [data-part="option"]').first()
       : container.locator('[data-testid="probe-dropdowns-select"] [data-part="option"]').first();
     await option.waitFor({ timeout: 10_000 });
     await option.hover();

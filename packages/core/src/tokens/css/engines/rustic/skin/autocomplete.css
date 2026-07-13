@@ -1,0 +1,73 @@
+/**
+ * Rustic AutoComplete skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the wrapper `<div>`, carrying the BEM pair
+ * `.rottay-autocomplete.rottay-autocomplete--rustic` + `data-part='root'`
+ * (plus `data-status`/`data-open`/`data-disabled` state modifiers); every
+ * painted element is an IN-TREE descendant with a `data-part` (AutoComplete
+ * never portals in either engine).
+ *
+ * BORDER reproduces `getBorderColor()`'s priority chain error > warning >
+ * focus > default. The focus rule carries `:not([data-status='error'])
+ * :not([data-status='warning'])` so it never coexists with a status border --
+ * the JS ternary checks status FIRST, so a focused error/warning field keeps
+ * its status color. `isFocused` was set unconditionally in `onFocus`/`onBlur`,
+ * so native `:focus` matches it exactly; the imperative state is removed.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * every border-color rule reaches (0,4,0) via the two root classes +
+ * `[data-part='root']` + the descendant `[data-part='input']` (status rules go
+ * higher via the extra status attribute). Non-border paint (background, color,
+ * outline, box-shadow, border-radius, transform) wins unlayered at (0,4,0).
+ *
+ * The option highlight follows `focusedIndex` (set by both keyboard nav and the
+ * retained `onMouseEnter`), mirrored onto `data-active`; the CSS reads that
+ * attribute rather than an inline background.
+ *
+ * The input `color` is transcribed byte-exact from the source's
+ * `var(--ds-color-neutral-900)` -- a non-themeable literal where every sibling
+ * property reads a `--ds-autocomplete-*` token; filed as a proposal.
+ */
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='input'] {
+  border: 1px solid var(--ds-autocomplete-border);
+  border-radius: var(--ds-autocomplete-radius);
+  outline: none;
+  background-color: var(--ds-autocomplete-bg);
+  color: var(--ds-color-neutral-900);
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root']:not([data-status='error']):not([data-status='warning']) [data-part='input']:focus {
+  border-color: var(--ds-autocomplete-border-focus);
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'][data-status='error'] [data-part='input'] {
+  border-color: var(--ds-autocomplete-error-border);
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'][data-status='warning'] [data-part='input'] {
+  border-color: var(--ds-autocomplete-warning-border);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='clear-button'] {
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--ds-autocomplete-clear-color);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='dropdown'] {
+  background-color: var(--ds-autocomplete-dropdown-bg);
+  border-radius: var(--ds-autocomplete-dropdown-radius);
+  box-shadow: var(--ds-autocomplete-dropdown-shadow);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='option'] {
+  background-color: transparent;
+}
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='option'][data-active='true'] {
+  background-color: var(--ds-autocomplete-option-bg-hover);
+}
+
+.rottay-autocomplete.rottay-autocomplete--rustic[data-part='root'] [data-part='empty'] {
+  color: var(--ds-autocomplete-empty-color);
+}

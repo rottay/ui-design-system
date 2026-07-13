@@ -139,7 +139,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const [activeColumns, setActiveColumns] = useState<CascaderOption[][]>([options]);
     const [selectedPath, setSelectedPath] = useState<CascaderOption[]>([]);
     const [position, setPosition] = useState({ top: 0, left: 0 });
-    const [isFocused, setIsFocused] = useState(false);
     const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
     const [searchValue, setSearchValue] = useState('');
 
@@ -157,7 +156,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         setInternalOpen(newOpen);
       }
       onDropdownVisibleChange?.(newOpen);
-      setIsFocused(newOpen);
       if (newOpen && showSearch) {
         setTimeout(() => searchInputRef.current?.focus(), 0);
       }
@@ -354,14 +352,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
     const sizeConfig = SIZE_CONFIG[size ?? 'default'] || SIZE_CONFIG.default;
 
-    // Border color changes based on validation status and focus state
-    const getBorderColor = () => {
-      if (status === 'error') return 'var(--ds-cascader-border-error)';
-      if (status === 'warning') return 'var(--ds-cascader-border-warning)';
-      if (isFocused) return 'var(--ds-cascader-border-focus)';
-      return 'var(--ds-cascader-border)';
-    };
-
     // Build BEM-style class names for external CSS targeting if needed
     const containerClasses = [
       'rottay-cascader',
@@ -378,9 +368,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       alignItems: 'center',
       height: sizeConfig.height,
       padding: '0 12px',
-      border: `1px solid ${getBorderColor()}`,
-      borderRadius: 'var(--ds-cascader-radius)',
-      backgroundColor: 'var(--ds-cascader-bg)',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
       fontFamily: 'var(--ds-font-family-base)',
@@ -393,15 +380,11 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
-      color: selectedPath.length > 0 ? 'inherit' : 'var(--ds-cascader-placeholder-color)',
       fontSize: 'var(--ds-font-size-sm)',
     };
 
     const clearButtonStyle: React.CSSProperties = {
-      background: 'none',
-      border: 'none',
       cursor: 'pointer',
-      color: 'var(--ds-cascader-clear-color)',
       padding: '0 4px',
       fontSize: '14px',
     };
@@ -409,9 +392,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
     const arrowStyle: React.CSSProperties = {
       marginLeft: '8px',
       transition: 'transform 0.2s',
-      transform: isOpen ? 'rotate(180deg)' : 'none',
       fontSize: '10px',
-      color: 'var(--ds-cascader-arrow-color)',
     };
 
     const dropdownStyle: React.CSSProperties = {
@@ -420,59 +401,47 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       left: position.left,
       display: 'flex',
       flexDirection: 'column',
-      backgroundColor: 'var(--ds-cascader-dropdown-bg)',
-      borderRadius: 'var(--ds-cascader-dropdown-radius)',
-      boxShadow: 'var(--ds-card-shadow, var(--ds-cascader-dropdown-shadow))',
       zIndex: 1050,
-      animation: 'rottay-cascader-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
+      animation: 'ds-cascader-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
       transformOrigin: 'top left',
     };
 
     const searchContainerStyle: React.CSSProperties = {
       padding: '8px',
-      borderBottom: '1px solid var(--ds-cascader-menu-border)',
     };
 
     const searchInputStyle: React.CSSProperties = {
       width: '100%',
       padding: '6px 10px',
-      border: '1px solid var(--ds-cascader-border)',
-      borderRadius: 'var(--ds-cascader-radius)',
       fontSize: 'var(--ds-font-size-sm)',
-      outline: 'none',
-      backgroundColor: 'var(--ds-cascader-bg)',
       transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
     };
 
-    const menuStyle = (colIndex: number, totalCols: number): React.CSSProperties => ({
+    const menuStyle = (): React.CSSProperties => ({
       listStyle: 'none',
       margin: 0,
       padding: '4px 0',
       minWidth: 'var(--ds-cascader-menu-width)',
       maxHeight: 'var(--ds-cascader-menu-height)',
       overflowY: 'auto',
-      borderRight: colIndex < totalCols - 1 ? `1px solid var(--ds-cascader-menu-border)` : 'none',
     });
 
-    // Item style highlights the selected path with a left border accent
-    // and reduces opacity for disabled options
+    // Item style reduces opacity for disabled options and bolds the
+    // selected path; background/border-left now live in the skin CSS.
     const getItemStyle = (isSelected: boolean, isDisabled?: boolean): React.CSSProperties => ({
       padding: 'var(--ds-cascader-item-padding)',
       cursor: isDisabled ? 'not-allowed' : 'pointer',
-      backgroundColor: isSelected ? 'var(--ds-cascader-item-bg-selected)' : 'transparent',
       opacity: isDisabled ? 0.5 : 1,
       display: 'flex',
       justifyContent: 'space-between',
       alignItems: 'center',
       fontSize: 'var(--ds-font-size-sm)',
       transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
-      borderLeft: isSelected ? '3px solid var(--ds-color-primary, #1677ff)' : '3px solid transparent',
       fontWeight: isSelected ? 600 : 'normal',
     });
 
     const emptyStyle: React.CSSProperties = {
       padding: 'var(--ds-cascader-item-padding)',
-      color: 'var(--ds-cascader-empty-color)',
       textAlign: 'center',
       fontSize: 'var(--ds-font-size-sm)',
     };
@@ -481,10 +450,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
       display: 'inline-block',
       width: '12px',
       height: '12px',
-      border: '2px solid var(--ds-cascader-arrow-color)',
-      borderTopColor: 'transparent',
-      borderRadius: '50%',
-      animation: 'rottay-cascader-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+      animation: 'ds-cascader-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
     };
 
     const isSearchMode = showSearch && searchValue.length > 0;
@@ -512,14 +478,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                 onClick={(e) => e.stopPropagation()}
                 style={searchInputStyle}
                 data-part="search-input"
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--ds-color-primary, #1677ff)';
-                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--ds-cascader-border)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
               />
             </div>
           )}
@@ -545,14 +503,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                     className="rottay-cascader__item"
                     onClick={() => handleSearchSelect(fo)}
                     style={getItemStyle(false)}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = 'var(--ds-cascader-item-bg-hover)';
-                      e.currentTarget.style.borderLeft = '3px solid var(--ds-color-primary, #1677ff)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.borderLeft = '3px solid transparent';
-                    }}
                     data-part="option"
                   >
                     <span>{fo.labels.join(' / ')}</span>
@@ -570,7 +520,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                   key={colIndex}
                   className="rottay-cascader__menu"
                   data-part="menu-column"
-                  style={menuStyle(colIndex, activeColumns.length)}
+                  data-last={colIndex === activeColumns.length - 1 || undefined}
+                  style={menuStyle()}
                 >
                   {column.length > 0 ? (
                     column.map((option) => {
@@ -586,19 +537,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                           key={String(optValue)}
                           className="rottay-cascader__item"
                           onClick={() => handleOptionClick(option, colIndex)}
-                          onMouseEnter={(e) => {
-                            handleOptionHover(option, colIndex);
-                            if (!option.disabled && !isSelected) {
-                              e.currentTarget.style.backgroundColor = 'var(--ds-cascader-item-bg-hover)';
-                              e.currentTarget.style.borderLeft = '3px solid var(--ds-color-primary, #1677ff)';
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isSelected) {
-                              e.currentTarget.style.backgroundColor = 'transparent';
-                              e.currentTarget.style.borderLeft = '3px solid transparent';
-                            }
-                          }}
+                          onMouseEnter={() => handleOptionHover(option, colIndex)}
                           style={getItemStyle(!!isSelected, option.disabled)}
                           data-part="option"
                           data-selected={isSelected || undefined}
@@ -609,7 +548,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                             <span style={spinnerStyle} data-part="loading" />
                           ) : (
                             hasExpandIndicator && (
-                              <span style={{ color: 'var(--ds-cascader-arrow-color)' }} data-part="menu-item-arrow">›</span>
+                              <span data-part="menu-item-arrow">›</span>
                             )
                           )}
                         </li>
@@ -622,18 +561,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
               ))}
             </div>
           )}
-
-          {/* Spinner + dropdown keyframes */}
-          <style>{`
-            @keyframes rottay-cascader-spin {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-            @keyframes rottay-cascader-dropdown-in {
-              from { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
-              to { opacity: 1; transform: scaleY(1) translateY(0); }
-            }
-          `}</style>
         </div>,
         document.body
       )

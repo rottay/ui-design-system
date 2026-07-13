@@ -188,7 +188,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`relative ${className || ''}`}
+        className={`ds-autocomplete ds-autocomplete--modern relative ${className || ''}`}
         style={style}
         data-part="root"
       >
@@ -196,7 +196,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
           <input
             ref={inputRef}
             type="text"
-            style={{ width: '100%', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', boxSizing: 'border-box', ...getSizeStyle() }}
+            style={{ width: '100%', boxSizing: 'border-box', ...getSizeStyle() }}
             value={value}
             onChange={(e) => handleChange(e.target.value)}
             onFocus={() => handleOpenChange(true)}
@@ -213,7 +213,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             <button
               type="button"
               className="absolute right-2 top-1/2 -translate-y-1/2"
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
+              style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12 }}
               onClick={() => handleChange('')}
               data-part="clear-button"
             >
@@ -226,7 +226,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             `menu` + `rounded-box` for consistent theming and `max-h-60` to
             keep the list scrollable when there are many options. */}
         {isOpen && (
-          <ul data-part="dropdown" style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, listStyle: 'none', margin: 0, marginBlockStart: 4, padding: 4, borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-2)' }}>
+          <ul data-part="dropdown" style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 4, listStyle: 'none', margin: 0, marginBlockStart: 4, padding: 4, maxHeight: 240, overflowY: 'auto' }}>
             {filteredOptions.length > 0 ? (
               filteredOptions.map((option, index) => (
                 <li key={option.value}>
@@ -247,7 +247,7 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
                 </li>
               ))
             ) : (
-              <li className="p-2 text-center" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <li className="p-2 text-center" data-part="empty">
                 {notFoundContent}
               </li>
             )}

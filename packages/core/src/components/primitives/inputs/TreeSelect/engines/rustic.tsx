@@ -229,7 +229,7 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
     return (
       <>
         {title.slice(0, idx)}
-        <span style={{ color: 'var(--ds-color-primary)', fontWeight: 600 }} data-part="tree-node-highlight">
+        <span style={{ fontWeight: 600 }} data-part="tree-node-highlight">
           {title.slice(idx, idx + searchValue.length)}
         </span>
         {title.slice(idx + searchValue.length)}
@@ -243,49 +243,37 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
     padding: 'var(--ds-treeselect-node-padding)',
     paddingLeft: `${level * 20 + 8}px`,
     cursor: node.disabled ? 'not-allowed' : 'pointer',
-    backgroundColor: isSelected ? 'var(--ds-treeselect-node-bg-selected)' : 'transparent',
     opacity: node.disabled ? 0.5 : 1,
-    borderRadius: 'var(--ds-treeselect-node-radius)',
     fontSize: 'var(--ds-font-size-sm)',
     transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s',
-    borderLeft: isSelected ? '3px solid var(--ds-color-primary, #1677ff)' : '3px solid transparent',
   };
 
   const expandButtonStyle: React.CSSProperties = {
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
     marginRight: '4px',
     fontSize: '10px',
-    color: 'var(--ds-treeselect-expand-color)',
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
     width: '18px',
     height: '18px',
     transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), color 0.15s',
-    transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
   };
 
   const loadingSpinnerStyle: React.CSSProperties = {
     display: 'inline-block',
     width: '12px',
     height: '12px',
-    border: '2px solid var(--ds-color-border-primary)',
-    borderTopColor: 'var(--ds-color-primary)',
-    borderRadius: '50%',
-    animation: 'rottay-treeselect-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+    animation: 'ds-tree-select-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
   };
 
   const treeLineStyle: React.CSSProperties = treeLine ? {
     margin: 0,
     padding: 0,
-    borderLeft: '1px solid var(--ds-color-border-primary)',
     marginLeft: `${level * 20 + 17}px`,
   } : {
     margin: 0,
     padding: 0,
-    borderLeft: level > 0 ? '1px solid var(--ds-color-border-secondary, rgba(0,0,0,0.06))' : 'none',
     marginLeft: level > 0 ? `${level * 20 + 17}px` : 0,
   };
 
@@ -295,16 +283,6 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
         className="rottay-treeselect__node"
         style={nodeStyle}
         onClick={() => !node.disabled && onSelect(node)}
-        onMouseEnter={(e) => {
-          if (!node.disabled && !isSelected) {
-            e.currentTarget.style.backgroundColor = 'var(--ds-treeselect-node-bg-hover)';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isSelected) {
-            e.currentTarget.style.backgroundColor = 'transparent';
-          }
-        }}
         data-part="option"
         data-selected={isSelected || undefined}
         data-disabled={node.disabled || undefined}
@@ -317,6 +295,7 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
             style={expandButtonStyle}
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             data-part="tree-node-toggle"
+            data-expanded={isExpanded || undefined}
           >
             {isLoading ? (
               <span style={loadingSpinnerStyle} data-part="loading" />
@@ -338,12 +317,12 @@ const TreeNodeItem: React.FC<TreeNodeProps> = ({
             data-part="option-icon"
           />
         )}
-        <span style={{ color: isSelected ? 'var(--ds-treeselect-node-color-selected)' : 'inherit' }} data-part="tree-node-label">
+        <span data-part="tree-node-label">
           {renderTitle()}
         </span>
       </div>
       {hasChildren && isExpanded && (
-        <ul style={treeLineStyle} data-part="tree-list">
+        <ul style={treeLineStyle} data-part="tree-list" data-tree-line={treeLine || undefined} data-nested={level > 0 || undefined}>
           {node.children!.map((child) => (
             <TreeNodeItem
               key={child.key ?? child.value}
@@ -455,7 +434,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     );
     const [internalExpandedKeys, setInternalExpandedKeys] = useState<Set<string | number>>(getInitialExpanded);
     const [internalOpen, setInternalOpen] = useState(false);
-    const [isFocused, setIsFocused] = useState(false);
     const [position, setPosition] = useState({ top: 0, left: 0, width: 0 });
     const [searchValue, setSearchValue] = useState('');
     const [loadingKeys, setLoadingKeys] = useState<Set<string | number>>(new Set());
@@ -483,7 +461,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         setInternalOpen(newOpen);
       }
       onDropdownVisibleChange?.(newOpen);
-      setIsFocused(newOpen);
       if (!newOpen) {
         setSearchValue('');
       }
@@ -637,13 +614,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
 
     const sizeConfig = SIZE_CONFIG[size ?? 'default'] || SIZE_CONFIG.default;
 
-    const getBorderColor = () => {
-      if (status === 'error') return 'var(--ds-treeselect-border-error)';
-      if (status === 'warning') return 'var(--ds-treeselect-border-warning)';
-      if (isFocused) return 'var(--ds-treeselect-border-focus)';
-      return 'var(--ds-treeselect-border)';
-    };
-
     // Build class names
     const containerClasses = [
       'rottay-treeselect',
@@ -660,9 +630,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       alignItems: 'center',
       height: sizeConfig.height,
       padding: '0 12px',
-      border: `1px solid ${getBorderColor()}`,
-      borderRadius: 'var(--ds-treeselect-radius)',
-      backgroundColor: 'var(--ds-treeselect-bg)',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
       fontFamily: 'var(--ds-font-family-base)',
@@ -675,15 +642,11 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
-      color: selectedKeys.size > 0 ? 'inherit' : 'var(--ds-treeselect-placeholder-color)',
       fontSize: 'var(--ds-font-size-sm)',
     };
 
     const clearButtonStyle: React.CSSProperties = {
-      background: 'none',
-      border: 'none',
       cursor: 'pointer',
-      color: 'var(--ds-treeselect-clear-color)',
       padding: '0 4px',
       fontSize: '14px',
     };
@@ -691,9 +654,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
     const arrowStyle: React.CSSProperties = {
       marginLeft: '8px',
       transition: 'transform 0.2s',
-      transform: isOpen ? 'rotate(180deg)' : 'none',
       fontSize: '10px',
-      color: 'var(--ds-treeselect-arrow-color)',
     };
 
     const dropdownStyle: React.CSSProperties = {
@@ -701,13 +662,10 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       top: position.top,
       left: position.left,
       width: position.width,
-      backgroundColor: 'var(--ds-treeselect-dropdown-bg)',
-      borderRadius: 'var(--ds-treeselect-dropdown-radius)',
-      boxShadow: 'var(--ds-card-shadow, var(--ds-treeselect-dropdown-shadow))',
       maxHeight: 'var(--ds-treeselect-dropdown-max-height)',
       overflowY: 'auto',
       zIndex: 1050,
-      animation: 'rottay-treeselect-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
+      animation: 'ds-tree-select-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
       transformOrigin: 'top center',
     };
 
@@ -715,46 +673,23 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
       display: 'block',
       width: '100%',
       padding: '6px 10px',
-      border: '1px solid var(--ds-color-border-primary)',
-      borderRadius: 'var(--ds-radius-sm)',
       fontSize: 'var(--ds-font-size-sm)',
-      backgroundColor: 'var(--ds-input-bg)',
-      color: 'inherit',
-      outline: 'none',
       boxSizing: 'border-box',
       transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
     };
 
     const searchContainerStyle: React.CSSProperties = {
       padding: '8px',
-      borderBottom: '1px solid var(--ds-color-border-secondary)',
       position: 'sticky',
       top: 0,
-      backgroundColor: 'var(--ds-treeselect-dropdown-bg)',
       zIndex: 1,
     };
 
     const emptyStyle: React.CSSProperties = {
       padding: '16px',
       textAlign: 'center',
-      color: 'var(--ds-treeselect-empty-color)',
       fontSize: 'var(--ds-font-size-sm)',
     };
-
-    // Inject keyframe animations into <head> once per page lifecycle. The
-    // style element is id-gated so multiple TreeSelect instances share it.
-    useEffect(() => {
-      const styleId = 'rottay-treeselect-spin-keyframes';
-      if (!document.getElementById(styleId)) {
-        const styleEl = document.createElement('style');
-        styleEl.id = styleId;
-        styleEl.textContent = `
-          @keyframes rottay-treeselect-spin { to { transform: rotate(360deg); } }
-          @keyframes rottay-treeselect-dropdown-in { from { opacity: 0; transform: scaleY(0.95) translateY(-4px); } to { opacity: 1; transform: scaleY(1) translateY(0); } }
-        `;
-        document.head.appendChild(styleEl);
-      }
-    }, []);
 
     // Portal the dropdown to document.body so it escapes parent overflow
     // containers and z-index stacking contexts (e.g., modals, drawers).
@@ -778,14 +713,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                 onClick={(e) => e.stopPropagation()}
                 style={searchInputStyle}
                 data-part="search-input"
-                onFocus={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--ds-color-primary, #1677ff)';
-                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08)';
-                }}
-                onBlur={(e) => {
-                  e.currentTarget.style.borderColor = 'var(--ds-color-border-primary)';
-                  e.currentTarget.style.boxShadow = 'none';
-                }}
               />
             </div>
           )}

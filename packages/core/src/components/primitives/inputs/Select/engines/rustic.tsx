@@ -422,15 +422,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   // Get size values
   const sizeConfig = SIZE_MAP[size];
 
-  // Determine border color based on status
-  const getBorderColor = () => {
-    if (effectiveStatus === 'error') return 'var(--ds-select-error-border)';
-    if (effectiveStatus === 'warning') return 'var(--ds-select-warning-border)';
-    if (effectiveStatus === 'success') return 'var(--ds-select-success-border)';
-    if (isOpen) return 'var(--ds-select-border-focus)';
-    return 'var(--ds-select-border)';
-  };
-
   // All visual properties reference CSS custom properties with fallback values
   // so the component renders correctly even without a loaded theme stylesheet.
   const containerStyle: React.CSSProperties = {
@@ -446,23 +437,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     gap: '0.5rem',
     minHeight: `${sizeConfig.height}px`,
     padding: sizeConfig.padding,
-    backgroundColor: disabled
-      ? 'var(--ds-select-bg-disabled)'
-      : variant === 'filled'
-        ? 'var(--ds-select-filled-bg)'
-        : 'var(--ds-select-bg)',
-    borderTop: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
-    borderRight: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
-    borderLeft: variant === 'flushed' ? 'none' : `1px solid ${getBorderColor()}`,
-    borderBottom: variant === 'flushed' ? `2px solid ${getBorderColor()}` : `1px solid ${getBorderColor()}`,
-    borderRadius: variant === 'flushed' ? 0 : 'var(--ds-select-radius)',
     fontSize: `${sizeConfig.fontSize}px`,
-    color: 'var(--ds-select-color)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
     transition: 'var(--ds-select-transition)',
-    outline: 'none',
-    boxShadow: isOpen ? 'var(--ds-select-shadow-focus)' : 'none',
   };
 
   const dropdownStyle: React.CSSProperties = {
@@ -472,14 +450,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     right: 0,
     marginTop: '0.25rem',
     padding: '0.25rem 0',
-    backgroundColor: 'var(--ds-select-dropdown-bg)',
-    border: `1px solid var(--ds-select-dropdown-border)`,
-    borderRadius: 'var(--ds-select-dropdown-radius)',
-    boxShadow: 'var(--ds-select-dropdown-shadow, var(--ds-card-shadow-hover, var(--ds-shadow-lg)))',
     maxHeight: virtualEnabled ? `${containerHeight}px` : '16rem',
     overflowY: 'auto',
     zIndex: 1050,
-    animation: 'rottay-select-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
+    animation: 'ds-select-dropdown-in var(--ds-personality-animation-entrance-duration, 0.15s) cubic-bezier(0.16, 1, 0.3, 1)',
     transformOrigin: 'top center',
   };
 
@@ -517,15 +491,10 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 alignItems: 'center',
                 gap: '0.25rem',
                 padding: '0.125rem 0.5rem',
-                backgroundColor: 'var(--ds-select-tag-bg)',
-                color: 'var(--ds-select-tag-color)',
-                borderRadius: 'var(--ds-select-tag-radius)',
                 fontSize: '0.875em',
                 transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s',
                 cursor: 'default',
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.05)'; }}
-              onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; }}
             >
               {opt.icon && <span>{opt.icon}</span>}
               {opt.label}
@@ -537,17 +506,12 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   handleSelect(opt.value, opt);
                 }}
                 style={{
-                  border: 'none',
-                  background: 'none',
                   cursor: 'pointer',
                   padding: '0 0.125rem',
                   fontSize: '0.75rem',
                   lineHeight: 1,
-                  color: 'var(--ds-select-clear-color)',
                   transition: 'color 0.15s',
                 }}
-                onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--ds-form-error-color, #ef4444)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.color = 'var(--ds-select-clear-color)'; }}
                 aria-label={`Remove ${opt.label}`}
               >
                 ×
@@ -561,9 +525,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: '0.125rem 0.5rem',
-                backgroundColor: 'var(--ds-select-tag-bg)',
-                color: 'var(--ds-select-tag-color)',
-                borderRadius: 'var(--ds-select-tag-radius)',
                 fontSize: '0.875em',
               }}
             >
@@ -630,27 +591,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           padding: '0.5rem 0.75rem',
           height: virtualEnabled ? `${itemHeight}px` : undefined,
           fontSize: `${sizeConfig.fontSize}px`,
-          backgroundColor: isSelected
-            ? 'var(--ds-select-option-bg-selected)'
-            : isFocused
-              ? 'var(--ds-select-option-bg-hover)'
-              : 'transparent',
-          color: isSelected
-            ? 'var(--ds-select-option-color-selected)'
-            : option.disabled
-              ? 'var(--ds-select-option-color-disabled)'
-              : 'var(--ds-select-color)',
           cursor: option.disabled ? 'not-allowed' : 'pointer',
           opacity: option.disabled ? 0.5 : 1,
           transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s',
-          borderLeft: isFocused && !isSelected
-            ? '3px solid var(--ds-color-primary, #1677ff)'
-            : isSelected
-              ? '3px solid var(--ds-select-check-color, var(--ds-color-primary))'
-              : '3px solid transparent',
-          boxShadow: isFocused && !isSelected
-            ? 'inset 0 0 0 1px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15))'
-            : 'none',
         }}
         onClick={() => handleSelect(option.value, option)}
         onMouseEnter={() => setFocusedIndex(optionIdx)}
@@ -660,33 +603,27 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       >
         {multiple && (
           <span
-            data-part="option-icon"
+            data-part="option-checkbox"
             style={{
               width: '1rem',
               height: '1rem',
-              border: `1px solid var(--ds-select-border)`,
-              borderRadius: '0.1875rem',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              backgroundColor: isSelected ? 'var(--ds-select-check-color)' : 'transparent',
-              color: 'white',
               fontSize: '0.625rem',
               flexShrink: 0,
               transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
-              transform: isSelected ? 'scale(1)' : 'scale(0.9)',
             }}
           >
-            {isSelected && <span style={{ animation: 'rottay-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}>✓</span>}
+            {isSelected && <span style={{ animation: 'ds-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)' }}>✓</span>}
           </span>
         )}
         {option.icon && <span data-part="option-icon" style={{ flexShrink: 0 }}>{option.icon}</span>}
         <span>{option.label}</span>
         {!multiple && isSelected && (
-          <span data-part="option-icon" style={{
+          <span data-part="option-check" style={{
             marginLeft: 'auto',
-            color: 'var(--ds-select-check-color)',
-            animation: 'rottay-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+            animation: 'ds-select-check-in 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             display: 'inline-block',
           }}>
             ✓
@@ -706,8 +643,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         fontWeight: 600,
         textTransform: 'uppercase',
         letterSpacing: '0.05em',
-        color: 'var(--ds-select-color-placeholder)',
-        borderTop: '1px solid var(--ds-select-dropdown-border)',
         height: virtualEnabled ? `${itemHeight}px` : undefined,
         display: 'flex',
         alignItems: 'center',
@@ -775,13 +710,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             onChange={handleSearchInput}
             placeholder={selectedOptions.length === 0 ? displayPlaceholder : ''}
             style={{
-              border: 'none',
-              outline: 'none',
-              backgroundColor: 'transparent',
               flex: 1,
               fontSize: 'inherit',
               minWidth: '3rem',
-              color: 'var(--ds-select-color)',
               caretColor: 'var(--ds-color-primary, #1677ff)',
             }}
             onClick={(e) => e.stopPropagation()}
@@ -789,7 +720,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             aria-controls={`${id || 'select'}-listbox`}
           />
         ) : displayValue || (
-          <span data-part="placeholder" style={{ color: 'var(--ds-select-color-placeholder)' }}>{displayPlaceholder}</span>
+          <span data-part="placeholder">{displayPlaceholder}</span>
         )}
 
         {/* Spacer */}
@@ -809,10 +740,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               justifyContent: 'center',
               width: '1rem',
               height: '1rem',
-              border: 'none',
-              background: 'none',
               cursor: 'pointer',
-              color: 'var(--ds-select-clear-color)',
               fontSize: '0.75rem',
             }}
           >
@@ -827,7 +755,7 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             height="14"
             viewBox="0 0 24 24"
             data-part="loading"
-            style={{ animation: 'spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite' }}
+            style={{ animation: 'ds-select-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite' }}
           >
             <circle
               cx="12"
@@ -853,7 +781,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           style={{
             marginLeft: '0.5rem',
             transition: 'var(--ds-select-transition)',
-            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
         >
           <polyline points="6 9 12 15 18 9" />
@@ -882,7 +809,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                     data-part="empty"
                     style={{
                       padding: '0.5rem 0.75rem',
-                      color: 'var(--ds-select-color-placeholder)',
                       textAlign: 'center',
                     }}
                   >
@@ -907,7 +833,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   data-part="empty"
                   style={{
                     padding: '0.5rem 0.75rem',
-                    color: 'var(--ds-select-color-placeholder)',
                     textAlign: 'center',
                   }}
                 >
@@ -926,22 +851,6 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           )}
         </div>
       )}
-
-      {/* Global keyframe styles */}
-      <style>{`
-        @keyframes spin {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        @keyframes rottay-select-dropdown-in {
-          from { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
-          to { opacity: 1; transform: scaleY(1) translateY(0); }
-        }
-        @keyframes rottay-select-check-in {
-          from { opacity: 0; transform: scale(0); }
-          to { opacity: 1; transform: scale(1); }
-        }
-      `}</style>
     </div>
   );
 });

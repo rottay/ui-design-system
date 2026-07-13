@@ -65,7 +65,9 @@ describe('Select advanced engine coverage', () => {
     expect(select.style.height).toBe('40px');
     expect(select.style.fontSize).toBe('16px');
     expect(select.style.paddingLeft).toBe('0px');
-    expect(select.style.borderColor).toBe('var(--ds-color-warning)');
+    // The warning border color is applied by the modern Select skin keyed on
+    // `data-status`; the native select carries the attribute, not inline paint.
+    expect(select.getAttribute('data-status')).toBe('warning');
     expect(select?.querySelector('option[value=""]')).toHaveTextContent('Choose record');
     expect(container.querySelector('.rottay-select__loading-indicator')).toBeTruthy();
 
@@ -190,7 +192,9 @@ describe('Select advanced engine coverage', () => {
     });
 
     const trigger = screen.getByRole('combobox');
-    expect(trigger).toHaveStyle({ backgroundColor: 'var(--ds-select-filled-bg)' });
+    // The filled background is applied by the rustic Select skin keyed on the
+    // root's `--filled` variant class; the trigger no longer carries inline paint.
+    expect(trigger.closest('.rottay-select--filled')).toBeTruthy();
     fireEvent.click(trigger);
     fireEvent.click(screen.getByText('Delta'));
 

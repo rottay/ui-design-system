@@ -1,0 +1,42 @@
+/**
+ * Modern Mentions skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the wrapper `<div>`, carrying the pair
+ * `ds-mentions ds-mentions--modern` + `data-part='root'`; the textarea and its
+ * suggestion popup are IN-TREE descendants with a `data-part` (Mentions never
+ * portals -- the popup anchors to the textarea box, not the caret).
+ *
+ * The textarea border reproduces `getStatusBorderColor()`'s 3-way chain
+ * error > warning > default, read off the textarea's `data-status`. The
+ * suggestion `option` carries no inline paint (its highlight rides the external
+ * `active`/`disabled` classes, unchanged), so it has no rule here.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-status='error'] {
+  border-color: var(--ds-color-error);
+}
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='textarea'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+}
+
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  border: 1px solid var(--ds-color-border-subtle);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.ds-mentions.ds-mentions--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}

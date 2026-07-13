@@ -213,7 +213,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     return (
       <>
         {title.slice(0, idx)}
-        <span className="font-semibold" data-part="tree-node-highlight" style={{ color: 'var(--ds-color-primary)' }}>{title.slice(idx, idx + searchValue.length)}</span>
+        <span className="font-semibold" data-part="tree-node-highlight">{title.slice(idx, idx + searchValue.length)}</span>
         {title.slice(idx + searchValue.length)}
       </>
     );
@@ -223,7 +223,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
     <li>
       <div
         className={`flex items-center py-1 px-2 rounded cursor-pointer ${isSelected ? 'font-medium' : ''} ${node.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-        style={{ paddingLeft: `${level * 16 + 8}px`, transition: 'all var(--ds-motion-fast)', ...(isSelected ? { background: 'var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))', color: 'var(--ds-color-primary)', borderLeft: '2px solid var(--ds-color-border-selected, var(--ds-color-primary))' } : {}) }}
+        style={{ paddingLeft: `${level * 16 + 8}px`, transition: 'all var(--ds-motion-fast)' }}
         onClick={() => !node.disabled && onSelect(node)}
         data-part="option"
         data-selected={isSelected || undefined}
@@ -233,12 +233,12 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         {!isLeaf ? (
           <button
             type="button"
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)', borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', marginRight: 'var(--ds-spacing-1, 4px)' }}
+            style={{ height: 24, padding: '0 var(--ds-spacing-2, 8px)', fontSize: 'var(--ds-font-size-xs, 12px)', cursor: 'pointer', marginRight: 'var(--ds-spacing-1, 4px)' }}
             onClick={handleExpand}
             data-part="tree-node-toggle"
           >
             {isLoading ? (
-              <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+              <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
             ) : (
               <span style={{ transition: 'transform var(--ds-motion-fast)' }} className={`inline-block ${isExpanded ? 'rotate-90' : ''}`}>&#9654;</span>
             )}
@@ -255,7 +255,6 @@ const TreeNode: React.FC<TreeNodeProps> = ({
             style={{
               width: 16,
               height: 16,
-              accentColor: 'var(--ds-color-primary)',
               cursor: node.disabled || node.disableCheckbox ? 'not-allowed' : 'pointer',
               transition: 'all var(--ds-motion-fast)',
             }}
@@ -269,7 +268,7 @@ const TreeNode: React.FC<TreeNodeProps> = ({
         <span className="flex-1" data-part="tree-node-label">{renderTitle()}</span>
       </div>
       {hasChildren && isExpanded && (
-        <ul data-part="tree-list" className={treeLine ? 'ml-4' : ''} style={treeLine ? { borderLeft: '2px solid var(--ds-color-border-subtle, var(--ds-color-border))' } : undefined}>
+        <ul data-part="tree-list" className={treeLine ? 'ml-4' : ''} data-tree-line={treeLine || undefined}>
           {node.children!.map((child) => (
             <TreeNode
               key={child.key ?? child.value}
@@ -557,18 +556,13 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`relative ${className || ''}`}
+        className={`ds-tree-select ds-tree-select--modern relative ${className || ''}`}
         style={style}
         data-part="root"
       >
         <div
           className={`flex items-center cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           style={{
-            border: '1px solid var(--ds-color-border)',
-            borderRadius: 'var(--ds-radius-md)',
-            background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-            color: 'var(--ds-color-text-primary)',
-            outline: 'none',
             boxSizing: 'border-box',
             ...getSizeStyle(),
           }}
@@ -579,7 +573,6 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         >
           <span
             className="flex-1 truncate"
-            style={selectedKeys.size === 0 ? { color: 'var(--ds-color-text-secondary)' } : undefined}
             data-part={selectedKeys.size > 0 ? 'value' : 'placeholder'}
           >
             {selectedKeys.size > 0 ? getDisplayValue() : displayPlaceholder}
@@ -587,7 +580,7 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
           {allowClear && selectedKeys.size > 0 && !disabled && (
             <button
               type="button"
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
+              style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={handleClear}
               data-part="clear-button"
             >
@@ -598,26 +591,19 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
         </div>
 
         {isOpen && (
-          <>
-          <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}` }} />
-          <div data-part="dropdown" style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', maxHeight: 240, overflowY: 'auto', animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
+          <div data-part="dropdown" style={{ position: 'absolute', zIndex: 50, width: '100%', marginTop: 'var(--ds-spacing-1, 4px)', maxHeight: 240, overflowY: 'auto', animation: 'ds-tree-select-slide-in var(--ds-motion-fast) ease-out' }}>
             {/* Search input */}
             {showSearch && (
-              <div className="p-2 sticky top-0 z-10" data-part="search-input-wrapper" style={{ borderBottom: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-card)' }}>
+              <div className="p-2 sticky top-0 z-10" data-part="search-input-wrapper">
                 <input
                   ref={searchInputRef}
                   type="text"
                   className="w-full"
                   data-part="search-input"
                   style={{
-                    border: '1px solid var(--ds-color-border)',
-                    borderRadius: 'var(--ds-radius-md)',
                     padding: '4px var(--ds-input-sm-padding-x, 10px)',
                     fontSize: 'var(--ds-input-sm-font-size, 13px)',
                     height: 'var(--ds-input-sm-height, 32px)',
-                    background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-                    color: 'var(--ds-color-text-primary)',
-                    outline: 'none',
                     boxSizing: 'border-box',
                     transition: 'all var(--ds-motion-fast)',
                   }}
@@ -650,12 +636,11 @@ export const TreeSelect = React.forwardRef<HTMLDivElement, TreeSelectProps>(
                 ))}
               </ul>
             ) : (
-              <div className="p-4 text-center" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <div className="p-4 text-center" data-part="empty">
                 {displayNotFound}
               </div>
             )}
           </div>
-          </>
         )}
       </div>
     );

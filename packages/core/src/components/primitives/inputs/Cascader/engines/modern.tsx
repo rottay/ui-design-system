@@ -333,18 +333,13 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`relative ${className || ''}`}
+        className={`ds-cascader ds-cascader--modern relative ${className || ''}`}
         style={style}
         data-part="root"
       >
         <div
           className={`flex items-center cursor-pointer ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           style={{
-            border: '1px solid var(--ds-color-border)',
-            borderRadius: 'var(--ds-radius-md)',
-            background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-            color: 'var(--ds-color-text-primary)',
-            outline: 'none',
             boxSizing: 'border-box',
             ...getSizeStyle(),
           }}
@@ -355,7 +350,6 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
         >
           <span
             className="flex-1 truncate"
-            style={!selectedPath.length ? { color: 'var(--ds-color-text-secondary)' } : undefined}
             data-part={selectedPath.length > 0 ? 'value' : 'placeholder'}
           >
             {selectedPath.length > 0 ? getDisplayValue() : placeholder}
@@ -363,7 +357,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
           {allowClear && selectedPath.length > 0 && !disabled && (
             <button
               type="button"
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 24, height: 24, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
+              style={{ width: 24, height: 24, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={handleClear}
               data-part="clear-button"
             >
@@ -375,25 +369,19 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
 
         {isOpen && (
           <>
-            <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-select-slide-in{from{opacity:0;transform:translateY(-4px) scale(0.98)}to{opacity:1;transform:translateY(0) scale(1)}}@keyframes rottay-cascader-panel-in{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}` }} />
-            <div data-part="dropdown" style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', borderRadius: 'var(--ds-radius-lg)', animation: 'rottay-select-slide-in var(--ds-motion-fast) ease-out', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', borderColor: 'var(--ds-color-border)', borderWidth: 1, borderStyle: 'solid' }}>
+            <div data-part="dropdown" style={{ position: 'absolute', zIndex: 50, marginTop: 'var(--ds-spacing-1, 4px)', animation: 'ds-cascader-slide-in var(--ds-motion-fast) ease-out' }}>
             {/* Search input */}
             {showSearch && (
-              <div className="p-2" data-part="search-input-wrapper" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
+              <div className="p-2" data-part="search-input-wrapper">
                 <input
                   ref={searchInputRef}
                   type="text"
                   className="w-full"
                   data-part="search-input"
                   style={{
-                    border: '1px solid var(--ds-color-border)',
-                    borderRadius: 'var(--ds-radius-md)',
                     padding: '4px var(--ds-input-sm-padding-x, 10px)',
                     fontSize: 'var(--ds-input-sm-font-size, 13px)',
                     height: 'var(--ds-input-sm-height, 32px)',
-                    background: 'var(--ds-color-bg-input, var(--ds-surface-control))',
-                    color: 'var(--ds-color-text-primary)',
-                    outline: 'none',
                     boxSizing: 'border-box',
                     transition: 'all var(--ds-motion-fast)',
                   }}
@@ -423,7 +411,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                       </li>
                     ))
                   ) : (
-                    <li className="p-2" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>{notFoundContent}</li>
+                    <li className="p-2" data-part="empty">{notFoundContent}</li>
                   )}
                 </ul>
               </>
@@ -435,6 +423,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                     <ul
                       key={colIndex}
                       data-part="menu-column"
+                      data-last={colIndex === activeColumns.length - 1 || undefined}
                       style={{
                         listStyle: 'none',
                         margin: 0,
@@ -442,8 +431,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                         width: 192,
                         maxHeight: 240,
                         overflowY: 'auto',
-                        borderRight: colIndex < activeColumns.length - 1 ? '1px solid var(--ds-color-border)' : undefined,
-                        ...(colIndex > 0 ? { animation: 'rottay-cascader-panel-in var(--ds-motion-fast) ease-out' } : {}),
+                        ...(colIndex > 0 ? { animation: 'ds-cascader-panel-in var(--ds-motion-fast) ease-out' } : {}),
                       }}
                     >
                       {column.length > 0 ? (
@@ -458,7 +446,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                               <button
                                 type="button"
                                 className={`flex justify-between ${option.disabled ? 'disabled' : ''} ${isSelected ? 'active font-medium' : ''}`}
-                                style={{ transition: 'all var(--ds-motion-fast)', ...(isSelected ? { background: 'var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))', borderLeft: '2px solid var(--ds-color-primary)' } : undefined) }}
+                                style={{ transition: 'all var(--ds-motion-fast)' }}
                                 disabled={option.disabled}
                                 onClick={() => handleOptionClick(option, colIndex)}
                                 onMouseEnter={() => handleOptionHover(option, colIndex)}
@@ -468,7 +456,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                               >
                                 <span className="truncate">{optLabel}</span>
                                 {isLoading ? (
-                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+                                  <span data-part="loading" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
                                 ) : (
                                   (optChildren && optChildren.length > 0 || (!isLeaf(option, fieldNames) && loadData)) && (
                                     <span data-part="menu-item-arrow">›</span>
@@ -479,7 +467,7 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                           );
                         })
                       ) : (
-                        <li className="p-2" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>{notFoundContent}</li>
+                        <li className="p-2" data-part="empty">{notFoundContent}</li>
                       )}
                     </ul>
                   ))}

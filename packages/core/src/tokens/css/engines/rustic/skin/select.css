@@ -1,0 +1,195 @@
+/**
+ * Rustic Select skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is the container `<div>`, carrying the BEM pair
+ * `.rottay-select.rottay-select--rustic` + `data-part='root'` plus the variant
+ * class (`--filled`/`--flushed`/…), `data-open`, `data-disabled` and
+ * `data-status`. The dropdown is IN-TREE (rustic never portals), so every part
+ * is a descendant of the root and the two root classes already lift each rule
+ * to (0,4,0) — no repeated-`data-part` trick is needed here.
+ *
+ * TRIGGER reproduces `getBorderColor()`'s priority error > warning > success >
+ * open > default. The open rule carries `:not([data-status])` so a field with a
+ * status keeps its status border even while open (the JS checks status first).
+ * `border-color` is set on all four sides; the `--flushed` variant zeroes the
+ * box and shows only a 2px bottom edge, so the same color surfaces there.
+ *
+ * The imperative hover handlers are removed and transcribed verbatim as `:hover`
+ * rules: the selected-tag chip's `transform: scale(1.05)`, and the tag-remove
+ * button's `color: var(--ds-form-error-color, #ef4444)`. The option row's
+ * highlight rides `data-active`/`data-selected` (set from `focusedIndex` by the
+ * retained `onMouseEnter`), and the arrow's open rotation rides `data-open`.
+ *
+ * Hardcoded literals transcribed byte-exact from the source `var(--…, #hex)`
+ * fallbacks: `#1677ff` (option focus border-left, tag-remove uses
+ * `#ef4444`), `rgba(22, 119, 255, 0.15)` (option focus box-shadow).
+ *
+ * Keyframes moved out of the engine's `<style>` tag, renamed `ds-select-spin`,
+ * `ds-select-dropdown-in`, `ds-select-check-in`.
+ */
+
+@keyframes ds-select-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes ds-select-dropdown-in {
+  from { opacity: 0; transform: scaleY(0.95) translateY(-4px); }
+  to { opacity: 1; transform: scaleY(1) translateY(0); }
+}
+@keyframes ds-select-check-in {
+  from { opacity: 0; transform: scale(0); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ---- trigger: box, radius, colors ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='trigger'] {
+  border-style: solid;
+  border-width: 1px;
+  border-color: var(--ds-select-border);
+  border-radius: var(--ds-select-radius);
+  background-color: var(--ds-select-bg);
+  color: var(--ds-select-color);
+  outline: none;
+  box-shadow: none;
+}
+/* flushed: only a 2px bottom edge, square corners */
+.rottay-select.rottay-select--rustic.rottay-select--flushed[data-part='root'] [data-part='trigger'] {
+  border-width: 0;
+  border-bottom-width: 2px;
+  border-radius: 0;
+}
+
+/* trigger border-color by state (all sides; --flushed shows only the bottom) */
+.rottay-select.rottay-select--rustic[data-part='root'][data-open='true']:not([data-status]) [data-part='trigger'] {
+  border-color: var(--ds-select-border-focus);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-status='error'] [data-part='trigger'] {
+  border-color: var(--ds-select-error-border);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-status='warning'] [data-part='trigger'] {
+  border-color: var(--ds-select-warning-border);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-status='success'] [data-part='trigger'] {
+  border-color: var(--ds-select-success-border);
+}
+/* trigger open shadow + variant/disabled background */
+.rottay-select.rottay-select--rustic[data-part='root'][data-open='true'] [data-part='trigger'] {
+  box-shadow: var(--ds-select-shadow-focus);
+}
+.rottay-select.rottay-select--rustic.rottay-select--filled[data-part='root'] [data-part='trigger'] {
+  background-color: var(--ds-select-filled-bg);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-disabled='true'] [data-part='trigger'] {
+  background-color: var(--ds-select-bg-disabled);
+}
+
+/* ---- placeholder + value ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-select-color-placeholder);
+}
+
+/* ---- arrow: open-driven rotation ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='arrow-icon'] {
+  transform: rotate(0deg);
+}
+.rottay-select.rottay-select--rustic[data-part='root'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ---- selected-value tag chip + count + remove (imperative hover -> :hover) ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag'] {
+  background-color: var(--ds-select-tag-bg);
+  color: var(--ds-select-tag-color);
+  border-radius: var(--ds-select-tag-radius);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag']:hover {
+  transform: scale(1.05);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag-count'] {
+  background-color: var(--ds-select-tag-bg);
+  color: var(--ds-select-tag-color);
+  border-radius: var(--ds-select-tag-radius);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag-remove'] {
+  border: none;
+  background: none;
+  color: var(--ds-select-clear-color);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='tag-remove']:hover {
+  color: var(--ds-form-error-color, #ef4444);
+}
+
+/* ---- search input inside the trigger ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='search-input'] {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--ds-select-color);
+}
+
+/* ---- clear button ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='clear-button'] {
+  border: none;
+  background: none;
+  color: var(--ds-select-clear-color);
+}
+
+/* ---- dropdown panel (in-tree) ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='dropdown'] {
+  background-color: var(--ds-select-dropdown-bg);
+  border: 1px solid var(--ds-select-dropdown-border);
+  border-radius: var(--ds-select-dropdown-radius);
+  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-card-shadow-hover, var(--ds-shadow-lg)));
+}
+
+/* ---- group header ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='group-label'] {
+  color: var(--ds-select-color-placeholder);
+  border-top: 1px solid var(--ds-select-dropdown-border);
+}
+
+/* ---- option row: selected > focused > default across bg/color/border/shadow ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'] {
+  background-color: transparent;
+  color: var(--ds-select-color);
+  border-left: 3px solid transparent;
+  box-shadow: none;
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-disabled='true'] {
+  color: var(--ds-select-option-color-disabled);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-active='true'] {
+  background-color: var(--ds-select-option-bg-hover);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-active='true']:not([data-selected='true']) {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+  box-shadow: inset 0 0 0 1px var(--ds-color-primary-100, rgba(22, 119, 255, 0.15));
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-selected='true'] {
+  background-color: var(--ds-select-option-bg-selected);
+  color: var(--ds-select-option-color-selected);
+  border-left: 3px solid var(--ds-select-check-color, var(--ds-color-primary));
+}
+
+/* ---- option multi-checkbox + single-select tick ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'] [data-part='option-checkbox'] {
+  border: 1px solid var(--ds-select-border);
+  border-radius: 0.1875rem;
+  background-color: transparent;
+  color: white;
+  transform: scale(0.9);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'] {
+  background-color: var(--ds-select-check-color);
+  transform: scale(1);
+}
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='option'] [data-part='option-check'] {
+  color: var(--ds-select-check-color);
+}
+
+/* ---- empty state ---- */
+.rottay-select.rottay-select--rustic[data-part='root'] [data-part='empty'] {
+  color: var(--ds-select-color-placeholder);
+}

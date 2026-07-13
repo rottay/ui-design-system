@@ -1,0 +1,227 @@
+/**
+ * Rustic TreeSelect skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS. The trigger IS the root element -- there is no separate
+ * wrapper -- and carries `.rottay-treeselect.rottay-treeselect--rustic
+ * [data-part='trigger']` (the pre-step stamped `data-part='trigger'`, not
+ * `'root'`; code is ground truth over the checkpoint brief's generic
+ * "[data-part='root']" phrasing -- this component has no wrapper div for a
+ * `'root'` part to live on). The dropdown is PORTALED via
+ * `createPortal(document.body)` to a standalone subtree carrying
+ * `.rottay-treeselect__dropdown[data-part='dropdown']` -- everything inside
+ * it (search input, tree list, node rows, checkbox, empty, spinner) is
+ * OUTSIDE the trigger's DOM subtree, so those rules are standalone, never
+ * `[data-part='trigger'] …` descendants (ARC-09 precedent).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR (incl. `transparent`, excl.
+ * `none`/`0`) must reach (0,4,0).
+ *   - TRIGGER is a single element with 2 classes + 1 `[data-part]` attr ->
+ *     (0,3,0) at its own selector, one short of the floor. The base
+ *     border-color rule buys the 4th unit by repeating `[data-part='trigger']`;
+ *     every state override (`[data-open='true']`, `[data-status='error'
+ *     |'warning']`) already carries a second attribute/pseudo of its own and
+ *     reaches (0,4,0) or higher naturally, so it needs no repeat -- the tie
+ *     between the repeated base rule and the equal-specificity status rules
+ *     is broken by source order (state rules declared after the base).
+ *   - DROPDOWN (portal root) has 1 class + 1 attr -> (0,2,0); its descendants
+ *     add one more attr -> (0,3,0), also one short. Any border-color rule
+ *     without an extra distinguishing attribute/pseudo (search-input-
+ *     wrapper's border-bottom, search-input's rest-state border-color, the
+ *     loading spinner's border, the option row's base transparent
+ *     border-left) buys the 4th unit by repeating its own `[data-part='x']`.
+ *     Rules that already carry a second attribute or pseudo-class (`:focus`,
+ *     `[data-selected='true']`, `[data-tree-line='true']`,
+ *     `[data-nested='true']`) reach (0,4,0) naturally and are left unrepeated.
+ *
+ * INTERACTION MECHANISM: the tree-node row's imperative
+ * `onMouseEnter`/`onMouseLeave` (writing `.style.backgroundColor`, guarded
+ * `!node.disabled && !isSelected`) are deleted and replaced by
+ * `:hover:not([data-selected='true']):not([data-disabled='true'])`; the
+ * `onMouseLeave` reset only ever restored the same `transparent` value the
+ * base (non-hover) rule already produces, so no separate rule is needed for
+ * it. The expand-button's state rotation (`isExpanded ? rotate(90deg) :
+ * rotate(0deg)`) is transcribed as `transform`, keyed off a new
+ * `data-expanded` attribute added to the toggle button. The arrow's open
+ * rotation (`isOpen ? rotate(180deg) : none`) is keyed off the trigger's
+ * existing `data-open` attribute (already stamped by the pre-step). The
+ * search input's imperative `onFocus`/`onBlur` (writing `.style.borderColor`
+ * / `.style.boxShadow`, hardcoded `#1677ff`/`rgba(22,119,255,…)` literals)
+ * are deleted and replaced by `:focus`; the `onBlur` values exactly match
+ * this file's rest-state rule (`var(--ds-color-border-primary)` / no
+ * box-shadow), so there is no rest-after-blur delta.
+ *
+ * The trigger's `getBorderColor()` priority chain (error > warning > focus >
+ * default) is reproduced via `[data-status]`/`[data-open]`, both already
+ * stamped on the trigger by the pre-step; `isFocused` (a piece of removed
+ * dead state that only ever mirrored `isOpen`, set in the same
+ * `handleOpenChange` call) is superseded by the existing `data-open`
+ * attribute and was deleted from the component along with `getBorderColor()`.
+ *
+ * Hardcoded literals transcribed byte-exact from the source
+ * `var(--…, #hex)`/raw-literal fallbacks: `#1677ff` (option-row selected
+ * border-left and search-input `:focus` border-color), `rgba(0, 0, 0, 0.06)`
+ * (tree-line indent, non-`treeLine` nested case), `rgba(22, 119, 255, 0.15)`
+ * + `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
+ *
+ * KEYFRAMES: `@keyframes rottay-treeselect-spin` /
+ * `rottay-treeselect-dropdown-in`, previously imperatively injected into
+ * `document.head` by a `useEffect` (deleted), are moved here renamed
+ * `ds-tree-select-spin` / `ds-tree-select-dropdown-in`; the loading
+ * spinner's and dropdown's inline `animation:` references (non-paint keys)
+ * are updated to match.
+ */
+
+@keyframes ds-tree-select-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ds-tree-select-dropdown-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* ============================================================================
+   TRIGGER (in-tree, IS the root)
+   ============================================================================ */
+
+/* BORDER IS THE FULL SHORTHAND, NEVER SPLIT: the engine wrote
+   `border: 1px solid var(--ds-treeselect-border[-state])` and the
+   --ds-treeselect-* tokens are UNDEFINED on today's tenants, so the whole
+   inline declaration was invalid-at-computed-value and the trigger shipped
+   BORDERLESS. Splitting width/style from the var color re-grows a 1px
+   floor-colored border the component never had; the shorthand dies (or
+   applies, on a tenant that defines the tokens) atomically, exactly as the
+   inline did. */
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] {
+  border-radius: var(--ds-treeselect-radius);
+  background-color: var(--ds-treeselect-bg);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-treeselect-border);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-open='true']:not([data-status]) {
+  border: 1px solid var(--ds-treeselect-border-focus);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-status='error'] {
+  border: 1px solid var(--ds-treeselect-border-error);
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-status='warning'] {
+  border: 1px solid var(--ds-treeselect-border-warning);
+}
+
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] [data-part='placeholder'] {
+  color: var(--ds-treeselect-placeholder-color);
+}
+
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-treeselect-clear-color);
+}
+
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'] [data-part='arrow-icon'] {
+  color: var(--ds-treeselect-arrow-color);
+  transform: none;
+}
+.rottay-treeselect.rottay-treeselect--rustic[data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ============================================================================
+   DROPDOWN (portal root, standalone) + contents
+   ============================================================================ */
+
+.rottay-treeselect__dropdown[data-part='dropdown'] {
+  background-color: var(--ds-treeselect-dropdown-bg);
+  border-radius: var(--ds-treeselect-dropdown-radius);
+  box-shadow: var(--ds-card-shadow, var(--ds-treeselect-dropdown-shadow));
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'] {
+  background-color: var(--ds-treeselect-dropdown-bg);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input'] {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: var(--ds-radius-sm);
+  background-color: var(--ds-input-bg);
+  color: inherit;
+  outline: none;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input'][data-part='search-input'] {
+  border-color: var(--ds-color-border-primary);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='search-input']:focus {
+  border-color: var(--ds-color-primary, #1677ff);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='empty'] {
+  color: var(--ds-treeselect-empty-color);
+}
+
+/* ---- tree node row ---- */
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'] {
+  background-color: transparent;
+  border-radius: var(--ds-treeselect-node-radius);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border-left: 3px solid transparent;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
+  background-color: var(--ds-treeselect-node-bg-hover);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
+  background-color: var(--ds-treeselect-node-bg-selected);
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'] [data-part='tree-node-label'] {
+  color: inherit;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='tree-node-label'] {
+  color: var(--ds-treeselect-node-color-selected);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-node-highlight'] {
+  color: var(--ds-color-primary);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-node-toggle'] {
+  background: none;
+  border: none;
+  color: var(--ds-treeselect-expand-color);
+  transform: rotate(0deg);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-node-toggle'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='loading'] {
+  border-radius: 50%;
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='loading'][data-part='loading'] {
+  border: 2px solid var(--ds-color-border-primary);
+  border-top-color: var(--ds-color-primary);
+}
+
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-list'][data-tree-line='true'] {
+  border-left: 1px solid var(--ds-color-border-primary);
+}
+.rottay-treeselect__dropdown[data-part='dropdown'] [data-part='tree-list']:not([data-tree-line='true'])[data-nested='true'] {
+  border-left: 1px solid var(--ds-color-border-secondary, rgba(0, 0, 0, 0.06));
+}

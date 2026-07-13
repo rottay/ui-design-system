@@ -1,0 +1,353 @@
+/**
+ * Modern Select skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * TWO IMPLEMENTATIONS share this file. The engine renders EITHER a styled
+ * native `<select>` (simple case: not searchable/multiple/grouped/virtual) OR a
+ * custom `<div>` trigger + PORTALED dropdown (advanced case). Both roots carry
+ * the pair `ds-select-shell ds-select-shell--modern` + `data-part='root'`
+ * (NOT `ds-select`: that bare class is the legacy rustic/personality select
+ * hook carrying `font-size: var(--ds-input-md-font-size)`, which would shrink
+ * this wrapper's inherited font and reflow the trigger text -- WO-SKIN-02 B).
+ *   - native trigger  -> `select[data-part='trigger']`   (element-qualified)
+ *   - custom trigger  -> `div[data-part='trigger']`      (element-qualified)
+ * They are mutually exclusive per instance but both stamp `data-part='trigger'`,
+ * so the element qualifier keeps their divergent paint apart.
+ *
+ * PORTAL: the custom dropdown mounts via `createPortal(document.body)`, so it is
+ * NOT a descendant of the root. Its rules are STANDALONE on the popup's own
+ * class `.ds-select-shell__dropdown[data-part='dropdown']`; parts inside it
+ * (search-input, option, group-label, empty) are descendants of THAT.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). In-tree parts get
+ * it from the two root classes (0,2,0) + `[data-part='root']` + descendant
+ * `[data-part]`. Standalone portal parts have only one class, so the 4th unit is
+ * bought by REPEATING the target `[data-part]` (filter-panel precedent). Pure
+ * `border: none` resets carry no color and are exempt. `border: … transparent`
+ * DOES paint (it wins the tenant color) and is held to the floor.
+ *
+ * The trigger state machine mirrors the Input modern skin exactly (Select's
+ * `buildTriggerStyle` "matches Input shell exactly"); Select's "focus" is
+ * `data-open`, hover is native `:hover`, status lives on `data-status`. Values
+ * are transcribed verbatim from `engines/modern.tsx`; the native arrow SVG data
+ * URI (stroke `%23A0A0A5`) and its size-parameterised inset are carried byte-
+ * exact (the inset rides an inline `--ds-select-native-arrow-inset` custom
+ * property, not a paint key).
+ */
+
+@keyframes ds-select-appear {
+  from {
+    opacity: 0;
+    transform: scale(var(--ds-motion-scale-in)) translateY(var(--ds-motion-offset-in));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================================================
+   CUSTOM TRIGGER (div) — buildTriggerStyle state machine
+   ============================================================================ */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'] {
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-select-bg, var(--ds-surface-control));
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border);
+  border-radius: var(--ds-radius-md, 8px);
+  outline: var(--ds-focus-ring-width, 2px) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+}
+
+/* variant at rest (default keeps the base border-color) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='filled'] {
+  background-color: var(--ds-select-filled-bg, var(--ds-surface-canvas));
+  border-color: transparent;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='flushed'] {
+  border-radius: 0;
+  border-width: 0;
+  border-color: transparent;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--ds-color-border);
+  background-color: transparent;
+}
+
+/* hover: only where nothing later in the mutation order overwrites it
+   (JS gate: isHovered && !isOpen && !hasError && !hasWarning && !isDisabled). */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger']:hover:not([data-open='true']):not([data-status]):not([data-disabled='true']) {
+  border-color: var(--ds-color-border-hover);
+  background-color: var(--ds-select-bg-hover, var(--ds-select-bg, var(--ds-surface-control)));
+}
+
+/* open (Select's focus) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-open='true'] {
+  border-color: var(--ds-color-primary);
+  background-color: var(--ds-select-bg-focus, var(--ds-select-bg, var(--ds-surface-control)));
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-variant='flushed'][data-open='true'] {
+  outline: none;
+  border-bottom-width: 2px;
+  border-bottom-color: var(--ds-color-primary);
+}
+
+/* error, then warning (JS: hasError, then hasWarning && !hasError) — ordered
+   after open so the status color wins the equal-specificity tie. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'] {
+  border-color: var(--ds-color-error);
+  background-color: color-mix(in srgb, var(--ds-color-error) 4%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='error'][data-open='true'] {
+  outline: var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+  background-color: color-mix(in srgb, var(--ds-color-warning) 4%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-status='warning'][data-open='true'] {
+  outline: var(--ds-focus-ring-width, 2px) solid color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+}
+
+/* disabled: background only (the JS disabled block never touches border-color);
+   ordered last so it wins the bg tie against filled/error/warning. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] div[data-part='trigger'][data-disabled='true'] {
+  background-color: var(--ds-select-bg-disabled, var(--ds-surface-canvas));
+}
+
+/* ============================================================================
+   NATIVE <select> TRIGGER — nativeSelectStyle state machine + injected focus CSS
+   ============================================================================ */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'] {
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-select-bg, var(--ds-surface-control));
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border);
+  border-radius: var(--ds-radius-md, 8px);
+  outline: var(--ds-focus-ring-width, 2px) solid transparent;
+  outline-offset: var(--ds-focus-ring-offset, 2px);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A0A0A5' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--ds-select-native-arrow-inset, 12px) center;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-variant='filled'] {
+  background-color: var(--ds-surface-canvas);
+  border-color: transparent;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-variant='flushed'] {
+  border-radius: 0;
+  border-width: 0;
+  border-color: transparent;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+  border-bottom-color: var(--ds-color-border);
+  background-color: transparent;
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-status='error'] {
+  border-color: var(--ds-color-error);
+  background-color: color-mix(in srgb, var(--ds-color-error) 4%, transparent);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger'][data-status='warning'] {
+  border-color: var(--ds-color-warning);
+  background-color: color-mix(in srgb, var(--ds-color-warning) 4%, transparent);
+}
+/* the injected nativeFocusCSS, verbatim */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:focus {
+  border-color: var(--ds-color-primary);
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] select[data-part='trigger']:hover:not(:focus):not(:disabled) {
+  border-color: var(--ds-color-border-hover);
+}
+
+/* ============================================================================
+   TRIGGER SUB-PARTS (in-tree, custom branch)
+   ============================================================================ */
+
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* the search input rendered INSIDE the trigger (color: inherit) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'] [data-part='search-input'] {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: inherit;
+}
+
+/* chevron: color + open-driven rotation (state transform is paint) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='arrow-icon'] {
+  color: var(--ds-color-text-muted);
+  transform: rotate(0deg);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* clear button: the removed imperative hover becomes a :hover rule */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background-color: transparent;
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='clear-button']:hover {
+  background-color: var(--ds-surface-canvas);
+}
+
+/* selected-value tag chip + count + its remove button */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag'] {
+  background-color: var(--ds-surface-canvas);
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-count'] {
+  background-color: var(--ds-surface-canvas);
+  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove'] {
+  border: none;
+  border-radius: 50%;
+  background-color: transparent;
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='tag-remove']:hover {
+  color: var(--ds-color-text-primary);
+}
+
+/* native loading wrapper: static vertical centering (a state-free transform) */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading'] {
+  transform: translateY(-50%);
+}
+
+/* loading spinner dot — the painted element in both the native branch (an inner
+   span) and the custom branch (the loading span itself) carries
+   `data-part='loading-spinner'`; one rule serves both. */
+.ds-select-shell.ds-select-shell--modern[data-part='root'] [data-part='loading-spinner'][data-part='loading-spinner'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+
+/* ============================================================================
+   PORTALED DROPDOWN + contents (standalone on the popup class)
+   ============================================================================ */
+
+.ds-select-shell__dropdown[data-part='dropdown'] {
+  background: var(--ds-select-dropdown-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 97%, white 3%), color-mix(in srgb, var(--ds-color-bg-primary) 22%, var(--ds-surface-card))));
+  border-radius: 14px;
+  box-shadow: var(--ds-select-dropdown-shadow, var(--ds-shadow-popover, var(--ds-shadow-lg, var(--ds-card-shadow))));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.ds-select-shell__dropdown[data-part='dropdown'][data-part='dropdown'][data-part='dropdown'] {
+  border: 1px solid var(--ds-select-dropdown-border-color, color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent));
+}
+
+/* search wrapper + search input inside the dropdown (color: text-primary) */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-input'] {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  color: var(--ds-color-text-primary);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='search-icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* group header divider + label color */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='group-label'][data-part='group-label'][data-divider='true'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* option rows: base + inset divider + focused + selected. The base border is
+   `1px solid transparent`, which paints (holds the tenant color) so it takes
+   the doubled-[data-part] (0,4,0) form; the focused/selected borders inherit
+   that base and add their state attr. */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] {
+  color: var(--ds-color-text-primary);
+  background: transparent;
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option']:not(:first-child):not([data-selected='true']):not([data-virtual='true']) {
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-border-subtle) 68%, transparent);
+}
+/* non-virtual focused (not selected) */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-active='true']:not([data-selected='true']):not([data-virtual='true']) {
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-active='true']:not([data-selected='true']):not([data-virtual='true']) {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+/* non-virtual selected */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true']:not([data-virtual='true']) {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  box-shadow: inset 2px 0 0 var(--ds-color-primary);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-selected='true']:not([data-virtual='true']) {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+}
+/* virtual focused (not selected) — divergent gradient + lift */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-virtual='true'][data-active='true']:not([data-selected='true']) {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 96%, white 4%), color-mix(in srgb, var(--ds-color-bg-primary) 20%, var(--ds-surface-card)));
+  transform: translateY(-1px);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-virtual='true'][data-active='true']:not([data-selected='true']) {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+}
+/* virtual selected — divergent gradient */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-virtual='true'][data-selected='true'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 6%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%));
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-virtual='true'][data-selected='true'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 18%, transparent);
+}
+
+/* option multi-checkbox: border + fill by selected */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-checkbox'] {
+  background-color: transparent;
+  border-radius: 4px;
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-checkbox'][data-part='option-checkbox'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'] {
+  background-color: var(--ds-color-primary);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] [data-part='option-checkbox'][data-part='option-checkbox'] {
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* option description + the single-select checkmark tick */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option-description'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='option'] [data-part='option-check'] {
+  color: var(--ds-color-primary);
+}
+
+/* empty state */
+.ds-select-shell__dropdown[data-part='dropdown'] [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}

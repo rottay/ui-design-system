@@ -1,0 +1,230 @@
+/**
+ * Rustic Cascader skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * TWO SCOPE ROOTS. The trigger IS the root element -- there is no separate
+ * wrapper -- and carries `.rottay-cascader.rottay-cascader--rustic
+ * [data-part='trigger']` (the pre-step stamped `data-part='trigger'`, not
+ * `'root'`; code is ground truth over the checkpoint brief's generic
+ * "[data-part='root']" phrasing, same situation as TreeSelect rustic). The
+ * dropdown is PORTALED via `createPortal(document.body)` (import L21, used
+ * L496/L639) to a standalone subtree carrying
+ * `.rottay-cascader__dropdown[data-part='dropdown']` -- everything inside it
+ * (search input, menu columns, option rows, checkbox-free rows, empty state,
+ * loading spinner) is OUTSIDE the trigger's DOM subtree, so those rules are
+ * standalone, never `[data-part='trigger'] …` descendants (ARC-09 precedent,
+ * matches TreeSelect rustic's portal posture exactly).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR (incl. `transparent`, excl.
+ * `none`/`0`) must reach (0,4,0).
+ *   - TRIGGER is a single element with 2 classes + 1 `[data-part]` attr ->
+ *     (0,3,0) at its own selector, one short of the floor. The base
+ *     border-color rule buys the 4th unit by repeating `[data-part='trigger']`;
+ *     every state override (`[data-status='error'|'warning']`,
+ *     `[data-open='true']:not([data-status])`) already carries a second
+ *     attribute/pseudo of its own and reaches (0,4,0) naturally, so none of
+ *     them needs the repeat trick. The rules are mutually exclusive (status
+ *     vs. no-status), so declaration order does not matter for the cascade.
+ *   - DROPDOWN (portal root) has 1 class + 1 attr -> (0,2,0); its descendants
+ *     add one more attr -> (0,3,0), also one short. Any border-color
+ *     declaration without an extra distinguishing attribute/pseudo
+ *     (search-input-wrapper's border-bottom, search-input's rest-state
+ *     border-color, the loading spinner's border, the option row's base
+ *     transparent border-left) buys the 4th unit by repeating its own
+ *     `[data-part='x']` -- following the Select-rustic/TreeSelect-rustic
+ *     convention of splitting a background/border-color pair into two
+ *     declarations so only the border one needs the repeat. Rules that
+ *     already carry a second attribute or pseudo-class (`:focus`,
+ *     `[data-selected='true']`, `:hover:not(...):not(...)`) reach (0,4,0)
+ *     naturally and are left unrepeated.
+ *
+ * INTERACTION MECHANISM -- three independent imperative sites, all deleted:
+ *   1. Trigger border color: `getBorderColor()` (error > warning > focus >
+ *      default) fed a template-literal `border` shorthand. `isFocused` was
+ *      local state set ONLY inside `handleOpenChange` as
+ *      `setIsFocused(newOpen)` -- i.e. it always mirrored `isOpen` exactly, no
+ *      other setter existed. Both `isFocused` state and `getBorderColor()`
+ *      are deleted from the component; the priority chain is reproduced via
+ *      the trigger's pre-existing `data-status`/`data-open` attributes
+ *      (same supersession as TreeSelect rustic's `isFocused`).
+ *   2. Search-input focus/blur (onFocus/onBlur, L515-522): wrote
+ *      `.style.borderColor`/`.style.boxShadow` with hardcoded `#1677ff`/
+ *      `rgba(22, 119, 255, …)` literals. DELETED; replaced by
+ *      `[data-part='search-input']:focus`. The `onBlur` reset values
+ *      (`var(--ds-cascader-border)`, `boxShadow: 'none'`) are byte-identical
+ *      to this file's rest-state rule for the same part -- NO rest-after-blur
+ *      delta.
+ *   3. Menu-item hover, both variants, both DELETED and replaced by one rule
+ *      `[data-part='option']:hover:not([data-selected='true']):not([data-disabled='true'])`
+ *      (the shared selector correctly serves both call sites below):
+ *      - Search-mode row (onMouseEnter/onMouseLeave, L548-555): NO guard at
+ *        all in source (search results are never selected/disabled) -- both
+ *        handlers held ONLY paint writes, so both are deleted outright.
+ *      - Column-mode row (onMouseEnter/onMouseLeave, L589-601): guard is
+ *        `!option.disabled && !isSelected` on enter, `!isSelected` on leave
+ *        (leaf paint-reset only, no independent effect since disabled rows
+ *        never got the enter-paint in the first place). `handleOptionHover
+ *        (option, colIndex)` in onMouseEnter is called UNCONDITIONALLY
+ *        (outside the `if`, guards its own disabled-check internally) and is
+ *        NON-paint (drives column expansion) -- it is KEPT, onMouseEnter
+ *        reduces to `() => handleOptionHover(option, colIndex)`; onMouseLeave
+ *        held only the paint reset and is deleted entirely.
+ *
+ * RE-STAMPED DATA-PART: same `data-last` addition as the modern sibling, for
+ * the same reason (`menuStyle(colIndex, totalCols)`'s conditional
+ * `borderRight`, "not the last column") -- `data-last={colIndex ===
+ * activeColumns.length - 1 || undefined}` on `<ul data-part='menu-column'>`;
+ * `menu-column` itself (contract-test-pinned) is unchanged.
+ *
+ * Hardcoded literals transcribed byte-exact from the source `var(--…, #hex)`
+ * fallbacks: `#1677ff` (search-input `:focus` border-color, option-row
+ * selected/hover border-left), `rgba(22, 119, 255, 0.15)` +
+ * `rgba(22, 119, 255, 0.08)` (search-input `:focus` box-shadow).
+ *
+ * KEYFRAMES: `@keyframes rottay-cascader-spin` / `rottay-cascader-dropdown-in`,
+ * previously a plain `<style>` tag rendered inside the portal (remounting on
+ * every open), are moved here renamed `ds-cascader-spin` /
+ * `ds-cascader-dropdown-in`; the `<style>` tag is deleted and the spinner's
+ * and dropdown's inline `animation:` references (non-paint keys) are updated
+ * to match.
+ */
+
+@keyframes ds-cascader-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ds-cascader-dropdown-in {
+  from {
+    opacity: 0;
+    transform: scaleY(0.95) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1) translateY(0);
+  }
+}
+
+/* ============================================================================
+   TRIGGER (in-tree, IS the root)
+   ============================================================================ */
+
+/* BORDER IS THE FULL SHORTHAND, NEVER SPLIT: the engine wrote
+   `border: 1px solid var(--ds-cascader-border[-state])` and the
+   --ds-cascader-* tokens are UNDEFINED on today's tenants, so the whole
+   inline declaration was invalid-at-computed-value and the trigger shipped
+   BORDERLESS. Splitting width/style from the var color re-grows a 1px
+   floor-colored border the component never had; the shorthand dies (or
+   applies, on a tenant that defines the tokens) atomically, exactly as the
+   inline did. */
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] {
+  border-radius: var(--ds-cascader-radius);
+  background-color: var(--ds-cascader-bg);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-cascader-border);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-status='error'] {
+  border: 1px solid var(--ds-cascader-border-error);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-status='warning'] {
+  border: 1px solid var(--ds-cascader-border-warning);
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-open='true']:not([data-status]) {
+  border: 1px solid var(--ds-cascader-border-focus);
+}
+
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] [data-part='placeholder'] {
+  color: var(--ds-cascader-placeholder-color);
+}
+
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] [data-part='clear-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-cascader-clear-color);
+}
+
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'] [data-part='arrow-icon'] {
+  color: var(--ds-cascader-arrow-color);
+  transform: none;
+}
+.rottay-cascader.rottay-cascader--rustic[data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ============================================================================
+   DROPDOWN (portal root, standalone) + contents
+   ============================================================================ */
+
+.rottay-cascader__dropdown[data-part='dropdown'] {
+  background-color: var(--ds-cascader-dropdown-bg);
+  border-radius: var(--ds-cascader-dropdown-radius);
+  box-shadow: var(--ds-card-shadow, var(--ds-cascader-dropdown-shadow));
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input-wrapper'][data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-cascader-menu-border);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input'] {
+  border-radius: var(--ds-cascader-radius);
+  outline: none;
+  background-color: var(--ds-cascader-bg);
+}
+/* Full shorthand, same undefined-token atomicity as the trigger above. */
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input'][data-part='search-input'] {
+  border: 1px solid var(--ds-cascader-border);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='search-input']:focus {
+  border-color: var(--ds-color-primary, #1677ff);
+  box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='empty'] {
+  color: var(--ds-cascader-empty-color);
+}
+
+/* ---- menu column (not-last gets the divider) ---- */
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='menu-column'] {
+  border-right: none;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='menu-column']:not([data-last='true']) {
+  border-right: 1px solid var(--ds-cascader-menu-border);
+}
+
+/* ---- option row: base (transparent) < hover (not selected/disabled) < selected ---- */
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'] {
+  background-color: transparent;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'] {
+  border-left: 3px solid transparent;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
+  background-color: var(--ds-cascader-item-bg-hover);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option']:hover:not([data-selected='true']):not([data-disabled='true']) {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-selected='true'] {
+  background-color: var(--ds-cascader-item-bg-selected);
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='option'][data-part='option'][data-selected='true'] {
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='menu-item-arrow'] {
+  color: var(--ds-cascader-arrow-color);
+}
+
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='loading'] {
+  border-radius: 50%;
+}
+.rottay-cascader__dropdown[data-part='dropdown'] [data-part='loading'][data-part='loading'] {
+  border: 2px solid var(--ds-cascader-arrow-color);
+  border-top-color: transparent;
+}

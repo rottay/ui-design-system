@@ -18,7 +18,6 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import type { MentionsProps, MentionsOption } from '../Mentions.types';
 import { MENTIONS_DEFAULTS } from '../Mentions.types';
 
@@ -63,11 +62,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
 
     const [internalValue, setInternalValue] = useState(defaultValue);
     const [isOpen, setIsOpen] = useState(false);
-    // The triad is decided once, in the behavior core. `focused` is any focus --
-    // a field's focus border must appear when a pointer lands in it. A ring is
-    // `focusVisible`, and this part does not draw one.
-    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-    const isFocused = interaction.focused;
     const [searchText, setSearchText] = useState('');
     const [currentPrefix, setCurrentPrefix] = useState('');
     const [mentionStart, setMentionStart] = useState(-1);
@@ -228,14 +222,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
-    /** Resolve border color from CSS variables based on status/focus priority. */
-    const getBorderColor = () => {
-      if (status === 'error') return 'var(--ds-mentions-border-error)';
-      if (status === 'warning') return 'var(--ds-mentions-border-warning)';
-      if (isFocused) return 'var(--ds-mentions-border-focus)';
-      return 'var(--ds-mentions-border)';
-    };
-
     // Build BEM class names; falsy entries are filtered out before joining
     const containerClasses = [
       'rottay-mentions',
@@ -255,12 +241,8 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const textareaStyle: React.CSSProperties = {
       width: '100%',
       padding: 'var(--ds-mentions-padding)',
-      border: `1px solid ${getBorderColor()}`,
-      borderRadius: 'var(--ds-mentions-radius)',
       fontSize: 'var(--ds-mentions-font-size)',
-      backgroundColor: 'var(--ds-mentions-bg)',
       resize: 'vertical',
-      outline: 'none',
       opacity: disabled ? 0.5 : 1,
       cursor: disabled ? 'not-allowed' : 'text',
       transition: 'var(--ds-transition-fast)',
@@ -273,9 +255,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       right: 0,
       marginTop: placement === 'top' ? 0 : '4px',
       marginBottom: placement === 'top' ? '4px' : 0,
-      backgroundColor: 'var(--ds-mentions-dropdown-bg)',
-      borderRadius: 'var(--ds-mentions-dropdown-radius)',
-      boxShadow: 'var(--ds-mentions-dropdown-shadow)',
       maxHeight: 'var(--ds-mentions-dropdown-max-height)',
       overflowY: 'auto',
       zIndex: 1050,
@@ -284,11 +263,12 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       margin: 0,
     };
 
-    /** Per-option inline styles: highlights the focused index and dims disabled items. */
-    const getOptionStyle = (index: number, isDisabled?: boolean): React.CSSProperties => ({
+    /** Per-option inline styles: the highlight rides `data-active` (set from
+     * `focusedIndex` by keyboard nav and the retained `onMouseEnter`) in the
+     * skin; only non-paint sizing stays inline. */
+    const getOptionStyle = (isDisabled?: boolean): React.CSSProperties => ({
       padding: 'var(--ds-mentions-option-padding)',
       cursor: isDisabled ? 'not-allowed' : 'pointer',
-      backgroundColor: focusedIndex === index ? 'var(--ds-mentions-option-bg-hover)' : 'transparent',
       opacity: isDisabled ? 0.5 : 1,
       fontSize: 'var(--ds-font-size-sm)',
       transition: 'background-color 0.15s',
@@ -297,7 +277,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
     const emptyStyle: React.CSSProperties = {
       padding: '12px',
       textAlign: 'center',
-      color: 'var(--ds-mentions-empty-color)',
       fontSize: 'var(--ds-font-size-sm)',
     };
 
@@ -320,7 +299,6 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
-          {...interactionHandlers}
           placeholder={placeholder}
           disabled={disabled}
           readOnly={readOnly}
@@ -352,7 +330,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                   aria-selected={focusedIndex === index}
                   onClick={() => !option.disabled && handleSelect(option)}
                   onMouseEnter={() => setFocusedIndex(index)}
-                  style={getOptionStyle(index, option.disabled)}
+                  style={getOptionStyle(option.disabled)}
                   className="rottay-mentions__option"
                   data-part="option"
                   data-active={focusedIndex === index || undefined}

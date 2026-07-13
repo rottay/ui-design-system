@@ -225,16 +225,10 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }, [isOpen]);
 
-    const getStatusBorderColor = () => {
-      if (status === 'error') return 'var(--ds-color-error)';
-      if (status === 'warning') return 'var(--ds-color-warning)';
-      return 'var(--ds-color-border)';
-    };
-
     return (
       <div
         ref={containerRef}
-        className={`relative ${className || ''}`}
+        className={`ds-mentions ds-mentions--modern relative ${className || ''}`}
         style={style}
         data-part="root"
       >
@@ -245,7 +239,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             else if (ref) ref.current = node;
           }}
           className={['rottay-mentions__input', status ? `rottay-mentions__input--${status}` : undefined].filter(Boolean).join(' ')}
-          style={{ width: '100%', border: `1px solid ${getStatusBorderColor()}`, borderRadius: 'var(--ds-radius-md)', padding: 'var(--ds-input-md-padding-y, 8px) var(--ds-input-md-padding-x, 12px)', fontSize: 'var(--ds-input-md-font-size, 14px)', background: 'var(--ds-color-bg-input)', color: 'var(--ds-color-text-primary)', outline: 'none', fontFamily: 'inherit', ...(autoSize ? { resize: 'none' as const } : undefined) }}
+          style={{ width: '100%', padding: 'var(--ds-input-md-padding-y, 8px) var(--ds-input-md-padding-x, 12px)', fontSize: 'var(--ds-input-md-font-size, 14px)', fontFamily: 'inherit', ...(autoSize ? { resize: 'none' as const } : undefined) }}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -267,7 +261,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
             className={['rottay-mentions__popup', `rottay-mentions__popup--${placement}`, popupClassName].filter(Boolean).join(' ')}
             data-placement={placement}
             data-part="dropdown"
-            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 'var(--ds-dropdown-padding, 6px)', maxHeight: 'var(--ds-dropdown-max-height, 192px)', overflowY: 'auto', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)', ...(placement === 'top' ? { bottom: '100%', marginBottom: 'var(--ds-spacing-1, 4px)' } : { top: '100%', marginTop: 'var(--ds-spacing-1, 4px)' }) }}
+            style={{ position: 'absolute', zIndex: 50, width: '100%', listStyle: 'none', margin: 0, padding: 'var(--ds-dropdown-padding, 6px)', maxHeight: 'var(--ds-dropdown-max-height, 192px)', overflowY: 'auto', ...(placement === 'top' ? { bottom: '100%', marginBottom: 'var(--ds-spacing-1, 4px)' } : { top: '100%', marginTop: 'var(--ds-spacing-1, 4px)' }) }}
             role="listbox"
             aria-label="Mention suggestions"
           >
@@ -289,7 +283,7 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
                 </li>
               ))
             ) : (
-              <li className="p-3 text-center" role="option" aria-disabled="true" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <li className="p-3 text-center" role="option" aria-disabled="true" data-part="empty">
                 {notFoundContent}
               </li>
             )}

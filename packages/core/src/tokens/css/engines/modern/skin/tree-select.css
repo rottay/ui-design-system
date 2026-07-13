@@ -1,0 +1,128 @@
+/**
+ * Modern TreeSelect skin (WO-SKIN-02 checkpoint B, dropdown family).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47):
+ * every `rottay-*` layer sorts before Tailwind's `base` layer, so a layered
+ * rule loses to preflight regardless of specificity. Unlayered outranks
+ * preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT is the outer `<div>`, which now carries the pair
+ * `ds-tree-select ds-tree-select--modern` + `data-part='root'` (stamped by
+ * this migration -- the pre-step had left the root component-scope-class-
+ * free, unlike Select's root). The trigger, dropdown, tree list, and every
+ * node row are IN-TREE descendants with their own `data-part` (TreeSelect
+ * modern never portals -- the mirror image of Select, whose custom-dropdown
+ * branch does).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
+ * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
+ * already reach (0,4,0) with a single descendant hop, so no part here needs
+ * the repeated-`[data-part]` trick.
+ *
+ * The tree-node row's selected background/color/border-left and the
+ * tree-line indent's border-left are transcribed verbatim from
+ * `engines/modern.tsx` (both were plain conditional inline styles -- this
+ * file has no imperative `.style.` writes anywhere). `treeLine` (a static
+ * per-instance prop, not per-node) is threaded onto the recursive child
+ * `<ul>` as `data-tree-line` so CSS can key off it; the outer (non-recursive)
+ * tree list never carried a border regardless of `treeLine` and is left
+ * unmatched.
+ *
+ * KEYFRAMES: `@keyframes rottay-select-slide-in`, previously an inline
+ * `<style dangerouslySetInnerHTML>` re-injected on every open, is moved here
+ * renamed `ds-tree-select-slide-in`; the dropdown's `animation:` reference
+ * (an inline, non-paint key) is updated to match. The loading spinner's bare
+ * `animation: 'spin …'` has no local `@keyframes` in the source and resolves
+ * against the global foundation `spin` keyframe -- left inline, untouched.
+ */
+
+@keyframes ds-tree-select-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ---- trigger ---- */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='trigger'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='placeholder'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* ---- dropdown panel (in-tree) ---- */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='dropdown'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+  border-color: var(--ds-color-border);
+  border-width: 1px;
+  border-style: solid;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='search-input-wrapper'] {
+  border-bottom: 1px solid var(--ds-color-border);
+  background: var(--ds-surface-card);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='search-input'] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-input, var(--ds-surface-control));
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- tree node row ---- */
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+  background: var(--ds-color-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
+  color: var(--ds-color-primary);
+  border-left: 2px solid var(--ds-color-border-selected, var(--ds-color-primary));
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='tree-node-highlight'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='tree-node-toggle'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='loading'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='option-icon'] {
+  accent-color: var(--ds-color-primary);
+}
+
+.ds-tree-select.ds-tree-select--modern[data-part='root'] [data-part='tree-list'][data-tree-line='true'] {
+  border-left: 2px solid var(--ds-color-border-subtle, var(--ds-color-border));
+}

@@ -109,6 +109,28 @@
 @import '../components/skin/button-icon.css';
 @import '../components/skin/voice-input-button.css';
 @import '../components/skin/input-compounds.css';
+@import '../engines/modern/skin/upload.css';
+@import '../engines/rustic/skin/upload.css';
+@import '../engines/modern/skin/transfer.css';
+@import '../engines/rustic/skin/transfer.css';
+@import '../engines/modern/skin/color-picker.css';
+@import '../engines/rustic/skin/color-picker.css';
+@import '../engines/modern/skin/time-picker.css';
+@import '../engines/rustic/skin/time-picker.css';
+@import '../engines/modern/skin/date-picker.css';
+@import '../engines/rustic/skin/date-picker.css';
+/* Dropdown family (WO-SKIN-02 checkpoint B). */
+@import '../engines/modern/skin/autocomplete.css';
+@import '../engines/rustic/skin/autocomplete.css';
+@import '../engines/modern/skin/mentions.css';
+@import '../engines/rustic/skin/mentions.css';
+@import '../engines/modern/skin/select.css';
+@import '../engines/rustic/skin/select.css';
+@import '../components/skin/select-compounds.css';
+@import '../engines/modern/skin/tree-select.css';
+@import '../engines/rustic/skin/tree-select.css';
+@import '../engines/modern/skin/cascader.css';
+@import '../engines/rustic/skin/cascader.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
