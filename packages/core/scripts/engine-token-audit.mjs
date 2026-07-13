@@ -2175,6 +2175,12 @@ const counters = {
   // CSS, and the unit suites assert the DOM. A stray `*/` inside a header
   // comment silently voided an entire migrated skin this way. Exact-0.
   "skins.parseErrors": countSkinParseErrors(),
+  // WO-SKIN-03: a skin nobody imports paints nothing, and it fails exactly as
+  // quietly as one that does not parse -- a dead agent left nine of them behind
+  // this batch. Every skin must reach BOTH entrypoints: foundation/base.css
+  // (which feeds the per-tenant bundles the apps actually load) and
+  // entrypoints/styles.css (which feeds dist/styles.css). Exact-0.
+  "skins.unwired": countUnwiredSkins(),
   // WO-ARC-09: per-file inline-paint ratchet over the six workspace-tier
   // components' migratable files. Decrease-only; each checkpoint's exit is its
   // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
@@ -2219,6 +2225,43 @@ function countSkinParseErrors() {
     }
   }
   return errors;
+}
+
+/**
+ * WO-SKIN-03: every skin stylesheet must be imported by BOTH entrypoints.
+ *
+ * A skin file that exists but is imported nowhere is bytes on disk: the browser
+ * never sees it, the component it was written for ships unpainted, and every
+ * other signal stays green (the counter reads the component's TSX, `tsc` does
+ * not read CSS, jsdom does not read stylesheets). The two entrypoints are not
+ * interchangeable -- `foundation/base.css` is inlined into the per-tenant
+ * bundles (dist/platform.css, dist/bithire.css) that the apps actually load,
+ * while `entrypoints/styles.css` feeds dist/styles.css. A skin wired into only
+ * one of them is dark for half the fleet.
+ *
+ * Exact-0: the first unwired skin fails the build.
+ */
+function countUnwiredSkins() {
+  const entrypoints = [
+    "src/tokens/css/foundation/base.css",
+    "src/tokens/css/entrypoints/styles.css",
+  ].map((rel) => ({ rel, css: readFileSync(join(root, rel), "utf8") }));
+
+  let unwired = 0;
+  for (const file of collectSkinFiles()) {
+    // The import specifier every entrypoint uses, e.g. `engines/modern/skin/toast.css`
+    // or `components/skin/toast-compounds.css` -- matched as a path suffix so the
+    // relative prefix (`../`) does not matter.
+    const specifier = file.slice(file.indexOf(`${sep}tokens${sep}css${sep}`) + `${sep}tokens${sep}css${sep}`.length).split(sep).join("/");
+    for (const { rel, css } of entrypoints) {
+      const imported = new RegExp(`@import\\s+['"][^'"]*${specifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}['"]`).test(css);
+      if (!imported) {
+        unwired += 1;
+        console.error(`  - skin is not imported by ${rel}: ${specifier}`);
+      }
+    }
+  }
+  return unwired;
 }
 
 /** Every unlayered skin stylesheet: the per-engine homes plus the agnostic one. */
@@ -2289,6 +2332,8 @@ const EXACT = {
   "themeCss.unreferencedSelectors": 0,
   // A skin that does not parse loads no rules; nothing else in the chain sees it.
   "skins.parseErrors": 0,
+  // A skin no entrypoint imports is just as dead, and just as silent.
+  "skins.unwired": 0,
 };
 
 /**
