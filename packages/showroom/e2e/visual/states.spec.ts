@@ -128,10 +128,14 @@ const PROBES: readonly Probe[] = [
   {
     name: 'card',
     slug: 'card',
-    // The anatomy part, not a class: the two engines do not share a class scheme
-    // for Card at all -- modern renders `ds-card ds-card--outlined`, rustic
+    // `data-part='root'` is the SHARED anatomy vocabulary -- every migrated
+    // primitive root carries it, so a container holding a second primitive
+    // (probe-extras holds a Toast) would silently widen this selector. Each card
+    // probe is therefore anchored to Card's own scope class, which the two
+    // engines do not share: modern renders `ds-card ds-card--outlined`, rustic
     // renders `rottay-card rottay-card--rustic` and no variant class.
-    selector: '[data-testid="probe-card"] [data-part="root"]',
+    selector:
+      '[data-testid="probe-card"] .ds-card[data-part="root"], [data-testid="probe-card"] .rottay-card[data-part="root"]',
     container: '[data-testid="probe-card"]',
     expectedCount: 2,
     subjects: [{ name: 'card-elevated', index: 0, states: CARD_STATES }],
@@ -143,7 +147,8 @@ const PROBES: readonly Probe[] = [
     name: 'card-outlined',
     slug: 'extras',
     container: '[data-testid="probe-extras"]',
-    selector: '[data-testid="probe-extras"] [data-part="root"]',
+    selector:
+      '[data-testid="probe-extras"] .ds-card[data-part="root"], [data-testid="probe-extras"] .rottay-card[data-part="root"]',
     expectedCount: 1,
     subjects: [{ name: 'card-outlined', index: 0, states: CARD_STATES }],
   },
@@ -155,7 +160,8 @@ const PROBES: readonly Probe[] = [
     slug: 'card',
     query: '&interactive=1',
     container: '[data-testid="probe-interactive"]',
-    selector: '[data-testid="probe-interactive"] [data-part="root"]',
+    selector:
+      '[data-testid="probe-interactive"] .ds-card[data-part="root"], [data-testid="probe-interactive"] .rottay-card[data-part="root"]',
     expectedCount: 1,
     subjects: [
       {

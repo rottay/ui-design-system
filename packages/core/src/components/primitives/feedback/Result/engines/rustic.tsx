@@ -310,40 +310,42 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
           the result when it appears or changes, without interrupting the user */
       <div
         ref={ref}
-        className={className}
+        data-part="root"
+        data-tone={status}
+        className={`rottay-result--rustic ${className}`.trim()}
         style={{ ...styles.container, ...style }}
         role="status"
         aria-live="polite"
       >
         {/* Icon Section */}
-        <div style={styles.iconWrapper}>
+        <div data-part="icon" style={styles.iconWrapper}>
           {icon || renderIcon(status!)}
         </div>
 
         {/* Title Section */}
         {title && (
-          <h2 style={styles.title}>
+          <h2 data-part="title" style={styles.title}>
             {title}
           </h2>
         )}
 
         {/* Subtitle Section */}
         {subTitle && (
-          <p style={styles.subTitle}>
+          <p data-part="description" style={styles.subTitle}>
             {subTitle}
           </p>
         )}
 
         {/* Extra Section (Buttons) */}
         {extra && (
-          <div style={styles.extra}>
+          <div data-part="extra" style={styles.extra}>
             {extra}
           </div>
         )}
 
         {/* Children Section */}
         {children && (
-          <div style={styles.children}>
+          <div data-part="content" style={styles.children}>
             {children}
           </div>
         )}

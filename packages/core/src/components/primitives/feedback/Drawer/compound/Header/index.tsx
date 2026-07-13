@@ -240,6 +240,7 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
     return (
       <div
         ref={ref}
+        data-part="header"
         className={`rottay-drawer-header ${className}`.trim()}
         style={headerStyle}
         // Semantic role for screen readers
@@ -247,12 +248,13 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
         aria-level={2}
       >
         {/* Title container */}
-        <div style={titleStyle}>{children}</div>
+        <div data-part="title" style={titleStyle}>{children}</div>
 
         {/* Close button - only rendered if closable and onClose provided */}
         {closable && onClose && (
           <button
             type="button"
+            data-part="close-button"
             onClick={onClose}
             style={closeButtonStyle}
             aria-label="Close drawer"

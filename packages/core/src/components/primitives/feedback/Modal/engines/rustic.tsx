@@ -371,7 +371,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
   return (
     <Portal>
       <div
-        className={`rottay-modal-overlay ${className}`}
+        data-part="root"
+        className={`rottay-modal-overlay rottay-modal-root--rustic ${className}`}
         style={overlayStyle}
         onClick={closeOnOverlayClick ? handleCancel : undefined}
       >
@@ -380,6 +381,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
           informs assistive technologies this is a modal context, enabling
           proper focus trapping behavior in screen readers. */}
       <div
+        data-part="surface"
+        data-open="true"
         className="rottay-modal"
         style={modalStyle}
         onClick={(e) => e.stopPropagation()}
@@ -388,14 +391,15 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
       >
         {/* Header section */}
         {(title || closable) && (
-          <div style={headerStyle}>
+          <div data-part="header" style={headerStyle}>
             {title && (
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}>
+              <h3 data-part="title" style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}>
                 {title}
               </h3>
             )}
             {closable && (
               <button
+                data-part="close-button"
                 style={{
                   background: 'transparent',
                   border: 'none',
@@ -412,15 +416,15 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
         )}
 
         {/* Body section */}
-        <div style={{ padding: '24px' }}>{children}</div>
+        <div data-part="body" style={{ padding: '24px' }}>{children}</div>
 
         {/* Footer section */}
         {!hideFooter && (
-          <div style={footerStyle}>
+          <div data-part="footer" style={footerStyle}>
             {footer || (
               <>
                 {onCancel && (
-                  <button style={cancelButtonStyle} onClick={handleCancel}>
+                  <button data-part="action" data-action="cancel" style={cancelButtonStyle} onClick={handleCancel}>
                     {cancelText}
                   </button>
                 )}
@@ -429,6 +433,8 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
                     disabled prevents double-submission during async confirmation. */}
                 {onOk && (
                   <button
+                    data-part="action"
+                    data-action="ok"
                     style={okButtonStyle}
                     onClick={handleOk}
                     disabled={confirmLoading}

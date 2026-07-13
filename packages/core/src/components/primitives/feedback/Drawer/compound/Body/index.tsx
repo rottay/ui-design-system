@@ -197,6 +197,7 @@ export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
     return (
       <div
         ref={ref}
+        data-part="body"
         className={`rottay-drawer-body ${className}`.trim()}
         style={bodyStyle}
       >

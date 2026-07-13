@@ -115,6 +115,7 @@ function CloseButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
+      data-part="close-button"
       onClick={onClick}
       aria-label="Close"
       style={{
@@ -315,7 +316,8 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       {/* Backdrop overlay with blur */}
       {mask && (
         <div
-          className="rottay-drawer-overlay"
+          data-part="backdrop"
+          className="rottay-drawer-overlay rottay-drawer-backdrop--modern"
           onClick={closeOnOverlayClick && closable !== false ? handleClose : undefined}
           style={{
             position: 'fixed',
@@ -336,15 +338,19 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       {/* Drawer panel */}
       <div
         ref={presenceRef}
+        data-part="surface"
+        data-placement={placement}
+        data-open={dataState === 'open' ? 'true' : 'false'}
         role="dialog"
         aria-modal="true"
         aria-label={typeof title === 'string' ? title : undefined}
-        className={`rottay-drawer rottay-drawer-${placement} ${className}`.trim()}
+        className={`rottay-drawer rottay-drawer-${placement} rottay-drawer--modern ${className}`.trim()}
         style={getPositionStyles()}
       >
         {/* ---- Header ---- */}
         {(title || closable) && (
           <div
+            data-part="header"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -358,6 +364,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             <div style={{ flex: '1 1 auto', minWidth: 0 }}>
               {title && (
                 <div
+                  data-part="title"
                   style={{
                     fontSize: '16px',
                     fontWeight: 600,
@@ -375,6 +382,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
 
         {/* ---- Body ---- */}
         <div
+          data-part="body"
           style={{
             flex: '1 1 auto',
             overflowY: 'auto',
@@ -387,6 +395,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
         {/* ---- Footer ---- */}
         {!hideFooter && footer && (
           <div
+            data-part="footer"
             style={{
               display: 'flex',
               alignItems: 'center',

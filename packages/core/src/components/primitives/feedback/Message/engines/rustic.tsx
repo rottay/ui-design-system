@@ -445,7 +445,14 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
           announce new messages without interrupting the user's current task.
           "polite" is preferred over "assertive" for messages since they are
           informational, not urgent (unlike error notifications). */}
-      <div style={styles.container(placement, top)} role="log" aria-live="polite">
+      <div
+        data-part="stack-container"
+        data-placement={placement}
+        className="rottay-message-stack--rustic"
+        style={styles.container(placement, top)}
+        role="log"
+        aria-live="polite"
+      >
         {messages.map(({ key: _messageKey, ...msg }) => (
           <MessageItem key={msg.id} {...msg} onRemove={removeMessage} />
         ))}
@@ -600,14 +607,14 @@ export const MessageItem: React.FC<MessageItemProps> = ({
    * Renders the appropriate icon based on type or custom icon.
    */
   const renderIcon = () => {
-    if (icon) return icon;
+    if (icon) return <span data-part="icon">{icon}</span>;
 
     if (type === 'loading') {
-      return <span style={styles.loadingSpinner} />;
+      return <span data-part="icon" style={styles.loadingSpinner} />;
     }
 
     return (
-      <span style={{ ...styles.icon.base, ...styles.icon[type] }}>
+      <span data-part="icon" style={{ ...styles.icon.base, ...styles.icon[type] }}>
         {MESSAGE_ICONS[type]}
       </span>
     );
@@ -628,19 +635,22 @@ export const MessageItem: React.FC<MessageItemProps> = ({
 
   return (
     <div
-      className={className}
+      data-part="root"
+      data-tone={type}
+      className={`rottay-message--rustic ${className}`.trim()}
       style={messageStyle}
       role="alert"
       aria-live="polite"
     >
       {renderIcon()}
-      <span style={styles.content}>{content}</span>
+      <span data-part="body" style={styles.content}>{content}</span>
       {/* Hover state is handled via JS events rather than CSS :hover
           because all styling is inline (no stylesheet). This trades a small
           performance cost for zero-dependency styling consistency.
           aria-label is essential since the button only contains "x" text. */}
       {closable && (
         <button
+          data-part="close-button"
           onClick={handleClose}
           style={styles.closeButton}
           aria-label="Close message"

@@ -157,11 +157,12 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
     return (
       <div
         ref={ref}
+        data-part="header"
         className={`rottay-modal-header ${className}`.trim()}
         style={headerStyle}
       >
         {/* Title container */}
-        <div style={titleStyle}>{children}</div>
+        <div data-part="title" style={titleStyle}>{children}</div>
 
         {/* Close button - only rendered if closable and onClose provided */}
         {closable && onClose && (

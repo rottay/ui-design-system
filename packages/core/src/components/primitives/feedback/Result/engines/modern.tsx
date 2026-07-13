@@ -197,39 +197,41 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
     return (
       <div
         ref={ref}
-        className={`flex flex-col items-center justify-center text-center py-12 px-6 ${className}`}
+        data-part="root"
+        data-tone={status}
+        className={`flex flex-col items-center justify-center text-center py-12 px-6 rottay-result--modern ${className}`}
         style={style}
       >
         {/* Custom icon takes precedence over the built-in status icon,
             allowing consumers to completely replace the visual indicator */}
-        <div className="mb-6">
+        <div className="mb-6" data-part="icon">
           {icon || statusIcons[status!]}
         </div>
 
         {/* Title Section */}
         {title && (
-          <h2 className="text-2xl font-bold mb-2" style={{ color: 'var(--ds-color-text-primary)' }}>
+          <h2 data-part="title" className="text-2xl font-bold mb-2" style={{ color: 'var(--ds-color-text-primary)' }}>
             {title}
           </h2>
         )}
 
         {/* Subtitle uses DS text-secondary token for visual hierarchy */}
         {subTitle && (
-          <p className="mb-6 max-w-md" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <p data-part="description" className="mb-6 max-w-md" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {subTitle}
           </p>
         )}
 
         {/* Extra Section (Buttons) */}
         {extra && (
-          <div className="flex flex-wrap gap-2 justify-center mb-6">
+          <div data-part="extra" className="flex flex-wrap gap-2 justify-center mb-6">
             {extra}
           </div>
         )}
 
         {/* Children Section */}
         {children && (
-          <div className="w-full max-w-lg">
+          <div data-part="content" className="w-full max-w-lg">
             {children}
           </div>
         )}

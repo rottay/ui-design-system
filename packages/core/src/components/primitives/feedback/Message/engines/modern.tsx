@@ -260,7 +260,9 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
     <MessageContext.Provider value={messageApi}>
       {children}
       <div
-        className={placementClasses[placement]}
+        data-part="stack-container"
+        data-placement={placement}
+        className={`${placementClasses[placement]} rottay-message-stack--modern`}
         style={{ marginTop: placement === 'top' ? top : undefined }}
       >
         {messages.map(({ key: _messageKey, ...msg }) => (
@@ -458,17 +460,20 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   // the active tenant theme (light/dark/custom).
   return (
     <div
-      className={`alert ${className}`}
+      data-part="root"
+      data-tone={type}
+      className={`alert rottay-message--modern ${className}`}
       style={{ ...alertStyles[type], boxShadow: 'var(--ds-elevation-2)', ...style }}
       role="alert"
     >
-      <span>{icon || icons[type]}</span>
-      <span>{content}</span>
+      <span data-part="icon">{icon || icons[type]}</span>
+      <span data-part="body">{content}</span>
       {/* aria-label required because the close button has no visible text
           label -- only an SVG icon. btn-ghost keeps the button visually
           minimal so it doesn't compete with the alert content. */}
       {closable && (
         <button
+          data-part="close-button"
           style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
           onClick={handleClose}
           aria-label="Close"

@@ -377,23 +377,26 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     <div
       role="alert"
       aria-live="polite"
+      data-part="root"
+      data-tone={variant}
       data-variant={variant}
-      className={className}
+      className={`rottay-toast--rustic ${className}`.trim()}
       style={containerStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       {/* Icon */}
-      {displayIcon && <span style={iconStyle}>{displayIcon}</span>}
+      {displayIcon && <span data-part="icon" style={iconStyle}>{displayIcon}</span>}
 
       {/* Content */}
-      <div style={contentStyle}>
+      <div data-part="body" style={contentStyle}>
         {title && <p style={titleStyle}>{title}</p>}
         {description && <p style={descriptionStyle}>{description}</p>}
         {children}
         {action && (
           <button
             type="button"
+            data-part="action"
             style={actionButtonStyle}
             onClick={() => {
               action.onClick();
@@ -411,6 +414,7 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
       {closable && (
         <button
           type="button"
+          data-part="close-button"
           style={closeButtonStyle}
           onClick={handleClose}
           aria-label="Close"
@@ -422,7 +426,7 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
       )}
 
       {/* Progress Bar */}
-      {showProgress && duration > 0 && <div style={progressStyle} />}
+      {showProgress && duration > 0 && <div data-part="progress-bar" style={progressStyle} />}
     </div>
   );
 }

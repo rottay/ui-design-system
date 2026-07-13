@@ -398,7 +398,8 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
       {/* Overlay/Mask - click to close if enabled */}
       {mask && (
         <div
-          className="rottay-drawer-overlay"
+          data-part="backdrop"
+          className="rottay-drawer-overlay rottay-drawer-backdrop--rustic"
           style={overlayStyle}
           onClick={closeOnOverlayClick ? handleClose : undefined}
         />
@@ -406,21 +407,25 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
 
       {/* Drawer Container */}
       <div
-        className={`rottay-drawer rottay-drawer-${placement} ${className}`}
+        data-part="surface"
+        data-placement={placement}
+        data-open={open ? 'true' : 'false'}
+        className={`rottay-drawer rottay-drawer-${placement} rottay-drawer--rustic ${className}`}
         style={getDrawerStyle()}
         role="dialog"
         aria-modal="true"
       >
         {/* Header section */}
         {(title || closable) && (
-          <div style={headerStyle}>
+          <div data-part="header" style={headerStyle}>
             {title && (
-              <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}>
+              <h3 data-part="title" style={{ margin: 0, fontSize: '16px', fontWeight: 500 }}>
                 {title}
               </h3>
             )}
             {closable && (
               <button
+                data-part="close-button"
                 style={closeButtonStyle}
                 onClick={handleClose}
                 aria-label="Close"
@@ -432,10 +437,10 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
         )}
 
         {/* Body section - main content area */}
-        <div style={bodyStyle}>{children}</div>
+        <div data-part="body" style={bodyStyle}>{children}</div>
 
         {/* Footer section - action buttons */}
-        {!hideFooter && footer && <div style={footerStyle}>{footer}</div>}
+        {!hideFooter && footer && <div data-part="footer" style={footerStyle}>{footer}</div>}
       </div>
     </>
   );

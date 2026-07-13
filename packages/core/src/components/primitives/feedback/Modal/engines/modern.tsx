@@ -201,6 +201,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
 
       {/* Fullscreen backdrop */}
       <div
+        data-part="root"
+        className="rottay-modal-root--modern"
         style={{
           position: 'fixed',
           inset: 0,
@@ -218,6 +220,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
         {/* Overlay */}
         {showBackdrop ? (
           <div
+            data-part="backdrop"
             onClick={backdropClosable ? handleCancel : undefined}
             style={{
               position: 'absolute',
@@ -233,6 +236,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
         {/* Panel */}
         <div
           ref={panelRef}
+          data-part="surface"
+          data-open="true"
           tabIndex={-1}
           role="dialog"
           aria-modal="true"
@@ -260,6 +265,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
           {/* ---- Header ---- */}
           {(header || title || description || closable) && (
             <div
+              data-part="header"
               style={{
                 display: 'flex',
                 alignItems: 'flex-start',
@@ -274,6 +280,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                   <>
                     {title && (
                       <span
+                        data-part="title"
                         style={{
                           display: 'block',
                           fontSize: '16px',
@@ -287,6 +294,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                     )}
                     {description && (
                       <div
+                        data-part="description"
                         style={{
                           marginTop: title ? 4 : 0,
                           fontSize: 13,
@@ -303,6 +311,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
               {closable && (
                 <button
                   type="button"
+                  data-part="close-button"
                   onClick={handleCancel}
                   aria-label="Close"
                   style={{
@@ -337,6 +346,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
 
           {/* ---- Body ---- */}
           <div
+            data-part="body"
             style={{
               flex: '1 1 auto',
               overflowY: 'auto',
@@ -351,6 +361,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
           {/* ---- Footer ---- */}
           {!hideFooter && (footer || onOk || onCancel) && (
             <div
+              data-part="footer"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -365,6 +376,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 <>
                   {onCancel && (
                     <button
+                      data-part="action"
+                      data-action="cancel"
                       style={{
                         padding: '8px 16px',
                         borderRadius: 'var(--ds-radius-md, 8px)',
@@ -383,6 +396,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                   )}
                   {onOk && (
                     <button
+                      data-part="action"
+                      data-action="ok"
                       style={{
                         padding: '8px 16px',
                         borderRadius: 'var(--ds-radius-md, 8px)',

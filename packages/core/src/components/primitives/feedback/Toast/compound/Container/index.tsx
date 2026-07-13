@@ -424,6 +424,8 @@ export function ToastContainer({
   const content = (
     <div
       ref={containerRef}
+      data-part="stack-container"
+      data-placement={position}
       className={`rottay-toast-container rottay-toast-container--${position} ${className}`}
       style={containerStyle}
       aria-live="polite"

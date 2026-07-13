@@ -182,6 +182,7 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       <button
         ref={ref}
         type="button"
+        data-part="close-button"
         className={`rottay-modal-close ${className}`.trim()}
         style={buttonStyle}
         onClick={onClose}

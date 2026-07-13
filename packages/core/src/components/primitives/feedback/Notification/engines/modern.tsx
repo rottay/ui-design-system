@@ -302,7 +302,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       {Object.entries(groupedNotifications).map(([p, items]) => (
         <div
           key={p}
-          className={placementClasses[p as NotificationPlacement]}
+          data-part="stack-container"
+          data-placement={p}
+          className={`${placementClasses[p as NotificationPlacement]} rottay-notification-stack--modern`}
           style={placementStyles[p as NotificationPlacement]}
         >
           {items.map((notification) => {
@@ -513,30 +515,33 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // role="alert" triggers immediate screen reader announcement.
   return (
     <div
-      className={`alert min-w-80 ${className}`}
+      data-part="root"
+      data-tone={type}
+      className={`alert min-w-80 rottay-notification--modern ${className}`}
       style={{ ...alertStyles[type], boxShadow: 'var(--ds-elevation-2)', ...style }}
       onClick={onClick}
       role="alert"
     >
       <div className="flex gap-3 w-full">
         {/* Icon */}
-        {icon !== null && <span>{icon || icons[type]}</span>}
+        {icon !== null && <span data-part="icon">{icon || icons[type]}</span>}
 
         {/* Content */}
-        <div className="flex-1">
+        <div className="flex-1" data-part="body">
           {/* Title */}
-          <div className="font-bold">{message}</div>
+          <div className="font-bold" data-part="title">{message}</div>
 
           {/* Description */}
-          {description && <div className="text-sm opacity-80">{description}</div>}
+          {description && <div className="text-sm opacity-80" data-part="description">{description}</div>}
 
           {/* Action Button */}
-          {actions && <div className="mt-2">{actions}</div>}
+          {actions && <div className="mt-2" data-part="action">{actions}</div>}
         </div>
 
         {/* Close Button */}
         {closable && (
           <button
+            data-part="close-button"
             style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
             onClick={(e) => {
               e.stopPropagation();

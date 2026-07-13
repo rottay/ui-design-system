@@ -145,6 +145,7 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
     return (
       <div
         ref={ref}
+        data-part="body"
         className={`rottay-modal-body ${className}`.trim()}
         style={bodyStyle}
       >

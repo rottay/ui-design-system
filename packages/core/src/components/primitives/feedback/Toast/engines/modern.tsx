@@ -328,7 +328,9 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   return (
     <div
       role="alert"
-      className={`${baseClasses} ${className}`}
+      data-part="root"
+      data-tone={variant}
+      className={`${baseClasses} rottay-toast--modern ${className}`}
       style={{
         position: 'relative',
         overflow: 'hidden',
@@ -341,10 +343,10 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       onMouseLeave={handleMouseLeave}
     >
       {/* Icon */}
-      {displayIcon}
+      {displayIcon && <span data-part="icon">{displayIcon}</span>}
 
       {/* Content */}
-      <div className="flex flex-col">
+      <div className="flex flex-col" data-part="body">
         {title && <span className="font-semibold">{title}</span>}
         {description && <span className="text-sm">{description}</span>}
         {children}
@@ -354,6 +356,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       <div className="flex-none flex gap-2">
         {action && (
           <button
+            data-part="action"
             onClick={() => {
               action.onClick();
               if (action.closeOnClick !== false) {
@@ -377,6 +380,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
 
         {closable && (
           <button
+            data-part="close-button"
             onClick={handleClose}
             aria-label="Close"
             style={{
@@ -403,6 +407,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
           bg-current inherits the alert's text color for consistent theming. */}
       {showProgress && duration > 0 && (
         <div
+          data-part="progress-bar"
           className="absolute bottom-0 left-0 h-1 bg-current opacity-30"
           style={{ width: `${progress}%`, transition: 'width var(--ds-motion-fast) linear' }}
         />

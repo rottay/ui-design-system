@@ -213,6 +213,7 @@ export function UndoToast({
         style={{ flexShrink: 0 }}
       >
         <circle
+          data-part="track"
           cx={RING_CENTER}
           cy={RING_CENTER}
           r={RING_RADIUS}
@@ -221,6 +222,7 @@ export function UndoToast({
           strokeWidth={RING_STROKE}
         />
         <circle
+          data-part="fill"
           cx={RING_CENTER}
           cy={RING_CENTER}
           r={RING_RADIUS}
@@ -269,6 +271,7 @@ export function UndoToast({
 
       {countdown === 'bar' && duration > 0 && (
         <div
+          data-part="track"
           aria-hidden="true"
           style={{
             position: 'absolute',
@@ -281,6 +284,7 @@ export function UndoToast({
           }}
         >
           <div
+            data-part="fill"
             style={{
               height: '100%',
               background: 'var(--ds-color-primary)',

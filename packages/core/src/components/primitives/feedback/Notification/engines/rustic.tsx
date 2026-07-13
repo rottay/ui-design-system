@@ -481,6 +481,9 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       {Object.entries(groupedNotifications).map(([p, items]) => (
         <div
           key={p}
+          data-part="stack-container"
+          data-placement={p}
+          className="rottay-notification-stack--rustic"
           style={styles.container(p as NotificationPlacement, top, bottom)}
           role="log"
           aria-live="polite"
@@ -654,11 +657,11 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
    */
   const renderIcon = () => {
     if (icon === null) return null;
-    if (icon) return icon;
+    if (icon) return <span data-part="icon">{icon}</span>;
     if (type === 'open') return null;
 
     return (
-      <span style={{ ...styles.icon.base, ...styles.icon[type] }}>
+      <span data-part="icon" style={{ ...styles.icon.base, ...styles.icon[type] }}>
         {NOTIFICATION_ICONS[type as keyof typeof NOTIFICATION_ICONS]}
       </span>
     );
@@ -690,7 +693,9 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
 
   return (
     <div
-      className={className}
+      data-part="root"
+      data-tone={type}
+      className={`rottay-notification--rustic ${className}`.trim()}
       style={notificationStyle}
       onClick={onClick}
       role="alert"
@@ -700,15 +705,15 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       {renderIcon()}
 
       {/* Content */}
-      <div style={styles.content}>
+      <div data-part="body" style={styles.content}>
         {/* Title */}
-        <div style={styles.message}>{message}</div>
+        <div data-part="title" style={styles.message}>{message}</div>
 
         {/* Description */}
-        {description && <div style={styles.description}>{description}</div>}
+        {description && <div data-part="description" style={styles.description}>{description}</div>}
 
         {/* Action Button */}
-        {actions && <div style={styles.btnContainer}>{actions}</div>}
+        {actions && <div data-part="action" style={styles.btnContainer}>{actions}</div>}
       </div>
 
       {/* JS-driven hover state because Rustic uses only inline styles
@@ -717,6 +722,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           aria-label is essential for the icon-only close button. */}
       {closable && (
         <button
+          data-part="close-button"
           onClick={(e) => {
             e.stopPropagation();
             handleClose();

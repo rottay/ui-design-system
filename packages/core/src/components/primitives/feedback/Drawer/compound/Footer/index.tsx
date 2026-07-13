@@ -226,6 +226,7 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
     return (
       <div
         ref={ref}
+        data-part="footer"
         className={`rottay-drawer-footer ${className}`.trim()}
         style={footerStyle}
         // Semantic role for action area
