@@ -165,3 +165,54 @@ batch. It gets a full stamp pass in the pre-step.
 - Each pre-step also GREPS the family's unit tests for assertions on inline paint
   (`toHaveStyle`, `.style.`, `getAttribute('style')`) and REPORTS them file:line without
   editing — the orchestrator adjudicates them while the migration runs.
+
+---
+
+## Orchestrator adjudications (settled during the pre-steps — binding on the migrations)
+
+### A1. Collapse rustic must NOT reuse the `rottay-collapse` classname
+
+The L pre-step asked whether rustic's root could take modern's `rottay-collapse` class. **No.**
+`engines/modern/theme.css:655` declares `[data-tenant] .rottay-collapse { border-color;
+border-radius }`, the selector carries no `[data-engine]` gate, and both engines' theme.css land
+in the same `rottay-engines` layer. `border-radius` is a **preflight-SAFE channel** — it paints
+(measured: 14px on modern's collapse). So giving rustic that classname would hand it a 14px radius
+it does not have today: pixels moved, disguised as a naming choice. Rustic mints its own scope
+class, grep-verified free.
+
+The general rule, now that P-76 is understood: **before reusing any existing classname, check
+whether a bridge rule targets it on a LIVE channel** (`color`, `background-color`, `box-shadow`,
+`border-radius`, `border-color`). A dead channel (`border-width`, `margin`, `padding`) is harmless;
+a live one is a silent repaint.
+
+### A2. Tooltip's portaled bubble is scoped (done in the pre-step)
+
+Tooltip modern carried NO first-party classname, and its bubble portals out of the tenant-scoped
+tree — so its skin could only have anchored on a bare `[data-part='bubble']`, which is the
+shared-vocabulary trap that has now bitten this program four times. Minted
+`rottay-tooltip-bubble--{modern,rustic}` (grep-verified free, inert: a class with no rules).
+
+### A3. Box stamps NO `data-part` of its own
+
+The L pre-step defaulted Box to `data-part="root"`. Reverted. Box is the style-injection escape
+hatch every other component composes with, so a default part puts `data-part='root'` on every
+nested Box in the fleet: a skin rule of the form `.rottay-x [data-part='root']` would reach into
+X's Boxes, and any query for X's own root matches them too. Box's skin anchors on its class.
+(This one was caught by the ARC-09 real-engines suite, which is exactly what that suite is for.)
+
+### A4. The ARC-09 real-engines tests now decide ownership STRUCTURALLY
+
+`data-part` is a shared vocabulary, so as this program stamps more components, a query of the form
+`container [data-part='x']` inside a composing component starts matching the anatomy of the
+components it is BUILT FROM — which paint inline legitimately until their own batch migrates them.
+The SelectionPreviewRail suite went red this way when Badge got stamped (the rail composes Badges).
+All five ARC-09 suites now resolve ownership structurally: a node belongs to the component under
+test iff no other `data-part='root'` sits between it and that component's own root. Any new
+real-engines suite must do the same.
+
+### A5. Two contract items were WRONG (code over contract)
+
+List has no `selected`/`clickable` state anywhere in its source, and Calendar renders no
+outside-month cells (its leading blanks are true placeholder divs, not adjacent-month dates). Both
+were in the pre-step brief's state lists; neither exists. The pre-step correctly refused to invent
+component API to satisfy a contract. Do not reintroduce them in the migration.
