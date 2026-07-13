@@ -317,8 +317,14 @@ each one. This is the single most likely source of a non-obvious visual regressi
 ## CORRECTION (2026-07-13, orchestrator) — CK-C's shared-vocabulary premise is FALSE
 
 §6 grouped CK-C as "the single biggest shared-vocabulary cluster" on the strength of
-`patterns/data/list-toolbar/tokens.ts` EXISTING. A partial inventory of eight of its thirteen
-files checked whether anything ADOPTS it. Nothing does — eight for eight.
+`patterns/data/list-toolbar/tokens.ts` EXISTING. The full inventory then checked whether anything ADOPTS it.
+**Adoption is 2 of 11 components.** `list-toolbar` (itself) and `status-filter-pills` (a clean,
+byte-exact adopter: all 17 imported names used, zero local reinvention). The other NINE hand-roll
+their own `color-mix()` recipes — and they do not agree with each other either.
+
+(An earlier revision of this correction said "eight for eight diverge", generalized from the
+partial sample before the two adopters had been reached. Recorded rather than quietly overwritten:
+an over-corrected claim is as unusable as the original wrong one.)
 
 | file | imports `list-toolbar/tokens.ts`? | verdict |
 | --- | --- | --- |
