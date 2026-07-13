@@ -162,13 +162,10 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // the current (non-clickable) page in the trail
   return (
     <div
-      className={`breadcrumbs text-sm ${className}`}
+      className={`rottay-breadcrumb-shell rottay-breadcrumb-shell--modern breadcrumbs text-sm ${className}`}
       style={{
         fontSize: 'var(--ds-breadcrumb-font-size, var(--ds-font-size-sm, 14px))',
         fontWeight: 'var(--ds-breadcrumb-font-weight, inherit)',
-        color: 'var(--ds-breadcrumb-color, var(--ds-color-text-secondary))',
-        background: 'var(--ds-breadcrumb-bg, transparent)',
-        border: '1px solid var(--ds-breadcrumb-border, transparent)',
         padding: 'var(--ds-breadcrumb-padding, 0)',
         // Override DaisyUI's ::before separator color via CSS custom property.
         // DaisyUI breadcrumbs use ::before pseudo-elements styled with the
@@ -185,9 +182,6 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
               <a
                 href={item.href}
                 onClick={item.onClick}
-                style={{
-                  color: 'var(--ds-breadcrumb-link-color, var(--ds-color-primary))',
-                }}
                 data-part="crumb"
                 data-current={false}
               >
@@ -195,7 +189,6 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
               </a>
             ) : (
               <span
-                style={{ color: 'var(--ds-breadcrumb-active-color, var(--ds-breadcrumb-color-active, var(--ds-color-text-primary)))' }}
                 data-part="crumb"
                 data-current={true}
               >

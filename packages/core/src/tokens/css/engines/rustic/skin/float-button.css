@@ -1,0 +1,83 @@
+/**
+ * Rustic FloatButton skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * N2 DOES NOT APPLY HERE, and the difference matters. Rustic carries no `btn`
+ * class and no DaisyUI at all; its hover-scale was a REAL React state
+ * (`isHovered`, with an explicit code comment apologising that "inline styles
+ * cannot use :hover"). So rustic's hover DOES move — into the `:hover` rule
+ * below — while modern's must NOT, because modern's lives in a layered `.btn`
+ * rule that no inline style ever contested. Same interaction, opposite
+ * migrations. The `isHovered` state drove nothing else and is gone at all three
+ * render sites.
+ *
+ * SCOPE: all THREE render sites (`FloatButton`, `Group`'s trigger, `BackTop`)
+ * carry `rottay-float-button rottay-float-button--rustic` +
+ * `data-part='trigger'` + `data-variant` + `data-shape`, and all three already
+ * shared one `styles` object — so they collapse to one rule set. The trigger IS
+ * the painted element, so its rules are COMPOUND (no descendant space).
+ *
+ * BOTH BADGES PAINT THE SAME. Unlike modern (where the dot and the count carry
+ * different channels), rustic's dot is `{...styles.badge, ...styles.badgeDot}` —
+ * `badgeDot` overrides only geometry. One rule covers both; no discriminator is
+ * needed.
+ *
+ * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
+ * (0,4,0) border floor. Everything else is non-border paint and wins unlayered
+ * at (0,3,0)+.
+ */
+
+.rottay-float-button.rottay-float-button--rustic[data-part='trigger'] {
+  border: none;
+  box-shadow: var(--ds-floatbutton-shadow, var(--ds-shadow-dialog));
+}
+
+/* ---- shape. ---- */
+.rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-shape='circle'] {
+  border-radius: 50%;
+}
+.rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-shape='circle']) {
+  border-radius: var(--ds-floatbutton-square-radius, 8px);
+}
+
+/* ---- type. ---- */
+.rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary'] {
+  background-color: var(--ds-floatbutton-primary-bg, var(--ds-color-primary));
+  color: var(--ds-floatbutton-primary-color, var(--ds-color-text-on-primary));
+}
+.rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary']) {
+  background-color: var(--ds-floatbutton-default-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-floatbutton-default-color, var(--ds-color-text-secondary));
+}
+
+/* ---- hover: the lift rustic used to do in JS. ---- */
+.rottay-float-button.rottay-float-button--rustic[data-part='trigger']:hover {
+  transform: scale(1.05);
+  box-shadow: var(--ds-floatbutton-hover-shadow, var(--ds-shadow-lg));
+}
+
+/* ---- badge + description. ---- */
+.rottay-float-button--rustic [data-part='badge'] {
+  background-color: var(--ds-floatbutton-badge-bg, var(--ds-color-error));
+  color: var(--ds-floatbutton-badge-color, var(--ds-color-text-on-primary));
+  border-radius: 9px;
+}
+
+.rottay-float-button--rustic [data-part='description'] {
+  color: var(--ds-floatbutton-description-color, var(--ds-color-text-secondary));
+}
+
+/* ---- the collapsed group panel slides down; open declares no transform at all
+        (the source's open branch was `{}`), so no rule matches it.
+        NOTE the different scope: the panel is a SIBLING of the trigger inside
+        Group's root, not a descendant of it, so it cannot be reached from
+        `.rottay-float-button--rustic` (which lands on the trigger). Group's root
+        carries its own `rottay-float-button-group--rustic` class for exactly
+        this. Modern needs no equivalent — its panel is Tailwind-only and has no
+        inline paint to move. ---- */
+.rottay-float-button-group--rustic[data-part='root'] [data-part='panel'][data-open='false'] {
+  transform: translateY(16px);
+}

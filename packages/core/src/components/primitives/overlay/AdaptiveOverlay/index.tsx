@@ -198,9 +198,10 @@ export function AdaptiveOverlay({
       {children}
       {footer != null && (
         <div
+          data-part="footer"
+          className="rottay-adaptive-overlay-footer"
           style={{
             padding: 'var(--ds-spacing-4, 16px)',
-            borderTop: '1px solid var(--ds-color-border, #e5e7eb)',
           }}
         >
           {footer}

@@ -64,8 +64,11 @@ describe('Pagination engine advanced coverage', () => {
     expect(screen.getByText('Total 100 items')).toBeInTheDocument();
     expect(screen.getAllByText('...')).toHaveLength(2);
 
+    // The active page's fill is the skin's, keyed on the state attribute below;
+    // the engine's job is to stamp the state, not to paint it.
     const activeButton = screen.getByRole('button', { name: '5' });
-    expect(activeButton.getAttribute('style') ?? '').toContain('var(--ds-pagination-active-bg');
+    expect(activeButton.getAttribute('data-part')).toBe('pagination-page-button');
+    expect(activeButton.getAttribute('data-current')).toBe('true');
 
     fireEvent.click(screen.getByRole('button', { name: '«' }));
     fireEvent.click(screen.getByRole('button', { name: '10' }));

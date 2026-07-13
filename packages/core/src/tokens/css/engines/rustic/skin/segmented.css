@@ -1,0 +1,38 @@
+/**
+ * Rustic Segmented skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-segmented rottay-segmented--rustic` +
+ * `data-part='root'`; each option button carries `data-part='option'` +
+ * `data-selected` + `data-disabled`.
+ *
+ * NO IDLE `color` RULE. Rustic's base button never declared one — an unselected
+ * option inherits its color from the container, and only the SELECTED option
+ * sets `color`. Adding an idle rule would newly pin a color the component has
+ * always left to inheritance; the asymmetry against modern (which does declare
+ * both states) is preserved, not reconciled.
+ *
+ * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
+ * (0,4,0) border floor. Every other channel here is non-border paint and wins
+ * unlayered at (0,3,0).
+ */
+
+.rottay-segmented.rottay-segmented--rustic[data-part='root'] {
+  background-color: var(--ds-segmented-bg, var(--ds-color-neutral-100, #f5f5f5));
+  border-radius: var(--ds-segmented-radius, 8px);
+}
+
+.rottay-segmented--rustic[data-part='root'] [data-part='option'] {
+  border: none;
+  background: transparent;
+  border-radius: var(--ds-segmented-item-radius, 4px);
+}
+
+.rottay-segmented--rustic[data-part='root'] [data-part='option'][data-selected='true'] {
+  background-color: var(--ds-segmented-active-bg, #fff);
+  box-shadow: var(--ds-segmented-active-shadow, 0 2px 8px rgba(0, 0, 0, 0.08));
+  color: var(--ds-segmented-active-color, var(--ds-color-primary-500, #1677ff));
+}

@@ -188,12 +188,11 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     height: isAdaptiveFullscreen ? '100dvh' : undefined,
     maxWidth: effectiveFullscreen ? 'none' : '90vw',
     maxHeight: effectiveFullscreen ? 'none' : MAX_HEIGHT_MAP[size] || MAX_HEIGHT_MAP.md,
-    backgroundColor: 'var(--ds-color-bg-elevated)',
-    borderRadius: effectiveFullscreen ? '0' : RADIUS_MAP[radius] || RADIUS_MAP.lg,
-    boxShadow: isAdaptiveFullscreen ? 'none' : shadow ? 'var(--ds-modal-shadow, var(--ds-shadow-2xl))' : 'none',
+    // The radius folds a size enum (RADIUS_MAP) and the fullscreen override into
+    // one value; the skin reads it (not a paint key).
+    ['--ds-overlay-modal-radius' as any]: effectiveFullscreen ? '0' : RADIUS_MAP[radius] || RADIUS_MAP.lg,
     overflow: 'hidden',
     cursor: 'default',
-    transform: isAdaptiveFullscreen ? undefined : open ? 'scale(1) translateY(0)' : 'scale(0.95) translateY(-8px)',
     opacity: isAdaptiveFullscreen ? 1 : open ? 1 : 0,
     transition: isAdaptiveFullscreen || disableAnimation
       ? 'none'
@@ -208,7 +207,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     justifyContent: 'space-between',
     gap: '12px',
     padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-    borderBottom: divider ? '1px solid var(--ds-modal-header-border, var(--ds-color-border-primary))' : 'none',
     flexShrink: 0,
   };
 
@@ -238,7 +236,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     justifyContent: 'flex-end',
     gap: '12px',
     padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-    borderTop: divider ? '1px solid var(--ds-modal-footer-border, var(--ds-color-border-primary))' : 'none',
     flexShrink: 0,
   };
 
@@ -251,10 +248,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
     height: 32,
     padding: 0,
     margin: 0,
-    border: 'none',
-    borderRadius: '6px',
-    backgroundColor: 'transparent',
-    color: 'var(--ds-modal-close-color, var(--ds-color-text-tertiary))',
     cursor: 'pointer',
     transition: 'all 0.2s ease-in-out',
     flexShrink: 0,
@@ -280,6 +273,9 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
             <div
               data-part="surface"
               data-open="true"
+              data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
+              data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
+              data-shadow={shadow ? 'true' : 'false'}
               className={`rottay-modal rottay-modal--rustic rottay-modal--${size} rottay-overlay-modal-shell--rustic ${className}`}
               style={modalStyle}
               role="dialog"
@@ -290,7 +286,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
             >
               {/* Header */}
               {(title || header || closable) && (
-                <div data-part="header" style={headerStyle}>
+                <div data-part="header" data-divider={divider ? 'true' : 'false'} style={headerStyle}>
                   <div data-part="title" style={titleStyle}>
                     {header || (
                       title && <span id="modal-title">{title}</span>
@@ -303,17 +299,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
                       style={closeButtonStyle}
                       onClick={onClose}
                       aria-label={t('modal.close')}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor =
-                          'var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary))';
-                        e.currentTarget.style.color =
-                          'var(--ds-modal-close-color-hover, var(--ds-color-text-primary))';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'transparent';
-                        e.currentTarget.style.color =
-                          'var(--ds-modal-close-color, var(--ds-color-text-tertiary))';
-                      }}
                     >
                       <svg
                         width={18}
@@ -341,7 +326,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
                     data-part="description"
                     style={{
                       marginTop: 0,
-                      color: 'var(--ds-modal-body-color, var(--ds-color-text-secondary))',
                     }}
                   >
                     {description}
@@ -352,7 +336,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
 
               {/* Footer */}
               {footer && (
-                <div data-part="footer" style={footerStyle}>
+                <div data-part="footer" data-divider={divider ? 'true' : 'false'} style={footerStyle}>
                   {footer}
                 </div>
               )}

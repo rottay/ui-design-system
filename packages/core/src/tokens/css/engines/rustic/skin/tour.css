@@ -1,0 +1,104 @@
+/**
+ * Rustic Tour skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * PORTAL: both engines portal via a DIRECT `createPortal(…, document.body)` — not through
+ * the shared `Portal` util. Every rule is standalone on the root class.
+ *
+ * THE MASK COLOUR IS RUNTIME AND STAYS JS-DRIVEN, via the `--ds-tour-mask-color` custom
+ * property stamped on the root (see the modern skin's header for the full rationale). The
+ * var is referenced with NO fallback on purpose: a `mask` object with no `color` leaves it
+ * unset, which drops both dependent declarations — exactly reproducing today's
+ * `backgroundColor: undefined` and invalid `0 0 0 9999px undefined`.
+ *
+ * This engine's default mask colour is the literal `rgba(0, 0, 0, 0.5)`; modern's is
+ * `--ds-color-alpha-black-50`. Both are resolved in JS and preserved.
+ *
+ * TOKENS: this engine references a dedicated 12-name `--ds-tour-*` family. NONE of those
+ * names is defined anywhere in the tokens tree, so the hex fallbacks below are what every
+ * tenant actually sees today. They are transcribed verbatim; defining the family is a
+ * visual change and belongs in its own work order.
+ *
+ * The surface's border was three LONGHANDS (`borderWidth` / `borderStyle` / `borderColor`).
+ * It is re-formed here as an atomic SHORTHAND per `data-type` — `0 solid transparent` for
+ * the non-primary case, which is exactly what the longhand trio computed to.
+ *
+ * NEITHER engine has any hover/focus/active feedback anywhere. That absence is the shipped
+ * behaviour and is preserved; do not add interaction paint.
+ *
+ * SPECIFICITY (P-48): every colored border repeats its `data-part` to clear the tenant `*`
+ * border-color floor at (0,3,1). `transparent` still paints (it wins the tenant colour), so
+ * the non-primary branch is held to the floor too.
+ */
+
+/* ---- mask + spotlight cutout ---- */
+.rottay-tour--rustic[data-part='root'] > [data-part='backdrop'] {
+  background-color: var(--ds-tour-mask-color);
+}
+.rottay-tour--rustic[data-part='root'] > [data-part='spotlight'] {
+  border-radius: 8px;
+  box-shadow: 0 0 0 9999px var(--ds-tour-mask-color);
+}
+
+/* ---- step dialog ---- */
+.rottay-tour--rustic[data-part='root'] > [data-part='surface'] {
+  background-color: var(--ds-tour-bg, #fff);
+  border-radius: var(--ds-tour-radius, 12px);
+  box-shadow: var(--ds-tour-shadow, 0 8px 24px rgba(0, 0, 0, 0.15));
+  transform: translate(-50%, -50%);
+}
+.rottay-tour--rustic[data-part='root'] > [data-part='surface'][data-anchored='true'] {
+  transform: translateX(-50%);
+}
+.rottay-tour--rustic[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
+  border: 2px solid var(--ds-tour-primary-border, var(--ds-color-primary-500, #3b82f6));
+}
+.rottay-tour--rustic[data-part='root'] > [data-part='surface'][data-part='surface']:not([data-type='primary']) {
+  border: 0 solid transparent;
+}
+
+/* ---- close button (no hover, by design) ---- */
+.rottay-tour--rustic[data-part='root'] [data-part='close-button'] {
+  background: none;
+  border: none;
+  color: var(--ds-tour-close-color, var(--ds-color-neutral-400, #9ca3af));
+}
+
+/* ---- copy ---- */
+.rottay-tour--rustic[data-part='root'] [data-part='title'] {
+  color: var(--ds-tour-title-color, var(--ds-color-neutral-900, #111827));
+}
+.rottay-tour--rustic[data-part='root'] [data-part='description'] {
+  color: var(--ds-tour-description-color, var(--ds-color-neutral-500, #6b7280));
+}
+
+/* ---- step indicators ---- */
+.rottay-tour--rustic[data-part='root'] [data-part='indicator'] {
+  border-radius: 50%;
+  background-color: var(--ds-color-border);
+}
+.rottay-tour--rustic[data-part='root'] [data-part='indicator'][data-current='true'] {
+  background-color: var(--ds-color-primary);
+}
+
+/* ---- nav actions (no hover, by design) ---- */
+.rottay-tour--rustic[data-part='root'] [data-part='action'] {
+  border-radius: 6px;
+}
+.rottay-tour--rustic[data-part='root'] [data-part='action'][data-action='prev'] {
+  background-color: var(--ds-color-bg-elevated);
+}
+.rottay-tour--rustic[data-part='root'] [data-part='action'][data-part='action'][data-action='prev'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.rottay-tour--rustic[data-part='root'] [data-part='action'][data-action='next'] {
+  border: none;
+  background-color: var(--ds-color-neutral-700);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tour--rustic[data-part='root']
+  [data-part='surface'][data-type='primary']
+  [data-part='action'][data-action='next'] {
+  background-color: var(--ds-color-primary);
+}

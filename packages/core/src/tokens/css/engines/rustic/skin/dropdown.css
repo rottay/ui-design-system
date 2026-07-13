@@ -1,0 +1,62 @@
+/**
+ * Rustic Dropdown skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * PORTAL: this engine's panel mounts via a direct `createPortal(…, document.body)`,
+ * so it is NOT a descendant of the trigger root (and carries no `data-rottay-portal`
+ * marker — only the shared `Portal` util stamps that). Every rule is therefore
+ * STANDALONE on the panel's own class `.rottay-dropdown--rustic`, which the panel
+ * carries alongside `data-part='surface'` — a SELF-CARRYING scope element, so the
+ * panel's own rules take the COMPOUND form with no descendant space. The item rows
+ * live inside the portaled panel and are its descendants.
+ *
+ * Unlike the modern engine, this one renders ZERO DaisyUI classes: `theme.css`'s
+ * `.menu li > button` rules do not reach it and its item hover was IMPERATIVE
+ * (`.style.backgroundColor` on mouseenter/leave). That hover becomes a real `:hover`
+ * rule here, gated on `:not([data-disabled='true'])` — exactly reproducing the
+ * handler's `if (!item.disabled)` guard. The mouseleave handler restored
+ * `transparent`, which is the resting value below.
+ *
+ * This engine declares no `transition`, so the hover snaps — do NOT add one (the
+ * near-identical rustic ContextMenu row DOES ease, and that asymmetry ships today).
+ *
+ * SCOPE: `rottay-dropdown--rustic`. NOT `ds-dropdown` — that name carries a DORMANT
+ * entrance-animation rule in personality.css that matches nothing today (P3).
+ *
+ * `[data-placement^='top']` reproduces the panel's `placement?.includes('top')`
+ * transform: every placement value containing 'top' also starts with it
+ * (top/topLeft/topRight vs bottom/bottomLeft/bottomRight), so the prefix match is
+ * exact. An absent `placement` matches nothing and leaves the transform unset.
+ */
+
+/* ---- portaled menu panel ---- */
+.rottay-dropdown--rustic[data-part='surface'] {
+  background-color: var(--ds-dropdown-bg, #fff);
+  border-radius: var(--ds-dropdown-radius, 12px);
+  box-shadow: var(--ds-dropdown-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+}
+.rottay-dropdown--rustic[data-part='surface'][data-placement^='top'] {
+  transform: translateY(-100%);
+}
+
+/* ---- structural rows ---- */
+.rottay-dropdown--rustic[data-part='surface'] [data-part='divider'] {
+  background-color: var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb));
+}
+.rottay-dropdown--rustic[data-part='surface'] [data-part='group-label'] {
+  color: var(--ds-dropdown-group-color, var(--ds-color-neutral-500, #6b7280));
+}
+
+/* ---- item row: resting chrome + the transcribed imperative hover ---- */
+.rottay-dropdown--rustic[data-part='surface'] [data-part='item'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+.rottay-dropdown--rustic[data-part='surface'] [data-part='item'][data-tone='danger'] {
+  color: var(--ds-dropdown-danger-color, var(--ds-color-error-500, #ef4444));
+}
+.rottay-dropdown--rustic[data-part='surface'] [data-part='item']:hover:not([data-disabled='true']) {
+  background-color: var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6));
+}

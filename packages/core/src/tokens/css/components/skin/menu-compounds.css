@@ -1,0 +1,95 @@
+/**
+ * Menu compound skins — `Menu.Item`, `Menu.SubMenu`, `Menu.Group`, `Menu.Divider`
+ * (WO-SKIN-04 checkpoint N).
+ *
+ * ENGINE-AGNOSTIC: all four compounds are JSX-composition APIs with a single
+ * render tree; they never touch the engine system. One skin file, no engine
+ * modifier.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: `rottay-menu-item`, `rottay-menu-submenu`, `rottay-menu-group` and
+ * `rottay-menu-divider` are the compounds' own BEM classes — until now dead CSS
+ * hooks (zero stylesheet references), grep-verified free of any other consumer.
+ * They are what keeps this file's paint from colliding with the two ENGINE Menu
+ * skins, which key the same `data-part='item'` / `'trigger'` / `'divider'` /
+ * `'group-label'` vocabulary. These compounds CAN legitimately be composed
+ * inside a `<Menu>` root (the engines render `children` when no `items` prop is
+ * given), so the collision is not hypothetical — every rule here is anchored on
+ * a compound class the engines never stamp, and the engine skins' rules are in
+ * turn anchored on `.rottay-menu--modern` / `--rustic`, which these compounds
+ * never carry.
+ *
+ * THE DIVIDER'S BORDER IS THREE LONGHANDS, ON PURPOSE. A `border-width` of
+ * `1px 0 0 0` has no shorthand form, so the dashed variant cannot be expressed
+ * as an atomic `border:` — and the solid variant's `border-color: transparent`
+ * must still be declared, because the source declared it (dropping it would let
+ * the tenant's `* { border-color }` floor paint an edge the divider has never
+ * had). The three longhands therefore stay TOGETHER in one rule at one
+ * specificity, which is exactly how ReactDOM applied them from the style object:
+ * they cannot drop independently of one another. This is not the split the
+ * atomic-border law forbids (that one spreads width/style and colour across
+ * rules of DIFFERENT specificity, where the colour alone can lose).
+ *
+ * The solid variant draws its line with `background-color` on a 1px-tall `<li>`;
+ * the dashed variant draws it with a dashed top border instead. Both are kept.
+ *
+ * SPECIFICITY (P-48): the divider's `border-color` carries a real colour and must
+ * clear the tenant's unlayered `* { border-color }` floor at (0,3,1), so it
+ * reaches (0,4,0) via the scope class + a repeated `data-part`. Non-border paint
+ * wins at (0,2,0)+.
+ */
+
+/* ---- Menu.Item ---------------------------------------------------------- */
+.rottay-menu-item[data-part='item'] {
+  color: var(--ds-menu-item-color, inherit);
+  background-color: transparent;
+  border-radius: var(--ds-menu-border-radius, 8px);
+}
+
+.rottay-menu-item[data-part='item'][data-tone='danger'] {
+  color: var(--ds-menu-item-danger-color, var(--ds-color-error));
+}
+
+/* ---- Menu.SubMenu ------------------------------------------------------- */
+.rottay-menu-submenu [data-part='trigger'] {
+  color: var(--ds-menu-item-color, inherit);
+  background-color: transparent;
+  border-radius: var(--ds-menu-border-radius, 8px);
+}
+
+.rottay-menu-submenu [data-part='trigger'][data-open='true'] {
+  background-color: var(--ds-menu-submenu-bg, var(--ds-color-bg-secondary));
+}
+
+/* the chevron flips with the panel; both states were fixed strings. */
+.rottay-menu-submenu [data-part='trigger'][data-open='false'] [data-part='arrow-icon'] {
+  transform: rotate(0deg);
+}
+.rottay-menu-submenu [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ---- Menu.Group --------------------------------------------------------- */
+.rottay-menu-group [data-part='group-label'] {
+  color: var(--ds-menu-group-title-color, var(--ds-color-text-muted));
+}
+
+/* ---- Menu.Divider: solid paints a background line, dashed paints a border. -- */
+.rottay-menu-divider[data-part='divider'] {
+  background-color: var(--ds-menu-divider-color, var(--ds-color-border));
+}
+
+.rottay-menu-divider[data-part='divider'][data-part='divider'] {
+  border-style: solid;
+  border-width: 0;
+  border-color: transparent;
+}
+
+.rottay-menu-divider--dashed[data-part='divider'][data-part='divider'] {
+  border-style: dashed;
+  border-width: 1px 0 0 0;
+  border-color: var(--ds-menu-divider-color, var(--ds-color-border));
+}

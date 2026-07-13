@@ -1,0 +1,78 @@
+/**
+ * Modern Dropdown skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * THE ITEM ROW IS NOT PAINTED HERE, ON PURPOSE (P2b). This engine keeps the DaisyUI
+ * `dropdown` / `dropdown-content` / `menu` classes, and the item row's ENTIRE resting
+ * chrome plus its hover background come from `modern/theme.css` (layer
+ * `rottay-engines`), keyed on `.menu li > button`:
+ *
+ *   [data-tenant] .menu li > button        { border: none; background: transparent;
+ *                                            border-radius: …; color: …; transition: …; }
+ *   [data-tenant] .menu li > button:hover  { background-color: var(--ds-dropdown-item-bg-hover); }
+ *   [data-tenant] .menu li > button.text-error       { color: var(--ds-color-error-600); }
+ *   [data-tenant] .menu li > button.text-error:hover { background-color: var(--ds-color-error-50); }
+ *
+ * and `personality.css` then replaces the transition timing on the same selector — a
+ * THIRD source. Because THIS file is unlayered, ANY `background` it declared on the
+ * row (even `transparent`) would outrank the layered `:hover` rule and delete a
+ * shipping hover. So the row gets exactly one declaration here: the danger `color`,
+ * which was inline before (inline also outranked `.text-error`) and is unlayered now.
+ * Same winner, same value, and the layered `.text-error:hover` background survives
+ * untouched because this file never mentions background on that element.
+ *
+ * ContextMenu LOOKS like the same widget but is genuinely hover-less on modern (it
+ * renders zero DaisyUI classes). Do not unify the two.
+ *
+ * The <ul> panel is different: its background/border/radius/shadow were ALREADY inline
+ * (masking `theme.css`'s `.dropdown-content` declarations), so moving them to an
+ * unlayered rule keeps the same winner with the same values.
+ *
+ * PORTAL: this engine does NOT portal — the panel is an in-tree absolute sibling. The
+ * scope class anchors every rule regardless.
+ *
+ * SCOPE: `rottay-dropdown--modern`. NOT `ds-dropdown` — that name carries a DORMANT
+ * `[data-engine] .ds-dropdown { animation: ds-dropdown-enter … }` rule in
+ * personality.css which matches nothing today (P3); adopting it would add a second,
+ * independent entrance animation on top of this component's own.
+ *
+ * SPECIFICITY (P-48): the panel's colored border repeats its `data-part` to clear the
+ * tenant `*` border-color floor at (0,3,1). It stays a SHORTHAND: `.dropdown-content`
+ * is a layered-rule hook and splitting the border into longhands would let the tenant
+ * floor repaint the color channel alone.
+ */
+
+@keyframes ds-dropdown-popover-enter-modern {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes ds-dropdown-popover-exit-modern {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
+}
+
+/* ---- floating menu panel (the <ul>) ---- */
+.rottay-dropdown--modern[data-part='trigger'] > [data-part='surface'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-1);
+}
+.rottay-dropdown--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- structural rows ---- */
+.rottay-dropdown--modern[data-part='trigger'] [data-part='divider'] {
+  background: var(--ds-color-border-subtle);
+}
+.rottay-dropdown--modern[data-part='trigger'] [data-part='group-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- danger item: colour ONLY. See the P2b note above — declaring a background
+        on this row would kill the layered `.menu li > button:hover` rule. ---- */
+.rottay-dropdown--modern[data-part='trigger'] [data-part='item'][data-tone='danger'] {
+  color: var(--ds-color-error);
+}

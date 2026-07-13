@@ -1,0 +1,110 @@
+/**
+ * Modern Menu skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * THE INJECTED DOCUMENT-GLOBAL `<style>` IS LEFT VERBATIM. `ensureGlobalStyles()`
+ * appends a singleton `<style id="rottay-menu-modern-styles">` to `document.head`
+ * carrying an `!important` `:focus-visible` outline, a chevron rotation and a
+ * `::marker` reset. It is NOT hoisted here: an `!important` stylesheet
+ * declaration outranks any inline style, so that rule — not the component's
+ * `onFocus` handler — is what has actually been painting the focus ring all
+ * along. The handler's `.style.outline = …` writes were dead on arrival (a plain
+ * inline style can never beat `!important`) and ARE removed; the CSS that really
+ * paints stays exactly where it is, at exactly its old priority. The `outline:
+ * none` rest state below is the same declaration the base style object carried,
+ * and loses to that `!important` rule exactly as it did when it was inline.
+ *
+ * SCOPE ROOT carries `rottay-menu rottay-menu--modern rottay-menu--<theme>` +
+ * `data-part='root'`. The theme MODIFIER CLASS (not a `data-theme` attribute) is
+ * deliberate: `data-theme` is DaisyUI's own theming hook and is claimed by the
+ * tenant layer, so stamping it on a `<ul>` would open a theme scope inside the
+ * menu. The class mirrors what the rustic engine already stamps.
+ *
+ * `data-level` is the other stamp this migration added: the selected tint is 8%
+ * on a top-level row and 7% on a child row, and nothing in the DOM distinguished
+ * them (the level rode a `--rottay-menu-level` custom property, which a selector
+ * cannot read).
+ *
+ * PRIORITY CHAIN, transcribed from the JS `if` ladder (base → hover → selected →
+ * danger → disabled): each rule below carries the `:not()` guards that make
+ * exactly one win per state combination. Hover was gated on
+ * `!disabled && !isSelected`; danger's colour was gated on `!isSelected`.
+ *
+ * SPECIFICITY (P-48): `border: none` and `outline: none` are color-free resets,
+ * exempt from the (0,4,0) floor. Everything else here is non-border paint and
+ * wins unlayered at (0,3,0)+.
+ */
+
+/* ---- root surface: the one channel that keys on the theme. ---- */
+.rottay-menu.rottay-menu--modern[data-part='root'] {
+  border-radius: var(--ds-radius-lg, 12px);
+}
+.rottay-menu--modern.rottay-menu--light[data-part='root'] {
+  background: var(--ds-surface-card);
+}
+.rottay-menu--modern.rottay-menu--dark[data-part='root'] {
+  background: var(--ds-surface-panel);
+}
+
+/* ---- item + submenu trigger share one chromeless base. ---- */
+.rottay-menu--modern[data-part='root'] [data-part='item'],
+.rottay-menu--modern[data-part='root'] [data-part='trigger'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  color: var(--ds-color-text-secondary);
+  outline: none;
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='item'] {
+  border: none;
+  background: transparent;
+}
+
+/* ---- hover: only when neither disabled nor already selected. ---- */
+.rottay-menu--modern[data-part='root'] [data-part='item']:not([data-disabled]):not([data-selected='true']):hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+}
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-tone='danger']:not([data-disabled]):not([data-selected='true']):hover {
+  background: color-mix(in srgb, var(--ds-color-error) 6%, transparent);
+}
+.rottay-menu--modern[data-part='root'] [data-part='trigger']:not([data-disabled]):hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+}
+
+/* ---- danger text, only while unselected (selection wins the colour). ---- */
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-tone='danger']:not([data-selected='true']) {
+  color: var(--ds-color-error);
+}
+
+/* ---- selected: a tint + the active colour. The tint is 8% at the top level
+        and 7% one level down — the reason `data-level` exists. ---- */
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'] {
+  color: var(--ds-sidebar-item-color-active, var(--ds-color-primary));
+}
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'][data-level='top'] {
+  background: color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 8%, transparent);
+}
+.rottay-menu--modern[data-part='root'] [data-part='item'][data-selected='true'][data-level='child'] {
+  background: color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 7%, transparent);
+}
+
+/* ---- the left accent bar (rendered only on a selected top-level row, so it
+        needs no state guard of its own). `translateY(-50%)` is optical
+        centering, not a runtime value. ---- */
+.rottay-menu--modern[data-part='root'] [data-part='indicator'] {
+  transform: translateY(-50%);
+  border-radius: 3px;
+  background: var(--ds-color-primary, var(--ds-sidebar-item-color-active));
+}
+
+/* ---- group heading + divider. ---- */
+.rottay-menu--modern[data-part='root'] [data-part='group-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.rottay-menu--modern[data-part='root'] [data-part='divider'] {
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent), transparent);
+  border: none;
+}

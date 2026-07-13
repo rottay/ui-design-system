@@ -1,0 +1,53 @@
+/**
+ * Rustic Pagination skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-pagination rottay-pagination--rustic` +
+ * `data-part='root'`. All four button parts are anchored under it.
+ *
+ * NOT JOINED, unlike modern: rustic gives every button its own full border and
+ * its own radius — there is no shared seam and no `border-right: none`. The two
+ * engines' page controls are genuinely different objects; preserved, not
+ * reconciled. `getButtonStyle`'s `isActive` argument only ever reached the
+ * CURRENT page button (prev/next/ellipsis always passed `false`), so the idle
+ * rule below is the base and only `[data-current='true']` inverts.
+ *
+ * The idle `color: inherit` is transcribed verbatim: it is what the component
+ * declared, and dropping it would let the button inherit from a different point
+ * in the cascade than it does today.
+ *
+ * SPECIFICITY (P-48): the `border` shorthand carries a real color and must clear
+ * the tenant's unlayered `* { border-color }` floor at (0,3,1), so it reaches
+ * (0,4,0) via the scope class + the root attr + a REPEATED `data-part` on the
+ * target (a compound, no descendant space), and stays a SHORTHAND. Non-border
+ * paint wins at (0,3,0).
+ */
+
+/* ---- shared button chrome: the one bordered rule (0,4,0). ---- */
+.rottay-pagination--rustic[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
+.rottay-pagination--rustic[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
+.rottay-pagination--rustic[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'] {
+  border: 1px solid var(--ds-pagination-border-color, var(--ds-color-neutral-300, #d9d9d9));
+}
+
+.rottay-pagination--rustic[data-part='root'] [data-part='pagination-nav-button'],
+.rottay-pagination--rustic[data-part='root'] [data-part='pagination-page-button'],
+.rottay-pagination--rustic[data-part='root'] [data-part='ellipsis'] {
+  border-radius: var(--ds-pagination-radius, 0.25rem);
+  background: var(--ds-pagination-bg, white);
+  color: inherit;
+}
+
+/* ---- the current page inverts. ---- */
+.rottay-pagination--rustic[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {
+  background: var(--ds-pagination-active-bg, var(--ds-color-primary-500, #0066CC));
+  color: var(--ds-pagination-active-color, white);
+}
+
+/* ---- the "total items" label. ---- */
+.rottay-pagination--rustic[data-part='root'] [data-part='pagination-range'] {
+  color: var(--ds-pagination-total-color, var(--ds-color-neutral-600, #666));
+}

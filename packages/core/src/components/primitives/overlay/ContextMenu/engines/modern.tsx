@@ -19,17 +19,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import type { ContextMenuProps, ContextMenuItem } from '../ContextMenu.types';
 import { usePresence } from '../../../../../motion/hooks/use-presence';
 
-/** Enter/exit keyframes for the floating menu -- injected once via <style>. Shared shape with Dropdown's popover motion. */
-const CONTEXT_MENU_STYLES = `
-@keyframes rottay-popover-enter {
-  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes rottay-popover-exit {
-  from { opacity: 1; transform: scale(1) translateY(0); }
-  to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
-}
-`;
 const MOTION_DURATION = 'var(--ds-motion-fast)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
@@ -39,12 +28,12 @@ const MenuItem: React.FC<{
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
   if (item.type === 'divider') {
-    return <li data-part="divider" style={{ height: 1, margin: '4px 0', background: 'var(--ds-color-border-subtle)' }} />;
+    return <li data-part="divider" style={{ height: 1, margin: '4px 0' }} />;
   }
 
   if (item.type === 'group') {
     return (
-      <li data-part="group-label" style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, color: 'var(--ds-color-text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+      <li data-part="group-label" style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
         <span>{item.label}</span>
       </li>
     );
@@ -58,7 +47,6 @@ const MenuItem: React.FC<{
         data-tone={item.danger ? 'danger' : undefined}
         data-disabled={item.disabled ? 'true' : undefined}
         className={`flex items-center justify-between gap-2 ${item.disabled ? 'disabled opacity-50' : ''}`}
-        style={item.danger ? { color: 'var(--ds-color-error)' } : undefined}
         disabled={item.disabled}
         onClick={() => {
           item.onClick?.();
@@ -151,41 +139,34 @@ export default function ModernContextMenu(props: ContextMenuProps): React.ReactE
     >
       {trigger}
       {shouldRender && (
-        <>
-          <style dangerouslySetInnerHTML={{ __html: CONTEXT_MENU_STYLES }} />
-          <ul
-            ref={(node) => {
-              menuRef.current = node;
-              presenceRef(node);
-            }}
-            data-part="surface"
-            data-open={dataState === 'open' ? 'true' : 'false'}
-            className={overlayClassName || undefined}
-            style={{
-              position: 'absolute',
-              // Tokenized overlay stack (spec section 9): context menus share
-              // the popover tier (matches the canonical --ds-z-index-context-menu
-              // alias), not a magic 50.
-              zIndex: 'var(--ds-z-popover)',
-              width: 224,
-              padding: 8,
-              listStyle: 'none',
-              margin: 0,
-              borderRadius: 'var(--ds-radius-lg)',
-              background: 'var(--ds-surface-card)',
-              border: '1px solid var(--ds-color-border-subtle)',
-              boxShadow: 'var(--ds-elevation-2)',
-              left: position.x,
-              top: position.y,
-              animation: `${dataState === 'open' ? 'rottay-popover-enter' : 'rottay-popover-exit'} ${MOTION_DURATION} ${MOTION_EASING} both`,
-              ...overlayStyle,
-            }}
-          >
-            {items.map((item) => (
-              <MenuItem key={item.key} item={item} onClick={handleItemClick} />
-            ))}
-          </ul>
-        </>
+        <ul
+          ref={(node) => {
+            menuRef.current = node;
+            presenceRef(node);
+          }}
+          data-part="surface"
+          data-open={dataState === 'open' ? 'true' : 'false'}
+          className={overlayClassName || undefined}
+          style={{
+            position: 'absolute',
+            // Tokenized overlay stack (spec section 9): context menus share
+            // the popover tier (matches the canonical --ds-z-index-context-menu
+            // alias), not a magic 50.
+            zIndex: 'var(--ds-z-popover)',
+            width: 224,
+            padding: 8,
+            listStyle: 'none',
+            margin: 0,
+            left: position.x,
+            top: position.y,
+            animation: `${dataState === 'open' ? 'ds-context-menu-popover-enter-modern' : 'ds-context-menu-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+            ...overlayStyle,
+          }}
+        >
+          {items.map((item) => (
+            <MenuItem key={item.key} item={item} onClick={handleItemClick} />
+          ))}
+        </ul>
       )}
     </div>
   );

@@ -226,6 +226,40 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
 }
 
 /** Fires the fixture's own trigger interaction against its trigger locator. */
+/**
+ * Waits until a just-opened surface has stopped moving.
+ *
+ * A fixed settle timeout photographs whatever frame happens to be on screen when
+ * it expires. HoverCard opens on a delay AND fades, so under full-suite load a
+ * 300ms wait caught it mid-transition and the diff failed once in ~40 runs while
+ * passing every time the spec ran alone — the worst kind of red, because it
+ * looks like a migration defect. This polls the surface's own opacity and
+ * transform until they are unchanged across two consecutive frames, so the shot
+ * is taken when the animation is over rather than when a clock says it should be.
+ */
+async function waitForSettled(page: Page, selector: string): Promise<void> {
+  await page.waitForFunction(
+    (sel) => {
+      const el = document.querySelector(sel);
+      if (!el) return false;
+      const read = () => {
+        const cs = getComputedStyle(el);
+        return `${cs.opacity}|${cs.transform}`;
+      };
+      const w = window as unknown as { __settle?: { key: string; hits: number } };
+      const key = read();
+      if (!w.__settle || w.__settle.key !== key) {
+        w.__settle = { key, hits: 1 };
+        return false;
+      }
+      w.__settle.hits += 1;
+      return w.__settle.hits >= 3;
+    },
+    selector,
+    { timeout: 10_000, polling: 'raf' },
+  );
+}
+
 async function triggerOpen(page: Page, container: Locator, fixture: OverlayFixtureConfig): Promise<void> {
   const trigger = container.locator(`[data-testid="${fixture.triggerTestId}"]`);
   await trigger.waitFor({ timeout: 10_000 });
@@ -278,12 +312,12 @@ for (const fixture of OVERLAY_FIXTURES) {
         const surface = page.locator(selector);
         await surface.waitFor({ timeout: 10_000 });
         expect(await container.locator(selector).count()).toBe(0);
-        await page.waitForTimeout(300);
+        await waitForSettled(page, selector);
         await expect(surface).toHaveScreenshot(`rottay-overlay-${fixture.key}-${engine}-open.png`);
       } else {
         const surface = container.locator(selector);
         await surface.waitFor({ timeout: 10_000 });
-        await page.waitForTimeout(300);
+        await waitForSettled(page, selector);
         await expect(surface).toHaveScreenshot(`rottay-overlay-${fixture.key}-${engine}-open.png`);
       }
     });

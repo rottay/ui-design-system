@@ -328,12 +328,10 @@ export const RusticAffix = forwardRef<HTMLDivElement, AffixProps>(
 
     // Advanced mode: CSS variables are spread into both affixed and non-affixed
     // styles so tenant overrides remain active regardless of scroll state.
-    // The box-shadow gives visual feedback that the element is floating.
     const affixedStyle: React.CSSProperties = state.affixed
       ? {
           ...cssVars,
           ...state.fixedStyle,
-          boxShadow: 'var(--ds-affix-shadow, 0 2px 8px rgba(0, 0, 0, 0.15))',
           transition: 'var(--ds-affix-transition)',
           ...style,
         }

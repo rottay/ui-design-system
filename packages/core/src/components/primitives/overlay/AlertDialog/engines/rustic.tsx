@@ -84,7 +84,6 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
   const backdropStyle: React.CSSProperties = {
     position: 'fixed',
     inset: 0,
-    backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -95,13 +94,9 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
 
   // Card-like dialog container -- consumer `style` prop merges at the end
   const dialogStyle: React.CSSProperties = {
-    backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff))',
-    borderRadius: 'var(--ds-modal-radius, var(--ds-radius-xl, 16px))',
     padding: '24px',
     maxWidth: '420px',
     width: '90vw',
-    border: '1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb))',
-    boxShadow: 'var(--ds-modal-shadow, var(--ds-shadow-2xl))',
     ...style,
   };
 
@@ -110,24 +105,18 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
     flexShrink: 0,
     width: '40px',
     height: '40px',
-    borderRadius: '50%',
-    backgroundColor: 'var(--ds-color-error-50, #fff2f0)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'var(--ds-color-error-500, #ff4d4f)',
   };
 
-  // Outlined cancel button styled via DS tokens for border and transitions
+  // Outlined cancel button; the transition is declared but never triggered (this
+  // engine has no hover/active state that changes opacity or box-shadow).
   const cancelButtonStyle: React.CSSProperties = {
     padding: '8px 16px',
-    borderRadius: 'var(--ds-radius-md, 8px)',
     fontSize: '14px',
     fontWeight: 500,
     cursor: 'pointer',
-    backgroundColor: 'var(--ds-color-bg-primary, transparent)',
-    color: 'var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a))',
-    border: '1px solid var(--ds-modal-footer-border, var(--ds-color-neutral-300, #d9d9d9))',
     transition: 'opacity var(--ds-personality-animation-entrance-duration, 220ms) var(--ds-input-transition-timing, ease), box-shadow var(--ds-personality-animation-entrance-duration, 220ms) var(--ds-input-transition-timing, ease)',
   };
 
@@ -167,7 +156,6 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
                   fontSize: '16px',
                   fontWeight: 600,
                   marginBottom: '8px',
-                  color: 'var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a))',
                 }}
               >
                 {title}
@@ -179,7 +167,6 @@ export default function RusticAlertDialog(props: AlertDialogProps): React.ReactE
                 data-part="description"
                 style={{
                   fontSize: '14px',
-                  color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666))',
                   lineHeight: 1.5,
                 }}
               >

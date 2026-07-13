@@ -1,0 +1,34 @@
+/**
+ * Modern Anchor skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: the link `<a>` carries `rottay-anchor-link rottay-anchor-link--modern`
+ * + `data-part='item'` + `data-selected`. It IS the painted element, so the
+ * rules are COMPOUND (no descendant space).
+ *
+ * MIXED BORDER MECHANISM — the active accent bar is assembled from two sources
+ * and only ONE of them was ever inline. The 2px width comes from Tailwind's
+ * `border-l-2` class (always present); the INACTIVE color comes from Tailwind's
+ * `border-transparent` class (present only when inactive); the ACTIVE color was
+ * the inline `borderColor`. Only the active color moves here. Writing an
+ * inactive `border-color` rule would NOT be a no-op: it would newly out-rank the
+ * tenant's unlayered `* { border-color }` floor, which today beats the layered
+ * `.border-transparent` utility. The inactive channel is therefore left exactly
+ * as it is.
+ *
+ * SPECIFICITY (P-48): the tenant border-color floor sits at (0,3,1), so the
+ * active `border-color` must reach (0,4,0) — two scope classes + `data-part` +
+ * `data-selected`. `color` is non-border paint and wins at (0,3,0)+.
+ */
+
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true'] {
+  color: var(--ds-color-primary);
+  border-color: var(--ds-color-primary);
+}

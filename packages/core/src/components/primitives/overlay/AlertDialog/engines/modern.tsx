@@ -90,9 +90,6 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
         data-part="backdrop"
         className="modal-backdrop"
         onClick={handleBackdropClick}
-        style={{
-          background: 'var(--ds-overlay-bg)',
-        }}
       />
       <div
         data-part="surface"
@@ -101,14 +98,12 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
         role="alertdialog"
         aria-modal="true"
         style={{
-          background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-          borderRadius: 'var(--ds-modal-radius, var(--ds-radius-lg))',
           padding: 'var(--ds-modal-padding, 1.5rem)',
         }}
       >
         <div className="flex gap-3 items-start">
           {/* Error-tinted circle with inline SVG warning triangle */}
-          <div data-part="icon" className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center" style={{ background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' }}>
+          <div data-part="icon" className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
               <line x1="12" y1="9" x2="12" y2="13" />
@@ -120,7 +115,7 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
               <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
             )}
             {description && (
-              <p data-part="description" className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</p>
+              <p data-part="description" className="text-sm">{description}</p>
             )}
           </div>
         </div>
@@ -131,13 +126,9 @@ export default function ModernAlertDialog(props: AlertDialogProps): React.ReactE
             data-part="action"
             data-action="cancel"
             style={{
-              background: 'transparent',
-              color: 'var(--ds-color-text-primary)',
               height: 'var(--ds-control-height-sm, 36px)',
               padding: '0 var(--ds-spacing-md, 16px)',
               fontSize: 'var(--ds-font-size-sm, 14px)',
-              borderRadius: 'var(--ds-radius-md)',
-              border: 'none',
               cursor: 'pointer',
             }}
             onClick={handleCancel}

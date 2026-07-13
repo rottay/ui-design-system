@@ -83,9 +83,8 @@ export function MobileHeader({
       <Box
         as="button"
         onClick={onBack}
+        className="rottay-mobile-header__back"
         style={{
-          background: 'none',
-          border: 'none',
           cursor: 'pointer',
           display: 'flex',
           alignItems: 'center',
@@ -93,7 +92,6 @@ export function MobileHeader({
           minWidth: 44,
           minHeight: 44,
           padding: 0,
-          color: 'var(--ds-color-text-primary)',
         } as CSSProperties}
         aria-label="Go back"
         data-testid="mobile-header-back"
@@ -108,8 +106,6 @@ export function MobileHeader({
     width: '100%',
     height: 56,
     minHeight: 56,
-    background: 'var(--ds-color-bg-primary)',
-    borderBottom: '1px solid var(--ds-color-border)',
     paddingTop: 'env(safe-area-inset-top, 0px)',
     ...(sticky
       ? {
@@ -124,6 +120,7 @@ export function MobileHeader({
   return (
     <Box
       as="header"
+      className="rottay-mobile-header"
       style={containerStyle}
       data-testid="mobile-header"
       role="banner"
@@ -164,6 +161,7 @@ export function MobileHeader({
         >
           {title && (
             <Text
+              className="rottay-mobile-header__title"
               style={{
                 fontSize: 17,
                 fontWeight: 600,
@@ -171,7 +169,6 @@ export function MobileHeader({
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                color: 'var(--ds-color-text-primary)',
               }}
               data-testid="mobile-header-title"
               data-part="label"

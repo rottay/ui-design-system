@@ -1,0 +1,115 @@
+/**
+ * Rustic Steps skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * N1 DOES NOT APPLY HERE: rustic owns none of DaisyUI's machinery. It renders
+ * real `<span>` circles and a real `<span>` connector, carries no `.steps` /
+ * `.step` class, and `engines/rustic/theme.css` has no `steps` selector at all.
+ * Everything below is ordinary inline paint keyed on the status the item stamps.
+ *
+ * SCOPE ROOT carries `rottay-steps rottay-steps--rustic` + `data-part='root'`.
+ *
+ * TWO STAMPS THIS MIGRATION HAD TO ADD, because the paint cannot leave the TSX
+ * without them and the pre-step did not provide them:
+ *   - `data-variant` on the icon, because ONE `data-part='icon'` covers three
+ *     different paint shapes: a `dot-slot` (a caller-rendered progressDot, which
+ *     this component gives NO color of its own), a `dot` (a filled circle whose
+ *     fill is the status BORDER token, not the bg token), and a `circle` (the
+ *     bordered number/check/cross badge). Without the discriminator, one rule
+ *     would have to paint all three.
+ *   - `data-status` on the connector, because its completion test is
+ *     `index < current` — a DIFFERENT predicate from the item's own
+ *     `effectiveStatus` (a caller can pin a step's status independently), so the
+ *     parent's `data-status` cannot stand in for it.
+ *
+ * THE BORDER SHORTHAND IS RE-FUSED, NOT SPLIT. The source set `border: '2px
+ * solid'` (width + style, no color) and then a separate `borderColor` — two keys
+ * that only resolve together. Splitting a border across declarations is what
+ * re-materialized a stray accent bar in the feedback batch, so each status gets
+ * ONE atomic `border: 2px solid <color>` shorthand. Computed result is identical
+ * (the source's colorless shorthand resolved to `currentColor` and was then
+ * overridden by `border-color` on the very next key).
+ *
+ * SPECIFICITY (P-48): the circle's `border` carries a real color and must clear
+ * the tenant's unlayered `* { border-color }` floor at (0,3,1); the per-status
+ * circle rules reach (0,5,0) (scope class + root attr + item attr + status attr
+ * + variant attr). Non-border paint wins at (0,3,0).
+ */
+
+/* ---- every icon is round, whatever it holds. ---- */
+.rottay-steps--rustic[data-part='root'] [data-part='icon'] {
+  border-radius: 50%;
+}
+
+/* ---- the bordered circle: bg + border + glyph color, per status. ---- */
+.rottay-steps--rustic[data-part='root'] [data-status='finish'] [data-part='icon'][data-variant='circle'] {
+  background-color: var(--ds-steps-finish-bg, var(--ds-color-primary-500, var(--ds-color-primary)));
+  border: 2px solid var(--ds-steps-finish-border, var(--ds-color-primary-500, var(--ds-color-primary)));
+  color: var(--ds-steps-finish-text, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-status='process'] [data-part='icon'][data-variant='circle'] {
+  background-color: var(--ds-steps-process-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  border: 2px solid var(--ds-steps-process-border, var(--ds-color-primary-500, var(--ds-color-primary)));
+  color: var(--ds-steps-process-text, var(--ds-color-primary-500, var(--ds-color-primary)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-status='error'] [data-part='icon'][data-variant='circle'] {
+  background-color: var(--ds-steps-error-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  border: 2px solid var(--ds-steps-error-border, var(--ds-color-error-500, var(--ds-color-error)));
+  color: var(--ds-steps-error-text, var(--ds-color-error-500, var(--ds-color-error)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-status='wait'] [data-part='icon'][data-variant='circle'] {
+  background-color: var(--ds-steps-wait-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  border: 2px solid var(--ds-steps-wait-border, var(--ds-color-border-secondary, var(--ds-color-neutral-300)));
+  color: var(--ds-steps-wait-text, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)));
+}
+
+/* ---- the boolean progress dot: filled with the status BORDER token (the source
+        read `colors.border`, not `colors.bg` — preserved deliberately). The
+        `dot-slot` variant is caller content and gets no fill at all. ---- */
+.rottay-steps--rustic[data-part='root'] [data-status='finish'] [data-part='icon'][data-variant='dot'] {
+  background-color: var(--ds-steps-finish-border, var(--ds-color-primary-500, var(--ds-color-primary)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-status='process'] [data-part='icon'][data-variant='dot'] {
+  background-color: var(--ds-steps-process-border, var(--ds-color-primary-500, var(--ds-color-primary)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-status='error'] [data-part='icon'][data-variant='dot'] {
+  background-color: var(--ds-steps-error-border, var(--ds-color-error-500, var(--ds-color-error)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-status='wait'] [data-part='icon'][data-variant='dot'] {
+  background-color: var(--ds-steps-wait-border, var(--ds-color-border-secondary, var(--ds-color-neutral-300)));
+}
+
+/* ---- the text column: only `error` gets a dedicated title color. ---- */
+.rottay-steps--rustic[data-part='root'] [data-part='label'] {
+  color: var(--ds-steps-title-color, var(--ds-color-text-primary, var(--ds-color-text)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-status='error'] [data-part='label'] {
+  color: var(--ds-steps-error-text, var(--ds-color-error-500, var(--ds-color-error)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-part='subtitle'] {
+  color: var(--ds-steps-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-part='description'] {
+  color: var(--ds-steps-description-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)));
+}
+
+/* ---- the connector, on its OWN status (index < current), not the item's. ---- */
+.rottay-steps--rustic[data-part='root'] [data-part='connector'][data-status='finish'] {
+  background-color: var(--ds-steps-connector-finish, var(--ds-color-primary-500, var(--ds-color-primary)));
+}
+
+.rottay-steps--rustic[data-part='root'] [data-part='connector'][data-status='wait'] {
+  background-color: var(--ds-steps-connector-wait, var(--ds-color-border-primary, var(--ds-color-neutral-200)));
+}

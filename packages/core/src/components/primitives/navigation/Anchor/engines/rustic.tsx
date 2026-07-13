@@ -75,7 +75,6 @@
 
 import React, { useState, useEffect, createContext, useContext, useCallback, Children, isValidElement } from 'react';
 
-import { useInteractionState } from '../../../../../behavior';
 import type { AnchorProps, AnchorLinkProps } from '../Anchor.types';
 import { ANCHOR_DEFAULTS } from '../Anchor.types';
 
@@ -116,21 +115,12 @@ const styles = {
     padding: 'var(--ds-anchor-link-padding, 4px 12px)',
     fontSize: 'var(--ds-anchor-link-font-size, 14px)',
     textDecoration: 'none',
-    color: 'var(--ds-anchor-link-color, var(--ds-color-neutral-600, #595959))',
-    borderLeft: '2px solid transparent',
     transition: 'color 0.2s, border-color 0.2s',
   } as React.CSSProperties,
 
   /** Active link styles */
   linkActive: {
-    color: 'var(--ds-anchor-link-active-color, var(--ds-color-primary-500, #1890ff))',
-    borderLeftColor: 'var(--ds-anchor-link-active-border, var(--ds-color-primary-500, #1890ff))',
     fontWeight: 500,
-  } as React.CSSProperties,
-
-  /** Hovered link styles */
-  linkHover: {
-    color: 'var(--ds-anchor-link-hover-color, var(--ds-color-primary-500, #1890ff))',
   } as React.CSSProperties,
 
   /** Nested links container */
@@ -211,14 +201,6 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
     // State
     // ---------------------------------------------------------------------------
 
-    // Hover state is managed in JS because inline styles cannot use :hover
-    // pseudo-selectors; this is the trade-off for zero-dependency styling
-    // The triad is decided once, in the behavior core. `focused` is any focus --
-    // a field's focus border must appear when a pointer lands in it. A ring is
-    // `focusVisible`, and this part does not draw one.
-    const { state: interaction, handlers: interactionHandlers } = useInteractionState();
-    const isHovered = interaction.hovered;
-
     // ---------------------------------------------------------------------------
     // Context
     // ---------------------------------------------------------------------------
@@ -255,12 +237,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
           href={href}
           target={target}
           onClick={handleClick}
-          {...interactionHandlers}
-          className={className}
+          className={`rottay-anchor-link rottay-anchor-link--rustic ${className}`.trim()}
           style={{
             ...styles.link,
             ...(isActive ? styles.linkActive : {}),
-            ...(isHovered && !isActive ? styles.linkHover : {}),
             ...style,
           }}
           data-part="item"

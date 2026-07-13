@@ -225,7 +225,6 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
   const tabListStyle: React.CSSProperties = {
     display: 'flex',
     gap: 'var(--ds-tabs-gap, 0.25rem)',
-    borderBottom: type === 'line' ? '1px solid var(--ds-tabs-border-color, var(--ds-color-neutral-200, #e5e5e5))' : undefined,
     justifyContent: centered ? 'center' : 'flex-start',
   };
 
@@ -237,21 +236,10 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
    * @param disabled - Whether this tab is disabled
    * @returns CSSProperties for the tab button
    */
-  // Generate button styles dynamically based on active/disabled/type state.
-  // CSS custom properties provide three fallback layers:
-  //   1. Component-level token (--ds-tabs-*)
-  //   2. Global design token (--ds-color-*)
-  //   3. Hardcoded fallback for standalone rendering
-  const getTabStyle = (isActive: boolean, disabled?: boolean): React.CSSProperties => ({
+  const getTabStyle = (disabled?: boolean): React.CSSProperties => ({
     ...SIZE_STYLES[size as TabsSize],
-    border: 'none',
-    background: isActive ? 'var(--ds-tabs-active-bg, var(--ds-color-primary-500, #0066CC))' : 'transparent',
-    color: isActive ? 'var(--ds-tabs-active-color, white)' : 'inherit',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
-    // Card/pills types get rounded corners; line type stays flat with a bottom border
-    borderRadius: type === 'card' || type === 'pills' ? 'var(--ds-tabs-radius, 0.375rem)' : '0',
-    borderBottom: type === 'line' && isActive ? '2px solid var(--ds-tabs-active-border, var(--ds-color-primary-500, #0066CC))' : undefined,
     // Negative margin pulls the active border over the container's bottom border
     marginBottom: type === 'line' ? '-1px' : undefined,
     display: 'flex',
@@ -264,7 +252,12 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
   // ============================================================================
 
   return (
-    <div className={className} style={style} data-part="root">
+    <div
+      className={`rottay-tabs rottay-tabs--rustic ${className}`.trim()}
+      style={style}
+      data-part="root"
+      data-variant={type}
+    >
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
@@ -284,7 +277,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
             aria-selected={item.key === currentKey}
             aria-controls={`tabs-panel-${tabsId}-${item.key}`}
             tabIndex={item.key === currentKey ? 0 : -1}
-            style={getTabStyle(item.key === currentKey, item.disabled)}
+            style={getTabStyle(item.disabled)}
             disabled={item.disabled}
             onClick={() => handleChange(item.key)}
             onKeyDown={(event) => handleKeyDown(event, item.key)}

@@ -114,18 +114,6 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       return 'bottom-full mb-2';
     };
 
-    // Map unified okType to DS token inline styles for the confirm button
-    const getOkButtonStyle = (): React.CSSProperties => {
-      switch (okType) {
-        case 'danger':
-          return { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' };
-        case 'primary':
-          return { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' };
-        default:
-          return { background: 'transparent', color: 'var(--ds-color-text-primary)' };
-      }
-    };
-
     return (
       <div
         ref={(node) => {
@@ -144,13 +132,13 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
             className={`absolute z-50 ${getPlacementClasses()} ${overlayClassName || ''}`}
             style={overlayStyle}
           >
-            <div data-part="surface" data-open="true" style={{ padding: 16, minWidth: 200, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', boxShadow: 'var(--ds-elevation-3)' }}>
+            <div data-part="surface" data-open="true" style={{ padding: 16, minWidth: 200 }}>
               <div className="flex items-start gap-2">
-                {icon && <span data-part="icon" className="mt-0.5" style={{ color: 'var(--ds-color-warning)' }}>{icon}</span>}
+                {icon && <span data-part="icon" className="mt-0.5">{icon}</span>}
                 <div className="flex-1">
                   <div data-part="title" className="font-medium">{title}</div>
                   {description && (
-                    <div data-part="description" className="text-sm mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                    <div data-part="description" className="text-sm mt-1">
                       {description}
                     </div>
                   )}
@@ -166,10 +154,6 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                     height: 32,
                     padding: '0 12px',
                     fontSize: 13,
-                    borderRadius: 'var(--ds-radius-md)',
-                    border: 'none',
-                    background: 'transparent',
-                    color: 'var(--ds-color-text-primary)',
                     cursor: 'pointer',
                   }}
                 >
@@ -190,10 +174,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                     height: 32,
                     padding: '0 12px',
                     fontSize: 13,
-                    borderRadius: 'var(--ds-radius-md)',
-                    border: 'none',
                     cursor: 'pointer',
-                    ...getOkButtonStyle(),
                   }}
                 >
                   {(loading || okButtonLoading) && (
@@ -203,9 +184,6 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
                         display: 'inline-block',
                         width: 14,
                         height: 14,
-                        border: '2px solid currentColor',
-                        borderTopColor: 'transparent',
-                        borderRadius: '50%',
                         animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
                       }}
                     />

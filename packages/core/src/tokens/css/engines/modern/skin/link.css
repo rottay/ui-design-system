@@ -1,0 +1,38 @@
+/**
+ * Modern Link skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight/DaisyUI regardless of
+ * specificity. The `color` below must out-rank DaisyUI's `.link-primary` /
+ * `.link-error` / … class colors — that suppression is the component's
+ * documented design intent, previously carried by an inline `color`. Unlayered
+ * beats DaisyUI's layered `.link-*` and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-link-shell rottay-link-shell--modern` alongside the
+ * DaisyUI `.link` + `.link-<type>` classes and `data-part='root'` +
+ * `data-variant`. The `-shell` scope (not bare `rottay-link`) is required:
+ * `rottay-link` is already stamped by display/Typography's rustic engine, and
+ * `data-part` is a shared vocabulary, not an identifier.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint — (0,3,0) suffices; these rules
+ * sit at (0,4,0).
+ */
+
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='default'] {
+  color: var(--ds-color-info, var(--ds-color-primary));
+}
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='primary'] {
+  color: var(--ds-color-primary);
+}
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='secondary'] {
+  color: var(--ds-color-secondary);
+}
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='success'] {
+  color: var(--ds-color-success);
+}
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='warning'] {
+  color: var(--ds-color-warning);
+}
+.rottay-link-shell.rottay-link-shell--modern[data-part='root'][data-variant='danger'] {
+  color: var(--ds-color-error);
+}

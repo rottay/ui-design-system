@@ -1,0 +1,18 @@
+/**
+ * Rustic Watermark skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * As on modern, the tile itself is canvas-rasterised into a `backgroundImage` data URL and
+ * stays JS-bound — it has no static value to lift into CSS. This engine additionally
+ * offsets the pattern by the `offset` prop, a free px pair that cannot be enumerated in
+ * CSS: the component stamps `--ds-watermark-offset` (a custom property, not a paint key)
+ * and this rule consumes it.
+ *
+ * PORTAL: neither engine portals — this is an in-place `absolute inset-0` layer.
+ */
+
+.rottay-watermark--rustic[data-part='root'] > [data-part='pattern'] {
+  background-repeat: repeat;
+  background-position: var(--ds-watermark-offset);
+}

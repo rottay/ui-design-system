@@ -5,8 +5,8 @@
  *
  * @remarks
  * ModalCloseButton renders an "X" icon button that triggers the `onClose`
- * callback when clicked. It includes hover state management via inline style
- * manipulation and uses CSS variables for consistent theming.
+ * callback when clicked. Its chrome and hover state are painted by the skin,
+ * keyed on the `rottay-modal-close-button` class and `data-part="close-button"`.
  *
  * **Key Features:**
  * - Three size variants (sm, md, lg) for button and icon dimensions
@@ -60,8 +60,8 @@ const SIZE_MAP = {
  * Close button for the Modal with hover effects and accessibility support.
  *
  * @description
- * Renders a transparent button with an "X" SVG icon. On hover, the background
- * and color are updated via inline style manipulation using CSS variables.
+ * Renders a transparent button with an "X" SVG icon whose resting and hover
+ * chrome come from the skin.
  * Click events are stopped from propagating to prevent triggering backdrop dismiss.
  *
  * @param props - {@link ModalCloseButtonProps}
@@ -93,10 +93,6 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       height: sizeConfig.button,
       padding: 0,
       margin: 0,
-      border: 'none',
-      borderRadius: 'var(--ds-modal-close-button-radius, var(--ds-radius-sm, 6px))',
-      backgroundColor: 'transparent',
-      color: 'var(--ds-modal-close-button-color, var(--ds-modal-close-color, var(--ds-color-text-tertiary)))',
       cursor: 'pointer',
       transition: 'all 0.2s ease-in-out',
       flexShrink: 0,
@@ -109,19 +105,6 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
       onClose?.();
     };
 
-    const handleMouseEnter = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.backgroundColor =
-        'var(--ds-modal-close-button-hover-bg, var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary)))';
-      e.currentTarget.style.color =
-        'var(--ds-modal-close-button-hover-color, var(--ds-modal-close-color-hover, var(--ds-color-text-primary)))';
-    };
-
-    const handleMouseLeave = (e: React.MouseEvent<HTMLButtonElement>) => {
-      e.currentTarget.style.backgroundColor = 'transparent';
-      e.currentTarget.style.color =
-        'var(--ds-modal-close-button-color, var(--ds-modal-close-color, var(--ds-color-text-tertiary)))';
-    };
-
     return (
       <button
         ref={ref}
@@ -130,8 +113,6 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
         className={`rottay-modal-close-button ${className}`}
         style={buttonStyle}
         onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         aria-label={ariaLabel}
       >
         <svg

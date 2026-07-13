@@ -111,16 +111,6 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
     }
   }, [isOpen, side]);
 
-  // CSS transform centres the card relative to the computed anchor point
-  const getCardTransform = () => {
-    switch (side) {
-      case 'top': return 'translate(-50%, -100%)';
-      case 'bottom': return 'translateX(-50%)';
-      case 'left': return 'translate(-100%, -50%)';
-      case 'right': return 'translateY(-50%)';
-      default: return 'translateX(-50%)';
-    }
-  };
 
   const cardContent = isOpen && typeof document !== 'undefined'
     ? createPortal(
@@ -128,6 +118,7 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
           ref={cardRef}
           data-part="surface"
           data-open="true"
+          data-side={side}
           className={`rottay-hover-card--rustic ${overlayClassName || ''}`}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -135,17 +126,11 @@ export default function RusticHoverCard(props: HoverCardProps): React.ReactEleme
             position: 'absolute',
             top: position.top,
             left: position.left,
-            transform: getCardTransform(),
             zIndex: 1060,
             minWidth: 240,
             maxWidth: 320,
-            backgroundColor: 'var(--ds-popover-bg, var(--ds-color-bg-elevated, #fff))',
-            borderRadius: 'var(--ds-popover-radius, var(--ds-radius-lg, 12px))',
-            boxShadow: 'var(--ds-popover-shadow, var(--ds-shadow-lg))',
             padding: 16,
-            border: '1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb))',
             fontFamily: 'var(--ds-font-family-base, inherit)',
-            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
             ...overlayStyle,
           }}
         >

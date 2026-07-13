@@ -1,0 +1,68 @@
+/**
+ * Rustic ContextMenu skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * PORTAL: the panel mounts via a direct `createPortal(…, document.body)`, so it is
+ * NOT a descendant of the trigger root. Every rule is STANDALONE on the panel's own
+ * class `.rottay-context-menu--rustic`, which the panel carries alongside
+ * `data-part='surface'` — a SELF-CARRYING scope element, so its own rules take the
+ * COMPOUND form with no descendant space. Item rows are its descendants.
+ *
+ * The item row's imperative hover was the most elaborate in this family: a two-property
+ * `.style.backgroundColor` + `.style.transform = 'translateX(2px)'` slide-and-tint,
+ * gated on `if (!item.disabled)` — reproduced as `:hover:not([data-disabled='true'])`.
+ * The row's `transition` (which stays inline) genuinely animates it: unlike most
+ * declared transitions in this family, this one is NOT dead. The resting state
+ * declares no `transform`, matching first paint; the mouseleave handler's explicit
+ * `translateX(0)` is visually identical to the unset value and the transition runs in
+ * both directions either way.
+ *
+ * The rustic sibling Dropdown writes the SAME hover imperatively but declares no
+ * transition, so its hover snaps while this one eases. That asymmetry ships today and
+ * is preserved.
+ *
+ * TOKENS: this engine has no `--ds-context-menu-*` family of its own — it rides
+ * Dropdown's `--ds-dropdown-*` namespace wholesale. Transcribed verbatim; forking a
+ * dedicated family would change what tenants can override and is not this batch's job.
+ *
+ * SPECIFICITY (P-48): the panel's colored border repeats its `data-part` to clear the
+ * tenant `*` border-color floor at (0,3,1).
+ */
+
+/* ---- portaled menu panel ---- */
+.rottay-context-menu--rustic[data-part='surface'] {
+  background-color: var(--ds-dropdown-bg, var(--ds-color-bg-elevated, #fff));
+  border-radius: var(--ds-dropdown-radius, var(--ds-radius-lg, 12px));
+  box-shadow: var(--ds-dropdown-shadow, var(--ds-shadow-lg));
+  backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
+}
+.rottay-context-menu--rustic[data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-dropdown-border-color, var(--ds-color-neutral-200, #e5e7eb));
+}
+
+/* ---- structural rows ---- */
+.rottay-context-menu--rustic[data-part='surface'] [data-part='divider'] {
+  background-color: var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb));
+}
+.rottay-context-menu--rustic[data-part='surface'] [data-part='group-label'] {
+  color: var(--ds-dropdown-group-color, var(--ds-color-text-secondary, #6b7280));
+}
+.rottay-context-menu--rustic[data-part='surface'] [data-part='shortcut'] {
+  color: var(--ds-dropdown-shortcut-color, var(--ds-color-text-secondary, #6b7280));
+}
+
+/* ---- item row: resting chrome + the transcribed two-property imperative hover ---- */
+.rottay-context-menu--rustic[data-part='surface'] [data-part='item'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-dropdown-item-color, inherit);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+.rottay-context-menu--rustic[data-part='surface'] [data-part='item'][data-tone='danger'] {
+  color: var(--ds-dropdown-danger-color, var(--ds-color-error-500, #ef4444));
+}
+.rottay-context-menu--rustic[data-part='surface'] [data-part='item']:hover:not([data-disabled='true']) {
+  background-color: var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6));
+  transform: translateX(2px);
+}

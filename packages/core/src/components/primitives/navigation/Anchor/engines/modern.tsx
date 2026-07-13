@@ -177,14 +177,10 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
           href={href}
           target={target}
           onClick={handleClick}
-          className={`block py-1 px-3 text-sm transition-colors border-l-2 ${
+          className={`rottay-anchor-link rottay-anchor-link--modern block py-1 px-3 text-sm transition-colors border-l-2 ${
             isActive ? 'font-medium' : 'border-transparent'
           } ${className}`}
-          style={{
-            color: isActive ? 'var(--ds-color-primary)' : 'var(--ds-color-text-secondary)',
-            ...(isActive ? { borderColor: 'var(--ds-color-primary)' } : {}),
-            ...style,
-          }}
+          style={style}
           data-part="item"
           data-selected={isActive}
         >

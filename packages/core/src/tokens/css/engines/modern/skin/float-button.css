@@ -1,0 +1,80 @@
+/**
+ * Modern FloatButton skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight/DaisyUI regardless of
+ * specificity. Unlayered outranks DaisyUI's `.btn` / `.btn-primary` /
+ * `.btn-ghost` and still yields to a caller's inline `style`.
+ *
+ * ============================================================================
+ * N2 — THE HOVER/PRESS SCALE HAS NO INLINE FOOTPRINT. DO NOT ADD A `transform`.
+ * ============================================================================
+ * Modern FloatButton's hover-lift and press-shrink are delivered ENTIRELY by a
+ * layered `[data-tenant] .btn:hover:not(:disabled) { transform: … }` rule (and
+ * its `:active` twin) in `engines/modern/theme.css`. NOTHING inline ever
+ * contested them, so they show up in no inline diff and a migration can delete
+ * them without noticing. Two consequences, both load-bearing:
+ *
+ *   1. `getFloatButtonClassName()` still builds the exact same `btn` /
+ *      `btn-circle` / `btn-primary` / `btn-ghost` / `shadow-lg` list. The scope
+ *      classes are PREPENDED to it, never substituted for it. Drop a `btn` class
+ *      and the interaction dies.
+ *   2. This file declares NO `transform`, at any specificity, in any state. An
+ *      unlayered `transform` here — even one added for layout — would out-rank
+ *      the layered `.btn:hover` rule permanently and pin the button at rest.
+ *
+ * The pre-step photographed a HOVERED FloatButton in both engines precisely so
+ * the byte-exact gate catches a violation of either point.
+ *
+ * SCOPE: all THREE render sites (`FloatButton`, `Group`'s trigger, `BackTop`)
+ * carry `rottay-float-button rottay-float-button--modern` +
+ * `data-part='trigger'` + `data-variant` + `data-shape`. The source wrote the
+ * shape/type → paint composition out by value three separate times; because the
+ * three resolve IDENTICALLY, they collapse to the one rule set below. (The root's
+ * `baseStyle` set `background: transparent` for the non-primary case, but
+ * `floatStyle` overwrote it with `--ds-surface-card` on the very next spread —
+ * so the transparent value was already dead, and all three sites shipped
+ * `--ds-surface-card`.)
+ *
+ * The trigger IS the painted element, so its rules are COMPOUND (no descendant
+ * space) — `data-part='trigger'` is shared vocabulary across a dozen components.
+ *
+ * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
+ * (0,4,0) border floor. Everything else is non-border paint and wins unlayered
+ * at (0,3,0)+.
+ */
+
+.rottay-float-button.rottay-float-button--modern[data-part='trigger'] {
+  border: none;
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- shape. ---- */
+.rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle'] {
+  border-radius: 50%;
+}
+.rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle']) {
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- type. ---- */
+.rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-variant='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-variant='primary']) {
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- badges. The dot also carries Tailwind's `bg-error`, which has been dead
+        since the inline background was added; this unlayered rule keeps winning
+        it, so the dot's colour is unchanged. ---- */
+.rottay-float-button--modern [data-part='badge'] {
+  background: var(--ds-color-error);
+}
+
+.rottay-float-button--modern [data-part='badge'][data-variant='count'] {
+  border-radius: 9999px;
+  color: var(--ds-color-text-on-primary);
+}

@@ -19,15 +19,9 @@
 
 import React, { useCallback, useEffect } from 'react';
 import type { ConfirmDialogProps } from '../ConfirmDialog.types';
-import { CONFIRM_DIALOG_DEFAULTS, VARIANT_COLORS } from '../ConfirmDialog.types';
+import { CONFIRM_DIALOG_DEFAULTS } from '../ConfirmDialog.types';
 
 /** Maps variant to DS token inline styles applied on the confirm button. */
-const VARIANT_BTN_STYLE: Record<string, React.CSSProperties> = {
-  info: { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' },
-  warning: { background: 'var(--ds-color-warning)', color: 'var(--ds-color-text-on-primary)' },
-  danger: { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' },
-};
-
 /** Maps each variant to an inline SVG so the component stays icon-library-free. */
 const VARIANT_ICON_MAP: Record<string, React.ReactNode> = {
   info: (
@@ -80,10 +74,8 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
     'data-testid': dataTestId,
   } = props;
 
-  const colors = VARIANT_COLORS[variant];
   // Allow consumers to override the default variant icon
   const displayIcon = icon || VARIANT_ICON_MAP[variant];
-  const btnStyle = VARIANT_BTN_STYLE[variant] ?? VARIANT_BTN_STYLE.info;
 
   const handleConfirm = useCallback(() => {
     onConfirm?.();
@@ -120,7 +112,8 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
     >
       {/* Backdrop delegates dismiss to onCancel (always allowed, unlike AlertDialog) */}
       <div
-        style={{ position: 'absolute', inset: 0, background: 'var(--ds-color-alpha-black-40)' }}
+        data-part="scrim"
+        style={{ position: 'absolute', inset: 0 }}
         onClick={onCancel}
       />
       <div
@@ -132,14 +125,11 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
           maxWidth: 384,
           width: '100%',
           padding: 24,
-          borderRadius: 'var(--ds-radius-lg)',
-          background: 'var(--ds-surface-card)',
-          boxShadow: 'var(--ds-elevation-3)',
         }}
       >
         <div className="flex gap-3">
           {displayIcon && (
-            <div data-part="icon" className="flex-shrink-0 mt-0.5" style={{ color: colors.icon }}>
+            <div data-part="icon" className="flex-shrink-0 mt-0.5">
               {displayIcon}
             </div>
           )}
@@ -148,7 +138,7 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
               <h3 data-part="title" className="font-bold text-lg mb-2">{title}</h3>
             )}
             {description && (
-              <p data-part="description" className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{description}</p>
+              <p data-part="description" className="text-sm">{description}</p>
             )}
           </div>
         </div>
@@ -163,10 +153,6 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
             style={{
               height: 36,
               padding: '0 16px',
-              borderRadius: 'var(--ds-radius-md)',
-              border: 'none',
-              background: 'transparent',
-              color: 'var(--ds-color-text-primary)',
               cursor: 'pointer',
               fontSize: 14,
             }}
@@ -186,11 +172,8 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
               gap: 6,
               height: 36,
               padding: '0 16px',
-              borderRadius: 'var(--ds-radius-md)',
-              border: 'none',
               cursor: 'pointer',
               fontSize: 14,
-              ...btnStyle,
             }}
           >
             {loading && (
@@ -200,9 +183,6 @@ export default function ModernConfirmDialog(props: ConfirmDialogProps): React.Re
                   display: 'inline-block',
                   width: 16,
                   height: 16,
-                  border: '2px solid currentColor',
-                  borderTopColor: 'transparent',
-                  borderRadius: '50%',
                   animation: 'ds-spin var(--ds-motion-glacial) linear infinite',
                 }}
               />

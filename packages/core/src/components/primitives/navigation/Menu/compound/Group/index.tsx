@@ -101,7 +101,6 @@ export function MenuGroup({
     padding: 'var(--ds-menu-group-title-padding, 8px 16px 4px)',
     fontSize: 'var(--ds-menu-group-title-font-size, 12px)',
     fontWeight: 'var(--ds-menu-group-title-font-weight, 600)',
-    color: 'var(--ds-menu-group-title-color, var(--ds-color-text-muted))',
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
     userSelect: 'none',

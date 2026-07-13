@@ -1,0 +1,86 @@
+/**
+ * Rustic Popconfirm skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * PORTAL: the panel mounts via a direct `createPortal(…, document.body)` (modern does NOT
+ * portal). Every rule is STANDALONE on the panel's own class
+ * `.rottay-popconfirm--rustic`, which it carries alongside `data-part='surface'` — a
+ * SELF-CARRYING scope element, so its own rules take the COMPOUND form with no descendant
+ * space.
+ *
+ * PLACEMENT: `[data-placement^='bottom']` reproduces the panel's
+ * `placement?.includes('bottom')` transform exactly. The check is case-sensitive, so the
+ * `leftBottom` / `rightBottom` values (capital B) never matched it and still do not — only
+ * `bottom`/`bottomLeft`/`bottomRight` do, and all three start with the prefix. Every other
+ * placement takes the base rule. The anchor point itself is runtime and stays inline.
+ *
+ * OK-TYPE: `data-ok-type` carries the `okType` prop; the engine's `default:` branch is the
+ * catch-all, reproduced with a `:not():not()` guard.
+ *
+ * TOKENS: this engine has a full dedicated `--ds-popconfirm-*` family (modern has none).
+ * None of those tokens are defined anywhere in the tokens tree today, so the hex fallbacks
+ * are what ships — transcribed verbatim, including the `--ds-modal-overlay-backdrop` leak
+ * (a Modal-scoped token used for this non-modal panel's blur). Both are recorded as
+ * proposals, not fixed here.
+ *
+ * LOADING: this engine dims the confirm button (`opacity: 0.7`, inline, uncounted) and
+ * renders NO spinner; modern shows a spinner ring instead. Both preserved.
+ *
+ * SPECIFICITY (P-48): every colored border repeats its `data-part` to clear the tenant `*`
+ * border-color floor at (0,3,1).
+ */
+
+/* ---- portaled panel ---- */
+.rottay-popconfirm--rustic[data-part='surface'] {
+  background-color: var(--ds-popconfirm-bg, var(--ds-color-bg-elevated, #fff));
+  border-radius: var(--ds-popconfirm-radius, var(--ds-radius-lg, 12px));
+  box-shadow: var(--ds-popconfirm-shadow, var(--ds-shadow-lg));
+  backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
+  transform: translate(-50%, -100%);
+}
+.rottay-popconfirm--rustic[data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-popconfirm-border-color, var(--ds-color-neutral-200, #e5e7eb));
+}
+.rottay-popconfirm--rustic[data-part='surface'][data-placement^='bottom'] {
+  transform: translateX(-50%);
+}
+
+/* ---- copy ---- */
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='icon'] {
+  color: var(--ds-popconfirm-icon-color, var(--ds-color-warning-500, #f59e0b));
+}
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='title'] {
+  color: var(--ds-popconfirm-title-color, var(--ds-color-neutral-900, #111827));
+}
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='description'] {
+  color: var(--ds-popconfirm-description-color, var(--ds-color-neutral-500, #6b7280));
+}
+
+/* ---- cancel action: outlined ---- */
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-popconfirm-button-radius, 6px);
+  background-color: var(--ds-popconfirm-cancel-bg, var(--ds-color-bg-primary, #fff));
+}
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='action'][data-part='action'][data-action='cancel'] {
+  border: 1px solid var(--ds-popconfirm-cancel-border, var(--ds-color-neutral-300, #d1d5db));
+}
+
+/* ---- confirm action, by okType ---- */
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='action'][data-action='confirm'] {
+  border: none;
+  border-radius: var(--ds-popconfirm-button-radius, 6px);
+}
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='action'][data-ok-type='danger'] {
+  background-color: var(--ds-popconfirm-danger-bg, var(--ds-color-error-500, #ef4444));
+  color: var(--ds-popconfirm-danger-color, #fff);
+}
+.rottay-popconfirm--rustic[data-part='surface'] [data-part='action'][data-ok-type='primary'] {
+  background-color: var(--ds-popconfirm-primary-bg, var(--ds-color-primary-500, #3b82f6));
+  color: var(--ds-popconfirm-primary-color, #fff);
+}
+.rottay-popconfirm--rustic[data-part='surface']
+  [data-part='action'][data-action='confirm']:not([data-ok-type='danger']):not([data-ok-type='primary']) {
+  background-color: var(--ds-popconfirm-default-bg, var(--ds-color-neutral-100, #f3f4f6));
+  color: var(--ds-popconfirm-default-color, var(--ds-color-neutral-700, #374151));
+}

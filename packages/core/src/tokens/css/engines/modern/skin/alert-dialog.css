@@ -1,0 +1,60 @@
+/**
+ * Modern AlertDialog skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * THIS ENGINE'S DaisyUI CLASSES ARE LOAD-BEARING AND MUST NOT BE REMOVED (P2a).
+ * It is the only component in this family that renders real DaisyUI structural
+ * classes (`modal modal-open`, `modal-backdrop`, `modal-box`, `modal-action`), and
+ * TWO of its shipping paint channels have no inline footprint at all — they are
+ * painted entirely by `runtime/personality.css` (layer `rottay-personality`):
+ *
+ *   .modal-backdrop { backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+ *   .modal-box      { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
+ *
+ * Personality's layer sorts AFTER `rottay-engines`, so it also outranks
+ * `modern/theme.css`'s own `[data-tenant] .modal-box { box-shadow: … }`. This file
+ * therefore declares NEITHER `box-shadow` NOR `backdrop-filter` on those two parts:
+ * an unlayered rule here would outrank personality and silently replace a shipping
+ * blur and shadow. They stay externally sourced, exactly as they ship.
+ *
+ * `background` and `border-radius` DO move here. They were inline before (inline
+ * outranks every layer) and are unlayered now (which also outranks every layer), so
+ * the winner's value is unchanged — they still mask `theme.css`'s `.modal-box`
+ * background/radius declarations, as they always did.
+ *
+ * PORTAL: this engine does NOT portal (neither does rustic) — the tree renders
+ * in-tree as a `position: fixed` sibling. The scope class still anchors every rule,
+ * so the selectors are position-independent.
+ *
+ * SCOPE: `rottay-alert-dialog--modern`. NOT `ds-popover` / `ds-dropdown` — those two
+ * names carry DORMANT entrance-animation rules in personality.css that match nothing
+ * today (P3); adopting either would hand this component an animation it has never had.
+ */
+
+.rottay-alert-dialog--modern[data-part='root'] > [data-part='backdrop'] {
+  background: var(--ds-overlay-bg);
+}
+
+.rottay-alert-dialog--modern[data-part='root'] > [data-part='surface'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-modal-radius, var(--ds-radius-lg));
+}
+
+.rottay-alert-dialog--modern[data-part='root'] [data-part='icon'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+
+.rottay-alert-dialog--modern[data-part='root'] [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- cancel action (the consumer's own `action` node is NOT painted here) ---- */
+.rottay-alert-dialog--modern[data-part='root'] [data-part='action'][data-action='cancel'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}

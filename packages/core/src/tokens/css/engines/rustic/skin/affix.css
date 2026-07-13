@@ -1,0 +1,18 @@
+/**
+ * Rustic Affix skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-affix rottay-affix--rustic` (+ the pre-existing
+ * `rottay-affix--affixed` modifier) and `data-part='root'`. `data-sticky` is
+ * stamped ONLY in advanced (onChange) mode while affixed; the simple
+ * sticky-position mode never carries it and never painted a shadow.
+ *
+ * SPECIFICITY (P-48): `box-shadow` is non-border paint — (0,3,0) suffices.
+ */
+
+.rottay-affix.rottay-affix--rustic[data-part='root'][data-sticky] {
+  box-shadow: var(--ds-affix-shadow, 0 2px 8px rgba(0, 0, 0, 0.15));
+}

@@ -1,0 +1,102 @@
+/**
+ * Modern Tour skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * PORTAL: both engines portal via a DIRECT `createPortal(…, document.body)` — not through
+ * the shared `Portal` util, so this tree carries no `data-rottay-portal` marker and is not
+ * inside `#rottay-portal-root`. Every rule is standalone on the root class.
+ *
+ * THE MASK COLOUR IS RUNTIME AND STAYS JS-DRIVEN. `maskColor` is consumer-supplied
+ * (`mask.color`) and is templated INTO the spotlight's box-shadow, whose spread also
+ * carries `getBoundingClientRect()` geometry. The component stamps it on the root as
+ * `--ds-tour-mask-color` (a custom property, not a paint key) and both mask surfaces read
+ * it here; the geometry (top/left/width/height) stays inline where it is measured.
+ *
+ * The var is referenced with NO fallback ON PURPOSE. A caller may pass a `mask` object
+ * with no `color`, in which case `maskColor` is `undefined`: today that produced
+ * `backgroundColor: undefined` (key omitted) and the invalid string
+ * `box-shadow: 0 0 0 9999px undefined` (declaration dropped) — no scrim, no cutout. An
+ * unset custom property makes both declarations invalid-at-computed-value and they drop
+ * the same way. Adding a fallback would paint a mask where none ships.
+ *
+ * This engine's default mask colour is `--ds-color-alpha-black-50`; rustic's is the literal
+ * `rgba(0, 0, 0, 0.5)`. Both are resolved in JS and preserved.
+ *
+ * `data-anchored` reproduces the surface's `targetRect ? … : …` transform (the popover
+ * centers itself in the viewport when no target was measured).
+ *
+ * NEITHER engine has any hover/focus/active feedback anywhere — no `:hover` rule, no
+ * handler, no imperative write. That absence is the shipped behaviour and is preserved; do
+ * not add interaction paint to the nav buttons or the close button here.
+ *
+ * SPECIFICITY (P-48): the surface's colored border is a SHORTHAND per `data-type`, repeated
+ * to clear the tenant `*` border-color floor at (0,3,1).
+ */
+
+/* ---- mask + spotlight cutout ---- */
+.rottay-tour--modern[data-part='root'] > [data-part='backdrop'] {
+  background-color: var(--ds-tour-mask-color);
+}
+.rottay-tour--modern[data-part='root'] > [data-part='spotlight'] {
+  box-shadow: 0 0 0 9999px var(--ds-tour-mask-color);
+}
+
+/* ---- step popover ---- */
+.rottay-tour--modern[data-part='root'] > [data-part='surface'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+  transform: translate(-50%, -50%);
+}
+.rottay-tour--modern[data-part='root'] > [data-part='surface'][data-anchored='true'] {
+  transform: translateX(-50%);
+}
+.rottay-tour--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-type='primary'] {
+  border: 2px solid var(--ds-color-primary);
+}
+.rottay-tour--modern[data-part='root'] > [data-part='surface'][data-part='surface']:not([data-type='primary']) {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- close button (no hover, by design) ---- */
+.rottay-tour--modern[data-part='root'] [data-part='close-button'] {
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- copy ---- */
+.rottay-tour--modern[data-part='root'] [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- step indicators ---- */
+.rottay-tour--modern[data-part='root'] [data-part='indicator'] {
+  background: var(--ds-surface-panel);
+}
+.rottay-tour--modern[data-part='root'] [data-part='indicator'][data-current='true'] {
+  background: var(--ds-color-primary);
+}
+
+/* ---- nav actions (no hover, by design) ---- */
+.rottay-tour--modern[data-part='root'] [data-part='action'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='prev'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-tour--modern[data-part='root'] [data-part='action'][data-action='next'] {
+  background: var(--ds-color-neutral);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tour--modern[data-part='root']
+  [data-part='surface'][data-type='primary']
+  [data-part='action'][data-action='next'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}

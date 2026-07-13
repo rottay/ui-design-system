@@ -1,0 +1,20 @@
+/**
+ * Modern Watermark skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * This component is structurally unlike every other one in this family: its visible
+ * content — the repeating text or image tile — is drawn to an off-screen `<canvas>`
+ * (`ctx.font`, `ctx.fillStyle`, `ctx.fillText`, `ctx.rotate`) and exported through
+ * `canvas.toDataURL()` into a React-state `backgroundImage`. None of that is a CSS
+ * property, so `background-image` CANNOT move here and stays JS-bound; only
+ * `background-repeat` is a static value a skin can own.
+ *
+ * PORTAL: neither engine portals — this is an in-place `absolute inset-0` layer, not a
+ * floating overlay.
+ */
+
+.rottay-watermark--modern[data-part='root'] > [data-part='pattern'] {
+  background-repeat: repeat;
+}

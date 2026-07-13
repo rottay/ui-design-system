@@ -1,0 +1,76 @@
+/**
+ * Rustic Sheet skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * PORTAL: this engine mounts via a direct `createPortal(…, document.body)` (modern does
+ * NOT portal). Every rule is STANDALONE on the root's own class
+ * `.rottay-sheet--rustic`, which carries `data-part='root'`.
+ *
+ * SIDE: `data-placement` carries the `side` prop. Unlike the modern engine (whose radius
+ * falls back to the bottom value for an unrecognised side), this engine's `default:`
+ * branch returns the base object with NO radius at all — so there is no base radius rule
+ * here, only the three explicit sides.
+ *
+ * Two real cross-engine divergences ship today and are preserved, not unified: the handle
+ * bar is a 2px rounded rect here but a full 9999px pill on modern; and the corner radius
+ * is a hardcoded 16px here but `var(--ds-radius-lg)` on modern.
+ *
+ * The close button has NO hover: its declared `transition` is dead (no handler, no rule).
+ * Modern's close button DOES have one. Do not invent a hover here.
+ *
+ * SPECIFICITY (P-48): the panel's and the header's colored borders repeat their
+ * `data-part` to clear the tenant `*` border-color floor at (0,3,1).
+ */
+
+/* ---- backdrop ---- */
+.rottay-sheet--rustic[data-part='root'] > [data-part='backdrop'] {
+  background-color: var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))));
+  backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
+}
+
+/* ---- panel ---- */
+.rottay-sheet--rustic[data-part='root'] > [data-part='surface'] {
+  background-color: var(--ds-drawer-bg, var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff)));
+  color: var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a));
+  box-shadow: var(--ds-modal-shadow, var(--ds-shadow-xl));
+}
+.rottay-sheet--rustic[data-part='root'] > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb));
+}
+
+/* rounded on the inward-facing edges only; no radius for an unrecognised side */
+.rottay-sheet--rustic[data-part='root'] > [data-part='surface'][data-placement='bottom'] {
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+.rottay-sheet--rustic[data-part='root'] > [data-part='surface'][data-placement='left'] {
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+.rottay-sheet--rustic[data-part='root'] > [data-part='surface'][data-placement='right'] {
+  border-top-left-radius: 16px;
+  border-bottom-left-radius: 16px;
+}
+
+/* ---- handle bar: a small rounded rect here, NOT modern's pill ---- */
+.rottay-sheet--rustic[data-part='root'] [data-part='handle'] {
+  background-color: var(--ds-color-neutral-300, #d1d5db);
+  border-radius: 2px;
+}
+
+/* ---- header + title ---- */
+.rottay-sheet--rustic[data-part='root'] [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-modal-header-border, var(--ds-color-neutral-200, #e5e7eb));
+}
+.rottay-sheet--rustic[data-part='root'] [data-part='title'] {
+  color: var(--ds-modal-title-color, inherit);
+}
+
+/* ---- close button: resting chrome only; this engine has no hover state ---- */
+.rottay-sheet--rustic[data-part='root'] [data-part='close-button'] {
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #6b7280));
+}

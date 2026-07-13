@@ -36,7 +36,6 @@ const MenuItem: React.FC<{
         data-part="divider"
         style={{
           height: 1,
-          backgroundColor: 'var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb))',
           margin: '6px 0',
         }}
       />
@@ -50,7 +49,6 @@ const MenuItem: React.FC<{
         style={{
           padding: '6px 12px 4px',
           fontSize: 12,
-          color: 'var(--ds-dropdown-group-color, var(--ds-color-text-secondary, #6b7280))',
           fontWeight: 600,
           letterSpacing: '0.02em',
           textTransform: 'uppercase',
@@ -80,27 +78,13 @@ const MenuItem: React.FC<{
         justifyContent: 'space-between',
         width: '100%',
         padding: '6px 12px',
-        border: 'none',
-        background: 'transparent',
         cursor: item.disabled ? 'not-allowed' : 'pointer',
         opacity: item.disabled ? 0.5 : 1,
-        color: item.danger ? 'var(--ds-dropdown-danger-color, var(--ds-color-error-500, #ef4444))' : 'var(--ds-dropdown-item-color, inherit)',
         textAlign: 'left',
         fontSize: 14,
         lineHeight: 1.5,
         fontFamily: 'inherit',
-        borderRadius: 'var(--ds-radius-sm, 6px)',
         transition: 'background-color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease), color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease), transform var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease)',
-      }}
-      onMouseEnter={(e) => {
-        if (!item.disabled) {
-          e.currentTarget.style.backgroundColor = 'var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6))';
-          e.currentTarget.style.transform = 'translateX(2px)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'transparent';
-        e.currentTarget.style.transform = 'translateX(0)';
       }}
     >
       <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -108,7 +92,7 @@ const MenuItem: React.FC<{
         {item.label}
       </span>
       {item.shortcut && (
-        <span style={{ fontSize: 12, color: 'var(--ds-dropdown-shortcut-color, var(--ds-color-text-secondary, #6b7280))' }}>
+        <span data-part="shortcut" style={{ fontSize: 12 }}>
           {item.shortcut}
         </span>
       )}
@@ -200,14 +184,9 @@ export default function RusticContextMenu(props: ContextMenuProps): React.ReactE
             left: position.left,
             zIndex: 1060,
             minWidth: 180,
-            backgroundColor: 'var(--ds-dropdown-bg, var(--ds-color-bg-elevated, #fff))',
-            borderRadius: 'var(--ds-dropdown-radius, var(--ds-radius-lg, 12px))',
-            boxShadow: 'var(--ds-dropdown-shadow, var(--ds-shadow-lg))',
             padding: '6px',
-            border: '1px solid var(--ds-dropdown-border-color, var(--ds-color-neutral-200, #e5e7eb))',
             fontFamily: 'var(--ds-font-family-base, inherit)',
-            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
-          ...overlayStyle,
+            ...overlayStyle,
           }}
         >
           {items.map((item) => (

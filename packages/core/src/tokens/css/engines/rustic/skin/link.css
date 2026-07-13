@@ -1,0 +1,41 @@
+/**
+ * Rustic Link skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-link-shell rottay-link-shell--rustic` +
+ * `data-part='root'` + `data-variant` + `data-disabled`. The `-shell` scope (not
+ * bare `rottay-link`) is required: `rottay-link` is already stamped by
+ * display/Typography's rustic engine.
+ *
+ * The disabled color out-ranked the type color in the JS ternary. The `:not(
+ * [data-disabled])` guard on every variant rule reproduces that priority
+ * structurally, so exactly one rule wins per state combination.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint — (0,3,0) suffices.
+ */
+
+.rottay-link-shell.rottay-link-shell--rustic[data-part='root'][data-disabled] {
+  color: var(--ds-link-disabled-color, rgba(0, 0, 0, 0.25));
+}
+
+.rottay-link-shell.rottay-link-shell--rustic[data-part='root'][data-variant='default']:not([data-disabled]) {
+  color: var(--ds-color-primary-500, #1890ff);
+}
+.rottay-link-shell.rottay-link-shell--rustic[data-part='root'][data-variant='primary']:not([data-disabled]) {
+  color: var(--ds-link-primary-color, var(--ds-color-primary-500, #1677ff));
+}
+.rottay-link-shell.rottay-link-shell--rustic[data-part='root'][data-variant='secondary']:not([data-disabled]) {
+  color: var(--ds-link-secondary-color, var(--ds-color-neutral-600, #595959));
+}
+.rottay-link-shell.rottay-link-shell--rustic[data-part='root'][data-variant='success']:not([data-disabled]) {
+  color: var(--ds-link-success-color, var(--ds-color-success-500, #52c41a));
+}
+.rottay-link-shell.rottay-link-shell--rustic[data-part='root'][data-variant='warning']:not([data-disabled]) {
+  color: var(--ds-link-warning-color, var(--ds-color-warning-500, #faad14));
+}
+.rottay-link-shell.rottay-link-shell--rustic[data-part='root'][data-variant='danger']:not([data-disabled]) {
+  color: var(--ds-link-danger-color, var(--ds-color-error-500, #ff4d4f));
+}

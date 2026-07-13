@@ -18,17 +18,6 @@ import type { DropdownProps, DropdownMenuItem, DropdownPlacement } from '../Drop
 import { DROPDOWN_DEFAULTS } from '../Dropdown.types';
 import { usePresence } from '../../../../../motion/hooks/use-presence';
 
-/** Enter/exit keyframes for the floating menu -- injected once via <style>. Shared shape with ContextMenu's popover motion. */
-const DROPDOWN_STYLES = `
-@keyframes rottay-popover-enter {
-  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
-}
-@keyframes rottay-popover-exit {
-  from { opacity: 1; transform: scale(1) translateY(0); }
-  to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
-}
-`;
 const MOTION_DURATION = 'var(--ds-motion-fast)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
@@ -48,17 +37,21 @@ const MenuItem: React.FC<{
   onClick?: (key: string) => void;
 }> = ({ item, onClick }) => {
   if (item.type === 'divider') {
-    return <li data-part="divider" style={{ height: 1, margin: '4px 0', background: 'var(--ds-color-border-subtle)' }} />;
+    return <li data-part="divider" style={{ height: 1, margin: '4px 0' }} />;
   }
 
   if (item.type === 'group') {
     return (
-      <li data-part="group-label" style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, color: 'var(--ds-color-text-muted)', textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
+      <li data-part="group-label" style={{ padding: '6px 12px', fontSize: 12, fontWeight: 500, textTransform: 'uppercase' as const, letterSpacing: '0.05em' }}>
         <span>{item.label}</span>
       </li>
     );
   }
 
+  // The item row's resting chrome AND its hover background are painted by
+  // `modern/theme.css`'s `.menu li > button` rules, keyed on the DaisyUI `menu`
+  // class on the <ul>. Those classes must survive: nothing here may declare a
+  // background on this row.
   return (
     <li>
       <button
@@ -71,7 +64,6 @@ const MenuItem: React.FC<{
           item.danger ? 'text-error' : '',
           item.disabled ? 'disabled' : '',
         ].filter(Boolean).join(' ')}
-        style={item.danger ? { color: 'var(--ds-color-error)' } : undefined}
         disabled={item.disabled}
         onClick={() => {
           item.onClick?.();
@@ -215,35 +207,28 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           {children}
         </div>
         {shouldRender && (
-          <>
-            <style dangerouslySetInnerHTML={{ __html: DROPDOWN_STYLES }} />
-            <ul
-              ref={presenceRef}
-              tabIndex={0}
-              data-part="surface"
-              data-open={dataState === 'open' ? 'true' : 'false'}
-              className={menuClassName}
-              style={{
-                position: 'absolute',
-                zIndex: 'var(--ds-z-dropdown)',
-                width: 208,
-                padding: 8,
-                borderRadius: 'var(--ds-radius-lg)',
-                listStyle: 'none',
-                margin: 0,
-                background: 'var(--ds-surface-card)',
-                border: '1px solid var(--ds-color-border-subtle)',
-                boxShadow: 'var(--ds-elevation-1)',
-                animation: `${dataState === 'open' ? 'rottay-popover-enter' : 'rottay-popover-exit'} ${MOTION_DURATION} ${MOTION_EASING} both`,
-                ...getPlacementStyle(),
-                ...overlayStyle,
-              }}
-            >
-              {menu?.items?.map((item) => (
-                <MenuItem key={item.key} item={item} onClick={handleItemClick} />
-              ))}
-            </ul>
-          </>
+          <ul
+            ref={presenceRef}
+            tabIndex={0}
+            data-part="surface"
+            data-open={dataState === 'open' ? 'true' : 'false'}
+            className={menuClassName}
+            style={{
+              position: 'absolute',
+              zIndex: 'var(--ds-z-dropdown)',
+              width: 208,
+              padding: 8,
+              listStyle: 'none',
+              margin: 0,
+              animation: `${dataState === 'open' ? 'ds-dropdown-popover-enter-modern' : 'ds-dropdown-popover-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+              ...getPlacementStyle(),
+              ...overlayStyle,
+            }}
+          >
+            {menu?.items?.map((item) => (
+              <MenuItem key={item.key} item={item} onClick={handleItemClick} />
+            ))}
+          </ul>
         )}
       </div>
     );

@@ -1,7 +1,7 @@
 /**
  * @fileoverview Overlay - full-viewport backdrop for modals, drawers, and sheets.
  * Supports optional blur, configurable background color, smooth opacity transitions,
- * and click-to-dismiss. Used internally by Modal and Drawer rustic/modern engines.
+ * and click-to-dismiss. The only importer today is `overlay/Modal`'s rustic engine.
  *
  * @example
  * ```tsx
@@ -86,9 +86,10 @@ export const Overlay = forwardRef<HTMLDivElement, OverlayProps>(
       bottom: 0,
       zIndex,
       backgroundColor,
-      // Both prefixed and unprefixed backdrop-filter for Safari compatibility.
-      backdropFilter: blur ? `blur(${blurAmount}px)` : undefined,
-      WebkitBackdropFilter: blur ? `blur(${blurAmount}px)` : undefined,
+      // `blurAmount` is a free px prop, so the filter cannot be enumerated in
+      // CSS. The skin reads this custom property for both the prefixed and the
+      // unprefixed backdrop-filter (Safari); `none` is the unblurred value.
+      ['--ds-overlay-backdrop-filter' as any]: blur ? `blur(${blurAmount}px)` : 'none',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

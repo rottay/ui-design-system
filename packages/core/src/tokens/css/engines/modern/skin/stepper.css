@@ -1,0 +1,54 @@
+/**
+ * Modern Stepper skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * ============================================================================
+ * N1 APPLIES HERE TOO — DAISYUI PAINTS THE CIRCLE AND THE CONNECTOR.
+ * ============================================================================
+ * Modern Stepper reimplements Steps' DaisyUI bridge verbatim (same
+ * `getStepClass` / `getStepTokenStyle`, same `.steps .step` classes), so it is
+ * governed by the SAME adjudication (P-73): `theme.css`'s
+ * `.steps .step::before` / `::after` bridge rules are both DEAD — the connector's
+ * because `--ds-steps-line-color` is defined nowhere (invalid-at-computed-value,
+ * dropped), the circle's because it TIES DaisyUI at (0,3,1) and loses on source
+ * order. DaisyUI paints both today.
+ *
+ * THEREFORE: this file declares NO `background-color` on `.step::before` /
+ * `.step::after` at any specificity, and does NOT define `--ds-steps-line-color`.
+ * It owns only the component's own token redirection — `--step-color`,
+ * `--step-neutral`, `accent-color` — moved verbatim and keyed on `data-status`,
+ * plus the real text elements. See `modern/skin/steps.css` for the full finding.
+ *
+ * SCOPE ROOT already carried `rottay-stepper rottay-stepper--modern` alongside
+ * the DaisyUI `steps` classes; both are KEPT.
+ *
+ * SPECIFICITY (P-48): nothing here paints a border color, so the (0,4,0) floor
+ * does not apply; custom properties and `color` win unlayered at (0,3,0).
+ */
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'] {
+  --step-neutral: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='finish'],
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='process'] {
+  --step-color: var(--ds-color-primary);
+  --step-neutral: var(--ds-color-primary);
+  accent-color: var(--ds-color-primary);
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='item'][data-status='error'] {
+  --step-color: var(--ds-color-error);
+  accent-color: var(--ds-color-error);
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-stepper--modern[data-part='root'] [data-part='description'] {
+  color: var(--ds-color-text-tertiary);
+}

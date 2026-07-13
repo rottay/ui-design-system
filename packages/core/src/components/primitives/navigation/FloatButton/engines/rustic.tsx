@@ -59,43 +59,16 @@ const styles = {
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: 'none',
     cursor: 'pointer',
-    boxShadow: 'var(--ds-floatbutton-shadow, var(--ds-shadow-dialog))',
     transition: 'all 0.2s',
     position: 'relative',
   } as React.CSSProperties,
 
-  /** Circle shape styles */
-  buttonCircle: {
+  /** Button footprint - identical for both shapes; only the radius differs,
+   *  and that rides `data-shape` in the skin. */
+  buttonSize: {
     width: 'var(--ds-floatbutton-size, 48px)',
     height: 'var(--ds-floatbutton-size, 48px)',
-    borderRadius: '50%',
-  } as React.CSSProperties,
-
-  /** Square shape styles with rounded corners */
-  buttonSquare: {
-    width: 'var(--ds-floatbutton-size, 48px)',
-    height: 'var(--ds-floatbutton-size, 48px)',
-    borderRadius: 'var(--ds-floatbutton-square-radius, 8px)',
-  } as React.CSSProperties,
-
-  /** Default type color scheme */
-  buttonDefault: {
-    backgroundColor: 'var(--ds-floatbutton-default-bg, var(--ds-color-bg-elevated))',
-    color: 'var(--ds-floatbutton-default-color, var(--ds-color-text-secondary))',
-  } as React.CSSProperties,
-
-  /** Primary type color scheme */
-  buttonPrimary: {
-    backgroundColor: 'var(--ds-floatbutton-primary-bg, var(--ds-color-primary))',
-    color: 'var(--ds-floatbutton-primary-color, var(--ds-color-text-on-primary))',
-  } as React.CSSProperties,
-
-  /** Hover state transformation */
-  buttonHover: {
-    transform: 'scale(1.05)',
-    boxShadow: 'var(--ds-floatbutton-hover-shadow, var(--ds-shadow-lg))',
   } as React.CSSProperties,
 
   /** Fixed positioning for floating behavior */
@@ -123,10 +96,9 @@ const styles = {
     transition: 'all 0.2s',
   } as React.CSSProperties,
 
-  /** Hidden state for collapsed group items */
+  /** Hidden state for collapsed group items; the slide rides `data-open`. */
   groupItemsHidden: {
     opacity: 0,
-    transform: 'translateY(16px)',
     pointerEvents: 'none',
   } as React.CSSProperties,
 
@@ -141,9 +113,6 @@ const styles = {
     fontSize: 12,
     lineHeight: '18px',
     textAlign: 'center',
-    backgroundColor: 'var(--ds-floatbutton-badge-bg, var(--ds-color-error))',
-    color: 'var(--ds-floatbutton-badge-color, var(--ds-color-text-on-primary))',
-    borderRadius: 9,
   } as React.CSSProperties,
 
   /** Dot badge variant */
@@ -158,7 +127,6 @@ const styles = {
   description: {
     fontSize: 12,
     marginTop: 2,
-    color: 'var(--ds-floatbutton-description-color, var(--ds-color-text-secondary))',
   } as React.CSSProperties,
 };
 
@@ -201,15 +169,9 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       children,
     } = props;
 
-    const [isHovered, setIsHovered] = useState(false);
-
-    // Style composition follows a specificity chain: base -> shape -> color -> hover -> consumer.
-    // Each layer only overrides what it needs, keeping the rest from previous layers.
     const buttonStyle = {
       ...styles.button,
-      ...(shape === 'circle' ? styles.buttonCircle : styles.buttonSquare),
-      ...(type === 'primary' ? styles.buttonPrimary : styles.buttonDefault),
-      ...(isHovered ? styles.buttonHover : {}),
+      ...styles.buttonSize,
       ...style,
     };
 
@@ -217,7 +179,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
     const content = (
       <>
         {icon}
-        {description && <span style={styles.description}>{description}</span>}
+        {description && <span data-part="description" style={styles.description}>{description}</span>}
         {children}
         {badge?.dot && (
           <span data-part="badge" style={{ ...styles.badge, ...styles.badgeDot }} />
@@ -233,11 +195,9 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
     // Shared props extracted to avoid duplication between <a> and <button>
     // rendering paths; keeps behavior consistent regardless of element type
     const commonProps = {
-      className,
+      className: `rottay-float-button rottay-float-button--rustic ${className}`.trim(),
       style: buttonStyle,
       title: typeof tooltip === 'string' ? tooltip : undefined,
-      onMouseEnter: () => setIsHovered(true),
-      onMouseLeave: () => setIsHovered(false),
       'data-part': 'trigger',
       'data-variant': type,
       'data-shape': shape,
@@ -305,7 +265,6 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
     } = props;
 
     const [internalOpen, setInternalOpen] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
 
     // Support controlled and uncontrolled modes
     const isOpen = controlledOpen ?? internalOpen;
@@ -342,7 +301,7 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
     return (
       <div
         ref={ref}
-        className={className}
+        className={`rottay-float-button-group rottay-float-button-group--rustic ${className}`.trim()}
         style={{
           ...styles.fixed,
           ...styles.group,
@@ -356,9 +315,8 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         {/* Trigger button */}
         <button
           type="button"
+          className="rottay-float-button rottay-float-button--rustic"
           onClick={trigger === 'click' ? handleToggle : undefined}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
           title={typeof tooltip === 'string' ? tooltip : undefined}
           data-part="trigger"
           data-variant={type}
@@ -366,9 +324,7 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
           data-open={isOpen}
           style={{
             ...styles.button,
-            ...(shape === 'circle' ? styles.buttonCircle : styles.buttonSquare),
-            ...(type === 'primary' ? styles.buttonPrimary : styles.buttonDefault),
-            ...(isHovered ? styles.buttonHover : {}),
+            ...styles.buttonSize,
             zIndex: 10,
           }}
         >
@@ -429,9 +385,6 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
     } = props;
 
     const [visible, setVisible] = useState(false);
-    // Hover state managed in JS because inline styles cannot use :hover;
-    // this is the trade-off for zero-dependency styling in Rustic engine
-    const [isHovered, setIsHovered] = useState(false);
 
     // Monitor scroll position and update visibility
     useEffect(() => {
@@ -471,24 +424,20 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         ref={ref}
         type="button"
         onClick={scrollToTop}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        className={className}
+        className={`rottay-float-button rottay-float-button--rustic ${className}`.trim()}
         data-part="trigger"
         data-variant={type}
         data-shape={shape}
         style={{
           ...styles.button,
           ...styles.fixed,
-          ...(shape === 'circle' ? styles.buttonCircle : styles.buttonSquare),
-          ...(type === 'primary' ? styles.buttonPrimary : styles.buttonDefault),
-          ...(isHovered ? styles.buttonHover : {}),
+          ...styles.buttonSize,
           ...style,
         }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
       >
         {icon ?? '↑'}
-        {description && <span style={styles.description}>{description}</span>}
+        {description && <span data-part="description" style={styles.description}>{description}</span>}
       </button>
     );
   }

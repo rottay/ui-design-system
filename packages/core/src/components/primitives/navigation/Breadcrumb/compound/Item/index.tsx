@@ -190,7 +190,6 @@ export const BreadcrumbItem = forwardRef<HTMLSpanElement, BreadcrumbItemProps>(
 
     /** Link/text styles based on interactivity */
     const linkStyle: React.CSSProperties = {
-      color: href ? 'var(--ds-color-primary-500, #1890ff)' : 'inherit',
       textDecoration: 'none',
       cursor: href || onClick ? 'pointer' : 'default',
     };

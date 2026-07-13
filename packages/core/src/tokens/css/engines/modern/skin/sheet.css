@@ -1,0 +1,102 @@
+/**
+ * Modern Sheet skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * PORTAL: this engine does NOT portal (rustic DOES) — it renders in-tree as a
+ * `position: fixed` wrapper. The scope class anchors every rule regardless.
+ *
+ * SIDE: `data-placement` carries the `side` prop. The engine's radius lookup was
+ * `RADIUS_BY_SIDE[side] || RADIUS_BY_SIDE.bottom`, so the BOTTOM value is the base rule
+ * (it also serves any unrecognised side) and left/right override it. The same fallback
+ * shape governs the border resets: the engine's `right` branch is the catch-all for any
+ * side that is neither `bottom` nor `left`, reproduced with a `:not():not()` guard.
+ *
+ * BORDER: the panel's border is a colored SHORTHAND held to the (0,4,0) floor (P-48);
+ * the per-side `none` resets are color-free, exempt from that floor, and carry one extra
+ * attribute so they outrank the shorthand.
+ *
+ * Keyframes moved out of the per-mount `<style>` tag and engine-namespaced. The rustic
+ * engine has NO keyframes at all (its declared `transition: transform` is inert — the
+ * property is never assigned), so nothing here has a rustic counterpart.
+ */
+
+@keyframes ds-sheet-backdrop-fade-modern {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes ds-sheet-slide-bottom-modern {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes ds-sheet-slide-left-modern {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes ds-sheet-slide-right-modern {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+/* ---- backdrop ---- */
+.rottay-sheet--modern[data-part='root'] > [data-part='backdrop'] {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ---- panel ---- */
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-3);
+  border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+}
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='left'] {
+  border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
+}
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-placement='right'] {
+  border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+}
+
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+/* the sliding edge sits flush against the viewport and drops its border */
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-placement='bottom'] {
+  border-bottom: none;
+}
+.rottay-sheet--modern[data-part='root'] > [data-part='surface'][data-part='surface'][data-placement='left'] {
+  border-left: none;
+}
+.rottay-sheet--modern[data-part='root']
+  > [data-part='surface'][data-part='surface']:not([data-placement='bottom']):not([data-placement='left']) {
+  border-right: none;
+}
+
+/* ---- handle bar: a full pill here (rustic's is a small rounded rect) ---- */
+.rottay-sheet--modern[data-part='root'] [data-part='handle'] {
+  background: var(--ds-color-border-secondary);
+  border-radius: 9999px;
+}
+
+/* ---- header + title ---- */
+.rottay-sheet--modern[data-part='root'] [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+.rottay-sheet--modern[data-part='root'] [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- close button: the removed imperative hover becomes a :hover rule. The rustic
+        engine's close button has NO hover (only a dead transition) — that asymmetry
+        ships today and is preserved. ---- */
+.rottay-sheet--modern[data-part='root'] [data-part='close-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background-color: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.rottay-sheet--modern[data-part='root'] [data-part='close-button']:hover {
+  background-color: var(--ds-surface-highlight);
+}

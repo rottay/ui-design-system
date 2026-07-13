@@ -95,7 +95,6 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
       justifyContent: alignMap[align] || 'flex-end',
       gap: '12px',
       padding: PADDING_MAP[padding] || PADDING_MAP.lg,
-      borderTop: divider ? '1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1))' : 'none',
       flexShrink: 0,
       ...style,
     };
@@ -104,6 +103,7 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
       <div
         ref={ref}
         data-part="footer"
+        data-divider={divider ? 'true' : 'false'}
         className={`rottay-overlay-modal-footer ${className}`}
         style={footerStyle}
       >

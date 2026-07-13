@@ -217,16 +217,8 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
    * @param isDisabled - Whether the button is disabled
    * @returns Complete button style object
    */
-  // Button styles use CSS custom properties with multi-level fallbacks so that:
-  // 1. Tenant-specific overrides (--ds-pagination-*) take highest priority
-  // 2. Design system tokens (--ds-color-*) provide themed defaults
-  // 3. Hardcoded values ensure the component renders correctly outside a provider
-  const getButtonStyle = (isActive: boolean, isDisabled: boolean): React.CSSProperties => ({
+  const getButtonStyle = (isDisabled: boolean): React.CSSProperties => ({
     ...SIZE_STYLES[sizeKey],
-    border: '1px solid var(--ds-pagination-border-color, var(--ds-color-neutral-300, #d9d9d9))',
-    borderRadius: 'var(--ds-pagination-radius, 0.25rem)',
-    background: isActive ? 'var(--ds-pagination-active-bg, var(--ds-color-primary-500, #0066CC))' : 'var(--ds-pagination-bg, white)',
-    color: isActive ? 'var(--ds-pagination-active-color, white)' : 'inherit',
     cursor: isDisabled ? 'not-allowed' : 'pointer',
     opacity: isDisabled ? 0.5 : 1,
   });
@@ -236,10 +228,14 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
   // ============================================================================
 
   return (
-    <div className={className} style={containerStyle} data-part="root">
+    <div
+      className={`rottay-pagination rottay-pagination--rustic ${className}`.trim()}
+      style={containerStyle}
+      data-part="root"
+    >
       {/* Total items display */}
       {showTotal && (
-        <div data-part="pagination-range" style={{ fontSize: '0.875rem', color: 'var(--ds-pagination-total-color, var(--ds-color-neutral-600, #666))' }}>
+        <div data-part="pagination-range" style={{ fontSize: '0.875rem' }}>
           {t('pagination.total_items', { total })}
         </div>
       )}
@@ -248,7 +244,7 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
       <nav style={paginationStyle}>
         {/* Previous button */}
         <button
-          style={getButtonStyle(false, disabled || current === 1)}
+          style={getButtonStyle(disabled || current === 1)}
           onClick={() => handlePageChange(current - 1)}
           disabled={disabled || current === 1}
           data-part="pagination-nav-button"
@@ -262,7 +258,7 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
           typeof page === 'number' ? (
             <button
               key={page}
-              style={getButtonStyle(page === current, disabled || false)}
+              style={getButtonStyle(disabled || false)}
               onClick={() => handlePageChange(page)}
               disabled={disabled}
               data-part="pagination-page-button"
@@ -273,7 +269,7 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
           ) : (
             <button
               key={`ellipsis-${index}`}
-              style={getButtonStyle(false, true)}
+              style={getButtonStyle(true)}
               disabled
               data-part="ellipsis"
             >
@@ -284,7 +280,7 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
 
         {/* Next button */}
         <button
-          style={getButtonStyle(false, disabled || current === totalPages)}
+          style={getButtonStyle(disabled || current === totalPages)}
           onClick={() => handlePageChange(current + 1)}
           disabled={disabled || current === totalPages}
           data-part="pagination-nav-button"

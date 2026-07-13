@@ -177,6 +177,62 @@
 @import '../engines/modern/skin/result.css';
 @import '../engines/rustic/skin/result.css';
 
+/* WO-SKIN-04: the overlay + navigation families paint from unlayered skins. */
+@import '../engines/modern/skin/affix.css';
+@import '../engines/rustic/skin/affix.css';
+@import '../engines/modern/skin/alert-dialog.css';
+@import '../engines/rustic/skin/alert-dialog.css';
+@import '../engines/modern/skin/anchor.css';
+@import '../engines/rustic/skin/anchor.css';
+@import '../engines/modern/skin/back-top.css';
+@import '../engines/rustic/skin/back-top.css';
+@import '../engines/modern/skin/breadcrumb.css';
+@import '../engines/rustic/skin/breadcrumb.css';
+@import '../engines/modern/skin/confirm-dialog.css';
+@import '../engines/rustic/skin/confirm-dialog.css';
+@import '../engines/modern/skin/context-menu.css';
+@import '../engines/rustic/skin/context-menu.css';
+@import '../engines/modern/skin/dropdown.css';
+@import '../engines/rustic/skin/dropdown.css';
+@import '../engines/modern/skin/float-button.css';
+@import '../engines/rustic/skin/float-button.css';
+@import '../engines/modern/skin/hover-card.css';
+@import '../engines/rustic/skin/hover-card.css';
+@import '../engines/modern/skin/link.css';
+@import '../engines/rustic/skin/link.css';
+@import '../engines/modern/skin/menu.css';
+@import '../engines/rustic/skin/menu.css';
+@import '../engines/modern/skin/overlay-modal.css';
+@import '../engines/rustic/skin/overlay-modal.css';
+@import '../engines/modern/skin/pagination.css';
+@import '../engines/rustic/skin/pagination.css';
+@import '../engines/modern/skin/popconfirm.css';
+@import '../engines/rustic/skin/popconfirm.css';
+@import '../engines/modern/skin/popover.css';
+@import '../engines/rustic/skin/popover.css';
+@import '../engines/modern/skin/segmented.css';
+@import '../engines/rustic/skin/segmented.css';
+@import '../engines/modern/skin/sheet.css';
+@import '../engines/rustic/skin/sheet.css';
+@import '../engines/modern/skin/stepper.css';
+@import '../engines/rustic/skin/stepper.css';
+@import '../engines/modern/skin/steps.css';
+@import '../engines/rustic/skin/steps.css';
+@import '../engines/modern/skin/tabs.css';
+@import '../engines/rustic/skin/tabs.css';
+@import '../engines/modern/skin/tour.css';
+@import '../engines/rustic/skin/tour.css';
+@import '../engines/modern/skin/watermark.css';
+@import '../engines/rustic/skin/watermark.css';
+@import '../components/skin/action-dock.css';
+@import '../components/skin/adaptive-overlay.css';
+@import '../components/skin/bottom-tab-bar.css';
+@import '../components/skin/breadcrumb-compounds.css';
+@import '../components/skin/menu-compounds.css';
+@import '../components/skin/mobile-header.css';
+@import '../components/skin/overlay-modal-compounds.css';
+@import '../components/skin/stepper-compounds.css';
+
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)

@@ -1,0 +1,110 @@
+/**
+ * Rustic Menu skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * `engines/rustic/theme.css` carries ZERO menu selectors, so this is greenfield —
+ * unlike modern, which has a large (layered, and therefore losing) `.rottay-menu`
+ * block to reason around.
+ *
+ * SCOPE ROOT already carried `rottay-menu rottay-menu--rustic rottay-menu--<mode>
+ * rottay-menu--<theme>` + `data-part='root'`.
+ *
+ * THIS IS ROVING FOCUS, NOT HOVER, AND NOT `:focus`. Rustic Menu has no
+ * `onMouseEnter` anywhere — what looks like a hover treatment is a `focusedKey`
+ * state driven by ARROW-KEY navigation. It is a different predicate from both
+ * `:hover` (there is no pointer treatment in this engine at all — a real
+ * asymmetry against modern, preserved) and `:focus` (arrow keys move the roving
+ * index without firing a focus event on each row). It therefore keys on a
+ * `data-focused` stamp — the one attribute this migration added — and NOT on a
+ * pseudo-class. Swapping in `:hover` or `:focus` would change WHICH rows light
+ * up and WHEN.
+ *
+ * TWO DIFFERENT PRIORITY CHAINS ON ONE ELEMENT, transcribed exactly:
+ *   - `color`:            danger > selected > default
+ *   - `background-color`: selected > focused > transparent   (danger never
+ *                         touches the background)
+ * The `:not()` guards below reproduce both, independently.
+ *
+ * SPECIFICITY (P-48): `outline: none` is a color-free reset, exempt from the
+ * (0,4,0) floor; the focused `outline` carries a real color and reaches (0,4,0).
+ * Non-border paint wins at (0,3,0).
+ */
+
+/* ---- root surface: background and text colour key on the theme MODIFIER CLASS
+        the engine already stamped (`rottay-menu--dark` / `--light`). A
+        `data-theme` attribute is not usable here: it is DaisyUI's own theming
+        hook and is claimed by the tenant layer, so stamping it on a `<ul>` would
+        open a theme scope inside the menu. ---- */
+.rottay-menu.rottay-menu--rustic[data-part='root'] {
+  border-radius: var(--ds-menu-border-radius, 8px);
+}
+.rottay-menu--rustic.rottay-menu--light[data-part='root'] {
+  background-color: var(--ds-menu-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-menu-item-color, var(--ds-color-text-primary));
+}
+.rottay-menu--rustic.rottay-menu--dark[data-part='root'] {
+  background-color: var(--ds-menu-dark-bg, var(--ds-color-neutral-900));
+  color: var(--ds-menu-dark-item-color, var(--ds-color-alpha-white-70));
+}
+
+/* ---- the submenu chevron flips with the panel. ---- */
+.rottay-menu--rustic[data-part='root'] [data-part='trigger'][data-open='false'] [data-part='arrow-icon'] {
+  transform: rotate(0deg);
+}
+.rottay-menu--rustic[data-part='root'] [data-part='trigger'][data-open='true'] [data-part='arrow-icon'] {
+  transform: rotate(180deg);
+}
+
+/* ---- item + submenu trigger share one base. ---- */
+.rottay-menu--rustic[data-part='root'] [data-part='item'],
+.rottay-menu--rustic[data-part='root'] [data-part='trigger'] {
+  background-color: transparent;
+  border-radius: var(--ds-menu-border-radius, 8px);
+  outline: none;
+  outline-offset: -2px;
+}
+
+.rottay-menu--rustic[data-part='root'] [data-part='trigger'] {
+  color: var(--ds-menu-item-color, inherit);
+}
+
+/* ---- roving focus: the ring and the row tint. ---- */
+.rottay-menu--rustic[data-part='root'] [data-part='item'][data-focused],
+.rottay-menu--rustic[data-part='root'] [data-part='trigger'][data-focused] {
+  outline: 2px solid var(--ds-menu-focus-ring-color, var(--ds-color-primary));
+}
+
+.rottay-menu--rustic[data-part='root'] [data-part='trigger'][data-focused] {
+  background-color: var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover));
+}
+.rottay-menu--rustic[data-part='root'] [data-part='item'][data-focused]:not([data-selected='true']) {
+  background-color: var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover));
+}
+
+/* ---- the leaf item's colour chain: danger > selected > default. ---- */
+.rottay-menu--rustic[data-part='root'] [data-part='item']:not([data-tone='danger']):not([data-selected='true']) {
+  color: var(--ds-menu-item-color, inherit);
+}
+.rottay-menu--rustic[data-part='root'] [data-part='item'][data-selected='true']:not([data-tone='danger']) {
+  color: var(--ds-menu-item-selected-color, var(--ds-color-primary));
+}
+.rottay-menu--rustic[data-part='root'] [data-part='item'][data-tone='danger'] {
+  color: var(--ds-menu-item-danger-color, var(--ds-color-error));
+}
+
+/* ---- selection outranks focus on the background. ---- */
+.rottay-menu--rustic[data-part='root'] [data-part='item'][data-selected='true'] {
+  background-color: var(--ds-menu-item-selected-bg, var(--ds-color-alpha-primary-10));
+}
+
+/* ---- group heading + divider. ---- */
+.rottay-menu--rustic[data-part='root'] [data-part='group-label'] {
+  color: var(--ds-menu-group-title-color, var(--ds-color-text-muted));
+}
+
+.rottay-menu--rustic[data-part='root'] [data-part='divider'] {
+  background-color: var(--ds-menu-divider-color, var(--ds-color-border));
+}

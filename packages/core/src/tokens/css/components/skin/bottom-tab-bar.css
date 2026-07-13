@@ -1,0 +1,69 @@
+/**
+ * BottomTabBar skin (WO-SKIN-04 checkpoint N).
+ *
+ * ENGINE-AGNOSTIC: BottomTabBar has no `engines/` split — it composes Box/Flex/
+ * Text, which resolve through the engine system themselves. One skin file, no
+ * engine modifier class.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * ELEMENT-LEVEL CLASSES, NOT BARE `data-part` DESCENDANTS: `data-part='icon'` /
+ * `'label'` / `'badge'` are shared vocabulary across the component fleet, and
+ * `item.icon` is an arbitrary consumer node rendered inside this tree. Each
+ * painted element therefore carries its own class and is matched by a COMPOUND
+ * selector.
+ *
+ * ACTIVE COLOR: one JS ternary fanned out to three redundant `color` sites (tab
+ * button, icon, label — none of them relying on inheritance). All three are
+ * reproduced explicitly, keyed on the tab button's `data-selected`, so the
+ * cascade cannot be changed by a future `color` landing on an intermediate node.
+ * Those three sites were JS object SHORTHAND (`color,`) and are invisible to the
+ * inline-paint counter — they are real paint, migrated from the inventory's
+ * coverage list, not the counter's.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * (0,3,1). The root's `border-top` carries a real color, so it must reach
+ * (0,4,0); with only ONE root class that is bought by a thrice-repeated
+ * `[data-part='root']` (the voice-input-button precedent). The tab button's
+ * `border: none` is a color-free reset, exempt from the floor. Non-border paint
+ * (background, color, border-radius) wins unlayered at (0,2,0)+.
+ */
+
+.rottay-bottom-tab-bar[data-part='root'] {
+  background: var(--ds-color-bg-primary);
+}
+
+.rottay-bottom-tab-bar[data-part='root'][data-part='root'][data-part='root'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* ---- tab button: transparent shell; the active/idle color fans out to the
+        icon and label, which re-declare it rather than inherit. ---- */
+.rottay-bottom-tab-bar__tab[data-part='tab-button'] {
+  background: none;
+  border: none;
+}
+
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'],
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__icon,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__label {
+  color: var(--ds-color-text-muted);
+}
+
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'],
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon,
+.rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label {
+  color: var(--ds-color-primary);
+}
+
+/* ---- badge: fixed error pill; its text literal has no token backing. ---- */
+.rottay-bottom-tab-bar__badge[data-part='badge'] {
+  border-radius: 8px;
+  background: var(--ds-color-error);
+}
+
+.rottay-bottom-tab-bar__badge-text {
+  color: #fff;
+}

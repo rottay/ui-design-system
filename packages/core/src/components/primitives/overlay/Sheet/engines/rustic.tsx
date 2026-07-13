@@ -83,14 +83,12 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
     const base: React.CSSProperties = {
       position: 'fixed',
       zIndex: 1060,
-      backgroundColor: 'var(--ds-drawer-bg, var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff)))',
-      color: 'var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a))',
-      boxShadow: 'var(--ds-modal-shadow, var(--ds-shadow-xl))',
       fontFamily: 'var(--ds-font-family-base, inherit)',
       display: 'flex',
       flexDirection: 'column',
+      // The transition is inert: `transform` is never assigned on any branch and
+      // the panel unmounts synchronously on close, so no slide ever plays.
       transition: 'transform var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1)), box-shadow var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
-      border: '1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb))',
     };
 
     switch (side) {
@@ -102,8 +100,6 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           right: 0,
           maxHeight: '85vh',
           minHeight: '30vh',
-          borderTopLeftRadius: 16,
-          borderTopRightRadius: 16,
         };
       case 'left':
         return {
@@ -113,8 +109,6 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           bottom: 0,
           width: 380,
           maxWidth: '90vw',
-          borderTopRightRadius: 16,
-          borderBottomRightRadius: 16,
         };
       case 'right':
         return {
@@ -124,8 +118,6 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           bottom: 0,
           width: 380,
           maxWidth: '90vw',
-          borderTopLeftRadius: 16,
-          borderBottomLeftRadius: 16,
         };
       default:
         return base;
@@ -141,10 +133,8 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))))',
             zIndex: 1059,
             transition: 'opacity var(--ds-modal-animation-duration, 200ms) var(--ds-modal-animation-timing, cubic-bezier(0.32, 0.72, 0, 1))',
-            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
           }}
           onClick={closeOnOverlayClick ? () => onOpenChange(false) : undefined}
         />
@@ -175,8 +165,6 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
               style={{
                 width: 40,
                 height: 4,
-                backgroundColor: 'var(--ds-color-neutral-300, #d1d5db)',
-                borderRadius: 2,
               }}
             />
           </div>
@@ -189,23 +177,19 @@ export default function RusticSheet(props: SheetProps): React.ReactElement {
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '12px 16px',
-              borderBottom: '1px solid var(--ds-modal-header-border, var(--ds-color-neutral-200, #e5e7eb))',
             }}
           >
-            <span data-part="title" style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)', color: 'var(--ds-modal-title-color, inherit)' }}>{title}</span>
+            <span data-part="title" style={{ fontSize: 'var(--ds-modal-title-font-size, 18px)', fontWeight: 'var(--ds-modal-title-font-weight, 600)' }}>{title}</span>
             <button
               type="button"
               data-part="close-button"
               onClick={() => onOpenChange(false)}
               aria-label="Close"
               style={{
-                border: 'none',
-                background: 'transparent',
                 fontSize: 20,
                 cursor: 'pointer',
                 padding: '4px 8px',
-                borderRadius: 4,
-                color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #6b7280))',
+                // The transition is inert: this engine declares no hover state.
                 transition: 'background-color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease), color var(--ds-personality-animation-entrance-duration, 180ms) var(--ds-input-transition-timing, ease)',
               }}
             >

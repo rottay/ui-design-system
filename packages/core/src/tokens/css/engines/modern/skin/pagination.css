@@ -1,0 +1,70 @@
+/**
+ * Modern Pagination skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * NO DaisyUI HERE, despite the file's own header comment: modern Pagination's
+ * doc block describes "DaisyUI's join pattern" and "join-item with btn size
+ * modifiers", but the render carries zero DaisyUI classes (Segmented's header
+ * makes the same stale claim). There is no `join`/`btn` hook to preserve.
+ * `personality.css`'s PAGINATION block targets `.ant-pagination-item`,
+ * `.join .btn` and `.ds-pagination-item` — none of which this engine stamps —
+ * so it is orphaned, not suppressed, and nothing here can wake it.
+ *
+ * SCOPE ROOT carries `rottay-pagination rottay-pagination--modern` +
+ * `data-part='root'`. All four button parts are anchored under it.
+ *
+ * THE JOINED-BUTTON BORDER IS ORDER-DEPENDENT. Every button got the full
+ * `border` shorthand; then prev/page/ellipsis dropped their RIGHT edge so
+ * adjacent buttons share one seam, and only `next` keeps a right border. The
+ * `border-right: none` rules therefore have to out-rank the shorthand that
+ * precedes them: they carry at least the same (0,4,0) and come later, so they
+ * win on `border-right-style` exactly as the inline spread order did.
+ *
+ * SPECIFICITY (P-48): the shared `border` shorthand carries a real color and
+ * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1), so it
+ * reaches (0,4,0) via the scope class + the root attr + a REPEATED `data-part`
+ * on the target (a compound, no descendant space), and stays a SHORTHAND.
+ * `border-right: none` is a color-free reset (exempt from the floor) but is held
+ * at (0,4,0)+ so it still beats the shorthand. `background` / `color` /
+ * `border-radius` are non-border paint and win at (0,3,0).
+ */
+
+/* ---- shared button chrome: the one bordered rule (0,4,0). ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-part='pagination-nav-button'],
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
+.rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'],
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'],
+.rottay-pagination--modern[data-part='root'] [data-part='ellipsis'] {
+  border-radius: 0;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- the joined seam: every button but `next` drops its right edge. ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='prev'][data-part='pagination-nav-button'],
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-part='pagination-page-button'],
+.rottay-pagination--modern[data-part='root'] [data-part='ellipsis'][data-part='ellipsis'] {
+  border-right: none;
+}
+
+/* ---- the outer corners round; the inner seams stay square. ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='prev'] {
+  border-radius: var(--ds-radius-md) 0 0 var(--ds-radius-md);
+}
+
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-nav-button'][data-direction='next'] {
+  border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
+}
+
+/* ---- the current page inverts. ---- */
+.rottay-pagination--modern[data-part='root'] [data-part='pagination-page-button'][data-current='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}

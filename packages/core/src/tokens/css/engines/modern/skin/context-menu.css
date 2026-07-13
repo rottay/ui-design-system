@@ -1,0 +1,55 @@
+/**
+ * Modern ContextMenu skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * NOT the same widget as Dropdown, despite the near-identical markup (P2b). Dropdown
+ * modern renders the DaisyUI `menu` class on its <ul> and therefore inherits a live
+ * item-row hover from `modern/theme.css`'s `.menu li > button:hover`. THIS engine
+ * renders ZERO DaisyUI classes (its <ul>'s className is the consumer's
+ * `overlayClassName` and nothing else), so no theme.css or personality.css rule
+ * reaches any element here, and its item rows have NO hover feedback at all.
+ * That absence is the shipped behaviour and is preserved: do not add a `:hover`.
+ *
+ * PORTAL: this engine does NOT portal — the menu is an in-tree absolute child of the
+ * trigger container (rustic DOES portal). The scope class anchors every rule anyway.
+ *
+ * SPECIFICITY (P-48): the panel's colored border repeats its `data-part` to clear the
+ * tenant `*` border-color floor at (0,3,1).
+ *
+ * Keyframes were per-mount `<style>` injections named `rottay-popover-enter`/`-exit`,
+ * byte-identical to Dropdown's own independent copy of the same two names. Each
+ * component now owns an engine-namespaced pair instead, so two open menus can no
+ * longer redefine one another's keyframes.
+ */
+
+@keyframes ds-context-menu-popover-enter-modern {
+  from { opacity: 0; transform: scale(0.96) translateY(-4px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes ds-context-menu-popover-exit-modern {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(0.96) translateY(-4px); }
+}
+
+/* ---- floating menu panel (the <ul>) ---- */
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-2);
+}
+.rottay-context-menu--modern[data-part='trigger'] > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- structural rows ---- */
+.rottay-context-menu--modern[data-part='trigger'] [data-part='divider'] {
+  background: var(--ds-color-border-subtle);
+}
+.rottay-context-menu--modern[data-part='trigger'] [data-part='group-label'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-context-menu--modern[data-part='trigger'] [data-part='item'][data-tone='danger'] {
+  color: var(--ds-color-error);
+}

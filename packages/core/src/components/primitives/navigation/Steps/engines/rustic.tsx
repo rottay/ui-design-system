@@ -50,35 +50,6 @@ import { STEPS_DEFAULTS } from '../Steps.types';
  * @param status - The step status
  * @returns Object containing background, border, and text colors
  */
-const getStatusColors = (status: StepStatus) => {
-  switch (status) {
-    case 'finish':
-      return {
-        bg: 'var(--ds-steps-finish-bg, var(--ds-color-primary-500, var(--ds-color-primary)))',
-        border: 'var(--ds-steps-finish-border, var(--ds-color-primary-500, var(--ds-color-primary)))',
-        text: 'var(--ds-steps-finish-text, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)))'
-      };
-    case 'process':
-      return {
-        bg: 'var(--ds-steps-process-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-        border: 'var(--ds-steps-process-border, var(--ds-color-primary-500, var(--ds-color-primary)))',
-        text: 'var(--ds-steps-process-text, var(--ds-color-primary-500, var(--ds-color-primary)))'
-      };
-    case 'error':
-      return {
-        bg: 'var(--ds-steps-error-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-        border: 'var(--ds-steps-error-border, var(--ds-color-error-500, var(--ds-color-error)))',
-        text: 'var(--ds-steps-error-text, var(--ds-color-error-500, var(--ds-color-error)))'
-      };
-    default:
-      return {
-        bg: 'var(--ds-steps-wait-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-        border: 'var(--ds-steps-wait-border, var(--ds-color-border-secondary, var(--ds-color-neutral-300)))',
-        text: 'var(--ds-steps-wait-text, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))'
-      };
-  }
-};
-
 /**
  * Calculates the effective status for a step based on its position.
  *
@@ -209,9 +180,13 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
     // ========================================================================
 
     return (
-      <ol ref={ref} className={className} style={containerStyle} data-part="root">
+      <ol
+        ref={ref}
+        className={`rottay-steps rottay-steps--rustic ${className}`.trim()}
+        style={containerStyle}
+        data-part="root"
+      >
         {computedSteps.map((step, index) => {
-          const colors = getStatusColors(step.effectiveStatus);
           const isLast = index === items.length - 1;
           const isClickable = !step.disabled && onChange;
 
@@ -234,7 +209,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                 description: step.description ?? '',
               };
               return (
-                <span data-part="icon" style={{ width: 8, height: 8, borderRadius: '50%', marginRight: 8 }}>
+                <span data-part="icon" data-variant="dot-slot" style={{ width: 8, height: 8, marginRight: 8 }}>
                   {progressDot(dotInfo)}
                 </span>
               );
@@ -245,11 +220,10 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
               return (
                 <span
                   data-part="icon"
+                  data-variant="dot"
                   style={{
                     width: 8,
                     height: 8,
-                    borderRadius: '50%',
-                    backgroundColor: colors.border,
                     marginRight: 8,
                     marginTop: 4,
                   }}
@@ -262,18 +236,14 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
               return (
                 <span
                   data-part="icon"
+                  data-variant="circle"
                   style={{
                     width: isSmall ? 24 : 32,
                     height: isSmall ? 24 : 32,
-                    borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     marginRight: 8,
-                    border: '2px solid',
-                    backgroundColor: colors.bg,
-                    borderColor: colors.border,
-                    color: colors.text,
                     fontSize: isSmall ? 12 : 14,
                     fontWeight: 500,
                   }}
@@ -295,18 +265,14 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
             return (
               <span
                 data-part="icon"
+                data-variant="circle"
                 style={{
                   width: isSmall ? 24 : 32,
                   height: isSmall ? 24 : 32,
-                  borderRadius: '50%',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   marginRight: 8,
-                  border: '2px solid',
-                  backgroundColor: colors.bg,
-                  borderColor: colors.border,
-                  color: colors.text,
                   fontSize: isSmall ? 12 : 14,
                   fontWeight: 500,
                 }}
@@ -348,14 +314,11 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                   style={{
                     fontSize: isSmall ? 12 : 14,
                     fontWeight: 500,
-                    color: step.effectiveStatus === 'error'
-                      ? 'var(--ds-steps-error-text, var(--ds-color-error-500, var(--ds-color-error)))'
-                      : 'var(--ds-steps-title-color, var(--ds-color-text-primary, var(--ds-color-text)))',
                   }}
                 >
                   {step.title}
                   {step.subTitle && (
-                    <span data-part="subtitle" style={{ fontSize: 12, color: 'var(--ds-steps-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))', marginLeft: 8 }}>
+                    <span data-part="subtitle" style={{ fontSize: 12, marginLeft: 8 }}>
                       {step.subTitle}
                     </span>
                   )}
@@ -363,7 +326,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
 
                 {/* Description */}
                 {step.description && (
-                  <span data-part="description" style={{ fontSize: 12, color: 'var(--ds-steps-description-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))', marginTop: 4 }}>
+                  <span data-part="description" style={{ fontSize: 12, marginTop: 4 }}>
                     {step.description}
                   </span>
                 )}
@@ -376,6 +339,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
               {!isLast && (
                 <span
                   data-part="connector"
+                  data-status={index < current ? 'finish' : 'wait'}
                   style={{
                     position: 'absolute',
                     height: isVertical ? 'calc(100% - 32px)' : 2,
@@ -383,9 +347,6 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                     top: isVertical ? 40 : 15,
                     left: isVertical ? 15 : 40,
                     right: isVertical ? 'auto' : 8,
-                    backgroundColor: index < current
-                      ? 'var(--ds-steps-connector-finish, var(--ds-color-primary-500, var(--ds-color-primary)))'
-                      : 'var(--ds-steps-connector-wait, var(--ds-color-border-primary, var(--ds-color-neutral-200)))',
                   }}
                 />
               )}

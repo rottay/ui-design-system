@@ -1,0 +1,106 @@
+/**
+ * Rustic Stepper skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * N1 DOES NOT APPLY HERE: rustic carries no DaisyUI class and reaches no
+ * pseudo-element. Every circle, line and label below is a real element.
+ *
+ * SCOPE ROOT already carried `rottay-stepper rottay-stepper--rustic` (plus
+ * direction/size/variant modifiers) + `data-part='root'`.
+ *
+ * THIS IS NOT THE SAME STATUS MAP AS `Stepper.Step`. The root engine and the
+ * compound each define their own `getStatusColors`, and they DISAGREE: the
+ * compound gives `process` a dedicated title color, the root engine does not
+ * (its `wait`/`process` titles resolve through different tokens entirely). That
+ * divergence is pre-existing and is preserved byte-exact here — the two are
+ * migrated independently, not reconciled. See `stepper-compounds.css`.
+ *
+ * THE FOCUS RING IS REACT-STATE, NOT `:focus`. `data-focused` is stamped from a
+ * roving-tabindex `focusedIndex`, which is a different predicate from the DOM's
+ * `:focus` (arrow-key navigation moves it without a focus event on every step).
+ * The rule keys on the stamp, not the pseudo-class — swapping in `:focus` would
+ * change WHEN the ring appears.
+ *
+ * THE BORDER SHORTHAND IS ATOMIC: the source built it as one template literal
+ * (`2px solid ${colors.border}`), so it stays one shorthand per status here.
+ *
+ * SPECIFICITY (P-48): the icon's `border` and the focus `outline` carry real
+ * colors and must clear the tenant's unlayered `* { border-color }` floor at
+ * (0,3,1); the per-status icon rules reach (0,4,0)+. Non-border paint wins at
+ * (0,3,0).
+ */
+
+/* ---- the roving focus ring. `outline: none` at rest is a color-free reset. ---- */
+.rottay-stepper--rustic[data-part='root'] [data-part='item'] {
+  outline: none;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-part='item'][data-focused] {
+  outline: 2px solid var(--ds-stepper-focus-ring, var(--ds-color-primary-500));
+}
+
+/* ---- the icon circle, per status. ---- */
+.rottay-stepper--rustic[data-part='root'] [data-part='icon'] {
+  border-radius: 50%;
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-status='finish'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-finish-bg, var(--ds-color-primary-500));
+  color: var(--ds-stepper-icon-finish-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+  border: 2px solid var(--ds-stepper-icon-finish-border, var(--ds-color-primary-500));
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-status='process'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-process-bg, var(--ds-color-primary-500));
+  color: var(--ds-stepper-icon-process-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+  border: 2px solid var(--ds-stepper-icon-process-border, var(--ds-color-primary-500));
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-status='error'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-error-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-stepper-icon-error-color, var(--ds-color-error));
+  border: 2px solid var(--ds-stepper-icon-error-border, var(--ds-color-error));
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-status='wait'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-wait-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-stepper-icon-wait-color, var(--ds-color-text-secondary));
+  border: 2px solid var(--ds-stepper-icon-wait-border, var(--ds-color-border));
+}
+
+/* ---- the title, per status (the root engine's own map — see the header). ---- */
+.rottay-stepper--rustic[data-part='root'] [data-status='finish'] [data-part='label'] {
+  color: var(--ds-stepper-title-finish-color, var(--ds-color-text-primary));
+}
+.rottay-stepper--rustic[data-part='root'] [data-status='process'] [data-part='label'] {
+  color: var(--ds-stepper-title-process-color, var(--ds-color-text-primary));
+}
+.rottay-stepper--rustic[data-part='root'] [data-status='error'] [data-part='label'] {
+  color: var(--ds-stepper-title-error-color, var(--ds-color-error));
+}
+.rottay-stepper--rustic[data-part='root'] [data-status='wait'] [data-part='label'] {
+  color: var(--ds-stepper-title-wait-color, var(--ds-color-text-secondary));
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-part='subtitle'] {
+  color: var(--ds-stepper-subtitle-color, var(--ds-color-text-secondary));
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-part='description'] {
+  color: var(--ds-stepper-description-color, var(--ds-color-text-secondary));
+}
+
+/* ---- the connector, on its OWN data-status (which mirrors the item's here,
+        unlike Steps/rustic where it is an index comparison). ---- */
+.rottay-stepper--rustic[data-part='root'] [data-part='connector'][data-status='finish'] {
+  background-color: var(--ds-stepper-connector-finish-color, var(--ds-color-primary-500));
+}
+
+.rottay-stepper--rustic[data-part='root'] [data-part='connector']:not([data-status='finish']) {
+  background-color: var(--ds-stepper-connector-color, var(--ds-color-border-secondary, var(--ds-color-border)));
+}

@@ -1,0 +1,56 @@
+/**
+ * Modern Popover skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE IS `rottay-popover--modern`, NEVER `ds-popover` (P3). personality.css carries
+ *
+ *   .ant-popover, .popover, [data-engine] .ds-popover {
+ *     animation: ds-dropdown-enter var(--ds-personality-animation-entrance-duration) …;
+ *   }
+ *
+ * which is DORMANT: neither engine carries any of those three classnames, and neither
+ * has ANY entrance animation today (no `<style>`, no `@keyframes`, no `transition`
+ * anywhere in either file). Naming this scope class `ds-popover` would wake that rule
+ * and hand Popover an entrance animation it has never had — a visual change disguised
+ * as a naming choice. The same trap exists for `.ds-dropdown` and Dropdown.
+ *
+ * PORTAL: this engine does NOT portal (rustic DOES) — the panel is an in-tree absolute
+ * child of the trigger wrapper. The scope class anchors every rule regardless.
+ *
+ * PLACEMENT: this engine silently collapses the 12 typed placements to 4 — its JS
+ * branches on `.includes('top'|'bottom'|'left'|'right')` and then unconditionally
+ * re-centers every top/bottom placement, so `topLeft`/`leftTop`/`rightBottom`/… all
+ * resolve to the centered case. The centering transform is therefore keyed here:
+ * translateY(-50%) for EXACTLY `left` and `right`, translateX(-50%) for every other
+ * value (and for an absent placement). That reproduces the collapse verbatim — it is a
+ * pre-existing behaviour, not a bug to fix inside a byte-exact migration. The paired
+ * offsets (bottom/top/left/margin) stay inline, where the placement math lives.
+ *
+ * SPECIFICITY (P-48): the title's colored border repeats its `data-part` to clear the
+ * tenant `*` border-color floor at (0,3,1).
+ */
+
+/* ---- content panel ---- */
+.rottay-popover--modern[data-part='trigger'] > [data-part='surface'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+  transform: translateX(-50%);
+}
+.rottay-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement='left'],
+.rottay-popover--modern[data-part='trigger'] > [data-part='surface'][data-placement='right'] {
+  transform: translateY(-50%);
+}
+
+/* ---- title divider ---- */
+.rottay-popover--modern[data-part='trigger'] [data-part='title'][data-part='title'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+/* ---- arrow: this engine's arrow has NO box-shadow (rustic's does). Preserved. ---- */
+.rottay-popover--modern[data-part='trigger'] [data-part='arrow'] {
+  background: var(--ds-surface-card);
+  transform: rotate(45deg);
+}

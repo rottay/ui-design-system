@@ -1,0 +1,100 @@
+/**
+ * Rustic overlay/Modal skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * NOT the same component as `primitives/feedback/Modal`. Every rule is anchored to
+ * `.rottay-overlay-modal-shell--rustic`, unique to this component; the bare
+ * `rottay-modal` token is NOT free (feedback/Modal rustic carries it on its own
+ * surface) and must never scope a rule here.
+ *
+ * SCOPE ROOT is SELF-CARRYING: unlike the modern engine (whose shell class sits on
+ * the `<dialog>` root), this engine puts the shell class on the PANEL itself, the
+ * same node that carries `data-part='surface'`. Its rules therefore take the
+ * COMPOUND form `.rottay-overlay-modal-shell--rustic[data-part='surface']` with no
+ * descendant space. The backdrop and focus-trap wrappers are ANCESTORS of this
+ * node, not descendants — they are separate reusable utils and are painted from
+ * `components/skin/overlay-modal-compounds.css`.
+ *
+ * PORTAL: the tree mounts through the shared `Portal` util into
+ * `#rottay-portal-root` on `document.body`, outside any tenant-scoped subtree, so
+ * every selector is standalone on the shell class.
+ *
+ * DIRECT-CHILD COMBINATORS are load-bearing: the `Modal.Header`/`Body`/`Footer`/
+ * `CloseButton` compounds re-use the same `data-part` names and can be composed
+ * INSIDE this engine's body. Anchoring each section on `surface > ...` keeps engine
+ * paint off a composed compound, which owns its own skin.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1), so a rule
+ * painting a border COLOR reaches b >= 4 by repeating the target's `data-part` on
+ * top of the shell class + `[data-part='surface']`.
+ *
+ * STATE: `data-adaptive-fullscreen` is viewport-driven (measured by `useBreakpoints`
+ * in JS, NOT a media query, so it cannot be re-derived in CSS); `data-shadow` and
+ * `data-divider` carry the `shadow` and `divider` props.
+ * `--ds-overlay-modal-radius` carries the panel radius (a RADIUS_MAP enum folded
+ * with the fullscreen '0' override).
+ *
+ * The panel's `transform` is a constant, not an entrance: the engine unmounts
+ * synchronously on `open=false` (`if (!open) return null`), so the closed
+ * `scale(0.95)` branch is never rendered and the declared `transition` never runs.
+ * The value is transcribed exactly as it ships — `none` when adaptive-fullscreen
+ * (the engine passed `undefined` and ReactDOM omitted the key).
+ */
+
+/* ---- surface (panel) ---- */
+.rottay-overlay-modal-shell--rustic[data-part='surface'] {
+  background-color: var(--ds-color-bg-elevated);
+  border-radius: var(--ds-overlay-modal-radius);
+  box-shadow: none;
+  transform: scale(1) translateY(0);
+}
+.rottay-overlay-modal-shell--rustic[data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true']) {
+  box-shadow: var(--ds-modal-shadow, var(--ds-shadow-2xl));
+}
+.rottay-overlay-modal-shell--rustic[data-part='surface'][data-adaptive-fullscreen='true'] {
+  transform: none;
+}
+
+/* ---- header / footer dividers (colored border SHORTHANDS at the (0,4,0) floor).
+        `data-divider='false'` reproduces the engine's explicit `'none'` branch. ---- */
+.rottay-overlay-modal-shell--rustic[data-part='surface']
+  > [data-part='header'][data-part='header'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-modal-header-border, var(--ds-color-border-primary));
+}
+.rottay-overlay-modal-shell--rustic[data-part='surface']
+  > [data-part='header'][data-part='header'][data-divider='false'] {
+  border-bottom: none;
+}
+.rottay-overlay-modal-shell--rustic[data-part='surface']
+  > [data-part='footer'][data-part='footer'][data-divider='true'] {
+  border-top: 1px solid var(--ds-modal-footer-border, var(--ds-color-border-primary));
+}
+.rottay-overlay-modal-shell--rustic[data-part='surface']
+  > [data-part='footer'][data-part='footer'][data-divider='false'] {
+  border-top: none;
+}
+
+/* ---- body description ---- */
+.rottay-overlay-modal-shell--rustic[data-part='surface']
+  > [data-part='body']
+  > [data-part='description'] {
+  color: var(--ds-modal-body-color, var(--ds-color-text-secondary));
+}
+
+/* ---- close button: the removed imperative hover becomes a :hover rule. The
+        mouseleave handler restored exactly the resting values below. ---- */
+.rottay-overlay-modal-shell--rustic[data-part='surface']
+  > [data-part='header']
+  > [data-part='close-button'] {
+  border: none;
+  border-radius: 6px;
+  background-color: transparent;
+  color: var(--ds-modal-close-color, var(--ds-color-text-tertiary));
+}
+.rottay-overlay-modal-shell--rustic[data-part='surface']
+  > [data-part='header']
+  > [data-part='close-button']:hover {
+  background-color: var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary));
+  color: var(--ds-modal-close-color-hover, var(--ds-color-text-primary));
+}

@@ -1,0 +1,50 @@
+/**
+ * Modern Breadcrumb skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * THE SEPARATOR CHANNEL IS NOT TOUCHED (N3). Modern Breadcrumb's separators are
+ * DaisyUI `::before` pseudo-elements, and `engines/modern/theme.css` carries TWO
+ * independent `.breadcrumbs` blocks whose live separator color is decided by a
+ * specificity tie-break that runs OPPOSITE to file order (the earlier block's
+ * `li + li::before` out-specifies the later block's `li::before`). Nothing here
+ * declares a `::before` rule or a separator token, and the component's
+ * `--bc-color` redirection stays inline, verbatim — so the tie-break, and the
+ * color a user sees today, are unchanged. Fixing that pair is P-73's job.
+ *
+ * SCOPE ROOT carries `rottay-breadcrumb-shell rottay-breadcrumb-shell--modern`
+ * alongside the DaisyUI `.breadcrumbs` class (kept — it is the pseudo-element
+ * separator's only hook) and `data-part='root'`.
+ *
+ * CHILD COMBINATORS, NOT DESCENDANTS: `Breadcrumb.Item` (the compound) renders
+ * the SAME `data-part='crumb'` + `data-current` pair as the engine's own crumbs.
+ * A descendant `[data-part='crumb']` rule here would paint a compound Item that
+ * ever lands inside this root with the engine's colors. The engine's crumbs are
+ * always `root > ul > li > a|span`; the compound's crumb is wrapped in an extra
+ * `span.rottay-breadcrumb-item`, so the child chain below cannot reach it.
+ *
+ * SPECIFICITY (P-48): the root's `border` shorthand carries a real color (a
+ * `transparent` fallback is still a color, not a `none`/`0` reset), so it must
+ * clear the tenant's unlayered `* { border-color }` floor at (0,3,1) — it
+ * reaches (0,4,0) via the two scope classes + a repeated `data-part`, and stays
+ * a SHORTHAND. `color` and `background` are non-border paint and win at (0,3,0).
+ */
+
+.rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'] {
+  color: var(--ds-breadcrumb-color, var(--ds-color-text-secondary));
+  background: var(--ds-breadcrumb-bg, transparent);
+}
+
+.rottay-breadcrumb-shell.rottay-breadcrumb-shell--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-breadcrumb-border, transparent);
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] > ul > li > [data-part='crumb'][data-current='false'] {
+  color: var(--ds-breadcrumb-link-color, var(--ds-color-primary));
+}
+
+.rottay-breadcrumb-shell--modern[data-part='root'] > ul > li > [data-part='crumb'][data-current='true'] {
+  color: var(--ds-breadcrumb-active-color, var(--ds-breadcrumb-color-active, var(--ds-color-text-primary)));
+}

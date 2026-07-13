@@ -142,25 +142,12 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
       handleOpenChange(false);
     };
 
-    // Resolve confirm-button colours from DS semantic tokens per okType variant
-    const getOkButtonStyle = (): React.CSSProperties => {
-      const baseStyle: React.CSSProperties = {
-        padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
-        borderRadius: 'var(--ds-popconfirm-button-radius, 6px)',
-        border: 'none',
-        cursor: 'pointer',
-        fontWeight: 500,
-        fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
-      };
-
-      switch (okType) {
-        case 'danger':
-          return { ...baseStyle, backgroundColor: 'var(--ds-popconfirm-danger-bg, var(--ds-color-error-500, #ef4444))', color: 'var(--ds-popconfirm-danger-color, #fff)' };
-        case 'primary':
-          return { ...baseStyle, backgroundColor: 'var(--ds-popconfirm-primary-bg, var(--ds-color-primary-500, #3b82f6))', color: 'var(--ds-popconfirm-primary-color, #fff)' };
-        default:
-          return { ...baseStyle, backgroundColor: 'var(--ds-popconfirm-default-bg, var(--ds-color-neutral-100, #f3f4f6))', color: 'var(--ds-popconfirm-default-color, var(--ds-color-neutral-700, #374151))' };
-      }
+    // Confirm-button chrome per okType lives in the skin, keyed on `data-ok-type`.
+    const okButtonStyle: React.CSSProperties = {
+      padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
+      cursor: 'pointer',
+      fontWeight: 500,
+      fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
     };
 
     const popoverContent = isOpen && typeof document !== 'undefined' ? (
@@ -171,34 +158,29 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
           aria-modal="true"
           data-part="surface"
           data-open="true"
+          data-placement={placement}
           className={`rottay-popconfirm--rustic ${overlayClassName || ''}`}
           style={{
             position: 'absolute',
             top: position.top,
             left: position.left,
-            transform: placement?.includes('bottom') ? 'translateX(-50%)' : 'translate(-50%, -100%)',
             zIndex: 'var(--ds-popconfirm-z-index, 1050)' as unknown as number,
-            backgroundColor: 'var(--ds-popconfirm-bg, var(--ds-color-bg-elevated, #fff))',
-            borderRadius: 'var(--ds-popconfirm-radius, var(--ds-radius-lg, 12px))',
-            boxShadow: 'var(--ds-popconfirm-shadow, var(--ds-shadow-lg))',
             padding: 'var(--ds-popconfirm-padding, 16px)',
             minWidth: 'var(--ds-popconfirm-min-width, 220px)',
             maxWidth: 'var(--ds-popconfirm-max-width, 350px)',
-            border: '1px solid var(--ds-popconfirm-border-color, var(--ds-color-neutral-200, #e5e7eb))',
-            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
             ...overlayStyle,
           }}
         >
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
             {icon && (
-              <span data-part="icon" style={{ color: 'var(--ds-popconfirm-icon-color, var(--ds-color-warning-500, #f59e0b))', marginTop: '2px' }}>
+              <span data-part="icon" style={{ marginTop: '2px' }}>
                 {icon}
               </span>
             )}
             <div style={{ flex: 1 }}>
-              <div data-part="title" style={{ fontWeight: 500, color: 'var(--ds-popconfirm-title-color, var(--ds-color-neutral-900, #111827))' }}>{title}</div>
+              <div data-part="title" style={{ fontWeight: 500 }}>{title}</div>
               {description && (
-                <div data-part="description" style={{ fontSize: '14px', color: 'var(--ds-popconfirm-description-color, var(--ds-color-neutral-500, #6b7280))', marginTop: '4px' }}>
+                <div data-part="description" style={{ fontSize: '14px', marginTop: '4px' }}>
                   {description}
                 </div>
               )}
@@ -219,9 +201,6 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
               onClick={handleCancel}
               style={{
                 padding: 'var(--ds-popconfirm-button-padding, 6px 16px)',
-                borderRadius: 'var(--ds-popconfirm-button-radius, 6px)',
-                border: '1px solid var(--ds-popconfirm-cancel-border, var(--ds-color-neutral-300, #d1d5db))',
-                backgroundColor: 'var(--ds-popconfirm-cancel-bg, var(--ds-color-bg-primary, #fff))',
                 cursor: 'pointer',
                 fontWeight: 500,
                 fontSize: 'var(--ds-popconfirm-button-font-size, 14px)',
@@ -238,7 +217,7 @@ export const Popconfirm = React.forwardRef<HTMLDivElement, PopconfirmProps>(
               onClick={handleConfirm}
               disabled={loading || okButtonLoading}
               style={{
-                ...getOkButtonStyle(),
+                ...okButtonStyle,
                 opacity: loading || okButtonLoading ? 0.7 : 1,
               }}
             >

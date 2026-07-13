@@ -1,0 +1,31 @@
+/**
+ * ActionDock skin (WO-SKIN-04 checkpoint N).
+ *
+ * ENGINE-AGNOSTIC: ActionDock has no `engines/` split — it composes Box/Flex,
+ * which resolve through the engine system themselves. One skin file, no engine
+ * modifier class.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-action-dock` + `data-part='root'` +
+ * `data-placement`. The two shadows differ only in the sign of their Y offset;
+ * both are token-free literals carried over verbatim (P-70 candidate).
+ *
+ * SPECIFICITY (P-48): `background` and `box-shadow` are non-border paint —
+ * (0,3,0) suffices; the `[data-placement]` presence check buys the third unit
+ * on the shared background rule.
+ */
+
+.rottay-action-dock[data-part='root'][data-placement] {
+  background: var(--ds-color-bg-primary);
+}
+
+.rottay-action-dock[data-part='root'][data-placement='bottom'] {
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.rottay-action-dock[data-part='root'][data-placement='top'] {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

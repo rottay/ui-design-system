@@ -1,0 +1,36 @@
+/**
+ * Rustic Breadcrumb skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * N3 DOES NOT APPLY HERE: rustic renders the separator as a real `<span>`
+ * sibling, not a DaisyUI `::before` pseudo-element, and its root carries no
+ * `.breadcrumbs` class — so neither `theme.css` `.breadcrumbs` block reaches it
+ * and there is no tie-break to preserve. The separator's color is ordinary
+ * inline paint and moves normally.
+ *
+ * SCOPE ROOT carries `rottay-breadcrumb-shell rottay-breadcrumb-shell--rustic` +
+ * `data-part='root'`.
+ *
+ * CHILD COMBINATORS, NOT DESCENDANTS: `Breadcrumb.Item` (the compound) renders
+ * the SAME `data-part='crumb'` + `data-current` pair. Rustic's own crumbs and
+ * separators are DIRECT children of the `<nav>` root; the compound's crumb is
+ * wrapped in a `span.rottay-breadcrumb-item`, so the `>` chain cannot reach it.
+ *
+ * SPECIFICITY (P-48): every channel here is `color` — non-border paint, which
+ * wins unlayered at (0,3,0).
+ */
+
+.rottay-breadcrumb-shell--rustic[data-part='root'] > [data-part='crumb'][data-current='false'] {
+  color: var(--ds-breadcrumb-link-color, var(--ds-color-primary-500, #0066CC));
+}
+
+.rottay-breadcrumb-shell--rustic[data-part='root'] > [data-part='crumb'][data-current='true'] {
+  color: var(--ds-breadcrumb-item-color, var(--ds-color-neutral-600, #666));
+}
+
+.rottay-breadcrumb-shell--rustic[data-part='root'] > [data-part='separator'] {
+  color: var(--ds-breadcrumb-separator-color, var(--ds-color-neutral-400, #999));
+}

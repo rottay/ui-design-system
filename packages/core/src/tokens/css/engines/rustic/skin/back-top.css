@@ -1,0 +1,39 @@
+/**
+ * Rustic BackTop skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: the button carries `rottay-backtop rottay-backtop--rustic` +
+ * `data-part='trigger'` + `data-state`. It IS the painted element, so the rules
+ * are COMPOUND (no descendant space).
+ *
+ * Rustic keeps the button MOUNTED and animates it out with a scale (modern
+ * unmounts instead — a real engine asymmetry, preserved). `opacity` and
+ * `pointer-events` are not paint channels and stay inline; only the `transform`
+ * moves here, keyed on `data-state`. `data-state='visible' | 'hidden'` is the
+ * one stamp this migration had to add: the pre-step gave the button its
+ * `data-part` but no visibility attribute, and the scale cannot leave the TSX
+ * without one.
+ *
+ * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
+ * (0,4,0) border floor. All other channels are non-border paint and win
+ * unlayered at (0,3,0).
+ */
+
+.rottay-backtop.rottay-backtop--rustic[data-part='trigger'] {
+  border-radius: 50%;
+  border: none;
+  background-color: var(--ds-backtop-bg, var(--ds-color-primary-500, #1677ff));
+  color: var(--ds-backtop-color, #fff);
+  box-shadow: var(--ds-backtop-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+}
+
+.rottay-backtop.rottay-backtop--rustic[data-part='trigger'][data-state='hidden'] {
+  transform: scale(0);
+}
+
+.rottay-backtop.rottay-backtop--rustic[data-part='trigger'][data-state='visible'] {
+  transform: scale(1);
+}

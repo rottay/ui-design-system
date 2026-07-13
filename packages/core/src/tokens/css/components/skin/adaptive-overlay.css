@@ -1,0 +1,25 @@
+/**
+ * AdaptiveOverlay skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every engine skin (P-47).
+ *
+ * AdaptiveOverlay owns almost no DOM: it is a compositor that dispatches to Modal
+ * (desktop), feedback/Drawer (tablet) or Sheet (phone) by device class, so its portal
+ * posture varies by DEVICE CLASS as well as engine. It is engine-agnostic — one render
+ * tree, no engine split — so it gets a single component-level file, not a modern/rustic
+ * pair.
+ *
+ * The ONE paint site it owns is this footer divider. It exists because Sheet has no
+ * `footer` prop at all, so the compositor hand-rolls a footer div on the phone path.
+ * It deliberately uses a THIRD divider token (`--ds-color-border`) — neither Sheet's
+ * `--ds-color-border-subtle` (modern) nor its `--ds-modal-header-border` (rustic) — so a
+ * phone-path header and footer do not match. Transcribed verbatim; reconciling the three
+ * tokens is a visual change and belongs in its own work order.
+ *
+ * SPECIFICITY (P-48): the colored border repeats BOTH the class and the `data-part` to
+ * clear the tenant `*` border-color floor at (0,3,1).
+ */
+
+.rottay-adaptive-overlay-footer.rottay-adaptive-overlay-footer[data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border, #e5e7eb);
+}

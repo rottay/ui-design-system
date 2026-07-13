@@ -197,7 +197,6 @@ export const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
     );
 
     const containerStyle: React.CSSProperties = {
-      outline: 'none',
       ...style,
     };
 

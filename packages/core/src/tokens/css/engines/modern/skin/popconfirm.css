@@ -1,0 +1,79 @@
+/**
+ * Modern Popconfirm skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * PORTAL: this engine does NOT portal (rustic DOES) — the panel is an in-tree absolute
+ * sibling inside a relative wrapper, so it can be clipped by an `overflow: hidden`
+ * ancestor. The scope class anchors every rule regardless.
+ *
+ * OK-TYPE: `data-ok-type` carries the `okType` prop. The engine's `default:` branch is
+ * the catch-all for anything that is neither `danger` nor `primary`, reproduced with a
+ * `:not():not()` guard so an unrecognised value keeps painting the transparent default.
+ *
+ * TOKENS: this engine has NO `--ds-popconfirm-*` surface at all — every value is a
+ * generic DS token. The rustic engine has a full dedicated family. That asymmetry ships
+ * today and is transcribed as-is, not harmonised.
+ *
+ * LOADING: this engine shows a spinner ring; rustic instead dims the confirm button to
+ * `opacity: 0.7` and renders no spinner. Two mutually exclusive treatments of the same
+ * boolean, one per engine — both preserved.
+ *
+ * SPECIFICITY (P-48): the panel's and the spinner's colored borders repeat their
+ * `data-part` to clear the tenant `*` border-color floor at (0,3,1).
+ */
+
+/* ---- panel ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- copy ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='icon'] {
+  color: var(--ds-color-warning);
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- cancel action ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- confirm action, by okType ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-action='confirm'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='danger'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='action'][data-ok-type='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-popconfirm--modern[data-part='trigger']
+  [data-part='action'][data-action='confirm']:not([data-ok-type='danger']):not([data-ok-type='primary']) {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- loading spinner ring ---- */
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='spinner'] {
+  border-radius: 50%;
+}
+.rottay-popconfirm--modern[data-part='trigger'] [data-part='spinner'][data-part='spinner'] {
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+}

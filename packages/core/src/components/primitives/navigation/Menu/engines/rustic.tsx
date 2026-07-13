@@ -140,7 +140,6 @@ function renderRusticMenuItems(
             style={{
               height: '1px',
               margin: '8px 0',
-              backgroundColor: 'var(--ds-menu-divider-color, var(--ds-color-border))',
             }}
         />
       );
@@ -156,7 +155,6 @@ function renderRusticMenuItems(
               padding: '8px 16px 4px',
               fontSize: '12px',
               fontWeight: 600,
-              color: 'var(--ds-menu-group-title-color, var(--ds-color-text-muted))',
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
               paddingLeft: paddingLeft ? `${paddingLeft}px` : undefined,
@@ -195,6 +193,7 @@ function renderRusticMenuItems(
             data-part="trigger"
             data-open={isOpen}
             data-disabled={item.disabled || undefined}
+            data-focused={isFocused || undefined}
             tabIndex={item.disabled ? -1 : 0}
             aria-expanded={isOpen}
             aria-haspopup="true"
@@ -214,12 +213,7 @@ function renderRusticMenuItems(
               minHeight: '40px',
               cursor: item.disabled ? 'not-allowed' : 'pointer',
               opacity: item.disabled ? 0.5 : 1,
-              color: 'var(--ds-menu-item-color, inherit)',
-              backgroundColor: isFocused ? 'var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover))' : 'transparent',
-              borderRadius: 'var(--ds-menu-border-radius, 8px)',
               transition: 'all 0.2s ease',
-              outline: isFocused ? '2px solid var(--ds-menu-focus-ring-color, var(--ds-color-primary))' : 'none',
-              outlineOffset: '-2px',
             }}
           >
             {item.icon && <span data-part="icon">{item.icon}</span>}
@@ -233,7 +227,6 @@ function renderRusticMenuItems(
               fill="none"
               style={{
                 transition: 'transform 0.2s ease',
-                transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
               }}
             >
               <path
@@ -288,6 +281,7 @@ function renderRusticMenuItems(
           data-selected={isSelected}
           data-disabled={item.disabled || undefined}
           data-tone={item.danger ? 'danger' : undefined}
+          data-focused={isFocused || undefined}
           tabIndex={item.disabled ? -1 : 0}
           aria-disabled={item.disabled}
           data-key={item.key}
@@ -305,20 +299,7 @@ function renderRusticMenuItems(
             minHeight: '40px',
             cursor: item.disabled ? 'not-allowed' : 'pointer',
             opacity: item.disabled ? 0.5 : 1,
-            color: item.danger
-              ? 'var(--ds-menu-item-danger-color, var(--ds-color-error))'
-              : isSelected
-                ? 'var(--ds-menu-item-selected-color, var(--ds-color-primary))'
-                : 'var(--ds-menu-item-color, inherit)',
-            backgroundColor: isSelected
-              ? 'var(--ds-menu-item-selected-bg, var(--ds-color-alpha-primary-10))'
-              : isFocused
-                ? 'var(--ds-menu-item-hover-bg, var(--ds-color-bg-hover))'
-                : 'transparent',
-            borderRadius: 'var(--ds-menu-border-radius, 8px)',
             transition: 'all 0.2s ease',
-            outline: isFocused ? '2px solid var(--ds-menu-focus-ring-color, var(--ds-color-primary))' : 'none',
-            outlineOffset: '-2px',
           }}
         >
           {item.icon && <span data-part="icon">{item.icon}</span>}
@@ -558,9 +539,6 @@ export default function RusticMenu(props: MenuProps): React.ReactElement {
     listStyle: 'none',
     padding: '4px',
     margin: 0,
-    backgroundColor: theme === 'dark' ? 'var(--ds-menu-dark-bg, var(--ds-color-neutral-900))' : 'var(--ds-menu-bg, var(--ds-color-bg-elevated))',
-    color: theme === 'dark' ? 'var(--ds-menu-dark-item-color, var(--ds-color-alpha-white-70))' : 'var(--ds-menu-item-color, var(--ds-color-text-primary))',
-    borderRadius: 'var(--ds-menu-border-radius, 8px)',
     display: mode === 'horizontal' ? 'flex' : 'block',
     flexDirection: mode === 'horizontal' ? 'row' : undefined,
     width: inlineCollapsed && mode === 'inline' ? 'var(--ds-menu-collapsed-width, 80px)' : undefined,

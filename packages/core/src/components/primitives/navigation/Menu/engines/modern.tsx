@@ -104,45 +104,31 @@ function getItemBaseStyle(level: number, inlineIndent: number): CSSProperties {
     paddingRight: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
     paddingBottom: 0,
     paddingLeft: 'var(--rottay-menu-item-padding-left)',
-    borderRadius: RADIUS,
     fontSize: isChild
       ? 'var(--ds-sidebar-item-font-size-child, 13.9px)'
       : 'var(--ds-sidebar-item-font-size, 15.75px)',
     fontWeight: 500,
     lineHeight: 1.28,
-    color: 'var(--ds-color-text-secondary)',
     textDecoration: 'none',
     cursor: 'pointer',
     position: 'relative',
     transition: TRANSITION,
-    border: 'none',
-    background: 'transparent',
     width: '100%',
     boxSizing: 'border-box' as const,
     textAlign: 'left' as const,
     justifyContent: 'flex-start',
-    outline: 'none',
     userSelect: 'none' as const,
     WebkitTapHighlightColor: 'transparent',
   };
 }
 
 /**
- * Overlay styles for the active/selected state.
+ * Non-paint overlay for the active/selected state; the tint and the text color
+ * ride `data-selected` + `data-level` in the skin.
  */
-function getActiveStyle(level: number): CSSProperties {
-  if (level > 0) {
-    // Children: no accent bar, just bolder text and subtle bg
-    return {
-      background: 'color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 7%, transparent)',
-      fontWeight: 600,
-      color: 'var(--ds-sidebar-item-color-active, var(--ds-color-primary))',
-    };
-  }
+function getActiveStyle(): CSSProperties {
   return {
-    background: 'color-mix(in srgb, var(--ds-sidebar-item-color-active, var(--ds-color-primary)) 8%, transparent)',
     fontWeight: 600,
-    color: 'var(--ds-sidebar-item-color-active, var(--ds-color-primary))',
   };
 }
 
@@ -151,25 +137,12 @@ function getActiveStyle(level: number): CSSProperties {
  */
 function getAccentBarStyle(): CSSProperties {
   return {
-    content: '""',
     position: 'absolute',
     left: 0,
     top: '50%',
-    transform: 'translateY(-50%)',
     width: 2.5,
     height: '64%',
-    borderRadius: ACCENT_BAR_WIDTH,
-    background: 'var(--ds-color-primary, var(--ds-sidebar-item-color-active))',
     transition: 'opacity var(--ds-motion-fast) ease-out, height var(--ds-motion-fast) ease-out',
-  };
-}
-
-/**
- * Style for danger items.
- */
-function getDangerStyle(): CSSProperties {
-  return {
-    color: 'var(--ds-color-error)',
   };
 }
 
@@ -200,19 +173,16 @@ function getSummaryStyle(level: number, inlineIndent: number): CSSProperties {
     paddingRight: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
     paddingBottom: 0,
     paddingLeft: 'var(--rottay-menu-item-padding-left)',
-    borderRadius: RADIUS,
     fontSize: isChild
       ? 'var(--ds-sidebar-item-font-size-child, 13.9px)'
       : 'var(--ds-sidebar-item-font-size, 15.75px)',
     fontWeight: 500,
     lineHeight: 1.28,
-    color: 'var(--ds-color-text-secondary)',
     cursor: 'pointer',
     position: 'relative',
     transition: TRANSITION,
     listStyle: 'none',
     textAlign: 'left' as const,
-    outline: 'none',
     userSelect: 'none' as const,
     WebkitTapHighlightColor: 'transparent',
   };
@@ -228,7 +198,6 @@ function getGroupTitleStyle(): CSSProperties {
     fontWeight: 600,
     textTransform: 'uppercase' as const,
     letterSpacing: '0.085em',
-    color: 'var(--ds-color-text-muted)',
     lineHeight: 1.1,
     userSelect: 'none' as const,
   };
@@ -241,8 +210,6 @@ function getDividerStyle(): CSSProperties {
   return {
     height: 1,
     margin: '4px 8px',
-    background: 'linear-gradient(90deg, transparent, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent), transparent)',
-    border: 'none',
     listStyle: 'none',
   };
 }
@@ -269,7 +236,6 @@ function MenuItemRow({
   inlineIndent: number;
   onItemClick: (key: string, keyPath: string[], e: React.MouseEvent<HTMLElement>) => void;
 }) {
-  const [isHovered, setIsHovered] = useState(false);
   const isChild = level > 0;
 
   const baseStyle = getItemBaseStyle(level, inlineIndent);
@@ -277,29 +243,11 @@ function MenuItemRow({
   // Compose final style
   let composedStyle: CSSProperties = { ...baseStyle };
 
-  // Hover state (only when not disabled and not already selected)
-  if (isHovered && !item.disabled && !isSelected) {
-    composedStyle = {
-      ...composedStyle,
-      background: item.danger
-        ? 'color-mix(in srgb, var(--ds-color-error) 6%, transparent)'
-        : 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)',
-    };
-  }
-
   // Active/selected state
   if (isSelected) {
     composedStyle = {
       ...composedStyle,
-      ...getActiveStyle(level),
-    };
-  }
-
-  // Danger color
-  if (item.danger && !isSelected) {
-    composedStyle = {
-      ...composedStyle,
-      ...getDangerStyle(),
+      ...getActiveStyle(),
     };
   }
 
@@ -319,23 +267,11 @@ function MenuItemRow({
         data-selected={isSelected}
         data-disabled={item.disabled || undefined}
         data-tone={item.danger ? 'danger' : undefined}
+        data-level={isChild ? 'child' : 'top'}
         tabIndex={item.disabled ? -1 : 0}
         style={composedStyle}
         aria-disabled={item.disabled || undefined}
         aria-current={isSelected ? 'page' : undefined}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onFocus={(e) => {
-          // Apply focus-visible ring via inline style
-          if (e.currentTarget.matches(':focus-visible')) {
-            e.currentTarget.style.outline = '2px solid var(--ds-color-primary)';
-            e.currentTarget.style.outlineOffset = '-2px';
-          }
-        }}
-        onBlur={(e) => {
-          e.currentTarget.style.outline = 'none';
-          e.currentTarget.style.outlineOffset = '0';
-        }}
         onKeyDown={(e) => {
           if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
             e.preventDefault();
@@ -431,9 +367,6 @@ function SubmenuRow({
   const summaryStyle: CSSProperties = {
     ...getSummaryStyle(level, inlineIndent),
     ...(item.disabled ? getDisabledStyle() : {}),
-    ...(isHovered && !item.disabled
-      ? { background: 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)' }
-      : {}),
   };
 
   return (
@@ -448,18 +381,6 @@ function SubmenuRow({
           aria-expanded={isOpen}
           data-open={isOpen ? 'true' : undefined}
           data-selected-descendant={hasSelectedDescendant ? 'true' : undefined}
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onFocus={(e) => {
-            if (e.currentTarget.matches(':focus-visible')) {
-              e.currentTarget.style.outline = '2px solid var(--ds-color-primary)';
-              e.currentTarget.style.outlineOffset = '-2px';
-            }
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.outline = 'none';
-            e.currentTarget.style.outlineOffset = '0';
-          }}
           onKeyDown={(e) => {
             if ((e.key === 'Enter' || e.key === ' ') && !item.disabled) {
               e.preventDefault();
@@ -806,8 +727,6 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
     listStyle: 'none',
     padding: isHorizontal ? '0 8px' : '10px 8px',
     margin: 0,
-    background: theme === 'dark' ? 'var(--ds-surface-panel)' : 'var(--ds-surface-card)',
-    borderRadius: RADIUS,
     fontFamily: 'var(--ds-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif)',
     ...(inlineCollapsed ? { width: 64, overflow: 'hidden' } : {}),
     ...style,
@@ -819,7 +738,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
 
   return (
     <ul
-      className={`rottay-menu rottay-menu--modern ${className}`.trim()}
+      className={`rottay-menu rottay-menu--modern rottay-menu--${theme} ${className}`.trim()}
       style={menuStyle}
       role="menu"
       data-part="root"

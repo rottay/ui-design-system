@@ -188,8 +188,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     return (
       <div
         ref={ref}
-        className={className}
-        style={{ display: 'inline-flex', borderRadius: 'var(--ds-radius-md)', overflow: 'hidden', border: '1px solid var(--ds-color-border)', ...(block ? { width: '100%' } : {}), ...style }}
+        className={`rottay-segmented rottay-segmented--modern ${className}`.trim()}
+        style={{ display: 'inline-flex', overflow: 'hidden', ...(block ? { width: '100%' } : {}), ...style }}
         data-part="root"
       >
         {normalizedOptions.map((opt) => {
@@ -206,13 +206,8 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: isDisabled ? 'not-allowed' : 'pointer',
-                border: 'none',
-                borderRadius: 0,
                 fontWeight: isActive ? 600 : 400,
                 ...sizeStyle,
-                ...(isActive
-                  ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
-                  : { background: 'transparent', color: 'var(--ds-color-text-primary)' }),
                 ...(isDisabled ? { opacity: 0.5, pointerEvents: 'none' as const } : {}),
               }}
               onClick={() => handleClick(opt.value)}

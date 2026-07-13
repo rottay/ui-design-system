@@ -7,7 +7,9 @@
  *
  * @remarks
  * The Hermes engine provides:
- * - DaisyUI tooltip/card component base classes
+ * - No DaisyUI class of any kind: the panel's chrome comes from this engine's own
+ *   skin, keyed on `rottay-popover--modern`. In particular it never renders
+ *   `tooltip`/`card`, so nothing in theme.css or personality.css matches it.
  * - Tailwind utility classes for layout and styling
  * - Custom trigger handling for click, hover, and focus
  * - Click-outside dismissal via event listeners
@@ -15,7 +17,8 @@
  *
  * Implementation details:
  * - Uses controlled/uncontrolled pattern for open state
- * - Placement mapped to DaisyUI tooltip position classes
+ * - Placement mapped to inline position styles (only 4 of the 12 typed placements
+ *   are actually distinct here; the rest collapse onto their nearest neighbour)
  * - Timeout refs for enter/leave delay management
  * - Arrow styling with rotated div element
  *
@@ -129,17 +132,19 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
       } else if (placement?.includes('bottom')) {
         Object.assign(base, { top: '100%', marginTop: 8 });
       } else if (placement?.includes('left') || placement?.includes('Left')) {
-        Object.assign(base, { right: '100%', marginRight: 8, top: '50%', transform: 'translateY(-50%)' });
+        Object.assign(base, { right: '100%', marginRight: 8, top: '50%' });
       } else if (placement?.includes('right') || placement?.includes('Right')) {
-        Object.assign(base, { left: '100%', marginLeft: 8, top: '50%', transform: 'translateY(-50%)' });
+        Object.assign(base, { left: '100%', marginLeft: 8, top: '50%' });
       } else {
         // default: top
         Object.assign(base, { bottom: '100%', marginBottom: 8 });
       }
-      // Horizontal centering for top/bottom placements
+      // Horizontal centering for top/bottom placements. The paired centering
+      // transform is keyed on `data-placement` in the skin: this engine resolves
+      // to translateY(-50%) for exactly `left`/`right` and translateX(-50%) for
+      // every other value (only 4 of the 12 typed placements are distinct here).
       if (placement?.includes('top') || placement?.includes('bottom') || !placement) {
         base.left = '50%';
-        base.transform = 'translateX(-50%)';
       }
       return base;
     };
@@ -205,25 +210,23 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           <div
             data-part="surface"
             data-open="true"
+            data-placement={placement}
             className={overlayClassName || ''}
             style={{
               ...getContentPositionStyles(),
-              borderRadius: 'var(--ds-radius-lg)',
               padding: 12,
-              background: 'var(--ds-surface-card)',
-              boxShadow: 'var(--ds-elevation-2)',
               minWidth: 150,
               ...overlayStyle,
             }}
           >
             {title && (
-              <div data-part="title" style={{ fontWeight: 600, marginBottom: 8, paddingBottom: 8, borderBottom: '1px solid var(--ds-color-border)' }}>
+              <div data-part="title" style={{ fontWeight: 600, marginBottom: 8, paddingBottom: 8 }}>
                 {title}
               </div>
             )}
             <div>{content}</div>
             {arrow && (
-              <div data-part="arrow" style={{ position: 'absolute', width: 12, height: 12, transform: 'rotate(45deg)', zIndex: -1, background: 'var(--ds-surface-card)' }} />
+              <div data-part="arrow" style={{ position: 'absolute', width: 12, height: 12, zIndex: -1 }} />
             )}
           </div>
         )}

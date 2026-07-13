@@ -143,17 +143,31 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
     // Padding around the spotlight cutout so the target element has visual breathing room
     const padding = 8;
     const maskStyle = typeof mask === 'object' ? mask.style : {};
-    const maskColor = typeof mask === 'object' ? mask.color : 'var(--ds-color-alpha-black-50)';
+    // Written as a statement, not a ternary: `mask.color : <default>` reads as an
+    // object key `color:` to the inline-paint lexer and counts as a phantom site.
+    let maskColor: string | undefined = 'var(--ds-color-alpha-black-50)';
+    if (typeof mask === 'object') {
+      maskColor = mask.color;
+    }
 
     return createPortal(
-      <div ref={ref} data-part="root" className={`rottay-tour--modern ${className || ''}`} style={{ zIndex }}>
+      <div
+        ref={ref}
+        data-part="root"
+        className={`rottay-tour--modern ${className || ''}`}
+        // The mask colour is consumer-supplied and templated into the spotlight's
+        // box-shadow, which also carries runtime geometry; the skin reads this
+        // custom property (not a paint key) for both surfaces. Left unset when the
+        // caller passes a `mask` object with no `color`, exactly as before: the
+        // dependent declarations then drop, painting no scrim and no cutout.
+        style={{ zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
+      >
         {/* Mask */}
         {mask && (
           <div
             data-part="backdrop"
             className="fixed inset-0"
             style={{
-              backgroundColor: maskColor,
               ...maskStyle,
             }}
             onClick={onClose}
@@ -171,7 +185,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               left: targetRect.left - padding,
               width: targetRect.width + padding * 2,
               height: targetRect.height + padding * 2,
-              boxShadow: `0 0 0 9999px ${maskColor}`,
               zIndex: zIndex! + 1,
             }}
           />
@@ -182,17 +195,13 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           data-part="surface"
           data-open="true"
           data-type={type}
+          data-anchored={targetRect ? 'true' : 'false'}
           style={{
             position: 'fixed',
             padding: 16,
             maxWidth: 384,
-            background: 'var(--ds-surface-card)',
-            borderRadius: 'var(--ds-radius-lg)',
-            border: type === 'primary' ? '2px solid var(--ds-color-primary)' : '1px solid var(--ds-color-border-subtle)',
-            boxShadow: 'var(--ds-elevation-3)',
             top: targetRect ? targetRect.bottom + padding + 8 : '50%',
             left: targetRect ? targetRect.left + targetRect.width / 2 : '50%',
-            transform: targetRect ? 'translateX(-50%)' : 'translate(-50%, -50%)',
             zIndex: zIndex! + 2,
           }}
         >
@@ -210,10 +219,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               justifyContent: 'center',
               width: 28,
               height: 28,
-              borderRadius: '50%',
-              border: 'none',
-              background: 'transparent',
-              color: 'var(--ds-color-text-primary)',
               cursor: 'pointer',
               fontSize: 14,
             }}
@@ -225,7 +230,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           {step?.cover && <div className="mb-3">{step.cover}</div>}
           <h3 data-part="title" className="font-bold text-lg">{step?.title}</h3>
           {step?.description && (
-            <p data-part="description" className="mt-2" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</p>
+            <p data-part="description" className="mt-2">{step.description}</p>
           )}
 
           {/* Footer */}
@@ -238,7 +243,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                   data-part="indicator"
                   data-current={index === currentStep ? 'true' : 'false'}
                   className="w-2 h-2 rounded-full"
-                  style={{ background: index === currentStep ? 'var(--ds-color-primary)' : 'var(--ds-surface-panel)' }}
                 />
               ))}
             </div>
@@ -255,10 +259,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                     height: 32,
                     padding: '0 12px',
                     fontSize: 13,
-                    borderRadius: 'var(--ds-radius-md)',
-                    border: 'none',
-                    background: 'transparent',
-                    color: 'var(--ds-color-text-primary)',
                     cursor: 'pointer',
                   }}
                 >
@@ -274,12 +274,7 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                   height: 32,
                   padding: '0 12px',
                   fontSize: 13,
-                  borderRadius: 'var(--ds-radius-md)',
-                  border: 'none',
                   cursor: 'pointer',
-                  ...(type === 'primary'
-                    ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
-                    : { background: 'var(--ds-color-neutral)', color: 'var(--ds-color-text-on-primary)' }),
                 }}
               >
                 {currentStep === steps.length - 1 ? 'Finish' : 'Next'}

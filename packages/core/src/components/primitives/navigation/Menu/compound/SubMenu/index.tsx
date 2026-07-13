@@ -184,22 +184,18 @@ export function MenuSubMenu({
     minHeight: 'var(--ds-menu-item-height, 40px)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
-    color: 'var(--ds-menu-item-color, inherit)',
-    backgroundColor: isOpen ? 'var(--ds-menu-submenu-bg, var(--ds-color-bg-secondary))' : 'transparent',
-    borderRadius: 'var(--ds-menu-border-radius, 8px)',
     transition: 'all 0.2s ease',
     userSelect: 'none',
   };
 
   /**
-   * Expand icon container styles with rotation animation.
+   * Expand icon container styles; the rotation rides `data-open` in the skin.
    */
   const iconContainerStyle: CSSProperties = {
     marginLeft: 'auto',
     display: 'flex',
     alignItems: 'center',
     transition: 'transform 0.2s ease',
-    transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
   };
 
   /**

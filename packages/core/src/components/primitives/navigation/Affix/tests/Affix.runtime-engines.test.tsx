@@ -81,7 +81,9 @@ describe('Affix runtime engines', () => {
     });
 
     expect(affix.style.bottom).toBe('10px');
-    expect(affix.style.boxShadow).toBe('var(--ds-elevation-1)');
+    // The affixed elevation is the skin's, keyed on `data-sticky`; position and
+    // offsets stay inline because they are measured at runtime.
+    expect(affix.getAttribute('data-sticky')).toBe('true');
     expect(addEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function), { passive: true });
 
     placeholderRect = createRect({ top: 640, bottom: 715, left: 12, right: 212, width: 200, height: 75 });
@@ -92,7 +94,7 @@ describe('Affix runtime engines', () => {
       expect(affix.style.position).toBe('');
     });
 
-    expect(affix.style.boxShadow).toBe('');
+    expect(affix.getAttribute('data-sticky')).toBeNull();
 
     unmount();
     expect(removeEventListenerSpy).toHaveBeenCalledWith('scroll', expect.any(Function));

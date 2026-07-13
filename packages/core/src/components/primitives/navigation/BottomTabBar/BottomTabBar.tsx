@@ -54,10 +54,6 @@ interface TabItemRendererProps {
 }
 
 function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
-  const color = isActive
-    ? 'var(--ds-color-primary)'
-    : 'var(--ds-color-text-muted)';
-
   const handleClick = () => {
     item.onClick?.();
     onSelect();
@@ -75,9 +71,6 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
     paddingBottom: 2,
     cursor: 'pointer',
     position: 'relative',
-    background: 'none',
-    border: 'none',
-    color,
     WebkitTapHighlightColor: 'transparent',
     textDecoration: 'none',
   };
@@ -89,6 +82,7 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
     <Box
       as={Element}
       {...(item.href ? { href: item.href } as any : { type: 'button' } as any)}
+      className="rottay-bottom-tab-bar__tab"
       style={tabStyle}
       onClick={handleClick}
       role="tab"
@@ -102,13 +96,13 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
       <Box style={{ position: 'relative', width: 24, height: 24 }}>
         <Box
           data-part="icon"
+          className="rottay-bottom-tab-bar__icon"
           style={{
             width: 24,
             height: 24,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color,
           }}
         >
           {item.icon}
@@ -118,14 +112,13 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
         {item.badge != null && item.badge > 0 && (
           <Box
             data-part="badge"
+            className="rottay-bottom-tab-bar__badge"
             style={{
               position: 'absolute',
               top: -4,
               right: -8,
               minWidth: item.badge > 99 ? 20 : 16,
               height: 16,
-              borderRadius: 8,
-              background: 'var(--ds-color-error)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -135,11 +128,11 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
             data-testid={`tab-badge-${item.key}`}
           >
             <Text
+              className="rottay-bottom-tab-bar__badge-text"
               style={{
                 fontSize: 10,
                 fontWeight: 600,
                 lineHeight: '16px',
-                color: '#fff',
               }}
             >
               {item.badge > 99 ? '99+' : String(item.badge)}
@@ -151,11 +144,11 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
       {/* Label */}
       <Text
         data-part="label"
+        className="rottay-bottom-tab-bar__label"
         style={{
           fontSize: 11,
           lineHeight: '14px',
           marginTop: 2,
-          color,
           fontWeight: isActive ? 600 : 400,
         }}
       >
@@ -191,8 +184,6 @@ export function BottomTabBar({
     left: 0,
     right: 0,
     width: '100%',
-    background: 'var(--ds-color-bg-primary)',
-    borderTop: '1px solid var(--ds-color-border)',
     paddingBottom: 'env(safe-area-inset-bottom, 0px)',
     zIndex: 40,
     ...style,
@@ -201,6 +192,7 @@ export function BottomTabBar({
   return (
     <Box
       as="nav"
+      className="rottay-bottom-tab-bar"
       style={containerStyle}
       data-testid="bottom-tab-bar"
       role="tablist"

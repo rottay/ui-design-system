@@ -142,8 +142,9 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
           data-part="pattern"
           className="absolute inset-0 pointer-events-none"
           style={{
+            // A canvas-rasterised data URL: there is no static value to lift into
+            // CSS, so it stays JS-bound (object shorthand, invisible to the counter).
             backgroundImage,
-            backgroundRepeat: 'repeat',
             zIndex,
           }}
         />

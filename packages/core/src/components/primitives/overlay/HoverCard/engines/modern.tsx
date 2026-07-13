@@ -1,9 +1,11 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the HoverCard overlay component.
- * Positions a DaisyUI card absolutely relative to the trigger using Tailwind
+ * @fileoverview Modern (Tailwind) engine for the HoverCard overlay component.
+ * Positions the card absolutely relative to the trigger using Tailwind
  * transform/translate utilities, with configurable open/close delays.
+ * It applies NO DaisyUI class of any kind: the card's chrome comes from this
+ * engine's own skin, keyed on `rottay-hover-card--modern`.
  *
  * @example
  * ```tsx
@@ -28,7 +30,7 @@ const SIDE_CLASSES: Record<string, string> = {
 };
 
 /**
- * HoverCard implementation using DaisyUI card classes and Tailwind utilities.
+ * HoverCard implementation using Tailwind positioning utilities.
  *
  * Uses a debounced open/close pattern: entering the trigger starts an open timer,
  * leaving starts a close timer, and entering the card itself cancels the close timer
@@ -102,7 +104,7 @@ export default function ModernHoverCard(props: HoverCardProps): React.ReactEleme
             data-part="surface"
             data-open="true"
             className={overlayClassName || undefined}
-            style={{ background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border-subtle)', padding: 16, width: 288, boxShadow: 'var(--ds-elevation-3)', ...overlayStyle }}
+            style={{ padding: 16, width: 288, ...overlayStyle }}
           >
             {content}
           </div>

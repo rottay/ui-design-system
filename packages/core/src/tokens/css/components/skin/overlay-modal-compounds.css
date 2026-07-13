@@ -1,0 +1,83 @@
+/**
+ * overlay/Modal compounds + shared utils (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every engine skin (P-47).
+ *
+ * NOT `components/skin/modal-compounds.css` — that file is `primitives/feedback/
+ * Modal`'s SHIPPED compound skin (WO-SKIN-03) and paints a different component.
+ * The two families rendered identical compound classnames until checkpoint P
+ * renamed this one's to `rottay-overlay-modal-{header,body,footer}`; the CloseButton
+ * never collided (`rottay-modal-close-button` here vs `rottay-modal-close` there).
+ * Every rule below is anchored to a class unique to THIS family. `data-part` is a
+ * shared vocabulary, not an identifier — a bare `[data-part='title']` would reach
+ * into feedback/Modal, which is exactly the collision the rename resolved.
+ *
+ * These compounds are engine-agnostic (one render tree, no engine split), so they
+ * live in a single file rather than a modern/rustic pair. `Modal.Header` composes
+ * `Modal.CloseButton`, so the close-button rules must not depend on the header.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1). Each
+ * compound carries exactly one class plus its own `data-part`, so a colored border
+ * buys b >= 4 by repeating BOTH (class + class + part + part). Color-free `none`
+ * resets are exempt.
+ *
+ * `data-divider` carries the compounds' `divider` prop (default `false`), whose
+ * false branch painted an explicit `none` — reproduced here rather than omitted.
+ */
+
+/* ---- Modal.Header + its title ---- */
+.rottay-overlay-modal-header.rottay-overlay-modal-header[data-part='header'][data-part='header'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-modal-header-border, rgba(0, 0, 0, 0.1));
+}
+.rottay-overlay-modal-header.rottay-overlay-modal-header[data-part='header'][data-part='header'][data-divider='false'] {
+  border-bottom: none;
+}
+.rottay-overlay-modal-header[data-part='header'] > [data-part='title'] {
+  color: var(--ds-modal-title-color, inherit);
+}
+
+/* ---- Modal.Body ---- */
+.rottay-overlay-modal-body[data-part='body'] {
+  color: var(--ds-modal-body-color, inherit);
+}
+
+/* ---- Modal.Footer ---- */
+.rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
+  border-top: 1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1));
+}
+.rottay-overlay-modal-footer.rottay-overlay-modal-footer[data-part='footer'][data-part='footer'][data-divider='false'] {
+  border-top: none;
+}
+
+/* ---- Modal.CloseButton: the removed imperative hover becomes a :hover rule. The
+        mouseleave handler restored exactly the resting values below. Its token
+        chain is its OWN (`--ds-modal-close-button-*` first), deliberately distinct
+        from the two engines' internal close buttons. ---- */
+.rottay-modal-close-button[data-part='close-button'] {
+  border: none;
+  border-radius: var(--ds-modal-close-button-radius, var(--ds-radius-sm, 6px));
+  background-color: transparent;
+  color: var(--ds-modal-close-button-color, var(--ds-modal-close-color, var(--ds-color-text-tertiary)));
+}
+.rottay-modal-close-button[data-part='close-button']:hover {
+  background-color: var(--ds-modal-close-button-hover-bg, var(--ds-modal-close-bg-hover, var(--ds-color-bg-tertiary)));
+  color: var(--ds-modal-close-button-hover-color, var(--ds-modal-close-color-hover, var(--ds-color-text-primary)));
+}
+
+/* ---- utils/Overlay: the rustic engine's backdrop. Engine-agnostic and reusable
+        (its `backgroundColor`/`blur`/`blurAmount` are public props), so it is
+        scoped on its own class, not on the Modal shell. `blurAmount` is a free px
+        prop, so the filter cannot be enumerated in CSS: the component stamps
+        `--ds-overlay-backdrop-filter` (a custom property, not a paint key) and this
+        rule consumes it for both the prefixed and unprefixed form. Its
+        `background-color` stays INLINE: it is a consumer-facing prop with a
+        documented default, not component-internal paint. ---- */
+.rottay-overlay {
+  backdrop-filter: var(--ds-overlay-backdrop-filter, none);
+  -webkit-backdrop-filter: var(--ds-overlay-backdrop-filter, none);
+}
+
+/* ---- utils/FocusTrap: an unstyled wrapper whose only paint is the focus reset. ---- */
+.rottay-focus-trap {
+  outline: none;
+}

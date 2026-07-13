@@ -1,0 +1,48 @@
+/**
+ * Modern Segmented skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * NO DaisyUI HERE, despite the file's own header comment: modern Segmented's
+ * doc block claims it "uses DaisyUI's `join` component", but the render carries
+ * zero DaisyUI classes — the same stale claim Pagination's header makes. There
+ * is no `join`/`btn` hook to preserve and no `theme.css` block to reconcile
+ * against; this is a clean greenfield skin.
+ *
+ * SCOPE ROOT carries `rottay-segmented rottay-segmented--modern` +
+ * `data-part='root'`; each option button carries `data-part='option'` +
+ * `data-selected` + `data-disabled`. Option rules are anchored under the root
+ * scope — `option` is shared vocabulary and must never be matched bare.
+ *
+ * SPECIFICITY (P-48): the root's `border` shorthand carries a real color, so it
+ * must clear the tenant's unlayered `* { border-color }` floor at (0,3,1) — it
+ * reaches (0,4,0) via the two scope classes + a repeated `data-part`, and stays
+ * a SHORTHAND. The option's `border: none` is a color-free reset, exempt. The
+ * option rules inherit the root's two classes through the descendant combinator,
+ * so their `background`/`color` clear (0,3,0) comfortably.
+ */
+
+.rottay-segmented.rottay-segmented--modern[data-part='root'] {
+  border-radius: var(--ds-radius-md);
+}
+
+.rottay-segmented.rottay-segmented--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.rottay-segmented--modern[data-part='root'] [data-part='option'] {
+  border: none;
+  border-radius: 0;
+}
+
+.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='false'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-segmented--modern[data-part='root'] [data-part='option'][data-selected='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}

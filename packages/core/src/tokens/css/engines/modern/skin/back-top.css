@@ -1,0 +1,28 @@
+/**
+ * Modern BackTop skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: the button carries `rottay-backtop rottay-backtop--modern` +
+ * `data-part='trigger'`. It IS the painted element, so the rule is COMPOUND (no
+ * descendant space) — `data-part='trigger'` is shared vocabulary across a dozen
+ * components and must never be matched bare.
+ *
+ * Modern UNMOUNTS the button when it is not visible (`if (!visible) return
+ * null`), so there is no hidden state to paint — the asymmetry against rustic
+ * (which stays mounted and animates a scale) is preserved, not reconciled.
+ *
+ * SPECIFICITY (P-48): `border: none` is a color-free reset, exempt from the
+ * (0,4,0) border floor. All other channels are non-border paint and win
+ * unlayered at (0,3,0).
+ */
+
+.rottay-backtop.rottay-backtop--modern[data-part='trigger'] {
+  border-radius: 50%;
+  border: none;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  box-shadow: var(--ds-elevation-2);
+}

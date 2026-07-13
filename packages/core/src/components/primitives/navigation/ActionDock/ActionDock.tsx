@@ -53,20 +53,17 @@ export function ActionDock({
     left: 0,
     right: 0,
     width: '100%',
-    background: 'var(--ds-color-bg-primary)',
     paddingLeft: 16,
     paddingRight: 16,
     zIndex: 39,
     ...(isBottom
       ? {
           bottom: 0,
-          boxShadow: '0 -2px 8px rgba(0, 0, 0, 0.08)',
           paddingTop: 12,
           paddingBottom: `max(12px, env(safe-area-inset-bottom, 12px))`,
         }
       : {
           top: 0,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
           paddingTop: `max(12px, env(safe-area-inset-top, 12px))`,
           paddingBottom: 12,
         }),
@@ -75,6 +72,7 @@ export function ActionDock({
 
   return (
     <Box
+      className="rottay-action-dock"
       style={containerStyle}
       data-testid="action-dock"
       role="toolbar"

@@ -204,28 +204,24 @@ export function StepperContent({
       }
     }
 
-    // Slide animation
+    // Slide animation. The translate itself rides data-state/data-direction in
+    // the skin; the 0.2s here must stay numerically in sync with the two
+    // setTimeout(200) calls above, which is why it is not folded into a token.
     if (animation === 'slide') {
-      const translateValue = direction === 'forward' ? '20px' : '-20px';
-      const reverseTranslate = direction === 'forward' ? '-20px' : '20px';
-
       switch (animationState) {
         case 'entering':
           return {
             opacity: 0,
-            transform: `translateX(${translateValue})`,
             transition: baseTransition,
           };
         case 'visible':
           return {
             opacity: 1,
-            transform: 'translateX(0)',
             transition: baseTransition,
           };
         case 'exiting':
           return {
             opacity: 0,
-            transform: `translateX(${reverseTranslate})`,
             transition: baseTransition,
             pointerEvents: 'none',
           };
@@ -266,6 +262,7 @@ export function StepperContent({
       data-active={isActive || undefined}
       data-state={animationState}
       data-direction={direction}
+      data-animation={animation}
     >
       {children}
     </div>

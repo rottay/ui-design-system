@@ -176,10 +176,7 @@ export default function RusticBreadcrumb(props: BreadcrumbProps): React.ReactEle
     ...style,
   };
 
-  // CSS variables with fallback chains (ds-breadcrumb -> ds-color -> hardcoded)
-  // ensure the component works even when no theme variables are defined
   const linkStyle: React.CSSProperties = {
-    color: 'var(--ds-breadcrumb-link-color, var(--ds-color-primary-500, #0066CC))',
     textDecoration: 'none',
     cursor: 'pointer',
     display: 'flex',
@@ -189,15 +186,9 @@ export default function RusticBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
   /** Non-link item styles (current page) */
   const itemStyle: React.CSSProperties = {
-    color: 'var(--ds-breadcrumb-item-color, var(--ds-color-neutral-600, #666))',
     display: 'flex',
     alignItems: 'center',
     gap: '0.25rem',
-  };
-
-  /** Separator styles */
-  const separatorStyle: React.CSSProperties = {
-    color: 'var(--ds-breadcrumb-separator-color, var(--ds-color-neutral-400, #999))',
   };
 
   // ---------------------------------------------------------------------------
@@ -207,7 +198,12 @@ export default function RusticBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // Semantic <nav> with aria-label enables screen readers to identify
   // this as a breadcrumb navigation landmark
   return (
-    <nav className={className} style={containerStyle} aria-label="breadcrumb" data-part="root">
+    <nav
+      className={`rottay-breadcrumb-shell rottay-breadcrumb-shell--rustic ${className}`.trim()}
+      style={containerStyle}
+      aria-label="breadcrumb"
+      data-part="root"
+    >
       {displayItems.map((item, index) => (
         <React.Fragment key={item.key}>
           {/* Render link or span based on href presence */}
@@ -223,7 +219,7 @@ export default function RusticBreadcrumb(props: BreadcrumbProps): React.ReactEle
 
           {/* Render separator between items (not after last item) */}
           {index < displayItems.length - 1 && (
-            <span style={separatorStyle} data-part="separator">{separator}</span>
+            <span data-part="separator">{separator}</span>
           )}
         </React.Fragment>
       ))}

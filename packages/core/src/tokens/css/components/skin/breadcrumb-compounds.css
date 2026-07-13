@@ -1,0 +1,34 @@
+/**
+ * Breadcrumb compound skin — `Breadcrumb.Item` (WO-SKIN-04 checkpoint N).
+ *
+ * ENGINE-AGNOSTIC: the compound is a JSX-composition API with a single render
+ * tree; it never touches the engine system. One skin file, no engine modifier.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: `rottay-breadcrumb-item` is the compound's own wrapper class — until
+ * now a dead CSS hook (zero stylesheet references), grep-verified free of any
+ * other consumer. It is what keeps this compound's paint from colliding with the
+ * two ENGINE Breadcrumb skins, which key the same `data-part='crumb'` +
+ * `data-current` vocabulary: those two are written with child combinators that
+ * this extra wrapper span defeats by construction.
+ *
+ * THE TWO VARIANTS RENDER DIFFERENT ELEMENTS, so they need different selector
+ * shapes: with `href`, the crumb is a nested `<a>` INSIDE the wrapper span (a
+ * descendant rule); without, the wrapper span IS the crumb and carries
+ * `data-part` itself (a compound rule).
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint; these rules sit at (0,2,0)+,
+ * above the compound's only competition (nothing) and below a caller's inline
+ * `style`, exactly as before.
+ */
+
+.rottay-breadcrumb-item [data-part='crumb'][data-current='false'] {
+  color: var(--ds-color-primary-500, #1890ff);
+}
+
+.rottay-breadcrumb-item[data-part='crumb'][data-current='true'] {
+  color: inherit;
+}

@@ -1,0 +1,75 @@
+/**
+ * Modern Steps skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * ============================================================================
+ * N1 — DAISYUI PAINTS THE CIRCLE AND THE CONNECTOR, AND IT MUST KEEP PAINTING.
+ * ============================================================================
+ * The step circle and the line between steps are DaisyUI `.step::after` /
+ * `.step::before` PSEUDO-ELEMENTS — no inline style can reach them, and this
+ * skin must not either. Adjudicated live with CDP `CSS.getMatchedStylesForNode`
+ * (P-73): both bridge rules in `engines/modern/theme.css` are DEAD, for two
+ * different reasons.
+ *
+ *   - `.steps .step::before` (the connector): theme.css's rule OUT-RANKS DaisyUI
+ *     (0,3,1 vs 0,2,1), but its value is `var(--ds-steps-line-color)` and that
+ *     token is defined NOWHERE — the declaration is invalid-at-computed-value
+ *     and is dropped. DaisyUI's `var(--step-bg)` paints.
+ *   - `.steps .step::after` (the circle): the two rules TIE at (0,3,1) —
+ *     DaisyUI's `:not(:has(.step-icon))` carries a class's worth of specificity
+ *     — so source order decides, and DaisyUI, emitted later, wins.
+ *
+ * THEREFORE, and this is load-bearing, not stylistic: this file MUST NOT declare
+ * `background-color` on `.step::before` / `.step::after` at ANY specificity, and
+ * MUST NOT define `--ds-steps-line-color`. Either one would newly out-rank
+ * DaisyUI and silently repaint the circle and the line — a visual change wearing
+ * a cleanup's clothes. Fixing that bridge is P-73's job, with its own baselines.
+ *
+ * What this file DOES own is the component's own token redirection, moved
+ * VERBATIM: `--step-color` / `--step-neutral` (DaisyUI's own custom properties,
+ * which its pseudo-element rules read) and `accent-color`, all keyed on the
+ * `data-status` the item carries. That is exactly what the inline style did, at
+ * the same effective priority — unlayered beats DaisyUI's layered `.step-primary`
+ * / `.step-error`, just as inline did.
+ *
+ * SCOPE ROOT carries `rottay-steps rottay-steps--modern` alongside the DaisyUI
+ * `.steps` class (KEPT — it is the pseudo-elements' only hook).
+ *
+ * SPECIFICITY (P-48): nothing here paints a border color, so the (0,4,0) floor
+ * does not apply; custom properties and `color` win unlayered at (0,3,0).
+ */
+
+/* ---- the DaisyUI token bridge: base neutral, then the per-status overrides.
+        `--step-neutral` is re-declared by finish/process at higher specificity,
+        reproducing the JS `{ ...base, '--step-neutral': primary }` spread. ---- */
+.rottay-steps--modern[data-part='root'] [data-part='item'] {
+  --step-neutral: var(--ds-steps-connector-color, var(--ds-color-border-secondary));
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='finish'],
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='process'] {
+  --step-color: var(--ds-color-primary);
+  --step-neutral: var(--ds-color-primary);
+  accent-color: var(--ds-color-primary);
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='item'][data-status='error'] {
+  --step-color: var(--ds-color-error);
+  accent-color: var(--ds-color-error);
+}
+
+/* ---- the text column (real elements; DaisyUI owns nothing here). ---- */
+.rottay-steps--modern[data-part='root'] [data-part='label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='subtitle'] {
+  color: var(--ds-color-text-tertiary);
+}
+
+.rottay-steps--modern[data-part='root'] [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}

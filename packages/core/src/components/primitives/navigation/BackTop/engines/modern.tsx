@@ -158,19 +158,14 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       <button
         ref={ref}
         type="button"
-        className={`fixed bottom-8 right-8 z-50 ${className}`}
+        className={`rottay-backtop rottay-backtop--modern fixed bottom-8 right-8 z-50 ${className}`}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
           width: 40,
           height: 40,
-          borderRadius: '50%',
-          border: 'none',
-          background: 'var(--ds-color-primary)',
-          color: 'var(--ds-color-text-on-primary)',
           cursor: 'pointer',
-          boxShadow: 'var(--ds-elevation-2)',
           ...style,
         }}
         onClick={handleClick}

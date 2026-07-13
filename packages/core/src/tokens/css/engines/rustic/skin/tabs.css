@@ -1,0 +1,59 @@
+/**
+ * Rustic Tabs skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-tabs rottay-tabs--rustic` + `data-part='root'` +
+ * `data-variant` (the type discriminator this migration added — see the modern
+ * skin's header for why it is required).
+ *
+ * NO HOVER, NO INDICATOR, NO KEYFRAME. Rustic Tabs has no `onMouseEnter` at all
+ * and no sliding indicator: its active tab is marked by a static bottom border,
+ * a completely different visual language from modern's glide. That asymmetry is
+ * preserved — inventing a rustic hover to "match" modern would be a visual
+ * change, not a migration.
+ *
+ * THE ACTIVE BOTTOM BORDER IS `line`-ONLY, and the source expressed the other
+ * variants' absence as `undefined` — which ReactDOM REMOVES, leaving no
+ * declaration at all rather than a `none`. Reproduced structurally: only the
+ * `line` + selected rule exists, so card/pills simply never match it. No
+ * else-branch reset is needed (there is nothing to reset).
+ *
+ * SPECIFICITY (P-48): the tab-list's and the active tab's `border-bottom`
+ * shorthands carry real colors and must clear the tenant's unlayered
+ * `* { border-color }` floor at (0,3,1), so both reach (0,4,0)+ and stay
+ * SHORTHANDS. The button's `border: none` is a color-free reset, exempt — but it
+ * is held at a LOWER specificity than the active `border-bottom` so the bottom
+ * edge still wins, exactly as the inline key order did. Non-border paint wins at
+ * (0,3,0).
+ */
+
+/* ---- the rule the `line` tabs sit on. ---- */
+.rottay-tabs--rustic[data-part='root'][data-variant='line'] [data-part='tab-list'][data-part='tab-list'] {
+  border-bottom: 1px solid var(--ds-tabs-border-color, var(--ds-color-neutral-200, #e5e5e5));
+}
+
+/* ---- every tab button is chromeless and transparent until selected. ---- */
+.rottay-tabs--rustic[data-part='root'] [data-part='tab-button'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+  border-radius: 0;
+}
+
+.rottay-tabs--rustic[data-part='root'][data-variant='card'] [data-part='tab-button'],
+.rottay-tabs--rustic[data-part='root'][data-variant='pills'] [data-part='tab-button'] {
+  border-radius: var(--ds-tabs-radius, 0.375rem);
+}
+
+.rottay-tabs--rustic[data-part='root'] [data-part='tab-button'][data-selected='true'] {
+  background: var(--ds-tabs-active-bg, var(--ds-color-primary-500, #0066CC));
+  color: var(--ds-tabs-active-color, white);
+}
+
+/* ---- only `line` draws the active underline. ---- */
+.rottay-tabs--rustic[data-part='root'][data-variant='line'] [data-part='tab-button'][data-selected='true'][data-selected='true'] {
+  border-bottom: 2px solid var(--ds-tabs-active-border, var(--ds-color-primary-500, #0066CC));
+}

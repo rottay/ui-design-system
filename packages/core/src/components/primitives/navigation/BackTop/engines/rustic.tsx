@@ -65,29 +65,22 @@ const styles = {
     right: 'var(--ds-backtop-right, 32px)',
     width: 'var(--ds-backtop-size, 44px)',
     height: 'var(--ds-backtop-size, 44px)',
-    borderRadius: '50%',
-    backgroundColor: 'var(--ds-backtop-bg, var(--ds-color-primary-500, #1677ff))',
-    color: 'var(--ds-backtop-color, #fff)',
-    border: 'none',
     cursor: 'pointer',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    boxShadow: 'var(--ds-backtop-shadow, 0 4px 12px rgba(0,0,0,0.15))',
     zIndex: 'var(--ds-backtop-z-index, 1000)' as unknown as number,
     transition: 'opacity 0.3s, transform 0.3s',
   } as React.CSSProperties,
-  /** Hidden state: scale(0) + opacity 0 provides a shrink-out animation;
-   *  pointerEvents:'none' ensures the invisible button cannot be clicked */
+  /** Hidden state: pointerEvents:'none' ensures the invisible button cannot be
+   *  clicked. The shrink-out scale rides `data-state` in the skin. */
   hidden: {
     opacity: 0,
-    transform: 'scale(0)',
     pointerEvents: 'none',
   } as React.CSSProperties,
   /** Visible state styles - fully visible and interactive */
   visible: {
     opacity: 1,
-    transform: 'scale(1)',
   } as React.CSSProperties,
 };
 
@@ -211,11 +204,12 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
       <button
         ref={ref}
         type="button"
-        className={className}
+        className={`rottay-backtop rottay-backtop--rustic ${className}`.trim()}
         style={buttonStyle}
         onClick={handleClick}
         aria-label="Back to top"
         data-part="trigger"
+        data-state={visible ? 'visible' : 'hidden'}
       >
         {children || (
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

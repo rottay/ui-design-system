@@ -1,0 +1,58 @@
+/**
+ * Rustic AlertDialog skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * SCOPE ROOT is SELF-CARRYING and is the BACKDROP: this engine's outermost node is
+ * the scrim itself, carrying `rottay-alert-dialog-rustic` + `data-part='backdrop'`.
+ * Its rule takes the COMPOUND form (no descendant space); everything else hangs off
+ * it. Unlike the modern engine, this one renders ZERO DaisyUI classes and has no
+ * external paint contributor — personality.css and every theme.css were grep-verified
+ * to have no rule matching `rottay-alert-dialog-rustic`.
+ *
+ * PORTAL: neither engine portals; the tree renders in-tree as a `position: fixed`
+ * sibling. The scope class anchors every rule regardless.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1), so the two
+ * colored borders here (the dialog card, the cancel button) repeat their `data-part`
+ * to reach b >= 4.
+ */
+
+.rottay-alert-dialog-rustic[data-part='backdrop'] {
+  background-color: var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))));
+}
+
+/* ---- dialog card ---- */
+.rottay-alert-dialog-rustic[data-part='backdrop'] > [data-part='surface'] {
+  background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff));
+  border-radius: var(--ds-modal-radius, var(--ds-radius-xl, 16px));
+  box-shadow: var(--ds-modal-shadow, var(--ds-shadow-2xl));
+}
+.rottay-alert-dialog-rustic[data-part='backdrop'] > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb));
+}
+
+/* ---- error badge ---- */
+.rottay-alert-dialog-rustic[data-part='backdrop'] [data-part='icon'] {
+  border-radius: 50%;
+  background-color: var(--ds-color-error-50, #fff2f0);
+  color: var(--ds-color-error-500, #ff4d4f);
+}
+
+/* ---- copy ---- */
+.rottay-alert-dialog-rustic[data-part='backdrop'] [data-part='title'] {
+  color: var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a));
+}
+.rottay-alert-dialog-rustic[data-part='backdrop'] [data-part='description'] {
+  color: var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666));
+}
+
+/* ---- cancel action (the consumer's own `action` node is NOT painted here) ---- */
+.rottay-alert-dialog-rustic[data-part='backdrop'] [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background-color: var(--ds-color-bg-primary, transparent);
+  color: var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a));
+}
+.rottay-alert-dialog-rustic[data-part='backdrop'] [data-part='action'][data-part='action'][data-action='cancel'] {
+  border: 1px solid var(--ds-modal-footer-border, var(--ds-color-neutral-300, #d9d9d9));
+}

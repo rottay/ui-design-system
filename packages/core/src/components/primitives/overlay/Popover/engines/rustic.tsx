@@ -71,7 +71,6 @@ const getPositionStyles = (
     top: {
       bottom: window.innerHeight - triggerRect.top + gap,
       left: triggerRect.left + triggerRect.width / 2 + scrollX,
-      transform: 'translateX(-50%)',
     },
     topLeft: {
       bottom: window.innerHeight - triggerRect.top + gap,
@@ -84,7 +83,6 @@ const getPositionStyles = (
     bottom: {
       top: triggerRect.bottom + gap + scrollY,
       left: triggerRect.left + triggerRect.width / 2 + scrollX,
-      transform: 'translateX(-50%)',
     },
     bottomLeft: {
       top: triggerRect.bottom + gap + scrollY,
@@ -97,7 +95,6 @@ const getPositionStyles = (
     left: {
       top: triggerRect.top + triggerRect.height / 2 + scrollY,
       right: window.innerWidth - triggerRect.left + gap,
-      transform: 'translateY(-50%)',
     },
     leftTop: {
       top: triggerRect.top + scrollY,
@@ -110,7 +107,6 @@ const getPositionStyles = (
     right: {
       top: triggerRect.top + triggerRect.height / 2 + scrollY,
       left: triggerRect.right + gap + scrollX,
-      transform: 'translateY(-50%)',
     },
     rightTop: {
       top: triggerRect.top + scrollY,
@@ -262,18 +258,14 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
           role="tooltip"
           data-part="surface"
           data-open="true"
+          data-placement={placement}
           className={`rottay-popover--rustic ${overlayClassName || ''}`}
           style={{
             position: 'fixed',
             zIndex,
-            backgroundColor: 'var(--ds-popover-bg, var(--ds-color-bg-elevated, #fff))',
-            borderRadius: 'var(--ds-popover-radius, var(--ds-radius-lg, 12px))',
-            boxShadow: 'var(--ds-popover-shadow, var(--ds-shadow-lg))',
             padding: 'var(--ds-popover-padding, 12px 16px)',
             minWidth: 'var(--ds-popover-min-width, 150px)',
             maxWidth: 'var(--ds-popover-max-width, 350px)',
-            border: '1px solid var(--ds-popover-border-color, var(--ds-color-neutral-200, #e5e7eb))',
-            backdropFilter: 'var(--ds-modal-overlay-backdrop, blur(4px))',
             ...position,
             ...overlayStyle,
           }}
@@ -289,8 +281,6 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
                 fontWeight: 600,
                 marginBottom: '8px',
                 paddingBottom: '8px',
-                borderBottom: '1px solid var(--ds-popover-title-border, var(--ds-color-neutral-200, #e5e7eb))',
-                color: 'var(--ds-popover-title-color, inherit)',
               }}
             >
               {title}
@@ -304,9 +294,6 @@ export const Popover = React.forwardRef<HTMLDivElement, PopoverProps>(
                 position: 'absolute',
                 width: 'var(--ds-popover-arrow-size, 10px)',
                 height: 'var(--ds-popover-arrow-size, 10px)',
-                backgroundColor: 'var(--ds-popover-bg, var(--ds-color-bg-elevated, #fff))',
-                transform: 'rotate(45deg)',
-                boxShadow: 'var(--ds-popover-arrow-shadow, -2px -2px 4px rgba(0, 0, 0, 0.05))',
               }}
             />
           )}

@@ -102,51 +102,6 @@ const ErrorIcon = ({ size }: { size: number }) => (
 );
 
 // ============================================================================
-// Color Configuration
-// ============================================================================
-
-/**
- * Gets the color configuration for a step based on its status.
- * Uses CSS variables with fallback values.
- * @param status - The step status
- * @returns Object with bg, color, border, and title colors
- * @internal
- */
-function getStatusColors(status: StepStatus) {
-  switch (status) {
-    case 'finish':
-      return {
-        bg: 'var(--ds-stepper-icon-finish-bg, var(--ds-color-primary-500))',
-        color: 'var(--ds-stepper-icon-finish-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
-        border: 'var(--ds-stepper-icon-finish-border, var(--ds-color-primary-500))',
-        title: 'var(--ds-stepper-title-finish-color, var(--ds-color-text-primary))',
-      };
-    case 'process':
-      return {
-        bg: 'var(--ds-stepper-icon-process-bg, var(--ds-color-primary-500))',
-        color: 'var(--ds-stepper-icon-process-color, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
-        border: 'var(--ds-stepper-icon-process-border, var(--ds-color-primary-500))',
-        title: 'var(--ds-stepper-title-process-color, var(--ds-color-text-primary))',
-      };
-    case 'error':
-      return {
-        bg: 'var(--ds-stepper-icon-error-bg, var(--ds-color-bg-elevated))',
-        color: 'var(--ds-stepper-icon-error-color, var(--ds-color-error))',
-        border: 'var(--ds-stepper-icon-error-border, var(--ds-color-error))',
-        title: 'var(--ds-stepper-title-error-color, var(--ds-color-error))',
-      };
-    case 'wait':
-    default:
-      return {
-        bg: 'var(--ds-stepper-icon-wait-bg, var(--ds-color-bg-elevated))',
-        color: 'var(--ds-stepper-icon-wait-color, var(--ds-color-text-secondary))',
-        border: 'var(--ds-stepper-icon-wait-border, var(--ds-color-border))',
-        title: 'var(--ds-stepper-title-wait-color, var(--ds-color-text-secondary))',
-      };
-  }
-}
-
-// ============================================================================
 // Step Renderer
 // ============================================================================
 
@@ -182,7 +137,6 @@ function renderStep(
   onChange?: (index: number) => void
 ): React.ReactNode {
   const status = computeStatus(index, current, item.status, globalStatus);
-  const colors = getStatusColors(status);
   // Resolve pixel dimensions and font sizes from the shared size maps.
   // These are used for both the circular icon container and the text labels.
   const iconSize = SIZE_MAP[size];
@@ -199,9 +153,6 @@ function renderStep(
     flex: direction === 'horizontal' && !isLast ? 1 : 'none',
     opacity: item.disabled ? 0.5 : 1,
     cursor: clickable && !item.disabled ? 'pointer' : 'default',
-    outline: isFocused ? '2px solid var(--ds-stepper-focus-ring, var(--ds-color-primary-500))' : 'none',
-    outlineOffset: '4px',
-    borderRadius: '4px',
   };
 
   // Icon container styles
@@ -212,10 +163,6 @@ function renderStep(
     width: iconSize,
     height: iconSize,
     minWidth: iconSize,
-    borderRadius: '50%',
-    backgroundColor: colors.bg,
-    color: colors.color,
-    border: `2px solid ${colors.border}`,
     fontSize: fontSize.title,
     fontWeight: 500,
     transition: 'all 0.3s ease',
@@ -233,7 +180,6 @@ function renderStep(
   const titleStyle: CSSProperties = {
     fontSize: fontSize.title,
     fontWeight: 500,
-    color: colors.title,
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
@@ -242,19 +188,14 @@ function renderStep(
   // Description styles
   const descStyle: CSSProperties = {
     fontSize: fontSize.description,
-    color: 'var(--ds-stepper-description-color, var(--ds-color-text-secondary))',
   };
 
   // Connector lines link adjacent steps visually. In horizontal mode, they
-  // stretch between step icons. Finished connectors use the primary color
-  // to indicate progress; pending connectors use the border color.
+  // stretch between step icons; the fill rides `data-status` in the skin.
   const connectorStyle: CSSProperties = direction === 'horizontal' ? {
     flex: 1,
     minWidth: '32px',
     height: 'var(--ds-stepper-connector-width, 1px)',
-    backgroundColor: status === 'finish'
-      ? 'var(--ds-stepper-connector-finish-color, var(--ds-color-primary-500))'
-      : 'var(--ds-stepper-connector-color, var(--ds-color-border-secondary, var(--ds-color-border)))',
     margin: '0 8px',
     alignSelf: 'center',
     transition: 'background-color 0.3s ease',
@@ -296,10 +237,7 @@ function renderStep(
             {item.subTitle && (
               <span
                 data-part="subtitle"
-                style={{
-                  fontSize: fontSize.description,
-                  color: 'var(--ds-stepper-subtitle-color, var(--ds-color-text-secondary))',
-                }}
+                style={{ fontSize: fontSize.description }}
               >
                 {item.subTitle}
               </span>

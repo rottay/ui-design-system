@@ -50,26 +50,6 @@ const PREMIUM_SIZE_MAP: Record<string, string> = {
 const MOTION_DURATION = 'var(--ds-motion-normal)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
-/** Keyframe animations injected via <style> tag -- no external stylesheet needed. */
-const OVERLAY_MODAL_STYLES = `
-@keyframes rottay-modal-backdrop-enter {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes rottay-modal-backdrop-exit {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-@keyframes rottay-modal-enter {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes rottay-modal-exit {
-  from { opacity: 1; transform: scale(1); }
-  to   { opacity: 0; transform: scale(0.95); }
-}
-`;
-
 /**
  * Calculate scrollbar width for body padding compensation.
  */
@@ -95,20 +75,9 @@ function CloseButton({ onClick, label }: { onClick: () => void; label: string })
         justifyContent: 'center',
         width: '32px',
         height: '32px',
-        border: 'none',
-        borderRadius: 'var(--ds-radius-md)',
-        backgroundColor: 'transparent',
         cursor: 'pointer',
-        color: 'var(--ds-modal-close-color, var(--ds-color-text-secondary))',
         flexShrink: 0,
         transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.backgroundColor =
-          'var(--ds-modal-close-bg-hover, var(--ds-surface-highlight))';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
       }}
     >
       <svg
@@ -162,7 +131,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
     radius = MODAL_DEFAULTS.radius,
     shadow = MODAL_DEFAULTS.shadow,
     padding = MODAL_DEFAULTS.padding,
-    divider = MODAL_DEFAULTS.divider,
+    // This engine's header border is unconditional: both branches of its
+    // `divider` ternary resolved to the same value, so the prop paints nothing.
+    divider: _divider = MODAL_DEFAULTS.divider,
     zIndex = MODAL_DEFAULTS.zIndex,
     disableAnimation: _disableAnimation = MODAL_DEFAULTS.disableAnimation,
     className = '',
@@ -273,9 +244,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
 
   return (
     <Portal>
-      {/* Injected keyframe styles */}
-      <style dangerouslySetInnerHTML={{ __html: OVERLAY_MODAL_STYLES }} />
-
       <dialog
         ref={dialogRef}
         data-part="root"
@@ -291,8 +259,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           maxHeight: '100vh',
           margin: 0,
           padding: 0,
-          border: 'none',
-          backgroundColor: 'transparent',
           display: 'flex',
           alignItems: isAdaptiveFullscreen
             ? 'stretch'
@@ -309,20 +275,11 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
         {showBackdrop && (
           <div
             data-part="backdrop"
+            data-blur={blurBackdrop !== false ? 'true' : 'false'}
             style={{
               position: 'fixed',
               inset: 0,
-              // Scrim (kept) with the glass layer (spec section 5) on top: a subtle
-              // frost tint + backdrop blur that both scale with --ds-effect-intensity,
-              // collapsing to a plain scrim at 0. Glass is sanctioned on overlay
-              // backdrops only.
-              backgroundColor: 'var(--ds-modal-overlay-bg, color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent))',
-              backgroundImage: blurBackdrop !== false
-                ? 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))'
-                : undefined,
-              backdropFilter: blurBackdrop !== false ? 'var(--ds-glass-backdrop-filter)' : undefined,
-              WebkitBackdropFilter: blurBackdrop !== false ? 'var(--ds-glass-backdrop-filter)' : undefined,
-              animation: `${dataState === 'open' ? 'rottay-modal-backdrop-enter' : 'rottay-modal-backdrop-exit'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+              animation: `${dataState === 'open' ? 'ds-overlay-modal-backdrop-enter-modern' : 'ds-overlay-modal-backdrop-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
               pointerEvents: 'none',
             }}
           />
@@ -333,6 +290,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
           ref={presenceRef}
           data-part="surface"
           data-open={dataState === 'open' ? 'true' : 'false'}
+          data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
+          data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
+          data-shadow={shadow ? 'true' : 'false'}
           role="document"
           onClick={(e) => e.stopPropagation()}
           style={{
@@ -344,16 +304,13 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
             maxHeight: effectiveFullscreen ? 'none' : '85vh',
             display: 'flex',
             flexDirection: 'column',
-            background: 'var(--ds-modal-bg, var(--ds-surface-card))',
-            color: 'var(--ds-modal-color, inherit)',
-            border: effectiveFullscreen ? 'none' : '1px solid var(--ds-color-border-subtle)',
-            borderRadius: panelRadius,
-            boxShadow: isAdaptiveFullscreen ? 'none' : shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-3))' : 'none',
+            // The radius folds a size enum (RADIUS_MAP) and the fullscreen
+            // override into one value; the skin reads it (not a paint key).
+            ['--ds-overlay-modal-radius' as any]: panelRadius,
             animation: isAdaptiveFullscreen
               ? undefined
-              : `${dataState === 'open' ? 'rottay-modal-enter' : 'rottay-modal-exit'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+              : `${dataState === 'open' ? 'ds-overlay-modal-enter-modern' : 'ds-overlay-modal-exit-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
             overflow: 'hidden',
-            outline: 'none',
             ...style,
           }}
         >
@@ -367,9 +324,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                 justifyContent: 'space-between',
                 gap: '12px',
                 padding: '16px 24px',
-                borderBottom: divider
-                  ? '1px solid var(--ds-modal-header-border, var(--ds-color-border-subtle))'
-                  : '1px solid var(--ds-modal-header-border, var(--ds-color-border-subtle))',
                 flexShrink: 0,
               }}
             >
@@ -383,7 +337,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                           fontSize: '16px',
                           fontWeight: 600,
                           lineHeight: '24px',
-                          color: 'var(--ds-modal-title-color, var(--ds-color-text-primary))',
                         }}
                       >
                         {title}
@@ -395,7 +348,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                         style={{
                           fontSize: '13px',
                           lineHeight: '18px',
-                          color: 'var(--ds-modal-subtitle-color, var(--ds-color-text-secondary))',
                           marginTop: title ? '2px' : undefined,
                         }}
                       >
@@ -418,7 +370,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
               flex: '1 1 auto',
               overflowY: 'auto',
               padding: contentPadding,
-              color: 'var(--ds-modal-body-color, inherit)',
             }}
           >
             {children}
@@ -434,7 +385,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement | nul
                 justifyContent: 'flex-end',
                 gap: '8px',
                 padding: '16px 24px',
-                borderTop: '1px solid var(--ds-modal-footer-border, var(--ds-color-border-subtle))',
                 flexShrink: 0,
               }}
             >

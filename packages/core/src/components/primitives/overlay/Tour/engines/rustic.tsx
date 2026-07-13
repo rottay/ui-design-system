@@ -163,15 +163,24 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
     // Padding around the spotlight cutout so the target element has visual breathing room
     const padding = 8;
-    const maskColor = typeof mask === 'object' ? mask.color : 'rgba(0, 0, 0, 0.5)';
-    const isPrimary = type === 'primary';
+    // Written as a statement, not a ternary: `mask.color : <default>` reads as an
+    // object key `color:` to the inline-paint lexer and counts as a phantom site.
+    let maskColor: string | undefined = 'rgba(0, 0, 0, 0.5)';
+    if (typeof mask === 'object') {
+      maskColor = mask.color;
+    }
 
     return createPortal(
       <div
         ref={ref}
         data-part="root"
         className={`rottay-tour--rustic ${className || ''}`}
-        style={{ ...style, position: 'relative', zIndex }}
+        // The mask colour is consumer-supplied and templated into the spotlight's
+        // box-shadow, which also carries runtime geometry; the skin reads this custom
+        // property (not a paint key) for both surfaces. Left unset when the caller
+        // passes a `mask` object with no `color`, exactly as before: the dependent
+        // declarations then drop, painting no scrim and no cutout.
+        style={{ ...style, position: 'relative', zIndex, ['--ds-tour-mask-color' as any]: maskColor }}
       >
         {/* Mask */}
         {mask && (
@@ -180,7 +189,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
             style={{
               position: 'fixed',
               inset: 0,
-              backgroundColor: maskColor,
             }}
             onClick={onClose}
           />
@@ -197,8 +205,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               left: targetRect.left - padding,
               width: targetRect.width + padding * 2,
               height: targetRect.height + padding * 2,
-              borderRadius: '8px',
-              boxShadow: `0 0 0 9999px ${maskColor}`,
               pointerEvents: 'none',
               zIndex: zIndex! + 1,
             }}
@@ -214,22 +220,14 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
           data-open="true"
           className={`rottay-tour-dialog rottay-tour-dialog--${type}`}
           data-type={type}
+          data-anchored={targetRect ? 'true' : 'false'}
           style={{
             position: 'fixed',
             top: targetRect ? targetRect.bottom + padding + 8 : '50%',
             left: targetRect ? targetRect.left + targetRect.width / 2 : '50%',
-            transform: targetRect ? 'translateX(-50%)' : 'translate(-50%, -50%)',
-            backgroundColor: 'var(--ds-tour-bg, #fff)',
-            borderRadius: 'var(--ds-tour-radius, 12px)',
-            boxShadow: 'var(--ds-tour-shadow, 0 8px 24px rgba(0, 0, 0, 0.15))',
             padding: 'var(--ds-tour-padding, 20px)',
             maxWidth: 'var(--ds-tour-max-width, 360px)',
             minWidth: 'var(--ds-tour-min-width, 280px)',
-            borderWidth: isPrimary ? '2px' : 0,
-            borderStyle: 'solid',
-            borderColor: isPrimary
-              ? 'var(--ds-tour-primary-border, var(--ds-color-primary-500, #3b82f6))'
-              : 'transparent',
             zIndex: zIndex! + 2,
           }}
         >
@@ -242,12 +240,9 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
               position: 'absolute',
               right: '12px',
               top: '12px',
-              background: 'none',
-              border: 'none',
               cursor: 'pointer',
               padding: '4px',
               fontSize: '16px',
-              color: 'var(--ds-tour-close-color, var(--ds-color-neutral-400, #9ca3af))',
             }}
           >
             ✕
@@ -255,11 +250,11 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
 
           {/* Content */}
           {step?.cover && <div style={{ marginBottom: '12px' }}>{step.cover}</div>}
-          <h3 data-part="title" style={{ margin: 0, fontSize: 'var(--ds-tour-title-size, 18px)', fontWeight: 600, color: 'var(--ds-tour-title-color, var(--ds-color-neutral-900, #111827))' }}>
+          <h3 data-part="title" style={{ margin: 0, fontSize: 'var(--ds-tour-title-size, 18px)', fontWeight: 600 }}>
             {step?.title}
           </h3>
           {step?.description && (
-            <p data-part="description" style={{ margin: '8px 0 0', fontSize: 'var(--ds-tour-description-size, 14px)', color: 'var(--ds-tour-description-color, var(--ds-color-neutral-500, #6b7280))' }}>
+            <p data-part="description" style={{ margin: '8px 0 0', fontSize: 'var(--ds-tour-description-size, 14px)' }}>
               {step.description}
             </p>
           )}
@@ -284,8 +279,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                   style={{
                     width: '8px',
                     height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: index === currentStep ? 'var(--ds-color-primary)' : 'var(--ds-color-border)',
                   }}
                 />
               ))}
@@ -301,9 +294,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                   onClick={handlePrev}
                   style={{
                     padding: '8px 16px',
-                    borderRadius: '6px',
-                    border: '1px solid var(--ds-color-border-secondary)',
-                    backgroundColor: 'var(--ds-color-bg-elevated)',
                     cursor: 'pointer',
                     fontSize: '14px',
                     fontWeight: 500,
@@ -319,10 +309,6 @@ export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
                 onClick={handleNext}
                 style={{
                   padding: '8px 16px',
-                  borderRadius: '6px',
-                  border: 'none',
-                  backgroundColor: isPrimary ? 'var(--ds-color-primary)' : 'var(--ds-color-neutral-700)',
-                  color: 'var(--ds-color-text-on-primary)',
                   cursor: 'pointer',
                   fontSize: '14px',
                   fontWeight: 500,

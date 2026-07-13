@@ -26,41 +26,11 @@ import { SHEET_DEFAULTS } from '../Sheet.types';
 const MOTION_DURATION = 'var(--ds-motion-normal)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
-/** Keyframe animations for each side + backdrop. */
-const SHEET_STYLES = `
-@keyframes rottay-sheet-backdrop-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes rottay-sheet-slide-bottom {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-@keyframes rottay-sheet-slide-left {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
-}
-@keyframes rottay-sheet-slide-right {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
-}
-`;
-
-/** Animation name lookup by side. */
+/** Animation name lookup by side. The keyframes live in the engine skin. */
 const SLIDE_ANIMATION: Record<string, string> = {
-  bottom: 'rottay-sheet-slide-bottom',
-  left: 'rottay-sheet-slide-left',
-  right: 'rottay-sheet-slide-right',
-};
-
-/**
- * Border-radius per side -- rounded on the inward-facing edges only.
- * The sliding edge sits flush against the viewport.
- */
-const RADIUS_BY_SIDE: Record<string, string> = {
-  bottom: 'var(--ds-radius-lg) var(--ds-radius-lg) 0 0',
-  left: '0 var(--ds-radius-lg) var(--ds-radius-lg) 0',
-  right: 'var(--ds-radius-lg) 0 0 var(--ds-radius-lg)',
+  bottom: 'ds-sheet-slide-bottom-modern',
+  left: 'ds-sheet-slide-left-modern',
+  right: 'ds-sheet-slide-right-modern',
 };
 
 /** Default side-panel width for left/right. */
@@ -83,20 +53,9 @@ function CloseButton({ onClick }: { onClick: () => void }) {
         justifyContent: 'center',
         width: '32px',
         height: '32px',
-        border: 'none',
-        borderRadius: 'var(--ds-radius-md)',
-        backgroundColor: 'transparent',
         cursor: 'pointer',
-        color: 'var(--ds-color-text-secondary)',
         flexShrink: 0,
         transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.backgroundColor =
-          'var(--ds-surface-highlight)';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
       }}
     >
       <svg
@@ -173,7 +132,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
 
   const isBottom = side === 'bottom';
   const animationName = SLIDE_ANIMATION[side] || SLIDE_ANIMATION.bottom;
-  const borderRadius = RADIUS_BY_SIDE[side] || RADIUS_BY_SIDE.bottom;
 
   // -- panel position styles --------------------------------------------------
 
@@ -185,10 +143,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
       zIndex: 'var(--ds-z-drawer)',
       display: 'flex',
       flexDirection: 'column',
-      background: 'var(--ds-surface-card)',
-      border: '1px solid var(--ds-color-border-subtle)',
-      borderRadius,
-      boxShadow: 'var(--ds-elevation-3)',
       animation: `${animationName} ${MOTION_DURATION} ${MOTION_EASING} both`,
       overflow: 'hidden',
     };
@@ -201,7 +155,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         bottom: 0,
         maxHeight: '85vh',
         minHeight: '30vh',
-        borderBottom: 'none',
         ...panelStyle,
       };
     }
@@ -214,7 +167,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
         bottom: 0,
         width: SIDE_PANEL_WIDTH,
         maxWidth: '100vw',
-        borderLeft: 'none',
         ...panelStyle,
       };
     }
@@ -227,15 +179,12 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
       bottom: 0,
       width: SIDE_PANEL_WIDTH,
       maxWidth: '100vw',
-      borderRight: 'none',
       ...panelStyle,
     };
   };
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: SHEET_STYLES }} />
-
       {/* ---- Wrapper ---- */}
       <div
         data-part="root"
@@ -256,10 +205,7 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
             style={{
               position: 'fixed',
               inset: 0,
-              background: 'color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)',
-              backdropFilter: 'blur(4px)',
-              WebkitBackdropFilter: 'blur(4px)',
-              animation: `rottay-sheet-backdrop-fade ${MOTION_DURATION} ${MOTION_EASING}`,
+              animation: `ds-sheet-backdrop-fade-modern ${MOTION_DURATION} ${MOTION_EASING}`,
             }}
           />
         )}
@@ -291,8 +237,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
                 style={{
                   width: '40px',
                   height: '4px',
-                  borderRadius: '9999px',
-                  background: 'var(--ds-color-border-secondary)',
                 }}
               />
             </div>
@@ -307,7 +251,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
                 alignItems: 'center',
                 justifyContent: 'space-between',
                 padding: '12px 16px',
-                borderBottom: '1px solid var(--ds-color-border-subtle)',
                 flexShrink: 0,
               }}
             >
@@ -317,7 +260,6 @@ export default function ModernSheet(props: SheetProps): React.ReactElement {
                   fontSize: '16px',
                   fontWeight: 600,
                   lineHeight: '24px',
-                  color: 'var(--ds-color-text-primary)',
                   flex: '1 1 auto',
                   minWidth: 0,
                 }}

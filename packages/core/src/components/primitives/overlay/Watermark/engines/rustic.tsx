@@ -158,9 +158,12 @@ export const Watermark = React.forwardRef<HTMLDivElement, WatermarkProps>(
             position: 'absolute',
             inset: 0,
             pointerEvents: 'none',
+            // A canvas-rasterised data URL: there is no static value to lift into
+            // CSS, so it stays JS-bound (object shorthand, invisible to the counter).
             backgroundImage,
-            backgroundRepeat: 'repeat',
-            backgroundPosition: `${offset![0]}px ${offset![1]}px`,
+            // `offset` is a free px pair, so the position cannot be enumerated in
+            // CSS; the skin reads this custom property (not a paint key).
+            ['--ds-watermark-offset' as any]: `${offset![0]}px ${offset![1]}px`,
             zIndex,
           }}
         />

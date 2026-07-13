@@ -1,0 +1,44 @@
+/**
+ * MobileHeader skin (WO-SKIN-04 checkpoint N).
+ *
+ * ENGINE-AGNOSTIC: MobileHeader has no `engines/` split — it composes Box/Flex/
+ * Text, which resolve through the engine system themselves. One skin file, no
+ * engine modifier class.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * ELEMENT-LEVEL CLASSES, NOT BARE `data-part` DESCENDANTS: `data-part='trigger'`
+ * and `data-part='label'` are shared vocabulary across a dozen components
+ * (Dropdown, Popconfirm, ContextMenu, Menu, FloatButton, …). MobileHeader's
+ * `leftAction` / `rightAction` / `children` slots accept arbitrary consumer
+ * nodes, so a descendant `[data-part='trigger']` rule would repaint any DS
+ * component the caller drops into a slot. Each painted element therefore carries
+ * its own class and is matched by a COMPOUND selector.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * (0,3,1). The root's `border-bottom` carries a real color, so it must reach
+ * (0,4,0); with only ONE root class that is bought by a thrice-repeated
+ * `[data-part='root']` (the voice-input-button precedent). The back button's
+ * `border: none` is a color-free reset, exempt from the floor. Non-border paint
+ * wins unlayered at (0,2,0)+.
+ */
+
+.rottay-mobile-header[data-part='root'] {
+  background: var(--ds-color-bg-primary);
+}
+
+.rottay-mobile-header[data-part='root'][data-part='root'][data-part='root'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.rottay-mobile-header__back[data-part='trigger'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-mobile-header__title[data-part='label'] {
+  color: var(--ds-color-text-primary);
+}

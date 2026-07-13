@@ -1,0 +1,101 @@
+/**
+ * Rustic ConfirmDialog skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED, same rationale as every other engine skin (P-47).
+ *
+ * PORTAL: NEITHER engine portals — both render in-tree as a `position: fixed` sibling.
+ *
+ * SCOPE ROOT is SELF-CARRYING and IS the scrim: `rottay-confirm-dialog-rustic` sits on
+ * the same node as `data-part='backdrop'`, and that node paints the scrim directly
+ * (unlike the modern engine, which uses a separate inner scrim div).
+ *
+ * VARIANT: the icon tint, the icon background and the CONFIRM BUTTON all read the shared
+ * `VARIANT_COLORS` table, keyed here on the surface's `data-variant`. The modern engine's
+ * confirm button reads a DIFFERENT table (`VARIANT_BTN_STYLE`, un-suffixed tokens), so the
+ * two engines paint the same button from different tokens. That divergence ships today
+ * and is preserved.
+ *
+ * Both buttons declare a `transition` (transform/opacity/box-shadow) that is DEAD: neither
+ * has a hover or active state that changes any of those three. It stays inline, inert; do
+ * not invent a hover to "use" it.
+ *
+ * The cancel button's border overrides the shared button base's `border: none` (the JS
+ * spread put it last), so its rule is ordered after — and carries more specificity than —
+ * the base reset.
+ *
+ * SPECIFICITY (P-48): every colored border repeats its `data-part` to clear the tenant `*`
+ * border-color floor at (0,3,1).
+ */
+
+/* ---- scrim (the root itself) ---- */
+.rottay-confirm-dialog-rustic[data-part='backdrop'] {
+  background-color: var(--ds-overlay-bg, var(--ds-modal-overlay-bg, var(--ds-color-alpha-black-50, rgba(0, 0, 0, 0.5))));
+}
+
+/* ---- dialog card ---- */
+.rottay-confirm-dialog-rustic[data-part='backdrop'] > [data-part='surface'] {
+  background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, #fff));
+  color: var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a));
+  border-radius: var(--ds-modal-radius, var(--ds-radius-xl, 16px));
+  box-shadow: var(--ds-modal-shadow, var(--ds-shadow-2xl));
+  backdrop-filter: var(--ds-modal-overlay-backdrop, blur(4px));
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-modal-border, var(--ds-color-neutral-200, #e5e7eb));
+}
+
+/* ---- icon badge: ring + pill are variant-free; tint + fill come from VARIANT_COLORS ---- */
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-part='icon'] {
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px var(--ds-color-alpha-white-20, rgba(255, 255, 255, 0.2));
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-variant='info'] [data-part='icon'] {
+  color: var(--ds-color-primary-500, #1890ff);
+  background-color: var(--ds-color-primary-50, #e6f7ff);
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-variant='warning'] [data-part='icon'] {
+  color: var(--ds-color-warning-500, #faad14);
+  background-color: var(--ds-color-warning-50, #fffbe6);
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-variant='danger'] [data-part='icon'] {
+  color: var(--ds-color-error-500, #ff4d4f);
+  background-color: var(--ds-color-error-50, #fff2f0);
+}
+
+/* ---- copy ---- */
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-part='title'] {
+  color: var(--ds-modal-title-color, var(--ds-color-text-primary, #1a1a1a));
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-part='description'] {
+  color: var(--ds-modal-subtitle-color, var(--ds-color-text-secondary, #666));
+}
+
+/* ---- shared button base ---- */
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-part='action'] {
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+/* ---- cancel: an outlined button (modern's cancel has no border at all) ---- */
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-part='action'][data-action='cancel'] {
+  background-color: var(--ds-color-bg-primary, transparent);
+  color: var(--ds-modal-color, var(--ds-color-text-primary, #1a1a1a));
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-part='action'][data-part='action'][data-action='cancel'] {
+  border: 1px solid var(--ds-modal-footer-border, var(--ds-color-neutral-300, #d9d9d9));
+}
+
+/* ---- confirm: VARIANT_COLORS.button (NOT modern's separate table) ---- */
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-part='action'][data-action='confirm'] {
+  color: var(--ds-color-primary-foreground, #fff);
+  box-shadow: var(--ds-button-primary-shadow, var(--ds-shadow-sm));
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-variant='info'] [data-part='action'][data-action='confirm'] {
+  background-color: var(--ds-color-primary-500, #1890ff);
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-variant='warning'] [data-part='action'][data-action='confirm'] {
+  background-color: var(--ds-color-warning-500, #faad14);
+}
+.rottay-confirm-dialog-rustic[data-part='backdrop'] [data-variant='danger'] [data-part='action'][data-action='confirm'] {
+  background-color: var(--ds-color-error-500, #ff4d4f);
+}

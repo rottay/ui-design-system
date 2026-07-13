@@ -106,8 +106,6 @@ const styles = {
   /** Container wrapper - inline flex with rounded background */
   container: {
     display: 'inline-flex',
-    backgroundColor: 'var(--ds-segmented-bg, var(--ds-color-neutral-100, #f5f5f5))',
-    borderRadius: 'var(--ds-segmented-radius, 8px)',
     padding: 'var(--ds-segmented-padding, 2px)',
   } as React.CSSProperties,
 
@@ -120,9 +118,6 @@ const styles = {
   /** Base button styles - shared across all options */
   button: {
     flex: 1,
-    border: 'none',
-    background: 'transparent',
-    borderRadius: 'var(--ds-segmented-item-radius, 4px)',
     cursor: 'pointer',
     transition: 'all 0.3s',
     display: 'flex',
@@ -142,9 +137,6 @@ const styles = {
 
   /** Active/selected state - elevated with primary color */
   buttonActive: {
-    backgroundColor: 'var(--ds-segmented-active-bg, #fff)',
-    boxShadow: 'var(--ds-segmented-active-shadow, 0 2px 8px rgba(0,0,0,0.08))',
-    color: 'var(--ds-segmented-active-color, var(--ds-color-primary-500, #1677ff))',
     fontWeight: 500,
   } as React.CSSProperties,
 
@@ -268,7 +260,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
     return (
       <div
         ref={ref}
-        className={className}
+        className={`rottay-segmented rottay-segmented--rustic ${className}`.trim()}
         // Merge container base, optional block-mode override, and consumer styles.
         // Spread order ensures consumer `style` prop wins over internal defaults.
         style={{ ...styles.container, ...(block ? styles.containerBlock : {}), ...style }}

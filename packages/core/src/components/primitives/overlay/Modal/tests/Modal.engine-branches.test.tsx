@@ -164,22 +164,22 @@ describe('Modal advanced engine coverage', () => {
     expect(dialog).toHaveStyle({ alignItems: 'flex-end' });
     expect(document.body.style.overflow).toBe('hidden');
 
+    // Sizing stays inline (viewport-derived); the fullscreen radius override is the
+    // skin's, keyed on the state attribute the engine stamps.
     const modalBox = dialog.querySelector('[role="document"]') as HTMLDivElement;
     expect(modalBox).toHaveStyle({
       width: '100vw',
       maxWidth: 'none',
       maxHeight: 'none',
-      borderRadius: '0',
     });
+    expect(modalBox.getAttribute('data-fullscreen')).toBe('true');
 
     const backdrop = Array.from(dialog.children).find(
       (node) => !(node as HTMLElement).hasAttribute('role')
     ) as HTMLDivElement;
-    // Modern blur backdrop is tokenized (WO-ENG-05 glass wiring): the blurBackdrop
-    // branch renders --ds-glass-backdrop-filter, which resolves to
-    // blur(calc(12px * var(--ds-effect-intensity))). (When blurBackdrop is false the
-    // property is undefined, so this still proves the blur-backdrop branch is active.)
-    expect(backdrop.style.backdropFilter).toContain('--ds-glass-backdrop-filter');
+    // The blur itself is the skin's (--ds-glass-backdrop-filter, WO-ENG-05 glass
+    // wiring); the engine's job is to stamp which branch is active.
+    expect(backdrop.getAttribute('data-blur')).toBe('true');
 
     fireEvent.keyDown(document, { key: 'Escape' });
     expect(handleClose).not.toHaveBeenCalled();

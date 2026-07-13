@@ -83,7 +83,6 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
       padding: PADDING_MAP[padding] || PADDING_MAP.lg,
       overflowY: 'auto',
       overflowX: 'hidden',
-      color: 'var(--ds-modal-body-color, inherit)',
       fontSize: 'var(--ds-modal-body-font-size, 14px)',
       lineHeight: 1.6,
       ...style,

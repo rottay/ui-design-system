@@ -1,0 +1,148 @@
+/**
+ * Modern overlay/Modal skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * outranks preflight + DaisyUI and still yields to a caller's inline `style`.
+ *
+ * NOT the same component as `primitives/feedback/Modal`, whose skin is
+ * `engines/modern/skin/modal.css` and whose compounds are
+ * `components/skin/modal-compounds.css`. The two families share the `data-part`
+ * vocabulary, so every rule here is anchored to
+ * `.rottay-overlay-modal-shell--modern`, unique to this component. The bare
+ * `rottay-modal` token is NOT free (feedback/Modal rustic carries it on its own
+ * surface) and must never scope a rule.
+ *
+ * PORTAL: both engines mount through the shared `Portal` util into
+ * `#rottay-portal-root` on `document.body`, so this tree is NOT a descendant of
+ * the tenant-scoped root. All rules are standalone on the shell class, which the
+ * `<dialog>` root carries alongside `data-part='root'`.
+ *
+ * DIRECT-CHILD COMBINATORS are load-bearing: `Modal.Header`/`Body`/`Footer`/
+ * `CloseButton` compounds re-use the same `data-part` names and can be composed
+ * INSIDE this engine's body. Anchoring each section on `root > surface > ...`
+ * keeps engine paint off a composed compound, which owns its own skin.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered `*` border-color floor at
+ * (0,3,1), so any rule painting a border COLOR must reach b >= 4. The shell class
+ * + `[data-part='root']` gives 2; the target's own `data-part` is REPEATED to buy
+ * the remaining 2. `border: none` resets carry no color and are exempt.
+ *
+ * STATE: `data-fullscreen` (explicit OR adaptive), `data-adaptive-fullscreen`
+ * (viewport-driven, measured by `useBreakpoints` in JS — NOT a media query, so it
+ * cannot be re-derived in CSS) and `data-shadow` reproduce the panel's three
+ * inline ternaries. `data-blur` reproduces the backdrop's `blurBackdrop !== false`
+ * gate: when false the engine passed `undefined` for all three glass keys and
+ * ReactDOM omitted them, so the false case must match NO rule rather than paint an
+ * explicit `none`. `--ds-overlay-modal-radius` carries the panel radius (a
+ * RADIUS_MAP enum folded with the fullscreen '0' override), which CSS cannot
+ * enumerate.
+ */
+
+@keyframes ds-overlay-modal-backdrop-enter-modern {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes ds-overlay-modal-backdrop-exit-modern {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes ds-overlay-modal-enter-modern {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes ds-overlay-modal-exit-modern {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(0.95); }
+}
+
+/* ---- root: the native <dialog>, stripped of its UA chrome ---- */
+.rottay-overlay-modal-shell--modern[data-part='root'] {
+  border: none;
+  background-color: transparent;
+}
+
+/* ---- backdrop: scrim + the glass layer (spec section 5). The frost tint and
+        blur both scale with --ds-effect-intensity, collapsing to a plain scrim at
+        0. Glass is sanctioned on overlay backdrops only. `--ds-modal-overlay-bg`
+        is a live BrandTheme token (chrome.modal.overlayBg). ---- */
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='backdrop'] {
+  background-color: var(--ds-modal-overlay-bg, color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent));
+}
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='backdrop'][data-blur='true'] {
+  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+}
+
+/* ---- surface (panel) ---- */
+.rottay-overlay-modal-shell--modern[data-part='root'] > [data-part='surface'] {
+  background: var(--ds-modal-bg, var(--ds-surface-card));
+  color: var(--ds-modal-color, inherit);
+  border-radius: var(--ds-overlay-modal-radius);
+  box-shadow: none;
+  outline: none;
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-shadow='true']:not([data-adaptive-fullscreen='true']) {
+  box-shadow: var(--ds-modal-shadow, var(--ds-elevation-3));
+}
+/* a colored border SHORTHAND, held to the (0,4,0) floor by the repeated part */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-part='surface'][data-fullscreen='false'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface'][data-part='surface'][data-fullscreen='true'] {
+  border: none;
+}
+
+/* ---- header: the border is unconditional. This engine's `divider` prop resolved
+        to the same value on BOTH branches of its ternary, so it paints nothing and
+        the rule must not be gated on it. ---- */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-modal-header-border, var(--ds-color-border-subtle));
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='header'] [data-part='title'] {
+  color: var(--ds-modal-title-color, var(--ds-color-text-primary));
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='header'] [data-part='description'] {
+  color: var(--ds-modal-subtitle-color, var(--ds-color-text-secondary));
+}
+
+/* ---- body ---- */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='body'] {
+  color: var(--ds-modal-body-color, inherit);
+}
+
+/* ---- footer: also unconditional in this engine (no `divider` gate at all) ---- */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-modal-footer-border, var(--ds-color-border-subtle));
+}
+
+/* ---- close button: the removed imperative hover becomes a :hover rule ---- */
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='header']
+  > [data-part='close-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background-color: transparent;
+  color: var(--ds-modal-close-color, var(--ds-color-text-secondary));
+}
+.rottay-overlay-modal-shell--modern[data-part='root']
+  > [data-part='surface']
+  > [data-part='header']
+  > [data-part='close-button']:hover {
+  background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
+}

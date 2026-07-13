@@ -1,0 +1,135 @@
+/**
+ * Stepper compound skins — `Stepper.Step` + `Stepper.Content` (WO-SKIN-04 N).
+ *
+ * ENGINE-AGNOSTIC: both compounds are JSX-composition APIs with a single render
+ * tree; they never touch the engine system. One skin file, no engine modifier.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: `rottay-stepper-step`, `rottay-stepper-connector` and
+ * `rottay-stepper-content` are the compounds' own BEM classes — until now dead
+ * CSS hooks (zero stylesheet references), grep-verified free of any other
+ * consumer. They are what keeps this file's paint from colliding with the two
+ * ENGINE Stepper skins, which key the same `data-part` / `data-status`
+ * vocabulary. (The engines never actually render these compounds — they read
+ * `children`'s PROPS into an items array and render their own markup — but the
+ * class anchor makes that a fact about the CSS, not a fact about today's JSX.)
+ *
+ * THE CONNECTOR IS A SIBLING, NOT A CHILD, of the step it follows: both are
+ * emitted from the same Fragment. It therefore carries its own class and its own
+ * `data-status`, and cannot be reached from `.rottay-stepper-step`.
+ *
+ * `Stepper.Step`'s STATUS MAP DIFFERS FROM THE ROOT RUSTIC ENGINE'S — the
+ * compound gives `process` its own title color and the root engine does not.
+ * That is a real, pre-existing visual divergence between the two APIs for the
+ * same component. It is preserved byte-exact, not reconciled; reconciling it is
+ * a visual change and needs its own work order.
+ *
+ * `Stepper.Content`'s 200ms IS HARDCODED IN FOUR PLACES — two CSS transition
+ * strings and two `setTimeout(…, 200)` literals — and the JS assumes, without
+ * listening for `transitionend`, that the transition has finished. All four stay
+ * exactly where they are: `transition` is not a paint channel, so nothing here
+ * touches the duration, and desyncing it would unmount content mid-fade.
+ *
+ * SPECIFICITY (P-48): the icon's `border` shorthand carries a real color and must
+ * clear the tenant's unlayered `* { border-color }` floor at (0,3,1); with one
+ * root class it reaches (0,4,0) via the status + part attributes. It stays a
+ * SHORTHAND (the source built it as one template literal). Non-border paint wins
+ * at (0,2,0)+.
+ */
+
+/* ---- Stepper.Step: the icon badge, per status. -------------------------- */
+.rottay-stepper-step[data-status='finish'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-finish-bg, var(--ds-color-primary));
+  color: var(--ds-stepper-icon-finish-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)));
+  border: 2px solid var(--ds-stepper-icon-finish-border, var(--ds-color-primary));
+}
+
+.rottay-stepper-step[data-status='process'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-process-bg, var(--ds-color-primary));
+  color: var(--ds-stepper-icon-process-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)));
+  border: 2px solid var(--ds-stepper-icon-process-border, var(--ds-color-primary));
+}
+
+.rottay-stepper-step[data-status='error'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-error-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  color: var(--ds-stepper-icon-error-color, var(--ds-color-error));
+  border: 2px solid var(--ds-stepper-icon-error-border, var(--ds-color-error));
+}
+
+.rottay-stepper-step[data-status='wait'] [data-part='icon'] {
+  background-color: var(--ds-stepper-icon-wait-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  color: var(--ds-stepper-icon-wait-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)));
+  border: 2px solid var(--ds-stepper-icon-wait-border, var(--ds-color-border-secondary, var(--ds-color-border-primary)));
+}
+
+/* ---- the badge is round for `circles` / `default`, a rounded square
+        otherwise — the one channel here that keys on the variant. ---- */
+.rottay-stepper-step [data-part='icon'][data-variant='circles'],
+.rottay-stepper-step [data-part='icon'][data-variant='default'] {
+  border-radius: 50%;
+}
+
+.rottay-stepper-step [data-part='icon']:not([data-variant='circles']):not([data-variant='default']) {
+  border-radius: var(--ds-stepper-border-radius, 6px);
+}
+
+/* ---- Stepper.Step: the text column. `process` gets its own title color here
+        and NOWHERE ELSE in the family (see the header). ---- */
+.rottay-stepper-step [data-part='label'] {
+  color: var(--ds-stepper-title-color, var(--ds-color-text-primary, var(--ds-color-text)));
+}
+
+.rottay-stepper-step[data-status='process'] [data-part='label'] {
+  color: var(--ds-stepper-title-process-color, var(--ds-color-text-primary, var(--ds-color-text)));
+}
+
+.rottay-stepper-step[data-status='error'] [data-part='label'] {
+  color: var(--ds-stepper-title-error-color, var(--ds-color-error));
+}
+
+.rottay-stepper-step [data-part='subtitle'] {
+  color: var(--ds-stepper-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)));
+}
+
+.rottay-stepper-step [data-part='description'] {
+  color: var(--ds-stepper-description-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)));
+}
+
+/* ---- Stepper.Step's connector: one fill, two orientations. The source wrote
+        the SAME two-branch ternary in both the horizontal and the vertical
+        object literal; the orientation only changed the box, never the color. -- */
+.rottay-stepper-connector[data-part='connector'][data-status='finish'] {
+  background-color: var(--ds-stepper-connector-finish-color, var(--ds-color-primary));
+}
+
+.rottay-stepper-connector[data-part='connector']:not([data-status='finish']) {
+  background-color: var(--ds-stepper-connector-color, var(--ds-color-border-secondary, var(--ds-color-border-primary)));
+}
+
+/* ---- Stepper.Content: the slide. Four fixed strings over a 4-value state enum
+        and a 2-value direction enum — no runtime measurement, so it is fully
+        expressible here. `fade` and `none` declare no transform at all (they
+        never did), so the `data-animation` guard keeps them out. `hidden` also
+        declares none. ---- */
+.rottay-stepper-content[data-part='panel'][data-animation='slide'][data-state='entering'][data-direction='forward'] {
+  transform: translateX(20px);
+}
+
+.rottay-stepper-content[data-part='panel'][data-animation='slide'][data-state='entering'][data-direction='backward'] {
+  transform: translateX(-20px);
+}
+
+.rottay-stepper-content[data-part='panel'][data-animation='slide'][data-state='visible'] {
+  transform: translateX(0);
+}
+
+.rottay-stepper-content[data-part='panel'][data-animation='slide'][data-state='exiting'][data-direction='forward'] {
+  transform: translateX(-20px);
+}
+
+.rottay-stepper-content[data-part='panel'][data-animation='slide'][data-state='exiting'][data-direction='backward'] {
+  transform: translateX(20px);
+}

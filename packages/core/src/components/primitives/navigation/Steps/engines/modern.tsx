@@ -64,38 +64,6 @@ const getStepClass = (status: StepStatus): string => {
 };
 
 /**
- * Returns inline style overrides for the step element so DS tokens
- * control the visual appearance instead of DaisyUI's built-in colors.
- * Keeps DaisyUI structural classes for layout only.
- * @internal
- */
-const getStepTokenStyle = (status: StepStatus): React.CSSProperties => {
-  const base: React.CSSProperties = {
-    '--step-neutral': 'var(--ds-steps-connector-color, var(--ds-color-border-secondary))',
-  } as React.CSSProperties;
-
-  switch (status) {
-    case 'finish':
-    case 'process':
-      return {
-        ...base,
-        '--step-color': 'var(--ds-color-primary)',
-        accentColor: 'var(--ds-color-primary)',
-        '--step-neutral': 'var(--ds-color-primary)',
-      } as React.CSSProperties;
-    case 'error':
-      return {
-        ...base,
-        '--step-color': 'var(--ds-color-error)',
-        accentColor: 'var(--ds-color-error)',
-      } as React.CSSProperties;
-    case 'wait':
-    default:
-      return base;
-  }
-};
-
-/**
  * Calculates the effective status for a step based on its position.
  *
  * @param index - Step index
@@ -208,13 +176,12 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
     return (
       <ul
         ref={ref}
-        className={`steps ${directionClass} ${sizeClass} ${className}`.trim()}
+        className={`rottay-steps rottay-steps--modern steps ${directionClass} ${sizeClass} ${className}`.trim()}
         style={style}
         data-part="root"
       >
         {computedSteps.map((step, index) => {
           const isClickable = !step.disabled && onChange;
-          const tokenStyle = getStepTokenStyle(step.effectiveStatus);
           return (
             <li
               key={index}
@@ -226,20 +193,19 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
               data-part="item"
               data-status={step.effectiveStatus}
               data-disabled={step.disabled || undefined}
-              style={tokenStyle}
             >
               <div className="flex flex-col items-start">
                 {/* Custom icon if provided and not in progressDot mode */}
                 {step.icon && !progressDot && <span className="mb-1" data-part="icon">{step.icon}</span>}
 
                 {/* Step title */}
-                <span className="font-medium" data-part="label" style={{ color: 'var(--ds-color-text-primary)' }}>{step.title}</span>
+                <span className="font-medium" data-part="label">{step.title}</span>
 
                 {/* Optional subtitle */}
-                {step.subTitle && <span className="text-xs" data-part="subtitle" style={{ color: 'var(--ds-color-text-tertiary)' }}>{step.subTitle}</span>}
+                {step.subTitle && <span className="text-xs" data-part="subtitle">{step.subTitle}</span>}
 
                 {/* Optional description */}
-                {step.description && <span className="text-sm mt-1" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</span>}
+                {step.description && <span className="text-sm mt-1" data-part="description">{step.description}</span>}
               </div>
             </li>
           );

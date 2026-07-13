@@ -1,0 +1,26 @@
+/**
+ * Modern HoverCard skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * This engine applies NO DaisyUI class (its file header used to claim it rides
+ * DaisyUI's `card` — it does not, and the comment is corrected). Nothing in
+ * theme.css or personality.css matches any element here.
+ *
+ * PORTAL: this engine does NOT portal (rustic DOES) — the card is an in-tree absolute
+ * sibling inside the trigger wrapper, two levels down (a Tailwind-positioned wrapper
+ * div sits between), so the surface is addressed as a descendant, not a child.
+ *
+ * SPECIFICITY (P-48): the card's colored border repeats its `data-part` to clear the
+ * tenant `*` border-color floor at (0,3,1).
+ */
+
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+.rottay-hover-card--modern[data-part='trigger'] [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}

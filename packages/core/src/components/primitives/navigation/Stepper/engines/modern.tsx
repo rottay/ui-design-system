@@ -84,36 +84,6 @@ function getStepClass(status: StepStatus): string {
  * driven by DS tokens to support tenant-aware theming.
  * @internal
  */
-function getStepTokenStyle(status: StepStatus): React.CSSProperties {
-  const base: React.CSSProperties = {
-    // Override DaisyUI connector-line color via the CSS custom property
-    // it exposes on step elements. The fallback ensures a neutral line
-    // when no DS token is set.
-    '--step-neutral': 'var(--ds-steps-connector-color, var(--ds-color-border-secondary))',
-  } as React.CSSProperties;
-
-  switch (status) {
-    case 'finish':
-    case 'process':
-      return {
-        ...base,
-        '--step-color': 'var(--ds-color-primary)',
-        accentColor: 'var(--ds-color-primary)',
-        // Override the connector line for reached steps
-        '--step-neutral': 'var(--ds-color-primary)',
-      } as React.CSSProperties;
-    case 'error':
-      return {
-        ...base,
-        '--step-color': 'var(--ds-color-error)',
-        accentColor: 'var(--ds-color-error)',
-      } as React.CSSProperties;
-    case 'wait':
-    default:
-      return base;
-  }
-}
-
 /**
  * Computes the status for a step based on its position.
  * @param index - Step index
@@ -151,7 +121,6 @@ function renderDaisySteps(
     // This lets consumers override specific steps while inheriting defaults elsewhere.
     const status = item.status || (globalStatus && index === current ? globalStatus : computeStatus(index, current));
     const stepClass = getStepClass(status);
-    const tokenStyle = getStepTokenStyle(status);
 
     return (
       <li
@@ -165,7 +134,6 @@ function renderDaisySteps(
         style={{
           cursor: clickable && !item.disabled ? 'pointer' : 'default',
           opacity: item.disabled ? 0.5 : 1,
-          ...tokenStyle,
         }}
         // DaisyUI's `data-content` attribute renders text/numbers inside the
         // step circle indicator. When a custom icon is provided, we skip it
@@ -176,9 +144,9 @@ function renderDaisySteps(
         data-disabled={item.disabled || undefined}
       >
         <div className="step-content">
-          <span className="font-medium" data-part="label" style={{ color: 'var(--ds-color-text-primary)' }}>{item.title}</span>
+          <span className="font-medium" data-part="label">{item.title}</span>
           {item.description && (
-            <span className="text-sm" data-part="description" style={{ color: 'var(--ds-color-text-tertiary)', opacity: 0.8 }}>{item.description}</span>
+            <span className="text-sm" data-part="description" style={{ opacity: 0.8 }}>{item.description}</span>
           )}
         </div>
       </li>

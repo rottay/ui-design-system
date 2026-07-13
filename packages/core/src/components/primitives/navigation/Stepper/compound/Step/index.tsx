@@ -202,38 +202,6 @@ export function StepperStep({
    * Gets the color configuration based on step status.
    * Uses CSS variables with fallback values.
    */
-  const getStatusColors = (s: StepStatus) => {
-    switch (s) {
-      case 'finish':
-        return {
-          bg: 'var(--ds-stepper-icon-finish-bg, var(--ds-color-primary))',
-          color: 'var(--ds-stepper-icon-finish-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)))',
-          border: 'var(--ds-stepper-icon-finish-border, var(--ds-color-primary))',
-        };
-      case 'process':
-        return {
-          bg: 'var(--ds-stepper-icon-process-bg, var(--ds-color-primary))',
-          color: 'var(--ds-stepper-icon-process-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)))',
-          border: 'var(--ds-stepper-icon-process-border, var(--ds-color-primary))',
-        };
-      case 'error':
-        return {
-          bg: 'var(--ds-stepper-icon-error-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-          color: 'var(--ds-stepper-icon-error-color, var(--ds-color-error))',
-          border: 'var(--ds-stepper-icon-error-border, var(--ds-color-error))',
-        };
-      case 'wait':
-      default:
-        return {
-          bg: 'var(--ds-stepper-icon-wait-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-          color: 'var(--ds-stepper-icon-wait-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))',
-          border: 'var(--ds-stepper-icon-wait-border, var(--ds-color-border-secondary, var(--ds-color-border-primary)))',
-        };
-    }
-  };
-
-  const statusColors = getStatusColors(status);
-
   // ============================================================================
   // Icon Renderer
   // ============================================================================
@@ -279,10 +247,6 @@ export function StepperStep({
     width: iconSize,
     height: iconSize,
     minWidth: iconSize,
-    borderRadius: variant === 'circles' || variant === 'default' ? '50%' : 'var(--ds-stepper-border-radius, 6px)',
-    backgroundColor: statusColors.bg,
-    color: statusColors.color,
-    border: `2px solid ${statusColors.border}`,
     fontSize: fontSize.title,
     fontWeight: 500,
     transition: 'all 0.3s ease',
@@ -299,11 +263,6 @@ export function StepperStep({
   const titleStyle: CSSProperties = {
     fontSize: fontSize.title,
     fontWeight: 500,
-    color: status === 'error'
-      ? 'var(--ds-stepper-title-error-color, var(--ds-color-error))'
-      : status === 'process'
-        ? 'var(--ds-stepper-title-process-color, var(--ds-color-text-primary, var(--ds-color-text)))'
-        : 'var(--ds-stepper-title-color, var(--ds-color-text-primary, var(--ds-color-text)))',
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
@@ -312,32 +271,25 @@ export function StepperStep({
 
   const subTitleStyle: CSSProperties = {
     fontSize: fontSize.description,
-    color: 'var(--ds-stepper-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))',
     marginLeft: '8px',
   };
 
   const descriptionStyle: CSSProperties = {
     fontSize: fontSize.description,
-    color: 'var(--ds-stepper-description-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))',
   };
 
-  // Connector line style (horizontal or vertical)
+  // Connector line style (horizontal or vertical); the fill rides `data-status`
+  // in the skin.
   const connectorStyle: CSSProperties = direction === 'horizontal' ? {
     flex: 1,
     minWidth: '32px',
     height: '1px',
-    backgroundColor: status === 'finish'
-      ? 'var(--ds-stepper-connector-finish-color, var(--ds-color-primary))'
-      : 'var(--ds-stepper-connector-color, var(--ds-color-border-secondary, var(--ds-color-border-primary)))',
     margin: '0 8px',
     alignSelf: 'center',
     transition: 'background-color 0.3s ease',
   } : {
     width: '1px',
     minHeight: '32px',
-    backgroundColor: status === 'finish'
-      ? 'var(--ds-stepper-connector-finish-color, var(--ds-color-primary))'
-      : 'var(--ds-stepper-connector-color, var(--ds-color-border-secondary, var(--ds-color-border-primary)))',
     marginLeft: `${iconSize / 2}px`,
     marginTop: '4px',
     marginBottom: '4px',
@@ -366,7 +318,7 @@ export function StepperStep({
         data-disabled={disabled || undefined}
       >
         {/* Step Icon/Number */}
-        <div className="rottay-stepper-step__icon" data-part="icon" style={iconContainerStyle}>
+        <div className="rottay-stepper-step__icon" data-part="icon" data-variant={variant} style={iconContainerStyle}>
           {renderIcon()}
         </div>
 

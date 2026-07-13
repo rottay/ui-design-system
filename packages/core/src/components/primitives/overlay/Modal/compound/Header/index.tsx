@@ -90,7 +90,6 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
       justifyContent: 'space-between',
       gap: '12px',
       padding: PADDING_MAP.lg,
-      borderBottom: divider ? '1px solid var(--ds-modal-header-border, rgba(0, 0, 0, 0.1))' : 'none',
       flexShrink: 0,
       ...style,
     };
@@ -101,13 +100,13 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
       fontSize: 'var(--ds-modal-title-font-size, 18px)',
       fontWeight: 'var(--ds-modal-title-font-weight, 600)',
       lineHeight: 1.4,
-      color: 'var(--ds-modal-title-color, inherit)',
     };
 
     return (
       <div
         ref={ref}
         data-part="header"
+        data-divider={divider ? 'true' : 'false'}
         className={`rottay-overlay-modal-header ${className}`}
         style={headerStyle}
       >

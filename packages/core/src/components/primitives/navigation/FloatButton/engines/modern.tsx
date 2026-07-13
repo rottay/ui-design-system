@@ -56,7 +56,20 @@ function getFloatButtonClassName(
     ? 'btn-circle'
     : 'rounded-lg';
 
-  return ['btn', shapeClassName, typeClassName, 'shadow-lg', className]
+  // The DaisyUI `btn` class list is load-bearing beyond color: `theme.css`'s
+  // layered `.btn:hover` / `.btn:active` rules are the ONLY source of this
+  // button's hover/press SCALE — no inline style ever contested them, so the
+  // interaction exists nowhere else. Removing or renaming these classes deletes
+  // it silently. The scope classes are prepended alongside, never in place of.
+  return [
+    'rottay-float-button',
+    'rottay-float-button--modern',
+    'btn',
+    shapeClassName,
+    typeClassName,
+    'shadow-lg',
+    className,
+  ]
     .filter(Boolean)
     .join(' ');
 }
@@ -99,20 +112,15 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       children,
     } = props;
 
-    // DS token inline styles for button shape and type variants
     const baseStyle: React.CSSProperties = {
       display: 'inline-flex',
       alignItems: 'center',
       justifyContent: 'center',
-      border: 'none',
       cursor: 'pointer',
       position: 'relative',
       ...(shape === 'circle'
-        ? { borderRadius: '50%', width: 40, height: 40 }
-        : { borderRadius: 'var(--ds-radius-lg)', padding: '8px 12px' }),
-      ...(type === 'primary'
-        ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
-        : { background: 'transparent', color: 'var(--ds-color-text-primary)' }),
+        ? { width: 40, height: 40 }
+        : { padding: '8px 12px' }),
     };
 
     // Badge rendering: dot takes priority over count to avoid conflicting
@@ -124,10 +132,10 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         {description && <span className="text-xs">{description}</span>}
         {children}
         {badge?.dot && (
-          <span data-part="badge" className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error" style={{ background: 'var(--ds-color-error)' }} />
+          <span data-part="badge" data-variant="dot" className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error" />
         )}
         {badge?.count && (
-          <span data-part="badge" style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 9999, padding: '1px 6px', fontSize: 11, lineHeight: '16px', background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' }}>
+          <span data-part="badge" data-variant="count" style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '1px 6px', fontSize: 11, lineHeight: '16px' }}>
             {badge.count > 99 ? '99+' : badge.count}
           </span>
         )}
@@ -136,11 +144,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
 
     // When href is provided, render as <a> for native link semantics and
     // accessibility; otherwise render as <button> for click-only actions
-    const floatStyle: React.CSSProperties = {
-      ...(type !== 'primary' ? { background: 'var(--ds-surface-card)' } : {}),
-      boxShadow: 'var(--ds-elevation-2)',
-      ...style,
-    };
+    const floatStyle: React.CSSProperties = { ...style };
     const floatClassName = getFloatButtonClassName(type, shape, className);
 
     const buttonElement = href ? (
@@ -274,16 +278,11 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
             display: 'inline-flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: 'none',
             cursor: 'pointer',
             zIndex: 10,
             ...(shape === 'circle'
-              ? { borderRadius: '50%', width: 40, height: 40 }
-              : { borderRadius: 'var(--ds-radius-lg)', padding: '8px 12px' }),
-            ...(type === 'primary'
-              ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
-              : { background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)' }),
-            boxShadow: 'var(--ds-elevation-2)',
+              ? { width: 40, height: 40 }
+              : { padding: '8px 12px' }),
           }}
           title={typeof tooltip === 'string' ? tooltip : undefined}
         >
@@ -390,15 +389,10 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
           display: 'inline-flex',
           alignItems: 'center',
           justifyContent: 'center',
-          border: 'none',
           cursor: 'pointer',
           ...(shape === 'circle'
-            ? { borderRadius: '50%', width: 40, height: 40 }
-            : { borderRadius: 'var(--ds-radius-lg)', padding: '8px 12px' }),
-          ...(type === 'primary'
-            ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }
-            : { background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)' }),
-          boxShadow: 'var(--ds-elevation-2)',
+            ? { width: 40, height: 40 }
+            : { padding: '8px 12px' }),
           ...style,
         }}
         title={typeof tooltip === 'string' ? tooltip : undefined}

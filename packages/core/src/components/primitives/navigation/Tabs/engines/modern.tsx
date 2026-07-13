@@ -74,7 +74,6 @@ interface IndicatorPos {
 function getTabItemStyle(
   type: string,
   isActive: boolean,
-  isHovered: boolean,
   isDisabled: boolean,
   sizeKey: string,
 ): React.CSSProperties {
@@ -89,9 +88,6 @@ function getTabItemStyle(
     alignItems: 'center',
     gap: '8px',
     whiteSpace: 'nowrap' as const,
-    border: 'none',
-    outline: 'none',
-    background: 'none',
     position: 'relative' as const,
     userSelect: 'none' as const,
     flexShrink: 0,
@@ -101,68 +97,18 @@ function getTabItemStyle(
 
   switch (type) {
     case 'line': {
-      // Active: primary text, 500 weight -- indicator handled separately
-      // Hover: secondary text
-      // Inactive: tertiary text
       return {
         ...base,
-        borderRadius: 0,
         paddingBottom: 'var(--ds-tabs-line-padding-bottom, 10px)',
         marginBottom: '-1px',
-        color: isDisabled
-          ? 'var(--ds-color-text-tertiary)'
-          : isActive
-            ? 'var(--ds-tab-color-active, var(--ds-color-text-primary))'
-            : isHovered
-              ? 'var(--ds-tab-color-hover, var(--ds-color-text-secondary))'
-              : 'var(--ds-tab-color, var(--ds-color-text-tertiary))',
         fontWeight: isActive ? 500 : 400,
       };
     }
 
-    case 'card': {
-      return {
-        ...base,
-        borderRadius: 'var(--ds-radius-md)',
-        backgroundColor: isDisabled
-          ? 'transparent'
-          : isActive
-            ? 'var(--ds-surface-card)'
-            : isHovered
-              ? 'var(--ds-tab-bg-hover, var(--ds-surface-highlight))'
-              : 'transparent',
-        boxShadow: isActive && !isDisabled
-          ? 'var(--ds-elevation-1)'
-          : 'none',
-        color: isDisabled
-          ? 'var(--ds-color-text-tertiary)'
-          : isActive
-            ? 'var(--ds-tab-color-active, var(--ds-color-text-primary))'
-            : isHovered
-              ? 'var(--ds-tab-color-hover, var(--ds-color-text-secondary))'
-              : 'var(--ds-tab-color, var(--ds-color-text-tertiary))',
-        fontWeight: isActive ? 500 : 400,
-      };
-    }
-
+    case 'card':
     case 'pills': {
       return {
         ...base,
-        borderRadius: '9999px',
-        backgroundColor: isDisabled
-          ? 'transparent'
-          : isActive
-            ? 'var(--ds-color-primary)'
-            : isHovered
-              ? 'var(--ds-color-alpha-black-100)'
-              : 'transparent',
-        color: isDisabled
-          ? 'var(--ds-color-text-tertiary)'
-          : isActive
-            ? 'var(--ds-color-text-on-primary)'
-            : isHovered
-              ? 'var(--ds-tab-color-hover, var(--ds-color-text-secondary))'
-              : 'var(--ds-tab-color, var(--ds-color-text-tertiary))',
         fontWeight: isActive ? 500 : 400,
       };
     }
@@ -188,9 +134,6 @@ function TabBadge({ children, sizeKey }: { children: React.ReactNode; sizeKey: s
         minWidth: '18px',
         height: '18px',
         padding: '0 6px',
-        borderRadius: '9999px',
-        backgroundColor: 'var(--ds-color-alpha-black-100)',
-        color: 'var(--ds-color-text-secondary)',
         fontSize: sizeStyle.badgeFontSize,
         fontWeight: 500,
         lineHeight: '1',
@@ -282,7 +225,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
   const tabListRef = useRef<HTMLDivElement>(null);
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [hoveredKey, setHoveredKey] = useState<string | null>(null);
   const [indicatorPos, setIndicatorPos] = useState<IndicatorPos | null>(null);
 
   // ============================================================================
@@ -385,13 +327,8 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
     overflowY: 'hidden',
     WebkitOverflowScrolling: 'touch',
     scrollbarWidth: 'none',
-    ...(type === 'line' && {
-      borderBottom: '1px solid var(--ds-tabs-border, var(--ds-color-border-subtle))',
-    }),
     ...(type === 'card' && {
       padding: '4px',
-      backgroundColor: 'var(--ds-surface-inset)',
-      borderRadius: 'var(--ds-radius-lg)',
       alignItems: 'center',
       gap: '2px',
     }),
@@ -414,6 +351,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   // supplies the visual width instead of transitioning the `width` property,
   // which the engine-token-audit.mjs compositor-only counter flags as a
   // layout-property animation.
+  // The `transform` is the one genuinely RUNTIME paint value in this family: it
+  // is measured from `getBoundingClientRect()` on every active-tab change, so it
+  // cannot be enumerated as CSS states and stays inline (contract-exempt).
   const indicatorStyle: React.CSSProperties | null = (type === 'line' && indicatorPos)
     ? {
         position: 'absolute',
@@ -421,8 +361,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         left: 0,
         height: '2px',
         width: '1px',
-        backgroundColor: 'var(--ds-tab-border-active, var(--ds-color-primary))',
-        borderRadius: '1px 1px 0 0',
         transformOrigin: 'left',
         transform: `translateX(${indicatorPos.left}px) scaleX(${indicatorPos.width})`,
         transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
@@ -435,7 +373,12 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   // ============================================================================
 
   return (
-    <div className={className} style={style} data-part="root">
+    <div
+      className={`rottay-tabs rottay-tabs--modern ${className}`.trim()}
+      style={style}
+      data-part="root"
+      data-variant={type || 'line'}
+    >
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
@@ -466,9 +409,8 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       >
         {items.map((item: TabItem) => {
           const isActive = item.key === currentKey;
-          const isHovered = item.key === hoveredKey && !item.disabled;
           const isDisabled = !!item.disabled;
-          const itemStyle = getTabItemStyle(type || 'line', isActive, isHovered, isDisabled, size as string);
+          const itemStyle = getTabItemStyle(type || 'line', isActive, isDisabled, size as string);
 
           return (
             <button
@@ -487,8 +429,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
               disabled={item.disabled}
               onClick={() => handleChange(item.key)}
               onKeyDown={(event) => handleKeyDown(event, item.key)}
-              onMouseEnter={() => setHoveredKey(item.key)}
-              onMouseLeave={() => setHoveredKey(null)}
               style={itemStyle}
             >
               {item.icon && (
@@ -525,7 +465,6 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
           tabIndex={0}
           style={{
             padding: 'var(--ds-spacing-4, 16px) 0 0 0',
-            outline: 'none',
             animation: 'rottay-tabs-fade-in var(--ds-motion-fast) var(--ds-motion-ease-out)',
           }}
         >

@@ -1,0 +1,94 @@
+/**
+ * Modern ConfirmDialog skin (WO-SKIN-04 checkpoint P).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all.
+ *
+ * PORTAL: NEITHER engine portals — both render in-tree as a `position: fixed` sibling.
+ * The scope class anchors every rule regardless.
+ *
+ * SCOPE ROOT is SELF-CARRYING: `rottay-confirm-dialog--modern` sits on the same node as
+ * `data-part='backdrop'` (the fixed positioning wrapper). The PAINTED scrim is a
+ * separate inner div, which the pre-step left unstamped; it now carries
+ * `data-part='scrim'` so it is addressable.
+ *
+ * TWO INDEPENDENT VARIANT TABLES ship today and are BOTH preserved, not merged:
+ *   - the ICON tint comes from the shared `VARIANT_COLORS` table
+ *     (`--ds-color-{primary,warning,error}-500` with hex fallbacks), and
+ *   - this engine's CONFIRM BUTTON comes from its own `VARIANT_BTN_STYLE` table
+ *     (the un-suffixed `--ds-color-{primary,warning,error}` + `--ds-color-text-on-primary`),
+ *     which is NOT `VARIANT_COLORS.button`.
+ * The rustic engine's confirm button DOES read `VARIANT_COLORS.button`, so the two
+ * engines paint the same button from different tokens. Collapsing them is a design
+ * decision, not a mechanical merge, and is out of scope for a byte-exact migration.
+ *
+ * The backdrop scrim is a flat 40% token here but a 50% fallback inside a 3-level chain
+ * on rustic. That mismatch also ships today and is preserved.
+ *
+ * This engine's dialog card has NO border (rustic's does) — likewise preserved.
+ *
+ * The spinner rides `ds-spin`, which is physically defined in `engines/rustic/theme.css`
+ * and resolves only because `engines/index.css` bundles all three engines' theme files
+ * into every tenant. Recorded, not changed.
+ */
+
+/* ---- scrim ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='scrim'] {
+  background: var(--ds-color-alpha-black-40);
+}
+
+/* ---- dialog card (no border, by design) ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] > [data-part='surface'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-3);
+}
+
+/* ---- icon tint: the shared VARIANT_COLORS table ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='info'] [data-part='icon'] {
+  color: var(--ds-color-primary-500, #1890ff);
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='warning'] [data-part='icon'] {
+  color: var(--ds-color-warning-500, #faad14);
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='danger'] [data-part='icon'] {
+  color: var(--ds-color-error-500, #ff4d4f);
+}
+
+/* ---- copy ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- cancel action ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- confirm action: this engine's OWN variant table (not VARIANT_COLORS) ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='action'][data-action='confirm'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='info'] [data-part='action'][data-action='confirm'] {
+  background: var(--ds-color-primary);
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='warning'] [data-part='action'][data-action='confirm'] {
+  background: var(--ds-color-warning);
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-variant='danger'] [data-part='action'][data-action='confirm'] {
+  background: var(--ds-color-error);
+}
+
+/* ---- loading spinner ring ---- */
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='spinner'] {
+  border-radius: 50%;
+}
+.rottay-confirm-dialog--modern[data-part='backdrop'] [data-part='spinner'][data-part='spinner'] {
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+}

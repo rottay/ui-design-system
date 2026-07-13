@@ -1,0 +1,134 @@
+/**
+ * Modern Tabs skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-tabs rottay-tabs--modern` + `data-part='root'` +
+ * `data-variant`. `data-variant` is the one stamp this migration had to add: the
+ * `type` prop (`line` | `card` | `pills`) rewrites nearly every channel on the
+ * tab button AND the tab list, and the pre-step gave the buttons only
+ * `data-selected` / `data-disabled` — with no type discriminator the three
+ * variants would have to share one rule.
+ *
+ * THE INDICATOR'S `transform` STAYS INLINE and is the file's one sanctioned
+ * counter residual: it is measured from `getBoundingClientRect()` on every
+ * active-tab change (a `scaleX` on a fixed 1px box, deliberately compositor-only
+ * so the separate compositor-only ratchet stays green). Its STATIC channels —
+ * the fill and the radius — live here.
+ *
+ * THE INJECTED PER-INSTANCE `<style>` IS LEFT VERBATIM. It carries the
+ * `::-webkit-scrollbar` reset, `@keyframes rottay-tabs-fade-in`, and an
+ * `!important` `:focus-visible` outline, all scoped by `[data-tabs-id="…"]` to
+ * one Tabs instance. Hoisting it would mean renaming the keyframe and
+ * re-deriving the `!important` outline's priority against a scope it no longer
+ * has — a visual risk with nothing to gain here, since the counter never saw it
+ * (its content is a JS string).
+ *
+ * PRIORITY CHAIN: the source resolved ONE `color` (and one `background`) through
+ * a 4-way ternary — disabled > active > hovered > default. Each CSS rule below
+ * therefore carries the `:not()` guards that make exactly one of them win per
+ * state combination, and hover is gated on `:not([data-disabled])` exactly where
+ * the JS gated `!item.disabled`. The `hoveredKey` state drove nothing but this
+ * paint and is gone with it.
+ *
+ * SPECIFICITY (P-48): the `line` tab-list's `border-bottom` carries a real color
+ * and must clear the tenant's unlayered `* { border-color }` floor at (0,3,1),
+ * so it reaches (0,4,0) and stays a SHORTHAND. The tab button's `border: none`
+ * and `outline: none` are color-free resets, exempt. Non-border paint wins at
+ * (0,3,0).
+ */
+
+/* ---- tab list: `line` gets the rule the tabs sit on; `card` gets an inset
+        tray. `pills` paints nothing (it never did). ---- */
+.rottay-tabs--modern[data-part='root'][data-variant='line'] [data-part='tab-list'][data-part='tab-list'] {
+  border-bottom: 1px solid var(--ds-tabs-border, var(--ds-color-border-subtle));
+}
+
+.rottay-tabs--modern[data-part='root'][data-variant='card'] [data-part='tab-list'] {
+  background-color: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- every tab button is a bare, chromeless control before its variant
+        paints it. ---- */
+.rottay-tabs--modern[data-part='root'] [data-part='tab-button'] {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* ---- variant geometry. ---- */
+.rottay-tabs--modern[data-part='root'][data-variant='line'] [data-part='tab-button'] {
+  border-radius: 0;
+}
+.rottay-tabs--modern[data-part='root'][data-variant='card'] [data-part='tab-button'] {
+  border-radius: var(--ds-radius-md);
+}
+.rottay-tabs--modern[data-part='root'][data-variant='pills'] [data-part='tab-button'] {
+  border-radius: 9999px;
+}
+
+/* ---- the shared text ramp: default < hover < active < disabled.
+        `line`, `card` and `pills` all resolved `color` identically EXCEPT that
+        pills inverts on active, so pills overrides it below. ---- */
+.rottay-tabs--modern[data-part='root'] [data-part='tab-button'][data-selected='false']:not([data-disabled]) {
+  color: var(--ds-tab-color, var(--ds-color-text-tertiary));
+}
+.rottay-tabs--modern[data-part='root'] [data-part='tab-button'][data-selected='false']:not([data-disabled]):hover {
+  color: var(--ds-tab-color-hover, var(--ds-color-text-secondary));
+}
+.rottay-tabs--modern[data-part='root'] [data-part='tab-button'][data-selected='true']:not([data-disabled]) {
+  color: var(--ds-tab-color-active, var(--ds-color-text-primary));
+}
+.rottay-tabs--modern[data-part='root'] [data-part='tab-button'][data-disabled] {
+  color: var(--ds-color-text-tertiary);
+}
+
+/* pills is the one variant whose ACTIVE tab inverts onto the primary fill. */
+.rottay-tabs--modern[data-part='root'][data-variant='pills'] [data-part='tab-button'][data-selected='true']:not([data-disabled]) {
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- card: fill + lift. Disabled is transparent and flat. ---- */
+.rottay-tabs--modern[data-part='root'][data-variant='card'] [data-part='tab-button'] {
+  background-color: transparent;
+  box-shadow: none;
+}
+.rottay-tabs--modern[data-part='root'][data-variant='card'] [data-part='tab-button'][data-selected='false']:not([data-disabled]):hover {
+  background-color: var(--ds-tab-bg-hover, var(--ds-surface-highlight));
+}
+.rottay-tabs--modern[data-part='root'][data-variant='card'] [data-part='tab-button'][data-selected='true']:not([data-disabled]) {
+  background-color: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* ---- pills: fill only, no lift. ---- */
+.rottay-tabs--modern[data-part='root'][data-variant='pills'] [data-part='tab-button'] {
+  background-color: transparent;
+}
+.rottay-tabs--modern[data-part='root'][data-variant='pills'] [data-part='tab-button'][data-selected='false']:not([data-disabled]):hover {
+  background-color: var(--ds-color-alpha-black-100);
+}
+.rottay-tabs--modern[data-part='root'][data-variant='pills'] [data-part='tab-button'][data-selected='true']:not([data-disabled]) {
+  background-color: var(--ds-color-primary);
+}
+
+/* ---- badge + indicator. ---- */
+.rottay-tabs--modern[data-part='root'] [data-part='tab-badge'] {
+  border-radius: 9999px;
+  background-color: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-tabs--modern[data-part='root'] [data-part='indicator'] {
+  background-color: var(--ds-tab-border-active, var(--ds-color-primary));
+  border-radius: 1px 1px 0 0;
+}
+
+/* ---- the panel is focusable (tabIndex=0) but draws no ring of its own; the
+        instance-scoped `<style>` block owns the tab BUTTONS' focus ring. ---- */
+.rottay-tabs--modern[data-part='root'] [data-part='tab-panel'] {
+  outline: none;
+}

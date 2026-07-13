@@ -32,7 +32,6 @@ const MenuItem: React.FC<{
         data-part="divider"
         style={{
           height: '1px',
-          backgroundColor: 'var(--ds-dropdown-divider-color, var(--ds-color-neutral-200, #e5e7eb))',
           margin: '4px 0',
         }}
       />
@@ -46,7 +45,6 @@ const MenuItem: React.FC<{
         style={{
           padding: '4px 12px',
           fontSize: '12px',
-          color: 'var(--ds-dropdown-group-color, var(--ds-color-neutral-500, #6b7280))',
           fontWeight: 500,
         }}
       >
@@ -73,21 +71,10 @@ const MenuItem: React.FC<{
         gap: '8px',
         width: '100%',
         padding: '8px 12px',
-        border: 'none',
-        background: 'transparent',
         cursor: item.disabled ? 'not-allowed' : 'pointer',
         opacity: item.disabled ? 0.5 : 1,
-        color: item.danger ? 'var(--ds-dropdown-danger-color, var(--ds-color-error-500, #ef4444))' : 'inherit',
         textAlign: 'left',
         fontSize: '14px',
-      }}
-      onMouseEnter={(e) => {
-        if (!item.disabled) {
-          e.currentTarget.style.backgroundColor = 'var(--ds-dropdown-item-hover-bg, var(--ds-color-neutral-100, #f3f4f6))';
-        }
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'transparent';
       }}
     >
       {item.icon}
@@ -239,6 +226,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
           role="menu"
           data-part="surface"
           data-open="true"
+          data-placement={placement}
           className={`rottay-dropdown--rustic ${overlayClassName || ''}`}
           style={{
             position: 'absolute',
@@ -246,11 +234,7 @@ export const Dropdown = React.forwardRef<HTMLDivElement, DropdownProps>(
             left: position.left,
             zIndex: 'var(--ds-dropdown-z-index, 1050)' as unknown as number,
             minWidth: 'var(--ds-dropdown-min-width, 160px)',
-            backgroundColor: 'var(--ds-dropdown-bg, #fff)',
-            borderRadius: 'var(--ds-dropdown-radius, 12px)',
-            boxShadow: 'var(--ds-dropdown-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))',
             padding: '4px 0',
-            transform: placement?.includes('top') ? 'translateY(-100%)' : undefined,
             ...overlayStyle,
           }}
           onMouseEnter={handleMouseEnter}

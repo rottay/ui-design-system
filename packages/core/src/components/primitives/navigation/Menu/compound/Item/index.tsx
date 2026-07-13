@@ -124,11 +124,6 @@ export function MenuItem({
     minHeight: 'var(--ds-menu-item-height, 40px)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : 1,
-    color: danger
-      ? 'var(--ds-menu-item-danger-color, var(--ds-color-error))'
-      : 'var(--ds-menu-item-color, inherit)',
-    backgroundColor: 'transparent',
-    borderRadius: 'var(--ds-menu-border-radius, 8px)',
     transition: 'all 0.2s ease',
     userSelect: 'none',
     ...style,

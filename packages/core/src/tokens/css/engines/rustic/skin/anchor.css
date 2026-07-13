@@ -1,0 +1,40 @@
+/**
+ * Rustic Anchor skin (WO-SKIN-04 checkpoint N).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule cannot paint these elements at all. Unlayered
+ * still yields to a caller's inline `style`.
+ *
+ * SCOPE: the link `<a>` carries `rottay-anchor-link rottay-anchor-link--rustic`
+ * + `data-part='item'` + `data-selected`. It IS the painted element, so the
+ * rules are COMPOUND (no descendant space).
+ *
+ * BORDER SHORTHAND IS ATOMIC: the rest border is `2px solid transparent` — a
+ * real color, not a `none`/`0` reset — so it must clear the tenant's unlayered
+ * `* { border-color }` floor at (0,3,1) or the left edge would newly paint in
+ * the tenant border color. It reaches (0,4,0) via the two scope classes + a
+ * repeated `data-part`, and stays a SHORTHAND (never split into width/style +
+ * a separate color).
+ *
+ * HOVER: `:hover:not([data-selected='true'])` reproduces the JS guard
+ * `isHovered && !isActive` exactly — hover was suppressed on the active link.
+ * The `useInteractionState()` hover state drove nothing but this one color and
+ * is gone with it.
+ */
+
+.rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'][data-part='item'] {
+  border-left: 2px solid transparent;
+}
+
+.rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'] {
+  color: var(--ds-anchor-link-color, var(--ds-color-neutral-600, #595959));
+}
+
+.rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'][data-selected='true'] {
+  color: var(--ds-anchor-link-active-color, var(--ds-color-primary-500, #1890ff));
+  border-left-color: var(--ds-anchor-link-active-border, var(--ds-color-primary-500, #1890ff));
+}
+
+.rottay-anchor-link.rottay-anchor-link--rustic[data-part='item']:hover:not([data-selected='true']) {
+  color: var(--ds-anchor-link-hover-color, var(--ds-color-primary-500, #1890ff));
+}
