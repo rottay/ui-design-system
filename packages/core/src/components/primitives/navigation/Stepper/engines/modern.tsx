@@ -171,11 +171,14 @@ function renderDaisySteps(
         // step circle indicator. When a custom icon is provided, we skip it
         // so the icon can be rendered inside the step-content div instead.
         data-content={item.icon ? undefined : (index + 1).toString()}
+        data-part="item"
+        data-status={status}
+        data-disabled={item.disabled || undefined}
       >
         <div className="step-content">
-          <span className="font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>{item.title}</span>
+          <span className="font-medium" data-part="label" style={{ color: 'var(--ds-color-text-primary)' }}>{item.title}</span>
           {item.description && (
-            <span className="text-sm" style={{ color: 'var(--ds-color-text-tertiary)', opacity: 0.8 }}>{item.description}</span>
+            <span className="text-sm" data-part="description" style={{ color: 'var(--ds-color-text-tertiary)', opacity: 0.8 }}>{item.description}</span>
           )}
         </div>
       </li>
@@ -315,6 +318,7 @@ export default function ModernStepper(props: StepperProps): React.ReactElement {
       style={containerStyle}
       role="navigation"
       aria-label="Progress steps"
+      data-part="root"
     >
       {stepsContent}
     </ul>

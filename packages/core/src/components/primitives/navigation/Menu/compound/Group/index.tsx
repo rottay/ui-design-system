@@ -125,12 +125,14 @@ export function MenuGroup({
       className={`rottay-menu-group ${className}`}
       style={groupStyle}
       role="presentation"
+      data-part="group"
     >
       {/* Group title header */}
       <div
         className="rottay-menu-group__title"
         style={titleStyle}
         role="presentation"
+        data-part="group-label"
       >
         {title}
       </div>
@@ -140,6 +142,7 @@ export function MenuGroup({
         className="rottay-menu-group__content"
         style={contentStyle}
         role="group"
+        data-part="panel"
         aria-label={typeof title === 'string' ? title : undefined}
       >
         {children}

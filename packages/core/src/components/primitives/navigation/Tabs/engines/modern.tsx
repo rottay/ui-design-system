@@ -180,6 +180,7 @@ function TabBadge({ children, sizeKey }: { children: React.ReactNode; sizeKey: s
   const sizeStyle = SIZE_CONFIG[sizeKey] || SIZE_CONFIG.md;
   return (
     <span
+      data-part="tab-badge"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -434,7 +435,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   // ============================================================================
 
   return (
-    <div className={className} style={style}>
+    <div className={className} style={style} data-part="root">
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
@@ -459,6 +460,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         role="tablist"
         aria-orientation="horizontal"
         data-tabs-id={tabsId}
+        data-part="tab-list"
         style={tabListStyle}
         {...(responsive ? responsive.attrs : {})}
       >
@@ -476,6 +478,9 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
               }}
               id={`tabs-tab-${tabsId}-${item.key}`}
               role="tab"
+              data-part="tab-button"
+              data-selected={isActive}
+              data-disabled={isDisabled || undefined}
               aria-selected={isActive}
               aria-controls={`tabs-panel-${tabsId}-${item.key}`}
               tabIndex={isActive ? 0 : -1}
@@ -488,6 +493,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
             >
               {item.icon && (
                 <span
+                  data-part="icon"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -506,7 +512,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         })}
 
         {/* Sliding indicator for line type */}
-        {indicatorStyle && <span style={indicatorStyle} aria-hidden="true" />}
+        {indicatorStyle && <span data-part="indicator" style={indicatorStyle} aria-hidden="true" />}
       </div>
 
       {/* Tab Panel */}
@@ -514,6 +520,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
         <div
           id={`tabs-panel-${tabsId}-${activeItem.key}`}
           role="tabpanel"
+          data-part="tab-panel"
           aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
           tabIndex={0}
           style={{

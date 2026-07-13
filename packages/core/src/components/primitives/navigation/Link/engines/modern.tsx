@@ -192,6 +192,9 @@ export default function ModernLink(props: LinkProps): React.ReactElement {
       className={linkClasses}
       onClick={handleClick}
       aria-disabled={disabled}
+      data-part="root"
+      data-variant={type}
+      data-disabled={disabled || undefined}
       style={{
         color: typeColorMap[type],
         textDecoration: underline

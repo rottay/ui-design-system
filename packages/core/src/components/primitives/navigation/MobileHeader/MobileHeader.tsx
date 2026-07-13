@@ -97,6 +97,7 @@ export function MobileHeader({
         } as CSSProperties}
         aria-label="Go back"
         data-testid="mobile-header-back"
+        data-part="trigger"
       >
         <BackArrowIcon />
       </Box>
@@ -126,6 +127,7 @@ export function MobileHeader({
       style={containerStyle}
       data-testid="mobile-header"
       role="banner"
+      data-part="root"
     >
       <Flex
         align="center"
@@ -172,6 +174,7 @@ export function MobileHeader({
                 color: 'var(--ds-color-text-primary)',
               }}
               data-testid="mobile-header-title"
+              data-part="label"
             >
               {title}
             </Text>

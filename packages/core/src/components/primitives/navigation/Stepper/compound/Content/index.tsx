@@ -262,6 +262,10 @@ export function StepperContent({
       role="tabpanel"
       aria-hidden={!isActive}
       data-step={stepIndex}
+      data-part="panel"
+      data-active={isActive || undefined}
+      data-state={animationState}
+      data-direction={direction}
     >
       {children}
     </div>

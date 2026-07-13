@@ -236,10 +236,10 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
   // ============================================================================
 
   return (
-    <div className={className} style={containerStyle}>
+    <div className={className} style={containerStyle} data-part="root">
       {/* Total items display */}
       {showTotal && (
-        <div style={{ fontSize: '0.875rem', color: 'var(--ds-pagination-total-color, var(--ds-color-neutral-600, #666))' }}>
+        <div data-part="pagination-range" style={{ fontSize: '0.875rem', color: 'var(--ds-pagination-total-color, var(--ds-color-neutral-600, #666))' }}>
           {t('pagination.total_items', { total })}
         </div>
       )}
@@ -251,6 +251,8 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
           style={getButtonStyle(false, disabled || current === 1)}
           onClick={() => handlePageChange(current - 1)}
           disabled={disabled || current === 1}
+          data-part="pagination-nav-button"
+          data-direction="prev"
         >
           «
         </button>
@@ -263,6 +265,8 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
               style={getButtonStyle(page === current, disabled || false)}
               onClick={() => handlePageChange(page)}
               disabled={disabled}
+              data-part="pagination-page-button"
+              data-current={page === current}
             >
               {page}
             </button>
@@ -271,6 +275,7 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
               key={`ellipsis-${index}`}
               style={getButtonStyle(false, true)}
               disabled
+              data-part="ellipsis"
             >
               {page}
             </button>
@@ -282,6 +287,8 @@ export default function RusticPagination(props: PaginationProps): React.ReactEle
           style={getButtonStyle(false, disabled || current === totalPages)}
           onClick={() => handlePageChange(current + 1)}
           disabled={disabled || current === totalPages}
+          data-part="pagination-nav-button"
+          data-direction="next"
         >
           »
         </button>

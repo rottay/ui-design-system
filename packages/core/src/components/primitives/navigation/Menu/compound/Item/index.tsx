@@ -145,16 +145,19 @@ export function MenuItem({
       onClick={handleClick}
       onKeyDown={handleKeyDown}
       role="menuitem"
+      data-part="item"
+      data-disabled={disabled || undefined}
+      data-tone={danger ? 'danger' : undefined}
       tabIndex={disabled ? -1 : 0}
       aria-disabled={disabled}
       title={title}
       data-key={itemKey}
     >
       {/* Icon container */}
-      {icon && <span className="rottay-menu-item__icon">{icon}</span>}
+      {icon && <span className="rottay-menu-item__icon" data-part="icon">{icon}</span>}
 
       {/* Label text */}
-      <span className="rottay-menu-item__label">{children}</span>
+      <span className="rottay-menu-item__label" data-part="label">{children}</span>
     </li>
   );
 }

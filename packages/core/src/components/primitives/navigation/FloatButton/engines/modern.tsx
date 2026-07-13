@@ -124,10 +124,10 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         {description && <span className="text-xs">{description}</span>}
         {children}
         {badge?.dot && (
-          <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error" style={{ background: 'var(--ds-color-error)' }} />
+          <span data-part="badge" className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-error" style={{ background: 'var(--ds-color-error)' }} />
         )}
         {badge?.count && (
-          <span style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 9999, padding: '1px 6px', fontSize: 11, lineHeight: '16px', background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' }}>
+          <span data-part="badge" style={{ position: 'absolute', top: -8, right: -8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 9999, padding: '1px 6px', fontSize: 11, lineHeight: '16px', background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' }}>
             {badge.count > 99 ? '99+' : badge.count}
           </span>
         )}
@@ -151,6 +151,9 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         className={floatClassName}
         style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
+        data-part="trigger"
+        data-variant={type}
+        data-shape={shape}
       >
         {content}
       </a>
@@ -162,6 +165,9 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         className={floatClassName}
         style={{ ...baseStyle, ...floatStyle }}
         title={typeof tooltip === 'string' ? tooltip : undefined}
+        data-part="trigger"
+        data-variant={type}
+        data-shape={shape}
       >
         {content}
       </button>
@@ -252,12 +258,18 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        data-part="root"
+        data-open={isOpen}
       >
         {/* Trigger button */}
         <button
           type="button"
           onClick={trigger === 'click' ? handleToggle : undefined}
           className={getFloatButtonClassName(type, shape)}
+          data-part="trigger"
+          data-variant={type}
+          data-shape={shape}
+          data-open={isOpen}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -283,6 +295,8 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
           className={`flex flex-col items-center gap-2 transition-all duration-200 ${
             isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
+          data-part="panel"
+          data-open={isOpen}
         >
           {children}
         </div>
@@ -369,6 +383,9 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         type="button"
         onClick={scrollToTop}
         className={`fixed bottom-6 right-6 transition-opacity duration-200 ${getFloatButtonClassName(type, shape, className)}`}
+        data-part="trigger"
+        data-variant={type}
+        data-shape={shape}
         style={{
           display: 'inline-flex',
           alignItems: 'center',

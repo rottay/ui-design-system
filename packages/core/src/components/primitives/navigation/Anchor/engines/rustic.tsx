@@ -263,6 +263,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
             ...(isHovered && !isActive ? styles.linkHover : {}),
             ...style,
           }}
+          data-part="item"
+          data-selected={isActive}
         >
           {title}
         </a>
@@ -438,6 +440,7 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
             ...(direction === 'horizontal' ? styles.containerHorizontal : {}),
             ...style,
           }}
+          data-part="root"
         >
           {children}
         </div>

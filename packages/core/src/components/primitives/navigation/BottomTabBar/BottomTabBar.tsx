@@ -95,10 +95,13 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
       aria-selected={isActive}
       aria-label={item.label}
       data-testid={`tab-item-${item.key}`}
+      data-part="tab-button"
+      data-selected={isActive}
     >
       {/* Icon container with optional badge */}
       <Box style={{ position: 'relative', width: 24, height: 24 }}>
         <Box
+          data-part="icon"
           style={{
             width: 24,
             height: 24,
@@ -114,6 +117,7 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
         {/* Badge indicator */}
         {item.badge != null && item.badge > 0 && (
           <Box
+            data-part="badge"
             style={{
               position: 'absolute',
               top: -4,
@@ -146,6 +150,7 @@ function TabItemRenderer({ item, isActive, onSelect }: TabItemRendererProps) {
 
       {/* Label */}
       <Text
+        data-part="label"
         style={{
           fontSize: 11,
           lineHeight: '14px',
@@ -200,6 +205,7 @@ export function BottomTabBar({
       data-testid="bottom-tab-bar"
       role="tablist"
       aria-label="Bottom navigation"
+      data-part="root"
     >
       <Flex
         align="stretch"

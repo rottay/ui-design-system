@@ -185,6 +185,8 @@ export const Link = React.forwardRef<HTMLAnchorElement, AnchorLinkProps>(
             ...(isActive ? { borderColor: 'var(--ds-color-primary)' } : {}),
             ...style,
           }}
+          data-part="item"
+          data-selected={isActive}
         >
           {title}
         </a>
@@ -353,6 +355,7 @@ export const Anchor = React.forwardRef<HTMLDivElement, AnchorProps>(
             direction === 'horizontal' ? 'flex gap-2' : ''
           } ${className}`}
           style={{ top: affix ? offsetTop : undefined, ...style }}
+          data-part="root"
         >
           {children}
         </div>

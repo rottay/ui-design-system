@@ -209,7 +209,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
     // ========================================================================
 
     return (
-      <ol ref={ref} className={className} style={containerStyle}>
+      <ol ref={ref} className={className} style={containerStyle} data-part="root">
         {computedSteps.map((step, index) => {
           const colors = getStatusColors(step.effectiveStatus);
           const isLast = index === items.length - 1;
@@ -234,7 +234,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                 description: step.description ?? '',
               };
               return (
-                <span style={{ width: 8, height: 8, borderRadius: '50%', marginRight: 8 }}>
+                <span data-part="icon" style={{ width: 8, height: 8, borderRadius: '50%', marginRight: 8 }}>
                   {progressDot(dotInfo)}
                 </span>
               );
@@ -244,6 +244,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
             if (progressDot) {
               return (
                 <span
+                  data-part="icon"
                   style={{
                     width: 8,
                     height: 8,
@@ -260,6 +261,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
             if (step.icon) {
               return (
                 <span
+                  data-part="icon"
                   style={{
                     width: isSmall ? 24 : 32,
                     height: isSmall ? 24 : 32,
@@ -292,6 +294,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
 
             return (
               <span
+                data-part="icon"
                 style={{
                   width: isSmall ? 24 : 32,
                   height: isSmall ? 24 : 32,
@@ -320,6 +323,9 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
           return (
             <li
               key={index}
+              data-part="item"
+              data-status={step.effectiveStatus}
+              data-disabled={step.disabled || undefined}
               style={{
                 flex: 1,
                 display: 'flex',
@@ -338,6 +344,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
               <div style={{ display: 'flex', flexDirection: 'column' }}>
                 {/* Title and subtitle */}
                 <span
+                  data-part="label"
                   style={{
                     fontSize: isSmall ? 12 : 14,
                     fontWeight: 500,
@@ -348,7 +355,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                 >
                   {step.title}
                   {step.subTitle && (
-                    <span style={{ fontSize: 12, color: 'var(--ds-steps-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))', marginLeft: 8 }}>
+                    <span data-part="subtitle" style={{ fontSize: 12, color: 'var(--ds-steps-subtitle-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))', marginLeft: 8 }}>
                       {step.subTitle}
                     </span>
                   )}
@@ -356,7 +363,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
 
                 {/* Description */}
                 {step.description && (
-                  <span style={{ fontSize: 12, color: 'var(--ds-steps-description-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))', marginTop: 4 }}>
+                  <span data-part="description" style={{ fontSize: 12, color: 'var(--ds-steps-description-color, var(--ds-color-text-tertiary, var(--ds-color-text-secondary)))', marginTop: 4 }}>
                     {step.description}
                   </span>
                 )}
@@ -368,6 +375,7 @@ export const Steps = React.forwardRef<HTMLOListElement, StepsProps>(
                   to visually indicate progress between finished steps. */}
               {!isLast && (
                 <span
+                  data-part="connector"
                   style={{
                     position: 'absolute',
                     height: isVertical ? 'calc(100% - 32px)' : 2,

@@ -315,6 +315,7 @@ export const RusticAffix = forwardRef<HTMLDivElement, AffixProps>(
           ref={ref}
           className={`rottay-affix rottay-affix--rustic ${className}`}
           style={stickyStyle}
+          data-part="root"
         >
           {children}
         </div>
@@ -355,6 +356,8 @@ export const RusticAffix = forwardRef<HTMLDivElement, AffixProps>(
           }}
           className={`rottay-affix rottay-affix--rustic ${state.affixed ? 'rottay-affix--affixed' : ''} ${className}`}
           style={affixedStyle}
+          data-part="root"
+          data-sticky={state.affixed || undefined}
         >
           {children}
         </div>

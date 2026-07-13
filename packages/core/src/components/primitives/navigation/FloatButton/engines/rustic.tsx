@@ -220,10 +220,10 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
         {description && <span style={styles.description}>{description}</span>}
         {children}
         {badge?.dot && (
-          <span style={{ ...styles.badge, ...styles.badgeDot }} />
+          <span data-part="badge" style={{ ...styles.badge, ...styles.badgeDot }} />
         )}
         {badge?.count && (
-          <span style={styles.badge}>
+          <span data-part="badge" style={styles.badge}>
             {badge.count > 99 ? '99+' : badge.count}
           </span>
         )}
@@ -238,6 +238,9 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       title: typeof tooltip === 'string' ? tooltip : undefined,
       onMouseEnter: () => setIsHovered(true),
       onMouseLeave: () => setIsHovered(false),
+      'data-part': 'trigger',
+      'data-variant': type,
+      'data-shape': shape,
     };
 
     // Render as anchor if href is provided
@@ -347,6 +350,8 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
         }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        data-part="root"
+        data-open={isOpen}
       >
         {/* Trigger button */}
         <button
@@ -355,6 +360,10 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           title={typeof tooltip === 'string' ? tooltip : undefined}
+          data-part="trigger"
+          data-variant={type}
+          data-shape={shape}
+          data-open={isOpen}
           style={{
             ...styles.button,
             ...(shape === 'circle' ? styles.buttonCircle : styles.buttonSquare),
@@ -368,6 +377,8 @@ export const Group = React.forwardRef<HTMLDivElement, FloatButtonGroupProps>(
 
         {/* Child buttons container */}
         <div
+          data-part="panel"
+          data-open={isOpen}
           style={{
             ...styles.groupItems,
             ...(isOpen ? {} : styles.groupItemsHidden),
@@ -463,6 +474,9 @@ export const BackTop = React.forwardRef<HTMLButtonElement, FloatButtonBackTopPro
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={className}
+        data-part="trigger"
+        data-variant={type}
+        data-shape={shape}
         style={{
           ...styles.button,
           ...styles.fixed,

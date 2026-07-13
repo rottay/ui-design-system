@@ -264,12 +264,12 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
   // ============================================================================
 
   return (
-    <div className={className} style={style}>
+    <div className={className} style={style} data-part="root">
       {responsive && responsive.css && (
         <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
       )}
       {/* Tab List */}
-      <div role="tablist" style={tabListStyle} {...(responsive ? responsive.attrs : {})}>
+      <div role="tablist" data-part="tab-list" style={tabListStyle} {...(responsive ? responsive.attrs : {})}>
         {items.map((item: TabItem) => (
           <button
             key={item.key}
@@ -278,6 +278,9 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
             }}
             id={`tabs-tab-${tabsId}-${item.key}`}
             role="tab"
+            data-part="tab-button"
+            data-selected={item.key === currentKey}
+            data-disabled={item.disabled || undefined}
             aria-selected={item.key === currentKey}
             aria-controls={`tabs-panel-${tabsId}-${item.key}`}
             tabIndex={item.key === currentKey ? 0 : -1}
@@ -296,6 +299,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
         <div
           id={`tabs-panel-${tabsId}-${activeItem.key}`}
           role="tabpanel"
+          data-part="tab-panel"
           aria-labelledby={`tabs-tab-${tabsId}-${activeItem.key}`}
           tabIndex={0}
           style={{ padding: '1rem' }}

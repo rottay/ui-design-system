@@ -315,6 +315,10 @@ function MenuItemRow({
     <li key={item.key} style={{ listStyle: 'none', margin: '0.5px 0' }}>
       <a
         role="menuitem"
+        data-part="item"
+        data-selected={isSelected}
+        data-disabled={item.disabled || undefined}
+        data-tone={item.danger ? 'danger' : undefined}
         tabIndex={item.disabled ? -1 : 0}
         style={composedStyle}
         aria-disabled={item.disabled || undefined}
@@ -348,12 +352,14 @@ function MenuItemRow({
         {/* Left accent bar for active top-level items */}
         {isSelected && !isChild && (
           <span
+            data-part="indicator"
             aria-hidden="true"
             style={getAccentBarStyle()}
           />
         )}
         {item.icon && (
           <span
+            data-part="icon"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -369,7 +375,7 @@ function MenuItemRow({
             {item.icon}
           </span>
         )}
-        <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span data-part="label" style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {item.label}
         </span>
       </a>
@@ -435,6 +441,8 @@ function SubmenuRow({
       <details open={isOpen}>
         <summary
           style={summaryStyle}
+          data-part="trigger"
+          data-disabled={item.disabled || undefined}
           tabIndex={item.disabled ? -1 : 0}
           aria-disabled={item.disabled || undefined}
           aria-expanded={isOpen}
@@ -467,6 +475,7 @@ function SubmenuRow({
         >
           {item.icon && (
             <span
+              data-part="icon"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -482,11 +491,12 @@ function SubmenuRow({
               {item.icon}
             </span>
           )}
-          <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <span data-part="label" style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {item.label}
           </span>
           {/* Chevron indicator */}
               <span
+                data-part="arrow-icon"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -517,6 +527,7 @@ function SubmenuRow({
         </summary>
         <ul
           role="group"
+          data-part="panel"
           style={{
             listStyle: 'none',
             padding: '0 0 1px 0',
@@ -557,16 +568,16 @@ function renderModernMenuItems(
   return items.map((item) => {
     // Divider
     if (item.type === 'divider') {
-      return <li key={item.key} style={getDividerStyle()} aria-hidden="true" />;
+      return <li key={item.key} data-part="divider" style={getDividerStyle()} aria-hidden="true" />;
     }
 
     // Group
     if (item.type === 'group') {
       return (
-        <li key={item.key} role="presentation" style={{ listStyle: 'none' }}>
-          <div style={getGroupTitleStyle()}>{item.title || item.label}</div>
+        <li key={item.key} data-part="group" role="presentation" style={{ listStyle: 'none' }}>
+          <div data-part="group-label" style={getGroupTitleStyle()}>{item.title || item.label}</div>
           {item.children && (
-            <ul role="group" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <ul role="group" data-part="panel" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {renderModernMenuItems(item.children, onItemClick, selectedKeys, openKeys, onSubmenuToggle, level + 1, inlineIndent)}
             </ul>
           )}
@@ -811,6 +822,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
       className={`rottay-menu rottay-menu--modern ${className}`.trim()}
       style={menuStyle}
       role="menu"
+      data-part="root"
     >
       {items
         ? renderModernMenuItems(items, handleItemClick, selectedKeys, openKeys, handleSubmenuToggle, 0, inlineIndent)

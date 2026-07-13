@@ -284,13 +284,18 @@ function renderStep(
         aria-disabled={item.disabled}
         aria-current={status === 'process' ? 'step' : undefined}
         data-step={index}
+        data-part="item"
+        data-status={status}
+        data-disabled={item.disabled || undefined}
+        data-focused={isFocused || undefined}
       >
-        <div style={iconStyle}>{renderIcon()}</div>
+        <div style={iconStyle} data-part="icon">{renderIcon()}</div>
         <div style={contentStyle}>
-          <div style={titleStyle}>
+          <div style={titleStyle} data-part="label">
             {item.title}
             {item.subTitle && (
               <span
+                data-part="subtitle"
                 style={{
                   fontSize: fontSize.description,
                   color: 'var(--ds-stepper-subtitle-color, var(--ds-color-text-secondary))',
@@ -300,11 +305,11 @@ function renderStep(
               </span>
             )}
           </div>
-          {item.description && <div style={descStyle}>{item.description}</div>}
+          {item.description && <div style={descStyle} data-part="description">{item.description}</div>}
         </div>
       </div>
       {/* Connector line (not for last step) */}
-      {!isLast && direction === 'horizontal' && <div style={connectorStyle} />}
+      {!isLast && direction === 'horizontal' && <div style={connectorStyle} data-part="connector" data-status={status} />}
     </React.Fragment>
   );
 }
@@ -498,6 +503,7 @@ export default function RusticStepper(props: StepperProps): React.ReactElement {
       style={containerStyle}
       role="navigation"
       aria-label="Progress steps"
+      data-part="root"
       tabIndex={clickable ? 0 : -1}
       onKeyDown={handleKeyDown}
       onFocus={() => {

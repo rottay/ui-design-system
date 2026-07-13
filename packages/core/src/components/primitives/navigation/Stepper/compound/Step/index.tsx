@@ -360,24 +360,28 @@ export function StepperStep({
         aria-disabled={disabled}
         aria-current={status === 'process' ? 'step' : undefined}
         data-step={stepIndex}
+        data-part="item"
+        data-status={status}
+        data-active={active || undefined}
+        data-disabled={disabled || undefined}
       >
         {/* Step Icon/Number */}
-        <div className="rottay-stepper-step__icon" style={iconContainerStyle}>
+        <div className="rottay-stepper-step__icon" data-part="icon" style={iconContainerStyle}>
           {renderIcon()}
         </div>
 
         {/* Step Content */}
         <div className="rottay-stepper-step__content" style={contentStyle}>
-          <div className="rottay-stepper-step__title" style={titleStyle}>
+          <div className="rottay-stepper-step__title" data-part="label" style={titleStyle}>
             {title}
             {subTitle && (
-              <span className="rottay-stepper-step__subtitle" style={subTitleStyle}>
+              <span className="rottay-stepper-step__subtitle" data-part="subtitle" style={subTitleStyle}>
                 {subTitle}
               </span>
             )}
           </div>
           {description && (
-            <div className="rottay-stepper-step__description" style={descriptionStyle}>
+            <div className="rottay-stepper-step__description" data-part="description" style={descriptionStyle}>
               {description}
             </div>
           )}
@@ -389,7 +393,7 @@ export function StepperStep({
 
       {/* Connector line (not for last step in horizontal mode) */}
       {!isLast && direction === 'horizontal' && (
-        <div className="rottay-stepper-connector" style={connectorStyle} />
+        <div className="rottay-stepper-connector" data-part="connector" data-status={status} style={connectorStyle} />
       )}
     </>
   );

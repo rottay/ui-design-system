@@ -206,10 +206,10 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
   // ============================================================================
 
   return (
-    <div className={className} style={style}>
+    <div className={className} style={style} data-part="root">
       {/* Total items display */}
       {showTotal && (
-        <div className="text-sm mb-2">{t('pagination.total_items', { total })}</div>
+        <div className="text-sm mb-2" data-part="pagination-range">{t('pagination.total_items', { total })}</div>
       )}
 
       {/* Pagination controls */}
@@ -219,6 +219,8 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           style={{ ...baseBtnStyle, borderRadius: 'var(--ds-radius-md) 0 0 var(--ds-radius-md)', borderRight: 'none' }}
           onClick={() => handlePageChange(current - 1)}
           disabled={disabled || current === 1}
+          data-part="pagination-nav-button"
+          data-direction="prev"
         >
           «
         </button>
@@ -235,11 +237,13 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
               }}
               onClick={() => handlePageChange(page)}
               disabled={disabled}
+              data-part="pagination-page-button"
+              data-current={page === current}
             >
               {page}
             </button>
           ) : (
-            <button key={`ellipsis-${index}`} style={{ ...baseBtnStyle, borderRight: 'none', pointerEvents: 'none', opacity: 0.5 }}>
+            <button key={`ellipsis-${index}`} style={{ ...baseBtnStyle, borderRight: 'none', pointerEvents: 'none', opacity: 0.5 }} data-part="ellipsis">
               {page}
             </button>
           )
@@ -250,6 +254,8 @@ export default function ModernPagination(props: PaginationProps): React.ReactEle
           style={{ ...baseBtnStyle, borderRadius: '0 var(--ds-radius-md) var(--ds-radius-md) 0' }}
           onClick={() => handlePageChange(current + 1)}
           disabled={disabled || current === totalPages}
+          data-part="pagination-nav-button"
+          data-direction="next"
         >
           »
         </button>

@@ -214,7 +214,7 @@ export const BreadcrumbItem = forwardRef<HTMLSpanElement, BreadcrumbItemProps>(
     if (href) {
       return (
         <span ref={ref} className={`rottay-breadcrumb-item ${className}`} style={itemStyle}>
-          <a href={href} onClick={onClick} style={linkStyle}>
+          <a href={href} onClick={onClick} style={linkStyle} data-part="crumb" data-current={false}>
             {content}
           </a>
         </span>
@@ -231,6 +231,8 @@ export const BreadcrumbItem = forwardRef<HTMLSpanElement, BreadcrumbItemProps>(
         className={`rottay-breadcrumb-item ${className}`}
         style={{ ...itemStyle, ...linkStyle }}
         onClick={onClick}
+        data-part="crumb"
+        data-current={true}
       >
         {content}
       </span>

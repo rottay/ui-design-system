@@ -175,6 +175,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         }}
         onClick={handleClick}
         aria-label="Back to top"
+        data-part="trigger"
       >
         {/* Default chevron-up icon; consumers can override with children prop
             for brand-specific icons without needing an icon library */}

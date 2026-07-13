@@ -176,6 +176,7 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
         '--bc-color': 'var(--ds-breadcrumb-separator-color, var(--ds-color-text-tertiary, currentColor))',
         ...style,
       } as React.CSSProperties}
+      data-part="root"
     >
       <ul>
         {displayItems.map((item) => (
@@ -187,11 +188,17 @@ export default function ModernBreadcrumb(props: BreadcrumbProps): React.ReactEle
                 style={{
                   color: 'var(--ds-breadcrumb-link-color, var(--ds-color-primary))',
                 }}
+                data-part="crumb"
+                data-current={false}
               >
                 {item.icon} {item.label}
               </a>
             ) : (
-              <span style={{ color: 'var(--ds-breadcrumb-active-color, var(--ds-breadcrumb-color-active, var(--ds-color-text-primary)))' }}>
+              <span
+                style={{ color: 'var(--ds-breadcrumb-active-color, var(--ds-breadcrumb-color-active, var(--ds-color-text-primary)))' }}
+                data-part="crumb"
+                data-current={true}
+              >
                 {item.icon} {item.label}
               </span>
             )}

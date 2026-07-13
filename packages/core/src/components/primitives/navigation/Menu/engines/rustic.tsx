@@ -136,6 +136,7 @@ function renderRusticMenuItems(
         <li
           key={item.key}
           role="separator"
+          data-part="divider"
             style={{
               height: '1px',
               margin: '8px 0',
@@ -148,8 +149,9 @@ function renderRusticMenuItems(
     // Handle group type
     if (item.type === 'group') {
       return (
-        <li key={item.key} role="presentation">
+        <li key={item.key} data-part="group" role="presentation">
           <div
+            data-part="group-label"
             style={{
               padding: '8px 16px 4px',
               fontSize: '12px',
@@ -163,7 +165,7 @@ function renderRusticMenuItems(
             {item.title || item.label}
           </div>
           {item.children && (
-            <ul role="group" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+            <ul role="group" data-part="panel" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
               {renderRusticMenuItems(
                 item.children,
                 onItemClick,
@@ -190,6 +192,9 @@ function renderRusticMenuItems(
           {/* Submenu title bar */}
           <div
             role="button"
+            data-part="trigger"
+            data-open={isOpen}
+            data-disabled={item.disabled || undefined}
             tabIndex={item.disabled ? -1 : 0}
             aria-expanded={isOpen}
             aria-haspopup="true"
@@ -217,10 +222,11 @@ function renderRusticMenuItems(
               outlineOffset: '-2px',
             }}
           >
-            {item.icon && <span>{item.icon}</span>}
-            <span style={{ flex: 1 }}>{item.label}</span>
+            {item.icon && <span data-part="icon">{item.icon}</span>}
+            <span data-part="label" style={{ flex: 1 }}>{item.label}</span>
             {/* Expand icon with rotation */}
             <svg
+              data-part="arrow-icon"
               width="12"
               height="12"
               viewBox="0 0 12 12"
@@ -242,6 +248,7 @@ function renderRusticMenuItems(
           {/* Nested content */}
           <ul
             role="menu"
+            data-part="panel"
             aria-hidden={!isOpen}
             style={{
               listStyle: 'none',
@@ -277,6 +284,10 @@ function renderRusticMenuItems(
       <li key={item.key} role="presentation">
         <div
           role="menuitem"
+          data-part="item"
+          data-selected={isSelected}
+          data-disabled={item.disabled || undefined}
+          data-tone={item.danger ? 'danger' : undefined}
           tabIndex={item.disabled ? -1 : 0}
           aria-disabled={item.disabled}
           data-key={item.key}
@@ -310,8 +321,8 @@ function renderRusticMenuItems(
             outlineOffset: '-2px',
           }}
         >
-          {item.icon && <span>{item.icon}</span>}
-          <span>{item.label}</span>
+          {item.icon && <span data-part="icon">{item.icon}</span>}
+          <span data-part="label">{item.label}</span>
         </div>
       </li>
     );
@@ -566,6 +577,7 @@ export default function RusticMenu(props: MenuProps): React.ReactElement {
       className={`rottay-menu rottay-menu--rustic rottay-menu--${mode} rottay-menu--${theme} ${className}`}
       style={menuStyle}
       role="menu"
+      data-part="root"
       aria-orientation={mode === 'horizontal' ? 'horizontal' : 'vertical'}
       tabIndex={0}
       onKeyDown={handleKeyDown}

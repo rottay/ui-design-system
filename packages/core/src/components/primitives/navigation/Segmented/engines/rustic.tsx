@@ -272,6 +272,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
         // Merge container base, optional block-mode override, and consumer styles.
         // Spread order ensures consumer `style` prop wins over internal defaults.
         style={{ ...styles.container, ...(block ? styles.containerBlock : {}), ...style }}
+        data-part="root"
       >
         {normalizedOptions.map((opt) => {
           const isActive = currentValue === opt.value;
@@ -291,6 +292,9 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
               }}
               onClick={() => handleClick(opt.value)}
               disabled={isDisabled}
+              data-part="option"
+              data-selected={isActive}
+              data-disabled={isDisabled || undefined}
             >
               {opt.icon}
               {opt.label}

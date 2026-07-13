@@ -207,23 +207,23 @@ export default function RusticBreadcrumb(props: BreadcrumbProps): React.ReactEle
   // Semantic <nav> with aria-label enables screen readers to identify
   // this as a breadcrumb navigation landmark
   return (
-    <nav className={className} style={containerStyle} aria-label="breadcrumb">
+    <nav className={className} style={containerStyle} aria-label="breadcrumb" data-part="root">
       {displayItems.map((item, index) => (
         <React.Fragment key={item.key}>
           {/* Render link or span based on href presence */}
           {item.href ? (
-            <a href={item.href} style={linkStyle} onClick={item.onClick}>
+            <a href={item.href} style={linkStyle} onClick={item.onClick} data-part="crumb" data-current={false}>
               {item.icon} {item.label}
             </a>
           ) : (
-            <span style={itemStyle}>
+            <span style={itemStyle} data-part="crumb" data-current={true}>
               {item.icon} {item.label}
             </span>
           )}
 
           {/* Render separator between items (not after last item) */}
           {index < displayItems.length - 1 && (
-            <span style={separatorStyle}>{separator}</span>
+            <span style={separatorStyle} data-part="separator">{separator}</span>
           )}
         </React.Fragment>
       ))}

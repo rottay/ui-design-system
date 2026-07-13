@@ -190,6 +190,7 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
         ref={ref}
         className={className}
         style={{ display: 'inline-flex', borderRadius: 'var(--ds-radius-md)', overflow: 'hidden', border: '1px solid var(--ds-color-border)', ...(block ? { width: '100%' } : {}), ...style }}
+        data-part="root"
       >
         {normalizedOptions.map((opt) => {
           const isActive = currentValue === opt.value;
@@ -216,8 +217,11 @@ export const Segmented = React.forwardRef<HTMLDivElement, SegmentedProps>(
               }}
               onClick={() => handleClick(opt.value)}
               disabled={isDisabled}
+              data-part="option"
+              data-selected={isActive}
+              data-disabled={isDisabled || undefined}
             >
-              {opt.icon && <span className="mr-1">{opt.icon}</span>}
+              {opt.icon && <span className="mr-1" data-part="icon">{opt.icon}</span>}
               {opt.label}
             </button>
           );

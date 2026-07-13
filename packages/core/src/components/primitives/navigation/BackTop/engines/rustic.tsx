@@ -215,6 +215,7 @@ export const BackTop = React.forwardRef<HTMLButtonElement, BackTopProps>(
         style={buttonStyle}
         onClick={handleClick}
         aria-label="Back to top"
+        data-part="trigger"
       >
         {children || (
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

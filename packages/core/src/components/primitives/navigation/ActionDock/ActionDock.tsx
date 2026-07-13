@@ -79,6 +79,8 @@ export function ActionDock({
       data-testid="action-dock"
       role="toolbar"
       aria-label={`${position === 'top' ? 'Top' : 'Bottom'} actions`}
+      data-part="root"
+      data-placement={position}
     >
       <Flex
         gap={12}

@@ -110,6 +110,7 @@ export function MenuDivider({
       className={`rottay-menu-divider ${dashed ? 'rottay-menu-divider--dashed' : ''} ${className}`}
       style={dividerStyle}
       role="separator"
+      data-part="divider"
     />
   );
 }

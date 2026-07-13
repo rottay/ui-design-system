@@ -210,6 +210,7 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
         ref={ref}
         className={`steps ${directionClass} ${sizeClass} ${className}`.trim()}
         style={style}
+        data-part="root"
       >
         {computedSteps.map((step, index) => {
           const isClickable = !step.disabled && onChange;
@@ -222,20 +223,23 @@ export const Steps = React.forwardRef<HTMLUListElement, StepsProps>(
               // In progressDot mode, replace the default number/icon with a
               // simple filled circle via DaisyUI's data-content attribute
               data-content={progressDot ? '●' : undefined}
+              data-part="item"
+              data-status={step.effectiveStatus}
+              data-disabled={step.disabled || undefined}
               style={tokenStyle}
             >
               <div className="flex flex-col items-start">
                 {/* Custom icon if provided and not in progressDot mode */}
-                {step.icon && !progressDot && <span className="mb-1">{step.icon}</span>}
+                {step.icon && !progressDot && <span className="mb-1" data-part="icon">{step.icon}</span>}
 
                 {/* Step title */}
-                <span className="font-medium" style={{ color: 'var(--ds-color-text-primary)' }}>{step.title}</span>
+                <span className="font-medium" data-part="label" style={{ color: 'var(--ds-color-text-primary)' }}>{step.title}</span>
 
                 {/* Optional subtitle */}
-                {step.subTitle && <span className="text-xs" style={{ color: 'var(--ds-color-text-tertiary)' }}>{step.subTitle}</span>}
+                {step.subTitle && <span className="text-xs" data-part="subtitle" style={{ color: 'var(--ds-color-text-tertiary)' }}>{step.subTitle}</span>}
 
                 {/* Optional description */}
-                {step.description && <span className="text-sm mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</span>}
+                {step.description && <span className="text-sm mt-1" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>{step.description}</span>}
               </div>
             </li>
           );

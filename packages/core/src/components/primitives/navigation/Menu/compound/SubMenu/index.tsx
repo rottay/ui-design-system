@@ -257,19 +257,22 @@ export function MenuSubMenu({
         onClick={handleTitleClick}
         onKeyDown={handleKeyDown}
         role="button"
+        data-part="trigger"
+        data-open={isOpen}
+        data-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : 0}
         aria-expanded={isOpen}
         aria-disabled={disabled}
         aria-haspopup="true"
       >
         {/* Optional icon */}
-        {icon && <span className="rottay-menu-submenu__icon">{icon}</span>}
+        {icon && <span className="rottay-menu-submenu__icon" data-part="icon">{icon}</span>}
 
         {/* Title label */}
-        <span className="rottay-menu-submenu__label">{title}</span>
+        <span className="rottay-menu-submenu__label" data-part="label">{title}</span>
 
         {/* Expand/collapse icon */}
-        <span className="rottay-menu-submenu__expand-icon" style={iconContainerStyle}>
+        <span className="rottay-menu-submenu__expand-icon" data-part="arrow-icon" style={iconContainerStyle}>
           {expandIcon || defaultExpandIcon}
         </span>
       </div>
@@ -280,6 +283,7 @@ export function MenuSubMenu({
         className="rottay-menu-submenu__content"
         style={contentStyle}
         role="menu"
+        data-part="panel"
         aria-hidden={!isOpen}
       >
         {children}

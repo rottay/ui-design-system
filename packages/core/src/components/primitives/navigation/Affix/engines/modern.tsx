@@ -306,6 +306,7 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
           ref={ref}
           className={`${zIndexClass} ${className}`.trim()}
           style={stickyStyle}
+          data-part="root"
         >
           {children}
         </div>
@@ -333,6 +334,8 @@ export const ModernAffix = forwardRef<HTMLDivElement, AffixProps>(
           }}
           className={`transition-all duration-200 ${zIndexClass} ${className}`.trim()}
           style={state.affixed ? { ...state.fixedStyle, boxShadow: 'var(--ds-elevation-1)', ...style } : style}
+          data-part="root"
+          data-sticky={state.affixed || undefined}
         >
           {children}
         </div>

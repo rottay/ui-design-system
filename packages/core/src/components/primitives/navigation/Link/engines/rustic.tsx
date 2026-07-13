@@ -183,6 +183,9 @@ export default function RusticLink(props: LinkProps): React.ReactElement {
       className={className}
       onClick={handleClick}
       aria-disabled={disabled}
+      data-part="root"
+      data-variant={type}
+      data-disabled={disabled || undefined}
       style={linkStyle}
       {...externalProps}
       {...rest}
