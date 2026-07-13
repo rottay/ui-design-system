@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in the engine-modern lane .md file)",
- "updated": "2026-07-11",
+ "updated": "2026-07-13",
  "rules": {
   "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
   "claim_requires": "all dependsOn done",
@@ -1525,14 +1525,24 @@
    "lane": "skin-adoption",
    "order": 2,
    "size": "XL",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-SKIN-01"
    ],
    "mustLandWith": [],
    "programs": [],
    "notes": "Owner-approved 2026-07-11 (stage-1 byte-exact plumbing; stage-2 visual improvement is a later program). Normative lane doc: roadmap/skin-adoption.md; authoring law: docs-engineering/engineering/design-system/runtime/skins/README.md. File lists are hypotheses until WO-SKIN-01 census corrects them.",
-   "progressLog": []
+   "progressLog": [
+    {
+     "at": "2026-07-12 00:52",
+     "by": "ds-agent",
+     "note": "Ckpt A (fields, 15 comp) COMPLETE: pre-step 1c58d4a8 (+ Stack rest-forwarding root fix) + migration 3f854715 (31 skins, counters->0 except Button.Group=3 documented residual). Gate 11/11 byte-exact after 2 net-caught fixes (slider data-orientation on the single root; PasswordInput rustic border-bottom:none reproducing ReactDOM's undefined-removal quirk). Ckpt B (dropdowns) pre-step COMMITTED with 18 baselines; migration next (opus). Ckpt C (pickers) pre-step queued (sonnet); its migration reserved for the standing fields-migrate agent. Env laws learned: never pnpm install concurrent with a running suite; never | tail on gate commands (masks exit codes); no git stash in the shared tree."
+    }
+   ],
+   "claimedBy": "ds-agent",
+   "claimedAt": "2026-07-11",
+   "doneAt": "2026-07-13",
+   "evidence": "All 25 input components migrated across three pipelined checkpoints, every fleet.inlinePaint counter at 0 except the documented Button.Group residual (3, ratcheted): A fields 15 comp (1c58d4a8+3f854715, gate 11/11), B dropdowns 5 comp (93ad1c88+e85c9c0f, gate 18/18), C pickers 5 comp (23c51dd1+0b3a88dc, gate 13/13). 52 new skin files; every gate byte-exact against pre-migration baselines recorded on production builds. Five real defects gate-caught and fixed with laws extracted (scope classes must be free tokens; border shorthands on maybe-undefined tokens are atomic; popup hook classes are per-engine; ReactDOM undefined-removal reproduces as explicit none; date-dependent panels need frozen clocks in specs). Batch cert: inputs suite 1249/1255 (6 = pre-existing TimePicker behavioral ledger, worktree-verified at the pre-migration commit), typecheck 0, --check green. Proposals P-70/P-71 filed. Stack fix (rest-forwarding) and Typography subtle/inherit shipped en route."
   },
   {
    "id": "WO-SKIN-03",
