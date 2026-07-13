@@ -1,0 +1,211 @@
+/**
+ * Modern Drawer skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * ===========================================================================
+ * PERSONALITY FLOOR (the load-bearing constraint in this file)
+ * ===========================================================================
+ * `runtime/personality.css` is imported `layer(rottay-personality)` and carries
+ * two rules that match this engine's own class names:
+ *
+ *   .rottay-drawer          -> transition: transform ...            spec (0,1,0)
+ *   .rottay-drawer-overlay  -> transition: opacity ...              spec (0,1,0)
+ *                              backdrop-filter: blur(4px)
+ *                              -webkit-backdrop-filter: blur(4px)
+ *
+ * Both are LAYERED, and an unlayered declaration outranks EVERY layer regardless
+ * of specificity. So the backdrop rule below (unlayered, b=2) beats the layered
+ * blur(4px) on `backdrop-filter` / `-webkit-backdrop-filter` -- reproducing
+ * exactly what the inline filter did before this migration. If the token
+ * `--ds-glass-backdrop-filter` is unset, the declaration is invalid at computed
+ * value time and resolves to `none`; it does NOT fall back to the personality
+ * rule, which is again what the inline value did. The floor to clear is (0,1,0);
+ * this file sits above it by construction, not by escalation.
+ *
+ * The `transition` channels on both rules are personality's alone -- this engine
+ * never set them inline and this skin does not declare them, so those rules stay
+ * live, unchanged.
+ *
+ * WHAT THIS FILE MUST NOT DO: the rustic engine shares the `.rottay-drawer-overlay`
+ * class and sets NO backdrop-filter of its own, so personality's blur(4px) is its
+ * only blur and is genuinely LIVE there. Every rule here is keyed on the
+ * `--modern` scope class; nothing may be keyed on the bare shared class, or
+ * rustic's blur would be overridden out of existence.
+ * ===========================================================================
+ *
+ * SPECIFICITY (P-48): the surface's border COLOR rule reaches b >= 4 to clear the
+ * tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1); the per-placement flush-edge rules sit one unit
+ * above it so the zeroed width wins over the base 1px. Border longhands stay
+ * LONGHAND (never collapsed into a `border:` shorthand): the flush edge zeroes a
+ * single side, and an undefined `--ds-color-border-subtle` must drop only the
+ * color channel, exactly as the inline longhands did.
+ *
+ * DIRECT-CHILD COMBINATORS keep engine section paint off a composed
+ * `Drawer.Header`/`Body`/`Footer` compound, which reuses the same `data-part`
+ * names inside the body and carries its own skin.
+ */
+
+/* ---- backdrop: scrim + glass. Outranks personality's blur(4px), as the inline
+        filter did. ---- */
+.rottay-drawer-backdrop--modern[data-part='backdrop'] {
+  background-color: color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent);
+  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+}
+
+/* ---- panel surface: fill + elevation + the default (right-placement) radius,
+        which the per-placement rules below override. ---- */
+.rottay-drawer--modern[data-part='surface'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-3);
+  border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+}
+
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'] {
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-subtle);
+}
+
+/* ---- rounded on the inward-facing edge only; the sliding edge sits flush ---- */
+.rottay-drawer--modern[data-part='surface'][data-placement='left'] {
+  border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
+}
+.rottay-drawer--modern[data-part='surface'][data-placement='right'] {
+  border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+}
+.rottay-drawer--modern[data-part='surface'][data-placement='top'] {
+  border-radius: 0 0 var(--ds-radius-lg) var(--ds-radius-lg);
+}
+.rottay-drawer--modern[data-part='surface'][data-placement='bottom'] {
+  border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+}
+
+/* ---- no border on the edge flush against the viewport ---- */
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='left'] {
+  border-left-width: 0;
+}
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='right'] {
+  border-right-width: 0;
+}
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='top'] {
+  border-top-width: 0;
+}
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='bottom'] {
+  border-bottom-width: 0;
+}
+
+/* ---- header / footer dividers ---- */
+.rottay-drawer--modern.rottay-drawer--modern > [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+.rottay-drawer--modern.rottay-drawer--modern > [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+.rottay-drawer--modern > [data-part='header'] [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- close button. The `:hover` rule reproduces the deleted mouseenter/
+        mouseleave `.style.backgroundColor` writes. ---- */
+.rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background-color: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.rottay-drawer--modern > [data-part='header'] [data-part='close-button']:hover {
+  background-color: var(--ds-surface-highlight);
+}
+
+/* ---- slide + fade keyframes, engine-namespaced (rustic has none, and must not
+        acquire one by name collision). ---- */
+@keyframes rottay-drawer-backdrop-fade-modern {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes rottay-drawer-backdrop-fade-out-modern {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes rottay-drawer-slide-left-modern {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-left-modern {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes rottay-drawer-slide-right-modern {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-right-modern {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes rottay-drawer-slide-top-modern {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-top-modern {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes rottay-drawer-slide-bottom-modern {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-bottom-modern {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}

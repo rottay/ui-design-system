@@ -64,17 +64,22 @@ describe('ToastContainer stacking physics', () => {
     const second = screen.getByText('Second').closest('[data-stack-depth]') as HTMLElement;
     const third = screen.getByText('Third').closest('[data-stack-depth]') as HTMLElement;
 
+    // The depth-derived transform rides a custom property the skin consumes;
+    // the container stamps the value, `skin/toast-compounds.css` applies it.
+    const stackTransform = (el: HTMLElement) =>
+      el.style.getPropertyValue('--ds-toast-stack-transform');
+
     // Most recently added toast is the front layer: full scale, no offset.
     expect(third.getAttribute('data-stack-depth')).toBe('0');
-    expect(third.style.transform).toBe('none');
+    expect(stackTransform(third)).toBe('none');
 
     // Earlier toasts progressively compress -- transform-only (scale + translateY).
     expect(second.getAttribute('data-stack-depth')).toBe('1');
-    expect(second.style.transform).toContain('scale(');
-    expect(second.style.transform).toContain('translateY(');
+    expect(stackTransform(second)).toContain('scale(');
+    expect(stackTransform(second)).toContain('translateY(');
 
     expect(first.getAttribute('data-stack-depth')).toBe('2');
-    expect(first.style.transform).toContain('scale(');
+    expect(stackTransform(first)).toContain('scale(');
   });
 
   it('transitions the stacking transform on --ds-motion-normal so a dismissal re-settles the rest', async () => {

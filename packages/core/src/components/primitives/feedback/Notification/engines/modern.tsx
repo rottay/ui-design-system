@@ -467,16 +467,12 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // Style Definitions
   // ========================================================================
 
-  /**
-   * DS token alert style mapping for each notification type.
-   */
-  const alertStyles: Record<NotificationType, React.CSSProperties> = {
-    success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
-    error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
-    info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
-    warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
-    open: {},
-  };
+  // Per-type fill and text colour are keyed on `data-tone` in the unlayered modern
+  // Notification skin. Unlayered is load-bearing: the root carries DaisyUI's
+  // `alert` class, whose base rule paints a border-color, and personality.css adds
+  // a `border-left-width` accent bar on the same class -- both are layered, and
+  // only an unlayered rule (or the inline style this replaced) out-ranks them.
+  // The `open` type has no entry, as before: it inherits DaisyUI's own fill.
 
   // Inline SVGs (h-6 w-6 = 24px) are slightly larger than Message icons
   // (h-5 w-5 = 20px) because notifications have more content area and
@@ -518,7 +514,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
       data-part="root"
       data-tone={type}
       className={`alert min-w-80 rottay-notification--modern ${className}`}
-      style={{ ...alertStyles[type], boxShadow: 'var(--ds-elevation-2)', ...style }}
+      style={style}
       onClick={onClick}
       role="alert"
     >
@@ -542,7 +538,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         {closable && (
           <button
             data-part="close-button"
-            style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
+            style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
             onClick={(e) => {
               e.stopPropagation();
               handleClose();

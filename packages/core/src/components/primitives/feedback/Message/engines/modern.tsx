@@ -416,14 +416,11 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     onClose?.();
   };
 
-  /** DS token alert style mapping */
-  const alertStyles: Record<MessageType, React.CSSProperties> = {
-    success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
-    error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
-    info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
-    warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
-    loading: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
-  };
+  // Per-type fill and text colour are keyed on `data-tone` in the unlayered
+  // modern Message skin. Unlayered is load-bearing: the root carries DaisyUI's
+  // `alert` class, whose base rule paints a border-color, and personality.css
+  // adds a `border-left-width` accent bar on the same class -- both are layered,
+  // and only an unlayered rule (or the inline style this replaced) out-ranks them.
 
   // Inline SVG icons instead of an icon library to keep the Modern engine's
   // bundle lightweight. Each icon uses stroke-based paths for consistent
@@ -450,8 +447,10 @@ export const MessageItem: React.FC<MessageItemProps> = ({
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
     ),
+    // `data-icon` marks the built-in spinner so the skin's ring rule cannot also
+    // paint a consumer-supplied `icon` rendered into the same slot.
     loading: (
-      <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }}></span>
+      <span data-icon="spinner" style={{ display: 'inline-block', width: 16, height: 16, animation: 'spin var(--ds-motion-glacial) linear infinite' }}></span>
     ),
   };
 
@@ -463,18 +462,17 @@ export const MessageItem: React.FC<MessageItemProps> = ({
       data-part="root"
       data-tone={type}
       className={`alert rottay-message--modern ${className}`}
-      style={{ ...alertStyles[type], boxShadow: 'var(--ds-elevation-2)', ...style }}
+      style={style}
       role="alert"
     >
       <span data-part="icon">{icon || icons[type]}</span>
       <span data-part="body">{content}</span>
       {/* aria-label required because the close button has no visible text
-          label -- only an SVG icon. btn-ghost keeps the button visually
-          minimal so it doesn't compete with the alert content. */}
+          label -- only an SVG icon. */}
       {closable && (
         <button
           data-part="close-button"
-          style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+          style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
           onClick={handleClose}
           aria-label="Close"
         >

@@ -1,0 +1,56 @@
+/**
+ * Rustic Result skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: no rule in runtime/personality.css matches any element here.
+ *
+ * SPECIFICITY (P-48): nothing in this file paints a border, so the tenant
+ * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply
+ * (`border-radius` is not a border colour).
+ *
+ * `data-part='status-icon'` / `'status-code'` mark the BUILT-IN icon shapes, so a
+ * consumer-supplied `icon` -- rendered into the same slot and never painted by
+ * this engine -- stays unpainted. Values are STATUS_COLOR_VARS, verbatim; its
+ * `|| RESULT_COLORS[status]` fallback was unreachable and is not transcribed.
+ */
+
+/* ---- circular status badge ---- */
+.rottay-result--rustic [data-part='status-icon'] {
+  border-radius: 50%;
+  color: var(--ds-result-icon-color, var(--ds-color-text-on-primary));
+}
+
+.rottay-result--rustic[data-tone='success'] [data-part='status-icon'] {
+  background-color: var(--ds-result-success-color, var(--ds-color-success));
+}
+.rottay-result--rustic[data-tone='error'] [data-part='status-icon'] {
+  background-color: var(--ds-result-error-color, var(--ds-color-error));
+}
+.rottay-result--rustic[data-tone='info'] [data-part='status-icon'] {
+  background-color: var(--ds-result-info-color, var(--ds-color-info));
+}
+.rottay-result--rustic[data-tone='warning'] [data-part='status-icon'] {
+  background-color: var(--ds-result-warning-color, var(--ds-color-warning));
+}
+
+/* ---- HTTP status code ---- */
+.rottay-result--rustic[data-tone='404'] [data-part='status-code'] {
+  color: var(--ds-result-404-color, var(--ds-color-info));
+}
+.rottay-result--rustic[data-tone='403'] [data-part='status-code'] {
+  color: var(--ds-result-403-color, var(--ds-color-warning));
+}
+.rottay-result--rustic[data-tone='500'] [data-part='status-code'] {
+  color: var(--ds-result-500-color, var(--ds-color-error));
+}
+
+/* ---- title + subtitle ---- */
+.rottay-result--rustic [data-part='title'] {
+  color: var(--ds-result-title-color, var(--ds-color-text-primary));
+}
+.rottay-result--rustic [data-part='description'] {
+  color: var(--ds-result-subtitle-color, var(--ds-color-text-secondary));
+}

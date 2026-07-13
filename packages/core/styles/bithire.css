@@ -22408,6 +22408,1446 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-bottom: 1px solid var(--ds-skeleton-border, var(--ds-color-border));
 }
 
+/* Overlay family (WO-SKIN-03 checkpoint O). */
+/**
+ * Modern Modal skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): every rule painting a border COLOR reaches b >= 4 to clear
+ * the tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). Bought from the root class repeated plus the
+ * target's own repeated `data-part`. Color-free resets (`border: none`,
+ * `outline: none`) are exempt from that floor.
+ *
+ * PORTAL: both engines mount through the shared Portal utility into
+ * `#rottay-portal-root` on `document.body`, outside any tenant-scoped subtree.
+ * Every selector here is therefore anchored on the component's own root class
+ * and resolves anywhere in the document (the Select dropdown-panel precedent).
+ *
+ * PERSONALITY: runtime/personality.css keys its modal rules on `.ant-modal`,
+ * `.modal`, `.modal-backdrop`, `.modal-box` and `[data-engine] .ds-modal*`.
+ * This engine carries none of those classes, so no personality rule matches any
+ * element painted here -- neither before nor after the migration.
+ *
+ * DIRECT-CHILD COMBINATORS are load-bearing: `Modal.Header`/`Body`/`Footer`/
+ * `CloseButton` compounds re-use the same `data-part` names and can be composed
+ * INSIDE this engine's body. Anchoring each section rule on `surface > ...`
+ * keeps engine paint off a composed compound, which owns its own skin.
+ */
+
+/* ---- backdrop: runtime scrim + opt-in blur, both via hatches stamped inline.
+        An unset filter hatch falls back to `none`, reproducing the omitted-key
+        behavior of `blurBackdrop: false`. The hatches are `--ds-modal-scrim-*`,
+        NOT `--ds-modal-overlay-bg`: that name is a live BrandTheme token
+        (chrome.modal.overlayBg) read by four primitives/overlay components. ---- */
+.rottay-modal-root--modern > [data-part='backdrop'] {
+  background-color: var(--ds-modal-scrim-fill);
+  backdrop-filter: var(--ds-modal-scrim-filter, none);
+  -webkit-backdrop-filter: var(--ds-modal-scrim-filter, none);
+}
+
+/* ---- panel surface ---- */
+.rottay-modal-root--modern > [data-part='surface'] {
+  background-color: var(--ds-modal-bg, var(--ds-surface-card));
+  border-radius: var(--ds-modal-surface-radius);
+  box-shadow: var(--ds-modal-surface-shadow);
+  outline: none;
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- header / footer dividers: `--ds-modal-section-border` is stamped on the
+        surface and inherits down; it resolves to `none` when `divider` is off. ---- */
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header'][data-part='header'] {
+  border-bottom: var(--ds-modal-section-border);
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer'][data-part='footer'] {
+  border-top: var(--ds-modal-section-border);
+}
+
+/* ---- header content ---- */
+.rottay-modal-root--modern > [data-part='surface'] > [data-part='header'] [data-part='title'] {
+  color: var(--ds-modal-title-color, inherit);
+}
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header']
+  [data-part='description'] {
+  color: var(--ds-modal-description-color, var(--ds-color-text-secondary));
+}
+
+/* ---- close button (ghost square). The `:hover` rule reproduces the deleted
+        mouseenter/mouseleave `.style.backgroundColor` writes. ---- */
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header']
+  [data-part='close-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background-color: transparent;
+  color: var(--ds-modal-close-color, inherit);
+}
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header']
+  [data-part='close-button']:hover {
+  background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
+}
+
+/* ---- body ---- */
+.rottay-modal-root--modern > [data-part='surface'] > [data-part='body'] {
+  color: var(--ds-modal-body-color, inherit);
+}
+
+/* ---- footer actions ---- */
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='ok'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='ok'] {
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* ---- entrance keyframes: engine-namespaced so a future rustic twin cannot
+        collide on the name. ---- */
+@keyframes ds-modal-backdrop-fade-modern {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ds-modal-panel-enter-modern {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/**
+ * Rustic Modal skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): every rule painting a border COLOR reaches b >= 4 to clear
+ * the tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). `border: none` on the OK and close buttons is a
+ * color-free reset and is exempt.
+ *
+ * PORTAL: this engine mounts through the shared Portal utility into
+ * `#rottay-portal-root` on `document.body`, outside any tenant-scoped subtree.
+ * Rules anchor on the root class only, so they resolve there.
+ *
+ * PERSONALITY: `runtime/personality.css` keys its modal rules on `.ant-modal`,
+ * `.modal`, `.modal-backdrop`, `.modal-box`, `[data-engine] .ds-modal*`. The
+ * root's pre-existing `rottay-modal-overlay` and the surface's `rottay-modal`
+ * match NONE of those, so no personality rule paints these elements -- the
+ * `.rottay-modal*` names are pure hooks with no stylesheet behind them.
+ *
+ * DIRECT-CHILD COMBINATORS keep this engine's section paint off a composed
+ * `Modal.Header`/`Body`/`Footer` compound, which reuses the same `data-part`
+ * names inside the body and carries its own skin.
+ */
+
+/* ---- root doubles as the scrim; alpha rides a hatch stamped per instance ---- */
+.rottay-modal-root--rustic[data-part='root'] {
+  background-color: rgba(0, 0, 0, var(--ds-modal-scrim-opacity));
+}
+
+/* ---- panel surface ---- */
+.rottay-modal-root--rustic > [data-part='surface'] {
+  background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  border-radius: var(--ds-modal-radius, var(--ds-radius-lg, 12px));
+  box-shadow: var(--ds-modal-shadow, var(--ds-shadow-xl));
+}
+
+/* ---- section dividers ---- */
+.rottay-modal-root--rustic.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid
+    var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)));
+}
+.rottay-modal-root--rustic.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid
+    var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)));
+}
+
+/* ---- close button ---- */
+.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='header']
+  > [data-part='close-button'] {
+  background: transparent;
+  border: none;
+}
+
+/* ---- footer actions ---- */
+.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-modal-btn-radius, 4px);
+  background: var(--ds-modal-cancel-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  color: var(--ds-modal-cancel-color, var(--ds-color-text-primary, inherit));
+}
+.rottay-modal-root--rustic.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border: 1px solid
+    var(--ds-modal-cancel-border, var(--ds-color-border-secondary, var(--ds-color-border-primary)));
+}
+.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='ok'] {
+  border-radius: var(--ds-modal-btn-radius, 4px);
+  background: var(--ds-modal-ok-bg, var(--ds-color-primary-500, var(--ds-color-primary)));
+  color: var(--ds-modal-ok-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)));
+  border: none;
+}
+
+/**
+ * Modal compound skin -- Modal.Header / Body / Footer / CloseButton
+ * (WO-SKIN-03 checkpoint O).
+ *
+ * Engine-agnostic: these four compounds render one tree regardless of the active
+ * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair.
+ * They are a fully parallel implementation of the same visual parts the engines
+ * hand-roll inline, on their own `--ds-modal-{header,footer}-border` /
+ * `--ds-modal-close-color` tokens; the engines' own section rules are anchored on
+ * `surface > ...` so composing a compound inside an engine body cannot pick up
+ * engine paint on top of these rules.
+ *
+ * DELIBERATELY UNLAYERED (P-47) and, for the two divider rules, at b >= 4 (P-48)
+ * to clear the tenant artifacts' unlayered `*` border-color floor at (0,3,1).
+ * `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * The `divider` booleans ride the `--ds-modal-{header,footer}-divider` hatches:
+ * an off divider resolves to the same explicit `none` the inline style set.
+ */
+
+.rottay-modal-header.rottay-modal-header[data-part='header'][data-part='header'] {
+  border-bottom: var(--ds-modal-header-divider);
+}
+
+.rottay-modal-header [data-part='title'] {
+  color: var(--ds-modal-title-color, inherit);
+}
+
+.rottay-modal-body[data-part='body'] {
+  color: var(--ds-modal-body-color, inherit);
+}
+
+.rottay-modal-footer.rottay-modal-footer[data-part='footer'][data-part='footer'] {
+  border-top: var(--ds-modal-footer-divider);
+}
+
+.rottay-modal-close[data-part='close-button'] {
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-modal-close-color, rgba(0, 0, 0, 0.45));
+}
+
+/**
+ * Modern Drawer skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * ===========================================================================
+ * PERSONALITY FLOOR (the load-bearing constraint in this file)
+ * ===========================================================================
+ * `runtime/personality.css` is imported `layer(rottay-personality)` and carries
+ * two rules that match this engine's own class names:
+ *
+ *   .rottay-drawer          -> transition: transform ...            spec (0,1,0)
+ *   .rottay-drawer-overlay  -> transition: opacity ...              spec (0,1,0)
+ *                              backdrop-filter: blur(4px)
+ *                              -webkit-backdrop-filter: blur(4px)
+ *
+ * Both are LAYERED, and an unlayered declaration outranks EVERY layer regardless
+ * of specificity. So the backdrop rule below (unlayered, b=2) beats the layered
+ * blur(4px) on `backdrop-filter` / `-webkit-backdrop-filter` -- reproducing
+ * exactly what the inline filter did before this migration. If the token
+ * `--ds-glass-backdrop-filter` is unset, the declaration is invalid at computed
+ * value time and resolves to `none`; it does NOT fall back to the personality
+ * rule, which is again what the inline value did. The floor to clear is (0,1,0);
+ * this file sits above it by construction, not by escalation.
+ *
+ * The `transition` channels on both rules are personality's alone -- this engine
+ * never set them inline and this skin does not declare them, so those rules stay
+ * live, unchanged.
+ *
+ * WHAT THIS FILE MUST NOT DO: the rustic engine shares the `.rottay-drawer-overlay`
+ * class and sets NO backdrop-filter of its own, so personality's blur(4px) is its
+ * only blur and is genuinely LIVE there. Every rule here is keyed on the
+ * `--modern` scope class; nothing may be keyed on the bare shared class, or
+ * rustic's blur would be overridden out of existence.
+ * ===========================================================================
+ *
+ * SPECIFICITY (P-48): the surface's border COLOR rule reaches b >= 4 to clear the
+ * tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1); the per-placement flush-edge rules sit one unit
+ * above it so the zeroed width wins over the base 1px. Border longhands stay
+ * LONGHAND (never collapsed into a `border:` shorthand): the flush edge zeroes a
+ * single side, and an undefined `--ds-color-border-subtle` must drop only the
+ * color channel, exactly as the inline longhands did.
+ *
+ * DIRECT-CHILD COMBINATORS keep engine section paint off a composed
+ * `Drawer.Header`/`Body`/`Footer` compound, which reuses the same `data-part`
+ * names inside the body and carries its own skin.
+ */
+
+/* ---- backdrop: scrim + glass. Outranks personality's blur(4px), as the inline
+        filter did. ---- */
+.rottay-drawer-backdrop--modern[data-part='backdrop'] {
+  background-color: color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent);
+  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+}
+
+/* ---- panel surface: fill + elevation + the default (right-placement) radius,
+        which the per-placement rules below override. ---- */
+.rottay-drawer--modern[data-part='surface'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-3);
+  border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+}
+
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'] {
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-subtle);
+}
+
+/* ---- rounded on the inward-facing edge only; the sliding edge sits flush ---- */
+.rottay-drawer--modern[data-part='surface'][data-placement='left'] {
+  border-radius: 0 var(--ds-radius-lg) var(--ds-radius-lg) 0;
+}
+.rottay-drawer--modern[data-part='surface'][data-placement='right'] {
+  border-radius: var(--ds-radius-lg) 0 0 var(--ds-radius-lg);
+}
+.rottay-drawer--modern[data-part='surface'][data-placement='top'] {
+  border-radius: 0 0 var(--ds-radius-lg) var(--ds-radius-lg);
+}
+.rottay-drawer--modern[data-part='surface'][data-placement='bottom'] {
+  border-radius: var(--ds-radius-lg) var(--ds-radius-lg) 0 0;
+}
+
+/* ---- no border on the edge flush against the viewport ---- */
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='left'] {
+  border-left-width: 0;
+}
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='right'] {
+  border-right-width: 0;
+}
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='top'] {
+  border-top-width: 0;
+}
+.rottay-drawer--modern.rottay-drawer--modern[data-part='surface'][data-part='surface'][data-placement='bottom'] {
+  border-bottom-width: 0;
+}
+
+/* ---- header / footer dividers ---- */
+.rottay-drawer--modern.rottay-drawer--modern > [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+.rottay-drawer--modern.rottay-drawer--modern > [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border-subtle);
+}
+
+.rottay-drawer--modern > [data-part='header'] [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- close button. The `:hover` rule reproduces the deleted mouseenter/
+        mouseleave `.style.backgroundColor` writes. ---- */
+.rottay-drawer--modern > [data-part='header'] [data-part='close-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background-color: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.rottay-drawer--modern > [data-part='header'] [data-part='close-button']:hover {
+  background-color: var(--ds-surface-highlight);
+}
+
+/* ---- slide + fade keyframes, engine-namespaced (rustic has none, and must not
+        acquire one by name collision). ---- */
+@keyframes rottay-drawer-backdrop-fade-modern {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes rottay-drawer-backdrop-fade-out-modern {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes rottay-drawer-slide-left-modern {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-left-modern {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+@keyframes rottay-drawer-slide-right-modern {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-right-modern {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes rottay-drawer-slide-top-modern {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-top-modern {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-100%);
+  }
+}
+@keyframes rottay-drawer-slide-bottom-modern {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes rottay-drawer-slide-out-bottom-modern {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
+
+/**
+ * Rustic Drawer skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * ===========================================================================
+ * PERSONALITY FLOOR -- WHAT THIS FILE DELIBERATELY DOES NOT PAINT
+ * ===========================================================================
+ * `runtime/personality.css` (imported `layer(rottay-personality)`) carries:
+ *
+ *   .rottay-drawer          -> transition: transform ...            spec (0,1,0)
+ *   .rottay-drawer-overlay  -> transition: opacity ...              spec (0,1,0)
+ *                              backdrop-filter: blur(4px)
+ *                              -webkit-backdrop-filter: blur(4px)
+ *
+ * This engine's backdrop carries `.rottay-drawer-overlay` and sets NO
+ * backdrop-filter of its own, so personality's blur(4px) is the ONLY declaration
+ * on that channel and is LIVE. It is this engine's real, shipping backdrop blur.
+ * This file therefore paints ONLY `background-color` on the backdrop. Declaring
+ * `backdrop-filter` here -- at any specificity -- would be unlayered and would
+ * silently delete rustic's blur, because unlayered outranks every layer. Do not
+ * add one.
+ *
+ * Likewise `.rottay-drawer`'s `transition: transform` is suppressed by the
+ * panel's own inline `transition` (kept in the TSX, and dead: `transform` is
+ * never assigned). Nothing here declares `transition`, so that balance holds.
+ * ===========================================================================
+ *
+ * SPECIFICITY (P-48): the header/footer divider rules reach b >= 4 to clear the
+ * tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). `border: none` on the close button is a
+ * color-free reset and is exempt.
+ *
+ * DIRECT-CHILD COMBINATORS keep engine section paint off a composed
+ * `Drawer.Header`/`Body`/`Footer` compound, which reuses the same `data-part`
+ * names inside the body and carries its own skin.
+ */
+
+/* ---- backdrop: scrim only; alpha rides a hatch stamped per instance.
+        The blur is personality.css's -- see the header. ---- */
+.rottay-drawer-backdrop--rustic[data-part='backdrop'] {
+  background-color: rgba(0, 0, 0, var(--ds-drawer-overlay-opacity));
+}
+
+/* ---- panel surface ---- */
+.rottay-drawer--rustic[data-part='surface'] {
+  background-color: var(--ds-drawer-bg, var(--ds-color-bg-elevated));
+  box-shadow: var(--ds-drawer-shadow, 0 8px 30px rgba(0, 0, 0, 0.12));
+}
+
+/* ---- header / footer dividers ---- */
+.rottay-drawer--rustic.rottay-drawer--rustic > [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle));
+}
+.rottay-drawer--rustic.rottay-drawer--rustic > [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle));
+}
+
+/* ---- close button (no hover: this engine ships none) ---- */
+.rottay-drawer--rustic > [data-part='header'] > [data-part='close-button'] {
+  background: transparent;
+  border: none;
+  color: var(--ds-drawer-close-color, var(--ds-color-text-secondary));
+}
+
+/**
+ * Drawer compound skin -- Drawer.Header / Body / Footer
+ * (WO-SKIN-03 checkpoint O).
+ *
+ * Engine-agnostic: these three compounds render one tree regardless of the active
+ * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair. They
+ * are a standalone composition API, parallel to the header/body/footer each engine
+ * hand-rolls, and draw on their own `--ds-drawer-{header,footer}-border` /
+ * `--ds-drawer-{body,footer}-bg` tokens. Both engines' own section rules are
+ * anchored on `surface > ...`, so composing a compound inside an engine body
+ * cannot pick up engine paint on top of these rules.
+ *
+ * DELIBERATELY UNLAYERED (P-47) and, for the two divider rules, at b >= 4 (P-48)
+ * to clear the tenant artifacts' unlayered `*` border-color floor at (0,3,1).
+ * `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * PERSONALITY: `.rottay-drawer-header/-body/-footer/-close` match no rule in
+ * runtime/personality.css (its Drawer rules key on `.rottay-drawer` and
+ * `.rottay-drawer-overlay`, which the ENGINE panel and backdrop carry, not these).
+ *
+ * The `divider` booleans ride the `--ds-drawer-{header,footer}-divider` hatches:
+ * an off divider resolves to the same explicit `none` the inline style set.
+ */
+
+.rottay-drawer-header.rottay-drawer-header[data-part='header'][data-part='header'] {
+  border-bottom: var(--ds-drawer-header-divider);
+}
+
+.rottay-drawer-header [data-part='title'] {
+  color: inherit;
+}
+
+.rottay-drawer-close[data-part='close-button'] {
+  background: transparent;
+  border: none;
+  color: var(--ds-drawer-close-color, var(--ds-color-text-secondary, rgba(0, 0, 0, 0.45)));
+}
+
+.rottay-drawer-body[data-part='body'] {
+  background-color: var(--ds-drawer-body-bg, transparent);
+  color: var(--ds-drawer-body-color, inherit);
+}
+
+.rottay-drawer-footer[data-part='footer'] {
+  background-color: var(--ds-drawer-footer-bg, transparent);
+}
+.rottay-drawer-footer.rottay-drawer-footer[data-part='footer'][data-part='footer'] {
+  border-top: var(--ds-drawer-footer-divider);
+}
+
+/**
+ * Modern Toast skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47), and here that is the whole point of the file.
+ * The root carries DaisyUI's structural `alert` class, and TWO layered rules
+ * paint through it:
+ *
+ *   DaisyUI `.alert`                    -> border-color from --alert-border-color
+ *                                          (on the BASE rule: this engine applies
+ *                                          no `alert-{variant}` modifier)
+ *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
+ *                                          border-left-style: solid
+ *                                          transition: opacity/transform
+ *
+ * Both live in layers (Tailwind's, and `rottay-personality`). An unlayered
+ * declaration outranks EVERY layer regardless of specificity, so the per-tone
+ * `border` shorthands below suppress the DaisyUI border-color AND personality's
+ * accent bar -- exactly as the inline `border` from the deleted getAlertStyle()
+ * did. The floor to clear is (0,1,0); this file sits above it by being unlayered,
+ * not by escalation. Personality's `transition` is untouched by anything here and
+ * stays live, as before.
+ *
+ * The `border` MUST stay a SHORTHAND. Splitting it into longhands would leave
+ * `border-left-style`/`border-left-width` uncontested and let personality's 4px
+ * accent bar re-appear on the left edge of every toast.
+ *
+ * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
+ * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1); the per-tone border rules sit at b=5 so they
+ * beat the un-toned fallback at b=4. `border: none` on the action/close buttons
+ * is a color-free reset and is exempt.
+ *
+ * TONES: the eight `ToastVariant`s, transcribed from the deleted getAlertStyle()
+ * switch. The un-toned rule reproduces that switch's `default:` arm (an unknown
+ * or absent variant fell through to VARIANT_COLORS.default's bg/color) -- which
+ * is NOT the same paint as `[data-tone='default']`, whose arm reads the card
+ * surface tokens instead. Both are kept.
+ */
+
+/* ---- root: elevation ---- */
+.rottay-toast--modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- fallback tone (switch `default:` arm -- variant outside the eight) ---- */
+.rottay-toast--modern[data-part='root'] {
+  background: var(--ds-toast-default-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-toast-default-color, var(--ds-color-text-primary));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+
+/* ---- the eight tones: fill + text ---- */
+.rottay-toast--modern[data-part='root'][data-tone='default'] {
+  background: var(--ds-card-bg);
+  color: var(--ds-card-color);
+}
+.rottay-toast--modern[data-part='root'][data-tone='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+.rottay-toast--modern[data-part='root'][data-tone='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.rottay-toast--modern[data-part='root'][data-tone='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  color: var(--ds-color-warning);
+}
+.rottay-toast--modern[data-part='root'][data-tone='info'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+.rottay-toast--modern[data-part='root'][data-tone='primary'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  color: var(--ds-color-primary);
+}
+.rottay-toast--modern[data-part='root'][data-tone='secondary'] {
+  background: color-mix(in srgb, var(--ds-color-secondary) 10%, transparent);
+  color: var(--ds-color-secondary);
+}
+.rottay-toast--modern[data-part='root'][data-tone='gradient'] {
+  background: var(
+    --ds-toast-gradient-bg,
+    linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-secondary))
+  );
+  color: var(--ds-toast-gradient-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- the eight tones: border (from VARIANT_COLORS[tone].borderColor) ---- */
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='default'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='success'] {
+  border: 1px solid var(--ds-toast-success-border, var(--ds-color-success-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='error'] {
+  border: 1px solid var(--ds-toast-error-border, var(--ds-color-error-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='warning'] {
+  border: 1px solid var(--ds-toast-warning-border, var(--ds-color-warning-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='info'] {
+  border: 1px solid var(--ds-toast-info-border, var(--ds-color-info-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='primary'] {
+  border: 1px solid var(--ds-toast-primary-border, var(--ds-color-alpha-primary-20));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='secondary'] {
+  border: 1px solid var(--ds-toast-secondary-border, var(--ds-color-alpha-secondary-20));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='gradient'] {
+  border: 1px solid transparent;
+}
+
+/* ---- action + close buttons (ghost; no hover ships on this engine) ---- */
+.rottay-toast--modern [data-part='action'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-toast--modern [data-part='close-button'] {
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+/**
+ * Rustic Toast skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: this engine's root carries no DaisyUI `alert` class and no
+ * `.rottay-toast-container` (that class belongs to the compound stack container,
+ * whose rules live in components/skin/toast-compounds.css). No rule in
+ * runtime/personality.css matches any element painted here.
+ *
+ * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
+ * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1); the per-tone borders sit at b=5 so they beat the
+ * un-toned fallback at b=4. `border: none` on the close button is a color-free
+ * reset and is exempt.
+ *
+ * TONES: the eight `ToastVariant`s, from VARIANT_COLORS in Toast.types.ts. Unlike
+ * the modern engine, this one read every tone straight from that table, so the
+ * un-toned fallback rule (`VARIANT_COLORS.default`, for a variant outside the
+ * eight) and `[data-tone='default']` resolve to the same paint.
+ *
+ * HATCHES: `--ds-toast-radius` (the `radius` prop), `--ds-toast-elevation` (the
+ * `shadow` toggle) and `--ds-toast-transform` (the exit scale/translate) are
+ * stamped inline per instance. The progress bar's `width` stays inline: the rAF
+ * loop writes only that, which is layout, not paint.
+ */
+
+/* ---- root: per-instance geometry + exit transform ---- */
+.rottay-toast--rustic[data-part='root'] {
+  border-radius: var(--ds-toast-radius);
+  box-shadow: var(--ds-toast-elevation);
+  transform: var(--ds-toast-transform);
+}
+
+/* ---- fallback tone (VARIANT_COLORS.default). `--ds-toast-tone-icon` is declared
+        on the ROOT so the per-tone rules below (one unit more specific) win and
+        the resolved value INHERITS down to the icon and the progress bar. ---- */
+.rottay-toast--rustic[data-part='root'] {
+  background: var(--ds-toast-default-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-toast-default-color, var(--ds-color-text-primary));
+  --ds-toast-tone-icon: var(--ds-toast-default-icon, var(--ds-color-text-secondary));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+
+/* ---- the eight tones: fill + text ---- */
+.rottay-toast--rustic[data-part='root'][data-tone='default'] {
+  background: var(--ds-toast-default-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-toast-default-color, var(--ds-color-text-primary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='success'] {
+  background: var(--ds-toast-success-bg, var(--ds-color-success-bg));
+  color: var(--ds-toast-success-color, var(--ds-color-success-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='error'] {
+  background: var(--ds-toast-error-bg, var(--ds-color-error-bg));
+  color: var(--ds-toast-error-color, var(--ds-color-error-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='warning'] {
+  background: var(--ds-toast-warning-bg, var(--ds-color-warning-bg));
+  color: var(--ds-toast-warning-color, var(--ds-color-warning-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='info'] {
+  background: var(--ds-toast-info-bg, var(--ds-color-info-bg));
+  color: var(--ds-toast-info-color, var(--ds-color-info-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='primary'] {
+  background: var(--ds-toast-primary-bg, var(--ds-color-alpha-primary-10));
+  color: var(--ds-toast-primary-color, var(--ds-color-primary-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='secondary'] {
+  background: var(--ds-toast-secondary-bg, var(--ds-color-alpha-secondary-10));
+  color: var(--ds-toast-secondary-color, var(--ds-color-secondary-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='gradient'] {
+  background: var(
+    --ds-toast-gradient-bg,
+    linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-secondary))
+  );
+  color: var(--ds-toast-gradient-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- the eight tones: border ---- */
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='default'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='success'] {
+  border: 1px solid var(--ds-toast-success-border, var(--ds-color-success-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='error'] {
+  border: 1px solid var(--ds-toast-error-border, var(--ds-color-error-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='warning'] {
+  border: 1px solid var(--ds-toast-warning-border, var(--ds-color-warning-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='info'] {
+  border: 1px solid var(--ds-toast-info-border, var(--ds-color-info-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='primary'] {
+  border: 1px solid var(--ds-toast-primary-border, var(--ds-color-alpha-primary-20));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='secondary'] {
+  border: 1px solid var(--ds-toast-secondary-border, var(--ds-color-alpha-secondary-20));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='gradient'] {
+  border: 1px solid transparent;
+}
+
+/* ---- icon + progress bar share the tone's icon colour (VARIANT_COLORS[t].iconColor),
+        routed through one per-tone custom property so each tone declares it once. ---- */
+.rottay-toast--rustic[data-part='root'][data-tone='default'] {
+  --ds-toast-tone-icon: var(--ds-toast-default-icon, var(--ds-color-text-secondary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='success'] {
+  --ds-toast-tone-icon: var(--ds-toast-success-icon, var(--ds-color-success));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='error'] {
+  --ds-toast-tone-icon: var(--ds-toast-error-icon, var(--ds-color-error));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='warning'] {
+  --ds-toast-tone-icon: var(--ds-toast-warning-icon, var(--ds-color-warning));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='info'] {
+  --ds-toast-tone-icon: var(--ds-toast-info-icon, var(--ds-color-info));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='primary'] {
+  --ds-toast-tone-icon: var(--ds-toast-primary-icon, var(--ds-color-primary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='secondary'] {
+  --ds-toast-tone-icon: var(--ds-toast-secondary-icon, var(--ds-color-secondary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='gradient'] {
+  --ds-toast-tone-icon: var(--ds-toast-gradient-icon, var(--ds-color-text-on-primary));
+}
+
+.rottay-toast--rustic > [data-part='icon'] {
+  color: var(--ds-toast-tone-icon);
+}
+.rottay-toast--rustic > [data-part='progress-bar'] {
+  background: var(--ds-toast-tone-icon);
+}
+
+/* ---- action + close buttons ---- */
+.rottay-toast--rustic [data-part='action'] {
+  background: transparent;
+  border-radius: var(--ds-toast-action-radius, 4px);
+  color: inherit;
+}
+.rottay-toast--rustic.rottay-toast--rustic [data-part='action'][data-part='action'] {
+  border: 1px solid currentColor;
+}
+.rottay-toast--rustic > [data-part='close-button'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+  border-radius: 4px;
+}
+
+/**
+ * Toast compound skin -- Toast.Container stack items and Toast.Undo
+ * (WO-SKIN-03 checkpoint O).
+ *
+ * Engine-agnostic: both compounds render one tree regardless of the active
+ * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair.
+ *
+ * DELIBERATELY UNLAYERED (P-47). Nothing in this file paints a border colour, so
+ * the (0,3,1) tenant border-color floor (P-48) does not apply to any rule here.
+ *
+ * ===========================================================================
+ * PERSONALITY: `.rottay-toast-container > *` -- NO CHANNEL OVERLAP
+ * ===========================================================================
+ * runtime/personality.css (layer `rottay-personality`) carries:
+ *
+ *   .rottay-toast-container > *  (0,1,0)  -> animation: ds-toast-enter 300ms ...
+ *
+ * That selector matches exactly the stack-item wrappers styled below. It declares
+ * ONLY `animation`; the wrapper never carried an inline `animation` and this file
+ * declares none, so the rule is LIVE today and stays LIVE -- there was never any
+ * suppression to preserve on that channel.
+ *
+ * The rule does interact with the `transform` below, and the interaction is
+ * unchanged by the migration: a running animation overrides the element's
+ * `transform` property regardless of origin or layer, so `ds-toast-enter` drives
+ * the transform for its 300ms; with no `forwards` fill it then hands back to the
+ * winning normal declaration -- previously the inline transform, now this rule.
+ * Same value, same handoff. The `.rottay-toast-container` class name is therefore
+ * load-bearing and must not be renamed.
+ * ===========================================================================
+ */
+
+/* ---- stack item: compress/fan transform, depth-derived, via a hatch ---- */
+.rottay-toast-container > [data-stack-depth] {
+  transform: var(--ds-toast-stack-transform);
+}
+
+/* ---- Toast.Undo: the ring/bar countdown wrapper ---- */
+.rottay-undo-toast[data-part='root'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* Scoped through the bar's own track so it cannot also match the ring's
+   `<circle data-part='fill'>` sibling, which paints via SVG stroke attributes. */
+.rottay-undo-toast [data-part='track'] > [data-part='fill'] {
+  background: var(--ds-color-primary);
+}
+
+/**
+ * Modern Message skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. The message item
+ * carries DaisyUI's structural `alert` class, and TWO layered rules paint through
+ * it:
+ *
+ *   DaisyUI `.alert`                    -> border-color from --alert-border-color
+ *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
+ *                                          border-left-style: solid
+ *                                          transition: opacity/transform
+ *
+ * Neither is suppressed today and neither becomes suppressed now: this engine
+ * never painted a `border` on the item -- only `background`/`color` (and a
+ * `box-shadow`) -- so it inherits DaisyUI's border-color and personality's 4px
+ * left accent bar, and it still does. Nothing in this file declares any border
+ * channel on the root; adding one would visibly change the item.
+ *
+ * SPECIFICITY (P-48): the only rule here that paints a border COLOR is the
+ * loading spinner's ring, and it reaches exactly b=4 (class + data-tone +
+ * data-part + `:empty`), clearing the tenant artifacts' unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * The stacking container is the external DaisyUI `.toast` class; `theme.css`'s
+ * `[data-tenant] .toast` rule references six `--ds-toast-*` tokens that are
+ * declared nowhere, leaving that container functionally unstyled. That is
+ * untouched here -- the container had no inline paint to migrate.
+ */
+
+/* ---- message item: elevation ---- */
+.rottay-message--modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- the five message types ---- */
+.rottay-message--modern[data-part='root'][data-tone='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+.rottay-message--modern[data-part='root'][data-tone='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.rottay-message--modern[data-part='root'][data-tone='info'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+.rottay-message--modern[data-part='root'][data-tone='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  color: var(--ds-color-warning);
+}
+.rottay-message--modern[data-part='root'][data-tone='loading'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+
+/* ---- loading spinner: `data-icon='spinner'` marks the BUILT-IN ring, so a
+        consumer-supplied `icon` rendered into the same slot stays unpainted, as
+        it is today. ---- */
+.rottay-message--modern.rottay-message--modern
+  [data-part='icon']
+  > [data-icon='spinner'][data-icon='spinner'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+/* ---- close button ---- */
+.rottay-message--modern [data-part='close-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/**
+ * Rustic Message skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: this engine carries no DaisyUI `alert`/`toast` class and no
+ * `ds-message` class, so NONE of personality.css's feedback rules
+ * (`.alert`, `.rottay-toast-container > *`, `[data-engine] .ds-message`) match
+ * any element painted here. The `rottay-message--rustic` / `-stack--rustic`
+ * scope classes were chosen to keep it that way: naming the root `ds-message`
+ * would newly activate personality's dormant `ds-toast-enter` entrance rule on
+ * top of this engine's own slide-in.
+ *
+ * SPECIFICITY (P-48): every rule painting a border COLOR reaches b >= 4 to clear
+ * the tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). `border: none` on the close button is a
+ * color-free reset and is exempt.
+ *
+ * The per-type `background-color` sits one unit above the base fill, mirroring
+ * the object-spread order (`...message.base, ...message[type]`) it replaces.
+ */
+
+/* ---- message item: base surface ---- */
+.rottay-message--rustic[data-part='root'] {
+  border-radius: var(--ds-message-radius, 8px);
+  box-shadow: var(
+    --ds-message-shadow,
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05)
+  );
+  background-color: var(--ds-message-bg, var(--ds-color-bg-elevated));
+}
+
+/* ---- the five message types: fill ---- */
+.rottay-message--rustic[data-part='root'][data-tone='success'] {
+  background-color: var(--ds-message-success-bg, var(--ds-color-success-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='error'] {
+  background-color: var(--ds-message-error-bg, var(--ds-color-error-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='info'] {
+  background-color: var(--ds-message-info-bg, var(--ds-color-info-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='warning'] {
+  background-color: var(--ds-message-warning-bg, var(--ds-color-warning-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='loading'] {
+  background-color: var(--ds-message-loading-bg, var(--ds-color-info-bg));
+}
+
+/* ---- the five message types: border ---- */
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='success'] {
+  border: 1px solid var(--ds-message-success-border, var(--ds-color-success-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='error'] {
+  border: 1px solid var(--ds-message-error-border, var(--ds-color-error-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='info'] {
+  border: 1px solid var(--ds-message-info-border, var(--ds-color-info-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='warning'] {
+  border: 1px solid var(--ds-message-warning-border, var(--ds-color-warning-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='loading'] {
+  border: 1px solid var(--ds-message-loading-border, var(--ds-color-info-border));
+}
+
+/* ---- icon colour per type. Scoped to `data-icon='builtin'`: the loading spinner
+        and a consumer-supplied `icon` both render into the same slot and neither
+        was ever given a colour here (the `loading` entry of the old icon table was
+        unreachable -- the loading branch returns before it). ---- */
+.rottay-message--rustic[data-tone='success'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-success-color, var(--ds-color-success));
+}
+.rottay-message--rustic[data-tone='error'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-error-color, var(--ds-color-error));
+}
+.rottay-message--rustic[data-tone='info'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-info-color, var(--ds-color-info));
+}
+.rottay-message--rustic[data-tone='warning'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-warning-color, var(--ds-color-warning));
+}
+
+/* ---- loading spinner: the loading icon element IS the ring ---- */
+.rottay-message--rustic.rottay-message--rustic > [data-part='icon'][data-icon='spinner'] {
+  border: 2px solid var(--ds-message-loading-color, var(--ds-color-info));
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+
+/* ---- content + close button ---- */
+.rottay-message--rustic > [data-part='body'] {
+  color: var(--ds-message-text-color, var(--ds-color-text-primary));
+}
+.rottay-message--rustic > [data-part='close-button'] {
+  border: none;
+  background: none;
+  color: var(--ds-message-close-color, var(--ds-color-text-tertiary));
+}
+.rottay-message--rustic > [data-part='close-button']:hover {
+  color: var(--ds-message-close-color-hover, var(--ds-color-text-primary));
+}
+
+/* ---- stack container ---- */
+.rottay-message-stack--rustic[data-part='stack-container'] {
+  transform: translateX(-50%);
+}
+
+/* ---- entrance / exit / spin keyframes, engine-namespaced ---- */
+@keyframes ds-message-slide-in-rustic {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes ds-message-slide-out-rustic {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
+  }
+}
+@keyframes ds-message-spin-rustic {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/**
+ * Modern Notification skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47), and that is load-bearing here. The item carries
+ * DaisyUI's structural `alert` class, and TWO layered rules paint through it:
+ *
+ *   DaisyUI `.alert`                    -> border-color from --alert-border-color
+ *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
+ *                                          border-left-style: solid
+ *                                          transition: opacity/transform
+ *
+ * Neither is suppressed today and neither becomes suppressed now: this engine
+ * never painted a `border` on the item -- only `background`/`color` (and a
+ * `box-shadow`) -- so it inherits DaisyUI's border-color and personality's 4px
+ * left accent bar, and it still does. Nothing in this file declares any border
+ * channel on the root; adding one would visibly change the item. (The rustic
+ * engine draws its own 4px accent explicitly, in its own skin.)
+ *
+ * SPECIFICITY (P-48): no rule here paints a border COLOR, so the tenant
+ * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply.
+ * `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * The `open` type has NO fill/colour rule: its entry in the style table was an
+ * empty object, so the item fell through to DaisyUI's own `.alert` paint. That
+ * fall-through is preserved by simply not writing a rule for it.
+ *
+ * The stacking container is the external DaisyUI `.toast` class; `theme.css`'s
+ * `[data-tenant] .toast` rule references six `--ds-toast-*` tokens that are
+ * declared nowhere, leaving that container functionally unstyled. That is
+ * untouched here -- the container had no inline paint to migrate.
+ */
+
+/* ---- item: elevation ---- */
+.rottay-notification--modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- the four painted types ---- */
+.rottay-notification--modern[data-part='root'][data-tone='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+.rottay-notification--modern[data-part='root'][data-tone='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.rottay-notification--modern[data-part='root'][data-tone='info'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+.rottay-notification--modern[data-part='root'][data-tone='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  color: var(--ds-color-warning);
+}
+
+/* ---- close button ---- */
+.rottay-notification--modern [data-part='close-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/**
+ * Rustic Notification skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: this engine carries no DaisyUI `alert`/`toast` class and no
+ * `ds-notification` class, so NONE of personality.css's feedback rules
+ * (`.alert`, `.rottay-toast-container > *`, `[data-engine] .ds-notification`)
+ * match any element painted here. The `rottay-notification--rustic` /
+ * `-stack--rustic` scope classes were chosen to keep it that way: naming the root
+ * `ds-notification` would newly activate personality's dormant `ds-toast-enter`
+ * entrance rule on top of this engine's own slide-in.
+ *
+ * SPECIFICITY (P-48): the per-tone `border-left` accent bars paint a border COLOR
+ * and reach b >= 4 to clear the tenant artifacts' unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * The `open` type has NO accent bar: its entry in the style table was an empty
+ * object. It DOES have an icon colour, but the icon is never rendered for it (the
+ * icon renderer returns null on `open` before reaching the table) -- that entry
+ * was unreachable, so it is not transcribed.
+ */
+
+/* ---- item: base surface ---- */
+.rottay-notification--rustic[data-part='root'] {
+  border-radius: var(--ds-notification-radius, 12px);
+  background-color: var(--ds-notification-bg, var(--ds-color-bg-elevated));
+  box-shadow: var(--ds-notification-shadow, var(--ds-shadow-lg));
+}
+
+/* ---- per-type left accent bar ---- */
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='success'] {
+  border-left: 4px solid var(--ds-notification-success-color, var(--ds-color-success));
+}
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='error'] {
+  border-left: 4px solid var(--ds-notification-error-color, var(--ds-color-error));
+}
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='info'] {
+  border-left: 4px solid var(--ds-notification-info-color, var(--ds-color-primary-500));
+}
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='warning'] {
+  border-left: 4px solid var(--ds-notification-warning-color, var(--ds-color-warning));
+}
+
+/* ---- per-type icon colour (built-in glyph only) ---- */
+.rottay-notification--rustic[data-tone='success'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-success-color, var(--ds-color-success));
+}
+.rottay-notification--rustic[data-tone='error'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-error-color, var(--ds-color-error));
+}
+.rottay-notification--rustic[data-tone='info'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-info-color, var(--ds-color-primary-500));
+}
+.rottay-notification--rustic[data-tone='warning'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-warning-color, var(--ds-color-warning));
+}
+
+/* ---- title + description ---- */
+.rottay-notification--rustic [data-part='title'] {
+  color: var(--ds-notification-title-color, var(--ds-color-text-primary));
+}
+.rottay-notification--rustic [data-part='description'] {
+  color: var(--ds-notification-desc-color, var(--ds-color-text-secondary));
+}
+
+/* ---- close button ---- */
+.rottay-notification--rustic > [data-part='close-button'] {
+  border: none;
+  background: none;
+  color: var(--ds-notification-close-color, var(--ds-color-text-tertiary));
+}
+.rottay-notification--rustic > [data-part='close-button']:hover {
+  color: var(--ds-notification-close-color-hover, var(--ds-color-text-primary));
+}
+
+/* ---- stack container: the two centered placements ---- */
+.rottay-notification-stack--rustic[data-part='stack-container'][data-placement='top'],
+.rottay-notification-stack--rustic[data-part='stack-container'][data-placement='bottom'] {
+  transform: translateX(-50%);
+}
+
+/* ---- entrance / exit keyframes, engine-namespaced ---- */
+@keyframes ds-notification-slide-in-rustic {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes ds-notification-slide-out-rustic {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
+  }
+}
+
+/**
+ * Modern Result skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: no rule in runtime/personality.css matches any element here.
+ *
+ * SPECIFICITY (P-48): nothing in this file paints a border, so the tenant
+ * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply.
+ *
+ * `data-part='status-icon'` / `'status-code'` mark the BUILT-IN icon shapes, so a
+ * consumer-supplied `icon` -- rendered into the same slot and never coloured by
+ * this engine -- stays unpainted. The icons stroke `currentColor`, so setting
+ * `color` on the shape reproduces the inline value exactly.
+ */
+
+.rottay-result--modern[data-tone='success'] [data-part='status-icon'] {
+  color: var(--ds-color-success);
+}
+.rottay-result--modern[data-tone='error'] [data-part='status-icon'] {
+  color: var(--ds-color-error);
+}
+.rottay-result--modern[data-tone='info'] [data-part='status-icon'] {
+  color: var(--ds-color-info);
+}
+.rottay-result--modern[data-tone='warning'] [data-part='status-icon'] {
+  color: var(--ds-color-warning);
+}
+
+.rottay-result--modern[data-tone='404'] [data-part='status-code'] {
+  color: var(--ds-color-primary);
+}
+.rottay-result--modern[data-tone='403'] [data-part='status-code'] {
+  color: var(--ds-color-warning);
+}
+.rottay-result--modern[data-tone='500'] [data-part='status-code'] {
+  color: var(--ds-color-error);
+}
+
+.rottay-result--modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.rottay-result--modern [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic Result skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: no rule in runtime/personality.css matches any element here.
+ *
+ * SPECIFICITY (P-48): nothing in this file paints a border, so the tenant
+ * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply
+ * (`border-radius` is not a border colour).
+ *
+ * `data-part='status-icon'` / `'status-code'` mark the BUILT-IN icon shapes, so a
+ * consumer-supplied `icon` -- rendered into the same slot and never painted by
+ * this engine -- stays unpainted. Values are STATUS_COLOR_VARS, verbatim; its
+ * `|| RESULT_COLORS[status]` fallback was unreachable and is not transcribed.
+ */
+
+/* ---- circular status badge ---- */
+.rottay-result--rustic [data-part='status-icon'] {
+  border-radius: 50%;
+  color: var(--ds-result-icon-color, var(--ds-color-text-on-primary));
+}
+
+.rottay-result--rustic[data-tone='success'] [data-part='status-icon'] {
+  background-color: var(--ds-result-success-color, var(--ds-color-success));
+}
+.rottay-result--rustic[data-tone='error'] [data-part='status-icon'] {
+  background-color: var(--ds-result-error-color, var(--ds-color-error));
+}
+.rottay-result--rustic[data-tone='info'] [data-part='status-icon'] {
+  background-color: var(--ds-result-info-color, var(--ds-color-info));
+}
+.rottay-result--rustic[data-tone='warning'] [data-part='status-icon'] {
+  background-color: var(--ds-result-warning-color, var(--ds-color-warning));
+}
+
+/* ---- HTTP status code ---- */
+.rottay-result--rustic[data-tone='404'] [data-part='status-code'] {
+  color: var(--ds-result-404-color, var(--ds-color-info));
+}
+.rottay-result--rustic[data-tone='403'] [data-part='status-code'] {
+  color: var(--ds-result-403-color, var(--ds-color-warning));
+}
+.rottay-result--rustic[data-tone='500'] [data-part='status-code'] {
+  color: var(--ds-result-500-color, var(--ds-color-error));
+}
+
+/* ---- title + subtitle ---- */
+.rottay-result--rustic [data-part='title'] {
+  color: var(--ds-result-title-color, var(--ds-color-text-primary));
+}
+.rottay-result--rustic [data-part='description'] {
+  color: var(--ds-result-subtitle-color, var(--ds-color-text-secondary));
+}
+
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

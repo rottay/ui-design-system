@@ -110,7 +110,6 @@ describe('Message fallback and item coverage', () => {
       </>
     );
 
-    expect(document.head.querySelectorAll('#rustic-message-styles')).toHaveLength(1);
     expect(screen.getAllByRole('log')).toHaveLength(2);
 
     const closeButton = screen.getByRole('button', { name: 'Close message' });

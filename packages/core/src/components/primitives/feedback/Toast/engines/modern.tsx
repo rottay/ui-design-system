@@ -48,71 +48,12 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../Toast.types';
-import { TOAST_DEFAULTS, TOAST_ANIMATION, VARIANT_COLORS } from '../Toast.types';
+import { TOAST_DEFAULTS, TOAST_ANIMATION } from '../Toast.types';
 import { getToastAnimationStyle } from '../utils/animations';
 
 // ============================================================================
 // Helper Functions
 // ============================================================================
-
-/**
- * Maps Toast variant to DS token inline styles.
- *
- * @description
- * Converts the design system's variant to a tenanted background, text
- * colour, and border using CSS custom properties. Every variant `ToastVariant`
- * admits resolves to an explicit style here rather than inheriting DaisyUI's
- * `.alert` defaults.
- *
- * @param variant - Toast variant
- * @returns React.CSSProperties with background, color, and border
- *
- * @internal
- */
-export function getAlertStyle(variant: ToastVariant): React.CSSProperties {
-  // DaisyUI's `.alert` sets `border-color` from `--alert-border-color`
-  // (falling back to `--color-base-200`) as part of the base `.alert` rule
-  // itself, not just its `alert-{variant}` modifiers -- and this engine
-  // applies only the structural `alert` class, never a modifier. A rule in
-  // this file (`@layer rottay-engines`) cannot out-rank that DaisyUI rule
-  // (P-47): only an unlayered stylesheet or an inline style can. The
-  // unlayered position is a skin file (`tokens/css/engines/*/skin/*.css`,
-  // WO-ARC-07's mechanism, currently Button/Card only), which Toast does not
-  // have yet, so inline is where the border goes today. Sourced from
-  // VARIANT_COLORS, the same per-variant border the rustic engine already
-  // renders, so a tenant's `--ds-toast-{variant}-border` override reaches
-  // both engines identically.
-  const colors = VARIANT_COLORS[variant as keyof typeof VARIANT_COLORS] || VARIANT_COLORS.default;
-  const border = `1px solid ${colors.borderColor}`;
-
-  switch (variant) {
-    case 'default':
-      // Card is the DS's only BrandTheme-reachable neutral elevated surface
-      // today (chrome.cardComponent.bg/color) -- Toast has no chrome.toast.*
-      // section of its own. The foundation --ds-color-bg-elevated/text-primary
-      // literals are not emitted by compileBrandTheme, so they cannot move
-      // for a dynamic tenant; --ds-card-bg/--ds-card-color can.
-      return { background: 'var(--ds-card-bg)', color: 'var(--ds-card-color)', border };
-    case 'success':
-      return { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)', border };
-    case 'error':
-      return { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)', border };
-    case 'warning':
-      return { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)', border };
-    case 'info':
-      return { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)', border };
-    case 'primary':
-      return { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', color: 'var(--ds-color-primary)', border };
-    case 'secondary':
-      return { background: 'color-mix(in srgb, var(--ds-color-secondary) 10%, transparent)', color: 'var(--ds-color-secondary)', border };
-    case 'gradient':
-      // Not a tint of one token: a self-contained brand-gradient fill (see
-      // VARIANT_COLORS.gradient) rather than the color-mix idiom above.
-      return { background: colors.bg, color: colors.color, border };
-    default:
-      return { background: colors.bg, color: colors.color, border };
-  }
-}
 
 /**
  * Returns the default icon SVG for a given variant.
@@ -298,9 +239,13 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   // Class Names
   // ========================================================================
 
-  // DS token styles provide the variant colouring; boxShadow via DS elevation
-  // token adds depth so the toast visually floats above the page content
-  const alertStyle = getAlertStyle(variant as ToastVariant);
+  // Variant colouring and elevation are keyed on `data-tone` in the unlayered
+  // modern Toast skin. Unlayered is load-bearing: DaisyUI's `.alert` sets
+  // border-color from `--alert-border-color` as part of its BASE rule (this
+  // engine applies only the structural `alert` class, never an `alert-{variant}`
+  // modifier), and personality.css adds a `border-left-width` accent bar on the
+  // same class. Both are layered; only an unlayered rule -- or the inline style
+  // this replaced -- out-ranks them.
   const baseClasses = 'alert';
   // Enter/exit motion comes entirely from the inline `animation` set below via
   // getToastAnimationStyle, which reads --ds-toast-enter/exit-duration/easing
@@ -334,8 +279,6 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
       style={{
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: 'var(--ds-elevation-2)',
-        ...alertStyle,
         ...getToastAnimationStyle('top-right', isExiting ? 'out' : 'in', 'fade'),
         ...style,
       }}
@@ -367,10 +310,6 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
               height: 32,
               padding: '0 12px',
               fontSize: 13,
-              borderRadius: 'var(--ds-radius-md)',
-              border: 'none',
-              background: 'transparent',
-              color: 'var(--ds-color-text-primary)',
               cursor: 'pointer',
             }}
           >
@@ -389,10 +328,6 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
               justifyContent: 'center',
               width: 32,
               height: 32,
-              borderRadius: '50%',
-              border: 'none',
-              background: 'transparent',
-              color: 'var(--ds-color-text-primary)',
               cursor: 'pointer',
             }}
           >

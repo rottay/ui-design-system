@@ -1,0 +1,138 @@
+/**
+ * Rustic Message skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: this engine carries no DaisyUI `alert`/`toast` class and no
+ * `ds-message` class, so NONE of personality.css's feedback rules
+ * (`.alert`, `.rottay-toast-container > *`, `[data-engine] .ds-message`) match
+ * any element painted here. The `rottay-message--rustic` / `-stack--rustic`
+ * scope classes were chosen to keep it that way: naming the root `ds-message`
+ * would newly activate personality's dormant `ds-toast-enter` entrance rule on
+ * top of this engine's own slide-in.
+ *
+ * SPECIFICITY (P-48): every rule painting a border COLOR reaches b >= 4 to clear
+ * the tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). `border: none` on the close button is a
+ * color-free reset and is exempt.
+ *
+ * The per-type `background-color` sits one unit above the base fill, mirroring
+ * the object-spread order (`...message.base, ...message[type]`) it replaces.
+ */
+
+/* ---- message item: base surface ---- */
+.rottay-message--rustic[data-part='root'] {
+  border-radius: var(--ds-message-radius, 8px);
+  box-shadow: var(
+    --ds-message-shadow,
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05)
+  );
+  background-color: var(--ds-message-bg, var(--ds-color-bg-elevated));
+}
+
+/* ---- the five message types: fill ---- */
+.rottay-message--rustic[data-part='root'][data-tone='success'] {
+  background-color: var(--ds-message-success-bg, var(--ds-color-success-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='error'] {
+  background-color: var(--ds-message-error-bg, var(--ds-color-error-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='info'] {
+  background-color: var(--ds-message-info-bg, var(--ds-color-info-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='warning'] {
+  background-color: var(--ds-message-warning-bg, var(--ds-color-warning-bg));
+}
+.rottay-message--rustic[data-part='root'][data-tone='loading'] {
+  background-color: var(--ds-message-loading-bg, var(--ds-color-info-bg));
+}
+
+/* ---- the five message types: border ---- */
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='success'] {
+  border: 1px solid var(--ds-message-success-border, var(--ds-color-success-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='error'] {
+  border: 1px solid var(--ds-message-error-border, var(--ds-color-error-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='info'] {
+  border: 1px solid var(--ds-message-info-border, var(--ds-color-info-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='warning'] {
+  border: 1px solid var(--ds-message-warning-border, var(--ds-color-warning-border));
+}
+.rottay-message--rustic.rottay-message--rustic[data-part='root'][data-tone='loading'] {
+  border: 1px solid var(--ds-message-loading-border, var(--ds-color-info-border));
+}
+
+/* ---- icon colour per type. Scoped to `data-icon='builtin'`: the loading spinner
+        and a consumer-supplied `icon` both render into the same slot and neither
+        was ever given a colour here (the `loading` entry of the old icon table was
+        unreachable -- the loading branch returns before it). ---- */
+.rottay-message--rustic[data-tone='success'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-success-color, var(--ds-color-success));
+}
+.rottay-message--rustic[data-tone='error'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-error-color, var(--ds-color-error));
+}
+.rottay-message--rustic[data-tone='info'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-info-color, var(--ds-color-info));
+}
+.rottay-message--rustic[data-tone='warning'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-message-warning-color, var(--ds-color-warning));
+}
+
+/* ---- loading spinner: the loading icon element IS the ring ---- */
+.rottay-message--rustic.rottay-message--rustic > [data-part='icon'][data-icon='spinner'] {
+  border: 2px solid var(--ds-message-loading-color, var(--ds-color-info));
+  border-top-color: transparent;
+  border-radius: 50%;
+}
+
+/* ---- content + close button ---- */
+.rottay-message--rustic > [data-part='body'] {
+  color: var(--ds-message-text-color, var(--ds-color-text-primary));
+}
+.rottay-message--rustic > [data-part='close-button'] {
+  border: none;
+  background: none;
+  color: var(--ds-message-close-color, var(--ds-color-text-tertiary));
+}
+.rottay-message--rustic > [data-part='close-button']:hover {
+  color: var(--ds-message-close-color-hover, var(--ds-color-text-primary));
+}
+
+/* ---- stack container ---- */
+.rottay-message-stack--rustic[data-part='stack-container'] {
+  transform: translateX(-50%);
+}
+
+/* ---- entrance / exit / spin keyframes, engine-namespaced ---- */
+@keyframes ds-message-slide-in-rustic {
+  from {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes ds-message-slide-out-rustic {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
+  }
+}
+@keyframes ds-message-spin-rustic {
+  to {
+    transform: rotate(360deg);
+  }
+}

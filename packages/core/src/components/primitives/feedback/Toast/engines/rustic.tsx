@@ -51,7 +51,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import type { ToastProps, ToastVariant } from '../Toast.types';
-import { TOAST_DEFAULTS, TOAST_ANIMATION, VARIANT_COLORS } from '../Toast.types';
+import { TOAST_DEFAULTS, TOAST_ANIMATION } from '../Toast.types';
 import { getToastAnimationStyle } from '../utils/animations';
 
 // ============================================================================
@@ -169,10 +169,6 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
 
-  // Retrieve the colour palette for this variant. Falls back to the
-  // neutral "default" palette when an unrecognised variant is provided.
-  const colors = VARIANT_COLORS[variant as keyof typeof VARIANT_COLORS] || VARIANT_COLORS.default;
-
   // ========================================================================
   // Event Handlers
   // ========================================================================
@@ -274,6 +270,9 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
   // Container uses CSS variables with hardcoded fallbacks so the toast
   // works out-of-the-box but remains fully customisable via tenant themes.
   // Exit animation scales down and moves up for a natural dismiss feel.
+  // Variant colouring is keyed on `data-tone` in the unlayered rustic Toast skin.
+  // The per-instance radius, the `shadow` toggle, and the exit transform ride
+  // hatches the skin consumes: none of the three is enumerable from a tone alone.
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'flex',
@@ -281,22 +280,18 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     gap: 'var(--ds-toast-gap, 12px)',
     padding: 'var(--ds-toast-padding, 12px 16px)',
     maxWidth: 'var(--ds-toast-max-width, 400px)',
-    background: colors.bg,
-    color: colors.color,
-    borderRadius: radiusMap[radius] || 'var(--ds-toast-radius-md, 8px)',
-    border: `1px solid ${colors.borderColor}`,
-    boxShadow: shadow ? 'var(--ds-toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))' : 'none',
+    '--ds-toast-radius': radiusMap[radius] || 'var(--ds-toast-radius-md, 8px)',
+    '--ds-toast-elevation': shadow ? 'var(--ds-toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.15))' : 'none',
+    '--ds-toast-transform': isExiting ? 'scale(0.95) translateY(-10px)' : 'scale(1) translateY(0)',
     overflow: 'hidden',
     opacity: isExiting ? 0 : 1,
-    transform: isExiting ? 'scale(0.95) translateY(-10px)' : 'scale(1) translateY(0)',
     transition: `opacity var(--ds-toast-exit-duration, ${TOAST_ANIMATION.exitDuration}ms) var(--ds-toast-exit-easing, ease), transform var(--ds-toast-exit-duration, ${TOAST_ANIMATION.exitDuration}ms) var(--ds-toast-exit-easing, ease)`,
     ...getToastAnimationStyle('top-right', isExiting ? 'out' : 'in', 'fade'),
     ...style,
-  };
+  } as React.CSSProperties;
 
   /** Icon container styles */
   const iconStyle: React.CSSProperties = {
-    color: colors.iconColor,
     flexShrink: 0,
     marginTop: '2px',
   };
@@ -331,12 +326,8 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     width: '24px',
     height: '24px',
     padding: 0,
-    border: 'none',
-    background: 'transparent',
-    color: 'inherit',
     opacity: 'var(--ds-toast-close-opacity, 0.5)' as unknown as number,
     cursor: 'pointer',
-    borderRadius: '4px',
     flexShrink: 0,
   };
 
@@ -346,21 +337,16 @@ export default function RusticToast(props: ToastProps): React.ReactElement | nul
     padding: 'var(--ds-toast-action-padding, 4px 12px)',
     fontSize: 'var(--ds-toast-action-size, 13px)',
     fontWeight: 500,
-    background: 'transparent',
-    border: '1px solid currentColor',
-    borderRadius: 'var(--ds-toast-action-radius, 4px)',
-    color: 'inherit',
     cursor: 'pointer',
   };
 
-  /** Progress bar styles */
+  /** Progress bar styles. The rAF loop writes only `width` -- layout, not paint. */
   const progressStyle: React.CSSProperties = {
     position: 'absolute',
     bottom: 0,
     left: 0,
     height: 'var(--ds-toast-progress-height, 3px)',
     width: `${progress}%`,
-    background: colors.iconColor,
     opacity: 'var(--ds-toast-progress-opacity, 0.5)' as unknown as number,
     transition: 'width 0.1s linear',
   };

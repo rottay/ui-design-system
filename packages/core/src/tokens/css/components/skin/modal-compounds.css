@@ -1,0 +1,42 @@
+/**
+ * Modal compound skin -- Modal.Header / Body / Footer / CloseButton
+ * (WO-SKIN-03 checkpoint O).
+ *
+ * Engine-agnostic: these four compounds render one tree regardless of the active
+ * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair.
+ * They are a fully parallel implementation of the same visual parts the engines
+ * hand-roll inline, on their own `--ds-modal-{header,footer}-border` /
+ * `--ds-modal-close-color` tokens; the engines' own section rules are anchored on
+ * `surface > ...` so composing a compound inside an engine body cannot pick up
+ * engine paint on top of these rules.
+ *
+ * DELIBERATELY UNLAYERED (P-47) and, for the two divider rules, at b >= 4 (P-48)
+ * to clear the tenant artifacts' unlayered `*` border-color floor at (0,3,1).
+ * `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * The `divider` booleans ride the `--ds-modal-{header,footer}-divider` hatches:
+ * an off divider resolves to the same explicit `none` the inline style set.
+ */
+
+.rottay-modal-header.rottay-modal-header[data-part='header'][data-part='header'] {
+  border-bottom: var(--ds-modal-header-divider);
+}
+
+.rottay-modal-header [data-part='title'] {
+  color: var(--ds-modal-title-color, inherit);
+}
+
+.rottay-modal-body[data-part='body'] {
+  color: var(--ds-modal-body-color, inherit);
+}
+
+.rottay-modal-footer.rottay-modal-footer[data-part='footer'][data-part='footer'] {
+  border-top: var(--ds-modal-footer-divider);
+}
+
+.rottay-modal-close[data-part='close-button'] {
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-modal-close-color, rgba(0, 0, 0, 0.45));
+}

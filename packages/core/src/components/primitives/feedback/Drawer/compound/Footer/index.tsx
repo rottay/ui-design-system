@@ -204,20 +204,18 @@ export const DrawerFooter = forwardRef<HTMLDivElement, DrawerFooterProps>(
       // Spacing
       padding: FOOTER_PADDING,
 
-      // Visual - optional top border for separation
-      borderTop: divider
+      // Visual - the `divider` decision rides a hatch the skin consumes, so the
+      // "off" branch resolves to the same explicit `none` React set inline.
+      '--ds-drawer-footer-divider': divider
         ? '1px solid var(--ds-drawer-footer-border, var(--ds-color-border, rgba(0, 0, 0, 0.1)))'
         : 'none',
-
-      // Background - transparent by default, customizable
-      backgroundColor: 'var(--ds-drawer-footer-bg, transparent)',
 
       // Prevent shrinking when content overflows
       flexShrink: 0,
 
       // Merge user styles (takes precedence)
       ...style,
-    };
+    } as React.CSSProperties;
 
     // -------------------------------------------------------------------------
     // Render

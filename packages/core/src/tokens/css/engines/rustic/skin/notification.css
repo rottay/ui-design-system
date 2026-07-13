@@ -1,0 +1,106 @@
+/**
+ * Rustic Notification skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: this engine carries no DaisyUI `alert`/`toast` class and no
+ * `ds-notification` class, so NONE of personality.css's feedback rules
+ * (`.alert`, `.rottay-toast-container > *`, `[data-engine] .ds-notification`)
+ * match any element painted here. The `rottay-notification--rustic` /
+ * `-stack--rustic` scope classes were chosen to keep it that way: naming the root
+ * `ds-notification` would newly activate personality's dormant `ds-toast-enter`
+ * entrance rule on top of this engine's own slide-in.
+ *
+ * SPECIFICITY (P-48): the per-tone `border-left` accent bars paint a border COLOR
+ * and reach b >= 4 to clear the tenant artifacts' unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
+ * (0,3,1). `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * The `open` type has NO accent bar: its entry in the style table was an empty
+ * object. It DOES have an icon colour, but the icon is never rendered for it (the
+ * icon renderer returns null on `open` before reaching the table) -- that entry
+ * was unreachable, so it is not transcribed.
+ */
+
+/* ---- item: base surface ---- */
+.rottay-notification--rustic[data-part='root'] {
+  border-radius: var(--ds-notification-radius, 12px);
+  background-color: var(--ds-notification-bg, var(--ds-color-bg-elevated));
+  box-shadow: var(--ds-notification-shadow, var(--ds-shadow-lg));
+}
+
+/* ---- per-type left accent bar ---- */
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='success'] {
+  border-left: 4px solid var(--ds-notification-success-color, var(--ds-color-success));
+}
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='error'] {
+  border-left: 4px solid var(--ds-notification-error-color, var(--ds-color-error));
+}
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='info'] {
+  border-left: 4px solid var(--ds-notification-info-color, var(--ds-color-primary-500));
+}
+.rottay-notification--rustic.rottay-notification--rustic[data-part='root'][data-tone='warning'] {
+  border-left: 4px solid var(--ds-notification-warning-color, var(--ds-color-warning));
+}
+
+/* ---- per-type icon colour (built-in glyph only) ---- */
+.rottay-notification--rustic[data-tone='success'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-success-color, var(--ds-color-success));
+}
+.rottay-notification--rustic[data-tone='error'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-error-color, var(--ds-color-error));
+}
+.rottay-notification--rustic[data-tone='info'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-info-color, var(--ds-color-primary-500));
+}
+.rottay-notification--rustic[data-tone='warning'] > [data-part='icon'][data-icon='builtin'] {
+  color: var(--ds-notification-warning-color, var(--ds-color-warning));
+}
+
+/* ---- title + description ---- */
+.rottay-notification--rustic [data-part='title'] {
+  color: var(--ds-notification-title-color, var(--ds-color-text-primary));
+}
+.rottay-notification--rustic [data-part='description'] {
+  color: var(--ds-notification-desc-color, var(--ds-color-text-secondary));
+}
+
+/* ---- close button ---- */
+.rottay-notification--rustic > [data-part='close-button'] {
+  border: none;
+  background: none;
+  color: var(--ds-notification-close-color, var(--ds-color-text-tertiary));
+}
+.rottay-notification--rustic > [data-part='close-button']:hover {
+  color: var(--ds-notification-close-color-hover, var(--ds-color-text-primary));
+}
+
+/* ---- stack container: the two centered placements ---- */
+.rottay-notification-stack--rustic[data-part='stack-container'][data-placement='top'],
+.rottay-notification-stack--rustic[data-part='stack-container'][data-placement='bottom'] {
+  transform: translateX(-50%);
+}
+
+/* ---- entrance / exit keyframes, engine-namespaced ---- */
+@keyframes ds-notification-slide-in-rustic {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes ds-notification-slide-out-rustic {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
+  }
+}

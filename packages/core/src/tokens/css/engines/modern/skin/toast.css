@@ -1,0 +1,129 @@
+/**
+ * Modern Toast skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47), and here that is the whole point of the file.
+ * The root carries DaisyUI's structural `alert` class, and TWO layered rules
+ * paint through it:
+ *
+ *   DaisyUI `.alert`                    -> border-color from --alert-border-color
+ *                                          (on the BASE rule: this engine applies
+ *                                          no `alert-{variant}` modifier)
+ *   personality.css `.alert`   (0,1,0)  -> border-left-width: var(..., 4px)
+ *                                          border-left-style: solid
+ *                                          transition: opacity/transform
+ *
+ * Both live in layers (Tailwind's, and `rottay-personality`). An unlayered
+ * declaration outranks EVERY layer regardless of specificity, so the per-tone
+ * `border` shorthands below suppress the DaisyUI border-color AND personality's
+ * accent bar -- exactly as the inline `border` from the deleted getAlertStyle()
+ * did. The floor to clear is (0,1,0); this file sits above it by being unlayered,
+ * not by escalation. Personality's `transition` is untouched by anything here and
+ * stays live, as before.
+ *
+ * The `border` MUST stay a SHORTHAND. Splitting it into longhands would leave
+ * `border-left-style`/`border-left-width` uncontested and let personality's 4px
+ * accent bar re-appear on the left edge of every toast.
+ *
+ * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
+ * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1); the per-tone border rules sit at b=5 so they
+ * beat the un-toned fallback at b=4. `border: none` on the action/close buttons
+ * is a color-free reset and is exempt.
+ *
+ * TONES: the eight `ToastVariant`s, transcribed from the deleted getAlertStyle()
+ * switch. The un-toned rule reproduces that switch's `default:` arm (an unknown
+ * or absent variant fell through to VARIANT_COLORS.default's bg/color) -- which
+ * is NOT the same paint as `[data-tone='default']`, whose arm reads the card
+ * surface tokens instead. Both are kept.
+ */
+
+/* ---- root: elevation ---- */
+.rottay-toast--modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- fallback tone (switch `default:` arm -- variant outside the eight) ---- */
+.rottay-toast--modern[data-part='root'] {
+  background: var(--ds-toast-default-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-toast-default-color, var(--ds-color-text-primary));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+
+/* ---- the eight tones: fill + text ---- */
+.rottay-toast--modern[data-part='root'][data-tone='default'] {
+  background: var(--ds-card-bg);
+  color: var(--ds-card-color);
+}
+.rottay-toast--modern[data-part='root'][data-tone='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+.rottay-toast--modern[data-part='root'][data-tone='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.rottay-toast--modern[data-part='root'][data-tone='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  color: var(--ds-color-warning);
+}
+.rottay-toast--modern[data-part='root'][data-tone='info'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+.rottay-toast--modern[data-part='root'][data-tone='primary'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  color: var(--ds-color-primary);
+}
+.rottay-toast--modern[data-part='root'][data-tone='secondary'] {
+  background: color-mix(in srgb, var(--ds-color-secondary) 10%, transparent);
+  color: var(--ds-color-secondary);
+}
+.rottay-toast--modern[data-part='root'][data-tone='gradient'] {
+  background: var(
+    --ds-toast-gradient-bg,
+    linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-secondary))
+  );
+  color: var(--ds-toast-gradient-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- the eight tones: border (from VARIANT_COLORS[tone].borderColor) ---- */
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='default'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='success'] {
+  border: 1px solid var(--ds-toast-success-border, var(--ds-color-success-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='error'] {
+  border: 1px solid var(--ds-toast-error-border, var(--ds-color-error-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='warning'] {
+  border: 1px solid var(--ds-toast-warning-border, var(--ds-color-warning-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='info'] {
+  border: 1px solid var(--ds-toast-info-border, var(--ds-color-info-border));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='primary'] {
+  border: 1px solid var(--ds-toast-primary-border, var(--ds-color-alpha-primary-20));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='secondary'] {
+  border: 1px solid var(--ds-toast-secondary-border, var(--ds-color-alpha-secondary-20));
+}
+.rottay-toast--modern.rottay-toast--modern[data-part='root'][data-part='root'][data-tone='gradient'] {
+  border: 1px solid transparent;
+}
+
+/* ---- action + close buttons (ghost; no hover ships on this engine) ---- */
+.rottay-toast--modern [data-part='action'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-toast--modern [data-part='close-button'] {
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}

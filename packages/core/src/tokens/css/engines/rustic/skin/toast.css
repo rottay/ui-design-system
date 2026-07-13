@@ -1,0 +1,160 @@
+/**
+ * Rustic Toast skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: this engine's root carries no DaisyUI `alert` class and no
+ * `.rottay-toast-container` (that class belongs to the compound stack container,
+ * whose rules live in components/skin/toast-compounds.css). No rule in
+ * runtime/personality.css matches any element painted here.
+ *
+ * SPECIFICITY (P-48): every border rule reaches b >= 4 to clear the tenant
+ * artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1); the per-tone borders sit at b=5 so they beat the
+ * un-toned fallback at b=4. `border: none` on the close button is a color-free
+ * reset and is exempt.
+ *
+ * TONES: the eight `ToastVariant`s, from VARIANT_COLORS in Toast.types.ts. Unlike
+ * the modern engine, this one read every tone straight from that table, so the
+ * un-toned fallback rule (`VARIANT_COLORS.default`, for a variant outside the
+ * eight) and `[data-tone='default']` resolve to the same paint.
+ *
+ * HATCHES: `--ds-toast-radius` (the `radius` prop), `--ds-toast-elevation` (the
+ * `shadow` toggle) and `--ds-toast-transform` (the exit scale/translate) are
+ * stamped inline per instance. The progress bar's `width` stays inline: the rAF
+ * loop writes only that, which is layout, not paint.
+ */
+
+/* ---- root: per-instance geometry + exit transform ---- */
+.rottay-toast--rustic[data-part='root'] {
+  border-radius: var(--ds-toast-radius);
+  box-shadow: var(--ds-toast-elevation);
+  transform: var(--ds-toast-transform);
+}
+
+/* ---- fallback tone (VARIANT_COLORS.default). `--ds-toast-tone-icon` is declared
+        on the ROOT so the per-tone rules below (one unit more specific) win and
+        the resolved value INHERITS down to the icon and the progress bar. ---- */
+.rottay-toast--rustic[data-part='root'] {
+  background: var(--ds-toast-default-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-toast-default-color, var(--ds-color-text-primary));
+  --ds-toast-tone-icon: var(--ds-toast-default-icon, var(--ds-color-text-secondary));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+
+/* ---- the eight tones: fill + text ---- */
+.rottay-toast--rustic[data-part='root'][data-tone='default'] {
+  background: var(--ds-toast-default-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-toast-default-color, var(--ds-color-text-primary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='success'] {
+  background: var(--ds-toast-success-bg, var(--ds-color-success-bg));
+  color: var(--ds-toast-success-color, var(--ds-color-success-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='error'] {
+  background: var(--ds-toast-error-bg, var(--ds-color-error-bg));
+  color: var(--ds-toast-error-color, var(--ds-color-error-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='warning'] {
+  background: var(--ds-toast-warning-bg, var(--ds-color-warning-bg));
+  color: var(--ds-toast-warning-color, var(--ds-color-warning-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='info'] {
+  background: var(--ds-toast-info-bg, var(--ds-color-info-bg));
+  color: var(--ds-toast-info-color, var(--ds-color-info-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='primary'] {
+  background: var(--ds-toast-primary-bg, var(--ds-color-alpha-primary-10));
+  color: var(--ds-toast-primary-color, var(--ds-color-primary-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='secondary'] {
+  background: var(--ds-toast-secondary-bg, var(--ds-color-alpha-secondary-10));
+  color: var(--ds-toast-secondary-color, var(--ds-color-secondary-700));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='gradient'] {
+  background: var(
+    --ds-toast-gradient-bg,
+    linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-secondary))
+  );
+  color: var(--ds-toast-gradient-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- the eight tones: border ---- */
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='default'] {
+  border: 1px solid var(--ds-toast-default-border, var(--ds-color-border-primary));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='success'] {
+  border: 1px solid var(--ds-toast-success-border, var(--ds-color-success-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='error'] {
+  border: 1px solid var(--ds-toast-error-border, var(--ds-color-error-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='warning'] {
+  border: 1px solid var(--ds-toast-warning-border, var(--ds-color-warning-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='info'] {
+  border: 1px solid var(--ds-toast-info-border, var(--ds-color-info-border));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='primary'] {
+  border: 1px solid var(--ds-toast-primary-border, var(--ds-color-alpha-primary-20));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='secondary'] {
+  border: 1px solid var(--ds-toast-secondary-border, var(--ds-color-alpha-secondary-20));
+}
+.rottay-toast--rustic.rottay-toast--rustic[data-part='root'][data-part='root'][data-tone='gradient'] {
+  border: 1px solid transparent;
+}
+
+/* ---- icon + progress bar share the tone's icon colour (VARIANT_COLORS[t].iconColor),
+        routed through one per-tone custom property so each tone declares it once. ---- */
+.rottay-toast--rustic[data-part='root'][data-tone='default'] {
+  --ds-toast-tone-icon: var(--ds-toast-default-icon, var(--ds-color-text-secondary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='success'] {
+  --ds-toast-tone-icon: var(--ds-toast-success-icon, var(--ds-color-success));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='error'] {
+  --ds-toast-tone-icon: var(--ds-toast-error-icon, var(--ds-color-error));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='warning'] {
+  --ds-toast-tone-icon: var(--ds-toast-warning-icon, var(--ds-color-warning));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='info'] {
+  --ds-toast-tone-icon: var(--ds-toast-info-icon, var(--ds-color-info));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='primary'] {
+  --ds-toast-tone-icon: var(--ds-toast-primary-icon, var(--ds-color-primary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='secondary'] {
+  --ds-toast-tone-icon: var(--ds-toast-secondary-icon, var(--ds-color-secondary));
+}
+.rottay-toast--rustic[data-part='root'][data-tone='gradient'] {
+  --ds-toast-tone-icon: var(--ds-toast-gradient-icon, var(--ds-color-text-on-primary));
+}
+
+.rottay-toast--rustic > [data-part='icon'] {
+  color: var(--ds-toast-tone-icon);
+}
+.rottay-toast--rustic > [data-part='progress-bar'] {
+  background: var(--ds-toast-tone-icon);
+}
+
+/* ---- action + close buttons ---- */
+.rottay-toast--rustic [data-part='action'] {
+  background: transparent;
+  border-radius: var(--ds-toast-action-radius, 4px);
+  color: inherit;
+}
+.rottay-toast--rustic.rottay-toast--rustic [data-part='action'][data-part='action'] {
+  border: 1px solid currentColor;
+}
+.rottay-toast--rustic > [data-part='close-button'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+  border-radius: 4px;
+}

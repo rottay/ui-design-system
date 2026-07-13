@@ -120,8 +120,10 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
       // Spacing - uses PADDING_MAP for consistency
       padding: PADDING_MAP.lg,
 
-      // Visual - optional bottom border for separation
-      borderBottom: divider
+      // Visual - optional bottom border for separation. The `divider` decision
+      // rides a hatch the skin consumes, so the "off" branch resolves to the
+      // same explicit `none` React set inline.
+      '--ds-modal-header-divider': divider
         ? '1px solid var(--ds-modal-header-border, rgba(0, 0, 0, 0.1))'
         : 'none',
 
@@ -130,7 +132,7 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
 
       // Merge user styles (takes precedence)
       ...style,
-    };
+    } as React.CSSProperties;
 
     /**
      * Styles for the title text container.
@@ -145,9 +147,6 @@ export const ModalHeader = forwardRef<HTMLDivElement, ModalHeaderProps>(
       fontSize: 'var(--ds-modal-title-font-size, 18px)',
       fontWeight: 'var(--ds-modal-title-font-weight, 600)',
       lineHeight: 1.4,
-
-      // Color - inherits or uses custom property
-      color: 'var(--ds-modal-title-color, inherit)',
     };
 
     // -------------------------------------------------------------------------

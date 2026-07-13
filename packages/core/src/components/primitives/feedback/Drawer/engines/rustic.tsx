@@ -269,15 +269,19 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
    * Overlay/mask styles.
    * Covers the entire viewport with semi-transparent background.
    */
+  // The scrim alpha is per-instance, so it rides a hatch the skin composes into
+  // rgba(). No backdrop-filter is set here or in the rustic skin: this engine's
+  // blur comes from personality.css's `.rottay-drawer-overlay` rule, which stays
+  // the only declaration on that channel.
   const overlayStyle: React.CSSProperties = {
     position: 'fixed',
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: `rgba(0, 0, 0, ${maskOpacity})`,
+    '--ds-drawer-overlay-opacity': maskOpacity,
     zIndex,
-  };
+  } as React.CSSProperties;
 
   /**
    * Generate drawer container styles based on placement.
@@ -287,10 +291,10 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
     // Base styles with CSS custom property theming
     const baseStyle: React.CSSProperties = {
       position: 'fixed',
-      backgroundColor: 'var(--ds-drawer-bg, var(--ds-color-bg-elevated))',
-      boxShadow: 'var(--ds-drawer-shadow, 0 8px 30px rgba(0, 0, 0, 0.12))',
-      // CSS transition on transform allows the slide-in/out animation.
-      // The drawer's zIndex is mask+1 so it renders above the overlay.
+      // This transition never fires: the panel is positioned with top/left/right/
+      // bottom and `transform` is never assigned, so there is no transform delta
+      // to interpolate. Kept as-is -- it is also what suppresses personality.css's
+      // `.rottay-drawer { transition: transform ... }` on this engine.
       transition: 'var(--ds-drawer-transition, transform 0.3s ease-in-out)',
       overflowY: 'auto',
       zIndex: zIndex! + 1,
@@ -344,7 +348,6 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
    */
   const headerStyle: React.CSSProperties = {
     padding: 'var(--ds-drawer-header-padding, 16px 24px)',
-    borderBottom: '1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -367,17 +370,13 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
    */
   const footerStyle: React.CSSProperties = {
     padding: 'var(--ds-drawer-footer-padding, 10px 16px)',
-    borderTop: '1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle))',
     flexShrink: 0,
   };
 
   /**
    * Close button styles.
-   * Minimal, accessible button with hover feedback.
    */
   const closeButtonStyle: React.CSSProperties = {
-    background: 'transparent',
-    border: 'none',
     fontSize: 'var(--ds-drawer-close-size, 20px)',
     cursor: 'pointer',
     padding: '0',
@@ -386,7 +385,6 @@ export default function RusticDrawer(props: DrawerProps): React.ReactElement {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'var(--ds-drawer-close-color, var(--ds-color-text-secondary))',
   };
 
   // ---------------------------------------------------------------------------

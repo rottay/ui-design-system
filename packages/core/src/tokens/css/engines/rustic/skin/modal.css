@@ -1,0 +1,87 @@
+/**
+ * Rustic Modal skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): every rule painting a border COLOR reaches b >= 4 to clear
+ * the tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). `border: none` on the OK and close buttons is a
+ * color-free reset and is exempt.
+ *
+ * PORTAL: this engine mounts through the shared Portal utility into
+ * `#rottay-portal-root` on `document.body`, outside any tenant-scoped subtree.
+ * Rules anchor on the root class only, so they resolve there.
+ *
+ * PERSONALITY: `runtime/personality.css` keys its modal rules on `.ant-modal`,
+ * `.modal`, `.modal-backdrop`, `.modal-box`, `[data-engine] .ds-modal*`. The
+ * root's pre-existing `rottay-modal-overlay` and the surface's `rottay-modal`
+ * match NONE of those, so no personality rule paints these elements -- the
+ * `.rottay-modal*` names are pure hooks with no stylesheet behind them.
+ *
+ * DIRECT-CHILD COMBINATORS keep this engine's section paint off a composed
+ * `Modal.Header`/`Body`/`Footer` compound, which reuses the same `data-part`
+ * names inside the body and carries its own skin.
+ */
+
+/* ---- root doubles as the scrim; alpha rides a hatch stamped per instance ---- */
+.rottay-modal-root--rustic[data-part='root'] {
+  background-color: rgba(0, 0, 0, var(--ds-modal-scrim-opacity));
+}
+
+/* ---- panel surface ---- */
+.rottay-modal-root--rustic > [data-part='surface'] {
+  background-color: var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  border-radius: var(--ds-modal-radius, var(--ds-radius-lg, 12px));
+  box-shadow: var(--ds-modal-shadow, var(--ds-shadow-xl));
+}
+
+/* ---- section dividers ---- */
+.rottay-modal-root--rustic.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid
+    var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)));
+}
+.rottay-modal-root--rustic.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid
+    var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)));
+}
+
+/* ---- close button ---- */
+.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='header']
+  > [data-part='close-button'] {
+  background: transparent;
+  border: none;
+}
+
+/* ---- footer actions ---- */
+.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-modal-btn-radius, 4px);
+  background: var(--ds-modal-cancel-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)));
+  color: var(--ds-modal-cancel-color, var(--ds-color-text-primary, inherit));
+}
+.rottay-modal-root--rustic.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border: 1px solid
+    var(--ds-modal-cancel-border, var(--ds-color-border-secondary, var(--ds-color-border-primary)));
+}
+.rottay-modal-root--rustic
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='ok'] {
+  border-radius: var(--ds-modal-btn-radius, 4px);
+  background: var(--ds-modal-ok-bg, var(--ds-color-primary-500, var(--ds-color-primary)));
+  color: var(--ds-modal-ok-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)));
+  border: none;
+}

@@ -80,7 +80,7 @@
 
 import React from 'react';
 import type { ResultProps, ResultStatus } from '../Result.types';
-import { RESULT_DEFAULTS, RESULT_COLORS, RESULT_ICONS } from '../Result.types';
+import { RESULT_DEFAULTS, RESULT_ICONS } from '../Result.types';
 
 // ============================================================================
 // Styles
@@ -97,19 +97,11 @@ import { RESULT_DEFAULTS, RESULT_COLORS, RESULT_ICONS } from '../Result.types';
  * @internal
  */
 /**
- * CSS variable-based color mapping for result statuses.
- * Uses design system tokens with fallbacks.
+ * The per-status colour map moved verbatim into the unlayered rustic Result skin,
+ * keyed on `data-tone`. Its `|| RESULT_COLORS[status]` fallback was unreachable --
+ * the map covered every `ResultStatus` key -- so only the live half was carried
+ * over. `RESULT_COLORS` remains exported from Result.types.ts.
  */
-const STATUS_COLOR_VARS: Record<ResultStatus, string> = {
-  success: 'var(--ds-result-success-color, var(--ds-color-success))',
-  error: 'var(--ds-result-error-color, var(--ds-color-error))',
-  info: 'var(--ds-result-info-color, var(--ds-color-info))',
-  warning: 'var(--ds-result-warning-color, var(--ds-color-warning))',
-  '404': 'var(--ds-result-404-color, var(--ds-color-info))',
-  '403': 'var(--ds-result-403-color, var(--ds-color-warning))',
-  '500': 'var(--ds-result-500-color, var(--ds-color-error))',
-};
-
 const styles = {
   /**
    * Container styles - centered flex layout.
@@ -137,31 +129,26 @@ const styles = {
    * @param status - The result status for color lookup
    * @returns CSSProperties for the icon container
    */
-  icon: (status: ResultStatus): React.CSSProperties => ({
+  // The badge's circular fill and the status code's colour are keyed on
+  // `data-tone` in the unlayered rustic Result skin, from STATUS_COLOR_VARS.
+  icon: {
     width: 'var(--ds-result-icon-size, 72px)',
     height: 'var(--ds-result-icon-size, 72px)',
-    borderRadius: '50%',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 'var(--ds-result-icon-font-size, 32px)',
-    color: 'var(--ds-result-icon-color, var(--ds-color-text-on-primary))',
-    backgroundColor: STATUS_COLOR_VARS[status] || RESULT_COLORS[status],
-  }),
+  } as React.CSSProperties,
 
   /**
    * HTTP status code display styles (404, 403, 500).
    * Creates a large, bold status code display.
-   *
-   * @param status - The result status for color lookup
-   * @returns CSSProperties for the status code display
    */
-  statusCode: (status: ResultStatus): React.CSSProperties => ({
+  statusCode: {
     fontSize: 'var(--ds-result-code-size, 72px)',
     fontWeight: 700,
-    color: STATUS_COLOR_VARS[status] || RESULT_COLORS[status],
     lineHeight: 1,
-  }),
+  } as React.CSSProperties,
 
   /**
    * Title styles - prominent heading.
@@ -169,7 +156,6 @@ const styles = {
   title: {
     fontSize: 'var(--ds-result-title-size, 24px)',
     fontWeight: 600,
-    color: 'var(--ds-result-title-color, var(--ds-color-text-primary))',
     marginBottom: '8px',
     maxWidth: 'var(--ds-result-max-width, 480px)',
   } as React.CSSProperties,
@@ -179,7 +165,6 @@ const styles = {
    */
   subTitle: {
     fontSize: 'var(--ds-result-subtitle-size, 14px)',
-    color: 'var(--ds-result-subtitle-color, var(--ds-color-text-secondary))',
     marginBottom: '24px',
     maxWidth: 'var(--ds-result-max-width, 480px)',
     lineHeight: 1.6,
@@ -222,12 +207,12 @@ const renderIcon = (status: ResultStatus): React.ReactNode => {
   // HTTP status codes are rendered as bold text rather than icons
   // because they are universally recognisable and carry more meaning
   if (['404', '403', '500'].includes(status)) {
-    return <div style={styles.statusCode(status)}>{status}</div>;
+    return <div data-part="status-code" style={styles.statusCode}>{status}</div>;
   }
 
   // Standard statuses display icon character in colored circle
   return (
-    <div style={styles.icon(status)}>
+    <div data-part="status-icon" style={styles.icon}>
       {RESULT_ICONS[status]}
     </div>
   );

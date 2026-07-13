@@ -49,18 +49,6 @@ const SIZE_WIDTH_MAP: Record<ModalSize, string> = {
   full: '95vw',
 };
 
-/** Keyframe + utility styles injected once. */
-const MODAL_STYLES = `
-@keyframes ds-modal-backdrop-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes ds-modal-panel-enter {
-  from { opacity: 0; transform: scale(0.96); }
-  to   { opacity: 1; transform: scale(1); }
-}
-`;
-
 const RADIUS_MAP = {
   none: '0',
   sm: 'var(--ds-radius-sm)',
@@ -197,8 +185,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
 
   return (
     <Portal>
-      <style dangerouslySetInnerHTML={{ __html: MODAL_STYLES }} />
-
       {/* Fullscreen backdrop */}
       <div
         data-part="root"
@@ -225,11 +211,18 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundColor: getOverlayBackground(showBackdrop, overlayOpacity ?? MODAL_DEFAULTS.overlayOpacity ?? 0.45),
-              backdropFilter: blurBackdrop ? 'var(--ds-modal-overlay-backdrop, blur(8px))' : undefined,
-              WebkitBackdropFilter: blurBackdrop ? 'var(--ds-modal-overlay-backdrop, blur(8px))' : undefined,
-              animation: disableAnimation ? undefined : 'ds-modal-backdrop-fade var(--ds-motion-normal) var(--ds-motion-ease-out)',
-            }}
+              // Runtime scrim colour and the opt-in blur ride custom-property
+              // hatches: both are computed per instance, so the skin cannot
+              // enumerate them. An unset filter hatch resolves to the `none`
+              // fallback, matching the omitted-key behavior of `blurBackdrop: false`.
+              // Named `--ds-modal-scrim-*`, NOT `--ds-modal-overlay-bg`: that is a
+              // live BrandTheme token (chrome.modal.overlayBg) which four
+              // primitives/overlay components read, and an inline stamp of it here
+              // would shadow a tenant's value.
+              '--ds-modal-scrim-fill': getOverlayBackground(showBackdrop, overlayOpacity ?? MODAL_DEFAULTS.overlayOpacity ?? 0.45),
+              '--ds-modal-scrim-filter': blurBackdrop ? 'var(--ds-modal-overlay-backdrop, blur(8px))' : undefined,
+              animation: disableAnimation ? undefined : 'ds-modal-backdrop-fade-modern var(--ds-motion-normal) var(--ds-motion-ease-out)',
+            } as React.CSSProperties}
           />
         ) : null}
 
@@ -252,15 +245,16 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
             display: 'flex',
             flexDirection: 'column',
             margin: fullScreen ? 0 : '16px',
-            backgroundColor: 'var(--ds-modal-bg, var(--ds-surface-card))',
-            border: '1px solid var(--ds-color-border)',
-            borderRadius: fullScreen ? 0 : (RADIUS_MAP[radius ?? 'lg'] ?? RADIUS_MAP.lg),
-            boxShadow: shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-5))' : 'none',
-            animation: disableAnimation ? undefined : 'ds-modal-panel-enter var(--ds-motion-normal) var(--ds-motion-ease-out)',
-            outline: 'none',
+            // Per-instance radius/elevation and the divider rule ride hatches the
+            // skin consumes. `--ds-modal-section-border` is declared here, on the
+            // surface, so the header and footer rules inherit one resolved value.
+            '--ds-modal-surface-radius': fullScreen ? 0 : (RADIUS_MAP[radius ?? 'lg'] ?? RADIUS_MAP.lg),
+            '--ds-modal-surface-shadow': shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-5))' : 'none',
+            '--ds-modal-section-border': sectionBorder,
+            animation: disableAnimation ? undefined : 'ds-modal-panel-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out)',
             overflow: 'hidden',
             ...style,
-          }}
+          } as React.CSSProperties}
         >
           {/* ---- Header ---- */}
           {(header || title || description || closable) && (
@@ -271,7 +265,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 alignItems: 'flex-start',
                 justifyContent: 'space-between',
                 padding: '16px 24px',
-                borderBottom: sectionBorder,
                 flexShrink: 0,
               }}
             >
@@ -286,7 +279,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                           fontSize: '16px',
                           fontWeight: 600,
                           lineHeight: '24px',
-                          color: 'var(--ds-modal-title-color, inherit)',
                         }}
                       >
                         {title}
@@ -299,7 +291,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                           marginTop: title ? 4 : 0,
                           fontSize: 13,
                           lineHeight: '20px',
-                          color: 'var(--ds-modal-description-color, var(--ds-color-text-secondary))',
                         }}
                       >
                         {description}
@@ -320,20 +311,9 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                     justifyContent: 'center',
                     width: '32px',
                     height: '32px',
-                    border: 'none',
-                    borderRadius: 'var(--ds-radius-md)',
-                    backgroundColor: 'transparent',
                     cursor: 'pointer',
-                    color: 'var(--ds-modal-close-color, inherit)',
                     transition: 'background-color var(--ds-motion-fast) var(--ds-motion-ease-out)',
                     flexShrink: 0,
-                  }}
-                  onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor =
-                      'var(--ds-modal-close-bg-hover, var(--ds-surface-highlight))';
-                  }}
-                  onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -352,7 +332,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
               overflowY: 'auto',
               padding: contentPadding,
               maxHeight: fullScreen ? undefined : '70vh',
-              color: 'var(--ds-modal-body-color, inherit)',
             }}
           >
             {children}
@@ -368,7 +347,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                 justifyContent: 'flex-end',
                 gap: '8px',
                 padding: '16px 24px',
-                borderTop: sectionBorder,
                 flexShrink: 0,
               }}
             >
@@ -380,10 +358,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                       data-action="cancel"
                       style={{
                         padding: '8px 16px',
-                        borderRadius: 'var(--ds-radius-md, 8px)',
-                        border: '1px solid var(--ds-color-border)',
-                        background: 'transparent',
-                        color: 'var(--ds-color-text-primary)',
                         fontSize: 14,
                         fontWeight: 500,
                         cursor: 'pointer',
@@ -400,10 +374,6 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
                       data-action="ok"
                       style={{
                         padding: '8px 16px',
-                        borderRadius: 'var(--ds-radius-md, 8px)',
-                        border: '1px solid var(--ds-color-primary)',
-                        background: 'var(--ds-color-primary)',
-                        color: 'var(--ds-color-text-on-primary)',
                         fontSize: 14,
                         fontWeight: 500,
                         cursor: confirmLoading ? 'wait' : 'pointer',

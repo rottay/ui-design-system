@@ -1,0 +1,47 @@
+/**
+ * Toast compound skin -- Toast.Container stack items and Toast.Undo
+ * (WO-SKIN-03 checkpoint O).
+ *
+ * Engine-agnostic: both compounds render one tree regardless of the active
+ * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair.
+ *
+ * DELIBERATELY UNLAYERED (P-47). Nothing in this file paints a border colour, so
+ * the (0,3,1) tenant border-color floor (P-48) does not apply to any rule here.
+ *
+ * ===========================================================================
+ * PERSONALITY: `.rottay-toast-container > *` -- NO CHANNEL OVERLAP
+ * ===========================================================================
+ * runtime/personality.css (layer `rottay-personality`) carries:
+ *
+ *   .rottay-toast-container > *  (0,1,0)  -> animation: ds-toast-enter 300ms ...
+ *
+ * That selector matches exactly the stack-item wrappers styled below. It declares
+ * ONLY `animation`; the wrapper never carried an inline `animation` and this file
+ * declares none, so the rule is LIVE today and stays LIVE -- there was never any
+ * suppression to preserve on that channel.
+ *
+ * The rule does interact with the `transform` below, and the interaction is
+ * unchanged by the migration: a running animation overrides the element's
+ * `transform` property regardless of origin or layer, so `ds-toast-enter` drives
+ * the transform for its 300ms; with no `forwards` fill it then hands back to the
+ * winning normal declaration -- previously the inline transform, now this rule.
+ * Same value, same handoff. The `.rottay-toast-container` class name is therefore
+ * load-bearing and must not be renamed.
+ * ===========================================================================
+ */
+
+/* ---- stack item: compress/fan transform, depth-derived, via a hatch ---- */
+.rottay-toast-container > [data-stack-depth] {
+  transform: var(--ds-toast-stack-transform);
+}
+
+/* ---- Toast.Undo: the ring/bar countdown wrapper ---- */
+.rottay-undo-toast[data-part='root'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* Scoped through the bar's own track so it cannot also match the ring's
+   `<circle data-part='fill'>` sibling, which paints via SVG stroke attributes. */
+.rottay-undo-toast [data-part='track'] > [data-part='fill'] {
+  background: var(--ds-color-primary);
+}

@@ -64,20 +64,22 @@ function getStackTransform(
 ): CSSProperties {
   const depthFromFront = Math.min(total - 1 - index, MAX_STACK_DEPTH);
 
+  // The transform is depth-derived, so it rides a hatch the compound skin
+  // consumes rather than being enumerable as a static rule.
   if (depthFromFront === 0) {
     return {
-      transform: 'none',
+      '--ds-toast-stack-transform': 'none',
       transition: disableTransition ? 'none' : 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
-    };
+    } as CSSProperties;
   }
 
   const scale = 1 - depthFromFront * STACK_SCALE_STEP;
   const offset = depthFromFront * STACK_OFFSET_STEP * (vertical === 'top' ? -1 : 1);
 
   return {
-    transform: `scale(${scale}) translateY(${offset}px)`,
+    '--ds-toast-stack-transform': `scale(${scale}) translateY(${offset}px)`,
     transition: disableTransition ? 'none' : 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
-  };
+  } as CSSProperties;
 }
 
 // ============================================================================

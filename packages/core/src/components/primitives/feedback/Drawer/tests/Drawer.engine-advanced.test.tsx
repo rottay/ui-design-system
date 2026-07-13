@@ -87,8 +87,11 @@ describe('Drawer advanced engine coverage', () => {
 
     expect(screen.getByRole('dialog')).toBeInTheDocument();
     expect(screen.getByText('Rustic footer')).toBeInTheDocument();
+    // The mask rides a custom property the skin's backdrop rule consumes; the
+    // blur itself stays personality.css's, which is why rustic declares no
+    // backdrop-filter of its own.
     expect(container.querySelector('.rottay-drawer-overlay')?.getAttribute('style') ?? '').toContain(
-      'rgba(0, 0, 0, 0.3)'
+      '--ds-drawer-overlay-opacity: 0.3'
     );
     expect(container.querySelector('.rottay-drawer')?.getAttribute('style') ?? '').toContain('height: 256px');
 

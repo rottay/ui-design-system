@@ -129,7 +129,6 @@ const styles = {
   container: (placement: 'top' | 'bottom', top: number): React.CSSProperties => ({
     position: 'fixed',
     left: '50%',
-    transform: 'translateX(-50%)',
     [placement]: placement === 'top' ? top : 24,
     zIndex: 'var(--ds-message-z-index, 1000)' as unknown as number,
     display: 'flex',
@@ -142,49 +141,28 @@ const styles = {
   /**
    * Message box styles for each type.
    */
+  // Per-type fill, border and icon colour are keyed on `data-tone` in the
+  // unlayered rustic Message skin.
   message: {
     base: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
       padding: 'var(--ds-message-padding, 10px 16px)',
-      borderRadius: 'var(--ds-message-radius, 8px)',
-      boxShadow: 'var(--ds-message-shadow, 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05))',
-      backgroundColor: 'var(--ds-message-bg, var(--ds-color-bg-elevated))',
       pointerEvents: 'auto' as const,
       // cubic-bezier(0.22, 1, 0.36, 1) is an "ease-out-expo" curve that
       // decelerates sharply, giving messages a snappy entrance that settles
       // naturally. Duration and easing are exposed as CSS vars so tenants
       // can adjust animation feel without JS changes.
       animation:
-        'messageSlideIn var(--ds-message-enter-duration, 220ms) var(--ds-message-enter-easing, cubic-bezier(0.22, 1, 0.36, 1))',
+        'ds-message-slide-in-rustic var(--ds-message-enter-duration, 220ms) var(--ds-message-enter-easing, cubic-bezier(0.22, 1, 0.36, 1))',
       maxWidth: 'var(--ds-message-max-width, 400px)',
       minWidth: 'var(--ds-message-min-width, 200px)',
     } as React.CSSProperties,
-    success: {
-      backgroundColor: 'var(--ds-message-success-bg, var(--ds-color-success-bg))',
-      border: '1px solid var(--ds-message-success-border, var(--ds-color-success-border))',
-    },
-    error: {
-      backgroundColor: 'var(--ds-message-error-bg, var(--ds-color-error-bg))',
-      border: '1px solid var(--ds-message-error-border, var(--ds-color-error-border))',
-    },
-    info: {
-      backgroundColor: 'var(--ds-message-info-bg, var(--ds-color-info-bg))',
-      border: '1px solid var(--ds-message-info-border, var(--ds-color-info-border))',
-    },
-    warning: {
-      backgroundColor: 'var(--ds-message-warning-bg, var(--ds-color-warning-bg))',
-      border: '1px solid var(--ds-message-warning-border, var(--ds-color-warning-border))',
-    },
-    loading: {
-      backgroundColor: 'var(--ds-message-loading-bg, var(--ds-color-info-bg))',
-      border: '1px solid var(--ds-message-loading-border, var(--ds-color-info-border))',
-    },
   },
 
   /**
-   * Icon styles for each message type.
+   * Icon styles shared by every message type.
    */
   icon: {
     base: {
@@ -195,11 +173,6 @@ const styles = {
       height: '16px',
       fontSize: '14px',
     } as React.CSSProperties,
-    success: { color: 'var(--ds-message-success-color, var(--ds-color-success))' },
-    error: { color: 'var(--ds-message-error-color, var(--ds-color-error))' },
-    info: { color: 'var(--ds-message-info-color, var(--ds-color-info))' },
-    warning: { color: 'var(--ds-message-warning-color, var(--ds-color-warning))' },
-    loading: { color: 'var(--ds-message-loading-color, var(--ds-color-info))' },
   },
 
   /**
@@ -209,19 +182,15 @@ const styles = {
     flex: 1,
     fontSize: 'var(--ds-message-font-size, 14px)',
     lineHeight: 'var(--ds-message-line-height, 22px)',
-    color: 'var(--ds-message-text-color, var(--ds-color-text-primary))',
   } as React.CSSProperties,
 
   /**
    * Close button styles.
    */
   closeButton: {
-    border: 'none',
-    background: 'none',
     cursor: 'pointer',
     padding: '0',
     marginLeft: '8px',
-    color: 'var(--ds-message-close-color, var(--ds-color-text-tertiary))',
     fontSize: '14px',
     lineHeight: 1,
     transition: 'color var(--ds-duration-fast, 150ms)',
@@ -231,17 +200,13 @@ const styles = {
    * Loading spinner styles.
    */
   // CSS-only spinner avoids importing a spinner component or animation library.
-  // borderTopColor: transparent creates the rotating gap illusion.
-  // Linear timing keeps constant speed -- easing would create a pulsing feel
-  // that conflicts with the "indeterminate loading" semantic.
+  // The ring (border + transparent top edge) is painted by the skin, keyed on
+  // the loading tone's empty icon element.
   loadingSpinner: {
     display: 'inline-block',
     width: '14px',
     height: '14px',
-    border: '2px solid var(--ds-message-loading-color, var(--ds-color-info))',
-    borderTopColor: 'transparent',
-    borderRadius: '50%',
-    animation: 'messageSpin var(--ds-spinner-duration, 0.8s) linear infinite',
+    animation: 'ds-message-spin-rustic var(--ds-spinner-duration, 0.8s) linear infinite',
   } as React.CSSProperties,
 };
 
@@ -254,47 +219,8 @@ const styles = {
  * Only runs on client-side and only once per page load.
  * @internal
  */
-// Runtime style injection is necessary because Rustic has zero CSS file
-// dependencies. The SSR guard (typeof document === 'undefined') prevents
-// server-side crashes. The ID check avoids duplicate <style> tags when
-// multiple MessageProviders mount (e.g., in nested micro-frontends).
-const injectStyles = () => {
-  if (typeof document === 'undefined') return;
-
-  const styleId = 'rustic-message-styles';
-  if (document.getElementById(styleId)) return;
-
-  const styleSheet = document.createElement('style');
-  styleSheet.id = styleId;
-  styleSheet.textContent = `
-    @keyframes messageSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    @keyframes messageSlideOut {
-      from {
-        opacity: 1;
-        transform: translateY(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateY(calc(var(--ds-personality-animation-offset-distance, 12px) * -1));
-      }
-    }
-    @keyframes messageSpin {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-  `;
-  document.head.appendChild(styleSheet);
-};
+// The three keyframes this engine drives (slide-in, slide-out, spin) ship in the
+// unlayered rustic Message skin, engine-namespaced. Nothing is injected at runtime.
 
 // ============================================================================
 // Message Provider Component
@@ -331,11 +257,6 @@ export const MessageProvider: React.FC<MessageProviderProps> = ({
   top = MESSAGE_DEFAULTS.top,
 }) => {
   const [messages, setMessages] = useState<InternalMessage[]>([]);
-
-  // Inject CSS keyframes on mount
-  useEffect(() => {
-    injectStyles();
-  }, []);
 
   /**
    * Removes a message from state by ID.
@@ -606,28 +527,30 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   /**
    * Renders the appropriate icon based on type or custom icon.
    */
+  // `data-icon` marks which of the three icon shapes rendered. The skin keys the
+  // spinner ring and the per-tone glyph colour on it, so a consumer-supplied
+  // `icon` -- which carries neither and was never painted here -- stays unpainted.
   const renderIcon = () => {
     if (icon) return <span data-part="icon">{icon}</span>;
 
     if (type === 'loading') {
-      return <span data-part="icon" style={styles.loadingSpinner} />;
+      return <span data-part="icon" data-icon="spinner" style={styles.loadingSpinner} />;
     }
 
     return (
-      <span data-part="icon" style={{ ...styles.icon.base, ...styles.icon[type] }}>
+      <span data-part="icon" data-icon="builtin" style={styles.icon.base}>
         {MESSAGE_ICONS[type]}
       </span>
     );
   };
 
-  /** Combined message styles with type-specific and animation styles */
+  /** Combined message styles with animation styles */
   const messageStyle: React.CSSProperties = {
     ...styles.message.base,
-    ...styles.message[type],
     ...(isExiting
       ? {
           animation:
-            'messageSlideOut var(--ds-message-exit-duration, 160ms) var(--ds-message-exit-easing, cubic-bezier(0.4, 0, 1, 1)) forwards',
+            'ds-message-slide-out-rustic var(--ds-message-exit-duration, 160ms) var(--ds-message-exit-easing, cubic-bezier(0.4, 0, 1, 1)) forwards',
         }
       : {}),
     ...style,
@@ -644,24 +567,13 @@ export const MessageItem: React.FC<MessageItemProps> = ({
     >
       {renderIcon()}
       <span data-part="body" style={styles.content}>{content}</span>
-      {/* Hover state is handled via JS events rather than CSS :hover
-          because all styling is inline (no stylesheet). This trades a small
-          performance cost for zero-dependency styling consistency.
-          aria-label is essential since the button only contains "x" text. */}
+      {/* aria-label is essential since the button only contains "x" text. */}
       {closable && (
         <button
           data-part="close-button"
           onClick={handleClose}
           style={styles.closeButton}
           aria-label="Close message"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color =
-              'var(--ds-message-close-color-hover, var(--ds-color-text-primary))';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color =
-              'var(--ds-message-close-color, var(--ds-color-text-tertiary))';
-          }}
         >
           {closeIcon || '×'}
         </button>

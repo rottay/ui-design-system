@@ -294,22 +294,21 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: `rgba(0, 0, 0, ${overlayOpacity})`,
+    // Scrim alpha is per-instance, so it rides a hatch the skin composes into
+    // the rgba() the overlay paints.
+    '--ds-modal-scrim-opacity': overlayOpacity,
     display: 'flex',
     alignItems: centered ? 'center' : 'flex-start',
     justifyContent: 'center',
     padding: '20px',
     zIndex,
     overflowY: 'auto',
-  };
+  } as React.CSSProperties;
 
-  // Three-level CSS variable fallback chain: component-specific token ->
-  // global semantic token -> hardcoded default. This allows tenants to
-  // customize at any granularity (modal-specific, theme-wide, or neither).
+  // Surface paint lives in the unlayered rustic Modal skin; the three-level CSS
+  // variable fallback chain (component token -> semantic token -> literal) moved
+  // with it verbatim. Consumer `style` still wins as an inline declaration.
   const modalStyle: React.CSSProperties = {
-    backgroundColor: 'var(--ds-modal-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-    borderRadius: 'var(--ds-modal-radius, var(--ds-radius-lg, 12px))',
-    boxShadow: 'var(--ds-modal-shadow, var(--ds-shadow-xl))',
     position: 'relative',
     width: '100%',
     ...SIZE_STYLES[modalSize],
@@ -321,7 +320,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
    */
   const headerStyle: React.CSSProperties = {
     padding: 'var(--ds-modal-header-padding, 16px 24px)',
-    borderBottom: '1px solid var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
@@ -332,7 +330,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
    */
   const footerStyle: React.CSSProperties = {
     padding: 'var(--ds-modal-footer-padding, 10px 16px)',
-    borderTop: '1px solid var(--ds-modal-border-color, var(--ds-color-border-primary, var(--ds-color-border)))',
     display: 'flex',
     justifyContent: 'flex-end',
     gap: 'var(--ds-modal-footer-gap, 12px)',
@@ -344,11 +341,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
   const cancelButtonStyle: React.CSSProperties = {
     padding: 'var(--ds-modal-btn-padding, 4px 15px)',
     fontSize: 'var(--ds-modal-btn-font-size, 14px)',
-    borderRadius: 'var(--ds-modal-btn-radius, 4px)',
     cursor: 'pointer',
-    border: '1px solid var(--ds-modal-cancel-border, var(--ds-color-border-secondary, var(--ds-color-border-primary)))',
-    background: 'var(--ds-modal-cancel-bg, var(--ds-color-bg-elevated, var(--ds-color-bg-primary)))',
-    color: 'var(--ds-modal-cancel-color, var(--ds-color-text-primary, inherit))',
   };
 
   /**
@@ -357,11 +350,7 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
   const okButtonStyle: React.CSSProperties = {
     padding: 'var(--ds-modal-btn-padding, 4px 15px)',
     fontSize: 'var(--ds-modal-btn-font-size, 14px)',
-    borderRadius: 'var(--ds-modal-btn-radius, 4px)',
     cursor: 'pointer',
-    background: 'var(--ds-modal-ok-bg, var(--ds-color-primary-500, var(--ds-color-primary)))',
-    color: 'var(--ds-modal-ok-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)))',
-    border: 'none',
   };
 
   // ---------------------------------------------------------------------------
@@ -401,8 +390,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement {
               <button
                 data-part="close-button"
                 style={{
-                  background: 'transparent',
-                  border: 'none',
                   fontSize: '20px',
                   cursor: 'pointer',
                 }}

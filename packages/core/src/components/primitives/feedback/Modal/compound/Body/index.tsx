@@ -130,7 +130,6 @@ export const ModalBody = forwardRef<HTMLDivElement, ModalBodyProps>(
       overflowX: 'hidden',
 
       // Typography - uses CSS custom properties for tenant theming
-      color: 'var(--ds-modal-body-color, inherit)',
       fontSize: 'var(--ds-modal-body-font-size, 14px)',
       lineHeight: 1.6,
 

@@ -27,64 +27,20 @@ import { usePresence } from '../../../../../motion/hooks/use-presence';
 const MOTION_DURATION = 'var(--ds-motion-normal)';
 const MOTION_EASING = 'var(--ds-motion-ease-out)';
 
-/** Keyframe animations for all four placement directions + backdrop fade, enter AND exit. */
-const DRAWER_STYLES = `
-@keyframes rottay-drawer-backdrop-fade {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes rottay-drawer-backdrop-fade-out {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-@keyframes rottay-drawer-slide-left {
-  from { transform: translateX(-100%); }
-  to   { transform: translateX(0); }
-}
-@keyframes rottay-drawer-slide-out-left {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-100%); }
-}
-@keyframes rottay-drawer-slide-right {
-  from { transform: translateX(100%); }
-  to   { transform: translateX(0); }
-}
-@keyframes rottay-drawer-slide-out-right {
-  from { transform: translateX(0); }
-  to   { transform: translateX(100%); }
-}
-@keyframes rottay-drawer-slide-top {
-  from { transform: translateY(-100%); }
-  to   { transform: translateY(0); }
-}
-@keyframes rottay-drawer-slide-out-top {
-  from { transform: translateY(0); }
-  to   { transform: translateY(-100%); }
-}
-@keyframes rottay-drawer-slide-bottom {
-  from { transform: translateY(100%); }
-  to   { transform: translateY(0); }
-}
-@keyframes rottay-drawer-slide-out-bottom {
-  from { transform: translateY(0); }
-  to   { transform: translateY(100%); }
-}
-`;
-
-/** Enter animation name lookup by placement. */
+/** Enter animation name lookup by placement. Keyframes ship in the modern Drawer skin. */
 const SLIDE_ANIMATION: Record<string, string> = {
-  left: 'rottay-drawer-slide-left',
-  right: 'rottay-drawer-slide-right',
-  top: 'rottay-drawer-slide-top',
-  bottom: 'rottay-drawer-slide-bottom',
+  left: 'rottay-drawer-slide-left-modern',
+  right: 'rottay-drawer-slide-right-modern',
+  top: 'rottay-drawer-slide-top-modern',
+  bottom: 'rottay-drawer-slide-bottom-modern',
 };
 
 /** Exit animation name lookup by placement -- mirrors SLIDE_ANIMATION. */
 const SLIDE_OUT_ANIMATION: Record<string, string> = {
-  left: 'rottay-drawer-slide-out-left',
-  right: 'rottay-drawer-slide-out-right',
-  top: 'rottay-drawer-slide-out-top',
-  bottom: 'rottay-drawer-slide-out-bottom',
+  left: 'rottay-drawer-slide-out-left-modern',
+  right: 'rottay-drawer-slide-out-right-modern',
+  top: 'rottay-drawer-slide-out-top-modern',
+  bottom: 'rottay-drawer-slide-out-bottom-modern',
 };
 
 /** Premium size presets shared with the public Drawer contract. */
@@ -94,17 +50,6 @@ const SIZE_MAP: Record<DrawerSize, string> = {
   lg: '520px',
   xl: '736px',
   full: '100%',
-};
-
-/**
- * Border-radius per placement -- rounded on the inward-facing edge only.
- * The sliding edge gets no radius to sit flush against the viewport.
- */
-const RADIUS_BY_PLACEMENT: Record<string, string> = {
-  left: '0 var(--ds-radius-lg) var(--ds-radius-lg) 0',
-  right: 'var(--ds-radius-lg) 0 0 var(--ds-radius-lg)',
-  top: '0 0 var(--ds-radius-lg) var(--ds-radius-lg)',
-  bottom: 'var(--ds-radius-lg) var(--ds-radius-lg) 0 0',
 };
 
 // ============================================================================
@@ -124,20 +69,9 @@ function CloseButton({ onClick }: { onClick: () => void }) {
         justifyContent: 'center',
         width: '32px',
         height: '32px',
-        border: 'none',
-        borderRadius: 'var(--ds-radius-md)',
-        backgroundColor: 'transparent',
         cursor: 'pointer',
-        color: 'var(--ds-color-text-secondary)',
         flexShrink: 0,
         transition: `background-color var(--ds-motion-fast) ${MOTION_EASING}`,
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.backgroundColor =
-          'var(--ds-surface-highlight)';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
       }}
     >
       <svg
@@ -233,10 +167,12 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
   const animationName =
     (dataState === 'open' ? SLIDE_ANIMATION[placement as string] : SLIDE_OUT_ANIMATION[placement as string]) ||
     (dataState === 'open' ? SLIDE_ANIMATION.right : SLIDE_OUT_ANIMATION.right);
-  const borderRadius = RADIUS_BY_PLACEMENT[placement as string] || RADIUS_BY_PLACEMENT.right;
 
   // -- position styles --------------------------------------------------------
 
+  // Surface paint (fill, the four border longhands, elevation, the per-placement
+  // radius, and the zeroed flush edge) is keyed on `data-placement` in the modern
+  // Drawer skin. Only geometry is assembled here.
   const getPositionStyles = (): React.CSSProperties => {
     const base: React.CSSProperties = {
       position: 'fixed',
@@ -246,21 +182,11 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
       zIndex: 'var(--ds-z-drawer)',
       display: 'flex',
       flexDirection: 'column',
-      background: 'var(--ds-surface-card)',
-      borderTopWidth: '1px',
-      borderRightWidth: '1px',
-      borderBottomWidth: '1px',
-      borderLeftWidth: '1px',
-      borderStyle: 'solid',
-      borderColor: 'var(--ds-color-border-subtle)',
-      boxShadow: 'var(--ds-elevation-3)',
-      borderRadius,
       animation: `${animationName} ${MOTION_DURATION} ${MOTION_EASING} both`,
       overflow: 'hidden',
       ...style,
     };
 
-    // Remove border on the edge that sits flush against the viewport
     switch (placement) {
       case 'left':
         return {
@@ -270,7 +196,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: resolvedWidth,
           height: '100vh',
           maxWidth: '100vw',
-          borderLeftWidth: 0,
         };
       case 'right':
         return {
@@ -280,7 +205,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: resolvedWidth,
           height: '100vh',
           maxWidth: '100vw',
-          borderRightWidth: 0,
         };
       case 'top':
         return {
@@ -290,7 +214,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: '100vw',
           height: resolvedHeight,
           maxHeight: '100vh',
-          borderTopWidth: 0,
         };
       case 'bottom':
         return {
@@ -300,7 +223,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
           width: '100vw',
           height: resolvedHeight,
           maxHeight: '100vh',
-          borderBottomWidth: 0,
         };
       default:
         return base;
@@ -311,9 +233,10 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: DRAWER_STYLES }} />
-
-      {/* Backdrop overlay with blur */}
+      {/* Backdrop overlay with blur. Scrim + glass layer (spec section 5) are
+          painted by the modern Drawer skin; the skin's unlayered backdrop-filter
+          is what keeps personality.css's `.rottay-drawer-overlay` blur(4px)
+          override off this engine, exactly as the inline filter used to. */}
       {mask && (
         <div
           data-part="backdrop"
@@ -323,14 +246,7 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
             position: 'fixed',
             inset: 0,
             zIndex: 'var(--ds-z-overlay)',
-            // Scrim (kept) + glass layer (spec section 5): frost tint + backdrop blur
-            // scale with --ds-effect-intensity, collapsing to a plain scrim at 0.
-            // Glass is sanctioned on overlay backdrops only.
-            backgroundColor: 'color-mix(in srgb, var(--ds-color-bg-primary) 80%, transparent)',
-            backgroundImage: 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))',
-            backdropFilter: 'var(--ds-glass-backdrop-filter)',
-            WebkitBackdropFilter: 'var(--ds-glass-backdrop-filter)',
-            animation: `${dataState === 'open' ? 'rottay-drawer-backdrop-fade' : 'rottay-drawer-backdrop-fade-out'} ${MOTION_DURATION} ${MOTION_EASING} both`,
+            animation: `${dataState === 'open' ? 'rottay-drawer-backdrop-fade-modern' : 'rottay-drawer-backdrop-fade-out-modern'} ${MOTION_DURATION} ${MOTION_EASING} both`,
           }}
         />
       )}
@@ -357,7 +273,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
               justifyContent: 'space-between',
               gap: '12px',
               padding: '16px 24px',
-              borderBottom: '1px solid var(--ds-color-border-subtle)',
               flexShrink: 0,
             }}
           >
@@ -369,7 +284,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
                     fontSize: '16px',
                     fontWeight: 600,
                     lineHeight: '24px',
-                    color: 'var(--ds-color-text-primary)',
                   }}
                 >
                   {title}
@@ -402,7 +316,6 @@ export default function ModernDrawer(props: DrawerProps): React.ReactElement {
               justifyContent: 'flex-end',
               gap: '8px',
               padding: '16px 24px',
-              borderTop: '1px solid var(--ds-color-border-subtle)',
               flexShrink: 0,
             }}
           >

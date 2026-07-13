@@ -1,25 +1,61 @@
 /**
  * Toast modern engine — variant surface token derivation (WO-ENG-21, P-41).
  *
- * Every variant `ToastVariant` admits must paint its background, text
- * colour, and border from tenant-derived DS tokens rather than inheriting
- * DaisyUI's un-tenanted `.alert` literals (base-100/base-content fill,
- * base-200 border).
+ * Every variant `ToastVariant` admits must paint its background, text colour,
+ * and border from tenant-derived DS tokens rather than inheriting DaisyUI's
+ * un-tenanted `.alert` literals (base-100/base-content fill, base-200 border).
+ *
+ * WO-SKIN-03 moved that paint out of `getAlertStyle()` and into the unlayered
+ * skin, so the derivation is now a two-part contract: the engine stamps the
+ * tone, and `engines/modern/skin/toast.css` carries one rule per tone. Both
+ * halves are pinned here — reading the skin also sidesteps the jsdom CSSOM
+ * limitations (`color-mix()`, a `var()` whose fallback is another `var()`)
+ * that kept the pre-migration suite from asserting several variants at all.
+ *
+ * The per-tone `border` MUST stay a shorthand: Toast-modern's root carries
+ * DaisyUI's structural `alert` class, which `personality.css` targets with a
+ * `border-left-width: 4px` accent bar. The inline shorthand suppressed it; a
+ * skin that split the shorthand into longhands would leave that bar
+ * uncontested and re-materialise it on every modern toast.
  */
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
 import React from 'react';
 import { describe, expect, it } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-import ModernToast, { getAlertStyle } from '../engines/modern';
+import ModernToast from '../engines/modern';
 import { VARIANT_COLORS } from '../Toast.types';
 
-describe('Toast modern engine — default variant', () => {
-  it('reads the card surface tokens instead of an inherited literal', () => {
-    render(<ModernToast variant="default" title="Notice" visible />);
+const here = dirname(fileURLToPath(import.meta.url));
+// Comments are stripped: the skin's header documents the very declarations
+// asserted below, so matching raw text would both false-green the positive
+// pins and false-red the longhand ban.
+const SKIN = readFileSync(
+  join(here, '../../../../../tokens/css/engines/modern/skin/toast.css'),
+  'utf8'
+).replace(/\/\*[\s\S]*?\*\//g, '');
+
+const VARIANTS = [
+  'default',
+  'success',
+  'error',
+  'warning',
+  'info',
+  'primary',
+  'secondary',
+  'gradient',
+] as const;
+
+describe('Toast modern engine — the tone reaches the DOM', () => {
+  it.each(VARIANTS)('%s stamps data-tone on the alert root', (variant) => {
+    render(<ModernToast variant={variant} title="Notice" visible />);
     const alert = screen.getByRole('alert');
 
-    expect(alert.style.background).toBe('var(--ds-card-bg)');
-    expect(alert.style.color).toBe('var(--ds-card-color)');
+    expect(alert.getAttribute('data-tone')).toBe(variant);
+    expect(alert.getAttribute('data-part')).toBe('root');
   });
 
   it('keeps the structural `alert` class but drops the animate-* utility', () => {
@@ -29,104 +65,49 @@ describe('Toast modern engine — default variant', () => {
     expect(alert.className).toContain('alert');
     expect(alert.className).not.toMatch(/animate-fade/);
   });
+
+  it('paints nothing inline: the surface is the skin`s to own', () => {
+    render(<ModernToast variant="success" title="Notice" visible />);
+    const alert = screen.getByRole('alert');
+
+    expect(alert.style.background).toBe('');
+    expect(alert.style.color).toBe('');
+    expect(alert.style.border).toBe('');
+  });
 });
 
-describe('Toast modern engine — siblings unaffected', () => {
-  // jsdom's CSSOM (cssstyle) rejects the `background: color-mix(...)`
-  // declaration outright (it drops from the style attribute entirely), so
-  // only `color` — which jsdom parses fine — is asserted here. This is an
-  // environment limitation, not a component behavior; it applies equally on
-  // main and is not something this WO's change touches.
+describe('Toast modern engine — the skin derives every variant from tokens', () => {
+  it.each(VARIANTS)('%s carries a fill + text rule keyed on its tone', (variant) => {
+    expect(SKIN).toContain(`[data-part='root'][data-tone='${variant}']`);
+  });
+
+  it.each(VARIANTS)('%s borders from its VARIANT_COLORS token, as a shorthand', (variant) => {
+    expect(SKIN).toContain(`border: 1px solid ${VARIANT_COLORS[variant].borderColor};`);
+  });
+
+  it('never leaves a border longhand for personality.css`s accent bar to win', () => {
+    expect(SKIN).not.toMatch(/border-left-(width|style)\s*:/);
+  });
+
   it.each([
     ['success', 'var(--ds-color-success)'],
     ['error', 'var(--ds-color-error)'],
     ['warning', 'var(--ds-color-warning)'],
     ['info', 'var(--ds-color-info)'],
-  ] as const)('%s still derives from its semantic color token', (variant, colorVar) => {
-    render(<ModernToast variant={variant} title="Notice" visible />);
-    const alert = screen.getByRole('alert');
-
-    expect(alert.style.color).toBe(colorVar);
-  });
-});
-
-describe('Toast modern engine — primary/secondary no longer fall through', () => {
-  // Same jsdom color-mix limitation as above: primary/secondary's background
-  // is a color-mix() expression and is asserted (as a resolved string, not a
-  // DOM style) in the getAlertStyle() suite below instead.
-  //
-  // gradient has no case in this describe block: unlike primary/secondary,
-  // BOTH of its background and color are `var(--ds-toast-gradient-*, var(--ds-color-...))`
-  // chains -- a var() whose fallback is itself another var() call. jsdom's
-  // CSSOM drops that shape from color/background/border/borderColor alike; a
-  // bare no-fallback var() (what success/error/warning/info/primary/secondary
-  // use for `color`) is the only form it renders reliably. gradient is
-  // asserted only against getAlertStyle() below, where every field is
-  // checked directly against the resolved string.
-  it('primary derives from its semantic color token', () => {
-    render(<ModernToast variant="primary" title="Notice" visible />);
-    const alert = screen.getByRole('alert');
-
-    expect(alert.style.color).toBe('var(--ds-color-primary)');
+    ['primary', 'var(--ds-color-primary)'],
+    ['secondary', 'var(--ds-color-secondary)'],
+  ] as const)('%s still derives its text from its semantic color token', (_variant, colorVar) => {
+    expect(SKIN).toContain(`color: ${colorVar};`);
   });
 
-  it('secondary derives from its semantic color token', () => {
-    render(<ModernToast variant="secondary" title="Notice" visible />);
-    const alert = screen.getByRole('alert');
-
-    expect(alert.style.color).toBe('var(--ds-color-secondary)');
-  });
-});
-
-describe('Toast modern engine — getAlertStyle() resolves every variant, including border', () => {
-  // DaisyUI's `.alert` sets `border-color` from `--alert-border-color`
-  // (base-200) as part of the base `.alert` rule, whenever no
-  // `alert-{variant}` modifier class is applied -- and this engine never
-  // applies one. Every variant needs an explicit border to stop inheriting
-  // that un-tenanted grey, including the variants whose background/color
-  // already came from a DS token.
-  //
-  // Asserted against the pure function rather than through the rendered DOM:
-  // jsdom's CSSOM (cssstyle) drops any `border`, `borderColor`, `color`, or
-  // `background` declaration whose value contains a var() with a fallback
-  // (nested var() fallback: dropped entirely; `border`'s own width/style/color
-  // decomposition additionally mis-assigns even a plain, non-var fallback to
-  // all three longhands). A bare no-fallback var() is the only form it
-  // renders reliably. Every VARIANT_COLORS[variant].borderColor value is a
-  // nested-fallback chain (`var(--ds-toast-{variant}-border, var(--ds-color-...))`),
-  // so no DOM-level assertion can observe any variant's border in this
-  // environment. This is an environment limitation, not a component
-  // behavior -- it is exactly why the "siblings unaffected" and
-  // "primary/secondary" suites above assert only the bare-var `color` case
-  // through the DOM.
-  it.each([
-    'default',
-    'success',
-    'error',
-    'warning',
-    'info',
-    'primary',
-    'secondary',
-    'gradient',
-  ] as const)('%s resolves a tenanted border from VARIANT_COLORS', (variant) => {
-    const style = getAlertStyle(variant);
-
-    expect(style.border).toBe(`1px solid ${VARIANT_COLORS[variant].borderColor}`);
+  it('default reads the card surface tokens, not an inherited DaisyUI literal', () => {
+    expect(SKIN).toContain('background: var(--ds-card-bg);');
+    expect(SKIN).toContain('color: var(--ds-card-color);');
   });
 
-  it.each([
-    ['default', 'var(--ds-card-bg)', 'var(--ds-card-color)'],
-    ['success', 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', 'var(--ds-color-success)'],
-    ['error', 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', 'var(--ds-color-error)'],
-    ['warning', 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', 'var(--ds-color-warning)'],
-    ['info', 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', 'var(--ds-color-info)'],
-    ['primary', 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', 'var(--ds-color-primary)'],
-    ['secondary', 'color-mix(in srgb, var(--ds-color-secondary) 10%, transparent)', 'var(--ds-color-secondary)'],
-    ['gradient', VARIANT_COLORS.gradient.bg, VARIANT_COLORS.gradient.color],
-  ] as const)('%s resolves the expected background and color', (variant, background, color) => {
-    const style = getAlertStyle(variant);
-
-    expect(style.background).toBe(background);
-    expect(style.color).toBe(color);
+  it('gradient keeps its token-first chain with the two-stop fallback', () => {
+    expect(SKIN).toContain('--ds-toast-gradient-bg');
+    expect(SKIN).toContain('linear-gradient(135deg, var(--ds-color-primary), var(--ds-color-secondary))');
+    expect(SKIN).toContain('color: var(--ds-toast-gradient-color, var(--ds-color-text-on-primary));');
   });
 });

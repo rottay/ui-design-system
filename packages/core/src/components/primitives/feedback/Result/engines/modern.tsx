@@ -91,39 +91,39 @@ import { RESULT_DEFAULTS } from '../Result.types';
 const statusIcons: Record<ResultStatus, React.ReactNode> = {
   /** Success - checkmark in circle with green color */
   success: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24" style={{ color: 'var(--ds-color-success)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" data-part="status-icon" className="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
   /** Error - X in circle with red color */
   error: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24" style={{ color: 'var(--ds-color-error)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" data-part="status-icon" className="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
   /** Info - information icon with blue color */
   info: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24" style={{ color: 'var(--ds-color-info)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" data-part="status-icon" className="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
   /** Warning - triangle with exclamation with yellow/orange color */
   warning: (
-    <svg xmlns="http://www.w3.org/2000/svg" className="h-24 w-24" style={{ color: 'var(--ds-color-warning)' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg xmlns="http://www.w3.org/2000/svg" data-part="status-icon" className="h-24 w-24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
     </svg>
   ),
   /** 404 - large status code with primary color */
   '404': (
-    <div className="text-8xl font-bold" style={{ color: 'var(--ds-color-primary)' }}>404</div>
+    <div data-part="status-code" className="text-8xl font-bold">404</div>
   ),
   /** 403 - large status code with warning color */
   '403': (
-    <div className="text-8xl font-bold" style={{ color: 'var(--ds-color-warning)' }}>403</div>
+    <div data-part="status-code" className="text-8xl font-bold">403</div>
   ),
   /** 500 - large status code with error color */
   '500': (
-    <div className="text-8xl font-bold" style={{ color: 'var(--ds-color-error)' }}>500</div>
+    <div data-part="status-code" className="text-8xl font-bold">500</div>
   ),
 };
 
@@ -210,14 +210,14 @@ export const Result = React.forwardRef<HTMLDivElement, ResultProps>(
 
         {/* Title Section */}
         {title && (
-          <h2 data-part="title" className="text-2xl font-bold mb-2" style={{ color: 'var(--ds-color-text-primary)' }}>
+          <h2 data-part="title" className="text-2xl font-bold mb-2">
             {title}
           </h2>
         )}
 
         {/* Subtitle uses DS text-secondary token for visual hierarchy */}
         {subTitle && (
-          <p data-part="description" className="mb-6 max-w-md" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <p data-part="description" className="mb-6 max-w-md">
             {subTitle}
           </p>
         )}

@@ -1,0 +1,49 @@
+/**
+ * Drawer compound skin -- Drawer.Header / Body / Footer
+ * (WO-SKIN-03 checkpoint O).
+ *
+ * Engine-agnostic: these three compounds render one tree regardless of the active
+ * engine, so they get a single home here rather than an engines/{modern,rustic}/skin pair. They
+ * are a standalone composition API, parallel to the header/body/footer each engine
+ * hand-rolls, and draw on their own `--ds-drawer-{header,footer}-border` /
+ * `--ds-drawer-{body,footer}-bg` tokens. Both engines' own section rules are
+ * anchored on `surface > ...`, so composing a compound inside an engine body
+ * cannot pick up engine paint on top of these rules.
+ *
+ * DELIBERATELY UNLAYERED (P-47) and, for the two divider rules, at b >= 4 (P-48)
+ * to clear the tenant artifacts' unlayered `*` border-color floor at (0,3,1).
+ * `border: none` on the close button is a color-free reset and is exempt.
+ *
+ * PERSONALITY: `.rottay-drawer-header/-body/-footer/-close` match no rule in
+ * runtime/personality.css (its Drawer rules key on `.rottay-drawer` and
+ * `.rottay-drawer-overlay`, which the ENGINE panel and backdrop carry, not these).
+ *
+ * The `divider` booleans ride the `--ds-drawer-{header,footer}-divider` hatches:
+ * an off divider resolves to the same explicit `none` the inline style set.
+ */
+
+.rottay-drawer-header.rottay-drawer-header[data-part='header'][data-part='header'] {
+  border-bottom: var(--ds-drawer-header-divider);
+}
+
+.rottay-drawer-header [data-part='title'] {
+  color: inherit;
+}
+
+.rottay-drawer-close[data-part='close-button'] {
+  background: transparent;
+  border: none;
+  color: var(--ds-drawer-close-color, var(--ds-color-text-secondary, rgba(0, 0, 0, 0.45)));
+}
+
+.rottay-drawer-body[data-part='body'] {
+  background-color: var(--ds-drawer-body-bg, transparent);
+  color: var(--ds-drawer-body-color, inherit);
+}
+
+.rottay-drawer-footer[data-part='footer'] {
+  background-color: var(--ds-drawer-footer-bg, transparent);
+}
+.rottay-drawer-footer.rottay-drawer-footer[data-part='footer'][data-part='footer'] {
+  border-top: var(--ds-drawer-footer-divider);
+}

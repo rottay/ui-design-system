@@ -156,12 +156,6 @@ export const ModalCloseButton = forwardRef<HTMLButtonElement, ModalCloseButtonPr
 
       // Reset button defaults
       padding: 0,
-      border: 'none',
-      borderRadius: '4px',
-      background: 'transparent',
-
-      // Color - uses CSS custom property for tenant theming
-      color: 'var(--ds-modal-close-color, rgba(0, 0, 0, 0.45))',
 
       // Interaction
       cursor: 'pointer',

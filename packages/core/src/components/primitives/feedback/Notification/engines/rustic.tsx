@@ -147,11 +147,13 @@ const styles = {
     // use fixed pixel offsets (24px) for consistent gutter spacing.
     // maxWidth on the base style prevents notifications from stretching
     // across the entire viewport on wide screens.
+    // The centering transform for the top/bottom placements is keyed on
+    // `data-placement` in the rustic Notification skin.
     const placements: Record<NotificationPlacement, React.CSSProperties> = {
-      top: { top, left: '50%', transform: 'translateX(-50%)', alignItems: 'center' },
+      top: { top, left: '50%', alignItems: 'center' },
       topLeft: { top, left: 24 },
       topRight: { top, right: 24 },
-      bottom: { bottom, left: '50%', transform: 'translateX(-50%)', alignItems: 'center' },
+      bottom: { bottom, left: '50%', alignItems: 'center' },
       bottomLeft: { bottom, left: 24 },
       bottomRight: { bottom, right: 24 },
     };
@@ -162,28 +164,22 @@ const styles = {
   /**
    * Notification item styles.
    */
+  // Per-type left accent bar and icon colour are keyed on `data-tone` in the
+  // unlayered rustic Notification skin.
   notification: {
     base: {
       display: 'flex',
       gap: '12px',
       padding: 'var(--ds-notification-padding, 16px 24px)',
-      borderRadius: 'var(--ds-notification-radius, 12px)',
-      backgroundColor: 'var(--ds-notification-bg, var(--ds-color-bg-elevated))',
-      boxShadow: 'var(--ds-notification-shadow, var(--ds-shadow-lg))',
       pointerEvents: 'auto' as const,
       animation:
-        'notificationSlideIn var(--ds-notification-enter-duration, 240ms) var(--ds-notification-enter-easing, cubic-bezier(0.22, 1, 0.36, 1))',
+        'ds-notification-slide-in-rustic var(--ds-notification-enter-duration, 240ms) var(--ds-notification-enter-easing, cubic-bezier(0.22, 1, 0.36, 1))',
       minWidth: 'var(--ds-notification-min-width, 300px)',
     } as React.CSSProperties,
-    success: { borderLeft: '4px solid var(--ds-notification-success-color, var(--ds-color-success))' },
-    error: { borderLeft: '4px solid var(--ds-notification-error-color, var(--ds-color-error))' },
-    info: { borderLeft: '4px solid var(--ds-notification-info-color, var(--ds-color-primary-500))' },
-    warning: { borderLeft: '4px solid var(--ds-notification-warning-color, var(--ds-color-warning))' },
-    open: {},
   },
 
   /**
-   * Icon styles by type.
+   * Icon styles shared by every notification type.
    */
   icon: {
     base: {
@@ -192,11 +188,6 @@ const styles = {
       fontSize: '20px',
       paddingTop: '2px',
     } as React.CSSProperties,
-    success: { color: 'var(--ds-notification-success-color, var(--ds-color-success))' },
-    error: { color: 'var(--ds-notification-error-color, var(--ds-color-error))' },
-    info: { color: 'var(--ds-notification-info-color, var(--ds-color-primary-500))' },
-    warning: { color: 'var(--ds-notification-warning-color, var(--ds-color-warning))' },
-    open: { color: 'var(--ds-notification-info-color, var(--ds-color-primary-500))' },
   },
 
   /**
@@ -214,7 +205,6 @@ const styles = {
     fontWeight: 600,
     fontSize: 'var(--ds-notification-title-size, 16px)',
     lineHeight: '24px',
-    color: 'var(--ds-notification-title-color, var(--ds-color-text-primary))',
     marginBottom: '4px',
   } as React.CSSProperties,
 
@@ -224,7 +214,6 @@ const styles = {
   description: {
     fontSize: 'var(--ds-notification-desc-size, 14px)',
     lineHeight: '22px',
-    color: 'var(--ds-notification-desc-color, var(--ds-color-text-secondary))',
   } as React.CSSProperties,
 
   /**
@@ -238,11 +227,8 @@ const styles = {
    * Close button styles.
    */
   closeButton: {
-    border: 'none',
-    background: 'none',
     cursor: 'pointer',
     padding: '4px',
-    color: 'var(--ds-notification-close-color, var(--ds-color-text-tertiary))',
     fontSize: '14px',
     lineHeight: 1,
     transition: 'color var(--ds-duration-fast, 150ms)',
@@ -254,52 +240,10 @@ const styles = {
 // Animation Styles Injection
 // ============================================================================
 
-/**
- * Injects CSS keyframe animations into the document head.
- *
- * @remarks
- * Called once when the provider mounts to add slide animations.
- * Checks for existing styles to prevent duplicates.
- *
- * @internal
- */
-const injectStyles = () => {
-  if (typeof document === 'undefined') return;
-
-  const styleId = 'rustic-notification-styles';
-  if (document.getElementById(styleId)) return;
-
-  const styleSheet = document.createElement('style');
-  styleSheet.id = styleId;
-  // Notifications slide in horizontally (translateX) rather than vertically
-  // like messages, following the UX convention that corner-positioned elements
-  // slide in from the nearest edge. The offset distance is 2x the base
-  // animation distance for a more pronounced entrance matching the larger
-  // notification size. CSS variable allows per-tenant animation tuning.
-  styleSheet.textContent = `
-    @keyframes notificationSlideIn {
-      from {
-        opacity: 0;
-        transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-    @keyframes notificationSlideOut {
-      from {
-        opacity: 1;
-        transform: translateX(0);
-      }
-      to {
-        opacity: 0;
-        transform: translateX(calc(var(--ds-personality-animation-offset-distance, 12px) * 2));
-      }
-    }
-  `;
-  document.head.appendChild(styleSheet);
-};
+// The two keyframes this engine drives (slide-in, slide-out) ship in the unlayered
+// rustic Notification skin, engine-namespaced. Nothing is injected at runtime.
+// They translate on X regardless of which of the six placements is active -- the
+// slide does not flip direction for left-anchored corners.
 
 // ============================================================================
 // Notification Provider
@@ -351,13 +295,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   // ========================================================================
   // Effects
   // ========================================================================
-
-  /**
-   * Inject animation styles on mount.
-   */
-  useEffect(() => {
-    injectStyles();
-  }, []);
 
   // ========================================================================
   // Notification Actions
@@ -655,13 +592,16 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   /**
    * Renders the appropriate icon based on type and custom icon prop.
    */
+  // `data-icon` marks the built-in glyph. The skin keys the per-tone icon colour
+  // on it, so a consumer-supplied `icon` -- which was never coloured here -- stays
+  // unpainted.
   const renderIcon = () => {
     if (icon === null) return null;
     if (icon) return <span data-part="icon">{icon}</span>;
     if (type === 'open') return null;
 
     return (
-      <span data-part="icon" style={{ ...styles.icon.base, ...styles.icon[type] }}>
+      <span data-part="icon" data-icon="builtin" style={styles.icon.base}>
         {NOTIFICATION_ICONS[type as keyof typeof NOTIFICATION_ICONS]}
       </span>
     );
@@ -676,11 +616,10 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
    */
   const notificationStyle: React.CSSProperties = {
     ...styles.notification.base,
-    ...styles.notification[type],
     ...(isExiting
       ? {
           animation:
-            'notificationSlideOut var(--ds-notification-exit-duration, 180ms) var(--ds-notification-exit-easing, cubic-bezier(0.4, 0, 1, 1)) forwards',
+            'ds-notification-slide-out-rustic var(--ds-notification-exit-duration, 180ms) var(--ds-notification-exit-easing, cubic-bezier(0.4, 0, 1, 1)) forwards',
         }
       : {}),
     cursor: onClick ? 'pointer' : 'default',
@@ -716,10 +655,8 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
         {actions && <div data-part="action" style={styles.btnContainer}>{actions}</div>}
       </div>
 
-      {/* JS-driven hover state because Rustic uses only inline styles
-          (no stylesheet for :hover pseudo-class). stopPropagation prevents
-          the notification's onClick from firing on close button clicks.
-          aria-label is essential for the icon-only close button. */}
+      {/* stopPropagation prevents the notification's onClick from firing on close
+          button clicks. aria-label is essential for the icon-only close button. */}
       {closable && (
         <button
           data-part="close-button"
@@ -729,14 +666,6 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
           }}
           style={styles.closeButton}
           aria-label="Close notification"
-          onMouseEnter={(e) => {
-            e.currentTarget.style.color =
-              'var(--ds-notification-close-color-hover, var(--ds-color-text-primary))';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.color =
-              'var(--ds-notification-close-color, var(--ds-color-text-tertiary))';
-          }}
         >
           {closeIcon || '×'}
         </button>

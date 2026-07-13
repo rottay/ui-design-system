@@ -1,0 +1,66 @@
+/**
+ * Rustic Drawer skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * ===========================================================================
+ * PERSONALITY FLOOR -- WHAT THIS FILE DELIBERATELY DOES NOT PAINT
+ * ===========================================================================
+ * `runtime/personality.css` (imported `layer(rottay-personality)`) carries:
+ *
+ *   .rottay-drawer          -> transition: transform ...            spec (0,1,0)
+ *   .rottay-drawer-overlay  -> transition: opacity ...              spec (0,1,0)
+ *                              backdrop-filter: blur(4px)
+ *                              -webkit-backdrop-filter: blur(4px)
+ *
+ * This engine's backdrop carries `.rottay-drawer-overlay` and sets NO
+ * backdrop-filter of its own, so personality's blur(4px) is the ONLY declaration
+ * on that channel and is LIVE. It is this engine's real, shipping backdrop blur.
+ * This file therefore paints ONLY `background-color` on the backdrop. Declaring
+ * `backdrop-filter` here -- at any specificity -- would be unlayered and would
+ * silently delete rustic's blur, because unlayered outranks every layer. Do not
+ * add one.
+ *
+ * Likewise `.rottay-drawer`'s `transition: transform` is suppressed by the
+ * panel's own inline `transition` (kept in the TSX, and dead: `transform` is
+ * never assigned). Nothing here declares `transition`, so that balance holds.
+ * ===========================================================================
+ *
+ * SPECIFICITY (P-48): the header/footer divider rules reach b >= 4 to clear the
+ * tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). `border: none` on the close button is a
+ * color-free reset and is exempt.
+ *
+ * DIRECT-CHILD COMBINATORS keep engine section paint off a composed
+ * `Drawer.Header`/`Body`/`Footer` compound, which reuses the same `data-part`
+ * names inside the body and carries its own skin.
+ */
+
+/* ---- backdrop: scrim only; alpha rides a hatch stamped per instance.
+        The blur is personality.css's -- see the header. ---- */
+.rottay-drawer-backdrop--rustic[data-part='backdrop'] {
+  background-color: rgba(0, 0, 0, var(--ds-drawer-overlay-opacity));
+}
+
+/* ---- panel surface ---- */
+.rottay-drawer--rustic[data-part='surface'] {
+  background-color: var(--ds-drawer-bg, var(--ds-color-bg-elevated));
+  box-shadow: var(--ds-drawer-shadow, 0 8px 30px rgba(0, 0, 0, 0.12));
+}
+
+/* ---- header / footer dividers ---- */
+.rottay-drawer--rustic.rottay-drawer--rustic > [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle));
+}
+.rottay-drawer--rustic.rottay-drawer--rustic > [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-drawer-border-color, var(--ds-color-border-subtle));
+}
+
+/* ---- close button (no hover: this engine ships none) ---- */
+.rottay-drawer--rustic > [data-part='header'] > [data-part='close-button'] {
+  background: transparent;
+  border: none;
+  color: var(--ds-drawer-close-color, var(--ds-color-text-secondary));
+}

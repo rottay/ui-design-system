@@ -29,6 +29,7 @@
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from "node:fs";
 import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
+import postcss from "postcss";
 import { resolve, dirname, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 // WO-GAT-04 (accessibility CI, proposal P-10): APCA is the perceptually-accurate contrast model
@@ -2169,6 +2170,11 @@ const counters = {
   // and the baseline is 0 -- so the first viewport breakpoint added to a skin
   // fails the build, which is the point.
   "responsive.viewportMqInSkins": countViewportMediaQueriesInSkins(),
+  // WO-SKIN-03: a skin that does not PARSE loads no rules at all, and every
+  // other signal stays green -- the counter reads source text, tsc never sees
+  // CSS, and the unit suites assert the DOM. A stray `*/` inside a header
+  // comment silently voided an entire migrated skin this way. Exact-0.
+  "skins.parseErrors": countSkinParseErrors(),
   // WO-ARC-09: per-file inline-paint ratchet over the six workspace-tier
   // components' migratable files. Decrease-only; each checkpoint's exit is its
   // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
@@ -2190,6 +2196,52 @@ const counters = {
  * Decrease-only. Baseline measured at 0: the two skins that exist adapt through
  * their tokens and their anatomy, not through a breakpoint.
  */
+/**
+ * WO-SKIN-03: every skin stylesheet must parse.
+ *
+ * The migration's whole premise is that paint removed from a component is paint
+ * a skin now carries. If the skin fails to parse, the browser drops it and the
+ * component ships unpainted -- and nothing else in the chain notices: the
+ * inline-paint counter reads the component's source, `tsc` does not read CSS,
+ * and jsdom suites assert the DOM, not the stylesheet. Only a pixel diff would
+ * catch it, and only for a state some baseline happens to photograph.
+ *
+ * Exact-0: the first unparseable skin fails the build.
+ */
+function countSkinParseErrors() {
+  let errors = 0;
+  for (const file of collectSkinFiles()) {
+    try {
+      postcss.parse(readFileSync(file, "utf8"), { from: file });
+    } catch (err) {
+      errors += 1;
+      console.error(`  - skin does not parse: ${file.replace(root + sep, "")} -- ${err.message}`);
+    }
+  }
+  return errors;
+}
+
+/** Every unlayered skin stylesheet: the per-engine homes plus the agnostic one. */
+function collectSkinFiles() {
+  const skins = [];
+  const walk = (dir) => {
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries) {
+      const full = join(dir, entry.name);
+      if (entry.isDirectory()) walk(full);
+      else if (entry.isFile() && entry.name.endsWith(".css") && full.includes(`${sep}skin${sep}`)) skins.push(full);
+    }
+  };
+  walk(join(root, "src/tokens/css/engines"));
+  walk(join(root, "src/tokens/css/components/skin"));
+  return skins;
+}
+
 function countViewportMediaQueriesInSkins() {
   const skins = [];
   const walk = (dir) => {
@@ -2235,6 +2287,8 @@ const EXACT = {
   "state.darkFocusRingDefects": 0,
   // Every remaining theme.css selector is consumer-proven (WO-ENG-08, spec section 8).
   "themeCss.unreferencedSelectors": 0,
+  // A skin that does not parse loads no rules; nothing else in the chain sees it.
+  "skins.parseErrors": 0,
 };
 
 /**

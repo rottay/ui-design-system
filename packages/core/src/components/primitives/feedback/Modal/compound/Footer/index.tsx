@@ -147,8 +147,10 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
       // Spacing - uses PADDING_MAP for consistency
       padding: PADDING_MAP[padding] || PADDING_MAP.lg,
 
-      // Visual - optional top border for separation
-      borderTop: divider
+      // Visual - optional top border for separation. The `divider` decision
+      // rides a hatch the skin consumes, so the "off" branch resolves to the
+      // same explicit `none` React set inline.
+      '--ds-modal-footer-divider': divider
         ? '1px solid var(--ds-modal-footer-border, rgba(0, 0, 0, 0.1))'
         : 'none',
 
@@ -157,7 +159,7 @@ export const ModalFooter = forwardRef<HTMLDivElement, ModalFooterProps>(
 
       // Merge user styles (takes precedence)
       ...style,
-    };
+    } as React.CSSProperties;
 
     // -------------------------------------------------------------------------
     // Render

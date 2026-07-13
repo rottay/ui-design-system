@@ -1,0 +1,149 @@
+/**
+ * Modern Modal skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): every rule painting a border COLOR reaches b >= 4 to clear
+ * the tenant artifacts' unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). Bought from the root class repeated plus the
+ * target's own repeated `data-part`. Color-free resets (`border: none`,
+ * `outline: none`) are exempt from that floor.
+ *
+ * PORTAL: both engines mount through the shared Portal utility into
+ * `#rottay-portal-root` on `document.body`, outside any tenant-scoped subtree.
+ * Every selector here is therefore anchored on the component's own root class
+ * and resolves anywhere in the document (the Select dropdown-panel precedent).
+ *
+ * PERSONALITY: runtime/personality.css keys its modal rules on `.ant-modal`,
+ * `.modal`, `.modal-backdrop`, `.modal-box` and `[data-engine] .ds-modal*`.
+ * This engine carries none of those classes, so no personality rule matches any
+ * element painted here -- neither before nor after the migration.
+ *
+ * DIRECT-CHILD COMBINATORS are load-bearing: `Modal.Header`/`Body`/`Footer`/
+ * `CloseButton` compounds re-use the same `data-part` names and can be composed
+ * INSIDE this engine's body. Anchoring each section rule on `surface > ...`
+ * keeps engine paint off a composed compound, which owns its own skin.
+ */
+
+/* ---- backdrop: runtime scrim + opt-in blur, both via hatches stamped inline.
+        An unset filter hatch falls back to `none`, reproducing the omitted-key
+        behavior of `blurBackdrop: false`. The hatches are `--ds-modal-scrim-*`,
+        NOT `--ds-modal-overlay-bg`: that name is a live BrandTheme token
+        (chrome.modal.overlayBg) read by four primitives/overlay components. ---- */
+.rottay-modal-root--modern > [data-part='backdrop'] {
+  background-color: var(--ds-modal-scrim-fill);
+  backdrop-filter: var(--ds-modal-scrim-filter, none);
+  -webkit-backdrop-filter: var(--ds-modal-scrim-filter, none);
+}
+
+/* ---- panel surface ---- */
+.rottay-modal-root--modern > [data-part='surface'] {
+  background-color: var(--ds-modal-bg, var(--ds-surface-card));
+  border-radius: var(--ds-modal-surface-radius);
+  box-shadow: var(--ds-modal-surface-shadow);
+  outline: none;
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface'][data-part='surface'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- header / footer dividers: `--ds-modal-section-border` is stamped on the
+        surface and inherits down; it resolves to `none` when `divider` is off. ---- */
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header'][data-part='header'] {
+  border-bottom: var(--ds-modal-section-border);
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer'][data-part='footer'] {
+  border-top: var(--ds-modal-section-border);
+}
+
+/* ---- header content ---- */
+.rottay-modal-root--modern > [data-part='surface'] > [data-part='header'] [data-part='title'] {
+  color: var(--ds-modal-title-color, inherit);
+}
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header']
+  [data-part='description'] {
+  color: var(--ds-modal-description-color, var(--ds-color-text-secondary));
+}
+
+/* ---- close button (ghost square). The `:hover` rule reproduces the deleted
+        mouseenter/mouseleave `.style.backgroundColor` writes. ---- */
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header']
+  [data-part='close-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background-color: transparent;
+  color: var(--ds-modal-close-color, inherit);
+}
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='header']
+  [data-part='close-button']:hover {
+  background-color: var(--ds-modal-close-bg-hover, var(--ds-surface-highlight));
+}
+
+/* ---- body ---- */
+.rottay-modal-root--modern > [data-part='surface'] > [data-part='body'] {
+  color: var(--ds-modal-body-color, inherit);
+}
+
+/* ---- footer actions ---- */
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='cancel'] {
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='ok'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-modal-root--modern.rottay-modal-root--modern
+  > [data-part='surface']
+  > [data-part='footer']
+  > [data-part='action'][data-action='ok'] {
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* ---- entrance keyframes: engine-namespaced so a future rustic twin cannot
+        collide on the name. ---- */
+@keyframes ds-modal-backdrop-fade-modern {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes ds-modal-panel-enter-modern {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

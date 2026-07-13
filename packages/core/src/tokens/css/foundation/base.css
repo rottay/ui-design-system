@@ -144,6 +144,22 @@
 @import '../engines/modern/skin/skeleton.css';
 @import '../engines/rustic/skin/skeleton.css';
 @import '../components/skin/skeleton-compounds.css';
+/* Overlay family (WO-SKIN-03 checkpoint O). */
+@import '../engines/modern/skin/modal.css';
+@import '../engines/rustic/skin/modal.css';
+@import '../components/skin/modal-compounds.css';
+@import '../engines/modern/skin/drawer.css';
+@import '../engines/rustic/skin/drawer.css';
+@import '../components/skin/drawer-compounds.css';
+@import '../engines/modern/skin/toast.css';
+@import '../engines/rustic/skin/toast.css';
+@import '../components/skin/toast-compounds.css';
+@import '../engines/modern/skin/message.css';
+@import '../engines/rustic/skin/message.css';
+@import '../engines/modern/skin/notification.css';
+@import '../engines/rustic/skin/notification.css';
+@import '../engines/modern/skin/result.css';
+@import '../engines/rustic/skin/result.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

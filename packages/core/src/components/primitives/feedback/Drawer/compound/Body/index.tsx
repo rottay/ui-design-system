@@ -180,12 +180,6 @@ export const DrawerBody = forwardRef<HTMLDivElement, DrawerBodyProps>(
       overflowY: 'auto',
       overflowX: 'hidden',
 
-      // Background - transparent by default, customizable via CSS var
-      backgroundColor: 'var(--ds-drawer-body-bg, transparent)',
-
-      // Typography - inherit from parent for theme compatibility
-      color: 'var(--ds-drawer-body-color, inherit)',
-
       // Merge user styles (takes precedence)
       ...style,
     };

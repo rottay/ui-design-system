@@ -1,0 +1,47 @@
+/**
+ * Modern Result skin (WO-SKIN-03 checkpoint O).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PERSONALITY: no rule in runtime/personality.css matches any element here.
+ *
+ * SPECIFICITY (P-48): nothing in this file paints a border, so the tenant
+ * artifacts' unlayered `*` border-color floor at (0,3,1) does not apply.
+ *
+ * `data-part='status-icon'` / `'status-code'` mark the BUILT-IN icon shapes, so a
+ * consumer-supplied `icon` -- rendered into the same slot and never coloured by
+ * this engine -- stays unpainted. The icons stroke `currentColor`, so setting
+ * `color` on the shape reproduces the inline value exactly.
+ */
+
+.rottay-result--modern[data-tone='success'] [data-part='status-icon'] {
+  color: var(--ds-color-success);
+}
+.rottay-result--modern[data-tone='error'] [data-part='status-icon'] {
+  color: var(--ds-color-error);
+}
+.rottay-result--modern[data-tone='info'] [data-part='status-icon'] {
+  color: var(--ds-color-info);
+}
+.rottay-result--modern[data-tone='warning'] [data-part='status-icon'] {
+  color: var(--ds-color-warning);
+}
+
+.rottay-result--modern[data-tone='404'] [data-part='status-code'] {
+  color: var(--ds-color-primary);
+}
+.rottay-result--modern[data-tone='403'] [data-part='status-code'] {
+  color: var(--ds-color-warning);
+}
+.rottay-result--modern[data-tone='500'] [data-part='status-code'] {
+  color: var(--ds-color-error);
+}
+
+.rottay-result--modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.rottay-result--modern [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}

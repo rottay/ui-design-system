@@ -179,8 +179,9 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       // Spacing
       padding: HEADER_PADDING,
 
-      // Visual
-      borderBottom: divider
+      // Visual - the `divider` decision rides a hatch the skin consumes, so the
+      // "off" branch resolves to the same explicit `none` React set inline.
+      '--ds-drawer-header-divider': divider
         ? '1px solid var(--ds-drawer-header-border, var(--ds-color-border, rgba(0, 0, 0, 0.1)))'
         : 'none',
 
@@ -189,7 +190,7 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
 
       // Merge user styles (takes precedence)
       ...style,
-    };
+    } as React.CSSProperties;
 
     /**
      * Styles for the title text container.
@@ -204,9 +205,6 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       fontSize: 'var(--ds-drawer-title-font-size, 16px)',
       fontWeight: 'var(--ds-drawer-title-font-weight, 600)' as React.CSSProperties['fontWeight'],
       lineHeight: 1.4,
-
-      // Inherit color from parent for theme compatibility
-      color: 'inherit',
     };
 
     /**
@@ -214,9 +212,6 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
      * Minimal styling for a clean, accessible button.
      */
     const closeButtonStyle: React.CSSProperties = {
-      // Reset button styles
-      background: 'transparent',
-      border: 'none',
       cursor: 'pointer',
 
       // Spacing
@@ -226,10 +221,8 @@ export const DrawerHeader = forwardRef<HTMLDivElement, DrawerHeaderProps>(
       fontSize: '18px',
       lineHeight: 1,
 
-      // Color - uses CSS custom property for tenant theming
-      color: 'var(--ds-drawer-close-color, var(--ds-color-text-secondary, rgba(0, 0, 0, 0.45)))',
-
-      // Hover state handled via CSS in production
+      // No :hover rule exists for this button in any stylesheet, so this
+      // transition never fires.
       transition: 'color 0.2s ease',
     };
 

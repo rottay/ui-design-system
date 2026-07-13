@@ -249,7 +249,9 @@ export function UndoToast({
 
   return (
     <div
-      style={{ position: 'relative', display: 'inline-flex', color: 'var(--ds-color-text-primary)' }}
+      data-part="root"
+      className="rottay-undo-toast"
+      style={{ position: 'relative', display: 'inline-flex' }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -287,7 +289,6 @@ export function UndoToast({
             data-part="fill"
             style={{
               height: '100%',
-              background: 'var(--ds-color-primary)',
               width: '100%',
               ...(animate
                 ? {
