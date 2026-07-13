@@ -359,6 +359,12 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
         {responsiveStyleTag}
         <span
           className={`rottay-badge rottay-badge--modern ${pulse ? 'animate-pulse' : ''} ${className}`}
+          data-part="root"
+          data-variant={variant}
+          data-badge-style={badgeStyle}
+          data-bordered={bordered ? 'true' : undefined}
+          data-dot={dot ? 'true' : undefined}
+          data-size={size}
           style={{ ...badgeInlineStyle, ...style }}
           onClick={isInteractive ? handleClick : undefined}
           // The hover transform itself is CSS (tokens/css/engines/modern/skin/badge.css),
@@ -367,13 +373,14 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
           {...responsiveAttrs}
         >
           {icon && (
-            <span style={{ display: 'inline-flex', marginRight: '4px', flexShrink: 0 }}>
+            <span data-part="icon" style={{ display: 'inline-flex', marginRight: '4px', flexShrink: 0 }}>
               {icon}
             </span>
           )}
           {!dot && formattedValue !== undefined ? formattedValue : props.children}
           {closable && (
             <span
+              data-part="close"
               style={{
                 display: 'inline-flex',
                 marginLeft: '4px',
@@ -445,9 +452,16 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   return (
     <>
       {responsiveStyleTag}
-      <div className={className} style={{ position: 'relative', display: 'inline-flex', ...style }}>
+      <div className={className} data-part="anchor" style={{ position: 'relative', display: 'inline-flex', ...style }}>
         <span
           className={`rottay-badge rottay-badge--modern ${pulse ? 'animate-pulse' : ''}`}
+          data-part="root"
+          data-variant={variant}
+          data-badge-style={badgeStyle}
+          data-bordered={bordered ? 'true' : undefined}
+          data-dot={dot ? 'true' : undefined}
+          data-size={size}
+          data-position={position}
           {...responsiveAttrs}
           style={{ ...indicatorBadgeStyle, position: 'absolute', zIndex: 1, ...positionStyle }}
           onClick={isInteractive ? handleClick : undefined}
@@ -456,7 +470,7 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
           {!dot && (
             <>
               {icon && (
-                <span style={{ display: 'inline-flex', marginRight: '3px', flexShrink: 0 }}>
+                <span data-part="icon" style={{ display: 'inline-flex', marginRight: '3px', flexShrink: 0 }}>
                   {icon}
                 </span>
               )}

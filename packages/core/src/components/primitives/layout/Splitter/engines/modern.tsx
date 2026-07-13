@@ -66,6 +66,7 @@ export const Panel = React.forwardRef<HTMLDivElement, SplitterPanelProps & { siz
       <div
         ref={ref}
         className={`overflow-auto ${className}`}
+        data-part="panel"
         style={{
           flex: `0 0 ${clampedSize}%`,
           // Prevent content from forcing the panel wider than its flex-basis
@@ -111,6 +112,9 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
     });
     const isDragging = useRef(false);
     const activeGutter = useRef<number>(-1);
+    // Reactive mirror of activeGutter, purely for the data-dragging anatomy
+    // attribute below -- the drag math itself still reads the ref.
+    const [draggingIndex, setDraggingIndex] = useState<number>(-1);
 
     const isVertical = layout === 'vertical';
 
@@ -121,6 +125,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       e.preventDefault();
       isDragging.current = true;
       activeGutter.current = index;
+      setDraggingIndex(index);
       onResizeStart?.();
 
       const handleMouseMove = (moveEvent: MouseEvent) => {
@@ -156,6 +161,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       const handleMouseUp = () => {
         if (isDragging.current) {
           isDragging.current = false;
+          setDraggingIndex(-1);
           onResizeEnd?.(sizes);
         }
         document.removeEventListener('mousemove', handleMouseMove);
@@ -177,8 +183,10 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
           if (typeof ref === 'function') ref(node);
           else if (ref) ref.current = node;
         }}
-        className={`flex ${isVertical ? 'flex-col' : 'flex-row'} w-full h-full ${className}`}
+        className={`rottay-splitter rottay-splitter--modern flex ${isVertical ? 'flex-col' : 'flex-row'} w-full h-full ${className}`}
         style={style}
+        data-part="root"
+        data-orientation={isVertical ? 'vertical' : 'horizontal'}
       >
         {childArray.map((child, index) => (
           <React.Fragment key={index}>
@@ -194,6 +202,9 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
                 }`}
                 style={{ background: 'var(--ds-surface-panel)' }}
                 onMouseDown={handleMouseDown(index)}
+                data-part="gutter"
+                data-orientation={isVertical ? 'vertical' : 'horizontal'}
+                data-dragging={draggingIndex === index ? 'true' : 'false'}
               />
             )}
           </React.Fragment>

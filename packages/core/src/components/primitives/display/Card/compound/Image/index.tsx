@@ -227,11 +227,13 @@ export function CardImage({
   return (
     <div
       className={`rottay-card-image ${className}`}
+      data-part="image"
+      data-position={position}
       style={containerStyle}
     >
       {/* Placeholder shown while loading or on error */}
       {(!imageLoaded || imageError) && (
-        <div style={placeholderStyle}>
+        <div data-part="placeholder" style={placeholderStyle}>
           {imageError ? (
             <svg
               width="48"
@@ -241,6 +243,7 @@ export function CardImage({
               stroke="currentColor"
               strokeWidth="1.5"
               aria-hidden="true"
+              data-part="error-icon"
             >
               <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
               <circle cx="8.5" cy="8.5" r="1.5" />
@@ -249,6 +252,7 @@ export function CardImage({
           ) : (
             <div
               className="rottay-card-image-loading"
+              data-part="spinner"
               style={{
                 width: '40px',
                 height: '40px',
@@ -265,6 +269,7 @@ export function CardImage({
       {/* Actual image */}
       {!imageError && (
         <img
+          data-part="img"
           src={src}
           alt={alt}
           style={imageStyle}
@@ -274,11 +279,11 @@ export function CardImage({
       )}
 
       {/* Gradient overlay */}
-      {gradient && <div style={gradientStyle} aria-hidden="true" />}
+      {gradient && <div data-part="gradient" style={gradientStyle} aria-hidden="true" />}
 
       {/* Custom overlay content */}
       {overlay && (
-        <div className="rottay-card-image-overlay" style={overlayStyle}>
+        <div className="rottay-card-image-overlay" data-part="overlay" style={overlayStyle}>
           {overlay}
         </div>
       )}

@@ -286,11 +286,13 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   const calendarHoverBackground = 'var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)))';
 
   return (
-    <div ref={ref} className={className} style={containerStyle} id={id} role="application" aria-label="Calendar">
+    <div ref={ref} className={className} data-part="root" data-mode={mode} style={containerStyle} id={id} role="application" aria-label="Calendar">
       {/* Header */}
-      <div style={styles.header}>
+      <div style={styles.header} data-part="header">
         <div style={styles.headerNav}>
           <button
+            data-part="nav-button"
+            data-direction="prev-year"
             style={{ ...styles.navButton, ...(hovered === 'prevYear' ? { backgroundColor: calendarHoverBackground } : {}) }}
             onClick={() => setViewYear((y) => y - 1)}
             onMouseEnter={() => setHovered('prevYear')}
@@ -301,6 +303,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           </button>
           {mode === 'month' && (
             <button
+              data-part="nav-button"
+              data-direction="prev-month"
               style={{ ...styles.navButton, ...(hovered === 'prevMonth' ? { backgroundColor: calendarHoverBackground } : {}) }}
               onClick={handlePrevMonth}
               onMouseEnter={() => setHovered('prevMonth')}
@@ -314,12 +318,18 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
 
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
+            data-part="mode-toggle"
+            data-mode="month"
+            data-active={mode === 'month' ? 'true' : 'false'}
             style={{ ...styles.modeButton, ...(mode === 'month' ? styles.modeButtonActive : {}) }}
             onClick={() => handleModeChange('month')}
           >
             {MONTHS[viewMonth]} {viewYear}
           </button>
           <button
+            data-part="mode-toggle"
+            data-mode="year"
+            data-active={mode === 'year' ? 'true' : 'false'}
             style={{ ...styles.modeButton, ...(mode === 'year' ? styles.modeButtonActive : {}) }}
             onClick={() => handleModeChange('year')}
           >
@@ -330,6 +340,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
         <div style={styles.headerNav}>
           {mode === 'month' && (
             <button
+              data-part="nav-button"
+              data-direction="next-month"
               style={{ ...styles.navButton, ...(hovered === 'nextMonth' ? { backgroundColor: calendarHoverBackground } : {}) }}
               onClick={handleNextMonth}
               onMouseEnter={() => setHovered('nextMonth')}
@@ -340,6 +352,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             </button>
           )}
           <button
+            data-part="nav-button"
+            data-direction="next-year"
             style={{ ...styles.navButton, ...(hovered === 'nextYear' ? { backgroundColor: calendarHoverBackground } : {}) }}
             onClick={() => setViewYear((y) => y + 1)}
             onMouseEnter={() => setHovered('nextYear')}
@@ -356,14 +370,14 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           {/* Day headers */}
           <div style={styles.daysHeader} role="row">
             {DAYS.map((day) => (
-              <div key={day} style={styles.dayHeader} role="columnheader">
+              <div key={day} style={styles.dayHeader} data-part="weekday-header" role="columnheader">
                 {fullscreen ? day : day.charAt(0)}
               </div>
             ))}
           </div>
 
           {/* Days grid */}
-          <div style={styles.daysGrid} role="grid">
+          <div style={styles.daysGrid} data-part="grid" role="grid">
             {/* Empty cells */}
             {Array.from({ length: firstDayOfMonth }).map((_, i) => (
               <div key={`empty-${i}`} style={{ aspectRatio: '1' }} />
@@ -381,6 +395,10 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
               return (
                 <button
                   key={day}
+                  data-part="cell"
+                  data-selected={isSelected ? 'true' : 'false'}
+                  data-today={isToday ? 'true' : 'false'}
+                  data-disabled={isDisabled || undefined}
                   style={{
                     ...styles.dayCell,
                     ...(isToday && !isSelected ? styles.dayCellToday : {}),
@@ -398,7 +416,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                 >
                   <span style={{ fontSize: fullscreen ? '14px' : '12px' }}>{day}</span>
                   {dateCellRender && (
-                    <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, fontSize: '10px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    <div data-part="cell-content" style={{ position: 'absolute', bottom: 0, left: 0, right: 0, fontSize: '10px', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                       {dateCellRender(date)}
                     </div>
                   )}
@@ -409,7 +427,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
         </>
       ) : (
         /* Year view - show months */
-        <div style={styles.monthsGrid} role="grid">
+        <div style={styles.monthsGrid} data-part="grid" role="grid">
           {MONTHS.map((month, i) => {
             const date = new Date(viewYear, i, 1);
             const isCurrentMonth = i === today.getMonth() && viewYear === today.getFullYear();
@@ -419,6 +437,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             return (
               <button
                 key={month}
+                data-part="cell"
+                data-selected={isSelected ? 'true' : 'false'}
+                data-today={isCurrentMonth ? 'true' : 'false'}
                 style={{
                   ...styles.monthCell,
                   ...(isCurrentMonth && !isSelected ? styles.monthCellCurrent : {}),
@@ -433,7 +454,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
               >
                 <span style={{ fontSize: fullscreen ? '14px' : '12px' }}>{month}</span>
                 {monthCellRender && (
-                  <div style={{ marginTop: '4px', fontSize: '10px' }}>
+                  <div data-part="cell-content" style={{ marginTop: '4px', fontSize: '10px' }}>
                     {monthCellRender(date)}
                   </div>
                 )}

@@ -143,13 +143,16 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
           role="separator"
           aria-orientation={orientation}
           data-testid={testId}
+          data-part="root"
+          data-orientation={orientation}
+          data-with-text="true"
           {...rest}
         >
-          <span className="divider-line divider-line-before" style={lineBeforeStyle} />
-          <span className="divider-content" style={textStyle}>
+          <span className="divider-line divider-line-before" data-part="line-before" style={lineBeforeStyle} />
+          <span className="divider-content" data-part="text" style={textStyle}>
             {children}
           </span>
-          <span className="divider-line divider-line-after" style={lineAfterStyle} />
+          <span className="divider-line divider-line-after" data-part="line-after" style={lineAfterStyle} />
         </div>
       );
     }
@@ -163,6 +166,9 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
         role="separator"
         aria-orientation={orientation}
         data-testid={testId}
+        data-part="root"
+        data-orientation={orientation}
+        data-with-text="false"
         {...rest}
       />
     );

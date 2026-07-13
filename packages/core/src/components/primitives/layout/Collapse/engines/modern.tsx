@@ -97,6 +97,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
+        data-part="arrow"
         style={{
           transform: isActive ? 'rotate(90deg)' : 'rotate(0deg)',
           fontSize: 12,
@@ -110,6 +111,9 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
       <div
         ref={ref}
         className={className || undefined}
+        data-part="panel"
+        data-expanded={isActive ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
         style={{
           borderRadius: context.ghost
             ? 'var(--ds-collapse-root-ghost-idle-border-radius, 0)'
@@ -164,10 +168,13 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
           onClick={handleClick}
           role="button"
           aria-expanded={isActive}
+          data-part="header"
+          data-expanded={isActive ? 'true' : 'false'}
+          data-disabled={disabled ? 'true' : 'false'}
         >
           {context.expandIconPosition === 'start' && arrowIcon}
-          <span style={{ flex: 1 }}>{header}</span>
-          {extra && <span style={{ marginLeft: 'auto' }}>{extra}</span>}
+          <span data-part="label" style={{ flex: 1 }}>{header}</span>
+          {extra && <span data-part="extra" style={{ marginLeft: 'auto' }}>{extra}</span>}
           {context.expandIconPosition === 'end' && arrowIcon}
         </div>
         {/* Content area: the outer element is the grid-template-rows track
@@ -176,12 +183,16 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             so the whole reveal reads as one motion. */}
         <div
           className="rottay-collapse-content"
+          data-part="content"
+          data-expanded={isActive ? 'true' : 'false'}
           style={{
             gridTemplateRows: isActive ? '1fr' : '0fr',
           }}
         >
           <div
             className="rottay-collapse-content-inner"
+            data-part="content-inner"
+            data-expanded={isActive ? 'true' : 'false'}
             style={{
               opacity: isActive ? 1 : 0,
               color: 'var(--ds-collapse-content-default-idle-color, inherit)',
@@ -274,6 +285,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
         <div
           ref={ref}
           className={`rottay-collapse${ghost ? ' rottay-collapse--ghost' : ''}${!bordered ? ' rottay-collapse--borderless' : ''} ${className}`.trim() || undefined}
+          data-part="root"
           style={{
             display: 'flex',
             flexDirection: 'column',

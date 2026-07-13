@@ -160,6 +160,8 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         <HeadingElement
           ref={ref}
           className={`rottay-heading rottay-heading--${level} ${className}`.trim()}
+          data-part="root"
+          data-color={color}
           style={headingStyle}
           {...(responsive ? responsive.attrs : {})}
           {...restProps}
@@ -270,6 +272,8 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
         <TextElement
           ref={ref}
           className={`rottay-text${numeric === 'tabular' ? ' ds-nums-tabular' : ''} ${className}`.trim()}
+          data-part="root"
+          data-color={color}
           style={textStyle}
           {...(responsive ? responsive.attrs : {})}
           {...restProps}
@@ -332,6 +336,8 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       <p
         ref={ref}
         className={`rottay-paragraph ${className}`.trim()}
+        data-part="root"
+        data-color={color}
         style={paragraphStyle}
         {...restProps}
       >
@@ -406,6 +412,9 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
         rel={computedRel}
         onClick={handleClick}
         className={`rottay-link ${className}`.trim()}
+        data-part="root"
+        data-color={color}
+        data-disabled={disabled || undefined}
         style={linkStyle}
         aria-disabled={disabled}
         {...restProps}

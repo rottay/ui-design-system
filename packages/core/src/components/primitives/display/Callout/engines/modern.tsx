@@ -73,24 +73,26 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
 
   return (
     <div
-      className={`alert ${className}`}
+      className={`alert rottay-callout-shell rottay-callout-shell--modern ${className}`}
       role="alert"
+      data-part="root"
+      data-tone={variant}
       style={{ ...variantStyle, ...style }}
     >
       {/* Leading icon: custom icon overrides the per-variant default */}
-      <span className="text-lg font-bold">
+      <span className="text-lg font-bold" data-part="icon">
         {icon || CALLOUT_ICONS[variant]}
       </span>
 
       {/* Content area: flex-col stacks title, body, and action vertically.
           flex-1 ensures it fills available width next to icon and close button. */}
-      <div className="flex flex-col gap-1 flex-1">
+      <div className="flex flex-col gap-1 flex-1" data-part="body">
         {title && (
-          <span className="font-semibold text-sm">{title}</span>
+          <span className="font-semibold text-sm" data-part="title">{title}</span>
         )}
-        <span className="text-sm">{children}</span>
+        <span className="text-sm" data-part="description">{children}</span>
         {action && (
-          <div className="mt-2">{action}</div>
+          <div className="mt-2" data-part="action">{action}</div>
         )}
       </div>
 
@@ -98,6 +100,7 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
       {closable && (
         <button
           type="button"
+          data-part="close-button"
           style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
           onClick={handleClose}
           aria-label="Close"

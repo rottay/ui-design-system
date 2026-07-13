@@ -179,16 +179,17 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     switch (status) {
       case 'loading':
         return (
-          <div style={overlayStyle} role="status" aria-label="Loading QR code">
-            <div style={spinnerStyle} />
+          <div data-part="overlay" style={overlayStyle} role="status" aria-label="Loading QR code">
+            <div data-part="spinner" style={spinnerStyle} />
           </div>
         );
       case 'expired':
         return (
-          <div style={overlayStyle} role="alert">
-            <p style={{ margin: 0, color: 'var(--ds-qrcode-expired-color, #666)', fontSize: 14 }}>QR Code expired</p>
+          <div data-part="overlay" style={overlayStyle} role="alert">
+            <p data-part="status-text" style={{ margin: 0, color: 'var(--ds-qrcode-expired-color, #666)', fontSize: 14 }}>QR Code expired</p>
             {onRefresh && (
               <button
+                data-part="refresh-button"
                 onClick={onRefresh}
                 style={buttonStyle}
                 type="button"
@@ -201,8 +202,8 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
         );
       case 'scanned':
         return (
-          <div style={overlayStyle} role="status" aria-label="QR code scanned">
-            <svg width={48} height={48} fill="var(--ds-qrcode-success-color, var(--ds-color-success-500, #52c41a))" viewBox="0 0 20 20" aria-hidden="true">
+          <div data-part="overlay" style={overlayStyle} role="status" aria-label="QR code scanned">
+            <svg data-part="status-icon" width={48} height={48} fill="var(--ds-qrcode-success-color, var(--ds-color-success-500, #52c41a))" viewBox="0 0 20 20" aria-hidden="true">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -220,7 +221,9 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     <div
       className={`rottay-qrcode rottay-qrcode--rustic ${className || ''}`}
       style={containerStyle}
+      data-part="root"
       data-status={status}
+      data-bordered={bordered ? 'true' : undefined}
     >
       <style>
         {`
@@ -230,7 +233,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
           }
         `}
       </style>
-      <div style={{ position: 'relative', width: size, height: size }}>
+      <div style={{ position: 'relative', width: size, height: size }} data-part="canvas-wrapper">
         <canvas
           ref={canvasRef}
           width={size}
@@ -238,9 +241,10 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
           style={{ display: 'block' }}
           aria-label={`QR code for: ${value}`}
           role="img"
+          data-part="canvas"
         />
         {icon && status === 'active' && (
-          <div style={iconWrapperStyle}>
+          <div data-part="icon" style={iconWrapperStyle}>
             <img
               src={icon}
               alt=""

@@ -147,9 +147,21 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
   } : {};
 
   return (
-    <div className={className} style={containerStyle} onClick={onClick}>
+    <div
+      className={className}
+      data-part="root"
+      data-variant={variant}
+      data-shape={shape}
+      data-size={size}
+      data-bordered={bordered ? 'true' : undefined}
+      data-ring={ring ? 'true' : undefined}
+      data-status={status}
+      style={containerStyle}
+      onClick={onClick}
+    >
       {src && !imageError ? (
         <img
+          data-part="img"
           src={src}
           alt={alt || name || 'avatar'}
           style={imageStyle}
@@ -158,12 +170,12 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
         />
       ) : (
         // Prevent accidental text selection of initials during click interactions
-        <span style={{ userSelect: 'none' }}>
+        <span data-part="fallback" style={{ userSelect: 'none' }}>
           {displayInitials || children}
         </span>
       )}
 
-      {status && <span style={statusStyle} />}
+      {status && <span data-part="status-dot" data-status={status} style={statusStyle} />}
     </div>
   );
 }

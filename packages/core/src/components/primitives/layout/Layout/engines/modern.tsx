@@ -60,8 +60,10 @@ export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     return (
       <div
         ref={ref}
-        className={`flex flex-col min-h-screen ${hasSider ? 'md:flex-row' : ''} ${className}`}
+        className={`rottay-layout rottay-layout--modern flex flex-col min-h-screen ${hasSider ? 'md:flex-row' : ''} ${className}`}
         style={style}
+        data-part="root"
+        data-has-sider={hasSider ? 'true' : 'false'}
       >
         {children}
       </div>
@@ -83,8 +85,9 @@ export const Header = React.forwardRef<HTMLElement, LayoutHeaderProps>(
     return (
       <header
         ref={ref}
-        className={`px-4 flex items-center shrink-0 ${className}`}
+        className={`rottay-layout-header px-4 flex items-center shrink-0 ${className}`}
         style={{ background: 'var(--ds-surface-inset)', height: typeof height === 'number' ? `${height}px` : height, ...style }}
+        data-part="header"
       >
         {children}
       </header>
@@ -139,13 +142,16 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     return (
       <aside
         ref={ref}
-        className={`shrink-0 overflow-y-auto transition-all duration-300 ${className}`}
+        className={`rottay-layout-sider shrink-0 overflow-y-auto transition-all duration-300 ${className}`}
         style={{
           background: theme === 'dark' ? 'var(--ds-surface-panel)' : 'var(--ds-surface-card)',
           ...(theme === 'dark' ? { color: 'var(--ds-color-text-primary)' } : {}),
           width: typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth,
           ...style,
         }}
+        data-part="sider"
+        data-theme={theme}
+        data-collapsed={isCollapsed ? 'true' : 'false'}
       >
         {children}
         {collapsible && (
@@ -153,6 +159,8 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
             type="button"
             style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', width: '100%', marginTop: 8, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleToggle}
+            data-part="trigger"
+            data-collapsed={isCollapsed ? 'true' : 'false'}
           >
             {trigger ?? (isCollapsed ? '→' : '←')}
           </button>
@@ -173,7 +181,7 @@ export const Content = React.forwardRef<HTMLElement, LayoutContentProps>(
   (props, ref) => {
     const { children, className = '', style } = props;
     return (
-      <main ref={ref} className={`flex-1 p-4 overflow-auto ${className}`} style={style}>
+      <main ref={ref} className={`rottay-layout-content flex-1 p-4 overflow-auto ${className}`} style={style} data-part="content">
         {children}
       </main>
     );
@@ -192,7 +200,7 @@ export const Footer = React.forwardRef<HTMLElement, LayoutFooterProps>(
   (props, ref) => {
     const { children, className = '', style } = props;
     return (
-      <footer ref={ref} className={`px-4 py-2 shrink-0 ${className}`} style={{ background: 'var(--ds-surface-inset)', ...style }}>
+      <footer ref={ref} className={`rottay-layout-footer px-4 py-2 shrink-0 ${className}`} style={{ background: 'var(--ds-surface-inset)', ...style }} data-part="footer">
         {children}
       </footer>
     );

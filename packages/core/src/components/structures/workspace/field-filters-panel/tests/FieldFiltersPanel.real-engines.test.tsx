@@ -10,6 +10,33 @@ import { FieldFiltersPanel } from '..';
 import type { FieldFilterDefinition, FieldFilterPreset, FieldFilterVisual } from '..';
 import { renderWithEngine } from '../../../../../_internal/testing/helpers/engine-test-utils';
 
+/**
+ * `data-part` is a shared VOCABULARY, not an identifier. This component composes
+ * other components (Badge, Card, Input, ...), and every migrated primitive stamps
+ * parts of its own -- so a bare `[data-part="x"]` query inside this container also
+ * matches the anatomy of the components this one is BUILT FROM, which paint inline
+ * legitimately until their own batch migrates them. Ownership is therefore decided
+ * structurally: a node belongs to THIS component iff no other `data-part="root"`
+ * sits between it and this component's root.
+ */
+function ownParts(scope: HTMLElement, part: string): HTMLElement[] {
+  // This component's OWN root is the outermost `data-part="root"` in the tree.
+  const own = scope.querySelector('[data-part="root"]') as HTMLElement | null;
+  if (!own) return [];
+  if (part === 'root') return [own];
+  const all = own.querySelectorAll(`[data-part="${part}"]`) as NodeListOf<HTMLElement>;
+  return [...all].filter((el) => {
+    // Anything under a NESTED root belongs to a component this one is built FROM
+    // (a Badge, a Card, an Input) -- and that component paints inline legitimately
+    // until its own batch migrates it.
+    for (let p = el.parentElement; p && p !== own; p = p.parentElement) {
+      if (p.getAttribute('data-part') === 'root') return false;
+    }
+    return true;
+  });
+}
+
+
 // ---------------------------------------------------------------------------
 // WO-ARC-09 checkpoint 2 — the field-filters-panel skin is a real stylesheet,
 // asserted here, mirroring Table.real-engines.test.tsx.
@@ -222,7 +249,7 @@ describe.each(['modern', 'rustic'] as const)(
       expect(await screen.findByText('Advanced filters')).toBeTruthy();
 
       for (const part of NO_PAINT_PARTS) {
-        const nodes = container.querySelectorAll<HTMLElement>(`[data-part="${part}"]`);
+        const nodes = ownParts(container, part);
         expect(nodes.length, `data-part="${part}" did not render`).toBeGreaterThan(0);
         nodes.forEach((el) => {
           expect(el.style.background, `${part} paints background inline`).toBe('');
@@ -233,7 +260,7 @@ describe.each(['modern', 'rustic'] as const)(
       }
 
       for (const part of NO_COLOR_PARTS) {
-        const nodes = container.querySelectorAll<HTMLElement>(`[data-part="${part}"]`);
+        const nodes = ownParts(container, part);
         nodes.forEach((el) => {
           expect(el.style.color, `${part} (Box) paints color inline`).toBe('');
         });

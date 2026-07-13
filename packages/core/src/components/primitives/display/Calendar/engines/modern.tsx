@@ -169,17 +169,22 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     <div
       ref={ref}
       className={`rounded-lg p-4 ${containerClass} ${className}`}
+      data-part="root"
+      data-mode={mode}
       style={{ background: 'var(--ds-surface-card)', ...style }}
       id={id}
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4" data-part="header">
         <div className="flex items-center gap-2">
-          <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handlePrevYear}>«</button>
-          {mode === 'month' && <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handlePrevMonth}>‹</button>}
+          <button data-part="nav-button" data-direction="prev-year" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handlePrevYear}>«</button>
+          {mode === 'month' && <button data-part="nav-button" data-direction="prev-month" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handlePrevMonth}>‹</button>}
         </div>
         <div className="flex items-center gap-2">
           <button
+            data-part="mode-toggle"
+            data-mode="month"
+            data-active={mode === 'month' ? 'true' : 'false'}
             style={mode === 'month'
               ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
               : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
@@ -189,6 +194,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             {MONTHS[viewMonth]} {viewYear}
           </button>
           <button
+            data-part="mode-toggle"
+            data-mode="year"
+            data-active={mode === 'year' ? 'true' : 'false'}
             style={mode === 'year'
               ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
               : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
@@ -199,8 +207,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           </button>
         </div>
         <div className="flex items-center gap-2">
-          {mode === 'month' && <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleNextMonth}>›</button>}
-          <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleNextYear}>»</button>
+          {mode === 'month' && <button data-part="nav-button" data-direction="next-month" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleNextMonth}>›</button>}
+          <button data-part="nav-button" data-direction="next-year" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={handleNextYear}>»</button>
         </div>
       </div>
 
@@ -209,14 +217,14 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           {/* Day headers */}
           <div className="grid grid-cols-7 gap-1 mb-2">
             {DAYS.map((day) => (
-              <div key={day} className="text-center text-sm font-medium py-2" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <div key={day} className="text-center text-sm font-medium py-2" data-part="weekday-header" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {fullscreen ? day : day.charAt(0)}
               </div>
             ))}
           </div>
 
           {/* Days grid */}
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-1" data-part="grid">
             {/* Empty cells for days before month starts */}
             {Array.from({ length: firstDayOfMonth }).map((_, i) => (
               <div key={`empty-${i}`} className="aspect-square" />
@@ -233,6 +241,10 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
               return (
                 <button
                   key={day}
+                  data-part="cell"
+                  data-selected={isSelected ? 'true' : 'false'}
+                  data-today={isToday ? 'true' : 'false'}
+                  data-disabled={isDisabled || undefined}
                   className={`
                     aspect-square flex flex-col items-center justify-center rounded-lg
                     transition-colors relative
@@ -260,7 +272,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                 >
                   <span className={fullscreen ? 'text-sm' : 'text-xs'}>{day}</span>
                   {dateCellRender && (
-                    <div className="absolute bottom-0 left-0 right-0 text-xs truncate">
+                    <div className="absolute bottom-0 left-0 right-0 text-xs truncate" data-part="cell-content">
                       {dateCellRender(date)}
                     </div>
                   )}
@@ -271,7 +283,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
         </>
       ) : (
         /* Year view - show months */
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-3 gap-2" data-part="grid">
           {MONTHS.map((month, i) => {
             const date = new Date(viewYear, i, 1);
             const isCurrentMonth = i === today.getMonth() && viewYear === today.getFullYear();
@@ -280,6 +292,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             return (
               <button
                 key={month}
+                data-part="cell"
+                data-selected={isSelected ? 'true' : 'false'}
+                data-today={isCurrentMonth ? 'true' : 'false'}
                 className={`
                   p-4 rounded-lg text-center transition-colors
                   ${isCurrentMonth && !isSelected ? 'border' : ''}
@@ -304,7 +319,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
               >
                 <span className={fullscreen ? 'text-sm' : 'text-xs'}>{month}</span>
                 {monthCellRender && (
-                  <div className="mt-1 text-xs">
+                  <div className="mt-1 text-xs" data-part="cell-content">
                     {monthCellRender(date)}
                   </div>
                 )}

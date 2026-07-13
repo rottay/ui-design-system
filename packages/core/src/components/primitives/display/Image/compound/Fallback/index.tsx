@@ -66,6 +66,7 @@ export const ImageFallback = forwardRef<HTMLDivElement, ImageFallbackProps>(
       <div
         ref={ref}
         className={`rottay-image-fallback ${className}`}
+        data-part="fallback"
         style={fallbackStyles}
         role="img"
         aria-label="Image failed to load"

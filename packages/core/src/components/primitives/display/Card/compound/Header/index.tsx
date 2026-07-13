@@ -160,23 +160,23 @@ export function CardHeader({
   const hasTextContent = title || subtitle;
 
   return (
-    <div className={`rottay-card-header ${className}`} style={headerStyle}>
+    <div className={`rottay-card-header ${className}`} data-part="header" data-divider={divider ? 'true' : undefined} style={headerStyle}>
       <div className="rottay-card-header-content" style={contentWrapperStyle}>
         {avatar && (
-          <div className="rottay-card-header-avatar" style={{ flexShrink: 0 }}>
+          <div className="rottay-card-header-avatar" data-part="avatar" style={{ flexShrink: 0 }}>
             {avatar}
           </div>
         )}
         {hasTextContent && (
           <div className="rottay-card-header-text" style={textContentStyle}>
-            {title && <h3 style={titleStyle}>{title}</h3>}
-            {subtitle && <p style={subtitleStyle}>{subtitle}</p>}
+            {title && <h3 data-part="title" style={titleStyle}>{title}</h3>}
+            {subtitle && <p data-part="subtitle" style={subtitleStyle}>{subtitle}</p>}
           </div>
         )}
         {children}
       </div>
       {extra && (
-        <div className="rottay-card-header-extra" style={extraStyle}>
+        <div className="rottay-card-header-extra" data-part="extra" style={extraStyle}>
           {extra}
         </div>
       )}

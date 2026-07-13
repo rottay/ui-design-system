@@ -25,13 +25,15 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
       <div
         ref={ref}
         className={`flex items-start ${className}`}
+        data-part="meta"
         style={{ gap: 'var(--ds-list-meta-avatar-margin-right, 12px)', ...style }}
       >
-        {avatar && <div className="flex-shrink-0">{avatar}</div>}
-        <div className="flex-1 min-w-0">
+        {avatar && <div className="flex-shrink-0" data-part="meta-avatar">{avatar}</div>}
+        <div className="flex-1 min-w-0" data-part="meta-content">
           {title && (
             <div
               className="font-medium"
+              data-part="meta-title"
               style={{
                 color: 'var(--ds-list-meta-title-color, var(--ds-color-text-primary))',
                 fontSize: 'var(--ds-list-meta-title-font-size, inherit)',
@@ -44,6 +46,7 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
           {description && (
             <div
               className="text-sm"
+              data-part="meta-description"
               style={{
                 color: 'var(--ds-list-meta-description-color, var(--ds-color-text-secondary))',
                 fontSize: 'var(--ds-list-meta-description-font-size, 0.875rem)',
@@ -69,6 +72,7 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
       <li
         ref={ref}
         className={`flex items-center justify-between ${className}`}
+        data-part="item"
         style={{
           padding: 'var(--ds-list-default-padding-vertical, 12px) var(--ds-list-default-padding-horizontal, 16px)',
           background: 'var(--ds-list-item-background-color, transparent)',
@@ -77,10 +81,11 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
           ...style,
         }}
       >
-        <div className="flex-1 min-w-0">{children}</div>
+        <div className="flex-1 min-w-0" data-part="item-content">{children}</div>
         {extra && (
           <div
             className="flex-shrink-0"
+            data-part="item-extra"
             style={{ marginLeft: 'var(--ds-list-extra-margin-left, 16px)' }}
           >
             {extra}
@@ -89,6 +94,7 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
         {actions && actions.length > 0 && (
           <div
             className="flex items-center"
+            data-part="item-actions"
             style={{
               marginLeft: 'var(--ds-list-extra-margin-left, 16px)',
               gap: 'var(--ds-list-actions-gap, 8px)',
@@ -96,7 +102,7 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
             }}
           >
             {actions.map((action, index) => (
-              <span key={index}>{action}</span>
+              <span key={index} data-part="item-action">{action}</span>
             ))}
           </div>
         )}
@@ -148,15 +154,17 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         <div
           ref={ref}
           className={`animate-pulse ${className}`}
+          data-part="root"
+          data-loading="true"
           style={{ opacity: 'var(--ds-list-loading-opacity, 0.6)', ...style }}
         >
           {[1, 2, 3].map((i) => (
-            <div key={i} className="py-3">
+            <div key={i} className="py-3" data-part="skeleton-row">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
+                <div className="w-10 h-10 rounded-full" data-part="skeleton-avatar" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
                 <div className="flex-1">
-                  <div className="h-4 rounded w-1/3 mb-2" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
-                  <div className="h-3 rounded w-2/3" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
+                  <div className="h-4 rounded w-1/3 mb-2" data-part="skeleton-line" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
+                  <div className="h-3 rounded w-2/3" data-part="skeleton-line" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
                 </div>
               </div>
             </div>
@@ -169,6 +177,8 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       <div
         ref={ref}
         className={`${bordered ? 'border rounded-lg' : ''} ${className}`}
+        data-part="root"
+        data-loading="false"
         style={{
           background: 'var(--ds-list-background-color, transparent)',
           color: 'var(--ds-list-text-color, inherit)',
@@ -184,6 +194,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         {header && (
           <div
             className={`px-4 py-3 font-medium ${bordered ? 'border-b' : ''}`}
+            data-part="header"
             style={{
               padding: 'var(--ds-list-header-padding-vertical, 12px) var(--ds-list-header-padding-horizontal, 16px)',
               fontSize: 'var(--ds-list-header-font-size, inherit)',
@@ -198,6 +209,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         {/* When grid is set, switch to CSS Grid; otherwise render as a standard vertical list */}
         <ul
           className={`${grid ? 'grid' : ''} ${itemLayout === 'vertical' ? '' : ''}`}
+          data-part="list"
           style={grid ? {
             gridTemplateColumns: `repeat(${grid.column || 1}, 1fr)`,
             gap: grid.gutter || 16,
@@ -209,6 +221,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
               {split && index < React.Children.count(listContent) - 1 && !grid && (
                 <div
                   className="border-b"
+                  data-part="divider"
                   style={{
                     borderColor: 'var(--ds-list-split-color, var(--ds-color-border))',
                     borderBottomWidth: 'var(--ds-list-split-width, 1px)',
@@ -221,6 +234,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         {footer && (
           <div
             className={`px-4 py-3 ${bordered ? 'border-t' : ''}`}
+            data-part="footer"
             style={{
               padding: 'var(--ds-list-footer-padding-vertical, 12px) var(--ds-list-footer-padding-horizontal, 16px)',
               fontSize: 'var(--ds-list-footer-font-size, inherit)',

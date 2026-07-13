@@ -347,6 +347,11 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
     className,
   ].filter(Boolean).join(' ');
 
+  // Box stamps NO data-part of its own. It is the style-injection escape hatch
+  // every other component composes with, so a default part would put
+  // `data-part='root'` on every nested Box in the fleet: a skin rule of the form
+  // `.rottay-x [data-part='root']` would then reach into X's Boxes, and any query
+  // for X's own root would match them too. Box's skin anchors on its class.
   const ElementType = Component as ElementType;
   const elementProps = {
     ...htmlAttributes,

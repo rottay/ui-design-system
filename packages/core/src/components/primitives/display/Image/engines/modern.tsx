@@ -155,6 +155,10 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
   return (
     <div
       className={containerClasses}
+      data-status={status}
+      data-bordered={bordered ? 'true' : undefined}
+      data-shadow={shadow ? 'true' : undefined}
+      data-zoomable={zoomable ? 'true' : undefined}
       style={containerStyle}
       onClick={onClick}
       {...interactionHandlers}
@@ -165,6 +169,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
       {/* Loading Placeholder */}
       {status === 'loading' && (
         <div
+          data-part="placeholder"
           className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
           style={{ background: 'var(--ds-surface-inset)' }}
         >
@@ -177,6 +182,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
       {/* Error Fallback */}
       {status === 'error' && (
         <div
+          data-part="fallback"
           className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
           style={{ background: 'var(--ds-surface-inset)', color: 'var(--ds-color-text-secondary)' }}
         >
@@ -186,6 +192,7 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
       {/* Main Image */}
       <img
+        data-part="img"
         src={src}
         alt={alt}
         width={width}
@@ -199,14 +206,14 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
       {/* Hover Overlay */}
       {hoverOverlay && isHovered && (
-        <div className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${radiusClass}`} style={{ background: 'var(--ds-color-alpha-black-40)' }}>
+        <div data-part="hover-overlay" className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${radiusClass}`} style={{ background: 'var(--ds-color-alpha-black-40)' }}>
           {hoverOverlay}
         </div>
       )}
 
       {/* Zoom indicator for zoomable images */}
       {zoomable && isHovered && (
-        <div className="absolute bottom-2 right-2 p-1.5 rounded-full" style={{ background: 'var(--ds-color-alpha-black-50)', color: 'var(--ds-color-white)' }}>
+        <div data-part="zoom-indicator" className="absolute bottom-2 right-2 p-1.5 rounded-full" style={{ background: 'var(--ds-color-alpha-black-50)', color: 'var(--ds-color-white)' }}>
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
           </svg>

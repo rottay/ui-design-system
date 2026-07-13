@@ -105,24 +105,25 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       <div
         ref={ref}
         className={`rottay-empty rottay-empty--modern flex flex-col items-center justify-center py-8 ${className}`}
+        data-part="root"
         style={style}
         role="status"
         aria-label={typeof displayDescription === 'string' ? displayDescription : 'Empty state'}
       >
         {image && (
-          <div className="mb-4" style={imageStyle}>
+          <div className="mb-4" data-part="image" style={imageStyle}>
             {renderImage()}
           </div>
         )}
 
         {displayDescription && (
-          <p className="text-sm mb-4 text-center" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <p className="text-sm mb-4 text-center" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>
             {displayDescription}
           </p>
         )}
 
         {children && (
-          <div className="rottay-empty__footer">
+          <div className="rottay-empty__footer" data-part="footer">
             {children}
           </div>
         )}

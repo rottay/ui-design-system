@@ -66,8 +66,10 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
     // The left-border accent (borderLeft) visually differentiates the rustic
     // engine from the classic engine's full-border approach.
     <aside
-      className={`rottay-callout-rustic rottay-callout--${variant} ${className}`}
+      className={`rottay-callout-rustic rottay-callout--${variant} rottay-callout-shell rottay-callout-shell--rustic ${className}`}
       role="alert"
+      data-part="root"
+      data-tone={variant}
       style={{
         display: 'flex',
         gap: 12,
@@ -85,6 +87,7 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
     >
       {/* Icon column: fixed-size prevents text from pushing the icon around */}
       <span
+        data-part="icon"
         style={{
           flexShrink: 0,
           width: 20,
@@ -102,16 +105,16 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
       </span>
 
       {/* Content column: minWidth:0 prevents flex overflow on long unbreakable text */}
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div data-part="body" style={{ flex: 1, minWidth: 0 }}>
         {title && (
-          <div style={{ fontWeight: 600, marginBottom: children ? 4 : 0, fontSize: 14 }}>
+          <div data-part="title" style={{ fontWeight: 600, marginBottom: children ? 4 : 0, fontSize: 14 }}>
             {title}
           </div>
         )}
-        <div>{children}</div>
+        <div data-part="description">{children}</div>
         {/* Action slot for CTA buttons placed below the body */}
         {action && (
-          <div style={{ marginTop: 8 }}>{action}</div>
+          <div data-part="action" style={{ marginTop: 8 }}>{action}</div>
         )}
       </div>
 
@@ -119,6 +122,7 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
       {closable && (
         <button
           type="button"
+          data-part="close-button"
           onClick={handleClose}
           aria-label="Close"
           style={{

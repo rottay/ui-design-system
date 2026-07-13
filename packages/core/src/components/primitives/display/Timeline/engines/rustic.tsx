@@ -85,12 +85,13 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
   return (
     <div
       className={`rottay-timeline ${className}`}
+      data-part="root"
       style={containerStyle}
       role="list"
       aria-label="Timeline"
     >
       {/* Vertical line */}
-      <div style={lineStyle} aria-hidden="true" />
+      <div style={lineStyle} data-part="connector" aria-hidden="true" />
 
       {/* Render each timeline entry with its dot, optional label, and content */}
       {orderedItems.map((item, index) => {
@@ -136,23 +137,26 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
           <div
             key={index}
             className={itemProps.className}
+            data-part="item"
+            data-side={isRight ? 'end' : 'start'}
+            data-tone={itemProps.color || 'primary'}
             style={itemStyle}
             role="listitem"
           >
             {/* Dot */}
-            <div style={dotStyle} aria-hidden="true">
+            <div style={dotStyle} data-part="dot" aria-hidden="true">
               {itemProps.dot}
             </div>
 
             {/* Label */}
             {itemProps.label && (
-              <div style={{ color: 'var(--ds-timeline-label-color, #999)', fontSize: 'var(--ds-timeline-label-font-size, 12px)', marginBottom: '4px' }}>
+              <div data-part="label" style={{ color: 'var(--ds-timeline-label-color, #999)', fontSize: 'var(--ds-timeline-label-font-size, 12px)', marginBottom: '4px' }}>
                 {itemProps.label}
               </div>
             )}
 
             {/* Content */}
-            <div>{itemProps.children}</div>
+            <div data-part="body">{itemProps.children}</div>
           </div>
         );
       })}
@@ -160,11 +164,16 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
       {/* Pending item */}
       {pending && (
         <div
+          data-part="item"
+          data-side="start"
+          data-pending="true"
           style={{ position: 'relative', paddingBottom: TIMELINE_SIZE_MAP.itemPadding }}
           role="listitem"
           aria-label="Pending"
         >
           <div
+            data-part="dot"
+            data-pending="true"
             style={{
               position: 'absolute',
               left: `calc(-1 * ${TIMELINE_SIZE_MAP.dotOffset})`,
@@ -179,7 +188,7 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
           >
             {pendingDot}
           </div>
-          <div style={{ color: 'var(--ds-timeline-pending-color, #999)' }}>{pending}</div>
+          <div data-part="body" style={{ color: 'var(--ds-timeline-pending-color, #999)' }}>{pending}</div>
         </div>
       )}
 

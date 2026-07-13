@@ -95,7 +95,7 @@ export function CardBody({
   const renderedChildren = React.Children.toArray(children);
 
   return (
-    <div className={`rottay-card-body ${className}`} style={bodyStyle}>
+    <div className={`rottay-card-body ${className}`} data-part="body" style={bodyStyle}>
       {renderedChildren}
     </div>
   );

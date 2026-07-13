@@ -199,29 +199,31 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     // tech announce the loading state, sr-only span provides a text label.
     if (loading) {
       return (
-        <div ref={ref} className={className} style={style} role="status" aria-busy="true">
-          <div style={{ ...STYLES.skeleton, height: 16, width: 64, marginBottom: 8 }} />
-          <div style={{ ...STYLES.skeleton, height: 32, width: 96 }} />
+        <div ref={ref} className={className} data-part="root" data-loading="true" style={style} role="status" aria-busy="true">
+          <div data-part="skeleton-line" style={{ ...STYLES.skeleton, height: 16, width: 64, marginBottom: 8 }} />
+          <div data-part="skeleton-line" style={{ ...STYLES.skeleton, height: 32, width: 96 }} />
           <span className="sr-only">Loading...</span>
         </div>
       );
     }
 
     return (
-      <div ref={ref} className={className} style={style}>
+      <div ref={ref} className={className} data-part="root" data-loading="false" style={style}>
         {title && (
-          <div style={STYLES.title}>
+          <div data-part="title" style={STYLES.title}>
             {title}
           </div>
         )}
         <div
+          data-part="value"
+          data-trend={valueType}
           style={{
             ...STYLES.value,
             color: valueColor,
             ...valueStyle,
           }}
         >
-          {prefix && <span style={STYLES.prefix}>{prefix}</span>}
+          {prefix && <span data-part="prefix" style={STYLES.prefix}>{prefix}</span>}
           {shouldAnimateValue ? (
             <CountUp
               from={countFrom}
@@ -233,7 +235,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           ) : (
             <span>{displayValue}</span>
           )}
-          {suffix && <span style={STYLES.suffix}>{suffix}</span>}
+          {suffix && <span data-part="suffix" style={STYLES.suffix}>{suffix}</span>}
         </div>
       </div>
     );
@@ -355,20 +357,21 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
       <div
         ref={ref}
         className={className}
+        data-part="root"
         style={style}
         role="timer"
         aria-live="polite"
         aria-atomic="true"
       >
         {title && (
-          <div style={STYLES.title}>
+          <div data-part="title" style={STYLES.title}>
             {title}
           </div>
         )}
-        <div style={countdownValueStyle}>
-          {prefix && <span style={STYLES.prefix}>{prefix}</span>}
+        <div data-part="value" data-trend={valueType} style={countdownValueStyle}>
+          {prefix && <span data-part="prefix" style={STYLES.prefix}>{prefix}</span>}
           <span>{formatTime(timeLeft, format)}</span>
-          {suffix && <span style={STYLES.suffix}>{suffix}</span>}
+          {suffix && <span data-part="suffix" style={STYLES.suffix}>{suffix}</span>}
         </div>
       </div>
     );

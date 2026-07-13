@@ -137,24 +137,25 @@ const RusticEmpty = forwardRef<HTMLDivElement, EmptyProps>(
       <div
         ref={ref}
         className={`rottay-empty rottay-empty--rustic ${className || ''}`}
+        data-part="root"
         style={containerStyle}
         role="status"
         aria-label={typeof displayDescription === 'string' ? displayDescription : 'Empty state'}
       >
         {image && (
-          <div className="rottay-empty__image" style={imageContainerStyle}>
+          <div className="rottay-empty__image" data-part="image" style={imageContainerStyle}>
             {renderImage()}
           </div>
         )}
 
         {displayDescription && (
-          <p className="rottay-empty__description" style={descriptionStyle}>
+          <p className="rottay-empty__description" data-part="description" style={descriptionStyle}>
             {displayDescription}
           </p>
         )}
 
         {children && (
-          <div className="rottay-empty__footer" style={footerStyle}>
+          <div className="rottay-empty__footer" data-part="footer" style={footerStyle}>
             {children}
           </div>
         )}

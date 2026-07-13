@@ -59,6 +59,7 @@ export const ImageSkeleton = forwardRef<HTMLDivElement, ImageSkeletonProps>(
         <div
           ref={ref}
           className={`rottay-image-skeleton ${className}`}
+          data-part="skeleton"
           style={skeletonStyles}
           aria-hidden="true"
           {...props}

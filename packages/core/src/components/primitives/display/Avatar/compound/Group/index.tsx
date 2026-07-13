@@ -91,11 +91,12 @@ export function AvatarGroup({
   };
 
   return (
-    <div className={`rottay-avatar-group ${className}`} style={groupStyle}>
+    <div className={`rottay-avatar-group ${className}`} data-part="root" style={groupStyle}>
       {/* Surplus badge is rendered first due to row-reverse -- it appears at the end visually */}
       {surplus > 0 && (
         <div
           className="rottay-avatar-surplus"
+          data-part="surplus"
           style={surplusStyle}
           title={`+${surplus} more`}
         >
@@ -103,7 +104,7 @@ export function AvatarGroup({
         </div>
       )}
       {displayChildren.map((child, index) => (
-        <div key={index} style={childStyle}>
+        <div key={index} data-part="item" style={childStyle}>
           {child}
         </div>
       ))}

@@ -286,6 +286,12 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
         )}
         <span
           className={`rottay-badge rottay-badge--rustic ${className}`}
+          data-part="root"
+          data-variant={variant}
+          data-badge-style={badgeStyle}
+          data-bordered={bordered ? 'true' : undefined}
+          data-dot={dot ? 'true' : undefined}
+          data-size={size}
           style={{ ...badgeIndicatorStyle, ...pulseAnimation, ...style }}
           onClick={isInteractive ? handleClick : undefined}
           // The hover transform itself is CSS (tokens/css/engines/rustic/skin/badge.css),
@@ -293,10 +299,11 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
           data-interactive={isInteractive ? 'true' : undefined}
           {...responsiveAttrs}
         >
-          {icon && <span style={{ marginRight: formattedValue !== undefined ? 4 : 0 }}>{icon}</span>}
+          {icon && <span data-part="icon" style={{ marginRight: formattedValue !== undefined ? 4 : 0 }}>{icon}</span>}
           {!dot && (formattedValue !== undefined ? formattedValue : children)}
           {closable && (
             <span
+              data-part="close"
               style={{ marginLeft: 4, cursor: 'pointer', opacity: 0.7 }}
               onClick={handleClose}
               aria-label="Close badge"
@@ -338,18 +345,25 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
           }
         `}</style>
       )}
-      <div className={className} style={containerStyle}>
+      <div className={className} data-part="anchor" style={containerStyle}>
         {children}
         {shouldShowBadge && (
           <span
             className="rottay-badge rottay-badge--rustic"
+            data-part="root"
+            data-variant={variant}
+            data-badge-style={badgeStyle}
+            data-bordered={bordered ? 'true' : undefined}
+            data-dot={dot ? 'true' : undefined}
+            data-size={size}
+            data-position={position}
             style={positionedBadgeStyle}
             onClick={isInteractive ? handleClick : undefined}
             data-interactive={isInteractive ? 'true' : undefined}
           >
             {!dot && (
               <>
-                {icon && <span style={{ marginRight: 4 }}>{icon}</span>}
+                {icon && <span data-part="icon" style={{ marginRight: 4 }}>{icon}</span>}
                 {formattedValue}
               </>
             )}

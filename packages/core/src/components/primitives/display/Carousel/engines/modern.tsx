@@ -189,6 +189,9 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       <div
         ref={containerRef}
         className={`carousel w-full relative ${carouselClass} ${className}`}
+        data-part="root"
+        data-vertical={vertical ? 'true' : undefined}
+        data-fade={fade ? 'true' : undefined}
         style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -198,12 +201,15 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         {/* Slides Container */}
         <div
           className="carousel-inner relative w-full overflow-hidden"
+          data-part="track"
           style={{ height: style?.height || 'var(--ds-carousel-height, 300px)' }}
         >
           {slides.map((slide, index) => (
             <div
               key={index}
               className="carousel-item absolute w-full h-full"
+              data-part="slide"
+              data-selected={index === currentSlide ? 'true' : 'false'}
               style={{
                 // Fade mode: toggle opacity only, no translation needed.
                 // Slide mode: offset each slide by its distance from current,
@@ -231,6 +237,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           <>
             <button
               className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
+              data-part="arrow"
+              data-direction="prev"
               style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', boxShadow: 'var(--ds-elevation-1)' }}
               onClick={prev}
               aria-label="Previous slide"
@@ -240,6 +248,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             </button>
             <button
               className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
+              data-part="arrow"
+              data-direction="next"
               style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', boxShadow: 'var(--ds-elevation-1)' }}
               onClick={next}
               aria-label="Next slide"
@@ -254,6 +264,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         {dots && (
           <div
             className={`absolute flex gap-1 z-10 ${dotsPositionClass}`}
+            data-part="dots"
             role="tablist"
             aria-label="Carousel navigation"
           >
@@ -263,6 +274,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                 className={`w-2 h-2 rounded-full transition-all ${
                   index === currentSlide ? 'w-4' : ''
                 }`}
+                data-part="dot"
+                data-selected={index === currentSlide ? 'true' : 'false'}
                 style={{
                   background: index === currentSlide
                     ? 'var(--ds-color-primary)'

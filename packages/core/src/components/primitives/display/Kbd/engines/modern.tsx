@@ -41,6 +41,8 @@ export default function ModernKbd(props: KbdProps): React.ReactElement {
   return (
     <kbd
       className={className || undefined}
+      data-part="root"
+      data-size={size}
       style={{
         display: 'inline-flex',
         alignItems: 'center',

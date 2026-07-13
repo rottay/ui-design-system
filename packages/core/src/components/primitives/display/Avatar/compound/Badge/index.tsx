@@ -81,11 +81,13 @@ export function AvatarBadge({
   };
 
   return (
-    <div className={`rottay-avatar-badge ${className}`} style={containerStyle}>
+    <div className={`rottay-avatar-badge ${className}`} data-part="anchor" style={containerStyle}>
       {children}
       {/* aria-label exposes the status to assistive technologies */}
       <span
         className="rottay-avatar-badge-dot"
+        data-part="dot"
+        data-status={status}
         style={badgeStyle}
         aria-label={`Status: ${status}`}
       />

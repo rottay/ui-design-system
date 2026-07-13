@@ -183,19 +183,27 @@ export default function ModernTag(props: TagProps): React.ReactElement {
   return (
     <span
       className={className || undefined}
+      data-part="root"
+      data-variant={variant}
+      data-size={size}
+      data-radius={radius}
+      data-outlined={outlined ? 'true' : undefined}
+      data-bordered={bordered ? 'true' : undefined}
+      data-clickable={clickable ? 'true' : undefined}
       style={tagStyle}
       onClick={handleClick}
       role={clickable ? 'button' : undefined}
       tabIndex={clickable ? 0 : undefined}
       {...restProps}
     >
-      {icon && <span style={{ flexShrink: 0 }}>{icon}</span>}
+      {icon && <span data-part="icon" style={{ flexShrink: 0 }}>{icon}</span>}
 
-      <span>{children}</span>
+      <span data-part="content">{children}</span>
 
       {closable && (
         <button
           type="button"
+          data-part="close"
           onClick={handleClose}
           style={{ marginLeft: 'var(--ds-tag-close-gap, 2px)', background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'inherit', display: 'inline-flex' }}
           aria-label="Remove tag"

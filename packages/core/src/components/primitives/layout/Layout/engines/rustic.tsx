@@ -133,12 +133,14 @@ export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     return (
       <div
         ref={ref}
-        className={className}
+        className={`rottay-layout rottay-layout--rustic ${className ?? ''}`.trim()}
         style={{
           ...styles.layout,
           ...(hasSider ? styles.layoutWithSider : {}),
           ...style,
         }}
+        data-part="root"
+        data-has-sider={hasSider ? 'true' : 'false'}
       >
         {children}
       </div>
@@ -160,12 +162,13 @@ export const Header = React.forwardRef<HTMLElement, LayoutHeaderProps>(
     return (
       <header
         ref={ref}
-        className={className}
+        className={`rottay-layout-header ${className ?? ''}`.trim()}
         style={{
           ...styles.header,
           height: typeof height === 'number' ? `${height}px` : height,
           ...style,
         }}
+        data-part="header"
       >
         {children}
       </header>
@@ -218,7 +221,7 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     return (
       <aside
         ref={ref}
-        className={className}
+        className={`rottay-layout-sider ${className ?? ''}`.trim()}
         style={{
           ...styles.sider,
           // Light theme overlays elevated background and a subtle border
@@ -226,10 +229,19 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
           width: typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth,
           ...style,
         }}
+        data-part="sider"
+        data-theme={theme}
+        data-collapsed={isCollapsed ? 'true' : 'false'}
       >
         {children}
         {collapsible && (
-          <button type="button" style={styles.trigger} onClick={handleToggle}>
+          <button
+            type="button"
+            style={styles.trigger}
+            onClick={handleToggle}
+            data-part="trigger"
+            data-collapsed={isCollapsed ? 'true' : 'false'}
+          >
             {trigger ?? (isCollapsed ? '→' : '←')}
           </button>
         )}
@@ -249,7 +261,7 @@ export const Content = React.forwardRef<HTMLElement, LayoutContentProps>(
   (props, ref) => {
     const { children, className, style } = props;
     return (
-      <main ref={ref} className={className} style={{ ...styles.content, ...style }}>
+      <main ref={ref} className={`rottay-layout-content ${className ?? ''}`.trim()} style={{ ...styles.content, ...style }} data-part="content">
         {children}
       </main>
     );
@@ -267,7 +279,7 @@ export const Footer = React.forwardRef<HTMLElement, LayoutFooterProps>(
   (props, ref) => {
     const { children, className, style } = props;
     return (
-      <footer ref={ref} className={className} style={{ ...styles.footer, ...style }}>
+      <footer ref={ref} className={`rottay-layout-footer ${className ?? ''}`.trim()} style={{ ...styles.footer, ...style }} data-part="footer">
         {children}
       </footer>
     );

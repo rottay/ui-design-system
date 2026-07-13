@@ -162,12 +162,13 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     // Loading skeleton with Tailwind animate-pulse
     if (loading) {
       return (
-        <div ref={ref} className={className} style={{
+        <div ref={ref} className={className} data-part="root" data-loading="true" style={{
           ...style,
           animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
           animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
         }}>
           <div
+            data-part="skeleton-line"
             style={{
               height: 'var(--ds-spacing-4, 1rem)',
               width: 'var(--ds-spacing-16, 4rem)',
@@ -177,6 +178,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
             }}
           />
           <div
+            data-part="skeleton-line"
             style={{
               height: 'var(--ds-spacing-8, 2rem)',
               width: 'var(--ds-spacing-24, 6rem)',
@@ -189,10 +191,11 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     }
 
     return (
-      <div ref={ref} className={className} style={style}>
+      <div ref={ref} className={className} data-part="root" data-loading="false" style={style}>
         {title && (
           <div
             className="stat-title"
+            data-part="title"
             style={{
               lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
               marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
@@ -203,6 +206,8 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
         )}
         <div
           className="stat-value"
+          data-part="value"
+          data-trend={valueType}
           style={{
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
             ...valueColorStyle,
@@ -210,7 +215,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           }}
         >
           {prefix && (
-            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
+            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
               {prefix}
             </span>
           )}
@@ -226,7 +231,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
             <span>{displayValue}</span>
           )}
           {suffix && (
-            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
+            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
               {suffix}
             </span>
           )}
@@ -339,10 +344,11 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     const valueColorStyle = VALUE_TYPE_STYLE_MAP[valueType] || VALUE_TYPE_STYLE_MAP.default;
 
     return (
-      <div ref={ref} className={className} style={style}>
+      <div ref={ref} className={className} data-part="root" style={style}>
         {title && (
           <div
             className="stat-title"
+            data-part="title"
             style={{
               lineHeight: 'var(--ds-line-height-sm, 1.25rem)',
               marginBottom: 'var(--ds-statistic-title-margin-bottom, var(--ds-spacing-1, 0.25rem))',
@@ -355,6 +361,8 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
             does not shift as numbers change during the countdown. */}
         <div
           className="stat-value"
+          data-part="value"
+          data-trend={valueType}
           style={{
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
             fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
@@ -363,13 +371,13 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
           }}
         >
           {prefix && (
-            <span style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
+            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
               {prefix}
             </span>
           )}
           <span>{formatTime(timeLeft, format)}</span>
           {suffix && (
-            <span style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
+            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
               {suffix}
             </span>
           )}

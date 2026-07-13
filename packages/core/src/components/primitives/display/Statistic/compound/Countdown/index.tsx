@@ -231,24 +231,24 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     // Loading skeleton
     if (loading) {
       return (
-        <div ref={ref} className={`rottay-statistic rottay-statistic--countdown rottay-statistic--loading ${className}`} style={containerStyle}>
-          <div style={{ height: '16px', width: '64px', marginBottom: '8px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
-          <div style={{ height: '32px', width: '120px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
+        <div ref={ref} className={`rottay-statistic rottay-statistic--countdown rottay-statistic--loading ${className}`} data-part="root" data-loading="true" style={containerStyle}>
+          <div data-part="skeleton-line" style={{ height: '16px', width: '64px', marginBottom: '8px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
+          <div data-part="skeleton-line" style={{ height: '32px', width: '120px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
         </div>
       );
     }
 
     return (
-      <div ref={ref} className={`rottay-statistic rottay-statistic--countdown ${className}`} style={containerStyle}>
+      <div ref={ref} className={`rottay-statistic rottay-statistic--countdown ${className}`} data-part="root" data-loading="false" style={containerStyle}>
         {title && (
-          <div className="rottay-statistic__title" style={titleStyle}>
+          <div className="rottay-statistic__title" data-part="title" style={titleStyle}>
             {title}
           </div>
         )}
-        <div className="rottay-statistic__value" style={valueContainerStyle}>
-          {prefix && <span className="rottay-statistic__prefix" style={{ marginRight: '4px' }}>{prefix}</span>}
+        <div className="rottay-statistic__value" data-part="value" data-trend={valueType || 'default'} style={valueContainerStyle}>
+          {prefix && <span className="rottay-statistic__prefix" data-part="prefix" style={{ marginRight: '4px' }}>{prefix}</span>}
           <span className="rottay-statistic__content">{formatTime(timeLeft, format)}</span>
-          {suffix && <span className="rottay-statistic__suffix" style={{ marginLeft: '4px' }}>{suffix}</span>}
+          {suffix && <span className="rottay-statistic__suffix" data-part="suffix" style={{ marginLeft: '4px' }}>{suffix}</span>}
         </div>
       </div>
     );

@@ -221,6 +221,10 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     <>
       <div
         className={`rottay-image-rustic ${className}`}
+        data-status={status}
+        data-bordered={bordered ? 'true' : undefined}
+        data-shadow={shadow ? 'true' : undefined}
+        data-zoomable={zoomable ? 'true' : undefined}
         style={containerStyle}
         onClick={handleClick}
         {...interactionHandlers}
@@ -230,17 +234,18 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
         aria-label={zoomable ? `${alt} (click to zoom)` : undefined}
       >
         {/* Loading Placeholder */}
-        <div style={placeholderStyle}>
+        <div data-part="placeholder" style={placeholderStyle}>
           {placeholder || <DefaultPlaceholder />}
         </div>
 
         {/* Error Fallback */}
-        <div style={fallbackStyle}>
+        <div data-part="fallback" style={fallbackStyle}>
           {fallback || <DefaultFallbackIcon />}
         </div>
 
         {/* Main Image */}
         <img
+          data-part="img"
           src={src}
           alt={alt}
           width={width}
@@ -253,12 +258,13 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
 
         {/* Hover Overlay */}
         {hoverOverlay && (
-          <div style={overlayStyle}>{hoverOverlay}</div>
+          <div data-part="hover-overlay" style={overlayStyle}>{hoverOverlay}</div>
         )}
 
         {/* Zoom indicator */}
         {zoomable && isHovered && status === 'loaded' && (
           <div
+            data-part="zoom-indicator"
             style={{
               position: 'absolute',
               bottom: 8,
@@ -279,6 +285,7 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
       {/* Zoom Overlay */}
       {zoomable && (
         <div
+          data-part="zoom-dialog"
           style={zoomOverlayStyle}
           onClick={handleCloseZoom}
           role="dialog"
@@ -286,11 +293,13 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
           aria-modal="true"
         >
           <img
+            data-part="zoom-img"
             src={src}
             alt={alt}
             style={zoomedImageStyle}
           />
           <button
+            data-part="zoom-close"
             onClick={handleCloseZoom}
             style={{
               position: 'absolute',

@@ -62,6 +62,7 @@ function highlightText(
       {before}
       <span
         className="rottay-tree-highlight"
+        data-part="tree-node-highlight"
         style={{
           backgroundColor: 'var(--ds-tree-highlight-bg, #fef3c7)',
           color: 'var(--ds-tree-highlight-color, #92400e)',
@@ -313,6 +314,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         treeLineConnectors.push(
           <div
             key={`vline-${i}`}
+            data-part="connector"
             style={{
               position: 'absolute',
               left: i * 24 + 12,
@@ -329,6 +331,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     treeLineConnectors.push(
       <div
         key="hline"
+        data-part="connector"
         style={{
           position: 'absolute',
           left: (level - 1) * 24 + 12,
@@ -344,6 +347,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
       treeLineConnectors.push(
         <div
           key="vline-self"
+          data-part="connector"
           style={{
             position: 'absolute',
             left: (level - 1) * 24 + 12,
@@ -358,6 +362,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
       treeLineConnectors.push(
         <div
           key="vline-self"
+          data-part="connector"
           style={{
             position: 'absolute',
             left: (level - 1) * 24 + 12,
@@ -433,6 +438,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
   return (
     <div
       className="rottay-tree-node"
+      data-part="node"
       data-key={normalizedNodeKey}
       style={{ position: 'relative' }}
       ref={(el) => nodeRef(normalizedNodeKey, el)}
@@ -443,6 +449,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
       {/* Drop indicator line */}
       {isDropTarget && dropPosition && dropPosition !== 'inside' && (
         <div
+          data-part="drop-indicator"
           style={{
             ...styles.dropIndicator(level),
             top: dropPosition === 'before' ? -1 : undefined,
@@ -467,6 +474,13 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         aria-level={level + 1}
         tabIndex={isFocused ? 0 : -1}
         data-tree-node-key={normalizedNodeKey}
+        data-part="row"
+        data-selected={isSelected ? 'true' : 'false'}
+        data-expanded={showExpander ? (isExpanded ? 'true' : 'false') : undefined}
+        data-disabled={disabled || undefined}
+        data-focused={isFocused || undefined}
+        data-drop-target={isDropTarget || undefined}
+        data-drop-position={isDropTarget ? dropPosition : undefined}
         draggable={isDraggable}
         onDragStart={
           isDraggable
@@ -496,6 +510,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
           loadingSpinner
         ) : showExpander ? (
           <span
+            data-part="tree-node-toggle"
             style={switcherStyle}
             onClick={handleToggle}
             role="button"
@@ -515,6 +530,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         {checkable && (
           <input
             type="checkbox"
+            data-part="checkbox"
             style={checkboxStyle}
             checked={isChecked}
             ref={(el) => {
@@ -531,10 +547,10 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         )}
 
         {/* Icon */}
-        {showIcon && icon && <span style={iconStyle}>{icon}</span>}
+        {showIcon && icon && <span data-part="icon" style={iconStyle}>{icon}</span>}
 
         {/* Title */}
-        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span data-part="tree-node-label" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {displayTitle}
         </span>
       </div>
@@ -1022,6 +1038,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
     <div
       ref={treeContainerRef}
       className={`rottay-tree rottay-tree--rustic ${className}`}
+      data-part="root"
       style={containerStyle}
       role="tree"
       aria-multiselectable={props.multiple || false}

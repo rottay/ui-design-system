@@ -206,6 +206,7 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       <div
         ref={ref}
         className={`rottay-tooltip rottay-tooltip--rustic ${className}`}
+        data-part="root"
         style={containerStyle}
         {...eventHandlers}
       >
@@ -214,15 +215,19 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
           <div
             id={tooltipId.current}
             role="tooltip"
+            className="rottay-tooltip-bubble rottay-tooltip-bubble--rustic"
+            data-part="bubble"
+            data-placement={placement}
+            data-open={visible ? 'true' : 'false'}
             style={tooltipStyle}
             aria-hidden={!visible}
           >
             {shortcut ? (
-              <span style={SHORTCUT_ROW_STYLE}>
+              <span data-part="shortcut-row" style={SHORTCUT_ROW_STYLE}>
                 <span>{content}</span>
-                <span style={SHORTCUT_CHIPS_STYLE}>
+                <span data-part="shortcut-chips" style={SHORTCUT_CHIPS_STYLE}>
                   {formatShortcutKey(shortcut).map((segment, i) => (
-                    <kbd key={i} style={SHORTCUT_KBD_STYLE}>
+                    <kbd key={i} data-part="shortcut-key" style={SHORTCUT_KBD_STYLE}>
                       {segment}
                     </kbd>
                   ))}
@@ -231,7 +236,7 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
             ) : (
               content
             )}
-            {arrow && <div style={arrowStyle} />}
+            {arrow && <div data-part="arrow" style={arrowStyle} />}
           </div>
         )}
       </div>

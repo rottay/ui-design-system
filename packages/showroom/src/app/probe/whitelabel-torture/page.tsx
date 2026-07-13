@@ -10,6 +10,13 @@ import {
   Badge,
   Input,
   Card,
+  Image,
+  Carousel,
+  QRCode,
+  Avatar,
+  Tag,
+  Kbd,
+  Empty,
   Table,
   Toast,
   FieldFiltersPanel,
@@ -78,6 +85,22 @@ import {
   Dropdown,
   HoverCard,
   Watermark,
+  Layout,
+  Collapse,
+  Divider,
+  Splitter,
+  Tree,
+  Calendar,
+  List,
+  Timeline,
+  Descriptions,
+  Statistic,
+  Heading,
+  Paragraph,
+  Link,
+  Tooltip,
+  Callout,
+  type TreeDataNode,
   type FieldFilterDefinition,
   type FieldFilterPreset,
   type FieldFilterVisual,
@@ -1724,6 +1747,431 @@ function NavFbStates() {
   );
 }
 
+// Fixed fixtures for the WO-SKIN-05 checkpoint D1 surfaces+media data-part
+// probe (Card, Image, Carousel, QRCode, Avatar, Badge, Tag, Kbd, Empty).
+// Every instance below is deterministic: forced variant/status/size props, a
+// `src=""` Image permanently pinned in its `loading` status (per the HTML
+// spec an empty `src` queues no request, so neither load nor error ever
+// fires), and a syntactically invalid data-URI Image pinned in `error`
+// (decode failure is synchronous -- no network, no flake). Rendered only
+// behind `?display1=1` so no flagship capture sees it. This page is the
+// visual-evidence half; the contract test renders its own fixtures directly
+// through React Testing Library.
+//
+// The Avatar row is the D1.1 mandatory baseline (P-75): xs/md/xl sizes are
+// photographed as-is, unfixed, so the shipped 40x40 clip (xl gets cropped)
+// and halo (xs shows the container's tint around a too-small child) are both
+// captured before anyone touches that component.
+const DISPLAY1_VALID_IMG =
+  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCI+PHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjNGY0NmU1Ii8+PC9zdmc+';
+const DISPLAY1_BROKEN_IMG = 'data:image/png;base64,not-a-real-image';
+
+function Display1States() {
+  return (
+    <Box
+      data-testid="probe-display1"
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
+    >
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: 16,
+        }}
+      >
+        <Stack spacing="xs" data-testid="probe-display1-card">
+          <Text size="xs" color="secondary">Card</Text>
+          <Stack spacing="sm">
+            <Card variant="elevated" title="Elevated" description="Rest state" />
+            <Card variant="outlined" title="Outlined" hoverable divider actions={[<Button key="a" size="xs">Action</Button>]} />
+            <Card variant="filled" colorVariant="success" title="Toned" clickable onClick={() => undefined} />
+            <Card variant="ghost" loading title="Loading" />
+            <Card.Header title="Header title" subtitle="Header subtitle" divider avatar={<Avatar size="sm" name="AB" />} extra={<Button size="xs">Extra</Button>} />
+            <Card.Body padding="sm">Body content</Card.Body>
+            <Card.Footer divider align="space-between" actions={[<Button key="f" size="xs">Save</Button>]} />
+            <Card.Image src={DISPLAY1_VALID_IMG} alt="Cover" height={64} overlay={<Badge variant="success" content="New" />} gradient />
+          </Stack>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-image">
+          <Text size="xs" color="secondary">Image (loaded / loading / error)</Text>
+          <Box style={{ display: 'flex', gap: 8 }}>
+            <Image src={DISPLAY1_VALID_IMG} alt="Loaded" width={64} height={64} bordered shadow />
+            <Image src="" alt="Loading" width={64} height={64} />
+            <Image src={DISPLAY1_BROKEN_IMG} alt="Errored" width={64} height={64} />
+            <Image src={DISPLAY1_VALID_IMG} alt="Zoomable" width={64} height={64} zoomable hoverOverlay={<Text size="xs">View</Text>} />
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-carousel">
+          <Text size="xs" color="secondary">Carousel</Text>
+          <Box style={{ position: 'relative', height: 120 }}>
+            <Carousel arrows dots>
+              <div style={{ background: 'var(--ds-color-primary)', width: '100%', height: '100%' }} />
+              <div style={{ background: 'var(--ds-color-secondary)', width: '100%', height: '100%' }} />
+              <div style={{ background: 'var(--ds-color-success)', width: '100%', height: '100%' }} />
+            </Carousel>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-qrcode">
+          <Text size="xs" color="secondary">QRCode (active / loading / expired / scanned)</Text>
+          <Box style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <QRCode value="https://rottay.com" size={72} bordered />
+            <QRCode value="https://rottay.com" size={72} status="loading" />
+            <QRCode value="https://rottay.com" size={72} status="expired" onRefresh={() => undefined} />
+            <QRCode value="https://rottay.com" size={72} status="scanned" />
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-avatar">
+          <Text size="xs" color="secondary">Avatar (xs / md / xl -- P-75 clip/halo baseline, unfixed)</Text>
+          <Box style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+            <Avatar size="xs" name="AB" />
+            <Avatar size="md" name="CD" />
+            <Avatar size="xl" name="EF" />
+            <Avatar size="md" name="GH" status="online" bordered />
+            <Avatar.Badge status="busy">
+              <Avatar size="md" name="IJ" />
+            </Avatar.Badge>
+            <Avatar.Group max={2}>
+              <Avatar name="A1" />
+              <Avatar name="A2" />
+              <Avatar name="A3" />
+            </Avatar.Group>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-badge">
+          <Text size="xs" color="secondary">Badge</Text>
+          <Box style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            <Badge variant="primary" content="Solid" badgeStyle="solid" />
+            <Badge variant="success" content="Soft" badgeStyle="soft" />
+            <Badge variant="warning" content="Outline" badgeStyle="outline" bordered />
+            <Badge variant="error" dot />
+            <Badge tone="info" content="Closable" closable onClose={() => undefined} />
+            <Badge variant="primary" count={5}>
+              <Box style={{ width: 32, height: 32, background: 'var(--ds-surface-panel)', borderRadius: 6 }} />
+            </Badge>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-tag">
+          <Text size="xs" color="secondary">Tag</Text>
+          <Box style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <Tag variant="default">Default</Tag>
+            <Tag variant="primary" outlined>Outlined</Tag>
+            <Tag variant="success" bordered>Bordered</Tag>
+            <Tag variant="warning" closable onClose={() => undefined}>Closable</Tag>
+            <Tag variant="error" clickable onClick={() => undefined} icon={<TagIcon />}>Clickable</Tag>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-kbd">
+          <Text size="xs" color="secondary">Kbd</Text>
+          <Box style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <Kbd size="sm">Shift</Kbd>
+            <Kbd size="md">Ctrl</Kbd>
+            <Kbd size="lg">Enter</Kbd>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display1-empty">
+          <Text size="xs" color="secondary">Empty</Text>
+          <Box style={{ display: 'flex', gap: 16 }}>
+            <Empty description="No records" image="default">
+              <Button size="xs">Create</Button>
+            </Empty>
+            <Empty description="Nothing to show" image="simple" />
+          </Box>
+        </Stack>
+      </Box>
+    </Box>
+  );
+}
+
+// Fixed fixtures for the WO-SKIN-05 checkpoint D2 data-display data-part
+// probe (Tree, Calendar, List, Timeline, Descriptions, Statistic, Typography,
+// Tooltip, Callout). Every instance below is deterministic: forced
+// selected/expanded/disabled props and a controlled Calendar `value` distinct
+// from the pinned recording day. Calendar's own "today" ring is compiled from
+// a real `new Date()` inside the component with no override prop -- the e2e
+// spec freezes the browser clock via `page.clock.setFixedTime` before
+// navigating (same recipe as WO-SKIN-02's DatePicker pin) so the ring does
+// not silently move day to day. Tooltip stays closed at rest (matching every
+// other floating component's rest posture) and is opened by the spec's own
+// hover interaction pin, not by this fixture. Rendered only behind
+// `?display2=1` so no flagship capture sees it. This page is the
+// visual-evidence half; the contract test renders its own fixtures directly
+// through React Testing Library.
+//
+// Two checkpoint-anticipated states have no corresponding prop in source
+// today (WO-SKIN-05 D2 pre-step finding, code over inventory): List.Item has
+// no `selected`/`clickable` prop, and Calendar renders no outside-month
+// cells (only true blanks before day 1, never adjacent-month dates) -- both
+// rows below demonstrate the states that DO exist rather than inventing new
+// component API.
+const DISPLAY2_TREE_DATA: TreeDataNode[] = [
+  {
+    key: 'documents',
+    title: 'Documents',
+    children: [
+      { key: 'selected-file', title: 'Selected file' },
+      { key: 'disabled-file', title: 'Disabled file', disabled: true },
+      { key: 'leaf-file', title: 'Plain file', isLeaf: true },
+    ],
+  },
+  { key: 'archive', title: 'Archive', isLeaf: true },
+];
+
+function Display2States() {
+  return (
+    <Box
+      data-testid="probe-display2"
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
+    >
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: 16,
+        }}
+      >
+        <Stack spacing="xs" data-testid="probe-display2-tree">
+          <Text size="xs" color="secondary">Tree (selected / expanded / disabled / checkable)</Text>
+          <Tree
+            treeData={DISPLAY2_TREE_DATA}
+            defaultExpandedKeys={['documents']}
+            defaultSelectedKeys={['selected-file']}
+            checkable
+            showLine
+            onSelect={() => undefined}
+            onExpand={() => undefined}
+            onCheck={() => undefined}
+          />
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-calendar">
+          <Text size="xs" color="secondary">Calendar (selected != today, disabled Sundays)</Text>
+          <Calendar
+            value={new Date(2026, 6, 8)}
+            disabledDate={(date) => date.getDay() === 0}
+            fullscreen={false}
+            onChange={() => undefined}
+          />
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-list">
+          <Text size="xs" color="secondary">List (bordered, header/footer, split)</Text>
+          <List
+            header="Team members"
+            footer="3 members"
+            bordered
+            dataSource={['Ada Lovelace', 'Alan Turing', 'Grace Hopper']}
+            renderItem={(item) => {
+              const name = String(item);
+              return (
+                <List.Item key={name} actions={[<Button key="edit" size="xs">Edit</Button>]}>
+                  <List.Item.Meta
+                    avatar={<Avatar size="sm" name={name.split(' ').map((part) => part[0]).join('')} />}
+                    title={name}
+                    description="Member"
+                  />
+                </List.Item>
+              );
+            }}
+          />
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-timeline">
+          <Text size="xs" color="secondary">Timeline (tones + pending)</Text>
+          <Timeline pending="Recording...">
+            <Timeline.Item color="success" label="09:00">Order placed</Timeline.Item>
+            <Timeline.Item color="warning" label="09:15">Payment pending</Timeline.Item>
+            <Timeline.Item color="error" label="09:30">Payment failed</Timeline.Item>
+          </Timeline>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-descriptions">
+          <Text size="xs" color="secondary">Descriptions (bordered, horizontal, spanning cell)</Text>
+          <Descriptions title="Order #1029" bordered column={2}>
+            <Descriptions.Item label="Status">Shipped</Descriptions.Item>
+            <Descriptions.Item label="Total" span={2}>$128.00</Descriptions.Item>
+          </Descriptions>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-statistic">
+          <Text size="xs" color="secondary">Statistic + Countdown (trend variants, loading)</Text>
+          <Box style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+            <Statistic title="Revenue" value={128000} prefix="$" valueType="positive" />
+            <Statistic title="Errors" value={12} valueType="negative" />
+            <Statistic title="Loading" value={0} loading />
+            <Statistic.Countdown title="Sale ends" value={Date.now() + 3600000} valueType="warning" />
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-typography">
+          <Text size="xs" color="secondary">Typography (Heading / Text / Paragraph / Link)</Text>
+          <Stack spacing="xs">
+            <Heading level="h3" color="primary">Section heading</Heading>
+            <Text color="muted">Muted inline text</Text>
+            <Paragraph color="secondary">A short paragraph of body copy for size comparison.</Paragraph>
+            <Link href="/display2-link" color="primary">Learn more</Link>
+          </Stack>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-tooltip">
+          <Text size="xs" color="secondary">Tooltip (closed at rest; hover to open)</Text>
+          <Box style={{ paddingTop: 32, paddingBottom: 16 }}>
+            <Tooltip content="Pinned tooltip content" placement="top">
+              <Button data-testid="probe-display2-tooltip-trigger" size="xs">Hover me</Button>
+            </Tooltip>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-display2-callout">
+          <Text size="xs" color="secondary">Callout (tones + closable + action)</Text>
+          <Stack spacing="xs">
+            <Callout tone="info" title="Heads up" closable onClose={() => undefined}>Informational message.</Callout>
+            <Callout tone="danger" title="Error" action={<Button size="xs">Retry</Button>}>Something failed.</Callout>
+          </Stack>
+        </Stack>
+      </Box>
+    </Box>
+  );
+}
+
+// Fixed fixtures for the WO-SKIN-05 checkpoint L layout-family data-part
+// probe (Box, Layout, Collapse, Divider, Splitter). Every instance below is
+// deterministic -- forced controlled props, never a live drag or toggle --
+// so the grid renders identically on every load. Rendered only behind
+// `?layout=1` so no flagship capture sees it. This page is the
+// visual-evidence half; the contract test renders its own fixtures directly
+// through React Testing Library.
+//
+// Layout.Sider is shown TWICE (collapsed=false and collapsed=true, both
+// controlled) so the P-76-adjacent data-collapsed state is photographed in
+// both positions without any interaction. The outer Layout's own
+// `min-h-screen` Tailwind class is overridden via the `style` prop it
+// already merges last -- the same "style={{ position: 'static' }}"
+// torture-page idiom already used above for FloatButton/BackTop/
+// MobileHeader/ActionDock/Affix, not a change to the component itself.
+function LayoutStates() {
+  return (
+    <Box
+      data-testid="probe-layout"
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
+    >
+      <Box
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+          gap: 16,
+        }}
+      >
+        <Stack spacing="xs" data-testid="probe-layout-box">
+          <Text size="xs" color="secondary">Box</Text>
+          <Box style={{ padding: 12, border: '1px dashed var(--ds-color-border)' }}>
+            <Text size="xs">Plain style-injection Box</Text>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-layout-layout">
+          <Text size="xs" color="secondary">Layout (Sider expanded / Sider collapsed / Header / Content / Footer)</Text>
+          <Layout hasSider style={{ minHeight: 220, border: '1px solid var(--ds-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+            <Layout.Sider theme="dark" collapsible collapsed={false} width={140} style={{ minHeight: 220 }}>
+              <Text size="xs" style={{ padding: 8, display: 'block' }}>Nav (expanded)</Text>
+            </Layout.Sider>
+            <Layout.Sider theme="light" collapsible collapsed width={80} style={{ minHeight: 220 }}>
+              <Text size="xs" style={{ padding: 8, display: 'block' }}>Nav</Text>
+            </Layout.Sider>
+            <Layout style={{ minHeight: 220 }}>
+              <Layout.Header height={48}>
+                <Text size="xs">Header</Text>
+              </Layout.Header>
+              <Layout.Content>
+                <Text size="xs">Content</Text>
+              </Layout.Content>
+              <Layout.Footer>
+                <Text size="xs">Footer</Text>
+              </Layout.Footer>
+            </Layout>
+          </Layout>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-layout-collapse">
+          <Text size="xs" color="secondary">Collapse (expanded / collapsed / disabled)</Text>
+          <Collapse defaultActiveKey={['open']}>
+            <Collapse.Panel header="Open panel" panelKey="open">
+              <Text size="xs">Expanded content</Text>
+            </Collapse.Panel>
+            <Collapse.Panel header="Closed panel" panelKey="closed">
+              <Text size="xs">Collapsed content</Text>
+            </Collapse.Panel>
+            <Collapse.Panel header="Disabled panel" panelKey="disabled" disabled>
+              <Text size="xs">Disabled content</Text>
+            </Collapse.Panel>
+          </Collapse>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-layout-divider">
+          <Text size="xs" color="secondary">Divider (horizontal/vertical x plain/with-text)</Text>
+          <Stack spacing="sm">
+            <Divider />
+            <Divider>With text</Divider>
+          </Stack>
+          <Box style={{ display: 'flex', alignItems: 'center', height: 48, gap: 12 }}>
+            <Text size="xs">Left</Text>
+            <Divider orientation="vertical" />
+            <Text size="xs">Mid</Text>
+            <Divider orientation="vertical">Tag</Divider>
+            <Text size="xs">Right</Text>
+          </Box>
+        </Stack>
+
+        <Stack spacing="xs" data-testid="probe-layout-splitter">
+          <Text size="xs" color="secondary">Splitter (horizontal / vertical, at rest)</Text>
+          <Box style={{ height: 100, border: '1px solid var(--ds-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+            <Splitter layout="horizontal">
+              <Splitter.Panel defaultSize={40}>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>Left</Text>
+              </Splitter.Panel>
+              <Splitter.Panel>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>Right</Text>
+              </Splitter.Panel>
+            </Splitter>
+          </Box>
+          <Box style={{ height: 100, border: '1px solid var(--ds-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+            <Splitter layout="vertical">
+              <Splitter.Panel defaultSize={40}>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>Top</Text>
+              </Splitter.Panel>
+              <Splitter.Panel>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>Bottom</Text>
+              </Splitter.Panel>
+            </Splitter>
+          </Box>
+        </Stack>
+      </Box>
+    </Box>
+  );
+}
+
 function sanitizeFixture(raw: string | null): TortureFixture {
   return raw && (TORTURE_FIXTURES as string[]).includes(raw) ? (raw as TortureFixture) : 'torture-dark';
 }
@@ -1747,6 +2195,9 @@ function TortureContent() {
   const overlayfb = useMemo(() => searchParams.get('overlayfb') === '1', [searchParams]);
   const overlay = useMemo(() => searchParams.get('overlay') === '1', [searchParams]);
   const nav = useMemo(() => searchParams.get('nav') === '1', [searchParams]);
+  const display1 = useMemo(() => searchParams.get('display1') === '1', [searchParams]);
+  const display2 = useMemo(() => searchParams.get('display2') === '1', [searchParams]);
+  const layout = useMemo(() => searchParams.get('layout') === '1', [searchParams]);
 
   // WO-ENG-11 compares engines on an otherwise identical surface.
   const engine = useMemo<ProbeEngine>(() => {
@@ -1814,6 +2265,12 @@ function TortureContent() {
             {overlay && <OverlayStates />}
 
             {nav && <NavFbStates />}
+
+            {display1 && <Display1States />}
+
+            {display2 && <Display2States />}
+
+            {layout && <LayoutStates />}
 
             <Box
               data-testid="probe-extras"

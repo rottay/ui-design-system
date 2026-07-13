@@ -315,6 +315,9 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     return (
       <div
         className={className}
+        data-part="root"
+        data-vertical={vertical ? 'true' : undefined}
+        data-fade={fade ? 'true' : undefined}
         style={containerStyle}
         onMouseEnter={() => pauseOnHover && setIsPaused(true)}
         onMouseLeave={() => pauseOnHover && setIsPaused(false)}
@@ -324,11 +327,13 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       >
         {/* aria-live="polite" announces slide changes to screen readers
             without interrupting the current speech queue. */}
-        <div style={slidesContainerStyle} aria-live="polite">
+        <div style={slidesContainerStyle} data-part="track" aria-live="polite">
           {slides.map((slide, index) => (
             <div
               key={index}
               style={getSlideStyle(index)}
+              data-part="slide"
+              data-selected={index === currentSlide ? 'true' : 'false'}
               role="group"
               aria-roledescription="slide"
               aria-label={`Slide ${index + 1} of ${slides.length}`}
@@ -344,6 +349,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
           <>
             <button
               style={{ ...arrowStyle, left: '10px' }}
+              data-part="arrow"
+              data-direction="prev"
               onClick={prev}
               aria-label="Previous slide"
               type="button"
@@ -352,6 +359,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             </button>
             <button
               style={{ ...arrowStyle, right: '10px' }}
+              data-part="arrow"
+              data-direction="next"
               onClick={next}
               aria-label="Next slide"
               type="button"
@@ -365,6 +374,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
         {dots && (
           <div
             style={getDotsContainerStyle()}
+            data-part="dots"
             role="tablist"
             aria-label="Carousel navigation"
           >
@@ -372,6 +382,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               <button
                 key={index}
                 style={getDotStyle(index === currentSlide)}
+                data-part="dot"
+                data-selected={index === currentSlide ? 'true' : 'false'}
                 onClick={() => goTo(index)}
                 aria-label={`Go to slide ${index + 1}`}
                 aria-selected={index === currentSlide}

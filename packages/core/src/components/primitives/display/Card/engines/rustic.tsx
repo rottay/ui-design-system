@@ -219,6 +219,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
   // to signal a "refresh" rather than an initial load.
   const loadingOverlay = loading && (
     <div
+      data-part="loading-overlay"
       style={{
         position: 'absolute',
         top: 0,
@@ -236,6 +237,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       aria-label="Loading"
     >
       <div
+        data-part="spinner"
         style={{
           width: '32px',
           height: '32px',
@@ -275,6 +277,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       {/* Cover image at top */}
       {cover && coverPosition === 'top' && (
         <img
+          data-part="cover"
           src={cover}
           alt={typeof title === 'string' ? title : 'Card cover'}
           style={coverStyle}
@@ -283,10 +286,11 @@ export default function RusticCard(props: CardProps): React.ReactElement {
 
       {/* Header with title, description, and extra */}
       {(title || description || extra) && (
-        <div style={headerStyle}>
+        <div data-part="header" data-divider={divider ? 'true' : undefined} style={headerStyle}>
           <div style={{ flex: 1, minWidth: 0 }}>
             {title && (
               <div
+                data-part="title"
                 style={{
                   fontSize: '16px',
                   fontWeight: 600,
@@ -301,6 +305,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
             )}
             {description && (
               <div
+                data-part="description"
                 style={{
                   fontSize: '14px',
                   color: 'var(--ds-card-subtitle-color, #8c8c8c)',
@@ -313,16 +318,16 @@ export default function RusticCard(props: CardProps): React.ReactElement {
               </div>
             )}
           </div>
-          {extra && <div style={{ flexShrink: 0, marginLeft: '12px' }}>{extra}</div>}
+          {extra && <div data-part="extra" style={{ flexShrink: 0, marginLeft: '12px' }}>{extra}</div>}
         </div>
       )}
 
       {/* Main content */}
-      <div style={{ padding: paddingValue, flex: 1 }}>{children}</div>
+      <div data-part="body" style={{ padding: paddingValue, flex: 1 }}>{children}</div>
 
       {/* Actions */}
       {actions && actions.length > 0 && (
-        <div style={actionsStyle}>
+        <div data-part="actions" style={actionsStyle}>
           {actions.map((action, index) => (
             <React.Fragment key={index}>{action}</React.Fragment>
           ))}
@@ -332,6 +337,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
       {/* Cover image at bottom */}
       {cover && coverPosition === 'bottom' && (
         <img
+          data-part="cover"
           src={cover}
           alt={typeof title === 'string' ? title : 'Card cover'}
           style={coverStyle}

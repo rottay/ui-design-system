@@ -124,7 +124,7 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
      * Renders items in horizontal grid layout.
      */
     const renderHorizontalLayout = () => (
-      <div style={gridStyle} role="list">
+      <div style={gridStyle} data-part="rows" role="list">
         {React.Children.map(children, (child) => {
           if (!React.isValidElement(child)) return null;
           const itemProps = child.props as DescriptionsItemProps;
@@ -132,6 +132,7 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
           return (
             <div
+              data-part="row"
               role="listitem"
               style={{
                 gridColumn: `span ${span}`,
@@ -139,11 +140,11 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                 paddingBottom: bordered ? '12px' : '0',
               }}
             >
-              <div style={{ ...labelBaseStyle, ...itemProps.styles?.label }}>
+              <div data-part="label" style={{ ...labelBaseStyle, ...itemProps.styles?.label }}>
                 {itemProps.label}
                 {colon ? ':' : ''}
               </div>
-              <div style={{ ...contentBaseStyle, ...itemProps.styles?.content }}>
+              <div data-part="content" style={{ ...contentBaseStyle, ...itemProps.styles?.content }}>
                 {itemProps.children}
               </div>
             </div>
@@ -156,13 +157,14 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
      * Renders items in vertical stacked layout.
      */
     const renderVerticalLayout = () => (
-      <div role="list">
+      <div data-part="rows" role="list">
         {React.Children.map(children, (child) => {
           if (!React.isValidElement(child)) return null;
           const itemProps = child.props as DescriptionsItemProps;
 
           return (
             <div
+              data-part="row"
               role="listitem"
               style={{
                 display: 'flex',
@@ -171,6 +173,7 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               }}
             >
               <div
+                data-part="label"
                 style={{
                   width: '33%',
                   ...labelBaseStyle,
@@ -181,6 +184,7 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                 {colon ? ':' : ''}
               </div>
               <div
+                data-part="content"
                 style={{
                   flex: 1,
                   ...contentBaseStyle,
@@ -200,20 +204,21 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         ref={ref}
         className={className}
         style={containerStyle}
+        data-part="root"
         data-engine="rustic"
         role="region"
         aria-label={typeof title === 'string' ? title : 'Description list'}
       >
         {/* Header section */}
         {(title || extra) && (
-          <div style={headerStyle}>
-            {title && <h3 style={titleStyle}>{title}</h3>}
-            {extra && <div>{extra}</div>}
+          <div style={headerStyle} data-part="header">
+            {title && <h3 style={titleStyle} data-part="title">{title}</h3>}
+            {extra && <div data-part="extra">{extra}</div>}
           </div>
         )}
 
         {/* Content section */}
-        <div style={contentContainerStyle}>
+        <div style={contentContainerStyle} data-part="body">
           {layout === 'horizontal'
             ? renderHorizontalLayout()
             : renderVerticalLayout()}

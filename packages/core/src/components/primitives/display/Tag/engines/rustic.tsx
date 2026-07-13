@@ -206,6 +206,13 @@ export default function RusticTag(props: TagProps): React.ReactElement {
   return (
     <span
       className={classNames}
+      data-part="root"
+      data-variant={variant}
+      data-size={size}
+      data-radius={radius}
+      data-outlined={outlined ? 'true' : undefined}
+      data-bordered={bordered ? 'true' : undefined}
+      data-clickable={clickable ? 'true' : undefined}
       style={containerStyle}
       onClick={handleClick}
       role={clickable ? 'button' : undefined}
@@ -213,17 +220,18 @@ export default function RusticTag(props: TagProps): React.ReactElement {
       {...restProps}
     >
       {icon && (
-        <span className="rottay-tag__icon" style={iconStyle}>
+        <span className="rottay-tag__icon" data-part="icon" style={iconStyle}>
           {icon}
         </span>
       )}
 
-      <span className="rottay-tag__content">{children}</span>
+      <span className="rottay-tag__content" data-part="content">{children}</span>
 
       {closable && (
         <button
           type="button"
           className="rottay-tag__close"
+          data-part="close"
           onClick={handleClose}
           aria-label="Remove tag"
           style={closeButtonStyle}

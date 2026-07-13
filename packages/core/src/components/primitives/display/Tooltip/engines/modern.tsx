@@ -371,19 +371,29 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       <div
         ref={setWrapperRef}
         className={className || undefined}
+        data-part="root"
         style={wrapperStyle}
         {...eventHandlers}
       >
         {children}
         {!disabled && content && isVisible && typeof document !== 'undefined'
           ? createPortal(
-              <div ref={tooltipRef} role="tooltip" style={bubbleStyle} aria-hidden={!isVisible}>
+              <div
+                ref={tooltipRef}
+                role="tooltip"
+                className="rottay-tooltip-bubble rottay-tooltip-bubble--modern"
+                data-part="bubble"
+                data-placement={placement}
+                data-open={isVisible ? 'true' : 'false'}
+                style={bubbleStyle}
+                aria-hidden={!isVisible}
+              >
                 {shortcut ? (
-                  <span style={SHORTCUT_ROW_STYLE}>
+                  <span data-part="shortcut-row" style={SHORTCUT_ROW_STYLE}>
                     <span>{content}</span>
-                    <span style={SHORTCUT_CHIPS_STYLE}>
+                    <span data-part="shortcut-chips" style={SHORTCUT_CHIPS_STYLE}>
                       {formatShortcutKey(shortcut).map((segment, i) => (
-                        <kbd key={i} style={SHORTCUT_KBD_STYLE}>
+                        <kbd key={i} data-part="shortcut-key" style={SHORTCUT_KBD_STYLE}>
                           {segment}
                         </kbd>
                       ))}

@@ -124,11 +124,12 @@ export function CardFooter({
   };
 
   return (
-    <div className={`rottay-card-footer ${className}`} style={footerStyle}>
+    <div className={`rottay-card-footer ${className}`} data-part="footer" data-divider={divider ? 'true' : undefined} style={footerStyle}>
       {children}
       {actions && actions.length > 0 && (
         <div
           className="rottay-card-footer-actions"
+          data-part="actions"
           style={{
             display: 'flex',
             alignItems: 'center',

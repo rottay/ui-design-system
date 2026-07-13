@@ -118,6 +118,7 @@ export const CarouselItem = forwardRef<HTMLDivElement, CarouselItemComponentProp
       <div
         ref={ref}
         className={`rottay-carousel__item ${className}`}
+        data-part="item"
         style={itemStyle}
       >
         {children}

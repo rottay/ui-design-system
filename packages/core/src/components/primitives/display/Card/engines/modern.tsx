@@ -70,6 +70,7 @@ const CardSpinner: React.FC = () => (
     height={24}
     viewBox="0 0 24 24"
     fill="none"
+    data-part="spinner"
     style={{ animation: 'rottay-button-spin var(--ds-motion-glacial) linear infinite' }}
   >
     <circle
@@ -236,11 +237,14 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         <div style={cardStyle} className={cardClassName} {...responsiveAttrs}>
           {/* Placeholder cover */}
           {cover && (
-            <div style={{
-              height: 'var(--ds-card-cover-height, 192px)',
-              backgroundColor: 'var(--ds-surface-inset)',
-              opacity: 0.6,
-            }} />
+            <div
+              data-part="cover"
+              style={{
+                height: 'var(--ds-card-cover-height, 192px)',
+                backgroundColor: 'var(--ds-surface-inset)',
+                opacity: 0.6,
+              }}
+            />
           )}
           <div style={{
             padding: paddingValue || BODY_PADDING,
@@ -248,27 +252,27 @@ export default function ModernCard(props: CardProps): React.ReactElement {
             minHeight: 'var(--ds-card-skeleton-min-height, 120px)',
           }}>
             {/* Skeleton bars */}
-            <div style={{ opacity: 0.4, display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-3, 12px)' }}>
-              <div style={{
+            <div data-part="skeleton" style={{ opacity: 0.4, display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-3, 12px)' }}>
+              <div data-part="skeleton-bar" style={{
                 height: 'var(--ds-skeleton-bar-height, 12px)',
                 backgroundColor: 'var(--ds-surface-inset)',
                 borderRadius: 'var(--ds-radius-sm, 6px)',
                 width: '60%',
               }} />
-              <div style={{
+              <div data-part="skeleton-bar" style={{
                 height: 'var(--ds-skeleton-bar-height, 12px)',
                 backgroundColor: 'var(--ds-surface-inset)',
                 borderRadius: 'var(--ds-radius-sm, 6px)',
                 width: '40%',
               }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)', marginTop: 'var(--ds-spacing-1, 4px)' }}>
-                <div style={{
+                <div data-part="skeleton-bar" style={{
                   height: 'var(--ds-skeleton-bar-height-sm, 10px)',
                   backgroundColor: 'var(--ds-surface-inset)',
                   borderRadius: 'var(--ds-radius-sm, 6px)',
                   width: '100%',
                 }} />
-                <div style={{
+                <div data-part="skeleton-bar" style={{
                   height: 'var(--ds-skeleton-bar-height-sm, 10px)',
                   backgroundColor: 'var(--ds-surface-inset)',
                   borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -278,6 +282,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
             </div>
             {/* Spinner overlay */}
             <div
+              data-part="loading-overlay"
               style={{
                 position: 'absolute',
                 inset: 0,
@@ -322,7 +327,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
       >
         {/* Cover image - top */}
         {cover && coverPosition === 'top' && (
-          <div style={{ overflow: 'hidden', lineHeight: 0 }}>
+          <div data-part="cover" style={{ overflow: 'hidden', lineHeight: 0 }}>
             <img
               src={cover}
               alt={typeof title === 'string' ? title : 'Card cover'}
@@ -332,18 +337,22 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         )}
 
         {/* Body */}
-        <div style={{ padding: paddingValue || BODY_PADDING, color: 'var(--ds-card-body-color, inherit)' }}>
+        <div data-part="body" style={{ padding: paddingValue || BODY_PADDING, color: 'var(--ds-card-body-color, inherit)' }}>
           {/* Header */}
           {(title || description || extra) && (
-            <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'flex-start',
-              ...headerSeparator,
-            }}>
+            <div
+              data-part="header"
+              data-divider={divider ? 'true' : undefined}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+                ...headerSeparator,
+              }}
+            >
               <div style={{ minWidth: 0, flex: 1 }}>
                 {title && (
-                  <div style={{
+                  <div data-part="title" style={{
                     fontSize: 'var(--ds-card-title-font-size, 16px)',
                     fontWeight: 600,
                     lineHeight: 1.4,
@@ -354,7 +363,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                   </div>
                 )}
                 {description && (
-                  <div style={{
+                  <div data-part="description" style={{
                     fontSize: 'var(--ds-card-description-font-size, 13px)',
                     lineHeight: 1.5,
                     color: 'var(--ds-card-subtitle-color, var(--ds-color-text-secondary))',
@@ -365,7 +374,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                 )}
               </div>
               {extra && (
-                <div style={{ flexShrink: 0, marginLeft: 'var(--ds-spacing-4, 16px)' }}>
+                <div data-part="extra" style={{ flexShrink: 0, marginLeft: 'var(--ds-spacing-4, 16px)' }}>
                   {extra}
                 </div>
               )}
@@ -377,7 +386,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
 
           {/* Actions */}
           {actions && actions.length > 0 && (
-            <div style={{
+            <div data-part="actions" style={{
               display: 'flex',
               justifyContent: 'flex-end',
               alignItems: 'center',
@@ -396,7 +405,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
 
         {/* Cover image - bottom */}
         {cover && coverPosition === 'bottom' && (
-          <div style={{ overflow: 'hidden', lineHeight: 0 }}>
+          <div data-part="cover" style={{ overflow: 'hidden', lineHeight: 0 }}>
             <img
               src={cover}
               alt={typeof title === 'string' ? title : 'Card cover'}

@@ -66,7 +66,7 @@ export function AvatarFallback({
   // Show fallback when there is no src at all, or when loading failed.
   if (!src || error) {
     return (
-      <div className={`rottay-avatar-fallback ${className}`} style={style}>
+      <div className={`rottay-avatar-fallback ${className}`} data-part="fallback" style={style}>
         {fallback}
       </div>
     );
@@ -74,6 +74,7 @@ export function AvatarFallback({
 
   return (
     <img
+      data-part="img"
       src={src}
       alt={alt || 'avatar'}
       onError={handleError}

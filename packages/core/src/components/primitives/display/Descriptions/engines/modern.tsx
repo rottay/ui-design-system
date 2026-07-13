@@ -73,26 +73,28 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         ref={ref}
         className={`rottay-descriptions${layout === 'vertical' ? ' rottay-descriptions-vertical' : ''}${!bordered ? ' rottay-descriptions-borderless' : ''} ${className}`}
         style={style}
+        data-part="root"
         data-engine="modern"
       >
         {/* Header section with title and extra content */}
         {(title || extra) && (
-          <div className="rottay-descriptions-title flex justify-between items-center mb-4">
+          <div className="rottay-descriptions-title flex justify-between items-center mb-4" data-part="header">
             {title && (
-              <h3 className="text-lg font-semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
+              <h3 className="text-lg font-semibold" data-part="title" style={{ color: 'var(--ds-color-text-primary)' }}>
                 {title}
               </h3>
             )}
-            {extra && <div>{extra}</div>}
+            {extra && <div data-part="extra">{extra}</div>}
           </div>
         )}
 
         {/* Content section */}
-        <div className={`${borderClass} ${sizeClass}`} style={borderStyle}>
+        <div className={`${borderClass} ${sizeClass}`} data-part="body" style={borderStyle}>
           {layout === 'horizontal' ? (
             // Horizontal: CSS grid with configurable columns; items can span multiple cells
             <div
               className="grid gap-4 p-4"
+              data-part="rows"
               style={{ gridTemplateColumns: `repeat(${columnCount}, 1fr)` }}
             >
               {React.Children.map(children, (child) => {
@@ -107,6 +109,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                         ? ' border-b pb-2 last:border-b-0'
                         : ''
                     }`}
+                    data-part="row"
                     style={{
                       gridColumn: `span ${span}`,
                       ...(bordered && { borderColor: 'var(--ds-color-border)' }),
@@ -114,6 +117,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                   >
                     <div
                       className="rottay-descriptions-label text-sm mb-1"
+                      data-part="label"
                       style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
@@ -121,6 +125,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     </div>
                     <div
                       className="rottay-descriptions-content"
+                      data-part="content"
                       style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
@@ -131,15 +136,16 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
             </div>
           ) : (
             // Vertical: label on the left (1/3 width), value on the right, separated by dividers
-            <div className="divide-y" style={{ '--tw-divide-color': 'var(--ds-color-border)' } as React.CSSProperties}>
+            <div className="divide-y" data-part="rows" style={{ '--tw-divide-color': 'var(--ds-color-border)' } as React.CSSProperties}>
               {React.Children.map(children, (child) => {
                 if (!React.isValidElement(child)) return null;
                 const itemProps = child.props as DescriptionsItemProps;
 
                 return (
-                  <div className="rottay-descriptions-row flex p-3">
+                  <div className="rottay-descriptions-row flex p-3" data-part="row">
                     <div
                       className="rottay-descriptions-label w-1/3"
+                      data-part="label"
                       style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
@@ -147,6 +153,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     </div>
                     <div
                       className="rottay-descriptions-content flex-1"
+                      data-part="content"
                       style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}

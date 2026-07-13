@@ -46,6 +46,8 @@ export default function RusticKbd(props: KbdProps): React.ReactElement {
   return (
     <kbd
       className={`rottay-kbd-rustic ${className}`}
+      data-part="root"
+      data-size={size}
       style={{
         display: 'inline-flex',
         alignItems: 'center',

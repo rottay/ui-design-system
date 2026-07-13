@@ -149,18 +149,23 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
           role="separator"
           aria-orientation={orientation}
           data-testid={testId}
+          data-part="root"
+          data-orientation={orientation}
+          data-with-text="true"
           {...rest}
         >
           <span
             className="divider__line divider__line--before"
+            data-part="line-before"
             style={lineBeforeStyle}
             aria-hidden="true"
           />
-          <span className="divider__text" style={textStyle}>
+          <span className="divider__text" data-part="text" style={textStyle}>
             {children}
           </span>
           <span
             className="divider__line divider__line--after"
+            data-part="line-after"
             style={lineAfterStyle}
             aria-hidden="true"
           />
@@ -177,6 +182,9 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
         role="separator"
         aria-orientation={orientation}
         data-testid={testId}
+        data-part="root"
+        data-orientation={orientation}
+        data-with-text="false"
         {...rest}
       />
     );

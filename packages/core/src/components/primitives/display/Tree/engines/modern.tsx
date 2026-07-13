@@ -58,7 +58,7 @@ function highlightText(
   return (
     <>
       {before}
-      <span className="rottay-tree-search-highlight rounded-sm px-0.5" style={{ background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)', color: 'var(--ds-color-text-primary)' }}>
+      <span className="rottay-tree-search-highlight rounded-sm px-0.5" data-part="tree-node-highlight" style={{ background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)', color: 'var(--ds-color-text-primary)' }}>
         {match}
       </span>
       {after}
@@ -100,6 +100,7 @@ const DropIndicator: React.FC<{ position: 'before' | 'inside' | 'after'; level: 
   return (
     <div
       className="absolute left-0 right-0 pointer-events-none z-10"
+      data-part="drop-indicator"
       style={{
         top: position === 'before' ? -1 : undefined,
         bottom: position === 'after' ? -1 : undefined,
@@ -236,6 +237,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   return (
     <div
       className="rottay-tree-node relative"
+      data-part="node"
       data-key={nodeKey}
       ref={(el) => nodeRef(nodeKey, el)}
     >
@@ -247,6 +249,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
               <div
                 key={i}
                 className="absolute top-0 bottom-0 border-l"
+                data-part="connector"
                 style={{
                   left: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)`,
                   borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
@@ -257,6 +260,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           )}
           <div
             className="absolute border-t"
+            data-part="connector"
             style={{
               left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
               top: '50%',
@@ -268,6 +272,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           {isLast && (
             <div
               className="absolute border-l"
+              data-part="connector"
               style={{
                 left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
@@ -280,6 +285,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           {!isLast && (
             <div
               className="absolute border-l"
+              data-part="connector"
               style={{
                 left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
@@ -362,6 +368,13 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         aria-level={level + 1}
         tabIndex={isFocused ? 0 : -1}
         data-tree-node-key={nodeKey}
+        data-part="row"
+        data-selected={isSelected ? 'true' : 'false'}
+        data-expanded={showExpander ? (isExpanded ? 'true' : 'false') : undefined}
+        data-disabled={disabled || undefined}
+        data-focused={isFocused || undefined}
+        data-drop-target={isDropTarget || undefined}
+        data-drop-position={isDropTarget ? dropPosition : undefined}
         draggable={isDraggable}
         onDragStart={isDraggable ? (e) => onDragStartInternal(nodeKey, e) : undefined}
         onDragOver={
@@ -388,6 +401,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         ) : showExpander ? (
           <button
             type="button"
+            data-part="tree-node-toggle"
             style={{ background: 'transparent', color: 'var(--ds-tree-icon-color, var(--ds-color-text-primary))', width: 'var(--ds-tree-switcher-size, 24px)', height: 'var(--ds-tree-switcher-size, 24px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, marginRight: 4, flexShrink: 0 }}
             onClick={handleToggle}
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
@@ -415,6 +429,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         {checkable && (
           <input
             type="checkbox"
+            data-part="checkbox"
             className={[
               'checkbox checkbox-sm checkbox-primary mr-2 flex-shrink-0',
               isHalfChecked ? 'checkbox-indeterminate' : '',
@@ -436,6 +451,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         {showIcon && icon && (
           <span
             className="mr-2 flex-shrink-0 flex items-center"
+            data-part="icon"
             style={{ color: 'var(--ds-tree-icon-color, currentColor)', width: 'var(--ds-tree-icon-size, 16px)', height: 'var(--ds-tree-icon-size, 16px)' }}
           >
             {icon}
@@ -443,10 +459,13 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         )}
 
         {/* Title */}
-        <span className={[
-          'truncate',
-          !isFiltered && filteredKeys ? 'opacity-40' : '',
-        ].join(' ')}>
+        <span
+          data-part="tree-node-label"
+          className={[
+            'truncate',
+            !isFiltered && filteredKeys ? 'opacity-40' : '',
+          ].join(' ')}
+        >
           {displayTitle}
         </span>
       </div>
@@ -911,6 +930,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
     <div
       ref={treeContainerRef}
       className={`rottay-tree rottay-tree--modern ${className}`}
+      data-part="root"
       style={{ background: 'var(--ds-tree-bg, transparent)', ...style }}
       role="tree"
       aria-multiselectable={props.multiple || false}

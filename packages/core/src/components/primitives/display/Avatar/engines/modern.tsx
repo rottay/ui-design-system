@@ -142,15 +142,26 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
   return (
     <div
       className={containerClass}
+      data-part="root"
+      data-variant={variant}
+      data-shape={shape}
+      data-size={size}
+      data-bordered={bordered ? 'true' : undefined}
+      data-status={status}
       onClick={onClick}
       style={{ cursor: onClick ? 'pointer' : undefined, ...style }}
     >
+      {/* The real size token lives on THIS child (P-75) -- the container above
+          is deliberately left unsized so its shipped 40x40 clip/halo behaviour
+          (theme.css:1069) is unchanged by this stamp. */}
       <div
         className={`mask ${maskClass} ${ringClass}`}
+        data-part="mask"
         style={{ ...sizeStyle, ...ringStyle, transition: `var(--ds-avatar-transition)` }}
       >
         {src && !imageError ? (
           <img
+            data-part="img"
             src={src}
             alt={alt || name || 'avatar'}
             onError={handleError}
@@ -159,6 +170,7 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
         ) : (
           <div
             className="flex items-center justify-center"
+            data-part="fallback"
             style={{
               width: '100%',
               height: '100%',
@@ -181,6 +193,8 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
       {status && (
         <span
           className="absolute bottom-0 right-0 rounded-full"
+          data-part="status-dot"
+          data-status={status}
           style={{
             width: 'var(--ds-avatar-status-size)',
             height: 'var(--ds-avatar-status-size)',

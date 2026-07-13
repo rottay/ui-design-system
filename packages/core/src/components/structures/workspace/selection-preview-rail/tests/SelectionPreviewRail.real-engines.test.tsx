@@ -191,9 +191,37 @@ const PAINT_CHANNELS = [
   'boxShadow',
 ] as const;
 
+/**
+ * The rail's OWN scope. `data-part` is a shared vocabulary, not an identifier:
+ * the rail composes Badges, and every migrated primitive stamps `data-part` of
+ * its own, so a bare `[data-part="x"]` query inside this container also matches
+ * the parts of the components the rail is BUILT FROM — which paint inline
+ * legitimately until their own batch migrates them. Every query below is
+ * therefore anchored to `.ds-selection-preview-rail`'s direct ownership.
+ */
+const RAIL = '.ds-selection-preview-rail';
+
+/** Elements the RAIL itself stamps -- not those of any component it composes. */
+function railParts(container: HTMLElement, part: string): HTMLElement[] {
+  const root = container.querySelector<HTMLElement>(RAIL);
+  if (!root) return [];
+  const owned = [...root.querySelectorAll<HTMLElement>(`[data-part="${part}"]`)].filter((el) => {
+    // A composed component (the rail renders Badges) stamps its OWN root, so any
+    // descendant root belongs to that component, not to the rail...
+    if (el.getAttribute('data-part') === 'root') return false;
+    // ...and so does any part sitting underneath one.
+    for (let p = el.parentElement; p && p !== root; p = p.parentElement) {
+      if (p.getAttribute('data-part') === 'root') return false;
+    }
+    return true;
+  });
+  if (root.matches(`[data-part="${part}"]`)) owned.unshift(root);
+  return owned;
+}
+
 async function waitForRoot(container: HTMLElement): Promise<void> {
   await waitFor(() => {
-    expect(container.querySelector('[data-part="root"]')).not.toBeNull();
+    expect(container.querySelector(`${RAIL}[data-part="root"]`)).not.toBeNull();
   });
 }
 
@@ -223,7 +251,7 @@ describe.each(['modern', 'rustic'] as const)(
       await waitForRoot(container);
 
       for (const part of DEFAULT_NO_PAINT_PARTS) {
-        const nodes = container.querySelectorAll<HTMLElement>(`[data-part="${part}"]`);
+        const nodes = railParts(container, part);
         expect(nodes.length, `data-part="${part}" did not render`).toBeGreaterThan(0);
         nodes.forEach((el) => expectNoInlinePaint(el, part));
       }

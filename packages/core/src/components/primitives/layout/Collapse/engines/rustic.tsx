@@ -164,6 +164,7 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
+        data-part="arrow"
         style={{
           ...styles.arrow,
           ...(isActive ? styles.arrowActive : {}),
@@ -177,6 +178,9 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
       <div
         ref={ref}
         className={className}
+        data-part="panel"
+        data-expanded={isActive ? 'true' : 'false'}
+        data-disabled={disabled ? 'true' : 'false'}
         style={{
           ...styles.panel,
           // Ghost mode strips border and background for a minimal look
@@ -191,9 +195,12 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             ...(disabled ? styles.headerDisabled : {}),
           }}
           onClick={handleClick}
+          data-part="header"
+          data-expanded={isActive ? 'true' : 'false'}
+          data-disabled={disabled ? 'true' : 'false'}
         >
           {context.expandIconPosition === 'start' && arrowIcon}
-          <span style={styles.headerContent}>{header}</span>
+          <span data-part="label" style={styles.headerContent}>{header}</span>
           {extra}
           {context.expandIconPosition === 'end' && arrowIcon}
         </div>
@@ -202,12 +209,16 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
             the styles object above. */}
         <div
           className="rottay-collapse-content-track"
+          data-part="content"
+          data-expanded={isActive ? 'true' : 'false'}
           style={{
             ...styles.contentTrack,
             ...(isActive ? styles.contentTrackActive : styles.contentTrackInactive),
           }}
         >
           <div
+            data-part="content-inner"
+            data-expanded={isActive ? 'true' : 'false'}
             style={{
               ...styles.contentInner,
               ...(isActive ? styles.contentInnerActive : styles.contentInnerInactive),
@@ -292,6 +303,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
         <div
           ref={ref}
           className={className}
+          data-part="root"
           style={{
             ...styles.container,
             ...style,

@@ -83,6 +83,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
   return (
     <ul
       className={`timeline timeline-vertical ${className}`}
+      data-part="root"
       style={{
         fontSize: 'var(--ds-timeline-content-font-size, inherit)',
         lineHeight: 'var(--ds-timeline-content-line-height, normal)',
@@ -104,14 +105,16 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
         const positionClass = itemProps.position
           ? itemProps.position === 'left' ? 'timeline-start' : 'timeline-end'
           : getPositionClass(index);
+        const side = positionClass === 'timeline-start' ? 'start' : 'end';
 
         return (
-          <li key={index}>
-            {index > 0 && <hr style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
+          <li key={index} data-part="item" data-side={side} data-tone={itemProps.color || 'primary'}>
+            {index > 0 && <hr data-part="connector" style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
             <div className={positionClass}>
               {itemProps.label && (
                 <div
                   className="text-sm mb-1"
+                  data-part="label"
                   style={{
                     color: 'var(--ds-timeline-label-color, var(--ds-color-text-secondary))',
                     fontSize: 'var(--ds-timeline-label-font-size, 12px)',
@@ -120,11 +123,11 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
                   {itemProps.label}
                 </div>
               )}
-              <div className={itemProps.className} style={itemProps.style}>
+              <div className={itemProps.className} data-part="body" style={itemProps.style}>
                 {itemProps.children}
               </div>
             </div>
-            <div className="timeline-middle">
+            <div className="timeline-middle" data-part="dot">
               {itemProps.dot || (
                 <div
                   className="rounded-full"
@@ -137,7 +140,7 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
                 />
               )}
             </div>
-            {index < orderedItems.length - 1 && <hr style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
+            {index < orderedItems.length - 1 && <hr data-part="connector" style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
           </li>
         );
       })}
@@ -145,13 +148,13 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
       {/* Pending item uses DaisyUI's loading spinner + pulse animation
           to visually indicate an in-progress or upcoming event. */}
       {pending && (
-        <li>
-          <hr style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />
-          <div className="timeline-start">
-            <span style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-timeline-pending-dot-color, var(--ds-color-primary))', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
+        <li data-part="item" data-side="start" data-pending="true">
+          <hr data-part="connector" style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />
+          <div className="timeline-start" data-part="body">
+            <span data-part="spinner" style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-timeline-pending-dot-color, var(--ds-color-primary))', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
             {pending}
           </div>
-          <div className="timeline-middle">
+          <div className="timeline-middle" data-part="dot" data-pending="true">
             <div
               className="rounded-full animate-pulse"
               style={{

@@ -25,6 +25,7 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
       <div
         ref={ref}
         className={className}
+        data-part="meta"
         style={{
           display: 'flex',
           alignItems: 'flex-start',
@@ -32,15 +33,16 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
           ...style,
         }}
       >
-        {avatar && <div style={{ flexShrink: 0 }}>{avatar}</div>}
-        <div style={{ flex: 1, minWidth: 0 }}>
+        {avatar && <div style={{ flexShrink: 0 }} data-part="meta-avatar">{avatar}</div>}
+        <div style={{ flex: 1, minWidth: 0 }} data-part="meta-content">
           {title && (
-            <div style={{ fontWeight: 500, marginBottom: description ? '4px' : 0 }}>
+            <div style={{ fontWeight: 500, marginBottom: description ? '4px' : 0 }} data-part="meta-title">
               {title}
             </div>
           )}
           {description && (
             <div
+              data-part="meta-description"
               style={{
                 fontSize: 'var(--ds-list-meta-description-font-size, 14px)',
                 color: 'var(--ds-list-meta-description-color, var(--ds-color-text-secondary))',
@@ -65,6 +67,7 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
       <li
         ref={ref}
         className={className}
+        data-part="item"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -73,12 +76,12 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
           ...style,
         }}
       >
-        <div style={{ flex: 1, minWidth: 0 }}>{children}</div>
-        {extra && <div style={{ marginLeft: '16px', flexShrink: 0 }}>{extra}</div>}
+        <div style={{ flex: 1, minWidth: 0 }} data-part="item-content">{children}</div>
+        {extra && <div style={{ marginLeft: '16px', flexShrink: 0 }} data-part="item-extra">{extra}</div>}
         {actions && actions.length > 0 && (
-          <div style={{ marginLeft: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ marginLeft: '16px', display: 'flex', alignItems: 'center', gap: '8px' }} data-part="item-actions">
             {actions.map((action, index) => (
-              <span key={index}>{action}</span>
+              <span key={index} data-part="item-action">{action}</span>
             ))}
           </div>
         )}
@@ -127,10 +130,11 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     // Three-row skeleton with avatar circle + text bars matching typical list layouts
     if (loading) {
       return (
-        <div ref={ref} className={className} style={{ ...style }}>
+        <div ref={ref} className={className} data-part="root" data-loading="true" style={{ ...style }}>
           {[1, 2, 3].map((i) => (
-            <div key={i} style={{ padding: '12px 0', display: 'flex', gap: '12px' }}>
+            <div key={i} style={{ padding: '12px 0', display: 'flex', gap: '12px' }} data-part="skeleton-row">
               <div
+                data-part="skeleton-avatar"
                 style={{
                   width: 40,
                   height: 40,
@@ -140,6 +144,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
               />
               <div style={{ flex: 1 }}>
                 <div
+                  data-part="skeleton-line"
                   style={{
                     height: 16,
                     background: 'var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary))',
@@ -149,6 +154,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
                   }}
                 />
                 <div
+                  data-part="skeleton-line"
                   style={{
                     height: 12,
                     background: 'var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary))',
@@ -167,6 +173,8 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       <div
         ref={ref}
         className={className}
+        data-part="root"
+        data-loading="false"
         style={{
           border: bordered ? '1px solid var(--ds-list-border-color, var(--ds-color-border))' : undefined,
           borderRadius: bordered ? 'var(--ds-list-border-radius, 8px)' : undefined,
@@ -176,6 +184,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       >
         {header && (
           <div
+            data-part="header"
             style={{
               padding: '12px 16px',
               fontWeight: 500,
@@ -187,6 +196,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
         )}
         {/* Reset native list styling; horizontal padding only when bordered to inset content */}
         <ul
+          data-part="list"
           style={{
             listStyle: 'none',
             margin: 0,
@@ -202,13 +212,14 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             <React.Fragment key={index}>
               {child}
               {split && index < React.Children.count(listContent) - 1 && !grid && (
-                <div style={{ borderBottom: '1px solid var(--ds-list-split-color, var(--ds-color-border-subtle))' }} />
+                <div data-part="divider" style={{ borderBottom: '1px solid var(--ds-list-split-color, var(--ds-color-border-subtle))' }} />
               )}
             </React.Fragment>
           ))}
         </ul>
         {footer && (
           <div
+            data-part="footer"
             style={{
               padding: '12px 16px',
               borderTop: bordered ? '1px solid var(--ds-list-border-color, var(--ds-color-border))' : undefined,

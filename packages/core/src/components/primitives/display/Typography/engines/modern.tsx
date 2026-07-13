@@ -286,6 +286,8 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         <Component
           ref={ref as React.Ref<HTMLHeadingElement>}
           className={classes}
+          data-part="root"
+          data-color={color}
           style={{ textWrap: 'balance', ...typographyStyle, ...colorStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
@@ -398,6 +400,8 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
         <Component
           ref={ref as any}
           className={classes}
+          data-part="root"
+          data-color={color}
           style={{ textWrap: 'pretty', ...textSizeStyle, ...colorStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
@@ -462,7 +466,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     };
 
     return (
-      <p ref={ref} className={classes} style={{ ...paragraphSizeStyle, ...colorStyle, ...style }} {...props}>
+      <p ref={ref} className={classes} data-part="root" data-color={color} style={{ ...paragraphSizeStyle, ...colorStyle, ...style }} {...props}>
         {children}
       </p>
     );
@@ -540,6 +544,9 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
         rel={computedRel}
         onClick={disabled ? undefined : onClick}
         className={classes}
+        data-part="root"
+        data-color={color}
+        data-disabled={disabled || undefined}
         style={{ ...linkSizeStyle, ...colorStyle, ...style }}
         aria-disabled={disabled}
         {...props}
