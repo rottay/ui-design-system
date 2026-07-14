@@ -4,7 +4,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { NotificationSurface } from '.';
-import { createSurfaceStoryDecorator } from '../common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../foundation/common/story-helpers';
 
 const meta: Meta<typeof NotificationSurface> = {
   title: 'Surfaces/NotificationSurface',

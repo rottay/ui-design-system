@@ -8,7 +8,7 @@ import {
   useGlobalShortcuts,
   useRegisteredShortcuts,
 } from '../../../../hooks/shortcuts';
-import { createSurfaceStoryDecorator } from '../../../surfaces/common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../surfaces/foundation/common/story-helpers';
 import type { ShortcutDisplayItem } from './ShortcutsOverlay.types';
 
 const SAMPLE_SHORTCUTS: ShortcutDisplayItem[] = [

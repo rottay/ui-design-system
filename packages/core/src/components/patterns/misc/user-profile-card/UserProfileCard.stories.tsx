@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { PatternUserProfileCard } from '.';
-import { createSurfaceStoryDecorator } from '../../../surfaces/common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../surfaces/foundation/common/story-helpers';
 
 const meta: Meta<typeof PatternUserProfileCard> = {
   title: 'Patterns/UserProfileCard',

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Card } from '../../../primitives';
 import { BarChart, LineChart, PieChart } from '.';
-import { createSurfaceStoryDecorator } from '../../../surfaces/common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../surfaces/foundation/common/story-helpers';
 
 const meta: Meta = {
   title: 'Patterns/Charts',

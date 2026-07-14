@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ProfileSurface } from '.';
 import { Text } from '../../../../primitives';
-import { createSurfaceStoryDecorator } from '../common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../foundation/common/story-helpers';
 
 const meta: Meta<typeof ProfileSurface> = {
   title: 'Surfaces/ProfileSurface',

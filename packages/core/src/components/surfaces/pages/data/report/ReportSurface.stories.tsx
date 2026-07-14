@@ -5,7 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { ReportSurface } from '.';
 import { Text, Flex, Stack } from '../../../../primitives';
-import { createSurfaceStoryDecorator } from '../common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../foundation/common/story-helpers';
 
 const meta: Meta<typeof ReportSurface> = {
   title: 'Surfaces/ReportSurface',

@@ -2,18 +2,18 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { CalendarDays, Filter, GitCompare, Inbox, ListTree, ShieldCheck } from 'lucide-react';
 
-import { Box, Button, Card, Stack, Text } from '../../primitives';
-import { PatternApprovalWorkflow } from '../approval-workflow';
-import { PatternCalendarView } from '../calendar-view';
-import { PatternCommandPalette } from '../command-palette';
-import { PatternDetailPanel } from '../detail-panel';
-import { PatternEmptyState } from '../empty-state';
-import { PatternFilterPanel } from '../filter-panel';
-import { PatternKanbanBoard } from '../kanban-board';
-import { PatternLiveFeed } from '../live-feed';
-import { PatternTimeline } from '../timeline';
-import { PatternTreeView } from '../tree-view';
-import { createSurfaceStoryDecorator } from '../../surfaces/common/story-helpers';
+import { Box, Button, Card, Stack, Text } from '../../../primitives';
+import { PatternApprovalWorkflow } from '../../workflow/approval-workflow';
+import { PatternCalendarView } from '../../visualization/calendar-view';
+import { PatternCommandPalette } from '../../navigation/command-palette';
+import { PatternDetailPanel } from '../../data/detail-panel';
+import { PatternEmptyState } from '../../misc/empty-state';
+import { PatternFilterPanel } from '../../forms/filter-panel';
+import { PatternKanbanBoard } from '../../visualization/kanban-board';
+import { PatternLiveFeed } from '../../communication/live-feed';
+import { PatternTimeline } from '../../visualization/timeline';
+import { PatternTreeView } from '../../visualization/tree-view';
+import { createSurfaceStoryDecorator } from '../../../surfaces/foundation/common/story-helpers';
 
 const meta: Meta = {
   title: 'Patterns/Advanced Catalog',

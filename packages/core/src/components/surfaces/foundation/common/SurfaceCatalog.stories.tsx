@@ -18,7 +18,7 @@ import {
   SearchSurface,
   SettingsSurface,
   WizardSurface,
-} from '../';
+} from '../../';
 import { Badge, Box, Button, Card, Stack, Text } from '../../../primitives';
 import { createPosterDataUri, createSurfaceStoryDecorator } from './story-helpers';
 

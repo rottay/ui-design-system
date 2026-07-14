@@ -1,12 +1,12 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
-import { Box, Button, Card, Stack, Text } from '../../primitives';
-import { PatternDataTable } from '../data-table';
-import { PatternFormBuilder } from '../form-builder';
-import { PatternStatsGrid } from '../stats-grid';
-import { BarChart, LineChart } from '../charts';
-import { createSurfaceStoryDecorator } from '../../surfaces/common/story-helpers';
+import { Box, Button, Card, Stack, Text } from '../../../primitives';
+import { PatternDataTable } from '../../data/data-table';
+import { PatternFormBuilder } from '../../forms/form-builder';
+import { PatternStatsGrid } from '../../data/stats-grid';
+import { BarChart, LineChart } from '../../visualization/charts';
+import { createSurfaceStoryDecorator } from '../../../surfaces/foundation/common/story-helpers';
 
 const meta: Meta = {
   title: 'Patterns/Catalog',

@@ -2,7 +2,7 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { PatternFileManager } from '.';
-import { createSurfaceStoryDecorator } from '../../../surfaces/common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../surfaces/foundation/common/story-helpers';
 
 const meta: Meta<typeof PatternFileManager> = {
   title: 'Patterns/FileManager',

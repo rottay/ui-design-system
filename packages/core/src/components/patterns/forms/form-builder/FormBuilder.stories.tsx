@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from '../../../primitives';
 import { PatternFormBuilder } from '.';
-import { createSurfaceStoryDecorator } from '../../../surfaces/common/story-helpers';
+import { createSurfaceStoryDecorator } from '../../../surfaces/foundation/common/story-helpers';
 
 const meta: Meta<typeof PatternFormBuilder> = {
   title: 'Patterns/FormBuilder',

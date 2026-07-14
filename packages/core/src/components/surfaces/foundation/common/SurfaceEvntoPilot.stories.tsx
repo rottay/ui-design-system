@@ -10,8 +10,8 @@ import {
   DashboardSurface,
   ListSurface,
   WizardSurface,
-} from '../';
-import type { EntityAdapter } from '../../types';
+} from '../../';
+import type { EntityAdapter } from '../types';
 import { Badge, Box, Button, Card, Flex, Stack, Text } from '../../../primitives';
 import { PatternStatsGrid } from '../../../patterns';
 import { SurfaceStoryProvider, createPosterDataUri } from './story-helpers';
