@@ -49,7 +49,7 @@ Ordered by (value per unit of risk) × (readiness), not by size:
 | 7 | **CK-H2** misc | ~216 | ~5 | ~100% category A. |
 | 8 | **CK-I** long tail | 397 | 38 | Certified across 43 scoped files; 381 true DOM-paint sites moved and permanent exclusions preserved. |
 | 9 | **CK-H1** tenant/branding previews | 235 → 45 | 4 | Certified after recovery: 190 static sites moved; 37 runtime-paint and 8 non-paint identities remain exact. |
-| 10 | **CK-E** visualization | 478 → 111 | pre-step certified; migration pending | Final checkpoint: exact floors, inert anatomy and 23 visual baselines are certified; 367 static/finite-state sites now migrate while 111 exact Stage-1 identities remain. |
+| 10 | **CK-E** visualization | 478 → 111 | 23 | Certified byte-exact at `506d065f`: 367 static/finite-state sites moved; 111 exact Stage-1 identities remain; focused suites, builds, audit, artifacts and 14-case visual matrix ×2 green. |
 
 ## The two pieces of machinery that must land before their dependents
 
@@ -61,8 +61,8 @@ and presence's per-user identity colours.
 A skin rule cannot hold these, and emitting one custom property per swatch or datum would be
 strictly worse code than the inline value. They are **not pending work** — carrying them as debt
 that can never reach 0 is a lie in the ratchet. Name the exemption, list the sites exactly (the
-inventories give exact counts), and gate on it. The machinery is certified; CK-H1 is complete and
-CK-E is its remaining consumer.
+inventories give exact counts), and gate on it. The machinery and both runtime-value consumers,
+CK-H1 and CK-E, are certified.
 
 ### 2. ~~The variant-pinning harness (blocks CK-A)~~ — RESOLVED 2026-07-13, CK-A IS NOT BLOCKED
 

@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-E — current visualization re-audit
 
-Status: measured contract input with inert pre-step certified (2026-07-14). This file supersedes
+Status: measured contract input and **Stage-1 migration certified** at `506d065f` (2026-07-14). This file supersedes
 the `476 instrumented` headline in `wo-skin-06-ck-e-inventory.md`; the older inventory remains
 useful as historical source notes. The executable migration contract now lives in
 `wo-skin-06-ck-e-contract.md`.
@@ -133,3 +133,15 @@ The pre-step is certified before any paint migration:
   Kanban/Timeline interactions;
 - all 14 Playwright tests pass without snapshot updates across Rottay dark, BitHire light,
   modern/rustic, desktop and mobile composition.
+
+## Stage-1 migration closure
+
+The certified implementation preserves the measured boundary exactly: inline `299 -> 50`, runtime
+SVG `179 -> 61`, combined `478 -> 111`, unclassified `0`. All 367 contracted static or
+finite-state sites moved into 23 scope-anchored skins; every per-file exemption remains an exact
+identity rather than a transferable budget.
+
+Evidence at `506d065f`: focused Node `55/55`, visualization Vitest `134/134`, core and Showroom
+typechecks/builds, all tracked artifact-parity checks, and the full engine audit are green. The
+14-case/23-snapshot production visual matrix passed twice without updates, and independent
+adversarial review found no P0/P1/P2 regression.

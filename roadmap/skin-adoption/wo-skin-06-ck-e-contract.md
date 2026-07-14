@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-E — visualization migration contract
 
-Status: inert pre-step certified; Stage-1 paint migration pending (2026-07-14).
+Status: **Stage-1 certified** at `506d065f` (2026-07-14).
 
 This contract is the executable authority for CK-E. It supersedes the stale `476 instrumented`
 headline in `wo-skin-06-ck-e-inventory.md` and consumes the corrected per-file measurements in
@@ -168,4 +168,25 @@ all batches. CK-E is certified only when:
 - all 14 Playwright tests pass twice without updating the 23 pre-step snapshots;
 - independent review finds no visual, responsive, engine, tenant or interaction regression.
 
-Only after this gate may CK-E be marked complete in `wo-skin-06-plan.md` and `roadmap/registry.json`.
+All exit conditions were met at `506d065f`; CK-E may be marked complete in
+`wo-skin-06-plan.md` and `roadmap/registry.json`.
+
+## 9. Certified result
+
+The migration closed at the contracted boundary with no floor drift:
+
+- `478 -> 111` exact: inline `299 -> 50`, runtime SVG `179 -> 61`, unclassified `0`;
+- all **367** static/finite-state sites moved into **23** scope-anchored skins across the seven
+  non-overlapping batches;
+- all tracked tenant/vertical bundles were regenerated and matched both canonical entrypoints;
+- focused Node contracts passed `55/55`; the visualization Vitest matrix passed `134/134`;
+- core and Showroom typechecks plus production builds passed; Showroom generated all 289 pages;
+- the engine audit passed with `skins.parseErrors`, `skins.unwired`, `skins.deadParts` and
+  `skins.exemptionsBreached` at zero;
+- all 14 Playwright cases passed twice against the same 23 committed snapshots, with no update;
+- independent adversarial review found no P0/P1/P2 regression.
+
+The final review also pinned the high-risk parity edges that a paint counter alone cannot prove:
+Gauge custom/default precedence and export fidelity; Sankey hover specificity; Histogram/Scatter
+grid repaint order; rustic Kanban's initial/hover/settled cycle; and clickable versus inert rustic
+Timeline rows. Stage-2 visual redesign remains explicitly outside this byte-exact checkpoint.

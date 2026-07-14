@@ -1621,7 +1621,7 @@
    "lane": "skin-adoption",
    "order": 6,
    "size": "XL",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-SKIN-01",
     "WO-SKIN-02"
@@ -1679,10 +1679,17 @@
      "at": "2026-07-14 19:07",
      "by": "ds-agent",
      "note": "CK-E inert pre-step CERTIFIED: start census unchanged at 478 = 299 inline + 179 runtime SVG; runtime channels fully classified at 166 D3 + 9 JSX + 4 DOM with unclassified 0; exact Stage-1 boundary pinned at 111 = 50 inline + 61 runtime. Scope/part/state anatomy and unchanged React/D3/DOM topology are executable contracts. Core and 289-page Showroom production builds green. The 14-test visual suite generated 23 baselines covering Rottay dark, BitHire light, modern/rustic, desktop/mobile, loading and interactive tooltip/crosshair/Sankey/brush/Kanban/Timeline states, then passed fully without snapshot updates. Next: migrate exactly 367 static/finite-state sites, retaining all 111 floor identities."
+    },
+    {
+     "at": "2026-07-14 19:41",
+     "by": "ds-agent",
+     "note": "CK-E CERTIFIED byte-exact at 506d065f: 478 to 111 exact (299 to 50 inline; 179 to 61 runtime SVG), 367 static/finite-state sites moved into 23 skins, unclassified 0. Focused Node 55/55 and visualization Vitest 134/134; both typechecks and production builds green; tracked artifacts and engine audit green; 14-case/23-snapshot production visual matrix passed twice without updates; independent adversarial review found no P0/P1/P2."
     }
    ],
    "claimedBy": "ds-agent",
-   "claimedAt": "2026-07-14"
+   "claimedAt": "2026-07-14",
+   "doneAt": "2026-07-14",
+   "evidence": "All ten WO-SKIN-06 checkpoints are certified. Final CK-E commit 506d065f closed visualization exactly at 478 to 111 (367 migrations; inline 299 to 50; runtime SVG 179 to 61; unclassified 0) with 23 skins. Node contracts 55/55, visualization Vitest 134/134, both typechecks/builds, tracked artifact parity and engine audit passed; all 14 production Playwright cases passed twice against 23 unchanged snapshots; independent adversarial review found no P0/P1/P2."
   },
   {
    "id": "WO-SKIN-07",
