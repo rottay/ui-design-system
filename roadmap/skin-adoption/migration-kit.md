@@ -174,3 +174,12 @@ their keyframes into a skin, and the contract should say so before the migration
 | --- | --- | --- |
 | `patterns/communication/live-feed/tests/PatternLiveFeed.engine-advanced.test.tsx:52` | live-feed (rustic) | `expect(container.querySelector('style')).toBeTruthy()`; rustic injects a `<style>` with a LOCAL `pulse` keyframe (0.4) that deliberately differs from the global (0.5) — do not "de-duplicate" it |
 | `patterns/data/stats-grid/tests/PatternStatsGrid.engine-advanced.test.tsx:75` | stats-grid (both engines) | `expect(container.querySelector('style')).not.toBeNull()`; both engines inject a `<style>` |
+
+## Never write `*/` inside a skin comment (caught twice, both by parseErrors)
+
+Migration agents keep writing token globs in skin header comments —
+`--ds-surface-*/--ds-elevation-*`, `background*/filter` — and the `*/` **closes the CSS comment
+early**, turning the rest of the line into CSS that postcss chokes on. It silently voids the ENTIRE
+skin (zero rules load) if `skins.parseErrors` doesn't catch it. It bit collection-header (CK-B) and
+command-palette (CK-G). In a comment, write `--ds-surface, --ds-elevation` or `background and filter`
+— never a `*` immediately followed by `/`.
