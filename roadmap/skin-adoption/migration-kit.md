@@ -71,6 +71,14 @@ can't paint these elements at all; and each tenant ships an unlayered
   is enough; you do not need to repeat the data-part for these.
 - A rule keyed via a **descendant** (`[root] [data-part='track']`) already carries the root
   classes; add the descendant `data-part` (and repeat it for borders) to reach the floor.
+- **COUNT THE ACTUAL ROOT CLASSES (a single-class scope needs one MORE data-part repeat).** The
+  (0,4,0) recipe above assumes a TWO-class engine-split root `.ds-comp.ds-comp--engine` (=2) + data-part
+  ×2 (=2). But some engine-AGNOSTIC components were stamped with a SINGLE scope class
+  (`.ds-data-terminal-card`, no `ds-structure` prefix) — there, class(=1) + data-part×2(=2) is only
+  **(0,3,0)**, which the tenant border floor **(0,3,1)** WINS (equal b-column, the floor's `html`
+  element breaks the tie). Repeat the data-part a THIRD time (`[data-part='x'][data-part='x'][data-part='x']`
+  = (0,4,0)) to clear it. This bit an orchestrator ruling on CK-A; the migration agent caught it by
+  reading the specificity instead of the ruling. Non-border paint is unaffected (it wins at (0,3,0)).
 
 ## State / handler mapping (delete the paint-only mechanism, transcribe to CSS)
 
