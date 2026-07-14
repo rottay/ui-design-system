@@ -1,0 +1,98 @@
+/**
+ * Rustic Tree skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * THE ROOT'S BACKGROUND IS NOT HERE. Rustic's container style sets font
+ * properties only -- it never declared a background -- so this file declares
+ * none. (Modern's `theme.css` bridge on `.rottay-tree` is engine-ungated and can
+ * therefore reach this root, which carries the same base class; reproducing a
+ * background here would be a second, competing source for a channel this engine
+ * never owned.)
+ *
+ * `>` FROM THE NODE, DESCENDANT TO IT. Nodes nest recursively, so the rules
+ * reach `[data-part='node']` by descent; every part inside a node is then taken
+ * with a child combinator, because `data-part` is a shared vocabulary and a node
+ * title is arbitrary caller content (a Timeline rendered in a title also has a
+ * `connector` part).
+ *
+ * BOX-SHADOW PRECEDENCE. The row's shadow was a single ternary --
+ * focused ? focus-ring : drop-inside ? inset-ring : none -- so focus WINS over a
+ * drop target. Specificity alone would invert that (the drop rule carries two
+ * attributes), so the drop rule is gated with `:not([data-focused])` rather than
+ * left to the cascade. The same reasoning gates the drop background with
+ * `:not([data-selected='true'])`: selected came first in its ternary.
+ *
+ * HOVER reproduces the imperative `onMouseEnter` write on the row itself, with
+ * `:not()` guards standing in for its `!isSelected && !disabled && !dropInside`
+ * gate. `onMouseLeave` needs no counterpart: it only restored the resting values
+ * this file's base rule already declares.
+ *
+ * SPECIFICITY (P-48): every border-color rule clears the tenant's unlayered
+ * (0,3,1) `*` floor at (0,5,0)+. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- hierarchy lines (their per-node offsets stay inline) ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'] {
+  border-left: 1px solid var(--ds-tree-line-color, var(--ds-color-border-primary));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal'] {
+  border-top: 1px solid var(--ds-tree-line-color, var(--ds-color-border-primary));
+}
+
+/* ---- drop indicator: the line inside the positioned wrapper (its keyframe
+        stays in the module's one-shot <style> injection) ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div {
+  background-color: var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
+  border-radius: 1px;
+}
+
+/* ---- row: rest, selected, drop-inside, focus ring, hover ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] {
+  border-radius: var(--ds-tree-node-radius, 4px);
+  background-color: transparent;
+  color: inherit;
+  border-left: 3px solid transparent;
+  outline: none;
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'] {
+  background-color: var(--ds-tree-node-selected-bg, var(--ds-color-alpha-primary-10));
+  color: var(--ds-tree-node-selected-color, var(--ds-color-primary));
+  border-left: 3px solid var(--ds-color-primary, var(--ds-tree-node-selected-color));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']:not([data-selected='true']) {
+  background-color: var(--ds-tree-drop-bg, rgba(59, 130, 246, 0.05));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']:not([data-focused]) {
+  box-shadow: inset 0 0 0 2px var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-focused] {
+  box-shadow: 0 0 0 2px var(--ds-tree-focus-ring-color, var(--ds-color-primary-200, rgba(59, 130, 246, 0.3)));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]):not([data-drop-position='inside']) {
+  background-color: var(--ds-tree-node-hover-bg, rgba(0, 0, 0, 0.04));
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+/* ---- row contents: expander (rotates on the row's data-expanded), checkbox,
+        search highlight ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] {
+  border: none;
+  background: none;
+  color: inherit;
+  transform: rotate(0deg);
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-expanded='true'] > [data-part='tree-node-toggle'] {
+  transform: rotate(90deg);
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox'] {
+  accent-color: var(--ds-tree-checkbox-color, var(--ds-color-primary));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight'] {
+  background-color: var(--ds-tree-highlight-bg, #fef3c7);
+  color: var(--ds-tree-highlight-color, #92400e);
+  border-radius: 2px;
+}

@@ -1,0 +1,59 @@
+/**
+ * Modern Image skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and Tailwind's utilities, and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-image rottay-image--modern` (fresh mints,
+ * grep-verified free across CSS and CSS-in-JS): this engine published no
+ * first-party classname, only Tailwind utilities.
+ *
+ * The bordered root sets border-COLOR ONLY, exactly as the object did. Its WIDTH
+ * comes from Tailwind's `border` utility class, added to the root by the same
+ * `bordered` flag — a layered rule this unlayered colour does not disturb. Adding a
+ * width here would be inventing one.
+ *
+ * SPECIFICITY (P-48): a border colour must clear the tenant's unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1); the
+ * repeated `[data-part='root']` buys the fourth unit.
+ *
+ * Every part rule uses a CHILD combinator: `data-part` is a shared vocabulary, and
+ * the `placeholder`, `fallback` and `hoverOverlay` props are consumer slots that can
+ * hold any component.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-image.rottay-image--modern[data-part='root'][data-part='root'][data-bordered='true'] {
+  border-color: var(--ds-color-border);
+}
+.rottay-image.rottay-image--modern[data-part='root'][data-shadow='true'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- loading: the panel, and the default pulse block inside it (a consumer's own
+        `placeholder` node never carries the pulse class) ---- */
+.rottay-image.rottay-image--modern > [data-part='placeholder'] {
+  background: var(--ds-surface-inset);
+}
+.rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse {
+  background: var(--ds-surface-panel);
+}
+
+/* ---- error: the default icon reads this `color` through `fill="currentColor"`,
+        inherited rather than re-declared on the glyph ---- */
+.rottay-image.rottay-image--modern > [data-part='fallback'] {
+  background: var(--ds-surface-inset);
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- hover ---- */
+.rottay-image.rottay-image--modern > [data-part='hover-overlay'] {
+  background: var(--ds-color-alpha-black-40);
+}
+.rottay-image.rottay-image--modern > [data-part='zoom-indicator'] {
+  background: var(--ds-color-alpha-black-50);
+  color: var(--ds-color-white);
+}

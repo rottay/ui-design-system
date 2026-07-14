@@ -39,7 +39,7 @@
 
 import React, { useCallback } from 'react';
 import type { TagProps } from '../Tag.types';
-import { TAG_DEFAULTS, SIZE_MAP, RADIUS_MAP, TONE_TO_TAG_VARIANT } from '../Tag.types';
+import { TAG_DEFAULTS, SIZE_MAP, TONE_TO_TAG_VARIANT } from '../Tag.types';
 
 /**
  * Close icon SVG component for closable tags.
@@ -60,18 +60,6 @@ const CloseIcon: React.FC = () => (
     />
   </svg>
 );
-
-/**
- * Color configuration for each variant using CSS variables.
- */
-const VARIANT_COLORS = {
-  default: { bg: 'var(--ds-tag-default-bg)', text: 'var(--ds-tag-default-color)', border: 'var(--ds-tag-default-border)' },
-  primary: { bg: 'var(--ds-tag-primary-bg)', text: 'var(--ds-tag-primary-color)', border: 'var(--ds-tag-primary-border)' },
-  secondary: { bg: 'var(--ds-tag-secondary-bg)', text: 'var(--ds-tag-secondary-color)', border: 'var(--ds-tag-secondary-border)' },
-  success: { bg: 'var(--ds-tag-success-bg)', text: 'var(--ds-tag-success-color)', border: 'var(--ds-tag-success-border)' },
-  warning: { bg: 'var(--ds-tag-warning-bg)', text: 'var(--ds-tag-warning-color)', border: 'var(--ds-tag-warning-border)' },
-  error: { bg: 'var(--ds-tag-error-bg)', text: 'var(--ds-tag-error-color)', border: 'var(--ds-tag-error-border)' },
-};
 
 /**
  * Rustic (Pure HTML/CSS) implementation of the Tag component.
@@ -134,17 +122,13 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     [onClose]
   );
 
-  // Resolve variant colors from the CSS-variable-based lookup table.
-  // Falls back to 'default' for unrecognised variant strings.
-  const variantKey = (variant as keyof typeof VARIANT_COLORS) || 'default';
-  const colors = VARIANT_COLORS[variantKey] || VARIANT_COLORS.default;
-
   // Size tokens (height, padding, fontSize) come from the shared SIZE_MAP
   // defined in Tag.types so all three engines share identical sizing.
   const sizeConfig = SIZE_MAP[size] || SIZE_MAP.md;
 
-  // All visual properties are inline to avoid any CSS framework dependency.
-  // The outlined variant swaps background to transparent while keeping the border.
+  // The `color` prop is an arbitrary caller string, so it cannot be enumerated as a
+  // CSS rule; it rides a custom property that tag.css's resting-fill rules read with
+  // the variant's own token as the fallback. Outlined never reads it.
   const containerStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -155,14 +139,11 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     fontSize: sizeConfig.fontSize,
     fontWeight: 500,
     lineHeight: 1,
-    backgroundColor: outlined ? 'transparent' : (color || colors.bg),
-    color: colors.text,
-    border: bordered || outlined ? `1px solid ${colors.border}` : '1px solid transparent',
-    borderRadius: RADIUS_MAP[radius] || RADIUS_MAP.md,
     cursor: clickable ? 'pointer' : 'default',
     transition: 'var(--ds-tag-transition, all 0.2s ease-in-out)',
     userSelect: 'none',
     whiteSpace: 'nowrap',
+    ...(color ? ({ '--ds-tag-custom-bg': color } as React.CSSProperties) : {}),
     ...style,
   };
 
@@ -181,18 +162,18 @@ export default function RusticTag(props: TagProps): React.ReactElement {
     justifyContent: 'center',
     marginLeft: '0.125rem',
     padding: 0,
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
-    color: 'inherit',
     opacity: 0.7,
     transition: 'opacity 0.2s ease-in-out',
   };
 
-  // BEM-style class names are emitted alongside inline styles so consumers
-  // can hook into them for global overrides without touching inline styles.
+  // BEM-style class names are emitted so consumers can hook into them for global
+  // overrides. `rottay-tag--rustic` is the engine anchor tag.css keys its rules on:
+  // bare `rottay-tag` is shared with the classic engine and is painted by tenant
+  // artifacts, so no rule here may rest on it alone.
   const classNames = [
     'rottay-tag',
+    'rottay-tag--rustic',
     `rottay-tag--${size}`,
     `rottay-tag--${variant}`,
     outlined && 'rottay-tag--outlined',

@@ -1,0 +1,70 @@
+/**
+ * Modern Calendar skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-calendar rottay-calendar--modern` + `data-part` +
+ * `data-mode` (grep-verified free: Calendar was fully greenfield -- no
+ * first-party classname, no theme.css bridge, no personality hook, in either
+ * engine). The engine suffix is load-bearing: rustic carries the same base class
+ * and paints different values.
+ *
+ * HOVER WAS IMPERATIVE. The cells wrote `el.style.background` from
+ * `onMouseEnter`/`onMouseLeave` and cleared it with `''`; the `:hover` rule below
+ * reproduces it, with `:not()` guards standing in for the handlers' own
+ * `!isSelected && !isDisabled` gate. Nav buttons and mode toggles had NO hover in
+ * this engine (rustic's nav buttons do) -- the asymmetry is transcribed, not
+ * levelled.
+ *
+ * BORDER WIDTHS ARE NOT HERE. The today-ring's width comes from the Tailwind
+ * `border` utility, which the component emits ONLY in the today-and-not-selected
+ * state (utilities sort after preflight, so they paint); only the color was ever
+ * inline. The `border: none` on the buttons is a color-free reset (exempt from
+ * the P-48 (0,4,0) floor).
+ *
+ * `>` CHAINS THROUGHOUT: `data-part` is a shared vocabulary and `dateCellRender`
+ * / `monthCellRender` inject arbitrary caller content inside the cells, so a
+ * descendant selector could reach a nested component's own parts.
+ *
+ * SPECIFICITY (P-48): the today-ring's `border-color` clears the tenant's
+ * unlayered (0,3,1) `*` border-color floor at (0,7,0). Values transcribed
+ * verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-calendar.rottay-calendar--modern[data-part='root'] {
+  background: var(--ds-surface-card);
+}
+
+/* ---- header: the four nav arrows and the two mode toggles share one resting
+        surface; only the active toggle diverges. ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- weekday column headers ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- cells (one rule set serves the month grid and the year grid: their paint
+        is identical, only their geometry differs). ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-inverse);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border-color: var(--ds-color-primary);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
+  background: var(--ds-surface-inset);
+}

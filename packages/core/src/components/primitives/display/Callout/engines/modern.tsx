@@ -22,20 +22,14 @@ import type { CalloutProps } from '../Callout.types';
 import { CALLOUT_DEFAULTS, CALLOUT_ICONS, TONE_TO_CALLOUT_VARIANT } from '../Callout.types';
 
 /**
- * Maps DS variant names to DS token inline styles.
- */
-const VARIANT_STYLES: Record<string, React.CSSProperties> = {
-  info: { background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', color: 'var(--ds-color-info)' },
-  warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 10%, transparent)', color: 'var(--ds-color-warning)' },
-  error: { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)', color: 'var(--ds-color-error)' },
-  success: { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)', color: 'var(--ds-color-success)' },
-};
-
-/**
  * Modern (token-driven) implementation of the Callout component.
  *
  * Leverages `alert` structural class with DS token inline styles for semantic colouring
  * and layout, with a ghost close button and flex-column content area.
+ *
+ * Semantic paint (per-tone surface, text and close button) is keyed on
+ * `data-tone` by `tokens/css/engines/modern/skin/callout.css`; an unrecognised
+ * tone falls back to the info palette there, as it did here.
  *
  * @param props - {@link CalloutProps} controlling variant, content, and behaviour.
  * @returns A DS token-styled alert element, or null when dismissed.
@@ -68,16 +62,13 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
     onClose?.();
   };
 
-  // Fallback to 'info' for unrecognised variants to avoid unstyled alerts
-  const variantStyle = VARIANT_STYLES[variant] || VARIANT_STYLES.info;
-
   return (
     <div
       className={`alert rottay-callout-shell rottay-callout-shell--modern ${className}`}
       role="alert"
       data-part="root"
       data-tone={variant}
-      style={{ ...variantStyle, ...style }}
+      style={style}
     >
       {/* Leading icon: custom icon overrides the per-variant default */}
       <span className="text-lg font-bold" data-part="icon">
@@ -101,7 +92,7 @@ export default function ModernCallout(props: CalloutProps): React.ReactElement |
         <button
           type="button"
           data-part="close-button"
-          style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
+          style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }}
           onClick={handleClose}
           aria-label="Close"
         >

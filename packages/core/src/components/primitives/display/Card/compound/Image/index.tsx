@@ -148,24 +148,15 @@ export function CardImage({
     onError?.(new Error('Failed to load image'));
   };
 
+  // `radius` passes an unrecognised value straight through, so the resolved radius
+  // is an open string no rule can enumerate; card-compounds.css reads it as a custom
+  // property and overrides the corner pair each position rounds.
   const containerStyle: CSSProperties = {
     position: 'relative',
     width: '100%',
     height: typeof height === 'number' ? `${height}px` : height,
     overflow: 'hidden',
-    borderRadius: RADIUS_MAP[radius] || radius,
-    ...(position === 'top' && {
-      borderTopLeftRadius: 'var(--ds-card-radius, 12px)',
-      borderTopRightRadius: 'var(--ds-card-radius, 12px)',
-      borderBottomLeftRadius: 0,
-      borderBottomRightRadius: 0,
-    }),
-    ...(position === 'bottom' && {
-      borderTopLeftRadius: 0,
-      borderTopRightRadius: 0,
-      borderBottomLeftRadius: 'var(--ds-card-radius, 12px)',
-      borderBottomRightRadius: 'var(--ds-card-radius, 12px)',
-    }),
+    '--ds-card-image-radius': RADIUS_MAP[radius] || radius,
     ...(position === 'cover' && {
       position: 'absolute',
       top: 0,
@@ -176,7 +167,7 @@ export function CardImage({
       zIndex: 0,
     }),
     ...style,
-  };
+  } as CSSProperties;
 
   const imageStyle: CSSProperties = {
     width: '100%',
@@ -194,11 +185,9 @@ export function CardImage({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'var(--ds-card-image-placeholder-bg, var(--ds-color-neutral-100, #f0f0f0))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: 'var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary, #a3a3a3))',
   };
 
   const overlayStyle: CSSProperties = {
@@ -219,8 +208,6 @@ export function CardImage({
     left: 0,
     right: 0,
     bottom: 0,
-    background:
-      'var(--ds-card-cover-overlay-bg, linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.7) 100%))',
     zIndex: 1,
   } : {};
 
@@ -256,10 +243,7 @@ export function CardImage({
               style={{
                 width: '40px',
                 height: '40px',
-                border: '3px solid var(--ds-card-image-loading-track, var(--ds-color-neutral-200, #e5e5e5))',
-                borderTopColor: 'var(--ds-card-image-loading-active, var(--ds-color-primary-500, #171717))',
-                borderRadius: '50%',
-                animation: 'rottay-card-image-spin 1s linear infinite',
+                animation: 'ds-card-image-spin 1s linear infinite',
               }}
             />
           )}
@@ -287,13 +271,6 @@ export function CardImage({
           {overlay}
         </div>
       )}
-
-      {/* Keyframes for loading spinner */}
-      <style>{`
-        @keyframes rottay-card-image-spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
   );
 }

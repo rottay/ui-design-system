@@ -1,0 +1,25 @@
+/**
+ * Modern Splitter skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-splitter rottay-splitter--modern` +
+ * `data-part='root'` + `data-orientation`, minted in the WO-SKIN-05
+ * pre-step (0bd687ea) -- neither engine carried a first-party classname
+ * before it. Panel/gutter are descendants with their own `data-part`.
+ *
+ * SPECIFICITY (P-48): the only channel this file paints is the gutter's
+ * `background`, non-border, which clears preflight unlayered at (0,3,0);
+ * the two root classes + `[data-part='root']` + the descendant
+ * `[data-part='gutter']` already reach (0,4,0). No border-color channel
+ * exists in this component, so the (0,4,0) floor never applies. Value
+ * transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- gutter: static token background (was the drag handle's inline `style`). ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'] {
+  background: var(--ds-surface-panel);
+}

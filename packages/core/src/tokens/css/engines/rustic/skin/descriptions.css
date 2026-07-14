@@ -1,0 +1,65 @@
+/**
+ * Rustic Descriptions skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style` -- which is what keeps the `styles.label` /
+ * `styles.content` / per-item override props working: they land inline and
+ * therefore still beat these rules.
+ *
+ * SCOPE ROOT carries `rottay-descriptions rottay-descriptions--rustic` +
+ * `data-part='root'` + `data-engine` + `data-bordered`. The engine suffix is
+ * load-bearing: modern carries the same base class, and the two engines paint
+ * different values.
+ *
+ * CHILD COMBINATORS THROUGHOUT. `data-part` is a shared vocabulary, and this
+ * component renders arbitrary caller content inside `[data-part='content']` --
+ * a descendant selector would reach a `data-part='label'` belonging to whatever
+ * component the caller nested there. The DOM chain root > body > rows > row >
+ * label|content is fixed, so `>` costs nothing and closes that hole.
+ *
+ * BOTH BRANCHES OF `bordered` ARE EXPLICIT. The borderless branch declared
+ * `border: none` / `border-radius: 0` / `background-color: transparent` inline,
+ * and preflight's `border-width: 0` is not a substitute for the radius and
+ * background resets -- so it gets its own rules rather than being left to
+ * default.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element; the bordered `border` / `border-bottom`
+ * shorthands clear it at (0,5,0)+. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- header title ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='header'] > [data-part='title'] {
+  color: var(--ds-descriptions-title-color, var(--ds-color-text-primary, #333));
+}
+
+/* ---- content container: framed vs flush ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='true'] > [data-part='body'] {
+  border: 1px solid var(--ds-descriptions-border-color, #e8e8e8);
+  border-radius: var(--ds-descriptions-radius, 8px);
+  background-color: var(--ds-descriptions-bg, #fff);
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='false'] > [data-part='body'] {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+/* ---- row separator (both layouts share one rule pair) ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='true'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  border-bottom: 1px solid var(--ds-descriptions-item-border-color, #f0f0f0);
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='false'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  border-bottom: none;
+}
+
+/* ---- label + value ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+  color: var(--ds-descriptions-label-color, var(--ds-color-text-secondary, #666));
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+  color: var(--ds-descriptions-content-color, var(--ds-color-text-primary, #333));
+}

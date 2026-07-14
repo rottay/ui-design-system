@@ -24,7 +24,7 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
     return (
       <div
         ref={ref}
-        className={`flex items-start ${className}`}
+        className={`rottay-list-item-meta rottay-list-item-meta--modern flex items-start ${className}`}
         data-part="meta"
         style={{ gap: 'var(--ds-list-meta-avatar-margin-right, 12px)', ...style }}
       >
@@ -35,7 +35,6 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
               className="font-medium"
               data-part="meta-title"
               style={{
-                color: 'var(--ds-list-meta-title-color, var(--ds-color-text-primary))',
                 fontSize: 'var(--ds-list-meta-title-font-size, inherit)',
                 fontWeight: 'var(--ds-list-meta-title-font-weight, 500)',
               }}
@@ -48,7 +47,6 @@ export const Meta = React.forwardRef<HTMLDivElement, ListItemMetaProps>(
               className="text-sm"
               data-part="meta-description"
               style={{
-                color: 'var(--ds-list-meta-description-color, var(--ds-color-text-secondary))',
                 fontSize: 'var(--ds-list-meta-description-font-size, 0.875rem)',
                 marginTop: 'var(--ds-list-meta-description-margin-top, 0)',
               }}
@@ -71,12 +69,10 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
     return (
       <li
         ref={ref}
-        className={`flex items-center justify-between ${className}`}
+        className={`rottay-list-item rottay-list-item--modern flex items-center justify-between ${className}`}
         data-part="item"
         style={{
           padding: 'var(--ds-list-default-padding-vertical, 12px) var(--ds-list-default-padding-horizontal, 16px)',
-          background: 'var(--ds-list-item-background-color, transparent)',
-          color: 'var(--ds-list-text-color, inherit)',
           transition: 'background var(--ds-list-transition-duration, var(--ds-motion-normal)) var(--ds-list-transition-timing, ease-in-out)',
           ...style,
         }}
@@ -98,7 +94,6 @@ export const Item = React.forwardRef<HTMLLIElement, ListItemProps>(
             style={{
               marginLeft: 'var(--ds-list-extra-margin-left, 16px)',
               gap: 'var(--ds-list-actions-gap, 8px)',
-              color: 'var(--ds-list-actions-color, var(--ds-color-primary))',
             }}
           >
             {actions.map((action, index) => (
@@ -153,7 +148,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
       return (
         <div
           ref={ref}
-          className={`animate-pulse ${className}`}
+          className={`rottay-list rottay-list--modern animate-pulse ${className}`}
           data-part="root"
           data-loading="true"
           style={{ opacity: 'var(--ds-list-loading-opacity, 0.6)', ...style }}
@@ -161,10 +156,10 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
           {[1, 2, 3].map((i) => (
             <div key={i} className="py-3" data-part="skeleton-row">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full" data-part="skeleton-avatar" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
+                <div className="w-10 h-10 rounded-full" data-part="skeleton-avatar" />
                 <div className="flex-1">
-                  <div className="h-4 rounded w-1/3 mb-2" data-part="skeleton-line" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
-                  <div className="h-3 rounded w-2/3" data-part="skeleton-line" style={{ background: 'var(--ds-list-item-hover-background-color, var(--ds-surface-panel))' }} />
+                  <div className="h-4 rounded w-1/3 mb-2" data-part="skeleton-line" />
+                  <div className="h-3 rounded w-2/3" data-part="skeleton-line" />
                 </div>
               </div>
             </div>
@@ -176,18 +171,12 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
     return (
       <div
         ref={ref}
-        className={`${bordered ? 'border rounded-lg' : ''} ${className}`}
+        className={`rottay-list rottay-list--modern ${bordered ? 'border rounded-lg' : ''} ${className}`}
         data-part="root"
         data-loading="false"
+        data-bordered={bordered ? 'true' : 'false'}
         style={{
-          background: 'var(--ds-list-background-color, transparent)',
-          color: 'var(--ds-list-text-color, inherit)',
           fontSize: sizeFontSize[size],
-          ...(bordered && {
-            borderColor: 'var(--ds-list-border-color, var(--ds-color-border))',
-            borderWidth: 'var(--ds-list-border-width, 1px)',
-            borderRadius: 'var(--ds-list-border-radius, var(--ds-radius-lg))',
-          }),
           ...style,
         }}
       >
@@ -199,8 +188,6 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
               padding: 'var(--ds-list-header-padding-vertical, 12px) var(--ds-list-header-padding-horizontal, 16px)',
               fontSize: 'var(--ds-list-header-font-size, inherit)',
               fontWeight: 'var(--ds-list-header-font-weight, 600)',
-              background: 'var(--ds-list-header-background-color, transparent)',
-              ...(bordered ? { borderColor: 'var(--ds-list-border-color, var(--ds-color-border))' } : {}),
             }}
           >
             {header}
@@ -219,14 +206,7 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             <React.Fragment key={index}>
               {child}
               {split && index < React.Children.count(listContent) - 1 && !grid && (
-                <div
-                  className="border-b"
-                  data-part="divider"
-                  style={{
-                    borderColor: 'var(--ds-list-split-color, var(--ds-color-border))',
-                    borderBottomWidth: 'var(--ds-list-split-width, 1px)',
-                  }}
-                />
+                <div className="border-b" data-part="divider" />
               )}
             </React.Fragment>
           ))}
@@ -238,8 +218,6 @@ export const List = React.forwardRef<HTMLDivElement, ListProps>(
             style={{
               padding: 'var(--ds-list-footer-padding-vertical, 12px) var(--ds-list-footer-padding-horizontal, 16px)',
               fontSize: 'var(--ds-list-footer-font-size, inherit)',
-              background: 'var(--ds-list-footer-background-color, transparent)',
-              ...(bordered ? { borderColor: 'var(--ds-list-border-color, var(--ds-color-border))' } : {}),
             }}
           >
             {footer}

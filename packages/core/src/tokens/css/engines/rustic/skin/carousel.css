@@ -1,0 +1,58 @@
+/**
+ * Rustic Carousel skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-carousel rottay-carousel--rustic` (fresh mints,
+ * grep-verified free). This engine renders no DaisyUI class, so it takes none of
+ * the `.carousel` chrome the modern engine's theme bridge paints — an asymmetry
+ * that is preserved, not unified.
+ *
+ * Every rule uses a CHILD combinator: `data-part` is a shared vocabulary and each
+ * slide holds arbitrary consumer content.
+ *
+ * SPECIFICITY (P-48): the arrow's `border` shorthand carries a real colour and must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='arrow']` buys the fourth unit. The dot's `border: none` is a
+ * colour-free reset and is exempt.
+ *
+ * Two transforms cannot be enumerated as rules and ride custom properties set
+ * inline: the slide offset is arithmetic over the live slide index, and the dots
+ * rail's centring transform is one branch of a positioning switch whose four other
+ * declarations (top/left/bottom/right/flex-direction) are not paint and stay inline
+ * with it. Splitting the transform away from its own switch would leave the two
+ * halves of one decision in two files.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+.rottay-carousel.rottay-carousel--rustic > [data-part='track'] > [data-part='slide'] {
+  transform: var(--ds-carousel-slide-transform, none);
+}
+
+/* ---- arrows: one shared object, positioned per side by an inline left/right ---- */
+.rottay-carousel.rottay-carousel--rustic > [data-part='arrow'][data-part='arrow'] {
+  transform: translateY(-50%);
+  background: var(--ds-carousel-arrow-bg, rgba(255, 255, 255, 0.9));
+  border: 1px solid var(--ds-carousel-arrow-border, #ddd);
+  border-radius: var(--ds-carousel-arrow-radius, 50%);
+}
+
+/* ---- dots rail ---- */
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] {
+  transform: var(--ds-carousel-dots-transform);
+}
+
+/* ---- dots ---- */
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'] {
+  border-radius: var(--ds-carousel-dot-radius, 4px);
+  border: none;
+}
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
+  background: var(--ds-carousel-dot-active-bg, var(--ds-color-primary-500, #1890ff));
+}
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
+  background: var(--ds-carousel-dot-bg, #d9d9d9);
+}

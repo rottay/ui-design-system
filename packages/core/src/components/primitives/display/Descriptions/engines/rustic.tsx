@@ -86,14 +86,11 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
       fontSize: 'var(--ds-descriptions-title-font-size, 18px)',
       fontWeight: 600,
       margin: 0,
-      color: 'var(--ds-descriptions-title-color, var(--ds-color-text-primary, #333))',
     };
 
-    // Content area gets border/radius/bg only in bordered mode; transparent otherwise
+    // Content area gets border/radius/bg only in bordered mode; transparent
+    // otherwise -- both branches keyed on `data-bordered` in the skin.
     const contentContainerStyle: React.CSSProperties = {
-      border: bordered ? '1px solid var(--ds-descriptions-border-color, #e8e8e8)' : 'none',
-      borderRadius: bordered ? 'var(--ds-descriptions-radius, 8px)' : '0',
-      backgroundColor: bordered ? 'var(--ds-descriptions-bg, #fff)' : 'transparent',
       overflow: 'hidden',
     };
 
@@ -108,7 +105,6 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
     // Label uses a secondary colour and smaller font to visually differentiate from values.
     // Component-level styles.label is merged first, then item-level overrides on top.
     const labelBaseStyle: React.CSSProperties = {
-      color: 'var(--ds-descriptions-label-color, var(--ds-color-text-secondary, #666))',
       fontSize: 'var(--ds-descriptions-label-font-size, 13px)',
       marginBottom: layout === 'vertical' ? '4px' : '0',
       ...styles?.label,
@@ -116,7 +112,6 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
     // Base content styles
     const contentBaseStyle: React.CSSProperties = {
-      color: 'var(--ds-descriptions-content-color, var(--ds-color-text-primary, #333))',
       ...styles?.content,
     };
 
@@ -136,7 +131,6 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               role="listitem"
               style={{
                 gridColumn: `span ${span}`,
-                borderBottom: bordered ? '1px solid var(--ds-descriptions-item-border-color, #f0f0f0)' : 'none',
                 paddingBottom: bordered ? '12px' : '0',
               }}
             >
@@ -169,7 +163,6 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
               style={{
                 display: 'flex',
                 padding: '12px 16px',
-                borderBottom: bordered ? '1px solid var(--ds-descriptions-item-border-color, #f0f0f0)' : 'none',
               }}
             >
               <div
@@ -202,10 +195,11 @@ export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
     return (
       <div
         ref={ref}
-        className={className}
+        className={`rottay-descriptions rottay-descriptions--rustic ${className}`.trim()}
         style={containerStyle}
         data-part="root"
         data-engine="rustic"
+        data-bordered={bordered ? 'true' : 'false'}
         role="region"
         aria-label={typeof title === 'string' ? title : 'Description list'}
       >

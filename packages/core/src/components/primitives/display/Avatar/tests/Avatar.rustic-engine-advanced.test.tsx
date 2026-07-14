@@ -25,7 +25,9 @@ describe('Avatar rustic engine advanced coverage', () => {
 
     expect(avatar).toHaveClass('avatar-shell');
     expect(avatar).toHaveStyle({ cursor: 'pointer' });
-    expect(avatar.style.outline).toContain('#123456');
+    // A consumer-supplied ringColor rides the `--ds-avatar-custom-ring` hatch; the
+    // outline itself is the skin's. The value still reaches the DOM, byte for byte.
+    expect(avatar.style.getPropertyValue('--ds-avatar-custom-ring')).toBe('#123456');
     expect(spans).toHaveLength(2);
     fireEvent.click(avatar);
     expect(handleClick).toHaveBeenCalledTimes(1);

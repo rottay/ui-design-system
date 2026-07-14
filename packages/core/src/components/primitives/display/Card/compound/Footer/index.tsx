@@ -119,7 +119,6 @@ export function CardFooter({
     justifyContent: ALIGN_MAP[align],
     gap: '8px',
     padding: PADDING_MAP[padding],
-    borderTop: divider ? '1px solid var(--ds-card-footer-border, var(--ds-card-border, #e5e5e5))' : 'none',
     ...style,
   };
 

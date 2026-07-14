@@ -149,21 +149,12 @@ const ALIGN_CLASSES: Record<string, string> = {
 };
 
 /**
- * Colors use DS tokens so they automatically adapt when the theme changes
- * (e.g. light to dark mode). "muted" maps to text-secondary for reduced emphasis.
+ * Scope class carried by all four exports. Text color is selected from
+ * `data-color` by `tokens/css/engines/modern/skin/typography.css`, which resolves
+ * an unrecognised value to the `default` color. Both the class and `data-color`
+ * must reach the root for the color to paint.
  */
-const COLOR_STYLES: Record<string, React.CSSProperties> = {
-  default: { color: 'var(--ds-color-text-primary)' },
-  secondary: { color: 'var(--ds-color-text-secondary)' },
-  tertiary: { color: 'var(--ds-color-text-tertiary)' },
-  muted: { color: 'var(--ds-color-text-secondary)' },
-  subtle: { color: 'var(--ds-color-text-muted)' },
-  inherit: { color: 'inherit' },
-  primary: { color: 'var(--ds-color-primary)' },
-  success: { color: 'var(--ds-color-success)' },
-  warning: { color: 'var(--ds-color-warning)' },
-  error: { color: 'var(--ds-color-error)' },
-};
+const SCOPE_CLASSES = 'rottay-typography rottay-typography--modern';
 
 /**
  * Modern (token-driven) implementation of Heading component.
@@ -253,6 +244,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     // Heading size is now applied via inline fontSize (DS token), not
     // a Tailwind text-* class.
     const classes = [
+      SCOPE_CLASSES,
       resolvedWeightClass,
       ALIGN_CLASSES[align],
       truncate ? 'truncate' : '',
@@ -261,8 +253,6 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     ]
       .filter(Boolean)
       .join(' ');
-
-    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
 
     // Apply premium typographic refinements: font-size from DS tokens,
     // negative letter-spacing, and tighter line-height for larger heading
@@ -288,7 +278,7 @@ export const ModernHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
           className={classes}
           data-part="root"
           data-color={color}
-          style={{ textWrap: 'balance', ...typographyStyle, ...colorStyle, ...style }}
+          style={{ textWrap: 'balance', ...typographyStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >
@@ -371,6 +361,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
     // Text size is now applied via inline fontSize (DS token), not a Tailwind
     // text-* class.
     const classes = [
+      SCOPE_CLASSES,
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
       underline ? 'underline' : '',
@@ -384,8 +375,6 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
     ]
       .filter(Boolean)
       .join(' ');
-
-    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
 
     // Apply DS token-based font-size for non-responsive sizes
     const textSizeStyle: React.CSSProperties = !sizeIsResponsive
@@ -402,7 +391,7 @@ export const ModernText = forwardRef<HTMLElement, TextProps>(
           className={classes}
           data-part="root"
           data-color={color}
-          style={{ textWrap: 'pretty', ...textSizeStyle, ...colorStyle, ...style }}
+          style={{ textWrap: 'pretty', ...textSizeStyle, ...style }}
           {...(responsive ? responsive.attrs : {})}
           {...props}
         >
@@ -449,6 +438,7 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     // readable at longer lengths. These can be overridden via className.
     // Paragraph size is now applied via inline fontSize (DS token).
     const classes = [
+      SCOPE_CLASSES,
       WEIGHT_CLASSES[weight],
       ALIGN_CLASSES[align],
       'leading-relaxed',
@@ -460,13 +450,12 @@ export const ModernParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
       .filter(Boolean)
       .join(' ');
 
-    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
     const paragraphSizeStyle: React.CSSProperties = {
       fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
     };
 
     return (
-      <p ref={ref} className={classes} data-part="root" data-color={color} style={{ ...paragraphSizeStyle, ...colorStyle, ...style }} {...props}>
+      <p ref={ref} className={classes} data-part="root" data-color={color} style={{ ...paragraphSizeStyle, ...style }} {...props}>
         {children}
       </p>
     );
@@ -517,6 +506,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
     // The "transition-colors" class is always present for smooth color shifts.
     // Link size is now applied via inline fontSize (DS token).
     const classes = [
+      SCOPE_CLASSES,
       weight ? WEIGHT_CLASSES[weight] : '',
       strong ? 'font-semibold' : '',
       underline ? 'underline' : '',
@@ -529,7 +519,6 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
       .filter(Boolean)
       .join(' ');
 
-    const colorStyle = COLOR_STYLES[color] || COLOR_STYLES.default;
     const linkSizeStyle: React.CSSProperties = {
       fontSize: TEXT_SIZE_STYLES[size] || TEXT_SIZE_STYLES.md,
     };
@@ -547,7 +536,7 @@ export const ModernLink = forwardRef<HTMLAnchorElement, LinkProps>(
         data-part="root"
         data-color={color}
         data-disabled={disabled || undefined}
-        style={{ ...linkSizeStyle, ...colorStyle, ...style }}
+        style={{ ...linkSizeStyle, ...style }}
         aria-disabled={disabled}
         {...props}
       >

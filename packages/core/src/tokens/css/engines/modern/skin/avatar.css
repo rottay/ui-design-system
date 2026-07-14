@@ -1,0 +1,89 @@
+/**
+ * Modern Avatar skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * THE P-75 FREEZE. `[data-tenant] .avatar` (engines/modern/theme.css:1069) forces
+ * `width: 40px; height: 40px; overflow: hidden` on the ROOT, which wears DaisyUI's
+ * structural `avatar` class, while the real size token sits inline on the `mask`
+ * CHILD. Nothing contests the root, so the `size` prop does not work in this engine:
+ * children above 40px are clipped, children below it are haloed by the root's own
+ * painted disc. That is measured, shipped behaviour, and this file PRESERVES it —
+ * no rule here sizes the root, touches its overflow, or removes the `avatar` class.
+ * Correcting it is P-75's own work order, with its own baselines. A skin that
+ * "helpfully" sized the root would be a regression wearing a migration's clothes.
+ *
+ * SCOPE ROOT gains `rottay-avatar rottay-avatar--modern` (fresh mints, grep-verified
+ * free across CSS and CSS-in-JS). Adding classnames cannot disturb the freeze: the
+ * `.avatar` rule keeps matching, and nothing targets the new names but this file.
+ * The mint is `rottay-avatar`, never `ds-avatar` — that one is claimed by
+ * `runtime/personality.css:522` and `engines/rustic/theme.css:804`, and taking it
+ * would hand this component two rule sets it has never worn.
+ *
+ * SPECIFICITY (P-48): the status dot's `border` shorthand carries a real colour and
+ * must clear the tenant's unlayered `*` border-color floor at (0,3,1); its repeated
+ * `data-part` buys the fourth unit. It stays a SHORTHAND because preflight zeroes
+ * `border-width` on every element.
+ *
+ * `--ds-avatar-custom-bg` is the hatch for the `backgroundColor` PROP, a caller
+ * string that cannot be enumerated. It is read as the FIRST term of the `background`
+ * SHORTHAND, not as a `background-color` longhand: the gradient variant's fill is a
+ * background-IMAGE, and the object's `background: backgroundColor` wiped it. A
+ * longhand would have left the gradient painting over the caller's colour.
+ *
+ * The `textColor` PROP stays inline (standing law: text colour painted from a prop
+ * never moves to CSS). It is a caller's value, like `style`, and it outranks every
+ * rule below exactly as it always did.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- fallback fill + ink. The bare rule carries `default`, which is also the
+        lookup's fallback for an unrecognised variant. ---- */
+.rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-surface-panel));
+  color: var(--ds-color-text-inverse);
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='primary'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-primary));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-secondary));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-success));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-warning));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-error));
+}
+
+/* ---- gradient is the only variant that diverges on ink, and the only one that
+        lifts its initials off the fill ---- */
+.rottay-avatar.rottay-avatar--modern[data-variant='gradient'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary)));
+  color: var(--ds-avatar-gradient-color);
+  text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-black) 15%, transparent);
+}
+
+/* ---- status dot: the frame and the offset are one object for every status ---- */
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot'] {
+  border: var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border);
+  transform: translate(25%, 25%);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='online'] {
+  background-color: var(--ds-avatar-status-online);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='offline'] {
+  background-color: var(--ds-avatar-status-offline);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='away'] {
+  background-color: var(--ds-avatar-status-away);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='busy'] {
+  background-color: var(--ds-avatar-status-busy);
+}

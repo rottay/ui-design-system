@@ -35,3 +35,146 @@
 .rottay-badge.rottay-badge--modern[data-interactive='true']:hover {
   transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));
 }
+
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — the rest of the surface. The `transform` rules
+ * above were the whole skin until now; fill, ink, frame and the bordered ring
+ * were still inline.
+ *
+ * SPECIFICITY (P-48): every rule below paints a border colour (`transparent` is
+ * a colour — only `none`/`0`/`unset`/`inherit` are exempt resets), so each must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1). The repeated
+ * `[data-part='root']` buys the fourth unit. Each frame stays a SHORTHAND
+ * because preflight zeroes `border-width` on every element.
+ *
+ * The variant rule alone carries the SOLID style, which is what the object's
+ * `switch` fell through to (`case 'solid': default:`); `soft`, `ghost` and
+ * `outline` are qualified overrides that outrank it.
+ *
+ * The indicator render is the only one that rounds fully. It is identified by
+ * `[data-position]`, which only that render path stamps.
+ * ======================================================================== */
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-radius-sm);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-position] {
+  border-radius: var(--ds-radius-full);
+}
+
+/* ---- bordered: a ring the surface colour, so the badge reads as lifted off
+        whatever it sits on ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-bordered='true'] {
+  box-shadow: 0 0 0 2px var(--ds-surface-card);
+}
+
+/* ---- solid (the switch's default) ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'] {
+  background-color: var(--ds-color-neutral-200);
+  color: var(--ds-color-text-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'] {
+  background-color: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'] {
+  background-color: var(--ds-color-secondary);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'] {
+  background-color: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'] {
+  background-color: var(--ds-color-warning);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'] {
+  background-color: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'] {
+  background-color: var(--ds-color-info);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+
+/* ---- soft and ghost share one branch of the switch ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-secondary);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-primary-10);
+  color: var(--ds-color-primary);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-secondary-10);
+  color: var(--ds-color-secondary-600);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-success-10);
+  color: var(--ds-color-success-700);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-warning-10);
+  color: var(--ds-color-warning-700);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-error-10);
+  color: var(--ds-color-error-700);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-info-10);
+  color: var(--ds-color-info-700);
+}
+
+/* ---- outline: no fill, and the frame carries the hue ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-text-secondary);
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-primary);
+  border: 1px solid var(--ds-color-primary-400);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-secondary-600);
+  border: 1px solid var(--ds-color-secondary-300);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-success-700);
+  border: 1px solid var(--ds-color-success-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-warning-700);
+  border: 1px solid var(--ds-color-warning-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-error-700);
+  border: 1px solid var(--ds-color-error-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-info-700);
+  border: 1px solid var(--ds-color-info-border);
+}

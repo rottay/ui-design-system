@@ -1,0 +1,97 @@
+/**
+ * Rustic Tooltip skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPED ON THE BUBBLE'S OWN CLASS PAIR `rottay-tooltip-bubble
+ * rottay-tooltip-bubble--rustic`, not on a bare `[data-part='bubble']`
+ * (`data-part` is a shared vocabulary, and a bare part selector would claim every
+ * bubble in the fleet) and not under the root's `rottay-tooltip` (which is a live
+ * personality/tenant hook for the entrance animation and z-index). Rustic's
+ * bubble is in-tree rather than portaled, but a self-sufficient scope works
+ * either way and matches modern's.
+ *
+ * THE TONE IS IN THE VARIABLE NAME. Rustic reads
+ * `var(--ds-tooltip-<color>-bg, var(--ds-tooltip-bg))` -- the color prop is
+ * interpolated into the custom-property NAME, so each of the six values of the
+ * closed `TooltipColor` union gets its own rule here, and the unqualified rule
+ * carries the fallback an unrecognised value would have resolved to.
+ *
+ * SPECIFICITY (P-48): the shortcut chip's border is the only border here; it
+ * reaches (0,5,0) via the two bubble classes + `[data-part='bubble']` + the
+ * target's own `[data-part]` REPEATED, clearing the tenant's unlayered (0,3,1)
+ * `*` border-color floor. Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- bubble: shared surface + the open/closed scale ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] {
+  border-radius: var(--ds-tooltip-radius, 6px);
+  box-shadow: var(--ds-tooltip-shadow);
+}
+
+/* ---- per-tone surface (bubble) ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] {
+  background-color: var(--ds-tooltip-bg);
+  color: var(--ds-tooltip-color);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='default'] {
+  background-color: var(--ds-tooltip-default-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-default-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='primary'] {
+  background-color: var(--ds-tooltip-primary-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-primary-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='secondary'] {
+  background-color: var(--ds-tooltip-secondary-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-secondary-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='success'] {
+  background-color: var(--ds-tooltip-success-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-success-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='warning'] {
+  background-color: var(--ds-tooltip-warning-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-warning-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='error'] {
+  background-color: var(--ds-tooltip-error-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-error-color, var(--ds-tooltip-color));
+}
+
+/* ---- arrow: a rotated square in the bubble's own tone (its per-placement
+        offsets stay inline, and it only renders when `arrow` is set). ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-bg);
+  transform: rotate(45deg);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='default'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-default-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='primary'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-primary-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='secondary'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-secondary-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='success'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-success-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='warning'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-warning-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='error'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-error-bg, var(--ds-tooltip-bg));
+}
+
+/* ---- shortcut chips: built on `currentColor` so they track whichever tone the
+        bubble is painting, with no second color map. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] [data-part='shortcut-key'] {
+  border-radius: var(--ds-radius-sm);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] [data-part='shortcut-key'][data-part='shortcut-key'] {
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}

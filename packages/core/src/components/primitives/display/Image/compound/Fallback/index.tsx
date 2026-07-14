@@ -56,8 +56,6 @@ export const ImageFallback = forwardRef<HTMLDivElement, ImageFallbackProps>(
       justifyContent: 'center',
       width: typeof width === 'number' ? `${width}px` : width || '100%',
       height: typeof height === 'number' ? `${height}px` : height || '100%',
-      backgroundColor: 'var(--ds-color-neutral-100, #f5f5f5)',
-      color: 'var(--ds-color-neutral-500, #737373)',
       fontSize: '0.875rem',
       ...style,
     };

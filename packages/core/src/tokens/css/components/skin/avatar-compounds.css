@@ -1,0 +1,55 @@
+/**
+ * Avatar compound skin — Avatar.Badge + Avatar.Group (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint these elements at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: both compounds have a single render tree shared by every engine,
+ * so they share one file rather than an engine pair.
+ *
+ * SPECIFICITY (P-48): each `border` shorthand carries a real colour and must clear
+ * the tenant's unlayered `*` border-color floor at (0,3,1); the repeated `data-part`
+ * (and, for the surplus tile, its group ancestor) buys the fourth unit. They stay
+ * SHORTHANDS because preflight zeroes `border-width` on every element — these 2px
+ * frames are the cut-out that separates each circle from the one it overlaps, so a
+ * longhand colour over a zeroed width would erase the effect entirely.
+ *
+ * Avatar.Group's rules use a CHILD combinator: its `item` wrappers hold whole
+ * Avatars, which stamp `data-part` names of their own.
+ *
+ * The surplus tile inherits the item's frame (its object spread `childStyle` first),
+ * so it takes the same border rule and adds its own fill and ink. `maxStyle` is a
+ * caller's value and stays inline, outranking both.
+ *
+ * Values transcribed verbatim from `compound/Badge/index.tsx` and
+ * `compound/Group/index.tsx`.
+ */
+
+/* ---- Avatar.Badge: the presence dot ---- */
+.rottay-avatar-badge-dot[data-part='dot'][data-part='dot'] {
+  border-radius: 50%;
+  border: 2px solid var(--ds-avatar-badge-border, var(--ds-color-bg-primary));
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='online'] {
+  background-color: var(--ds-color-success);
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='offline'] {
+  background-color: var(--ds-color-border-secondary);
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='busy'] {
+  background-color: var(--ds-color-error);
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='away'] {
+  background-color: var(--ds-color-warning);
+}
+
+/* ---- Avatar.Group: the overlap cut-out, worn by every tile including surplus ---- */
+.rottay-avatar-group[data-part='root'] > [data-part='item'][data-part='item'],
+.rottay-avatar-group[data-part='root'] > [data-part='surplus'][data-part='surplus'] {
+  border: 2px solid var(--ds-avatar-group-border, var(--ds-color-bg-base));
+}
+.rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
+  background-color: var(--ds-avatar-surplus-bg, var(--ds-color-bg-secondary));
+  color: var(--ds-avatar-surplus-color, var(--ds-color-text-secondary));
+}

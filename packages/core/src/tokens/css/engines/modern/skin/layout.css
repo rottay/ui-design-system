@@ -1,0 +1,59 @@
+/**
+ * Modern Layout skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE: `Layout`'s own root carries `rottay-layout rottay-layout--modern`
+ * (minted in the WO-SKIN-05 pre-step, 0bd687ea -- neither engine carried any
+ * first-party classname before it). `Header`/`Sider`/`Content`/`Footer` are
+ * separately exported, independently mountable pieces -- the pre-step's own
+ * contract test renders `Layout.Sider` with no `Layout` ancestor at all --
+ * so each one carries ITS OWN engine-suffixed pair
+ * (`rottay-layout-header rottay-layout-header--modern`, etc., added in this
+ * migration) rather than relying on a `.rottay-layout[data-part='root']`
+ * ancestor that may not exist. `Content` paints nothing on this engine, so
+ * it keeps its bare `rottay-layout-content` class untouched.
+ *
+ * SPECIFICITY (P-48): the one border-color-bearing declaration in this file
+ * lives in the rustic skin (Sider's light-theme `border-right`), not here --
+ * modern's Sider never sets a border. Every declaration below is non-border
+ * (`background`, `color`) and clears preflight unlayered at (0,3,0); each
+ * part's own two-class pair + `[data-part='...']` already reaches it.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- header: static token background (was the inline `style`). ---- */
+.rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+  background: var(--ds-surface-inset);
+}
+
+/* ---- sider: background + color, keyed on the already-stamped `data-theme`.
+        The light branch sets no `color` at all in the source -- an inherited
+        text color, not an omission -- so no rule is written for it here;
+        writing one would introduce a color this engine's light Sider has
+        never painted. ---- */
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='dark'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-primary);
+}
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='light'] {
+  background: var(--ds-surface-card);
+}
+
+/* ---- sider collapse-trigger: static token chrome (was the inline `style`
+        on the toggle button). `border: none` is a color-free reset, exempt
+        from the (0,4,0) floor. ---- */
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- footer: static token background (was the inline `style`). ---- */
+.rottay-layout-footer.rottay-layout-footer--modern[data-part='footer'] {
+  background: var(--ds-surface-inset);
+}

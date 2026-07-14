@@ -263,10 +263,9 @@ describe('Tree modern engine advanced coverage', () => {
     expect(screen.getByRole('tree')).not.toHaveTextContent('Other Item');
     expect(screen.getByRole('tree')).not.toHaveTextContent('Outside Item');
     const highlight = screen.getByText('Match');
+    // The highlight's fill is the skin's, anchored on this class -- the class IS the
+    // contract, and it is what a tenant would retarget.
     expect(highlight).toHaveClass('rottay-tree-search-highlight');
-    expect(highlight).toHaveStyle({
-      background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)',
-      color: 'var(--ds-color-text-primary)',
-    });
+    expect(highlight.getAttribute('data-part')).toBe('tree-node-highlight');
   });
 });

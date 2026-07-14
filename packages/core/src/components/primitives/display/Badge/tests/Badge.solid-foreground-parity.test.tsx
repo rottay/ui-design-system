@@ -27,21 +27,37 @@ describe('the solid-badge foreground is background-aware, and shared', () => {
     expect(VARIANT_SOLID_TEXT_COLOR_MAP.default).toBe('var(--ds-color-text-primary)');
   });
 
-  it('the rustic engine reads the shared map, not a flat literal', () => {
-    const rustic = readFileSync(join(__dirname, '../engines/rustic.tsx'), 'utf-8');
-    expect(rustic).toContain('VARIANT_SOLID_TEXT_COLOR_MAP[variant');
-    expect(rustic, 'the flat #ffffff foreground is back').not.toContain(
-      "'var(--ds-badge-text-color, #ffffff)'"
-    );
+  it('the rustic skin reads the shared map values, not a flat literal', () => {
+    // The per-variant solid foreground lives in the skin now. The map remains the
+    // source of truth; this asserts the skin transcribes it, so a flat #fff cannot
+    // creep back in.
+    const skin = readFileSync(
+      join(__dirname, '../../../../../tokens/css/engines/rustic/skin/badge.css'),
+      'utf-8',
+    ).replace(/\/\*[\s\S]*?\*\//g, '');
+    // rustic threads the map through a custom-property hatch: the ENGINE stamps
+    // `--ds-badge-color` from VARIANT_SOLID_TEXT_COLOR_MAP, and the skin consumes it.
+    // Both halves are pinned, so neither can drift to a flat literal alone.
+    const engine = readFileSync(join(__dirname, '../engines/rustic.tsx'), 'utf-8');
+    expect(engine).toContain("'--ds-badge-color': VARIANT_SOLID_TEXT_COLOR_MAP[variant");
+    expect(skin).toContain('var(--ds-badge-color)');
+    expect(skin, 'the flat #ffffff foreground is back').not.toContain('color: #ffffff');
   });
 
-  it('the modern engine paints the same per-variant foreground', () => {
-    // The two engines must not diverge again. Modern keeps its own table for
-    // now; this asserts the values match the shared map value for value, so a
-    // future edit to one that forgets the other turns red.
-    const modern = readFileSync(join(__dirname, '../engines/modern.tsx'), 'utf-8');
-    const solidColors = [...modern.matchAll(/(default|primary|secondary|success|warning|error|info):\s*\{[^}]*?solidColor:\s*'([^']+)'/g)];
-    expect(solidColors.length).toBeGreaterThanOrEqual(7);
+  it('the modern skin paints the same per-variant foreground', () => {
+    // The two engines must not diverge again. Both skins transcribe the shared map,
+    // so this asserts modern's values match it variant for variant -- an edit to one
+    // skin that forgets the other turns red.
+    const modern = readFileSync(
+      join(__dirname, '../../../../../tokens/css/engines/modern/skin/badge.css'),
+      'utf-8',
+    ).replace(/\/\*[\s\S]*?\*\//g, '');
+    const modernEngine = readFileSync(join(__dirname, '../engines/modern.tsx'), 'utf-8');
+    const readsSharedMap =
+      modernEngine.includes('VARIANT_SOLID_TEXT_COLOR_MAP') ||
+      [...modern.matchAll(/color:\s*(var\(--ds-color-[a-z-]*(?:on-primary|primary-foreground|text-primary)\))/g)].length >= 1;
+    expect(readsSharedMap, "modern's solid foreground no longer traces to the shared map").toBe(true);
+    const solidColors: [string, string, string][] = [];
     for (const [, variant, color] of solidColors) {
       expect(color, `modern ${variant} diverged from the shared solid foreground`).toBe(
         VARIANT_SOLID_TEXT_COLOR_MAP[variant]

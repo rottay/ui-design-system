@@ -1,0 +1,97 @@
+/**
+ * Rustic Image skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT keeps `rottay-image-rustic` and adds `rottay-image rottay-image--rustic`
+ * (fresh mints, grep-verified free) so the engine pair anchors every rule.
+ *
+ * The ZOOM DIALOG is not a descendant of the root: this engine returns a fragment
+ * whose second child is the dialog, so no root-scoped selector can reach it. It gets
+ * its own self-sufficient scope, `rottay-image-zoom rottay-image-zoom--rustic` —
+ * the same standalone treatment WO-SKIN-02 gave the portaled picker panels. The
+ * modern engine has no zoom dialog at all; that asymmetry is preserved.
+ *
+ * `--ds-image-resolved-radius` carries `RADIUS_MAP[radius]`, one value the object
+ * applied to five different elements. The `radius` prop is not stamped as an
+ * attribute, and the value is a single inherited custom property here — set once on
+ * the root, read by every part below. It is deliberately NOT the public
+ * `--ds-image-radius` token (which the classic engine's theme already consumes);
+ * overloading that name would leak a per-instance value into a shared token.
+ *
+ * SPECIFICITY (P-48): rules carrying a border COLOUR must clear the tenant's
+ * unlayered `*` floor at (0,3,1); the repeated `[data-part]` takes them past
+ * (0,4,0). The unbordered `border: none` and the close button's are colour-free
+ * resets and are exempt. Both frames stay SHORTHANDS because preflight zeroes
+ * `border-width` on every element.
+ *
+ * KEYFRAME: the per-mount `<style>` injecting `rusticImagePulse` is replaced by an
+ * engine-namespaced copy here, so the name cannot collide with another engine's
+ * skin in the same tenant bundle.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root ---- */
+.rottay-image.rottay-image--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-image-resolved-radius);
+  border: none;
+  box-shadow: none;
+}
+.rottay-image.rottay-image--rustic[data-part='root'][data-part='root'][data-bordered='true'] {
+  border: 1px solid var(--ds-image-border-color, rgba(0, 0, 0, 0.1));
+}
+.rottay-image.rottay-image--rustic[data-part='root'][data-part='root'][data-shadow='true'] {
+  box-shadow: var(--ds-image-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));
+}
+
+/* ---- the image itself ---- */
+.rottay-image.rottay-image--rustic > [data-part='img'] {
+  border-radius: var(--ds-image-resolved-radius);
+}
+
+/* ---- loading: the panel, and the default pulse block inside it (a consumer's own
+        `placeholder` node never carries the pulse class) ---- */
+.rottay-image.rottay-image--rustic > [data-part='placeholder'] {
+  background-color: var(--ds-image-placeholder-bg, #f5f5f5);
+  border-radius: var(--ds-image-resolved-radius);
+}
+.rottay-image.rottay-image--rustic > [data-part='placeholder'] > .rottay-image__pulse {
+  background-color: var(--ds-image-loading-bg, #e5e5e5);
+}
+
+/* ---- error: the default icon reads this `color` through `fill="currentColor"` ---- */
+.rottay-image.rottay-image--rustic > [data-part='fallback'] {
+  background-color: var(--ds-image-fallback-bg, #f5f5f5);
+  color: var(--ds-image-fallback-color, #737373);
+  border-radius: var(--ds-image-resolved-radius);
+}
+
+/* ---- hover ---- */
+.rottay-image.rottay-image--rustic > [data-part='hover-overlay'] {
+  background-color: var(--ds-image-overlay-bg, rgba(0, 0, 0, 0.4));
+  border-radius: var(--ds-image-resolved-radius);
+}
+.rottay-image.rottay-image--rustic > [data-part='zoom-indicator'] {
+  background-color: var(--ds-image-zoom-indicator-bg, rgba(0, 0, 0, 0.5));
+  border-radius: 50%;
+  color: var(--ds-image-zoom-indicator-color, white);
+}
+
+/* ---- zoom dialog: a fragment SIBLING of the root, scoped on its own ---- */
+.rottay-image-zoom.rottay-image-zoom--rustic[data-part='zoom-dialog'] {
+  background-color: var(--ds-image-zoom-overlay-bg, rgba(0, 0, 0, 0.9));
+}
+.rottay-image-zoom.rottay-image-zoom--rustic > [data-part='zoom-close'] {
+  background-color: var(--ds-image-zoom-close-bg, rgba(255, 255, 255, 0.1));
+  border: none;
+  border-radius: 50%;
+  color: var(--ds-image-zoom-close-color, white);
+}
+
+@keyframes ds-image-pulse-rustic {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

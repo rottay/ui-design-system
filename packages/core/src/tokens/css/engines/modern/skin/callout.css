@@ -1,0 +1,56 @@
+/**
+ * Modern Callout skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight/DaisyUI regardless of
+ * specificity. Unlayered outranks both and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT carries `rottay-callout-shell rottay-callout-shell--modern`
+ * alongside the DaisyUI `.alert` class and `data-part='root'` + `data-tone`.
+ * The dedicated `-shell` scope is mandatory: bare `.rottay-alert` /
+ * `.rottay-alert-shell` are Alert's, and a rule anchored on a classname another
+ * component renders repaints that component. `rottay-callout-shell` is
+ * grep-verified free across CSS and CSS-in-JS.
+ *
+ * BORDER CHANNEL: Modern Callout declares no border inline, and DaisyUI's own
+ * `.alert { border-width: var(--border) }` (which outranks preflight) is what
+ * paints this root's border today. This skin therefore declares no border on the
+ * root: a width here would be a border that does not exist today, and a lone
+ * `border-color` longhand would leave DaisyUI's `var(--border)` in charge of the
+ * width. The `border: none` on the close button is a color-free reset (exempt
+ * from the P-48 (0,4,0) border floor).
+ *
+ * SPECIFICITY (P-48): non-border paint beats preflight unlayered at (0,3,0)+.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root surface: per-tone tinted background + matching text color. The
+        unqualified rule carries the info values because the lookup it replaces
+        fell back to info for any unrecognised tone; the three rules below
+        override it. The caller's `style` still wins as inline. ---- */
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  color: var(--ds-color-warning);
+}
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+
+/* ---- close button: ghost circle. Child combinator keeps the rule off any
+        `data-part='close-button'` a caller's content may bring. ---- */
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}

@@ -20,7 +20,7 @@
 
 import React, { useState } from 'react';
 import type { CalloutProps } from '../Callout.types';
-import { CALLOUT_DEFAULTS, CALLOUT_COLORS, CALLOUT_ICONS, TONE_TO_CALLOUT_VARIANT } from '../Callout.types';
+import { CALLOUT_DEFAULTS, CALLOUT_ICONS, TONE_TO_CALLOUT_VARIANT } from '../Callout.types';
 
 /**
  * Rustic (Pure HTML/CSS) implementation of the Callout component.
@@ -28,6 +28,9 @@ import { CALLOUT_DEFAULTS, CALLOUT_COLORS, CALLOUT_ICONS, TONE_TO_CALLOUT_VARIAN
  * Uses a semantic `<aside>` element with inline styles and CSS-variable
  * colour tokens. Differentiated from the classic engine by its left-border
  * accent style (instead of a full border) for a more editorial look.
+ *
+ * Semantic paint (surface, left accent, icon and text colour) is keyed on
+ * `data-tone` by `tokens/css/engines/rustic/skin/callout.css`.
  *
  * @param props - {@link CalloutProps} controlling variant, content, and behaviour.
  * @returns A semantic aside alert element, or null when dismissed.
@@ -52,7 +55,6 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
 
   // Uncontrolled dismiss: once closed, the aside is removed from the DOM
   const [visible, setVisible] = useState(true);
-  const colors = CALLOUT_COLORS[variant];
 
   if (!visible) return null;
 
@@ -74,10 +76,6 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
         display: 'flex',
         gap: 12,
         padding: '12px 16px',
-        borderRadius: 8,
-        backgroundColor: colors.bg,
-        borderLeft: `4px solid ${colors.icon}`,
-        color: colors.text,
         fontSize: 14,
         lineHeight: 1.6,
         fontFamily: 'var(--ds-font-family-base, inherit)',
@@ -97,7 +95,6 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
           justifyContent: 'center',
           fontSize: 14,
           fontWeight: 700,
-          color: colors.icon,
           marginTop: 2,
         }}
       >
@@ -127,11 +124,8 @@ export default function RusticCallout(props: CalloutProps): React.ReactElement |
           aria-label="Close"
           style={{
             flexShrink: 0,
-            border: 'none',
-            background: 'transparent',
             cursor: 'pointer',
             fontSize: 16,
-            color: colors.text,
             opacity: 0.6,
             padding: '0 2px',
             lineHeight: 1,

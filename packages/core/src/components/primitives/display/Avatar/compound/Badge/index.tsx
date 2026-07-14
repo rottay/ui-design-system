@@ -15,24 +15,13 @@ export type BadgeStatus = 'online' | 'offline' | 'busy' | 'away';
 export interface AvatarBadgeProps {
   /** The Avatar element (or other content) that the badge wraps. */
   children: ReactNode;
-  /** Presence status -- controls the badge color via STATUS_COLORS. */
+  /** Presence status -- reaches the DOM as data-status, which the skin colours. */
   status?: BadgeStatus;
   /** When true, renders a smaller 10px dot; when false, renders a 14px dot. */
   dot?: boolean;
   className?: string;
   style?: CSSProperties;
 }
-
-/**
- * Maps each status value to the corresponding design-system CSS variable.
- * Colors are intentionally sourced from semantic tokens so they adapt to themes.
- */
-const STATUS_COLORS: Record<BadgeStatus, string> = {
-  online: 'var(--ds-color-success)',
-  offline: 'var(--ds-color-border-secondary)',
-  busy: 'var(--ds-color-error)',
-  away: 'var(--ds-color-warning)',
-};
 
 /**
  * Avatar.Badge -- overlays a colored status dot on the bottom-right corner
@@ -67,17 +56,15 @@ export function AvatarBadge({
   };
 
   // The dot is sized based on the `dot` prop: 10px for a subtle indicator,
-  // 14px for a larger, more prominent one. The 2px border provides a
-  // "cut-out" effect that visually separates the dot from the avatar.
+  // 14px for a larger, more prominent one. Its fill and the 2px cut-out frame that
+  // separates it from the avatar are painted by
+  // tokens/css/components/skin/avatar-compounds.css, keyed on the data-status stamp.
   const badgeStyle: CSSProperties = {
     position: 'absolute',
     bottom: 0,
     right: 0,
     width: dot ? '10px' : '14px',
     height: dot ? '10px' : '14px',
-    borderRadius: '50%',
-    backgroundColor: STATUS_COLORS[status],
-    border: '2px solid var(--ds-avatar-badge-border, var(--ds-color-bg-primary))',
   };
 
   return (

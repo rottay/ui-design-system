@@ -95,12 +95,6 @@ const CardSpinner: React.FC = () => (
 );
 
 // ============================================================================
-// Variant Styles
-// ============================================================================
-
-
-
-// ============================================================================
 // Component
 // ============================================================================
 
@@ -212,9 +206,10 @@ export default function ModernCard(props: CardProps): React.ReactElement {
   ) : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
+  // The divider rule itself is card.css, keyed on the data-divider stamp; the space
+  // it needs around it is not paint and stays here.
   const headerSeparator: React.CSSProperties = divider
     ? {
-        borderBottom: '1px solid var(--ds-card-header-border, var(--ds-color-border))',
         paddingBottom: 'var(--ds-spacing-4, 16px)',
         marginBottom: 'var(--ds-spacing-4, 16px)',
       }
@@ -241,7 +236,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               data-part="cover"
               style={{
                 height: 'var(--ds-card-cover-height, 192px)',
-                backgroundColor: 'var(--ds-surface-inset)',
                 opacity: 0.6,
               }}
             />
@@ -255,27 +249,19 @@ export default function ModernCard(props: CardProps): React.ReactElement {
             <div data-part="skeleton" style={{ opacity: 0.4, display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-3, 12px)' }}>
               <div data-part="skeleton-bar" style={{
                 height: 'var(--ds-skeleton-bar-height, 12px)',
-                backgroundColor: 'var(--ds-surface-inset)',
-                borderRadius: 'var(--ds-radius-sm, 6px)',
                 width: '60%',
               }} />
               <div data-part="skeleton-bar" style={{
                 height: 'var(--ds-skeleton-bar-height, 12px)',
-                backgroundColor: 'var(--ds-surface-inset)',
-                borderRadius: 'var(--ds-radius-sm, 6px)',
                 width: '40%',
               }} />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)', marginTop: 'var(--ds-spacing-1, 4px)' }}>
                 <div data-part="skeleton-bar" style={{
                   height: 'var(--ds-skeleton-bar-height-sm, 10px)',
-                  backgroundColor: 'var(--ds-surface-inset)',
-                  borderRadius: 'var(--ds-radius-sm, 6px)',
                   width: '100%',
                 }} />
                 <div data-part="skeleton-bar" style={{
                   height: 'var(--ds-skeleton-bar-height-sm, 10px)',
-                  backgroundColor: 'var(--ds-surface-inset)',
-                  borderRadius: 'var(--ds-radius-sm, 6px)',
                   width: '85%',
                 }} />
               </div>
@@ -289,10 +275,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                backdropFilter: 'blur(4px)',
-                WebkitBackdropFilter: 'blur(4px)',
-                backgroundColor: 'color-mix(in srgb, var(--ds-surface-card) 60%, transparent)',
-                borderRadius: 'inherit',
                 zIndex: 1,
                 opacity: 1,
                 transition: `opacity var(--ds-motion-normal) var(--ds-motion-ease-out)`,
@@ -337,7 +319,7 @@ export default function ModernCard(props: CardProps): React.ReactElement {
         )}
 
         {/* Body */}
-        <div data-part="body" style={{ padding: paddingValue || BODY_PADDING, color: 'var(--ds-card-body-color, inherit)' }}>
+        <div data-part="body" style={{ padding: paddingValue || BODY_PADDING }}>
           {/* Header */}
           {(title || description || extra) && (
             <div
@@ -356,7 +338,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                     fontSize: 'var(--ds-card-title-font-size, 16px)',
                     fontWeight: 600,
                     lineHeight: 1.4,
-                    color: 'var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)))',
                     letterSpacing: 'var(--ds-card-title-letter-spacing, -0.01em)',
                   }}>
                     {title}
@@ -366,7 +347,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
                   <div data-part="description" style={{
                     fontSize: 'var(--ds-card-description-font-size, 13px)',
                     lineHeight: 1.5,
-                    color: 'var(--ds-card-subtitle-color, var(--ds-color-text-secondary))',
                     marginTop: title ? 'var(--ds-spacing-0-5, 2px)' : undefined,
                   }}>
                     {description}
@@ -393,8 +373,6 @@ export default function ModernCard(props: CardProps): React.ReactElement {
               gap: 'var(--ds-spacing-2, 8px)',
               marginTop: 'var(--ds-spacing-4, 16px)',
               paddingTop: 'var(--ds-spacing-4, 16px)',
-              borderTop: '1px solid var(--ds-card-footer-border, var(--ds-color-border))',
-              backgroundColor: 'var(--ds-card-footer-bg, transparent)',
             }}>
               {actions.map((action, index) => (
                 <React.Fragment key={index}>{action}</React.Fragment>

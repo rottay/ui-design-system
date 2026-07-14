@@ -107,14 +107,12 @@ const STYLES = {
   container: {},
   title: {
     fontSize: 'var(--ds-statistic-title-font-size, 14px)',
-    color: 'var(--ds-statistic-title-color, var(--ds-color-text-secondary))',
     marginBottom: '4px',
     lineHeight: 1.5,
   } as React.CSSProperties,
   value: {
     fontSize: 'var(--ds-statistic-value-font-size, 24px)',
     fontWeight: 600,
-    color: 'var(--ds-statistic-value-color, var(--ds-color-text-primary))',
     lineHeight: 1.3,
   } as React.CSSProperties,
   prefix: {
@@ -123,22 +121,16 @@ const STYLES = {
   suffix: {
     marginLeft: '4px',
   } as React.CSSProperties,
-  skeleton: {
-    background: 'var(--ds-statistic-skeleton-bg, var(--ds-color-bg-secondary))',
-    borderRadius: '4px',
-  } as React.CSSProperties,
+  skeleton: {} as React.CSSProperties,
 };
 
 /**
- * Maps valueType to CSS color values.
- * Uses WCAG 2.1 AA compliant colors for accessibility.
+ * Scope class carried by both exports. The value's trend color is selected from
+ * `data-trend` by `tokens/css/engines/rustic/skin/statistic.css`, which resolves
+ * an unrecognised trend to the `default` color. Both the class and `data-trend`
+ * must reach the DOM for the color to paint.
  */
-const VALUE_TYPE_COLOR_MAP: Record<string, string> = {
-  default: 'var(--ds-statistic-value-color, var(--ds-color-text-primary))',
-  positive: 'var(--ds-statistic-positive-color, var(--ds-color-success))',
-  negative: 'var(--ds-statistic-negative-color, var(--ds-color-error))',
-  warning: 'var(--ds-statistic-warning-color, var(--ds-color-warning))',
-};
+const SCOPE_CLASSES = 'rottay-statistic rottay-statistic--rustic';
 
 /**
  * Rustic Engine implementation of the Statistic component.
@@ -193,13 +185,12 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
       animateValue && typeof value === 'number' && !formatter && !loading;
 
     // Fallback to 'default' when an unrecognised valueType is supplied
-    const valueColor = VALUE_TYPE_COLOR_MAP[valueType] || VALUE_TYPE_COLOR_MAP.default;
 
     // Accessible loading skeleton: role="status" + aria-busy lets assistive
     // tech announce the loading state, sr-only span provides a text label.
     if (loading) {
       return (
-        <div ref={ref} className={className} data-part="root" data-loading="true" style={style} role="status" aria-busy="true">
+        <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="true" style={style} role="status" aria-busy="true">
           <div data-part="skeleton-line" style={{ ...STYLES.skeleton, height: 16, width: 64, marginBottom: 8 }} />
           <div data-part="skeleton-line" style={{ ...STYLES.skeleton, height: 32, width: 96 }} />
           <span className="sr-only">Loading...</span>
@@ -208,7 +199,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     }
 
     return (
-      <div ref={ref} className={className} data-part="root" data-loading="false" style={style}>
+      <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="false" style={style}>
         {title && (
           <div data-part="title" style={STYLES.title}>
             {title}
@@ -219,7 +210,6 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           data-trend={valueType}
           style={{
             ...STYLES.value,
-            color: valueColor,
             ...valueStyle,
           }}
         >
@@ -342,21 +332,17 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
       setIsFinished(false);
     }, [value]);
 
-    // Get color for value type
-    const valueColor = VALUE_TYPE_COLOR_MAP[valueType] || VALUE_TYPE_COLOR_MAP.default;
-
     // Monospace font prevents layout jitter as digits change during countdown
     const countdownValueStyle: React.CSSProperties = {
       ...STYLES.value,
       fontFamily: 'monospace',
-      color: valueColor,
       ...valueStyle,
     };
 
     return (
       <div
         ref={ref}
-        className={className}
+        className={`${SCOPE_CLASSES} ${className}`.trim()}
         data-part="root"
         style={style}
         role="timer"

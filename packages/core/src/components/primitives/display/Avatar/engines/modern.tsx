@@ -102,37 +102,18 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
     height: `var(--ds-avatar-${size}-size)`,
   };
 
-  // Map DS variant names to inline style objects using DS tokens.
-  const variantBgStyle: React.CSSProperties = {
-    default: { background: 'var(--ds-surface-panel)' },
-    primary: { background: 'var(--ds-color-primary)' },
-    secondary: { background: 'var(--ds-color-secondary)' },
-    success: { background: 'var(--ds-color-success)' },
-    warning: { background: 'var(--ds-color-warning)' },
-    error: { background: 'var(--ds-color-error)' },
-    gradient: { background: 'linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary))' },
-  }[variant] || { background: 'var(--ds-surface-panel)' };
+  // The variant fill and ink are painted by tokens/css/engines/modern/skin/avatar.css,
+  // keyed on the data-variant stamp below. An explicit backgroundColor prop is a
+  // caller's value that cannot be enumerated as a rule, so it rides a custom property
+  // the skin reads as the FIRST term of its `background` shorthand -- which is what
+  // lets it wipe the gradient variant's image, exactly as the inline shorthand did.
+  const customBgStyle = backgroundColor
+    ? ({ '--ds-avatar-custom-bg': backgroundColor } as React.CSSProperties)
+    : {};
 
-  const variantTextStyle: React.CSSProperties = {
-    default: { color: 'var(--ds-color-text-inverse)' },
-    primary: { color: 'var(--ds-color-text-inverse)' },
-    secondary: { color: 'var(--ds-color-text-inverse)' },
-    success: { color: 'var(--ds-color-text-inverse)' },
-    warning: { color: 'var(--ds-color-text-inverse)' },
-    error: { color: 'var(--ds-color-text-inverse)' },
-    gradient: { color: 'var(--ds-avatar-gradient-color)' },
-  }[variant] || { color: 'var(--ds-color-text-inverse)' };
-
-  // Status indicator uses DS token colours for consistent theming
-  const statusTokenColor = status ? {
-    online: 'var(--ds-avatar-status-online)',
-    offline: 'var(--ds-avatar-status-offline)',
-    away: 'var(--ds-avatar-status-away)',
-    busy: 'var(--ds-avatar-status-busy)',
-  }[status] : undefined;
-
-  // DaisyUI 'online' class on the avatar container enables its built-in status dot
-  const containerClass = `avatar ${status ? 'online' : ''} ${className}`;
+  // DaisyUI 'online' class on the avatar container enables its built-in status dot.
+  // P-75: the container is deliberately left unsized and unaltered -- see avatar.css.
+  const containerClass = `rottay-avatar rottay-avatar--modern avatar ${status ? 'online' : ''} ${className}`;
   // Ring utility provides the bordered outline; ring-offset prevents it from touching the avatar
   const ringClass = bordered ? 'ring ring-offset-2' : '';
   const ringStyle: React.CSSProperties = bordered
@@ -174,13 +155,12 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
             style={{
               width: '100%',
               height: '100%',
-              // Explicit backgroundColor/textColor props win (e.g. an entity
-              // tint-scale tone) and fall back to the variant tokens otherwise.
-              background: backgroundColor || variantBgStyle.background,
+              ...customBgStyle,
               fontSize: `var(--ds-avatar-${size}-font-size)`,
               fontWeight: `var(--ds-avatar-font-weight)` as any,
-              color: textColor || variantTextStyle.color || `var(--ds-avatar-${variant}-color)`,
-              textShadow: variant === 'gradient' ? '0 1px 2px color-mix(in srgb, var(--ds-color-black) 15%, transparent)' : undefined,
+              // An explicit textColor is a caller's value, like `style`: it stays
+              // inline and outranks the skin's per-variant ink.
+              ...(textColor ? { color: textColor } : {}),
             }}
           >
             {displayInitials || children}
@@ -198,9 +178,6 @@ export default function ModernAvatar(props: AvatarProps): React.ReactElement {
           style={{
             width: 'var(--ds-avatar-status-size)',
             height: 'var(--ds-avatar-status-size)',
-            backgroundColor: statusTokenColor,
-            border: 'var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border)',
-            transform: 'translate(25%, 25%)',
             transition: `opacity var(--ds-avatar-transition), transform var(--ds-avatar-transition), background-color var(--ds-avatar-transition)`,
             opacity: 1,
           }}

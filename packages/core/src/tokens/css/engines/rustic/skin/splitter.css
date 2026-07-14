@@ -1,0 +1,39 @@
+/**
+ * Rustic Splitter skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-splitter rottay-splitter--rustic` +
+ * `data-part='root'` + `data-orientation`, minted in the WO-SKIN-05
+ * pre-step (0bd687ea) -- neither engine carried a first-party classname
+ * before it.
+ *
+ * The gutter's hover highlight was React state (`hoveredGutter === index`)
+ * driving an inline `backgroundColor` swap via matching
+ * `onMouseEnter`/`onMouseLeave` setters -- replaced below by a plain
+ * `:hover` rule on the same `[data-part='gutter']` element the JS used to
+ * paint; the state and its setters are removed from `engines/rustic.tsx`
+ * since they drove nothing else. Modern's gutter carries a
+ * `transition-colors` Tailwind class but never gains a hover rule at all
+ * (pre-existing cross-engine asymmetry, WO-SKIN-05 inventory) -- preserved
+ * as-is, not invented here.
+ *
+ * SPECIFICITY (P-48): both declarations are non-border (`background-color`),
+ * clearing preflight unlayered at (0,3,0); the two root classes +
+ * `[data-part='root']` + the descendant `[data-part='gutter']` reach
+ * (0,4,0). Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- gutter: base background (was styles.gutter.backgroundColor). ---- */
+.rottay-splitter.rottay-splitter--rustic[data-part='root'] [data-part='gutter'] {
+  background-color: var(--ds-splitter-gutter-bg, var(--ds-color-neutral-200, #e8e8e8));
+}
+
+/* ---- gutter: hover highlight (was styles.gutterHover, driven by the
+        deleted `hoveredGutter` state). ---- */
+.rottay-splitter.rottay-splitter--rustic[data-part='root'] [data-part='gutter']:hover {
+  background-color: var(--ds-splitter-gutter-hover-bg, var(--ds-color-primary-500, #1890ff));
+}

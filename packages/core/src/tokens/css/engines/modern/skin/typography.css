@@ -1,0 +1,61 @@
+/**
+ * A COMPOSING PARENT MAY RE-STAMP `data-part`. SelectionPreviewRail passes
+ * `data-part="identity-title"` to the Text it composes, and the child's own
+ * `root` stamp loses. So these rules anchor on the CLASS, never on the part:
+ * a component that can be composed must not require a `data-part` it does not
+ * control. The class is repeated to hold the specificity the part used to buy.
+ *
+ * Modern Typography skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE: all four exports (Heading, Text, Paragraph, Link) share the pair
+ * `rottay-typography rottay-typography--modern` + `data-part='root'` +
+ * `data-color`, because all four read the SAME color lookup. Modern stamped no
+ * first-party classname before this skin; the pair is grep-verified free across
+ * CSS and CSS-in-JS. Anchoring on `data-part='root'` alone is not an option --
+ * `data-part` is a shared vocabulary, not an identifier.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and beats preflight unlayered
+ * at (0,3,0). The unqualified rule carries the `default` value because the
+ * lookup it replaces fell back to `default` for any unrecognised color (all four
+ * exports); the per-color rules below override it at (0,4,0). Values transcribed
+ * verbatim from COLOR_STYLES in `engines/modern.tsx`.
+ */
+
+.rottay-typography.rottay-typography--modern.rottay-typography--modern {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='default'] {
+  color: var(--ds-color-text-primary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='secondary'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='tertiary'] {
+  color: var(--ds-color-text-tertiary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='muted'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='subtle'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='inherit'] {
+  color: inherit;
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='primary'] {
+  color: var(--ds-color-primary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='success'] {
+  color: var(--ds-color-success);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='warning'] {
+  color: var(--ds-color-warning);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='error'] {
+  color: var(--ds-color-error);
+}

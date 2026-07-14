@@ -92,9 +92,11 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
 
   const displayInitials = initials || getInitials(name, alt);
 
-  // All visual properties use CSS custom properties (--ds-avatar-*) so the
-  // avatar adapts to tenant themes automatically. Explicit backgroundColor /
-  // textColor / ringColor props override the token values per-instance.
+  // Shape, fill, ink, frame and ring are painted by
+  // tokens/css/engines/rustic/skin/avatar.css, keyed on the data-shape /
+  // data-variant / data-bordered / data-ring stamps below. The backgroundColor and
+  // ringColor props are caller strings that cannot be enumerated as rules, so they
+  // ride custom properties the skin reads with the variant token as the fallback.
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-flex',
@@ -102,27 +104,16 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
     justifyContent: 'center',
     width: `var(--ds-avatar-${size}-size)`,
     height: `var(--ds-avatar-${size}-size)`,
-    // Three shape tiers: circle (50%), square (small radius), rounded (medium radius)
-    borderRadius: shape === 'circle'
-      ? 'var(--ds-avatar-radius-circle)'
-      : shape === 'square'
-        ? 'var(--ds-avatar-radius-square)'
-        : 'var(--ds-avatar-radius-rounded)',
     overflow: 'hidden',
-    background: backgroundColor || `var(--ds-avatar-${variant}-bg)`,
-    color: textColor || `var(--ds-avatar-${variant}-color)`,
     fontSize: `var(--ds-avatar-${size}-font-size)`,
     fontWeight: 'var(--ds-avatar-font-weight)' as any,
     cursor: onClick ? 'pointer' : undefined,
-    border: bordered
-      ? 'var(--ds-avatar-border-width) solid var(--ds-avatar-border-color)'
-      : 'none',
-    // Ring uses CSS outline so it doesn't affect layout (unlike border)
-    outline: ring
-      ? `var(--ds-avatar-ring-width) solid ${ringColor || 'var(--ds-avatar-ring-color)'}`
-      : 'none',
-    outlineOffset: ring ? 'var(--ds-avatar-ring-offset)' : '0',
     transition: 'var(--ds-avatar-transition)',
+    ...(backgroundColor ? ({ '--ds-avatar-custom-bg': backgroundColor } as React.CSSProperties) : {}),
+    ...(ringColor ? ({ '--ds-avatar-custom-ring': ringColor } as React.CSSProperties) : {}),
+    // An explicit textColor is a caller's value, like `style`: it stays inline and
+    // outranks the skin's per-variant ink.
+    ...(textColor ? { color: textColor } : {}),
     ...style,
   };
 
@@ -132,23 +123,19 @@ export default function RusticAvatar(props: AvatarProps): React.ReactElement {
     objectFit: 'cover',
   };
 
-  // Status dot is positioned absolutely at bottom-right with a small translate
-  // to overlap the avatar edge. White border separates it from the avatar bg.
+  // Status dot is positioned absolutely at bottom-right; its fill, frame and the
+  // translate that overlaps the avatar edge all live in the skin.
   const statusStyle: React.CSSProperties = status ? {
     position: 'absolute',
     bottom: 0,
     right: 0,
     width: 'var(--ds-avatar-status-size)',
     height: 'var(--ds-avatar-status-size)',
-    borderRadius: '50%',
-    backgroundColor: `var(--ds-avatar-status-${status})`,
-    border: 'var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border)',
-    transform: 'translate(15%, 15%)',
   } : {};
 
   return (
     <div
-      className={className}
+      className={`rottay-avatar rottay-avatar--rustic ${className || ''}`.trim()}
       data-part="root"
       data-variant={variant}
       data-shape={shape}

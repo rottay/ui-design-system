@@ -217,6 +217,54 @@
 @import '../components/skin/overlay-modal-compounds.css';
 @import '../components/skin/stepper-compounds.css';
 
+/* WO-SKIN-05: the display + layout families paint from unlayered skins. */
+@import '../engines/modern/skin/avatar.css';
+@import '../engines/rustic/skin/avatar.css';
+@import '../engines/modern/skin/calendar.css';
+@import '../engines/rustic/skin/calendar.css';
+@import '../engines/modern/skin/callout.css';
+@import '../engines/rustic/skin/callout.css';
+@import '../engines/modern/skin/carousel.css';
+@import '../engines/rustic/skin/carousel.css';
+@import '../engines/modern/skin/collapse.css';
+@import '../engines/rustic/skin/collapse.css';
+@import '../engines/modern/skin/descriptions.css';
+@import '../engines/rustic/skin/descriptions.css';
+@import '../engines/modern/skin/divider.css';
+@import '../engines/rustic/skin/divider.css';
+@import '../engines/modern/skin/empty.css';
+@import '../engines/rustic/skin/empty.css';
+@import '../engines/modern/skin/image.css';
+@import '../engines/rustic/skin/image.css';
+@import '../engines/modern/skin/kbd.css';
+@import '../engines/rustic/skin/kbd.css';
+@import '../engines/modern/skin/layout.css';
+@import '../engines/rustic/skin/layout.css';
+@import '../engines/modern/skin/list.css';
+@import '../engines/rustic/skin/list.css';
+@import '../engines/modern/skin/qrcode.css';
+@import '../engines/rustic/skin/qrcode.css';
+@import '../engines/modern/skin/splitter.css';
+@import '../engines/rustic/skin/splitter.css';
+@import '../engines/modern/skin/statistic.css';
+@import '../engines/rustic/skin/statistic.css';
+@import '../engines/modern/skin/tag.css';
+@import '../engines/rustic/skin/tag.css';
+@import '../engines/modern/skin/timeline.css';
+@import '../engines/rustic/skin/timeline.css';
+@import '../engines/modern/skin/tooltip.css';
+@import '../engines/rustic/skin/tooltip.css';
+@import '../engines/modern/skin/tree.css';
+@import '../engines/rustic/skin/tree.css';
+@import '../engines/modern/skin/typography.css';
+@import '../engines/rustic/skin/typography.css';
+@import '../components/skin/avatar-compounds.css';
+@import '../components/skin/card-compounds.css';
+@import '../components/skin/carousel-compounds.css';
+@import '../components/skin/image-compounds.css';
+@import '../components/skin/statistic-compounds.css';
+@import '../components/skin/tooltip-compounds.css';
+
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
 

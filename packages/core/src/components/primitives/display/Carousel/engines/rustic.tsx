@@ -202,6 +202,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
      * @param {number} index - Slide index
      * @returns {React.CSSProperties} Computed slide positioning and transition styles
      */
+    // The slide offset is arithmetic over the live index, so carousel.css consumes
+    // it as a custom property rather than enumerating it.
     const getSlideStyle = (index: number): React.CSSProperties => ({
       position: 'absolute',
       top: 0,
@@ -209,24 +211,18 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       width: '100%',
       height: '100%',
       opacity: fade ? (index === currentSlide ? 1 : 0) : 1,
-      transform: fade
+      '--ds-carousel-slide-transform': fade
         ? 'none'
         : vertical
           ? `translateY(${(index - currentSlide) * 100}%)`
           : `translateX(${(index - currentSlide) * 100}%)`,
       transition: `all ${speed}ms ease-in-out`,
-    });
+    } as React.CSSProperties);
 
-    // Arrow buttons use DS CSS variables with hardcoded fallbacks so they
-    // render correctly even without a theme provider (SSR-safe).
     const arrowStyle: React.CSSProperties = {
       position: 'absolute',
       top: '50%',
-      transform: 'translateY(-50%)',
       zIndex: 10,
-      background: 'var(--ds-carousel-arrow-bg, rgba(255, 255, 255, 0.9))',
-      border: '1px solid var(--ds-carousel-arrow-border, #ddd)',
-      borderRadius: 'var(--ds-carousel-arrow-radius, 50%)',
       width: 'var(--ds-carousel-arrow-size, 32px)',
       height: 'var(--ds-carousel-arrow-size, 32px)',
       cursor: 'pointer',
@@ -242,13 +238,16 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
      *
      * @returns {React.CSSProperties} Dot container positioning styles
      */
+    // The centring transform is one branch of this switch; carousel.css consumes it
+    // as a custom property so it travels with the four positioning keys it belongs
+    // to instead of being split into a rule of its own.
     const getDotsContainerStyle = (): React.CSSProperties => {
-      const base: React.CSSProperties = {
+      const base = {
         position: 'absolute',
         display: 'flex',
         gap: '6px',
         zIndex: 10,
-      };
+      } as React.CSSProperties;
 
       switch (dotPosition) {
         case 'top':
@@ -256,41 +255,41 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
             ...base,
             top: '10px',
             left: '50%',
-            transform: 'translateX(-50%)',
+            '--ds-carousel-dots-transform': 'translateX(-50%)',
             flexDirection: 'row',
-          };
+          } as React.CSSProperties;
         case 'bottom':
           return {
             ...base,
             bottom: '10px',
             left: '50%',
-            transform: 'translateX(-50%)',
+            '--ds-carousel-dots-transform': 'translateX(-50%)',
             flexDirection: 'row',
-          };
+          } as React.CSSProperties;
         case 'left':
           return {
             ...base,
             left: '10px',
             top: '50%',
-            transform: 'translateY(-50%)',
+            '--ds-carousel-dots-transform': 'translateY(-50%)',
             flexDirection: 'column',
-          };
+          } as React.CSSProperties;
         case 'right':
           return {
             ...base,
             right: '10px',
             top: '50%',
-            transform: 'translateY(-50%)',
+            '--ds-carousel-dots-transform': 'translateY(-50%)',
             flexDirection: 'column',
-          };
+          } as React.CSSProperties;
         default:
           return {
             ...base,
             bottom: '10px',
             left: '50%',
-            transform: 'translateX(-50%)',
+            '--ds-carousel-dots-transform': 'translateX(-50%)',
             flexDirection: 'row',
-          };
+          } as React.CSSProperties;
       }
     };
 
@@ -303,18 +302,13 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     const getDotStyle = (isActive: boolean): React.CSSProperties => ({
       width: isActive ? 'var(--ds-carousel-dot-active-width, 16px)' : 'var(--ds-carousel-dot-size, 8px)',
       height: 'var(--ds-carousel-dot-size, 8px)',
-      borderRadius: 'var(--ds-carousel-dot-radius, 4px)',
-      background: isActive
-        ? 'var(--ds-carousel-dot-active-bg, var(--ds-color-primary-500, #1890ff))'
-        : 'var(--ds-carousel-dot-bg, #d9d9d9)',
-      border: 'none',
       cursor: 'pointer',
       transition: 'var(--ds-carousel-transition, all 0.3s ease)',
     });
 
     return (
       <div
-        className={className}
+        className={`rottay-carousel rottay-carousel--rustic ${className || ''}`.trim()}
         data-part="root"
         data-vertical={vertical ? 'true' : undefined}
         data-fade={fade ? 'true' : undefined}

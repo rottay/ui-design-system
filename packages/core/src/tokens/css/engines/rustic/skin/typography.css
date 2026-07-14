@@ -1,0 +1,68 @@
+/**
+ * A COMPOSING PARENT MAY RE-STAMP `data-part`. SelectionPreviewRail passes
+ * `data-part="identity-title"` to the Text it composes, and the child's own
+ * `root` stamp loses. So these rules anchor on the CLASS, never on the part:
+ * a component that can be composed must not require a `data-part` it does not
+ * control. The class is repeated to hold the specificity the part used to buy.
+ *
+ * Rustic Typography skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE: all four exports (Heading, Text, Paragraph, Link) share the pair
+ * `rottay-typography rottay-typography--rustic` + `data-part='root'` +
+ * `data-color`, because all four read the SAME COLOR_MAP lookup. The bare
+ * `rottay-heading` / `rottay-text` / `rottay-paragraph` / `rottay-link` names
+ * rustic already stamps are NOT used as the scope: `rottay-link` is reserved by
+ * navigation's shipped Link skin (`rottay-link-shell`), and a scope class must
+ * name this component, not a shared word. The pair is grep-verified free across
+ * CSS and CSS-in-JS.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and beats preflight unlayered
+ * at (0,3,0). Two fallback rules come FIRST because the lookup they replace had
+ * two different fallbacks: Heading/Text/Paragraph fell back to `default`, Link
+ * fell back to `primary` (hence the `--link` modifier class). The per-color
+ * rules below tie with the Link fallback at (0,4,0) and win on source order --
+ * exactly the JS precedence, where an in-map color always beat the `||`. Values
+ * transcribed verbatim from COLOR_MAP in `Typography.types.ts`.
+ */
+
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic {
+  color: var(--ds-color-text-primary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--link[data-part='root'] {
+  color: var(--ds-color-primary-500);
+}
+
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='default'] {
+  color: var(--ds-color-text-primary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='secondary'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='tertiary'] {
+  color: var(--ds-color-text-tertiary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='muted'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='subtle'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='inherit'] {
+  color: inherit;
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='primary'] {
+  color: var(--ds-color-primary-500);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='success'] {
+  color: var(--ds-color-success-500);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='warning'] {
+  color: var(--ds-color-warning-500);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='error'] {
+  color: var(--ds-color-error-500);
+}

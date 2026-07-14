@@ -79,12 +79,11 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
     top: `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
     bottom: pending ? '40px' : `calc(${TIMELINE_SIZE_MAP.dotSize} / 2)`,
     width: TIMELINE_SIZE_MAP.lineWidth,
-    backgroundColor: 'var(--ds-timeline-line-color, #e8e8e8)',
   };
 
   return (
     <div
-      className={`rottay-timeline ${className}`}
+      className={`rottay-timeline rottay-timeline--rustic ${className}`}
       data-part="root"
       style={containerStyle}
       role="list"
@@ -115,23 +114,21 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
           ...itemProps.style,
         };
 
-        // When a custom dot element is supplied, we make the default circle
-        // transparent so the custom content shows through without overlap.
-        // The boxShadow technique creates a coloured ring without adding to layout.
+        // An item's colour can be any CSS colour string (TIMELINE_COLOR_MAP falls
+        // through to the raw value), so the fill rides a custom property rather
+        // than an enumerable attribute. `data-custom-dot` carries the branch that
+        // clears the default circle when the caller supplies its own dot element.
         const dotStyle: React.CSSProperties = {
           position: 'absolute',
           left: `calc(-1 * ${TIMELINE_SIZE_MAP.dotOffset})`,
           top: '4px',
           width: TIMELINE_SIZE_MAP.dotSize,
           height: TIMELINE_SIZE_MAP.dotSize,
-          borderRadius: '50%',
-          backgroundColor: itemProps.dot ? 'transparent' : colorValue,
-          border: itemProps.dot ? 'none' : `${TIMELINE_SIZE_MAP.dotBorderWidth} solid white`,
-          boxShadow: itemProps.dot ? 'none' : `0 0 0 ${TIMELINE_SIZE_MAP.dotBorderWidth} ${colorValue}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-        };
+          '--ds-timeline-dot-color': colorValue,
+        } as React.CSSProperties;
 
         return (
           <div
@@ -144,13 +141,18 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
             role="listitem"
           >
             {/* Dot */}
-            <div style={dotStyle} data-part="dot" aria-hidden="true">
+            <div
+              style={dotStyle}
+              data-part="dot"
+              data-custom-dot={itemProps.dot ? 'true' : 'false'}
+              aria-hidden="true"
+            >
               {itemProps.dot}
             </div>
 
             {/* Label */}
             {itemProps.label && (
-              <div data-part="label" style={{ color: 'var(--ds-timeline-label-color, #999)', fontSize: 'var(--ds-timeline-label-font-size, 12px)', marginBottom: '4px' }}>
+              <div data-part="label" style={{ fontSize: 'var(--ds-timeline-label-font-size, 12px)', marginBottom: '4px' }}>
                 {itemProps.label}
               </div>
             )}
@@ -180,15 +182,13 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
               top: '4px',
               width: TIMELINE_SIZE_MAP.dotSize,
               height: TIMELINE_SIZE_MAP.dotSize,
-              borderRadius: '50%',
-              backgroundColor: 'var(--ds-timeline-pending-dot-color, #e8e8e8)',
               animation: 'rottay-timeline-pulse 1.5s ease-in-out infinite',
             }}
             aria-hidden="true"
           >
             {pendingDot}
           </div>
-          <div data-part="body" style={{ color: 'var(--ds-timeline-pending-color, #999)' }}>{pending}</div>
+          <div data-part="body">{pending}</div>
         </div>
       )}
 

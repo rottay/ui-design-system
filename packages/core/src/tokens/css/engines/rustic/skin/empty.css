@@ -1,0 +1,22 @@
+/**
+ * Rustic Empty skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks
+ * preflight and still yields to the caller's inline `style`.
+ *
+ * SCOPE is the root's own `rottay-empty rottay-empty--rustic` pair. Bare
+ * `rottay-empty` carries a live bridge rule (engines/modern/theme.css:835, ungated
+ * by engine) whose root `color` reaches this engine too and is inherited by the
+ * footer slot; the root is neither re-anchored nor re-coloured here.
+ *
+ * The CHILD combinator is required: `data-part` is a shared vocabulary and the
+ * `children` footer slot holds consumer components that stamp their own parts.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and wins unlayered at (0,3,0).
+ * Value transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+.rottay-empty.rottay-empty--rustic > [data-part='description'] {
+  color: var(--ds-empty-description-color, var(--ds-color-text-tertiary, rgba(0, 0, 0, 0.25)));
+}

@@ -91,6 +91,8 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
   const radiusClass = RADIUS_CLASS_MAP[radius] || RADIUS_CLASS_MAP.none;
 
   const containerClasses = [
+    'rottay-image',
+    'rottay-image--modern',
     'relative',
     'inline-block',
     'overflow-hidden',
@@ -131,16 +133,14 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
     width: typeof width === 'number' ? `${width}px` : width || 'auto',
     height: typeof height === 'number' ? `${height}px` : height || 'auto',
     aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
-    ...(bordered && { borderColor: 'var(--ds-color-border)' }),
-    ...(shadow && { boxShadow: 'var(--ds-elevation-2)' }),
     ...style,
   };
 
-  // Inline SVG used when no consumer fallback is provided and the image fails
+  // Inline SVG used when no consumer fallback is provided and the image fails.
+  // `fill="currentColor"` resolves against the fallback panel's own colour.
   const DefaultFallbackIcon = () => (
     <svg
       className="w-12 h-12"
-      style={{ color: 'var(--ds-color-text-secondary)' }}
       viewBox="0 0 48 48"
       fill="none"
       aria-hidden="true"
@@ -171,10 +171,9 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
         <div
           data-part="placeholder"
           className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
-          style={{ background: 'var(--ds-surface-inset)' }}
         >
           {placeholder || (
-            <div className="animate-pulse w-full h-full" style={{ background: 'var(--ds-surface-panel)' }} />
+            <div className="rottay-image__pulse animate-pulse w-full h-full" />
           )}
         </div>
       )}
@@ -184,7 +183,6 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
         <div
           data-part="fallback"
           className={`absolute inset-0 flex items-center justify-center ${radiusClass}`}
-          style={{ background: 'var(--ds-surface-inset)', color: 'var(--ds-color-text-secondary)' }}
         >
           {fallback || <DefaultFallbackIcon />}
         </div>
@@ -206,14 +204,14 @@ export default function ModernImage(props: ImageProps): React.ReactElement {
 
       {/* Hover Overlay */}
       {hoverOverlay && isHovered && (
-        <div data-part="hover-overlay" className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${radiusClass}`} style={{ background: 'var(--ds-color-alpha-black-40)' }}>
+        <div data-part="hover-overlay" className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${radiusClass}`}>
           {hoverOverlay}
         </div>
       )}
 
       {/* Zoom indicator for zoomable images */}
       {zoomable && isHovered && (
-        <div data-part="zoom-indicator" className="absolute bottom-2 right-2 p-1.5 rounded-full" style={{ background: 'var(--ds-color-alpha-black-50)', color: 'var(--ds-color-white)' }}>
+        <div data-part="zoom-indicator" className="absolute bottom-2 right-2 p-1.5 rounded-full">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7" />
           </svg>

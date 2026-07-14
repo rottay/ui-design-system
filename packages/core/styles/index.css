@@ -13999,6 +13999,72 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   background-image: none;
 }
 
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — everything the ARC-07 migration left inline: the
+ * loading state, and the header/body/actions text and rules.
+ *
+ * THE LOADING ROOT HAS NO `data-part`. It is a separate early return that reuses
+ * the class list but never spreads `partAttributes` — so none of the variant, tone
+ * or hover rules above have ever painted it, and none of them start now.
+ * `:not([data-part='root'])` is how the two roots tell each other apart, and it is
+ * load-bearing: `data-part='cover'` names the loading PLACEHOLDER in one render
+ * path and the real cover WRAPPER in the other, and only the placeholder is filled.
+ *
+ * The `:not(.rottay-card-header)` guard on the header is equally load-bearing.
+ * `Card.Header` is a compound a caller can drop into `children`, where it lands as
+ * a direct child of `[data-part='body']` — exactly where this engine renders its
+ * OWN header. Both stamp `data-part='header'` and `data-part='title'`, and their
+ * token fallback chains differ, so without the guard this rule would repaint the
+ * compound. The compound has its own file: components/skin/card-compounds.css.
+ *
+ * SPECIFICITY (P-48): the header and actions rules carry a border colour and must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1); their selector
+ * chains are far past it. They stay SHORTHANDS because preflight zeroes
+ * `border-width` on every element.
+ * ======================================================================== */
+
+/* ---- loading: the cover placeholder (a fill the real cover wrapper never has) ---- */
+.ds-card.ds-card--modern:not([data-part='root']) > [data-part='cover'] {
+  background-color: var(--ds-surface-inset);
+}
+
+/* ---- loading: the four skeleton bars share one fill and one radius; only their
+        widths and heights differ, and those stay inline ---- */
+.ds-card.ds-card--modern:not([data-part='root']) [data-part='skeleton'] [data-part='skeleton-bar'] {
+  background-color: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+/* ---- loading: the frosted spinner scrim ---- */
+.ds-card.ds-card--modern:not([data-part='root']) [data-part='loading-overlay'] {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background-color: color-mix(in srgb, var(--ds-surface-card) 60%, transparent);
+  border-radius: inherit;
+}
+
+/* ---- body ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
+  color: var(--ds-card-body-color, inherit);
+}
+
+/* ---- this engine's OWN header (never the Card.Header compound) ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header)[data-divider='true'] {
+  border-bottom: 1px solid var(--ds-card-header-border, var(--ds-color-border));
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='title'] {
+  color: var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)));
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='description'] {
+  color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
+}
+
+/* ---- actions rail ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
+  border-top: 1px solid var(--ds-card-footer-border, var(--ds-color-border));
+  background-color: var(--ds-card-footer-bg, transparent);
+}
+
 /**
  * Rustic Card skin (WO-ARC-07).
  *
@@ -14104,6 +14170,64 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 .rottay-card.rottay-card--rustic[data-part='root'][data-loading='true'] {
   opacity: 0.7;
   pointer-events: none;
+}
+
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — everything the ARC-07 migration left inline: the
+ * header and actions rules, the description ink, and the loading scrim.
+ *
+ * Unlike the modern engine, this one keeps ONE root: the loading overlay renders
+ * inside the normal tree rather than from an early return, so every rule below can
+ * hang off `[data-part='root']`. The header and the actions rail are DIRECT children
+ * of that root (the body is their sibling, not their parent), which is why no
+ * `:not(.rottay-card-header)` guard is needed here: a `Card.Header` compound dropped
+ * into `children` lands inside `[data-part='body']`, and the child combinator below
+ * cannot reach it.
+ *
+ * SPECIFICITY (P-48): every rule carrying a border colour must clear the tenant's
+ * unlayered `*` border-color floor at (0,3,1); the repeated `data-part` takes them
+ * past it. The `border-bottom: none` reset is colour-free and exempt. Each frame
+ * stays a SHORTHAND because preflight zeroes `border-width` on every element.
+ *
+ * KEYFRAME: the per-mount `<style>` injecting `rottay-rustic-card-spin` is replaced
+ * by an engine-namespaced copy here, so it cannot collide with another engine's skin
+ * in the same tenant bundle.
+ *
+ * The loading scrim's `rgba(255, 255, 255, 0.6)` is a white-only literal that does
+ * not react to dark tenants — the modern engine's equivalent is a theme-aware
+ * `color-mix`. That is a shipped defect, reproduced verbatim here: changing it would
+ * be a repaint, not a migration.
+ * ======================================================================== */
+
+/* ---- header ---- */
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='header'][data-part='header'] {
+  border-bottom: none;
+}
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='header'][data-part='header'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-card-header-border, #e5e5e5);
+}
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='header'] > div > [data-part='description'] {
+  color: var(--ds-card-subtitle-color, #8c8c8c);
+}
+
+/* ---- actions rail ---- */
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='actions'][data-part='actions'] {
+  border-top: 1px solid var(--ds-card-footer-border, #e5e5e5);
+}
+
+/* ---- loading scrim + spinner ---- */
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='loading-overlay'] {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(2px);
+}
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='loading-overlay'] > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-neutral-200, #e0e0e0);
+  border-top-color: var(--ds-color-primary-500, #1890ff);
+  border-radius: 50%;
+}
+
+@keyframes ds-card-spin-rustic {
+  to { transform: rotate(360deg); }
 }
 
 /**
@@ -14534,6 +14658,149 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));
 }
 
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — the rest of the surface. The `transform` rules
+ * above were the whole skin until now; fill, ink, frame and the bordered ring
+ * were still inline.
+ *
+ * SPECIFICITY (P-48): every rule below paints a border colour (`transparent` is
+ * a colour — only `none`/`0`/`unset`/`inherit` are exempt resets), so each must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1). The repeated
+ * `[data-part='root']` buys the fourth unit. Each frame stays a SHORTHAND
+ * because preflight zeroes `border-width` on every element.
+ *
+ * The variant rule alone carries the SOLID style, which is what the object's
+ * `switch` fell through to (`case 'solid': default:`); `soft`, `ghost` and
+ * `outline` are qualified overrides that outrank it.
+ *
+ * The indicator render is the only one that rounds fully. It is identified by
+ * `[data-position]`, which only that render path stamps.
+ * ======================================================================== */
+
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-radius-sm);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-position] {
+  border-radius: var(--ds-radius-full);
+}
+
+/* ---- bordered: a ring the surface colour, so the badge reads as lifted off
+        whatever it sits on ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-bordered='true'] {
+  box-shadow: 0 0 0 2px var(--ds-surface-card);
+}
+
+/* ---- solid (the switch's default) ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'] {
+  background-color: var(--ds-color-neutral-200);
+  color: var(--ds-color-text-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'] {
+  background-color: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'] {
+  background-color: var(--ds-color-secondary);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'] {
+  background-color: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'] {
+  background-color: var(--ds-color-warning);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'] {
+  background-color: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'] {
+  background-color: var(--ds-color-info);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid transparent;
+}
+
+/* ---- soft and ghost share one branch of the switch ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-secondary);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-primary-10);
+  color: var(--ds-color-primary);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-secondary-10);
+  color: var(--ds-color-secondary-600);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-success-10);
+  color: var(--ds-color-success-700);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-warning-10);
+  color: var(--ds-color-warning-700);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-error-10);
+  color: var(--ds-color-error-700);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='soft'],
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='ghost'] {
+  background-color: var(--ds-color-alpha-info-10);
+  color: var(--ds-color-info-700);
+}
+
+/* ---- outline: no fill, and the frame carries the hue ---- */
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='default'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-text-secondary);
+  border: 1px solid var(--ds-color-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='primary'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-primary);
+  border: 1px solid var(--ds-color-primary-400);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-secondary-600);
+  border: 1px solid var(--ds-color-secondary-300);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='success'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-success-700);
+  border: 1px solid var(--ds-color-success-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='warning'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-warning-700);
+  border: 1px solid var(--ds-color-warning-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='error'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-error-700);
+  border: 1px solid var(--ds-color-error-border);
+}
+.rottay-badge.rottay-badge--modern[data-part='root'][data-part='root'][data-variant='info'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-color-info-700);
+  border: 1px solid var(--ds-color-info-border);
+}
+
 /**
  * Rustic Badge skin (P-43 follow-up).
  *
@@ -14556,6 +14823,68 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 .rottay-badge.rottay-badge--rustic[data-interactive='true']:hover {
   transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));
+}
+
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — the rest of the surface. The `transform` rules
+ * above were the whole skin until now.
+ *
+ * This engine already published its fill, ink and radius as per-instance CUSTOM
+ * PROPERTIES (`--ds-badge-bg`, `--ds-badge-color`, `--ds-badge-border-radius`,
+ * set inline from the shared `VARIANT_*_MAP`s in `Badge.types.ts`, which the
+ * classic engine reads too). The rules below consume those properties rather
+ * than restating 21 token names, so the maps stay the single source and no
+ * value can drift between the two. `--ds-badge-soft-bg` / `--ds-badge-soft-color`
+ * join them on the same terms, for the one branch that had no property yet.
+ *
+ * SPECIFICITY (P-48): every rule carrying a border colour must clear the
+ * tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` buys the fourth unit. The frames stay SHORTHANDS because
+ * preflight zeroes `border-width` on every element.
+ *
+ * OUTLINE OUTRANKS BORDERED, and that is the point of its doubled attribute:
+ * the object spread `getStyleVariation()` LAST, so an outline badge that is also
+ * `bordered` took outline's 1px hue frame, not the bordered 2px surface frame.
+ * Order said that; here the selector does.
+ * ======================================================================== */
+
+/* ---- base: the switch's `default` branch (solid) plus the resting frame ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-badge-border-radius);
+  border: none;
+  box-shadow: none;
+  background-color: var(--ds-badge-bg);
+  color: var(--ds-badge-color);
+}
+
+/* ---- bordered: a surface-coloured frame plus a 1px ring in the badge's own hue ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-bordered='true'] {
+  border: var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff);
+  box-shadow: 0 0 0 1px var(--ds-badge-bg);
+}
+
+/* ---- soft ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-badge-style='soft'] {
+  background-color: var(--ds-badge-soft-bg);
+  color: var(--ds-badge-soft-color);
+}
+
+/* ---- ghost: no fill, ink in the badge's own hue ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-badge-style='ghost'] {
+  background-color: transparent;
+  color: var(--ds-badge-bg);
+}
+
+/* ---- outline: ghost plus a frame, and it wins the frame from `bordered` ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-badge-style='outline'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-badge-bg);
+  border: 1px solid var(--ds-badge-bg);
+}
+
+@keyframes ds-badge-pulse-rustic {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
 }
 
 /**
@@ -27490,6 +27819,3166 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .rottay-stepper-content[data-part='panel'][data-animation='slide'][data-state='exiting'][data-direction='backward'] {
   transform: translateX(20px);
+}
+
+
+/* WO-SKIN-05: the display + layout families paint from unlayered skins. */
+/**
+ * Modern Avatar skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * THE P-75 FREEZE. `[data-tenant] .avatar` (engines/modern/theme.css:1069) forces
+ * `width: 40px; height: 40px; overflow: hidden` on the ROOT, which wears DaisyUI's
+ * structural `avatar` class, while the real size token sits inline on the `mask`
+ * CHILD. Nothing contests the root, so the `size` prop does not work in this engine:
+ * children above 40px are clipped, children below it are haloed by the root's own
+ * painted disc. That is measured, shipped behaviour, and this file PRESERVES it —
+ * no rule here sizes the root, touches its overflow, or removes the `avatar` class.
+ * Correcting it is P-75's own work order, with its own baselines. A skin that
+ * "helpfully" sized the root would be a regression wearing a migration's clothes.
+ *
+ * SCOPE ROOT gains `rottay-avatar rottay-avatar--modern` (fresh mints, grep-verified
+ * free across CSS and CSS-in-JS). Adding classnames cannot disturb the freeze: the
+ * `.avatar` rule keeps matching, and nothing targets the new names but this file.
+ * The mint is `rottay-avatar`, never `ds-avatar` — that one is claimed by
+ * `runtime/personality.css:522` and `engines/rustic/theme.css:804`, and taking it
+ * would hand this component two rule sets it has never worn.
+ *
+ * SPECIFICITY (P-48): the status dot's `border` shorthand carries a real colour and
+ * must clear the tenant's unlayered `*` border-color floor at (0,3,1); its repeated
+ * `data-part` buys the fourth unit. It stays a SHORTHAND because preflight zeroes
+ * `border-width` on every element.
+ *
+ * `--ds-avatar-custom-bg` is the hatch for the `backgroundColor` PROP, a caller
+ * string that cannot be enumerated. It is read as the FIRST term of the `background`
+ * SHORTHAND, not as a `background-color` longhand: the gradient variant's fill is a
+ * background-IMAGE, and the object's `background: backgroundColor` wiped it. A
+ * longhand would have left the gradient painting over the caller's colour.
+ *
+ * The `textColor` PROP stays inline (standing law: text colour painted from a prop
+ * never moves to CSS). It is a caller's value, like `style`, and it outranks every
+ * rule below exactly as it always did.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- fallback fill + ink. The bare rule carries `default`, which is also the
+        lookup's fallback for an unrecognised variant. ---- */
+.rottay-avatar.rottay-avatar--modern > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-surface-panel));
+  color: var(--ds-color-text-inverse);
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='primary'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-primary));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='secondary'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-secondary));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='success'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-success));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='warning'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-warning));
+}
+.rottay-avatar.rottay-avatar--modern[data-variant='error'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-color-error));
+}
+
+/* ---- gradient is the only variant that diverges on ink, and the only one that
+        lifts its initials off the fill ---- */
+.rottay-avatar.rottay-avatar--modern[data-variant='gradient'] > [data-part='mask'] > [data-part='fallback'] {
+  background: var(--ds-avatar-custom-bg, linear-gradient(to bottom right, var(--ds-color-primary), var(--ds-color-secondary)));
+  color: var(--ds-avatar-gradient-color);
+  text-shadow: 0 1px 2px color-mix(in srgb, var(--ds-color-black) 15%, transparent);
+}
+
+/* ---- status dot: the frame and the offset are one object for every status ---- */
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-part='status-dot'] {
+  border: var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border);
+  transform: translate(25%, 25%);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='online'] {
+  background-color: var(--ds-avatar-status-online);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='offline'] {
+  background-color: var(--ds-avatar-status-offline);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='away'] {
+  background-color: var(--ds-avatar-status-away);
+}
+.rottay-avatar.rottay-avatar--modern > [data-part='status-dot'][data-status='busy'] {
+  background-color: var(--ds-avatar-status-busy);
+}
+
+/**
+ * Rustic Avatar skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT gains `rottay-avatar rottay-avatar--rustic` (fresh mints, grep-verified
+ * free); this engine published no classname at all. The mint is `rottay-avatar`,
+ * never `ds-avatar`: that name is claimed by `runtime/personality.css:522` and by
+ * `engines/rustic/theme.css:804`, and taking it would hand this component two rule
+ * sets it has never worn.
+ *
+ * P-75 does NOT bite here. This engine has a single DOM level: the element that
+ * carries the size token IS the element DaisyUI's `avatar` class would have
+ * targeted, and it carries no such class. Its root is sized, so its root is
+ * correct — which is precisely why the modern engine's clip is a defect and not a
+ * design. Nothing about that asymmetry changes in this file.
+ *
+ * SPECIFICITY (P-48): every rule carrying a border or outline COLOUR must clear the
+ * tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` buys the fourth unit. The `none` resets are colour-free and
+ * exempt. Each frame stays a SHORTHAND because preflight zeroes `border-width` on
+ * every element.
+ *
+ * The RING is an `outline`, not a border, so it costs no layout — the object said so
+ * and this keeps it. `--ds-avatar-custom-ring` is the hatch for the `ringColor` PROP
+ * (a caller string); `--ds-avatar-custom-bg` is the hatch for `backgroundColor`.
+ * The `textColor` PROP stays inline (standing law: text colour painted from a prop
+ * never moves to CSS) and outranks every `color` below, as it always did.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- shape. `rounded` is the ternary's else-branch, so it is the bare rule. ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-avatar-radius-rounded);
+  border: none;
+  outline: none;
+  outline-offset: 0;
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-shape='circle'] {
+  border-radius: var(--ds-avatar-radius-circle);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-shape='square'] {
+  border-radius: var(--ds-avatar-radius-square);
+}
+
+/* ---- fill + ink per variant. The bare rule carries `default`. ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-default-bg));
+  color: var(--ds-avatar-default-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='primary'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-primary-bg));
+  color: var(--ds-avatar-primary-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='secondary'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-bg));
+  color: var(--ds-avatar-secondary-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='success'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-bg));
+  color: var(--ds-avatar-success-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='warning'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-bg));
+  color: var(--ds-avatar-warning-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='error'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-bg));
+  color: var(--ds-avatar-error-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='gradient'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-gradient-bg));
+  color: var(--ds-avatar-gradient-color);
+}
+
+/* ---- bordered frame ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-bordered='true'] {
+  border: var(--ds-avatar-border-width) solid var(--ds-avatar-border-color);
+}
+
+/* ---- ring: an outline, so it never moves the box ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-ring='true'] {
+  outline: var(--ds-avatar-ring-width) solid var(--ds-avatar-custom-ring, var(--ds-avatar-ring-color));
+  outline-offset: var(--ds-avatar-ring-offset);
+}
+
+/* ---- status dot: the frame, radius and offset are one object for every status ---- */
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-part='status-dot'] {
+  border-radius: 50%;
+  border: var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border);
+  transform: translate(15%, 15%);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='online'] {
+  background-color: var(--ds-avatar-status-online);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='offline'] {
+  background-color: var(--ds-avatar-status-offline);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='away'] {
+  background-color: var(--ds-avatar-status-away);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='busy'] {
+  background-color: var(--ds-avatar-status-busy);
+}
+
+/**
+ * Modern Calendar skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-calendar rottay-calendar--modern` + `data-part` +
+ * `data-mode` (grep-verified free: Calendar was fully greenfield -- no
+ * first-party classname, no theme.css bridge, no personality hook, in either
+ * engine). The engine suffix is load-bearing: rustic carries the same base class
+ * and paints different values.
+ *
+ * HOVER WAS IMPERATIVE. The cells wrote `el.style.background` from
+ * `onMouseEnter`/`onMouseLeave` and cleared it with `''`; the `:hover` rule below
+ * reproduces it, with `:not()` guards standing in for the handlers' own
+ * `!isSelected && !isDisabled` gate. Nav buttons and mode toggles had NO hover in
+ * this engine (rustic's nav buttons do) -- the asymmetry is transcribed, not
+ * levelled.
+ *
+ * BORDER WIDTHS ARE NOT HERE. The today-ring's width comes from the Tailwind
+ * `border` utility, which the component emits ONLY in the today-and-not-selected
+ * state (utilities sort after preflight, so they paint); only the color was ever
+ * inline. The `border: none` on the buttons is a color-free reset (exempt from
+ * the P-48 (0,4,0) floor).
+ *
+ * `>` CHAINS THROUGHOUT: `data-part` is a shared vocabulary and `dateCellRender`
+ * / `monthCellRender` inject arbitrary caller content inside the cells, so a
+ * descendant selector could reach a nested component's own parts.
+ *
+ * SPECIFICITY (P-48): the today-ring's `border-color` clears the tenant's
+ * unlayered (0,3,1) `*` border-color floor at (0,7,0). Values transcribed
+ * verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-calendar.rottay-calendar--modern[data-part='root'] {
+  background: var(--ds-surface-card);
+}
+
+/* ---- header: the four nav arrows and the two mode toggles share one resting
+        surface; only the active toggle diverges. ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'],
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- weekday column headers ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > div > [data-part='weekday-header'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- cells (one rule set serves the month grid and the year grid: their paint
+        is identical, only their geometry differs). ---- */
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-inverse);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border-color: var(--ds-color-primary);
+}
+.rottay-calendar.rottay-calendar--modern[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
+  background: var(--ds-surface-inset);
+}
+
+/**
+ * Rustic Calendar skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-calendar rottay-calendar--rustic` + `data-part` +
+ * `data-mode` (grep-verified free: Calendar was fully greenfield -- no
+ * first-party classname, no theme.css bridge, no personality hook, in either
+ * engine). The engine suffix is load-bearing: modern carries the same base class
+ * and paints different values.
+ *
+ * HOVER WAS REACT STATE. A single `hovered: string | null` was compared against
+ * each element's key and spread into its style object on match; the `:hover`
+ * rules below reproduce all six sites (four nav arrows, day cell, month cell),
+ * with `:not()` guards standing in for the spread's own `!isSelected` /
+ * `!isDisabled` conditions. The mode toggles had no hover state and get none
+ * here.
+ *
+ * BORDER ORDERING mirrors the spread order the style objects had: the cell's
+ * base `border: none` is overridden by the today ring only when the cell is not
+ * selected (the selected spread never re-applied the ring), and the selected
+ * background outranks the base but is disjoint from the hover rule by
+ * construction. `border: none` is a color-free reset (exempt from the P-48
+ * (0,4,0) floor); the mode toggle's and the today ring's real borders clear the
+ * tenant's unlayered (0,3,1) `*` border-color floor at (0,5,0)+.
+ *
+ * `>` CHAINS THROUGHOUT: `data-part` is a shared vocabulary and `dateCellRender`
+ * / `monthCellRender` inject arbitrary caller content inside the cells, so a
+ * descendant selector could reach a nested component's own parts.
+ *
+ * Values transcribed verbatim from the `styles` object in `engines/rustic.tsx`.
+ */
+
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] {
+  background-color: var(--ds-calendar-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-calendar-radius, 8px);
+  box-shadow: var(--ds-calendar-shadow, var(--ds-shadow-md));
+}
+
+/* ---- header: nav arrows (ghost, with hover) + mode toggles (outlined) ---- */
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'] {
+  border: none;
+  background-color: transparent;
+  border-radius: var(--ds-calendar-nav-radius, 4px);
+  color: var(--ds-calendar-nav-color, var(--ds-color-text-secondary));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:hover {
+  background-color: var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'] {
+  border: 1px solid var(--ds-calendar-border, var(--ds-color-border));
+  background-color: var(--ds-calendar-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-calendar-nav-radius, 4px);
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
+  background-color: var(--ds-calendar-primary, var(--ds-color-primary-500));
+  color: var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+  border: 1px solid var(--ds-calendar-primary, var(--ds-color-primary-500));
+}
+
+/* ---- weekday column headers ---- */
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > div > [data-part='weekday-header'] {
+  color: var(--ds-calendar-header-color, var(--ds-color-text-secondary));
+}
+
+/* ---- cells (one rule set serves the month grid and the year grid: their paint
+        is identical, only their geometry differs). ---- */
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  border-radius: var(--ds-calendar-cell-radius, 8px);
+  border: none;
+  background-color: transparent;
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'] {
+  background-color: var(--ds-calendar-primary, var(--ds-color-primary-500));
+  color: var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border: 1px solid var(--ds-calendar-primary, var(--ds-color-primary-500));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
+  background-color: var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)));
+}
+
+/**
+ * Modern Callout skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight/DaisyUI regardless of
+ * specificity. Unlayered outranks both and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT carries `rottay-callout-shell rottay-callout-shell--modern`
+ * alongside the DaisyUI `.alert` class and `data-part='root'` + `data-tone`.
+ * The dedicated `-shell` scope is mandatory: bare `.rottay-alert` /
+ * `.rottay-alert-shell` are Alert's, and a rule anchored on a classname another
+ * component renders repaints that component. `rottay-callout-shell` is
+ * grep-verified free across CSS and CSS-in-JS.
+ *
+ * BORDER CHANNEL: Modern Callout declares no border inline, and DaisyUI's own
+ * `.alert { border-width: var(--border) }` (which outranks preflight) is what
+ * paints this root's border today. This skin therefore declares no border on the
+ * root: a width here would be a border that does not exist today, and a lone
+ * `border-color` longhand would leave DaisyUI's `var(--border)` in charge of the
+ * width. The `border: none` on the close button is a color-free reset (exempt
+ * from the P-48 (0,4,0) border floor).
+ *
+ * SPECIFICITY (P-48): non-border paint beats preflight unlayered at (0,3,0)+.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root surface: per-tone tinted background + matching text color. The
+        unqualified rule carries the info values because the lookup it replaces
+        fell back to info for any unrecognised tone; the three rules below
+        override it. The caller's `style` still wins as inline. ---- */
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  color: var(--ds-color-info);
+}
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 10%, transparent);
+  color: var(--ds-color-warning);
+}
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 10%, transparent);
+  color: var(--ds-color-error);
+}
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'][data-tone='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 10%, transparent);
+  color: var(--ds-color-success);
+}
+
+/* ---- close button: ghost circle. Child combinator keeps the rule off any
+        `data-part='close-button'` a caller's content may bring. ---- */
+.rottay-callout-shell.rottay-callout-shell--modern[data-part='root'] > [data-part='close-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/**
+ * Rustic Callout skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-callout-shell rottay-callout-shell--rustic` +
+ * `data-part='root'` + `data-tone` (alongside the untargeted legacy
+ * `rottay-callout-rustic` / `rottay-callout--<variant>` names). The `-shell`
+ * scope is mandatory: bare `.rottay-alert` / `.rottay-alert-shell` belong to
+ * Alert, and a rule anchored on a classname another component renders repaints
+ * that component. Rustic's root carries no DaisyUI `alert` class, so nothing
+ * external composes onto its border channel.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element. The left accent is a `border-left` SHORTHAND
+ * (as it is inline) so width, style and color land atomically; it therefore
+ * reaches (0,4,0) via the two shell classes + `[data-part='root']` +
+ * `[data-tone]`. The close button's `border: none` is a color-free reset
+ * (exempt). Values transcribed verbatim from `engines/rustic.tsx` /
+ * `CALLOUT_COLORS`.
+ */
+
+/* ---- root: tone-independent radius, then per-tone surface, left accent and
+        text color (was the inline style object + CALLOUT_COLORS lookup). ---- */
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'] {
+  border-radius: 8px;
+}
+
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] {
+  background-color: var(--ds-color-info-50, #eff6ff);
+  border-left: 4px solid var(--ds-color-info-500, #3b82f6);
+  color: var(--ds-color-info-800, #1e40af);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] {
+  background-color: var(--ds-color-warning-50, #fffbeb);
+  border-left: 4px solid var(--ds-color-warning-500, #f59e0b);
+  color: var(--ds-color-warning-800, #92400e);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] {
+  background-color: var(--ds-color-error-50, #fef2f2);
+  border-left: 4px solid var(--ds-color-error-500, #ef4444);
+  color: var(--ds-color-error-800, #991b1b);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] {
+  background-color: var(--ds-color-success-50, #f0fdf4);
+  border-left: 4px solid var(--ds-color-success-500, #22c55e);
+  color: var(--ds-color-success-800, #166534);
+}
+
+/* ---- icon: the per-tone accent color. Child combinator keeps the rule off any
+        `data-part='icon'` the caller's own content may bring. ---- */
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] > [data-part='icon'] {
+  color: var(--ds-color-info-500, #3b82f6);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] > [data-part='icon'] {
+  color: var(--ds-color-warning-500, #f59e0b);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] > [data-part='icon'] {
+  color: var(--ds-color-error-500, #ef4444);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] > [data-part='icon'] {
+  color: var(--ds-color-success-500, #22c55e);
+}
+
+/* ---- close button: transparent, borderless, per-tone text color (opacity +
+        cursor stay inline). `border: none` is a color-free reset (exempt). ---- */
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'] > [data-part='close-button'] {
+  border: none;
+  background: transparent;
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] > [data-part='close-button'] {
+  color: var(--ds-color-info-800, #1e40af);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] > [data-part='close-button'] {
+  color: var(--ds-color-warning-800, #92400e);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] > [data-part='close-button'] {
+  color: var(--ds-color-error-800, #991b1b);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] > [data-part='close-button'] {
+  color: var(--ds-color-success-800, #166534);
+}
+
+/**
+ * Modern Carousel skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-carousel rottay-carousel--modern` (fresh mints,
+ * grep-verified free) alongside DaisyUI's structural `carousel` class, which is
+ * left in place: `engines/modern/theme.css:798` paints `border-radius` and
+ * `overflow` through it uncontested, and border-radius is a preflight-SAFE channel,
+ * so dropping the class would remove a radius that renders today.
+ *
+ * Every rule uses a CHILD combinator. `data-part` is a shared vocabulary and each
+ * slide holds arbitrary consumer content, which may itself be a component that
+ * stamps `slide`, `arrow` or `dot`.
+ *
+ * SPECIFICITY (P-48): the arrow's `border` shorthand carries a real colour, so it
+ * must clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='arrow']` buys the fourth unit. It stays a SHORTHAND because preflight
+ * zeroes `border-width` on every element.
+ *
+ * The slide offset is arithmetic over the live slide index (`(index - currentSlide)
+ * * 100%`), so it cannot be enumerated as a rule; it rides the
+ * `--ds-carousel-slide-transform` custom property, set inline per slide. Its
+ * fallback is `none`, the same value the fade branch produces.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-carousel.rottay-carousel--modern > [data-part='track'] > [data-part='slide'] {
+  transform: var(--ds-carousel-slide-transform, none);
+}
+
+/* ---- arrows: both buttons carried the same object ---- */
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-part='arrow'] {
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: 1px solid var(--ds-color-border);
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* ---- dots ---- */
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
+  background: var(--ds-color-primary);
+}
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
+  background: var(--ds-surface-panel);
+}
+
+/**
+ * Rustic Carousel skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-carousel rottay-carousel--rustic` (fresh mints,
+ * grep-verified free). This engine renders no DaisyUI class, so it takes none of
+ * the `.carousel` chrome the modern engine's theme bridge paints — an asymmetry
+ * that is preserved, not unified.
+ *
+ * Every rule uses a CHILD combinator: `data-part` is a shared vocabulary and each
+ * slide holds arbitrary consumer content.
+ *
+ * SPECIFICITY (P-48): the arrow's `border` shorthand carries a real colour and must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='arrow']` buys the fourth unit. The dot's `border: none` is a
+ * colour-free reset and is exempt.
+ *
+ * Two transforms cannot be enumerated as rules and ride custom properties set
+ * inline: the slide offset is arithmetic over the live slide index, and the dots
+ * rail's centring transform is one branch of a positioning switch whose four other
+ * declarations (top/left/bottom/right/flex-direction) are not paint and stay inline
+ * with it. Splitting the transform away from its own switch would leave the two
+ * halves of one decision in two files.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+.rottay-carousel.rottay-carousel--rustic > [data-part='track'] > [data-part='slide'] {
+  transform: var(--ds-carousel-slide-transform, none);
+}
+
+/* ---- arrows: one shared object, positioned per side by an inline left/right ---- */
+.rottay-carousel.rottay-carousel--rustic > [data-part='arrow'][data-part='arrow'] {
+  transform: translateY(-50%);
+  background: var(--ds-carousel-arrow-bg, rgba(255, 255, 255, 0.9));
+  border: 1px solid var(--ds-carousel-arrow-border, #ddd);
+  border-radius: var(--ds-carousel-arrow-radius, 50%);
+}
+
+/* ---- dots rail ---- */
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] {
+  transform: var(--ds-carousel-dots-transform);
+}
+
+/* ---- dots ---- */
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'] {
+  border-radius: var(--ds-carousel-dot-radius, 4px);
+  border: none;
+}
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
+  background: var(--ds-carousel-dot-active-bg, var(--ds-color-primary-500, #1890ff));
+}
+.rottay-carousel.rottay-carousel--rustic > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
+  background: var(--ds-carousel-dot-bg, #d9d9d9);
+}
+
+/**
+ * Modern Collapse skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT keeps the component's existing bare `rottay-collapse` class
+ * (plus conditional `--ghost`/`--borderless` modifiers) -- this is the SAME
+ * class `engines/modern/theme.css:654-671`'s live bridge already targets on
+ * `border-color`/`border-radius` (a real, measured 14px radius today per the
+ * WO-SKIN-05 orchestrator adjudication A1). An unlayered rule anchored to
+ * that class outranks the layered bridge outright, so nothing here needs to
+ * out-fight it; it simply wins going forward the same way every other
+ * unlayered skin already does. Rustic's Collapse could NOT reuse this class
+ * for the identical reason in reverse (it would hand rustic a radius it
+ * never had) -- see `engines/rustic/skin/collapse.css`.
+ *
+ * SPECIFICITY (P-48): the only border-color-bearing rule here is the
+ * bordered panel (below) -- the two root classes + `[data-part='root']`
+ * already reach (0,3,0), and the descendant `[data-part='panel']` repeated
+ * buys the 4th unit. Every other declaration (background, box-shadow,
+ * border-radius, color, transform) is non-border and clears preflight
+ * unlayered at (0,3,0) or better. Values transcribed verbatim from
+ * `engines/modern.tsx`.
+ */
+
+/* ---- arrow: rotation (was the inline `transform` ternary on `isActive`). ---- */
+.rottay-collapse[data-part='root'] [data-part='arrow'] {
+  transform: rotate(0deg);
+}
+.rottay-collapse[data-part='root'] [data-part='arrow'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+/* ---- panel: border-radius + surface (was the Panel root's inline style).
+        Ghost overrides both to its own token pair; the extra
+        `.rottay-collapse--ghost` class naturally out-specifies the default
+        rule below, no guard needed since only two mutually distinct states
+        exist. ---- */
+.rottay-collapse[data-part='root'] [data-part='panel'] {
+  border-radius: var(--ds-collapse-root-default-idle-border-radius, var(--ds-radius-md));
+  background: var(--ds-collapse-root-default-idle-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-collapse-root-default-idle-shadow, none);
+}
+.rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='panel'] {
+  border-radius: var(--ds-collapse-root-ghost-idle-border-radius, 0);
+  background: var(--ds-collapse-root-ghost-idle-bg, transparent);
+  box-shadow: var(--ds-collapse-root-ghost-idle-shadow, none);
+}
+
+/* ---- panel: border, bordered case only (was the `context.bordered` spread
+        -- when not bordered, no border key was ever set, so no rule fires
+        for that state). `:not(.rottay-collapse--borderless)` is both the
+        gate for `bordered` (the two are complementary, see
+        `Collapse.types.ts`'s COLLAPSE_DEFAULTS) and the specificity unit
+        that clears the (0,4,0) border-color floor. ---- */
+.rottay-collapse:not(.rottay-collapse--borderless)[data-part='root'] [data-part='panel'][data-part='panel'] {
+  border: var(--ds-collapse-root-default-idle-border-width, 1px) var(--ds-collapse-root-default-idle-border-style, solid) var(--ds-collapse-root-default-idle-border-color, var(--ds-color-border));
+}
+
+/* ---- header: color, 3-way priority (disabled > expanded > idle). Mutually
+        exclusive `:not()` guards reproduce the JS ternary's priority order
+        without relying on cascade position. ---- */
+.rottay-collapse[data-part='root'] [data-part='header'] {
+  color: var(--ds-collapse-header-default-idle-color, inherit);
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-expanded='true']:not([data-disabled='true']) {
+  color: var(--ds-collapse-header-default-expanded-color, var(--ds-color-primary));
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
+  color: var(--ds-collapse-header-default-disabled-color, var(--ds-color-text-disabled));
+}
+
+/* ---- header: background, 4-way priority (disabled > expanded > ghost > idle).
+        Same mutually-exclusive-guard idiom; the ghost rule additionally
+        excludes expanded/disabled so an active ghost panel resolves to the
+        expanded rule instead, matching the JS ternary's nesting order. ---- */
+.rottay-collapse[data-part='root'] [data-part='header'] {
+  background: var(--ds-collapse-header-default-idle-bg, transparent);
+}
+.rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='header']:not([data-expanded='true']):not([data-disabled='true']) {
+  background: var(--ds-collapse-header-ghost-idle-bg, transparent);
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-expanded='true']:not([data-disabled='true']) {
+  background: var(--ds-collapse-header-default-expanded-bg, transparent);
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
+  background: var(--ds-collapse-header-default-disabled-bg, transparent);
+}
+
+/* ---- content-inner: color (was a STATIC, unconditional inline value, no
+        ternary in the source) + background (was the `context.ghost`
+        ternary). ---- */
+.rottay-collapse[data-part='root'] [data-part='content-inner'] {
+  color: var(--ds-collapse-content-default-idle-color, inherit);
+  background: var(--ds-collapse-content-default-idle-bg, transparent);
+}
+.rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='content-inner'] {
+  background: var(--ds-collapse-content-ghost-idle-bg, transparent);
+}
+
+/**
+ * Rustic Collapse skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE ROOT mints `rottay-collapse-shell rottay-collapse-shell--rustic`
+ * (grep-verified free across CSS and CSS-in-JS). Per the WO-SKIN-05
+ * orchestrator adjudication A1, rustic must NOT reuse modern's bare
+ * `rottay-collapse` -- `engines/modern/theme.css:654-671` declares a live
+ * bridge on that exact classname with NO `[data-engine]` gate, on the
+ * preflight-SAFE `border-radius` channel (measured 14px). Reusing it here
+ * would hand rustic a radius it has never painted. `rottay-collapse-shell`
+ * mirrors the `rottay-alert-shell`/`rottay-progress-shell` precedent.
+ *
+ * `context.ghost`/`context.bordered` have NO DOM signal on this engine
+ * (rustic's root/panel carry no ghost/bordered class or attribute, unlike
+ * modern's `--ghost`/`--borderless` root modifiers) -- inventing one would
+ * be new `data-*` anatomy the WO-SKIN-05 pre-step did not stamp. The border
+ * channel (the one place ghost truly changes the painted value: `none` vs a
+ * real bordered color) rides the `--ds-collapse-panel-border` custom-property
+ * hatch instead, set inline to the exact resolved value every render; this
+ * skin only supplies the `var()` fallback. Background does NOT need the
+ * hatch: `styles.panel` sets no background at all (bordered case) and
+ * `styles.panelGhost.backgroundColor` is `'transparent'` (ghost case) --
+ * both branches resolve to the same rendered value, so one unconditional
+ * `transparent` rule reproduces both without any conditional at all.
+ *
+ * SPECIFICITY (P-48): the border rule paints a real color in the bordered
+ * branch and must reach (0,4,0) -- the two root classes + `[data-part='root']`
+ * already give (0,3,0), and the descendant `[data-part='panel']` repeated
+ * buys the 4th unit. Every other declaration here is non-border. Values
+ * transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- panel: border-radius (was styles.panel.borderRadius, unconditional --
+        panelGhost never overrides it) + background (was styles.panel's
+        absent backgroundColor / styles.panelGhost's 'transparent': the same
+        rendered value either way, see header). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='panel'] {
+  border-radius: var(--ds-collapse-radius, 12px);
+  background-color: transparent;
+}
+
+/* ---- panel: border (was styles.panel.border / styles.panelGhost's 'none'
+        override, driven by `context.ghost` -- no DOM signal, so the resolved
+        value rides `--ds-collapse-panel-border`, always set inline). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='panel'][data-part='panel'] {
+  border: var(--ds-collapse-panel-border, 1px solid var(--ds-collapse-border-color, var(--ds-color-neutral-300, #d9d9d9)));
+}
+
+/* ---- header: background (was styles.header.backgroundColor, STATIC --
+        no ghost/disabled/active branching on this engine). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='header'] {
+  background-color: var(--ds-collapse-header-bg, var(--ds-color-neutral-50, #fafafa));
+}
+
+/* ---- arrow: rotation (was styles.arrow / styles.arrowActive's `transform`,
+        driven by `isActive`, now keyed on `data-expanded`). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='arrow'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+/* ---- content-inner: background (was styles.contentInner.backgroundColor,
+        STATIC -- no ghost branching on this engine). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='content-inner'] {
+  background-color: var(--ds-collapse-content-bg, #fff);
+}
+
+/**
+ * Modern Descriptions skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style` --
+ * which is what keeps the `styles.label` / `styles.content` / per-item override
+ * props working: they land inline and therefore still beat these rules.
+ *
+ * SCOPE ROOT carries `rottay-descriptions rottay-descriptions--modern` +
+ * `data-part='root'` + `data-engine` + `data-bordered`. The engine suffix is
+ * load-bearing: rustic carries the same base class, and the two engines paint
+ * different values.
+ *
+ * CHILD COMBINATORS THROUGHOUT. `data-part` is a shared vocabulary, and this
+ * component renders arbitrary caller content inside `[data-part='content']` --
+ * a descendant selector would reach a `data-part='label'` belonging to whatever
+ * component the caller nested there. The DOM chain root > body > rows > row >
+ * label|content is fixed, so `>` costs nothing and closes that hole.
+ *
+ * BORDER WIDTHS ARE NOT HERE. Bordered mode gets its width from the Tailwind
+ * `border` / `border-b` utilities (utilities sort after preflight, so they
+ * paint); only the COLOR was ever inline. In borderless mode no utility class is
+ * emitted, so the width stays at preflight's 0 and no color can show -- which is
+ * why there is no borderless counterpart to these two rules.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element; the two border-color rules clear it at (0,5,0)+.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- header title ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='header'] > [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- bordered container + bordered row separator (color only; see header) ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] {
+  border-color: var(--ds-color-border);
+}
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  border-color: var(--ds-color-border);
+}
+
+/* ---- label + value (both layouts share one rule pair) ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+  color: var(--ds-color-text-primary);
+}
+
+/**
+ * Rustic Descriptions skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style` -- which is what keeps the `styles.label` /
+ * `styles.content` / per-item override props working: they land inline and
+ * therefore still beat these rules.
+ *
+ * SCOPE ROOT carries `rottay-descriptions rottay-descriptions--rustic` +
+ * `data-part='root'` + `data-engine` + `data-bordered`. The engine suffix is
+ * load-bearing: modern carries the same base class, and the two engines paint
+ * different values.
+ *
+ * CHILD COMBINATORS THROUGHOUT. `data-part` is a shared vocabulary, and this
+ * component renders arbitrary caller content inside `[data-part='content']` --
+ * a descendant selector would reach a `data-part='label'` belonging to whatever
+ * component the caller nested there. The DOM chain root > body > rows > row >
+ * label|content is fixed, so `>` costs nothing and closes that hole.
+ *
+ * BOTH BRANCHES OF `bordered` ARE EXPLICIT. The borderless branch declared
+ * `border: none` / `border-radius: 0` / `background-color: transparent` inline,
+ * and preflight's `border-width: 0` is not a substitute for the radius and
+ * background resets -- so it gets its own rules rather than being left to
+ * default.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element; the bordered `border` / `border-bottom`
+ * shorthands clear it at (0,5,0)+. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- header title ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='header'] > [data-part='title'] {
+  color: var(--ds-descriptions-title-color, var(--ds-color-text-primary, #333));
+}
+
+/* ---- content container: framed vs flush ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='true'] > [data-part='body'] {
+  border: 1px solid var(--ds-descriptions-border-color, #e8e8e8);
+  border-radius: var(--ds-descriptions-radius, 8px);
+  background-color: var(--ds-descriptions-bg, #fff);
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='false'] > [data-part='body'] {
+  border: none;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+/* ---- row separator (both layouts share one rule pair) ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='true'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  border-bottom: 1px solid var(--ds-descriptions-item-border-color, #f0f0f0);
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'][data-bordered='false'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  border-bottom: none;
+}
+
+/* ---- label + value ---- */
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+  color: var(--ds-descriptions-label-color, var(--ds-color-text-secondary, #666));
+}
+.rottay-descriptions.rottay-descriptions--rustic[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+  color: var(--ds-descriptions-content-color, var(--ds-color-text-primary, #333));
+}
+
+/**
+ * Modern Divider skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT mints `rottay-divider rottay-divider--modern` (grep-verified
+ * free; neither engine carried a first-party scope class before this
+ * migration -- DaisyUI's own `divider`/`divider-horizontal`/`divider-start`/
+ * `-end` classes stay, untouched, alongside it) + the already-stamped
+ * `data-part='root'` + `data-orientation` + `data-with-text`.
+ *
+ * L.2 (checked live, refuted): the with-text root's own border channel is
+ * NOT reproduced here. `theme.css`'s `.divider-horizontal`/`.divider-vertical`
+ * bridge is zeroed by Tailwind's preflight before it ever paints (measured
+ * `border-top-width: 0px` live, production build, CDP), and this
+ * component's with-text root never set a border inline either. The real
+ * line paint lives on the `line-before`/`line-after` children (with-text
+ * case) or merges onto the root itself (plain divider,
+ * `data-with-text='false'`) -- explicitly gated below so the with-text root
+ * never receives it.
+ *
+ * `color`/`thickness` are caller-overridable free-form props (`DividerProps`
+ * accepts any CSS color string and either a preset or a raw px number), so
+ * the resolved line value cannot be enumerated into a finite `data-*`
+ * lookup the way a closed-enum channel can. It rides the `--ds-divider-line`
+ * custom-property hatch instead -- set inline, every render, to the exact
+ * string the removed `borderTop`/`borderLeft` keys used to hold (the same
+ * hatch the migration kit sanctions for a runtime-computed value); the
+ * fallback below matches `DEFAULT_COLORS.modern` + `THICKNESS_MAP.thin` +
+ * the default `solid` variant so it is never actually reached in practice.
+ * Text color's `plain` branch has the same shape: this engine stamps no
+ * `data-plain` (rustic's own skin uses its existing `divider--plain` class
+ * instead, since it already renders one), so `plain ? 'inherit' : token`
+ * rides `--ds-divider-plain-color`.
+ *
+ * SPECIFICITY (P-48): every line rule paints a real border color on one axis
+ * per orientation (the other axis is always the colorless reset `none`) and
+ * must reach (0,4,0) -- the two root classes + `[data-part='root']` already
+ * give (0,3,0), and `[data-orientation='...']` (with-text) or
+ * `[data-with-text='false']` (plain) buys the 4th unit. Text color is
+ * non-border and clears preflight unlayered at (0,3,0) or better. Values
+ * transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- line: with-text spans (was lineBeforeStyle/lineAfterStyle's
+        borderTop/borderLeft, both driven by `isHorizontal`). ---- */
+.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-before'],
+.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='horizontal'] [data-part='line-after'] {
+  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+  border-left: none;
+}
+.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='vertical'] [data-part='line-before'],
+.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='vertical'] [data-part='line-after'] {
+  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+  border-top: none;
+}
+
+/* ---- line: plain divider, merged onto the root itself (was the simple-
+        divider return path's `{ ...containerStyle, ...lineStyle }`). Gated
+        to `data-with-text='false'` -- the with-text root never carries this
+        channel (see header). ---- */
+.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='horizontal'][data-with-text='false'] {
+  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+  border-left: none;
+}
+.rottay-divider.rottay-divider--modern[data-part='root'][data-orientation='vertical'][data-with-text='false'] {
+  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, oklch(0.746 0 0)));
+  border-top: none;
+}
+
+/* ---- text: color (was textStyle.color's `plain` ternary). ---- */
+.rottay-divider.rottay-divider--modern[data-part='root'] [data-part='text'] {
+  color: var(--ds-divider-plain-color, var(--ds-color-text-secondary));
+}
+
+/**
+ * Rustic Divider skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE ROOT mints `rottay-divider rottay-divider--rustic` (grep-verified
+ * free; neither engine carried a first-party scope class before this
+ * migration -- this engine's own BEM classes, `divider`/`divider--<axis>`/
+ * `divider--<variant>`/etc., stay untouched alongside it) + the
+ * already-stamped `data-part='root'` + `data-orientation` + `data-with-text`.
+ *
+ * L.2 (checked live, refuted): see the modern skin's header for the full
+ * measurement -- rustic is unaffected for an independent reason anyway (its
+ * root never carries the single-dash `divider-horizontal`/`-vertical`
+ * classnames the theme.css bridge targets, only the double-dash BEM
+ * `divider--horizontal`).
+ *
+ * `color`/`thickness` are caller-overridable free-form props, so the
+ * resolved line value rides the `--ds-divider-line` custom-property hatch,
+ * same as the modern skin. `borderRight`/`borderBottom` are always the
+ * static literal `none` in the source (never conditional on anything caller-
+ * supplied) -- transcribed here as plain, unconditional declarations, no
+ * hatch needed. `plain`'s text-color branch DOES have a DOM signal on this
+ * engine: `divider--plain` is already stamped by the component (only when
+ * `plain && hasChildren`) -- keyed on directly, no hatch, no invented
+ * anatomy.
+ *
+ * SPECIFICITY (P-48): every line rule paints a real border color on one axis
+ * per orientation and must reach (0,4,0) -- the two root classes +
+ * `[data-part='root']` already give (0,3,0), and `[data-orientation='...']`
+ * (with-text) or `[data-with-text='false']` (plain) buys the 4th unit. Text
+ * color is non-border and clears preflight unlayered at (0,3,0) or better.
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- line: with-text spans (was lineBeforeStyle/lineAfterStyle's
+        borderTop/borderLeft/borderRight/borderBottom, all driven by
+        `isHorizontal` except the always-none right/bottom pair). ---- */
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'] [data-part='line-before'],
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'] [data-part='line-after'] {
+  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'] [data-part='line-before'],
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'] [data-part='line-after'] {
+  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* ---- line: plain divider, merged onto the root itself (was the simple-
+        divider return path's `{ ...containerStyle, ...lineStyle }`). Gated
+        to `data-with-text='false'` -- the with-text root never carries this
+        channel. ---- */
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'][data-with-text='false'] {
+  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'][data-with-text='false'] {
+  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* ---- text: color (was textStyle.color's `plain` ternary; `divider--plain`
+        is this engine's own existing class, stamped only when
+        `plain && hasChildren`, so no rule fires here for the plain case and
+        the text naturally inherits -- matching the original `'inherit'`
+        value exactly). ---- */
+.rottay-divider.rottay-divider--rustic[data-part='root']:not(.divider--plain) [data-part='text'] {
+  color: var(--ds-divider-text-color, var(--ds-color-neutral-600, #555));
+}
+
+/**
+ * Modern Empty skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE is the root's own `rottay-empty rottay-empty--modern` pair. The bare
+ * `rottay-empty` is targeted by a live bridge rule (engines/modern/theme.css:835)
+ * whose `color: var(--ds-text-secondary)` paints the root uncontested and is
+ * inherited by the footer slot; the root is NOT re-anchored or re-coloured here,
+ * so that inheritance survives untouched.
+ *
+ * Every rule uses a CHILD combinator: `data-part` is a shared vocabulary, and the
+ * `children` footer slot is consumer territory that can hold any component
+ * (a Card stamps `data-part='description'` too). `>` pins each rule to the
+ * element Empty itself renders.
+ *
+ * `rottay-empty__illustration` is a fresh, grep-verified-free classname on the two
+ * first-party SVGs. Their `color` feeds `fill="currentColor"`; the consumer's own
+ * `image` ReactNode never carries the class, so it never takes this colour.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and wins unlayered at (0,3,0).
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-empty.rottay-empty--modern > [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-empty.rottay-empty--modern .rottay-empty__illustration {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Rustic Empty skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks
+ * preflight and still yields to the caller's inline `style`.
+ *
+ * SCOPE is the root's own `rottay-empty rottay-empty--rustic` pair. Bare
+ * `rottay-empty` carries a live bridge rule (engines/modern/theme.css:835, ungated
+ * by engine) whose root `color` reaches this engine too and is inherited by the
+ * footer slot; the root is neither re-anchored nor re-coloured here.
+ *
+ * The CHILD combinator is required: `data-part` is a shared vocabulary and the
+ * `children` footer slot holds consumer components that stamp their own parts.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and wins unlayered at (0,3,0).
+ * Value transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+.rottay-empty.rottay-empty--rustic > [data-part='description'] {
+  color: var(--ds-empty-description-color, var(--ds-color-text-tertiary, rgba(0, 0, 0, 0.25)));
+}
+
+/**
+ * Modern Image skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and Tailwind's utilities, and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-image rottay-image--modern` (fresh mints,
+ * grep-verified free across CSS and CSS-in-JS): this engine published no
+ * first-party classname, only Tailwind utilities.
+ *
+ * The bordered root sets border-COLOR ONLY, exactly as the object did. Its WIDTH
+ * comes from Tailwind's `border` utility class, added to the root by the same
+ * `bordered` flag — a layered rule this unlayered colour does not disturb. Adding a
+ * width here would be inventing one.
+ *
+ * SPECIFICITY (P-48): a border colour must clear the tenant's unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1); the
+ * repeated `[data-part='root']` buys the fourth unit.
+ *
+ * Every part rule uses a CHILD combinator: `data-part` is a shared vocabulary, and
+ * the `placeholder`, `fallback` and `hoverOverlay` props are consumer slots that can
+ * hold any component.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-image.rottay-image--modern[data-part='root'][data-part='root'][data-bordered='true'] {
+  border-color: var(--ds-color-border);
+}
+.rottay-image.rottay-image--modern[data-part='root'][data-shadow='true'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- loading: the panel, and the default pulse block inside it (a consumer's own
+        `placeholder` node never carries the pulse class) ---- */
+.rottay-image.rottay-image--modern > [data-part='placeholder'] {
+  background: var(--ds-surface-inset);
+}
+.rottay-image.rottay-image--modern > [data-part='placeholder'] > .rottay-image__pulse {
+  background: var(--ds-surface-panel);
+}
+
+/* ---- error: the default icon reads this `color` through `fill="currentColor"`,
+        inherited rather than re-declared on the glyph ---- */
+.rottay-image.rottay-image--modern > [data-part='fallback'] {
+  background: var(--ds-surface-inset);
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- hover ---- */
+.rottay-image.rottay-image--modern > [data-part='hover-overlay'] {
+  background: var(--ds-color-alpha-black-40);
+}
+.rottay-image.rottay-image--modern > [data-part='zoom-indicator'] {
+  background: var(--ds-color-alpha-black-50);
+  color: var(--ds-color-white);
+}
+
+/**
+ * Rustic Image skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT keeps `rottay-image-rustic` and adds `rottay-image rottay-image--rustic`
+ * (fresh mints, grep-verified free) so the engine pair anchors every rule.
+ *
+ * The ZOOM DIALOG is not a descendant of the root: this engine returns a fragment
+ * whose second child is the dialog, so no root-scoped selector can reach it. It gets
+ * its own self-sufficient scope, `rottay-image-zoom rottay-image-zoom--rustic` —
+ * the same standalone treatment WO-SKIN-02 gave the portaled picker panels. The
+ * modern engine has no zoom dialog at all; that asymmetry is preserved.
+ *
+ * `--ds-image-resolved-radius` carries `RADIUS_MAP[radius]`, one value the object
+ * applied to five different elements. The `radius` prop is not stamped as an
+ * attribute, and the value is a single inherited custom property here — set once on
+ * the root, read by every part below. It is deliberately NOT the public
+ * `--ds-image-radius` token (which the classic engine's theme already consumes);
+ * overloading that name would leak a per-instance value into a shared token.
+ *
+ * SPECIFICITY (P-48): rules carrying a border COLOUR must clear the tenant's
+ * unlayered `*` floor at (0,3,1); the repeated `[data-part]` takes them past
+ * (0,4,0). The unbordered `border: none` and the close button's are colour-free
+ * resets and are exempt. Both frames stay SHORTHANDS because preflight zeroes
+ * `border-width` on every element.
+ *
+ * KEYFRAME: the per-mount `<style>` injecting `rusticImagePulse` is replaced by an
+ * engine-namespaced copy here, so the name cannot collide with another engine's
+ * skin in the same tenant bundle.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root ---- */
+.rottay-image.rottay-image--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-image-resolved-radius);
+  border: none;
+  box-shadow: none;
+}
+.rottay-image.rottay-image--rustic[data-part='root'][data-part='root'][data-bordered='true'] {
+  border: 1px solid var(--ds-image-border-color, rgba(0, 0, 0, 0.1));
+}
+.rottay-image.rottay-image--rustic[data-part='root'][data-part='root'][data-shadow='true'] {
+  box-shadow: var(--ds-image-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06));
+}
+
+/* ---- the image itself ---- */
+.rottay-image.rottay-image--rustic > [data-part='img'] {
+  border-radius: var(--ds-image-resolved-radius);
+}
+
+/* ---- loading: the panel, and the default pulse block inside it (a consumer's own
+        `placeholder` node never carries the pulse class) ---- */
+.rottay-image.rottay-image--rustic > [data-part='placeholder'] {
+  background-color: var(--ds-image-placeholder-bg, #f5f5f5);
+  border-radius: var(--ds-image-resolved-radius);
+}
+.rottay-image.rottay-image--rustic > [data-part='placeholder'] > .rottay-image__pulse {
+  background-color: var(--ds-image-loading-bg, #e5e5e5);
+}
+
+/* ---- error: the default icon reads this `color` through `fill="currentColor"` ---- */
+.rottay-image.rottay-image--rustic > [data-part='fallback'] {
+  background-color: var(--ds-image-fallback-bg, #f5f5f5);
+  color: var(--ds-image-fallback-color, #737373);
+  border-radius: var(--ds-image-resolved-radius);
+}
+
+/* ---- hover ---- */
+.rottay-image.rottay-image--rustic > [data-part='hover-overlay'] {
+  background-color: var(--ds-image-overlay-bg, rgba(0, 0, 0, 0.4));
+  border-radius: var(--ds-image-resolved-radius);
+}
+.rottay-image.rottay-image--rustic > [data-part='zoom-indicator'] {
+  background-color: var(--ds-image-zoom-indicator-bg, rgba(0, 0, 0, 0.5));
+  border-radius: 50%;
+  color: var(--ds-image-zoom-indicator-color, white);
+}
+
+/* ---- zoom dialog: a fragment SIBLING of the root, scoped on its own ---- */
+.rottay-image-zoom.rottay-image-zoom--rustic[data-part='zoom-dialog'] {
+  background-color: var(--ds-image-zoom-overlay-bg, rgba(0, 0, 0, 0.9));
+}
+.rottay-image-zoom.rottay-image-zoom--rustic > [data-part='zoom-close'] {
+  background-color: var(--ds-image-zoom-close-bg, rgba(255, 255, 255, 0.1));
+  border: none;
+  border-radius: 50%;
+  color: var(--ds-image-zoom-close-color, white);
+}
+
+@keyframes ds-image-pulse-rustic {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/**
+ * Modern Kbd skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-kbd rottay-kbd--modern` + `data-part='root'`. Both
+ * classnames are fresh mints (grep-verified free across CSS and CSS-in-JS): this
+ * engine published no first-party classname at all, and the element is a bare
+ * `<kbd>` tag with no DaisyUI class despite the file's own header claim.
+ *
+ * SPECIFICITY (P-48): the `border` shorthand carries a real colour, so it must
+ * clear the tenant's unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). The repeated `[data-part='root']` buys the fourth
+ * unit. It stays a SHORTHAND because preflight zeroes `border-width` on every
+ * element: a longhand `border-color` alone would leave the width at 0 and the
+ * key-cap frame would vanish. Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-kbd.rottay-kbd--modern[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-color-border);
+  background: var(--ds-surface-inset);
+  color: var(--ds-color-text-primary);
+}
+
+/**
+ * Rustic Kbd skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks
+ * preflight and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-kbd rottay-kbd--rustic` (fresh mints, grep-verified
+ * free) alongside the pre-existing `rottay-kbd-rustic`, which is kept because
+ * apps outside this package may hook it; it has no rules of its own here.
+ *
+ * SPECIFICITY (P-48): both `border` declarations carry a real colour and must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` buys the fourth unit. They stay SHORTHANDS because
+ * preflight zeroes `border-width` on every element — a longhand colour alone
+ * would leave a 0-width frame. The `border-bottom` shorthand follows the
+ * all-sides one so the thicker key-cap lip wins the bottom edge, exactly as the
+ * inline object's key order did. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+.rottay-kbd.rottay-kbd--rustic[data-part='root'][data-part='root'] {
+  background-color: var(--ds-color-neutral-50, #fafafa);
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+  border-bottom: 2px solid var(--ds-color-neutral-400, #9ca3af);
+  border-radius: 4px;
+  color: var(--ds-color-text-primary, #1f2937);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+
+/**
+ * Modern Layout skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE: `Layout`'s own root carries `rottay-layout rottay-layout--modern`
+ * (minted in the WO-SKIN-05 pre-step, 0bd687ea -- neither engine carried any
+ * first-party classname before it). `Header`/`Sider`/`Content`/`Footer` are
+ * separately exported, independently mountable pieces -- the pre-step's own
+ * contract test renders `Layout.Sider` with no `Layout` ancestor at all --
+ * so each one carries ITS OWN engine-suffixed pair
+ * (`rottay-layout-header rottay-layout-header--modern`, etc., added in this
+ * migration) rather than relying on a `.rottay-layout[data-part='root']`
+ * ancestor that may not exist. `Content` paints nothing on this engine, so
+ * it keeps its bare `rottay-layout-content` class untouched.
+ *
+ * SPECIFICITY (P-48): the one border-color-bearing declaration in this file
+ * lives in the rustic skin (Sider's light-theme `border-right`), not here --
+ * modern's Sider never sets a border. Every declaration below is non-border
+ * (`background`, `color`) and clears preflight unlayered at (0,3,0); each
+ * part's own two-class pair + `[data-part='...']` already reaches it.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- header: static token background (was the inline `style`). ---- */
+.rottay-layout-header.rottay-layout-header--modern[data-part='header'] {
+  background: var(--ds-surface-inset);
+}
+
+/* ---- sider: background + color, keyed on the already-stamped `data-theme`.
+        The light branch sets no `color` at all in the source -- an inherited
+        text color, not an omission -- so no rule is written for it here;
+        writing one would introduce a color this engine's light Sider has
+        never painted. ---- */
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='dark'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-primary);
+}
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'][data-theme='light'] {
+  background: var(--ds-surface-card);
+}
+
+/* ---- sider collapse-trigger: static token chrome (was the inline `style`
+        on the toggle button). `border: none` is a color-free reset, exempt
+        from the (0,4,0) floor. ---- */
+.rottay-layout-sider.rottay-layout-sider--modern[data-part='sider'] [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- footer: static token background (was the inline `style`). ---- */
+.rottay-layout-footer.rottay-layout-footer--modern[data-part='footer'] {
+  background: var(--ds-surface-inset);
+}
+
+/**
+ * Rustic Layout skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE: `Layout`'s own root carries `rottay-layout rottay-layout--rustic`
+ * (minted in the WO-SKIN-05 pre-step, 0bd687ea). `Header`/`Sider`/`Content`/
+ * `Footer` are separately exported, independently mountable pieces (the
+ * pre-step's own contract test renders `Layout.Sider` standalone, with no
+ * `Layout` ancestor) -- each carries its OWN engine-suffixed pair
+ * (`rottay-layout-header rottay-layout-header--rustic`, etc., added in this
+ * migration) rather than relying on a `.rottay-layout[data-part='root']`
+ * ancestor that may not exist.
+ *
+ * SPECIFICITY (P-48): the sider's light-theme `border-right` paints a real
+ * color and must reach (0,4,0) -- the two sider classes + `[data-part=
+ * 'sider']` already give (0,3,0), and `[data-theme='light']` buys the 4th
+ * unit. Every other declaration is non-border and clears preflight
+ * unlayered at (0,3,0) or better. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- header: background + color (was styles.header's backgroundColor/color,
+        STATIC -- no branching on this engine). ---- */
+.rottay-layout-header.rottay-layout-header--rustic[data-part='header'] {
+  background-color: var(--ds-layout-header-bg, var(--ds-color-primary-900));
+  color: var(--ds-layout-header-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- sider: dark-theme base (was styles.sider, the engine's default --
+        always painted first, then the light override below composes on
+        top exactly like the JS's conditional spread). ---- */
+.rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'] {
+  background-color: var(--ds-layout-sider-bg, var(--ds-color-primary-900));
+  color: var(--ds-layout-sider-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- sider: light-theme override (was styles.siderLight, spread over the
+        base above when `theme === 'light'`). `border-right` is the
+        shorthand the original inline value used, transcribed verbatim. ---- */
+.rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'][data-theme='light'] {
+  background-color: var(--ds-layout-sider-light-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-layout-sider-light-color, var(--ds-color-text-primary));
+  border-right: 1px solid var(--ds-layout-sider-light-border, var(--ds-color-border-subtle));
+}
+
+/* ---- sider collapse-trigger: static chrome (was styles.trigger). `border:
+        none` and `color: inherit` are both explicit in the source (not
+        omissions), transcribed as-is. ---- */
+.rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'] [data-part='trigger'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+/* ---- content: background (was styles.content.backgroundColor, STATIC). ---- */
+.rottay-layout-content.rottay-layout-content--rustic[data-part='content'] {
+  background-color: var(--ds-layout-content-bg, var(--ds-color-bg-primary));
+}
+
+/* ---- footer: background (was styles.footer.backgroundColor, STATIC). ---- */
+.rottay-layout-footer.rottay-layout-footer--rustic[data-part='footer'] {
+  background-color: var(--ds-layout-footer-bg, var(--ds-color-bg-secondary));
+}
+
+/**
+ * Modern List skin (WO-SKIN-05 checkpoint D2). Covers all three exports of
+ * `engines/modern.tsx` -- List, Item and Meta. Item and Meta are engine-split
+ * (each engine exports its own), so they belong in this engine file rather than
+ * in a compounds file; and they are usable STANDALONE, so each carries its own
+ * scope class instead of hanging off the List root's.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPES: `rottay-list rottay-list--modern` + `data-part='root'` +
+ * `data-bordered` + `data-loading`; `rottay-list-item rottay-list-item--modern`;
+ * `rottay-list-item-meta rottay-list-item-meta--modern`. All grep-verified free
+ * across CSS and CSS-in-JS.
+ *
+ * CHILD COMBINATORS outside the loading branch: `data-part` is a shared
+ * vocabulary and List renders arbitrary caller content inside its items, so a
+ * descendant selector could reach a `data-part` belonging to a nested component.
+ * Inside `[data-loading='true']` the tree is a pure skeleton with no caller
+ * content, so the skeleton rules may safely use descendants (their targets sit
+ * under unclassed layout divs).
+ *
+ * BORDERS ARE ATOMIC SHORTHANDS. The inline styles set `borderWidth` +
+ * `borderColor` as separate longhands and leaned on preflight's
+ * `border-style: solid`; the shorthands below name that `solid` explicitly and
+ * land width, style and color together. Border-bearing rules clear the tenant's
+ * unlayered (0,3,1) `*` border-color floor at (0,4,0)+.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ============================ List (container) ============================ */
+
+.rottay-list.rottay-list--modern[data-part='root'] {
+  background: var(--ds-list-background-color, transparent);
+  color: var(--ds-list-text-color, inherit);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] {
+  border: var(--ds-list-border-width, 1px) solid var(--ds-list-border-color, var(--ds-color-border));
+  border-radius: var(--ds-list-border-radius, var(--ds-radius-lg));
+}
+
+/* loading skeleton: avatar disc + text bars share one fill */
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
+  background: var(--ds-list-item-hover-background-color, var(--ds-surface-panel));
+}
+
+/* header + footer: surface always, separator color only when bordered (the
+   width comes from the `border-b` / `border-t` utilities, which are only
+   emitted in bordered mode). */
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='header'] {
+  background: var(--ds-list-header-background-color, transparent);
+}
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer'] {
+  background: var(--ds-list-footer-background-color, transparent);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header'],
+.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer'] {
+  border-color: var(--ds-list-border-color, var(--ds-color-border));
+}
+
+/* split divider between items */
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider'] {
+  border-bottom: var(--ds-list-split-width, 1px) solid var(--ds-list-split-color, var(--ds-color-border));
+}
+
+/* ============================== List.Item ================================ */
+
+.rottay-list-item.rottay-list-item--modern[data-part='item'] {
+  background: var(--ds-list-item-background-color, transparent);
+  color: var(--ds-list-text-color, inherit);
+}
+.rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] {
+  color: var(--ds-list-actions-color, var(--ds-color-primary));
+}
+
+/* ============================ List.Item.Meta ============================= */
+
+.rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title'] {
+  color: var(--ds-list-meta-title-color, var(--ds-color-text-primary));
+}
+.rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description'] {
+  color: var(--ds-list-meta-description-color, var(--ds-color-text-secondary));
+}
+
+/**
+ * Rustic List skin (WO-SKIN-05 checkpoint D2). Covers the two exports of
+ * `engines/rustic.tsx` that paint -- List and Meta. Rustic's `Item` carries no
+ * paint at all (pure layout), so it gets no scope class and no rules: the
+ * modern/rustic asymmetry is transcribed, not levelled.
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPES: `rottay-list rottay-list--rustic` + `data-part='root'` +
+ * `data-bordered` + `data-loading`; `rottay-list-item-meta
+ * rottay-list-item-meta--rustic`. Meta is usable standalone, so it carries its
+ * own scope rather than hanging off the List root's. All grep-verified free.
+ *
+ * THE BORDERLESS BRANCH HAS NO RULES, DELIBERATELY. Every border here was
+ * `bordered ? '<value>' : undefined`, and an `undefined` key is one ReactDOM
+ * never writes -- so the borderless list falls to preflight's `border-width: 0`
+ * and an initial `border-radius: 0`, which is exactly what an absent rule gives.
+ *
+ * Inside `[data-loading='true']` the tree is a pure skeleton with no caller
+ * content, so those rules may safely use descendant selectors (their targets sit
+ * under unclassed layout divs). Everywhere else uses child combinators, since
+ * `data-part` is a shared vocabulary and List renders caller content.
+ *
+ * SPECIFICITY (P-48): border-bearing rules clear the tenant's unlayered (0,3,1)
+ * `*` border-color floor at (0,4,0)+. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ============================ List (container) ============================ */
+
+.rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] {
+  border: 1px solid var(--ds-list-border-color, var(--ds-color-border));
+  border-radius: var(--ds-list-border-radius, 8px);
+}
+
+/* loading skeleton: avatar disc + text bars share one fill, differ in radius */
+.rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'] {
+  background: var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary));
+  border-radius: 50%;
+}
+.rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
+  background: var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary));
+  border-radius: 4px;
+}
+
+/* header + footer separators, bordered mode only */
+.rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='header'] {
+  border-bottom: 1px solid var(--ds-list-border-color, var(--ds-color-border));
+}
+.rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='footer'] {
+  border-top: 1px solid var(--ds-list-border-color, var(--ds-color-border));
+}
+
+/* split divider between items (unconditional, unlike the header/footer rules) */
+.rottay-list.rottay-list--rustic[data-part='root'] > [data-part='list'] > [data-part='divider'] {
+  border-bottom: 1px solid var(--ds-list-split-color, var(--ds-color-border-subtle));
+}
+
+/* ============================ List.Item.Meta ============================= */
+
+.rottay-list-item-meta.rottay-list-item-meta--rustic[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description'] {
+  color: var(--ds-list-meta-description-color, var(--ds-color-text-secondary));
+}
+
+/**
+ * Modern QRCode skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight, DaisyUI and Tailwind's utilities, and still yields
+ * to a caller's inline `style`.
+ *
+ * SCOPE ROOT already carried `rottay-qrcode rottay-qrcode--modern`; no classname is
+ * minted or dropped here. That matters: `engines/modern/theme.css:853` is a live
+ * BRIDGE on the bare `rottay-qrcode` name (border-radius, border-color,
+ * background-color, plus per-status opacity). When `bordered` is false the
+ * component declares none of those channels and the bridge paints the root
+ * uncontested — so every rule below that touches the root's frame or fill is gated
+ * on `[data-bordered='true']`, exactly as the inline spread was. An ungated rule
+ * would silently take the unbordered root away from the bridge.
+ *
+ * SPECIFICITY (P-48): rules carrying a border COLOUR must clear the tenant's
+ * unlayered `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1);
+ * the two root classes plus the target's own repeated `data-part` take them past
+ * (0,4,0).
+ *
+ * The root's frame stays LONGHAND (`border-width` + `border-color`, no
+ * `border-style`), which is what the inline object declared: preflight's
+ * `border-style: solid` on `*` supplies the style, and Tailwind's `border` utility
+ * class — added to the root only when `bordered` — is the layered rule this
+ * unlayered width now outranks. The spinner and the refresh button, whose widths
+ * were never in a layered rule's reach, keep the shorthand.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root, bordered only: the bridge owns the unbordered root ---- */
+.rottay-qrcode.rottay-qrcode--modern[data-part='root'][data-bordered='true'] {
+  border-color: var(--ds-qrcode-border-color, var(--ds-color-border));
+  border-width: var(--ds-qrcode-border-width, 1px);
+  border-radius: var(--ds-qrcode-border-radius, var(--ds-radius-md));
+  background: var(--ds-qrcode-background-color, var(--ds-surface-card));
+}
+
+/* ---- status overlays: one fill per status (opacity stays inline) ---- */
+.rottay-qrcode.rottay-qrcode--modern[data-status='loading'] > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background: var(--ds-qrcode-loading-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent));
+}
+.rottay-qrcode.rottay-qrcode--modern[data-status='expired'] > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background: var(--ds-qrcode-status-expired-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 90%, transparent));
+}
+.rottay-qrcode.rottay-qrcode--modern[data-status='scanned'] > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background: var(--ds-qrcode-status-scanned-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent));
+}
+
+/* ---- loading spinner ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'][data-part='spinner'] {
+  border: 2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border));
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+/* ---- expired: message + refresh ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-text'] {
+  color: var(--ds-qrcode-status-expired-text-color, var(--ds-color-text-secondary));
+}
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'][data-part='refresh-button'] {
+  background: var(--ds-qrcode-refresh-button-bg, transparent);
+  color: var(--ds-qrcode-refresh-button-color, var(--ds-color-primary));
+  border-radius: var(--ds-qrcode-refresh-button-radius, var(--ds-radius-md));
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* ---- scanned: the check glyph inherits this through `fill="currentColor"` ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-icon'] {
+  color: var(--ds-qrcode-status-scanned-icon-color, var(--ds-color-success));
+}
+
+/* ---- centre icon ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='icon'] {
+  background: var(--ds-qrcode-icon-bg, var(--ds-surface-card));
+  border-radius: var(--ds-qrcode-icon-border-radius, var(--ds-radius-sm));
+}
+
+/**
+ * Rustic QRCode skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT already carried `rottay-qrcode rottay-qrcode--rustic`; no classname is
+ * minted or dropped. The bare `rottay-qrcode` name carries a live BRIDGE
+ * (`engines/modern/theme.css:853` — the selector has no engine gate, so it reaches
+ * this engine too) painting border-radius, border-color and background-color on the
+ * root. When `bordered` is false this component declares none of them and the
+ * bridge paints uncontested, so the root rule below is gated on
+ * `[data-bordered='true']` exactly as the inline spread was.
+ *
+ * SPECIFICITY (P-48): rules carrying a border COLOUR must clear the tenant's
+ * unlayered `*` border-color floor at (0,3,1); the two root classes plus the
+ * target's own repeated `data-part` take them past (0,4,0). Each stays a SHORTHAND
+ * because preflight zeroes `border-width` on every element.
+ *
+ * KEYFRAME: this engine injected a per-mount `<style>` redefining the GLOBAL
+ * `spin` (`foundation/animations/keyframes.css`) with byte-identical content —
+ * a global name shadowed for the whole document while any rustic QRCode is
+ * mounted. The copy is renamed and engine-namespaced here so it can never diverge
+ * from, or shadow, the global one; the modern engine's spinner keeps reading the
+ * global `spin`, which is the asymmetry that already shipped.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root, bordered only: the bridge owns the unbordered root (padding stays
+        inline — it is not a paint channel and it rode the same spread) ---- */
+.rottay-qrcode.rottay-qrcode--rustic[data-part='root'][data-bordered='true'] {
+  border: 1px solid var(--ds-qrcode-border-color, #d9d9d9);
+  border-radius: var(--ds-qrcode-radius, 8px);
+  background-color: var(--ds-qrcode-bg, #ffffff);
+}
+
+/* ---- one overlay fill for all three statuses (the object was shared) ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background-color: var(--ds-qrcode-overlay-bg, rgba(255, 255, 255, 0.9));
+}
+
+/* ---- loading spinner ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-qrcode-spinner-track, #f3f3f3);
+  border-top: 3px solid var(--ds-qrcode-spinner-color, var(--ds-color-primary-500, #1890ff));
+  border-radius: 50%;
+}
+
+/* ---- expired: message + refresh ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-text'] {
+  color: var(--ds-qrcode-expired-color, #666);
+}
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'][data-part='refresh-button'] {
+  border: 1px solid var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff));
+}
+
+/* ---- centre icon ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='icon'] {
+  transform: translate(-50%, -50%);
+  background-color: var(--ds-qrcode-icon-bg, #fff);
+  border-radius: 4px;
+}
+
+@keyframes ds-qrcode-spin-rustic {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/**
+ * Modern Splitter skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-splitter rottay-splitter--modern` +
+ * `data-part='root'` + `data-orientation`, minted in the WO-SKIN-05
+ * pre-step (0bd687ea) -- neither engine carried a first-party classname
+ * before it. Panel/gutter are descendants with their own `data-part`.
+ *
+ * SPECIFICITY (P-48): the only channel this file paints is the gutter's
+ * `background`, non-border, which clears preflight unlayered at (0,3,0);
+ * the two root classes + `[data-part='root']` + the descendant
+ * `[data-part='gutter']` already reach (0,4,0). No border-color channel
+ * exists in this component, so the (0,4,0) floor never applies. Value
+ * transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- gutter: static token background (was the drag handle's inline `style`). ---- */
+.rottay-splitter.rottay-splitter--modern[data-part='root'] [data-part='gutter'] {
+  background: var(--ds-surface-panel);
+}
+
+/**
+ * Rustic Splitter skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-splitter rottay-splitter--rustic` +
+ * `data-part='root'` + `data-orientation`, minted in the WO-SKIN-05
+ * pre-step (0bd687ea) -- neither engine carried a first-party classname
+ * before it.
+ *
+ * The gutter's hover highlight was React state (`hoveredGutter === index`)
+ * driving an inline `backgroundColor` swap via matching
+ * `onMouseEnter`/`onMouseLeave` setters -- replaced below by a plain
+ * `:hover` rule on the same `[data-part='gutter']` element the JS used to
+ * paint; the state and its setters are removed from `engines/rustic.tsx`
+ * since they drove nothing else. Modern's gutter carries a
+ * `transition-colors` Tailwind class but never gains a hover rule at all
+ * (pre-existing cross-engine asymmetry, WO-SKIN-05 inventory) -- preserved
+ * as-is, not invented here.
+ *
+ * SPECIFICITY (P-48): both declarations are non-border (`background-color`),
+ * clearing preflight unlayered at (0,3,0); the two root classes +
+ * `[data-part='root']` + the descendant `[data-part='gutter']` reach
+ * (0,4,0). Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- gutter: base background (was styles.gutter.backgroundColor). ---- */
+.rottay-splitter.rottay-splitter--rustic[data-part='root'] [data-part='gutter'] {
+  background-color: var(--ds-splitter-gutter-bg, var(--ds-color-neutral-200, #e8e8e8));
+}
+
+/* ---- gutter: hover highlight (was styles.gutterHover, driven by the
+        deleted `hoveredGutter` state). ---- */
+.rottay-splitter.rottay-splitter--rustic[data-part='root'] [data-part='gutter']:hover {
+  background-color: var(--ds-splitter-gutter-hover-bg, var(--ds-color-primary-500, #1890ff));
+}
+
+/**
+ * Modern Statistic skin (WO-SKIN-05 checkpoint D2). Covers BOTH exports of
+ * `engines/modern.tsx` -- Statistic and its sibling Countdown -- which share one
+ * anatomy and one set of values.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style` --
+ * which is what keeps the `valueStyle` prop overriding the trend color.
+ *
+ * SCOPE ROOT carries `rottay-statistic rottay-statistic--modern` +
+ * `data-part='root'`. The engine suffix is load-bearing: rustic and the
+ * engine-agnostic `compound/Countdown` both carry the bare `rottay-statistic`,
+ * and all three paint different values.
+ *
+ * THE TITLE'S COLOR IS NOT HERE, DELIBERATELY. `engines/modern/theme.css`'s
+ * `.stat-title { color: var(--ds-statistic-title-color) }` is uncontested on the
+ * title today (its inline style sets only line-height and margin) and `color` is
+ * a channel preflight does not touch, so that rule paints. Declaring the same
+ * color here would take ownership of a channel this skin never held.
+ *
+ * SPECIFICITY (P-48): every value here is non-border paint except the skeleton's
+ * `border-radius`, which carries no color -- so (0,3,0) clears preflight and the
+ * (0,4,0) border floor does not apply. Child combinators keep the rules off any
+ * `data-part` a caller's `prefix`/`suffix`/`title` node may itself carry. Values
+ * transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
+  background: var(--ds-statistic-loading-bg, var(--ds-surface-panel));
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+/* ---- value: trend color. The unqualified rule carries the `default` value
+        because the lookup it replaces fell back to `default` for an
+        unrecognised trend; `valueStyle` still wins as inline. ---- */
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] {
+  color: var(--ds-statistic-value-color, var(--ds-color-text-primary));
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='positive'] {
+  color: var(--ds-statistic-positive-color, var(--ds-color-success));
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='negative'] {
+  color: var(--ds-statistic-negative-color, var(--ds-color-error));
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='warning'] {
+  color: var(--ds-statistic-warning-color, var(--ds-color-warning));
+}
+
+/* ---- prefix / suffix: `inherit` keeps them on the value's trend color unless a
+        tenant sets the token. ---- */
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='prefix'] {
+  color: var(--ds-statistic-prefix-color, inherit);
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='suffix'] {
+  color: var(--ds-statistic-suffix-color, inherit);
+}
+
+/**
+ * Rustic Statistic skin (WO-SKIN-05 checkpoint D2). Covers BOTH exports of
+ * `engines/rustic.tsx` -- Statistic and its sibling Countdown -- which share one
+ * anatomy and one set of values.
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style` -- which is what keeps the `valueStyle` prop
+ * overriding the trend color.
+ *
+ * SCOPE ROOT carries `rottay-statistic rottay-statistic--rustic` +
+ * `data-part='root'`. The engine suffix is load-bearing: modern and the
+ * engine-agnostic `compound/Countdown` both carry the bare `rottay-statistic`,
+ * and all three paint different values. Rustic's title carries no `.stat-title`
+ * class, so unlike modern it has no theme.css bridge and its color belongs here.
+ *
+ * SPECIFICITY (P-48): every value here is non-border paint except the skeleton's
+ * `border-radius`, which carries no color -- so (0,3,0) clears preflight and the
+ * (0,4,0) border floor does not apply. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='skeleton-line'] {
+  background: var(--ds-statistic-skeleton-bg, var(--ds-color-bg-secondary));
+  border-radius: 4px;
+}
+
+/* ---- title ---- */
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='title'] {
+  color: var(--ds-statistic-title-color, var(--ds-color-text-secondary));
+}
+
+/* ---- value: trend color. The unqualified rule carries the `default` value
+        because the lookup it replaces fell back to `default` for an
+        unrecognised trend; `valueStyle` still wins as inline. ---- */
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'] {
+  color: var(--ds-statistic-value-color, var(--ds-color-text-primary));
+}
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'][data-trend='positive'] {
+  color: var(--ds-statistic-positive-color, var(--ds-color-success));
+}
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'][data-trend='negative'] {
+  color: var(--ds-statistic-negative-color, var(--ds-color-error));
+}
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'][data-trend='warning'] {
+  color: var(--ds-statistic-warning-color, var(--ds-color-warning));
+}
+
+/**
+ * Modern Tag skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-tag-shell rottay-tag-shell--modern` — a fresh mint
+ * (grep-verified free across CSS and CSS-in-JS). The bare `rottay-tag` name that
+ * this engine might otherwise have adopted is BANNED here: the bithire tenant
+ * artifact (`artifacts/bithire/index.css:3094`) paints `.rottay-tag` and
+ * `.rottay-tag--<variant>` on live channels (background, color, border-color,
+ * border-radius, border-width). Rustic Tag already carries those classnames and
+ * suppresses them; Modern carries none, so handing Modern the name would activate
+ * that tenant's tint vocabulary on it for the first time. `-shell` mirrors the
+ * `rottay-alert-shell` precedent.
+ *
+ * SPECIFICITY (P-48): the outlined `border` shorthand carries a real colour, so it
+ * must clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` plus `[data-outlined]` take it past (0,4,0). It stays a
+ * SHORTHAND because preflight zeroes `border-width` on every element — a longhand
+ * colour alone would paint nothing.
+ *
+ * The `:not([data-outlined])` guards reproduce the object's spread order: the
+ * outlined overrides were spread AFTER the variant map, so outlined wins the fill,
+ * the frame and the text colour, and the variant only supplies the hue.
+ *
+ * `--ds-tag-custom-bg` is the hatch for the `color` PROP, whose value is an
+ * arbitrary caller string that cannot be enumerated in CSS. It is set inline only
+ * when the prop is present; every resting-fill rule reads it with the variant's own
+ * token as the fallback, which is exactly what the object's trailing
+ * `...(color && { backgroundColor: color })` spread did.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- radius ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='none'] {
+  border-radius: var(--ds-tag-radius-none, 0);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='sm'] {
+  border-radius: var(--ds-tag-radius-sm, 3px);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='md'] {
+  border-radius: var(--ds-tag-radius-md, var(--ds-tag-default-radius, var(--ds-radius-md)));
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='lg'] {
+  border-radius: var(--ds-tag-radius-lg, var(--ds-radius-lg));
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='full'] {
+  border-radius: var(--ds-tag-radius-full, 9999px);
+}
+
+/* ---- solid fill: the variant map. The bare rule carries `default`, which is the
+        map's own fallback for an unrecognised variant. ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100));
+  color: var(--ds-color-text-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-primary));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-secondary));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-success));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-warning));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-error));
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- outlined: transparent fill, and the variant's fill token becomes the frame
+        and the ink. The bare rule again carries the map's `default` fallback. ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-outlined='true'] {
+  background: var(--ds-tag-custom-bg, transparent);
+  border: 1px solid var(--ds-color-alpha-black-100);
+  color: var(--ds-color-alpha-black-100);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-primary);
+  color: var(--ds-color-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-secondary);
+  color: var(--ds-color-secondary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-success);
+  color: var(--ds-color-success);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-warning);
+  color: var(--ds-color-warning);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-error);
+  color: var(--ds-color-error);
+}
+
+/* ---- bordered: an INSET ring, never a real border, so the frame costs no box
+        space next to the outlined variant's real one. ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-bordered='true'] {
+  box-shadow: inset 0 0 0 var(--ds-tag-border-width, 1px) var(--ds-color-border);
+}
+
+/* ---- close button (`border: none` is a colour-free reset, exempt from the floor) ---- */
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'] {
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+/**
+ * Rustic Tag skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT keeps its published BEM classnames and adds `rottay-tag--rustic`
+ * (grep-verified free; the existing modifiers are sizes and variants, never an
+ * engine name). The two-class anchor matters: `.rottay-tag` alone is also worn by
+ * the CLASSIC engine, which stamps no `data-part`, and it is painted on live
+ * channels by the bithire tenant artifact (`artifacts/bithire/index.css:3094`) —
+ * background, color, border-color, border-radius, border-width. Those tenant rules
+ * are suppressed today by this engine's inline style and stay suppressed here: at
+ * (0,2,1) they lose to every rule below.
+ *
+ * SPECIFICITY (P-48): each `border` declaration carries a real colour, so it must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1) — the repeated
+ * `[data-part='root']` gets the base to (0,4,0) and the qualified rules past it.
+ * They stay SHORTHANDS because preflight zeroes `border-width` on every element,
+ * and because a variant's `--ds-tag-<v>-border` token may be undefined: a shorthand
+ * over an undefined var falls back to no frame, which is exactly what the inline
+ * `border: 1px solid ${colors.border}` did.
+ *
+ * The resting `border: 1px solid transparent` is load-bearing, not decoration: an
+ * unbordered tag still reserves the 1px so it does not resize when `bordered` or
+ * `outlined` turns on.
+ *
+ * `--ds-tag-custom-bg` is the hatch for the `color` PROP (an arbitrary caller
+ * string). Unlike Modern, this engine ignores it when `outlined` — the object read
+ * `outlined ? 'transparent' : (color || colors.bg)`, and that asymmetry is
+ * preserved: no outlined rule reads the hatch.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- resting frame: the 1px is reserved even when nothing paints it ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid transparent;
+}
+
+/* ---- radius ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='none'] {
+  border-radius: var(--ds-tag-radius-none, 0);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='sm'] {
+  border-radius: var(--ds-tag-radius-sm, 0.1875rem);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='md'] {
+  border-radius: var(--ds-tag-radius-md, 0.375rem);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='lg'] {
+  border-radius: var(--ds-tag-radius-lg, 0.5rem);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='full'] {
+  border-radius: var(--ds-tag-radius-full, 9999px);
+}
+
+/* ---- ink: the variant's text colour, outlined or not. The bare rule carries
+        `default`, the lookup's own fallback for an unrecognised variant. ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-tag-default-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'] {
+  color: var(--ds-tag-primary-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'] {
+  color: var(--ds-tag-secondary-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success'] {
+  color: var(--ds-tag-success-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning'] {
+  color: var(--ds-tag-warning-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error'] {
+  color: var(--ds-tag-error-color);
+}
+
+/* ---- resting fill (solid only): the variant's bg, or the caller's `color` prop ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-default-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-primary-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-secondary-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-success-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-warning-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-error-bg));
+}
+
+/* ---- outlined drops the fill and ignores the `color` prop ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-outlined='true'] {
+  background-color: transparent;
+}
+
+/* ---- frame: `bordered` OR `outlined` paints the variant's border token ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-default-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-primary-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-secondary-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-success-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-warning-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-error-border);
+}
+
+/* ---- close button (`border: none` is a colour-free reset, exempt from the floor) ---- */
+.rottay-tag.rottay-tag--rustic > [data-part='close'] {
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+/**
+ * Modern Timeline skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-timeline rottay-timeline--modern` alongside the
+ * DaisyUI `timeline timeline-vertical` classes + `data-part='root'`. The engine
+ * suffix is load-bearing: rustic carries the same base class.
+ *
+ * TWO LAYERED BRIDGES STAY LIVE, AND NEITHER IS RESTATED HERE.
+ * `engines/modern/theme.css` declares `.timeline::before { background-color }`
+ * (DaisyUI's own connector pseudo-element) and `.timeline-start/-middle/-end
+ * { color: var(--ds-text-primary) }`. The latter genuinely paints every item's
+ * text today: the root's `color` is only INHERITED by those divs, and an
+ * explicit rule on a descendant beats an inherited value from an ancestor no
+ * matter how the ancestor's rule is layered. Moving the root's `color` here
+ * changes nothing about that -- it is still an ancestor. Declaring a color on
+ * `.timeline-start` here WOULD change it, so this file does not.
+ *
+ * THE `>` CHAINS ARE LOAD-BEARING. `data-part` is a shared vocabulary and
+ * `[data-part='body']` holds arbitrary caller content -- a descendant selector
+ * for `[data-part='label']` would reach a label belonging to whatever component
+ * an item renders. The label sits under the item's `.timeline-start` /
+ * `.timeline-end` div, so the chain steps through it explicitly.
+ *
+ * SPECIFICITY (P-48): the spinner's border color and the dot's border width
+ * clear the tenant's unlayered (0,3,1) `*` border-color floor at (0,5,0)+.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-timeline.rottay-timeline--modern[data-part='root'] {
+  color: var(--ds-timeline-content-color, inherit);
+}
+
+/* ---- connector rules (the component's own <hr>s, not DaisyUI's ::before) ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'] {
+  background: var(--ds-timeline-line-color, var(--ds-surface-panel));
+}
+
+/* ---- per-item label ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > .timeline-start > [data-part='label'],
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > .timeline-end > [data-part='label'] {
+  color: var(--ds-timeline-label-color, var(--ds-color-text-secondary));
+}
+
+/* ---- dot marker: default fill + ring width. The unqualified rule carries the
+        `primary` fill because the lookup it replaces fell back to primary for an
+        unrecognised tone; the tone rules below tie with it at (0,7,0) and win on
+        source order. The pending dot is excluded from the ring width: its own
+        marker never declared one, and a tenant that sets
+        `--ds-timeline-dot-border-width` must not grow a border there. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:not([data-pending='true']) > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-primary, var(--ds-color-primary));
+  border-width: var(--ds-timeline-dot-border-width, 0);
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='blue'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-blue, var(--ds-color-primary));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='red'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-red, var(--ds-color-error));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='green'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-green, var(--ds-color-success));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='gray'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-gray, var(--ds-surface-panel));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='primary'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-primary, var(--ds-color-primary));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='success'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-success, var(--ds-color-success));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='warning'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-warning, var(--ds-color-warning));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='error'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-error, var(--ds-color-error));
+}
+
+/* ---- pending row: dot fill + the spinner ring (animation stays inline) ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-line-color, var(--ds-surface-panel));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='body'] > [data-part='spinner'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-timeline-pending-dot-color, var(--ds-color-primary));
+  border-radius: 50%;
+}
+
+/**
+ * Rustic Timeline skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-timeline rottay-timeline--rustic` +
+ * `data-part='root'`. The engine suffix is load-bearing: modern carries the same
+ * base class.
+ *
+ * THE DOT COLOR CANNOT BE ENUMERATED. Rustic resolves an item's color through
+ * `TIMELINE_COLOR_MAP[color] || color` -- an unmapped value passes straight
+ * through, so `<Timeline.Item color="#ff0000">` is a supported call and the dot
+ * fill is genuinely runtime data, not a closed enum. It therefore rides the
+ * `--ds-timeline-dot-color` custom property the component sets inline (a quoted
+ * key, not a paint key) and is consumed here. Modern's map has no pass-through
+ * branch, which is why its skin CAN key the fill on `data-tone`; the asymmetry
+ * is real and transcribed, not levelled.
+ *
+ * `data-custom-dot` carries the branch that a caller-supplied dot element flips:
+ * the default circle goes transparent and drops its ring so the custom content
+ * shows through without overlap.
+ *
+ * The `@keyframes rottay-timeline-pulse` driving the pending dot stays in the
+ * component's own `<style>` block: `animation` is not a paint channel, the name
+ * is already collision-safe, and no other engine defines it.
+ *
+ * SPECIFICITY (P-48): the dot's `border` shorthand clears the tenant's unlayered
+ * (0,3,1) `*` border-color floor at (0,5,0). Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- the absolutely-positioned vertical line (geometry stays inline) ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='connector'] {
+  background-color: var(--ds-timeline-line-color, #e8e8e8);
+}
+
+/* ---- dot: shared disc, then the two branches of a caller-supplied dot ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='dot'] {
+  border-radius: 50%;
+}
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='dot'][data-custom-dot='false'] {
+  background-color: var(--ds-timeline-dot-color);
+  border: var(--ds-timeline-dot-border-width) solid white;
+  box-shadow: 0 0 0 var(--ds-timeline-dot-border-width) var(--ds-timeline-dot-color);
+}
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='dot'][data-custom-dot='true'] {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* ---- per-item label ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='label'] {
+  color: var(--ds-timeline-label-color, #999);
+}
+
+/* ---- pending row: dot fill (animation stays inline) + muted body ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] {
+  background-color: var(--ds-timeline-pending-dot-color, #e8e8e8);
+}
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='body'] {
+  color: var(--ds-timeline-pending-color, #999);
+}
+
+/**
+ * Modern Tooltip skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PORTALED, THEREFORE STANDALONE. The bubble mounts via
+ * `createPortal(document.body)`, so it is NOT a descendant of the tenant-scoped
+ * tree and no ancestor selector can reach it. Its rules hang off its own class
+ * pair `rottay-tooltip-bubble rottay-tooltip-bubble--modern` (grep-verified
+ * free), never a bare `[data-part='bubble']` -- `data-part` is a shared
+ * vocabulary, and a bare part selector would claim every bubble in the fleet.
+ * The wrapper root keeps NO scope class: it paints nothing, and `rottay-tooltip`
+ * is a live personality/tenant hook (entrance animation, z-index) that modern's
+ * wrapper does not carry today.
+ *
+ * `top`/`left` STAY INLINE: they come from `getBoundingClientRect()` on every
+ * frame the tooltip is positioned -- genuine runtime data, and not paint.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element. The shortcut chip's border is the only border
+ * here; it reaches (0,5,0) via the two bubble classes + `[data-part='bubble']` +
+ * the target's own `[data-part]` REPEATED (the standalone-scope idiom -- there
+ * is no root attribute to buy the fourth unit from). Values transcribed verbatim
+ * from `engines/modern.tsx`.
+ */
+
+/* ---- bubble: shared surface + the open/closed scale ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] {
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-elevation-2);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-open='true'] {
+  transform: scale(1);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-open='false'] {
+  transform: scale(0.95);
+}
+
+/* ---- per-tone surface. The unqualified rule carries the `default` pair because
+        the lookup it replaces fell back to default for an unrecognised color;
+        the tone rules below override it. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] {
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='secondary'] {
+  background: var(--ds-color-secondary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='success'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='warning'] {
+  background: var(--ds-color-warning);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='error'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- shortcut chips: built on `currentColor` so they track whichever tone the
+        bubble is painting, with no second color map. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] [data-part='shortcut-key'] {
+  border-radius: var(--ds-radius-sm);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] [data-part='shortcut-key'][data-part='shortcut-key'] {
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+/**
+ * Rustic Tooltip skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPED ON THE BUBBLE'S OWN CLASS PAIR `rottay-tooltip-bubble
+ * rottay-tooltip-bubble--rustic`, not on a bare `[data-part='bubble']`
+ * (`data-part` is a shared vocabulary, and a bare part selector would claim every
+ * bubble in the fleet) and not under the root's `rottay-tooltip` (which is a live
+ * personality/tenant hook for the entrance animation and z-index). Rustic's
+ * bubble is in-tree rather than portaled, but a self-sufficient scope works
+ * either way and matches modern's.
+ *
+ * THE TONE IS IN THE VARIABLE NAME. Rustic reads
+ * `var(--ds-tooltip-<color>-bg, var(--ds-tooltip-bg))` -- the color prop is
+ * interpolated into the custom-property NAME, so each of the six values of the
+ * closed `TooltipColor` union gets its own rule here, and the unqualified rule
+ * carries the fallback an unrecognised value would have resolved to.
+ *
+ * SPECIFICITY (P-48): the shortcut chip's border is the only border here; it
+ * reaches (0,5,0) via the two bubble classes + `[data-part='bubble']` + the
+ * target's own `[data-part]` REPEATED, clearing the tenant's unlayered (0,3,1)
+ * `*` border-color floor. Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- bubble: shared surface + the open/closed scale ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] {
+  border-radius: var(--ds-tooltip-radius, 6px);
+  box-shadow: var(--ds-tooltip-shadow);
+}
+
+/* ---- per-tone surface (bubble) ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] {
+  background-color: var(--ds-tooltip-bg);
+  color: var(--ds-tooltip-color);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='default'] {
+  background-color: var(--ds-tooltip-default-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-default-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='primary'] {
+  background-color: var(--ds-tooltip-primary-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-primary-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='secondary'] {
+  background-color: var(--ds-tooltip-secondary-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-secondary-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='success'] {
+  background-color: var(--ds-tooltip-success-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-success-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='warning'] {
+  background-color: var(--ds-tooltip-warning-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-warning-color, var(--ds-tooltip-color));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='error'] {
+  background-color: var(--ds-tooltip-error-bg, var(--ds-tooltip-bg));
+  color: var(--ds-tooltip-error-color, var(--ds-tooltip-color));
+}
+
+/* ---- arrow: a rotated square in the bubble's own tone (its per-placement
+        offsets stay inline, and it only renders when `arrow` is set). ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-bg);
+  transform: rotate(45deg);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='default'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-default-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='primary'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-primary-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='secondary'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-secondary-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='success'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-success-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='warning'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-warning-bg, var(--ds-tooltip-bg));
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'][data-tone='error'] > [data-part='arrow'] {
+  background-color: var(--ds-tooltip-error-bg, var(--ds-tooltip-bg));
+}
+
+/* ---- shortcut chips: built on `currentColor` so they track whichever tone the
+        bubble is painting, with no second color map. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] [data-part='shortcut-key'] {
+  border-radius: var(--ds-radius-sm);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--rustic[data-part='bubble'] [data-part='shortcut-key'][data-part='shortcut-key'] {
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}
+
+/**
+ * Modern Tree skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * THE TWO-LAYER HOVER IS DELIBERATE AND BOTH HALVES SURVIVE.
+ * `engines/modern/theme.css` paints `.rottay-tree .rottay-tree-node:hover`
+ * (the outer WRAPPER, which spans the tree's full column width) while the row
+ * inside it painted itself imperatively from `onMouseEnter`. When `blockNode` is
+ * false the row is only as wide as its content, so the wrapper's rule is what
+ * extends the highlight into the gutter -- the two are one hover AREA, not a
+ * duplicate. This file reproduces ONLY the row's half, on the row's own element.
+ * It must not declare anything on `.rottay-tree-node` / `[data-part='node']`:
+ * that would collapse the two layers into one and silently shrink the hover
+ * target.
+ *
+ * ROOT BACKGROUND: `[data-tenant] .rottay-tree { background-color }` in theme.css
+ * is layered and was already suppressed by the root's inline background; this
+ * unlayered rule keeps beating it, so the paint is unchanged.
+ *
+ * `>` FROM THE NODE, DESCENDANT TO IT. Nodes nest recursively, so the rules
+ * reach `[data-part='node']` by descent; every part inside a node is then taken
+ * with a child combinator, because `data-part` is a shared vocabulary and a node
+ * title is arbitrary caller content (a Timeline rendered in a title also has a
+ * `connector` part).
+ *
+ * BORDER WIDTHS: the connectors' widths were inline longhands (the Tailwind
+ * `border-l` / `border-t` utilities set only the 1px default underneath), so
+ * they move here keyed on `data-axis` -- a vertical connector must not grow a
+ * top border, nor a horizontal one a left border. The selected row's border
+ * width comes from the `border-l-2` utility, which the component emits only in
+ * that state; only its color was inline.
+ *
+ * SPECIFICITY (P-48): every border-color rule clears the tenant's unlayered
+ * (0,3,1) `*` floor at (0,5,0)+. The hover rule sits at (0,8,0), above the
+ * drop-target rule's (0,7,0) -- the same order the imperative write had, since
+ * its `!isSelected && !disabled` gate did not exclude a drop target. Values
+ * transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-tree.rottay-tree--modern[data-part='root'] {
+  background: var(--ds-tree-bg, transparent);
+}
+
+/* ---- hierarchy lines (their per-node offsets stay inline) ---- */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'] {
+  border-color: var(--ds-tree-line-color, var(--ds-color-border));
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'] {
+  border-left-width: var(--ds-tree-line-width, 1px);
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal'] {
+  border-top-width: var(--ds-tree-line-width, 1px);
+}
+
+/* ---- drop indicator: the line inside the positioned wrapper (its keyframe
+        stays in the component's own <style> block) ---- */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div {
+  background: var(--ds-tree-line-color, var(--ds-color-primary));
+}
+
+/* ---- row: rest, disabled, selected, drop-inside, hover. Ordered as the style
+        object's spreads were: the disabled color is overridden by the selected
+        color, and the drop-inside background outranks the selected one. ---- */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] {
+  background: var(--ds-tree-node-bg, transparent);
+  color: var(--ds-tree-node-color, inherit);
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-disabled] {
+  color: var(--ds-tree-node-color-disabled, var(--ds-color-text-disabled));
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'] {
+  background: var(--ds-tree-node-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent));
+  border-color: var(--ds-color-primary);
+  color: var(--ds-tree-node-color-selected, var(--ds-color-primary));
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent);
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]) {
+  background: var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent));
+  border-left: 2px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+}
+
+/* ---- row contents: expander, icon, search highlight ---- */
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] {
+  background: transparent;
+  color: var(--ds-tree-icon-color, var(--ds-color-text-primary));
+  border-radius: 50%;
+  border: none;
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='icon'] {
+  color: var(--ds-tree-icon-color, currentColor);
+}
+.rottay-tree.rottay-tree--modern[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 30%, transparent);
+  color: var(--ds-color-text-primary);
+}
+
+/**
+ * Rustic Tree skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * THE ROOT'S BACKGROUND IS NOT HERE. Rustic's container style sets font
+ * properties only -- it never declared a background -- so this file declares
+ * none. (Modern's `theme.css` bridge on `.rottay-tree` is engine-ungated and can
+ * therefore reach this root, which carries the same base class; reproducing a
+ * background here would be a second, competing source for a channel this engine
+ * never owned.)
+ *
+ * `>` FROM THE NODE, DESCENDANT TO IT. Nodes nest recursively, so the rules
+ * reach `[data-part='node']` by descent; every part inside a node is then taken
+ * with a child combinator, because `data-part` is a shared vocabulary and a node
+ * title is arbitrary caller content (a Timeline rendered in a title also has a
+ * `connector` part).
+ *
+ * BOX-SHADOW PRECEDENCE. The row's shadow was a single ternary --
+ * focused ? focus-ring : drop-inside ? inset-ring : none -- so focus WINS over a
+ * drop target. Specificity alone would invert that (the drop rule carries two
+ * attributes), so the drop rule is gated with `:not([data-focused])` rather than
+ * left to the cascade. The same reasoning gates the drop background with
+ * `:not([data-selected='true'])`: selected came first in its ternary.
+ *
+ * HOVER reproduces the imperative `onMouseEnter` write on the row itself, with
+ * `:not()` guards standing in for its `!isSelected && !disabled && !dropInside`
+ * gate. `onMouseLeave` needs no counterpart: it only restored the resting values
+ * this file's base rule already declares.
+ *
+ * SPECIFICITY (P-48): every border-color rule clears the tenant's unlayered
+ * (0,3,1) `*` floor at (0,5,0)+. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- hierarchy lines (their per-node offsets stay inline) ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='vertical'] {
+  border-left: 1px solid var(--ds-tree-line-color, var(--ds-color-border-primary));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='connector'][data-axis='horizontal'] {
+  border-top: 1px solid var(--ds-tree-line-color, var(--ds-color-border-primary));
+}
+
+/* ---- drop indicator: the line inside the positioned wrapper (its keyframe
+        stays in the module's one-shot <style> injection) ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='drop-indicator'] > div {
+  background-color: var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
+  border-radius: 1px;
+}
+
+/* ---- row: rest, selected, drop-inside, focus ring, hover ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] {
+  border-radius: var(--ds-tree-node-radius, 4px);
+  background-color: transparent;
+  color: inherit;
+  border-left: 3px solid transparent;
+  outline: none;
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-selected='true'] {
+  background-color: var(--ds-tree-node-selected-bg, var(--ds-color-alpha-primary-10));
+  color: var(--ds-tree-node-selected-color, var(--ds-color-primary));
+  border-left: 3px solid var(--ds-color-primary, var(--ds-tree-node-selected-color));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']:not([data-selected='true']) {
+  background-color: var(--ds-tree-drop-bg, rgba(59, 130, 246, 0.05));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-drop-target][data-drop-position='inside']:not([data-focused]) {
+  box-shadow: inset 0 0 0 2px var(--ds-tree-drop-indicator-color, var(--ds-color-primary));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-focused] {
+  box-shadow: 0 0 0 2px var(--ds-tree-focus-ring-color, var(--ds-color-primary-200, rgba(59, 130, 246, 0.3)));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row']:hover:not([data-selected='true']):not([data-disabled]):not([data-drop-position='inside']) {
+  background-color: var(--ds-tree-node-hover-bg, rgba(0, 0, 0, 0.04));
+  border-left: 3px solid var(--ds-color-primary, #1677ff);
+}
+
+/* ---- row contents: expander (rotates on the row's data-expanded), checkbox,
+        search highlight ---- */
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-toggle'] {
+  border: none;
+  background: none;
+  color: inherit;
+  transform: rotate(0deg);
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'][data-expanded='true'] > [data-part='tree-node-toggle'] {
+  transform: rotate(90deg);
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='checkbox'] {
+  accent-color: var(--ds-tree-checkbox-color, var(--ds-color-primary));
+}
+.rottay-tree.rottay-tree--rustic[data-part='root'] [data-part='node'] > [data-part='row'] > [data-part='tree-node-label'] > [data-part='tree-node-highlight'] {
+  background-color: var(--ds-tree-highlight-bg, #fef3c7);
+  color: var(--ds-tree-highlight-color, #92400e);
+  border-radius: 2px;
+}
+
+/**
+ * A COMPOSING PARENT MAY RE-STAMP `data-part`. SelectionPreviewRail passes
+ * `data-part="identity-title"` to the Text it composes, and the child's own
+ * `root` stamp loses. So these rules anchor on the CLASS, never on the part:
+ * a component that can be composed must not require a `data-part` it does not
+ * control. The class is repeated to hold the specificity the part used to buy.
+ *
+ * Modern Typography skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE: all four exports (Heading, Text, Paragraph, Link) share the pair
+ * `rottay-typography rottay-typography--modern` + `data-part='root'` +
+ * `data-color`, because all four read the SAME color lookup. Modern stamped no
+ * first-party classname before this skin; the pair is grep-verified free across
+ * CSS and CSS-in-JS. Anchoring on `data-part='root'` alone is not an option --
+ * `data-part` is a shared vocabulary, not an identifier.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and beats preflight unlayered
+ * at (0,3,0). The unqualified rule carries the `default` value because the
+ * lookup it replaces fell back to `default` for any unrecognised color (all four
+ * exports); the per-color rules below override it at (0,4,0). Values transcribed
+ * verbatim from COLOR_STYLES in `engines/modern.tsx`.
+ */
+
+.rottay-typography.rottay-typography--modern.rottay-typography--modern {
+  color: var(--ds-color-text-primary);
+}
+
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='default'] {
+  color: var(--ds-color-text-primary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='secondary'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='tertiary'] {
+  color: var(--ds-color-text-tertiary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='muted'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='subtle'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='inherit'] {
+  color: inherit;
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='primary'] {
+  color: var(--ds-color-primary);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='success'] {
+  color: var(--ds-color-success);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='warning'] {
+  color: var(--ds-color-warning);
+}
+.rottay-typography.rottay-typography--modern.rottay-typography--modern[data-color='error'] {
+  color: var(--ds-color-error);
+}
+
+/**
+ * A COMPOSING PARENT MAY RE-STAMP `data-part`. SelectionPreviewRail passes
+ * `data-part="identity-title"` to the Text it composes, and the child's own
+ * `root` stamp loses. So these rules anchor on the CLASS, never on the part:
+ * a component that can be composed must not require a `data-part` it does not
+ * control. The class is repeated to hold the specificity the part used to buy.
+ *
+ * Rustic Typography skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE: all four exports (Heading, Text, Paragraph, Link) share the pair
+ * `rottay-typography rottay-typography--rustic` + `data-part='root'` +
+ * `data-color`, because all four read the SAME COLOR_MAP lookup. The bare
+ * `rottay-heading` / `rottay-text` / `rottay-paragraph` / `rottay-link` names
+ * rustic already stamps are NOT used as the scope: `rottay-link` is reserved by
+ * navigation's shipped Link skin (`rottay-link-shell`), and a scope class must
+ * name this component, not a shared word. The pair is grep-verified free across
+ * CSS and CSS-in-JS.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and beats preflight unlayered
+ * at (0,3,0). Two fallback rules come FIRST because the lookup they replace had
+ * two different fallbacks: Heading/Text/Paragraph fell back to `default`, Link
+ * fell back to `primary` (hence the `--link` modifier class). The per-color
+ * rules below tie with the Link fallback at (0,4,0) and win on source order --
+ * exactly the JS precedence, where an in-map color always beat the `||`. Values
+ * transcribed verbatim from COLOR_MAP in `Typography.types.ts`.
+ */
+
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic {
+  color: var(--ds-color-text-primary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--link[data-part='root'] {
+  color: var(--ds-color-primary-500);
+}
+
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='default'] {
+  color: var(--ds-color-text-primary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='secondary'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='tertiary'] {
+  color: var(--ds-color-text-tertiary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='muted'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='subtle'] {
+  color: var(--ds-color-text-muted);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='inherit'] {
+  color: inherit;
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='primary'] {
+  color: var(--ds-color-primary-500);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='success'] {
+  color: var(--ds-color-success-500);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='warning'] {
+  color: var(--ds-color-warning-500);
+}
+.rottay-typography.rottay-typography--rustic.rottay-typography--rustic[data-color='error'] {
+  color: var(--ds-color-error-500);
+}
+
+/**
+ * Avatar compound skin — Avatar.Badge + Avatar.Group (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint these elements at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: both compounds have a single render tree shared by every engine,
+ * so they share one file rather than an engine pair.
+ *
+ * SPECIFICITY (P-48): each `border` shorthand carries a real colour and must clear
+ * the tenant's unlayered `*` border-color floor at (0,3,1); the repeated `data-part`
+ * (and, for the surplus tile, its group ancestor) buys the fourth unit. They stay
+ * SHORTHANDS because preflight zeroes `border-width` on every element — these 2px
+ * frames are the cut-out that separates each circle from the one it overlaps, so a
+ * longhand colour over a zeroed width would erase the effect entirely.
+ *
+ * Avatar.Group's rules use a CHILD combinator: its `item` wrappers hold whole
+ * Avatars, which stamp `data-part` names of their own.
+ *
+ * The surplus tile inherits the item's frame (its object spread `childStyle` first),
+ * so it takes the same border rule and adds its own fill and ink. `maxStyle` is a
+ * caller's value and stays inline, outranking both.
+ *
+ * Values transcribed verbatim from `compound/Badge/index.tsx` and
+ * `compound/Group/index.tsx`.
+ */
+
+/* ---- Avatar.Badge: the presence dot ---- */
+.rottay-avatar-badge-dot[data-part='dot'][data-part='dot'] {
+  border-radius: 50%;
+  border: 2px solid var(--ds-avatar-badge-border, var(--ds-color-bg-primary));
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='online'] {
+  background-color: var(--ds-color-success);
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='offline'] {
+  background-color: var(--ds-color-border-secondary);
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='busy'] {
+  background-color: var(--ds-color-error);
+}
+.rottay-avatar-badge-dot[data-part='dot'][data-status='away'] {
+  background-color: var(--ds-color-warning);
+}
+
+/* ---- Avatar.Group: the overlap cut-out, worn by every tile including surplus ---- */
+.rottay-avatar-group[data-part='root'] > [data-part='item'][data-part='item'],
+.rottay-avatar-group[data-part='root'] > [data-part='surplus'][data-part='surplus'] {
+  border: 2px solid var(--ds-avatar-group-border, var(--ds-color-bg-base));
+}
+.rottay-avatar-group[data-part='root'] > [data-part='surplus'] {
+  background-color: var(--ds-avatar-surplus-bg, var(--ds-color-bg-secondary));
+  color: var(--ds-avatar-surplus-color, var(--ds-color-text-secondary));
+}
+
+/**
+ * Card compound skin — Card.Header, Card.Footer, Card.Image (WO-SKIN-05 D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint these elements at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: each compound has one render tree shared by every engine, so they
+ * share one file rather than an engine pair.
+ *
+ * THE CLASSNAME IS THE OWNERSHIP BOUNDARY, not the `data-part`. Both Card engines
+ * render their OWN `data-part='header'`, `'title'`, `'actions'` and `'cover'`
+ * elements with different token fallback chains, and a compound dropped into a
+ * Card's `children` sits right beside them in the tree. Every selector here is
+ * anchored on the compound's own classname, which no engine element wears; the
+ * engines' skins carry the mirror-image guard (`:not(.rottay-card-header)`).
+ *
+ * SPECIFICITY (P-48): each rule carrying a border colour must clear the tenant's
+ * unlayered `*` border-color floor at (0,3,1); the repeated `data-part` buys the
+ * fourth unit. The `none` resets are colour-free and exempt. The frames stay
+ * SHORTHANDS because preflight zeroes `border-width` on every element.
+ *
+ * `--ds-card-image-radius` is the hatch for `RADIUS_MAP[radius] || radius`, whose
+ * else-branch passes the caller's raw string through — an open value no rule can
+ * enumerate. The per-position corner longhands override it, which is the order the
+ * object's spreads had.
+ *
+ * KEYFRAME: Card.Image's per-mount `<style>` injected `rottay-card-image-spin`; the
+ * copy here is renamed into the `ds-` vocabulary the skins share.
+ *
+ * Values transcribed verbatim from `compound/{Header,Footer,Image}/index.tsx`.
+ */
+
+/* ---- Card.Header ---- */
+.rottay-card-header[data-part='header'][data-part='header'] {
+  border-bottom: none;
+}
+.rottay-card-header[data-part='header'][data-part='header'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-card-header-border, var(--ds-card-border, #e5e5e5));
+}
+.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='title'] {
+  color: var(--ds-card-title-color, var(--ds-color-text-primary, #171717));
+}
+.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='subtitle'] {
+  color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary, #737373));
+}
+
+/* ---- Card.Footer ---- */
+.rottay-card-footer[data-part='footer'][data-part='footer'] {
+  border-top: none;
+}
+.rottay-card-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
+  border-top: 1px solid var(--ds-card-footer-border, var(--ds-card-border, #e5e5e5));
+}
+
+/* ---- Card.Image: radius, then the corner pair its position rounds ---- */
+.rottay-card-image[data-part='image'][data-part='image'] {
+  border-radius: var(--ds-card-image-radius);
+}
+.rottay-card-image[data-part='image'][data-part='image'][data-position='top'] {
+  border-top-left-radius: var(--ds-card-radius, 12px);
+  border-top-right-radius: var(--ds-card-radius, 12px);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.rottay-card-image[data-part='image'][data-part='image'][data-position='bottom'] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: var(--ds-card-radius, 12px);
+  border-bottom-right-radius: var(--ds-card-radius, 12px);
+}
+
+/* ---- Card.Image: the placeholder behind a loading or broken image ---- */
+.rottay-card-image > [data-part='placeholder'] {
+  background-color: var(--ds-card-image-placeholder-bg, var(--ds-color-neutral-100, #f0f0f0));
+  color: var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary, #a3a3a3));
+}
+.rottay-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-card-image-loading-track, var(--ds-color-neutral-200, #e5e5e5));
+  border-top-color: var(--ds-card-image-loading-active, var(--ds-color-primary-500, #171717));
+  border-radius: 50%;
+}
+
+/* ---- Card.Image: the scrim that keeps overlay text readable ---- */
+.rottay-card-image > [data-part='gradient'] {
+  background: var(--ds-card-cover-overlay-bg, linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.7) 100%));
+}
+
+@keyframes ds-card-image-spin {
+  to { transform: rotate(360deg); }
+}
+
+/**
+ * Carousel compound skin — Carousel.Item (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint the element at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: `Carousel.Item` has a single render tree shared by every engine,
+ * so it has one skin file rather than an engine pair.
+ *
+ * SCOPE is the item's own `rottay-carousel__item` class plus its repeated
+ * `data-part`, which reaches (0,3,0) — the floor for non-border paint. No rule here
+ * touches a border.
+ *
+ * `backgroundColor` and `backgroundImage` are caller-supplied strings (a colour and
+ * a URL), so they cannot be enumerated as rules; they ride custom properties set
+ * inline. Each fallback below is the CSS initial value for its property, which is
+ * what ReactDOM produced when the prop was absent and the key was dropped.
+ *
+ * Values transcribed verbatim from `compound/Item/index.tsx`.
+ */
+
+.rottay-carousel__item[data-part='item'][data-part='item'] {
+  background-color: var(--ds-carousel-item-bg, transparent);
+  background-image: var(--ds-carousel-item-bg-image, none);
+  background-size: cover;
+  background-position: center;
+}
+
+/**
+ * Image compound skin — Image.Fallback + Image.Skeleton (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint these elements at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: both compounds are standalone `forwardRef` leaves with a single
+ * render tree, so they share one file rather than an engine pair. Neither is
+ * consumed by either root engine — each root renders its OWN `data-part='fallback'`
+ * element without these classnames, so no rule here can reach into it.
+ *
+ * SCOPE is each compound's own classname plus its repeated `data-part`, reaching
+ * (0,3,0) — the floor for non-border paint. No rule here touches a border.
+ *
+ * `--ds-image-resolved-radius` carries `RADIUS_MAP[radius]`, which the `radius` prop
+ * selects and no attribute publishes. It is deliberately not the public
+ * `--ds-image-radius` token, which the classic engine's theme already consumes.
+ *
+ * KEYFRAME: Skeleton's per-mount `<style>` injected `rottayImageSkeletonPulse`; the
+ * copy here is renamed to the `ds-` vocabulary the skins share.
+ *
+ * Values transcribed verbatim from `compound/Fallback/index.tsx` and
+ * `compound/Skeleton/index.tsx`.
+ */
+
+.rottay-image-fallback[data-part='fallback'][data-part='fallback'] {
+  background-color: var(--ds-color-neutral-100, #f5f5f5);
+  color: var(--ds-color-neutral-500, #737373);
+}
+
+.rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'] {
+  background-color: var(--ds-color-neutral-200, #e5e5e5);
+  border-radius: var(--ds-image-resolved-radius);
+}
+
+@keyframes ds-image-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/**
+ * Statistic compound skin -- `compound/Countdown` (WO-SKIN-05 checkpoint D2).
+ *
+ * ENGINE-AGNOSTIC: this Countdown has a single render tree (no engine split), so
+ * it gets one file here rather than a per-engine pair. It is a
+ * different component from the Countdown each engine exports beside Statistic,
+ * with different values; the `--countdown` modifier is what keeps the three
+ * apart, since all three roots carry the bare `rottay-statistic`.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style` --
+ * which is what keeps the `valueStyle` prop overriding the value color.
+ *
+ * THE TREND LIVES IN A CUSTOM PROPERTY. `--ds-statistic-value-color` and
+ * `--ds-statistic-title-color` are set on the root by the component (a quoted
+ * custom-property key, not a paint key) and resolve here through inheritance --
+ * so the trend branch stays where it can see `valueType`, and the paint stays
+ * in CSS. Do not restate the trend colors here: the root is their only source.
+ *
+ * SPECIFICITY (P-48): both colors are non-border paint and clear preflight at
+ * (0,3,0); the skeleton's `border-radius` carries no color, so the (0,4,0)
+ * border floor does not apply. Values transcribed verbatim from
+ * `compound/Countdown/index.tsx`.
+ */
+
+/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+.rottay-statistic.rottay-statistic--countdown[data-part='root'] > [data-part='skeleton-line'] {
+  background: var(--ds-color-bg-secondary);
+  border-radius: 4px;
+}
+
+/* ---- title + value, both reading the root's own custom properties ---- */
+.rottay-statistic.rottay-statistic--countdown[data-part='root'] > [data-part='title'] {
+  color: var(--ds-statistic-title-color);
+}
+.rottay-statistic.rottay-statistic--countdown[data-part='root'] > [data-part='value'] {
+  color: var(--ds-statistic-value-color);
+}
+
+/**
+ * Tooltip compound skin -- `compound/Content` (WO-SKIN-05 checkpoint D2).
+ *
+ * ENGINE-AGNOSTIC: TooltipContent has a single render tree (no engine split), so
+ * it gets one file here rather than a per-engine pair. It is a
+ * standalone `forwardRef` piece with its own arrow-positioning logic, not the
+ * bubble either engine's Tooltip renders -- those carry
+ * `rottay-tooltip-bubble--{modern,rustic}` and have their own skins.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPED ON `rottay-tooltip-content`, the component's own first-party classname
+ * (grep-verified: only this file's component renders it). Note it is NOT matched
+ * by the personality/tenant rules on `.rottay-tooltip` -- a class selector is an
+ * exact match, not a prefix. The arrow hangs off the content as a child so its
+ * rule cannot reach a stray `rottay-tooltip-arrow` elsewhere.
+ *
+ * The arrow's per-side offsets stay inline: they are layout, not paint. No
+ * border is declared here, so the P-48 (0,4,0) floor does not apply. Values
+ * transcribed verbatim from `compound/Content/index.tsx`.
+ */
+
+.rottay-tooltip-content {
+  background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
+  color: var(--ds-tooltip-color, var(--ds-color-bg-base));
+  border-radius: var(--ds-tooltip-radius, 0.375rem);
+  box-shadow: var(--ds-tooltip-shadow, var(--ds-shadow-lg));
+}
+
+.rottay-tooltip-content > .rottay-tooltip-arrow {
+  background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
+  transform: rotate(45deg);
 }
 
 

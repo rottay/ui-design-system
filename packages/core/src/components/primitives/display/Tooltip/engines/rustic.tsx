@@ -61,9 +61,6 @@ const SHORTCUT_CHIPS_STYLE: React.CSSProperties = {
 };
 const SHORTCUT_KBD_STYLE: React.CSSProperties = {
   padding: '1px 5px',
-  borderRadius: 'var(--ds-radius-sm)',
-  border: '1px solid color-mix(in srgb, currentColor 30%, transparent)',
-  background: 'color-mix(in srgb, currentColor 12%, transparent)',
   fontSize: '0.85em',
   fontFamily: 'var(--ds-font-family-mono, monospace)',
   lineHeight: 1.4,
@@ -171,17 +168,17 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       marginBottom: placement.startsWith('top') ? 'var(--ds-tooltip-offset, 6px)' : undefined,
       marginLeft: placement.startsWith('right') ? 'var(--ds-tooltip-offset, 6px)' : undefined,
       marginRight: placement.startsWith('left') ? 'var(--ds-tooltip-offset, 6px)' : undefined,
-      backgroundColor: `var(--ds-tooltip-${color}-bg, var(--ds-tooltip-bg))`,
-      color: `var(--ds-tooltip-${color}-color, var(--ds-tooltip-color))`,
       padding: 'var(--ds-tooltip-padding, 0.5rem 0.75rem)',
-      borderRadius: 'var(--ds-tooltip-radius, 6px)',
       fontSize: 'var(--ds-tooltip-font-size, 0.8125rem)',
-      boxShadow: 'var(--ds-tooltip-shadow)',
       maxWidth: maxWidth || 'var(--ds-tooltip-max-width, 300px)',
       zIndex: zIndex || 'var(--ds-tooltip-z-index, 1070)',
       whiteSpace: 'nowrap',
       opacity: visible ? 1 : 0,
       visibility: visible ? 'visible' : 'hidden',
+      // The placement map also sets a `transform` (the centering translate); this
+      // key comes LATER in the literal and overwrites it, so the bubble has never
+      // been translate-centered. Preserved verbatim: moving this to the skin lets
+      // the placement translate survive, which MOVES the tooltip. Filed as P-78.
       transform: visible ? 'scale(1)' : 'scale(0.95)',
       transition: 'opacity 0.15s ease-out, visibility 0.15s ease-out, transform 0.15s ease-out',
       pointerEvents: visible ? 'auto' : 'none',
@@ -194,8 +191,6 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       position: 'absolute',
       width: 'var(--ds-tooltip-arrow-size, 6px)',
       height: 'var(--ds-tooltip-arrow-size, 6px)',
-      backgroundColor: `var(--ds-tooltip-${color}-bg, var(--ds-tooltip-bg))`,
-      transform: 'rotate(45deg)',
       ...(placement.startsWith('top') && { bottom: '-3px', left: '50%', marginLeft: '-3px' }),
       ...(placement.startsWith('bottom') && { top: '-3px', left: '50%', marginLeft: '-3px' }),
       ...(placement.startsWith('left') && { right: '-3px', top: '50%', marginTop: '-3px' }),
@@ -217,6 +212,7 @@ const RusticTooltip = forwardRef<HTMLDivElement, TooltipProps>(
             role="tooltip"
             className="rottay-tooltip-bubble rottay-tooltip-bubble--rustic"
             data-part="bubble"
+            data-tone={color}
             data-placement={placement}
             data-open={visible ? 'true' : 'false'}
             style={tooltipStyle}

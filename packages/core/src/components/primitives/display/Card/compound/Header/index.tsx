@@ -109,7 +109,6 @@ export function CardHeader({
     justifyContent: 'space-between',
     gap: '12px',
     padding: PADDING_MAP[padding],
-    borderBottom: divider ? '1px solid var(--ds-card-header-border, var(--ds-card-border, #e5e5e5))' : 'none',
     ...style,
   };
 
@@ -133,7 +132,6 @@ export function CardHeader({
     margin: 0,
     fontSize: 'var(--ds-card-title-font-size, 16px)',
     fontWeight: 600,
-    color: 'var(--ds-card-title-color, var(--ds-color-text-primary, #171717))',
     lineHeight: 1.4,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -143,7 +141,6 @@ export function CardHeader({
   const subtitleStyle: CSSProperties = {
     margin: 0,
     fontSize: 'var(--ds-card-subtitle-font-size, 14px)',
-    color: 'var(--ds-card-subtitle-color, var(--ds-color-text-secondary, #737373))',
     lineHeight: 1.4,
     overflow: 'hidden',
     textOverflow: 'ellipsis',

@@ -101,18 +101,19 @@ export const CarouselItem = forwardRef<HTMLDivElement, CarouselItemComponentProp
       end: 'flex-end',
     };
 
+    // Both backgrounds are caller-supplied strings (a colour and a URL), so
+    // carousel-compounds.css consumes them as custom properties rather than
+    // enumerating them.
     const itemStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: alignmentMap[justify],
       justifyContent: alignmentMap[align],
       width: '100%',
       height: '100%',
-      backgroundColor,
-      backgroundImage: backgroundImage ? `url(${backgroundImage})` : undefined,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
+      '--ds-carousel-item-bg': backgroundColor,
+      '--ds-carousel-item-bg-image': backgroundImage ? `url(${backgroundImage})` : undefined,
       ...style,
-    };
+    } as React.CSSProperties;
 
     return (
       <div

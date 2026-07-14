@@ -21,3 +21,65 @@
 .rottay-badge.rottay-badge--rustic[data-interactive='true']:hover {
   transform: var(--ds-badge-position-transform, translateY(0)) var(--ds-badge-hover-transform, translateY(0) scale(1));
 }
+
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — the rest of the surface. The `transform` rules
+ * above were the whole skin until now.
+ *
+ * This engine already published its fill, ink and radius as per-instance CUSTOM
+ * PROPERTIES (`--ds-badge-bg`, `--ds-badge-color`, `--ds-badge-border-radius`,
+ * set inline from the shared `VARIANT_*_MAP`s in `Badge.types.ts`, which the
+ * classic engine reads too). The rules below consume those properties rather
+ * than restating 21 token names, so the maps stay the single source and no
+ * value can drift between the two. `--ds-badge-soft-bg` / `--ds-badge-soft-color`
+ * join them on the same terms, for the one branch that had no property yet.
+ *
+ * SPECIFICITY (P-48): every rule carrying a border colour must clear the
+ * tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` buys the fourth unit. The frames stay SHORTHANDS because
+ * preflight zeroes `border-width` on every element.
+ *
+ * OUTLINE OUTRANKS BORDERED, and that is the point of its doubled attribute:
+ * the object spread `getStyleVariation()` LAST, so an outline badge that is also
+ * `bordered` took outline's 1px hue frame, not the bordered 2px surface frame.
+ * Order said that; here the selector does.
+ * ======================================================================== */
+
+/* ---- base: the switch's `default` branch (solid) plus the resting frame ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-badge-border-radius);
+  border: none;
+  box-shadow: none;
+  background-color: var(--ds-badge-bg);
+  color: var(--ds-badge-color);
+}
+
+/* ---- bordered: a surface-coloured frame plus a 1px ring in the badge's own hue ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-bordered='true'] {
+  border: var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff);
+  box-shadow: 0 0 0 1px var(--ds-badge-bg);
+}
+
+/* ---- soft ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-badge-style='soft'] {
+  background-color: var(--ds-badge-soft-bg);
+  color: var(--ds-badge-soft-color);
+}
+
+/* ---- ghost: no fill, ink in the badge's own hue ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-badge-style='ghost'] {
+  background-color: transparent;
+  color: var(--ds-badge-bg);
+}
+
+/* ---- outline: ghost plus a frame, and it wins the frame from `bordered` ---- */
+.rottay-badge.rottay-badge--rustic[data-part='root'][data-part='root'][data-badge-style='outline'][data-badge-style='outline'] {
+  background-color: transparent;
+  color: var(--ds-badge-bg);
+  border: 1px solid var(--ds-badge-bg);
+}
+
+@keyframes ds-badge-pulse-rustic {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.05); }
+}

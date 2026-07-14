@@ -45,7 +45,7 @@ export default function RusticKbd(props: KbdProps): React.ReactElement {
   // an inset shadow to simulate the concave surface of a real keycap.
   return (
     <kbd
-      className={`rottay-kbd-rustic ${className}`}
+      className={`rottay-kbd rottay-kbd--rustic rottay-kbd-rustic ${className}`}
       data-part="root"
       data-size={size}
       style={{
@@ -58,12 +58,6 @@ export default function RusticKbd(props: KbdProps): React.ReactElement {
         lineHeight: 1.4,
         padding: sizeConfig.padding,
         minWidth: sizeConfig.minWidth,
-        backgroundColor: 'var(--ds-color-neutral-50, #fafafa)',
-        border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
-        borderBottom: '2px solid var(--ds-color-neutral-400, #9ca3af)',
-        borderRadius: 4,
-        color: 'var(--ds-color-text-primary, #1f2937)',
-        boxShadow: 'inset 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 0 rgba(0, 0, 0, 0.06)',
         userSelect: 'none',
         whiteSpace: 'nowrap',
         verticalAlign: 'middle',

@@ -52,9 +52,9 @@ import { SPLITTER_DEFAULTS } from '../Splitter.types';
 /**
  * Precomputed inline style objects for the Rustic engine.
  * Uses CSS custom properties (--ds-splitter-*) with hardcoded fallbacks so
- * the component works even when the DS theme tokens are not loaded.
- * Gutter hover is managed via React state since :hover pseudo-classes
- * cannot be expressed in inline styles.
+ * the component works even when the DS theme tokens are not loaded. Gutter
+ * background (rest + hover) lives in `engines/rustic/skin/splitter.css`,
+ * keyed on `[data-part='gutter']` and `:hover`.
  */
 const styles = {
   container: {
@@ -69,7 +69,6 @@ const styles = {
   } as React.CSSProperties,
   gutter: {
     flexShrink: 0,
-    backgroundColor: 'var(--ds-splitter-gutter-bg, var(--ds-color-neutral-200, #e8e8e8))',
     transition: 'background-color 0.2s',
   } as React.CSSProperties,
   gutterHorizontal: {
@@ -79,9 +78,6 @@ const styles = {
   gutterVertical: {
     height: 'var(--ds-splitter-gutter-size, 8px)',
     cursor: 'row-resize',
-  } as React.CSSProperties,
-  gutterHover: {
-    backgroundColor: 'var(--ds-splitter-gutter-hover-bg, var(--ds-color-primary-500, #1890ff))',
   } as React.CSSProperties,
 };
 
@@ -123,9 +119,9 @@ Panel.displayName = 'Splitter.Panel.Rustic';
 /**
  * Rustic engine implementation of the Splitter container.
  * Implements drag-to-resize with document-level mouse events and pure inline
- * CSS. Unlike the Modern engine which uses Tailwind for gutter styling, this
- * engine simulates hover effects via React state (hoveredGutter) because
- * inline styles cannot use CSS pseudo-classes.
+ * CSS. The gutter's hover highlight is a `:hover` rule in
+ * `engines/rustic/skin/splitter.css`, keyed on the same `[data-part='gutter']`
+ * element the drag handler is bound to.
  *
  * @param props - Splitter configuration (layout direction, resize callbacks)
  * @returns A pure inline-CSS flex container with interleaved drag handles
@@ -150,9 +146,6 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
       return Array(childCount).fill(100 / childCount);
     });
 
-    // Track which gutter is hovered to apply the highlight background,
-    // since inline styles cannot express :hover pseudo-classes.
-    const [hoveredGutter, setHoveredGutter] = useState<number>(-1);
     const isDragging = useRef(false);
     const activeGutter = useRef<number>(-1);
     // Reactive mirror of activeGutter, purely for the data-dragging anatomy
@@ -241,17 +234,14 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
             {isValidElement(child)
               ? cloneElement(child as React.ReactElement<SplitterPanelProps & { size?: number }>, { size: sizes[index] })
               : child}
-            {/* Render gutter drag handles between panels with state-driven hover */}
+            {/* Render gutter drag handles between panels; hover highlight is CSS. */}
             {index < childArray.length - 1 && (
               <div
                 style={{
                   ...styles.gutter,
                   ...(isVertical ? styles.gutterVertical : styles.gutterHorizontal),
-                  ...(hoveredGutter === index ? styles.gutterHover : {}),
                 }}
                 onMouseDown={handleMouseDown(index)}
-                onMouseEnter={() => setHoveredGutter(index)}
-                onMouseLeave={() => setHoveredGutter(-1)}
                 data-part="gutter"
                 data-orientation={isVertical ? 'vertical' : 'horizontal'}
                 data-dragging={draggingIndex === index ? 'true' : 'false'}

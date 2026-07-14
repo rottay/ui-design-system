@@ -112,18 +112,18 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
     switch (status) {
       case 'loading':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" style={{ background: 'var(--ds-qrcode-loading-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent))', opacity: 'var(--ds-qrcode-loading-opacity, 1)' }}>
-            <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border))', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" style={{ opacity: 'var(--ds-qrcode-loading-opacity, 1)' }}>
+            <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
           </div>
         );
       case 'expired':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex flex-col items-center justify-center gap-2" style={{ background: 'var(--ds-qrcode-status-expired-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 90%, transparent))', opacity: 'var(--ds-qrcode-status-expired-opacity, 1)' }}>
-            <span data-part="status-text" className="text-sm" style={{ color: 'var(--ds-qrcode-status-expired-text-color, var(--ds-color-text-secondary))' }}>QR Code expired</span>
+          <div data-part="overlay" className="absolute inset-0 flex flex-col items-center justify-center gap-2" style={{ opacity: 'var(--ds-qrcode-status-expired-opacity, 1)' }}>
+            <span data-part="status-text" className="text-sm">QR Code expired</span>
             {onRefresh && (
               <button
                 data-part="refresh-button"
-                style={{ background: 'var(--ds-qrcode-refresh-button-bg, transparent)', color: 'var(--ds-qrcode-refresh-button-color, var(--ds-color-primary))', height: 'var(--ds-qrcode-refresh-button-size, 32px)', padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-qrcode-refresh-button-radius, var(--ds-radius-md))', border: '1px solid var(--ds-color-primary)', cursor: 'pointer' }}
+                style={{ height: 'var(--ds-qrcode-refresh-button-size, 32px)', padding: '0 12px', fontSize: 13, cursor: 'pointer' }}
                 onClick={onRefresh}
               >
                 Refresh
@@ -133,11 +133,10 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
         );
       case 'scanned':
         return (
-          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" style={{ background: 'var(--ds-qrcode-status-scanned-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent))', opacity: 'var(--ds-qrcode-status-scanned-opacity, 1)' }}>
+          <div data-part="overlay" className="absolute inset-0 flex items-center justify-center" style={{ opacity: 'var(--ds-qrcode-status-scanned-opacity, 1)' }}>
             <svg
               data-part="status-icon"
               className="w-12 h-12"
-              style={{ color: 'var(--ds-qrcode-status-scanned-icon-color, var(--ds-color-success))' }}
               fill="currentColor"
               viewBox="0 0 20 20"
             >
@@ -161,12 +160,6 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
   ].filter(Boolean).join(' ');
 
   const containerInlineStyle: React.CSSProperties = {
-    ...(bordered && {
-      borderColor: 'var(--ds-qrcode-border-color, var(--ds-color-border))',
-      borderWidth: 'var(--ds-qrcode-border-width, 1px)',
-      borderRadius: 'var(--ds-qrcode-border-radius, var(--ds-radius-md))',
-      background: 'var(--ds-qrcode-background-color, var(--ds-surface-card))',
-    }),
     ...style,
   };
 
@@ -190,7 +183,7 @@ export default function ModernQRCode(props: QRCodeProps): React.ReactElement {
           <div
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-1 rounded"
             data-part="icon"
-            style={{ width: iconSize, height: iconSize, background: 'var(--ds-qrcode-icon-bg, var(--ds-surface-card))', padding: 'var(--ds-qrcode-icon-padding, 4px)', borderRadius: 'var(--ds-qrcode-icon-border-radius, var(--ds-radius-sm))' }}
+            style={{ width: iconSize, height: iconSize, padding: 'var(--ds-qrcode-icon-padding, 4px)' }}
           >
             <img
               src={icon}

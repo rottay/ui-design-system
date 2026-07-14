@@ -1,0 +1,29 @@
+/**
+ * Rustic Kbd skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks
+ * preflight and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-kbd rottay-kbd--rustic` (fresh mints, grep-verified
+ * free) alongside the pre-existing `rottay-kbd-rustic`, which is kept because
+ * apps outside this package may hook it; it has no rules of its own here.
+ *
+ * SPECIFICITY (P-48): both `border` declarations carry a real colour and must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` buys the fourth unit. They stay SHORTHANDS because
+ * preflight zeroes `border-width` on every element — a longhand colour alone
+ * would leave a 0-width frame. The `border-bottom` shorthand follows the
+ * all-sides one so the thicker key-cap lip wins the bottom edge, exactly as the
+ * inline object's key order did. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+.rottay-kbd.rottay-kbd--rustic[data-part='root'][data-part='root'] {
+  background-color: var(--ds-color-neutral-50, #fafafa);
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+  border-bottom: 2px solid var(--ds-color-neutral-400, #9ca3af);
+  border-radius: 4px;
+  color: var(--ds-color-text-primary, #1f2937);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 0 rgba(0, 0, 0, 0.06);
+}

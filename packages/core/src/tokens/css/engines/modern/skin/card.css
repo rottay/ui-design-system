@@ -140,3 +140,69 @@
   background-color: var(--ds-color-info-50, rgba(59, 130, 246, 0.05));
   background-image: none;
 }
+
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — everything the ARC-07 migration left inline: the
+ * loading state, and the header/body/actions text and rules.
+ *
+ * THE LOADING ROOT HAS NO `data-part`. It is a separate early return that reuses
+ * the class list but never spreads `partAttributes` — so none of the variant, tone
+ * or hover rules above have ever painted it, and none of them start now.
+ * `:not([data-part='root'])` is how the two roots tell each other apart, and it is
+ * load-bearing: `data-part='cover'` names the loading PLACEHOLDER in one render
+ * path and the real cover WRAPPER in the other, and only the placeholder is filled.
+ *
+ * The `:not(.rottay-card-header)` guard on the header is equally load-bearing.
+ * `Card.Header` is a compound a caller can drop into `children`, where it lands as
+ * a direct child of `[data-part='body']` — exactly where this engine renders its
+ * OWN header. Both stamp `data-part='header'` and `data-part='title'`, and their
+ * token fallback chains differ, so without the guard this rule would repaint the
+ * compound. The compound has its own file: components/skin/card-compounds.css.
+ *
+ * SPECIFICITY (P-48): the header and actions rules carry a border colour and must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1); their selector
+ * chains are far past it. They stay SHORTHANDS because preflight zeroes
+ * `border-width` on every element.
+ * ======================================================================== */
+
+/* ---- loading: the cover placeholder (a fill the real cover wrapper never has) ---- */
+.ds-card.ds-card--modern:not([data-part='root']) > [data-part='cover'] {
+  background-color: var(--ds-surface-inset);
+}
+
+/* ---- loading: the four skeleton bars share one fill and one radius; only their
+        widths and heights differ, and those stay inline ---- */
+.ds-card.ds-card--modern:not([data-part='root']) [data-part='skeleton'] [data-part='skeleton-bar'] {
+  background-color: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+/* ---- loading: the frosted spinner scrim ---- */
+.ds-card.ds-card--modern:not([data-part='root']) [data-part='loading-overlay'] {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background-color: color-mix(in srgb, var(--ds-surface-card) 60%, transparent);
+  border-radius: inherit;
+}
+
+/* ---- body ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] {
+  color: var(--ds-card-body-color, inherit);
+}
+
+/* ---- this engine's OWN header (never the Card.Header compound) ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header)[data-divider='true'] {
+  border-bottom: 1px solid var(--ds-card-header-border, var(--ds-color-border));
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='title'] {
+  color: var(--ds-card-title-color, var(--ds-card-header-color, var(--ds-color-text-primary)));
+}
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='header']:not(.rottay-card-header) > div > [data-part='description'] {
+  color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary));
+}
+
+/* ---- actions rail ---- */
+.ds-card.ds-card--modern[data-part='root'] > [data-part='body'] > [data-part='actions'] {
+  border-top: 1px solid var(--ds-card-footer-border, var(--ds-color-border));
+  background-color: var(--ds-card-footer-bg, transparent);
+}

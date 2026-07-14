@@ -1,0 +1,67 @@
+/**
+ * Rustic Layout skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE: `Layout`'s own root carries `rottay-layout rottay-layout--rustic`
+ * (minted in the WO-SKIN-05 pre-step, 0bd687ea). `Header`/`Sider`/`Content`/
+ * `Footer` are separately exported, independently mountable pieces (the
+ * pre-step's own contract test renders `Layout.Sider` standalone, with no
+ * `Layout` ancestor) -- each carries its OWN engine-suffixed pair
+ * (`rottay-layout-header rottay-layout-header--rustic`, etc., added in this
+ * migration) rather than relying on a `.rottay-layout[data-part='root']`
+ * ancestor that may not exist.
+ *
+ * SPECIFICITY (P-48): the sider's light-theme `border-right` paints a real
+ * color and must reach (0,4,0) -- the two sider classes + `[data-part=
+ * 'sider']` already give (0,3,0), and `[data-theme='light']` buys the 4th
+ * unit. Every other declaration is non-border and clears preflight
+ * unlayered at (0,3,0) or better. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- header: background + color (was styles.header's backgroundColor/color,
+        STATIC -- no branching on this engine). ---- */
+.rottay-layout-header.rottay-layout-header--rustic[data-part='header'] {
+  background-color: var(--ds-layout-header-bg, var(--ds-color-primary-900));
+  color: var(--ds-layout-header-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- sider: dark-theme base (was styles.sider, the engine's default --
+        always painted first, then the light override below composes on
+        top exactly like the JS's conditional spread). ---- */
+.rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'] {
+  background-color: var(--ds-layout-sider-bg, var(--ds-color-primary-900));
+  color: var(--ds-layout-sider-color, var(--ds-color-text-on-primary));
+}
+
+/* ---- sider: light-theme override (was styles.siderLight, spread over the
+        base above when `theme === 'light'`). `border-right` is the
+        shorthand the original inline value used, transcribed verbatim. ---- */
+.rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'][data-theme='light'] {
+  background-color: var(--ds-layout-sider-light-bg, var(--ds-color-bg-elevated));
+  color: var(--ds-layout-sider-light-color, var(--ds-color-text-primary));
+  border-right: 1px solid var(--ds-layout-sider-light-border, var(--ds-color-border-subtle));
+}
+
+/* ---- sider collapse-trigger: static chrome (was styles.trigger). `border:
+        none` and `color: inherit` are both explicit in the source (not
+        omissions), transcribed as-is. ---- */
+.rottay-layout-sider.rottay-layout-sider--rustic[data-part='sider'] [data-part='trigger'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+/* ---- content: background (was styles.content.backgroundColor, STATIC). ---- */
+.rottay-layout-content.rottay-layout-content--rustic[data-part='content'] {
+  background-color: var(--ds-layout-content-bg, var(--ds-color-bg-primary));
+}
+
+/* ---- footer: background (was styles.footer.backgroundColor, STATIC). ---- */
+.rottay-layout-footer.rottay-layout-footer--rustic[data-part='footer'] {
+  background-color: var(--ds-layout-footer-bg, var(--ds-color-bg-secondary));
+}

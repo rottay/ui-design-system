@@ -1,0 +1,40 @@
+/**
+ * Image compound skin — Image.Fallback + Image.Skeleton (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint these elements at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: both compounds are standalone `forwardRef` leaves with a single
+ * render tree, so they share one file rather than an engine pair. Neither is
+ * consumed by either root engine — each root renders its OWN `data-part='fallback'`
+ * element without these classnames, so no rule here can reach into it.
+ *
+ * SCOPE is each compound's own classname plus its repeated `data-part`, reaching
+ * (0,3,0) — the floor for non-border paint. No rule here touches a border.
+ *
+ * `--ds-image-resolved-radius` carries `RADIUS_MAP[radius]`, which the `radius` prop
+ * selects and no attribute publishes. It is deliberately not the public
+ * `--ds-image-radius` token, which the classic engine's theme already consumes.
+ *
+ * KEYFRAME: Skeleton's per-mount `<style>` injected `rottayImageSkeletonPulse`; the
+ * copy here is renamed to the `ds-` vocabulary the skins share.
+ *
+ * Values transcribed verbatim from `compound/Fallback/index.tsx` and
+ * `compound/Skeleton/index.tsx`.
+ */
+
+.rottay-image-fallback[data-part='fallback'][data-part='fallback'] {
+  background-color: var(--ds-color-neutral-100, #f5f5f5);
+  color: var(--ds-color-neutral-500, #737373);
+}
+
+.rottay-image-skeleton[data-part='skeleton'][data-part='skeleton'] {
+  background-color: var(--ds-color-neutral-200, #e5e5e5);
+  border-radius: var(--ds-image-resolved-radius);
+}
+
+@keyframes ds-image-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

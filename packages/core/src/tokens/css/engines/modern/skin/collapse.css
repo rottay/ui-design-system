@@ -1,0 +1,102 @@
+/**
+ * Modern Collapse skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so a layered rule loses to preflight regardless
+ * of specificity. Unlayered outranks preflight and still yields to a
+ * caller's inline `style`.
+ *
+ * SCOPE ROOT keeps the component's existing bare `rottay-collapse` class
+ * (plus conditional `--ghost`/`--borderless` modifiers) -- this is the SAME
+ * class `engines/modern/theme.css:654-671`'s live bridge already targets on
+ * `border-color`/`border-radius` (a real, measured 14px radius today per the
+ * WO-SKIN-05 orchestrator adjudication A1). An unlayered rule anchored to
+ * that class outranks the layered bridge outright, so nothing here needs to
+ * out-fight it; it simply wins going forward the same way every other
+ * unlayered skin already does. Rustic's Collapse could NOT reuse this class
+ * for the identical reason in reverse (it would hand rustic a radius it
+ * never had) -- see `engines/rustic/skin/collapse.css`.
+ *
+ * SPECIFICITY (P-48): the only border-color-bearing rule here is the
+ * bordered panel (below) -- the two root classes + `[data-part='root']`
+ * already reach (0,3,0), and the descendant `[data-part='panel']` repeated
+ * buys the 4th unit. Every other declaration (background, box-shadow,
+ * border-radius, color, transform) is non-border and clears preflight
+ * unlayered at (0,3,0) or better. Values transcribed verbatim from
+ * `engines/modern.tsx`.
+ */
+
+/* ---- arrow: rotation (was the inline `transform` ternary on `isActive`). ---- */
+.rottay-collapse[data-part='root'] [data-part='arrow'] {
+  transform: rotate(0deg);
+}
+.rottay-collapse[data-part='root'] [data-part='arrow'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+/* ---- panel: border-radius + surface (was the Panel root's inline style).
+        Ghost overrides both to its own token pair; the extra
+        `.rottay-collapse--ghost` class naturally out-specifies the default
+        rule below, no guard needed since only two mutually distinct states
+        exist. ---- */
+.rottay-collapse[data-part='root'] [data-part='panel'] {
+  border-radius: var(--ds-collapse-root-default-idle-border-radius, var(--ds-radius-md));
+  background: var(--ds-collapse-root-default-idle-bg, var(--ds-surface-card));
+  box-shadow: var(--ds-collapse-root-default-idle-shadow, none);
+}
+.rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='panel'] {
+  border-radius: var(--ds-collapse-root-ghost-idle-border-radius, 0);
+  background: var(--ds-collapse-root-ghost-idle-bg, transparent);
+  box-shadow: var(--ds-collapse-root-ghost-idle-shadow, none);
+}
+
+/* ---- panel: border, bordered case only (was the `context.bordered` spread
+        -- when not bordered, no border key was ever set, so no rule fires
+        for that state). `:not(.rottay-collapse--borderless)` is both the
+        gate for `bordered` (the two are complementary, see
+        `Collapse.types.ts`'s COLLAPSE_DEFAULTS) and the specificity unit
+        that clears the (0,4,0) border-color floor. ---- */
+.rottay-collapse:not(.rottay-collapse--borderless)[data-part='root'] [data-part='panel'][data-part='panel'] {
+  border: var(--ds-collapse-root-default-idle-border-width, 1px) var(--ds-collapse-root-default-idle-border-style, solid) var(--ds-collapse-root-default-idle-border-color, var(--ds-color-border));
+}
+
+/* ---- header: color, 3-way priority (disabled > expanded > idle). Mutually
+        exclusive `:not()` guards reproduce the JS ternary's priority order
+        without relying on cascade position. ---- */
+.rottay-collapse[data-part='root'] [data-part='header'] {
+  color: var(--ds-collapse-header-default-idle-color, inherit);
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-expanded='true']:not([data-disabled='true']) {
+  color: var(--ds-collapse-header-default-expanded-color, var(--ds-color-primary));
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
+  color: var(--ds-collapse-header-default-disabled-color, var(--ds-color-text-disabled));
+}
+
+/* ---- header: background, 4-way priority (disabled > expanded > ghost > idle).
+        Same mutually-exclusive-guard idiom; the ghost rule additionally
+        excludes expanded/disabled so an active ghost panel resolves to the
+        expanded rule instead, matching the JS ternary's nesting order. ---- */
+.rottay-collapse[data-part='root'] [data-part='header'] {
+  background: var(--ds-collapse-header-default-idle-bg, transparent);
+}
+.rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='header']:not([data-expanded='true']):not([data-disabled='true']) {
+  background: var(--ds-collapse-header-ghost-idle-bg, transparent);
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-expanded='true']:not([data-disabled='true']) {
+  background: var(--ds-collapse-header-default-expanded-bg, transparent);
+}
+.rottay-collapse[data-part='root'] [data-part='header'][data-disabled='true'] {
+  background: var(--ds-collapse-header-default-disabled-bg, transparent);
+}
+
+/* ---- content-inner: color (was a STATIC, unconditional inline value, no
+        ternary in the source) + background (was the `context.ghost`
+        ternary). ---- */
+.rottay-collapse[data-part='root'] [data-part='content-inner'] {
+  color: var(--ds-collapse-content-default-idle-color, inherit);
+  background: var(--ds-collapse-content-default-idle-bg, transparent);
+}
+.rottay-collapse.rottay-collapse--ghost[data-part='root'] [data-part='content-inner'] {
+  background: var(--ds-collapse-content-ghost-idle-bg, transparent);
+}

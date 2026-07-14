@@ -1,0 +1,48 @@
+/**
+ * Rustic Statistic skin (WO-SKIN-05 checkpoint D2). Covers BOTH exports of
+ * `engines/rustic.tsx` -- Statistic and its sibling Countdown -- which share one
+ * anatomy and one set of values.
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style` -- which is what keeps the `valueStyle` prop
+ * overriding the trend color.
+ *
+ * SCOPE ROOT carries `rottay-statistic rottay-statistic--rustic` +
+ * `data-part='root'`. The engine suffix is load-bearing: modern and the
+ * engine-agnostic `compound/Countdown` both carry the bare `rottay-statistic`,
+ * and all three paint different values. Rustic's title carries no `.stat-title`
+ * class, so unlike modern it has no theme.css bridge and its color belongs here.
+ *
+ * SPECIFICITY (P-48): every value here is non-border paint except the skeleton's
+ * `border-radius`, which carries no color -- so (0,3,0) clears preflight and the
+ * (0,4,0) border floor does not apply. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='skeleton-line'] {
+  background: var(--ds-statistic-skeleton-bg, var(--ds-color-bg-secondary));
+  border-radius: 4px;
+}
+
+/* ---- title ---- */
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='title'] {
+  color: var(--ds-statistic-title-color, var(--ds-color-text-secondary));
+}
+
+/* ---- value: trend color. The unqualified rule carries the `default` value
+        because the lookup it replaces fell back to `default` for an
+        unrecognised trend; `valueStyle` still wins as inline. ---- */
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'] {
+  color: var(--ds-statistic-value-color, var(--ds-color-text-primary));
+}
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'][data-trend='positive'] {
+  color: var(--ds-statistic-positive-color, var(--ds-color-success));
+}
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'][data-trend='negative'] {
+  color: var(--ds-statistic-negative-color, var(--ds-color-error));
+}
+.rottay-statistic.rottay-statistic--rustic[data-part='root'] > [data-part='value'][data-trend='warning'] {
+  color: var(--ds-statistic-warning-color, var(--ds-color-warning));
+}

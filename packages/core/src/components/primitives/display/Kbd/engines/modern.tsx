@@ -1,9 +1,10 @@
 'use client';
 
 /**
- * @fileoverview Modern (DaisyUI/Tailwind) engine for the Kbd display primitive.
- * Leverages DaisyUI's built-in `kbd` component class, keeping the implementation
- * minimal -- just a single `<kbd>` with size and font-mono utility classes.
+ * @fileoverview Modern engine for the Kbd display primitive. A single `<kbd>`
+ * element carrying no DaisyUI class: the key-cap chrome is painted by
+ * `tokens/css/engines/modern/skin/kbd.css`, keyed on the `data-part`/`data-size`
+ * contract stamped below. Size dimensions and a caller's own `style` stay inline.
  *
  * @example
  * ```tsx
@@ -40,7 +41,7 @@ export default function ModernKbd(props: KbdProps): React.ReactElement {
 
   return (
     <kbd
-      className={className || undefined}
+      className={`rottay-kbd rottay-kbd--modern ${className}`.trim()}
       data-part="root"
       data-size={size}
       style={{
@@ -50,10 +51,6 @@ export default function ModernKbd(props: KbdProps): React.ReactElement {
         fontFamily: 'monospace',
         fontWeight: 500,
         lineHeight: 1,
-        borderRadius: 'var(--ds-radius-sm)',
-        border: '1px solid var(--ds-color-border)',
-        background: 'var(--ds-surface-inset)',
-        color: 'var(--ds-color-text-primary)',
         ...sizeStyle,
         ...style,
       }}

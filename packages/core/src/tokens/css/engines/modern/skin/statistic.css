@@ -1,0 +1,58 @@
+/**
+ * Modern Statistic skin (WO-SKIN-05 checkpoint D2). Covers BOTH exports of
+ * `engines/modern.tsx` -- Statistic and its sibling Countdown -- which share one
+ * anatomy and one set of values.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style` --
+ * which is what keeps the `valueStyle` prop overriding the trend color.
+ *
+ * SCOPE ROOT carries `rottay-statistic rottay-statistic--modern` +
+ * `data-part='root'`. The engine suffix is load-bearing: rustic and the
+ * engine-agnostic `compound/Countdown` both carry the bare `rottay-statistic`,
+ * and all three paint different values.
+ *
+ * THE TITLE'S COLOR IS NOT HERE, DELIBERATELY. `engines/modern/theme.css`'s
+ * `.stat-title { color: var(--ds-statistic-title-color) }` is uncontested on the
+ * title today (its inline style sets only line-height and margin) and `color` is
+ * a channel preflight does not touch, so that rule paints. Declaring the same
+ * color here would take ownership of a channel this skin never held.
+ *
+ * SPECIFICITY (P-48): every value here is non-border paint except the skeleton's
+ * `border-radius`, which carries no color -- so (0,3,0) clears preflight and the
+ * (0,4,0) border floor does not apply. Child combinators keep the rules off any
+ * `data-part` a caller's `prefix`/`suffix`/`title` node may itself carry. Values
+ * transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='skeleton-line'] {
+  background: var(--ds-statistic-loading-bg, var(--ds-surface-panel));
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+/* ---- value: trend color. The unqualified rule carries the `default` value
+        because the lookup it replaces fell back to `default` for an
+        unrecognised trend; `valueStyle` still wins as inline. ---- */
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] {
+  color: var(--ds-statistic-value-color, var(--ds-color-text-primary));
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='positive'] {
+  color: var(--ds-statistic-positive-color, var(--ds-color-success));
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='negative'] {
+  color: var(--ds-statistic-negative-color, var(--ds-color-error));
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'][data-trend='warning'] {
+  color: var(--ds-statistic-warning-color, var(--ds-color-warning));
+}
+
+/* ---- prefix / suffix: `inherit` keeps them on the value's trend color unless a
+        tenant sets the token. ---- */
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='prefix'] {
+  color: var(--ds-statistic-prefix-color, inherit);
+}
+.rottay-statistic.rottay-statistic--modern[data-part='root'] > [data-part='value'] > [data-part='suffix'] {
+  color: var(--ds-statistic-suffix-color, inherit);
+}

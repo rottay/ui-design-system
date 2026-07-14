@@ -1,0 +1,35 @@
+/**
+ * Tooltip compound skin -- `compound/Content` (WO-SKIN-05 checkpoint D2).
+ *
+ * ENGINE-AGNOSTIC: TooltipContent has a single render tree (no engine split), so
+ * it gets one file here rather than a per-engine pair. It is a
+ * standalone `forwardRef` piece with its own arrow-positioning logic, not the
+ * bubble either engine's Tooltip renders -- those carry
+ * `rottay-tooltip-bubble--{modern,rustic}` and have their own skins.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPED ON `rottay-tooltip-content`, the component's own first-party classname
+ * (grep-verified: only this file's component renders it). Note it is NOT matched
+ * by the personality/tenant rules on `.rottay-tooltip` -- a class selector is an
+ * exact match, not a prefix. The arrow hangs off the content as a child so its
+ * rule cannot reach a stray `rottay-tooltip-arrow` elsewhere.
+ *
+ * The arrow's per-side offsets stay inline: they are layout, not paint. No
+ * border is declared here, so the P-48 (0,4,0) floor does not apply. Values
+ * transcribed verbatim from `compound/Content/index.tsx`.
+ */
+
+.rottay-tooltip-content {
+  background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
+  color: var(--ds-tooltip-color, var(--ds-color-bg-base));
+  border-radius: var(--ds-tooltip-radius, 0.375rem);
+  box-shadow: var(--ds-tooltip-shadow, var(--ds-shadow-lg));
+}
+
+.rottay-tooltip-content > .rottay-tooltip-arrow {
+  background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
+  transform: rotate(45deg);
+}

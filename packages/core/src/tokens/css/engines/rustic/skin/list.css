@@ -1,0 +1,65 @@
+/**
+ * Rustic List skin (WO-SKIN-05 checkpoint D2). Covers the two exports of
+ * `engines/rustic.tsx` that paint -- List and Meta. Rustic's `Item` carries no
+ * paint at all (pure layout), so it gets no scope class and no rules: the
+ * modern/rustic asymmetry is transcribed, not levelled.
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPES: `rottay-list rottay-list--rustic` + `data-part='root'` +
+ * `data-bordered` + `data-loading`; `rottay-list-item-meta
+ * rottay-list-item-meta--rustic`. Meta is usable standalone, so it carries its
+ * own scope rather than hanging off the List root's. All grep-verified free.
+ *
+ * THE BORDERLESS BRANCH HAS NO RULES, DELIBERATELY. Every border here was
+ * `bordered ? '<value>' : undefined`, and an `undefined` key is one ReactDOM
+ * never writes -- so the borderless list falls to preflight's `border-width: 0`
+ * and an initial `border-radius: 0`, which is exactly what an absent rule gives.
+ *
+ * Inside `[data-loading='true']` the tree is a pure skeleton with no caller
+ * content, so those rules may safely use descendant selectors (their targets sit
+ * under unclassed layout divs). Everywhere else uses child combinators, since
+ * `data-part` is a shared vocabulary and List renders caller content.
+ *
+ * SPECIFICITY (P-48): border-bearing rules clear the tenant's unlayered (0,3,1)
+ * `*` border-color floor at (0,4,0)+. Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ============================ List (container) ============================ */
+
+.rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] {
+  border: 1px solid var(--ds-list-border-color, var(--ds-color-border));
+  border-radius: var(--ds-list-border-radius, 8px);
+}
+
+/* loading skeleton: avatar disc + text bars share one fill, differ in radius */
+.rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'] {
+  background: var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary));
+  border-radius: 50%;
+}
+.rottay-list.rottay-list--rustic[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
+  background: var(--ds-list-skeleton-bg, var(--ds-color-bg-tertiary));
+  border-radius: 4px;
+}
+
+/* header + footer separators, bordered mode only */
+.rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='header'] {
+  border-bottom: 1px solid var(--ds-list-border-color, var(--ds-color-border));
+}
+.rottay-list.rottay-list--rustic[data-part='root'][data-bordered='true'] > [data-part='footer'] {
+  border-top: 1px solid var(--ds-list-border-color, var(--ds-color-border));
+}
+
+/* split divider between items (unconditional, unlike the header/footer rules) */
+.rottay-list.rottay-list--rustic[data-part='root'] > [data-part='list'] > [data-part='divider'] {
+  border-bottom: 1px solid var(--ds-list-split-color, var(--ds-color-border-subtle));
+}
+
+/* ============================ List.Item.Meta ============================= */
+
+.rottay-list-item-meta.rottay-list-item-meta--rustic[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description'] {
+  color: var(--ds-list-meta-description-color, var(--ds-color-text-secondary));
+}

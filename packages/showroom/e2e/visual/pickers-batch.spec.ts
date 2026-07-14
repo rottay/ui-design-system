@@ -112,8 +112,16 @@ for (const fixture of FIXTURES) {
 // asymmetry, code is ground truth).
 // ---------------------------------------------------------------------------
 
+/**
+ * `data-part` is a shared VOCABULARY: every migrated component stamps `root`, and
+ * these fixtures label each picker with a `<Text>` that stamps one too. A bare part
+ * selector therefore matches the LABEL first. Excluding Typography's own scope class
+ * keeps the query on the component the fixture is actually about.
+ */
 async function clickPart(container: Locator, testId: string, part: string, nth = 0): Promise<void> {
-  const trigger = container.locator(`[data-testid="${testId}"] [data-part="${part}"]`).nth(nth);
+  const trigger = container
+    .locator(`[data-testid="${testId}"] [data-part="${part}"]:not(.rottay-typography)`)
+    .nth(nth);
   await trigger.click();
 }
 

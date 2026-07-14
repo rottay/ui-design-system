@@ -1,7 +1,9 @@
 /**
  * @fileoverview Rustic (pure HTML/CSS/Canvas) engine for the QRCode display primitive.
- * Zero-dependency implementation with inline styles, DS CSS variables, full ARIA
- * roles/labels, and an inline `@keyframes spin` for the loading spinner.
+ * Zero-dependency implementation with full ARIA roles/labels. Chrome is painted by
+ * `tokens/css/engines/rustic/skin/qrcode.css`, keyed on the `data-part`/`data-status`/
+ * `data-bordered` contract stamped below; the canvas bitmap and a caller's own
+ * `style` stay in this file.
  *
  * @example
  * ```tsx
@@ -60,11 +62,11 @@ function generatePattern(value: string, gridSize: number): boolean[][] {
 
 /**
  * Rustic QRCode engine. Draws the pattern on a `<canvas>` with full ARIA
- * labelling, centers an optional icon, and overlays inline-styled status
- * indicators with role="status" / role="alert" for accessibility.
+ * labelling, centers an optional icon, and overlays status indicators with
+ * role="status" / role="alert" for accessibility.
  *
  * @param props - DS QRCodeProps (value, size, colors, status, icon, etc.).
- * @returns An inline-styled container with canvas, icon, status overlay, and keyframes.
+ * @returns A container with canvas, icon, and status overlay.
  */
 export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
   const {
@@ -111,15 +113,13 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     }
   }, [value, size, color, bgColor, pattern]);
 
-  // All decoration via DS CSS variables; bordered adds padding, border, and bg
+  // bordered still owns the padding; its frame and fill are painted by qrcode.css,
+  // which keys on the data-bordered stamp below
   const containerStyle: React.CSSProperties = {
     display: 'inline-block',
     position: 'relative',
     ...(bordered && {
-      border: '1px solid var(--ds-qrcode-border-color, #d9d9d9)',
       padding: 'var(--ds-qrcode-padding, 12px)',
-      borderRadius: 'var(--ds-qrcode-radius, 8px)',
-      backgroundColor: 'var(--ds-qrcode-bg, #ffffff)',
     }),
     ...style,
   };
@@ -136,42 +136,31 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     alignItems: 'center',
     justifyContent: 'center',
     gap: '8px',
-    backgroundColor: 'var(--ds-qrcode-overlay-bg, rgba(255, 255, 255, 0.9))',
   };
 
-  // Absolutely centered over the canvas with a white background so the icon is readable
+  // Absolutely centered over the canvas so the icon stays readable
   const iconWrapperStyle: React.CSSProperties = {
     position: 'absolute',
     top: '50%',
     left: '50%',
-    transform: 'translate(-50%, -50%)',
     width: iconSize,
     height: iconSize,
-    backgroundColor: 'var(--ds-qrcode-icon-bg, #fff)',
     padding: 4,
-    borderRadius: 4,
   };
 
   // Button styles
   const buttonStyle: React.CSSProperties = {
     padding: '4px 12px',
-    border: '1px solid var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff))',
-    borderRadius: 4,
-    background: 'transparent',
-    color: 'var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff))',
     cursor: 'pointer',
     fontSize: 14,
     fontFamily: 'inherit',
   };
 
-  // CSS-only spinner driven by the inline @keyframes spin defined below
+  // CSS-only spinner; the ring and the keyframe both live in qrcode.css
   const spinnerStyle: React.CSSProperties = {
     width: 24,
     height: 24,
-    border: '3px solid var(--ds-qrcode-spinner-track, #f3f3f3)',
-    borderTop: '3px solid var(--ds-qrcode-spinner-color, var(--ds-color-primary-500, #1890ff))',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
+    animation: 'ds-qrcode-spin-rustic 1s linear infinite',
   };
 
   // Each status gets proper ARIA roles: 'status' for loading/scanned, 'alert' for expired
@@ -186,7 +175,7 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
       case 'expired':
         return (
           <div data-part="overlay" style={overlayStyle} role="alert">
-            <p data-part="status-text" style={{ margin: 0, color: 'var(--ds-qrcode-expired-color, #666)', fontSize: 14 }}>QR Code expired</p>
+            <p data-part="status-text" style={{ margin: 0, fontSize: 14 }}>QR Code expired</p>
             {onRefresh && (
               <button
                 data-part="refresh-button"
@@ -225,14 +214,6 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
       data-status={status}
       data-bordered={bordered ? 'true' : undefined}
     >
-      <style>
-        {`
-          @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-        `}
-      </style>
       <div style={{ position: 'relative', width: size, height: size }} data-part="canvas-wrapper">
         <canvas
           ref={canvasRef}

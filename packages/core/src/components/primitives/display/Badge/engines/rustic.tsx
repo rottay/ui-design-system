@@ -159,6 +159,8 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   const cssVars: React.CSSProperties = {
     '--ds-badge-bg': color,
     '--ds-badge-color': VARIANT_SOLID_TEXT_COLOR_MAP[variant!] || VARIANT_SOLID_TEXT_COLOR_MAP.default,
+    '--ds-badge-soft-bg': VARIANT_SOFT_COLOR_MAP[variant!] || VARIANT_SOFT_COLOR_MAP.default,
+    '--ds-badge-soft-color': VARIANT_SOFT_TEXT_COLOR_MAP[variant!] || VARIANT_SOFT_TEXT_COLOR_MAP.default,
     '--ds-badge-min-width': sizeValues.minWidth,
     '--ds-badge-height': sizeValues.height,
     '--ds-badge-font-size': sizeValues.fontSize,
@@ -186,36 +188,6 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   };
 
   /**
-   * Returns CSS styles for the selected badge style variant.
-   * @returns Style object for the badge appearance
-   */
-  const getStyleVariation = (): React.CSSProperties => {
-    switch (badgeStyle) {
-      case 'outline':
-        return {
-          backgroundColor: 'transparent',
-          color: 'var(--ds-badge-bg)',
-          border: '1px solid var(--ds-badge-bg)',
-        };
-      case 'soft':
-        return {
-          backgroundColor: VARIANT_SOFT_COLOR_MAP[variant!] || VARIANT_SOFT_COLOR_MAP.default,
-          color: VARIANT_SOFT_TEXT_COLOR_MAP[variant!] || VARIANT_SOFT_TEXT_COLOR_MAP.default,
-        };
-      case 'ghost':
-        return {
-          backgroundColor: 'transparent',
-          color: 'var(--ds-badge-bg)',
-        };
-      default: // solid
-        return {
-          backgroundColor: 'var(--ds-badge-bg)',
-          color: 'var(--ds-badge-color)',
-        };
-    }
-  };
-
-  /**
    * Handles badge click events.
    * @param e - Mouse event
    */
@@ -235,6 +207,9 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
 
   // Core visual style shared by both standalone and positioned badges.
   // When dot=true, dimensions collapse to the dot size with zero padding.
+  // Fill, ink, radius, frame and the bordered ring are painted by
+  // tokens/css/engines/rustic/skin/badge.css, which reads the custom properties
+  // above and keys the style branches on the data-badge-style stamp.
   const badgeIndicatorStyle: React.CSSProperties = {
     ...cssVars,
     display: 'inline-flex',
@@ -247,21 +222,17 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     fontSize: 'var(--ds-badge-font-size)',
     fontWeight: 500,
     lineHeight: 1,
-    borderRadius: 'var(--ds-badge-border-radius)',
-    border: bordered ? 'var(--ds-badge-border-width, 2px) solid var(--ds-badge-border-color, #fff)' : 'none',
-    boxShadow: bordered ? `0 0 0 1px ${color}` : 'none',
     cursor: isInteractive ? 'pointer' : 'default',
     transition: 'var(--ds-badge-transition, all 0.2s ease-in-out)',
     userSelect: 'none',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    ...getStyleVariation(),
   };
 
-  // Animation is applied inline; the matching @keyframes is injected via <style> below
+  // The matching @keyframes lives in the skin, engine-namespaced
   const pulseAnimation = pulse ? {
-    animation: 'badge-pulse 1.5s ease-in-out infinite',
+    animation: 'ds-badge-pulse-rustic 1.5s ease-in-out infinite',
   } : {};
 
   const responsiveStyleTag = responsive && responsive.css ? (
@@ -276,14 +247,6 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
     return (
       <>
         {responsiveStyleTag}
-        {pulse && (
-          <style>{`
-            @keyframes badge-pulse {
-              0%, 100% { opacity: 1; transform: scale(1); }
-              50% { opacity: 0.6; transform: scale(1.05); }
-            }
-          `}</style>
-        )}
         <span
           className={`rottay-badge rottay-badge--rustic ${className}`}
           data-part="root"
@@ -337,14 +300,6 @@ export default function RusticBadge(props: BadgeProps): React.ReactElement {
   return (
     <>
       {responsiveStyleTag}
-      {pulse && (
-        <style>{`
-          @keyframes badge-pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.05); }
-          }
-        `}</style>
-      )}
       <div className={className} data-part="anchor" style={containerStyle}>
         {children}
         {shouldShowBadge && (

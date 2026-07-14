@@ -20,8 +20,21 @@ describe('Badge labelled children paint chrome on every engine (WO-ENG-13)', () 
     const { findByText } = renderWithEngine(<Badge variant="success">Ready</Badge>, engine);
     const el = await findByText('Ready');
 
-    expect(el.style.backgroundColor).not.toBe('');
-    expect(el.style.backgroundColor).not.toBe('transparent');
+    // modern/rustic paint the chrome from engines/*/skin/badge.css, keyed on the
+    // stamps; the engine's job there is to RESOLVE the treatment and say so in the
+    // DOM. classic is the Ant Design wrapper -- unmigrated, still inline.
+    if (engine === 'classic') {
+      expect(el.style.backgroundColor).not.toBe('');
+      expect(el.style.backgroundColor).not.toBe('transparent');
+    } else if (engine === 'rustic') {
+      // rustic threads its fill through the `--ds-badge-bg` hatch.
+      expect(el.style.getPropertyValue('--ds-badge-soft-bg')).not.toBe('');
+      expect(el.getAttribute('data-badge-style')).toBe('soft');
+    } else {
+      expect(el.getAttribute('data-variant')).toBe('success');
+      expect(el.getAttribute('data-badge-style')).toBe('soft');
+      expect(el.className).toContain('rottay-badge');
+    }
   });
 
   it.each(STABLE_ENGINES)('%s engine clips a long label with the ENG-09 guard', async (engine) => {
@@ -113,12 +126,24 @@ describe('Badge defaults to soft; the count/dot indicator stays solid (WO-ENG-15
     const { findByText } = renderWithEngine(<Badge variant="success">Ready</Badge>, engine);
     const el = await findByText('Ready');
 
-    expect(el.style.backgroundColor).toBe('var(--ds-color-alpha-success-10)');
+    // The soft tint lives in engines/*/skin/badge.css, keyed on this pair; what the
+    // ENGINE decides -- and what this test exists to pin -- is that a LABELLED badge
+    // resolves to `soft` while an indicator stays `solid`. classic is unmigrated.
+    if (engine === 'classic') {
+      expect(el.style.backgroundColor).toBe('var(--ds-color-alpha-success-10)');
+    } else if (engine === 'rustic') {
+      expect(el.style.getPropertyValue('--ds-badge-soft-bg')).toBe('var(--ds-color-alpha-success-10)');
+    } else {
+      expect(el.getAttribute('data-badge-style')).toBe('soft');
+      expect(el.getAttribute('data-variant')).toBe('success');
+    }
     // The soft text color is the darker -700 shade (matching the modern engine's
     // softColor token), not the solid fill color -- the solid token is tuned for
     // white text on top of it at full opacity, not for use as small text on its
     // own low-opacity tint.
-    expect(el.style.color).toBe('var(--ds-color-success-700)');
+    if (engine === 'classic') {
+      expect(el.style.color).toBe('var(--ds-color-success-700)');
+    }
   });
 
   it.each(STABLE_ENGINES)('%s engine still produces the saturated solid fill when badgeStyle="solid" is explicit', async (engine) => {
@@ -128,8 +153,15 @@ describe('Badge defaults to soft; the count/dot indicator stays solid (WO-ENG-15
     );
     const el = await findByText('Ready');
 
-    expect(el.style.backgroundColor).not.toBe('');
-    expect(el.style.backgroundColor).not.toBe('transparent');
+    // An EXPLICIT badgeStyle always wins over the labelled default. classic paints
+    // it inline; modern/rustic stamp the resolved treatment and the skin fills it.
+    if (engine === 'classic') {
+      expect(el.style.backgroundColor).not.toBe('');
+      expect(el.style.backgroundColor).not.toBe('transparent');
+    } else {
+      expect(el.getAttribute('data-badge-style')).toBe('solid');
+      expect(el.getAttribute('data-variant')).toBe('success');
+    }
     expect(el.style.backgroundColor).not.toBe('var(--ds-color-alpha-success-10)');
   });
 
@@ -153,7 +185,10 @@ describe('Badge defaults to soft; the count/dot indicator stays solid (WO-ENG-15
     );
     const indicator = screen.getByText('5');
 
-    expect(indicator.style.backgroundColor).toBe('var(--ds-color-success)');
+    // The indicator's solid fill is the skin's, keyed on the treatment the engine
+    // resolves: an INDICATOR stays solid even though a LABELLED badge defaults soft.
+    expect(indicator.getAttribute('data-badge-style')).toBe('solid');
+    expect(indicator.getAttribute('data-variant')).toBe('success');
     expect(indicator.style.backgroundColor).not.toBe('var(--ds-color-alpha-success-10)');
   });
 });

@@ -42,9 +42,18 @@
 
 import React, { forwardRef, useId } from 'react';
 import type { HeadingProps, TextProps, ParagraphProps, LinkProps, TextSize } from '../Typography.types';
-import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, COLOR_MAP, LINE_HEIGHT_MAP } from '../Typography.types';
+import { TYPOGRAPHY_DEFAULTS, SIZE_MAP, WEIGHT_MAP, LINE_HEIGHT_MAP } from '../Typography.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
+
+/**
+ * Scope class carried by all four exports. Text color is selected from
+ * `data-color` by `tokens/css/engines/rustic/skin/typography.css`, which resolves
+ * an unrecognised value to the `default` color -- except on Link, whose
+ * `rottay-typography--link` modifier resolves it to `primary`. Both the class and
+ * `data-color` must reach the root for the color to paint.
+ */
+const SCOPE_CLASSES = 'rottay-typography rottay-typography--rustic';
 
 /**
  * Extracts the scalar value from a prop that may be a ResponsiveValue.
@@ -130,7 +139,6 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         lineHeight: 1.2,
       }),
       fontWeight: WEIGHT_MAP[weight] || WEIGHT_MAP.bold,
-      color: COLOR_MAP[color] || COLOR_MAP.default,
       textAlign: align,
       // Reset margin to zero; DS layout components handle spacing.
       margin: 0,
@@ -159,7 +167,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
         )}
         <HeadingElement
           ref={ref}
-          className={`rottay-heading rottay-heading--${level} ${className}`.trim()}
+          className={`rottay-heading ${SCOPE_CLASSES} rottay-heading--${level} ${className}`.trim()}
           data-part="root"
           data-color={color}
           style={headingStyle}
@@ -244,7 +252,6 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
         fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
       }),
       fontWeight: WEIGHT_MAP[weight] || WEIGHT_MAP.normal,
-      color: COLOR_MAP[color] || COLOR_MAP.default,
       textAlign: align,
       fontStyle: italic ? 'italic' : undefined,
       fontFamily: monospace ? 'var(--ds-font-mono, monospace)' : undefined,
@@ -271,7 +278,7 @@ export const ApolloText = forwardRef<HTMLElement, TextProps>(
         )}
         <TextElement
           ref={ref}
-          className={`rottay-text${numeric === 'tabular' ? ' ds-nums-tabular' : ''} ${className}`.trim()}
+          className={`rottay-text ${SCOPE_CLASSES}${numeric === 'tabular' ? ' ds-nums-tabular' : ''} ${className}`.trim()}
           data-part="root"
           data-color={color}
           style={textStyle}
@@ -314,7 +321,6 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     const paragraphStyle: React.CSSProperties = {
       fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
       fontWeight: WEIGHT_MAP[weight] || WEIGHT_MAP.normal,
-      color: COLOR_MAP[color] || COLOR_MAP.default,
       textAlign: align,
       lineHeight: 'var(--ds-line-height-relaxed, 1.625)',
       margin: 0,
@@ -335,7 +341,7 @@ export const ApolloParagraph = forwardRef<HTMLParagraphElement, ParagraphProps>(
     return (
       <p
         ref={ref}
-        className={`rottay-paragraph ${className}`.trim()}
+        className={`rottay-paragraph ${SCOPE_CLASSES} ${className}`.trim()}
         data-part="root"
         data-color={color}
         style={paragraphStyle}
@@ -385,7 +391,6 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
       fontSize: SIZE_MAP.text[size] || SIZE_MAP.text.md,
       // `strong` prop takes precedence over `weight` for bold link text.
       fontWeight: strong ? WEIGHT_MAP.semibold : (weight ? WEIGHT_MAP[weight] : WEIGHT_MAP.normal),
-      color: COLOR_MAP[color] || COLOR_MAP.primary,
       textDecoration: underline ? 'underline' : 'none',
       cursor: disabled ? 'not-allowed' : 'pointer',
       opacity: disabled ? 0.5 : 1,
@@ -411,7 +416,7 @@ export const ApolloLink = forwardRef<HTMLAnchorElement, LinkProps>(
         target={target}
         rel={computedRel}
         onClick={handleClick}
-        className={`rottay-link ${className}`.trim()}
+        className={`rottay-link ${SCOPE_CLASSES} rottay-typography--link ${className}`.trim()}
         data-part="root"
         data-color={color}
         data-disabled={disabled || undefined}

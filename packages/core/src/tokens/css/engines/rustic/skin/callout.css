@@ -1,0 +1,85 @@
+/**
+ * Rustic Callout skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-callout-shell rottay-callout-shell--rustic` +
+ * `data-part='root'` + `data-tone` (alongside the untargeted legacy
+ * `rottay-callout-rustic` / `rottay-callout--<variant>` names). The `-shell`
+ * scope is mandatory: bare `.rottay-alert` / `.rottay-alert-shell` belong to
+ * Alert, and a rule anchored on a classname another component renders repaints
+ * that component. Rustic's root carries no DaisyUI `alert` class, so nothing
+ * external composes onto its border channel.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element. The left accent is a `border-left` SHORTHAND
+ * (as it is inline) so width, style and color land atomically; it therefore
+ * reaches (0,4,0) via the two shell classes + `[data-part='root']` +
+ * `[data-tone]`. The close button's `border: none` is a color-free reset
+ * (exempt). Values transcribed verbatim from `engines/rustic.tsx` /
+ * `CALLOUT_COLORS`.
+ */
+
+/* ---- root: tone-independent radius, then per-tone surface, left accent and
+        text color (was the inline style object + CALLOUT_COLORS lookup). ---- */
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'] {
+  border-radius: 8px;
+}
+
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] {
+  background-color: var(--ds-color-info-50, #eff6ff);
+  border-left: 4px solid var(--ds-color-info-500, #3b82f6);
+  color: var(--ds-color-info-800, #1e40af);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] {
+  background-color: var(--ds-color-warning-50, #fffbeb);
+  border-left: 4px solid var(--ds-color-warning-500, #f59e0b);
+  color: var(--ds-color-warning-800, #92400e);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] {
+  background-color: var(--ds-color-error-50, #fef2f2);
+  border-left: 4px solid var(--ds-color-error-500, #ef4444);
+  color: var(--ds-color-error-800, #991b1b);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] {
+  background-color: var(--ds-color-success-50, #f0fdf4);
+  border-left: 4px solid var(--ds-color-success-500, #22c55e);
+  color: var(--ds-color-success-800, #166534);
+}
+
+/* ---- icon: the per-tone accent color. Child combinator keeps the rule off any
+        `data-part='icon'` the caller's own content may bring. ---- */
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] > [data-part='icon'] {
+  color: var(--ds-color-info-500, #3b82f6);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] > [data-part='icon'] {
+  color: var(--ds-color-warning-500, #f59e0b);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] > [data-part='icon'] {
+  color: var(--ds-color-error-500, #ef4444);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] > [data-part='icon'] {
+  color: var(--ds-color-success-500, #22c55e);
+}
+
+/* ---- close button: transparent, borderless, per-tone text color (opacity +
+        cursor stay inline). `border: none` is a color-free reset (exempt). ---- */
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'] > [data-part='close-button'] {
+  border: none;
+  background: transparent;
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='info'] > [data-part='close-button'] {
+  color: var(--ds-color-info-800, #1e40af);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='warning'] > [data-part='close-button'] {
+  color: var(--ds-color-warning-800, #92400e);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='error'] > [data-part='close-button'] {
+  color: var(--ds-color-error-800, #991b1b);
+}
+.rottay-callout-shell.rottay-callout-shell--rustic[data-part='root'][data-tone='success'] > [data-part='close-button'] {
+  color: var(--ds-color-success-800, #166534);
+}

@@ -88,6 +88,12 @@ export function countArc09PaintInFile(text) {
   // ARC09_PAINT_SHORTHAND_RE's doc for why the narrow scope is deliberate.
   const styleObjDepths = [];
   const inStyleObj = () => styleObjDepths.length > 0;
+  // The last CODE character seen -- comments and whitespace never update it. A
+  // backward scan over raw text cannot do this: it lands inside any comment that
+  // sits between the previous `,`/`{` and the key, and the key vanishes from the
+  // count. That is an UNDER-count, the worst direction for a ratchet: a file with
+  // live paint right after a comment would read as `inlinePaint: 0` -- migrated.
+  let prevMeaningful = "";
   let i = 0;
   while (i < n) {
     const c = text[i];
@@ -177,6 +183,7 @@ export function countArc09PaintInFile(text) {
         }
       }
       stack.push(c);
+      prevMeaningful = c;
       i++;
       continue;
     }
@@ -196,6 +203,7 @@ export function countArc09PaintInFile(text) {
           styleObjDepths.pop();
         }
       }
+      prevMeaningful = c;
       i++;
       continue;
     }
@@ -234,14 +242,12 @@ export function countArc09PaintInFile(text) {
     // at an identifier boundary.
     if (topIs("{") && !inTypeBody() && /[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
       const ahead = text.slice(i, i + 48);
-      // An object KEY is preceded (skipping whitespace) by `{` or `,` and nothing
-      // else. Without this guard the `color` in `background: active ? color : x`
-      // reads as a second key -- the TERNARY's own colon looks like a key's colon --
-      // and the counter inflates. A gate that over-counts sends agents hunting
-      // paint that does not exist; it is as useless as one that under-counts.
-      let k = i - 1;
-      while (k >= 0 && /\s/.test(text[k])) k -= 1;
-      const atKeyPosition = k >= 0 && (text[k] === "{" || text[k] === ",");
+      // An object KEY is preceded by `{` or `,` -- and by nothing else. Without this
+      // the `color` in `background: active ? color : x` reads as a second key (the
+      // TERNARY's colon looks like a key's colon) and the counter inflates. It is
+      // computed from the last MEANINGFUL character, so comments between the comma
+      // and the key do not hide the key.
+      const atKeyPosition = prevMeaningful === "{" || prevMeaningful === ",";
       const m = atKeyPosition ? ARC09_PAINT_KEY_RE.exec(ahead) : null;
       if (m && !ARC09_PAINT_EXEMPT.has(m[1])) count += 1;
       else if (atKeyPosition && inStyleObj()) {
@@ -249,6 +255,7 @@ export function countArc09PaintInFile(text) {
         if (sh && !ARC09_PAINT_EXEMPT.has(sh[1])) count += 1;
       }
     }
+    if (!/\s/.test(c)) prevMeaningful = c;
     i++;
   }
   return count;

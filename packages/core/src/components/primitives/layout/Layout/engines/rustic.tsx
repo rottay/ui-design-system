@@ -69,50 +69,35 @@ const styles = {
   layoutWithSider: {
     flexDirection: 'row',
   } as React.CSSProperties,
-  /** Header: dark primary background with centered vertical alignment */
+  /** Header: layout only -- background/color live in engines/rustic/skin/layout.css. */
   header: {
-    backgroundColor: 'var(--ds-layout-header-bg, var(--ds-color-primary-900))',
-    color: 'var(--ds-layout-header-color, var(--ds-color-text-on-primary))',
     padding: 'var(--ds-layout-header-padding, 0 16px)',
     display: 'flex',
     alignItems: 'center',
     flexShrink: 0,
   } as React.CSSProperties,
-  /** Sider (dark theme): matches header background with smooth width transition */
+  /** Sider: layout only -- background/color (dark base + light override) live in the skin. */
   sider: {
-    backgroundColor: 'var(--ds-layout-sider-bg, var(--ds-color-primary-900))',
-    color: 'var(--ds-layout-sider-color, var(--ds-color-text-on-primary))',
     flexShrink: 0,
     overflow: 'auto',
     transition: 'width 0.3s',
   } as React.CSSProperties,
-  /** Sider light theme override: elevated background with a subtle right border */
-  siderLight: {
-    backgroundColor: 'var(--ds-layout-sider-light-bg, var(--ds-color-bg-elevated))',
-    color: 'var(--ds-layout-sider-light-color, var(--ds-color-text-primary))',
-    borderRight: '1px solid var(--ds-layout-sider-light-border, var(--ds-color-border-subtle))',
-  } as React.CSSProperties,
-  /** Content: flex-growing main area with default padding and scroll */
+  /** Content: flex-growing main area -- background lives in the skin. */
   content: {
     flex: 1,
     padding: 'var(--ds-layout-content-padding, 16px)',
     overflow: 'auto',
-    backgroundColor: 'var(--ds-layout-content-bg, var(--ds-color-bg-primary))',
   } as React.CSSProperties,
-  /** Footer: secondary background, centered text, shrink-proof */
+  /** Footer: layout only -- background lives in the skin. */
   footer: {
-    backgroundColor: 'var(--ds-layout-footer-bg, var(--ds-color-bg-secondary))',
     padding: 'var(--ds-layout-footer-padding, 16px)',
     textAlign: 'center',
     flexShrink: 0,
   } as React.CSSProperties,
-  /** Collapse toggle button: transparent, full-width, inherits text color */
+  /** Collapse toggle button: layout only -- chrome lives in the skin. */
   trigger: {
     width: '100%',
     padding: '8px',
-    border: 'none',
-    background: 'transparent',
-    color: 'inherit',
     cursor: 'pointer',
     textAlign: 'center',
   } as React.CSSProperties,
@@ -162,7 +147,7 @@ export const Header = React.forwardRef<HTMLElement, LayoutHeaderProps>(
     return (
       <header
         ref={ref}
-        className={`rottay-layout-header ${className ?? ''}`.trim()}
+        className={`rottay-layout-header rottay-layout-header--rustic ${className ?? ''}`.trim()}
         style={{
           ...styles.header,
           height: typeof height === 'number' ? `${height}px` : height,
@@ -221,11 +206,9 @@ export const Sider = React.forwardRef<HTMLElement, LayoutSiderProps>(
     return (
       <aside
         ref={ref}
-        className={`rottay-layout-sider ${className ?? ''}`.trim()}
+        className={`rottay-layout-sider rottay-layout-sider--rustic ${className ?? ''}`.trim()}
         style={{
           ...styles.sider,
-          // Light theme overlays elevated background and a subtle border
-          ...(theme === 'light' ? styles.siderLight : {}),
           width: typeof currentWidth === 'number' ? `${currentWidth}px` : currentWidth,
           ...style,
         }}
@@ -261,7 +244,7 @@ export const Content = React.forwardRef<HTMLElement, LayoutContentProps>(
   (props, ref) => {
     const { children, className, style } = props;
     return (
-      <main ref={ref} className={`rottay-layout-content ${className ?? ''}`.trim()} style={{ ...styles.content, ...style }} data-part="content">
+      <main ref={ref} className={`rottay-layout-content rottay-layout-content--rustic ${className ?? ''}`.trim()} style={{ ...styles.content, ...style }} data-part="content">
         {children}
       </main>
     );
@@ -279,7 +262,7 @@ export const Footer = React.forwardRef<HTMLElement, LayoutFooterProps>(
   (props, ref) => {
     const { children, className, style } = props;
     return (
-      <footer ref={ref} className={`rottay-layout-footer ${className ?? ''}`.trim()} style={{ ...styles.footer, ...style }} data-part="footer">
+      <footer ref={ref} className={`rottay-layout-footer rottay-layout-footer--rustic ${className ?? ''}`.trim()} style={{ ...styles.footer, ...style }} data-part="footer">
         {children}
       </footer>
     );

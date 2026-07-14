@@ -74,6 +74,8 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
     // DaisyUI maps text position to divider-start/divider-end;
     // center (default) does not need an additional class
     const classNames = [
+      'rottay-divider',
+      'rottay-divider--modern',
       'divider',
       isHorizontal ? 'divider-horizontal' : 'divider-vertical',
       hasChildren && textPosition === 'left' ? 'divider-start' : '',
@@ -97,14 +99,18 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...style,
     };
 
-    // Line uses border (not a pseudo-element) for inline style portability
+    // Line uses border (not a pseudo-element) for inline style portability.
+    // `color`/`thickness` are caller-overridable free-form props (see
+    // Divider.types.ts), so the resolved value can't be enumerated into a
+    // finite data-* lookup -- it rides `--ds-divider-line` instead, read via
+    // `var()` by engines/modern/skin/divider.css and gated on
+    // `data-orientation` there to land on border-top vs border-left.
     const lineStyle: React.CSSProperties = {
       flex: 1,
       height: isHorizontal ? '0' : '100%',
       width: isHorizontal ? '100%' : '0',
-      borderTop: isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
-      borderLeft: !isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
-    };
+      '--ds-divider-line': `${lineThickness} ${variant} ${lineColor}`,
+    } as React.CSSProperties;
 
     // flexGrow/flexBasis control asymmetric line lengths around the text
     const lineBeforeStyle: React.CSSProperties = {
@@ -121,17 +127,20 @@ const ModernDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: '5%',
     };
 
-    // DaisyUI text convention: uppercase + letter-spacing for visual emphasis
+    // DaisyUI text convention: uppercase + letter-spacing for visual emphasis.
+    // `plain`'s color branch rides `--ds-divider-plain-color` since this
+    // engine stamps no `data-plain` signal (rustic's skin keys off its own
+    // existing `divider--plain` class instead).
     const textStyle: React.CSSProperties = {
       display: 'flex',
       alignItems: 'center',
       whiteSpace: 'nowrap',
       fontSize: plain ? 'inherit' : '0.875rem',
       fontWeight: plain ? 'inherit' : 600,
-      color: plain ? 'inherit' : 'var(--ds-color-text-secondary)',
+      '--ds-divider-plain-color': plain ? 'inherit' : undefined,
       textTransform: plain ? 'none' : 'uppercase',
       letterSpacing: plain ? 'normal' : '0.05em',
-    };
+    } as React.CSSProperties;
 
     // Two render paths: with inline text or simple line
     if (hasChildren) {

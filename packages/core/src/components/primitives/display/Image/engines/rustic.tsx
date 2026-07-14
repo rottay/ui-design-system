@@ -96,21 +96,21 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
   // Resolve DS radius token to a CSS value shared by container and inner elements
   const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.none;
 
-  // All visual decoration (border, shadow, transition) via DS CSS variables
+  // One radius value serves the container, the image and the three panels; the
+  // `radius` prop publishes no attribute, so image.css reads it as an inherited
+  // custom property set once here.
   const containerStyle: React.CSSProperties = {
     position: 'relative',
     display: 'inline-block',
     width: typeof width === 'number' ? `${width}px` : width || 'auto',
     height: typeof height === 'number' ? `${height}px` : height || 'auto',
     aspectRatio: aspectRatio ? String(aspectRatio) : undefined,
-    borderRadius: radiusValue,
+    '--ds-image-resolved-radius': radiusValue,
     overflow: 'hidden',
-    border: bordered ? '1px solid var(--ds-image-border-color, rgba(0, 0, 0, 0.1))' : 'none',
-    boxShadow: shadow ? 'var(--ds-image-shadow, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06))' : 'none',
     cursor: onClick || zoomable ? 'pointer' : 'default',
     transition: 'var(--ds-image-transition, all 0.2s ease-in-out)',
     ...style,
-  };
+  } as React.CSSProperties;
 
   // Hidden via display:none until loaded, avoiding a flash of broken content
   const imageStyle: React.CSSProperties = {
@@ -118,7 +118,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     height: '100%',
     objectFit,
     objectPosition,
-    borderRadius: radiusValue,
     display: status === 'loaded' ? 'block' : 'none',
     transition: 'opacity 0.3s ease-in-out',
   };
@@ -133,8 +132,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     display: status === 'loading' ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'var(--ds-image-placeholder-bg, #f5f5f5)',
-    borderRadius: radiusValue,
   };
 
   // Fallback styles
@@ -147,9 +144,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     display: status === 'error' ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'var(--ds-image-fallback-bg, #f5f5f5)',
-    color: 'var(--ds-image-fallback-color, #737373)',
-    borderRadius: radiusValue,
   };
 
   // Hover overlay styles
@@ -162,8 +156,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     display: isHovered && hoverOverlay ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'var(--ds-image-overlay-bg, rgba(0, 0, 0, 0.4))',
-    borderRadius: radiusValue,
     transition: 'opacity 0.2s ease-in-out',
   };
 
@@ -177,7 +169,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     display: isZoomed ? 'flex' : 'none',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'var(--ds-image-zoom-overlay-bg, rgba(0, 0, 0, 0.9))',
     zIndex: 9999,
     cursor: 'zoom-out',
   };
@@ -205,14 +196,14 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
     </svg>
   );
 
-  // Inline pulse animation placeholder -- avoids importing an animation library
+  // Pulse animation placeholder -- avoids importing an animation library
   const DefaultPlaceholder = () => (
     <div
+      className="rottay-image__pulse"
       style={{
         width: '100%',
         height: '100%',
-        backgroundColor: 'var(--ds-image-loading-bg, #e5e5e5)',
-        animation: 'rusticImagePulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        animation: 'ds-image-pulse-rustic 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
       }}
     />
   );
@@ -220,7 +211,7 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
   return (
     <>
       <div
-        className={`rottay-image-rustic ${className}`}
+        className={`rottay-image rottay-image--rustic rottay-image-rustic ${className}`}
         data-status={status}
         data-bordered={bordered ? 'true' : undefined}
         data-shadow={shadow ? 'true' : undefined}
@@ -270,9 +261,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
               bottom: 8,
               right: 8,
               padding: 6,
-              backgroundColor: 'var(--ds-image-zoom-indicator-bg, rgba(0, 0, 0, 0.5))',
-              borderRadius: '50%',
-              color: 'var(--ds-image-zoom-indicator-color, white)',
             }}
           >
             <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -285,6 +273,7 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
       {/* Zoom Overlay */}
       {zoomable && (
         <div
+          className="rottay-image-zoom rottay-image-zoom--rustic"
           data-part="zoom-dialog"
           style={zoomOverlayStyle}
           onClick={handleCloseZoom}
@@ -306,10 +295,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
               top: 16,
               right: 16,
               padding: 8,
-              backgroundColor: 'var(--ds-image-zoom-close-bg, rgba(255, 255, 255, 0.1))',
-              border: 'none',
-              borderRadius: '50%',
-              color: 'var(--ds-image-zoom-close-color, white)',
               cursor: 'pointer',
             }}
             aria-label="Close zoom"
@@ -320,16 +305,6 @@ export default function RusticImage(props: ImageProps): React.ReactElement {
           </button>
         </div>
       )}
-
-      {/* Inline keyframes for animation */}
-      <style>
-        {`
-          @keyframes rusticImagePulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-          }
-        `}
-      </style>
     </>
   );
 }

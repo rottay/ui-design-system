@@ -43,85 +43,6 @@ function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefi
 type BadgePositionStyle = React.CSSProperties & Record<'--ds-badge-position-transform', string>;
 
 // ---------------------------------------------------------------------------
-// Semantic color tokens per variant
-// ---------------------------------------------------------------------------
-// Each variant maps to a set of CSS custom properties for solid/soft/outline
-// rendering. CSS variables are always defined by the tenant stylesheet.
-interface VariantTokens {
-  /** Solid bg color */
-  solidBg: string;
-  /** Solid text color */
-  solidColor: string;
-  /** Soft bg (low-opacity tint) */
-  softBg: string;
-  /** Soft text color */
-  softColor: string;
-  /** Outline border color */
-  outlineBorder: string;
-  /** Outline text color */
-  outlineColor: string;
-}
-
-const VARIANT_TOKENS: Record<string, VariantTokens> = {
-  default: {
-    solidBg: 'var(--ds-color-neutral-200)',
-    solidColor: 'var(--ds-color-text-primary)',
-    softBg: 'var(--ds-color-alpha-black-100)',
-    softColor: 'var(--ds-color-text-secondary)',
-    outlineBorder: 'var(--ds-color-border)',
-    outlineColor: 'var(--ds-color-text-secondary)',
-  },
-  primary: {
-    solidBg: 'var(--ds-color-primary)',
-    solidColor: 'var(--ds-color-primary-foreground)',
-    softBg: 'var(--ds-color-alpha-primary-10)',
-    softColor: 'var(--ds-color-primary)',
-    outlineBorder: 'var(--ds-color-primary-400)',
-    outlineColor: 'var(--ds-color-primary)',
-  },
-  secondary: {
-    solidBg: 'var(--ds-color-secondary)',
-    solidColor: 'var(--ds-color-text-on-primary)',
-    softBg: 'var(--ds-color-alpha-secondary-10)',
-    softColor: 'var(--ds-color-secondary-600)',
-    outlineBorder: 'var(--ds-color-secondary-300)',
-    outlineColor: 'var(--ds-color-secondary-600)',
-  },
-  success: {
-    solidBg: 'var(--ds-color-success)',
-    solidColor: 'var(--ds-color-text-on-primary)',
-    softBg: 'var(--ds-color-alpha-success-10)',
-    softColor: 'var(--ds-color-success-700)',
-    outlineBorder: 'var(--ds-color-success-border)',
-    outlineColor: 'var(--ds-color-success-700)',
-  },
-  warning: {
-    solidBg: 'var(--ds-color-warning)',
-    solidColor: 'var(--ds-color-text-on-primary)',
-    softBg: 'var(--ds-color-alpha-warning-10)',
-    softColor: 'var(--ds-color-warning-700)',
-    outlineBorder: 'var(--ds-color-warning-border)',
-    outlineColor: 'var(--ds-color-warning-700)',
-  },
-  error: {
-    solidBg: 'var(--ds-color-error)',
-    solidColor: 'var(--ds-color-text-on-primary)',
-    softBg: 'var(--ds-color-alpha-error-10)',
-    softColor: 'var(--ds-color-error-700)',
-    outlineBorder: 'var(--ds-color-error-border)',
-    outlineColor: 'var(--ds-color-error-700)',
-  },
-  info: {
-    solidBg: 'var(--ds-color-info)',
-    solidColor: 'var(--ds-color-text-on-primary)',
-    softBg: 'var(--ds-color-alpha-info-10)',
-    softColor: 'var(--ds-color-info-700)',
-    outlineBorder: 'var(--ds-color-info-border)',
-    outlineColor: 'var(--ds-color-info-700)',
-  },
-};
-
-// ---------------------------------------------------------------------------
 // Size specs (inline style values)
 // ---------------------------------------------------------------------------
 // Tight, consistent size scale: xs=20px, sm=24px, md=28px, lg=32px
@@ -184,8 +105,9 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     style,
   } = props;
 
-  // tone (semantic) takes precedence over the deprecated variant prop; VARIANT_TOKENS
-  // and SIZE_SPECS below are keyed by the same internal color-token name either way.
+  // tone (semantic) takes precedence over the deprecated variant prop; the
+  // data-variant stamp badge.css keys its fill on, and SIZE_SPECS below, are keyed
+  // by the same internal color-token name either way.
   const variant = tone ? TONE_TO_BADGE_VARIANT[tone] : variantProp;
 
   // -------------------------------------------------------------------------
@@ -267,35 +189,11 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   // -------------------------------------------------------------------------
   // Style computation
   // -------------------------------------------------------------------------
-  const tokens = VARIANT_TOKENS[variant!] || VARIANT_TOKENS.default;
   const sizeSpec = SIZE_SPECS[size!] || SIZE_SPECS.md;
 
-  // Compute background, color, and border based on badgeStyle
-  let badgeBg: string;
-  let badgeColor: string;
-  let badgeBorder: string;
-
-  switch (badgeStyle) {
-    case 'outline':
-      badgeBg = 'transparent';
-      badgeColor = tokens.outlineColor;
-      badgeBorder = `1px solid ${tokens.outlineBorder}`;
-      break;
-    case 'soft':
-    case 'ghost':
-      badgeBg = tokens.softBg;
-      badgeColor = tokens.softColor;
-      badgeBorder = '1px solid transparent';
-      break;
-    case 'solid':
-    default:
-      badgeBg = tokens.solidBg;
-      badgeColor = tokens.solidColor;
-      badgeBorder = '1px solid transparent';
-      break;
-  }
-
-  // Base badge inline styles
+  // Fill, ink, frame and the bordered ring are painted by
+  // tokens/css/engines/modern/skin/badge.css, keyed on the data-variant /
+  // data-badge-style / data-bordered stamps below.
   const badgeInlineStyle: React.CSSProperties = {
     display: 'inline-flex',
     alignItems: 'center',
@@ -313,20 +211,12 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
     fontWeight: 600,
     letterSpacing: '-0.01em',
     fontFamily: 'var(--ds-font-family-base)',
-    backgroundColor: badgeBg,
-    color: badgeColor,
-    border: badgeBorder,
-    borderRadius: 'var(--ds-radius-sm)',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     transition: `all var(--ds-motion-fast) var(--ds-motion-ease-out)`,
     // Clickable cursor
     ...(isInteractive ? { cursor: 'pointer' } : {}),
-    // Bordered ring
-    ...(bordered ? {
-      boxShadow: '0 0 0 2px var(--ds-surface-card)',
-    } : {}),
   };
 
   // -------------------------------------------------------------------------
@@ -434,7 +324,9 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
   };
   const positionStyle = positionStyleMap[position!] || positionStyleMap['top-right'];
 
-  // Indicator badge style (smaller, positioned)
+  // Indicator badge style (smaller, positioned). The full radius this render path
+  // takes is a badge.css rule keyed on the data-position stamp, which only this
+  // path emits.
   const indicatorBadgeStyle: React.CSSProperties = dot
     ? {
         ...badgeInlineStyle,
@@ -442,12 +334,8 @@ export default function ModernBadge(props: BadgeProps): React.ReactElement {
         height: dotSize,
         minWidth: 'auto',
         padding: 0,
-        borderRadius: 'var(--ds-radius-full)',
       }
-    : {
-        ...badgeInlineStyle,
-        borderRadius: 'var(--ds-radius-full)',
-      };
+    : badgeInlineStyle;
 
   return (
     <>

@@ -1,0 +1,52 @@
+/**
+ * Modern Descriptions skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style` --
+ * which is what keeps the `styles.label` / `styles.content` / per-item override
+ * props working: they land inline and therefore still beat these rules.
+ *
+ * SCOPE ROOT carries `rottay-descriptions rottay-descriptions--modern` +
+ * `data-part='root'` + `data-engine` + `data-bordered`. The engine suffix is
+ * load-bearing: rustic carries the same base class, and the two engines paint
+ * different values.
+ *
+ * CHILD COMBINATORS THROUGHOUT. `data-part` is a shared vocabulary, and this
+ * component renders arbitrary caller content inside `[data-part='content']` --
+ * a descendant selector would reach a `data-part='label'` belonging to whatever
+ * component the caller nested there. The DOM chain root > body > rows > row >
+ * label|content is fixed, so `>` costs nothing and closes that hole.
+ *
+ * BORDER WIDTHS ARE NOT HERE. Bordered mode gets its width from the Tailwind
+ * `border` / `border-b` utilities (utilities sort after preflight, so they
+ * paint); only the COLOR was ever inline. In borderless mode no utility class is
+ * emitted, so the width stays at preflight's 0 and no color can show -- which is
+ * why there is no borderless counterpart to these two rules.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element; the two border-color rules clear it at (0,5,0)+.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- header title ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='header'] > [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- bordered container + bordered row separator (color only; see header) ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] {
+  border-color: var(--ds-color-border);
+}
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'][data-bordered='true'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] {
+  border-color: var(--ds-color-border);
+}
+
+/* ---- label + value (both layouts share one rule pair) ---- */
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}
+.rottay-descriptions.rottay-descriptions--modern[data-part='root'] > [data-part='body'] > [data-part='rows'] > [data-part='row'] > [data-part='content'] {
+  color: var(--ds-color-text-primary);
+}

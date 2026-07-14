@@ -1,0 +1,136 @@
+/**
+ * Rustic Tag skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT keeps its published BEM classnames and adds `rottay-tag--rustic`
+ * (grep-verified free; the existing modifiers are sizes and variants, never an
+ * engine name). The two-class anchor matters: `.rottay-tag` alone is also worn by
+ * the CLASSIC engine, which stamps no `data-part`, and it is painted on live
+ * channels by the bithire tenant artifact (`artifacts/bithire/index.css:3094`) —
+ * background, color, border-color, border-radius, border-width. Those tenant rules
+ * are suppressed today by this engine's inline style and stay suppressed here: at
+ * (0,2,1) they lose to every rule below.
+ *
+ * SPECIFICITY (P-48): each `border` declaration carries a real colour, so it must
+ * clear the tenant's unlayered `*` border-color floor at (0,3,1) — the repeated
+ * `[data-part='root']` gets the base to (0,4,0) and the qualified rules past it.
+ * They stay SHORTHANDS because preflight zeroes `border-width` on every element,
+ * and because a variant's `--ds-tag-<v>-border` token may be undefined: a shorthand
+ * over an undefined var falls back to no frame, which is exactly what the inline
+ * `border: 1px solid ${colors.border}` did.
+ *
+ * The resting `border: 1px solid transparent` is load-bearing, not decoration: an
+ * unbordered tag still reserves the 1px so it does not resize when `bordered` or
+ * `outlined` turns on.
+ *
+ * `--ds-tag-custom-bg` is the hatch for the `color` PROP (an arbitrary caller
+ * string). Unlike Modern, this engine ignores it when `outlined` — the object read
+ * `outlined ? 'transparent' : (color || colors.bg)`, and that asymmetry is
+ * preserved: no outlined rule reads the hatch.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- resting frame: the 1px is reserved even when nothing paints it ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'] {
+  border: 1px solid transparent;
+}
+
+/* ---- radius ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='none'] {
+  border-radius: var(--ds-tag-radius-none, 0);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='sm'] {
+  border-radius: var(--ds-tag-radius-sm, 0.1875rem);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='md'] {
+  border-radius: var(--ds-tag-radius-md, 0.375rem);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='lg'] {
+  border-radius: var(--ds-tag-radius-lg, 0.5rem);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-radius='full'] {
+  border-radius: var(--ds-tag-radius-full, 9999px);
+}
+
+/* ---- ink: the variant's text colour, outlined or not. The bare rule carries
+        `default`, the lookup's own fallback for an unrecognised variant. ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-tag-default-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'] {
+  color: var(--ds-tag-primary-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'] {
+  color: var(--ds-tag-secondary-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success'] {
+  color: var(--ds-tag-success-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning'] {
+  color: var(--ds-tag-warning-color);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error'] {
+  color: var(--ds-tag-error-color);
+}
+
+/* ---- resting fill (solid only): the variant's bg, or the caller's `color` prop ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-default-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-primary-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-secondary-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-success-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-warning-bg));
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error']:not([data-outlined]) {
+  background-color: var(--ds-tag-custom-bg, var(--ds-tag-error-bg));
+}
+
+/* ---- outlined drops the fill and ignores the `color` prop ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-outlined='true'] {
+  background-color: transparent;
+}
+
+/* ---- frame: `bordered` OR `outlined` paints the variant's border token ---- */
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-default-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-primary-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='secondary'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-secondary-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='success'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-success-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='warning'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-warning-border);
+}
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error'][data-bordered='true'],
+.rottay-tag.rottay-tag--rustic[data-part='root'][data-part='root'][data-variant='error'][data-outlined='true'] {
+  border: 1px solid var(--ds-tag-error-border);
+}
+
+/* ---- close button (`border: none` is a colour-free reset, exempt from the floor) ---- */
+.rottay-tag.rottay-tag--rustic > [data-part='close'] {
+  background: none;
+  border: none;
+  color: inherit;
+}

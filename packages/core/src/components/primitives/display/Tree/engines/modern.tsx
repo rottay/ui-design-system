@@ -58,7 +58,7 @@ function highlightText(
   return (
     <>
       {before}
-      <span className="rottay-tree-search-highlight rounded-sm px-0.5" data-part="tree-node-highlight" style={{ background: 'color-mix(in srgb, var(--ds-color-warning) 30%, transparent)', color: 'var(--ds-color-text-primary)' }}>
+      <span className="rottay-tree-search-highlight rounded-sm px-0.5" data-part="tree-node-highlight">
         {match}
       </span>
       {after}
@@ -107,7 +107,7 @@ const DropIndicator: React.FC<{ position: 'before' | 'inside' | 'after'; level: 
         paddingLeft: left,
       }}
     >
-      <div className="h-0.5 rounded-full" style={{ background: 'var(--ds-tree-line-color, var(--ds-color-primary))', animation: 'rottay-drop-indicator var(--ds-motion-slow) ease-out' }} />
+      <div className="h-0.5 rounded-full" style={{ animation: 'rottay-drop-indicator var(--ds-motion-slow) ease-out' }} />
     </div>
   );
 };
@@ -250,35 +250,30 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 key={i}
                 className="absolute top-0 bottom-0 border-l"
                 data-part="connector"
-                style={{
-                  left: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)`,
-                  borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
-                  borderLeftWidth: 'var(--ds-tree-line-width, 1px)',
-                }}
+                data-axis="vertical"
+                style={{ left: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)` }}
               />
             ) : null,
           )}
           <div
             className="absolute border-t"
             data-part="connector"
+            data-axis="horizontal"
             style={{
               left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
               top: '50%',
               width: 12,
-              borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
-              borderTopWidth: 'var(--ds-tree-line-width, 1px)',
             }}
           />
           {isLast && (
             <div
               className="absolute border-l"
               data-part="connector"
+              data-axis="vertical"
               style={{
                 left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
                 height: '50%',
-                borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
-                borderLeftWidth: 'var(--ds-tree-line-width, 1px)',
               }}
             />
           )}
@@ -286,12 +281,11 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
             <div
               className="absolute border-l"
               data-part="connector"
+              data-axis="vertical"
               style={{
                 left: `calc(${level - 1} * var(--ds-tree-indent, 24px) + 12px)`,
                 top: 0,
                 bottom: 0,
-                borderColor: 'var(--ds-tree-line-color, var(--ds-color-border))',
-                borderLeftWidth: 'var(--ds-tree-line-width, 1px)',
               }}
             />
           )}
@@ -326,38 +320,10 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         style={{
           padding: 'var(--ds-tree-node-padding, 4px 8px)',
           paddingLeft,
-          background: 'var(--ds-tree-node-bg, transparent)',
-          color: disabled
-            ? 'var(--ds-tree-node-color-disabled, var(--ds-color-text-disabled))'
-            : 'var(--ds-tree-node-color, inherit)',
-          ...(isSelected
-            ? {
-                background: 'var(--ds-tree-node-bg-selected, color-mix(in srgb, var(--ds-color-primary) 10%, transparent))',
-                borderColor: 'var(--ds-color-primary)',
-                color: 'var(--ds-tree-node-color-selected, var(--ds-color-primary))',
-              }
-            : {}),
           ...(isFocused ? { '--tw-ring-color': 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)' } as React.CSSProperties : {}),
           ...(isDropTarget && dropPosition === 'inside'
-            ? {
-                '--tw-ring-color': 'var(--ds-color-primary)',
-                background: 'color-mix(in srgb, var(--ds-color-primary) 5%, transparent)',
-              } as React.CSSProperties
+            ? { '--tw-ring-color': 'var(--ds-color-primary)' } as React.CSSProperties
             : {}),
-        }}
-        onMouseEnter={(e) => {
-          if (!isSelected && !disabled) {
-            const el = e.currentTarget as HTMLElement;
-            el.style.background = 'var(--ds-tree-node-bg-hover, color-mix(in srgb, var(--ds-surface-inset) 50%, transparent))';
-            el.style.borderLeft = '2px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent)';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isSelected && !disabled) {
-            const el = e.currentTarget as HTMLElement;
-            el.style.background = '';
-            el.style.borderLeft = '';
-          }
         }}
         onClick={handleClick}
         role="treeitem"
@@ -402,7 +368,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           <button
             type="button"
             data-part="tree-node-toggle"
-            style={{ background: 'transparent', color: 'var(--ds-tree-icon-color, var(--ds-color-text-primary))', width: 'var(--ds-tree-switcher-size, 24px)', height: 'var(--ds-tree-switcher-size, 24px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, marginRight: 4, flexShrink: 0 }}
+            style={{ width: 'var(--ds-tree-switcher-size, 24px)', height: 'var(--ds-tree-switcher-size, 24px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, marginRight: 4, flexShrink: 0 }}
             onClick={handleToggle}
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             tabIndex={-1}
@@ -452,7 +418,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           <span
             className="mr-2 flex-shrink-0 flex items-center"
             data-part="icon"
-            style={{ color: 'var(--ds-tree-icon-color, currentColor)', width: 'var(--ds-tree-icon-size, 16px)', height: 'var(--ds-tree-icon-size, 16px)' }}
+            style={{ width: 'var(--ds-tree-icon-size, 16px)', height: 'var(--ds-tree-icon-size, 16px)' }}
           >
             {icon}
           </span>
@@ -931,7 +897,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       ref={treeContainerRef}
       className={`rottay-tree rottay-tree--modern ${className}`}
       data-part="root"
-      style={{ background: 'var(--ds-tree-bg, transparent)', ...style }}
+      style={style}
       role="tree"
       aria-multiselectable={props.multiple || false}
       onKeyDown={handleKeyDown}

@@ -1,0 +1,86 @@
+/**
+ * Modern List skin (WO-SKIN-05 checkpoint D2). Covers all three exports of
+ * `engines/modern.tsx` -- List, Item and Meta. Item and Meta are engine-split
+ * (each engine exports its own), so they belong in this engine file rather than
+ * in a compounds file; and they are usable STANDALONE, so each carries its own
+ * scope class instead of hanging off the List root's.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPES: `rottay-list rottay-list--modern` + `data-part='root'` +
+ * `data-bordered` + `data-loading`; `rottay-list-item rottay-list-item--modern`;
+ * `rottay-list-item-meta rottay-list-item-meta--modern`. All grep-verified free
+ * across CSS and CSS-in-JS.
+ *
+ * CHILD COMBINATORS outside the loading branch: `data-part` is a shared
+ * vocabulary and List renders arbitrary caller content inside its items, so a
+ * descendant selector could reach a `data-part` belonging to a nested component.
+ * Inside `[data-loading='true']` the tree is a pure skeleton with no caller
+ * content, so the skeleton rules may safely use descendants (their targets sit
+ * under unclassed layout divs).
+ *
+ * BORDERS ARE ATOMIC SHORTHANDS. The inline styles set `borderWidth` +
+ * `borderColor` as separate longhands and leaned on preflight's
+ * `border-style: solid`; the shorthands below name that `solid` explicitly and
+ * land width, style and color together. Border-bearing rules clear the tenant's
+ * unlayered (0,3,1) `*` border-color floor at (0,4,0)+.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ============================ List (container) ============================ */
+
+.rottay-list.rottay-list--modern[data-part='root'] {
+  background: var(--ds-list-background-color, transparent);
+  color: var(--ds-list-text-color, inherit);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] {
+  border: var(--ds-list-border-width, 1px) solid var(--ds-list-border-color, var(--ds-color-border));
+  border-radius: var(--ds-list-border-radius, var(--ds-radius-lg));
+}
+
+/* loading skeleton: avatar disc + text bars share one fill */
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-avatar'],
+.rottay-list.rottay-list--modern[data-part='root'][data-loading='true'] [data-part='skeleton-line'] {
+  background: var(--ds-list-item-hover-background-color, var(--ds-surface-panel));
+}
+
+/* header + footer: surface always, separator color only when bordered (the
+   width comes from the `border-b` / `border-t` utilities, which are only
+   emitted in bordered mode). */
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='header'] {
+  background: var(--ds-list-header-background-color, transparent);
+}
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='footer'] {
+  background: var(--ds-list-footer-background-color, transparent);
+}
+.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='header'],
+.rottay-list.rottay-list--modern[data-part='root'][data-bordered='true'] > [data-part='footer'] {
+  border-color: var(--ds-list-border-color, var(--ds-color-border));
+}
+
+/* split divider between items */
+.rottay-list.rottay-list--modern[data-part='root'] > [data-part='list'] > [data-part='divider'] {
+  border-bottom: var(--ds-list-split-width, 1px) solid var(--ds-list-split-color, var(--ds-color-border));
+}
+
+/* ============================== List.Item ================================ */
+
+.rottay-list-item.rottay-list-item--modern[data-part='item'] {
+  background: var(--ds-list-item-background-color, transparent);
+  color: var(--ds-list-text-color, inherit);
+}
+.rottay-list-item.rottay-list-item--modern[data-part='item'] > [data-part='item-actions'] {
+  color: var(--ds-list-actions-color, var(--ds-color-primary));
+}
+
+/* ============================ List.Item.Meta ============================= */
+
+.rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-title'] {
+  color: var(--ds-list-meta-title-color, var(--ds-color-text-primary));
+}
+.rottay-list-item-meta.rottay-list-item-meta--modern[data-part='meta'] > [data-part='meta-content'] > [data-part='meta-description'] {
+  color: var(--ds-list-meta-description-color, var(--ds-color-text-secondary));
+}

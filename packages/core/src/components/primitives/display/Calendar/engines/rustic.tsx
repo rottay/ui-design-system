@@ -38,10 +38,7 @@ const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 
 // ---------------------------------------------------------------------------
 const styles = {
   container: {
-    backgroundColor: 'var(--ds-calendar-bg, var(--ds-color-bg-elevated))',
-    borderRadius: 'var(--ds-calendar-radius, 8px)',
     padding: 'var(--ds-calendar-padding, 16px)',
-    boxShadow: 'var(--ds-calendar-shadow, var(--ds-shadow-md))',
   },
   containerFullscreen: {
     width: '100%',
@@ -62,25 +59,13 @@ const styles = {
   },
   navButton: {
     padding: '4px 8px',
-    border: 'none',
-    backgroundColor: 'transparent',
     cursor: 'pointer',
-    borderRadius: 'var(--ds-calendar-nav-radius, 4px)',
     fontSize: '16px',
-    color: 'var(--ds-calendar-nav-color, var(--ds-color-text-secondary))',
   },
   modeButton: {
     padding: '4px 12px',
-    border: '1px solid var(--ds-calendar-border, var(--ds-color-border))',
-    backgroundColor: 'var(--ds-calendar-bg, var(--ds-color-bg-elevated))',
     cursor: 'pointer',
-    borderRadius: 'var(--ds-calendar-nav-radius, 4px)',
     fontSize: '14px',
-  },
-  modeButtonActive: {
-    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500))',
-    color: 'var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
-    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500))',
   },
   daysHeader: {
     display: 'grid',
@@ -92,7 +77,6 @@ const styles = {
     textAlign: 'center' as const,
     fontSize: 'var(--ds-calendar-header-font-size, 12px)',
     fontWeight: 500,
-    color: 'var(--ds-calendar-header-color, var(--ds-color-text-secondary))',
     padding: '8px',
   },
   daysGrid: {
@@ -106,19 +90,9 @@ const styles = {
     flexDirection: 'column' as const,
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 'var(--ds-calendar-cell-radius, 8px)',
     cursor: 'pointer',
     position: 'relative' as const,
-    border: 'none',
-    backgroundColor: 'transparent',
     transition: 'var(--ds-calendar-transition, background-color 0.2s)',
-  },
-  dayCellToday: {
-    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500))',
-  },
-  dayCellSelected: {
-    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500))',
-    color: 'var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
   },
   dayCellDisabled: {
     opacity: 'var(--ds-calendar-disabled-opacity, 0.3)',
@@ -131,19 +105,9 @@ const styles = {
   },
   monthCell: {
     padding: '16px',
-    borderRadius: 'var(--ds-calendar-cell-radius, 8px)',
     textAlign: 'center' as const,
     cursor: 'pointer',
-    border: 'none',
-    backgroundColor: 'transparent',
     transition: 'var(--ds-calendar-transition, background-color 0.2s)',
-  },
-  monthCellCurrent: {
-    border: '1px solid var(--ds-calendar-primary, var(--ds-color-primary-500))',
-  },
-  monthCellSelected: {
-    backgroundColor: 'var(--ds-calendar-primary, var(--ds-color-primary-500))',
-    color: 'var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)))',
   },
 };
 
@@ -188,9 +152,6 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
   const isControlled = value !== undefined;
   const [internalValue, setInternalValue] = useState<Date>(() => parseDate(defaultValue));
   const [mode, setMode] = useState<CalendarMode>(modeProp || defaultMode);
-  // Tracks which element is currently hovered so we can apply hover styles
-  // imperatively (inline styles cannot express :hover pseudo-selectors).
-  const [hovered, setHovered] = useState<string | null>(null);
 
   const currentDate = isControlled ? parseDate(value) : internalValue;
   const today = new Date();
@@ -281,22 +242,16 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
     ...(fullscreen ? styles.containerFullscreen : styles.containerCompact),
     ...style,
   };
-  // Shared hover background token -- extracted to avoid repeating the triple
-  // CSS variable fallback chain in every onMouseEnter handler.
-  const calendarHoverBackground = 'var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)))';
-
   return (
-    <div ref={ref} className={className} data-part="root" data-mode={mode} style={containerStyle} id={id} role="application" aria-label="Calendar">
+    <div ref={ref} className={`rottay-calendar rottay-calendar--rustic ${className ?? ''}`.trim()} data-part="root" data-mode={mode} style={containerStyle} id={id} role="application" aria-label="Calendar">
       {/* Header */}
       <div style={styles.header} data-part="header">
         <div style={styles.headerNav}>
           <button
             data-part="nav-button"
             data-direction="prev-year"
-            style={{ ...styles.navButton, ...(hovered === 'prevYear' ? { backgroundColor: calendarHoverBackground } : {}) }}
+            style={styles.navButton}
             onClick={() => setViewYear((y) => y - 1)}
-            onMouseEnter={() => setHovered('prevYear')}
-            onMouseLeave={() => setHovered(null)}
             aria-label="Previous year"
           >
             «
@@ -305,10 +260,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             <button
               data-part="nav-button"
               data-direction="prev-month"
-              style={{ ...styles.navButton, ...(hovered === 'prevMonth' ? { backgroundColor: calendarHoverBackground } : {}) }}
+              style={styles.navButton}
               onClick={handlePrevMonth}
-              onMouseEnter={() => setHovered('prevMonth')}
-              onMouseLeave={() => setHovered(null)}
               aria-label="Previous month"
             >
               ‹
@@ -321,7 +274,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             data-part="mode-toggle"
             data-mode="month"
             data-active={mode === 'month' ? 'true' : 'false'}
-            style={{ ...styles.modeButton, ...(mode === 'month' ? styles.modeButtonActive : {}) }}
+            style={styles.modeButton}
             onClick={() => handleModeChange('month')}
           >
             {MONTHS[viewMonth]} {viewYear}
@@ -330,7 +283,7 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             data-part="mode-toggle"
             data-mode="year"
             data-active={mode === 'year' ? 'true' : 'false'}
-            style={{ ...styles.modeButton, ...(mode === 'year' ? styles.modeButtonActive : {}) }}
+            style={styles.modeButton}
             onClick={() => handleModeChange('year')}
           >
             Year
@@ -342,10 +295,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             <button
               data-part="nav-button"
               data-direction="next-month"
-              style={{ ...styles.navButton, ...(hovered === 'nextMonth' ? { backgroundColor: calendarHoverBackground } : {}) }}
+              style={styles.navButton}
               onClick={handleNextMonth}
-              onMouseEnter={() => setHovered('nextMonth')}
-              onMouseLeave={() => setHovered(null)}
               aria-label="Next month"
             >
               ›
@@ -354,10 +305,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
           <button
             data-part="nav-button"
             data-direction="next-year"
-            style={{ ...styles.navButton, ...(hovered === 'nextYear' ? { backgroundColor: calendarHoverBackground } : {}) }}
+            style={styles.navButton}
             onClick={() => setViewYear((y) => y + 1)}
-            onMouseEnter={() => setHovered('nextYear')}
-            onMouseLeave={() => setHovered(null)}
             aria-label="Next year"
           >
             »
@@ -390,7 +339,6 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
               const isToday = isSameDay(date, today);
               const isSelected = isSameDay(date, currentDate);
               const isDisabled = isDateDisabled(date);
-              const cellKey = `day-${day}`;
 
               return (
                 <button
@@ -401,14 +349,9 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                   data-disabled={isDisabled || undefined}
                   style={{
                     ...styles.dayCell,
-                    ...(isToday && !isSelected ? styles.dayCellToday : {}),
-                    ...(isSelected ? styles.dayCellSelected : {}),
                     ...(isDisabled ? styles.dayCellDisabled : {}),
-                    ...(hovered === cellKey && !isDisabled && !isSelected ? { backgroundColor: calendarHoverBackground } : {}),
                   }}
                   onClick={() => handleDateClick(day)}
-                  onMouseEnter={() => setHovered(cellKey)}
-                  onMouseLeave={() => setHovered(null)}
                   disabled={isDisabled}
                   role="gridcell"
                   aria-selected={isSelected}
@@ -432,7 +375,6 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
             const date = new Date(viewYear, i, 1);
             const isCurrentMonth = i === today.getMonth() && viewYear === today.getFullYear();
             const isSelected = i === currentDate.getMonth() && viewYear === currentDate.getFullYear();
-            const cellKey = `month-${i}`;
 
             return (
               <button
@@ -440,15 +382,8 @@ export const Calendar = React.forwardRef<HTMLDivElement, CalendarProps>((props, 
                 data-part="cell"
                 data-selected={isSelected ? 'true' : 'false'}
                 data-today={isCurrentMonth ? 'true' : 'false'}
-                style={{
-                  ...styles.monthCell,
-                  ...(isCurrentMonth && !isSelected ? styles.monthCellCurrent : {}),
-                  ...(isSelected ? styles.monthCellSelected : {}),
-                  ...(hovered === cellKey && !isSelected ? { backgroundColor: calendarHoverBackground } : {}),
-                }}
+                style={styles.monthCell}
                 onClick={() => handleMonthClick(i)}
-                onMouseEnter={() => setHovered(cellKey)}
-                onMouseLeave={() => setHovered(null)}
                 role="gridcell"
                 aria-selected={isSelected}
               >

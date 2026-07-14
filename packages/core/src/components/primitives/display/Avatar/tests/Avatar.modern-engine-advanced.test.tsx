@@ -31,8 +31,11 @@ describe('Avatar modern advanced coverage', () => {
     expect(inner.className).toContain('mask-squircle');
     expect(inner.className).toContain('ring');
     // The gradient variant paints its background token and a legibility text-shadow inline.
-    expect(initials.style.background).toContain('linear-gradient');
-    expect(initials.style.textShadow).not.toBe('');
+    // The initials gradient is the skin's; the engine stamps the part it keys on.
+    expect(initials.getAttribute('data-part')).toBe('fallback');
+    // The legibility text-shadow moved into the skin with the gradient it protects;
+    // the skin keys both on the ROOT's variant stamp.
+    expect(initials.closest('[data-variant]')?.getAttribute('data-variant')).toBe('gradient');
     // Status renders a themed corner dot.
     expect(status).toBeInTheDocument();
 
@@ -51,7 +54,9 @@ describe('Avatar modern advanced coverage', () => {
     );
 
     const initials = screen.getByText('JD') as HTMLDivElement;
-    expect(initials.style.background).toBe('var(--ds-tint-8)');
+    // A caller's backgroundColor rides the `--ds-avatar-custom-bg` hatch, which the
+    // skin consumes -- the caller's value still wins, byte for byte.
+    expect(initials.style.getPropertyValue('--ds-avatar-custom-bg')).toBe('var(--ds-tint-8)');
     expect(initials.style.color).toBe('var(--ds-color-primary)');
   });
 

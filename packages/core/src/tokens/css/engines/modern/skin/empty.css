@@ -1,0 +1,33 @@
+/**
+ * Modern Empty skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE is the root's own `rottay-empty rottay-empty--modern` pair. The bare
+ * `rottay-empty` is targeted by a live bridge rule (engines/modern/theme.css:835)
+ * whose `color: var(--ds-text-secondary)` paints the root uncontested and is
+ * inherited by the footer slot; the root is NOT re-anchored or re-coloured here,
+ * so that inheritance survives untouched.
+ *
+ * Every rule uses a CHILD combinator: `data-part` is a shared vocabulary, and the
+ * `children` footer slot is consumer territory that can hold any component
+ * (a Card stamps `data-part='description'` too). `>` pins each rule to the
+ * element Empty itself renders.
+ *
+ * `rottay-empty__illustration` is a fresh, grep-verified-free classname on the two
+ * first-party SVGs. Their `color` feeds `fill="currentColor"`; the consumer's own
+ * `image` ReactNode never carries the class, so it never takes this colour.
+ *
+ * SPECIFICITY (P-48): `color` is non-border paint and wins unlayered at (0,3,0).
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-empty.rottay-empty--modern > [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.rottay-empty.rottay-empty--modern .rottay-empty__illustration {
+  color: var(--ds-color-text-secondary);
+}

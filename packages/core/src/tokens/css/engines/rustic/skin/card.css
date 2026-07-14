@@ -104,3 +104,61 @@
   opacity: 0.7;
   pointer-events: none;
 }
+
+/* ===========================================================================
+ * WO-SKIN-05 checkpoint D1 — everything the ARC-07 migration left inline: the
+ * header and actions rules, the description ink, and the loading scrim.
+ *
+ * Unlike the modern engine, this one keeps ONE root: the loading overlay renders
+ * inside the normal tree rather than from an early return, so every rule below can
+ * hang off `[data-part='root']`. The header and the actions rail are DIRECT children
+ * of that root (the body is their sibling, not their parent), which is why no
+ * `:not(.rottay-card-header)` guard is needed here: a `Card.Header` compound dropped
+ * into `children` lands inside `[data-part='body']`, and the child combinator below
+ * cannot reach it.
+ *
+ * SPECIFICITY (P-48): every rule carrying a border colour must clear the tenant's
+ * unlayered `*` border-color floor at (0,3,1); the repeated `data-part` takes them
+ * past it. The `border-bottom: none` reset is colour-free and exempt. Each frame
+ * stays a SHORTHAND because preflight zeroes `border-width` on every element.
+ *
+ * KEYFRAME: the per-mount `<style>` injecting `rottay-rustic-card-spin` is replaced
+ * by an engine-namespaced copy here, so it cannot collide with another engine's skin
+ * in the same tenant bundle.
+ *
+ * The loading scrim's `rgba(255, 255, 255, 0.6)` is a white-only literal that does
+ * not react to dark tenants — the modern engine's equivalent is a theme-aware
+ * `color-mix`. That is a shipped defect, reproduced verbatim here: changing it would
+ * be a repaint, not a migration.
+ * ======================================================================== */
+
+/* ---- header ---- */
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='header'][data-part='header'] {
+  border-bottom: none;
+}
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='header'][data-part='header'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-card-header-border, #e5e5e5);
+}
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='header'] > div > [data-part='description'] {
+  color: var(--ds-card-subtitle-color, #8c8c8c);
+}
+
+/* ---- actions rail ---- */
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='actions'][data-part='actions'] {
+  border-top: 1px solid var(--ds-card-footer-border, #e5e5e5);
+}
+
+/* ---- loading scrim + spinner ---- */
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='loading-overlay'] {
+  background-color: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(2px);
+}
+.rottay-card.rottay-card--rustic[data-part='root'] > [data-part='loading-overlay'] > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-neutral-200, #e0e0e0);
+  border-top-color: var(--ds-color-primary-500, #1890ff);
+  border-radius: 50%;
+}
+
+@keyframes ds-card-spin-rustic {
+  to { transform: rotate(360deg); }
+}

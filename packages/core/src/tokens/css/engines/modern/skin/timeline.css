@@ -1,0 +1,91 @@
+/**
+ * Modern Timeline skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-timeline rottay-timeline--modern` alongside the
+ * DaisyUI `timeline timeline-vertical` classes + `data-part='root'`. The engine
+ * suffix is load-bearing: rustic carries the same base class.
+ *
+ * TWO LAYERED BRIDGES STAY LIVE, AND NEITHER IS RESTATED HERE.
+ * `engines/modern/theme.css` declares `.timeline::before { background-color }`
+ * (DaisyUI's own connector pseudo-element) and `.timeline-start/-middle/-end
+ * { color: var(--ds-text-primary) }`. The latter genuinely paints every item's
+ * text today: the root's `color` is only INHERITED by those divs, and an
+ * explicit rule on a descendant beats an inherited value from an ancestor no
+ * matter how the ancestor's rule is layered. Moving the root's `color` here
+ * changes nothing about that -- it is still an ancestor. Declaring a color on
+ * `.timeline-start` here WOULD change it, so this file does not.
+ *
+ * THE `>` CHAINS ARE LOAD-BEARING. `data-part` is a shared vocabulary and
+ * `[data-part='body']` holds arbitrary caller content -- a descendant selector
+ * for `[data-part='label']` would reach a label belonging to whatever component
+ * an item renders. The label sits under the item's `.timeline-start` /
+ * `.timeline-end` div, so the chain steps through it explicitly.
+ *
+ * SPECIFICITY (P-48): the spinner's border color and the dot's border width
+ * clear the tenant's unlayered (0,3,1) `*` border-color floor at (0,5,0)+.
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-timeline.rottay-timeline--modern[data-part='root'] {
+  color: var(--ds-timeline-content-color, inherit);
+}
+
+/* ---- connector rules (the component's own <hr>s, not DaisyUI's ::before) ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > [data-part='connector'] {
+  background: var(--ds-timeline-line-color, var(--ds-surface-panel));
+}
+
+/* ---- per-item label ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > .timeline-start > [data-part='label'],
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'] > .timeline-end > [data-part='label'] {
+  color: var(--ds-timeline-label-color, var(--ds-color-text-secondary));
+}
+
+/* ---- dot marker: default fill + ring width. The unqualified rule carries the
+        `primary` fill because the lookup it replaces fell back to primary for an
+        unrecognised tone; the tone rules below tie with it at (0,7,0) and win on
+        source order. The pending dot is excluded from the ring width: its own
+        marker never declared one, and a tenant that sets
+        `--ds-timeline-dot-border-width` must not grow a border there. ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item']:not([data-pending='true']) > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-primary, var(--ds-color-primary));
+  border-width: var(--ds-timeline-dot-border-width, 0);
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='blue'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-blue, var(--ds-color-primary));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='red'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-red, var(--ds-color-error));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='green'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-green, var(--ds-color-success));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='gray'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-gray, var(--ds-surface-panel));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='primary'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-primary, var(--ds-color-primary));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='success'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-success, var(--ds-color-success));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='warning'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-warning, var(--ds-color-warning));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-tone='error'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-color-error, var(--ds-color-error));
+}
+
+/* ---- pending row: dot fill + the spinner ring (animation stays inline) ---- */
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] > [data-part='dot-marker'] {
+  background: var(--ds-timeline-line-color, var(--ds-surface-panel));
+}
+.rottay-timeline.rottay-timeline--modern[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='body'] > [data-part='spinner'] {
+  border: 2px solid var(--ds-color-border);
+  border-top-color: var(--ds-timeline-pending-dot-color, var(--ds-color-primary));
+  border-radius: 50%;
+}

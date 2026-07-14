@@ -51,22 +51,9 @@ import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
 import { formatShortcutKey } from '../../../../../hooks/shortcuts';
 
 /**
- * Maps color variants to DS token background/color pairs.
- */
-const COLOR_STYLE_MAP: Record<string, React.CSSProperties> = {
-  default: { background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)' },
-  primary: { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' },
-  secondary: { background: 'var(--ds-color-secondary)', color: 'var(--ds-color-text-on-primary)' },
-  success: { background: 'var(--ds-color-success)', color: 'var(--ds-color-text-on-primary)' },
-  warning: { background: 'var(--ds-color-warning)', color: 'var(--ds-color-text-on-primary)' },
-  error: { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' },
-};
-
-/**
- * Layout + chip styles for the optional `shortcut` prop. Built on
- * `currentColor` rather than a fixed token so the chips automatically
- * adapt to whichever `color` variant (COLOR_STYLE_MAP, above) is active,
- * without a second color map to keep in sync.
+ * Layout styles for the optional `shortcut` prop. The chips' own surface is
+ * built on `currentColor` in the skin, so it adapts to whichever `color` variant
+ * the bubble's `data-tone` selects without a second color map to keep in sync.
  */
 const SHORTCUT_ROW_STYLE: React.CSSProperties = {
   display: 'flex',
@@ -81,9 +68,6 @@ const SHORTCUT_CHIPS_STYLE: React.CSSProperties = {
 };
 const SHORTCUT_KBD_STYLE: React.CSSProperties = {
   padding: '1px 5px',
-  borderRadius: 'var(--ds-radius-sm)',
-  border: '1px solid color-mix(in srgb, currentColor 30%, transparent)',
-  background: 'color-mix(in srgb, currentColor 12%, transparent)',
   fontSize: '0.85em',
   fontFamily: 'var(--ds-font-family-mono, monospace)',
   lineHeight: 1.4,
@@ -326,14 +310,13 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       eventHandlers.onClick = toggle;
     }
 
-    // Tooltip bubble styles: DS tokens for colors, shadow, radius
+    // Tooltip bubble geometry. Surface, radius, shadow and the open/closed
+    // scale are keyed on data-tone/data-open in the skin; top/left are measured
+    // from the trigger on every reposition, so they stay here.
     const bubbleStyle: React.CSSProperties = {
       position: 'fixed',
       top: portalPosition?.top ?? 0,
       left: portalPosition?.left ?? 0,
-      ...(COLOR_STYLE_MAP[color] || COLOR_STYLE_MAP.default),
-      borderRadius: 'var(--ds-radius-md)',
-      boxShadow: 'var(--ds-elevation-2)',
       padding: '6px 10px',
       fontSize: 12,
       width: 'max-content',
@@ -355,7 +338,6 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
       zIndex: zIndex ?? 'var(--ds-z-tooltip)',
       opacity: isVisible ? 1 : 0,
       visibility: portalPosition ? 'visible' : 'hidden',
-      transform: `scale(${isVisible ? 1 : 0.95})`,
       transformOrigin: 'center',
       transition: 'opacity var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease',
     };
@@ -383,6 +365,7 @@ const ModernTooltip = forwardRef<HTMLDivElement, TooltipProps>(
                 role="tooltip"
                 className="rottay-tooltip-bubble rottay-tooltip-bubble--modern"
                 data-part="bubble"
+                data-tone={color}
                 data-placement={placement}
                 data-open={isVisible ? 'true' : 'false'}
                 style={bubbleStyle}

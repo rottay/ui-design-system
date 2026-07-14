@@ -188,7 +188,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
     return (
       <div
         ref={containerRef}
-        className={`carousel w-full relative ${carouselClass} ${className}`}
+        className={`rottay-carousel rottay-carousel--modern carousel w-full relative ${carouselClass} ${className}`}
         data-part="root"
         data-vertical={vertical ? 'true' : undefined}
         data-fade={fade ? 'true' : undefined}
@@ -214,14 +214,16 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                 // Fade mode: toggle opacity only, no translation needed.
                 // Slide mode: offset each slide by its distance from current,
                 // using translateX for horizontal or translateY for vertical.
+                // The offset is arithmetic over the live index, so carousel.css
+                // consumes it as a custom property rather than enumerating it.
                 opacity: fade ? (index === currentSlide ? 1 : 0) : 1,
-                transform: fade
+                '--ds-carousel-slide-transform': fade
                   ? 'none'
                   : vertical
                     ? `translateY(${(index - currentSlide) * 100}%)`
                     : `translateX(${(index - currentSlide) * 100}%)`,
                 transition: `all ${speed}ms var(--ds-motion-ease-out)`,
-              }}
+              } as React.CSSProperties}
               role="group"
               aria-roledescription="slide"
               aria-label={`Slide ${index + 1} of ${slides.length}`}
@@ -239,7 +241,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               className="absolute left-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="prev"
-              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', boxShadow: 'var(--ds-elevation-1)' }}
+              style={{ width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={prev}
               aria-label="Previous slide"
               type="button"
@@ -250,7 +252,7 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
               className="absolute right-2 top-1/2 -translate-y-1/2 z-10"
               data-part="arrow"
               data-direction="next"
-              style={{ background: 'var(--ds-surface-card)', color: 'var(--ds-color-text-primary)', width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', borderRadius: '50%', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', boxShadow: 'var(--ds-elevation-1)' }}
+              style={{ width: 'var(--ds-carousel-arrow-size, 32px)', height: 'var(--ds-carousel-arrow-size, 32px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)' }}
               onClick={next}
               aria-label="Next slide"
               type="button"
@@ -276,11 +278,6 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
                 }`}
                 data-part="dot"
                 data-selected={index === currentSlide ? 'true' : 'false'}
-                style={{
-                  background: index === currentSlide
-                    ? 'var(--ds-color-primary)'
-                    : 'var(--ds-surface-panel)',
-                }}
                 onClick={() => goTo(index)}
                 aria-label={`Go to slide ${index + 1}`}
                 aria-selected={index === currentSlide}

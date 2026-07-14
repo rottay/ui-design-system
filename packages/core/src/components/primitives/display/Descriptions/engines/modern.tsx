@@ -64,23 +64,23 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
 
     // Bordered mode adds a visible container outline using DS border token
     const borderClass = bordered ? 'border rounded-lg' : '';
-    const borderStyle: React.CSSProperties = bordered ? { borderColor: 'var(--ds-color-border)' } : {};
     // Resolve responsive column config to a concrete number for CSS grid
     const columnCount = resolveColumnCount(column);
 
     return (
       <div
         ref={ref}
-        className={`rottay-descriptions${layout === 'vertical' ? ' rottay-descriptions-vertical' : ''}${!bordered ? ' rottay-descriptions-borderless' : ''} ${className}`}
+        className={`rottay-descriptions rottay-descriptions--modern${layout === 'vertical' ? ' rottay-descriptions-vertical' : ''}${!bordered ? ' rottay-descriptions-borderless' : ''} ${className}`}
         style={style}
         data-part="root"
         data-engine="modern"
+        data-bordered={bordered ? 'true' : 'false'}
       >
         {/* Header section with title and extra content */}
         {(title || extra) && (
           <div className="rottay-descriptions-title flex justify-between items-center mb-4" data-part="header">
             {title && (
-              <h3 className="text-lg font-semibold" data-part="title" style={{ color: 'var(--ds-color-text-primary)' }}>
+              <h3 className="text-lg font-semibold" data-part="title">
                 {title}
               </h3>
             )}
@@ -89,7 +89,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
         )}
 
         {/* Content section */}
-        <div className={`${borderClass} ${sizeClass}`} data-part="body" style={borderStyle}>
+        <div className={`${borderClass} ${sizeClass}`} data-part="body">
           {layout === 'horizontal' ? (
             // Horizontal: CSS grid with configurable columns; items can span multiple cells
             <div
@@ -110,15 +110,12 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                         : ''
                     }`}
                     data-part="row"
-                    style={{
-                      gridColumn: `span ${span}`,
-                      ...(bordered && { borderColor: 'var(--ds-color-border)' }),
-                    }}
+                    style={{ gridColumn: `span ${span}` }}
                   >
                     <div
                       className="rottay-descriptions-label text-sm mb-1"
                       data-part="label"
-                      style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
+                      style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
@@ -126,7 +123,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     <div
                       className="rottay-descriptions-content"
                       data-part="content"
-                      style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
+                      style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
                     </div>
@@ -146,7 +143,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     <div
                       className="rottay-descriptions-label w-1/3"
                       data-part="label"
-                      style={{ color: 'var(--ds-color-text-secondary)', ...styles?.label, ...itemProps.styles?.label }}
+                      style={{ ...styles?.label, ...itemProps.styles?.label }}
                     >
                       {itemProps.label}
                       {colon ? ':' : ''}
@@ -154,7 +151,7 @@ export const ModernDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
                     <div
                       className="rottay-descriptions-content flex-1"
                       data-part="content"
-                      style={{ color: 'var(--ds-color-text-primary)', ...styles?.content, ...itemProps.styles?.content }}
+                      style={{ ...styles?.content, ...itemProps.styles?.content }}
                     >
                       {itemProps.children}
                     </div>

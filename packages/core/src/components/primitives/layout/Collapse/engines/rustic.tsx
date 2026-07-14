@@ -3,9 +3,11 @@
 /**
  * @fileoverview Collapse Rustic Engine - Rottay Design System.
  * Pure inline CSS implementation using React Context for accordion state.
- * All styles are defined in a static `styles` object with CSS custom property
- * fallbacks (e.g., `--ds-collapse-border-color`), making it embeddable in
- * third-party apps without CSS framework dependencies.
+ * Layout-only styles stay in the static `styles` object below; painted
+ * chrome (border, background, arrow rotation) lives in
+ * `engines/rustic/skin/collapse.css`, keyed on this file's `data-part`
+ * anatomy, with CSS custom property fallbacks (e.g., `--ds-collapse-border-
+ * color`) for tenant-level overrides.
  *
  * @example
  * ```tsx
@@ -24,6 +26,11 @@ import React, { useState, createContext, useContext, Children, cloneElement, isV
 import type { CollapseProps, CollapsePanelProps } from '../Collapse.types';
 import { COLLAPSE_DEFAULTS } from '../Collapse.types';
 
+// `context.ghost` has no DOM signal on this engine (see collapse.css's header),
+// so the border channel -- the one place ghost actually changes the resolved
+// value -- rides this custom property instead of a data-* attribute.
+type PanelBorderStyle = React.CSSProperties & Record<'--ds-collapse-panel-border', string>;
+
 /**
  * Static style objects used throughout the Rustic Collapse.
  * CSS custom properties (--ds-collapse-*) provide tenant-level overrides
@@ -35,37 +42,33 @@ const styles = {
     flexDirection: 'column',
     gap: 'var(--ds-collapse-gap, 1px)',
   } as React.CSSProperties,
+  // border-radius + rest background live in engines/rustic/skin/collapse.css,
+  // keyed on [data-part='panel']. `overflow` stays inline (not a paint channel).
   panel: {
-    border: '1px solid var(--ds-collapse-border-color, var(--ds-color-neutral-300, #d9d9d9))',
-    borderRadius: 'var(--ds-collapse-radius, 12px)',
     overflow: 'hidden',
-  } as React.CSSProperties,
-  panelGhost: {
-    border: 'none',
-    backgroundColor: 'transparent',
   } as React.CSSProperties,
   panelDisabled: {
     opacity: 0.5,
     cursor: 'not-allowed',
   } as React.CSSProperties,
+  // Background lives in the skin (see collapse.css header for why the
+  // ghost/bordered branches need no conditional there). Everything else
+  // (layout, cursor) stays inline.
   header: {
     display: 'flex',
     alignItems: 'center',
     gap: 'var(--ds-collapse-header-gap, 8px)',
     padding: 'var(--ds-collapse-header-padding, 12px 16px)',
-    backgroundColor: 'var(--ds-collapse-header-bg, var(--ds-color-neutral-50, #fafafa))',
     cursor: 'pointer',
     userSelect: 'none',
   } as React.CSSProperties,
   headerDisabled: {
     pointerEvents: 'none',
   } as React.CSSProperties,
+  // Rotation lives in the skin, keyed on [data-part='arrow'][data-expanded].
   arrow: {
     transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
     fontSize: 10,
-  } as React.CSSProperties,
-  arrowActive: {
-    transform: 'rotate(90deg)',
   } as React.CSSProperties,
   headerContent: {
     flex: 1,
@@ -87,11 +90,11 @@ const styles = {
   } as React.CSSProperties,
   // The inner wrapper needs min-height:0 -- grid items default to
   // min-height:auto, which would floor the track at the content's intrinsic
-  // height and prevent it from ever reaching 0fr.
+  // height and prevent it from ever reaching 0fr. Background lives in the
+  // skin, keyed on [data-part='content-inner'].
   contentInner: {
     minHeight: 0,
     overflow: 'hidden',
-    backgroundColor: 'var(--ds-collapse-content-bg, #fff)',
     transition: 'padding var(--ds-motion-normal) var(--ds-motion-ease-out)',
   } as React.CSSProperties,
   contentInnerActive: {
@@ -127,9 +130,10 @@ const CollapseContext = createContext<CollapseContextValue | null>(null);
 /**
  * Rustic (vanilla CSS) Collapse Panel.
  *
- * Reads shared state from CollapseContext. All visual styles are composed
- * from the static `styles` object by merging ghost/disabled/active overrides.
- * Arrow rotation uses an inline `transform` transition.
+ * Reads shared state from CollapseContext. Layout comes from the static
+ * `styles` object; border/background/arrow-rotation paint lives in
+ * `engines/rustic/skin/collapse.css`, keyed on `data-part`/`data-expanded`/
+ * `data-disabled`.
  *
  * @param props - {@link CollapsePanelProps} with an optional injected `index`.
  * @returns A self-styled collapsible panel, or null if rendered outside a Collapse.
@@ -160,15 +164,13 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
       }
     };
 
-    // Arrow rotates 90deg when expanded via inline transform style
+    // Rotation on expand lives in engines/rustic/skin/collapse.css, keyed on
+    // [data-part='arrow'][data-expanded='true'].
     const arrowIcon = showArrow && (
       <span
         className="rottay-collapse-arrow"
         data-part="arrow"
-        style={{
-          ...styles.arrow,
-          ...(isActive ? styles.arrowActive : {}),
-        }}
+        style={styles.arrow}
       >
         ▶
       </span>
@@ -183,11 +185,16 @@ export const Panel = React.forwardRef<HTMLDivElement, CollapsePanelProps & { ind
         data-disabled={disabled ? 'true' : 'false'}
         style={{
           ...styles.panel,
-          // Ghost mode strips border and background for a minimal look
-          ...(context.ghost ? styles.panelGhost : {}),
+          // Ghost mode strips the border to `none`; radius + background stay
+          // fixed regardless (see collapse.css). No DOM signal exists for
+          // `ghost` on this engine, so the resolved value rides this custom
+          // property -- the skin only supplies its `var()` fallback.
+          '--ds-collapse-panel-border': context.ghost
+            ? 'none'
+            : '1px solid var(--ds-collapse-border-color, var(--ds-color-neutral-300, #d9d9d9))',
           ...(disabled ? styles.panelDisabled : {}),
           ...style,
-        }}
+        } as PanelBorderStyle}
       >
         <div
           style={{
@@ -302,7 +309,7 @@ export const Collapse = React.forwardRef<HTMLDivElement, CollapseProps>(
         <style dangerouslySetInnerHTML={{ __html: RUSTIC_REDUCED_MOTION_STYLES }} />
         <div
           ref={ref}
-          className={className}
+          className={`rottay-collapse-shell rottay-collapse-shell--rustic ${className ?? ''}`.trim()}
           data-part="root"
           style={{
             ...styles.container,

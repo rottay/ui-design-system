@@ -1,0 +1,79 @@
+/**
+ * Modern QRCode skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight, DaisyUI and Tailwind's utilities, and still yields
+ * to a caller's inline `style`.
+ *
+ * SCOPE ROOT already carried `rottay-qrcode rottay-qrcode--modern`; no classname is
+ * minted or dropped here. That matters: `engines/modern/theme.css:853` is a live
+ * BRIDGE on the bare `rottay-qrcode` name (border-radius, border-color,
+ * background-color, plus per-status opacity). When `bordered` is false the
+ * component declares none of those channels and the bridge paints the root
+ * uncontested — so every rule below that touches the root's frame or fill is gated
+ * on `[data-bordered='true']`, exactly as the inline spread was. An ungated rule
+ * would silently take the unbordered root away from the bridge.
+ *
+ * SPECIFICITY (P-48): rules carrying a border COLOUR must clear the tenant's
+ * unlayered `html[data-tenant]:not([data-theme]):not(.light) *` floor at (0,3,1);
+ * the two root classes plus the target's own repeated `data-part` take them past
+ * (0,4,0).
+ *
+ * The root's frame stays LONGHAND (`border-width` + `border-color`, no
+ * `border-style`), which is what the inline object declared: preflight's
+ * `border-style: solid` on `*` supplies the style, and Tailwind's `border` utility
+ * class — added to the root only when `bordered` — is the layered rule this
+ * unlayered width now outranks. The spinner and the refresh button, whose widths
+ * were never in a layered rule's reach, keep the shorthand.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root, bordered only: the bridge owns the unbordered root ---- */
+.rottay-qrcode.rottay-qrcode--modern[data-part='root'][data-bordered='true'] {
+  border-color: var(--ds-qrcode-border-color, var(--ds-color-border));
+  border-width: var(--ds-qrcode-border-width, 1px);
+  border-radius: var(--ds-qrcode-border-radius, var(--ds-radius-md));
+  background: var(--ds-qrcode-background-color, var(--ds-surface-card));
+}
+
+/* ---- status overlays: one fill per status (opacity stays inline) ---- */
+.rottay-qrcode.rottay-qrcode--modern[data-status='loading'] > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background: var(--ds-qrcode-loading-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent));
+}
+.rottay-qrcode.rottay-qrcode--modern[data-status='expired'] > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background: var(--ds-qrcode-status-expired-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 90%, transparent));
+}
+.rottay-qrcode.rottay-qrcode--modern[data-status='scanned'] > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background: var(--ds-qrcode-status-scanned-overlay-bg, color-mix(in srgb, var(--ds-surface-card) 80%, transparent));
+}
+
+/* ---- loading spinner ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'][data-part='spinner'] {
+  border: 2.5px solid var(--ds-qrcode-border-color, var(--ds-color-border));
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+/* ---- expired: message + refresh ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-text'] {
+  color: var(--ds-qrcode-status-expired-text-color, var(--ds-color-text-secondary));
+}
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'][data-part='refresh-button'] {
+  background: var(--ds-qrcode-refresh-button-bg, transparent);
+  color: var(--ds-qrcode-refresh-button-color, var(--ds-color-primary));
+  border-radius: var(--ds-qrcode-refresh-button-radius, var(--ds-radius-md));
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* ---- scanned: the check glyph inherits this through `fill="currentColor"` ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-icon'] {
+  color: var(--ds-qrcode-status-scanned-icon-color, var(--ds-color-success));
+}
+
+/* ---- centre icon ---- */
+.rottay-qrcode.rottay-qrcode--modern > [data-part='canvas-wrapper'] > [data-part='icon'] {
+  background: var(--ds-qrcode-icon-bg, var(--ds-surface-card));
+  border-radius: var(--ds-qrcode-icon-border-radius, var(--ds-radius-sm));
+}

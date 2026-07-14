@@ -107,7 +107,12 @@ for (const engine of ENGINES) {
     test.setTimeout(60_000);
 
     const container = await openProbe(page, 'rottay', engine);
-    const rateRoot = container.locator('[data-testid="probe-statusfb-rate"] [data-part="root"]').first();
+    // Anchored to Rate's own scope class: `data-part` is a shared vocabulary, and
+    // the fixture's `<Text>` label stamps `root` too, so a bare part selector would
+    // pick the label instead of the Rate.
+    const rateRoot = container
+      .locator('[data-testid="probe-statusfb-rate"] .rottay-rate[data-part="root"]')
+      .first();
     const thirdStar = rateRoot.locator('[data-part="star"]').nth(2);
     await thirdStar.hover();
     await page.waitForTimeout(300);

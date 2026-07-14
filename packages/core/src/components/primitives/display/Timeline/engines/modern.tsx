@@ -23,20 +23,11 @@ import type { TimelineProps, TimelineItemProps } from '../Timeline.types';
 import { TIMELINE_DEFAULTS } from '../Timeline.types';
 
 /**
- * Map color names to DS token background styles.
+ * Scope class for the root. Per-item dot fill is selected from the item's
+ * `data-tone` by `tokens/css/engines/modern/skin/timeline.css`, which resolves an
+ * unrecognised tone to the primary fill.
  */
-const COLOR_STYLE_MAP: Record<string, React.CSSProperties> = {
-  blue: { background: 'var(--ds-timeline-color-blue, var(--ds-color-primary))' },
-  red: { background: 'var(--ds-timeline-color-red, var(--ds-color-error))' },
-  green: { background: 'var(--ds-timeline-color-green, var(--ds-color-success))' },
-  gray: { background: 'var(--ds-timeline-color-gray, var(--ds-surface-panel))' },
-  primary: { background: 'var(--ds-timeline-color-primary, var(--ds-color-primary))' },
-  success: { background: 'var(--ds-timeline-color-success, var(--ds-color-success))' },
-  warning: { background: 'var(--ds-timeline-color-warning, var(--ds-color-warning))' },
-  error: { background: 'var(--ds-timeline-color-error, var(--ds-color-error))' },
-};
-
-const DEFAULT_COLOR_STYLE: React.CSSProperties = { background: 'var(--ds-timeline-color-primary, var(--ds-color-primary))' };
+const SCOPE_CLASSES = 'rottay-timeline rottay-timeline--modern';
 
 /**
  * ModernTimeline - DaisyUI implementation of Timeline.
@@ -82,12 +73,11 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
 
   return (
     <ul
-      className={`timeline timeline-vertical ${className}`}
+      className={`${SCOPE_CLASSES} timeline timeline-vertical ${className}`}
       data-part="root"
       style={{
         fontSize: 'var(--ds-timeline-content-font-size, inherit)',
         lineHeight: 'var(--ds-timeline-content-line-height, normal)',
-        color: 'var(--ds-timeline-content-color, inherit)',
         ...style,
       }}
     >
@@ -99,8 +89,6 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           ? (item.props as TimelineItemProps)
           : (item as TimelineItemProps);
 
-        const colorStyle = COLOR_STYLE_MAP[itemProps.color as string] || DEFAULT_COLOR_STYLE;
-
         // Per-item position override takes precedence over the mode-based default
         const positionClass = itemProps.position
           ? itemProps.position === 'left' ? 'timeline-start' : 'timeline-end'
@@ -109,16 +97,13 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
 
         return (
           <li key={index} data-part="item" data-side={side} data-tone={itemProps.color || 'primary'}>
-            {index > 0 && <hr data-part="connector" style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
+            {index > 0 && <hr data-part="connector" style={{ width: 'var(--ds-timeline-line-width, 2px)' }} />}
             <div className={positionClass}>
               {itemProps.label && (
                 <div
                   className="text-sm mb-1"
                   data-part="label"
-                  style={{
-                    color: 'var(--ds-timeline-label-color, var(--ds-color-text-secondary))',
-                    fontSize: 'var(--ds-timeline-label-font-size, 12px)',
-                  }}
+                  style={{ fontSize: 'var(--ds-timeline-label-font-size, 12px)' }}
                 >
                   {itemProps.label}
                 </div>
@@ -131,16 +116,15 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
               {itemProps.dot || (
                 <div
                   className="rounded-full"
+                  data-part="dot-marker"
                   style={{
                     width: 'var(--ds-timeline-dot-size, 12px)',
                     height: 'var(--ds-timeline-dot-size, 12px)',
-                    borderWidth: 'var(--ds-timeline-dot-border-width, 0)',
-                    ...colorStyle,
                   }}
                 />
               )}
             </div>
-            {index < orderedItems.length - 1 && <hr data-part="connector" style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />}
+            {index < orderedItems.length - 1 && <hr data-part="connector" style={{ width: 'var(--ds-timeline-line-width, 2px)' }} />}
           </li>
         );
       })}
@@ -149,18 +133,18 @@ function ModernTimeline(props: TimelineProps): React.ReactElement {
           to visually indicate an in-progress or upcoming event. */}
       {pending && (
         <li data-part="item" data-side="start" data-pending="true">
-          <hr data-part="connector" style={{ background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))', width: 'var(--ds-timeline-line-width, 2px)' }} />
+          <hr data-part="connector" style={{ width: 'var(--ds-timeline-line-width, 2px)' }} />
           <div className="timeline-start" data-part="body">
-            <span data-part="spinner" style={{ display: 'inline-block', width: 16, height: 16, border: '2px solid var(--ds-color-border)', borderTopColor: 'var(--ds-timeline-pending-dot-color, var(--ds-color-primary))', borderRadius: '50%', animation: 'spin var(--ds-motion-glacial) linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
+            <span data-part="spinner" style={{ display: 'inline-block', width: 16, height: 16, animation: 'spin var(--ds-motion-glacial) linear infinite', marginRight: 8, verticalAlign: 'middle' }} />
             {pending}
           </div>
           <div className="timeline-middle" data-part="dot" data-pending="true">
             <div
               className="rounded-full animate-pulse"
+              data-part="dot-marker"
               style={{
                 width: 'var(--ds-timeline-dot-size, 12px)',
                 height: 'var(--ds-timeline-dot-size, 12px)',
-                background: 'var(--ds-timeline-line-color, var(--ds-surface-panel))',
                 animation: 'var(--ds-timeline-pending-animation, pulse 2s var(--ds-motion-ease-in-out) infinite)',
               }}
             />

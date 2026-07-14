@@ -68,23 +68,21 @@ export function AvatarGroup({
     ...style,
   };
 
-  // Negative left margin creates the horizontal overlap between avatars.
-  // The 2px border provides a visual "cut-out" separating each circle.
+  // Negative left margin creates the horizontal overlap between avatars. The 2px
+  // "cut-out" frame that separates each circle is painted by
+  // tokens/css/components/skin/avatar-compounds.css.
   const childStyle: CSSProperties = {
     marginLeft: '-8px',
-    border: '2px solid var(--ds-avatar-group-border, var(--ds-color-bg-base))',
   };
 
-  // The surplus badge inherits the overlap styling and adds a neutral
-  // background with secondary text color for the "+N" count. The count uses
+  // The surplus badge inherits the overlap styling; its neutral fill and secondary
+  // ink for the "+N" count live in the skin alongside the frame. The count uses
   // tabular figures so multi-digit overflows stay digit-aligned, and centers
   // its label; consumers size the badge to match their avatars via `maxStyle`.
   const surplusStyle: CSSProperties = {
     ...childStyle,
     display: 'inline-grid',
     placeItems: 'center',
-    backgroundColor: 'var(--ds-avatar-surplus-bg, var(--ds-color-bg-secondary))',
-    color: 'var(--ds-avatar-surplus-color, var(--ds-color-text-secondary))',
     fontWeight: 'var(--ds-avatar-group-overflow-font-weight, var(--ds-font-weight-medium))' as CSSProperties['fontWeight'],
     fontVariantNumeric: 'tabular-nums',
     ...maxStyle,

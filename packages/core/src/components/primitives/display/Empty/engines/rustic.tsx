@@ -124,7 +124,6 @@ const RusticEmpty = forwardRef<HTMLDivElement, EmptyProps>(
     const descriptionStyle: React.CSSProperties = {
       margin: 0,
       marginBottom: children ? '16px' : 0,
-      color: 'var(--ds-empty-description-color, var(--ds-color-text-tertiary, rgba(0, 0, 0, 0.25)))',
       fontSize: 'var(--ds-empty-description-font-size, 14px)',
       lineHeight: '1.5',
     };

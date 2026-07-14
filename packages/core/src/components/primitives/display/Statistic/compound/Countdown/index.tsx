@@ -216,14 +216,12 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
 
     const titleStyle: React.CSSProperties = {
       fontSize: 'var(--ds-statistic-title-font-size)',
-      color: 'var(--ds-statistic-title-color)',
       marginBottom: '4px',
     };
 
     const valueContainerStyle: React.CSSProperties = {
       fontSize: 'var(--ds-statistic-value-font-size)',
       fontWeight: 'var(--ds-statistic-value-font-weight)' as any,
-      color: 'var(--ds-statistic-value-color)',
       fontFamily: 'var(--ds-font-family-mono, monospace)',
       ...valueStyle,
     };
@@ -232,8 +230,8 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
     if (loading) {
       return (
         <div ref={ref} className={`rottay-statistic rottay-statistic--countdown rottay-statistic--loading ${className}`} data-part="root" data-loading="true" style={containerStyle}>
-          <div data-part="skeleton-line" style={{ height: '16px', width: '64px', marginBottom: '8px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
-          <div data-part="skeleton-line" style={{ height: '32px', width: '120px', background: 'var(--ds-color-bg-secondary)', borderRadius: '4px' }} />
+          <div data-part="skeleton-line" style={{ height: '16px', width: '64px', marginBottom: '8px' }} />
+          <div data-part="skeleton-line" style={{ height: '32px', width: '120px' }} />
         </div>
       );
     }

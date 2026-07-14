@@ -97,14 +97,12 @@ function formatNumber(
 }
 
 /**
- * Maps valueType to DS token color values for inline styles.
+ * Scope class carried by both exports. The value's trend color is selected from
+ * `data-trend` by `tokens/css/engines/modern/skin/statistic.css`, which resolves
+ * an unrecognised trend to the `default` color. Both the class and `data-trend`
+ * must reach the DOM for the color to paint.
  */
-const VALUE_TYPE_STYLE_MAP: Record<string, React.CSSProperties> = {
-  default: { color: 'var(--ds-statistic-value-color, var(--ds-color-text-primary))' },
-  positive: { color: 'var(--ds-statistic-positive-color, var(--ds-color-success))' },
-  negative: { color: 'var(--ds-statistic-negative-color, var(--ds-color-error))' },
-  warning: { color: 'var(--ds-statistic-warning-color, var(--ds-color-warning))' },
-};
+const SCOPE_CLASSES = 'rottay-statistic rottay-statistic--modern';
 
 /**
  * Modern Engine implementation of the Statistic component.
@@ -156,13 +154,10 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     const shouldAnimateValue =
       animateValue && typeof value === 'number' && !formatter && !loading;
 
-    // Get DS token style for value color
-    const valueColorStyle = VALUE_TYPE_STYLE_MAP[valueType] || VALUE_TYPE_STYLE_MAP.default;
-
     // Loading skeleton with Tailwind animate-pulse
     if (loading) {
       return (
-        <div ref={ref} className={className} data-part="root" data-loading="true" style={{
+        <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="true" style={{
           ...style,
           animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
           animationDuration: 'var(--ds-skeleton-animation-duration, 1.5s)',
@@ -172,9 +167,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
             style={{
               height: 'var(--ds-spacing-4, 1rem)',
               width: 'var(--ds-spacing-16, 4rem)',
-              borderRadius: 'var(--ds-radius-sm, 6px)',
               marginBottom: 'var(--ds-spacing-2, 0.5rem)',
-              background: 'var(--ds-statistic-loading-bg, var(--ds-surface-panel))',
             }}
           />
           <div
@@ -182,8 +175,6 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
             style={{
               height: 'var(--ds-spacing-8, 2rem)',
               width: 'var(--ds-spacing-24, 6rem)',
-              borderRadius: 'var(--ds-radius-sm, 6px)',
-              background: 'var(--ds-statistic-loading-bg, var(--ds-surface-panel))',
             }}
           />
         </div>
@@ -191,7 +182,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
     }
 
     return (
-      <div ref={ref} className={className} data-part="root" data-loading="false" style={style}>
+      <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" data-loading="false" style={style}>
         {title && (
           <div
             className="stat-title"
@@ -210,12 +201,11 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
           data-trend={valueType}
           style={{
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
-            ...valueColorStyle,
             ...valueStyle,
           }}
         >
           {prefix && (
-            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
+            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
               {prefix}
             </span>
           )}
@@ -231,7 +221,7 @@ export const Statistic = forwardRef<HTMLDivElement, StatisticProps>(
             <span>{displayValue}</span>
           )}
           {suffix && (
-            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
+            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
               {suffix}
             </span>
           )}
@@ -340,11 +330,8 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
       setIsFinished(false);
     }, [value]);
 
-    // Get DS token style for value color
-    const valueColorStyle = VALUE_TYPE_STYLE_MAP[valueType] || VALUE_TYPE_STYLE_MAP.default;
-
     return (
-      <div ref={ref} className={className} data-part="root" style={style}>
+      <div ref={ref} className={`${SCOPE_CLASSES} ${className}`.trim()} data-part="root" style={style}>
         {title && (
           <div
             className="stat-title"
@@ -366,18 +353,17 @@ export const Countdown = forwardRef<HTMLDivElement, CountdownProps>(
           style={{
             lineHeight: 'var(--ds-line-height-2xl, 2rem)',
             fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
-            ...valueColorStyle,
             ...valueStyle,
           }}
         >
           {prefix && (
-            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-prefix-color, inherit)' }}>
+            <span data-part="prefix" style={{ marginRight: 'var(--ds-spacing-1, 0.25rem)' }}>
               {prefix}
             </span>
           )}
           <span>{formatTime(timeLeft, format)}</span>
           {suffix && (
-            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)', color: 'var(--ds-statistic-suffix-color, inherit)' }}>
+            <span data-part="suffix" style={{ marginLeft: 'var(--ds-spacing-1, 0.25rem)' }}>
               {suffix}
             </span>
           )}

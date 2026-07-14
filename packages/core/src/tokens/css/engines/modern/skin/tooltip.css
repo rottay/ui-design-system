@@ -1,0 +1,78 @@
+/**
+ * Modern Tooltip skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * PORTALED, THEREFORE STANDALONE. The bubble mounts via
+ * `createPortal(document.body)`, so it is NOT a descendant of the tenant-scoped
+ * tree and no ancestor selector can reach it. Its rules hang off its own class
+ * pair `rottay-tooltip-bubble rottay-tooltip-bubble--modern` (grep-verified
+ * free), never a bare `[data-part='bubble']` -- `data-part` is a shared
+ * vocabulary, and a bare part selector would claim every bubble in the fleet.
+ * The wrapper root keeps NO scope class: it paints nothing, and `rottay-tooltip`
+ * is a live personality/tenant hook (entrance animation, z-index) that modern's
+ * wrapper does not carry today.
+ *
+ * `top`/`left` STAY INLINE: they come from `getBoundingClientRect()` on every
+ * frame the tooltip is positioned -- genuine runtime data, and not paint.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * border-color on every element. The shortcut chip's border is the only border
+ * here; it reaches (0,5,0) via the two bubble classes + `[data-part='bubble']` +
+ * the target's own `[data-part]` REPEATED (the standalone-scope idiom -- there
+ * is no root attribute to buy the fourth unit from). Values transcribed verbatim
+ * from `engines/modern.tsx`.
+ */
+
+/* ---- bubble: shared surface + the open/closed scale ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] {
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-elevation-2);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-open='true'] {
+  transform: scale(1);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-open='false'] {
+  transform: scale(0.95);
+}
+
+/* ---- per-tone surface. The unqualified rule carries the `default` pair because
+        the lookup it replaces fell back to default for an unrecognised color;
+        the tone rules below override it. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] {
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='secondary'] {
+  background: var(--ds-color-secondary);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='success'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='warning'] {
+  background: var(--ds-color-warning);
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'][data-tone='error'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- shortcut chips: built on `currentColor` so they track whichever tone the
+        bubble is painting, with no second color map. ---- */
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] [data-part='shortcut-key'] {
+  border-radius: var(--ds-radius-sm);
+  background: color-mix(in srgb, currentColor 12%, transparent);
+}
+.rottay-tooltip-bubble.rottay-tooltip-bubble--modern[data-part='bubble'] [data-part='shortcut-key'][data-part='shortcut-key'] {
+  border: 1px solid color-mix(in srgb, currentColor 30%, transparent);
+}

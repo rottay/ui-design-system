@@ -1,0 +1,120 @@
+/**
+ * Modern Tag skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-tag-shell rottay-tag-shell--modern` — a fresh mint
+ * (grep-verified free across CSS and CSS-in-JS). The bare `rottay-tag` name that
+ * this engine might otherwise have adopted is BANNED here: the bithire tenant
+ * artifact (`artifacts/bithire/index.css:3094`) paints `.rottay-tag` and
+ * `.rottay-tag--<variant>` on live channels (background, color, border-color,
+ * border-radius, border-width). Rustic Tag already carries those classnames and
+ * suppresses them; Modern carries none, so handing Modern the name would activate
+ * that tenant's tint vocabulary on it for the first time. `-shell` mirrors the
+ * `rottay-alert-shell` precedent.
+ *
+ * SPECIFICITY (P-48): the outlined `border` shorthand carries a real colour, so it
+ * must clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` plus `[data-outlined]` take it past (0,4,0). It stays a
+ * SHORTHAND because preflight zeroes `border-width` on every element — a longhand
+ * colour alone would paint nothing.
+ *
+ * The `:not([data-outlined])` guards reproduce the object's spread order: the
+ * outlined overrides were spread AFTER the variant map, so outlined wins the fill,
+ * the frame and the text colour, and the variant only supplies the hue.
+ *
+ * `--ds-tag-custom-bg` is the hatch for the `color` PROP, whose value is an
+ * arbitrary caller string that cannot be enumerated in CSS. It is set inline only
+ * when the prop is present; every resting-fill rule reads it with the variant's own
+ * token as the fallback, which is exactly what the object's trailing
+ * `...(color && { backgroundColor: color })` spread did.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- radius ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='none'] {
+  border-radius: var(--ds-tag-radius-none, 0);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='sm'] {
+  border-radius: var(--ds-tag-radius-sm, 3px);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='md'] {
+  border-radius: var(--ds-tag-radius-md, var(--ds-tag-default-radius, var(--ds-radius-md)));
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='lg'] {
+  border-radius: var(--ds-tag-radius-lg, var(--ds-radius-lg));
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-radius='full'] {
+  border-radius: var(--ds-tag-radius-full, 9999px);
+}
+
+/* ---- solid fill: the variant map. The bare rule carries `default`, which is the
+        map's own fallback for an unrecognised variant. ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-alpha-black-100));
+  color: var(--ds-color-text-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-primary));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-secondary));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-success));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-warning));
+  color: var(--ds-color-text-on-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error']:not([data-outlined]) {
+  background: var(--ds-tag-custom-bg, var(--ds-color-error));
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- outlined: transparent fill, and the variant's fill token becomes the frame
+        and the ink. The bare rule again carries the map's `default` fallback. ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-outlined='true'] {
+  background: var(--ds-tag-custom-bg, transparent);
+  border: 1px solid var(--ds-color-alpha-black-100);
+  color: var(--ds-color-alpha-black-100);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='primary'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-primary);
+  color: var(--ds-color-primary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='secondary'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-secondary);
+  color: var(--ds-color-secondary);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='success'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-success);
+  color: var(--ds-color-success);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='warning'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-warning);
+  color: var(--ds-color-warning);
+}
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-variant='error'][data-outlined='true'] {
+  border: 1px solid var(--ds-color-error);
+  color: var(--ds-color-error);
+}
+
+/* ---- bordered: an INSET ring, never a real border, so the frame costs no box
+        space next to the outlined variant's real one. ---- */
+.rottay-tag-shell.rottay-tag-shell--modern[data-part='root'][data-part='root'][data-bordered='true'] {
+  box-shadow: inset 0 0 0 var(--ds-tag-border-width, 1px) var(--ds-color-border);
+}
+
+/* ---- close button (`border: none` is a colour-free reset, exempt from the floor) ---- */
+.rottay-tag-shell.rottay-tag-shell--modern > [data-part='close'] {
+  background: none;
+  border: none;
+  color: inherit;
+}

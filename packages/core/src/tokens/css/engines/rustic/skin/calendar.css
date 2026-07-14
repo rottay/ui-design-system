@@ -1,0 +1,84 @@
+/**
+ * Rustic Calendar skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-calendar rottay-calendar--rustic` + `data-part` +
+ * `data-mode` (grep-verified free: Calendar was fully greenfield -- no
+ * first-party classname, no theme.css bridge, no personality hook, in either
+ * engine). The engine suffix is load-bearing: modern carries the same base class
+ * and paints different values.
+ *
+ * HOVER WAS REACT STATE. A single `hovered: string | null` was compared against
+ * each element's key and spread into its style object on match; the `:hover`
+ * rules below reproduce all six sites (four nav arrows, day cell, month cell),
+ * with `:not()` guards standing in for the spread's own `!isSelected` /
+ * `!isDisabled` conditions. The mode toggles had no hover state and get none
+ * here.
+ *
+ * BORDER ORDERING mirrors the spread order the style objects had: the cell's
+ * base `border: none` is overridden by the today ring only when the cell is not
+ * selected (the selected spread never re-applied the ring), and the selected
+ * background outranks the base but is disjoint from the hover rule by
+ * construction. `border: none` is a color-free reset (exempt from the P-48
+ * (0,4,0) floor); the mode toggle's and the today ring's real borders clear the
+ * tenant's unlayered (0,3,1) `*` border-color floor at (0,5,0)+.
+ *
+ * `>` CHAINS THROUGHOUT: `data-part` is a shared vocabulary and `dateCellRender`
+ * / `monthCellRender` inject arbitrary caller content inside the cells, so a
+ * descendant selector could reach a nested component's own parts.
+ *
+ * Values transcribed verbatim from the `styles` object in `engines/rustic.tsx`.
+ */
+
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] {
+  background-color: var(--ds-calendar-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-calendar-radius, 8px);
+  box-shadow: var(--ds-calendar-shadow, var(--ds-shadow-md));
+}
+
+/* ---- header: nav arrows (ghost, with hover) + mode toggles (outlined) ---- */
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button'] {
+  border: none;
+  background-color: transparent;
+  border-radius: var(--ds-calendar-nav-radius, 4px);
+  color: var(--ds-calendar-nav-color, var(--ds-color-text-secondary));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='nav-button']:hover {
+  background-color: var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'] {
+  border: 1px solid var(--ds-calendar-border, var(--ds-color-border));
+  background-color: var(--ds-calendar-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-calendar-nav-radius, 4px);
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='header'] > div > [data-part='mode-toggle'][data-active='true'] {
+  background-color: var(--ds-calendar-primary, var(--ds-color-primary-500));
+  color: var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+  border: 1px solid var(--ds-calendar-primary, var(--ds-color-primary-500));
+}
+
+/* ---- weekday column headers ---- */
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > div > [data-part='weekday-header'] {
+  color: var(--ds-calendar-header-color, var(--ds-color-text-secondary));
+}
+
+/* ---- cells (one rule set serves the month grid and the year grid: their paint
+        is identical, only their geometry differs). ---- */
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'] {
+  border-radius: var(--ds-calendar-cell-radius, 8px);
+  border: none;
+  background-color: transparent;
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-selected='true'] {
+  background-color: var(--ds-calendar-primary, var(--ds-color-primary-500));
+  color: var(--ds-calendar-primary-text, var(--ds-color-text-inverse, var(--ds-color-bg-base)));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell'][data-today='true']:not([data-selected='true']) {
+  border: 1px solid var(--ds-calendar-primary, var(--ds-color-primary-500));
+}
+.rottay-calendar.rottay-calendar--rustic[data-part='root'] > [data-part='grid'] > [data-part='cell']:hover:not([data-selected='true']):not([data-disabled]) {
+  background-color: var(--ds-calendar-hover-bg, var(--ds-color-bg-muted, var(--ds-color-neutral-100)));
+}

@@ -1,0 +1,28 @@
+/**
+ * Carousel compound skin — Carousel.Item (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint the element at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: `Carousel.Item` has a single render tree shared by every engine,
+ * so it has one skin file rather than an engine pair.
+ *
+ * SCOPE is the item's own `rottay-carousel__item` class plus its repeated
+ * `data-part`, which reaches (0,3,0) — the floor for non-border paint. No rule here
+ * touches a border.
+ *
+ * `backgroundColor` and `backgroundImage` are caller-supplied strings (a colour and
+ * a URL), so they cannot be enumerated as rules; they ride custom properties set
+ * inline. Each fallback below is the CSS initial value for its property, which is
+ * what ReactDOM produced when the prop was absent and the key was dropped.
+ *
+ * Values transcribed verbatim from `compound/Item/index.tsx`.
+ */
+
+.rottay-carousel__item[data-part='item'][data-part='item'] {
+  background-color: var(--ds-carousel-item-bg, transparent);
+  background-image: var(--ds-carousel-item-bg-image, none);
+  background-size: cover;
+  background-position: center;
+}

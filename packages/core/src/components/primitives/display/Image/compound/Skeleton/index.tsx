@@ -44,36 +44,25 @@ export const ImageSkeleton = forwardRef<HTMLDivElement, ImageSkeletonProps>(
     // Get radius CSS value
     const radiusValue = RADIUS_MAP[radius] || RADIUS_MAP.none;
 
-    // Container styles
+    // The `radius` prop publishes no attribute, so image-compounds.css reads the
+    // resolved value as a custom property.
     const skeletonStyles: React.CSSProperties = {
       width: typeof width === 'number' ? `${width}px` : width || '100%',
       height: typeof height === 'number' ? `${height}px` : height || '100%',
-      backgroundColor: 'var(--ds-color-neutral-200, #e5e5e5)',
-      borderRadius: radiusValue,
-      animation: animate ? 'rottayImageSkeletonPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
+      '--ds-image-resolved-radius': radiusValue,
+      animation: animate ? 'ds-image-skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' : 'none',
       ...style,
-    };
+    } as React.CSSProperties;
 
     return (
-      <>
-        <div
-          ref={ref}
-          className={`rottay-image-skeleton ${className}`}
-          data-part="skeleton"
-          style={skeletonStyles}
-          aria-hidden="true"
-          {...props}
-        />
-        {/* Inline keyframes for animation */}
-        <style>
-          {`
-            @keyframes rottayImageSkeletonPulse {
-              0%, 100% { opacity: 1; }
-              50% { opacity: 0.5; }
-            }
-          `}
-        </style>
-      </>
+      <div
+        ref={ref}
+        className={`rottay-image-skeleton ${className}`}
+        data-part="skeleton"
+        style={skeletonStyles}
+        aria-hidden="true"
+        {...props}
+      />
     );
   }
 );

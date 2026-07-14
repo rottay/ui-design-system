@@ -21,8 +21,8 @@ import { useTranslation } from '../../../../../i18n';
 /** Detailed empty-box SVG illustration using DS text-secondary token at reduced opacity. */
 const DefaultImage: React.FC = () => (
   <svg
-    className="w-24 h-24"
-    style={{ color: 'var(--ds-color-text-secondary)', opacity: 0.4 }}
+    className="rottay-empty__illustration w-24 h-24"
+    style={{ opacity: 0.4 }}
     viewBox="0 0 64 41"
     fill="currentColor"
     xmlns="http://www.w3.org/2000/svg"
@@ -45,8 +45,8 @@ const DefaultImage: React.FC = () => (
 /** Minimal outline-only SVG illustration at reduced opacity for subtle empty states. */
 const SimpleImage: React.FC = () => (
   <svg
-    className="w-16 h-10"
-    style={{ color: 'var(--ds-color-text-secondary)', opacity: 0.3 }}
+    className="rottay-empty__illustration w-16 h-10"
+    style={{ opacity: 0.3 }}
     viewBox="0 0 64 41"
     fill="none"
     stroke="currentColor"
@@ -117,7 +117,7 @@ const ModernEmpty = forwardRef<HTMLDivElement, EmptyProps>(
         )}
 
         {displayDescription && (
-          <p className="text-sm mb-4 text-center" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <p className="text-sm mb-4 text-center" data-part="description">
             {displayDescription}
           </p>
         )}

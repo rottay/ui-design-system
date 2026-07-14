@@ -1,0 +1,107 @@
+/**
+ * Rustic Avatar skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT gains `rottay-avatar rottay-avatar--rustic` (fresh mints, grep-verified
+ * free); this engine published no classname at all. The mint is `rottay-avatar`,
+ * never `ds-avatar`: that name is claimed by `runtime/personality.css:522` and by
+ * `engines/rustic/theme.css:804`, and taking it would hand this component two rule
+ * sets it has never worn.
+ *
+ * P-75 does NOT bite here. This engine has a single DOM level: the element that
+ * carries the size token IS the element DaisyUI's `avatar` class would have
+ * targeted, and it carries no such class. Its root is sized, so its root is
+ * correct — which is precisely why the modern engine's clip is a defect and not a
+ * design. Nothing about that asymmetry changes in this file.
+ *
+ * SPECIFICITY (P-48): every rule carrying a border or outline COLOUR must clear the
+ * tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='root']` buys the fourth unit. The `none` resets are colour-free and
+ * exempt. Each frame stays a SHORTHAND because preflight zeroes `border-width` on
+ * every element.
+ *
+ * The RING is an `outline`, not a border, so it costs no layout — the object said so
+ * and this keeps it. `--ds-avatar-custom-ring` is the hatch for the `ringColor` PROP
+ * (a caller string); `--ds-avatar-custom-bg` is the hatch for `backgroundColor`.
+ * The `textColor` PROP stays inline (standing law: text colour painted from a prop
+ * never moves to CSS) and outranks every `color` below, as it always did.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- shape. `rounded` is the ternary's else-branch, so it is the bare rule. ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-avatar-radius-rounded);
+  border: none;
+  outline: none;
+  outline-offset: 0;
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-shape='circle'] {
+  border-radius: var(--ds-avatar-radius-circle);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-shape='square'] {
+  border-radius: var(--ds-avatar-radius-square);
+}
+
+/* ---- fill + ink per variant. The bare rule carries `default`. ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-default-bg));
+  color: var(--ds-avatar-default-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='primary'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-primary-bg));
+  color: var(--ds-avatar-primary-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='secondary'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-secondary-bg));
+  color: var(--ds-avatar-secondary-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='success'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-success-bg));
+  color: var(--ds-avatar-success-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='warning'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-warning-bg));
+  color: var(--ds-avatar-warning-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='error'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-error-bg));
+  color: var(--ds-avatar-error-color);
+}
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-variant='gradient'] {
+  background: var(--ds-avatar-custom-bg, var(--ds-avatar-gradient-bg));
+  color: var(--ds-avatar-gradient-color);
+}
+
+/* ---- bordered frame ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-bordered='true'] {
+  border: var(--ds-avatar-border-width) solid var(--ds-avatar-border-color);
+}
+
+/* ---- ring: an outline, so it never moves the box ---- */
+.rottay-avatar.rottay-avatar--rustic[data-part='root'][data-part='root'][data-ring='true'] {
+  outline: var(--ds-avatar-ring-width) solid var(--ds-avatar-custom-ring, var(--ds-avatar-ring-color));
+  outline-offset: var(--ds-avatar-ring-offset);
+}
+
+/* ---- status dot: the frame, radius and offset are one object for every status ---- */
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-part='status-dot'] {
+  border-radius: 50%;
+  border: var(--ds-avatar-status-border-width) solid var(--ds-avatar-status-border);
+  transform: translate(15%, 15%);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='online'] {
+  background-color: var(--ds-avatar-status-online);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='offline'] {
+  background-color: var(--ds-avatar-status-offline);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='away'] {
+  background-color: var(--ds-avatar-status-away);
+}
+.rottay-avatar.rottay-avatar--rustic > [data-part='status-dot'][data-status='busy'] {
+  background-color: var(--ds-avatar-status-busy);
+}

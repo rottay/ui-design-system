@@ -1,0 +1,50 @@
+/**
+ * Modern Carousel skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-carousel rottay-carousel--modern` (fresh mints,
+ * grep-verified free) alongside DaisyUI's structural `carousel` class, which is
+ * left in place: `engines/modern/theme.css:798` paints `border-radius` and
+ * `overflow` through it uncontested, and border-radius is a preflight-SAFE channel,
+ * so dropping the class would remove a radius that renders today.
+ *
+ * Every rule uses a CHILD combinator. `data-part` is a shared vocabulary and each
+ * slide holds arbitrary consumer content, which may itself be a component that
+ * stamps `slide`, `arrow` or `dot`.
+ *
+ * SPECIFICITY (P-48): the arrow's `border` shorthand carries a real colour, so it
+ * must clear the tenant's unlayered `*` border-color floor at (0,3,1); the repeated
+ * `[data-part='arrow']` buys the fourth unit. It stays a SHORTHAND because preflight
+ * zeroes `border-width` on every element.
+ *
+ * The slide offset is arithmetic over the live slide index (`(index - currentSlide)
+ * * 100%`), so it cannot be enumerated as a rule; it rides the
+ * `--ds-carousel-slide-transform` custom property, set inline per slide. Its
+ * fallback is `none`, the same value the fade branch produces.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-carousel.rottay-carousel--modern > [data-part='track'] > [data-part='slide'] {
+  transform: var(--ds-carousel-slide-transform, none);
+}
+
+/* ---- arrows: both buttons carried the same object ---- */
+.rottay-carousel.rottay-carousel--modern > [data-part='arrow'][data-part='arrow'] {
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: 1px solid var(--ds-color-border);
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* ---- dots ---- */
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='true'] {
+  background: var(--ds-color-primary);
+}
+.rottay-carousel.rottay-carousel--modern > [data-part='dots'] > [data-part='dot'][data-selected='false'] {
+  background: var(--ds-surface-panel);
+}

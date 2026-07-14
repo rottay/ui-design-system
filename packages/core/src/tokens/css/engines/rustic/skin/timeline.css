@@ -1,0 +1,65 @@
+/**
+ * Rustic Timeline skin (WO-SKIN-05 checkpoint D2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): a layered rule sorts before Tailwind's base
+ * layer and loses to preflight; unlayered outranks preflight and still yields to
+ * the caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-timeline rottay-timeline--rustic` +
+ * `data-part='root'`. The engine suffix is load-bearing: modern carries the same
+ * base class.
+ *
+ * THE DOT COLOR CANNOT BE ENUMERATED. Rustic resolves an item's color through
+ * `TIMELINE_COLOR_MAP[color] || color` -- an unmapped value passes straight
+ * through, so `<Timeline.Item color="#ff0000">` is a supported call and the dot
+ * fill is genuinely runtime data, not a closed enum. It therefore rides the
+ * `--ds-timeline-dot-color` custom property the component sets inline (a quoted
+ * key, not a paint key) and is consumed here. Modern's map has no pass-through
+ * branch, which is why its skin CAN key the fill on `data-tone`; the asymmetry
+ * is real and transcribed, not levelled.
+ *
+ * `data-custom-dot` carries the branch that a caller-supplied dot element flips:
+ * the default circle goes transparent and drops its ring so the custom content
+ * shows through without overlap.
+ *
+ * The `@keyframes rottay-timeline-pulse` driving the pending dot stays in the
+ * component's own `<style>` block: `animation` is not a paint channel, the name
+ * is already collision-safe, and no other engine defines it.
+ *
+ * SPECIFICITY (P-48): the dot's `border` shorthand clears the tenant's unlayered
+ * (0,3,1) `*` border-color floor at (0,5,0). Values transcribed verbatim from
+ * `engines/rustic.tsx`.
+ */
+
+/* ---- the absolutely-positioned vertical line (geometry stays inline) ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='connector'] {
+  background-color: var(--ds-timeline-line-color, #e8e8e8);
+}
+
+/* ---- dot: shared disc, then the two branches of a caller-supplied dot ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='dot'] {
+  border-radius: 50%;
+}
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='dot'][data-custom-dot='false'] {
+  background-color: var(--ds-timeline-dot-color);
+  border: var(--ds-timeline-dot-border-width) solid white;
+  box-shadow: 0 0 0 var(--ds-timeline-dot-border-width) var(--ds-timeline-dot-color);
+}
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='dot'][data-custom-dot='true'] {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+/* ---- per-item label ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'] > [data-part='label'] {
+  color: var(--ds-timeline-label-color, #999);
+}
+
+/* ---- pending row: dot fill (animation stays inline) + muted body ---- */
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='dot'] {
+  background-color: var(--ds-timeline-pending-dot-color, #e8e8e8);
+}
+.rottay-timeline.rottay-timeline--rustic[data-part='root'] > [data-part='item'][data-pending='true'] > [data-part='body'] {
+  color: var(--ds-timeline-pending-color, #999);
+}

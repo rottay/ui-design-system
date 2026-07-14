@@ -1,0 +1,91 @@
+/**
+ * Card compound skin — Card.Header, Card.Footer, Card.Image (WO-SKIN-05 D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint these elements at all.
+ * Unlayered outranks preflight and still yields to the caller's inline `style`.
+ *
+ * ENGINE-AGNOSTIC: each compound has one render tree shared by every engine, so they
+ * share one file rather than an engine pair.
+ *
+ * THE CLASSNAME IS THE OWNERSHIP BOUNDARY, not the `data-part`. Both Card engines
+ * render their OWN `data-part='header'`, `'title'`, `'actions'` and `'cover'`
+ * elements with different token fallback chains, and a compound dropped into a
+ * Card's `children` sits right beside them in the tree. Every selector here is
+ * anchored on the compound's own classname, which no engine element wears; the
+ * engines' skins carry the mirror-image guard (`:not(.rottay-card-header)`).
+ *
+ * SPECIFICITY (P-48): each rule carrying a border colour must clear the tenant's
+ * unlayered `*` border-color floor at (0,3,1); the repeated `data-part` buys the
+ * fourth unit. The `none` resets are colour-free and exempt. The frames stay
+ * SHORTHANDS because preflight zeroes `border-width` on every element.
+ *
+ * `--ds-card-image-radius` is the hatch for `RADIUS_MAP[radius] || radius`, whose
+ * else-branch passes the caller's raw string through — an open value no rule can
+ * enumerate. The per-position corner longhands override it, which is the order the
+ * object's spreads had.
+ *
+ * KEYFRAME: Card.Image's per-mount `<style>` injected `rottay-card-image-spin`; the
+ * copy here is renamed into the `ds-` vocabulary the skins share.
+ *
+ * Values transcribed verbatim from `compound/{Header,Footer,Image}/index.tsx`.
+ */
+
+/* ---- Card.Header ---- */
+.rottay-card-header[data-part='header'][data-part='header'] {
+  border-bottom: none;
+}
+.rottay-card-header[data-part='header'][data-part='header'][data-divider='true'] {
+  border-bottom: 1px solid var(--ds-card-header-border, var(--ds-card-border, #e5e5e5));
+}
+.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='title'] {
+  color: var(--ds-card-title-color, var(--ds-color-text-primary, #171717));
+}
+.rottay-card-header > .rottay-card-header-content > .rottay-card-header-text > [data-part='subtitle'] {
+  color: var(--ds-card-subtitle-color, var(--ds-color-text-secondary, #737373));
+}
+
+/* ---- Card.Footer ---- */
+.rottay-card-footer[data-part='footer'][data-part='footer'] {
+  border-top: none;
+}
+.rottay-card-footer[data-part='footer'][data-part='footer'][data-divider='true'] {
+  border-top: 1px solid var(--ds-card-footer-border, var(--ds-card-border, #e5e5e5));
+}
+
+/* ---- Card.Image: radius, then the corner pair its position rounds ---- */
+.rottay-card-image[data-part='image'][data-part='image'] {
+  border-radius: var(--ds-card-image-radius);
+}
+.rottay-card-image[data-part='image'][data-part='image'][data-position='top'] {
+  border-top-left-radius: var(--ds-card-radius, 12px);
+  border-top-right-radius: var(--ds-card-radius, 12px);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.rottay-card-image[data-part='image'][data-part='image'][data-position='bottom'] {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: var(--ds-card-radius, 12px);
+  border-bottom-right-radius: var(--ds-card-radius, 12px);
+}
+
+/* ---- Card.Image: the placeholder behind a loading or broken image ---- */
+.rottay-card-image > [data-part='placeholder'] {
+  background-color: var(--ds-card-image-placeholder-bg, var(--ds-color-neutral-100, #f0f0f0));
+  color: var(--ds-card-image-placeholder-color, var(--ds-color-text-tertiary, #a3a3a3));
+}
+.rottay-card-image > [data-part='placeholder'] > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-card-image-loading-track, var(--ds-color-neutral-200, #e5e5e5));
+  border-top-color: var(--ds-card-image-loading-active, var(--ds-color-primary-500, #171717));
+  border-radius: 50%;
+}
+
+/* ---- Card.Image: the scrim that keeps overlay text readable ---- */
+.rottay-card-image > [data-part='gradient'] {
+  background: var(--ds-card-cover-overlay-bg, linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.7) 100%));
+}
+
+@keyframes ds-card-image-spin {
+  to { transform: rotate(360deg); }
+}

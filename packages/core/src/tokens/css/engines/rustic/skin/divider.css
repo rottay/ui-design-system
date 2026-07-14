@@ -1,0 +1,81 @@
+/**
+ * Rustic Divider skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE ROOT mints `rottay-divider rottay-divider--rustic` (grep-verified
+ * free; neither engine carried a first-party scope class before this
+ * migration -- this engine's own BEM classes, `divider`/`divider--<axis>`/
+ * `divider--<variant>`/etc., stay untouched alongside it) + the
+ * already-stamped `data-part='root'` + `data-orientation` + `data-with-text`.
+ *
+ * L.2 (checked live, refuted): see the modern skin's header for the full
+ * measurement -- rustic is unaffected for an independent reason anyway (its
+ * root never carries the single-dash `divider-horizontal`/`-vertical`
+ * classnames the theme.css bridge targets, only the double-dash BEM
+ * `divider--horizontal`).
+ *
+ * `color`/`thickness` are caller-overridable free-form props, so the
+ * resolved line value rides the `--ds-divider-line` custom-property hatch,
+ * same as the modern skin. `borderRight`/`borderBottom` are always the
+ * static literal `none` in the source (never conditional on anything caller-
+ * supplied) -- transcribed here as plain, unconditional declarations, no
+ * hatch needed. `plain`'s text-color branch DOES have a DOM signal on this
+ * engine: `divider--plain` is already stamped by the component (only when
+ * `plain && hasChildren`) -- keyed on directly, no hatch, no invented
+ * anatomy.
+ *
+ * SPECIFICITY (P-48): every line rule paints a real border color on one axis
+ * per orientation and must reach (0,4,0) -- the two root classes +
+ * `[data-part='root']` already give (0,3,0), and `[data-orientation='...']`
+ * (with-text) or `[data-with-text='false']` (plain) buys the 4th unit. Text
+ * color is non-border and clears preflight unlayered at (0,3,0) or better.
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- line: with-text spans (was lineBeforeStyle/lineAfterStyle's
+        borderTop/borderLeft/borderRight/borderBottom, all driven by
+        `isHorizontal` except the always-none right/bottom pair). ---- */
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'] [data-part='line-before'],
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'] [data-part='line-after'] {
+  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'] [data-part='line-before'],
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'] [data-part='line-after'] {
+  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* ---- line: plain divider, merged onto the root itself (was the simple-
+        divider return path's `{ ...containerStyle, ...lineStyle }`). Gated
+        to `data-with-text='false'` -- the with-text root never carries this
+        channel. ---- */
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='horizontal'][data-with-text='false'] {
+  border-top: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+.rottay-divider.rottay-divider--rustic[data-part='root'][data-orientation='vertical'][data-with-text='false'] {
+  border-left: var(--ds-divider-line, 1px solid var(--ds-divider-color, #d9d9d9));
+  border-top: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+/* ---- text: color (was textStyle.color's `plain` ternary; `divider--plain`
+        is this engine's own existing class, stamped only when
+        `plain && hasChildren`, so no rule fires here for the plain case and
+        the text naturally inherits -- matching the original `'inherit'`
+        value exactly). ---- */
+.rottay-divider.rottay-divider--rustic[data-part='root']:not(.divider--plain) [data-part='text'] {
+  color: var(--ds-divider-text-color, var(--ds-color-neutral-600, #555));
+}

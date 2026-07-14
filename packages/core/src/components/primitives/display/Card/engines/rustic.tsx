@@ -187,13 +187,12 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     'data-loading': loading ? 'true' : undefined,
   } as const;
 
-  // Header style
+  // The divider rule is card.css, keyed on the data-divider stamp below.
   const headerStyle: React.CSSProperties = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     padding: paddingValue,
-    borderBottom: divider ? '1px solid var(--ds-card-header-border, #e5e5e5)' : 'none',
   };
 
   // Cover image style
@@ -210,7 +209,6 @@ export default function RusticCard(props: CardProps): React.ReactElement {
     justifyContent: 'flex-end',
     gap: '8px',
     padding: paddingValue,
-    borderTop: '1px solid var(--ds-card-footer-border, #e5e5e5)',
   };
 
   // The loading overlay sits on top of the full card (position: absolute)
@@ -226,8 +224,6 @@ export default function RusticCard(props: CardProps): React.ReactElement {
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
-        backdropFilter: 'blur(2px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -241,10 +237,7 @@ export default function RusticCard(props: CardProps): React.ReactElement {
         style={{
           width: '32px',
           height: '32px',
-          border: '3px solid var(--ds-color-neutral-200, #e0e0e0)',
-          borderTopColor: 'var(--ds-color-primary-500, #1890ff)',
-          borderRadius: '50%',
-          animation: 'rottay-rustic-card-spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
+          animation: 'ds-card-spin-rustic 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite',
         }}
       />
     </div>
@@ -308,7 +301,6 @@ export default function RusticCard(props: CardProps): React.ReactElement {
                 data-part="description"
                 style={{
                   fontSize: '14px',
-                  color: 'var(--ds-card-subtitle-color, #8c8c8c)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -343,16 +335,6 @@ export default function RusticCard(props: CardProps): React.ReactElement {
           style={coverStyle}
         />
       )}
-
-      {/* Inline keyframes avoid requiring a global CSS file, keeping the
-          rustic engine fully self-contained with zero external dependencies.
-          The animation name is prefixed to prevent collisions with other
-          component keyframes in the same document. */}
-      <style>{`
-        @keyframes rottay-rustic-card-spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
     </div>
     </>
   );

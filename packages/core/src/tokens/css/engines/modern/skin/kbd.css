@@ -1,0 +1,26 @@
+/**
+ * Modern Kbd skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
+ * Tailwind's base layer, so a layered rule cannot paint a component at all.
+ * Unlayered outranks preflight and still yields to a caller's inline `style`.
+ *
+ * SCOPE ROOT carries `rottay-kbd rottay-kbd--modern` + `data-part='root'`. Both
+ * classnames are fresh mints (grep-verified free across CSS and CSS-in-JS): this
+ * engine published no first-party classname at all, and the element is a bare
+ * `<kbd>` tag with no DaisyUI class despite the file's own header claim.
+ *
+ * SPECIFICITY (P-48): the `border` shorthand carries a real colour, so it must
+ * clear the tenant's unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ * border-color floor at (0,3,1). The repeated `[data-part='root']` buys the fourth
+ * unit. It stays a SHORTHAND because preflight zeroes `border-width` on every
+ * element: a longhand `border-color` alone would leave the width at 0 and the
+ * key-cap frame would vanish. Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+.rottay-kbd.rottay-kbd--modern[data-part='root'][data-part='root'] {
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-color-border);
+  background: var(--ds-surface-inset);
+  color: var(--ds-color-text-primary);
+}

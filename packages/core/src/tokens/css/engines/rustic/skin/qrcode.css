@@ -1,0 +1,72 @@
+/**
+ * Rustic QRCode skin (WO-SKIN-05 checkpoint D1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): no `rottay-*` layer can paint a component
+ * (Tailwind's `@layer base` sorts after all of them). Unlayered outranks preflight
+ * and still yields to the caller's inline `style`.
+ *
+ * SCOPE ROOT already carried `rottay-qrcode rottay-qrcode--rustic`; no classname is
+ * minted or dropped. The bare `rottay-qrcode` name carries a live BRIDGE
+ * (`engines/modern/theme.css:853` — the selector has no engine gate, so it reaches
+ * this engine too) painting border-radius, border-color and background-color on the
+ * root. When `bordered` is false this component declares none of them and the
+ * bridge paints uncontested, so the root rule below is gated on
+ * `[data-bordered='true']` exactly as the inline spread was.
+ *
+ * SPECIFICITY (P-48): rules carrying a border COLOUR must clear the tenant's
+ * unlayered `*` border-color floor at (0,3,1); the two root classes plus the
+ * target's own repeated `data-part` take them past (0,4,0). Each stays a SHORTHAND
+ * because preflight zeroes `border-width` on every element.
+ *
+ * KEYFRAME: this engine injected a per-mount `<style>` redefining the GLOBAL
+ * `spin` (`foundation/animations/keyframes.css`) with byte-identical content —
+ * a global name shadowed for the whole document while any rustic QRCode is
+ * mounted. The copy is renamed and engine-namespaced here so it can never diverge
+ * from, or shadow, the global one; the modern engine's spinner keeps reading the
+ * global `spin`, which is the asymmetry that already shipped.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root, bordered only: the bridge owns the unbordered root (padding stays
+        inline — it is not a paint channel and it rode the same spread) ---- */
+.rottay-qrcode.rottay-qrcode--rustic[data-part='root'][data-bordered='true'] {
+  border: 1px solid var(--ds-qrcode-border-color, #d9d9d9);
+  border-radius: var(--ds-qrcode-radius, 8px);
+  background-color: var(--ds-qrcode-bg, #ffffff);
+}
+
+/* ---- one overlay fill for all three statuses (the object was shared) ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] {
+  background-color: var(--ds-qrcode-overlay-bg, rgba(255, 255, 255, 0.9));
+}
+
+/* ---- loading spinner ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-qrcode-spinner-track, #f3f3f3);
+  border-top: 3px solid var(--ds-qrcode-spinner-color, var(--ds-color-primary-500, #1890ff));
+  border-radius: 50%;
+}
+
+/* ---- expired: message + refresh ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='status-text'] {
+  color: var(--ds-qrcode-expired-color, #666);
+}
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='overlay'] > [data-part='refresh-button'][data-part='refresh-button'] {
+  border: 1px solid var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-qrcode-button-color, var(--ds-color-primary-500, #1890ff));
+}
+
+/* ---- centre icon ---- */
+.rottay-qrcode.rottay-qrcode--rustic > [data-part='canvas-wrapper'] > [data-part='icon'] {
+  transform: translate(-50%, -50%);
+  background-color: var(--ds-qrcode-icon-bg, #fff);
+  border-radius: 4px;
+}
+
+@keyframes ds-qrcode-spin-rustic {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

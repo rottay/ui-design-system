@@ -64,9 +64,6 @@ function highlightText(
         className="rottay-tree-highlight"
         data-part="tree-node-highlight"
         style={{
-          backgroundColor: 'var(--ds-tree-highlight-bg, #fef3c7)',
-          color: 'var(--ds-tree-highlight-color, #92400e)',
-          borderRadius: '2px',
           padding: '0 2px',
         }}
       >
@@ -104,8 +101,6 @@ const styles = {
 
   dropLine: {
     height: '2px',
-    backgroundColor: 'var(--ds-tree-drop-indicator-color, var(--ds-color-primary))',
-    borderRadius: '1px',
     animation: 'rottay-tree-drop-line-in 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
   } as React.CSSProperties,
 };
@@ -243,27 +238,9 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     padding: '4px 8px',
     paddingLeft,
     cursor: disabled ? 'not-allowed' : 'pointer',
-    borderRadius: 'var(--ds-tree-node-radius, 4px)',
-    backgroundColor: isSelected
-      ? 'var(--ds-tree-node-selected-bg, var(--ds-color-alpha-primary-10))'
-      : isDropTarget && dropPosition === 'inside'
-        ? 'var(--ds-tree-drop-bg, rgba(59, 130, 246, 0.05))'
-        : 'transparent',
-    color: isSelected
-      ? 'var(--ds-tree-node-selected-color, var(--ds-color-primary))'
-      : 'inherit',
     opacity: disabled ? 0.5 : !isFiltered && filteredKeys ? 0.4 : 1,
     transition: 'background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
-    outline: 'none',
-    boxShadow: isFocused
-      ? '0 0 0 2px var(--ds-tree-focus-ring-color, var(--ds-color-primary-200, rgba(59, 130, 246, 0.3)))'
-      : isDropTarget && dropPosition === 'inside'
-        ? 'inset 0 0 0 2px var(--ds-tree-drop-indicator-color, var(--ds-color-primary))'
-        : undefined,
     position: 'relative',
-    borderLeft: isSelected
-      ? '3px solid var(--ds-color-primary, var(--ds-tree-node-selected-color))'
-      : '3px solid transparent',
   };
 
   // The expand/collapse arrow rotates 90deg to point downward when expanded.
@@ -276,14 +253,10 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: '4px',
-    transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
     transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
     flexShrink: 0,
-    border: 'none',
-    background: 'none',
     cursor: 'pointer',
     padding: 0,
-    color: 'inherit',
   };
 
   const checkboxStyle: React.CSSProperties = {
@@ -291,7 +264,6 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     width: '16px',
     height: '16px',
     cursor: disabled || disableCheckbox ? 'not-allowed' : 'pointer',
-    accentColor: 'var(--ds-tree-checkbox-color, var(--ds-color-primary))',
     flexShrink: 0,
   };
 
@@ -315,12 +287,12 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
           <div
             key={`vline-${i}`}
             data-part="connector"
+            data-axis="vertical"
             style={{
               position: 'absolute',
               left: i * 24 + 12,
               top: 0,
               bottom: 0,
-              borderLeft: '1px solid var(--ds-tree-line-color, var(--ds-color-border-primary))',
               pointerEvents: 'none',
             }}
           />,
@@ -332,12 +304,12 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
       <div
         key="hline"
         data-part="connector"
+        data-axis="horizontal"
         style={{
           position: 'absolute',
           left: (level - 1) * 24 + 12,
           top: '50%',
           width: 12,
-          borderTop: '1px solid var(--ds-tree-line-color, var(--ds-color-border-primary))',
           pointerEvents: 'none',
         }}
       />,
@@ -348,12 +320,12 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         <div
           key="vline-self"
           data-part="connector"
+          data-axis="vertical"
           style={{
             position: 'absolute',
             left: (level - 1) * 24 + 12,
             top: 0,
             height: '50%',
-            borderLeft: '1px solid var(--ds-tree-line-color, var(--ds-color-border-primary))',
             pointerEvents: 'none',
           }}
         />,
@@ -363,12 +335,12 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         <div
           key="vline-self"
           data-part="connector"
+          data-axis="vertical"
           style={{
             position: 'absolute',
             left: (level - 1) * 24 + 12,
             top: 0,
             bottom: 0,
-            borderLeft: '1px solid var(--ds-tree-line-color, var(--ds-color-border-primary))',
             pointerEvents: 'none',
           }}
         />,
@@ -396,24 +368,6 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     const node = findNode(normalizedNodeKey);
     if (node) {
       onCheck(normalizedNodeKey, node);
-    }
-  };
-
-  // Imperative hover handlers -- required because inline styles cannot
-  // express :hover. The border-left accent appears on hover and persists
-  // on selected nodes, giving progressive visual feedback.
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isSelected && !disabled && !(isDropTarget && dropPosition === 'inside')) {
-      e.currentTarget.style.backgroundColor =
-        'var(--ds-tree-node-hover-bg, rgba(0, 0, 0, 0.04))';
-      e.currentTarget.style.borderLeft = '3px solid var(--ds-color-primary, #1677ff)';
-    }
-  };
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!isSelected && !(isDropTarget && dropPosition === 'inside')) {
-      e.currentTarget.style.backgroundColor = 'transparent';
-      e.currentTarget.style.borderLeft = '3px solid transparent';
     }
   };
 
@@ -464,8 +418,6 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
       <div
         style={nodeStyle}
         onClick={handleClick}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         role="treeitem"
         aria-selected={isSelected}
         aria-expanded={showExpander ? isExpanded : undefined}

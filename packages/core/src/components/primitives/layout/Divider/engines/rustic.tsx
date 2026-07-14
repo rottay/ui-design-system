@@ -74,6 +74,8 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
 
     // BEM class names allow external CSS overrides without specificity wars
     const classNames = [
+      'rottay-divider',
+      'rottay-divider--rustic',
       'divider',
       `divider--${orientation}`,
       `divider--${variant}`,
@@ -100,18 +102,20 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       ...style,
     };
 
-    // Base line style: only the relevant border direction is set, and
-    // borderRight/Bottom are explicitly none to prevent style bleeding
+    // Base line style: layout only. Border (top/left driven by `isHorizontal`,
+    // right/bottom always the static `none` reset) lives in
+    // engines/rustic/skin/divider.css. `color`/`thickness` are
+    // caller-overridable free-form props (see Divider.types.ts), so the
+    // resolved value can't be enumerated into a finite data-* lookup -- it
+    // rides `--ds-divider-line`, read via `var()` in the skin and gated on
+    // `data-orientation` there to land on border-top vs border-left.
     const lineStyle: React.CSSProperties = {
       flex: 1,
       boxSizing: 'border-box',
       height: isHorizontal ? '0' : '100%',
       width: isHorizontal ? '100%' : '0',
-      borderTop: isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
-      borderLeft: !isHorizontal ? `${lineThickness} ${variant} ${lineColor}` : 'none',
-      borderRight: 'none',
-      borderBottom: 'none',
-    };
+      '--ds-divider-line': `${lineThickness} ${variant} ${lineColor}`,
+    } as React.CSSProperties;
 
     // Asymmetric flex values create the left/center/right text positioning
     const lineBeforeStyle: React.CSSProperties = {
@@ -128,14 +132,17 @@ const RusticDivider = forwardRef<HTMLDivElement, DividerProps>(
       minWidth: '5%',
     };
 
-    // Text uses CSS custom property fallbacks for tenant-level overrides
+    // Text uses CSS custom property fallbacks for tenant-level overrides.
+    // Color lives in engines/rustic/skin/divider.css, gated on the
+    // already-stamped `divider--plain` class (present only when
+    // `plain && hasChildren`) -- when plain, no rule matches and the text
+    // naturally inherits, matching the original `'inherit'` value exactly.
     const textStyle: React.CSSProperties = {
       display: 'inline-block',
       padding: 'var(--ds-divider-text-padding, 0 1rem)',
       whiteSpace: 'nowrap',
       fontSize: plain ? 'inherit' : 'var(--ds-divider-text-size, 0.875rem)',
       fontWeight: plain ? 'inherit' : 500,
-      color: plain ? 'inherit' : 'var(--ds-divider-text-color, var(--ds-color-neutral-600, #555))',
       lineHeight: 1.5,
     };
 

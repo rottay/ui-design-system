@@ -1,0 +1,39 @@
+/**
+ * Statistic compound skin -- `compound/Countdown` (WO-SKIN-05 checkpoint D2).
+ *
+ * ENGINE-AGNOSTIC: this Countdown has a single render tree (no engine split), so
+ * it gets one file here rather than a per-engine pair. It is a
+ * different component from the Countdown each engine exports beside Statistic,
+ * with different values; the `--countdown` modifier is what keeps the three
+ * apart, since all three roots carry the bare `rottay-statistic`.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * base layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight and still yields to a caller's inline `style` --
+ * which is what keeps the `valueStyle` prop overriding the value color.
+ *
+ * THE TREND LIVES IN A CUSTOM PROPERTY. `--ds-statistic-value-color` and
+ * `--ds-statistic-title-color` are set on the root by the component (a quoted
+ * custom-property key, not a paint key) and resolve here through inheritance --
+ * so the trend branch stays where it can see `valueType`, and the paint stays
+ * in CSS. Do not restate the trend colors here: the root is their only source.
+ *
+ * SPECIFICITY (P-48): both colors are non-border paint and clear preflight at
+ * (0,3,0); the skeleton's `border-radius` carries no color, so the (0,4,0)
+ * border floor does not apply. Values transcribed verbatim from
+ * `compound/Countdown/index.tsx`.
+ */
+
+/* ---- loading skeleton bars (height/width/margin stay inline) ---- */
+.rottay-statistic.rottay-statistic--countdown[data-part='root'] > [data-part='skeleton-line'] {
+  background: var(--ds-color-bg-secondary);
+  border-radius: 4px;
+}
+
+/* ---- title + value, both reading the root's own custom properties ---- */
+.rottay-statistic.rottay-statistic--countdown[data-part='root'] > [data-part='title'] {
+  color: var(--ds-statistic-title-color);
+}
+.rottay-statistic.rottay-statistic--countdown[data-part='root'] > [data-part='value'] {
+  color: var(--ds-statistic-value-color);
+}

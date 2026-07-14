@@ -1,0 +1,70 @@
+/**
+ * Rustic Collapse skin (WO-SKIN-05 checkpoint L).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as every other engine skin:
+ * a layered rule loses to Tailwind's `base` layer regardless of
+ * specificity; unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * SCOPE ROOT mints `rottay-collapse-shell rottay-collapse-shell--rustic`
+ * (grep-verified free across CSS and CSS-in-JS). Per the WO-SKIN-05
+ * orchestrator adjudication A1, rustic must NOT reuse modern's bare
+ * `rottay-collapse` -- `engines/modern/theme.css:654-671` declares a live
+ * bridge on that exact classname with NO `[data-engine]` gate, on the
+ * preflight-SAFE `border-radius` channel (measured 14px). Reusing it here
+ * would hand rustic a radius it has never painted. `rottay-collapse-shell`
+ * mirrors the `rottay-alert-shell`/`rottay-progress-shell` precedent.
+ *
+ * `context.ghost`/`context.bordered` have NO DOM signal on this engine
+ * (rustic's root/panel carry no ghost/bordered class or attribute, unlike
+ * modern's `--ghost`/`--borderless` root modifiers) -- inventing one would
+ * be new `data-*` anatomy the WO-SKIN-05 pre-step did not stamp. The border
+ * channel (the one place ghost truly changes the painted value: `none` vs a
+ * real bordered color) rides the `--ds-collapse-panel-border` custom-property
+ * hatch instead, set inline to the exact resolved value every render; this
+ * skin only supplies the `var()` fallback. Background does NOT need the
+ * hatch: `styles.panel` sets no background at all (bordered case) and
+ * `styles.panelGhost.backgroundColor` is `'transparent'` (ghost case) --
+ * both branches resolve to the same rendered value, so one unconditional
+ * `transparent` rule reproduces both without any conditional at all.
+ *
+ * SPECIFICITY (P-48): the border rule paints a real color in the bordered
+ * branch and must reach (0,4,0) -- the two root classes + `[data-part='root']`
+ * already give (0,3,0), and the descendant `[data-part='panel']` repeated
+ * buys the 4th unit. Every other declaration here is non-border. Values
+ * transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- panel: border-radius (was styles.panel.borderRadius, unconditional --
+        panelGhost never overrides it) + background (was styles.panel's
+        absent backgroundColor / styles.panelGhost's 'transparent': the same
+        rendered value either way, see header). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='panel'] {
+  border-radius: var(--ds-collapse-radius, 12px);
+  background-color: transparent;
+}
+
+/* ---- panel: border (was styles.panel.border / styles.panelGhost's 'none'
+        override, driven by `context.ghost` -- no DOM signal, so the resolved
+        value rides `--ds-collapse-panel-border`, always set inline). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='panel'][data-part='panel'] {
+  border: var(--ds-collapse-panel-border, 1px solid var(--ds-collapse-border-color, var(--ds-color-neutral-300, #d9d9d9)));
+}
+
+/* ---- header: background (was styles.header.backgroundColor, STATIC --
+        no ghost/disabled/active branching on this engine). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='header'] {
+  background-color: var(--ds-collapse-header-bg, var(--ds-color-neutral-50, #fafafa));
+}
+
+/* ---- arrow: rotation (was styles.arrow / styles.arrowActive's `transform`,
+        driven by `isActive`, now keyed on `data-expanded`). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='arrow'][data-expanded='true'] {
+  transform: rotate(90deg);
+}
+
+/* ---- content-inner: background (was styles.contentInner.backgroundColor,
+        STATIC -- no ghost branching on this engine). ---- */
+.rottay-collapse-shell.rottay-collapse-shell--rustic[data-part='root'] [data-part='content-inner'] {
+  background-color: var(--ds-collapse-content-bg, #fff);
+}

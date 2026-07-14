@@ -200,7 +200,6 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
                 className={`flex-shrink-0 transition-colors ${
                   isVertical ? 'h-2 cursor-row-resize' : 'w-2 cursor-col-resize'
                 }`}
-                style={{ background: 'var(--ds-surface-panel)' }}
                 onMouseDown={handleMouseDown(index)}
                 data-part="gutter"
                 data-orientation={isVertical ? 'vertical' : 'horizontal'}
