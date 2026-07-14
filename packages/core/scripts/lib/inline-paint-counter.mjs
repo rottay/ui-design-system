@@ -147,6 +147,14 @@ export function countArc09PaintInFile(text) {
         pendingTypeBody = false;
       }
       if (c === "{") {
+        // A RETURN-TYPE annotation opens a type body too: `function f(x: T): { color: string }`.
+        // Its innermost bracket is `{`, so without this its members read as paint. The
+        // `)` -> `:` -> `{` signature is unambiguous; an object literal's `key: {` is
+        // never preceded by a closing paren.
+        const beforeBrace = text.slice(Math.max(0, i - 40), i);
+        if (/\)\s*:\s*$/.test(beforeBrace) && !inTypeBody()) {
+          typeBodyDepths.push(stack.length);
+        }
         // `style={{`, `style={`, `style: {` -- and any object nested inside one.
         const back = text.slice(Math.max(0, i - 24), i);
         if (/\bstyle\s*(=\s*\{?|:)\s*$/.test(back) || inStyleObj()) {
