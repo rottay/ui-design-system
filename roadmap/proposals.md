@@ -1248,3 +1248,24 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   config it cannot honour. Silently rendering a different form than the caller asked for is the worst
   of the three options.
 - **Status** — OPEN.
+
+### P-85 The counter counts a type-position object body inside a generic type argument
+
+- **Context** — Found by the CK-B/P migration. A sixth counter blind spot, adjacent to the
+  already-handled `interface X {` / `type X = {` / return-type / destructuring cases.
+- **Evidence** — `cockpit-header/engines/modern.tsx:34` declared
+  `const STATUS_PILL_STYLES: Record<Status, { background: string; color: string; borderColor: string }> = {...}`.
+  The `{ background: string; … }` is a TYPE argument inside the `Record<…>` generic — a type body, not
+  an object literal. The lexer's type-body detection covers `interface X {`, `type X = {`, `): {`
+  (return type), and `const {` (destructuring), but NOT a `{}` sitting inside a generic's angle
+  brackets. So `background:` at :34 was counted as a phantom paint site. (Only `background` counts,
+  not `color`/`borderColor` — the lexer resets key-position at each `;`.)
+- **Why it did not bite here** — the whole const (type + value) was deleted by the migration, so the
+  phantom vanished with it and cockpit reached a true 0. **It WOULD bite** any file that keeps such a
+  `Record<K, {paint: T}>` type annotation while migrating its value: the type stays, the phantom
+  stays, and the file cannot reach 0 — a false floor.
+- **Ask** — extend the lexer's type-body detection to a `{` opened inside a `<…>` generic argument
+  list, the same way it already handles the other four type-body shapes. Small, safe, and it removes
+  the last known false-positive class. Note: this is distinct from the edit:104 case, which is
+  already correctly handled (verified) — that one is an interface member, this one is a generic arg.
+- **Status** — OPEN.
