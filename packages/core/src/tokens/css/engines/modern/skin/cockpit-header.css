@@ -1,0 +1,126 @@
+/**
+ * Modern CockpitHeader skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the pattern's outer `<div>`, which carries the pair
+ * `ds-pattern-cockpit-header ds-engine-modern` + `data-part='root'`; both the
+ * loading early-return and the main render use that same root. Every painted
+ * element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that paints `border` / `border-color`
+ * with a real color (including `transparent`, which is NOT a reset) must reach
+ * (0,4,0): the two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part`
+ * plus a contract `data-variant`. Non-border paint (background, color, box-shadow,
+ * border-radius) beats preflight while unlayered at (0,3,0).
+ *
+ * Interaction paint that the removed React hover/focus state used to own now lives
+ * here as `:hover, :focus` rules. The skeleton blocks share one `data-part` but
+ * differ in radius, so each block carries its radius on an inline
+ * `--ds-cockpit-header-skeleton-radius` custom property (uncounted); the uniform
+ * pulse background lives here. The `animation: pulse` reference to the global
+ * keyframe stays inline (sanctioned residual).
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root: card surface + bottom border (both loading and main roots) ---- */
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+}
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- sticky elevation: only when the header is sticky AND scrolled compact
+        (the JS baked box-shadow into stickyStyles only under `isCompact`). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true'][data-compact='true'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- breadcrumb crumb: interactive <a> (muted, secondary on hover) and
+        static <span> (last=secondary, otherwise muted). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- separator ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- back button: ghost with a visible border only when highlighted. Rest
+        `border: 1px solid transparent` is NOT a reset, so it repeats the
+        data-part to reach the (0,4,0) border floor. Highlight = hover||focus. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] {
+  border: 1px solid transparent;
+  border-radius: var(--ds-radius-md);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back']:hover,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back']:focus {
+  border-color: var(--ds-color-border);
+  background: var(--ds-color-neutral-50);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- status pill: shared radius + per-variant soft palette (bg -100, text
+        -700, border -200). data-part + data-variant reaches (0,4,0). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'] {
+  border-radius: var(--ds-radius-full);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='success'] {
+  background: var(--ds-color-success-100);
+  color: var(--ds-color-success-700);
+  border: 1px solid var(--ds-color-success-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='warning'] {
+  background: var(--ds-color-warning-100);
+  color: var(--ds-color-warning-700);
+  border: 1px solid var(--ds-color-warning-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='error'] {
+  background: var(--ds-color-error-100);
+  color: var(--ds-color-error-700);
+  border: 1px solid var(--ds-color-error-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='info'] {
+  background: var(--ds-color-info-100);
+  color: var(--ds-color-info-700);
+  border: 1px solid var(--ds-color-info-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='default'] {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-700);
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
+        the inline custom property (default sm). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-cockpit-header-skeleton-radius, var(--ds-radius-sm));
+  background: var(--ds-color-neutral-100);
+}

@@ -113,7 +113,6 @@ export function CollectionHeader({
   const editorialTech = layoutVariant === 'editorial-tech';
   const compactLayout = isCompactViewport;
   const displayInk = 'var(--ds-collection-header-display-color, var(--ds-color-primary))';
-  const displayShade = 'var(--ds-collection-header-display-shade, var(--ds-color-text-primary))';
   const compactMetaItems = metaItems ?? [];
   const inlineMetaItems = metaItemsPlacement === 'inline-start' ? compactMetaItems : [];
   const eyebrowMetaItems = metaItemsPlacement === 'eyebrow-end' ? compactMetaItems : [];
@@ -127,16 +126,10 @@ export function CollectionHeader({
         alignItems: 'center',
         minHeight: 'var(--ds-spacing-6, 24px)',
         padding: '0 var(--ds-spacing-2, 8px)',
-        borderRadius: 999,
-        border: '1px solid var(--ds-color-border-subtle)',
-        background: embedded
-          ? 'color-mix(in srgb, var(--ds-surface-panel) 72%, transparent)'
-          : 'var(--ds-surface-panel)',
         fontSize: 'var(--ds-font-size-xs, 12px)',
         fontWeight: 700,
         textTransform: 'uppercase' as const,
         letterSpacing: '0.13em',
-        color: 'var(--ds-color-text-muted)',
         lineHeight: 1,
       }}
     >
@@ -145,25 +138,6 @@ export function CollectionHeader({
   ) : null;
 
   const renderMetaItem = (item: CollectionHeaderMetaItem) => {
-    const toneStyles =
-      item.tone === 'primary'
-        ? {
-            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)',
-            background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
-            color: 'var(--ds-color-primary)',
-          }
-        : item.tone === 'success'
-          ? {
-              border: '1px solid color-mix(in srgb, var(--ds-color-success) 18%, transparent)',
-              background: 'color-mix(in srgb, var(--ds-color-success) 8%, transparent)',
-              color: 'var(--ds-color-success)',
-            }
-          : {
-              border: '1px solid var(--ds-color-border-subtle)',
-              background: 'var(--ds-surface-panel)',
-              color: 'var(--ds-color-text-secondary)',
-            };
-
     return (
       <Box
         data-part="meta-item"
@@ -175,12 +149,10 @@ export function CollectionHeader({
           gap: 4,
           minHeight: 'var(--ds-spacing-6, 24px)',
           padding: '0 var(--ds-spacing-2, 8px)',
-          borderRadius: 999,
           fontSize: 'var(--ds-font-size-xs, 12px)',
           fontWeight: 700,
           letterSpacing: '0.02em',
           whiteSpace: 'nowrap',
-          ...toneStyles,
         }}
       >
         {item.label}
@@ -207,8 +179,6 @@ export function CollectionHeader({
               ? 'var(--ds-spacing-4, 16px) var(--ds-spacing-4, 16px) var(--ds-spacing-2, 8px)'
               : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)'
             : 'var(--ds-spacing-5, 20px) var(--ds-spacing-5, 20px) var(--ds-spacing-3, 12px)',
-        background: embedded ? 'transparent' : 'var(--ds-surface-card)',
-        borderBottom: embedded ? 'none' : '1px solid var(--ds-color-border-subtle)',
       }}
     >
       <Flex
@@ -268,7 +238,6 @@ export function CollectionHeader({
                       ? '-0.052em'
                       : '-0.04em'
                   : 0,
-              color: useDottedTitle ? 'transparent' : 'var(--ds-color-text-primary)',
               margin: 0,
               marginTop: 0,
               lineHeight: useDisplayTitle
@@ -284,34 +253,8 @@ export function CollectionHeader({
               display: 'block',
               width: 'fit-content',
               textRendering: 'optimizeLegibility',
-              textShadow: useDisplayTitle
-                ? `0 0 24px color-mix(in srgb, ${displayInk} 12%, transparent)`
-                : undefined,
               textTransform: (useDisplayTitle || useDottedTitle) ? ('uppercase' as const) : undefined,
-              backgroundImage: useDottedTitle
-                ? [
-                    compactLayout
-                      ? `radial-gradient(circle at 1px 1px, color-mix(in srgb, ${displayInk} 76%, ${displayShade} 24%) 0 0.45px, transparent 0.65px)`
-                      : editorialTech
-                        ? `radial-gradient(circle at 1.35px 1.35px, color-mix(in srgb, ${displayInk} 78%, ${displayShade} 22%) 0 0.56px, transparent 0.72px)`
-                        : `radial-gradient(circle, color-mix(in srgb, ${displayInk} 82%, ${displayShade} 18%) 0 1px, transparent 1.2px)`,
-                    compactLayout
-                      ? `linear-gradient(180deg, color-mix(in srgb, ${displayShade} 60%, ${displayInk} 40%) 0%, color-mix(in srgb, ${displayInk} 52%, transparent) 100%)`
-                      : editorialTech
-                        ? `linear-gradient(180deg, color-mix(in srgb, ${displayShade} 58%, ${displayInk} 42%) 0%, color-mix(in srgb, ${displayInk} 68%, ${displayShade} 20%) 54%, color-mix(in srgb, ${displayInk} 42%, transparent) 100%)`
-                        : `linear-gradient(180deg, color-mix(in srgb, ${displayShade} 58%, ${displayInk} 42%) 0%, color-mix(in srgb, ${displayInk} 56%, transparent) 100%)`,
-                  ].join(', ')
-                : undefined,
-              backgroundSize: useDottedTitle
-                ? compactLayout
-                  ? '4px 4px, 100% 100%'
-                  : editorialTech
-                    ? '5.2px 5.2px, 100% 100%'
-                    : '6px 6px, 100% 100%'
-                : undefined,
-              backgroundPosition: useDottedTitle ? '0 0, 0 0' : undefined,
               WebkitBackgroundClip: useDottedTitle ? ('text, text' as any) : undefined,
-              backgroundClip: useDottedTitle ? ('text, text' as any) : undefined,
               WebkitTextFillColor: useDottedTitle ? 'transparent' : undefined,
               WebkitTextStroke: useDottedTitle
                 ? compactLayout
@@ -319,13 +262,6 @@ export function CollectionHeader({
                   : editorialTech
                     ? `0.32px color-mix(in srgb, ${displayInk} 24%, transparent)`
                     : `1px color-mix(in srgb, ${displayInk} 28%, transparent)`
-                : undefined,
-              filter: useDottedTitle
-                ? compactLayout
-                  ? `drop-shadow(0 0 6px color-mix(in srgb, ${displayInk} 8%, transparent))`
-                  : editorialTech
-                    ? `drop-shadow(0 0 8px color-mix(in srgb, ${displayInk} 10%, transparent))`
-                    : `drop-shadow(0 0 18px color-mix(in srgb, ${displayInk} 12%, transparent))`
                 : undefined,
             }}
           >
@@ -347,8 +283,6 @@ export function CollectionHeader({
                   width: 28,
                   height: 1,
                   marginTop: 9,
-                  background:
-                    'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 100%)',
                 }}
               />
               <Text
@@ -363,7 +297,6 @@ export function CollectionHeader({
                     : useDottedTitle
                       ? '10px'
                       : 'var(--ds-font-size-sm, 14px)',
-                  color: 'color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%)',
                   lineHeight: 1.56,
                   textWrap: 'pretty',
                   fontFamily: useMonoSubtitle
@@ -382,6 +315,7 @@ export function CollectionHeader({
             <Flex
               align="start"
               gap={10}
+              data-part="subtitle-row"
               style={{
                 marginTop: useDisplayTitle
                   ? 'var(--ds-spacing-2, 8px)'
@@ -392,7 +326,6 @@ export function CollectionHeader({
                     : 'var(--ds-spacing-3, 12px)',
                 paddingTop: compactLayout ? 'var(--ds-spacing-2, 8px)' : 'var(--ds-spacing-3, 12px)',
                 maxWidth: compactLayout ? '100%' : 620,
-                borderTop: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)',
               }}
             >
               <Box
@@ -403,9 +336,6 @@ export function CollectionHeader({
                   minHeight: compactLayout ? 28 : 34,
                   alignSelf: 'stretch',
                   flexShrink: 0,
-                  borderRadius: 999,
-                  background:
-                    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 48%, transparent) 0%, color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 100%)',
                 }}
               />
               <Text
@@ -423,7 +353,6 @@ export function CollectionHeader({
                         ? '11px'
                         : 'var(--ds-font-size-xs, 12px)'
                       : 'var(--ds-font-size-sm, 14px)',
-                  color: 'var(--ds-color-text-secondary)',
                   lineHeight: useDisplayTitle ? 1.65 : useDottedTitle ? (compactLayout ? 1.45 : 1.55) : 1.5,
                   textWrap: 'pretty',
                   fontFamily: useMonoSubtitle
@@ -456,8 +385,6 @@ export function CollectionHeader({
                 marginTop: 'var(--ds-spacing-3, 12px)',
                 height: 1,
                 width: 'min(100%, 720px)',
-                background:
-                  'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%)',
               }}
             />
           )}
@@ -505,18 +432,6 @@ export function CollectionHeader({
                 padding: 'var(--ds-spacing-1, 4px)',
                 width: compactLayout ? '100%' : 'fit-content',
                 maxWidth: '100%',
-                borderRadius: 'var(--ds-radius-md, 8px)',
-                border: '1px solid var(--ds-color-border-subtle)',
-                background: embedded
-                  ? editorialTech
-                    ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, transparent)'
-                    : 'color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)'
-                  : 'var(--ds-surface-panel)',
-                boxShadow: embedded
-                  ? editorialTech
-                    ? '0 8px 18px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)'
-                    : '0 10px 24px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)'
-                  : 'var(--ds-elevation-1)',
                 alignSelf: compactLayout ? 'stretch' : 'flex-end',
               }}
             >
@@ -550,8 +465,6 @@ export function CollectionHeader({
                     style={{
                       minHeight: 'var(--ds-spacing-8, 32px)',
                       paddingInline: action.variant === 'primary' ? 'var(--ds-spacing-3, 12px)' : 'var(--ds-spacing-3, 12px)',
-                      borderRadius: '999px',
-                      boxShadow: action.variant === 'primary' ? 'var(--ds-elevation-1)' : 'none',
                       fontSize: 'var(--ds-font-size-xs, 12px)',
                     }}
                   >
@@ -598,12 +511,6 @@ export function CollectionHeader({
                         gap: 'var(--ds-spacing-1, 4px)',
                         minHeight: 'var(--ds-spacing-5, 20px)',
                         padding: '0 var(--ds-spacing-2, 8px)',
-                        borderRadius: 999,
-                        border: '1px solid var(--ds-color-border-subtle)',
-                        background: embedded
-                          ? 'color-mix(in srgb, var(--ds-surface-panel) 68%, transparent)'
-                          : 'var(--ds-surface-panel)',
-                        color: 'var(--ds-color-text-muted)',
                         fontSize: 'var(--ds-font-size-xs, 12px)',
                         fontWeight: 700,
                         letterSpacing: '0.08em',
@@ -622,12 +529,6 @@ export function CollectionHeader({
                           alignItems: 'center',
                           minHeight: 'var(--ds-spacing-5, 20px)',
                           padding: '0 var(--ds-spacing-2, 8px)',
-                          borderRadius: 999,
-                          border: '1px solid var(--ds-color-border-subtle)',
-                          background: embedded
-                            ? 'color-mix(in srgb, var(--ds-surface-panel) 66%, transparent)'
-                            : 'var(--ds-surface-panel)',
-                          color: 'var(--ds-color-text-muted)',
                           fontSize: 'var(--ds-font-size-xs, 12px)',
                           fontWeight: 700,
                           letterSpacing: '0.03em',
@@ -683,12 +584,6 @@ export function CollectionHeader({
                       alignItems: 'center',
                       minHeight: 'var(--ds-spacing-5, 20px)',
                       padding: '0 var(--ds-spacing-2, 8px)',
-                      borderRadius: 999,
-                      border: '1px solid var(--ds-color-border-subtle)',
-                      background: embedded
-                        ? 'color-mix(in srgb, var(--ds-surface-panel) 66%, transparent)'
-                        : 'var(--ds-surface-panel)',
-                      color: 'var(--ds-color-text-muted)',
                       fontSize: 'var(--ds-font-size-xs, 12px)',
                       fontWeight: 700,
                       letterSpacing: '0.03em',

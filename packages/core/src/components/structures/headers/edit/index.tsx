@@ -122,64 +122,26 @@ const VARIANT_TOKEN_MAP: Record<'primary' | 'warning' | 'info' | 'success' | 'er
   secondary: 'secondary',
 };
 
+// The tone is prop-selected (colorVariant/status.color) and the pre-step stamped
+// no variant attribute to key a CSS rule on, so the computed tone rides a `--ds-*`
+// custom property (set inline, consumed by edit-header.css). The return keys are
+// deliberately NOT named `background`/`border`/`color`: those are custom-property
+// VALUES, not inline paint, and must not read as paint to the skin ratchet.
 function getVariantTone(variant?: 'primary' | 'warning' | 'info' | 'success' | 'error' | 'secondary') {
   const token = VARIANT_TOKEN_MAP[variant || 'secondary'];
 
   if (token === 'secondary') {
     return {
-      background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
-      border: 'var(--ds-color-border-secondary)',
-      color: 'var(--ds-color-text-secondary)',
+      bg: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
+      bd: 'var(--ds-color-border-secondary)',
+      fg: 'var(--ds-color-text-secondary)',
     };
   }
 
   return {
-    background: `color-mix(in srgb, var(--ds-color-${token}) 10%, var(--ds-color-bg-secondary) 90%)`,
-    border: `color-mix(in srgb, var(--ds-color-${token}) 18%, var(--ds-color-border-secondary) 82%)`,
-    color: `color-mix(in srgb, var(--ds-color-${token}) 78%, var(--ds-color-text-primary) 22%)`,
-  };
-}
-
-function buildPatternStyle(archetype: 'editorial' | 'control' | 'technical' | 'governance'): CSSProperties {
-  const tone =
-    archetype === 'governance'
-      ? 'color-mix(in srgb, var(--ds-color-text-primary) 17%, transparent)'
-      : archetype === 'technical'
-        ? 'color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)'
-        : archetype === 'editorial'
-          ? 'color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)'
-          : 'color-mix(in srgb, var(--ds-color-text-secondary) 18%, transparent)';
-  const toneSecondary =
-    archetype === 'governance'
-      ? 'color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent)'
-      : archetype === 'technical'
-        ? 'color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)'
-        : archetype === 'editorial'
-          ? 'color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent)'
-          : 'color-mix(in srgb, var(--ds-color-text-primary) 9%, transparent)';
-  const gridColor =
-    archetype === 'technical'
-      ? 'color-mix(in srgb, var(--ds-color-text-muted) 30%, transparent)'
-      : archetype === 'governance'
-        ? 'color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent)'
-        : archetype === 'editorial'
-          ? 'color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent)'
-          : 'color-mix(in srgb, var(--ds-color-text-muted) 26%, transparent)';
-  const grid = archetype === 'technical' ? 22 : archetype === 'governance' ? 24 : 26;
-
-  return {
-    backgroundImage: [
-      `radial-gradient(circle at 12% 16%, ${tone} 0%, transparent 48%)`,
-      `radial-gradient(circle at 84% 2%, ${toneSecondary} 0%, transparent 34%)`,
-      'radial-gradient(circle at 74% 100%, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent) 0%, transparent 42%)',
-      'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%)',
-      'linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%)',
-      'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%)',
-      `linear-gradient(${gridColor} 1px, transparent 1px)`,
-      `linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`,
-    ].join(', '),
-    backgroundSize: `100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, ${grid}px ${grid}px, ${grid}px ${grid}px`,
-    backgroundPosition: '0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0',
+    bg: `color-mix(in srgb, var(--ds-color-${token}) 10%, var(--ds-color-bg-secondary) 90%)`,
+    bd: `color-mix(in srgb, var(--ds-color-${token}) 18%, var(--ds-color-border-secondary) 82%)`,
+    fg: `color-mix(in srgb, var(--ds-color-${token}) 78%, var(--ds-color-text-primary) 22%)`,
   };
 }
 
@@ -238,8 +200,6 @@ export function EditHeader({
         style={{
           position: 'relative',
           overflow: 'hidden',
-          background: 'var(--ds-surface-card, var(--ds-color-bg-elevated))',
-          border: '1px solid var(--ds-color-border-secondary)',
           padding: 48,
           display: 'flex',
           justifyContent: 'center',
@@ -257,19 +217,13 @@ export function EditHeader({
       className="ds-structure ds-edit-header"
       style={{
         width: '100%',
-        background: 'var(--ds-surface-card, var(--ds-color-bg-elevated))',
-        border: '1px solid var(--ds-color-border-secondary)',
-        borderRadius: 20,
         overflow: 'hidden',
-        boxShadow: '0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)',
       }}
     >
       <Box
         data-part="top-bar"
         style={{
           padding: '12px 24px',
-          borderBottom: '1px solid var(--ds-color-border-secondary)',
-          background: 'var(--ds-color-bg-secondary)',
         }}
       >
         <Flex justify="between" align="center">
@@ -280,17 +234,13 @@ export function EditHeader({
                 data-part="back-button"
                 align="center"
                 gap={8}
-                className="back-button"
                 style={{
                   padding: '8px 12px',
-                  background: 'transparent',
-                  border: '1px solid var(--ds-color-border-secondary)',
-                  borderRadius: 10,
                   cursor: 'pointer',
                 }}
               >
-                <ArrowLeftOutlined data-part="back-icon" style={{ fontSize: 14, color: 'var(--ds-color-text-secondary)' }} />
-                <Text data-part="back-label" size="xs" weight="medium" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <ArrowLeftOutlined data-part="back-icon" style={{ fontSize: 14 }} />
+                <Text data-part="back-label" size="xs" weight="medium">
                   {backLabel}
                 </Text>
               </Flex>,
@@ -299,23 +249,23 @@ export function EditHeader({
 
             {breadcrumb && breadcrumb.length > 0 && (
               <>
-                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 16, background: 'var(--ds-color-border-secondary)' }} />
+                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 16 }} />
                 <Flex align="center" gap={8}>
                   {breadcrumb.map((item, index) => (
                     <Flex key={index} align="center" gap={8}>
                       {index > 0 && (
-                        <Text data-part="breadcrumb-separator" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>/</Text>
+                        <Text data-part="breadcrumb-separator" size="xs">/</Text>
                       )}
                       {item.href ? (
                         renderHrefAnchor(
                           item.href,
-                          <Text data-part="breadcrumb-link" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }} className="breadcrumb-link">
+                          <Text data-part="breadcrumb-link" size="xs">
                             {item.label}
                           </Text>,
                           { textDecoration: 'none' },
                         )
                       ) : (
-                        <Text data-part="breadcrumb-item" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                        <Text data-part="breadcrumb-item" size="xs">
                           {item.label}
                         </Text>
                       )}
@@ -332,11 +282,8 @@ export function EditHeader({
                 data-part="entity-id"
                 size="xs"
                 style={{
-                  color: 'var(--ds-color-text-secondary)',
                   fontFamily: 'monospace',
                   padding: '4px 10px',
-                  border: '1px solid var(--ds-color-border-secondary)',
-                  borderRadius: 999,
                 }}
               >
                 ID: {entityId.slice(0, 8)}
@@ -346,7 +293,7 @@ export function EditHeader({
         </Flex>
       </Box>
 
-      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: '28px', ...buildPatternStyle(archetype) }}>
+      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: '28px' }}>
         <Flex justify="between" align="center" gap={20} wrap="wrap">
           <Flex align="center" gap={20}>
             {Icon && (
@@ -355,15 +302,15 @@ export function EditHeader({
                 style={{
                   width: 52,
                   height: 52,
-                  background: iconTone.background,
-                  border: `1px solid ${iconTone.border}`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  borderRadius: 14,
-                }}
+                  '--ds-header-icon-tone-bg': iconTone.bg,
+                  '--ds-header-icon-tone-bd': iconTone.bd,
+                  '--ds-header-icon-tone-fg': iconTone.fg,
+                } as CSSProperties}
               >
-                <Icon data-part="icon-badge-glyph" style={{ width: 24, height: 24, color: iconTone.color }} />
+                <Icon data-part="icon-badge-glyph" style={{ width: 24, height: 24 }} />
               </Box>
             )}
             <Stack spacing="xs">
@@ -373,7 +320,6 @@ export function EditHeader({
                   size="xs"
                   weight="bold"
                   style={{
-                    color: 'var(--ds-color-text-muted)',
                     textTransform: 'uppercase',
                     letterSpacing: '0.12em',
                     fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -383,7 +329,7 @@ export function EditHeader({
                 </Text>
               ) : null}
               <Flex align="center" gap={12}>
-                <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, color: 'var(--ds-color-text-primary)', letterSpacing: '-0.03em' }}>
+                <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em' }}>
                   {title}
                 </Text>
                 {status && (
@@ -391,19 +337,19 @@ export function EditHeader({
                     data-part="status-pill"
                     style={{
                       padding: '4px 12px',
-                      background: statusTone.background,
-                      border: `1px solid ${statusTone.border}`,
-                      borderRadius: 999,
-                    }}
+                      '--ds-edit-header-status-tone-bg': statusTone.bg,
+                      '--ds-edit-header-status-tone-bd': statusTone.bd,
+                      '--ds-edit-header-status-tone-fg': statusTone.fg,
+                    } as CSSProperties}
                   >
-                    <Text data-part="status-pill-text" size="xs" weight="medium" style={{ color: statusTone.color, textTransform: 'capitalize' }}>
+                    <Text data-part="status-pill-text" size="xs" weight="medium" style={{ textTransform: 'capitalize' }}>
                       {status.label}
                     </Text>
                   </Box>
                 )}
               </Flex>
               {subtitle && (
-                <Text data-part="subtitle" size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{subtitle}</Text>
+                <Text data-part="subtitle" size="sm">{subtitle}</Text>
               )}
             </Stack>
           </Flex>
@@ -456,20 +402,6 @@ export function EditHeader({
             style={{
               marginTop: 22,
               padding: '16px 18px 18px',
-              borderRadius: 18,
-              border: '1px solid var(--ds-color-border-secondary)',
-              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 58%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%)',
-              backgroundImage: [
-                'radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%)',
-                'radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%)',
-                'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%)',
-                'linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px)',
-                'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px)',
-              ].join(', '),
-              backgroundSize: '100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px',
-              backgroundPosition: '0 0, 0 0, 0 0, 0 0, 0 0',
-              boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)',
-              backdropFilter: 'blur(8px)',
             }}
           >
             {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
@@ -481,19 +413,6 @@ export function EditHeader({
           </Box>
         ) : null}
       </Box>
-
-      <style>{`
-        .back-button {
-          transition: all 0.2s ease;
-        }
-        .back-button:hover {
-          border-color: var(--ds-color-border);
-          background: color-mix(in srgb, var(--ds-color-bg-secondary) 90%, transparent);
-        }
-        .breadcrumb-link:hover {
-          color: var(--ds-color-text-secondary) !important;
-        }
-      `}</style>
     </Box>
   );
 }

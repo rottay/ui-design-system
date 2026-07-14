@@ -26,41 +26,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import type { CockpitHeaderProps, CockpitStatus } from '../CockpitHeader.types';
 
 /* ------------------------------------------------------------------ */
-/* Status pill color mapping (soft variant: bg -100, text -700)        */
-/* ------------------------------------------------------------------ */
-
-const STATUS_PILL_STYLES: Record<
-  CockpitStatus['variant'],
-  { background: string; color: string; borderColor: string }
-> = {
-  success: {
-    background: 'var(--ds-color-success-100)',
-    color: 'var(--ds-color-success-700)',
-    borderColor: 'var(--ds-color-success-200)',
-  },
-  warning: {
-    background: 'var(--ds-color-warning-100)',
-    color: 'var(--ds-color-warning-700)',
-    borderColor: 'var(--ds-color-warning-200)',
-  },
-  error: {
-    background: 'var(--ds-color-error-100)',
-    color: 'var(--ds-color-error-700)',
-    borderColor: 'var(--ds-color-error-200)',
-  },
-  info: {
-    background: 'var(--ds-color-info-100)',
-    color: 'var(--ds-color-info-700)',
-    borderColor: 'var(--ds-color-info-200)',
-  },
-  default: {
-    background: 'var(--ds-color-neutral-100)',
-    color: 'var(--ds-color-neutral-700)',
-    borderColor: 'var(--ds-color-neutral-200)',
-  },
-};
-
-/* ------------------------------------------------------------------ */
 /* Shared style constants                                              */
 /* ------------------------------------------------------------------ */
 
@@ -86,8 +51,6 @@ function BreadcrumbLink({
   href?: string;
   isLast: boolean;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   if (href && !isLast) {
     return (
       <a
@@ -95,12 +58,7 @@ function BreadcrumbLink({
         data-part="crumb"
         data-interactive="true"
         data-last="false"
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         style={{
-          color: hovered
-            ? 'var(--ds-color-text-secondary)'
-            : 'var(--ds-color-text-muted)',
           fontWeight: 500,
           textDecoration: 'none',
           transition: `color ${TRANSITION_FAST}`,
@@ -118,9 +76,6 @@ function BreadcrumbLink({
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
       style={{
-        color: isLast
-          ? 'var(--ds-color-text-secondary)'
-          : 'var(--ds-color-text-muted)',
         fontWeight: isLast ? 600 : 500,
       }}
     >
@@ -137,19 +92,10 @@ function BreadcrumbLink({
  * Ghost back navigation button with token-driven hover/focus state.
  */
 function BackButton({ onClick }: { onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-
-  const isHighlighted = hovered || focused;
-
   return (
     <button
       type="button"
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       aria-label="Go back"
       data-part="back"
       style={{
@@ -159,14 +105,6 @@ function BackButton({ onClick }: { onClick: () => void }) {
         width: 34,
         height: 34,
         flexShrink: 0,
-        border: `1px solid ${isHighlighted ? 'var(--ds-color-border)' : 'transparent'}`,
-        borderRadius: 'var(--ds-radius-md)',
-        background: isHighlighted
-          ? 'var(--ds-color-neutral-50)'
-          : 'transparent',
-        color: isHighlighted
-          ? 'var(--ds-color-text-primary)'
-          : 'var(--ds-color-text-secondary)',
         cursor: 'pointer',
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
       }}
@@ -197,7 +135,6 @@ function BackButton({ onClick }: { onClick: () => void }) {
  * Renders a single status pill badge with semantic coloring.
  */
 function StatusPill({ status }: { status: CockpitStatus }) {
-  const pillStyle = STATUS_PILL_STYLES[status.variant];
   return (
     <span
       data-part="status"
@@ -209,10 +146,6 @@ function StatusPill({ status }: { status: CockpitStatus }) {
         fontSize: 12,
         fontWeight: 600,
         lineHeight: 1.5,
-        borderRadius: 'var(--ds-radius-full)',
-        background: pillStyle.background,
-        color: pillStyle.color,
-        border: `1px solid ${pillStyle.borderColor}`,
         whiteSpace: 'nowrap',
         letterSpacing: '0.01em',
       }}
@@ -272,8 +205,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
         data-part="root"
         data-loading="true"
         style={{
-          background: 'var(--ds-surface-card)',
-          borderBottom: '1px solid var(--ds-color-border-subtle)',
           padding: '20px 24px',
           ...style,
         }}
@@ -285,8 +216,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
             style={{
               width: 160,
               height: 12,
-              borderRadius: 'var(--ds-radius-sm)',
-              background: 'var(--ds-color-neutral-100)',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
           />
@@ -305,10 +234,9 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                 style={{
                   width: 34,
                   height: 34,
-                  borderRadius: 'var(--ds-radius-md)',
-                  background: 'var(--ds-color-neutral-100)',
+                  '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
                   animation: 'pulse 1.5s ease-in-out infinite',
-                }}
+                } as React.CSSProperties}
               />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <div
@@ -316,8 +244,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   style={{
                     width: 260,
                     height: 24,
-                    borderRadius: 'var(--ds-radius-sm)',
-                    background: 'var(--ds-color-neutral-100)',
                     animation: 'pulse 1.5s ease-in-out infinite',
                   }}
                 />
@@ -326,8 +252,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   style={{
                     width: 180,
                     height: 14,
-                    borderRadius: 'var(--ds-radius-sm)',
-                    background: 'var(--ds-color-neutral-100)',
                     animation: 'pulse 1.5s ease-in-out infinite',
                   }}
                 />
@@ -340,20 +264,18 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                 style={{
                   width: 80,
                   height: 34,
-                  borderRadius: 'var(--ds-radius-md)',
-                  background: 'var(--ds-color-neutral-100)',
+                  '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
                   animation: 'pulse 1.5s ease-in-out infinite',
-                }}
+                } as React.CSSProperties}
               />
               <div
                 data-part="skeleton"
                 style={{
                   width: 100,
                   height: 34,
-                  borderRadius: 'var(--ds-radius-md)',
-                  background: 'var(--ds-color-neutral-100)',
+                  '--ds-cockpit-header-skeleton-radius': 'var(--ds-radius-md)',
                   animation: 'pulse 1.5s ease-in-out infinite',
-                }}
+                } as React.CSSProperties}
               />
             </div>
           </div>
@@ -369,9 +291,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
         top: 0,
         zIndex: 100,
         transition: `padding ${TRANSITION_NORMAL}, box-shadow ${TRANSITION_NORMAL}`,
-        ...(isCompact
-          ? { boxShadow: 'var(--ds-elevation-2)' }
-          : {}),
       }
     : {};
 
@@ -384,8 +303,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
       data-sticky={sticky ? 'true' : 'false'}
       data-compact={isCompact ? 'true' : 'false'}
       style={{
-        background: 'var(--ds-surface-card)',
-        borderBottom: '1px solid var(--ds-color-border-subtle)',
         padding: isCompact ? '12px 24px' : '20px 24px',
         transition: `padding ${TRANSITION_NORMAL}`,
         ...stickyStyles,
@@ -414,7 +331,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   <span
                     data-part="separator"
                     style={{
-                      color: 'var(--ds-color-text-muted)',
                       userSelect: 'none',
                       fontSize: 12,
                       opacity: 0.7,
@@ -477,7 +393,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   fontWeight: 700,
                   lineHeight: 1.25,
                   letterSpacing: '-0.025em',
-                  color: 'var(--ds-color-text-primary)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -512,7 +427,6 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   margin: '4px 0 0',
                   fontSize: 13,
                   lineHeight: 1.5,
-                  color: 'var(--ds-color-text-secondary)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',

@@ -119,64 +119,27 @@ const VARIANT_TOKEN_MAP: Record<'primary' | 'secondary' | 'success' | 'warning' 
   info: 'info',
 };
 
+// The tone is prop-selected (colorVariant) and the pre-step stamped no variant
+// attribute to key a CSS rule on, so the computed tone rides a `--ds-*` custom
+// property (set inline, consumed by edit-header.css's shared icon-badge rule).
+// The return keys are deliberately NOT named `background`/`border`/`color`: those
+// are custom-property VALUES, not inline paint, and must not read as paint to the
+// skin ratchet.
 function getVariantTone(variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'info') {
   const token = VARIANT_TOKEN_MAP[variant || 'secondary'];
 
   if (token === 'secondary') {
     return {
-      background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
-      border: 'var(--ds-color-border-secondary)',
-      color: 'var(--ds-color-text-secondary)',
+      bg: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
+      bd: 'var(--ds-color-border-secondary)',
+      fg: 'var(--ds-color-text-secondary)',
     };
   }
 
   return {
-    background: `color-mix(in srgb, var(--ds-color-${token}) 10%, var(--ds-color-bg-secondary) 90%)`,
-    border: `color-mix(in srgb, var(--ds-color-${token}) 18%, var(--ds-color-border-secondary) 82%)`,
-    color: `color-mix(in srgb, var(--ds-color-${token}) 78%, var(--ds-color-text-primary) 22%)`,
-  };
-}
-
-function buildPatternStyle(archetype: 'editorial' | 'control' | 'technical' | 'governance'): CSSProperties {
-  const tone =
-    archetype === 'governance'
-      ? 'color-mix(in srgb, var(--ds-color-text-primary) 17%, transparent)'
-      : archetype === 'technical'
-        ? 'color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)'
-        : archetype === 'editorial'
-          ? 'color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent)'
-          : 'color-mix(in srgb, var(--ds-color-text-secondary) 18%, transparent)';
-  const toneSecondary =
-    archetype === 'governance'
-      ? 'color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent)'
-      : archetype === 'technical'
-        ? 'color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)'
-        : archetype === 'editorial'
-          ? 'color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent)'
-          : 'color-mix(in srgb, var(--ds-color-text-primary) 9%, transparent)';
-  const gridColor =
-    archetype === 'technical'
-      ? 'color-mix(in srgb, var(--ds-color-text-muted) 30%, transparent)'
-      : archetype === 'governance'
-        ? 'color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent)'
-        : archetype === 'editorial'
-          ? 'color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent)'
-          : 'color-mix(in srgb, var(--ds-color-text-muted) 26%, transparent)';
-  const grid = archetype === 'technical' ? 22 : archetype === 'governance' ? 24 : 26;
-
-  return {
-    backgroundImage: [
-      `radial-gradient(circle at 12% 16%, ${tone} 0%, transparent 48%)`,
-      `radial-gradient(circle at 84% 2%, ${toneSecondary} 0%, transparent 34%)`,
-      'radial-gradient(circle at 74% 100%, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent) 0%, transparent 42%)',
-      'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%)',
-      'linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%)',
-      'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%)',
-      `linear-gradient(${gridColor} 1px, transparent 1px)`,
-      `linear-gradient(90deg, ${gridColor} 1px, transparent 1px)`,
-    ].join(', '),
-    backgroundSize: `100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, ${grid}px ${grid}px, ${grid}px ${grid}px`,
-    backgroundPosition: '0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0',
+    bg: `color-mix(in srgb, var(--ds-color-${token}) 10%, var(--ds-color-bg-secondary) 90%)`,
+    bd: `color-mix(in srgb, var(--ds-color-${token}) 18%, var(--ds-color-border-secondary) 82%)`,
+    fg: `color-mix(in srgb, var(--ds-color-${token}) 78%, var(--ds-color-text-primary) 22%)`,
   };
 }
 
@@ -229,20 +192,14 @@ export function FormHeader({
       className="ds-structure ds-form-header"
       style={{
         width: '100%',
-        background: 'var(--ds-surface-card, var(--ds-color-bg-elevated))',
-        border: '1px solid var(--ds-color-border-secondary)',
-        borderRadius: 20,
         marginBottom: 24,
         overflow: 'hidden',
-        boxShadow: '0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)',
       }}
     >
       <Box
         data-part="top-bar"
         style={{
           padding: '12px 24px',
-          borderBottom: '1px solid var(--ds-color-border-secondary)',
-          background: 'var(--ds-color-bg-secondary)',
         }}
       >
         <Flex justify="between" align="center">
@@ -255,15 +212,12 @@ export function FormHeader({
                 gap={8}
                 style={{
                   padding: '8px 12px',
-                  background: 'transparent',
-                  border: '1px solid var(--ds-color-border)',
-                  borderRadius: 10,
                   cursor: 'pointer',
                   transition: 'all 0.2s ease',
                 }}
               >
-                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14, color: 'var(--ds-color-text-secondary)' }} />
-                <Text data-part="back-label" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
+                <Text data-part="back-label" size="xs">
                   {backLabel}
                 </Text>
               </Flex>,
@@ -272,7 +226,7 @@ export function FormHeader({
 
             {breadcrumbItems && breadcrumbItems.length > 0 ? (
               <>
-                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18, background: 'var(--ds-color-border-secondary)' }} />
+                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18 }} />
                 <Breadcrumb items={breadcrumbItems} />
               </>
             ) : null}
@@ -301,23 +255,23 @@ export function FormHeader({
         </Flex>
       </Box>
 
-      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: 28, ...buildPatternStyle(archetype) }}>
+      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: 28 }}>
         <Flex align="center" gap={16}>
           <Box
             data-part="icon-badge"
             style={{
               width: 52,
               height: 52,
-              background: iconTone.background,
-              border: `1px solid ${iconTone.border}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              borderRadius: 14,
               flexShrink: 0,
-            }}
+              '--ds-header-icon-tone-bg': iconTone.bg,
+              '--ds-header-icon-tone-bd': iconTone.bd,
+              '--ds-header-icon-tone-fg': iconTone.fg,
+            } as CSSProperties}
           >
-            <MainIcon data-part="icon-badge-glyph" style={{ width: 22, height: 22, color: iconTone.color }} />
+            <MainIcon data-part="icon-badge-glyph" style={{ width: 22, height: 22 }} />
           </Box>
           <Stack spacing="xs" style={{ minWidth: 0 }}>
             {eyebrow ? (
@@ -326,7 +280,6 @@ export function FormHeader({
                 size="xs"
                 weight="bold"
                 style={{
-                  color: 'var(--ds-color-text-muted)',
                   textTransform: 'uppercase',
                   letterSpacing: '0.12em',
                   fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -335,11 +288,11 @@ export function FormHeader({
                 {eyebrow}
               </Text>
             ) : null}
-            <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ds-color-text-primary)' }}>
+            <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em' }}>
               {title}
             </Text>
             {subtitle && (
-              <Text data-part="subtitle" size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <Text data-part="subtitle" size="sm">
                 {subtitle}
               </Text>
             )}
@@ -352,20 +305,6 @@ export function FormHeader({
             style={{
               marginTop: 22,
               padding: '16px 18px 18px',
-              borderRadius: 18,
-              border: '1px solid var(--ds-color-border-secondary)',
-              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 58%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%)',
-              backgroundImage: [
-                'radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%)',
-                'radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%)',
-                'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%)',
-                'linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px)',
-                'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px)',
-              ].join(', '),
-              backgroundSize: '100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px',
-              backgroundPosition: '0 0, 0 0, 0 0, 0 0, 0 0',
-              boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)',
-              backdropFilter: 'blur(8px)',
             }}
           >
             {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}

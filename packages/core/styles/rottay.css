@@ -32070,6 +32070,396 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
+ * Modern CockpitHeader skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the pattern's outer `<div>`, which carries the pair
+ * `ds-pattern-cockpit-header ds-engine-modern` + `data-part='root'`; both the
+ * loading early-return and the main render use that same root. Every painted
+ * element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that paints `border` / `border-color`
+ * with a real color (including `transparent`, which is NOT a reset) must reach
+ * (0,4,0): the two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part`
+ * plus a contract `data-variant`. Non-border paint (background, color, box-shadow,
+ * border-radius) beats preflight while unlayered at (0,3,0).
+ *
+ * Interaction paint that the removed React hover/focus state used to own now lives
+ * here as `:hover, :focus` rules. The skeleton blocks share one `data-part` but
+ * differ in radius, so each block carries its radius on an inline
+ * `--ds-cockpit-header-skeleton-radius` custom property (uncounted); the uniform
+ * pulse background lives here. The `animation: pulse` reference to the global
+ * keyframe stays inline (sanctioned residual).
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root: card surface + bottom border (both loading and main roots) ---- */
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+}
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- sticky elevation: only when the header is sticky AND scrolled compact
+        (the JS baked box-shadow into stickyStyles only under `isCompact`). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern[data-part='root'][data-sticky='true'][data-compact='true'] {
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* ---- breadcrumb crumb: interactive <a> (muted, secondary on hover) and
+        static <span> (last=secondary, otherwise muted). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- separator ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- back button: ghost with a visible border only when highlighted. Rest
+        `border: 1px solid transparent` is NOT a reset, so it repeats the
+        data-part to reach the (0,4,0) border floor. Highlight = hover||focus. ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back'] {
+  border: 1px solid transparent;
+  border-radius: var(--ds-radius-md);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back']:hover,
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='back'][data-part='back']:focus {
+  border-color: var(--ds-color-border);
+  background: var(--ds-color-neutral-50);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- status pill: shared radius + per-variant soft palette (bg -100, text
+        -700, border -200). data-part + data-variant reaches (0,4,0). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'] {
+  border-radius: var(--ds-radius-full);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='success'] {
+  background: var(--ds-color-success-100);
+  color: var(--ds-color-success-700);
+  border: 1px solid var(--ds-color-success-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='warning'] {
+  background: var(--ds-color-warning-100);
+  color: var(--ds-color-warning-700);
+  border: 1px solid var(--ds-color-warning-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='error'] {
+  background: var(--ds-color-error-100);
+  color: var(--ds-color-error-700);
+  border: 1px solid var(--ds-color-error-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='info'] {
+  background: var(--ds-color-info-100);
+  color: var(--ds-color-info-700);
+  border: 1px solid var(--ds-color-info-200);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='status'][data-variant='default'] {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-700);
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
+        the inline custom property (default sm). ---- */
+.ds-pattern-cockpit-header.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-cockpit-header-skeleton-radius, var(--ds-radius-sm));
+  background: var(--ds-color-neutral-100);
+}
+
+/**
+ * Modern PageShell skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the shell's outer `<div>`, carrying the pair
+ * `ds-pattern-page-shell ds-engine-modern` + `data-part='root'`. The loading root
+ * additionally carries `ds-pattern-page-shell--loading` and `data-loading='true'`;
+ * the main root carries `data-loading='false'`. Every painted element is a
+ * descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule painting `border` / `border-color` with
+ * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
+ * two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part` plus a
+ * contract `data-active`. Non-border paint (background, color, border-radius) beats
+ * preflight while unlayered at (0,3,0). Pure `border: none` carries no color and is
+ * exempt.
+ *
+ * Interaction paint that the removed React hover/focus state used to own now lives
+ * here as `:hover` / `:focus` rules. The shell-grid `background-image` is scoped to
+ * the non-loading root (the loading root never painted it); it stays invisible
+ * until a tenant sets `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks
+ * share one `data-part` but differ in radius, so each carries its radius on an
+ * inline `--ds-page-shell-skeleton-radius` custom property (default sm). The
+ * `animation: pulse` reference to the global keyframe stays inline.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- shell-grid background: non-loading root only (main root had it, the loading
+        root did not). Invisible until a tenant sets the grid tokens. ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'][data-loading='false'] {
+  background-image: repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px));
+  background-size: var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px);
+}
+
+/* ---- breadcrumb crumb: interactive <a> (muted, secondary on hover) and static
+        <span> (last=secondary, otherwise muted). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- separator ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- back button: borderless ghost, highlighted on hover||focus. No painting
+        border, so no (0,4,0) repeat is needed. ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='back'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='back']:hover,
+.ds-pattern-page-shell.ds-engine-modern [data-part='back']:focus {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- tab: base (repeated data-part for the transparent 2px underline) + active
+        underline + hover (only when not active, matching the JS guard). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-part='tab'] {
+  color: var(--ds-color-text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-active='true'] {
+  color: var(--ds-color-primary);
+  border-bottom: 2px solid var(--ds-color-primary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- separators: tab strip and the no-tabs rule (both 1px bottom border). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='tabs'][data-part='tabs'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='rule'][data-part='rule'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
+        the inline custom property (default sm). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-page-shell-skeleton-radius, var(--ds-radius-sm));
+  background: var(--ds-color-neutral-100);
+}
+
+/**
+ * Modern WorkbenchHeader skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the header's outer `<div>`, carrying the pair
+ * `ds-pattern-workbench-header ds-engine-modern` + `data-part='root'`; both the
+ * loading early-return and the main render use that same root. Every painted
+ * element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule painting `border` / `border-color` with
+ * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
+ * two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part` plus a
+ * contract `data-variant` / `data-active`. Non-border paint (background, color,
+ * box-shadow, border-radius, outline) beats preflight while unlayered at (0,3,0).
+ * Pure `border: none` carries no color and is exempt.
+ *
+ * Interaction paint that the removed React hover/focus state used to own now lives
+ * here. QuickActionButton merged `vs.hover` over `vs.base` when
+ * `(hovered||focused) && !disabled`; the button is natively `disabled`, so
+ * `:hover:not(:disabled), :focus:not(:disabled)` reproduces that gate. SavedViewTab
+ * tracks `onFocus`/`onBlur` in addition to hover (a keyboard-focus affordance the
+ * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`. Skeleton
+ * blocks share one `data-part` but differ in radius, so each carries its radius on
+ * an inline `--ds-workbench-header-skeleton-radius` custom property (default sm).
+ * The `animation: pulse` reference to the global keyframe stays inline.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root: card surface + bottom border (both loading and main roots) ---- */
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+}
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+/* ---- quick action button: shared radius/outline + per-variant base and merged
+        hover/focus (gated `:not(:disabled)`, matching `!action.disabled`). ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] {
+  border-radius: var(--ds-radius-md);
+  outline: none;
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-color-primary);
+  box-shadow: var(--ds-elevation-1);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary']:hover:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary']:focus:not(:disabled) {
+  background: var(--ds-color-primary-600);
+  border-color: var(--ds-color-primary-600);
+  box-shadow: var(--ds-elevation-2);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] {
+  background: transparent;
+  color: var(--ds-color-error-600);
+  border: 1px solid var(--ds-color-error-200);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger']:hover:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger']:focus:not(:disabled) {
+  background: var(--ds-color-error-50);
+  border-color: var(--ds-color-error-300);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] {
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  border: 1px solid var(--ds-color-border);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default']:hover:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default']:focus:not(:disabled) {
+  background: var(--ds-color-neutral-50);
+  color: var(--ds-color-text-primary);
+  border-color: var(--ds-color-neutral-300);
+}
+
+/* ---- back button: borderless ghost, highlighted on hover||focus. This button is
+        defined but currently mounted by nothing; its paint is migrated for parity
+        and renders nothing today. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='back'] {
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  outline: none;
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='back']:hover,
+.ds-pattern-workbench-header.ds-engine-modern [data-part='back']:focus {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='subtitle'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- exception count badge (soft error) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='exception'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-error-100);
+  color: var(--ds-color-error-700);
+}
+
+/* ---- saved-view tab: base (repeated data-part for the transparent 2px underline)
+        + active underline + hover/focus when not active. The `:focus` rule is the
+        keyboard affordance page-shell's tab deliberately omits. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-part='tab'] {
+  color: var(--ds-color-text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  outline: none;
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true'] {
+  color: var(--ds-color-primary);
+  border-bottom: 2px solid var(--ds-color-primary);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']) {
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- saved-views tab strip container (1px bottom border) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tabs'][data-part='tabs'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
+        the inline custom property (default sm). ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-workbench-header-skeleton-radius, var(--ds-radius-sm));
+  background: var(--ds-color-neutral-100);
+}
+
+/**
  * Rustic StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
@@ -32200,6 +32590,90 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border: 1px solid var(--ds-color-primary-600);
   background: var(--ds-color-primary-600);
   color: var(--ds-color-text-on-primary);
+}
+
+/**
+ * Rustic (Vanilla / CSS-variable) PageShell skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the shell's outer `<div>`, carrying the pair
+ * `ds-pattern-page-shell ds-engine-rustic` + `data-part='root'`; the loading root
+ * carries `data-loading='true'`, the main root `data-loading='false'`. Every
+ * painted element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1), so a rule
+ * painting `border` / `border-color` with a real color (including `transparent`,
+ * which is NOT a reset) must reach (0,4,0): the two root classes (0,2,0) + a
+ * REPEATED `data-part`, or a `data-part` plus a contract `data-active`. Non-border
+ * paint beats preflight while unlayered at (0,3,0). Pure `border: none` /
+ * `background: none` carry no color and are exempt.
+ *
+ * This engine has ZERO interactive paint — no hover on the back button, breadcrumb
+ * links, or inactive tabs — a deliberate asymmetry with the modern engine. No
+ * `:hover` / `:focus` rules exist here by design.
+ *
+ * Values are transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- shell-grid background: both roots spread `containerStyle`, so it applies to
+        loading and main alike. Invisible until a tenant sets the grid tokens. ---- */
+.ds-pattern-page-shell.ds-engine-rustic[data-part='root'] {
+  background-image: repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px));
+  background-size: var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px);
+}
+
+/* ---- loading text: only the loading root sets a muted text color ---- */
+.ds-pattern-page-shell.ds-engine-rustic[data-part='root'][data-loading='true'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- breadcrumbs: interactive link (primary), static crumb (muted), separator ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='crumb'][data-interactive='true'] {
+  color: var(--ds-color-primary);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='crumb'][data-interactive='false'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- back button: borderless, no hover (rustic asymmetry) ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='back'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-text-secondary);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='title'] {
+  color: var(--ds-color-text);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='subtitle'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- tab strip container (1px bottom border) ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='tabs'][data-part='tabs'] {
+  border-bottom: 1px solid var(--ds-color-neutral-200);
+}
+
+/* ---- tab: base (repeated data-part for the transparent 2px underline) + active
+        underline. No hover (rustic asymmetry). ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='tab'][data-part='tab'] {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='tab'][data-active='true'] {
+  border-bottom: 2px solid var(--ds-color-primary);
+  color: var(--ds-color-primary);
 }
 
 /**
@@ -33505,6 +33979,887 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-surface.ds-wizard .ds-wizard__error-card[data-part='root'][data-variant] {
   border-color: var(--ds-color-error-500);
+}
+
+/**
+ * DetailHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/detail-header.css — DetailHeader renders one DOM
+ * tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT carries `ds-structure ds-detail-header` + `data-part='root'`.
+ *
+ * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
+ * (0,3,1); a border-COLOR rule buys (0,4,0) from the two root classes + the target
+ * `data-part` repeated (or the target `data-part` + a real contract attribute like
+ * `data-active`/`data-variant`). Non-border paint wins unlayered at (0,3,0). A
+ * `color` on a composed `Text` must exceed the typography skin's (0,4,0)
+ * `[data-color='…']` rule, so it buys (0,5,0) from the two root classes + the
+ * target `data-part` ×3. The `Box as="h1"` title and the icons are NOT typography,
+ * so their color wins at (0,3,0).
+ *
+ * STATE: the 4-way archetype ternary (`buildPatternStyle`) is STATE-SELECTED over
+ * static tokens → a `[data-archetype='…']` rule on the stamped `data-part='hero-panel'`.
+ * DetailHeader's archetype numbers DIVERGE from Edit/Form's and it alone varies the
+ * hero background + fade mask per archetype, so these are its OWN token set. Tab
+ * active/inactive is keyed on the stamped `data-active`.
+ *
+ * TAB-ACTIVE HATCH: `archetypeTone.tabActiveBackground` is archetype-selected, but
+ * the tab strip is a SIBLING of the hero-panel — no `data-archetype` node is an
+ * ancestor of the tab, so a pure CSS rule cannot reach the per-archetype value. It
+ * rides `--ds-detail-header-tab-active-bg`, set inline on the tab (uncounted); the
+ * active rule consumes it, the inactive tab is transparent.
+ */
+
+/* ─── hero-panel archetype gradient (buildPatternStyle × getArchetypeStyles) ─ */
+
+.ds-structure.ds-detail-header [data-part='hero-panel'][data-archetype='control'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-secondary) 15%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 32%),
+    radial-gradient(circle at 72% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 42%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 86%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 28px 28px, 28px 28px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.ds-structure.ds-detail-header [data-part='hero-panel'][data-archetype='editorial'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 9%, transparent) 0%, transparent 32%),
+    radial-gradient(circle at 72% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 26px 26px, 26px 26px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.ds-structure.ds-detail-header [data-part='hero-panel'][data-archetype='technical'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-secondary) 16%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent) 0%, transparent 32%),
+    radial-gradient(circle at 72% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 38%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 54%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 22px 22px, 22px 22px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.ds-structure.ds-detail-header [data-part='hero-panel'][data-archetype='governance'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent) 0%, transparent 32%),
+    radial-gradient(circle at 72% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 42%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+/* ─── root card + top bar ──────────────────────────────────────────────────── */
+
+.ds-structure.ds-detail-header[data-part='root'] {
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  border-radius: 22px;
+  box-shadow: 0 14px 36px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+}
+.ds-structure.ds-detail-header[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-detail-header [data-part='top-bar'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent);
+}
+.ds-structure.ds-detail-header [data-part='top-bar'][data-part='top-bar'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+/* ─── back button + breadcrumb divider ─────────────────────────────────────── */
+
+.ds-structure.ds-detail-header [data-part='back-button'] {
+  border-radius: 11px;
+  background: transparent;
+}
+.ds-structure.ds-detail-header [data-part='back-button'][data-part='back-button'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-structure.ds-detail-header [data-part='back-icon'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-detail-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-detail-header [data-part='breadcrumb-divider'] {
+  background: var(--ds-color-border-secondary);
+}
+
+/* ─── avatar (image + initials variants) ───────────────────────────────────── */
+
+.ds-structure.ds-detail-header [data-part='avatar'] {
+  border-radius: 18px;
+}
+.ds-structure.ds-detail-header [data-part='avatar'][data-variant='initials'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
+}
+.ds-structure.ds-detail-header [data-part='avatar'][data-variant='image'],
+.ds-structure.ds-detail-header [data-part='avatar'][data-variant='initials'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+/* the initials glyph is a Text with no stamp of its own; it keeps the typography
+   default color, which resolves to var(--ds-color-text-primary) — the exact value
+   the inline paint set — so no rule is needed here (its inline color was dropped) */
+
+/* ─── hero copy: eyebrow / title (Box as h1) / subtitle ────────────────────── */
+
+.ds-structure.ds-detail-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-detail-header [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-detail-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ─── metadata card + chips ────────────────────────────────────────────────── */
+
+/* the inline object set `background` (a linear-gradient) THEN `backgroundImage`
+   (a 5-layer stack); the later key silently overwrote the earlier, so only the
+   5-layer stack ever painted (P-78). Transcribed as that stack, not the dead one. */
+.ds-structure.ds-detail-header [data-part='metadata-card'] {
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  backdrop-filter: blur(8px);
+}
+.ds-structure.ds-detail-header [data-part='metadata-card'][data-part='metadata-card'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* the chip carries the muted color so its leading icon (a consumer node with no
+   stamp) inherits currentColor; the label overrides to muted at (0,5,0) and the
+   value keeps the typography default (text-primary) */
+.ds-structure.ds-detail-header [data-part='metadata-chip'] {
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 58%, transparent);
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-detail-header [data-part='metadata-chip'][data-part='metadata-chip'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-structure.ds-detail-header [data-part='metadata-chip-label'][data-part='metadata-chip-label'][data-part='metadata-chip-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ─── tab strip ────────────────────────────────────────────────────────────── */
+
+.ds-structure.ds-detail-header [data-part='tab-strip'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 96%, transparent);
+}
+.ds-structure.ds-detail-header [data-part='tab-strip'][data-part='tab-strip'] {
+  border-top: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-detail-header [data-part='tab'] {
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  background: transparent;
+  transform: translateY(0px);
+}
+.ds-structure.ds-detail-header [data-part='tab'][data-active='true'] {
+  background: var(--ds-detail-header-tab-active-bg);
+  transform: translateY(1px);
+}
+/* border shorthand + explicit border-bottom:none in ONE rule so the reset wins */
+.ds-structure.ds-detail-header [data-part='tab'][data-active='true'] {
+  border: 1px solid var(--ds-color-border-secondary);
+  border-bottom: none;
+}
+.ds-structure.ds-detail-header [data-part='tab'][data-active='false'] {
+  border: 1px solid transparent;
+  border-bottom: none;
+}
+
+.ds-structure.ds-detail-header [data-part='tab-icon'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-detail-header [data-part='tab-icon'][data-active='false'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-detail-header [data-part='tab-label'][data-part='tab-label'][data-part='tab-label'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-detail-header [data-part='tab-label'][data-part='tab-label'][data-part='tab-label'][data-active='false'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-detail-header [data-part='tab-count'] {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent);
+}
+.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-detail-header [data-part='tab-count-text'][data-part='tab-count-text'][data-part='tab-count-text'][data-active='false'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/**
+ * EditHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/edit-header.css — EditHeader renders one DOM
+ * tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT is the header's outer element, which carries the pair
+ * `ds-structure ds-edit-header` + `data-part='root'` (the main and the loading
+ * early-return both carry the class pair, `data-part='root'`, and — loading only —
+ * `data-loading='true'`).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED for the remaining
+ * (0,2,0). Non-border paint wins unlayered at (0,3,0). A `color` on a composed
+ * `Text` must exceed the typography skin's (0,4,0) `[data-color='…']` rule, so it
+ * buys (0,5,0) from the two root classes + the target `data-part` repeated three
+ * times.
+ *
+ * SHARED WITH FormHeader (contract §2 — proven byte-identical): `buildPatternStyle`
+ * (the archetype hero-panel gradient) and `getVariantTone` (the icon-badge tone)
+ * are identical between EditHeader and FormHeader down to every percentage. Their
+ * rules are written ONCE here as grouped `.ds-edit-header , .ds-form-header`
+ * selectors so both consume one token set; form-header.css does not restate them.
+ *
+ * HATCH (contract §5.1, kit "runtime-computed"): `getVariantTone(colorVariant)` /
+ * `getVariantTone(status.color)` are prop-selected, and the pre-step stamped NO
+ * variant/status attribute on `icon-badge`/`status-pill` to key a CSS rule on.
+ * Their computed tone rides a `--ds-*` custom property set inline (uncounted) and
+ * is consumed here. `icon-badge` sets `color` on itself so the composed glyph
+ * inherits `currentColor`; `status-pill` sets a `--…-fg` the composed `status-pill-text`
+ * consumes at (0,5,0), because a `Text` will not inherit `color` past the
+ * typography skin.
+ *
+ * The archetype 4-way is STATE-SELECTED over static tokens → a `[data-archetype='…']`
+ * rule on the stamped attribute. `data-archetype` defaults to `control`.
+ */
+
+/* ─── SHARED EDIT+FORM: hero-panel archetype gradient (buildPatternStyle) ─── */
+
+.ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='control'],
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='control'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-secondary) 18%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 9%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 74% 100%, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 26%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 26%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 26px 26px, 26px 26px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='editorial'],
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='editorial'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 16%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 74% 100%, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 26px 26px, 26px 26px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='technical'],
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='technical'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 74% 100%, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 30%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 30%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 22px 22px, 22px 22px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+.ds-structure.ds-edit-header [data-part='hero-panel'][data-archetype='governance'],
+.ds-structure.ds-form-header [data-part='hero-panel'][data-archetype='governance'] {
+  background-image:
+    radial-gradient(circle at 12% 16%, color-mix(in srgb, var(--ds-color-text-primary) 17%, transparent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 2%, color-mix(in srgb, var(--ds-color-text-secondary) 10%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 74% 100%, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 40%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 52%, transparent) 100%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 84%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 100%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+/* ─── SHARED EDIT+FORM: icon-badge tone (getVariantTone, via hatch) ───────── */
+
+.ds-structure.ds-edit-header [data-part='icon-badge'],
+.ds-structure.ds-form-header [data-part='icon-badge'] {
+  border-radius: 14px;
+  background: var(--ds-header-icon-tone-bg);
+  color: var(--ds-header-icon-tone-fg);
+}
+.ds-structure.ds-edit-header [data-part='icon-badge'][data-part='icon-badge'],
+.ds-structure.ds-form-header [data-part='icon-badge'][data-part='icon-badge'] {
+  border: 1px solid var(--ds-header-icon-tone-bd);
+}
+
+/* ─── EDIT-SPECIFIC ───────────────────────────────────────────────────────── */
+
+/* root card (main + loading early-return share the class pair) */
+.ds-structure.ds-edit-header[data-part='root'] {
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  border-radius: 20px;
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+}
+.ds-structure.ds-edit-header[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+/* the loading early-return shares background + border with the main root but has
+   NO radius/shadow; suppress the two the main rule would otherwise add to it */
+.ds-structure.ds-edit-header[data-part='root'][data-loading='true'] {
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* top bar */
+.ds-structure.ds-edit-header [data-part='top-bar'] {
+  background: var(--ds-color-bg-secondary);
+}
+.ds-structure.ds-edit-header [data-part='top-bar'][data-part='top-bar'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+/* back button (no hover — the dead <style> block that never painted was deleted) */
+.ds-structure.ds-edit-header [data-part='back-button'] {
+  border-radius: 10px;
+  background: transparent;
+}
+.ds-structure.ds-edit-header [data-part='back-button'][data-part='back-button'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-structure.ds-edit-header [data-part='back-icon'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-edit-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* breadcrumb */
+.ds-structure.ds-edit-header [data-part='breadcrumb-divider'] {
+  background: var(--ds-color-border-secondary);
+}
+.ds-structure.ds-edit-header [data-part='breadcrumb-separator'][data-part='breadcrumb-separator'][data-part='breadcrumb-separator'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-edit-header [data-part='breadcrumb-link'][data-part='breadcrumb-link'][data-part='breadcrumb-link'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-edit-header [data-part='breadcrumb-item'][data-part='breadcrumb-item'][data-part='breadcrumb-item'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* entity id chip */
+.ds-structure.ds-edit-header [data-part='entity-id'] {
+  border-radius: 999px;
+}
+.ds-structure.ds-edit-header [data-part='entity-id'][data-part='entity-id'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-structure.ds-edit-header [data-part='entity-id'][data-part='entity-id'][data-part='entity-id'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* eyebrow / subtitle */
+.ds-structure.ds-edit-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-edit-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* status pill (hatch): the pre-step stamped no status attribute, so the tone
+   rides --ds-edit-header-status-tone-* set inline on the pill; the text will not
+   inherit color past its own typography skin, so it reads the --…-fg at (0,5,0) */
+.ds-structure.ds-edit-header [data-part='status-pill'] {
+  border-radius: 999px;
+  background: var(--ds-edit-header-status-tone-bg);
+}
+.ds-structure.ds-edit-header [data-part='status-pill'][data-part='status-pill'] {
+  border: 1px solid var(--ds-edit-header-status-tone-bd);
+}
+.ds-structure.ds-edit-header [data-part='status-pill-text'][data-part='status-pill-text'][data-part='status-pill-text'] {
+  color: var(--ds-edit-header-status-tone-fg);
+}
+
+/* context card below the hero */
+.ds-structure.ds-edit-header [data-part='context-card'] {
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  backdrop-filter: blur(8px);
+}
+.ds-structure.ds-edit-header [data-part='context-card'][data-part='context-card'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/**
+ * FormHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/form-header.css — FormHeader renders one DOM
+ * tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT carries `ds-structure ds-form-header` + `data-part='root'`.
+ *
+ * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
+ * (0,3,1); a border-COLOR rule buys (0,4,0) from the two root classes + the target
+ * `data-part` repeated. Non-border paint wins unlayered at (0,3,0). A `color` on a
+ * composed `Text` must exceed the typography skin's (0,4,0) `[data-color='…']`
+ * rule, so it buys (0,5,0) from the two root classes + the `data-part` ×3.
+ *
+ * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`)
+ * and the icon-badge tone (`getVariantTone`) are proven byte-identical to
+ * EditHeader (contract §2) and are defined ONCE, as grouped
+ * `.ds-edit-header , .ds-form-header` selectors, in edit-header.css — they are NOT
+ * restated here. The icon-badge tone rides the shared `--ds-header-icon-tone-*`
+ * custom property, set inline by this component from `getVariantTone(colorVariant)`
+ * because the pre-step stamped no variant attribute to key a CSS rule on.
+ */
+
+/* root card */
+.ds-structure.ds-form-header[data-part='root'] {
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  border-radius: 20px;
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+}
+.ds-structure.ds-form-header[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* top bar */
+.ds-structure.ds-form-header [data-part='top-bar'] {
+  background: var(--ds-color-bg-secondary);
+}
+.ds-structure.ds-form-header [data-part='top-bar'][data-part='top-bar'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+/* back button — border token is --ds-color-border here (EditHeader uses -secondary) */
+.ds-structure.ds-form-header [data-part='back-button'] {
+  border-radius: 10px;
+  background: transparent;
+}
+.ds-structure.ds-form-header [data-part='back-button'][data-part='back-button'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-structure.ds-form-header [data-part='back-icon'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-form-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* breadcrumb divider */
+.ds-structure.ds-form-header [data-part='breadcrumb-divider'] {
+  background: var(--ds-color-border-secondary);
+}
+
+/* eyebrow / subtitle */
+.ds-structure.ds-form-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-form-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* context card below the hero (byte-identical to EditHeader's, duplicated per-file) */
+.ds-structure.ds-form-header [data-part='context-card'] {
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  backdrop-filter: blur(8px);
+}
+.ds-structure.ds-form-header [data-part='context-card'][data-part='context-card'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/**
+ * CollectionHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/collection-header.css — CollectionHeader renders
+ * one DOM tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT carries `ds-structure ds-collection-header` + `data-part='root'` +
+ * `data-embedded`.
+ *
+ * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
+ * (0,3,1); a border-COLOR rule buys (0,4,0) from the two root classes + the target
+ * `data-part` repeated (or `data-part` + a real contract attribute like `data-tone`).
+ * Non-border paint wins unlayered at (0,3,0). A `color` on a composed `Text`
+ * (eyebrow, subtitle) must exceed the typography skin's (0,4,0) `[data-color='…']`
+ * rule, so it buys (0,5,0) from the two root classes + the `data-part` ×3. The
+ * `Box as="h2"` title and the Box chips are NOT typography, so their color wins at
+ * (0,3,0) and their text children inherit it.
+ *
+ * STATE: `surfaceVariant==='embedded'` → the stamped `data-embedded` (on the root,
+ * eyebrow, and quick-actions; the shortcut chips carry no `data-embedded`, so their
+ * embedded background is keyed off the ROOT's `data-embedded` as an ancestor).
+ * `titleTreatment` / `compactLayout` / `layoutVariant` are STATE-SELECTED over
+ * static tokens → keyed on the stamped `data-title-treatment` / `data-compact-layout`
+ * / `data-editorial-tech`. `item.tone` → `data-tone`.
+ *
+ * QUICK-ACTION BUTTON: a composed `Button` paints its own radius/shadow via
+ * button.css keyed on `data-*` (up to (0,5,0) for the hovered-state shadow), and
+ * Button DROPS `data-part` in the modern engine (P-79). The pill radius + variant
+ * shadow are therefore keyed on the BEM classes the component puts on the Button,
+ * repeated to reach (0,6,0) so they win over button.css at every interaction state
+ * exactly as the caller's inline style did.
+ */
+
+/* root -------------------------------------------------------------------------- */
+
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='true'] {
+  background: transparent;
+  border-bottom: none;
+}
+.ds-structure.ds-collection-header[data-part='root'][data-embedded='false'] {
+  background: var(--ds-surface-card);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+/* eyebrow (Text) ---------------------------------------------------------------- */
+
+.ds-structure.ds-collection-header [data-part='eyebrow'] {
+  border-radius: 999px;
+}
+.ds-structure.ds-collection-header [data-part='eyebrow'][data-part='eyebrow'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+.ds-structure.ds-collection-header [data-part='eyebrow'][data-embedded='true'] {
+  background: color-mix(in srgb, var(--ds-surface-panel) 72%, transparent);
+}
+.ds-structure.ds-collection-header [data-part='eyebrow'][data-embedded='false'] {
+  background: var(--ds-surface-panel);
+}
+.ds-structure.ds-collection-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* meta-item chips (Box; text child inherits color) ------------------------------ */
+
+.ds-structure.ds-collection-header [data-part='meta-item'] {
+  border-radius: 999px;
+}
+.ds-structure.ds-collection-header [data-part='meta-item'][data-tone='primary'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  color: var(--ds-color-primary);
+}
+.ds-structure.ds-collection-header [data-part='meta-item'][data-tone='success'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-success) 18%, transparent);
+  background: color-mix(in srgb, var(--ds-color-success) 8%, transparent);
+  color: var(--ds-color-success);
+}
+.ds-structure.ds-collection-header [data-part='meta-item'][data-tone='neutral'] {
+  border: 1px solid var(--ds-color-border-subtle);
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+
+/* title (Box as h2) ------------------------------------------------------------- */
+
+.ds-structure.ds-collection-header [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
+  color: transparent;
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='display'] {
+  text-shadow: 0 0 24px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 12%, transparent);
+}
+
+/* dotted-title glyph-clip recipe: the counted background and filter move here; the
+   uncounted -webkit-background-clip / -webkit-text-fill-color / -webkit-text-stroke
+   stay inline (leave non-counted paint in place). background-position + clip are
+   constant across the three dotted branches; the image/size/filter branch on
+   compact vs editorial-tech vs default. */
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'] {
+  background-position: 0 0, 0 0;
+  background-clip: text, text;
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='true'] {
+  background-image:
+    radial-gradient(circle at 1px 1px, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 76%, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 24%) 0 0.45px, transparent 0.65px),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 60%, var(--ds-collection-header-display-color, var(--ds-color-primary)) 40%) 0%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 52%, transparent) 100%);
+  background-size: 4px 4px, 100% 100%;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 8%, transparent));
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='true'] {
+  background-image:
+    radial-gradient(circle at 1.35px 1.35px, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 78%, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 22%) 0 0.56px, transparent 0.72px),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 58%, var(--ds-collection-header-display-color, var(--ds-color-primary)) 42%) 0%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 68%, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 20%) 54%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 42%, transparent) 100%);
+  background-size: 5.2px 5.2px, 100% 100%;
+  filter: drop-shadow(0 0 8px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 10%, transparent));
+}
+.ds-structure.ds-collection-header [data-part='title'][data-title-treatment='dotted'][data-compact-layout='false'][data-editorial-tech='false'] {
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 82%, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 18%) 0 1px, transparent 1.2px),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-collection-header-display-shade, var(--ds-color-text-primary)) 58%, var(--ds-collection-header-display-color, var(--ds-color-primary)) 42%) 0%, color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 56%, transparent) 100%);
+  background-size: 6px 6px, 100% 100%;
+  filter: drop-shadow(0 0 18px color-mix(in srgb, var(--ds-collection-header-display-color, var(--ds-color-primary)) 12%, transparent));
+}
+
+/* subtitle divider + editorial-tech rule + title accent bar --------------------- */
+
+.ds-structure.ds-collection-header [data-part='subtitle-divider'] {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 100%);
+}
+.ds-structure.ds-collection-header [data-part='editorial-tech-rule'] {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 76%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 40%, transparent) 40%, color-mix(in srgb, var(--ds-color-border-subtle) 18%, transparent) 72%, transparent 100%);
+}
+.ds-structure.ds-collection-header [data-part='title-accent'] {
+  border-radius: 999px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 48%, transparent) 0%, color-mix(in srgb, var(--ds-color-primary) 12%, transparent) 100%);
+}
+/* subtitle-row: the default-branch subtitle wrapper. The repeated data-part buys
+   (0,4,0) so its top border clears the tenant border-color floor at (0,3,1). */
+.ds-structure.ds-collection-header [data-part='subtitle-row'][data-part='subtitle-row'] {
+  border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent);
+}
+
+/* subtitle (Text) — two variants ------------------------------------------------ */
+
+.ds-structure.ds-collection-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'][data-variant='editorial-tech'] {
+  color: color-mix(in srgb, var(--ds-color-text-secondary) 88%, var(--ds-color-primary) 12%);
+}
+.ds-structure.ds-collection-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'][data-variant='default'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* quick-actions pill container -------------------------------------------------- */
+
+.ds-structure.ds-collection-header [data-part='quick-actions'] {
+  border-radius: var(--ds-radius-md, 8px);
+}
+.ds-structure.ds-collection-header [data-part='quick-actions'][data-part='quick-actions'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+.ds-structure.ds-collection-header [data-part='quick-actions'][data-embedded='true'][data-editorial-tech='true'] {
+  background: color-mix(in srgb, var(--ds-surface-panel) 68%, transparent);
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent);
+}
+.ds-structure.ds-collection-header [data-part='quick-actions'][data-embedded='true'][data-editorial-tech='false'] {
+  background: color-mix(in srgb, var(--ds-surface-panel) 76%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent);
+}
+.ds-structure.ds-collection-header [data-part='quick-actions'][data-embedded='false'] {
+  background: var(--ds-surface-panel);
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* quick-action Button — BEM classes repeated to (0,6,0) to override button.css --- */
+
+.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action {
+  border-radius: 999px;
+}
+.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--primary {
+  box-shadow: var(--ds-elevation-1);
+}
+.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--secondary,
+.ds-structure.ds-collection-header .ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action.ds-collection-header__quick-action--default {
+  box-shadow: none;
+}
+
+/* shortcuts label + shortcut pills (Box; embedded keyed off the ROOT ancestor) -- */
+
+.ds-structure.ds-collection-header [data-part='shortcuts-label'] {
+  border-radius: 999px;
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-collection-header [data-part='shortcuts-label'][data-part='shortcuts-label'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+.ds-structure.ds-collection-header[data-embedded='true'] [data-part='shortcuts-label'] {
+  background: color-mix(in srgb, var(--ds-surface-panel) 68%, transparent);
+}
+.ds-structure.ds-collection-header[data-embedded='false'] [data-part='shortcuts-label'] {
+  background: var(--ds-surface-panel);
+}
+
+.ds-structure.ds-collection-header [data-part='shortcut-pill'] {
+  border-radius: 999px;
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-collection-header [data-part='shortcut-pill'][data-part='shortcut-pill'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+.ds-structure.ds-collection-header[data-embedded='true'] [data-part='shortcut-pill'] {
+  background: color-mix(in srgb, var(--ds-surface-panel) 66%, transparent);
+}
+.ds-structure.ds-collection-header[data-embedded='false'] [data-part='shortcut-pill'] {
+  background: var(--ds-surface-panel);
+}
+
+/**
+ * DashboardHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/dashboard-header.css — DashboardHeader renders
+ * one DOM tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT is the header's outer element, which carries the pair
+ * `ds-structure ds-dashboard-header` + `data-part='root'` + `data-compact`
+ * (both the compact and full renders share the class pair and part).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED or a real contract
+ * attribute (`data-compact`) for the remaining (0,2,0). Non-border paint wins
+ * unlayered at (0,3,0).
+ *
+ * Text color is a special case: the modern/rustic typography skins paint every
+ * `Text` at `.rottay-typography.rottay-typography--<engine>.rottay-typography--<engine>[data-color='…']`
+ * = (0,4,0), unlayered. A color rule on a composed `Text` must therefore exceed
+ * (0,4,0); it buys (0,5,0) from the two root classes + the target `data-part`
+ * repeated three times. Box/icon color has no such competitor and wins at (0,3,0)
+ * (the icon inherits `currentColor` from the Box the rule paints).
+ *
+ * STATE: `STATUS_COLORS[state]` and the change-direction ternary are
+ * STATE-SELECTED over static tokens, so each becomes a rule keyed on the stamped
+ * `data-state` / `data-direction`. `data-compact` selects between the two header
+ * shells.
+ */
+
+/* status dot — pill background is the status colour at 12% -------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='status-dot'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='connected'] {
+  background: color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot'][data-state='offline'] {
+  background: color-mix(in srgb, var(--ds-color-error) 12%, transparent);
+}
+
+/* status dot glyph — solid status colour ------------------------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'] {
+  border-radius: 50%;
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='connected'] {
+  background: var(--ds-color-success);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='warning'] {
+  background: var(--ds-color-warning);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-glyph'][data-state='offline'] {
+  background: var(--ds-color-error);
+}
+
+/* status dot text — Text, needs (0,5,0) to beat the typography skin ----------- */
+
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='live'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='connected'] {
+  color: var(--ds-color-success);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='syncing'],
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-structure.ds-dashboard-header [data-part='status-dot-text'][data-part='status-dot-text'][data-part='status-dot-text'][data-state='offline'] {
+  color: var(--ds-color-error);
+}
+
+/* metric chip ---------------------------------------------------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-bg-secondary);
+}
+.ds-structure.ds-dashboard-header [data-part='metric-chip'][data-part='metric-chip'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* metric chip change — Text keyed on direction, (0,5,0) + data-direction ------ */
+
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='up'] {
+  color: var(--ds-color-success);
+}
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='down'] {
+  color: var(--ds-color-error);
+}
+.ds-structure.ds-dashboard-header [data-part='metric-chip-change'][data-part='metric-chip-change'][data-part='metric-chip-change'][data-direction='flat'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* leading icon (compact + full share data-part='icon') ----------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* header shells — compact vs full, keyed on data-compact --------------------- */
+
+.ds-structure.ds-dashboard-header [data-part='root'][data-compact='true'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+.ds-structure.ds-dashboard-header [data-part='root'][data-compact='false'] {
+  background: var(--ds-color-bg-primary);
+  border-bottom: 1px solid var(--ds-color-border-secondary);
 }
 
 

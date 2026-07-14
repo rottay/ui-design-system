@@ -267,7 +267,11 @@
 @import '../engines/modern/skin/invoice-template.css';
 @import '../engines/rustic/skin/invoice-template.css';
 @import '../engines/modern/skin/step-wizard.css';
+@import '../engines/modern/skin/cockpit-header.css';
+@import '../engines/modern/skin/page-shell.css';
+@import '../engines/modern/skin/workbench-header.css';
 @import '../engines/rustic/skin/step-wizard.css';
+@import '../engines/rustic/skin/page-shell.css';
 @import '../components/skin/avatar-compounds.css';
 @import '../components/skin/card-compounds.css';
 @import '../components/skin/carousel-compounds.css';
@@ -281,6 +285,11 @@
 @import '../components/skin/guided-draft-form.css';
 @import '../components/skin/record.css';
 @import '../components/skin/wizard-surface.css';
+@import '../components/skin/detail-header.css';
+@import '../components/skin/edit-header.css';
+@import '../components/skin/form-header.css';
+@import '../components/skin/collection-header.css';
+@import '../components/skin/dashboard-header.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

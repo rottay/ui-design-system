@@ -1,0 +1,115 @@
+/**
+ * Modern PageShell skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the shell's outer `<div>`, carrying the pair
+ * `ds-pattern-page-shell ds-engine-modern` + `data-part='root'`. The loading root
+ * additionally carries `ds-pattern-page-shell--loading` and `data-loading='true'`;
+ * the main root carries `data-loading='false'`. Every painted element is a
+ * descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule painting `border` / `border-color` with
+ * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
+ * two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part` plus a
+ * contract `data-active`. Non-border paint (background, color, border-radius) beats
+ * preflight while unlayered at (0,3,0). Pure `border: none` carries no color and is
+ * exempt.
+ *
+ * Interaction paint that the removed React hover/focus state used to own now lives
+ * here as `:hover` / `:focus` rules. The shell-grid `background-image` is scoped to
+ * the non-loading root (the loading root never painted it); it stays invisible
+ * until a tenant sets `--ds-shell-grid-size`/`--ds-shell-grid-line`. Skeleton blocks
+ * share one `data-part` but differ in radius, so each carries its radius on an
+ * inline `--ds-page-shell-skeleton-radius` custom property (default sm). The
+ * `animation: pulse` reference to the global keyframe stays inline.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- shell-grid background: non-loading root only (main root had it, the loading
+        root did not). Invisible until a tenant sets the grid tokens. ---- */
+.ds-pattern-page-shell.ds-engine-modern[data-part='root'][data-loading='false'] {
+  background-image: repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px));
+  background-size: var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px);
+}
+
+/* ---- breadcrumb crumb: interactive <a> (muted, secondary on hover) and static
+        <span> (last=secondary, otherwise muted). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='true']:hover {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='crumb'][data-interactive='false'][data-last='false'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- separator ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- back button: borderless ghost, highlighted on hover||focus. No painting
+        border, so no (0,4,0) repeat is needed. ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='back'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='back']:hover,
+.ds-pattern-page-shell.ds-engine-modern [data-part='back']:focus {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- tab: base (repeated data-part for the transparent 2px underline) + active
+        underline + hover (only when not active, matching the JS guard). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-part='tab'] {
+  color: var(--ds-color-text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab'][data-active='true'] {
+  color: var(--ds-color-primary);
+  border-bottom: 2px solid var(--ds-color-primary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='tab']:hover:not([data-active='true']) {
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- separators: tab strip and the no-tabs rule (both 1px bottom border). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='tabs'][data-part='tabs'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+.ds-pattern-page-shell.ds-engine-modern [data-part='rule'][data-part='rule'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
+        the inline custom property (default sm). ---- */
+.ds-pattern-page-shell.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-page-shell-skeleton-radius, var(--ds-radius-sm));
+  background: var(--ds-color-neutral-100);
+}

@@ -1,0 +1,146 @@
+/**
+ * Modern WorkbenchHeader skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the header's outer `<div>`, carrying the pair
+ * `ds-pattern-workbench-header ds-engine-modern` + `data-part='root'`; both the
+ * loading early-return and the main render use that same root. Every painted
+ * element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule painting `border` / `border-color` with
+ * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
+ * two root classes (0,2,0) + a REPEATED `data-part`, or a `data-part` plus a
+ * contract `data-variant` / `data-active`. Non-border paint (background, color,
+ * box-shadow, border-radius, outline) beats preflight while unlayered at (0,3,0).
+ * Pure `border: none` carries no color and is exempt.
+ *
+ * Interaction paint that the removed React hover/focus state used to own now lives
+ * here. QuickActionButton merged `vs.hover` over `vs.base` when
+ * `(hovered||focused) && !disabled`; the button is natively `disabled`, so
+ * `:hover:not(:disabled), :focus:not(:disabled)` reproduces that gate. SavedViewTab
+ * tracks `onFocus`/`onBlur` in addition to hover (a keyboard-focus affordance the
+ * page-shell tab deliberately lacks), so it keys on `:hover` AND `:focus`. Skeleton
+ * blocks share one `data-part` but differ in radius, so each carries its radius on
+ * an inline `--ds-workbench-header-skeleton-radius` custom property (default sm).
+ * The `animation: pulse` reference to the global keyframe stays inline.
+ *
+ * Values are transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root: card surface + bottom border (both loading and main roots) ---- */
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+}
+.ds-pattern-workbench-header.ds-engine-modern[data-part='root'][data-part='root'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+/* ---- quick action button: shared radius/outline + per-variant base and merged
+        hover/focus (gated `:not(:disabled)`, matching `!action.disabled`). ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'] {
+  border-radius: var(--ds-radius-md);
+  outline: none;
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-color-primary);
+  box-shadow: var(--ds-elevation-1);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary']:hover:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='primary']:focus:not(:disabled) {
+  background: var(--ds-color-primary-600);
+  border-color: var(--ds-color-primary-600);
+  box-shadow: var(--ds-elevation-2);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger'] {
+  background: transparent;
+  color: var(--ds-color-error-600);
+  border: 1px solid var(--ds-color-error-200);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger']:hover:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='danger']:focus:not(:disabled) {
+  background: var(--ds-color-error-50);
+  border-color: var(--ds-color-error-300);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default'] {
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  border: 1px solid var(--ds-color-border);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default']:hover:not(:disabled),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='action'][data-variant='default']:focus:not(:disabled) {
+  background: var(--ds-color-neutral-50);
+  color: var(--ds-color-text-primary);
+  border-color: var(--ds-color-neutral-300);
+}
+
+/* ---- back button: borderless ghost, highlighted on hover||focus. This button is
+        defined but currently mounted by nothing; its paint is migrated for parity
+        and renders nothing today. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='back'] {
+  border: none;
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  outline: none;
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='back']:hover,
+.ds-pattern-workbench-header.ds-engine-modern [data-part='back']:focus {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='subtitle'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- exception count badge (soft error) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='exception'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-error-100);
+  color: var(--ds-color-error-700);
+}
+
+/* ---- saved-view tab: base (repeated data-part for the transparent 2px underline)
+        + active underline + hover/focus when not active. The `:focus` rule is the
+        keyboard affordance page-shell's tab deliberately omits. ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-part='tab'] {
+  color: var(--ds-color-text-muted);
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  outline: none;
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab'][data-active='true'] {
+  color: var(--ds-color-primary);
+  border-bottom: 2px solid var(--ds-color-primary);
+}
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:hover:not([data-active='true']),
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tab']:focus:not([data-active='true']) {
+  color: var(--ds-color-text-primary);
+  background: var(--ds-color-neutral-50);
+}
+
+/* ---- saved-views tab strip container (1px bottom border) ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='tabs'][data-part='tabs'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+/* ---- loading skeleton blocks: uniform pulse background; per-block radius rides
+        the inline custom property (default sm). ---- */
+.ds-pattern-workbench-header.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-workbench-header-skeleton-radius, var(--ds-radius-sm));
+  background: var(--ds-color-neutral-100);
+}

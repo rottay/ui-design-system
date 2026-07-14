@@ -20,7 +20,7 @@
  * @package @rottay/design-system
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import type { WorkbenchHeaderProps, WorkbenchQuickAction } from '../WorkbenchHeader.types';
 
 /* ------------------------------------------------------------------ */
@@ -39,65 +39,13 @@ const TRANSITION_FAST =
  * Primary uses filled background, danger uses error tokens, default is ghost/outlined.
  */
 function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-
   const variant = action.variant ?? 'default';
-  const isInteractive = hovered || focused;
-
-  const variantStyles: Record<
-    string,
-    { base: React.CSSProperties; hover: React.CSSProperties }
-  > = {
-    primary: {
-      base: {
-        background: 'var(--ds-color-primary)',
-        color: 'var(--ds-color-text-on-primary)',
-        border: '1px solid var(--ds-color-primary)',
-        boxShadow: 'var(--ds-elevation-1)',
-      },
-      hover: {
-        background: 'var(--ds-color-primary-600)',
-        borderColor: 'var(--ds-color-primary-600)',
-        boxShadow: 'var(--ds-elevation-2)',
-      },
-    },
-    danger: {
-      base: {
-        background: 'transparent',
-        color: 'var(--ds-color-error-600)',
-        border: '1px solid var(--ds-color-error-200)',
-      },
-      hover: {
-        background: 'var(--ds-color-error-50)',
-        borderColor: 'var(--ds-color-error-300)',
-      },
-    },
-    default: {
-      base: {
-        background: 'transparent',
-        color: 'var(--ds-color-text-secondary)',
-        border: '1px solid var(--ds-color-border)',
-      },
-      hover: {
-        background: 'var(--ds-color-neutral-50)',
-        color: 'var(--ds-color-text-primary)',
-        borderColor: 'var(--ds-color-neutral-300)',
-      },
-    },
-  };
-
-  const vs = variantStyles[variant] ?? variantStyles.default;
 
   return (
     <button
       type="button"
       disabled={action.disabled}
       onClick={action.onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       data-part="action"
       data-variant={variant}
       style={{
@@ -108,13 +56,9 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
         fontSize: 13,
         fontWeight: 500,
         lineHeight: 1.4,
-        borderRadius: 'var(--ds-radius-md)',
         cursor: action.disabled ? 'not-allowed' : 'pointer',
         opacity: action.disabled ? 0.5 : 1,
-        outline: 'none',
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}, box-shadow ${TRANSITION_FAST}`,
-        ...vs.base,
-        ...(isInteractive && !action.disabled ? vs.hover : {}),
       }}
     >
       {action.icon && (
@@ -135,18 +79,10 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
  * Clean back navigation button with ghost styling and hover state.
  */
 function BackButton({ onClick }: { onClick: () => void }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const isInteractive = hovered || focused;
-
   return (
     <button
       type="button"
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       aria-label="Go back"
       data-part="back"
       style={{
@@ -156,16 +92,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
         width: 32,
         height: 32,
         flexShrink: 0,
-        border: 'none',
-        borderRadius: 'var(--ds-radius-sm)',
-        background: isInteractive
-          ? 'var(--ds-color-neutral-100)'
-          : 'transparent',
-        color: isInteractive
-          ? 'var(--ds-color-text-primary)'
-          : 'var(--ds-color-text-secondary)',
         cursor: 'pointer',
-        outline: 'none',
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}`,
       }}
     >
@@ -203,20 +130,12 @@ function SavedViewTab({
   isActive: boolean;
   onClick: () => void;
 }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const isInteractive = (hovered || focused) && !isActive;
-
   return (
     <button
       type="button"
       role="tab"
       aria-selected={isActive}
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       data-part="tab"
       data-active={isActive ? 'true' : 'false'}
       style={{
@@ -225,22 +144,8 @@ function SavedViewTab({
         fontSize: 13,
         fontWeight: isActive ? 600 : 500,
         lineHeight: 1.4,
-        color: isActive
-          ? 'var(--ds-color-primary)'
-          : isInteractive
-            ? 'var(--ds-color-text-primary)'
-            : 'var(--ds-color-text-muted)',
-        background: isInteractive
-          ? 'var(--ds-color-neutral-50)'
-          : 'transparent',
-        border: 'none',
-        borderBottom: isActive
-          ? '2px solid var(--ds-color-primary)'
-          : '2px solid transparent',
         marginBottom: -1,
         cursor: 'pointer',
-        outline: 'none',
-        borderRadius: 0,
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
       }}
     >
@@ -254,8 +159,6 @@ function SavedViewTab({
 /* ------------------------------------------------------------------ */
 
 const PULSE_STYLE: React.CSSProperties = {
-  borderRadius: 'var(--ds-radius-sm)',
-  background: 'var(--ds-color-neutral-100)',
   animation: 'pulse 1.5s ease-in-out infinite',
 };
 
@@ -310,8 +213,6 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
 
   /* ---- Container styles ---- */
   const containerStyle: React.CSSProperties = {
-    background: 'var(--ds-surface-card)',
-    borderBottom: '1px solid var(--ds-color-border)',
     padding: '20px 24px',
     ...style,
   };
@@ -337,7 +238,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
             <SkeletonBlock
               width={40}
               height={40}
-              style={{ borderRadius: 'var(--ds-radius-full)', flexShrink: 0 }}
+              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-full)', flexShrink: 0 } as React.CSSProperties}
             />
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               <SkeletonBlock width={200} height={22} />
@@ -348,12 +249,12 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
             <SkeletonBlock
               width={80}
               height={34}
-              style={{ borderRadius: 'var(--ds-radius-md)' }}
+              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
             />
             <SkeletonBlock
               width={80}
               height={34}
-              style={{ borderRadius: 'var(--ds-radius-md)' }}
+              style={{ '--ds-workbench-header-skeleton-radius': 'var(--ds-radius-md)' } as React.CSSProperties}
             />
           </div>
         </div>
@@ -414,7 +315,6 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                   fontWeight: 600,
                   lineHeight: 1.3,
                   letterSpacing: '-0.02em',
-                  color: 'var(--ds-color-text-primary)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -435,9 +335,6 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                     fontSize: 12,
                     fontWeight: 600,
                     lineHeight: 1.5,
-                    borderRadius: 'var(--ds-radius-full)',
-                    background: 'var(--ds-color-error-100)',
-                    color: 'var(--ds-color-error-700)',
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -468,7 +365,6 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
                   margin: '4px 0 0',
                   fontSize: 13,
                   lineHeight: 1.4,
-                  color: 'var(--ds-color-text-muted)',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   whiteSpace: 'nowrap',
@@ -510,7 +406,6 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
             alignItems: 'center',
             gap: 0,
             marginTop: 16,
-            borderBottom: '1px solid var(--ds-color-border)',
           }}
         >
           {savedViews.map((view) => {

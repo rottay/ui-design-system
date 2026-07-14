@@ -100,11 +100,6 @@ export interface DetailHeaderProps {
   children?: ReactNode;
 }
 
-const sharedBorder = 'var(--ds-color-border-secondary)';
-const sharedTextMuted = 'var(--ds-color-text-muted)';
-const sharedTextSecondary = 'var(--ds-color-text-secondary)';
-const sharedTextPrimary = 'var(--ds-color-text-primary)';
-
 function getArchetypeStyles(archetype: DetailHeaderArchetype) {
   switch (archetype) {
     case 'editorial':
@@ -151,34 +146,6 @@ function getArchetypeStyles(archetype: DetailHeaderArchetype) {
   }
 }
 
-function buildPatternStyle(archetype: DetailHeaderArchetype): CSSProperties {
-  const tone = getArchetypeStyles(archetype);
-
-  return {
-    backgroundImage: [
-      `radial-gradient(circle at 12% 16%, ${tone.accent} 0%, transparent 48%)`,
-      `radial-gradient(circle at 84% 2%, ${tone.accentSecondary} 0%, transparent 32%)`,
-      `radial-gradient(circle at 72% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%)`,
-      'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%)',
-      tone.fadeMask,
-      tone.heroBackground,
-      `linear-gradient(${tone.gridColor} 1px, transparent 1px)`,
-      `linear-gradient(90deg, ${tone.gridColor} 1px, transparent 1px)`,
-    ].join(', '),
-    backgroundSize: [
-      '100% 100%',
-      '100% 100%',
-      '100% 100%',
-      '100% 100%',
-      '100% 100%',
-      '100% 100%',
-      `${tone.gridSize}px ${tone.gridSize}px`,
-      `${tone.gridSize}px ${tone.gridSize}px`,
-    ].join(', '),
-    backgroundPosition: '0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0',
-  };
-}
-
 function renderAvatarNode(avatar: string | ReactNode, title: string) {
   if (typeof avatar === 'string') {
     if (avatar.startsWith('http') || avatar.startsWith('/')) {
@@ -189,9 +156,7 @@ function renderAvatarNode(avatar: string | ReactNode, title: string) {
           style={{
             width: 68,
             height: 68,
-            borderRadius: 18,
             overflow: 'hidden',
-            border: `1px solid ${sharedBorder}`,
           }}
         >
           <img
@@ -210,15 +175,12 @@ function renderAvatarNode(avatar: string | ReactNode, title: string) {
         style={{
           width: 68,
           height: 68,
-          borderRadius: 18,
-          background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent)',
-          border: `1px solid ${sharedBorder}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Text style={{ fontSize: 24, fontWeight: 700, color: sharedTextPrimary }}>{avatar}</Text>
+        <Text style={{ fontSize: 24, fontWeight: 700 }}>{avatar}</Text>
       </Box>
     );
   }
@@ -276,20 +238,14 @@ export function DetailHeader({
       className="ds-structure ds-detail-header"
       style={{
         width: '100%',
-        background: 'var(--ds-surface-card, var(--ds-color-bg-elevated))',
-        border: `1px solid ${sharedBorder}`,
-        borderRadius: 22,
         marginBottom: 24,
         overflow: 'hidden',
-        boxShadow: '0 14px 36px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)',
       }}
     >
       <Box
         data-part="top-bar"
         style={{
           padding: '12px 24px',
-          borderBottom: `1px solid ${sharedBorder}`,
-          background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent)',
         }}
       >
         <Flex justify="between" align="center" gap={16} wrap="wrap">
@@ -302,13 +258,10 @@ export function DetailHeader({
                 gap={8}
                 style={{
                   padding: '7px 12px',
-                  border: `1px solid ${sharedBorder}`,
-                  borderRadius: 11,
-                  background: 'transparent',
                 }}
               >
-                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14, color: sharedTextSecondary }} />
-                <Text data-part="back-label" size="xs" style={{ color: sharedTextSecondary }}>
+                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14 }} />
+                <Text data-part="back-label" size="xs">
                   {backLabel}
                 </Text>
               </Flex>,
@@ -317,7 +270,7 @@ export function DetailHeader({
 
             {breadcrumbItems && breadcrumbItems.length > 0 ? (
               <>
-                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18, background: sharedBorder }} />
+                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18 }} />
                 <Breadcrumb items={breadcrumbItems} />
               </>
             ) : null}
@@ -354,7 +307,6 @@ export function DetailHeader({
         data-archetype={archetype}
         style={{
           padding: 28,
-          ...buildPatternStyle(archetype),
         }}
       >
         <Flex align="start" justify="between" gap={22} wrap="wrap">
@@ -368,7 +320,6 @@ export function DetailHeader({
                   size="xs"
                   weight="bold"
                   style={{
-                    color: sharedTextMuted,
                     letterSpacing: '0.14em',
                     textTransform: 'uppercase',
                     fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -389,7 +340,6 @@ export function DetailHeader({
                     fontWeight: 720,
                     letterSpacing: '-0.04em',
                     lineHeight: 1.02,
-                    color: sharedTextPrimary,
                   }}
                 >
                   {title}
@@ -398,7 +348,7 @@ export function DetailHeader({
               </Flex>
 
               {subtitle ? (
-                <Text data-part="subtitle" size="sm" style={{ color: sharedTextSecondary, lineHeight: 1.65, maxWidth: 780 }}>
+                <Text data-part="subtitle" size="sm" style={{ lineHeight: 1.65, maxWidth: 780 }}>
                   {subtitle}
                 </Text>
               ) : null}
@@ -418,20 +368,6 @@ export function DetailHeader({
             style={{
               marginTop: 24,
               padding: '16px 18px 18px',
-              borderRadius: 18,
-              border: `1px solid ${sharedBorder}`,
-              background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 58%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%)',
-              backgroundImage: [
-                'radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%)',
-                'radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%)',
-                'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%)',
-                'linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px)',
-                'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px)',
-              ].join(', '),
-              backgroundSize: '100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px',
-              backgroundPosition: '0 0, 0 0, 0 0, 0 0, 0 0',
-              boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)',
-              backdropFilter: 'blur(8px)',
             }}
           >
             {visibleMetadata.length > 0 ? (
@@ -445,18 +381,14 @@ export function DetailHeader({
                     style={{
                       minWidth: 0,
                       padding: '9px 12px',
-                      borderRadius: 14,
-                      border: `1px solid ${sharedBorder}`,
-                      background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 58%, transparent)',
                     }}
                   >
-                    {item.icon ? <item.icon style={{ width: 14, height: 14, color: sharedTextMuted }} /> : null}
+                    {item.icon ? <item.icon style={{ width: 14, height: 14 }} /> : null}
                     <Text
                       data-part="metadata-chip-label"
                       size="xs"
                       weight="bold"
                       style={{
-                        color: sharedTextMuted,
                         letterSpacing: '0.12em',
                         textTransform: 'uppercase',
                         fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -469,7 +401,6 @@ export function DetailHeader({
                       size="sm"
                       weight="medium"
                       style={{
-                        color: sharedTextPrimary,
                         fontFamily: item.mono ? 'var(--ds-font-family-mono, monospace)' : undefined,
                         wordBreak: item.mono ? 'break-all' : 'break-word',
                       }}
@@ -494,9 +425,7 @@ export function DetailHeader({
         <Box
           data-part="tab-strip"
           style={{
-            borderTop: `1px solid ${sharedBorder}`,
             padding: '10px 18px 0',
-            background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 96%, transparent)',
           }}
         >
           <Flex align="center" gap={10} wrap="wrap">
@@ -513,14 +442,9 @@ export function DetailHeader({
                   style={{
                     cursor: 'pointer',
                     padding: '10px 12px 12px',
-                    borderTopLeftRadius: 12,
-                    borderTopRightRadius: 12,
-                    border: isActive ? `1px solid ${sharedBorder}` : '1px solid transparent',
-                    borderBottom: 'none',
-                    background: isActive ? archetypeTone.tabActiveBackground : 'transparent',
                     transition: 'background 160ms ease, border-color 160ms ease, transform 160ms ease',
-                    transform: `translateY(${isActive ? 1 : 0}px)`,
-                  }}
+                    '--ds-detail-header-tab-active-bg': archetypeTone.tabActiveBackground,
+                  } as CSSProperties}
                 >
                   <Flex align="center" gap={8}>
                     {TabIcon ? (
@@ -530,7 +454,6 @@ export function DetailHeader({
                         style={{
                           width: 14,
                           height: 14,
-                          color: isActive ? sharedTextPrimary : sharedTextMuted,
                         }}
                       />
                     ) : null}
@@ -539,7 +462,6 @@ export function DetailHeader({
                       data-active={isActive}
                       size="sm"
                       weight={isActive ? 'medium' : undefined}
-                      style={{ color: isActive ? sharedTextPrimary : sharedTextSecondary }}
                     >
                       {tab.label}
                     </Text>
@@ -548,11 +470,9 @@ export function DetailHeader({
                         data-part="tab-count"
                         style={{
                           padding: '2px 6px',
-                          borderRadius: 999,
-                          background: 'color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent)',
                         }}
                       >
-                        <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium" style={{ color: isActive ? sharedTextPrimary : sharedTextSecondary }}>
+                        <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium">
                           {tab.count}
                         </Text>
                       </Box>

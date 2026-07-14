@@ -77,16 +77,7 @@ export interface DashboardHeaderProps {
 // Status indicator
 // ---------------------------------------------------------------------------
 
-const STATUS_COLORS: Record<DashboardStatusState, string> = {
-  live: 'var(--ds-color-success)',
-  connected: 'var(--ds-color-success)',
-  syncing: 'var(--ds-color-warning)',
-  offline: 'var(--ds-color-error)',
-  warning: 'var(--ds-color-warning)',
-};
-
 function StatusDot({ state, label }: { state: DashboardStatusState; label?: string }) {
-  const color = STATUS_COLORS[state];
   return (
     <Flex
       data-part="status-dot"
@@ -95,8 +86,6 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
       gap={2}
       style={{
         padding: '2px 10px',
-        borderRadius: 'var(--ds-radius-full, 9999px)',
-        background: `color-mix(in srgb, ${color} 12%, transparent)`,
       }}
     >
       <Box
@@ -105,13 +94,11 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
         style={{
           width: 6,
           height: 6,
-          borderRadius: '50%',
-          background: color,
           flexShrink: 0,
           animation: state === 'live' || state === 'syncing' ? 'pulse 2s infinite' : undefined,
         }}
       />
-      <Text data-part="status-dot-text" data-state={state} size="xs" style={{ color, whiteSpace: 'nowrap', fontWeight: 500 }}>
+      <Text data-part="status-dot-text" data-state={state} size="xs" style={{ whiteSpace: 'nowrap', fontWeight: 500 }}>
         {label ?? state.charAt(0).toUpperCase() + state.slice(1)}
       </Text>
     </Flex>
@@ -123,14 +110,6 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
 // ---------------------------------------------------------------------------
 
 function MetricChip({ metric }: { metric: DashboardMetric }) {
-  const changeColor = metric.change
-    ? metric.change.direction === 'up'
-      ? 'var(--ds-color-success)'
-      : metric.change.direction === 'down'
-        ? 'var(--ds-color-error)'
-        : 'var(--ds-color-text-muted)'
-    : undefined;
-
   return (
     <Flex
       data-part="metric-chip"
@@ -138,13 +117,10 @@ function MetricChip({ metric }: { metric: DashboardMetric }) {
       gap={2}
       style={{
         padding: '6px 12px',
-        borderRadius: 'var(--ds-radius-md, 8px)',
-        background: 'var(--ds-color-bg-secondary)',
-        border: '1px solid var(--ds-color-border-secondary)',
       }}
     >
       {metric.icon && (
-        <Box data-part="metric-chip-icon" style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>
+        <Box data-part="metric-chip-icon" style={{ flexShrink: 0 }}>
           {metric.icon}
         </Box>
       )}
@@ -157,7 +133,7 @@ function MetricChip({ metric }: { metric: DashboardMetric }) {
             {metric.value}
           </Text>
           {metric.change && (
-            <Text data-part="metric-chip-change" data-direction={metric.change.direction} size="xs" style={{ color: changeColor, lineHeight: 1.2 }}>
+            <Text data-part="metric-chip-change" data-direction={metric.change.direction} size="xs" style={{ lineHeight: 1.2 }}>
               {metric.change.direction === 'up' ? '+' : metric.change.direction === 'down' ? '-' : ''}
               {metric.change.value}
             </Text>
@@ -195,12 +171,11 @@ export function DashboardHeader({
         aria-label={title}
         style={{
           padding: 'var(--ds-spacing-sm, 8px) var(--ds-spacing-md, 16px)',
-          borderBottom: '1px solid var(--ds-color-border-secondary)',
         }}
       >
         <Flex justify="between" align="center" gap={3}>
           <Flex align="center" gap={2} style={{ flex: 1, minWidth: 0 }}>
-            {icon && <Box data-part="icon" aria-hidden="true" style={{ flexShrink: 0, color: 'var(--ds-color-text-muted)' }}>{icon}</Box>}
+            {icon && <Box data-part="icon" aria-hidden="true" style={{ flexShrink: 0 }}>{icon}</Box>}
             <Text data-part="title" size="md" weight="semibold" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {title}
             </Text>
@@ -264,15 +239,13 @@ export function DashboardHeader({
       aria-label={title}
       style={{
         padding: 'var(--ds-spacing-md, 16px) var(--ds-spacing-lg, 24px)',
-        background: 'var(--ds-color-bg-primary)',
-        borderBottom: '1px solid var(--ds-color-border-secondary)',
       }}
     >
       {/* Row 1: title + status + actions */}
       <Flex justify="between" align="center" gap={4} style={{ marginBottom: metrics || searchSlot || timeRangeSlot ? 12 : 0 }}>
         <Box style={{ flex: 1, minWidth: 0 }}>
           <Flex align="center" gap={3}>
-            {icon && <Box data-part="icon" aria-hidden="true" style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>{icon}</Box>}
+            {icon && <Box data-part="icon" aria-hidden="true" style={{ flexShrink: 0 }}>{icon}</Box>}
             <Box>
               <Flex align="center" gap={2}>
                 <Text data-part="title" size="xl" weight="semibold">{title}</Text>

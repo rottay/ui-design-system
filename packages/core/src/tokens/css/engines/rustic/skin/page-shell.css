@@ -1,0 +1,83 @@
+/**
+ * Rustic (Vanilla / CSS-variable) PageShell skin (WO-SKIN-06 CK-B).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the shell's outer `<div>`, carrying the pair
+ * `ds-pattern-page-shell ds-engine-rustic` + `data-part='root'`; the loading root
+ * carries `data-loading='true'`, the main root `data-loading='false'`. Every
+ * painted element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): the tenant `*` border-color floor sits at (0,3,1), so a rule
+ * painting `border` / `border-color` with a real color (including `transparent`,
+ * which is NOT a reset) must reach (0,4,0): the two root classes (0,2,0) + a
+ * REPEATED `data-part`, or a `data-part` plus a contract `data-active`. Non-border
+ * paint beats preflight while unlayered at (0,3,0). Pure `border: none` /
+ * `background: none` carry no color and are exempt.
+ *
+ * This engine has ZERO interactive paint — no hover on the back button, breadcrumb
+ * links, or inactive tabs — a deliberate asymmetry with the modern engine. No
+ * `:hover` / `:focus` rules exist here by design.
+ *
+ * Values are transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- shell-grid background: both roots spread `containerStyle`, so it applies to
+        loading and main alike. Invisible until a tenant sets the grid tokens. ---- */
+.ds-pattern-page-shell.ds-engine-rustic[data-part='root'] {
+  background-image: repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px));
+  background-size: var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px);
+}
+
+/* ---- loading text: only the loading root sets a muted text color ---- */
+.ds-pattern-page-shell.ds-engine-rustic[data-part='root'][data-loading='true'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- breadcrumbs: interactive link (primary), static crumb (muted), separator ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='crumb'][data-interactive='true'] {
+  color: var(--ds-color-primary);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='crumb'][data-interactive='false'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='separator'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- back button: borderless, no hover (rustic asymmetry) ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='back'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-text-secondary);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+/* ---- title / subtitle ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='title'] {
+  color: var(--ds-color-text);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='subtitle'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- tab strip container (1px bottom border) ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='tabs'][data-part='tabs'] {
+  border-bottom: 1px solid var(--ds-color-neutral-200);
+}
+
+/* ---- tab: base (repeated data-part for the transparent 2px underline) + active
+        underline. No hover (rustic asymmetry). ---- */
+.ds-pattern-page-shell.ds-engine-rustic [data-part='tab'][data-part='tab'] {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-page-shell.ds-engine-rustic [data-part='tab'][data-active='true'] {
+  border-bottom: 2px solid var(--ds-color-primary);
+  color: var(--ds-color-primary);
+}

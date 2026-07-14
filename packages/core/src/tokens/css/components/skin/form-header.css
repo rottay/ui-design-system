@@ -1,0 +1,85 @@
+/**
+ * FormHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/form-header.css — FormHeader renders one DOM
+ * tree under every engine (no engines/ split), so it has a single skin.
+ *
+ * SCOPE ROOT carries `ds-structure ds-form-header` + `data-part='root'`.
+ *
+ * SPECIFICITY (P-48): the tenant `html[data-tenant]…*` border-color floor sits at
+ * (0,3,1); a border-COLOR rule buys (0,4,0) from the two root classes + the target
+ * `data-part` repeated. Non-border paint wins unlayered at (0,3,0). A `color` on a
+ * composed `Text` must exceed the typography skin's (0,4,0) `[data-color='…']`
+ * rule, so it buys (0,5,0) from the two root classes + the `data-part` ×3.
+ *
+ * SHARED WITH EditHeader: the archetype hero-panel gradient (`buildPatternStyle`)
+ * and the icon-badge tone (`getVariantTone`) are proven byte-identical to
+ * EditHeader (contract §2) and are defined ONCE, as grouped
+ * `.ds-edit-header , .ds-form-header` selectors, in edit-header.css — they are NOT
+ * restated here. The icon-badge tone rides the shared `--ds-header-icon-tone-*`
+ * custom property, set inline by this component from `getVariantTone(colorVariant)`
+ * because the pre-step stamped no variant attribute to key a CSS rule on.
+ */
+
+/* root card */
+.ds-structure.ds-form-header[data-part='root'] {
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  border-radius: 20px;
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+}
+.ds-structure.ds-form-header[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* top bar */
+.ds-structure.ds-form-header [data-part='top-bar'] {
+  background: var(--ds-color-bg-secondary);
+}
+.ds-structure.ds-form-header [data-part='top-bar'][data-part='top-bar'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+/* back button — border token is --ds-color-border here (EditHeader uses -secondary) */
+.ds-structure.ds-form-header [data-part='back-button'] {
+  border-radius: 10px;
+  background: transparent;
+}
+.ds-structure.ds-form-header [data-part='back-button'][data-part='back-button'] {
+  border: 1px solid var(--ds-color-border);
+}
+.ds-structure.ds-form-header [data-part='back-icon'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-form-header [data-part='back-label'][data-part='back-label'][data-part='back-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* breadcrumb divider */
+.ds-structure.ds-form-header [data-part='breadcrumb-divider'] {
+  background: var(--ds-color-border-secondary);
+}
+
+/* eyebrow / subtitle */
+.ds-structure.ds-form-header [data-part='eyebrow'][data-part='eyebrow'][data-part='eyebrow'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-form-header [data-part='subtitle'][data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* context card below the hero (byte-identical to EditHeader's, duplicated per-file) */
+.ds-structure.ds-form-header [data-part='context-card'] {
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 82% 100%, color-mix(in srgb, var(--ds-color-text-secondary) 6%, transparent) 0%, transparent 36%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 54%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 74%, transparent) 100%),
+    linear-gradient(color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px, 24px 24px;
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0;
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent);
+  backdrop-filter: blur(8px);
+}
+.ds-structure.ds-form-header [data-part='context-card'][data-part='context-card'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}

@@ -47,16 +47,10 @@ export default function RusticPageShell(props: PageShellProps) {
     style,
   } = props;
 
-  // Shell-grid: subtle background grid driven by premium chrome tokens.
-  // --ds-shell-grid-size defaults to 0px (no grid) for tenants that don't set it.
-  const gridBg = 'repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px))';
-
   /* Optional maxWidth constrains and centers the shell for readable content widths */
   const containerStyle: CSSProperties = {
     maxWidth: maxWidth ?? undefined,
     margin: maxWidth ? '0 auto' : undefined,
-    backgroundImage: gridBg,
-    backgroundSize: `var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px)`,
     ...style,
   };
 
@@ -67,7 +61,7 @@ export default function RusticPageShell(props: PageShellProps) {
         className={`ds-pattern-page-shell ds-engine-rustic ${className ?? ''}`}
         data-part="root"
         data-loading="true"
-        style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)', ...containerStyle }}
+        style={{ textAlign: 'center', padding: 48, ...containerStyle }}
       >
         Loading...
       </div>
@@ -79,7 +73,6 @@ export default function RusticPageShell(props: PageShellProps) {
 
   /** Breadcrumb link style -- primary color with no underline */
   const linkStyle: CSSProperties = {
-    color: 'var(--ds-color-primary)',
     textDecoration: 'none',
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm, 14px)',
@@ -88,7 +81,6 @@ export default function RusticPageShell(props: PageShellProps) {
   /** Breadcrumb separator "/" between crumb items */
   const separatorStyle: CSSProperties = {
     margin: '0 8px',
-    color: 'var(--ds-color-text-muted)',
     fontSize: 'var(--ds-font-size-sm, 14px)',
   };
 
@@ -121,7 +113,7 @@ export default function RusticPageShell(props: PageShellProps) {
                 <span
                   data-part="crumb"
                   data-interactive="false"
-                  style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)' }}
+                  style={{ fontSize: 'var(--ds-font-size-sm, 14px)' }}
                 >
                   {bc.label}
                 </span>
@@ -140,16 +132,12 @@ export default function RusticPageShell(props: PageShellProps) {
               onClick={back.onClick}
               data-part="back"
               style={{
-                background: 'none',
-                border: 'none',
                 cursor: 'pointer',
-                color: 'var(--ds-color-text-secondary)',
                 fontSize: 'var(--ds-font-size-sm, 14px)',
                 display: 'flex',
                 alignItems: 'center',
                 gap: 4,
                 padding: '4px 8px',
-                borderRadius: 'var(--ds-radius-sm, 6px)',
               }}
             >
               &#8592; {back.label}
@@ -158,13 +146,13 @@ export default function RusticPageShell(props: PageShellProps) {
           <div data-part="titles">
             {/* Title + badge inline; lineHeight 1.3 prevents badge vertical misalignment */}
             <div data-part="title-row" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <h1 data-part="title" style={{ margin: 0, fontSize: 24, fontWeight: 600, color: 'var(--ds-color-text)', lineHeight: 1.3 }}>
+              <h1 data-part="title" style={{ margin: 0, fontSize: 24, fontWeight: 600, lineHeight: 1.3 }}>
                 {title}
               </h1>
               {badge}
             </div>
             {subtitle && (
-              <p data-part="subtitle" style={{ margin: '4px 0 0', fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)' }}>
+              <p data-part="subtitle" style={{ margin: '4px 0 0', fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                 {subtitle}
               </p>
             )}
@@ -176,7 +164,7 @@ export default function RusticPageShell(props: PageShellProps) {
       {/* Tab bar -- active tab highlighted with primary-colored 2px bottom border */}
       {tabs && tabs.length > 0 && (
         <div>
-          <div data-part="tabs" style={{ display: 'flex', borderBottom: '1px solid var(--ds-color-neutral-200)', marginBottom: 24, gap: 0 }}>
+          <div data-part="tabs" style={{ display: 'flex', marginBottom: 24, gap: 0 }}>
             {tabs.map((tab) => (
               <button
                 key={tab.key}
@@ -185,10 +173,6 @@ export default function RusticPageShell(props: PageShellProps) {
                 data-active={activeTabKey === tab.key ? 'true' : 'false'}
                 style={{
                   padding: '8px 16px',
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: activeTabKey === tab.key ? '2px solid var(--ds-color-primary)' : '2px solid transparent',
-                  color: activeTabKey === tab.key ? 'var(--ds-color-primary)' : 'var(--ds-color-text-secondary)',
                   fontWeight: activeTabKey === tab.key ? 600 : 400,
                   fontSize: 'var(--ds-font-size-sm, 14px)',
                   cursor: 'pointer',

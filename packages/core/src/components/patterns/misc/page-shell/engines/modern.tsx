@@ -32,7 +32,7 @@
  * </ModernPageShell>
  */
 
-import React, { useState } from 'react';
+import React from 'react';
 import type { PageShellProps } from '../PageShell.types';
 
 /* ------------------------------------------------------------------ */
@@ -59,8 +59,6 @@ function BreadcrumbItem({
   onClick?: () => void;
   isLast: boolean;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   const isInteractive = !isLast && (href || onClick);
 
   if (isInteractive) {
@@ -78,12 +76,7 @@ function BreadcrumbItem({
               }
             : undefined
         }
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
         style={{
-          color: hovered
-            ? 'var(--ds-color-text-secondary)'
-            : 'var(--ds-color-text-muted)',
           fontWeight: 500,
           textDecoration: 'none',
           transition: `color ${TRANSITION_FAST}`,
@@ -101,9 +94,6 @@ function BreadcrumbItem({
       data-interactive="false"
       data-last={isLast ? 'true' : 'false'}
       style={{
-        color: isLast
-          ? 'var(--ds-color-text-secondary)'
-          : 'var(--ds-color-text-muted)',
         fontWeight: isLast ? 600 : 500,
       }}
     >
@@ -128,16 +118,12 @@ function TabButton({
   isActive: boolean;
   onClick: () => void;
 }) {
-  const [hovered, setHovered] = useState(false);
-
   return (
     <button
       type="button"
       role="tab"
       aria-selected={isActive}
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
       data-part="tab"
       data-active={isActive ? 'true' : 'false'}
       style={{
@@ -146,22 +132,8 @@ function TabButton({
         fontSize: 13,
         fontWeight: isActive ? 600 : 500,
         lineHeight: 1.4,
-        color: isActive
-          ? 'var(--ds-color-primary)'
-          : hovered
-            ? 'var(--ds-color-text-primary)'
-            : 'var(--ds-color-text-muted)',
-        background:
-          hovered && !isActive
-            ? 'var(--ds-color-neutral-50)'
-            : 'transparent',
-        border: 'none',
-        borderBottom: isActive
-          ? '2px solid var(--ds-color-primary)'
-          : '2px solid transparent',
         marginBottom: -1,
         cursor: 'pointer',
-        borderRadius: 0,
         transition: `color ${TRANSITION_FAST}, background ${TRANSITION_FAST}, border-color ${TRANSITION_FAST}`,
       }}
     >
@@ -184,19 +156,10 @@ function BackButton({
   label?: string;
   onClick: () => void;
 }) {
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-
-  const isHighlighted = hovered || focused;
-
   return (
     <button
       type="button"
       onClick={onClick}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onFocus={() => setFocused(true)}
-      onBlur={() => setFocused(false)}
       aria-label={label ? `Go back to ${label}` : 'Go back'}
       data-part="back"
       data-has-label={label ? 'true' : 'false'}
@@ -205,14 +168,6 @@ function BackButton({
         alignItems: 'center',
         gap: 6,
         padding: label ? '6px 12px 6px 8px' : '6px',
-        border: 'none',
-        borderRadius: 'var(--ds-radius-md)',
-        background: isHighlighted
-          ? 'var(--ds-color-neutral-100)'
-          : 'transparent',
-        color: isHighlighted
-          ? 'var(--ds-color-text-primary)'
-          : 'var(--ds-color-text-secondary)',
         fontSize: 13,
         fontWeight: 500,
         lineHeight: 1.4,
@@ -295,8 +250,6 @@ export default function ModernPageShell(props: PageShellProps) {
             style={{
               width: 180,
               height: 12,
-              borderRadius: 'var(--ds-radius-sm)',
-              background: 'var(--ds-color-neutral-100)',
               animation: 'pulse 1.5s ease-in-out infinite',
             }}
           />
@@ -318,8 +271,6 @@ export default function ModernPageShell(props: PageShellProps) {
                   width: '100%',
                   maxWidth: 280,
                   height: 28,
-                  borderRadius: 'var(--ds-radius-sm)',
-                  background: 'var(--ds-color-neutral-100)',
                   animation: 'pulse 1.5s ease-in-out infinite',
                 }}
               />
@@ -328,8 +279,6 @@ export default function ModernPageShell(props: PageShellProps) {
                 style={{
                   width: 200,
                   height: 14,
-                  borderRadius: 'var(--ds-radius-sm)',
-                  background: 'var(--ds-color-neutral-100)',
                   animation: 'pulse 1.5s ease-in-out infinite',
                 }}
               />
@@ -340,20 +289,18 @@ export default function ModernPageShell(props: PageShellProps) {
                 style={{
                   width: 80,
                   height: 32,
-                  borderRadius: 'var(--ds-radius-md)',
-                  background: 'var(--ds-color-neutral-100)',
+                  '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)',
                   animation: 'pulse 1.5s ease-in-out infinite',
-                }}
+                } as React.CSSProperties}
               />
               <div
                 data-part="skeleton"
                 style={{
                   width: 100,
                   height: 32,
-                  borderRadius: 'var(--ds-radius-md)',
-                  background: 'var(--ds-color-neutral-100)',
+                  '--ds-page-shell-skeleton-radius': 'var(--ds-radius-md)',
                   animation: 'pulse 1.5s ease-in-out infinite',
-                }}
+                } as React.CSSProperties}
               />
             </div>
           </div>
@@ -365,10 +312,6 @@ export default function ModernPageShell(props: PageShellProps) {
   /* Default to the first tab when no activeTab is explicitly set */
   const activeTabKey = activeTab ?? tabs?.[0]?.key;
 
-  // Shell-grid: subtle background grid driven by premium chrome tokens.
-  // --ds-shell-grid-size defaults to 0px (no grid) for tenants that don't set it.
-  const gridBg = 'repeating-linear-gradient(0deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px)), repeating-linear-gradient(90deg, var(--ds-shell-grid-line, transparent) 0 1px, transparent 1px var(--ds-shell-grid-size, 0px))';
-
   return (
     <div
       className={`ds-pattern-page-shell ds-engine-modern ${className ?? ''}`}
@@ -377,8 +320,6 @@ export default function ModernPageShell(props: PageShellProps) {
       style={{
         maxWidth: maxWidth ?? undefined,
         margin: maxWidth ? '0 auto' : undefined,
-        backgroundImage: gridBg,
-        backgroundSize: `var(--ds-shell-grid-size, 0px) var(--ds-shell-grid-size, 0px)`,
         ...style,
       }}
     >
@@ -412,7 +353,6 @@ export default function ModernPageShell(props: PageShellProps) {
                     <span
                       data-part="separator"
                       style={{
-                        color: 'var(--ds-color-text-muted)',
                         userSelect: 'none',
                         fontSize: 12,
                       }}
@@ -478,7 +418,6 @@ export default function ModernPageShell(props: PageShellProps) {
                     fontWeight: 700,
                     lineHeight: 1.2,
                     letterSpacing: '-0.025em',
-                    color: 'var(--ds-color-text-primary)',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
@@ -495,7 +434,6 @@ export default function ModernPageShell(props: PageShellProps) {
                     margin: '4px 0 0',
                     fontSize: 14,
                     lineHeight: 1.5,
-                    color: 'var(--ds-color-text-secondary)',
                   }}
                 >
                   {subtitle}
@@ -538,7 +476,6 @@ export default function ModernPageShell(props: PageShellProps) {
               alignItems: 'center',
               gap: 0,
               marginTop: 16,
-              borderBottom: '1px solid var(--ds-color-border-subtle)',
             }}
           >
             {tabs.map((tab) => (
@@ -556,7 +493,6 @@ export default function ModernPageShell(props: PageShellProps) {
             data-part="rule"
             style={{
               marginTop: 16,
-              borderBottom: '1px solid var(--ds-color-border-subtle)',
             }}
           />
         )}

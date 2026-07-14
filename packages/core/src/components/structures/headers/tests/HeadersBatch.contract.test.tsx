@@ -171,7 +171,7 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
       expect(root.getAttribute('data-loading')).toBe('true');
     });
 
-    it('stamps root/top-bar/back-button(+className)/back-icon/back-label/breadcrumb-divider/breadcrumb-link(+className)/breadcrumb-separator/breadcrumb-item/entity-id/hero-panel/icon-badge/icon-badge-glyph/eyebrow/title/status-pill/status-pill-text/subtitle/actions/context-card/context-rail/context-card-children', async () => {
+    it('stamps root/top-bar/back-button/back-icon/back-label/breadcrumb-divider/breadcrumb-link/breadcrumb-separator/breadcrumb-item/entity-id/hero-panel/icon-badge/icon-badge-glyph/eyebrow/title/status-pill/status-pill-text/subtitle/actions/context-card/context-rail/context-card-children (§4 className hooks deleted)', async () => {
       // A real lucide-react/DS icon forwards arbitrary props (including
       // `data-part`) onto its root <svg> via a rest-spread -- this fixture
       // must replicate that, or it silently disproves the stamp reaching
@@ -208,7 +208,9 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
 
       const backButton = container.querySelector('[data-part="back-button"]');
       expect(backButton).not.toBeNull();
-      expect(backButton?.className).toContain('back-button'); // untouched dead-CSS hook, §4
+      // §4: the migration deleted the dead `back-button` className hook; anatomy
+      // is now carried by the data-part alone.
+      expect(backButton?.className ?? '').not.toContain('back-button');
 
       expect(container.querySelector('[data-part="back-icon"]')).not.toBeNull();
       expect(container.querySelector('[data-part="back-label"]')).not.toBeNull();
@@ -216,7 +218,8 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
 
       const breadcrumbLink = container.querySelector('[data-part="breadcrumb-link"]');
       expect(breadcrumbLink).not.toBeNull();
-      expect(breadcrumbLink?.className).toContain('breadcrumb-link'); // untouched dead-CSS hook, §4
+      // §4: the dead `breadcrumb-link` className hook was deleted with the <style> block.
+      expect(breadcrumbLink?.className ?? '').not.toContain('breadcrumb-link');
 
       expect(container.querySelector('[data-part="breadcrumb-separator"]')).not.toBeNull();
       expect(container.querySelector('[data-part="breadcrumb-item"]')).not.toBeNull();
@@ -236,18 +239,21 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
       expect(container.querySelector('[data-part="context-card-children"]')).not.toBeNull();
     });
 
-    it('the dead <style> block is untouched: back-button/breadcrumb-link className hooks still exist verbatim', async () => {
+    it('§4: the dead <style> block was removed by the migration — no <style> tag, no back-button/breadcrumb-link className hooks, and the never-firing hover was NOT transcribed', async () => {
       const { container } = renderWithEngine(
         <EditHeader title="X" backHref="/x" breadcrumb={[{ label: 'A', href: '/a' }]} />,
         'modern',
       );
 
       await waitForPart(container, 'root');
-      const styleTag = container.querySelector('style');
-      expect(styleTag).not.toBeNull();
-      expect(styleTag?.textContent).toContain('.back-button:hover');
-      expect(styleTag?.textContent).toContain('.breadcrumb-link:hover');
-      expect(styleTag?.textContent).toContain('!important');
+      // The block painted nothing today (the chip's inline background beat
+      // .back-button:hover; the breadcrumb rule's !important set an identical
+      // value). Lifting the inline paint into the skin would have made the dead
+      // hover start winning — a hover the button has never had. So the migration
+      // deletes the block and does NOT transcribe it. This asserts that deletion.
+      expect(container.querySelector('style')).toBeNull();
+      expect(container.querySelector('.back-button')).toBeNull();
+      expect(container.querySelector('.breadcrumb-link')).toBeNull();
     });
   });
 
@@ -381,6 +387,8 @@ describe('Headers-family (structures) data-part contract (WO-SKIN-06 checkpoint 
 
       expect(container.querySelector('[data-part="title"][data-title-treatment="default"]')).not.toBeNull();
       expect(container.querySelector('[data-part="title-accent"]')).not.toBeNull();
+      // The default-branch subtitle wrapper carries the top border in the skin.
+      expect(container.querySelector('[data-part="subtitle-row"]')).not.toBeNull();
       expect(container.querySelector('[data-part="subtitle"][data-variant="default"]')).not.toBeNull();
       expect(container.querySelector('[data-part="secondary-rail"]')).not.toBeNull();
       expect(container.querySelector('[data-part="shortcut-pill"]')).not.toBeNull();
