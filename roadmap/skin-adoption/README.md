@@ -53,3 +53,27 @@ build is a singleton — never run two concurrently.
   specificity. Suppression therefore survives a migration by construction. The
   hazard is the inverse: silently killing a personality rule that legitimately
   wins today (see the two hard runtime constraints in the data-part contract doc).
+
+## Selector law (hardened after seven incidents)
+
+`data-part` is a shared VOCABULARY. Every migrated component stamps `root`/`icon`/`label`/…, so a
+selector that reaches for a part without saying WHOSE part it is will eventually match a component
+it was never written for.
+
+**Anchor every rule to the component's own scope class.** Then, inside that scope:
+
+- Prefer a DIRECT-CHILD chain (`>`) over a descendant hop. `.rottay-x[data-part='root'] > [data-part='body'] > [data-part='title']` cannot escape into a composed child; `.rottay-x [data-part='title']` can.
+- A DESCENDANT hop is only safe when no component X composes also stamps that part. Audited
+  2026-07-13: the shipped skins' descendant hops (Modal's `description`, AlertDialog's `icon`,
+  Message's `icon`) do not currently collide — but that is a property of today's composition, not of
+  the selector. If you add one, say in the skin header WHY it cannot escape.
+- **Never require a `data-part` on a component a parent may re-stamp.** SelectionPreviewRail passes
+  `data-part="identity-title"` to the `Text` it composes; Typography's skin required
+  `[data-part='root']`, matched nothing, and the text inherited white. A component that can be
+  COMPOSED anchors on its CLASS alone.
+- The same law binds test queries and visual probes, not just skins. Five of the seven incidents were
+  a probe or a suite, not a stylesheet.
+
+The ARC-09 real-engines suites now resolve ownership STRUCTURALLY: a node belongs to the component
+under test iff no other `data-part='root'` sits between it and that component's own root. Any new
+real-engines suite must do the same.
