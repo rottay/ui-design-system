@@ -1139,3 +1139,91 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   selectors as prose). **Every "finding" this audit produced before it was correct was a defect in the
   audit.** A tool that reports a problem has not found one.
 - **Status** — OPEN.
+
+### P-81 `Card` silently drops `id`, and that has broken GuidedDraftForm's section navigation in production
+
+- **Context** — Found by the CK-D/R pre-step while applying P-79. P-79 says `Card` drops a
+  consumer's `data-part`. It is worse than that: **`Card` forwards nothing at all.** Its engine
+  destructures a fixed, explicit prop list with no rest-spread, so every attribute outside that list
+  is discarded — including `id`.
+- **The live bug** — `guided-draft-form/index.tsx` passes `id={`section-${section.key}`}` to the
+  section `Card` (lines 777 and 882) so that its section-nav can jump to a section:
+
+  ```ts
+  document.getElementById(`section-${key}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' });  // :581
+  ```
+
+  The `id` never reaches the DOM. `getElementById` returns `null`. The optional chain swallows it.
+  **The scroll silently does nothing** — no error, no warning, no failing test. Clicking a section in
+  the nav simply does not move the page, and it has presumably never worked.
+- **Why it went unnoticed for so long** — every layer that could have caught it was looking elsewhere.
+  `tsc` accepts the prop (`CardProps` extends `BaseComponentProps`). The paint counter does not read
+  attributes. No unit test asserts the `id`. And `?.` converts a null lookup into a no-op rather than
+  a throw, so even at runtime the failure is mute. **The optional chain is what turned a crash into a
+  silent product defect.**
+- **The general shape, and why P-79 matters more than it looked** — the DS's primitives accept props
+  their types promise and their engines discard. P-79 found the `data-part` case, which was
+  hypothetical (no shipped skin depended on it yet). This is the same defect with a real user-visible
+  consequence, already shipping. There are almost certainly others: **anything a consumer passes to a
+  `Card`, `Grid`, or (in modern) a `Button` that is not on the engine's explicit allowlist is gone.**
+- **Ask** — (1) decide the precedence question P-79 raises (when a parent and a component both name a
+  part, who wins?), then make the primitives honest: either forward the documented pass-through props
+  (`id`, `data-*`, `aria-*`) or stop declaring them in the type. (2) Independently of that, fix
+  GuidedDraftForm's anchor navigation — it needs an element it actually controls to carry the `id`.
+  (3) Audit the fleet for other props handed to a primitive that eats them; a one-off grep for `id=`
+  and `aria-` on `<Card`/`<Grid`/`<Button` would find them.
+- **Left byte-exact by the migration**, as it must be: a byte-exact pass may not fix a defect. Filed
+  instead.
+- **Status** — OPEN.
+
+### P-82 A tenant authored a colour that no shipping engine obeys — and the house style is the trap
+
+- **Context** — Found by the CK-B/P pre-step, in a layer the CK-B inventory never swept (it checked
+  `theme.css` and `personality.css`; this lives in the tenant artifact/token layer).
+- **Evidence** — `--ds-page-shell-subtitle-color` is **declared** in
+  `tokens/css/foundation/themes/default.css:787` (as `var(--ds-color-text-secondary)`) and
+  **overridden by the rottay tenant** to real hexes: `#A0A0A5` in dark, `#6B6B6B` in light
+  (`artifacts/rottay/index.css:905, 2475`). It is **consumed by exactly one file**:
+  `page-shell/engines/classic.tsx:128`. Modern hardcodes `var(--ds-color-text-secondary)`; rustic
+  hardcodes `var(--ds-color-text-muted)`. **No vertical runs the classic engine.** Someone authored a
+  brand colour that nothing on screen obeys.
+- **Why it is a migration landmine, not just a curiosity** — the DS's own house style (`CLAUDE.md`,
+  "Component CSS variable pattern") tells modern-engine authors to write
+  `var(--ds-{component}-{property}, var(--ds-{generic-fallback}))`. **A skin author following the
+  house rule writes `color: var(--ds-page-shell-subtitle-color, var(--ds-color-text-secondary))` and
+  silently repaints the subtitle** — but only under rottay, and only in the tenant themes. Under the
+  default theme the token resolves to `text-secondary` and it reads as a perfect no-op. Every value
+  byte-identical; the cascade is not. Same shape as P-78, in a place nobody was looking.
+- **Ruled for the migration (2026-07-13)**: page-shell/modern and /rustic transcribe their subtitle
+  colour VERBATIM and must NOT adopt the component token. Adopting it is a visual change with its own
+  baselines.
+- **The mirror image, in the same cluster** — `--ds-collection-header-display-color` is **consumed and
+  never declared** (`collection/index.tsx:115`, defined nowhere; the fallback is what always renders).
+  One token is declared and never read; the other is read and never declared. Both are somebody's
+  intent evaporating in the gap between a token and an engine.
+- **Ask** — decide whether PageShell's subtitle should be tenant-themable at all. If yes, wire modern
+  and rustic to the token as a deliberate visual change. If no, delete the rottay override and the
+  default declaration, because a token that only a dead engine reads is a trap with a long fuse.
+- **Status** — OPEN.
+
+### P-83 WorkbenchHeader ships a back button no consumer can ever ask for
+
+- **Context** — Found by the CK-B/P pre-step while trying to pin every BackButton with a baseline.
+- **Evidence** — `workbench-header/engines/modern.tsx:135` defines a complete `BackButton` (32×32,
+  its own hover/focus recipe, divergent from cockpit's and page-shell's). It is **mounted by
+  nothing**, and `WorkbenchHeaderProps` has **no `onBack` field**, so no consumer can trigger one. The
+  "three divergent BackButtons" of the CK-B inventory are really **two reachable ones plus one that
+  cannot render.**
+- **Disposition** — the migration stamps and migrates its paint like any other site. That is
+  pixel-neutral by construction (it renders nothing today), so Workbench reaches `inlinePaint: 0`
+  honestly, and the rules sit inert until someone wires `onBack`. It is **not** deleted: this program
+  has already been burned by deleting "unused" code that was in fact the ratchet's *destination* —
+  the question is never "who references this?" but "what SHOULD reference this, and does it exist?"
+  Here the missing thing is a prop, not a reason.
+- **A contract assertion pins the deadness** (`renders NO back button`), so wiring one up later must
+  be deliberate rather than accidental. Its ~3 sites are migrated but **unphotographed**, and that is
+  stated rather than hidden — an uncertified site that declares itself uncertified is fine; a silent
+  one is not.
+- **Ask** — add `onBack` to `WorkbenchHeaderProps` and wire it (a visual change with new baselines),
+  or delete the component. Either is a product decision.
+- **Status** — OPEN.

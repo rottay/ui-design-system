@@ -28,13 +28,23 @@ same mechanism is live in one component and dead in another — never pattern-ma
   (4 writes). `rustic.tsx:279-283` — input focus/blur writes `.style.boxShadow` on the PARENT element
   to fake an inset focus line (2 writes).
 
-**Transcribe every one; none may simply be dropped.** The counter is BLIND to the `.style.x =` shape,
-so command-palette can reach `inlinePaint: 0` with the hover fully intact and inline — the counter
-cannot tell you whether you handled them. **The pre-step must PIN each of these interactions in a
-baseline before any paint moves**, in both engines: row hover, row hover while another row is
-keyboard-selected (that is what the `activeIndex !== idx` guard exists for — a `:hover` rule that
-ignores it would light up two rows at once), and input focus. A pixel gate only catches what a
-baseline photographs, and no rest shot photographs a hover.
+**Transcribe every one; none may simply be dropped.**
+
+**CORRECTION (2026-07-13) — an earlier revision of this contract said "the counter is BLIND to the
+`.style.x =` shape". That is FALSE**, and it was corrected only because a migration agent read the
+lexer instead of believing the brief. `scripts/lib/inline-paint-counter.mjs:227-240` has an explicit
+`.style.` branch counting both the assignment form and `.style.setProperty('paint-prop', …)`. So
+command-palette CANNOT reach `inlinePaint: 0` with the hover still inline — the counter is a second
+gate on these ten writes, not a blind spot. (What IS blind: `(el.style as any).background = …`, where
+the cast sits between `.style` and the property, leaving no `.style.` substring. A different shape.)
+
+**The counter still cannot save you**, and this is the part that matters: it sees *that* a write
+exists, never *what it wrote*. Delete a handler and re-add it with the wrong colour, the wrong
+fallback, or without the `activeIndex` guard, and the counter reports a clean 0. **So the pre-step
+must PIN each of these interactions in a baseline before any paint moves**, in both engines: row
+hover, row hover **while a DIFFERENT row is keyboard-selected** (that is what the `activeIndex !== idx`
+guard exists for — a `:hover` rule that ignores it lights up two rows at once), and input focus. No
+rest shot photographs a hover.
 
 The guard is the subtle part: `:hover` alone re-implements the mechanism WRONG. Use
 `:hover:not([data-active])` (or the equivalent on whatever attribute carries `activeIndex === idx`)

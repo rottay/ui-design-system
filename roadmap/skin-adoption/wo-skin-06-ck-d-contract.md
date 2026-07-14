@@ -62,12 +62,31 @@ overrides header/record chrome that way. Do not assume your skin is the last wor
    `engines/modern.tsx:598,601` and `engines/rustic.tsx:672,675`, on mouse enter/leave. An earlier
    revision of this contract placed them in `form-sections`; that was WRONG (form-sections has zero,
    grep-confirmed — the R pre-step agent caught it by reading the code instead of obeying the brief).
-   They use the `(e.currentTarget as HTMLDivElement).style.background =` shape, which **the counter
-   is BLIND to** — filter-builder can reach `inlinePaint: 0` with the hover mechanism fully intact
-   and inline. Check whether any CSS competes with them before transcribing (the identical mechanism
-   was LIVE in one component and DEAD in another elsewhere in this program). Transcribe each to a
-   `:hover` rule on the SAME element it wrote to, and PIN the hover in the spec first — a pixel gate
-   only catches what a baseline photographs, and no rest shot photographs a hover.
+   They use the `(e.currentTarget as HTMLDivElement).style.background =` shape.
+
+   **CORRECTION (2026-07-13, and it matters because two contracts inherited the error): the counter
+   is NOT blind to these.** `scripts/lib/inline-paint-counter.mjs:227-240` has an explicit `.style.`
+   branch that counts both the assignment form and `.style.setProperty('paint-prop', …)`, and its own
+   doc comment says it exists precisely so a migration cannot reach 0 while still mutating paint
+   imperatively. The arithmetic reconciles to the byte: filter-builder modern = 76 object-literal keys
+   + 2 imperative = 78; rustic = 37 + 2 = 39. A migration agent proved this by reading the lexer
+   instead of believing the brief.
+
+   **The precise boundary** — the lexer matches the literal substring `.style.`. Here the cast sits on
+   the ELEMENT, so `.style.background` survives intact and is counted. What IS blind is
+   `(el.style as any).background = …`, where the cast sits BETWEEN `.style` and the property, leaving
+   no `.style.` substring. Two different shapes; do not conflate them as this contract originally did.
+
+   **Why the pin still earns its place**: the counter sees *that* a write exists, never *what it
+   wrote*. Delete a handler and re-add it with the wrong colour and the counter stays perfectly happy.
+   The baseline pin is the only thing that catches a wrong value.
+
+   So: check whether any CSS competes with them before transcribing (the identical mechanism was LIVE
+   in one component and DEAD in another elsewhere in this program). Transcribe each to a `:hover` rule
+   on the SAME element it wrote to, and PIN the hover in the spec first — no rest shot photographs a
+   hover. **The two engines' values DIFFER** (modern `var(--ds-color-bg-secondary)`; rustic
+   `var(--ds-color-bg-secondary, var(--ds-color-bg-muted))`). Transcribe each verbatim; the fallback
+   is part of the value.
 6. **Local `@keyframes` shadow a global of the same name and win** (last parsed). Rename + namespace
    every keyframe you move; never delete a local "duplicate" without measuring which one paints.
 7. Scope classes grep-verified FREE across CSS **and** CSS-in-JS. Text colour painted inline via
