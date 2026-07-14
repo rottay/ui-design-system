@@ -89,6 +89,8 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
   const color = STATUS_COLORS[state];
   return (
     <Flex
+      data-part="status-dot"
+      data-state={state}
       align="center"
       gap={2}
       style={{
@@ -98,6 +100,8 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
       }}
     >
       <Box
+        data-part="status-dot-glyph"
+        data-state={state}
         style={{
           width: 6,
           height: 6,
@@ -107,7 +111,7 @@ function StatusDot({ state, label }: { state: DashboardStatusState; label?: stri
           animation: state === 'live' || state === 'syncing' ? 'pulse 2s infinite' : undefined,
         }}
       />
-      <Text size="xs" style={{ color, whiteSpace: 'nowrap', fontWeight: 500 }}>
+      <Text data-part="status-dot-text" data-state={state} size="xs" style={{ color, whiteSpace: 'nowrap', fontWeight: 500 }}>
         {label ?? state.charAt(0).toUpperCase() + state.slice(1)}
       </Text>
     </Flex>
@@ -129,6 +133,7 @@ function MetricChip({ metric }: { metric: DashboardMetric }) {
 
   return (
     <Flex
+      data-part="metric-chip"
       align="center"
       gap={2}
       style={{
@@ -139,20 +144,20 @@ function MetricChip({ metric }: { metric: DashboardMetric }) {
       }}
     >
       {metric.icon && (
-        <Box style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>
+        <Box data-part="metric-chip-icon" style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>
           {metric.icon}
         </Box>
       )}
       <Box>
-        <Text size="xs" color="muted" style={{ lineHeight: 1.2 }}>
+        <Text data-part="metric-chip-label" size="xs" color="muted" style={{ lineHeight: 1.2 }}>
           {metric.label}
         </Text>
         <Flex align="baseline" gap={1}>
-          <Text size="sm" weight="semibold" style={{ lineHeight: 1.2 }}>
+          <Text data-part="metric-chip-value" size="sm" weight="semibold" style={{ lineHeight: 1.2 }}>
             {metric.value}
           </Text>
           {metric.change && (
-            <Text size="xs" style={{ color: changeColor, lineHeight: 1.2 }}>
+            <Text data-part="metric-chip-change" data-direction={metric.change.direction} size="xs" style={{ color: changeColor, lineHeight: 1.2 }}>
               {metric.change.direction === 'up' ? '+' : metric.change.direction === 'down' ? '-' : ''}
               {metric.change.value}
             </Text>
@@ -182,6 +187,9 @@ export function DashboardHeader({
   if (compact) {
     return (
       <Box
+        data-part="root"
+        data-compact="true"
+        className="ds-structure ds-dashboard-header"
         as="header"
         role="banner"
         aria-label={title}
@@ -192,14 +200,15 @@ export function DashboardHeader({
       >
         <Flex justify="between" align="center" gap={3}>
           <Flex align="center" gap={2} style={{ flex: 1, minWidth: 0 }}>
-            {icon && <Box aria-hidden="true" style={{ flexShrink: 0, color: 'var(--ds-color-text-muted)' }}>{icon}</Box>}
-            <Text size="md" weight="semibold" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+            {icon && <Box data-part="icon" aria-hidden="true" style={{ flexShrink: 0, color: 'var(--ds-color-text-muted)' }}>{icon}</Box>}
+            <Text data-part="title" size="md" weight="semibold" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {title}
             </Text>
             {status && <StatusDot state={status.state} label={status.label} />}
           </Flex>
           {actions && actions.length > 0 && (
             <Box
+              data-part="actions"
               role="toolbar"
               aria-label="Actions"
               style={{ display: 'flex', gap: 4 }}
@@ -211,6 +220,7 @@ export function DashboardHeader({
                   size="sm"
                   onClick={action.onClick}
                   aria-label={action.label}
+                  className="ds-dashboard-header__action"
                 >
                   {action.icon ?? action.label}
                 </Button>
@@ -221,6 +231,8 @@ export function DashboardHeader({
         {/* Scrollable metric chips in compact */}
         {metrics && metrics.length > 0 && (
           <Box
+            data-part="metrics-row"
+            data-compact="true"
             role="group"
             aria-label="Key metrics"
             style={{
@@ -244,6 +256,9 @@ export function DashboardHeader({
   // ---------- Full mode (desktop / tablet) ----------
   return (
     <Box
+      data-part="root"
+      data-compact="false"
+      className="ds-structure ds-dashboard-header"
       as="header"
       role="banner"
       aria-label={title}
@@ -257,20 +272,20 @@ export function DashboardHeader({
       <Flex justify="between" align="center" gap={4} style={{ marginBottom: metrics || searchSlot || timeRangeSlot ? 12 : 0 }}>
         <Box style={{ flex: 1, minWidth: 0 }}>
           <Flex align="center" gap={3}>
-            {icon && <Box aria-hidden="true" style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>{icon}</Box>}
+            {icon && <Box data-part="icon" aria-hidden="true" style={{ color: 'var(--ds-color-text-muted)', flexShrink: 0 }}>{icon}</Box>}
             <Box>
               <Flex align="center" gap={2}>
-                <Text size="xl" weight="semibold">{title}</Text>
+                <Text data-part="title" size="xl" weight="semibold">{title}</Text>
                 {status && <StatusDot state={status.state} label={status.label} />}
               </Flex>
               {subtitle && (
-                <Text size="sm" color="muted" style={{ marginTop: 2 }}>{subtitle}</Text>
+                <Text data-part="subtitle" size="sm" color="muted" style={{ marginTop: 2 }}>{subtitle}</Text>
               )}
             </Box>
           </Flex>
         </Box>
 
-        <Flex align="center" gap={3}>
+        <Flex data-part="actions" align="center" gap={3}>
           {timeRangeSlot}
           {searchSlot}
           {actions && actions.map((action) => (
@@ -280,6 +295,7 @@ export function DashboardHeader({
               size="sm"
               onClick={action.onClick}
               icon={action.icon}
+              className="ds-dashboard-header__action"
             >
               {action.label}
             </Button>
@@ -289,7 +305,7 @@ export function DashboardHeader({
 
       {/* Row 2: metric chips */}
       {metrics && metrics.length > 0 && (
-        <Box role="group" aria-label="Key metrics" style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+        <Box data-part="metrics-row" data-compact="false" role="group" aria-label="Key metrics" style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
           {metrics.map((m) => (
             <MetricChip key={m.key} metric={m} />
           ))}

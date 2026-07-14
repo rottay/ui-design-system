@@ -120,6 +120,8 @@ export function CollectionHeader({
   const belowMetaItems = metaItemsPlacement === 'below' ? compactMetaItems : [];
   const eyebrowChip = eyebrow ? (
     <Text
+      data-part="eyebrow"
+      data-embedded={embedded}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -164,6 +166,8 @@ export function CollectionHeader({
 
     return (
       <Box
+        data-part="meta-item"
+        data-tone={item.tone ?? 'neutral'}
         key={item.key}
         style={{
           display: 'inline-flex',
@@ -186,6 +190,9 @@ export function CollectionHeader({
 
   return (
     <Box
+      data-part="root"
+      data-embedded={embedded}
+      className="ds-structure ds-collection-header"
       style={{
         position: 'relative',
         overflow: 'hidden',
@@ -225,6 +232,10 @@ export function CollectionHeader({
           }}
         >
           <Box
+            data-part="title"
+            data-title-treatment={titleTreatment}
+            data-compact-layout={compactLayout}
+            data-editorial-tech={editorialTech}
             as="h2"
             style={{
               fontFamily: useDisplayTitle
@@ -330,6 +341,7 @@ export function CollectionHeader({
               }}
             >
               <Box
+                data-part="subtitle-divider"
                 style={{
                   flexShrink: 0,
                   width: 28,
@@ -340,6 +352,10 @@ export function CollectionHeader({
                 }}
               />
               <Text
+                data-part="subtitle"
+                data-variant="editorial-tech"
+                data-title-treatment={titleTreatment}
+                data-subtitle-treatment={subtitleTreatment}
                 style={{
                   display: 'block',
                   fontSize: useDisplayTitle
@@ -381,7 +397,7 @@ export function CollectionHeader({
             >
               <Box
                 aria-hidden
-                data-ds-collection-title-accent="true"
+                data-part="title-accent"
                 style={{
                   width: 3,
                   minHeight: compactLayout ? 28 : 34,
@@ -393,6 +409,11 @@ export function CollectionHeader({
                 }}
               />
               <Text
+                data-part="subtitle"
+                data-variant="default"
+                data-title-treatment={titleTreatment}
+                data-subtitle-treatment={subtitleTreatment}
+                data-compact-layout={compactLayout}
                 style={{
                   display: 'block',
                   fontSize: useDisplayTitle
@@ -430,6 +451,7 @@ export function CollectionHeader({
           )}
           {editorialTech && !compactLayout && (
             <Box
+              data-part="editorial-tech-rule"
               style={{
                 marginTop: 'var(--ds-spacing-3, 12px)',
                 height: 1,
@@ -443,6 +465,7 @@ export function CollectionHeader({
 
         {quickActions && quickActions.length > 0 && (
           <Box
+            data-part="secondary-rail"
             style={{
               flexShrink: 1,
               flex: compactLayout ? '1 1 100%' : '1 1 min(100%, 420px)',
@@ -470,6 +493,9 @@ export function CollectionHeader({
               </Flex>
             )}
             <Box
+              data-part="quick-actions"
+              data-embedded={embedded}
+              data-editorial-tech={editorialTech}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -520,6 +546,7 @@ export function CollectionHeader({
                           : 'default'
                     }
                     onClick={action.onClick}
+                    className={`ds-collection-header__quick-action ds-collection-header__quick-action--${action.variant ?? 'default'}`}
                     style={{
                       minHeight: 'var(--ds-spacing-8, 32px)',
                       paddingInline: action.variant === 'primary' ? 'var(--ds-spacing-3, 12px)' : 'var(--ds-spacing-3, 12px)',
@@ -530,6 +557,7 @@ export function CollectionHeader({
                   >
                     {action.icon && (
                       <Box
+                        data-part="quick-action-icon"
                         as="span"
                         style={{
                           display: 'inline-flex',
@@ -563,6 +591,7 @@ export function CollectionHeader({
                 {shortcuts && shortcuts.length > 0 && (
                   <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
                     <Box
+                      data-part="shortcuts-label"
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -581,11 +610,12 @@ export function CollectionHeader({
                         textTransform: 'uppercase' as const,
                       }}
                     >
-                      <Keyboard style={{ width: 10, height: 10 }} />
+                      <Keyboard data-part="shortcuts-label-icon" style={{ width: 10, height: 10 }} />
                       Shortcuts
                     </Box>
                     {shortcuts.map((shortcut) => (
                       <Box
+                        data-part="shortcut-pill"
                         key={shortcut.key}
                         style={{
                           display: 'inline-flex',
@@ -616,6 +646,7 @@ export function CollectionHeader({
 
         {!quickActions?.length && (eyebrowChip || compactMetaItems.length > 0 || (shortcuts && shortcuts.length > 0)) && (
           <Box
+            data-part="secondary-rail"
             style={{
               flexShrink: 1,
               flex: compactLayout ? '1 1 100%' : '1 1 min(100%, 420px)',
@@ -645,6 +676,7 @@ export function CollectionHeader({
               <Flex align="center" gap={8} wrap="wrap" justify={compactLayout ? 'start' : 'end'}>
                 {shortcuts.map((shortcut) => (
                   <Box
+                    data-part="shortcut-pill"
                     key={shortcut.key}
                     style={{
                       display: 'inline-flex',

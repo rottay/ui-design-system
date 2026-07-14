@@ -98,6 +98,8 @@ function QuickActionButton({ action }: { action: WorkbenchQuickAction }) {
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
+      data-part="action"
+      data-variant={variant}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -146,6 +148,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       aria-label="Go back"
+      data-part="back"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -214,6 +217,8 @@ function SavedViewTab({
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
+      data-part="tab"
+      data-active={isActive ? 'true' : 'false'}
       style={{
         position: 'relative',
         padding: '8px 16px',
@@ -257,6 +262,7 @@ const PULSE_STYLE: React.CSSProperties = {
 function SkeletonBlock(props: { width: number | string; height: number; style?: React.CSSProperties }) {
   return (
     <div
+      data-part="skeleton"
       style={{
         width: props.width,
         height: props.height,
@@ -315,6 +321,8 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
     return (
       <div
         className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
+        data-part="root"
+        data-loading="true"
         style={containerStyle}
       >
         <div
@@ -362,10 +370,13 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
   return (
     <div
       className={`ds-pattern-workbench-header ds-engine-modern ${className ?? ''}`}
+      data-part="root"
+      data-loading="false"
       style={containerStyle}
     >
       {/* ---- Header row: back + title + badge | quick actions ---- */}
       <div
+        data-part="header-row"
         style={{
           display: 'flex',
           alignItems: 'flex-start',
@@ -376,6 +387,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
       >
         {/* Left: title group */}
         <div
+          data-part="lead"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -385,8 +397,9 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
           }}
         >
           {/* Title + subtitle column */}
-          <div style={{ minWidth: 0, flex: 1 }}>
+          <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
             <div
+              data-part="title-row"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -394,6 +407,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
               }}
             >
               <h2
+                data-part="title"
                 style={{
                   margin: 0,
                   fontSize: 20,
@@ -412,6 +426,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
               {/* Exception count badge */}
               {exceptionCount != null && exceptionCount > 0 && (
                 <span
+                  data-part="exception"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -448,6 +463,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
             {/* Subtitle */}
             {subtitle && (
               <p
+                data-part="subtitle"
                 style={{
                   margin: '4px 0 0',
                   fontSize: 13,
@@ -467,6 +483,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
         {/* Right: quick action buttons */}
         {quickActions && quickActions.length > 0 && (
           <div
+            data-part="actions"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -487,6 +504,7 @@ export default function ModernWorkbenchHeader(props: WorkbenchHeaderProps) {
         <div
           role="tablist"
           aria-label="Saved views"
+          data-part="tabs"
           style={{
             display: 'flex',
             alignItems: 'center',

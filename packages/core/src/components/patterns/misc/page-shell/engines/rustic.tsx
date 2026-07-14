@@ -63,7 +63,12 @@ export default function RusticPageShell(props: PageShellProps) {
   /* Plain text loading indicator using muted color token */
   if (loading) {
     return (
-      <div className={className} style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)', ...containerStyle }}>
+      <div
+        className={`ds-pattern-page-shell ds-engine-rustic ${className ?? ''}`}
+        data-part="root"
+        data-loading="true"
+        style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)', ...containerStyle }}
+      >
         Loading...
       </div>
     );
@@ -88,25 +93,36 @@ export default function RusticPageShell(props: PageShellProps) {
   };
 
   return (
-    <div className={className} style={containerStyle}>
+    <div
+      className={`ds-pattern-page-shell ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
+      data-loading="false"
+      style={containerStyle}
+    >
       {/* Custom breadcrumb nav: flex-wrap handles overflow on narrow screens.
            Clickable crumbs get primary link color; terminal crumbs are muted. */}
       {breadcrumbs && breadcrumbs.length > 0 && (
-        <nav style={{ marginBottom: 16, display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+        <nav data-part="breadcrumb" style={{ marginBottom: 16, display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
           {breadcrumbs.map((bc, i) => (
             <React.Fragment key={i}>
               {/* "/" separator between items; omitted before the first crumb */}
-              {i > 0 && <span style={separatorStyle}>/</span>}
+              {i > 0 && <span data-part="separator" style={separatorStyle}>/</span>}
               {bc.href || bc.onClick ? (
                 <a
                   href={bc.href ?? '#'}
                   onClick={bc.onClick ? (e) => { e.preventDefault(); bc.onClick!(); } : undefined}
+                  data-part="crumb"
+                  data-interactive="true"
                   style={linkStyle}
                 >
                   {bc.label}
                 </a>
               ) : (
-                <span style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)' }}>
+                <span
+                  data-part="crumb"
+                  data-interactive="false"
+                  style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)' }}
+                >
                   {bc.label}
                 </span>
               )}
@@ -116,12 +132,13 @@ export default function RusticPageShell(props: PageShellProps) {
       )}
 
       {/* Header row: back + title on left, action buttons on right */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div data-part="header-row" style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
+        <div data-part="lead" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           {/* Back button uses HTML arrow entity (&#8592;) to avoid icon library dependency */}
           {back && (
             <button
               onClick={back.onClick}
+              data-part="back"
               style={{
                 background: 'none',
                 border: 'none',
@@ -138,32 +155,34 @@ export default function RusticPageShell(props: PageShellProps) {
               &#8592; {back.label}
             </button>
           )}
-          <div>
+          <div data-part="titles">
             {/* Title + badge inline; lineHeight 1.3 prevents badge vertical misalignment */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <h1 style={{ margin: 0, fontSize: 24, fontWeight: 600, color: 'var(--ds-color-text)', lineHeight: 1.3 }}>
+            <div data-part="title-row" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <h1 data-part="title" style={{ margin: 0, fontSize: 24, fontWeight: 600, color: 'var(--ds-color-text)', lineHeight: 1.3 }}>
                 {title}
               </h1>
               {badge}
             </div>
             {subtitle && (
-              <p style={{ margin: '4px 0 0', fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)' }}>
+              <p data-part="subtitle" style={{ margin: '4px 0 0', fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)' }}>
                 {subtitle}
               </p>
             )}
           </div>
         </div>
-        {actions && <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>{actions}</div>}
+        {actions && <div data-part="actions" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>{actions}</div>}
       </div>
 
       {/* Tab bar -- active tab highlighted with primary-colored 2px bottom border */}
       {tabs && tabs.length > 0 && (
         <div>
-          <div style={{ display: 'flex', borderBottom: '1px solid var(--ds-color-neutral-200)', marginBottom: 24, gap: 0 }}>
+          <div data-part="tabs" style={{ display: 'flex', borderBottom: '1px solid var(--ds-color-neutral-200)', marginBottom: 24, gap: 0 }}>
             {tabs.map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => onTabChange?.(tab.key)}
+                data-part="tab"
+                data-active={activeTabKey === tab.key ? 'true' : 'false'}
                 style={{
                   padding: '8px 16px',
                   background: 'none',

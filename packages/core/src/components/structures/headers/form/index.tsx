@@ -225,6 +225,8 @@ export function FormHeader({
 
   return (
     <Box
+      data-part="root"
+      className="ds-structure ds-form-header"
       style={{
         width: '100%',
         background: 'var(--ds-surface-card, var(--ds-color-bg-elevated))',
@@ -236,6 +238,7 @@ export function FormHeader({
       }}
     >
       <Box
+        data-part="top-bar"
         style={{
           padding: '12px 24px',
           borderBottom: '1px solid var(--ds-color-border-secondary)',
@@ -247,6 +250,7 @@ export function FormHeader({
             {renderHrefAnchor(
               backHref,
               <Flex
+                data-part="back-button"
                 align="center"
                 gap={8}
                 style={{
@@ -258,8 +262,8 @@ export function FormHeader({
                   transition: 'all 0.2s ease',
                 }}
               >
-                <ArrowLeftIcon style={{ width: 14, height: 14, color: 'var(--ds-color-text-secondary)' }} />
-                <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14, color: 'var(--ds-color-text-secondary)' }} />
+                <Text data-part="back-label" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {backLabel}
                 </Text>
               </Flex>,
@@ -268,13 +272,13 @@ export function FormHeader({
 
             {breadcrumbItems && breadcrumbItems.length > 0 ? (
               <>
-                <Box style={{ width: 1, height: 18, background: 'var(--ds-color-border-secondary)' }} />
+                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18, background: 'var(--ds-color-border-secondary)' }} />
                 <Breadcrumb items={breadcrumbItems} />
               </>
             ) : null}
           </Flex>
 
-          <Flex align="center" gap={12} wrap="wrap">
+          <Flex data-part="actions" align="center" gap={12} wrap="wrap">
             {resolvedActions.map((headerAction, index) => {
               const ActionIcon = resolveSharedHeaderActionIcon(headerAction);
 
@@ -297,9 +301,10 @@ export function FormHeader({
         </Flex>
       </Box>
 
-      <Box style={{ padding: 28, ...buildPatternStyle(archetype) }}>
+      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: 28, ...buildPatternStyle(archetype) }}>
         <Flex align="center" gap={16}>
           <Box
+            data-part="icon-badge"
             style={{
               width: 52,
               height: 52,
@@ -312,11 +317,12 @@ export function FormHeader({
               flexShrink: 0,
             }}
           >
-            <MainIcon style={{ width: 22, height: 22, color: iconTone.color }} />
+            <MainIcon data-part="icon-badge-glyph" style={{ width: 22, height: 22, color: iconTone.color }} />
           </Box>
           <Stack spacing="xs" style={{ minWidth: 0 }}>
             {eyebrow ? (
               <Text
+                data-part="eyebrow"
                 size="xs"
                 weight="bold"
                 style={{
@@ -329,11 +335,11 @@ export function FormHeader({
                 {eyebrow}
               </Text>
             ) : null}
-            <Text style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ds-color-text-primary)' }}>
+            <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-0.03em', color: 'var(--ds-color-text-primary)' }}>
               {title}
             </Text>
             {subtitle && (
-              <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+              <Text data-part="subtitle" size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
                 {subtitle}
               </Text>
             )}
@@ -342,6 +348,7 @@ export function FormHeader({
 
         {contextRail || children ? (
           <Box
+            data-part="context-card"
             style={{
               marginTop: 22,
               padding: '16px 18px 18px',
@@ -361,9 +368,9 @@ export function FormHeader({
               backdropFilter: 'blur(8px)',
             }}
           >
-            {contextRail ? <Box>{contextRail}</Box> : null}
+            {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
             {children ? (
-              <Box style={{ marginTop: contextRail ? 18 : 0 }}>
+              <Box data-part="context-card-children" style={{ marginTop: contextRail ? 18 : 0 }}>
                 {children}
               </Box>
             ) : null}

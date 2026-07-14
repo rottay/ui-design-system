@@ -233,6 +233,8 @@ export function EditHeader({
   if (loading) {
     return (
       <Box
+        data-part="root"
+        data-loading="true"
         style={{
           position: 'relative',
           overflow: 'hidden',
@@ -251,6 +253,8 @@ export function EditHeader({
 
   return (
     <Box
+      data-part="root"
+      className="ds-structure ds-edit-header"
       style={{
         width: '100%',
         background: 'var(--ds-surface-card, var(--ds-color-bg-elevated))',
@@ -261,6 +265,7 @@ export function EditHeader({
       }}
     >
       <Box
+        data-part="top-bar"
         style={{
           padding: '12px 24px',
           borderBottom: '1px solid var(--ds-color-border-secondary)',
@@ -272,6 +277,7 @@ export function EditHeader({
             {renderHrefAnchor(
               backHref,
               <Flex
+                data-part="back-button"
                 align="center"
                 gap={8}
                 className="back-button"
@@ -283,8 +289,8 @@ export function EditHeader({
                   cursor: 'pointer',
                 }}
               >
-                <ArrowLeftOutlined style={{ fontSize: 14, color: 'var(--ds-color-text-secondary)' }} />
-                <Text size="xs" weight="medium" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <ArrowLeftOutlined data-part="back-icon" style={{ fontSize: 14, color: 'var(--ds-color-text-secondary)' }} />
+                <Text data-part="back-label" size="xs" weight="medium" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {backLabel}
                 </Text>
               </Flex>,
@@ -293,23 +299,23 @@ export function EditHeader({
 
             {breadcrumb && breadcrumb.length > 0 && (
               <>
-                <Box style={{ width: 1, height: 16, background: 'var(--ds-color-border-secondary)' }} />
+                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 16, background: 'var(--ds-color-border-secondary)' }} />
                 <Flex align="center" gap={8}>
                   {breadcrumb.map((item, index) => (
                     <Flex key={index} align="center" gap={8}>
                       {index > 0 && (
-                        <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>/</Text>
+                        <Text data-part="breadcrumb-separator" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>/</Text>
                       )}
                       {item.href ? (
                         renderHrefAnchor(
                           item.href,
-                          <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }} className="breadcrumb-link">
+                          <Text data-part="breadcrumb-link" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }} className="breadcrumb-link">
                             {item.label}
                           </Text>,
                           { textDecoration: 'none' },
                         )
                       ) : (
-                        <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                        <Text data-part="breadcrumb-item" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
                           {item.label}
                         </Text>
                       )}
@@ -323,6 +329,7 @@ export function EditHeader({
           <Flex align="center" gap={16}>
             {entityId && (
               <Text
+                data-part="entity-id"
                 size="xs"
                 style={{
                   color: 'var(--ds-color-text-secondary)',
@@ -339,11 +346,12 @@ export function EditHeader({
         </Flex>
       </Box>
 
-      <Box style={{ padding: '28px', ...buildPatternStyle(archetype) }}>
+      <Box data-part="hero-panel" data-archetype={archetype} style={{ padding: '28px', ...buildPatternStyle(archetype) }}>
         <Flex justify="between" align="center" gap={20} wrap="wrap">
           <Flex align="center" gap={20}>
             {Icon && (
               <Box
+                data-part="icon-badge"
                 style={{
                   width: 52,
                   height: 52,
@@ -355,12 +363,13 @@ export function EditHeader({
                   borderRadius: 14,
                 }}
               >
-                <Icon style={{ width: 24, height: 24, color: iconTone.color }} />
+                <Icon data-part="icon-badge-glyph" style={{ width: 24, height: 24, color: iconTone.color }} />
               </Box>
             )}
             <Stack spacing="xs">
               {eyebrow ? (
                 <Text
+                  data-part="eyebrow"
                   size="xs"
                   weight="bold"
                   style={{
@@ -374,11 +383,12 @@ export function EditHeader({
                 </Text>
               ) : null}
               <Flex align="center" gap={12}>
-                <Text style={{ fontSize: 28, fontWeight: 700, color: 'var(--ds-color-text-primary)', letterSpacing: '-0.03em' }}>
+                <Text data-part="title" style={{ fontSize: 28, fontWeight: 700, color: 'var(--ds-color-text-primary)', letterSpacing: '-0.03em' }}>
                   {title}
                 </Text>
                 {status && (
                   <Box
+                    data-part="status-pill"
                     style={{
                       padding: '4px 12px',
                       background: statusTone.background,
@@ -386,19 +396,19 @@ export function EditHeader({
                       borderRadius: 999,
                     }}
                   >
-                    <Text size="xs" weight="medium" style={{ color: statusTone.color, textTransform: 'capitalize' }}>
+                    <Text data-part="status-pill-text" size="xs" weight="medium" style={{ color: statusTone.color, textTransform: 'capitalize' }}>
                       {status.label}
                     </Text>
                   </Box>
                 )}
               </Flex>
               {subtitle && (
-                <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{subtitle}</Text>
+                <Text data-part="subtitle" size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>{subtitle}</Text>
               )}
             </Stack>
           </Flex>
 
-          <Flex gap={12} wrap="wrap" style={{ marginLeft: 'auto' }}>
+          <Flex data-part="actions" gap={12} wrap="wrap" style={{ marginLeft: 'auto' }}>
             {actions.map((action, index) => {
               const ActionIcon = resolveSharedHeaderActionIcon(action);
 
@@ -442,6 +452,7 @@ export function EditHeader({
 
         {contextRail || children ? (
           <Box
+            data-part="context-card"
             style={{
               marginTop: 22,
               padding: '16px 18px 18px',
@@ -461,9 +472,9 @@ export function EditHeader({
               backdropFilter: 'blur(8px)',
             }}
           >
-            {contextRail ? <Box>{contextRail}</Box> : null}
+            {contextRail ? <Box data-part="context-rail">{contextRail}</Box> : null}
             {children ? (
-              <Box style={{ marginTop: contextRail ? 18 : 0 }}>
+              <Box data-part="context-card-children" style={{ marginTop: contextRail ? 18 : 0 }}>
                 {children}
               </Box>
             ) : null}

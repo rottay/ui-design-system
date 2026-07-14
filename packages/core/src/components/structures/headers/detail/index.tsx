@@ -184,6 +184,8 @@ function renderAvatarNode(avatar: string | ReactNode, title: string) {
     if (avatar.startsWith('http') || avatar.startsWith('/')) {
       return (
         <Box
+          data-part="avatar"
+          data-variant="image"
           style={{
             width: 68,
             height: 68,
@@ -203,6 +205,8 @@ function renderAvatarNode(avatar: string | ReactNode, title: string) {
 
     return (
       <Box
+        data-part="avatar"
+        data-variant="initials"
         style={{
           width: 68,
           height: 68,
@@ -268,6 +272,8 @@ export function DetailHeader({
 
   return (
     <Box
+      data-part="root"
+      className="ds-structure ds-detail-header"
       style={{
         width: '100%',
         background: 'var(--ds-surface-card, var(--ds-color-bg-elevated))',
@@ -279,6 +285,7 @@ export function DetailHeader({
       }}
     >
       <Box
+        data-part="top-bar"
         style={{
           padding: '12px 24px',
           borderBottom: `1px solid ${sharedBorder}`,
@@ -290,6 +297,7 @@ export function DetailHeader({
             {renderHrefAnchor(
               backHref,
               <Flex
+                data-part="back-button"
                 align="center"
                 gap={8}
                 style={{
@@ -299,8 +307,8 @@ export function DetailHeader({
                   background: 'transparent',
                 }}
               >
-                <ArrowLeftIcon style={{ width: 14, height: 14, color: sharedTextSecondary }} />
-                <Text size="xs" style={{ color: sharedTextSecondary }}>
+                <ArrowLeftIcon data-part="back-icon" style={{ width: 14, height: 14, color: sharedTextSecondary }} />
+                <Text data-part="back-label" size="xs" style={{ color: sharedTextSecondary }}>
                   {backLabel}
                 </Text>
               </Flex>,
@@ -309,7 +317,7 @@ export function DetailHeader({
 
             {breadcrumbItems && breadcrumbItems.length > 0 ? (
               <>
-                <Box style={{ width: 1, height: 18, background: sharedBorder }} />
+                <Box data-part="breadcrumb-divider" style={{ width: 1, height: 18, background: sharedBorder }} />
                 <Breadcrumb items={breadcrumbItems} />
               </>
             ) : null}
@@ -342,6 +350,8 @@ export function DetailHeader({
       </Box>
 
       <Box
+        data-part="hero-panel"
+        data-archetype={archetype}
         style={{
           padding: 28,
           ...buildPatternStyle(archetype),
@@ -354,6 +364,7 @@ export function DetailHeader({
             <Stack spacing="sm" style={{ minWidth: 0, flex: 1 }}>
               {eyebrow ? (
                 <Text
+                  data-part="eyebrow"
                   size="xs"
                   weight="bold"
                   style={{
@@ -369,6 +380,8 @@ export function DetailHeader({
 
               <Flex align="center" gap={12} wrap="wrap">
                 <Box
+                  data-part="title"
+                  data-archetype={archetype}
                   as="h1"
                   style={{
                     margin: 0,
@@ -385,13 +398,13 @@ export function DetailHeader({
               </Flex>
 
               {subtitle ? (
-                <Text size="sm" style={{ color: sharedTextSecondary, lineHeight: 1.65, maxWidth: 780 }}>
+                <Text data-part="subtitle" size="sm" style={{ color: sharedTextSecondary, lineHeight: 1.65, maxWidth: 780 }}>
                   {subtitle}
                 </Text>
               ) : null}
 
               {contextRail ? (
-                <Box style={{ marginTop: 2 }}>
+                <Box data-part="context-rail" style={{ marginTop: 2 }}>
                   {contextRail}
                 </Box>
               ) : null}
@@ -401,6 +414,7 @@ export function DetailHeader({
 
         {visibleMetadata.length > 0 || children ? (
           <Box
+            data-part="metadata-card"
             style={{
               marginTop: 24,
               padding: '16px 18px 18px',
@@ -424,6 +438,7 @@ export function DetailHeader({
               <Flex gap={12} wrap="wrap">
                 {visibleMetadata.map((item, index) => (
                   <Flex
+                    data-part="metadata-chip"
                     key={`${item.label}-${index}`}
                     align="center"
                     gap={8}
@@ -437,6 +452,7 @@ export function DetailHeader({
                   >
                     {item.icon ? <item.icon style={{ width: 14, height: 14, color: sharedTextMuted }} /> : null}
                     <Text
+                      data-part="metadata-chip-label"
                       size="xs"
                       weight="bold"
                       style={{
@@ -449,6 +465,7 @@ export function DetailHeader({
                       {item.label}
                     </Text>
                     <Text
+                      data-part="metadata-chip-value"
                       size="sm"
                       weight="medium"
                       style={{
@@ -465,7 +482,7 @@ export function DetailHeader({
             ) : null}
 
             {children ? (
-              <Box style={{ marginTop: visibleMetadata.length > 0 ? 18 : 0 }}>
+              <Box data-part="metadata-card-children" style={{ marginTop: visibleMetadata.length > 0 ? 18 : 0 }}>
                 {children}
               </Box>
             ) : null}
@@ -475,6 +492,7 @@ export function DetailHeader({
 
       {tabs && tabs.length > 0 ? (
         <Box
+          data-part="tab-strip"
           style={{
             borderTop: `1px solid ${sharedBorder}`,
             padding: '10px 18px 0',
@@ -488,6 +506,8 @@ export function DetailHeader({
 
               return (
                 <Box
+                  data-part="tab"
+                  data-active={isActive}
                   key={tab.id}
                   onClick={() => onTabChange?.(tab.id)}
                   style={{
@@ -505,6 +525,8 @@ export function DetailHeader({
                   <Flex align="center" gap={8}>
                     {TabIcon ? (
                       <TabIcon
+                        data-part="tab-icon"
+                        data-active={isActive}
                         style={{
                           width: 14,
                           height: 14,
@@ -513,6 +535,8 @@ export function DetailHeader({
                       />
                     ) : null}
                     <Text
+                      data-part="tab-label"
+                      data-active={isActive}
                       size="sm"
                       weight={isActive ? 'medium' : undefined}
                       style={{ color: isActive ? sharedTextPrimary : sharedTextSecondary }}
@@ -521,13 +545,14 @@ export function DetailHeader({
                     </Text>
                     {tab.count !== undefined ? (
                       <Box
+                        data-part="tab-count"
                         style={{
                           padding: '2px 6px',
                           borderRadius: 999,
                           background: 'color-mix(in srgb, var(--ds-color-bg-primary) 36%, transparent)',
                         }}
                       >
-                        <Text size="xs" weight="medium" style={{ color: isActive ? sharedTextPrimary : sharedTextSecondary }}>
+                        <Text data-part="tab-count-text" data-active={isActive} size="xs" weight="medium" style={{ color: isActive ? sharedTextPrimary : sharedTextSecondary }}>
                           {tab.count}
                         </Text>
                       </Box>

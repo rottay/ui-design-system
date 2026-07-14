@@ -92,6 +92,9 @@ function BreadcrumbLink({
     return (
       <a
         href={href}
+        data-part="crumb"
+        data-interactive="true"
+        data-last="false"
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         style={{
@@ -111,6 +114,9 @@ function BreadcrumbLink({
 
   return (
     <span
+      data-part="crumb"
+      data-interactive="false"
+      data-last={isLast ? 'true' : 'false'}
       style={{
         color: isLast
           ? 'var(--ds-color-text-secondary)'
@@ -145,6 +151,7 @@ function BackButton({ onClick }: { onClick: () => void }) {
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       aria-label="Go back"
+      data-part="back"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -193,6 +200,8 @@ function StatusPill({ status }: { status: CockpitStatus }) {
   const pillStyle = STATUS_PILL_STYLES[status.variant];
   return (
     <span
+      data-part="status"
+      data-variant={status.variant}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -260,6 +269,8 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
     return (
       <div
         className={`ds-pattern-cockpit-header ds-engine-modern ${className ?? ''}`}
+        data-part="root"
+        data-loading="true"
         style={{
           background: 'var(--ds-surface-card)',
           borderBottom: '1px solid var(--ds-color-border-subtle)',
@@ -270,6 +281,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {/* Breadcrumb skeleton */}
           <div
+            data-part="skeleton"
             style={{
               width: 160,
               height: 12,
@@ -289,6 +301,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               <div
+                data-part="skeleton"
                 style={{
                   width: 34,
                   height: 34,
@@ -299,6 +312,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
               />
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <div
+                  data-part="skeleton"
                   style={{
                     width: 260,
                     height: 24,
@@ -308,6 +322,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                   }}
                 />
                 <div
+                  data-part="skeleton"
                   style={{
                     width: 180,
                     height: 14,
@@ -321,6 +336,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
             {/* Action skeleton */}
             <div style={{ display: 'flex', gap: 8 }}>
               <div
+                data-part="skeleton"
                 style={{
                   width: 80,
                   height: 34,
@@ -330,6 +346,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
                 }}
               />
               <div
+                data-part="skeleton"
                 style={{
                   width: 100,
                   height: 34,
@@ -362,6 +379,10 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
     <div
       ref={headerRef}
       className={`ds-pattern-cockpit-header ds-engine-modern ${className ?? ''}`}
+      data-part="root"
+      data-loading="false"
+      data-sticky={sticky ? 'true' : 'false'}
+      data-compact={isCompact ? 'true' : 'false'}
       style={{
         background: 'var(--ds-surface-card)',
         borderBottom: '1px solid var(--ds-color-border-subtle)',
@@ -375,6 +396,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
       {breadcrumbs && breadcrumbs.length > 0 && !isCompact && (
         <nav
           aria-label="Breadcrumb"
+          data-part="breadcrumb"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -390,6 +412,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
               <React.Fragment key={`crumb-${idx}`}>
                 {idx > 0 && (
                   <span
+                    data-part="separator"
                     style={{
                       color: 'var(--ds-color-text-muted)',
                       userSelect: 'none',
@@ -414,6 +437,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
 
       {/* ---- Main row: back + title + status | actions ---- */}
       <div
+        data-part="main-row"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -423,6 +447,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
       >
         {/* Left cluster: back button + title group */}
         <div
+          data-part="lead"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -434,8 +459,9 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
           {onBack && <BackButton onClick={onBack} />}
 
           {/* Title + subtitle column */}
-          <div style={{ minWidth: 0, flex: 1 }}>
+          <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
             <div
+              data-part="title-row"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -444,6 +470,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
               }}
             >
               <h2
+                data-part="title"
                 style={{
                   margin: 0,
                   fontSize: isCompact ? 16 : 22,
@@ -463,6 +490,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
               {/* Status pills */}
               {status && status.length > 0 && (
                 <div
+                  data-part="status-list"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -479,6 +507,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
             {/* Subtitle / metadata row */}
             {subtitle && !isCompact && (
               <p
+                data-part="subtitle"
                 style={{
                   margin: '4px 0 0',
                   fontSize: 13,
@@ -498,6 +527,7 @@ export default function ModernCockpitHeader(props: CockpitHeaderProps) {
         {/* Action toolbar */}
         {actions && (
           <div
+            data-part="actions"
             style={{
               display: 'flex',
               alignItems: 'center',

@@ -67,6 +67,9 @@ function BreadcrumbItem({
     return (
       <a
         href={href ?? '#'}
+        data-part="crumb"
+        data-interactive="true"
+        data-last="false"
         onClick={
           onClick
             ? (e: React.MouseEvent) => {
@@ -94,6 +97,9 @@ function BreadcrumbItem({
 
   return (
     <span
+      data-part="crumb"
+      data-interactive="false"
+      data-last={isLast ? 'true' : 'false'}
       style={{
         color: isLast
           ? 'var(--ds-color-text-secondary)'
@@ -132,6 +138,8 @@ function TabButton({
       onClick={onClick}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      data-part="tab"
+      data-active={isActive ? 'true' : 'false'}
       style={{
         position: 'relative',
         padding: '8px 16px',
@@ -190,6 +198,8 @@ function BackButton({
       onFocus={() => setFocused(true)}
       onBlur={() => setFocused(false)}
       aria-label={label ? `Go back to ${label}` : 'Go back'}
+      data-part="back"
+      data-has-label={label ? 'true' : 'false'}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -269,6 +279,8 @@ export default function ModernPageShell(props: PageShellProps) {
     return (
       <div
         className={`ds-pattern-page-shell ds-pattern-page-shell--loading ds-engine-modern ${className ?? ''}`}
+        data-part="root"
+        data-loading="true"
         style={{
           padding: '24px 24px 0',
           maxWidth: maxWidth ?? undefined,
@@ -276,9 +288,10 @@ export default function ModernPageShell(props: PageShellProps) {
           ...style,
         }}
       >
-        <div className="ds-pattern-page-shell__loading-skeleton" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div className="ds-pattern-page-shell__loading-skeleton" data-part="skeleton-group" style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           {/* Breadcrumb skeleton */}
           <div
+            data-part="skeleton"
             style={{
               width: 180,
               height: 12,
@@ -298,6 +311,7 @@ export default function ModernPageShell(props: PageShellProps) {
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <div
+                data-part="skeleton"
                 style={{
                   // In-flow skeleton: 280px exceeds the content box a 360px
                   // viewport offers, so it is bounded rather than pinned.
@@ -310,6 +324,7 @@ export default function ModernPageShell(props: PageShellProps) {
                 }}
               />
               <div
+                data-part="skeleton"
                 style={{
                   width: 200,
                   height: 14,
@@ -321,6 +336,7 @@ export default function ModernPageShell(props: PageShellProps) {
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <div
+                data-part="skeleton"
                 style={{
                   width: 80,
                   height: 32,
@@ -330,6 +346,7 @@ export default function ModernPageShell(props: PageShellProps) {
                 }}
               />
               <div
+                data-part="skeleton"
                 style={{
                   width: 100,
                   height: 32,
@@ -355,6 +372,8 @@ export default function ModernPageShell(props: PageShellProps) {
   return (
     <div
       className={`ds-pattern-page-shell ds-engine-modern ${className ?? ''}`}
+      data-part="root"
+      data-loading="false"
       style={{
         maxWidth: maxWidth ?? undefined,
         margin: maxWidth ? '0 auto' : undefined,
@@ -366,6 +385,7 @@ export default function ModernPageShell(props: PageShellProps) {
       {/* ---- Page header area ---- */}
       {!hideHeader && (
         <div
+          data-part="header"
           style={{
             padding: '20px 24px 0',
           }}
@@ -374,6 +394,7 @@ export default function ModernPageShell(props: PageShellProps) {
         {breadcrumbs && breadcrumbs.length > 0 && (
           <nav
             aria-label="Breadcrumb"
+            data-part="breadcrumb"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -389,6 +410,7 @@ export default function ModernPageShell(props: PageShellProps) {
                 <React.Fragment key={`crumb-${idx}`}>
                   {idx > 0 && (
                     <span
+                      data-part="separator"
                       style={{
                         color: 'var(--ds-color-text-muted)',
                         userSelect: 'none',
@@ -413,6 +435,7 @@ export default function ModernPageShell(props: PageShellProps) {
 
         {/* ---- Header row: back + title group | actions ---- */}
         <div
+          data-part="header-row"
           style={{
             display: 'flex',
             alignItems: 'flex-start',
@@ -423,6 +446,7 @@ export default function ModernPageShell(props: PageShellProps) {
         >
           {/* Left cluster: back button + title group */}
           <div
+            data-part="lead"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -436,8 +460,9 @@ export default function ModernPageShell(props: PageShellProps) {
             )}
 
             {/* Title + badge + subtitle */}
-            <div style={{ minWidth: 0, flex: 1 }}>
+            <div data-part="titles" style={{ minWidth: 0, flex: 1 }}>
               <div
+                data-part="title-row"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
@@ -446,6 +471,7 @@ export default function ModernPageShell(props: PageShellProps) {
                 }}
               >
                 <h1
+                  data-part="title"
                   style={{
                     margin: 0,
                     fontSize: 24,
@@ -464,6 +490,7 @@ export default function ModernPageShell(props: PageShellProps) {
               </div>
               {subtitle && (
                 <p
+                  data-part="subtitle"
                   style={{
                     margin: '4px 0 0',
                     fontSize: 14,
@@ -480,6 +507,7 @@ export default function ModernPageShell(props: PageShellProps) {
           {/* Right: action buttons */}
           {actions && (
             <div
+              data-part="actions"
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -493,7 +521,7 @@ export default function ModernPageShell(props: PageShellProps) {
         </div>
 
         {headerContent && (
-          <div style={{ marginTop: 18 }}>
+          <div data-part="header-content" style={{ marginTop: 18 }}>
             {headerContent}
           </div>
         )}
@@ -504,6 +532,7 @@ export default function ModernPageShell(props: PageShellProps) {
           <div
             role="tablist"
             aria-label="Page tabs"
+            data-part="tabs"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -524,6 +553,7 @@ export default function ModernPageShell(props: PageShellProps) {
         ) : (
           /* Subtle separator when no tabs */
           <div
+            data-part="rule"
             style={{
               marginTop: 16,
               borderBottom: '1px solid var(--ds-color-border-subtle)',
@@ -534,7 +564,7 @@ export default function ModernPageShell(props: PageShellProps) {
       )}
 
       {/* ---- Content area ---- */}
-      <div style={{ padding: '16px 24px 24px' }}>
+      <div data-part="content" style={{ padding: '16px 24px 24px' }}>
         {tabs && tabs.length > 0
           ? tabs.find((t) => t.key === activeTabKey)?.content
           : children}

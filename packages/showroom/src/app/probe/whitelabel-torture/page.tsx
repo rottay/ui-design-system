@@ -122,6 +122,16 @@ import {
   FormSurface,
   WizardSurface,
   DetailFormSurface,
+  DetailHeader,
+  EditHeader,
+  FormHeader,
+  CollectionHeader,
+  DashboardHeader,
+  PatternCockpitHeader,
+  PatternPageShell,
+  PatternWorkbenchHeader,
+  type CockpitStatus,
+  type WorkbenchQuickAction,
   type TreeDataNode,
   type FieldFilterDefinition,
   type FieldFilterPreset,
@@ -2824,6 +2834,448 @@ function RecordFbStates() {
   );
 }
 
+// Fixed fixtures for the WO-SKIN-06 checkpoint CK-B/S structures/headers
+// data-part probe (DetailHeader, EditHeader, FormHeader, CollectionHeader,
+// DashboardHeader). Per the checkpoint contract this half is FOUR
+// independent token sets (Edit=Form share one archetype recipe byte-for-
+// byte; Detail is the same 8-layer shape with every numeric value
+// diverging; Collection and Dashboard are unrelated) -- fixtures below are
+// deliberately per-component and, for the archetype recipe, cover all four
+// `archetype` values for Detail AND separately for Edit/Form, since their
+// numbers are NOT interchangeable. Every instance is deterministic --
+// controlled props only, no live clock, no real navigation -- so the grid
+// renders identically on every load. Rendered only behind `?headers=1` so
+// no flagship capture sees it. This page is the visual-evidence half;
+// HeadersBatch.contract.test.tsx renders its own fixtures directly through
+// React Testing Library.
+//
+// EditHeader's back-button/breadcrumb-link `<style>` block (§4 of the
+// contract) is DEAD today -- both rules lose to inline styles on the same
+// elements. This page renders EditHeader normally (the dead rule is not
+// disarmed here); headers-structures-batch.spec.ts's hover pins are what
+// prove the deadness photographically.
+const HEADERS_DETAIL_ARCHETYPES = ['editorial', 'control', 'technical', 'governance'] as const;
+const HEADERS_DETAIL_SECONDARY_ARCHETYPES = ['control', 'technical', 'governance'] as const;
+const HEADERS_TABS = [
+  { id: 'overview', label: 'Overview', count: 3 },
+  { id: 'activity', label: 'Activity', count: 0 },
+  { id: 'settings', label: 'Settings' },
+];
+
+function HeadersFbDetailHeader() {
+  // Controlled `activeTab` state (not a fixed prop) so
+  // headers-structures-batch.spec.ts's tab-click interaction pin actually
+  // exercises the isActive->CSS mapping instead of clicking a tab whose
+  // "active" prop never changes. This is the first-rendered DetailHeader
+  // instance (archetype 'editorial') so the spec's `.first()` selector
+  // reaches it.
+  const [activeTab, setActiveTab] = useState('overview');
+
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-detail">
+      <Text size="xs" color="secondary">DetailHeader (all 4 archetypes -- Detail-specific numbers, not Edit/Form&apos;s)</Text>
+      <DetailHeader
+        title="Acme Corp (editorial)"
+        subtitle="Enterprise customer since 2019"
+        avatar="AC"
+        status={{ label: 'Active', variant: 'success' }}
+        backHref="/customers"
+        breadcrumb={[{ label: 'Customers', href: '/customers' }, { label: 'Acme Corp' }]}
+        actions={[{ label: 'Edit', onClick: () => undefined }]}
+        tabs={HEADERS_TABS}
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        metadata={[
+          { label: 'Owner', value: 'Ada Lovelace' },
+          { label: 'Region', value: 'EMEA', mono: true },
+        ]}
+        eyebrow="Customer"
+        archetype="editorial"
+      />
+      {HEADERS_DETAIL_SECONDARY_ARCHETYPES.map((archetype) => (
+        <DetailHeader
+          key={archetype}
+          title={`Acme Corp (${archetype})`}
+          subtitle="Enterprise customer since 2019"
+          avatar="AC"
+          status={{ label: 'Active', variant: 'success' }}
+          backHref="/customers"
+          breadcrumb={[{ label: 'Customers', href: '/customers' }, { label: 'Acme Corp' }]}
+          actions={[{ label: 'Edit', onClick: () => undefined }]}
+          tabs={HEADERS_TABS}
+          activeTab="overview"
+          onTabChange={() => undefined}
+          metadata={[
+            { label: 'Owner', value: 'Ada Lovelace' },
+            { label: 'Region', value: 'EMEA', mono: true },
+          ]}
+          eyebrow="Customer"
+          archetype={archetype}
+        />
+      ))}
+      <Text size="xs" color="secondary">DetailHeader (avatar image variant, no tabs, no metadata)</Text>
+      {/* renderAvatarNode picks the image branch only for a string
+          starting with 'http' or '/' -- a broken-image glyph is fine
+          evidence for the chrome/layout this probe captures. */}
+      <DetailHeader
+        title="Grace Hopper"
+        backHref="/people"
+        avatar="/probe-avatar-placeholder.png"
+      />
+    </Stack>
+  );
+}
+
+function HeadersFbEditHeader() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-edit">
+      <Text size="xs" color="secondary">EditHeader (all 4 archetypes -- byte-identical recipe to FormHeader, NOT Detail&apos;s)</Text>
+      {HEADERS_DETAIL_ARCHETYPES.map((archetype) => (
+        <EditHeader
+          key={archetype}
+          icon={TagIcon}
+          title={`Edit workspace (${archetype})`}
+          subtitle="Editing workspace settings"
+          entityId="ws_9f8e7d6c5b4a"
+          backHref="/workspaces"
+          colorVariant="primary"
+          breadcrumb={[{ label: 'Workspaces', href: '/workspaces' }, { label: 'Current' }]}
+          status={{ label: 'Draft', color: 'warning' }}
+          archetype={archetype}
+          eyebrow="Workspace"
+          onSave={() => undefined}
+          onCancel={() => undefined}
+        />
+      ))}
+      <Text size="xs" color="secondary">EditHeader (loading)</Text>
+      <EditHeader title="Loading" backHref="/x" loading />
+    </Stack>
+  );
+}
+
+function HeadersFbFormHeader() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-form">
+      <Text size="xs" color="secondary">FormHeader (all 4 archetypes -- byte-identical recipe to EditHeader)</Text>
+      {HEADERS_DETAIL_ARCHETYPES.map((archetype) => (
+        <FormHeader
+          key={archetype}
+          icon={TagIcon}
+          title={`Create workspace (${archetype})`}
+          subtitle="Set up a new workspace"
+          backHref="/workspaces"
+          colorVariant="success"
+          breadcrumb={[{ label: 'Workspaces', href: '/workspaces' }]}
+          actions={[{ label: 'Create', onClick: () => undefined }]}
+          archetype={archetype}
+          eyebrow="New"
+        />
+      ))}
+    </Stack>
+  );
+}
+
+function HeadersFbCollectionHeader() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-collection">
+      <Text size="xs" color="secondary">CollectionHeader (dotted title, editorial-tech, quickActions all 3 variants, meta-item all 3 tones)</Text>
+      <CollectionHeader
+        eyebrow="Workspace"
+        title="Candidates"
+        titleTreatment="dotted"
+        subtitle="All active candidates across the pipeline"
+        layoutVariant="editorial-tech"
+        metaItems={[
+          { key: 'a', label: '12 active', tone: 'primary' },
+          { key: 'b', label: '3 flagged', tone: 'success' },
+          { key: 'c', label: 'Neutral', tone: 'neutral' },
+        ]}
+        shortcuts={[{ key: 's', label: '⌘K search' }]}
+        quickActions={[
+          { key: 'q1', label: 'Invite', onClick: () => undefined, variant: 'primary' },
+          { key: 'q2', label: 'Export', onClick: () => undefined, variant: 'secondary' },
+          { key: 'q3', label: 'More', onClick: () => undefined },
+        ]}
+        surfaceVariant="default"
+      />
+      <Text size="xs" color="secondary">CollectionHeader (display title, embedded, no quickActions -- title-accent + no-quickActions secondary-rail branch)</Text>
+      <CollectionHeader
+        eyebrow="Workspace"
+        title="Overview"
+        titleTreatment="display"
+        subtitle="Program overview"
+        metaItems={[{ key: 'a', label: '4 items', tone: 'neutral' }]}
+        shortcuts={[{ key: 's', label: '⌘K search' }]}
+        surfaceVariant="embedded"
+      />
+      <Text size="xs" color="secondary">CollectionHeader (default title treatment, default layout, not embedded)</Text>
+      <CollectionHeader
+        eyebrow="Workspace"
+        title="Reports"
+        subtitle="Weekly report summary"
+        surfaceVariant="default"
+      />
+      {/* The quick-actions PILL container's background/boxShadow only
+          branch on `editorialTech` when `embedded` is true (not-embedded
+          collapses to one value regardless of editorialTech), and the pill
+          only renders at all when quickActions is non-empty. These two
+          instances cover the two embedded+quickActions states. */}
+      <Text size="xs" color="secondary">CollectionHeader (embedded, editorial-tech, quickActions -- quick-actions pill embedded+editorialTech branch)</Text>
+      <CollectionHeader
+        eyebrow="Workspace"
+        title="Pipeline"
+        titleTreatment="dotted"
+        subtitle="Embedded editorial-tech with quick actions"
+        layoutVariant="editorial-tech"
+        quickActions={[{ key: 'q1', label: 'Invite', onClick: () => undefined, variant: 'primary' }]}
+        surfaceVariant="embedded"
+      />
+      <Text size="xs" color="secondary">CollectionHeader (embedded, default layout, quickActions -- quick-actions pill embedded+non-editorialTech branch)</Text>
+      <CollectionHeader
+        eyebrow="Workspace"
+        title="Pipeline"
+        subtitle="Embedded default layout with quick actions"
+        quickActions={[{ key: 'q1', label: 'Invite', onClick: () => undefined }]}
+        surfaceVariant="embedded"
+      />
+    </Stack>
+  );
+}
+
+function HeadersFbDashboardHeader() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-dashboard">
+      <Text size="xs" color="secondary">DashboardHeader (compact, status=live -- animating; toHaveScreenshot freezes CSS animations by default, see REST TRUTH note in the spec)</Text>
+      <DashboardHeader
+        title="Overview"
+        icon={<TagIcon style={{ width: 16, height: 16 }} />}
+        status={{ state: 'live' }}
+        metrics={[{ key: 'm1', label: 'Users', value: 128, change: { value: '4%', direction: 'up' } }]}
+        actions={[{ key: 'a1', label: 'Refresh', onClick: () => undefined }]}
+        compact
+      />
+      <Text size="xs" color="secondary">DashboardHeader (full, status=connected -- static, all 3 metric-change directions)</Text>
+      <DashboardHeader
+        title="Overview"
+        subtitle="Live operational metrics"
+        icon={<TagIcon style={{ width: 18, height: 18 }} />}
+        status={{ state: 'connected' }}
+        metrics={[
+          { key: 'm1', label: 'Users', value: 128, change: { value: '4%', direction: 'up' } },
+          { key: 'm2', label: 'Errors', value: 3, change: { value: '2%', direction: 'down' } },
+          { key: 'm3', label: 'Latency', value: '120ms', change: { value: '0%', direction: 'flat' } },
+        ]}
+        actions={[
+          { key: 'a1', label: 'Refresh', onClick: () => undefined },
+          { key: 'a2', label: 'Export', onClick: () => undefined, variant: 'primary' },
+        ]}
+      />
+      <Text size="xs" color="secondary">DashboardHeader (full, status=syncing -- animating)</Text>
+      <DashboardHeader title="Overview" status={{ state: 'syncing' }} metrics={[{ key: 'm1', label: 'Sync', value: '82%' }]} />
+      <Text size="xs" color="secondary">DashboardHeader (full, status=offline)</Text>
+      <DashboardHeader title="Overview" status={{ state: 'offline' }} />
+      <Text size="xs" color="secondary">DashboardHeader (full, status=warning)</Text>
+      <DashboardHeader title="Overview" status={{ state: 'warning' }} />
+    </Stack>
+  );
+}
+
+function HeadersFbStates() {
+  return (
+    <Box
+      data-testid="probe-headers"
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
+    >
+      <Stack spacing="lg" fullWidth>
+        <HeadersFbDetailHeader />
+        <HeadersFbEditHeader />
+        <HeadersFbFormHeader />
+        <HeadersFbCollectionHeader />
+        <HeadersFbDashboardHeader />
+      </Stack>
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Fixed fixtures for the WO-SKIN-06 checkpoint CK-B/P patterns/misc header
+// data-part probe (CockpitHeader, PageShell, WorkbenchHeader). Every value is a
+// literal, so the section renders identically on every load. Rendered only
+// behind `?headers-patterns=1` so no flagship capture sees it.
+//
+// Renders every state a skin rule in this checkpoint keys on: all five
+// CockpitStatus variants (STATUS_PILL_STYLES is a 5-way map), all three
+// WorkbenchQuickAction variants plus a disabled one (variantStyles is a 3-way
+// map whose `hover` sub-object is SPREAD over its `base` — the P-78 shape),
+// active/inactive tabs in both tab strips, the terminal `isLast` crumb, a
+// labelled back button, PageShell's no-tabs `rule` branch, and all three
+// loading-skeleton branches.
+//
+// `isCompact` is NOT driven from here. headers-patterns-batch.spec.ts stubs
+// `window.scrollY` and dispatches the scroll event CockpitHeader listens for,
+// so the viewport never moves and no other fixture in this grid shifts under
+// it. The sticky instance below exists only so that listener is attached.
+//
+// Only PageShell has a rustic engine. CockpitHeader and WorkbenchHeader map
+// rustic -> `./engines/classic`, so under `?engine=rustic` those two bands
+// render the CLASSIC engine, which this checkpoint does not own.
+// ---------------------------------------------------------------------------
+
+const HP_CRUMBS = [
+  { label: 'Home', href: '/' },
+  { label: 'Events', href: '/events' },
+  { label: 'Event #1234' },
+];
+
+const HP_STATUS: CockpitStatus[] = [
+  { label: 'Active', variant: 'success' },
+  { label: 'Pending', variant: 'warning' },
+  { label: 'Failed', variant: 'error' },
+  { label: 'VIP', variant: 'info' },
+  { label: 'Draft', variant: 'default' },
+];
+
+const HP_QUICK_ACTIONS: WorkbenchQuickAction[] = [
+  { label: 'Save', onClick: () => undefined, variant: 'primary' },
+  { label: 'Delete', onClick: () => undefined, variant: 'danger' },
+  { label: 'Archive', onClick: () => undefined, variant: 'default' },
+  { label: 'Locked', onClick: () => undefined, variant: 'default', disabled: true },
+];
+
+const HP_SAVED_VIEWS = [
+  { id: 'default', label: 'Default View' },
+  { id: 'compact', label: 'Compact View' },
+];
+
+function HeadersPatternsFbCockpit() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-patterns-cockpit">
+      <Text size="xs" color="secondary">CockpitHeader (all five status variants)</Text>
+      <PatternCockpitHeader
+        title="Event #1234"
+        subtitle="Summer Music Festival — Main Stage"
+        breadcrumbs={HP_CRUMBS}
+        status={HP_STATUS}
+        onBack={() => undefined}
+        actions={<Button size="sm">Edit</Button>}
+      />
+    </Stack>
+  );
+}
+
+function HeadersPatternsFbCockpitSticky() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-patterns-cockpit-sticky">
+      <Text size="xs" color="secondary">CockpitHeader (sticky — compact on scroll)</Text>
+      <PatternCockpitHeader
+        title="Event #1234"
+        subtitle="Sticky instance"
+        breadcrumbs={HP_CRUMBS}
+        status={[HP_STATUS[0]]}
+        onBack={() => undefined}
+        sticky
+      />
+    </Stack>
+  );
+}
+
+function HeadersPatternsFbPageShell() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-patterns-page-shell">
+      <Text size="xs" color="secondary">PageShell (tabs, labelled back, badge, header content)</Text>
+      <PatternPageShell
+        title="Users"
+        subtitle="Manage platform users"
+        breadcrumbs={HP_CRUMBS}
+        back={{ label: 'Settings', onClick: () => undefined }}
+        badge={<Badge variant="primary">beta</Badge>}
+        headerContent={<Text size="xs">Header content slot</Text>}
+        actions={<Button size="sm">Add User</Button>}
+        tabs={[
+          { key: 'all', label: 'All', content: <Text size="xs">All records</Text> },
+          { key: 'archived', label: 'Archived', content: <Text size="xs">Archived records</Text> },
+        ]}
+        activeTab="all"
+        onTabChange={() => undefined}
+      >
+        {/* PageShellProps.children is required even when tabs supply the body:
+            with tabs present the modern engine renders the active tab's content
+            and ignores children. */}
+        <Text size="xs">Tab-driven body</Text>
+      </PatternPageShell>
+    </Stack>
+  );
+}
+
+function HeadersPatternsFbPageShellNoTabs() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-patterns-page-shell-notabs">
+      <Text size="xs" color="secondary">PageShell (no tabs — the bare rule branch)</Text>
+      <PatternPageShell title="Users" subtitle="No tabs">
+        <Text size="xs">Content</Text>
+      </PatternPageShell>
+    </Stack>
+  );
+}
+
+function HeadersPatternsFbWorkbench() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-patterns-workbench">
+      <Text size="xs" color="secondary">WorkbenchHeader (three quick-action variants + disabled)</Text>
+      <PatternWorkbenchHeader
+        title="Operations Dashboard"
+        subtitle="Morning briefing"
+        exceptionCount={3}
+        quickActions={HP_QUICK_ACTIONS}
+        savedViews={HP_SAVED_VIEWS}
+        activeViewId="default"
+        onViewChange={() => undefined}
+      />
+    </Stack>
+  );
+}
+
+function HeadersPatternsFbLoading() {
+  return (
+    <Stack spacing="xs" data-testid="probe-headers-patterns-loading">
+      <Text size="xs" color="secondary">Loading branches (cockpit 6 blocks / page-shell 5 / workbench 6)</Text>
+      <PatternCockpitHeader title="Loading" loading />
+      <PatternPageShell title="Loading" loading>
+        <Text size="xs">Body</Text>
+      </PatternPageShell>
+      <PatternWorkbenchHeader title="Loading" loading />
+    </Stack>
+  );
+}
+
+function HeadersPatternsFbStates() {
+  return (
+    <Box
+      data-testid="probe-headers-patterns"
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
+    >
+      <Stack spacing="lg" fullWidth>
+        <HeadersPatternsFbCockpit />
+        <HeadersPatternsFbCockpitSticky />
+        <HeadersPatternsFbPageShell />
+        <HeadersPatternsFbPageShellNoTabs />
+        <HeadersPatternsFbWorkbench />
+        <HeadersPatternsFbLoading />
+      </Stack>
+    </Box>
+  );
+}
+
 function sanitizeFixture(raw: string | null): TortureFixture {
   return raw && (TORTURE_FIXTURES as string[]).includes(raw) ? (raw as TortureFixture) : 'torture-dark';
 }
@@ -2852,6 +3304,8 @@ function TortureContent() {
   const layout = useMemo(() => searchParams.get('layout') === '1', [searchParams]);
   const forms = useMemo(() => searchParams.get('forms') === '1', [searchParams]);
   const record = useMemo(() => searchParams.get('record') === '1', [searchParams]);
+  const headers = useMemo(() => searchParams.get('headers') === '1', [searchParams]);
+  const headersPatterns = useMemo(() => searchParams.get('headers-patterns') === '1', [searchParams]);
 
   // WO-ENG-11 compares engines on an otherwise identical surface.
   const engine = useMemo<ProbeEngine>(() => {
@@ -2929,6 +3383,9 @@ function TortureContent() {
             {forms && <FormsFbStates />}
 
             {record && <RecordFbStates />}
+
+            {headers && <HeadersFbStates />}
+            {headersPatterns && <HeadersPatternsFbStates />}
 
             <Box
               data-testid="probe-extras"
