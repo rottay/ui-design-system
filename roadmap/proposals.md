@@ -1287,7 +1287,12 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   the spread stays. The only byte-exact path to 0 is to DROP the spread and re-express the shared
   surface (popupPanelStyle's bg/border/radius/boxShadow) in the component's own skin — which
   **de-shares** the object. popupPanelStyle/menuItemStyle are imported by ONLY these three files, so
-  dropping all three leaves them dead exports in `_internal`.
+  dropping the spread de-shares. **CORRECTION (verified at cert):** only components with a
+  CONFLICTING override must drop it. env-toggle + workspace-switcher panels had a `boxShadow`
+  override → dropped popupPanelStyle. locale-switcher's PANEL had no override → KEPT the spread,
+  so popupPanelStyle survives (1 importer). Only `menuItemStyle` (locale's menu-item, the one
+  with a state-ternary override) became a genuinely dead export (0 importers) — FLAGGED for a
+  future `_internal`-surface migration, not deleted.
 - **Compounding factor** — the popups are (probably) UNPHOTOGRAPHED: the switchers render closed at
   rest, so the panels/menu don't appear in the baseline. The migration is then verified at the SOURCE
   level (the skin rule diffed against the `_internal` values verbatim), not by the pixel gate.
