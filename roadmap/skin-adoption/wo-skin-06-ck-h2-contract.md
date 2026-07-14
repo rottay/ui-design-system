@@ -44,6 +44,32 @@ file. Either is acceptable; what is NOT acceptable is silently running the JSX p
 createElement file and reporting a green invariant-2 it never actually checked. Stamp `data-part` in
 the `createElement` props object (2nd arg), not as a JSX attribute.
 
+## PRE-STEP EVIDENCE + CORRECTIONS (2026-07-14; supersedes stale expectations below)
+
+The inert pre-step is committed at `28421f66`. It preserves all nine counters exactly at
+`35/29/30/28/22/31/11/10/20` (sum 216), passes the attribute-stripped element-tree invariant in all
+nine files including `React.createElement`, passes core/showroom typecheck and the rendered anatomy
+contract 25/25, and records 30 production-build screenshots through seven Playwright tests. The full
+tenant/engine matrix, high-risk state bands and TokenInspector pinned/unpinned evidence pass again
+without updating snapshots.
+
+Corrections the migration units must honor:
+
+- `file-manager` modern merges caller `style` before three local defaults (`background`,
+  `borderRadius`, `boxShadow`), so those defaults intentionally beat the caller today. Keep those
+  three sites inline as deliberate Stage-1 residuals; external CSS or `!important` would change the
+  public precedence contract. Expected final checkpoint counter is therefore 3, not an artificial 0.
+- Retain the modern `tr.active` and `a.link link-hover` classes. `data-selected` is the ownership hook;
+  do not invent selected-row or folder-link paint. Unit H2-2 must compare production computed style
+  before/after and add a skin declaration only if the migration itself would otherwise remove live
+  paint.
+- TokenInspector's exact ten-node anatomy is `panel`, `header`, `title`, `pinned-badge`,
+  `element-info`, `empty`, `token-row`, `token-name`, `token-value`, `footer`, plus `data-pinned` and
+  `data-value-kind`. There is no close node in the current implementation; the older vocabulary below
+  was aspirational and must not be manufactured.
+- Wire all nine skins into **both** canonical entrypoints before visual certification, then regenerate
+  all five tracked vertical bundles. `skins.unwired` and `skins.deadParts` must remain exactly 0.
+
 ---
 
 ## DRAFTER NOTES FOR THE ORCHESTRATOR

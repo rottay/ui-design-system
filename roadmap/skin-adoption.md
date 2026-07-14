@@ -86,7 +86,7 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | **CK-G** | navigation patterns | 279 | CERTIFIED byte-exact (`67ff3f35`) |
 | **CK-F** | communication | 271 | CERTIFIED byte-exact (`9d85264c`) — banked P-87 (color-on-`<Text>`=(0,5,0)) |
 | **CK-C** | workspace chrome | 466 | CERTIFIED byte-exact (`f0046708`) — 12 skins; 458/466 counted sites moved, 8 deliberate P-88/shared-token residuals |
-| CK-H2 | misc | ~216 | contract adjudicated (`879f34e9`) — category-A, token-inspector createElement |
+| CK-H2 | misc | 216 | inert pre-step certified (`28421f66`) — 25/25 anatomy, 30 stable production baselines; migration next |
 | CK-I | long tail (surfaces) | 397 | contract adjudicated (`77c9a202`) — forms EXCLUDED (already CK-D); averted a clobber |
 | CK-E / CK-H1 | visualization / brand-preview trio | 308 / 237 | LAST — deferred until the exemption machinery is observed executing |
 
