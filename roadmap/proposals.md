@@ -1016,3 +1016,22 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **THE APPS HAVE BEEN PAPERING OVER THIS WITH `!important`, AND THAT CHANGES THE FIX.** Found while inventorying WO-06 CK-B: `app-bithire/src/styles/detail-chrome.css` overrides the DS's header chrome with `margin: 0 !important`, `padding: … !important`, `align-items: … !important`. Per the cascade, an author `!important` declaration outranks BOTH a layered rule (importance is weighed before layer order, and among important declarations layer order REVERSES) AND an inline non-important style. So those channels are ALREADY app-controlled in bithire, above the component's own inline paint. Two consequences: (1) migrating that inline paint into a skin changes nothing there — the app's `!important` still wins, so byte-exactness holds in the app as well as the showroom; (2) **the apps reached for `!important` because nothing else worked.** The theming surface was dead and nobody knew. So fixing the layer order is not a one-line change: it will hand those channels back to the DS, and every app `!important` written to survive without them has to be re-audited or it will fight the newly-live bridge. Budget that into the fix, and grep every app's CSS for `!important` before flipping the layer statement.
 - **Ask** — name Tailwind's `base` layer FIRST in the layer statement (`@layer base, rottay-reset, …`), which restores the bridge layer's intended precedence, and then re-record every visual baseline: this WILL move pixels (dead border declarations across three engines come alive at once). It is a large, deliberate visual change and belongs in its own work order with its own baselines — never inside a byte-exact migration. Until then, every WO-SKIN contract must treat theme.css border/margin/padding bridges as DEAD and preserve that.
 - **Status** — OPEN.
+
+### P-77 DataTerminalCard's variant is random on the client and fixed on the server — a guaranteed hydration mismatch
+
+- **Context** — Found by the WO-SKIN-06 CK-A inventory while establishing how to PIN the component's variant for byte-exact screenshots. The pinning question was the migration's; the defect is the product's.
+- **Evidence** — `structures/dashboard/data-terminal-card/index.tsx:106-114`:
+  ```ts
+  function getPageVariant(): 1 | 2 | 3 | 4 {
+    if (typeof window === "undefined") return 1;        // server: always 1
+    let seed = (window as ...).__cardVariantSeed;
+    if (!seed) { seed = Math.floor(Math.random() * 4) + 1; ... }  // client: rolls 1-4
+    return seed;
+  }
+  ```
+  The server always renders variant 1. The client rolls a fresh random variant on first mount. They disagree 3 times out of 4.
+- **Impact** — a React hydration mismatch on every unpinned `DataTerminalCard` in any SSR app, which all three apps are. React discards the server tree and re-renders on the client (a visible flash and a wasted render), and logs a hydration error in development. This ships today.
+- **Also** — 149 of the component's sites live behind this: three of its four card bodies never paint on any given render, so a sighted check certifies at most one of them unless the variant is pinned via the `variant` prop (the four bodies are not exported; the prop is the only door).
+- **Adjacent** — `dashboard-insights`'s `useVariant` hook has the same `Math.random()` shape but ZERO callers anywhere in core or the showroom: its 8 renderers are individually exported and directly mountable, so the trap is inert there. Do not "fix" it by wiring it up.
+- **Ask** — make the seed deterministic across the server/client boundary (derive it from a stable input, or hoist the choice to the consumer), then decide whether a randomly-chosen card variant is a feature at all.
+- **Status** — OPEN.
