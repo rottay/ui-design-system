@@ -32,13 +32,92 @@
         "floor": 4,
         "why": "Per-user identity colours on live cursors and rings (ringColor/cursorColor), including 1 site the counter cannot see (an SVG presentation attribute)."
       },
-      "patterns/visualization/charts/**": {
-        "floor": 39,
-        "why": "Per-datum and per-series colour. TWO shapes, and the second was MISSED by the triage: (1) `d.color ?? palette[i % palette.length]` as the actual data-mark fill in bar/line/area/radar/scatter/pie/treemap/funnel/network; (2) a caller-overridable prop typed `?: string` whose DEFAULT is a static token but whose value is arbitrary once overridden -- gauge.needleColor, histogram.color, histogram.cumulativeColor, waterfall.increaseColor/decreaseColor/totalColor, bullet.valueColor/targetColor. A default that looks static does not make the site static.",
-        "$note": "STILL A GLOB -- the gate SKIPS it, so it protects nothing yet. Resolve to per-file floors from wo-skin-06-ck-e-inventory.md's per-file sections BEFORE contracting CK-E. Also add the 6 B sites outside charts: kanban-board 2, calendar-view 2, map-view 2.",
-        "$excluded": "charts/hooks/use-chart-theme.ts:291 is DEAD CODE (the hook has no callers). Do NOT exempt it -- exempting dead code freezes it in place. Delete the hook or wire it; either way that is a product decision, not an exemption."
+      "patterns/visualization/charts/bar-chart/index.tsx": {
+        "floor": 2,
+        "why": "Legend swatch backgroundColor: single-series `d.color ?? palette[i % palette.length]` and multi-series `s.color ?? palette[i % palette.length]` -- the actual bar fill itself is D3-imperative (`.attr('fill', ...)`), invisible to this counter; only the legend re-consumption of the same per-datum/per-series value is census-visible."
+      },
+      "patterns/visualization/charts/line-chart/index.tsx": {
+        "floor": 2,
+        "why": "Legend swatch backgroundColor: `s.color ?? palette[i % palette.length]` (1), plus the same per-series color re-consumed a second time as `color` inside the `items={rows.map(...)}` array literal fed to `<TooltipSeries>` on hover (1). The line stroke/area-gradient/dot fill itself is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/area-chart/index.tsx": {
+        "floor": 2,
+        "why": "Same shape as line-chart: legend swatch backgroundColor (1) + tooltip `items[].color` re-consumption (1). The area fill/gradient itself is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/radar-chart/index.tsx": {
+        "floor": 3,
+        "why": "Legend swatch backgroundColor: `s.color ?? palette[i % palette.length]` (1), plus `palette[0]` used twice as the default series color (`[{ name: 'Data', data, color: palette[0] }]`) when no `series` prop is passed -- two separate source occurrences, both real value-object literals, not a type annotation."
+      },
+      "patterns/visualization/charts/scatter/index.tsx": {
+        "floor": 1,
+        "why": "Legend swatch backgroundColor: `d.color ?? colors[i % colors.length]`. Point fill/stroke is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/pie-chart/index.tsx": {
+        "floor": 1,
+        "why": "Legend swatch backgroundColor: `d.color ?? palette[i % palette.length]`. Slice fill is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/treemap/index.tsx": {
+        "floor": 1,
+        "why": "Legend swatch backgroundColor: `palette[i % palette.length]` -- no per-item override at all, pure index cycling, still B because `palette`/`colors` itself is a caller-supplied array. Tile fill is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/funnel-chart/index.tsx": {
+        "floor": 1,
+        "why": "Legend swatch backgroundColor: `d.color ?? colors[i % colors.length]`. Segment fill is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/waterfall/index.tsx": {
+        "floor": 4,
+        "why": "The 3 legend-array `color:` entries (`increaseColor`/`decreaseColor`/`totalColor`, each typed `?: string` with a static-token default) plus their re-consumption as `item.color` on the swatch backgroundColor (1) -- 4 sites total, all traceable to the same 3 caller-overridable props. Bar fill is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/histogram/index.tsx": {
+        "floor": 2,
+        "why": "Legend swatch backgroundColor for `color` (bar fill prop, default var(--ds-color-primary)) and `cumulativeColor` (line/dot prop, default var(--ds-color-info)) -- both typed `?: string` with a static-token default, arbitrary once overridden. Bar/line/dot painting itself is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/gauge/index.tsx": {
+        "floor": 1,
+        "why": "Legend swatch backgroundColor: `seg.color` from the caller-suppliable `segments` array (DEFAULT_SEGMENTS' own 3 literal color values are A-static -- they are hardcoded fallback defaults, not a runtime read). `needleColor` (typed `?: string`, default var(--ds-color-text-primary)) feeds 3 D3 `.attr()` calls and is real B, but is NEVER a census-visible object-literal site anywhere in this file -- it cannot be floor-protected by this counter-based gate at all, same class as `crosshair.ts`'s dot fill (see the family $excluded note)."
+      },
+      "patterns/visualization/charts/bullet/index.tsx": {
+        "floor": 12,
+        "why": "`resolvedRangeColors[0..2]`/`valueColor`/`targetColor` (5, built into the legend array) + `item.color` re-consumption on the swatch backgroundColor (1) + the `rangeBands` array literal (`{ upper, color: resolvedRangeColors[n] }`) rebuilt independently in BOTH the horizontal (3) and vertical (3) orientation branches. All 12 trace back to the same caller-overridable `rangeColors`/`valueColor`/`targetColor` props; the value-bar/target-marker/range-band fills themselves are D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/sankey/index.tsx": {
+        "floor": 3,
+        "why": "Node layout object `color: n.color ?? colors[i % colors.length]` (1), link layout object `color: link.color ?? sn.color` -- a second-order fallback through the link's SOURCE NODE's already-resolved color, not independently computable (1), plus the node legend swatch backgroundColor re-consumption (1). Node/link fill itself is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/network-graph/index.tsx": {
+        "floor": 1,
+        "why": "Legend swatch backgroundColor: `colors[i % colors.length]`. Node fill (`groupColor()` or `d.color`) is D3-imperative, invisible here."
+      },
+      "patterns/visualization/charts/tooltip/index.tsx": {
+        "floor": 2,
+        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE ×5, SWATCH_STYLE ×1, label colors ×3) are all static tokens."
+      },
+      "patterns/visualization/kanban-board/engines/modern.tsx": {
+        "floor": 1,
+        "why": "Column header `borderTop: column.color ? \\`3px solid ${column.color}\\` : undefined` -- per-column caller-supplied accent color, no enum."
+      },
+      "patterns/visualization/kanban-board/engines/rustic.tsx": {
+        "floor": 1,
+        "why": "Same shape as modern: column header `borderTop`, keyed on the caller-supplied `column.color`."
+      },
+      "patterns/visualization/calendar-view/engines/modern.tsx": {
+        "floor": 1,
+        "why": "Event chip `background: ev.color ?? 'var(--ds-color-primary)'` -- per-event caller-supplied color."
+      },
+      "patterns/visualization/calendar-view/engines/rustic.tsx": {
+        "floor": 1,
+        "why": "Same shape as modern: event chip `background`, keyed on the caller-supplied `ev.color`."
+      },
+      "patterns/visualization/map-view/engines/modern.tsx": {
+        "floor": 1,
+        "why": "Marker color dot `background: marker.color`, conditionally rendered only when `marker.color` is present -- per-marker caller-supplied color with NO fallback token at all (pre-existing gap, not migration-caused; every other per-item color in this checkpoint has a `?? var(--ds-*)` default, this one does not)."
+      },
+      "patterns/visualization/map-view/engines/rustic.tsx": {
+        "floor": 1,
+        "why": "Same shape as modern: marker color dot `background: marker.color`, same no-fallback gap."
       }
-    }
+    },
+    "$excluded": "charts/hooks/use-chart-theme.ts:291 is DEAD CODE (the hook has no callers anywhere in the repo, verified by grep). Do NOT exempt it -- exempting dead code freezes it in place with the gate's blessing. Wire it up or delete it; either way that is a product decision, not an exemption. charts/tooltip/crosshair.ts's dot-fill B site (`.attr('fill', (d) => d.color)`) is also real B but is 100% D3-imperative -- the file's own census count is 0, so it is invisible to this counter-based gate and cannot be floor-protected here at all; same for gauge/index.tsx's `needleColor` (see that file's own why)."
   },
   "SKIN-EXEMPT-CRASH-SAFE-FALLBACK": {
     "$why": "Paint that must render when the theming provider itself has crashed. It cannot depend on a token, a skin, or anything the failure might have taken down.",
