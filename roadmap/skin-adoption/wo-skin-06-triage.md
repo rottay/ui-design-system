@@ -357,3 +357,42 @@ render.** Measure, then contract.
 **Cost note.** Six of these files were inventoried by sub-agents that burned ~1.5M tokens
 between them (one file cost 523k). The remaining seven are not inventoried and CK-C's contract
 is not blocked on them. Whoever resumes this: one agent, one file at a time, no delegation.
+
+---
+
+## CORRECTION 2 (2026-07-13) — the shared-vocabulary premise is false for CK-D too, and that makes it a PATTERN
+
+§6 described CK-D as sharing "one form/section/step vocabulary; `getToneShell`/`getToneAccent`
+tone maps". The inventory read all 17 files by hand. `getToneShell`/`getToneAccent` are **private,
+unexported functions living in ONE file** (`structures/record/form-sections/index.tsx:120-182`). A
+repo-wide grep returns exactly one hit. Nothing else imports them (they cannot be imported), and
+nothing hand-rolls a call-alike. The word "tone" appears in **zero of the other 16 files**. What
+exists instead: **six independent enum-to-static-style maps, one per component**, sharing no code
+and mostly no values.
+
+**This is now a pattern, not an accident.** Two clusters, two falsified premises:
+
+| cluster | triage claimed | reality |
+| --- | --- | --- |
+| CK-C (workspace chrome) | "the single biggest shared-vocabulary cluster" | 2 of 11 components adopt the canonical tokens; nine hand-rolled DIVERGENT recipes (gradients vs flat fills; 8% vs 12% vs 14% tints; one component's three engines don't even agree the concept is a pill vs a tab) |
+| CK-D (forms + record + workflow) | "one form/section/step vocabulary" | six independent per-component maps; the named helpers are private to one file |
+
+**Root cause of my error, both times: I inferred SHARING from surface SIMILARITY.** Components that
+solve the same problem, in the same house style, with the same `color-mix()` idiom, look like they
+share a vocabulary. They do not. Nobody grepped for importers before the clusters were drawn. It is
+the same failure mode as assuming a declared token is live (P-73), a declared rule paints (P-76), or
+a token file that exists is adopted (CK-C). **Existence is not adoption. Similarity is not sharing.
+Measure, then contract.**
+
+**What this changes about WO-SKIN-06's shape.** The clusters are still the right SEQUENCING unit —
+they group work that shares a review context and can share one build/cert cycle. They are NOT a
+"one skin, one vocabulary" unit. Every migration in WO-06 should expect **one token set per
+component**, with unification treated as a SEPARATE, deliberate design pass with its own baselines.
+Any agent told "these files share a vocabulary, so one skin covers them" will either flatten real
+differences (moving pixels inside a byte-exact migration — forbidden) or waste time discovering,
+per file, that the premise was wrong.
+
+**The consolation, and it is a real one**: CK-D is the cleanest cluster in the program — 589 of 591
+sites are category A, it is DaisyUI-coupling-free, and it is suppression-risk-free (zero theme.css /
+personality.css rules target any of its components). There is no legacy layer to reconcile. It is
+mechanically simple work; it is just SIX skins, not one.
