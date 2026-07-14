@@ -70,6 +70,40 @@ classic untouched; caller className/style semantics unchanged.
   (runtime-measured, canvas/svg data-driven paint stays).
 - **Size** — XL.
 
+#### WO-SKIN-06 execution state (2026-07-13)
+
+Decomposed into **9 checkpoints**, fully inventoried. The plan is
+`skin-adoption/wo-skin-06-plan.md`, which **REPLACES the triage's §6 decomposition** — the triage
+grouped clusters "by shared vocabulary" and **every cluster inventoried falsified that premise**.
+The root cause was the same each time: **sharing was inferred from similarity.** Expect ONE TOKEN
+SET PER COMPONENT; unification is a separate design pass with its own baselines.
+
+| ckpt | scope | sites | state |
+| --- | --- | --- | --- |
+| **CK-D** | forms + record + workflow + form-surfaces | 591 | pre-steps COMMITTED (`06ac84f6`); **both migrations in flight** |
+| **CK-B** | headers (5 structures + 4 patterns/misc) | 334 | CONTRACTED; both pre-steps in flight |
+| CK-A | dashboard widgets | 439 | BLOCKED on a variant-pinning harness (P-77) |
+| CK-G | navigation patterns | 279 | inventoried |
+| CK-F | communication | 272 | inventoried |
+| CK-C | workspace chrome | 466 | inventoried — 28 imperative writes, the densest |
+| CK-H2 | misc | ~216 | inventoried |
+| CK-I | long tail | 439 | inventoried |
+| CK-E / CK-H1 | visualization / brand-preview trio | 308 / 237 | LAST — they need the category-B exemption machinery, which now exists |
+
+**The pipeline that works** (three migrations in parallel is the unlock): inventory → contract
+(orchestrator) → **inert pre-step** (anatomy + torture section + spec + contract test; baselines
+recorded on the PRODUCTION build and re-run once for stability; commit) → migration → **orchestrator
+wires the entrypoints** (the ONLY shared file — reserving it is what lets N migrations run at once,
+and `skins.unwired` fails the build if it is forgotten) → certify.
+
+**Proving a pre-step is inert is mechanical, not a judgement call**: re-run the paint counter against
+a stashed tree and diff. Byte-identical counts ⇒ zero paint moved. Do not eyeball a diff.
+
+**Category-B exemptions are live** (`roadmap/skin-exemptions.json`, 25 files, floor 101). The gate
+enforces a FLOOR per file — a file may not drop BELOW it, because that means paint whose value is
+runtime data was migrated into CSS, where it cannot live. It was a glob until 2026-07-13, and the
+gate **skips globs**, so it protected nothing while looking like it did.
+
 ### WO-SKIN-07 Skin-adoption program certification + release
 - Full core suite (respect the standing failure ledger), full visual suite, `--check`, docs
   contract pages extended per batch (the data-part-contracts README grows with each WO), minor
