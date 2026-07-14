@@ -30,15 +30,15 @@ import type { PricingTableProps, PricingPlan, PricingFeature } from '../PricingT
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
   if (value === true) {
     return (
-      <span style={{ color: 'var(--ds-color-success-600, var(--ds-color-success))', fontSize: 16, fontWeight: 700 }}>
+      <span data-part="feature-value" data-feature-state="included" style={{ color: 'var(--ds-color-success-600, var(--ds-color-success))', fontSize: 16, fontWeight: 700 }}>
         {'\u2713'}
       </span>
     );
   }
   if (value === false || value === undefined) {
-    return <span style={{ color: 'var(--ds-color-border-primary, var(--ds-color-border))', fontSize: 16 }}>{'\u2717'}</span>;
+    return <span data-part="feature-value" data-feature-state="excluded" style={{ color: 'var(--ds-color-border-primary, var(--ds-color-border))', fontSize: 16 }}>{'\u2717'}</span>;
   }
-  return <span style={{ fontSize: 13 }}>{value}</span>;
+  return <span data-part="feature-value" data-feature-state="custom" style={{ fontSize: 13 }}>{value}</span>;
 }
 
 /** Shared table cell padding and border. Extracted to avoid repetition across
@@ -100,28 +100,41 @@ export default function RusticPricingTable(props: PricingTableProps) {
   /* Short-circuit: plain text loading state with muted token color */
   if (loading) {
     return (
-      <div className={className} style={{ textAlign: 'center', padding: 48, ...style }}>
-        <span style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+      <div
+        className={`ds-pattern-pricing-table ds-engine-rustic ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        data-cycle={billingCycle ?? 'monthly'}
+        style={{ textAlign: 'center', padding: 48, ...style }}
+      >
+        <span data-part="loading-label" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
       </div>
     );
   }
 
   return (
-    <div className={className} style={style}>
+    <div
+      className={`ds-pattern-pricing-table ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      data-cycle={billingCycle ?? 'monthly'}
+      style={style}
+    >
       {/* Billing toggle -- Hand-built toggle switch using a hidden checkbox.
           The visible track and knob are absolutely-positioned spans whose
           position and color transition based on the billingCycle prop. */}
       {onBillingCycleChange && (
-        <div style={{ textAlign: 'center', marginBottom: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
+        <div data-part="toggle" data-cycle={billingCycle ?? 'monthly'} style={{ textAlign: 'center', marginBottom: 24, display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12 }}>
           <span style={{ fontWeight: billingCycle === 'monthly' ? 700 : 400, fontSize: 'var(--ds-font-size-sm, 14px)' }}>Monthly</span>
           <label style={{ position: 'relative', display: 'inline-block', width: 44, height: 24 }}>
             <input
+              data-part="toggle-input"
               type="checkbox"
               checked={billingCycle === 'yearly'}
               onChange={(e) => onBillingCycleChange(e.target.checked ? 'yearly' : 'monthly')}
               style={{ opacity: 0, width: 0, height: 0 }}
             />
-            <span style={{
+            <span data-part="toggle-track" data-cycle={billingCycle ?? 'monthly'} style={{
               position: 'absolute',
               cursor: 'pointer',
               inset: 0,
@@ -129,7 +142,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
               background: billingCycle === 'yearly' ? 'var(--ds-color-primary)' : 'var(--ds-color-neutral-300)',
               transition: 'background 0.2s',
             }}>
-              <span style={{
+              <span data-part="toggle-thumb" data-cycle={billingCycle ?? 'monthly'} style={{
                 position: 'absolute',
                 width: 18,
                 height: 18,
@@ -143,7 +156,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
           </label>
           <span style={{ fontWeight: billingCycle === 'yearly' ? 700 : 400, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
             Yearly
-            <span style={{
+            <span data-part="plan-badge" data-variant="savings" style={{
               marginLeft: 6,
               padding: '2px 6px',
               borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -161,24 +174,24 @@ export default function RusticPricingTable(props: PricingTableProps) {
         <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: plans.length * 180 + 200 }}>
           <thead>
             <tr>
-              <th style={{ ...cellStyle, textAlign: 'left', width: 200, verticalAlign: 'bottom', fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 600, color: 'var(--ds-color-text-muted)', border: 'none' }}>
+              <th data-part="table-heading" style={{ ...cellStyle, textAlign: 'left', width: 200, verticalAlign: 'bottom', fontSize: 'var(--ds-font-size-sm, 14px)', fontWeight: 600, color: 'var(--ds-color-text-muted)', border: 'none' }}>
                 Features
               </th>
               {/* Each plan column header: highlighted plans get thicker primary border + tinted bg */}
               {plans.map(plan => {
                 const isHighlighted = plan.id === highlightedPlan || plan.popular;
                 return (
-                  <th key={plan.id} style={{ ...cellStyle, textAlign: 'center', verticalAlign: 'top', border: 'none' }}>
+                  <th key={plan.id} data-part="plan-column" data-highlighted={isHighlighted} style={{ ...cellStyle, textAlign: 'center', verticalAlign: 'top', border: 'none' }}>
                     {/* renderPlanHeader lets consumers fully replace the plan card */}
                     {renderPlanHeader ? renderPlanHeader(plan) : (
-                      <div style={{
+                      <div data-part="plan-card" data-highlighted={isHighlighted} style={{
                         padding: 16,
                         borderRadius: 'var(--ds-radius-lg, 12px)',
                         border: isHighlighted ? '2px solid var(--ds-color-primary)' : '1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
                         background: isHighlighted ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))' : undefined,
                       }}>
                         {plan.popular && (
-                          <div style={{
+                          <div data-part="plan-badge" data-variant="popular" style={{
                             display: 'inline-block',
                             padding: '2px 8px',
                             borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -197,13 +210,15 @@ export default function RusticPricingTable(props: PricingTableProps) {
                           {typeof plan.price === 'number' ? `${currency}${plan.price}` : plan.price}
                         </div>
                           {plan.priceNote && (
-                          <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>{plan.priceNote}</div>
+                          <div data-part="price-note" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>{plan.priceNote}</div>
                         )}
                         {plan.description && (
-                          <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>{plan.description}</div>
+                          <div data-part="plan-description" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>{plan.description}</div>
                         )}
                         {/* CTA button: highlighted plans get the primary button style */}
                         <button
+                          data-part="cta-button"
+                          data-highlighted={isHighlighted}
                           style={isHighlighted ? primaryBtn : btnBase}
                           onClick={() => onSelectPlan?.(plan.id)}
                         >
@@ -227,6 +242,7 @@ export default function RusticPricingTable(props: PricingTableProps) {
                   {isCategory && (
                     <tr>
                       <td
+                        data-part="category-header"
                         colSpan={plans.length + 1}
                         style={{
                           padding: '16px 16px 8px',
@@ -242,12 +258,12 @@ export default function RusticPricingTable(props: PricingTableProps) {
                     </tr>
                   )}
                   {/* Feature row: label cell + one value cell per plan */}
-                  <tr>
-                    <td style={{ ...cellStyle, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
+                  <tr data-part="feature-row">
+                    <td data-part="feature-label-cell" style={{ ...cellStyle, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                       {feature.label}
                     </td>
                     {plans.map(plan => (
-                      <td key={plan.id} style={{ ...cellStyle, textAlign: 'center' }}>
+                      <td key={plan.id} data-part="feature-value-cell" style={{ ...cellStyle, textAlign: 'center' }}>
                         {renderFeatureValue(plan.features[feature.key])}
                       </td>
                     ))}

@@ -156,9 +156,16 @@ export function TokenInspector(): React.ReactElement | null {
     pointerEvents: state.pinned ? 'auto' : 'none',
   };
 
-  return React.createElement('div', { ref: panelRef, style: panelStyle },
+  return React.createElement('div', {
+    ref: panelRef,
+    className: 'ds-pattern-token-inspector',
+    'data-part': 'panel',
+    'data-pinned': state.pinned,
+    style: panelStyle,
+  },
     // Header
     React.createElement('div', {
+      'data-part': 'header',
       style: {
         padding: '8px 12px',
         borderBottom: '1px solid #2a2a2f',
@@ -169,8 +176,10 @@ export function TokenInspector(): React.ReactElement | null {
         borderRadius: '8px 8px 0 0',
       },
     },
-      React.createElement('span', { style: { fontWeight: 600, color: '#a0a0a5' } }, 'Token Inspector'),
+      React.createElement('span', { 'data-part': 'title', style: { fontWeight: 600, color: '#a0a0a5' } }, 'Token Inspector'),
       React.createElement('span', {
+        'data-part': 'pinned-badge',
+        'data-pinned': state.pinned,
         style: {
           padding: '1px 6px',
           borderRadius: 4,
@@ -182,16 +191,19 @@ export function TokenInspector(): React.ReactElement | null {
     ),
     // Element info
     React.createElement('div', {
+      'data-part': 'element-info',
       style: { padding: '6px 12px', borderBottom: '1px solid #222226', color: '#6b6b72', fontSize: 10 },
     }, state.element),
     // Tokens
     state.tokens.length === 0
       ? React.createElement('div', {
+          'data-part': 'empty',
           style: { padding: '16px 12px', color: '#555', textAlign: 'center' as const },
         }, 'Hover an element to inspect its tokens')
       : state.tokens.map((t, i) =>
           React.createElement('div', {
             key: i,
+            'data-part': 'token-row',
             style: {
               padding: '4px 12px',
               borderBottom: '1px solid #1e1e22',
@@ -200,8 +212,10 @@ export function TokenInspector(): React.ReactElement | null {
               gap: 8,
             },
           },
-            React.createElement('span', { style: { color: '#a0a0a5', flexShrink: 0 } }, t.name),
+            React.createElement('span', { 'data-part': 'token-name', style: { color: '#a0a0a5', flexShrink: 0 } }, t.name),
             React.createElement('span', {
+              'data-part': 'token-value',
+              'data-value-kind': t.value.startsWith('#') || t.value.startsWith('rgb') ? 'color' : 'text',
               style: {
                 color: t.value.startsWith('#') || t.value.startsWith('rgb') ? '#60a5fa' : '#e4e4e8',
                 overflow: 'hidden',
@@ -211,9 +225,10 @@ export function TokenInspector(): React.ReactElement | null {
               },
             }, t.value),
           ),
-        ),
+    ),
     // Footer
     React.createElement('div', {
+      'data-part': 'footer',
       style: { padding: '6px 12px', borderTop: '1px solid #2a2a2f', color: '#555', fontSize: 9, textAlign: 'center' as const },
     }, 'Ctrl+Shift+T to close | Click to pin'),
   );

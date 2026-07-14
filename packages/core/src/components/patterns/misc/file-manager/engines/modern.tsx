@@ -121,32 +121,44 @@ export default function ModernFileManager(props: FileManagerProps) {
   // so skeleton proportions stay consistent regardless of content.
   if (loading) {
     return (
-      <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+      <div
+        className={`ds-pattern-file-manager ds-engine-modern flex justify-center items-center py-12 ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        data-view-mode={viewMode}
+        style={style}
+      >
+        <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }
 
   return (
-    <div className={`ds-pattern-file-manager ds-engine-modern ${className ?? ''}`} style={{ ...style, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-1)' }}>
+    <div
+      className={`ds-pattern-file-manager ds-engine-modern ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      data-view-mode={viewMode}
+      style={{ ...style, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-1)' }}
+    >
       <div style={{ padding: 16 }}>
         {/* Toolbar */}
-        <div className="flex items-center justify-between mb-4">
-          <div className="text-sm" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+        <div data-part="toolbar" className="flex items-center justify-between mb-4">
+          <div data-part="breadcrumb" className="text-sm" style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
             <ul>
-              <li><a onClick={() => onNavigate?.(null)} className="cursor-pointer">Root</a></li>
+              <li><a data-part="breadcrumb-link" data-action="navigate-root" onClick={() => onNavigate?.(null)} className="cursor-pointer">Root</a></li>
               {currentPath.map((segment, i) => (
                 <li key={segment}>
                   {i < currentPath.length - 1
-                    ? <a onClick={() => onNavigate?.(segment)} className="cursor-pointer">{segment}</a>
-                    : <span>{segment}</span>}
+                    ? <a data-part="breadcrumb-link" data-action="navigate-folder" onClick={() => onNavigate?.(segment)} className="cursor-pointer">{segment}</a>
+                    : <span data-part="breadcrumb-current">{segment}</span>}
                 </li>
               ))}
             </ul>
           </div>
           <div className="flex gap-2">
             {selectedItems.length > 0 && onDelete && (
-              <button style={{ background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => onDelete(selectedItems)}>
+              <button data-part="toolbar-action" data-action="delete-selected" style={{ background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => onDelete(selectedItems)}>
                 Delete ({selectedItems.length})
               </button>
             )}
@@ -157,15 +169,19 @@ export default function ModernFileManager(props: FileManagerProps) {
                   type="file"
                   multiple
                   className="hidden"
+                  data-part="file-input"
                   onChange={handleUploadChange}
                   data-testid="file-input"
                 />
-                <button style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => fileInputRef.current?.click()}>
+                <button data-part="toolbar-action" data-action="upload" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => fileInputRef.current?.click()}>
                   Upload
                 </button>
               </>
             )}
             <button
+              data-part="view-toggle"
+              data-action="toggle-view"
+              data-view-mode={viewMode}
               style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, width: 32, padding: 0, fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={() => onViewModeChange?.(viewMode === 'grid' ? 'list' : 'grid')}
               title={viewMode === 'grid' ? 'Switch to list' : 'Switch to grid'}
@@ -185,12 +201,13 @@ export default function ModernFileManager(props: FileManagerProps) {
 
         {/* Drop zone + content */}
         <div
+          data-part="content"
           onDragOver={e => e.preventDefault()}
           onDrop={handleDrop}
           className="min-h-[200px]"
         >
           {items.length === 0 ? (
-            <div className="flex justify-center items-center py-12 opacity-50">
+            <div data-part="empty" className="flex justify-center items-center py-12 opacity-50">
               {emptyMessage}
             </div>
           ) : viewMode === 'list' ? (
@@ -208,9 +225,16 @@ export default function ModernFileManager(props: FileManagerProps) {
                 <tbody>
                   {/* DaisyUI "active" class highlights the selected row background. */}
                   {items.map(item => (
-                    <tr key={item.id} className={selectedItems.includes(item.id) ? 'active' : ''}>
+                    <tr
+                      key={item.id}
+                      className={selectedItems.includes(item.id) ? 'active' : ''}
+                      data-part="row"
+                      data-selected={selectedItems.includes(item.id)}
+                      data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
+                    >
                       <td>
                         <input
+                          data-part="checkbox"
                           type="checkbox"
                           style={{ width: 16, height: 16, cursor: 'pointer' }}
                           checked={selectedItems.includes(item.id)}
@@ -221,11 +245,11 @@ export default function ModernFileManager(props: FileManagerProps) {
                         <div className="flex items-center gap-2">
                           {/* Folders use an inline SVG folder icon; files use a renderFileIcon override or generic file SVG. */}
                           {item.type === 'folder' ? (
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" style={{ color: 'var(--ds-color-warning)' }} fill="currentColor" viewBox="0 0 20 20">
+                            <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" style={{ color: 'var(--ds-color-warning)' }} fill="currentColor" viewBox="0 0 20 20">
                               <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                             </svg>
                           ) : (
-                            <span style={getFileIconStyle(item as FileItem)}>
+                            <span data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'} style={getFileIconStyle(item as FileItem)}>
                               {renderFileIcon ? renderFileIcon(item as FileItem) : (
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -234,11 +258,11 @@ export default function ModernFileManager(props: FileManagerProps) {
                             </span>
                           )}
                           {item.type === 'folder' ? (
-                            <a className="link link-hover cursor-pointer" onClick={() => onNavigate?.(item.id)}>
+                            <a data-part="folder-link" data-action="navigate-folder" className="link link-hover cursor-pointer" onClick={() => onNavigate?.(item.id)}>
                               {item.name}
                             </a>
                           ) : (
-                            <span>{item.name}</span>
+                            <span data-part="file-name">{item.name}</span>
                           )}
                         </div>
                       </td>
@@ -248,6 +272,8 @@ export default function ModernFileManager(props: FileManagerProps) {
                         <div className="flex gap-1">
                           {onRename && (
                             <button
+                              data-part="item-action"
+                              data-action="rename"
                               style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
                               onClick={() => {
                                 const newName = window.prompt('New name:', item.name);
@@ -259,6 +285,8 @@ export default function ModernFileManager(props: FileManagerProps) {
                           )}
                           {onDelete && (
                             <button
+                              data-part="item-action"
+                              data-action="delete"
                               style={{ background: 'transparent', color: 'var(--ds-color-error)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
                               onClick={() => onDelete([item.id])}
                             >
@@ -279,6 +307,9 @@ export default function ModernFileManager(props: FileManagerProps) {
               {items.map(item => (
                 <div
                   key={item.id}
+                  data-part="grid-card"
+                  data-selected={selectedItems.includes(item.id)}
+                  data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
                   className="cursor-pointer transition-colors"
                   style={{
                     background: selectedItems.includes(item.id) ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' : 'var(--ds-surface-card)',
@@ -291,16 +322,16 @@ export default function ModernFileManager(props: FileManagerProps) {
                   <div className="items-center text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 12 }}>
                     <div className="text-3xl">
                       {item.type === 'folder' ? (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-9 w-9" style={{ color: 'var(--ds-color-warning)' }} fill="currentColor" viewBox="0 0 20 20">
+                        <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="h-9 w-9" style={{ color: 'var(--ds-color-warning)' }} fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                         </svg>
                       ) : (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-9 w-9" style={getFileIconStyle(item as FileItem)} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'} xmlns="http://www.w3.org/2000/svg" className="h-9 w-9" style={getFileIconStyle(item as FileItem)} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                         </svg>
                       )}
                     </div>
-                    <span className="text-xs truncate w-full">{item.name}</span>
+                    <span data-part="item-name" className="text-xs truncate w-full">{item.name}</span>
                   </div>
                 </div>
               ))}

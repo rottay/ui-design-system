@@ -71,9 +71,15 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
 
   if (loading) {
     return (
-      <div className={className ?? ''} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+      <div
+        className={`ds-pattern-user-profile-card ds-engine-modern ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        data-variant={variant}
+        style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}
+      >
         <div style={{ padding: 20, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' as const }}>
-          <span style={spinnerStyle(24)} />
+          <span data-part="spinner" style={spinnerStyle(24)} />
         </div>
       </div>
     );
@@ -83,24 +89,27 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
     return (
       <div
         className={`flex items-center gap-3 p-3 rounded-lg ds-pattern-user-profile-card ds-engine-modern ${onClick ? 'cursor-pointer' : ''} ${className ?? ''}`}
+        data-part="root"
+        data-loading={false}
+        data-variant={variant}
         style={style}
         onClick={onClick}
       >
-        <div style={{ position: 'relative', display: 'inline-flex' }}>
-          <div className={`${s.avatar} rounded-full`} style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div data-part="avatar-container" style={{ position: 'relative', display: 'inline-flex' }}>
+          <div data-part="avatar" className={`${s.avatar} rounded-full`} style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {user.avatar ? (
               <img src={user.avatar} alt={user.name} />
             ) : (
-              <div className="flex items-center justify-center w-full h-full" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>
+              <div data-part="avatar-fallback" className="flex items-center justify-center w-full h-full" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>
                 <span className={s.desc}>{user.name.charAt(0).toUpperCase()}</span>
               </div>
             )}
           </div>
-          <span style={{ position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, borderRadius: '50%', border: '2px solid var(--ds-surface-card)', background: isOnline ? 'var(--ds-color-success)' : 'var(--ds-color-text-secondary)' }} />
+          <span data-part="presence-dot" data-online={isOnline} style={{ position: 'absolute', bottom: 0, right: 0, width: 10, height: 10, borderRadius: '50%', border: '2px solid var(--ds-surface-card)', background: isOnline ? 'var(--ds-color-success)' : 'var(--ds-color-text-secondary)' }} />
         </div>
         <div className="flex-1 min-w-0">
-          <div className={`font-semibold ${s.title} truncate`}>{user.name}</div>
-          <div className={`${s.desc} opacity-50`}>{user.role}</div>
+          <div data-part="name" className={`font-semibold ${s.title} truncate`}>{user.name}</div>
+          <div data-part="role" className={`${s.desc} opacity-50`}>{user.role}</div>
         </div>
         {headerExtra}
       </div>
@@ -110,38 +119,41 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
   return (
     <div
       className={`ds-pattern-user-profile-card ds-engine-modern ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''} ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      data-variant={variant}
       style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}
       onClick={onClick}
     >
       <div className="items-center text-center" style={{ padding: 24, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <div style={{ position: 'relative', display: 'inline-flex' }}>
-          <div className={`${s.avatar} rounded-full`} style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div data-part="avatar-container" style={{ position: 'relative', display: 'inline-flex' }}>
+          <div data-part="avatar" className={`${s.avatar} rounded-full`} style={{ overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {user.avatar ? (
               <img src={user.avatar} alt={user.name} />
             ) : (
-              <div className="flex items-center justify-center w-full h-full" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>
+              <div data-part="avatar-fallback" className="flex items-center justify-center w-full h-full" style={{ background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>
                 <span className="text-lg">{user.name.charAt(0).toUpperCase()}</span>
               </div>
             )}
           </div>
-          <span style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', border: '2px solid var(--ds-surface-card)', background: isOnline ? 'var(--ds-color-success)' : 'var(--ds-color-text-secondary)' }} />
+          <span data-part="presence-dot" data-online={isOnline} style={{ position: 'absolute', bottom: 0, right: 0, width: 12, height: 12, borderRadius: '50%', border: '2px solid var(--ds-surface-card)', background: isOnline ? 'var(--ds-color-success)' : 'var(--ds-color-text-secondary)' }} />
         </div>
 
         <div className="mt-2">
-          <h3 className={`font-semibold ${s.title}`}>{user.name}</h3>
-          <p className={`${s.desc} opacity-50`}>{user.role}</p>
+          <h3 data-part="name" className={`font-semibold ${s.title}`}>{user.name}</h3>
+          <p data-part="role" className={`${s.desc} opacity-50`}>{user.role}</p>
         </div>
 
         {user.department && (
-          <span className="mt-1" style={{ ...pillBadgeSmStyle, background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' }}>{user.department}</span>
+          <span data-part="department-badge" className="mt-1" style={{ ...pillBadgeSmStyle, background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' }}>{user.department}</span>
         )}
 
         {user.email && (
-          <p className="text-xs opacity-40 mt-1">{user.email}</p>
+          <p data-part="email" className="text-xs opacity-40 mt-1">{user.email}</p>
         )}
 
         {user.status && (
-          <span className="mt-1" style={{ ...pillBadgeSmStyle, ...statusBadgeStyles[user.status] }}>
+          <span data-part="status-badge" data-status={user.status} className="mt-1" style={{ ...pillBadgeSmStyle, ...statusBadgeStyles[user.status] }}>
             {user.status}
           </span>
         )}
@@ -155,6 +167,9 @@ export default function ModernUserProfileCard(props: UserProfileCardProps) {
             {actions.map(action => (
               <button
                 key={action.key}
+                data-part="action-button"
+                data-variant={action.variant ?? 'default'}
+                data-disabled={!!action.disabled}
                 style={{
                   ...btnSizeStyles[size],
                   borderRadius: 'var(--ds-radius-md)',

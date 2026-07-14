@@ -97,8 +97,14 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
 
   if (loading) {
     return (
-      <div className={className} style={{ ...cardStyle, textAlign: 'center', padding: 48, ...style }}>
-        <span style={{ color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>Loading...</span>
+      <div
+        className={`ds-pattern-user-profile-card ds-engine-rustic ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        data-variant={variant}
+        style={{ ...cardStyle, textAlign: 'center', padding: 48, ...style }}
+      >
+        <span data-part="loading-label" style={{ color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>Loading...</span>
       </div>
     );
   }
@@ -115,15 +121,15 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
   };
 
   const renderAvatar = () => (
-    <div style={{ position: 'relative', display: 'inline-block' }}>
-      <div style={avatarStyle(s.avatar)}>
+    <div data-part="avatar-container" style={{ position: 'relative', display: 'inline-block' }}>
+      <div data-part="avatar" style={avatarStyle(s.avatar)}>
         {user.avatar ? (
           <img src={user.avatar} alt={user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         ) : (
           user.name.charAt(0).toUpperCase()
         )}
       </div>
-      <div style={statusDot} />
+      <div data-part="presence-dot" data-online={isOnline} style={statusDot} />
     </div>
   );
 
@@ -138,7 +144,10 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
   if (variant === 'compact') {
     return (
       <div
-        className={className}
+        className={`ds-pattern-user-profile-card ds-engine-rustic ${className ?? ''}`}
+        data-part="root"
+        data-loading={false}
+        data-variant={variant}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -151,10 +160,10 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
       >
         {renderAvatar()}
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 600, fontSize: s.titleSize, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <div data-part="name" style={{ fontWeight: 600, fontSize: s.titleSize, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
             {user.name}
           </div>
-          <div style={{ fontSize: s.descSize, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+          <div data-part="role" style={{ fontSize: s.descSize, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
             {user.role}
           </div>
         </div>
@@ -165,7 +174,10 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
 
   return (
     <div
-      className={className}
+      className={`ds-pattern-user-profile-card ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      data-variant={variant}
       style={{
         ...cardStyle,
         textAlign: 'center',
@@ -179,12 +191,12 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
       {renderAvatar()}
 
       <div style={{ marginTop: 12, marginBottom: 4 }}>
-        <div style={{ fontWeight: 600, fontSize: s.titleSize }}>{user.name}</div>
-        <div style={{ fontSize: s.descSize, color: 'var(--ds-color-text-muted)', marginTop: 2 }}>{user.role}</div>
+        <div data-part="name" style={{ fontWeight: 600, fontSize: s.titleSize }}>{user.name}</div>
+        <div data-part="role" style={{ fontSize: s.descSize, color: 'var(--ds-color-text-muted)', marginTop: 2 }}>{user.role}</div>
       </div>
 
       {user.department && (
-        <div style={{
+        <div data-part="department-badge" style={{
           display: 'inline-block',
           padding: '2px 10px',
           borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -199,13 +211,13 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
       )}
 
       {user.email && (
-        <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginBottom: 8 }}>
+        <div data-part="email" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginBottom: 8 }}>
           {user.email}
         </div>
       )}
 
       {user.status && (
-        <div style={{
+        <div data-part="status-badge" data-status={user.status} style={{
           display: 'inline-block',
           padding: '2px 10px',
           borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -226,6 +238,9 @@ export default function RusticUserProfileCard(props: UserProfileCardProps) {
           {actions.map(action => (
             <button
               key={action.key}
+              data-part="action-button"
+              data-variant={action.variant ?? 'default'}
+              data-disabled={!!action.disabled}
               style={{
                 ...getBtnStyle(action.variant),
                 opacity: action.disabled ? 0.5 : 1,

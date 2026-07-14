@@ -54,38 +54,50 @@ export default function ModernEmptyState(props: EmptyStateProps) {
   /* DaisyUI loading-spinner replaces content while data is fetching */
   if (loading) {
     return (
-      <div className={`flex justify-center items-center ${s.wrapper} ${className ?? ''}`} style={style}>
-        <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+      <div
+        className={`ds-pattern-empty-state ds-engine-modern flex justify-center items-center ${s.wrapper} ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        style={style}
+      >
+        <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }
 
   return (
-    <div className={`${s.wrapper} ds-pattern-empty-state ds-engine-modern ${className ?? ''}`} style={{ ...style, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <div
+      className={`${s.wrapper} ds-pattern-empty-state ds-engine-modern ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      style={{ ...style, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+    >
       <div className="text-center">
         <div className="max-w-md">
           {/* Image takes priority, then custom icon, then a built-in SVG empty-box fallback */}
           {image ? (
-            <img src={image} alt={title} className="mx-auto mb-4 max-h-40 object-contain" />
+            <img data-part="image" src={image} alt={title} className="mx-auto mb-4 max-h-40 object-contain" />
           ) : icon ? (
-            <div className={`${s.icon} mb-4 opacity-40`}>{icon}</div>
+            <div data-part="icon" className={`${s.icon} mb-4 opacity-40`}>{icon}</div>
           ) : (
             /* Default empty-box SVG rendered at very low opacity to stay unobtrusive */
-            <div className={`${s.icon} mb-4 opacity-20`}>
+            <div data-part="icon" className={`${s.icon} mb-4 opacity-20`}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-16 h-16 mx-auto">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5m6 4.125l2.25 2.25m0 0l2.25 2.25M12 13.875l2.25-2.25M12 13.875l-2.25 2.25M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
               </svg>
             </div>
           )}
           {/* Title is always rendered; description is conditional */}
-          <h2 className={`font-bold ${s.title}`}>{title}</h2>
-          {description && <p className={`${s.desc} opacity-60 mt-2`}>{description}</p>}
+          <h2 data-part="title" className={`font-bold ${s.title}`}>{title}</h2>
+          {description && <p data-part="description" className={`${s.desc} opacity-60 mt-2`}>{description}</p>}
           {/* Action row only mounts when at least one action is provided */}
           {(action || secondaryAction) && (
             <div className="flex justify-center gap-2 mt-6">
               {/* Primary action uses primary DS tokens when variant is "primary"; otherwise ghost */}
               {action && (
                 <button
+                  data-part="action"
+                  data-variant={action.variant ?? 'default'}
                   style={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
                     borderRadius: 'var(--ds-radius-md)',
@@ -102,6 +114,8 @@ export default function ModernEmptyState(props: EmptyStateProps) {
               {/* Secondary action is always ghost-styled to visually de-emphasize it */}
               {secondaryAction && (
                 <button
+                  data-part="secondary-action"
+                  data-variant="default"
                   style={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
                     borderRadius: 'var(--ds-radius-md)',

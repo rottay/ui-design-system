@@ -152,8 +152,14 @@ export default function RusticFileManager(props: FileManagerProps) {
 
   if (loading) {
     return (
-      <div className={className} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
-        <span style={{ color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>Loading...</span>
+      <div
+        className={`ds-pattern-file-manager ds-engine-rustic ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        data-view-mode={viewMode}
+        style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}
+      >
+        <span data-part="loading-label" style={{ color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>Loading...</span>
       </div>
     );
   }
@@ -203,25 +209,31 @@ export default function RusticFileManager(props: FileManagerProps) {
   });
 
   return (
-    <div className={className} style={{ ...containerStyle, ...style }}>
+    <div
+      className={`ds-pattern-file-manager ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      data-view-mode={viewMode}
+      style={{ ...containerStyle, ...style }}
+    >
       {/* Toolbar */}
-      <div style={toolbarStyle}>
-        <div style={breadcrumbStyle}>
-          <button style={linkStyle} onClick={() => onNavigate?.(null)}>Root</button>
+      <div data-part="toolbar" style={toolbarStyle}>
+        <div data-part="breadcrumb" style={breadcrumbStyle}>
+          <button data-part="breadcrumb-link" data-action="navigate-root" style={linkStyle} onClick={() => onNavigate?.(null)}>Root</button>
           {currentPath.map((segment, i) => (
             <React.Fragment key={segment}>
               <span>/</span>
               {i < currentPath.length - 1 ? (
-                <button style={linkStyle} onClick={() => onNavigate?.(segment)}>{segment}</button>
+                <button data-part="breadcrumb-link" data-action="navigate-folder" style={linkStyle} onClick={() => onNavigate?.(segment)}>{segment}</button>
               ) : (
-                <span style={{ color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>{segment}</span>
+                <span data-part="breadcrumb-current" style={{ color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>{segment}</span>
               )}
             </React.Fragment>
           ))}
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           {selectedItems.length > 0 && onDelete && (
-            <button style={dangerBtnStyle} onClick={() => onDelete(selectedItems)}>
+            <button data-part="toolbar-action" data-action="delete-selected" style={dangerBtnStyle} onClick={() => onDelete(selectedItems)}>
               Delete ({selectedItems.length})
             </button>
           )}
@@ -231,16 +243,20 @@ export default function RusticFileManager(props: FileManagerProps) {
                 ref={fileInputRef}
                 type="file"
                 multiple
+                data-part="file-input"
                 style={{ display: 'none' }}
                 onChange={handleUploadChange}
                 data-testid="file-input"
               />
-              <button style={primaryBtnStyle} onClick={() => fileInputRef.current?.click()}>
+              <button data-part="toolbar-action" data-action="upload" style={primaryBtnStyle} onClick={() => fileInputRef.current?.click()}>
                 Upload
               </button>
             </>
           )}
           <button
+            data-part="view-toggle"
+            data-action="toggle-view"
+            data-view-mode={viewMode}
             style={btnStyle}
             onClick={() => onViewModeChange?.(viewMode === 'grid' ? 'list' : 'grid')}
             title={viewMode === 'grid' ? 'Switch to list' : 'Switch to grid'}
@@ -252,19 +268,20 @@ export default function RusticFileManager(props: FileManagerProps) {
 
       {/* Content */}
       <div
+        data-part="content"
         onDragOver={e => e.preventDefault()}
         onDrop={handleDrop}
         style={{ minHeight: 200 }}
       >
         {items.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+          <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
             {emptyMessage}
           </div>
         ) : viewMode === 'list' ? (
           <div>
             {/* Column headers styled as an uppercase label row. cursor:default overrides
                 the pointer cursor from rowStyle since headers are not interactive. */}
-            <div style={{ ...rowStyle(false), fontWeight: 600, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', textTransform: 'uppercase' as const, cursor: 'default' }}>
+            <div data-part="column-header" data-selected={false} style={{ ...rowStyle(false), fontWeight: 600, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', textTransform: 'uppercase' as const, cursor: 'default' }}>
               <div style={{ width: 24 }}></div>
               <div style={{ flex: 1 }}>Name</div>
               <div style={{ width: 80 }}>Size</div>
@@ -272,33 +289,46 @@ export default function RusticFileManager(props: FileManagerProps) {
               <div style={{ width: 100 }}>Actions</div>
             </div>
             {items.map(item => (
-              <div key={item.id} style={rowStyle(selectedItems.includes(item.id))}>
+              <div
+                key={item.id}
+                data-part="row"
+                data-selected={selectedItems.includes(item.id)}
+                data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
+                style={rowStyle(selectedItems.includes(item.id))}
+              >
                 <div style={{ width: 24 }}>
                   <input
+                    data-part="checkbox"
                     type="checkbox"
                     checked={selectedItems.includes(item.id)}
                     onChange={() => handleSelect(item.id)}
                   />
                 </div>
                 <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ fontSize: 16 }}>
+                  <span
+                    data-part={item.type === 'folder' ? 'folder-icon' : 'file-icon'}
+                    data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
+                    style={{ fontSize: 16 }}
+                  >
                     {item.type === 'folder' ? '\uD83D\uDCC1' : renderFileIcon ? renderFileIcon(item as FileItem) : '\uD83D\uDCC4'}
                   </span>
                   {item.type === 'folder' ? (
-                    <button style={linkStyle} onClick={() => onNavigate?.(item.id)}>{item.name}</button>
+                    <button data-part="folder-link" data-action="navigate-folder" style={linkStyle} onClick={() => onNavigate?.(item.id)}>{item.name}</button>
                   ) : (
-                    <span>{item.name}</span>
+                    <span data-part="file-name">{item.name}</span>
                   )}
                 </div>
-                <div style={{ width: 80, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div data-part="file-size" style={{ width: 80, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                   {item.type === 'file' ? formatSize((item as FileItem).size) : '--'}
                 </div>
-                <div style={{ width: 120, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div data-part="modified-at" style={{ width: 120, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                   {formatDate(item.modifiedAt)}
                 </div>
                 <div style={{ width: 100, display: 'flex', gap: 4 }}>
                   {onRename && (
                     <button
+                      data-part="item-action"
+                      data-action="rename"
                       style={{ ...linkStyle, fontSize: 'var(--ds-font-size-xs, 12px)' }}
                       onClick={() => {
                         const newName = window.prompt('New name:', item.name);
@@ -310,6 +340,8 @@ export default function RusticFileManager(props: FileManagerProps) {
                   )}
                   {onDelete && (
                     <button
+                      data-part="item-action"
+                      data-action="delete"
                       style={{ ...linkStyle, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-error)' }}
                       onClick={() => onDelete([item.id])}
                     >
@@ -325,13 +357,20 @@ export default function RusticFileManager(props: FileManagerProps) {
             {items.map(item => (
               <div
                 key={item.id}
+                data-part="grid-card"
+                data-selected={selectedItems.includes(item.id)}
+                data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
                 style={gridCardStyle(selectedItems.includes(item.id))}
                 onClick={() => item.type === 'folder' ? onNavigate?.(item.id) : handleSelect(item.id)}
               >
-                <div style={{ fontSize: 32, marginBottom: 4 }}>
+                <div
+                  data-part={item.type === 'folder' ? 'folder-icon' : 'file-icon'}
+                  data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
+                  style={{ fontSize: 32, marginBottom: 4 }}
+                >
                   {item.type === 'folder' ? '\uD83D\uDCC1' : renderFileIcon ? renderFileIcon(item as FileItem) : '\uD83D\uDCC4'}
                 </div>
-                <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                <div data-part="item-name" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {item.name}
                 </div>
               </div>

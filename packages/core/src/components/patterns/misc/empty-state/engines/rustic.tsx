@@ -64,8 +64,13 @@ export default function RusticEmptyState(props: EmptyStateProps) {
 
   if (loading) {
     return (
-      <div className={className} style={containerStyle}>
-        <span style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+      <div
+        className={`ds-pattern-empty-state ds-engine-rustic ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        style={containerStyle}
+      >
+        <span data-part="loading-label" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
       </div>
     );
   }
@@ -97,19 +102,24 @@ export default function RusticEmptyState(props: EmptyStateProps) {
   };
 
   return (
-    <div className={className} style={containerStyle}>
+    <div
+      className={`ds-pattern-empty-state ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      style={containerStyle}
+    >
       {/* Visual hierarchy: image > custom icon > nothing (no default fallback in Rustic) */}
       {image ? (
-        <img src={image} alt={title} style={{ height: s.iconSize, objectFit: 'contain', marginBottom: 16 }} />
+        <img data-part="image" src={image} alt={title} style={{ height: s.iconSize, objectFit: 'contain', marginBottom: 16 }} />
       ) : icon ? (
-        <div style={{ fontSize: s.iconSize, lineHeight: 1, marginBottom: 16, opacity: 0.4 }}>{icon}</div>
+        <div data-part="icon" style={{ fontSize: s.iconSize, lineHeight: 1, marginBottom: 16, opacity: 0.4 }}>{icon}</div>
       ) : null}
       {/* Title rendered with bold weight; color inherits from ds text token */}
-      <div style={{ fontSize: s.titleSize, fontWeight: 600, color: 'var(--ds-color-text)', marginBottom: 8 }}>
+      <div data-part="title" style={{ fontSize: s.titleSize, fontWeight: 600, color: 'var(--ds-color-text)', marginBottom: 8 }}>
         {title}
       </div>
       {description && (
-        <div style={{ fontSize: s.descSize, color: 'var(--ds-color-text-muted)', marginBottom: 16, maxWidth: 400 }}>
+        <div data-part="description" style={{ fontSize: s.descSize, color: 'var(--ds-color-text-muted)', marginBottom: 16, maxWidth: 400 }}>
           {description}
         </div>
       )}
@@ -118,12 +128,12 @@ export default function RusticEmptyState(props: EmptyStateProps) {
         <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
           {/* Button variant selects between primary/default style objects */}
           {action && (
-            <button style={action.variant === 'primary' ? primaryBtn : defaultBtn} onClick={action.onClick}>
+            <button data-part="action" data-variant={action.variant ?? 'default'} style={action.variant === 'primary' ? primaryBtn : defaultBtn} onClick={action.onClick}>
               {action.label}
             </button>
           )}
           {secondaryAction && (
-            <button style={defaultBtn} onClick={secondaryAction.onClick}>
+            <button data-part="secondary-action" data-variant="default" style={defaultBtn} onClick={secondaryAction.onClick}>
               {secondaryAction.label}
             </button>
           )}

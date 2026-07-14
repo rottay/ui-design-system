@@ -28,9 +28,9 @@ import { pillBadgeSmStyle, spinnerStyle } from '../../../_internal/engines/moder
  * - `string` -> custom label (e.g. "10 GB")
  */
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
-  if (value === true) return <span className="text-lg" style={{ color: 'var(--ds-color-success)' }}>{'\u2713'}</span>;
-  if (value === false || value === undefined) return <span className="text-lg" style={{ color: 'var(--ds-color-text-secondary)' }}>{'\u2717'}</span>;
-  return <span className="text-sm">{value}</span>;
+  if (value === true) return <span data-part="feature-value" data-feature-state="included" className="text-lg" style={{ color: 'var(--ds-color-success)' }}>{'\u2713'}</span>;
+  if (value === false || value === undefined) return <span data-part="feature-value" data-feature-state="excluded" className="text-lg" style={{ color: 'var(--ds-color-text-secondary)' }}>{'\u2717'}</span>;
+  return <span data-part="feature-value" data-feature-state="custom" className="text-sm">{value}</span>;
 }
 
 /**
@@ -61,21 +61,34 @@ export default function ModernPricingTable(props: PricingTableProps) {
   /* Short-circuit: spinner while pricing data loads */
   if (loading) {
     return (
-      <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span role="status" aria-label="Loading" style={spinnerStyle(24)} />
+      <div
+        className={`ds-pattern-pricing-table ds-engine-modern flex justify-center items-center py-12 ${className ?? ''}`}
+        data-part="root"
+        data-loading={true}
+        data-cycle={billingCycle ?? 'monthly'}
+        style={style}
+      >
+        <span data-part="spinner" role="status" aria-label="Loading" style={spinnerStyle(24)} />
       </div>
     );
   }
 
   return (
-    <div className={`ds-pattern-pricing-table ds-engine-modern ${className ?? ''}`} style={style}>
+    <div
+      className={`ds-pattern-pricing-table ds-engine-modern ${className ?? ''}`}
+      data-part="root"
+      data-loading={false}
+      data-cycle={billingCycle ?? 'monthly'}
+      style={style}
+    >
       {/* Billing toggle -- Only rendered when the consumer provides a
           billing-cycle change handler, keeping the toggle opt-in for
           static pricing pages. */}
       {onBillingCycleChange && (
-        <div className="flex justify-center items-center gap-3 mb-8">
+        <div data-part="toggle" data-cycle={billingCycle ?? 'monthly'} className="flex justify-center items-center gap-3 mb-8">
           <span className={`text-sm ${billingCycle === 'monthly' ? 'font-bold' : 'opacity-50'}`}>Monthly</span>
           <input
+            data-part="toggle-input"
             type="checkbox"
             style={{ width: 40, height: 20, cursor: 'pointer' }}
             checked={billingCycle === 'yearly'}
@@ -83,7 +96,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
           />
           <span className={`text-sm ${billingCycle === 'yearly' ? 'font-bold' : 'opacity-50'}`}>
             Yearly
-            <span className="ml-1" style={{ ...pillBadgeSmStyle, background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' }}>Save 20%</span>
+            <span data-part="plan-badge" data-variant="savings" className="ml-1" style={{ ...pillBadgeSmStyle, background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' }}>Save 20%</span>
           </span>
         </div>
       )}
@@ -102,9 +115,9 @@ export default function ModernPricingTable(props: PricingTableProps) {
                   <th key={plan.id} className="text-center align-top">
                     {/* renderPlanHeader lets consumers fully replace the card content */}
                     {renderPlanHeader ? renderPlanHeader(plan) : (
-                      <div className="p-4" style={isHighlighted ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', borderRadius: 'var(--ds-radius-lg)', border: '2px solid var(--ds-color-primary)' } : { background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border)' }}>
+                      <div data-part="plan-card" data-highlighted={isHighlighted} className="p-4" style={isHighlighted ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', borderRadius: 'var(--ds-radius-lg)', border: '2px solid var(--ds-color-primary)' } : { background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border)' }}>
                         {plan.popular && (
-                          <span className="mb-2" style={{ ...pillBadgeSmStyle, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>Most Popular</span>
+                          <span data-part="plan-badge" data-variant="popular" className="mb-2" style={{ ...pillBadgeSmStyle, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>Most Popular</span>
                         )}
                         <div className="font-bold text-lg">{plan.name}</div>
                         {/* Price displayed as currency+number or raw string for "Custom" tiers */}
@@ -118,6 +131,8 @@ export default function ModernPricingTable(props: PricingTableProps) {
                           <div className="text-xs opacity-50 mt-1">{plan.description}</div>
                         )}
                         <button
+                          data-part="cta-button"
+                          data-highlighted={isHighlighted}
                           style={isHighlighted
                             ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', width: '100%', marginTop: 12 }
                             : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', width: '100%', marginTop: 12 }
@@ -145,6 +160,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
                   {isCategory && (
                     <tr>
                       <td
+                        data-part="category-header"
                         colSpan={plans.length + 1}
                         className="font-bold text-xs uppercase opacity-40 pt-6 pb-2 border-t"
                         style={{ borderColor: 'var(--ds-color-border)' }}
@@ -154,11 +170,11 @@ export default function ModernPricingTable(props: PricingTableProps) {
                     </tr>
                   )}
                   {/* Feature row */}
-                  <tr>
+                  <tr data-part="feature-row">
                     <td className="text-sm">
                       {/* Native title tooltip -- no JS overhead */}
                       {feature.description ? (
-                        <span title={feature.description} style={{ cursor: 'help', borderBottom: '1px dotted var(--ds-color-border)' }}>
+                        <span data-part="feature-label" title={feature.description} style={{ cursor: 'help', borderBottom: '1px dotted var(--ds-color-border)' }}>
                           {feature.label}
                         </span>
                       ) : (
