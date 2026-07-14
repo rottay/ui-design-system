@@ -1269,3 +1269,32 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   the last known false-positive class. Note: this is distinct from the edit:104 case, which is
   already correctly handled (verified) — that one is an interface member, this one is a generic arg.
 - **Status** — OPEN.
+
+### P-86 A counted key overriding a cross-file `_internal` shared-style spread cannot reach 0 without de-sharing
+
+- **Context** — Found by the CK-G migration (mig-06g-rest) on three modern navigation engines. A new
+  P-78 sub-class: not a later key overwriting an earlier key in ONE object, but a later key overriding
+  a value the SPREAD imported from another file supplies.
+- **Evidence** — `environment-toggle/modern:122` and `workspace-switcher/modern:162` render
+  `{...popupPanelStyle, boxShadow: 'var(--ds-elevation-3)'}` where `popupPanelStyle` (from
+  `patterns/navigation/_internal/engines/modern/styles.ts`) sets `boxShadow: var(--ds-elevation-2)`.
+  `locale-switcher/modern:300` renders `{...menuItemStyle, …, background: <focus ternary>}` where
+  `menuItemStyle` sets `background: transparent`. The override wins (later key), so the panel renders
+  elevation-3 and the menu-item paints its focus state.
+- **Why it can't migrate cleanly** — the override is a counted paint key, so reaching `inlinePaint: 0`
+  requires moving it to a skin. But the SPREAD supplies the same property INLINE (from the shared
+  object), and inline beats any unlayered skin rule. So a skin rule for the override never wins while
+  the spread stays. The only byte-exact path to 0 is to DROP the spread and re-express the shared
+  surface (popupPanelStyle's bg/border/radius/boxShadow) in the component's own skin — which
+  **de-shares** the object. popupPanelStyle/menuItemStyle are imported by ONLY these three files, so
+  dropping all three leaves them dead exports in `_internal`.
+- **Compounding factor** — the popups are (probably) UNPHOTOGRAPHED: the switchers render closed at
+  rest, so the panels/menu don't appear in the baseline. The migration is then verified at the SOURCE
+  level (the skin rule diffed against the `_internal` values verbatim), not by the pixel gate.
+- **Disposition (CK-G)** — drop-spread + re-express, transcribed verbatim, source-verified. The now-
+  dead `_internal` exports are FLAGGED, not deleted ("zero importers is not dead code").
+- **The real fix** — a separate `_internal`-SURFACE migration: move popupPanelStyle/menuItemStyle
+  themselves into skins consumed by all users, so the shared surface becomes tenant-themable in one
+  place instead of being duplicated into each component's skin. That is the honest root fix; the
+  per-component de-share is the byte-exact expedient CK-G could reach.
+- **Status** — OPEN.
