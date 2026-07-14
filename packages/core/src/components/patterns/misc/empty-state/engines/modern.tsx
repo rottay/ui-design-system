@@ -60,7 +60,7 @@ export default function ModernEmptyState(props: EmptyStateProps) {
         data-loading={true}
         style={style}
       >
-        <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+        <span className="ds-empty-state__spinner" data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }
@@ -96,14 +96,11 @@ export default function ModernEmptyState(props: EmptyStateProps) {
               {/* Primary action uses primary DS tokens when variant is "primary"; otherwise ghost */}
               {action && (
                 <button
+                  className="ds-empty-state__action"
                   data-part="action"
                   data-variant={action.variant ?? 'default'}
                   style={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                    borderRadius: 'var(--ds-radius-md)',
-                    border: action.variant === 'primary' ? '1px solid var(--ds-color-primary)' : '1px solid transparent',
-                    background: action.variant === 'primary' ? 'var(--ds-color-primary)' : 'transparent',
-                    color: action.variant === 'primary' ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-text-primary)',
                     ...s.btnStyle,
                   }}
                   onClick={action.onClick}
@@ -114,14 +111,11 @@ export default function ModernEmptyState(props: EmptyStateProps) {
               {/* Secondary action is always ghost-styled to visually de-emphasize it */}
               {secondaryAction && (
                 <button
+                  className="ds-empty-state__secondary-action"
                   data-part="secondary-action"
                   data-variant="default"
                   style={{
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                    borderRadius: 'var(--ds-radius-md)',
-                    border: '1px solid transparent',
-                    background: 'transparent',
-                    color: 'var(--ds-color-text-primary)',
                     ...s.btnStyle,
                   }}
                   onClick={secondaryAction.onClick}

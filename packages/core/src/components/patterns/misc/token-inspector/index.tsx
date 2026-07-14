@@ -144,11 +144,6 @@ export function TokenInspector(): React.ReactElement | null {
     width: 360,
     maxHeight: 400,
     overflow: 'auto',
-    background: '#1a1a1e',
-    color: '#e4e4e8',
-    border: '1px solid #2a2a2f',
-    borderRadius: 8,
-    boxShadow: '0 16px 48px rgba(0,0,0,0.5)',
     fontFamily: "'JetBrains Mono', 'SF Mono', monospace",
     fontSize: 11,
     lineHeight: 1.5,
@@ -168,37 +163,31 @@ export function TokenInspector(): React.ReactElement | null {
       'data-part': 'header',
       style: {
         padding: '8px 12px',
-        borderBottom: '1px solid #2a2a2f',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        background: '#131316',
-        borderRadius: '8px 8px 0 0',
       },
     },
-      React.createElement('span', { 'data-part': 'title', style: { fontWeight: 600, color: '#a0a0a5' } }, 'Token Inspector'),
+      React.createElement('span', { 'data-part': 'title', style: { fontWeight: 600 } }, 'Token Inspector'),
       React.createElement('span', {
         'data-part': 'pinned-badge',
         'data-pinned': state.pinned,
         style: {
           padding: '1px 6px',
-          borderRadius: 4,
           fontSize: 9,
-          background: state.pinned ? '#3b82f6' : '#2a2a2f',
-          color: state.pinned ? '#fff' : '#6b6b72',
         },
       }, state.pinned ? 'PINNED' : 'HOVER'),
     ),
     // Element info
     React.createElement('div', {
       'data-part': 'element-info',
-      style: { padding: '6px 12px', borderBottom: '1px solid #222226', color: '#6b6b72', fontSize: 10 },
+      style: { padding: '6px 12px', fontSize: 10 },
     }, state.element),
     // Tokens
     state.tokens.length === 0
       ? React.createElement('div', {
           'data-part': 'empty',
-          style: { padding: '16px 12px', color: '#555', textAlign: 'center' as const },
+          style: { padding: '16px 12px', textAlign: 'center' as const },
         }, 'Hover an element to inspect its tokens')
       : state.tokens.map((t, i) =>
           React.createElement('div', {
@@ -206,18 +195,16 @@ export function TokenInspector(): React.ReactElement | null {
             'data-part': 'token-row',
             style: {
               padding: '4px 12px',
-              borderBottom: '1px solid #1e1e22',
               display: 'flex',
               justifyContent: 'space-between',
               gap: 8,
             },
           },
-            React.createElement('span', { 'data-part': 'token-name', style: { color: '#a0a0a5', flexShrink: 0 } }, t.name),
+            React.createElement('span', { 'data-part': 'token-name', style: { flexShrink: 0 } }, t.name),
             React.createElement('span', {
               'data-part': 'token-value',
               'data-value-kind': t.value.startsWith('#') || t.value.startsWith('rgb') ? 'color' : 'text',
               style: {
-                color: t.value.startsWith('#') || t.value.startsWith('rgb') ? '#60a5fa' : '#e4e4e8',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 whiteSpace: 'nowrap',
@@ -229,7 +216,7 @@ export function TokenInspector(): React.ReactElement | null {
     // Footer
     React.createElement('div', {
       'data-part': 'footer',
-      style: { padding: '6px 12px', borderTop: '1px solid #2a2a2f', color: '#555', fontSize: 9, textAlign: 'center' as const },
+      style: { padding: '6px 12px', fontSize: 9, textAlign: 'center' as const },
     }, 'Ctrl+Shift+T to close | Click to pin'),
   );
 }

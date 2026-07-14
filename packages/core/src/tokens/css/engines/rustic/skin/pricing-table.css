@@ -1,0 +1,102 @@
+/**
+ * Rustic PricingTable skin (WO-SKIN-06 CK-H2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): named DS layers sort before the consumer base
+ * layer. Private BEM landing classes isolate caller-supplied plan headers, and
+ * every real border color reaches at least (0,4,0) over the tenant floor.
+ * Values and the monthly/yearly, highlighted/plain, CTA, badge, and tri-state
+ * divergences are transcribed verbatim from the rustic engine.
+ */
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__loading-label[data-part='loading-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__toggle-track[data-part='toggle-track'] {
+  border-radius: 12px;
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__toggle-track[data-part='toggle-track'][data-cycle='monthly'] {
+  background: var(--ds-color-neutral-300);
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__toggle-track[data-part='toggle-track'][data-cycle='yearly'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__toggle-thumb[data-part='toggle-thumb'] {
+  border-radius: 50%;
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-badge[data-part='plan-badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-badge[data-part='plan-badge'][data-variant='savings'] {
+  background: var(--ds-color-success-600, var(--ds-color-success));
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-badge[data-part='plan-badge'][data-variant='popular'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__table-heading[data-part='table-heading'],
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-column[data-part='plan-column'] {
+  border: none;
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__table-heading[data-part='table-heading'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-card[data-part='plan-card'] {
+  border-radius: var(--ds-radius-lg, 12px);
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-card[data-part='plan-card'][data-highlighted='true'] {
+  border: 2px solid var(--ds-color-primary);
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-card[data-part='plan-card'][data-highlighted='false'] {
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__price-note[data-part='price-note'],
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__plan-description[data-part='plan-description'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__cta-button[data-part='cta-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__cta-button[data-part='cta-button'][data-highlighted='true'] {
+  background: var(--ds-button-primary-bg, var(--ds-color-primary));
+  color: var(--ds-button-primary-color, var(--ds-color-text-on-primary, var(--ds-color-text-inverse)));
+  border-color: var(--ds-button-primary-border, var(--ds-color-primary));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__category-header[data-part='category-header'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+  border-top: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__feature-label-cell[data-part='feature-label-cell'],
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__feature-value-cell[data-part='feature-value-cell'] {
+  border-top: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__feature-value[data-part='feature-value'][data-feature-state='included'] {
+  color: var(--ds-color-success-600, var(--ds-color-success));
+}
+
+.ds-pattern-pricing-table.ds-engine-rustic .ds-pricing-table__feature-value[data-part='feature-value'][data-feature-state='excluded'] {
+  color: var(--ds-color-border-primary, var(--ds-color-border));
+}

@@ -1,0 +1,88 @@
+/**
+ * Rustic FileManager skin (WO-SKIN-06 checkpoint CK-H2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): layered component rules cannot outrank the
+ * global framework base. Real border colours use the two scope classes plus
+ * private ownership classes and repeated parts, clearing the tenant border
+ * floor at (0,3,1). Caller inline style still outranks this skin, preserving
+ * the rustic root's spread order.
+ */
+
+.ds-pattern-file-manager.ds-engine-rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+  border-radius: var(--ds-radius-lg, 12px);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar[data-part='toolbar'][data-part='toolbar'] {
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__view-toggle[data-part='view-toggle'][data-part='view-toggle'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='upload'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-color: var(--ds-color-primary);
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='delete-selected'] {
+  color: var(--ds-color-error);
+  border-color: var(--ds-color-error);
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__loading-label[data-part='loading-label'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb[data-part='breadcrumb'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__empty[data-part='empty'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__column-header[data-part='column-header'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__file-size[data-part='file-size'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__modified-at[data-part='modified-at'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb-current[data-part='breadcrumb-current'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__breadcrumb-link[data-part='breadcrumb-link'][data-part='breadcrumb-link'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__folder-link[data-part='folder-link'][data-part='folder-link'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__item-action[data-part='item-action'][data-part='item-action'] {
+  color: var(--ds-color-primary);
+  background: none;
+  border: none;
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__item-action[data-part='item-action'][data-action='delete'] {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__row[data-part='row'][data-part='row'],
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__column-header[data-part='column-header'][data-part='column-header'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__row[data-part='row'][data-selected='true'] {
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__grid-card[data-part='grid-card'] {
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false'] {
+  border: 2px solid transparent;
+}
+
+.ds-pattern-file-manager.ds-engine-rustic .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true'] {
+  border: 2px solid var(--ds-color-primary);
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}

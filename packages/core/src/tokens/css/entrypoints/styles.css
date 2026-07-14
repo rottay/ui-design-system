@@ -351,6 +351,17 @@
 @import '../components/skin/table-toolbar.css';
 @import '../components/skin/view-mode-switcher.css';
 
+/* WO-SKIN-06 CK-H2: misc patterns paint from unlayered skins. */
+@import '../engines/modern/skin/file-manager.css';
+@import '../engines/rustic/skin/file-manager.css';
+@import '../engines/modern/skin/user-profile-card.css';
+@import '../engines/rustic/skin/user-profile-card.css';
+@import '../engines/modern/skin/pricing-table.css';
+@import '../engines/rustic/skin/pricing-table.css';
+@import '../engines/modern/skin/empty-state.css';
+@import '../engines/rustic/skin/empty-state.css';
+@import '../components/skin/token-inspector.css';
+
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)

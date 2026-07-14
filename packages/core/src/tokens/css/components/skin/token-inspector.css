@@ -1,0 +1,87 @@
+/**
+ * TokenInspector skin — engine-agnostic and deliberately unlayered (P-47).
+ * Layered rules sort before Tailwind's base layer and cannot reliably paint
+ * these elements. The inspector deliberately uses literal colors so it stays
+ * legible while inspecting a broken or incomplete token theme.
+ *
+ * The root has one scope class. Border-color rules repeat the target part
+ * three times to reach (0,4,0) and clear the tenant border floor at (0,3,1).
+ * Other paint reaches at least (0,3,0). All descendants are raw DOM elements,
+ * so no Typography specificity tier applies.
+ */
+
+.ds-pattern-token-inspector[data-part='panel'][data-part='panel'][data-part='panel'] {
+  background: #1a1a1e;
+  color: #e4e4e8;
+  border: 1px solid #2a2a2f;
+  border-radius: 8px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+}
+
+.ds-pattern-token-inspector > [data-part='header'][data-part='header'][data-part='header'] {
+  border-bottom: 1px solid #2a2a2f;
+  background: #131316;
+  border-radius: 8px 8px 0 0;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='header']
+  > [data-part='title'][data-part='title'] {
+  color: #a0a0a5;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='header']
+  > [data-part='pinned-badge'][data-part='pinned-badge'] {
+  border-radius: 4px;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='header']
+  > [data-part='pinned-badge'][data-pinned='false'] {
+  background: #2a2a2f;
+  color: #6b6b72;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='header']
+  > [data-part='pinned-badge'][data-pinned='true'] {
+  background: #3b82f6;
+  color: #fff;
+}
+
+.ds-pattern-token-inspector > [data-part='element-info'][data-part='element-info'][data-part='element-info'] {
+  border-bottom: 1px solid #222226;
+  color: #6b6b72;
+}
+
+.ds-pattern-token-inspector > [data-part='empty'][data-part='empty'] {
+  color: #555;
+}
+
+.ds-pattern-token-inspector > [data-part='token-row'][data-part='token-row'][data-part='token-row'] {
+  border-bottom: 1px solid #1e1e22;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='token-row']
+  > [data-part='token-name'][data-part='token-name'] {
+  color: #a0a0a5;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='token-row']
+  > [data-part='token-value'][data-value-kind='color'] {
+  color: #60a5fa;
+}
+
+.ds-pattern-token-inspector
+  > [data-part='token-row']
+  > [data-part='token-value'][data-value-kind='text'] {
+  color: #e4e4e8;
+}
+
+.ds-pattern-token-inspector > [data-part='footer'][data-part='footer'][data-part='footer'] {
+  border-top: 1px solid #2a2a2f;
+  color: #555;
+}

@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview EmptyState -- Rustic engine (Vanilla / CSS variables).
- * Centered empty-state using only inline styles with --ds-* design tokens.
+ * Centered empty-state using an engine skin for paint and inline layout metrics.
  * No framework dependency. Supports icon, image, title, description,
  * and primary/secondary action buttons. Sizing is driven by pixel-based
  * presets (sm/md/lg) for padding, icon height, and font sizes.
@@ -28,8 +28,8 @@ const sizeDefs = {
 
 /**
  * Rustic (Vanilla CSS) implementation of the EmptyState pattern.
- * All visual properties use inline styles referencing --ds-* tokens,
- * ensuring tenant-theme portability without any CSS framework.
+ * Paint references --ds-* tokens in the engine skin, preserving tenant-theme
+ * portability without any CSS framework.
  *
  * @param props - See {@link EmptyStateProps} for the full prop contract.
  * @returns The rendered empty state.
@@ -70,15 +70,13 @@ export default function RusticEmptyState(props: EmptyStateProps) {
         data-loading={true}
         style={containerStyle}
       >
-        <span data-part="loading-label" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+        <span className="ds-empty-state__loading-label" data-part="loading-label">Loading...</span>
       </div>
     );
   }
 
-  /** Shared base button styles -- all action buttons inherit radius, padding, and transition */
+  /** Shared action layout metrics. */
   const btnBase: CSSProperties = {
-    border: '1px solid var(--ds-color-neutral-300)',
-    borderRadius: 'var(--ds-radius-md, 8px)',
     padding: s.btnPadding,
     fontSize: 'var(--ds-font-size-sm, 14px)',
     cursor: 'pointer',
@@ -86,19 +84,14 @@ export default function RusticEmptyState(props: EmptyStateProps) {
     transition: 'background 0.15s, border-color 0.15s',
   };
 
-  /** Primary variant -- uses tenant primary color with contrast foreground */
+  /** Primary action layout. */
   const primaryBtn: CSSProperties = {
     ...btnBase,
-    background: 'var(--ds-color-primary)',
-    color: 'var(--ds-color-primary-foreground, #fff)',
-    borderColor: 'var(--ds-color-primary)',
   };
 
-  /** Default variant -- neutral background with standard text color */
+  /** Default action layout. */
   const defaultBtn: CSSProperties = {
     ...btnBase,
-    background: 'var(--ds-color-background)',
-    color: 'var(--ds-color-text)',
   };
 
   return (
@@ -114,12 +107,12 @@ export default function RusticEmptyState(props: EmptyStateProps) {
       ) : icon ? (
         <div data-part="icon" style={{ fontSize: s.iconSize, lineHeight: 1, marginBottom: 16, opacity: 0.4 }}>{icon}</div>
       ) : null}
-      {/* Title rendered with bold weight; color inherits from ds text token */}
-      <div data-part="title" style={{ fontSize: s.titleSize, fontWeight: 600, color: 'var(--ds-color-text)', marginBottom: 8 }}>
+      {/* Title rendered with bold weight; the engine skin supplies its tokenized color */}
+      <div className="ds-empty-state__title" data-part="title" style={{ fontSize: s.titleSize, fontWeight: 600, marginBottom: 8 }}>
         {title}
       </div>
       {description && (
-        <div data-part="description" style={{ fontSize: s.descSize, color: 'var(--ds-color-text-muted)', marginBottom: 16, maxWidth: 400 }}>
+        <div className="ds-empty-state__description" data-part="description" style={{ fontSize: s.descSize, marginBottom: 16, maxWidth: 400 }}>
           {description}
         </div>
       )}
@@ -128,12 +121,12 @@ export default function RusticEmptyState(props: EmptyStateProps) {
         <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
           {/* Button variant selects between primary/default style objects */}
           {action && (
-            <button data-part="action" data-variant={action.variant ?? 'default'} style={action.variant === 'primary' ? primaryBtn : defaultBtn} onClick={action.onClick}>
+            <button className="ds-empty-state__action" data-part="action" data-variant={action.variant ?? 'default'} style={action.variant === 'primary' ? primaryBtn : defaultBtn} onClick={action.onClick}>
               {action.label}
             </button>
           )}
           {secondaryAction && (
-            <button data-part="secondary-action" data-variant="default" style={defaultBtn} onClick={secondaryAction.onClick}>
+            <button className="ds-empty-state__secondary-action" data-part="secondary-action" data-variant="default" style={defaultBtn} onClick={secondaryAction.onClick}>
               {secondaryAction.label}
             </button>
           )}

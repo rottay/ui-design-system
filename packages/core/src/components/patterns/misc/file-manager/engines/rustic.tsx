@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Rustic (Vanilla / CSS variables) engine for the FileManager pattern.
- * Renders a file/folder browser using only inline styles with `--ds-*` design tokens,
+ * Renders a file/folder browser with a token-driven engine skin and inline layout,
  * making it framework-agnostic (no Ant Design or Tailwind dependency). Supports list
  * and grid views, breadcrumb navigation, drag-and-drop upload, multi-select, rename,
  * and bulk delete.
@@ -36,15 +36,10 @@ function formatDate(date?: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Static style objects.
-// All colors and radii reference --ds-* CSS custom properties so the component
-// automatically adapts to any design-system theme without class-based overrides.
+// Static layout objects.
 // ---------------------------------------------------------------------------
 
 const containerStyle: CSSProperties = {
-  border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  borderRadius: 'var(--ds-radius-lg, 12px)',
-  background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
   overflow: 'hidden',
 };
 
@@ -53,40 +48,29 @@ const toolbarStyle: CSSProperties = {
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '12px 16px',
-  borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
 };
 
 const btnStyle: CSSProperties = {
   padding: '6px 14px',
   fontSize: 'var(--ds-font-size-sm, 14px)',
-  borderRadius: 'var(--ds-radius-md, 8px)',
-  border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-  background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-  color: 'var(--ds-color-text-primary, var(--ds-color-text))',
   cursor: 'pointer',
   fontWeight: 500,
 };
 
-// Primary and danger button variants extend the base button style,
-// overriding only color/background to keep sizing and radius consistent.
+// Primary and danger button variants share the same layout metrics.
 const primaryBtnStyle: CSSProperties = {
   ...btnStyle,
-  background: 'var(--ds-color-primary)',
-  color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
-  borderColor: 'var(--ds-color-primary)',
 };
 
 const dangerBtnStyle: CSSProperties = {
   ...btnStyle,
-  color: 'var(--ds-color-error)',
-  borderColor: 'var(--ds-color-error)',
 };
 
 /**
  * Rustic (Vanilla) FileManager engine.
  *
- * Uses inline styles exclusively, referencing `--ds-*` CSS custom properties for
- * theming. No external CSS framework is required. Grid and list views are built
+ * Uses a token-driven skin for paint and inline layout metrics. No external CSS
+ * framework is required. Grid and list views are built
  * with plain flexbox, and breadcrumb segments use styled `<button>` elements
  * to remain semantically accessible.
  *
@@ -159,7 +143,7 @@ export default function RusticFileManager(props: FileManagerProps) {
         data-view-mode={viewMode}
         style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}
       >
-        <span data-part="loading-label" style={{ color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>Loading...</span>
+        <span className="ds-file-manager__loading-label" data-part="loading-label">Loading...</span>
       </div>
     );
   }
@@ -171,41 +155,31 @@ export default function RusticFileManager(props: FileManagerProps) {
     alignItems: 'center',
     gap: 4,
     fontSize: 'var(--ds-font-size-sm, 14px)',
-    color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
   };
 
-  // linkStyle resets all native button/anchor styles so links look clickable but
-  // inherit the container font, avoiding browser default serif or underline.
+  // Link layout keeps the clickable controls aligned and inheriting the
+  // container font; the engine skin owns their native paint resets.
   const linkStyle: CSSProperties = {
-    color: 'var(--ds-color-primary)',
     cursor: 'pointer',
     textDecoration: 'none',
-    background: 'none',
-    border: 'none',
     padding: 0,
     font: 'inherit',
   };
 
-  // Row and grid card style factories. The `selected` boolean controls
-  // the highlighted background and border to indicate active selection.
-  const rowStyle = (selected: boolean): CSSProperties => ({
+  // Row and grid card layout factories keep sizing stable across states.
+  const rowStyle = (_selected: boolean): CSSProperties => ({
     display: 'flex',
     alignItems: 'center',
     gap: 12,
     padding: '8px 16px',
-    borderBottom: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100))',
-    background: selected ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))' : undefined,
     cursor: 'pointer',
   });
 
-  const gridCardStyle = (selected: boolean): CSSProperties => ({
+  const gridCardStyle = (_selected: boolean): CSSProperties => ({
     width: 110,
     padding: 12,
     textAlign: 'center',
-    borderRadius: 'var(--ds-radius-md, 8px)',
-    border: selected ? '2px solid var(--ds-color-primary)' : '2px solid transparent',
     cursor: 'pointer',
-    background: selected ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))' : undefined,
   });
 
   return (
@@ -217,23 +191,23 @@ export default function RusticFileManager(props: FileManagerProps) {
       style={{ ...containerStyle, ...style }}
     >
       {/* Toolbar */}
-      <div data-part="toolbar" style={toolbarStyle}>
-        <div data-part="breadcrumb" style={breadcrumbStyle}>
-          <button data-part="breadcrumb-link" data-action="navigate-root" style={linkStyle} onClick={() => onNavigate?.(null)}>Root</button>
+      <div className="ds-file-manager__toolbar" data-part="toolbar" style={toolbarStyle}>
+        <div className="ds-file-manager__breadcrumb" data-part="breadcrumb" style={breadcrumbStyle}>
+          <button className="ds-file-manager__breadcrumb-link" data-part="breadcrumb-link" data-action="navigate-root" style={linkStyle} onClick={() => onNavigate?.(null)}>Root</button>
           {currentPath.map((segment, i) => (
             <React.Fragment key={segment}>
               <span>/</span>
               {i < currentPath.length - 1 ? (
-                <button data-part="breadcrumb-link" data-action="navigate-folder" style={linkStyle} onClick={() => onNavigate?.(segment)}>{segment}</button>
+                <button className="ds-file-manager__breadcrumb-link" data-part="breadcrumb-link" data-action="navigate-folder" style={linkStyle} onClick={() => onNavigate?.(segment)}>{segment}</button>
               ) : (
-                <span data-part="breadcrumb-current" style={{ color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>{segment}</span>
+                <span className="ds-file-manager__breadcrumb-current" data-part="breadcrumb-current">{segment}</span>
               )}
             </React.Fragment>
           ))}
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           {selectedItems.length > 0 && onDelete && (
-            <button data-part="toolbar-action" data-action="delete-selected" style={dangerBtnStyle} onClick={() => onDelete(selectedItems)}>
+            <button className="ds-file-manager__toolbar-action" data-part="toolbar-action" data-action="delete-selected" style={dangerBtnStyle} onClick={() => onDelete(selectedItems)}>
               Delete ({selectedItems.length})
             </button>
           )}
@@ -248,12 +222,13 @@ export default function RusticFileManager(props: FileManagerProps) {
                 onChange={handleUploadChange}
                 data-testid="file-input"
               />
-              <button data-part="toolbar-action" data-action="upload" style={primaryBtnStyle} onClick={() => fileInputRef.current?.click()}>
+              <button className="ds-file-manager__toolbar-action" data-part="toolbar-action" data-action="upload" style={primaryBtnStyle} onClick={() => fileInputRef.current?.click()}>
                 Upload
               </button>
             </>
           )}
           <button
+            className="ds-file-manager__view-toggle"
             data-part="view-toggle"
             data-action="toggle-view"
             data-view-mode={viewMode}
@@ -274,14 +249,14 @@ export default function RusticFileManager(props: FileManagerProps) {
         style={{ minHeight: 200 }}
       >
         {items.length === 0 ? (
-          <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+          <div className="ds-file-manager__empty" data-part="empty" style={{ textAlign: 'center', padding: 48 }}>
             {emptyMessage}
           </div>
         ) : viewMode === 'list' ? (
           <div>
             {/* Column headers styled as an uppercase label row. cursor:default overrides
                 the pointer cursor from rowStyle since headers are not interactive. */}
-            <div data-part="column-header" data-selected={false} style={{ ...rowStyle(false), fontWeight: 600, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', textTransform: 'uppercase' as const, cursor: 'default' }}>
+            <div className="ds-file-manager__column-header" data-part="column-header" data-selected={false} style={{ ...rowStyle(false), fontWeight: 600, fontSize: 'var(--ds-font-size-xs, 12px)', textTransform: 'uppercase' as const, cursor: 'default' }}>
               <div style={{ width: 24 }}></div>
               <div style={{ flex: 1 }}>Name</div>
               <div style={{ width: 80 }}>Size</div>
@@ -290,6 +265,7 @@ export default function RusticFileManager(props: FileManagerProps) {
             </div>
             {items.map(item => (
               <div
+                className="ds-file-manager__row"
                 key={item.id}
                 data-part="row"
                 data-selected={selectedItems.includes(item.id)}
@@ -313,20 +289,21 @@ export default function RusticFileManager(props: FileManagerProps) {
                     {item.type === 'folder' ? '\uD83D\uDCC1' : renderFileIcon ? renderFileIcon(item as FileItem) : '\uD83D\uDCC4'}
                   </span>
                   {item.type === 'folder' ? (
-                    <button data-part="folder-link" data-action="navigate-folder" style={linkStyle} onClick={() => onNavigate?.(item.id)}>{item.name}</button>
+                    <button className="ds-file-manager__folder-link" data-part="folder-link" data-action="navigate-folder" style={linkStyle} onClick={() => onNavigate?.(item.id)}>{item.name}</button>
                   ) : (
                     <span data-part="file-name">{item.name}</span>
                   )}
                 </div>
-                <div data-part="file-size" style={{ width: 80, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div className="ds-file-manager__file-size" data-part="file-size" style={{ width: 80, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                   {item.type === 'file' ? formatSize((item as FileItem).size) : '--'}
                 </div>
-                <div data-part="modified-at" style={{ width: 120, fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div className="ds-file-manager__modified-at" data-part="modified-at" style={{ width: 120, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                   {formatDate(item.modifiedAt)}
                 </div>
                 <div style={{ width: 100, display: 'flex', gap: 4 }}>
                   {onRename && (
                     <button
+                      className="ds-file-manager__item-action"
                       data-part="item-action"
                       data-action="rename"
                       style={{ ...linkStyle, fontSize: 'var(--ds-font-size-xs, 12px)' }}
@@ -340,9 +317,10 @@ export default function RusticFileManager(props: FileManagerProps) {
                   )}
                   {onDelete && (
                     <button
+                      className="ds-file-manager__item-action"
                       data-part="item-action"
                       data-action="delete"
-                      style={{ ...linkStyle, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-error)' }}
+                      style={{ ...linkStyle, fontSize: 'var(--ds-font-size-xs, 12px)' }}
                       onClick={() => onDelete([item.id])}
                     >
                       Delete
@@ -356,6 +334,7 @@ export default function RusticFileManager(props: FileManagerProps) {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, padding: 16 }}>
             {items.map(item => (
               <div
+                className="ds-file-manager__grid-card"
                 key={item.id}
                 data-part="grid-card"
                 data-selected={selectedItems.includes(item.id)}

@@ -1,0 +1,95 @@
+/**
+ * Rustic UserProfileCard skin (WO-SKIN-06 CK-H2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): named DS layers sort before the consumer base
+ * layer. Private BEM landing classes prevent paint from crossing into caller
+ * slots, and border-color rules clear the tenant floor at (0,4,0) or above.
+ * Values and the engine's solid status-badge treatment are preserved verbatim.
+ */
+
+.ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loading='true'],
+.ds-pattern-user-profile-card.ds-engine-rustic[data-part='root'][data-loading='false'][data-variant='full'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+  border-radius: var(--ds-radius-lg, 12px);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__loading-label[data-part='loading-label'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__avatar[data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-color-bg-secondary, var(--ds-color-neutral-200));
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot'] {
+  border-radius: 50%;
+  border: 2px solid var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='false'] {
+  background: var(--ds-color-text-tertiary, var(--ds-color-neutral-400));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic[data-variant='compact'] .ds-user-profile-card__role[data-part='role'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic[data-variant='full'] .ds-user-profile-card__role[data-part='role'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__department-badge[data-part='department-badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__email[data-part='email'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='active'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='away'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='busy'] {
+  background: var(--ds-color-error);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='offline'] {
+  background: var(--ds-color-text-tertiary, var(--ds-color-neutral-400));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-color: var(--ds-color-primary);
+}
+
+.ds-pattern-user-profile-card.ds-engine-rustic .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger'] {
+  color: var(--ds-color-error);
+  border-color: var(--ds-color-error);
+}

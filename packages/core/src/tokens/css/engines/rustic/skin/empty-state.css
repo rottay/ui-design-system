@@ -1,0 +1,41 @@
+/**
+ * Rustic EmptyState skin (WO-SKIN-06 checkpoint CK-H2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): layered component rules cannot outrank the
+ * global framework base. Border rules combine both root classes with a
+ * private ownership class and repeated part, clearing the tenant border
+ * floor at (0,3,1).
+ *
+ * The dormant `--ds-empty-state-*` aliases are intentionally not connected;
+ * this component has never consumed them.
+ */
+
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__loading-label[data-part='loading-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-part='action'],
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__secondary-action[data-part='secondary-action'][data-part='secondary-action'] {
+  border: 1px solid var(--ds-color-neutral-300);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-variant='default'],
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__secondary-action[data-part='secondary-action'][data-variant='default'] {
+  background: var(--ds-color-background);
+  color: var(--ds-color-text);
+}
+
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__action[data-part='action'][data-variant='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground, #fff);
+  border-color: var(--ds-color-primary);
+}
+
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__title[data-part='title'] {
+  color: var(--ds-color-text);
+}
+
+.ds-pattern-empty-state.ds-engine-rustic .ds-empty-state__description[data-part='description'] {
+  color: var(--ds-color-text-muted);
+}

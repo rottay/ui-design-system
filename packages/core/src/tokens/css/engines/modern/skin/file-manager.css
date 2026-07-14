@@ -1,0 +1,92 @@
+/**
+ * Modern FileManager skin (WO-SKIN-06 checkpoint CK-H2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): layered component rules sort before
+ * Tailwind's base layer. Real border colours use the two scope classes plus
+ * a private ownership class and repeated part, clearing the tenant border
+ * floor at (0,3,1).
+ *
+ * The normal root keeps `background`, `borderRadius`, and `boxShadow` inline.
+ * Its local defaults follow the caller's style spread and intentionally win;
+ * moving them to CSS would reverse that public precedence contract.
+ *
+ * The list row's DaisyUI `active` class and folder anchor's `link link-hover`
+ * classes remain the sole owners of their class-driven behavior. This skin
+ * declares no row-selection or folder-link paint. SVG fill and stroke
+ * presentation attributes also remain on their original elements.
+ */
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__spinner[data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-part='toolbar-action'],
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__view-toggle[data-part='view-toggle'][data-part='view-toggle'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='delete-selected'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__toolbar-action[data-part='toolbar-action'][data-action='upload'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__view-toggle[data-part='view-toggle'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__folder-icon[data-part='folder-icon'][data-file-kind='folder'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='image'] {
+  color: var(--ds-color-info);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='pdf'] {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='text'] {
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__file-icon[data-part='file-icon'][data-file-kind='other'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-part='item-action'][data-part='item-action'] {
+  background: transparent;
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-part='item-action'][data-action='rename'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__item-action[data-part='item-action'][data-action='delete'] {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'] {
+  border-radius: var(--ds-radius-lg);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='false'] {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-file-manager.ds-engine-modern .ds-file-manager__grid-card[data-part='grid-card'][data-selected='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  border: 2px solid var(--ds-color-primary);
+}

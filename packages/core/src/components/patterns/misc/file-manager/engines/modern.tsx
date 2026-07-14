@@ -4,7 +4,7 @@
  * @fileoverview Modern (DaisyUI / Tailwind) engine for the FileManager pattern.
  * Renders a file/folder browser with list (table) and grid (card) views,
  * breadcrumb navigation, drag-and-drop upload, multi-select, rename, and bulk delete.
- * Uses DS token inline styles for buttons and Tailwind utilities for layout
+ * Uses the engine skin for component paint and Tailwind utilities for layout
  * -- no Ant Design dependency.
  *
  * @example
@@ -19,20 +19,6 @@
 
 import React, { useCallback, useRef } from 'react';
 import type { FileManagerProps, FileItem, FileSystemItem } from '../FileManager.types';
-
-/**
- * Maps a file's MIME type to a DaisyUI text color class.
- * This provides quick visual differentiation between file categories
- * without requiring separate icon assets.
- */
-function getFileIconStyle(item: FileItem): React.CSSProperties {
-  const mime = item.mimeType || '';
-  if (mime.startsWith('image/')) return { color: 'var(--ds-color-info)' };
-  if (mime === 'application/pdf') return { color: 'var(--ds-color-error)' };
-  if (mime.startsWith('text/')) return { color: 'var(--ds-color-success)' };
-  // Fallback: muted color for unknown or binary files.
-  return { color: 'var(--ds-color-text-secondary)' };
-}
 
 /** Converts raw byte count to a human-friendly size string (B/KB/MB/GB). */
 function formatSize(bytes?: number): string {
@@ -128,7 +114,7 @@ export default function ModernFileManager(props: FileManagerProps) {
         data-view-mode={viewMode}
         style={style}
       >
-        <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+        <span className="ds-file-manager__spinner" data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }
@@ -158,7 +144,7 @@ export default function ModernFileManager(props: FileManagerProps) {
           </div>
           <div className="flex gap-2">
             {selectedItems.length > 0 && onDelete && (
-              <button data-part="toolbar-action" data-action="delete-selected" style={{ background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => onDelete(selectedItems)}>
+              <button className="ds-file-manager__toolbar-action" data-part="toolbar-action" data-action="delete-selected" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => onDelete(selectedItems)}>
                 Delete ({selectedItems.length})
               </button>
             )}
@@ -173,16 +159,17 @@ export default function ModernFileManager(props: FileManagerProps) {
                   onChange={handleUploadChange}
                   data-testid="file-input"
                 />
-                <button data-part="toolbar-action" data-action="upload" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => fileInputRef.current?.click()}>
+                <button className="ds-file-manager__toolbar-action" data-part="toolbar-action" data-action="upload" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => fileInputRef.current?.click()}>
                   Upload
                 </button>
               </>
             )}
             <button
+              className="ds-file-manager__view-toggle"
               data-part="view-toggle"
               data-action="toggle-view"
               data-view-mode={viewMode}
-              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, width: 32, padding: 0, fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+              style={{ height: 32, width: 32, padding: 0, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={() => onViewModeChange?.(viewMode === 'grid' ? 'list' : 'grid')}
               title={viewMode === 'grid' ? 'Switch to list' : 'Switch to grid'}
             >
@@ -245,11 +232,11 @@ export default function ModernFileManager(props: FileManagerProps) {
                         <div className="flex items-center gap-2">
                           {/* Folders use an inline SVG folder icon; files use a renderFileIcon override or generic file SVG. */}
                           {item.type === 'folder' ? (
-                            <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" style={{ color: 'var(--ds-color-warning)' }} fill="currentColor" viewBox="0 0 20 20">
+                            <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                               <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                             </svg>
                           ) : (
-                            <span data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'} style={getFileIconStyle(item as FileItem)}>
+                            <span className="ds-file-manager__file-icon" data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}>
                               {renderFileIcon ? renderFileIcon(item as FileItem) : (
                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -272,9 +259,10 @@ export default function ModernFileManager(props: FileManagerProps) {
                         <div className="flex gap-1">
                           {onRename && (
                             <button
+                              className="ds-file-manager__item-action"
                               data-part="item-action"
                               data-action="rename"
-                              style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+                              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
                               onClick={() => {
                                 const newName = window.prompt('New name:', item.name);
                                 if (newName && newName !== item.name) onRename(item.id, newName);
@@ -285,9 +273,10 @@ export default function ModernFileManager(props: FileManagerProps) {
                           )}
                           {onDelete && (
                             <button
+                              className="ds-file-manager__item-action"
                               data-part="item-action"
                               data-action="delete"
-                              style={{ background: 'transparent', color: 'var(--ds-color-error)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
+                              style={{ height: 24, padding: '0 8px', fontSize: 12, cursor: 'pointer' }}
                               onClick={() => onDelete([item.id])}
                             >
                               Delete
@@ -310,23 +299,20 @@ export default function ModernFileManager(props: FileManagerProps) {
                   data-part="grid-card"
                   data-selected={selectedItems.includes(item.id)}
                   data-file-kind={item.type === 'folder' ? 'folder' : (item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'}
-                  className="cursor-pointer transition-colors"
+                  className="ds-file-manager__grid-card cursor-pointer transition-colors"
                   style={{
-                    background: selectedItems.includes(item.id) ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' : 'var(--ds-surface-card)',
-                    borderRadius: 'var(--ds-radius-lg)',
                     padding: 12,
-                    border: selectedItems.includes(item.id) ? '2px solid var(--ds-color-primary)' : '1px solid var(--ds-color-border)',
                   }}
                   onClick={() => item.type === 'folder' ? onNavigate?.(item.id) : handleSelect(item.id)}
                 >
                   <div className="items-center text-center" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 12 }}>
                     <div className="text-3xl">
                       {item.type === 'folder' ? (
-                        <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="h-9 w-9" style={{ color: 'var(--ds-color-warning)' }} fill="currentColor" viewBox="0 0 20 20">
+                        <svg data-part="folder-icon" data-file-kind="folder" xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__folder-icon h-9 w-9" fill="currentColor" viewBox="0 0 20 20">
                           <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" />
                         </svg>
                       ) : (
-                        <svg data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'} xmlns="http://www.w3.org/2000/svg" className="h-9 w-9" style={getFileIconStyle(item as FileItem)} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg data-part="file-icon" data-file-kind={(item as FileItem).mimeType?.startsWith('image/') ? 'image' : (item as FileItem).mimeType === 'application/pdf' ? 'pdf' : (item as FileItem).mimeType?.startsWith('text/') ? 'text' : 'other'} xmlns="http://www.w3.org/2000/svg" className="ds-file-manager__file-icon h-9 w-9" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                         </svg>
                       )}

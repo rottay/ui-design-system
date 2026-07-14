@@ -4,7 +4,7 @@
  * @fileoverview Modern (token-driven) engine for the PricingTable pattern.
  *
  * Builds the same plan-comparison grid as the Classic engine but uses DS token
- * inline styles and shared modern-styles helpers instead of Ant Design
+ * token skin rules and shared modern-style helpers instead of Ant Design
  * components. This avoids pulling in Ant Design's JavaScript runtime for
  * projects that rely on a lightweight pipeline, keeping the bundle small.
  *
@@ -28,20 +28,20 @@ import { pillBadgeSmStyle, spinnerStyle } from '../../../_internal/engines/moder
  * - `string` -> custom label (e.g. "10 GB")
  */
 function renderFeatureValue(value: boolean | string | undefined): React.ReactNode {
-  if (value === true) return <span data-part="feature-value" data-feature-state="included" className="text-lg" style={{ color: 'var(--ds-color-success)' }}>{'\u2713'}</span>;
-  if (value === false || value === undefined) return <span data-part="feature-value" data-feature-state="excluded" className="text-lg" style={{ color: 'var(--ds-color-text-secondary)' }}>{'\u2717'}</span>;
-  return <span data-part="feature-value" data-feature-state="custom" className="text-sm">{value}</span>;
+  if (value === true) return <span data-part="feature-value" data-feature-state="included" className="ds-pricing-table__feature-value text-lg">{'\u2713'}</span>;
+  if (value === false || value === undefined) return <span data-part="feature-value" data-feature-state="excluded" className="ds-pricing-table__feature-value text-lg">{'\u2717'}</span>;
+  return <span data-part="feature-value" data-feature-state="custom" className="ds-pricing-table__feature-value text-sm">{value}</span>;
 }
 
 /**
  * Modern (token-driven) engine for the PricingTable pattern component.
  *
- * Uses DS token inline styles and shared modern-styles helpers to compose the
+ * Uses DS token skin rules and shared modern-style helpers to compose the
  * pricing layout. Tooltips use the native title attribute instead of a
  * JS-driven Ant Design Tooltip.
  *
  * @param props - {@link PricingTableProps} controlling plans, features, billing cycle, and callbacks.
- * @returns A feature-comparison pricing table styled with DS token inline styles.
+ * @returns A feature-comparison pricing table styled with DS tokens.
  */
 export default function ModernPricingTable(props: PricingTableProps) {
   const {
@@ -96,7 +96,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
           />
           <span className={`text-sm ${billingCycle === 'yearly' ? 'font-bold' : 'opacity-50'}`}>
             Yearly
-            <span data-part="plan-badge" data-variant="savings" className="ml-1" style={{ ...pillBadgeSmStyle, background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' }}>Save 20%</span>
+            <span data-part="plan-badge" data-variant="savings" className="ds-pricing-table__plan-badge ml-1" style={pillBadgeSmStyle}>Save 20%</span>
           </span>
         </div>
       )}
@@ -115,9 +115,9 @@ export default function ModernPricingTable(props: PricingTableProps) {
                   <th key={plan.id} className="text-center align-top">
                     {/* renderPlanHeader lets consumers fully replace the card content */}
                     {renderPlanHeader ? renderPlanHeader(plan) : (
-                      <div data-part="plan-card" data-highlighted={isHighlighted} className="p-4" style={isHighlighted ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)', borderRadius: 'var(--ds-radius-lg)', border: '2px solid var(--ds-color-primary)' } : { background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', border: '1px solid var(--ds-color-border)' }}>
+                      <div data-part="plan-card" data-highlighted={isHighlighted} className="ds-pricing-table__plan-card p-4">
                         {plan.popular && (
-                          <span data-part="plan-badge" data-variant="popular" className="mb-2" style={{ ...pillBadgeSmStyle, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>Most Popular</span>
+                          <span data-part="plan-badge" data-variant="popular" className="ds-pricing-table__plan-badge mb-2" style={pillBadgeSmStyle}>Most Popular</span>
                         )}
                         <div className="font-bold text-lg">{plan.name}</div>
                         {/* Price displayed as currency+number or raw string for "Custom" tiers */}
@@ -131,12 +131,10 @@ export default function ModernPricingTable(props: PricingTableProps) {
                           <div className="text-xs opacity-50 mt-1">{plan.description}</div>
                         )}
                         <button
+                          className="ds-pricing-table__cta-button"
                           data-part="cta-button"
                           data-highlighted={isHighlighted}
-                          style={isHighlighted
-                            ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', width: '100%', marginTop: 12 }
-                            : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', width: '100%', marginTop: 12 }
-                          }
+                          style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', width: '100%', marginTop: 12 }}
                           onClick={() => onSelectPlan?.(plan.id)}
                         >
                           {plan.cta}
@@ -162,8 +160,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
                       <td
                         data-part="category-header"
                         colSpan={plans.length + 1}
-                        className="font-bold text-xs uppercase opacity-40 pt-6 pb-2 border-t"
-                        style={{ borderColor: 'var(--ds-color-border)' }}
+                        className="ds-pricing-table__category-header font-bold text-xs uppercase opacity-40 pt-6 pb-2 border-t"
                       >
                         {feature.category}
                       </td>
@@ -174,7 +171,7 @@ export default function ModernPricingTable(props: PricingTableProps) {
                     <td className="text-sm">
                       {/* Native title tooltip -- no JS overhead */}
                       {feature.description ? (
-                        <span data-part="feature-label" title={feature.description} style={{ cursor: 'help', borderBottom: '1px dotted var(--ds-color-border)' }}>
+                        <span className="ds-pricing-table__feature-label" data-part="feature-label" title={feature.description} style={{ cursor: 'help' }}>
                           {feature.label}
                         </span>
                       ) : (

@@ -1,0 +1,81 @@
+/**
+ * Modern UserProfileCard skin (WO-SKIN-06 CK-H2).
+ *
+ * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
+ * unnamed base layer. The private BEM landing classes keep consumer-provided
+ * slots from being painted when they happen to reuse a public data-part name.
+ * Border-color rules reach at least (0,4,0) to clear the tenant border floor.
+ *
+ * `panelCardStyle`, `pillBadgeSmStyle`, and `spinnerStyle()` remain inline.
+ * Their shared module does not define the local box-shadow, background, or
+ * color overrides declared here, so extracting those overrides preserves
+ * P-78 precedence. Values are transcribed verbatim from the modern engine.
+ */
+
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-loading='true'],
+.ds-pattern-user-profile-card.ds-engine-modern[data-part='root'][data-loading='false'][data-variant='full'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__avatar-fallback[data-part='avatar-fallback'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'] {
+  border-radius: 50%;
+  border: 2px solid var(--ds-surface-card);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='true'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__presence-dot[data-part='presence-dot'][data-online='false'] {
+  background: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__department-badge[data-part='department-badge'] {
+  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
+  color: var(--ds-color-info);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='active'] {
+  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='away'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='busy'] {
+  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__status-badge[data-part='status-badge'][data-status='offline'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'] {
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='primary'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='danger'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-user-profile-card.ds-engine-modern .ds-user-profile-card__action-button[data-part='action-button'][data-variant='default'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+}
