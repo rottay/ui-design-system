@@ -17,7 +17,7 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | (no entries — log via `progress`) |
+| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 02:37 — CK-D in flight. Contract written (f1c6e249, corrected 7eb9de90 — the imperative writes are in filter-builder, NOT form-sections; the R agent caught my error by reading the code). Pre-step F DONE and independently verified (4 components stamped both engines, 28/28 contract test, counters unchanged, the MANDATORY filter-builder row-hover pin is in forms-batch.spec.ts with waitForSettled, and nothing in tokens/css competes with those 4 imperative writes — they are the sole mechanism and must all be transcribed). Pre-step R in flight (9 files stamped, iterating on its contract test). MACHINERY BUILT THIS TURN: the category-B exemption gate (d74b9cc7) — files whose paint VALUE is runtime data declare a FLOOR in roadmap/skin-exemptions.json, and skins.exemptionsBreached (exact-0) fails the build if anyone migrates below it; drilled with a simulated breach. It was the blocker for CK-E and CK-H1. The charts entry is STILL A GLOB — the gate SKIPS globs, so it protects nothing yet; resolve to per-file floors from the CK-E inventory BEFORE contracting CK-E. CK-E also found 8 category-B props my triage missed (gauge.needleColor, waterfall's three, bullet's two, histogram's two): a default that looks static does not make the site static. use-chart-theme.ts:291 is DEAD CODE and is deliberately NOT exempted — exempting dead code freezes it with the gate's blessing. |
 
 ## Next up (todo, dependencies satisfied)
 
