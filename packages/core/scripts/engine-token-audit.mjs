@@ -29,6 +29,7 @@
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from "node:fs";
 import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
+import { countDeadParts } from "./skin-dead-part-audit.mjs";
 import postcss from "postcss";
 import { resolve, dirname, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -2188,6 +2189,14 @@ const counters = {
   // declared with a FLOOR in roadmap/skin-exemptions.json; this counts the files that
   // have been migrated BELOW theirs, i.e. paint that cannot live in CSS was deleted.
   "skins.exemptionsBreached": countExemptionBreaches(),
+  // WO-SKIN-06 (P-79): the THIRD way a skin silently paints nothing. It parses
+  // (skins.parseErrors) and it is imported (skins.unwired), but every one of its
+  // selectors anchors on a `[data-part='X']` the source never stamps -- because
+  // Grid/Card drop a consumer's data-part, or the part was renamed, or it is a
+  // typo. tsc accepts it, the counter does not read attributes, and the rule
+  // reaches nobody. Static, exact-0: every part a skin selects for must be
+  // stamped somewhere in the components tree.
+  "skins.deadParts": countDeadParts(),
   // WO-ARC-09: per-file inline-paint ratchet over the six workspace-tier
   // components' migratable files. Decrease-only; each checkpoint's exit is its
   // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
@@ -2381,6 +2390,8 @@ const EXACT = {
   "skins.unwired": 0,
   // Nobody may migrate a site whose paint VALUE is runtime data.
   "skins.exemptionsBreached": 0,
+  // A skin rule anchored on a data-part the source never stamps reaches nobody.
+  "skins.deadParts": 0,
 };
 
 /**
