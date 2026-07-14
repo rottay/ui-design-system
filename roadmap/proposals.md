@@ -1328,26 +1328,21 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Status** — FIXED in the kit; the byte-exact visual cert is the backstop that catches any Text-color
   rule that still under-shoots.
 
-### P-88 — `<Input>` (and `<Button>`) drop caller `className`/`data-part`: a primitive can be UN-SKINNABLE from outside
-- **Finding (CK-C pre-step, empirically probed — not assumed).** The P-79 law ("a surface owns no DOM,
-  Grid/Card drop `data-part`") has a SHARPER edge for `<Input>`: modern `<Input>` hardcodes its own
-  `data-part='root'` on the rendered `<input>` (overriding a caller's value, like Card) AND drops the
-  caller's `className` entirely (unlike Card, which merges className). rustic `<Input>` is worse — it
-  forwards NEITHER `data-part` NOR `className`; the `<input>` carries only the props rustic's engine
-  explicitly destructures. So a consuming component CANNOT put its own scope class or `data-part` on the
-  `<input>` node from outside. `<Button>` has the same shape (hardcodes `data-part`, merges className) —
-  already catalogued by an existing `SelectionPreviewRail.contract.test.tsx` test titled "documents
-  whether the Button primitive clobbers a caller-supplied data-part".
-- **Consequence.** A skin rule anchored to a `data-part` a component stamps on an `<Input>`/`<Button>`
-  silently NEVER MATCHES. Worse than a wrong colour: on a lazy-loaded primitive it manifests as a
-  `waitFor` HANG (polling for an attribute that will never appear), not a fast assertion failure.
-- **CK-C workaround (per-checkpoint, byte-exact):** anchor via the component's ROOT scope class + the
-  primitive's OWN stable class as a descendant (`.ds-structure.ds-table-toolbar .rottay-input`), at
-  specificity exceeding the primitive's OWN engine skin (same competitor shape as P-87's Typography skin).
-  Do NOT wrap in an extra Box (DOM change) or fix the primitive (blast radius).
-- **The real fix (SURFACED to the owner, not actioned here — a DS-architecture decision, larger than any
-  one checkpoint):** make `Input`/`Button` (and audit every primitive) forward a caller `className`
-  (merged) and `data-part` (as an override, or at least additively) the way `Box`/`Stack`/`Tag`/`Text`
-  already do. Until then, every consuming skin that needs to paint an input/button must use the
-  scope-root + primitive-class descendant anchor, and the promote-to-kit note should say so.
-- **Status** — OPEN (DS-architecture); CK-C has a byte-exact workaround in its contract addendum.
+### P-88 — `<Input>`/`<Button>` own `data-part`; Input's caller-style landing differs by engine
+- **Finding (CK-C, source- and DOM-probed).** Caller `data-part` is replaced by the primitive's own
+  anatomy (`root` for Input, `trigger` for Button). Caller `className` is not lost: Button merges it
+  onto the painted element in both engines; Input co-locates `className` and `style` on an outer
+  wrapper in modern and on the painted shell in rustic.
+- **Consequence.** A consumer selector keyed to its requested Input/Button `data-part` never matches.
+  A single fallback descendant selector is also unsafe for Input: `.rottay-input` targets the native
+  shell in modern, while the caller paint it replaces originally lived on the wrapper. That silently
+  transposes paint between elements even though the counter reaches zero.
+- **CK-C workaround (byte-exact):** pass a private BEM class through `className`; target the modern
+  wrapper guarded by `:has(> .rottay-input--modern[data-part='root'])`, and separately target the
+  rustic BEM shell at specificity above every Input state. Contract tests pin both shapes. Do not add
+  a wrapper or use a broad descendant part selector.
+- **The real fix (DS architecture):** formalize primitive ownership and composition separately:
+  primitives retain their own `data-part`, while consumers receive a documented owner/slot-class API
+  whose landing node is stable across engines. Audit every primitive for `className`/`style` landing
+  parity before promising it as a public skin hook.
+- **Status** — OPEN (architecture); CK-C's workaround is implemented and regression-tested.

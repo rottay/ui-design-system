@@ -16,9 +16,9 @@ skin-painted elements, imperative/useState state paint, Text color sites, child-
 injection; sonnet acceptable for pure-static leaf components) -> byte-exact gate (rest + every
 interaction state photographed) -> per-component real-engines ratchet test.
 
-Cascade laws that bind every WO here: P-48 border floor -> painting borders at (0,4,0); Text
-color NEVER moves to CSS (color prop map: secondary, subtle=text-muted, inherit; muted resolves
-to text-secondary — inverted trap); suppression rules escalate above the landing skin's max
+Cascade laws that bind every WO here: P-48 border floor -> painting borders at (0,4,0); composed
+Text color moves only to a selector at (0,5,0) or higher so it beats the Typography engine skin
+(P-87); suppression rules escalate above the landing skin's max
 state specificity; keyframes namespaced in skins; per-instance `<style>` tags preserved verbatim;
 classic untouched; caller className/style semantics unchanged.
 
@@ -85,7 +85,7 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | **CK-A** | dashboard widgets | 439 | CERTIFIED byte-exact (`ecfa1ad5`) |
 | **CK-G** | navigation patterns | 279 | CERTIFIED byte-exact (`67ff3f35`) |
 | **CK-F** | communication | 271 | CERTIFIED byte-exact (`9d85264c`) — banked P-87 (color-on-`<Text>`=(0,5,0)) |
-| CK-C | workspace chrome | 466 | contract adjudicated (`46bb06a5`) — 28 imperative writes, portal trio, P-78 |
+| **CK-C** | workspace chrome | 466 | CERTIFIED byte-exact (`f0046708`) — 12 skins; 458/466 counted sites moved, 8 deliberate P-88/shared-token residuals |
 | CK-H2 | misc | ~216 | contract adjudicated (`879f34e9`) — category-A, token-inspector createElement |
 | CK-I | long tail (surfaces) | 397 | contract adjudicated (`77c9a202`) — forms EXCLUDED (already CK-D); averted a clobber |
 | CK-E / CK-H1 | visualization / brand-preview trio | 308 / 237 | LAST — deferred until the exemption machinery is observed executing |

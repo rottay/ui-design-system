@@ -43,25 +43,20 @@ The anatomy pre-step proved both invariants (counter 466/delta-0, DOM unchanged 
 on 6 shapes incl. portal + IIFE-in-JSX; WorkspaceChrome contract test 36/36 with portal containment
 asserted; existing suites 118/118) and surfaced findings the migration MUST honor:
 
-1. **HEADLINE — `<Input>` is a worse P-79 case than `<Card>`; the 4 search-input stamps DO NOT reach
-   the DOM.** Empirically probed: modern `<Input>` hardcodes `data-part='root'` AND drops the caller's
-   `className`; rustic `<Input>` forwards NEITHER `data-part` NOR `className`. So `data-part='search-input'`
-   (table-toolbar, list-toolbar mobile+desktop) and `data-part='input'` (search-command-bar) NEVER land,
-   and the component scope class does not reach the `<input>` either. A skin rule anchored to those
-   data-parts silently never matches (it manifested as a 15s test HANG, not a fail — an unreachable
-   `data-part` on a lazy primitive hangs `waitFor`). **ORCHESTRATOR DECISION (anchor strategy, do NOT
-   re-litigate):**
+1. **HEADLINE — `<Input>` replaces the 4 caller search-input parts and lands caller style/class on
+   different nodes by engine.** Both engines own `data-part='root'`, so `data-part='search-input'`
+   (table-toolbar, list-toolbar mobile+desktop) and `data-part='input'` (search-command-bar) NEVER land.
+   A rule anchored to those parts silently never matches (it manifested as a 15s test HANG, not a
+   fail). Caller `className` and `style` do survive: modern puts both on an outer wrapper while rustic
+   puts both on its painted shell. **ORCHESTRATOR DECISION (anchor strategy, as corrected by the
+   migration section below):**
    - **list-toolbar search inputs**: their paint is `searchInputStyle()` in `tokens.ts`, which is Trap 5
      (OUT OF SCOPE, stays inline). There is NOTHING to migrate there; the inert `data-part='search-input'`
      stamps stay harmless. Do not touch.
-   - **table-toolbar + search-command-bar search inputs**: the `<input>` DOES carry its own generic
-     `rottay-input rottay-input--<engine>` class (grep-verified). If (and only if) the search-input has
-     CUSTOM inline paint beyond the Input engine's own defaults, migrate it via a rule anchored to the
-     component's ROOT scope class + the `.rottay-input` DESCENDANT — e.g.
-     `.ds-structure.ds-table-toolbar .rottay-input { … }` — at specificity that EXCEEDS the Input engine
-     skin's own `[data-part='root']` rule (measure it, same discipline as the P-87 Typography (0,5,0)
-     case; the Input skin is a competitor exactly like the Typography skin). If the search-input uses only
-     Input defaults (no custom paint), there is NOTHING to migrate — leave it.
+   - **table-toolbar + search-command-bar search inputs**: pass a private BEM class to Input and target
+     the node where that class and caller style co-land: the wrapper in modern, the shell in rustic.
+     The rustic selector must exceed the Input skin's maximum state specificity. Never use one generic
+     `.rottay-input` descendant for both engines; that moves modern paint to a different element.
    - **FORBIDDEN**: do NOT wrap the Input in an extra Box (a DOM change → not byte-exact), and do NOT
      "fix" the Input primitive (large blast-radius, out of scope). See P-88 for the broader DS issue.
 2. **saved-views `unsaved-dot` is modern-ONLY** — rustic never implements `isDirty` (grep-confirmed zero
@@ -76,6 +71,37 @@ asserted; existing suites 118/118) and surfaced findings the migration MUST hono
    render within the 15s test timeout unless `mockMatchMedia(1280)` is called first (the Tooltip lazy
    engine chunk needs an explicit viewport mock). The existing `ListToolbar.integration.test.tsx` only
    ever tested the 390px mobile path. Whoever writes Unit C1's migration test needs this.
+
+### MIGRATION CORRECTIONS (2026-07-14; supersede addendum item 1 where stated)
+
+The migration's adversarial cascade review found that addendum item 1 was only half right. The
+custom `data-part` is indeed replaced by Input's own `data-part="root"`, but caller `className` does
+**not** disappear from the DOM. It lands on the exact node that receives caller `style`:
+
+- modern simple Input: the outer wrapper `<div className={className} style={style}>`;
+- rustic Input: the painted `.rottay-input.rottay-input--rustic` shell.
+
+Painting `.rottay-input` in both engines would therefore transpose modern's paint from the wrapper
+onto the native input. The byte-exact ruling is: table-toolbar and search-command-bar pass a private
+BEM class to Input, then use two selector shapes — modern targets the BEM wrapper guarded by
+`:has(> .rottay-input--modern[data-part='root'])`; rustic targets the BEM class compounded with the
+rustic shell. Rustic's selector exceeds the maximum competing Input-state specificity, because the
+old caller inline style beat every Input state. The contract test pins both landing shapes.
+
+Additional migration rulings:
+
+- C1 retains exactly three counted sites: two `searchInputStyle()` call-site `borderRadius` keys and
+  one primary Button `borderRadius`. Input/Button do not land those caller paint keys on a stable,
+  common painted node across engines; broad descendant selectors would violate ownership. These are
+  deliberate P-88 residuals, not an incomplete migration. `list-toolbar/tokens.ts` remains 5.
+- Rustic saved-views adds `data-loading=true|false` because its loading and normal roots share the
+  same scope/part but intentionally have different paint.
+- Slot-bearing C4 components use private BEM ownership classes on every painted internal node.
+  Generic descendant `[data-part]` selectors are forbidden here: TableToolbar exposes three
+  arbitrary ReactNode slots; SearchCommandBar exposes two; ViewModeSwitcher accepts arbitrary icon
+  nodes. A consumer's homonymous part must never receive parent chrome.
+- SearchCommandBar state rules retain the same ownership chain as their base rules. Omitting the
+  `voice-controls`/`search-shell` ancestor lowers state specificity and causes the base rule to win.
 
 ---
 
@@ -569,6 +595,29 @@ No other file in this checkpoint injects a `<style>` tag or defines a `@keyframe
 
 ## 6. Certification
 
+### Final evidence — 2026-07-14
+
+CK-C is **CERTIFIED byte-exact** at migration commit `f0046708`:
+
+- 12 ownership-scoped skins are wired through both canonical entrypoints and all five generated
+  vertical bundles. `skins.parseErrors`, `skins.unwired`, `skins.exemptionsBreached` and
+  `skins.deadParts` are all exactly 0.
+- Counted paint moved from 466 to 8: `list-toolbar/engines/modern.tsx` retains the three adjudicated
+  P-88 sites and `list-toolbar/tokens.ts` retains five shared classic/modern sites; every other CK-C
+  source file is exactly 0. All 26 in-scope imperative paint writes were removed. The two classic
+  saved-views writes remain out of scope.
+- `WorkspaceChromeBatch.contract.test.tsx` is 36/36 green and pins private BEM ownership, both Input
+  landing shapes, both engines and all three standalone portal roots. The focused ListToolbar and
+  SavedViews suites bring the checkpoint run to 93/93 green. The pre-existing nested-button warning
+  in `saved-views-menu` remains record-only.
+- Core and showroom production builds pass. The seven committed pre-step screenshots pass at
+  `maxDiffPixelRatio: 0.0005` twice consecutively without updating snapshots: four tenant/engine
+  rest matrices plus the three open portal panels.
+- The only global `engine-token-audit --check` failure observed during this certification is the
+  pre-existing `effects.glowConsumers: 0 < 1` measurement defect introduced when CK-F moved the
+  sanctioned LiveFeed glow consumer from TSX into its skin. All CK-C/skin gates are green; that audit
+  ownership defect is repaired separately rather than weakening this checkpoint's floor.
+
 Per unit, in order: (1) **byte-exact** = the component's visual spec passes against the committed
 pre-step baselines (both engines for `saved-views`), 0 pixels over `maxDiffPixelRatio: 0.0005`,
 stability-re-run; (2) **counter delta reconciled BY HAND, not read off `: 0`** — this checkpoint has
@@ -581,8 +630,9 @@ the `structures/workspace` + `patterns/data` (list-toolbar, saved-views, status-
 suites green. The full visual + full core suites are the belt-and-suspenders pass when the
 environment has headroom; if resource pressure kills them (precedent: CK-A), certify byte-exact via
 the per-component spec + no-bleed-by-construction and record the owed confirmatory pass. Only after
-a unit certifies does the orchestrator append its `@import` lines to `foundation/base.css` and
-commit that unit — units may certify and land in any order, there is no cross-unit file dependency.
+a unit certifies does the orchestrator append its `@import` lines to both `foundation/base.css` and
+`entrypoints/styles.css` and commit that unit — units may certify and land in any order, there is no
+cross-unit file dependency.
 
 ---
 
