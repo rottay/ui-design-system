@@ -445,8 +445,12 @@ component under any circumstances.
 contest them, and a real cross-repo `@keyframes pulse`/`wave` bare-name collision.** The 6 imperative
 writes (`onFocus`/`onBlur` → `boxShadow` double-ring; `onMouseEnter`/`onMouseLeave` → `boxShadow`+
 `transform` hover-lift) are LIVE because `StatCard`'s root carries no className in either engine —
-nothing races them, same shape as CK-G's command-palette. Convert to `:hover`/`:focus-visible` once
-the scope class exists, per the kit's standing handler-deletion rule. Separately: rustic's
+nothing races them, same shape as CK-G's command-palette. **Migration correction:** the draft's
+instruction to replace these with `:hover`/`:focus-visible` was rejected by adversarial review:
+`onFocus` historically rings mouse focus too, and the handlers are explicitly last-event-wins, while
+pseudo-classes compose by fixed cascade order. Preserve those event semantics with paint-free
+behavioral `data-shadow-state`/`data-transform-state` writes and let the skin select those states;
+do not substitute pseudo-classes. Separately: rustic's
 `@keyframes pulse`/`@keyframes wave` are bare, unprefixed, and grep-confirmed collide with at least 2
 other files' identically-named keyframes (`tree-view/rustic`, `live-feed/rustic`; inventory claims 9
 total, not independently exhausted here) — **unlike CK-H2's already-namespaced keyframes, these are
@@ -525,6 +529,29 @@ table.
 ---
 
 ## 6. Certification
+
+### 6.1 Migration evidence (certified 2026-07-14)
+
+- Migration commit: **`84f3cd70`**. The 40 production renderables now use **38 deliberately
+  unlayered skins**, imported by both public CSS entrypoints and regenerated into all five tracked
+  vertical bundles.
+- Counter reconciliation: the 382 counter-visible sites in the migratable scope fell to **1**. That
+  survivor is `operations/kanban`'s adjudicated `SKIN-EXEMPT-NOT-PAINT` domain forwarding; therefore
+  all **381 true DOM-paint sites moved**. The 15 permanent foundation exclusions remain untouched and
+  byte-identical.
+- Adversarial review caught and closed three parity defects before certification: Rustic StatsGrid
+  now preserves historical last-event-wins focus/hover behavior with paint-free data states;
+  StatsGrid paint selectors use owned BEM hooks so `renderStat` consumer DOM cannot inherit default
+  card paint; and Report's selected template border outranks the distinct modern and rustic Card
+  interaction contracts.
+- Contracts: **12/12** long-tail anatomy tests and **7/7** StatsGrid advanced engine tests green. The
+  StatsGrid suite pins both consumer-owned DOM isolation and the exact rustic event sequence.
+- Production evidence: core and showroom production builds green. The same 32 committed baselines
+  passed **two independent 4/4 no-update runs** after migration at `maxDiffPixelRatio: 0.0005`; no
+  snapshot was changed.
+- Gate evidence: skin parse, unwired, exemption and dead-part counters remain exact zero. The
+  hardened exemption/runtime-SVG machinery is committed separately so its proof surface is not
+  conflated with the component migration.
 
 Per unit, in order: (1) **byte-exact** = the component's/surface's visual spec passes against the
 committed pre-step baselines, 0 pixels over `maxDiffPixelRatio: 0.0005`, stability-re-run; (2)
