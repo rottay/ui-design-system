@@ -329,6 +329,9 @@ export function SavedViewsMenu({
     <Box style={{ position: 'relative', zIndex: isOpen ? 60 : 1 }}>
       <Box
         as="button"
+        data-part="trigger"
+        data-open={isOpen}
+        className="ds-structure ds-saved-views-menu"
         ref={triggerRef}
         onClick={() => setIsOpen((prev) => !prev)}
         title={activeView ? `Views: ${activeView.label}` : 'Views'}
@@ -351,6 +354,8 @@ export function SavedViewsMenu({
       >
         <Flex align="center" justify="center" style={{ minWidth: 0 }}>
           <Box
+            data-part="trigger-icon"
+            data-open={isOpen}
             style={{
               width: 28,
               height: 28,
@@ -372,9 +377,12 @@ export function SavedViewsMenu({
 
       {isOpen && typeof document !== 'undefined' && createPortal(
         <>
-          <Box onClick={() => setIsOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 1990 }} />
+          <Box data-part="backdrop" onClick={() => setIsOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 1990 }} />
 
           <Box
+            data-part="panel"
+            data-open={isOpen}
+            className="ds-structure ds-saved-views-menu-panel"
             style={{
               position: 'fixed',
               top: panelPosition.top,
@@ -390,6 +398,7 @@ export function SavedViewsMenu({
             }}
           >
             <Box
+              data-part="header"
               style={{
                 padding: '16px 18px 14px',
                 borderBottom:
@@ -404,6 +413,7 @@ export function SavedViewsMenu({
                     Saved views
                   </Text>
                   <Text
+                    data-part="header-description"
                     size="xs"
                     style={{
                       display: 'block',
@@ -424,6 +434,7 @@ export function SavedViewsMenu({
 
               {activeView && (
                 <Box
+                  data-part="active-card"
                   style={{
                     marginTop: 14,
                     padding: 14,
@@ -441,6 +452,7 @@ export function SavedViewsMenu({
                           {activeView.label}
                         </Text>
                         <Text
+                          data-part="active-card-description"
                           size="xs"
                           style={{
                             display: 'block',
@@ -467,6 +479,7 @@ export function SavedViewsMenu({
                     {onViewSave && (
                       <Box
                         as="button"
+                        data-part="action-button"
                         onClick={handleDuplicateActiveView}
                         style={{
                           display: 'inline-flex',
@@ -491,6 +504,7 @@ export function SavedViewsMenu({
                     {activeView && (
                       <Box
                         as="button"
+                        data-part="action-button"
                         onClick={handleShareActiveView}
                         style={{
                           display: 'inline-flex',
@@ -515,6 +529,7 @@ export function SavedViewsMenu({
                     {onSaveCurrentView && (
                       <Box
                         as="button"
+                        data-part="action-button"
                         onClick={() => {
                           onSaveCurrentView();
                           setIsOpen(false);
@@ -595,6 +610,7 @@ export function SavedViewsMenu({
 
               {personaViews.length === 0 && (onSaveCurrentView || onViewSave) && (
                 <Box
+                  data-part="empty-state"
                   style={{
                     padding: '18px 16px',
                     borderRadius: 14,
@@ -603,12 +619,13 @@ export function SavedViewsMenu({
                   }}
                 >
                   <Flex align="start" gap={10}>
-                    <Sparkles style={{ width: 16, height: 16, color: 'var(--ds-color-text-muted)', marginTop: 2 }} />
+                    <Sparkles data-part="empty-state-icon" style={{ width: 16, height: 16, color: 'var(--ds-color-text-muted)', marginTop: 2 }} />
                     <Box style={{ minWidth: 0 }}>
                       <Text size="sm" weight="medium" style={{ display: 'block' }}>
                         No persona views yet
                       </Text>
                       <Text
+                        data-part="empty-state-description"
                         size="xs"
                         style={{
                           display: 'block',
@@ -625,6 +642,7 @@ export function SavedViewsMenu({
 
               {views.length === 0 && (
                 <Box
+                  data-part="empty-state"
                   style={{
                     padding: '28px 16px',
                     borderRadius: 14,
@@ -633,6 +651,7 @@ export function SavedViewsMenu({
                   }}
                 >
                   <Sparkles
+                    data-part="empty-state-icon"
                     style={{
                       width: 18,
                       height: 18,
@@ -644,6 +663,7 @@ export function SavedViewsMenu({
                     No saved views yet
                   </Text>
                   <Text
+                    data-part="empty-state-description"
                     size="xs"
                     style={{
                       display: 'block',
@@ -677,6 +697,7 @@ function Section({
     <Box style={{ marginBottom: 12 }}>
       <Flex align="center" justify="between" style={{ padding: '0 6px 8px' }}>
         <Text
+          data-part="section-header"
           size="xs"
           style={{
             fontSize: 11,
@@ -710,6 +731,8 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
   return (
     <Box
       as="button"
+      data-part="view-item"
+      data-active={isActive}
       onClick={() => onSelect(view.key)}
       style={{
         width: '100%',
@@ -731,6 +754,7 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
           <Box style={{ minWidth: 0, flex: 1 }}>
             <Flex align="center" gap={6} wrap="wrap">
               <Text
+                data-part="view-item-label"
                 size="sm"
                 weight={isActive ? 'medium' : undefined}
                 style={{
@@ -748,6 +772,7 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
               <StatusPill label={kindLabel} tone="neutral" />
             </Flex>
             <Text
+              data-part="view-item-description"
               size="xs"
               style={{
                 display: 'block',
@@ -764,6 +789,8 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
         <Flex align="center" gap={6} style={{ flexShrink: 0 }}>
           {isActive && (
             <Check
+              data-part="checkmark"
+              data-active={true}
               style={{
                 width: 14,
                 height: 14,
@@ -774,6 +801,7 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
           {onDelete && (
             <Box
               as="button"
+              data-part="delete"
               onClick={onDelete}
               aria-label={`Delete ${view.label}`}
               style={{
@@ -802,6 +830,8 @@ function ViewGlyph({ isSystem, active }: { isSystem?: boolean; active?: boolean 
   const Icon = isSystem ? LayoutTemplate : Bookmark;
   return (
     <Box
+      data-part="glyph"
+      data-active={!!active}
       style={{
         width: 30,
         height: 30,
@@ -824,6 +854,7 @@ function ViewGlyph({ isSystem, active }: { isSystem?: boolean; active?: boolean 
 function CountPill({ label }: { label: string }) {
   return (
     <Box
+      data-part="count-pill"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -852,6 +883,8 @@ function StatusPill({
 }) {
   return (
     <Box
+      data-part="status-pill"
+      data-tone={tone}
       style={{
         display: 'inline-flex',
         alignItems: 'center',

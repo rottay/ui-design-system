@@ -95,7 +95,8 @@ export function ViewModeSwitcher({
     <Box
       role="radiogroup"
       aria-label="View mode"
-      className={className}
+      data-part="root"
+      className={`ds-structure ds-view-mode-switcher ${className ?? ''}`}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -116,6 +117,9 @@ export function ViewModeSwitcher({
             as="button"
             role="radio"
             aria-checked={isActive}
+            data-part="button"
+            data-selected={isActive}
+            data-disabled={isDisabled}
             aria-label={mode.label}
             title={isDisabled ? mode.disabledReason : mode.label}
             aria-disabled={isDisabled || undefined}

@@ -78,7 +78,7 @@ export function StatusFilterPills({
   const gap = size === 'sm' ? 6 : 8;
 
   return (
-    <Flex align="center" gap={gap} style={{ flexWrap: 'wrap' }}>
+    <Flex data-part="root" className="ds-pattern-status-filter-pills" align="center" gap={gap} style={{ flexWrap: 'wrap' }}>
       {options.map((option) => {
         const isSelected = selectedValues.includes(option.value);
         const Icon = option.icon;
@@ -87,6 +87,8 @@ export function StatusFilterPills({
           <Box
             key={option.value}
             as="button"
+            data-part="pill"
+            data-selected={isSelected}
             onClick={() => onChange(option.value)}
             style={{
               display: 'flex',
@@ -124,6 +126,8 @@ export function StatusFilterPills({
           >
             {Icon && (
               <Icon
+                data-part="pill-icon"
+                data-selected={isSelected}
                 style={{
                   width: size === 'sm' ? 12 : 14,
                   height: size === 'sm' ? 12 : 14,
@@ -134,6 +138,8 @@ export function StatusFilterPills({
               />
             )}
             <Text
+              data-part="pill-label"
+              data-selected={isSelected}
               size="sm"
               style={{
                 fontSize,
@@ -145,6 +151,8 @@ export function StatusFilterPills({
             </Text>
             {showCounts && option.count !== undefined && (
               <Box
+                data-part="count-badge"
+                data-selected={isSelected}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -159,6 +167,8 @@ export function StatusFilterPills({
                 }}
               >
                 <Text
+                  data-part="count-badge-text"
+                  data-selected={isSelected}
                   size="sm"
                   style={{
                     fontSize: fontSize - 1,

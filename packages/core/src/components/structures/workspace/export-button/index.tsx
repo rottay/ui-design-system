@@ -225,8 +225,14 @@ export function ExportButton<T = unknown>({
   return (
     <>
       {/* Trigger */}
-      <Box ref={triggerRef} style={{ position: 'relative', display: 'inline-flex' }}>
+      <Box
+        data-part="root"
+        className="ds-structure ds-export-button"
+        ref={triggerRef}
+        style={{ position: 'relative', display: 'inline-flex' }}
+      >
         <Button
+          data-part="trigger"
           variant="ghost"
           size={size}
           disabled={disabled || data.length === 0}
@@ -248,6 +254,8 @@ export function ExportButton<T = unknown>({
         {/* Copied toast overlay */}
         {copiedFeedback && (
           <Box
+            data-part="toast"
+            data-copied={true}
             style={{
               position: 'absolute',
               top: -32,
@@ -267,7 +275,7 @@ export function ExportButton<T = unknown>({
           >
             <Flex gap={1} style={{ alignItems: 'center' }}>
               <Check size={12} />
-              <Text style={{ fontSize: 12, fontWeight: 600, color: 'inherit' }}>
+              <Text data-part="toast-label" style={{ fontSize: 12, fontWeight: 600, color: 'inherit' }}>
                 Copied!
               </Text>
             </Flex>
@@ -281,6 +289,9 @@ export function ExportButton<T = unknown>({
         typeof document !== 'undefined' &&
         createPortal(
           <Box
+            data-part="panel"
+            data-open={open}
+            className="ds-structure ds-export-button-panel"
             ref={dropdownRef}
             role="menu"
             aria-label="Export formats"
@@ -308,6 +319,7 @@ export function ExportButton<T = unknown>({
                   key={fmt}
                   as="button"
                   data-export-item
+                  data-part="menu-item"
                   role="menuitem"
                   tabIndex={-1}
                   onClick={() => handleExport(fmt)}
@@ -343,6 +355,7 @@ export function ExportButton<T = unknown>({
                   }}
                 >
                   <Flex
+                    data-part="menu-icon"
                     style={{
                       alignItems: 'center',
                       justifyContent: 'center',
@@ -356,6 +369,7 @@ export function ExportButton<T = unknown>({
                     {meta.icon}
                   </Flex>
                   <Text
+                    data-part="menu-label"
                     style={{
                       fontSize: 13,
                       fontWeight: 500,

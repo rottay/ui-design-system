@@ -145,7 +145,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
   if (loading) {
     return (
       <div
-        className={className}
+        data-part="root"
+        className={`ds-pattern-saved-views ds-engine-rustic ${className ?? ''}`}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -166,7 +167,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
 
   return (
     <div
-      className={className}
+      data-part="root"
+      className={`ds-pattern-saved-views ds-engine-rustic ${className ?? ''}`}
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -190,6 +192,10 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
         return (
           <div
             key={view.id}
+            data-part="tab"
+            data-active={isActive}
+            data-drop-target={isDropTarget}
+            data-dragging={isDragging}
             draggable={!!onViewReorder}
             onDragStart={(e) => handleDragStart(e, view.id)}
             onDragOver={(e) => handleDragOver(e, view.id)}
@@ -220,6 +226,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
           >
             {onViewReorder && (
               <span
+                data-part="drag-handle"
                 style={{
                   fontSize: 10,
                   color: 'var(--ds-color-text-muted, var(--ds-color-text-tertiary))',
@@ -234,6 +241,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
             {isEditing ? (
               <input
                 type="text"
+                data-part="rename-input"
                 value={editingName}
                 onChange={(e) => setEditingName(e.target.value)}
                 onKeyDown={(e) => {
@@ -255,6 +263,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
               />
             ) : (
               <span
+                data-part="tab-label"
+                data-active={isActive}
                 style={{
                   fontSize: 13,
                   fontWeight: isActive ? 600 : 400,
@@ -268,6 +278,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
             )}
             {view.isDefault && (
               <span
+                data-part="default-star"
+                data-default={true}
                 style={{
                   fontSize: 10,
                   color: 'var(--ds-color-warning)',
@@ -280,6 +292,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
             {hasMenu && (
               <div style={{ position: 'relative' }}>
                 <button
+                  data-part="menu-trigger"
+                  data-open={isMenuOpen}
                   onClick={(e) => {
                     e.stopPropagation();
                     setOpenMenuId(isMenuOpen ? null : view.id);
@@ -305,6 +319,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                 {isMenuOpen && (
                   <div
                     ref={menuRef}
+                    data-part="menu-panel"
+                    data-open={isMenuOpen}
                     style={{
                       position: 'absolute',
                       top: '100%',
@@ -320,6 +336,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                   >
                     {allowRename && (
                       <button
+                        data-part="menu-item"
+                        data-danger={false}
                         onClick={(e) => {
                           e.stopPropagation();
                           handleRenameStart(view);
@@ -349,6 +367,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                     )}
                     {onViewDuplicate && (
                       <button
+                        data-part="menu-item"
+                        data-danger={false}
                         onClick={(e) => {
                           e.stopPropagation();
                           onViewDuplicate(view.id);
@@ -380,6 +400,9 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                     {customActions.map((action) => (
                       <button
                         key={action.key}
+                        data-part="menu-item"
+                        data-danger={!!action.danger}
+                        data-disabled={!!action.disabled}
                         disabled={action.disabled}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -419,6 +442,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                     {allowDelete && !view.isDefault && (
                       <>
                         <div
+                          data-part="divider"
                           style={{
                             height: 1,
                             background: 'var(--ds-color-border)',
@@ -426,6 +450,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                           }}
                         />
                         <button
+                          data-part="menu-item"
+                          data-danger={true}
                           onClick={(e) => {
                             e.stopPropagation();
                             onViewDelete(view.id);
@@ -475,6 +501,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
         >
           <input
             type="text"
+            data-part="create-input"
             placeholder={newViewPlaceholder}
             value={newViewName}
             onChange={(e) => setNewViewName(e.target.value)}
@@ -502,6 +529,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
       ) : (
         canCreate && (
           <button
+            data-part="create-button"
             onClick={() => setIsCreating(true)}
             data-testid="create-view-button"
             style={{

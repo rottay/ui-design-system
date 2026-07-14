@@ -130,6 +130,7 @@ function CommandSuggestionChip({
   return (
     <Box
       as="button"
+      data-part="suggestion-chip"
       onClick={onClick}
       style={{
         display: 'inline-flex',
@@ -275,6 +276,19 @@ export function SearchCommandBar({
         ? 'var(--ds-color-warning)'
         : 'var(--ds-color-text-muted)';
 
+  // Derived 5-way state for the skin's data-voice-status hook: raw `voiceStatus`
+  // has no "needs-permission" member, but the paint conditionals throughout this
+  // file treat needsVoicePermission as a peer of the error/listening/transcribing
+  // branches, so the anatomy mirrors that rather than the hook's own type.
+  const voiceStatusForSkin: 'idle' | 'listening' | 'transcribing' | 'error' | 'needs-permission' =
+    voiceStatus === 'error'
+      ? 'error'
+      : needsVoicePermission
+        ? 'needs-permission'
+        : voiceStatus === 'listening' || voiceStatus === 'transcribing'
+          ? voiceStatus
+          : 'idle';
+
   const showVoiceBadge = voiceSupported && (voiceStatus !== 'idle' || isVoicePermissionBlocked || needsVoicePermission);
   const hideInlinePermissionBadge = needsVoicePermission && isCompactViewport;
   const showInlineVoiceBadge = showVoiceBadge && !hideInlinePermissionBadge;
@@ -376,6 +390,10 @@ export function SearchCommandBar({
     <>
     {renderPalette && <ConnectedCommandPalette />}
     <Box
+      data-part="root"
+      data-embedded={embedded}
+      data-editorial-tech={editorialTech}
+      className="ds-structure ds-search-command-bar"
       style={{
         position: 'relative',
         overflow: 'visible',
@@ -430,6 +448,11 @@ export function SearchCommandBar({
         >
           <Box style={{ minWidth: 0, flex: '1 1 720px' }}>
             <Box
+              data-part="search-shell"
+              data-voice-status={voiceStatusForSkin}
+              data-voice-active={isVoiceActive}
+              data-editorial-tech={editorialTech}
+              data-embedded={embedded}
               style={{
                 position: 'relative',
                 padding: editorialTech ? 5 : 6,
@@ -455,6 +478,7 @@ export function SearchCommandBar({
               }}
             >
               <Box
+                data-part="search-icon"
                 style={{
                   position: 'absolute',
                   left: 24,
@@ -470,6 +494,11 @@ export function SearchCommandBar({
               </Box>
               <Input
                 id="entity-workspace-command-input"
+                data-part="input"
+                data-voice-status={voiceStatusForSkin}
+                data-voice-active={isVoiceActive}
+                data-editorial-tech={editorialTech}
+                data-embedded={embedded}
                 placeholder={command.placeholder}
                 value={displayValue}
                 onChange={handleInputChange}
@@ -513,6 +542,7 @@ export function SearchCommandBar({
                   {hasClearButton && (
                     <Box
                       as="button"
+                      data-part="clear"
                       onClick={() => handleInputChange('')}
                       aria-label="Clear search"
                       title="Clear search"
@@ -538,6 +568,8 @@ export function SearchCommandBar({
 
                   {showInlineVoiceBadge && (
                     <Box
+                      data-part="voice-badge"
+                      data-voice-status={voiceStatusForSkin}
                       style={{
                         display: 'inline-flex',
                         alignItems: 'center',
@@ -570,6 +602,7 @@ export function SearchCommandBar({
                     >
                       <VoiceInputIcon status={voiceStatus} />
                       <Text
+                        data-part="voice-badge-label"
                         size="xs"
                         style={{
                           fontSize: 11,
@@ -585,6 +618,9 @@ export function SearchCommandBar({
 
                   <Box
                     as="button"
+                    data-part="voice-toggle"
+                    data-voice-status={voiceStatusForSkin}
+                    data-voice-active={isVoiceActive}
                     onClick={handleVoiceToggle}
                     aria-label={isVoiceActive ? 'Stop voice input' : 'Start voice input'}
                     title={
@@ -636,6 +672,8 @@ export function SearchCommandBar({
 
               {showVoiceHelp && (
                 <Box
+                  data-part="voice-help"
+                  data-permission-blocked={isVoicePermissionBlocked}
                   style={{
                     position: 'absolute',
                     right: 0,
@@ -657,6 +695,7 @@ export function SearchCommandBar({
                         {isVoicePermissionBlocked ? 'Enable microphone' : 'Allow microphone access'}
                       </Text>
                       <Text
+                        data-part="voice-help-description"
                         size="xs"
                         style={{
                           display: 'block',
@@ -675,6 +714,7 @@ export function SearchCommandBar({
                     </Box>
                     <Box
                       as="button"
+                      data-part="close"
                       onClick={() => setShowVoiceHelp(false)}
                       aria-label="Close microphone help"
                       style={{
@@ -697,6 +737,7 @@ export function SearchCommandBar({
 
                   <Box
                     as="ol"
+                    data-part="voice-help-list"
                     style={{
                       margin: '12px 0 0',
                       paddingLeft: 18,
@@ -730,6 +771,7 @@ export function SearchCommandBar({
 
                   <Flex align="center" justify="between" gap={12} style={{ marginTop: 16 }}>
                     <Text
+                      data-part="voice-help-hint"
                       size="xs"
                       style={{
                         flex: 1,
@@ -747,6 +789,7 @@ export function SearchCommandBar({
                     <Flex align="center" gap={8} style={{ flexShrink: 0 }}>
                       <Box
                         as="button"
+                        data-part="voice-help-cancel"
                         onClick={() => {
                           setShowVoiceHelp(false);
                           resetVoiceFeedback();
@@ -773,6 +816,7 @@ export function SearchCommandBar({
                       </Box>
                       <Box
                         as="button"
+                        data-part="voice-help-confirm"
                         onClick={
                           isVoicePermissionBlocked
                             ? () => {
@@ -816,6 +860,8 @@ export function SearchCommandBar({
                 style={{ marginTop: 6 }}
               >
                 <Text
+                  data-part="status"
+                  data-voice-status={voiceStatus}
                   size="xs"
                   style={{
                     color: statusTone,
@@ -847,6 +893,8 @@ export function SearchCommandBar({
               {commandSuggestions.length > 0 && (
                 <Box
                   data-ds-search-shell-slot="true"
+                  data-part="suggestions"
+                  data-editorial-tech={editorialTech}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -861,6 +909,7 @@ export function SearchCommandBar({
                   }}
                 >
                   <Text
+                    data-part="suggestions-label"
                     size="xs"
                     style={{
                       fontSize: 10,
@@ -887,6 +936,8 @@ export function SearchCommandBar({
               {actionsSlot && (
                 <Box
                   data-ds-search-shell-slot="true"
+                  data-part="actions-slot"
+                  data-editorial-tech={editorialTech}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -906,6 +957,7 @@ export function SearchCommandBar({
       </Box>
       {embedded && editorialTech && (
         <Box
+          data-part="divider"
           style={{
             marginTop: 10,
             height: 1,

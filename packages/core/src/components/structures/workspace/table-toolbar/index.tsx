@@ -61,6 +61,7 @@ export interface TableToolbarProps {
 function ToolbarDivider() {
   return (
     <Box
+      data-part="divider"
       style={{
         width: 2,
         height: 28,
@@ -88,6 +89,8 @@ export function TableToolbar({
 }: TableToolbarProps) {
   return (
     <Box
+      data-part="root"
+      className="ds-structure ds-table-toolbar"
       style={{
         padding: '10px 16px',
         borderBottom: '1px solid var(--ds-color-border)',
@@ -99,6 +102,7 @@ export function TableToolbar({
           {onSearchChange && (
             <Box style={{ position: 'relative', width: 476 }}>
               <Search
+                data-part="search-icon"
                 style={{
                   position: 'absolute',
                   left: 10,
@@ -111,6 +115,7 @@ export function TableToolbar({
                 }}
               />
               <Input
+                data-part="search-input"
                 placeholder={searchPlaceholder}
                 value={search ?? ''}
                 onChange={(value: string) => onSearchChange(value)}

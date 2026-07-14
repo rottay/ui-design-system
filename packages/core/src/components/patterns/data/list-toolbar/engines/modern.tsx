@@ -186,6 +186,7 @@ function SegmentedControl({
 }) {
   return (
     <Box
+      data-part="segmented-control"
       style={{
         display: 'inline-flex',
         borderRadius: RADIUS_SM,
@@ -225,6 +226,8 @@ function Segment({
   return (
     <Box
       as="button"
+      data-part="segment"
+      data-active={active}
       onClick={onClick}
       aria-label={ariaLabel}
       title={titleText}
@@ -250,6 +253,7 @@ function Segment({
       {/* Active indicator bar at bottom */}
       {active && (
         <Box
+          data-part="segment-indicator"
           style={{
             position: 'absolute',
             bottom: 0,
@@ -287,6 +291,7 @@ function IconButton({
   const btn = (
     <Box
       as="button"
+      data-part="icon-button"
       onClick={onClick}
       aria-label={ariaLabel}
       {...handlers}
@@ -318,6 +323,7 @@ function IconButton({
 function ToolbarDivider() {
   return (
     <Box
+      data-part="divider"
       style={{
         width: 1,
         height: 20,
@@ -372,6 +378,8 @@ function FilterButton({
     >
       <Box
         as="button"
+        data-part="filter-trigger"
+        data-active={!!isActive}
         {...handlers}
         style={{
           display: 'inline-flex',
@@ -414,6 +422,7 @@ function FilterButton({
         {isActive && activeLabel && (
           <Box
             as="span"
+            data-part="filter-badge"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -456,6 +465,8 @@ function FilterDropdownItem({
   return (
     <Box
       as="button"
+      data-part="filter-dropdown-item"
+      data-selected={selected}
       onClick={onClick}
       {...handlers}
       style={{
@@ -487,7 +498,7 @@ function FilterDropdownItem({
         {label}
       </Text>
       {selected && (
-        <Text as="span" style={{ fontSize: 12, opacity: 0.6, color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}>
+        <Text data-part="filter-checkmark" as="span" style={{ fontSize: 12, opacity: 0.6, color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}>
           &#10003;
         </Text>
       )}
@@ -592,6 +603,7 @@ function SettingsDropdown({
                 label: 'Columns',
                 children: columnSettingsContent ?? (
                   <Text
+                    data-part="settings-empty"
                     style={{
                       fontSize: 13,
                       color: COLOR_TEXT_MUTED,
@@ -628,6 +640,7 @@ function SettingsDropdown({
                 label: 'Views',
                 children: savedViewsContent ?? (
                   <Text
+                    data-part="settings-empty"
                     style={{
                       fontSize: 13,
                       color: COLOR_TEXT_MUTED,
@@ -674,6 +687,8 @@ function DensityOptionRow({
   return (
     <Box
       as="button"
+      data-part="density-option"
+      data-active={active}
       onClick={onClick}
       {...handlers}
       style={{
@@ -703,6 +718,7 @@ function DensityOptionRow({
       }}
     >
       <Box
+        data-part="density-option-icon"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -716,6 +732,7 @@ function DensityOptionRow({
       </Text>
       {active && (
         <Text
+          data-part="density-checkmark"
           as="span"
           style={{ marginLeft: 'auto', fontSize: 12, color: FILTER_PILL_ACTIVE_COLOR }}
         >
@@ -755,6 +772,7 @@ function MobileOverflow({
           {/* View mode */}
           <Box style={{ padding: '6px 14px' }}>
             <Text
+              data-part="mobile-overflow-label"
               style={{
                 fontSize: 11,
                 fontWeight: 600,
@@ -772,6 +790,7 @@ function MobileOverflow({
           {/* Density */}
           <Box style={{ padding: '6px 14px' }}>
             <Text
+              data-part="mobile-overflow-label"
               style={{
                 fontSize: 11,
                 fontWeight: 600,
@@ -789,6 +808,7 @@ function MobileOverflow({
           {/* Divider */}
           {onExport && (
             <Box
+              data-part="divider"
               style={{
                 height: 1,
                 background: TOOLBAR_DIVIDER,
@@ -836,6 +856,7 @@ function MobileOverflowItem({
   return (
     <Box
       as="button"
+      data-part="mobile-overflow-item"
       onClick={onClick}
       {...handlers}
       style={{
@@ -855,7 +876,7 @@ function MobileOverflowItem({
         outline: 'none',
       }}
     >
-      <Box style={{ display: 'flex', alignItems: 'center', color: 'inherit', flexShrink: 0 }}>
+      <Box data-part="mobile-overflow-item-icon" style={{ display: 'flex', alignItems: 'center', color: 'inherit', flexShrink: 0 }}>
         {icon}
       </Box>
       <Text as="span" style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>
@@ -941,7 +962,8 @@ export default function ModernListToolbar({
 
   return (
     <Box
-      className={className}
+      data-part="root"
+      className={`ds-pattern-list-toolbar ds-engine-modern ${className ?? ''}`}
       style={{
         background: TOOLBAR_BG,
         border: `1px solid ${TOOLBAR_BORDER}`,
@@ -964,6 +986,7 @@ export default function ModernListToolbar({
                 <>
                   {icon && (
                     <Box
+                      data-part="title-icon"
                       style={{
                         color: COLOR_TEXT_SECONDARY,
                         display: 'flex',
@@ -975,6 +998,7 @@ export default function ModernListToolbar({
                     </Box>
                   )}
                   <Text
+                    data-part="title"
                     style={{
                       fontSize: 15,
                       fontWeight: 600,
@@ -1027,6 +1051,7 @@ export default function ModernListToolbar({
               onChange={handleSearchChange}
               prefix={
                 <Search
+                  data-part="search-icon"
                   size={14}
                   style={{ color: SEARCH_ICON_COLOR }}
                 />
@@ -1084,6 +1109,7 @@ export default function ModernListToolbar({
                 <Flex align="center" gap={8} style={{ flexShrink: 0 }}>
                   {icon && (
                     <Box
+                      data-part="title-icon"
                       style={{
                         color: COLOR_TEXT_SECONDARY,
                         display: 'flex',
@@ -1094,6 +1120,7 @@ export default function ModernListToolbar({
                     </Box>
                   )}
                   <Text
+                    data-part="title"
                     style={{
                       fontSize: 14,
                       fontWeight: 600,
@@ -1128,6 +1155,7 @@ export default function ModernListToolbar({
               onChange={handleSearchChange}
               prefix={
                 <Search
+                  data-part="search-icon"
                   size={14}
                   style={{ color: SEARCH_ICON_COLOR }}
                 />
@@ -1244,6 +1272,7 @@ export default function ModernListToolbar({
       {/* ================================================================ */}
       {hasActiveFilters && (
         <Flex
+          data-part="filter-chips-strip"
           align="center"
           gap={8}
           wrap="wrap"
@@ -1255,10 +1284,12 @@ export default function ModernListToolbar({
         >
           <Flex align="center" gap={6} style={{ flexShrink: 0 }}>
             <Filter
+              data-part="filter-chips-icon"
               size={12}
               style={{ color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}
             />
             <Text
+              data-part="filter-chips-count"
               style={{
                 fontSize: 12,
                 fontWeight: 500,
@@ -1271,6 +1302,7 @@ export default function ModernListToolbar({
           </Flex>
 
           <Box
+            data-part="divider"
             style={{
               width: 1,
               height: 14,
@@ -1283,6 +1315,7 @@ export default function ModernListToolbar({
           {activeFilterChips.map((chip) => (
             <Tag
               key={chip.key}
+              data-part="filter-chip"
               closable
               onClose={() => onFilterChange?.(chip.key, '')}
               size="sm"
@@ -1292,10 +1325,10 @@ export default function ModernListToolbar({
                 borderRadius: RADIUS_SM,
               }}
             >
-              <Text as="span" style={{ fontSize: 12, color: COLOR_TEXT_MUTED, fontWeight: 400 }}>
+              <Text data-part="filter-chip-label" as="span" style={{ fontSize: 12, color: COLOR_TEXT_MUTED, fontWeight: 400 }}>
                 {chip.label}:
               </Text>{' '}
-              <Text as="span" style={{ fontSize: 12, fontWeight: 500, color: COLOR_TEXT_PRIMARY }}>
+              <Text data-part="filter-chip-value" as="span" style={{ fontSize: 12, fontWeight: 500, color: COLOR_TEXT_PRIMARY }}>
                 {chip.value}
               </Text>
             </Tag>
@@ -1306,6 +1339,7 @@ export default function ModernListToolbar({
               <Box style={{ flex: 1 }} />
               <Box
                 as="button"
+                data-part="clear-all"
                 onClick={onClearFilters}
                 style={{
                   display: 'inline-flex',
@@ -1348,6 +1382,7 @@ function FilterCountBadge({ count }: { count: number }) {
 
   return (
     <Box
+      data-part="count-badge"
       style={{
         display: 'inline-flex',
         alignItems: 'center',

@@ -59,6 +59,9 @@ export function ActiveFiltersBar({
 
   return (
     <Box
+      data-part="root"
+      data-embedded={embedded}
+      className="ds-structure ds-active-filters-bar"
       style={{
         padding: embedded ? '6px 16px 10px' : '10px 16px 12px',
         borderBottom: embedded
@@ -80,6 +83,7 @@ export function ActiveFiltersBar({
         <Box style={{ minWidth: 0, flex: '1 1 560px' }}>
           <Flex align="center" gap={8} wrap="wrap">
             <Text
+              data-part="pill"
               size="xs"
               style={{
                 display: 'inline-flex',
@@ -101,6 +105,7 @@ export function ActiveFiltersBar({
             {activeFilters.map((filter) => (
               <Box
                 key={filter.key}
+                data-part="chip"
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
@@ -115,6 +120,7 @@ export function ActiveFiltersBar({
                 }}
               >
                 <Text
+                  data-part="chip-label"
                   size="xs"
                   style={{
                     fontSize: 11,
@@ -129,6 +135,7 @@ export function ActiveFiltersBar({
                   {filter.label}
                 </Text>
                 <Text
+                  data-part="chip-value"
                   size="xs"
                   style={{
                     fontSize: 12,
@@ -142,6 +149,7 @@ export function ActiveFiltersBar({
                 </Text>
                 <Box
                   as="button"
+                  data-part="chip-remove"
                   onClick={() => onRemoveFilter(filter.key)}
                   style={{
                     display: 'inline-flex',
@@ -179,6 +187,7 @@ export function ActiveFiltersBar({
         >
           <Box
             as="button"
+            data-part="clear-all"
             onClick={onClearAll}
             style={{
               display: 'inline-flex',
@@ -204,6 +213,7 @@ export function ActiveFiltersBar({
           {onAddFilter && (
             <Box
               as="button"
+              data-part="add-filter"
               onClick={onAddFilter}
               style={{
                 display: 'inline-flex',

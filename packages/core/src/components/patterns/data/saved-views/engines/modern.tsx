@@ -225,7 +225,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   if (loading) {
     return (
       <div
-        className={className ?? ''}
+        data-part="root"
+        className={`ds-pattern-saved-views ds-engine-modern ${className ?? ''}`}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -236,6 +237,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
       >
         <svg
           className="loading-spinner"
+          data-part="spinner"
           width="18"
           height="18"
           viewBox="0 0 24 24"
@@ -276,7 +278,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   };
 
   return (
-    <div className={className ?? ''} style={barStyle}>
+    <div data-part="root" className={`ds-pattern-saved-views ds-engine-modern ${className ?? ''}`} style={barStyle}>
       {views.map((view) => {
         const isActive = view.id === activeViewId;
         const isEditing = editingViewId === view.id;
@@ -323,6 +325,10 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         return (
           <div
             key={view.id}
+            data-part="pill"
+            data-active={isActive}
+            data-dragging={isDragging}
+            data-drop-target={isDropTarget}
             draggable={!!onViewReorder}
             onDragStart={(e) => handleDragStart(e, view.id)}
             onDragOver={(e) => handleDragOver(e, view.id)}
@@ -361,6 +367,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             {isEditing ? (
               <input
                 type="text"
+                data-part="input"
                 style={inlineInputStyle}
                 value={editingName}
                 onChange={(e) => setEditingName(e.target.value)}
@@ -383,6 +390,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             {/* Unsaved changes indicator */}
             {view.config && (view as any).isDirty && (
               <span
+                data-part="unsaved-dot"
+                data-dirty={true}
+                data-active={isActive}
                 style={{
                   display: 'inline-block',
                   width: 6,
@@ -400,6 +410,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             {/* Default star */}
             {view.isDefault && (
               <svg
+                data-part="default-star"
+                data-default={true}
+                data-active={isActive}
                 xmlns="http://www.w3.org/2000/svg"
                 width="12"
                 height="12"
@@ -424,6 +437,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               >
                 <button
                   type="button"
+                  data-part="menu-trigger"
+                  data-open={isMenuOpen}
+                  data-active={isActive}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -474,6 +490,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 {/* Dropdown menu */}
                 {isMenuOpen && (
                   <div
+                    data-part="menu-panel"
+                    data-open={isMenuOpen}
                     style={{
                       position: 'absolute',
                       top: '100%',
@@ -493,6 +511,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                     {allowRename && (
                       <button
                         type="button"
+                        data-part="menu-item"
+                        data-danger={false}
                         style={menuItemStyle(
                           hoveredMenuItem === `rename-${view.id}`,
                         )}
@@ -521,6 +541,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                     {onViewDuplicate && (
                       <button
                         type="button"
+                        data-part="menu-item"
+                        data-danger={false}
                         style={menuItemStyle(
                           hoveredMenuItem === `duplicate-${view.id}`,
                         )}
@@ -554,6 +576,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                       <button
                         key={action.key}
                         type="button"
+                        data-part="menu-item"
+                        data-danger={!!action.danger}
+                        data-disabled={!!action.disabled}
                         disabled={action.disabled}
                         style={menuItemStyle(
                           hoveredMenuItem === `custom-${action.key}`,
@@ -577,6 +602,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                     {allowDelete && !view.isDefault && (
                       <>
                         <div
+                          data-part="menu-divider"
                           style={{
                             height: 1,
                             background: 'var(--ds-color-border)',
@@ -585,6 +611,8 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                         />
                         <button
                           type="button"
+                          data-part="menu-item"
+                          data-danger={true}
                           style={menuItemStyle(
                             hoveredMenuItem === `delete-${view.id}`,
                             true,
@@ -636,6 +664,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         >
           <input
             type="text"
+            data-part="create-input"
             style={inlineInputStyle}
             placeholder={newViewPlaceholder}
             value={newViewName}
@@ -660,6 +689,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         canCreate && (
           <button
             type="button"
+            data-part="create-button"
             style={{
               display: 'inline-flex',
               alignItems: 'center',

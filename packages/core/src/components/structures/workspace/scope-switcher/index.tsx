@@ -48,6 +48,9 @@ export function ScopeSwitcher({
 
   return (
     <Box
+      data-part="root"
+      data-inline={isInline}
+      className="ds-structure ds-scope-switcher"
       style={{
         padding: isInline ? 0 : '8px 16px',
         overflowX: 'auto',
@@ -77,6 +80,8 @@ export function ScopeSwitcher({
             <Box
               key={scope.key}
               as="button"
+              data-part="pill"
+              data-active={isActive}
               onClick={() => onScopeChange(scope.key)}
               style={{
                 display: 'inline-flex',
@@ -105,6 +110,7 @@ export function ScopeSwitcher({
               }}
             >
               <Text
+                data-part="pill-label"
                 size="sm"
                 style={{
                   fontSize: 12,
@@ -117,6 +123,8 @@ export function ScopeSwitcher({
               </Text>
               {hasCount && (
                 <Box
+                  data-part="count-badge"
+                  data-active={isActive}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',

@@ -91,6 +91,7 @@ export interface ColumnMenuProps<T extends ColumnMenuColumn> {
 function CountPill({ label }: { label: string }) {
   return (
     <Box
+      data-part="count-pill"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -447,6 +448,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
     <Box style={{ position: 'relative', zIndex: isOpen ? 60 : 1 }}>
       <Box
         as="button"
+        data-part="trigger"
+        data-open={isOpen}
+        className="ds-structure ds-column-menu"
         ref={triggerRef}
         onClick={isOpen ? () => setIsOpen(false) : handleOpen}
         title={`Columns: ${visibleCount} visible${hiddenCount > 0 ? `, ${hiddenCount} hidden` : ''}`}
@@ -474,6 +478,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
       >
         <Flex align="center" justify="center" style={{ minWidth: 0 }}>
           <Box
+            data-part="trigger-icon"
+            data-open={isOpen}
             style={{
               width: compact ? 22 : 28,
               height: compact ? 22 : 28,
@@ -495,9 +501,12 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
 
       {isOpen && typeof document !== 'undefined' && createPortal(
         <>
-          <Box onClick={() => setIsOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 1990 }} />
+          <Box data-part="backdrop" onClick={() => setIsOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 1990 }} />
 
           <Box
+            data-part="panel"
+            data-open={isOpen}
+            className="ds-structure ds-column-menu-panel"
             style={{
               position: 'fixed',
               top: panelPosition.top,
@@ -516,6 +525,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
             }}
           >
             <Box
+              data-part="header"
               style={{
                 padding: '18px 20px 16px',
                 borderBottom:
@@ -534,6 +544,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     Table columns
                   </Text>
                   <Text
+                    data-part="description"
                     size="xs"
                     style={{
                       display: 'block',
@@ -550,6 +561,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                   <CountPill label={`${visibleCount}/${columns.length}`} />
                   <Box
                     as="button"
+                    data-part="reset"
                     onClick={handleReset}
                     style={{
                       display: 'inline-flex',
@@ -597,6 +609,10 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     return (
                       <Box
                         key={column.key}
+                        data-part="row"
+                        data-drag-target={isDragTarget}
+                        data-visible={isVisible}
+                        data-dragging={isDragging}
                         onDragOver={(event: React.DragEvent<HTMLElement>) => handleColumnDragOver(event, column.key)}
                         onDrop={(event: React.DragEvent<HTMLElement>) => handleColumnDrop(event, column.key)}
                         style={{
@@ -623,6 +639,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           <Flex align="center" gap={12} style={{ minWidth: 0, flex: 1 }}>
                             <Box
                               as="button"
+                              data-part="drag-handle"
+                              data-drag-target={isDragTarget}
+                              data-dragging={isDragging}
                               draggable
                               aria-label={`Drag to move ${column.title}`}
                               title={`Drag to move ${column.title}`}
@@ -656,6 +675,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             <Box style={{ minWidth: 0, flex: 1 }}>
                               <Flex align="center" gap={6}>
                                 <Text
+                                  data-part="title"
+                                  data-visible={isVisible}
                                   size="sm"
                                   style={{
                                     display: 'block',
@@ -669,6 +690,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 </Text>
                                 {isPinned && (
                                   <Text
+                                    data-part="pin-badge"
+                                    data-pinned={true}
                                     size="xs"
                                     style={{
                                       fontSize: 10,
@@ -684,6 +707,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               </Flex>
                               <Flex align="center" gap={6} style={{ marginTop: 4 }}>
                                 <Text
+                                  data-part="description"
+                                  data-visible={isVisible}
                                   size="xs"
                                   style={{
                                     display: 'block',
@@ -699,6 +724,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 {onColumnResize && currentWidth != null && !isEditingWidth && (
                                   <Box
                                     as="button"
+                                    data-part="width-badge"
                                     onClick={() => setEditingWidthKey(column.key)}
                                     title={`Width: ${currentWidth}px (click to edit)`}
                                     style={{
@@ -724,6 +750,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 {onColumnResize && isEditingWidth && (
                                   <input
                                     type="number"
+                                    data-part="width-input"
                                     defaultValue={currentWidth ?? 150}
                                     min={40}
                                     max={2000}
@@ -823,6 +850,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         <Box key={section.groupKey}>
                           <Box
                             as="button"
+                            data-part="group-toggle"
                             onClick={() => handleToggleGroup(section.groupKey)}
                             style={{
                               display: 'flex',
@@ -842,6 +870,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               <ChevronDown style={{ width: 14, height: 14, flexShrink: 0 }} />
                             )}
                             <Text
+                              data-part="group-toggle-label"
                               size="xs"
                               weight="medium"
                               style={{
@@ -875,6 +904,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
 
                 {actions && actions.length > 0 && (
                   <Box
+                    data-part="action-section"
                     style={{
                       marginTop: 8,
                       paddingTop: 14,
@@ -884,6 +914,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     <Flex align="center" justify="between" gap={12} style={{ marginBottom: 10 }}>
                       <Box style={{ minWidth: 0 }}>
                         <Text
+                          data-part="action-section-label"
                           size="xs"
                           weight="medium"
                           style={{
@@ -897,6 +928,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                           Row actions
                         </Text>
                         <Text
+                          data-part="description"
                           size="xs"
                           style={{
                             display: 'block',
@@ -918,6 +950,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         return (
                           <Box
                             key={action.key}
+                            data-part="action-row"
+                            data-visible={isVisible}
                             style={{
                               border: isVisible
                                 ? '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)'
@@ -942,6 +976,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 />
                                 <Box style={{ minWidth: 0 }}>
                                   <Text
+                                    data-part="title"
+                                    data-visible={isVisible}
                                     size="sm"
                                     style={{
                                       display: 'block',
@@ -954,6 +990,8 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     {action.title}
                                   </Text>
                                   <Text
+                                    data-part="description"
+                                    data-visible={isVisible}
                                     size="xs"
                                     style={{
                                       display: 'block',
@@ -986,6 +1024,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               align="center"
               justify="between"
               gap={12}
+              data-part="footer"
               style={{
                 padding: 12,
                 borderTop:
@@ -994,11 +1033,12 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                   'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent), color-mix(in srgb, var(--ds-color-bg-primary) 28%, transparent))',
               }}
             >
-              <Text size="xs" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+              <Text data-part="footer-hint" size="xs" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
                 Column widths are also adjustable directly from the table header.
               </Text>
               <Box
                 as="button"
+                data-part="apply"
                 onClick={handleApply}
                 style={{
                   display: 'inline-flex',
@@ -1042,6 +1082,8 @@ function IconButton({
   return (
     <Box
       as="button"
+      data-part="icon-button"
+      data-disabled={!!disabled}
       aria-label={label}
       aria-disabled={disabled}
       onClick={disabled ? undefined : onClick}
