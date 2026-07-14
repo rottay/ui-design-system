@@ -37,6 +37,48 @@ common way this checkpoint's skins will silently no-op if written wrong.
 
 ---
 
+## PRE-STEP FINDINGS ADDENDUM (drilled + committed `8e363eb6`; these SUPERSEDE the contract body where noted)
+
+The anatomy pre-step proved both invariants (counter 466/delta-0, DOM unchanged via AST-diff drilled
+on 6 shapes incl. portal + IIFE-in-JSX; WorkspaceChrome contract test 36/36 with portal containment
+asserted; existing suites 118/118) and surfaced findings the migration MUST honor:
+
+1. **HEADLINE — `<Input>` is a worse P-79 case than `<Card>`; the 4 search-input stamps DO NOT reach
+   the DOM.** Empirically probed: modern `<Input>` hardcodes `data-part='root'` AND drops the caller's
+   `className`; rustic `<Input>` forwards NEITHER `data-part` NOR `className`. So `data-part='search-input'`
+   (table-toolbar, list-toolbar mobile+desktop) and `data-part='input'` (search-command-bar) NEVER land,
+   and the component scope class does not reach the `<input>` either. A skin rule anchored to those
+   data-parts silently never matches (it manifested as a 15s test HANG, not a fail — an unreachable
+   `data-part` on a lazy primitive hangs `waitFor`). **ORCHESTRATOR DECISION (anchor strategy, do NOT
+   re-litigate):**
+   - **list-toolbar search inputs**: their paint is `searchInputStyle()` in `tokens.ts`, which is Trap 5
+     (OUT OF SCOPE, stays inline). There is NOTHING to migrate there; the inert `data-part='search-input'`
+     stamps stay harmless. Do not touch.
+   - **table-toolbar + search-command-bar search inputs**: the `<input>` DOES carry its own generic
+     `rottay-input rottay-input--<engine>` class (grep-verified). If (and only if) the search-input has
+     CUSTOM inline paint beyond the Input engine's own defaults, migrate it via a rule anchored to the
+     component's ROOT scope class + the `.rottay-input` DESCENDANT — e.g.
+     `.ds-structure.ds-table-toolbar .rottay-input { … }` — at specificity that EXCEEDS the Input engine
+     skin's own `[data-part='root']` rule (measure it, same discipline as the P-87 Typography (0,5,0)
+     case; the Input skin is a competitor exactly like the Typography skin). If the search-input uses only
+     Input defaults (no custom paint), there is NOTHING to migrate — leave it.
+   - **FORBIDDEN**: do NOT wrap the Input in an extra Box (a DOM change → not byte-exact), and do NOT
+     "fix" the Input primitive (large blast-radius, out of scope). See P-88 for the broader DS issue.
+2. **saved-views `unsaved-dot` is modern-ONLY** — rustic never implements `isDirty` (grep-confirmed zero
+   refs). Not in the contract's §0/Trap-2 asymmetry list. The rustic skin gets NO unsaved-dot rule; the
+   contract test pins rustic's `unsaved-dot` count at 0.
+3. **The `menu-divider` (modern) vs `divider` (rustic) name in saved-views's context menu is a REAL
+   per-engine asymmetry, not a typo** (§2.2 already has it; confirmed). Do not "harmonize" it.
+4. **Pre-existing HTML defect, record only**: `saved-views-menu`'s `ViewItem` nests `<Box as="button">`
+   inside `<Box as="button">` (a button-in-button, invalid HTML, React logs a hydration warning). NOT
+   caused by the stamps; out of scope to fix — flag for the team.
+5. **Migration-test gotcha**: `list-toolbar`'s desktop layout (SegmentedControl in a `<Tooltip>`) does not
+   render within the 15s test timeout unless `mockMatchMedia(1280)` is called first (the Tooltip lazy
+   engine chunk needs an explicit viewport mock). The existing `ListToolbar.integration.test.tsx` only
+   ever tested the 390px mobile path. Whoever writes Unit C1's migration test needs this.
+
+---
+
 ## DRAFTER NOTES FOR THE ORCHESTRATOR
 
 This draft was produced by re-reading the inventory in full, the CK-F contract (template),
