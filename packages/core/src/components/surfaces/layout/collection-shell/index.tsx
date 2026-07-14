@@ -51,13 +51,8 @@ export function WorkspaceShell({
   style,
 }: WorkspaceShellProps) {
   const isAtmospheric = variant === 'ai-field';
-  const rounded = continuity === 'seamless' ? 24 : 18;
   const showOrbitalField = fieldPattern === 'orbital' || fieldPattern === 'hybrid';
   const showAmbientField = fieldPattern === 'ambient' || fieldPattern === 'hybrid';
-  const borderColor =
-    continuity === 'seamless'
-      ? 'var(--ds-workspace-shell-border, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle) 76%))'
-      : 'var(--ds-color-border-subtle)';
 
   const focalAreas =
     focusReaction && (focusActive || previewActive)
@@ -68,20 +63,6 @@ export function WorkspaceShell({
             : []),
         ]
       : undefined;
-
-  const overlayBackground = isAtmospheric
-    ? [
-        'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-canvas) 10%, transparent) 36%, color-mix(in srgb, var(--ds-color-bg-canvas) 44%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-canvas) 62%, transparent) 100%)',
-        previewEmphasis && previewActive
-          ? 'radial-gradient(38% 48% at 92% 48%, color-mix(in srgb, var(--ds-color-primary) 10%, transparent) 0%, transparent 74%)'
-          : null,
-        focusReaction && focusActive
-          ? 'radial-gradient(46% 38% at 28% 18%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent) 0%, transparent 78%)'
-          : null,
-      ]
-        .filter(Boolean)
-        .join(', ')
-    : 'var(--ds-workspace-shell-overlay, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 4%, transparent) 0%, transparent 36%, color-mix(in srgb, var(--ds-color-bg-secondary) 24%, transparent) 100%))';
 
   return (
     <Box
@@ -100,18 +81,6 @@ export function WorkspaceShell({
         position: 'relative',
         overflow: 'hidden',
         isolation: 'isolate',
-        borderRadius: rounded,
-        border: `1px solid ${borderColor}`,
-        background:
-          isAtmospheric
-            ? continuity === 'seamless'
-              ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-canvas) 8%) 0%, color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%) 44%, color-mix(in srgb, var(--ds-color-bg-canvas) 82%, var(--ds-surface-card) 18%) 100%)'
-              : 'var(--ds-surface-card)'
-            : continuity === 'seamless'
-              ? 'var(--ds-workspace-shell-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-primary) 8%) 0%, color-mix(in srgb, var(--ds-surface-card) 82%, var(--ds-color-bg-secondary) 18%) 52%, color-mix(in srgb, var(--ds-color-bg-canvas) 72%, var(--ds-surface-card) 28%) 100%))'
-            : 'var(--ds-surface-card)',
-        boxShadow:
-          'var(--ds-workspace-shell-shadow, 0 20px 48px color-mix(in srgb, var(--ds-color-primary) 11%, transparent), 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 70%, transparent))',
         ...style,
       }}
     >
@@ -179,7 +148,6 @@ export function WorkspaceShell({
           inset: 0,
           pointerEvents: 'none',
           zIndex: 0,
-          background: overlayBackground,
         }}
       />
 
@@ -189,10 +157,6 @@ export function WorkspaceShell({
         style={{
           position: 'relative',
           zIndex: 1,
-          borderRadius: rounded,
-          background: isAtmospheric
-            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 16%, transparent) 0%, transparent 100%)'
-            : undefined,
         }}
       >
         {children}

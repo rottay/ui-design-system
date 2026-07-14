@@ -47,7 +47,7 @@ function MemberRow({
       className="ds-team__divider"
       justify="between"
       align="center"
-      style={{ padding: '12px 0', borderBottom: '1px solid var(--ds-color-border)' }}
+      style={{ padding: '12px 0' }}
     >
       <Flex gap={12} align="center" style={{ flex: 1 }}>
         {member.avatar}
@@ -56,7 +56,7 @@ function MemberRow({
           <Text
             className="ds-team__muted-text"
             data-part="muted-text"
-            style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+            style={{ fontSize: 13 }}
           >
             {member.email}
           </Text>
@@ -85,7 +85,7 @@ function MemberRow({
           <Text
             className="ds-team__muted-text"
             data-part="muted-text"
-            style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+            style={{ fontSize: 13 }}
           >
             {config.behavior.roles.find((r) => r.id === member.role)?.label ?? member.role}
           </Text>

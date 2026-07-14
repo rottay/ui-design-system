@@ -1,0 +1,23 @@
+/**
+ * BulkSelectToggle skin (WO-SKIN-06 CK-I).
+ * Deliberately unlayered so the primitive engine skins and tenant wildcard
+ * floor cannot displace the pattern's active ring. Values are transcribed
+ * from the former inline styles; slideInCheckbox remains an external shared
+ * keyframe exactly as it was before extraction.
+ */
+
+.ds-pattern-bulk-select-toggle .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
+  transition: all 0.2s ease;
+}
+
+.ds-pattern-bulk-select-toggle[data-active='true'] .ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger.ds-bulk-select-toggle__trigger {
+  box-shadow: 0 0 0 2px var(--ds-color-primary-200);
+}
+
+.ds-pattern-bulk-select-toggle[data-active='true'] [data-part='icon'] {
+  animation: slideInCheckbox 0.2s ease-out;
+}
+
+.ds-pattern-bulk-select-toggle[data-has-selection='true'] .ds-bulk-select-toggle__count.ds-bulk-select-toggle__count {
+  animation: slideInCheckbox 0.2s ease-out;
+}

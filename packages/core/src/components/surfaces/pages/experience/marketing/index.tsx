@@ -50,7 +50,6 @@ export function MarketingSurface({
                 fontWeight: 700,
                 letterSpacing: '0.16em',
                 textTransform: 'uppercase',
-                color: 'var(--ds-color-text-muted)',
               }}
             >
               {config.presentation.eyebrow}
@@ -83,7 +82,6 @@ export function MarketingSurface({
             style={{
               fontSize: isMobile ? 16 : 18,
               lineHeight: isMobile ? 1.75 : 1.85,
-              color: 'var(--ds-color-text-secondary)',
               maxWidth: 640,
             }}
           >
@@ -115,12 +113,6 @@ export function MarketingSurface({
       style={{
         minHeight: '100vh',
         paddingBottom: isMobile ? 40 : 72,
-        background: [
-          'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-neutral-900) 1.2%, var(--ds-color-bg-primary)), var(--ds-color-bg-primary))',
-          'radial-gradient(circle at top right, color-mix(in srgb, var(--ds-color-neutral-900) 4%, transparent), transparent 34%)',
-          'repeating-linear-gradient(90deg, transparent 0, transparent 95px, color-mix(in srgb, var(--ds-color-neutral-900) 1.8%, transparent) 96px)',
-          'repeating-linear-gradient(180deg, transparent 0, transparent 95px, color-mix(in srgb, var(--ds-color-neutral-900) 1.8%, transparent) 96px)',
-        ].join(', '),
       }}
     >
       <Stack

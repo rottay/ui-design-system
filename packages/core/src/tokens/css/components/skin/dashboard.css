@@ -1,0 +1,5 @@
+/** DashboardSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-dashboard .ds-dashboard__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}

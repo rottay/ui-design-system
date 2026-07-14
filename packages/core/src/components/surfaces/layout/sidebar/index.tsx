@@ -75,7 +75,6 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
         variant="outlined"
         style={{
           minHeight: '100%',
-          borderRight: config.visual.bordered === false ? 'none' : undefined,
         }}
       >
         <Card.Body>

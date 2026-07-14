@@ -1,0 +1,27 @@
+/** CommandCenterSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='info'] {
+  background: var(--ds-color-info);
+}
+
+.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='warning'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='success'] {
+  background: var(--ds-color-success);
+}
+
+.ds-surface.ds-command-center .ds-command-center__insight-accent[data-part='insight-accent'][data-tone='error'] {
+  background: var(--ds-color-error);
+}
+
+.ds-surface.ds-command-center .ds-command-center__quick-action-icon[data-part='quick-action-icon'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary));
+  color: var(--ds-color-text-secondary);
+}

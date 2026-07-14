@@ -1,0 +1,44 @@
+/**
+ * Shared surface lifecycle-state skin (WO-SKIN-06 / CK-I).
+ * Engine-agnostic: every export renders one tree under every engine.
+ *
+ * DELIBERATELY UNLAYERED. Every tenant layer sorts before Tailwind preflight;
+ * an unlayered skin keeps component paint above that reset while leaving
+ * caller inline overrides in charge.
+ *
+ * These state helpers compose Card, Alert and Typography primitives. Their
+ * root classNames provide the stable surface scope. Text color rules repeat
+ * the owned part three times to reach (0,5,0), above both engines' (0,4,0)
+ * default Typography color rule. The stale-banner border repeats its own part
+ * to reach the tenant border-color floor at (0,4,0).
+ */
+
+.ds-surface.ds-loading-state [data-part='description'][data-part='description'][data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-empty-state-card [data-part='icon'][data-part='icon'][data-part='icon'] {
+  color: var(--ds-color-text-disabled);
+}
+
+.ds-surface.ds-empty-state-card [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-empty-state-card [data-part='description'][data-part='description'][data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-stale-banner[data-part='banner'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-info-bg, rgba(59,130,246,0.08));
+  color: var(--ds-color-info);
+}
+
+.ds-surface.ds-stale-banner[data-part='banner'][data-part='banner'] {
+  border: 1px solid var(--ds-color-info-border, rgba(59,130,246,0.2));
+}
+
+.ds-surface.ds-stale-banner > [data-part='description'][data-part='description'][data-part='description'] {
+  color: inherit;
+}

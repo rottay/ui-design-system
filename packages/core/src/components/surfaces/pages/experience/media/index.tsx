@@ -23,10 +23,8 @@ import { SurfaceEmptyState } from '../../../foundation/states';
 /** Default gallery card used when callers do not provide a custom grid-item renderer. */
 function DefaultMediaCard({
   item,
-  selected,
 }: {
   item: MediaSurfaceItem;
-  selected: boolean;
 }): React.ReactElement {
   return (
     <Card
@@ -34,9 +32,6 @@ function DefaultMediaCard({
       variant="outlined"
       hoverable
       clickable
-      style={{
-        borderColor: selected ? 'var(--ds-color-primary-500)' : undefined,
-      }}
     >
       <Card.Body>
         <Stack spacing="sm">
@@ -51,7 +46,7 @@ function DefaultMediaCard({
             <Stack spacing="xs">
               {item.title && <Text style={{ fontWeight: 700 }}>{item.title}</Text>}
               {item.description && (
-                <Text className="ds-media__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>{item.description}</Text>
+                <Text className="ds-media__muted-text" data-part="muted-text">{item.description}</Text>
               )}
               {item.meta}
             </Stack>
@@ -158,7 +153,7 @@ export function MediaSurface({
                   const selected = item.id === selectedId;
                   const rendered =
                     config.presentation.renderGridItem?.(item, { index, selected }) ?? (
-                      <DefaultMediaCard item={item} selected={selected} />
+                      <DefaultMediaCard item={item} />
                     );
 
                   return (
@@ -210,7 +205,7 @@ export function MediaSurface({
                     <Stack spacing="xs">
                       {selectedItem.meta}
                       {selectedItem.description && (
-                        <Text className="ds-media__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>
+                        <Text className="ds-media__muted-text" data-part="muted-text">
                           {selectedItem.description}
                         </Text>
                       )}

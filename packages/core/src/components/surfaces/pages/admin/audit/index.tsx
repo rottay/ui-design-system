@@ -135,7 +135,7 @@ export function AuditSurface({
             <Text
               className="ds-audit__muted-text"
               data-part="muted-text"
-              style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+              style={{ fontSize: 12 }}
             >
               Page {config.behavior.pagination.current} - {config.behavior.pagination.total} total entries
             </Text>

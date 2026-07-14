@@ -1,0 +1,34 @@
+/**
+ * GridView wrapper skin (WO-SKIN-06 CK-I).
+ * The consumer-owned renderCard subtree is never targeted; only the wrapper's
+ * selection shell, checkbox landing hook and empty state receive paint.
+ */
+
+.ds-pattern-grid-view [data-part='card-shell'][data-part='card-shell'] {
+  border-radius: var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)));
+  transition: box-shadow var(--ds-motion-fast, 120ms) var(--ds-motion-ease-out, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+.ds-pattern-grid-view [data-part='card-shell'][data-selected='true'] {
+  box-shadow: var(--ds-collection-card-selected-ring, var(--ds-premium-card-selected-ring, 0 0 0 2px var(--ds-color-primary)));
+}
+
+.ds-pattern-grid-view [data-part='card-shell'][data-selected='false'] {
+  box-shadow: none;
+}
+
+.ds-pattern-grid-view .ds-grid-view__checkbox-control.ds-grid-view__checkbox-control.ds-grid-view__checkbox-control {
+  background: var(--ds-color-bg-primary, #fff);
+  border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0,0,0,0.12));
+}
+
+.ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  border: 1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)));
+  background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary, #fff)));
+}
+
+.ds-pattern-grid-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
+  color: var(--ds-color-text-muted);
+}

@@ -1,0 +1,64 @@
+/**
+ * WorkspaceShell skin (WO-SKIN-06 / CK-I). Engine-agnostic and deliberately
+ * unlayered so its extracted paint keeps precedence over resets while a caller
+ * `style` prop continues to win inline.
+ */
+
+.ds-surface.ds-collection-shell[data-part='root'][data-continuity='seamless'] {
+  border-radius: 24px;
+  border: 1px solid var(--ds-workspace-shell-border, color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-subtle) 76%));
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-continuity='segmented'] {
+  border-radius: 18px;
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-surface.ds-collection-shell[data-part='root'] {
+  box-shadow: var(--ds-workspace-shell-shadow, 0 20px 48px color-mix(in srgb, var(--ds-color-primary) 11%, transparent), 0 10px 28px color-mix(in srgb, var(--ds-color-primary) 7%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-surface-card) 70%, transparent));
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='default'][data-continuity='seamless'] {
+  background: var(--ds-workspace-shell-bg, linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-primary) 8%) 0%, color-mix(in srgb, var(--ds-surface-card) 82%, var(--ds-color-bg-secondary) 18%) 52%, color-mix(in srgb, var(--ds-color-bg-canvas) 72%, var(--ds-surface-card) 28%) 100%));
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='default'][data-continuity='segmented'],
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='ai-field'][data-continuity='segmented'] {
+  background: var(--ds-surface-card);
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='ai-field'][data-continuity='seamless'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-canvas) 8%) 0%, color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%) 44%, color-mix(in srgb, var(--ds-color-bg-canvas) 82%, var(--ds-surface-card) 18%) 100%);
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-continuity='seamless'] > .ds-collection-shell__content[data-part='content'] {
+  border-radius: 24px;
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-continuity='segmented'] > .ds-collection-shell__content[data-part='content'] {
+  border-radius: 18px;
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='ai-field'] > .ds-collection-shell__content[data-part='content'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 16%, transparent) 0%, transparent 100%);
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='default'] > .ds-collection-shell__overlay[data-part='overlay'] {
+  background: var(--ds-workspace-shell-overlay, linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 4%, transparent) 0%, transparent 36%, color-mix(in srgb, var(--ds-color-bg-secondary) 24%, transparent) 100%));
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='ai-field'] > .ds-collection-shell__overlay[data-part='overlay'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-canvas) 10%, transparent) 36%, color-mix(in srgb, var(--ds-color-bg-canvas) 44%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-canvas) 62%, transparent) 100%);
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='ai-field'][data-preview-emphasis='true'][data-preview-active='true'] > .ds-collection-shell__overlay[data-part='overlay'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-canvas) 10%, transparent) 36%, color-mix(in srgb, var(--ds-color-bg-canvas) 44%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-canvas) 62%, transparent) 100%), radial-gradient(38% 48% at 92% 48%, color-mix(in srgb, var(--ds-color-primary) 10%, transparent) 0%, transparent 74%);
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='ai-field'][data-focus-reaction='true'][data-focus-active='true'] > .ds-collection-shell__overlay[data-part='overlay'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-canvas) 10%, transparent) 36%, color-mix(in srgb, var(--ds-color-bg-canvas) 44%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-canvas) 62%, transparent) 100%), radial-gradient(46% 38% at 28% 18%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent) 0%, transparent 78%);
+}
+
+.ds-surface.ds-collection-shell[data-part='root'][data-variant='ai-field'][data-preview-emphasis='true'][data-preview-active='true'][data-focus-reaction='true'][data-focus-active='true'] > .ds-collection-shell__overlay[data-part='overlay'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-canvas) 22%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-canvas) 10%, transparent) 36%, color-mix(in srgb, var(--ds-color-bg-canvas) 44%, transparent) 72%, color-mix(in srgb, var(--ds-color-bg-canvas) 62%, transparent) 100%), radial-gradient(38% 48% at 92% 48%, color-mix(in srgb, var(--ds-color-primary) 10%, transparent) 0%, transparent 74%), radial-gradient(46% 38% at 28% 18%, color-mix(in srgb, var(--ds-color-primary) 8%, transparent) 0%, transparent 78%);
+}

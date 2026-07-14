@@ -58,7 +58,6 @@ export function CompareSurface({
               <Text
                 className="ds-compare__muted-text"
                 data-part="muted-text"
-                style={{ color: 'var(--ds-color-text-muted)' }}
               >
                 {row.description}
               </Text>
@@ -76,7 +75,6 @@ export function CompareSurface({
             <Text
               className="ds-compare__muted-text"
               data-part="muted-text"
-              style={{ color: 'var(--ds-color-text-muted)' }}
             >
               {subject.description}
             </Text>
@@ -125,8 +123,6 @@ export function CompareSurface({
                   data-part="section-heading"
                   style={{
                     padding: '16px',
-                    borderRadius: 'var(--ds-radius-lg)',
-                    background: 'var(--ds-color-surface-secondary)',
                   }}
                 >
                   <Stack spacing="xs">
@@ -135,7 +131,6 @@ export function CompareSurface({
                       <Text
                         className="ds-compare__muted-text"
                         data-part="muted-text"
-                        style={{ color: 'var(--ds-color-text-muted)' }}
                       >
                         {section.description}
                       </Text>
@@ -159,7 +154,6 @@ export function CompareSurface({
                               <Text
                                 className="ds-compare__muted-text"
                                 data-part="muted-text"
-                                style={{ color: 'var(--ds-color-text-muted)' }}
                               >
                                 {row.description}
                               </Text>
@@ -173,7 +167,6 @@ export function CompareSurface({
                               data-part="divider"
                               style={{
                                 paddingTop: '12px',
-                                borderTop: '1px solid var(--ds-color-border-subtle)',
                               }}
                             >
                               <Stack spacing="xs">

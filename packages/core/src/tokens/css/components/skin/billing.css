@@ -1,0 +1,9 @@
+/** BillingSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-billing .ds-billing__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-billing .ds-billing__divider.ds-billing__divider {
+  border-bottom: 1px solid var(--ds-color-border, #e5e5e5);
+}

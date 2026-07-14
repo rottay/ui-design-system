@@ -21,7 +21,6 @@ export interface BillingSurfaceProps {
 
 const BILLING_ROW_STYLE: React.CSSProperties = {
   padding: '8px 0',
-  borderBottom: '1px solid var(--ds-color-border, #e5e5e5)',
 };
 
 function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactElement {
@@ -44,7 +43,6 @@ function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactE
               <Text
                 className="ds-billing__muted-text"
                 data-part="muted-text"
-                style={{ color: 'var(--ds-color-text-muted)' }}
               >
                 {currentPlan.price} / {currentPlan.interval}
               </Text>
@@ -69,7 +67,7 @@ function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactE
                   key={i}
                   className="ds-billing__muted-text"
                   data-part="muted-text"
-                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 14 }}
+                  style={{ fontSize: 14 }}
                 >
                   {feature}
                 </Text>
@@ -105,7 +103,7 @@ function UsageSection({ config }: { config: BillingSurfaceConfig }): React.React
                   <Text
                     className="ds-billing__muted-text"
                     data-part="muted-text"
-                    style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                    style={{ fontSize: 12 }}
                   >
                     {item.current} / {item.limit} {item.unit}
                   </Text>
@@ -185,14 +183,13 @@ function PaymentMethodsSection({ config }: { config: BillingSurfaceConfig }): Re
                 <Text
                   className="ds-billing__muted-text"
                   data-part="muted-text"
-                  style={{ color: 'var(--ds-color-text-muted)' }}
                 >
                   **** {method.last4}
                 </Text>
                 <Text
                   className="ds-billing__muted-text"
                   data-part="muted-text"
-                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                  style={{ fontSize: 12 }}
                 >
                   Exp {method.expiry}
                 </Text>

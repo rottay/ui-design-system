@@ -56,12 +56,6 @@ function TemplateSelector({
           hoverable
           clickable
           onClick={() => onTemplateSelect?.(template.id)}
-          style={{
-            borderColor:
-              selectedTemplate === template.id
-                ? 'var(--ds-color-primary)'
-                : undefined,
-          }}
         >
           <Card.Body>
             <Flex gap={8} align="start">
@@ -74,7 +68,7 @@ function TemplateSelector({
                   <Text
                     className="ds-report__muted-text"
                     data-part="muted-text"
-                    style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                    style={{ fontSize: 12 }}
                   >
                     {template.description}
                   </Text>
@@ -83,7 +77,7 @@ function TemplateSelector({
                   <Text
                     className="ds-report__muted-text"
                     data-part="muted-text"
-                    style={{ color: 'var(--ds-color-text-muted)', fontSize: 11 }}
+                    style={{ fontSize: 11 }}
                   >
                     {template.category}
                   </Text>
@@ -155,7 +149,6 @@ function ReportResults({
             <Text
               className="ds-report__muted-text"
               data-part="muted-text"
-              style={{ color: 'var(--ds-color-text-muted)' }}
             >Generating report...</Text>
           </Flex>
         </Card.Body>
@@ -195,7 +188,7 @@ function ReportResults({
     <Box
       className="ds-report__divider"
       data-part="divider"
-      style={{ marginTop: 16, padding: '12px 0', borderTop: '1px solid var(--ds-color-border)' }}
+      style={{ marginTop: 16, padding: '12px 0' }}
     >
       <Flex gap={16} wrap="wrap">
         {Object.entries(reportData.summary).map(([key, value]) => (
@@ -203,7 +196,7 @@ function ReportResults({
             <Text
               className="ds-report__muted-text"
               data-part="muted-text"
-              style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}
+              style={{ fontSize: 12 }}
             >{key}</Text>
             <Text style={{ fontWeight: 600 }}>{String(value)}</Text>
           </Stack>

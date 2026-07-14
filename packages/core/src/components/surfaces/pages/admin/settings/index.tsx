@@ -80,7 +80,6 @@ export function SettingsSurface({
           data-part="muted-text"
           size="sm"
           style={{
-            color: 'var(--ds-color-text-muted)',
             lineHeight: 1.5,
           }}
         >
@@ -116,7 +115,6 @@ export function SettingsSurface({
           data-part="muted-text"
           size="sm"
           style={{
-            color: 'var(--ds-color-text-muted)',
             lineHeight: 1.6,
           }}
         >
@@ -129,10 +127,6 @@ export function SettingsSurface({
           <Card
             className="ds-settings__footer-card"
             variant={profileDefaults.cardVariant}
-            style={{
-              borderColor: 'var(--ds-color-border-secondary)',
-              background: 'var(--ds-color-bg-secondary)',
-            }}
           >
             <Card.Body>{config.presentation.footer}</Card.Body>
           </Card>

@@ -1,0 +1,14 @@
+/** CompareSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-compare .ds-compare__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-compare .ds-compare__section-heading[data-part='section-heading'] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-color-surface-secondary);
+}
+
+.ds-surface.ds-compare .ds-compare__divider[data-part='divider'] {
+  border-top: 1px solid var(--ds-color-border-subtle);
+}

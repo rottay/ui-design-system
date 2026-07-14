@@ -111,7 +111,7 @@ export function EditorSurface({
           >
             <Stack spacing="md">
               {config.presentation.helperText && (
-                <Text className="ds-editor__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>
+                <Text className="ds-editor__muted-text" data-part="muted-text">
                   {config.presentation.helperText}
                 </Text>
               )}

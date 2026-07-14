@@ -1,0 +1,56 @@
+/** RecordWorkbenchSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'][data-variant='success'] {
+  border: 1px solid var(--ds-color-success);
+  color: var(--ds-color-success);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'][data-variant='warning'] {
+  border: 1px solid var(--ds-color-warning);
+  color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'][data-variant='error'] {
+  border: 1px solid var(--ds-color-error);
+  color: var(--ds-color-error);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'][data-variant='info'] {
+  border: 1px solid var(--ds-color-info);
+  color: var(--ds-color-info);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__status-badge[data-part='status-badge'][data-variant='default'] {
+  border: 1px solid var(--ds-color-text-muted);
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__tab-list[data-part='tab-list'][data-part='tab-list'] {
+  border-bottom: 1px solid var(--ds-color-border-primary);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__tab.ds-record-workbench__tab[data-active='true'][data-active='true'] {
+  border-radius: 0;
+  border-bottom: 2px solid var(--ds-color-primary);
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__tab.ds-record-workbench__tab[data-active='false'][data-active='false'] {
+  border-radius: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__tab-badge[data-part='tab-badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-bg-tertiary);
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-record-workbench .ds-record-workbench__sidebar[data-part='sidebar'][data-part='sidebar'] {
+  border-left: 1px solid var(--ds-color-border-secondary);
+}

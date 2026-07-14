@@ -73,9 +73,6 @@ function NotificationList({
           variant="outlined"
           style={{
             opacity: notification.read ? 0.7 : 1,
-            borderLeft: notification.read
-              ? undefined
-              : '3px solid var(--ds-color-primary)',
           }}
         >
           <Card.Body>
@@ -96,11 +93,11 @@ function NotificationList({
                     )}
                   </Flex>
                   {notification.message && (
-                    <Text className="ds-notification__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                    <Text className="ds-notification__muted-text" data-part="muted-text" style={{ fontSize: 13 }}>
                       {notification.message}
                     </Text>
                   )}
-                  <Text className="ds-notification__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                  <Text className="ds-notification__muted-text" data-part="muted-text" style={{ fontSize: 12 }}>
                     {notification.timestamp}
                   </Text>
                 </Stack>
@@ -121,7 +118,7 @@ function NotificationList({
                     size="sm"
                     onClick={() => onDelete([notification.id])}
                   >
-                    <Text className="ds-notification__destructive-text" data-part="destructive-text" style={{ fontSize: 12, color: 'var(--ds-color-error-500)' }}>Delete</Text>
+                    <Text className="ds-notification__destructive-text" data-part="destructive-text" style={{ fontSize: 12 }}>Delete</Text>
                   </Button>
                 )}
               </Flex>
@@ -187,7 +184,7 @@ function PreferencesPanel({
                       <Tag color="default" style={{ fontSize: 11 }}>{pref.channel}</Tag>
                     </Flex>
                     {pref.description && (
-                      <Text className="ds-notification__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                      <Text className="ds-notification__muted-text" data-part="muted-text" style={{ fontSize: 13 }}>
                         {pref.description}
                       </Text>
                     )}

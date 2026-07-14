@@ -1,0 +1,31 @@
+/** SearchSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+/* These rules replace always-winning inline card paint, so their specificity
+   stays above the interactive Card primitive's hover/state selectors. */
+.ds-surface.ds-search .ds-search__result-card.ds-search__result-card.ds-search__result-card.ds-search__result-card[data-part='root'][data-variant] {
+  background-color: var(--ds-search-result-bg, var(--ds-card-bg));
+  border-color: var(--ds-search-result-border, var(--ds-card-border-color, var(--ds-color-border-subtle)));
+  box-shadow: var(--ds-search-result-shadow, var(--ds-card-shadow, none));
+}
+
+.ds-surface.ds-search .ds-search__result-card.ds-search__result-card.ds-search__result-card.ds-search__result-card.ds-search__result-card--selected[data-part='root'][data-variant] {
+  background-color: var(--ds-search-result-bg-hover, var(--ds-search-result-bg, var(--ds-card-bg)));
+  border-color: var(--ds-color-primary-500);
+}
+
+.ds-surface.ds-search .ds-search__result-title[data-part='result-title'][data-part='result-title'] {
+  color: var(--ds-search-result-title-color, var(--ds-color-text-primary));
+}
+
+.ds-surface.ds-search .ds-search__result-meta[data-part='result-meta'][data-part='result-meta'] {
+  color: var(--ds-search-result-meta-color, var(--ds-color-text-muted));
+}
+
+.ds-surface.ds-search .ds-search__empty-state[data-part='empty-state'][data-state] {
+  border-radius: var(--ds-radius-lg);
+  background: var(--ds-search-empty-bg, transparent);
+}
+
+.ds-surface.ds-search .ds-search__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}

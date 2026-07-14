@@ -362,6 +362,46 @@
 @import '../engines/rustic/skin/empty-state.css';
 @import '../components/skin/token-inspector.css';
 
+/* WO-SKIN-06 CK-I: surfaces long-tail paint from unlayered skins. */
+@import '../engines/modern/skin/stats-grid.css';
+@import '../engines/rustic/skin/stats-grid.css';
+@import '../components/skin/surface-accent-bar.css';
+@import '../components/skin/surface-section-card.css';
+@import '../components/skin/surface-states.css';
+@import '../components/skin/bulk-select-toggle.css';
+@import '../components/skin/cell-renderers.css';
+@import '../components/skin/gallery-view.css';
+@import '../components/skin/grid-view.css';
+@import '../components/skin/collection-shell.css';
+@import '../components/skin/collection-workspace.css';
+@import '../components/skin/collection-workspace-render-dispatch.css';
+@import '../components/skin/command-center.css';
+@import '../components/skin/decision-inbox.css';
+@import '../components/skin/layout-header.css';
+@import '../components/skin/layout-sidebar.css';
+@import '../components/skin/record-workbench.css';
+@import '../components/skin/audit.css';
+@import '../components/skin/billing.css';
+@import '../components/skin/import-export.css';
+@import '../components/skin/integration.css';
+@import '../components/skin/profile.css';
+@import '../components/skin/settings.css';
+@import '../components/skin/team.css';
+@import '../components/skin/compare.css';
+@import '../components/skin/dashboard.css';
+@import '../components/skin/list.css';
+@import '../components/skin/report.css';
+@import '../components/skin/search.css';
+@import '../components/skin/visualization.css';
+@import '../components/skin/auth-surface.css';
+@import '../components/skin/chat-surface.css';
+@import '../components/skin/editor-surface.css';
+@import '../components/skin/marketing-surface.css';
+@import '../components/skin/media-surface.css';
+@import '../components/skin/notification-surface.css';
+@import '../components/skin/pricing-surface.css';
+@import '../components/skin/activity-surface.css';
+
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)

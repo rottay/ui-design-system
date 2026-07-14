@@ -1,0 +1,160 @@
+/**
+ * Rustic StatsGrid skin (WO-SKIN-06 CK-I).
+ * Deliberately unlayered. The component-specific --ds-stats-grid-* vocabulary,
+ * interaction feedback and skeleton declarations are preserved exactly. Bare
+ * pulse and wave keyframes are namespaced here to avoid global collisions.
+ */
+
+.ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__card {
+  box-shadow: var(--ds-card-shadow, none);
+  transition: box-shadow
+      var(--ds-personality-animation-entrance-duration, 300ms)
+      cubic-bezier(0.16, 1, 0.3, 1),
+    transform var(--ds-personality-animation-entrance-duration, 300ms)
+      cubic-bezier(0.16, 1, 0.3, 1),
+    background-color var(--ds-personality-animation-entrance-duration, 300ms)
+      cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-variant="default"] {
+  background: var(--ds-stats-grid-card-bg, var(--ds-color-bg-elevated));
+  border: 1px solid var(--ds-stats-grid-card-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-variant="outlined"] {
+  background: transparent;
+  border: 2px solid var(--ds-stats-grid-card-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-variant="filled"] {
+  background: var(--ds-stats-grid-card-filled-bg, var(--ds-color-bg-secondary));
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-variant="glass"] {
+  background: var(
+    --ds-stats-grid-card-glass-bg,
+    var(--ds-color-alpha-white-50)
+  );
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid
+    var(--ds-stats-grid-card-glass-border, var(--ds-color-alpha-white-20));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-shadow-state="hover"] {
+  box-shadow: var(--ds-card-shadow-hover, var(--ds-shadow-lg));
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-transform-state="hover"] {
+  transform: var(--ds-card-hover-transform, translateY(-2px) scale(1));
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-shadow-state="focus"] {
+  box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),
+    0 0 0 4px var(--ds-color-primary-400, #818cf8);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-shadow-state="rest"] {
+  box-shadow: var(--ds-card-shadow, none);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__card[data-transform-state="rest"] {
+  transform: translateY(0) scale(1);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__label {
+  color: var(--ds-stats-grid-label-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__value {
+  color: var(
+    --ds-stats-grid-accent,
+    var(--ds-stats-grid-value-color, var(--ds-color-text-primary))
+  );
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__trend {
+  border-radius: var(--ds-radius-sm, 6px);
+  transition: transform var(--ds-personality-animation-entrance-duration, 300ms)
+    cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__trend[data-change="increase"] {
+  color: var(--ds-stats-grid-trend-positive, var(--ds-color-success));
+  background: var(--ds-color-success-50, rgba(16, 185, 129, 0.08));
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__trend[data-change="decrease"] {
+  color: var(--ds-stats-grid-trend-negative, var(--ds-color-error));
+  background: var(--ds-color-error-50, rgba(239, 68, 68, 0.08));
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic
+  .ds-stats-grid__trend[data-change="neutral"] {
+  color: var(--ds-stats-grid-trend-neutral, var(--ds-color-text-muted));
+  background: transparent;
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__description {
+  color: var(--ds-stats-grid-description-color, var(--ds-color-text-muted));
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic[data-loading="true"]
+  [data-part="skeleton"] {
+  background: var(--ds-stats-grid-card-bg, var(--ds-color-bg-elevated));
+  border: 1px solid var(--ds-stats-grid-card-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic[data-loading="true"]
+  [data-part="skeleton-bar"] {
+  background: var(--ds-stats-grid-skeleton-bg, var(--ds-color-bg-tertiary));
+  border-radius: 4px;
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic[data-skeleton-animation="pulse"]
+  [data-part="skeleton-bar"] {
+  animation: ds-stats-grid-pulse 1.5s ease-in-out infinite;
+}
+
+.ds-pattern-stats-grid.ds-engine-rustic[data-skeleton-animation="wave"]
+  [data-part="skeleton-bar"] {
+  animation: ds-stats-grid-wave 1.4s ease-in-out infinite;
+  background-image: var(--ds-stats-grid-skeleton-wave-gradient);
+  background-size: 200% 100%;
+}
+
+@keyframes ds-stats-grid-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes ds-stats-grid-wave {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

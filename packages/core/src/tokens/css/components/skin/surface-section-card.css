@@ -1,0 +1,15 @@
+/**
+ * SurfaceSectionCard skin (WO-SKIN-06 / CK-I). Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED. Every tenant layer sorts before Tailwind preflight;
+ * an unlayered skin keeps component paint above that reset while leaving
+ * caller inline overrides in charge.
+ *
+ * A surface owns composition, so the Card root is scoped by the className the
+ * surface passes through. Repeating the Text part three times reaches (0,5,0)
+ * and clears both engines' (0,4,0) default Typography color rule.
+ */
+
+.ds-surface.ds-section-card [data-part='description'][data-part='description'][data-part='description'] {
+  color: var(--ds-color-text-muted);
+}

@@ -390,104 +390,7 @@ function buildDefaultHeaderMetaItems<T extends object>({
   return items;
 }
 
-// ---------------------------------------------------------------------------
-// Enhanced CSS
-// ---------------------------------------------------------------------------
-
-const ENHANCED_CSS = `
-.ds-collection-enhanced tr[data-row-key]:hover td {
-  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent) !important;
-  transition: background 140ms ease, box-shadow 140ms ease !important;
-}
-.ds-collection-enhanced tr[data-row-key]:hover {
-  box-shadow:
-    inset 0 1px 0 color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
-    inset 0 -1px 0 color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
-}
-.ds-collection-enhanced tr[data-row-key]:hover td:first-child {
-  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
-}
-.ds-collection-enhanced tr[data-selected="true"] td {
-  background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent) !important;
-}
-.ds-collection-enhanced tr[data-row-key]:hover button:hover,
-.ds-collection-enhanced tr[data-row-key]:hover a:hover {
-  transform: translateY(-1px);
-  color: var(--ds-color-primary);
-  transition: transform 120ms ease, color 120ms ease;
-}
-.ds-collection-enhanced thead th {
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-}
-.ds-collection-enhanced tbody td {
-  vertical-align: middle;
-  line-height: 1.3;
-  transition: background 140ms ease, box-shadow 140ms ease;
-}
-.ds-collection-enhanced .ds-resize-handle:hover .ds-resize-handle__bar,
-.ds-collection-enhanced .ds-resize-handle:focus-visible .ds-resize-handle__bar {
-  opacity: 1;
-  background: var(--ds-color-primary);
-}
-.ds-collection-enhanced .ds-collection-preview-rail__resize:hover > *,
-.ds-collection-enhanced .ds-collection-preview-rail__resize:focus-visible > * {
-  left: 5px !important;
-  width: 4px !important;
-  background: color-mix(in srgb, var(--ds-color-primary) 74%, transparent) !important;
-}
-.ds-collection-enhanced .ds-collection-preview-rail__resize:focus-visible {
-  outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 42%, transparent);
-  outline-offset: -2px;
-}
-`;
-
 const COLLECTION_WORKSPACE_COLUMNS_EVENT = 'collection-workspace:toggle-columns-menu';
-
-const PAGE_SIZE_CONTROL_CSS = `
-.ds-collection-page-size-control {
-  transition:
-    border-color 140ms ease,
-    background-color 140ms ease,
-    box-shadow 140ms ease;
-}
-.ds-collection-page-size-control:hover {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
-  box-shadow: 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
-}
-.ds-collection-page-size-control:focus-within {
-  border-color: color-mix(in srgb, var(--ds-color-primary) 42%, var(--ds-color-border-secondary));
-  box-shadow:
-    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent),
-    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
-}
-.ds-collection-page-size-control__picker {
-  transition:
-    border-color 140ms ease,
-    background-color 140ms ease,
-    color 140ms ease;
-}
-.ds-collection-page-size-control__value,
-.ds-collection-page-size-control__chevron {
-  transition:
-    color 140ms ease,
-    transform 140ms ease;
-}
-.ds-collection-page-size-control:hover .ds-collection-page-size-control__picker,
-.ds-collection-page-size-control:focus-within .ds-collection-page-size-control__picker {
-  background: color-mix(in srgb, var(--ds-color-primary) 13%, var(--ds-surface-card-bg));
-  border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-secondary));
-  color: var(--ds-color-primary);
-}
-.ds-collection-page-size-control:hover .ds-collection-page-size-control__chevron,
-.ds-collection-page-size-control:focus-within .ds-collection-page-size-control__chevron {
-  color: var(--ds-color-primary);
-  transform: translateY(1px);
-}
-.ds-collection-page-size-control__select:focus {
-  outline: none;
-}
-`;
 
 // ---------------------------------------------------------------------------
 // Compact utility button (inline in controls row)
@@ -520,14 +423,6 @@ function UtilityIcon({
         width: 32,
         height: 32,
         padding: 0,
-        borderRadius: 8,
-        border: active
-          ? '1px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent)'
-          : '1px solid transparent',
-        background: active
-          ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)'
-          : 'transparent',
-        color: active ? 'var(--ds-color-primary)' : 'var(--ds-color-text-muted)',
         cursor: 'pointer',
         transition: 'background 120ms ease, color 120ms ease, border-color 120ms ease',
       }}
@@ -591,7 +486,6 @@ function PageSizeControl({
         size="xs"
         style={{
           fontSize: 11,
-          color: 'var(--ds-color-text-muted)',
           fontWeight: 600,
           fontVariantNumeric: 'tabular-nums',
           whiteSpace: 'nowrap' as const,
@@ -604,7 +498,6 @@ function PageSizeControl({
 
   return (
     <>
-      <style>{PAGE_SIZE_CONTROL_CSS}</style>
       <Box
         as="label"
         className="ds-collection-page-size-control"
@@ -617,10 +510,6 @@ function PageSizeControl({
           gap: 8,
           minHeight: 30,
           padding: '3px 5px 3px 10px',
-          borderRadius: 999,
-          border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 74%, transparent)',
-          background: 'color-mix(in srgb, var(--ds-surface-card-bg) 90%, transparent)',
-          color: 'var(--ds-color-text-muted)',
           cursor: 'pointer',
           fontSize: 11,
           fontWeight: 680,
@@ -635,7 +524,6 @@ function PageSizeControl({
           size="xs"
           style={{
             fontSize: 11,
-            color: 'var(--ds-color-text-secondary)',
             fontWeight: 680,
             lineHeight: 1,
           }}
@@ -653,11 +541,6 @@ function PageSizeControl({
             height: 26,
             minWidth: 104,
             padding: '0 26px 0 9px',
-            borderRadius: 999,
-            border: '1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary))',
-            background: 'color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg))',
-            color: 'var(--ds-color-text-primary)',
-            boxShadow: 'inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent)',
           }}
         >
           <Text
@@ -666,7 +549,6 @@ function PageSizeControl({
             as="span"
             size="xs"
             style={{
-              color: 'var(--ds-color-text-muted)',
               fontSize: 10,
               fontWeight: 780,
               letterSpacing: 0,
@@ -682,7 +564,6 @@ function PageSizeControl({
             data-part="page-size-value"
             size="xs"
             style={{
-              color: 'var(--ds-color-text-primary)',
               fontSize: 12,
               fontWeight: 860,
               lineHeight: 1,
@@ -696,7 +577,6 @@ function PageSizeControl({
             as="span"
             size="xs"
             style={{
-              color: 'var(--ds-color-text-muted)',
               fontSize: 10,
               fontWeight: 760,
               lineHeight: 1,
@@ -718,17 +598,11 @@ function PageSizeControl({
               zIndex: 2,
               width: '100%',
               height: '100%',
-              border: 0,
-              borderRadius: 999,
-              background: 'transparent',
-              color: 'transparent',
               cursor: 'pointer',
               fontSize: 11,
               fontWeight: 820,
               lineHeight: 1,
-              opacity: 0,
               padding: 0,
-              outline: 'none',
             }}
           >
             {options.map((option) => (
@@ -746,7 +620,6 @@ function PageSizeControl({
             style={{
               position: 'absolute',
               right: 8,
-              color: 'var(--ds-color-text-muted)',
               pointerEvents: 'none',
             }}
           />
@@ -1071,10 +944,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             maxWidth: configuredWidth,
             flex: `0 0 ${configuredWidth}`,
             position: 'relative',
-            borderLeft: '2px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary))',
             paddingLeft: 'var(--ds-spacing-md, 16px)',
-            background: 'color-mix(in srgb, var(--ds-surface-card) 50%, var(--ds-color-bg-primary) 50%)',
-            borderRadius: '0 var(--ds-radius-sm, 6px) var(--ds-radius-sm, 6px) 0',
             overflow: 'auto',
             transition: previewRailResizable
               ? 'width 140ms ease, min-width 140ms ease, max-width 140ms ease, flex-basis 140ms ease'
@@ -1104,10 +974,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 left: 0,
                 width: 14,
                 padding: 0,
-                border: 0,
                 cursor: 'col-resize',
-                background: 'transparent',
-                transform: 'translateX(-50%)',
                 pointerEvents: 'auto',
                 zIndex: 40,
               }}
@@ -1122,9 +989,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                   bottom: 'clamp(12px, 30%, 180px)',
                   left: 6,
                   width: 2,
-                  borderRadius: 999,
-                  background: 'color-mix(in srgb, var(--ds-color-primary) 28%, transparent)',
-                  boxShadow: '0 0 0 1px color-mix(in srgb, var(--ds-surface-card) 70%, transparent)',
                   transition: 'background 140ms ease, width 140ms ease, left 140ms ease',
                 }}
               />
@@ -1405,9 +1269,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           data-focused="true"
           style={{
             position: 'relative',
-            background: 'color-mix(in srgb, var(--ds-color-primary) 7%, transparent)',
-            boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 34%, transparent)',
-            borderRadius: 'var(--ds-radius-xs, 3px)',
             transition: 'background 150ms ease-out, box-shadow 150ms ease-out',
           }}
         >
@@ -1610,7 +1471,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           fontWeight: 700,
           letterSpacing: '0.12em',
           textTransform: 'uppercase' as const,
-          color: 'color-mix(in srgb, var(--ds-color-text-muted) 74%, white 6%)',
         }}
       >
         Shortcuts
@@ -1625,7 +1485,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             alignItems: 'center',
             minHeight: 20,
             padding: '0 2px 0 0',
-            color: 'color-mix(in srgb, var(--ds-color-text-muted) 88%, white 12%)',
             fontSize: 10,
             fontWeight: 700,
             letterSpacing: '0.03em',
@@ -1678,10 +1537,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 ? '0 20px 12px'
                 : '0 16px 12px',
             marginTop: slotsCollapsed ? 0 : editorialTechMasthead ? 0 : 2,
-            background: useWorkspaceShell ? 'transparent' : 'var(--ds-surface-card)',
-            borderBottom: useWorkspaceShell ? 'none' : '1px solid var(--ds-color-border-subtle)',
             maxHeight: slotsCollapsed ? 0 : 320,
-            opacity: slotsCollapsed ? 0 : 1,
             overflow: slotsCollapsed ? 'hidden' : 'visible',
             transition: 'max-height 250ms ease-out, opacity 250ms ease-out, padding 250ms ease-out',
             pointerEvents: slotsCollapsed ? 'none' : undefined,
@@ -1717,7 +1573,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           : null),
       }}
     >
-      {enhanced && <style dangerouslySetInnerHTML={{ __html: ENHANCED_CSS }} />}
       {editorialTechMasthead ? (
         <Box
           className="ds-collection-workspace__masthead"
@@ -1725,12 +1580,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           style={{
             position: 'relative',
             paddingBottom: 6,
-            background: [
-              'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 14%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card) 8%, transparent) 44%, transparent 100%)',
-              'radial-gradient(88% 90% at 16% 8%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 68%)',
-            ].join(', '),
-            borderBottom:
-              '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent)',
           }}
         >
           {topChrome}
@@ -1746,7 +1595,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           style={{
             padding: slotsCollapsed ? 0 : '14px 16px 10px',
             maxHeight: slotsCollapsed ? 0 : 400,
-            opacity: slotsCollapsed ? 0 : 1,
             overflow: slotsCollapsed ? 'hidden' : 'visible',
             transition: 'max-height 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1)',
             pointerEvents: slotsCollapsed ? 'none' : undefined,
@@ -1767,9 +1615,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         data-ds-collection-toolbar-row="true"
         style={{
           padding: '6px 16px 0',
-          borderTop: useWorkspaceShell
-            ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 16%, transparent)'
-            : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 30%, transparent)',
           position: 'relative',
           zIndex: filtersExpanded ? 24 : 4,
           overflow: 'visible',
@@ -1806,8 +1651,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 data-ds-collection-views-strip="true"
                 style={{
                   maxHeight: filtersExpanded ? 0 : 52,
-                  opacity: filtersExpanded ? 0 : 1,
-                  transform: filtersExpanded ? 'translateY(-8px)' : 'translateY(0)',
                   overflow: 'hidden',
                   transition:
                     'max-height 220ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease, transform 220ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -1831,7 +1674,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                       style={{
                         width: 1,
                         height: 18,
-                        background: 'var(--ds-color-border-subtle)',
                         flexShrink: 0,
                       }}
                     />
@@ -1866,8 +1708,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                   data-ds-collection-filters-strip="true"
                   style={{
                     maxHeight: filtersExpanded ? (posture.isPhone ? 96 : 48) : 0,
-                    opacity: filtersExpanded ? 1 : 0,
-                    transform: filtersExpanded ? 'translateY(0)' : 'translateY(8px)',
                     overflow: filtersExpanded ? 'visible' : 'hidden',
                     transition:
                       'max-height 240ms cubic-bezier(0.16, 1, 0.3, 1), opacity 180ms ease, transform 240ms cubic-bezier(0.16, 1, 0.3, 1)',
@@ -1896,7 +1736,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                           fontWeight: 700,
                           textTransform: 'uppercase' as const,
                           letterSpacing: '0.1em',
-                          color: 'var(--ds-color-text-muted)',
                           whiteSpace: 'nowrap' as const,
                         }}
                       >
@@ -1916,9 +1755,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                             padding: '0 4px',
                             fontSize: 9,
                             fontWeight: 700,
-                            borderRadius: 8,
-                            background: 'var(--ds-color-primary)',
-                            color: 'var(--ds-color-text-on-primary)',
                           }}
                         >
                           {activeFilterCount}
@@ -1971,10 +1807,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                         onClick={clearFilters}
                         style={{
                           padding: '2px 8px',
-                          border: 0,
-                          background: 'transparent',
                           cursor: 'pointer',
-                          color: 'var(--ds-color-text-muted)',
                           fontSize: 10,
                           fontWeight: 600,
                           flexShrink: 0,
@@ -2106,12 +1939,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 alignItems: 'center',
                 gap: 8,
                 padding: '4px 10px',
-                borderRadius: 999,
-                background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)',
-                border: '1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent)',
                 fontSize: 12,
                 fontWeight: 700,
-                color: 'var(--ds-color-primary)',
                 fontVariantNumeric: 'tabular-nums',
               }}
             >
@@ -2126,7 +1955,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 fontWeight: 700,
                 textTransform: 'uppercase' as const,
                 letterSpacing: '0.08em',
-                color: 'var(--ds-color-text-muted)',
               }}
             >
               Smart sets
@@ -2285,8 +2113,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             position: 'sticky',
             bottom: 0,
             padding: 'var(--ds-spacing-sm, 8px) var(--ds-spacing-md, 16px)',
-            background: 'var(--ds-color-bg-primary)',
-            borderTop: '1px solid var(--ds-color-border-secondary)',
             zIndex: 10,
           }}
         >
@@ -2305,10 +2131,6 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                 alignItems: 'center',
                 gap: 8,
                 cursor: 'pointer',
-                background: 'var(--ds-color-primary)',
-                color: 'var(--ds-color-text-on-primary, #fff)',
-                border: 'none',
-                borderRadius: 'var(--ds-radius-sm, 6px)',
                 padding: '8px 16px',
                 fontWeight: 600,
                 fontSize: 14,

@@ -47,7 +47,7 @@ export function SurfaceLoadingState({
             <Text data-part="title" style={{ fontWeight: 700 }}>
               {title ?? tSurface('states.loading_title')}
             </Text>
-            <Text data-part="description" style={{ color: 'var(--ds-color-text-muted)' }}>
+            <Text data-part="description">
               {description ?? tSurface('states.loading_description')}
             </Text>
           </Stack>

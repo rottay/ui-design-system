@@ -199,7 +199,6 @@ function DefaultCardView<TView>({
                           style={{
                             fontSize: 12,
                             fontWeight: 600,
-                            color: 'var(--ds-color-text-muted)',
                             marginBottom: 4,
                           }}
                         >
@@ -208,7 +207,6 @@ function DefaultCardView<TView>({
                         <Text
                           className="ds-list__card-value"
                           data-part="card-value"
-                          style={{ color: 'var(--ds-color-text-primary)' }}
                         >
                           {buildSurfaceCellRenderer(
                             config,

@@ -1,0 +1,12 @@
+/**
+ * AuthSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
+ * unlayered. Text selectors clear Typography's (0,4,0) color floor.
+ */
+
+.ds-surface.ds-auth[data-part='root'][data-part='root'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-neutral-900) 1%, var(--ds-color-bg-primary)), var(--ds-color-bg-primary));
+}
+
+.ds-surface.ds-auth .ds-auth__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * @fileoverview Modern engine for the StatsGrid pattern.
@@ -21,13 +21,13 @@
  * />
  */
 
-import React, { useState, useEffect } from 'react';
-import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
-import { useTokens } from '../../../../../hooks/tokens';
-import type { StatsGridProps } from '../StatsGrid.types';
-import type { StatDef } from '../../../foundation/types';
-import { resolveStatsGridMotion } from '../personality';
-import { resolveStatsGridColumns } from '../layout';
+import React, { useState, useEffect } from "react";
+import { useBreakpoints } from "../../../../../hooks/responsive/useBreakpoints";
+import { useTokens } from "../../../../../hooks/tokens";
+import type { StatsGridProps } from "../StatsGrid.types";
+import type { StatDef } from "../../../foundation/types";
+import { resolveStatsGridMotion } from "../personality";
+import { resolveStatsGridColumns } from "../layout";
 
 /* ---------------------------------------------------------------------------
  * Sparkline
@@ -47,13 +47,21 @@ function normalizeSparkline(data: number[], width = 80, height = 28): string {
       const y = height - ((v - min) / range) * height;
       return `${x},${y}`;
     })
-    .join(' ');
+    .join(" ");
 }
 
 /** Tiny SVG sparkline chart with gradient fill beneath the line. */
-function Sparkline({ data, color, id }: { data: number[]; color?: string; id: string }) {
+function Sparkline({
+  data,
+  color,
+  id,
+}: {
+  data: number[];
+  color?: string;
+  id: string;
+}) {
   if (!data || data.length < 2) return null;
-  const strokeColor = color || 'var(--ds-color-primary-500)';
+  const strokeColor = color || "var(--ds-color-primary-500)";
   const points = normalizeSparkline(data);
   // Build closed polygon for gradient fill (line + bottom edge)
   const fillPoints = `0,28 ${points} 80,28`;
@@ -65,7 +73,7 @@ function Sparkline({ data, color, id }: { data: number[]; color?: string; id: st
       viewBox="0 0 80 28"
       width={80}
       height={28}
-      style={{ marginTop: 8, display: 'block', overflow: 'visible' }}
+      style={{ marginTop: 8, display: "block", overflow: "visible" }}
       aria-hidden="true"
     >
       <defs data-part="sparkline-defs">
@@ -74,7 +82,11 @@ function Sparkline({ data, color, id }: { data: number[]; color?: string; id: st
           <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
         </linearGradient>
       </defs>
-      <polygon data-part="sparkline-area" points={fillPoints} fill={`url(#${gradientId})`} />
+      <polygon
+        data-part="sparkline-area"
+        points={fillPoints}
+        fill={`url(#${gradientId})`}
+      />
       <polyline
         data-part="sparkline-line"
         points={points}
@@ -102,11 +114,11 @@ function useAnimatedValue(
   duration = 600
 ): number | string {
   const [value, setValue] = useState<number | string>(
-    animate && typeof target === 'number' ? 0 : target
+    animate && typeof target === "number" ? 0 : target
   );
 
   useEffect(() => {
-    if (!animate || typeof target !== 'number') {
+    if (!animate || typeof target !== "number") {
       setValue(target);
       return;
     }
@@ -126,73 +138,34 @@ function useAnimatedValue(
 }
 
 /* ---------------------------------------------------------------------------
- * Variant styles (DS tokens only)
- * --------------------------------------------------------------------------- */
-
-/** Maps variant names to DS token inline styles for card styling. */
-const variantStyles: Record<NonNullable<StatsGridProps['variant']>, React.CSSProperties> = {
-  default: {
-    // Surface-tint (spec section 5, role 1) layered over the fill; collapses to
-    // flat when --ds-effect-intensity is 0.
-    backgroundColor: 'var(--ds-surface-card)',
-    backgroundImage: 'var(--ds-gradient-surface)',
-    boxShadow: 'var(--ds-elevation-1)',
-    borderRadius: 'var(--ds-radius-lg)',
-  },
-  outlined: {
-    backgroundColor: 'var(--ds-surface-card)',
-    backgroundImage: 'var(--ds-gradient-surface)',
-    border: '1px solid var(--ds-color-border)',
-    borderRadius: 'var(--ds-radius-lg)',
-  },
-  filled: {
-    backgroundColor: 'var(--ds-surface-inset)',
-    backgroundImage: 'var(--ds-gradient-surface)',
-    borderRadius: 'var(--ds-radius-lg)',
-  },
-  glass: {
-    background: 'color-mix(in srgb, var(--ds-surface-card) 80%, transparent)',
-    backdropFilter: 'blur(12px)',
-    border: '1px solid color-mix(in srgb, var(--ds-color-border) 50%, transparent)',
-    borderRadius: 'var(--ds-radius-lg)',
-  },
-};
-
-/* ---------------------------------------------------------------------------
  * Trend indicator
  * --------------------------------------------------------------------------- */
 
 /** Renders an arrow + percentage change in the appropriate semantic color. */
-function TrendIndicator({ change, changeType }: { change: number; changeType?: StatDef['changeType'] }) {
-  const style: React.CSSProperties =
-    changeType === 'increase'
-      ? { color: 'var(--ds-color-success)' }
-      : changeType === 'decrease'
-        ? { color: 'var(--ds-color-error)' }
-        : { color: 'var(--ds-color-text-secondary)' };
-
+function TrendIndicator({
+  change,
+  changeType,
+}: {
+  change: number;
+  changeType?: StatDef["changeType"];
+}) {
   const arrow =
-    changeType === 'increase' ? '\u2191' : changeType === 'decrease' ? '\u2193' : '';
-
-  const bgStyle: React.CSSProperties =
-    changeType === 'increase'
-      ? { background: 'color-mix(in srgb, var(--ds-color-success) 10%, transparent)' }
-      : changeType === 'decrease'
-        ? { background: 'color-mix(in srgb, var(--ds-color-error) 10%, transparent)' }
-        : { background: 'var(--ds-surface-panel)' };
+    changeType === "increase"
+      ? "\u2191"
+      : changeType === "decrease"
+      ? "\u2193"
+      : "";
 
   return (
     <span
+      className="ds-stats-grid__trend"
       data-part="trend"
-      data-change={changeType ?? 'neutral'}
+      data-change={changeType ?? "neutral"}
       style={{
-        ...style,
-        ...bgStyle,
-        display: 'inline-flex',
-        alignItems: 'center',
+        display: "inline-flex",
+        alignItems: "center",
         gap: 2,
-        padding: '2px 6px',
-        borderRadius: 'var(--ds-radius-sm)',
+        padding: "2px 6px",
         fontSize: 12,
         fontWeight: 500,
         lineHeight: 1,
@@ -224,7 +197,7 @@ function StatCard({
 }: {
   stat: StatDef;
   sparkline?: boolean;
-  variant: StatsGridProps['variant'];
+  variant: StatsGridProps["variant"];
   animate?: boolean;
   animationDuration?: number;
   onClick?: () => void;
@@ -232,47 +205,53 @@ function StatCard({
   const displayValue = useAnimatedValue(stat.value, animate, animationDuration);
 
   const cardStyle: React.CSSProperties = {
-    ...variantStyles[variant || 'default'],
-    padding: '20px 24px',
-    display: 'flex',
-    flexDirection: 'column',
+    "--ds-stats-grid-accent": stat.color,
+    padding: "20px 24px",
+    display: "flex",
+    flexDirection: "column",
     gap: 4,
-    transition: 'box-shadow var(--ds-motion-normal) ease, transform var(--ds-motion-fast) ease',
-    position: 'relative',
-    overflow: 'hidden',
-  };
+    position: "relative",
+    overflow: "hidden",
+  } as React.CSSProperties;
 
-  // Hover-like state handled via inline transitions (no Tailwind hover:)
+  // Interactivity remains behavioral; the transition itself lives in the skin.
   const interactiveStyle: React.CSSProperties = onClick
-    ? { cursor: 'pointer' }
+    ? { cursor: "pointer" }
     : {};
 
   return (
     <div
+      className="ds-stats-grid__card"
       data-part="card"
-      data-variant={variant || 'default'}
-      data-interactive={onClick ? 'true' : 'false'}
+      data-variant={variant || "default"}
+      data-interactive={onClick ? "true" : "false"}
       style={{ ...cardStyle, ...interactiveStyle }}
       onClick={onClick}
-      role={onClick ? 'button' : undefined}
+      role={onClick ? "button" : undefined}
       tabIndex={onClick ? 0 : undefined}
-      onKeyDown={onClick ? (e) => e.key === 'Enter' && onClick() : undefined}
+      onKeyDown={onClick ? (e) => e.key === "Enter" && onClick() : undefined}
       aria-label={onClick ? `${stat.label}: ${stat.value}` : undefined}
     >
       {/* Label row: icon + label */}
-      <div data-part="label-row" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+      <div
+        data-part="label-row"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
+          marginBottom: 4,
+        }}
+      >
         {stat.icon && (
           <span
+            className="ds-stats-grid__icon"
             data-part="icon"
             style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               width: 32,
               height: 32,
-              borderRadius: 'var(--ds-radius-md)',
-              background: 'var(--ds-surface-panel)',
-              color: stat.color || 'var(--ds-color-text-secondary)',
               fontSize: 16,
               flexShrink: 0,
             }}
@@ -281,12 +260,12 @@ function StatCard({
           </span>
         )}
         <span
+          className="ds-stats-grid__label"
           data-part="label"
           style={{
             fontSize: 13,
             fontWeight: 500,
-            color: 'var(--ds-color-text-secondary)',
-            letterSpacing: '0.01em',
+            letterSpacing: "0.01em",
             lineHeight: 1.2,
           }}
         >
@@ -295,27 +274,34 @@ function StatCard({
       </div>
 
       {/* Value row: main value + trend */}
-      <div data-part="value-row" style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+      <div
+        data-part="value-row"
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          gap: 10,
+          flexWrap: "wrap",
+        }}
+      >
         <span
-          className="ds-nums-tabular"
+          className="ds-nums-tabular ds-stats-grid__value"
           data-part="value"
           style={{
             fontSize: 28,
             fontWeight: 700,
-            color: stat.color || 'var(--ds-color-text-primary)',
             lineHeight: 1.1,
-            letterSpacing: '-0.02em',
+            letterSpacing: "-0.02em",
           }}
         >
           {stat.prefix}
           {displayValue}
           {stat.suffix && (
             <span
+              className="ds-stats-grid__suffix"
               data-part="suffix"
               style={{
                 fontSize: 14,
                 fontWeight: 400,
-                color: 'var(--ds-color-text-secondary)',
                 marginLeft: 4,
               }}
             >
@@ -332,10 +318,10 @@ function StatCard({
       {/* Description */}
       {stat.description && (
         <span
+          className="ds-stats-grid__description"
           data-part="description"
           style={{
             fontSize: 12,
-            color: 'var(--ds-color-text-muted)',
             lineHeight: 1.4,
             marginTop: 2,
           }}
@@ -356,32 +342,22 @@ function StatCard({
  * Loading skeleton
  * --------------------------------------------------------------------------- */
 
-/** Inline keyframes for the shimmer animation. */
-const shimmerKeyframes = `
-@keyframes ds-stats-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-`;
-
 /** Premium loading skeleton with shimmer effect and proper card shapes. */
-function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | number }) {
-  const shimmerBg: React.CSSProperties = {
-    background: 'linear-gradient(90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75%)',
-    backgroundSize: '200% 100%',
-    animation: 'ds-stats-shimmer 1.5s ease-in-out infinite',
-    borderRadius: 'var(--ds-radius-sm)',
-  };
-
+function LoadingSkeleton({
+  columns,
+  gap,
+}: {
+  columns: number;
+  gap: string | number;
+}) {
   return (
     <>
-      <style>{shimmerKeyframes}</style>
       <div
         className="ds-pattern-stats-grid ds-engine-modern ds-stats-grid-skeleton"
         data-part="root"
         data-loading="true"
         style={{
-          display: 'grid',
+          display: "grid",
           gridTemplateColumns: resolveStatsGridColumns(columns),
           gap,
         }}
@@ -392,21 +368,33 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
             className="ds-stats-grid-skeleton__item"
             data-part="skeleton"
             style={{
-              background: 'var(--ds-surface-card)',
-              boxShadow: 'var(--ds-elevation-1)',
-              borderRadius: 'var(--ds-radius-lg)',
-              padding: '20px 24px',
-              display: 'flex',
-              flexDirection: 'column',
+              padding: "20px 24px",
+              display: "flex",
+              flexDirection: "column",
               gap: 12,
             }}
           >
             {/* Label shimmer */}
-            <div className="ds-stats-grid-skeleton__bar" data-part="skeleton-bar" data-kind="label" style={{ ...shimmerBg, width: '40%', height: 12 }} />
+            <div
+              className="ds-stats-grid-skeleton__bar"
+              data-part="skeleton-bar"
+              data-kind="label"
+              style={{ width: "40%", height: 12 }}
+            />
             {/* Value shimmer */}
-            <div className="ds-stats-grid-skeleton__bar" data-part="skeleton-bar" data-kind="value" style={{ ...shimmerBg, width: '65%', height: 28 }} />
+            <div
+              className="ds-stats-grid-skeleton__bar"
+              data-part="skeleton-bar"
+              data-kind="value"
+              style={{ width: "65%", height: 28 }}
+            />
             {/* Trend shimmer */}
-            <div className="ds-stats-grid-skeleton__bar" data-part="skeleton-bar" data-kind="trend" style={{ ...shimmerBg, width: '30%', height: 16 }} />
+            <div
+              className="ds-stats-grid-skeleton__bar"
+              data-part="skeleton-bar"
+              data-kind="trend"
+              style={{ width: "30%", height: 16 }}
+            />
           </div>
         ))}
       </div>
@@ -436,8 +424,8 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     renderStat,
     columns = 4,
     sparkline,
-    gap = '1rem',
-    variant = 'default',
+    gap = "1rem",
+    variant = "default",
     animate,
     onStatClick,
     loading,
@@ -447,13 +435,17 @@ export default function ModernStatsGrid(props: StatsGridProps) {
 
   // Resolve animation settings from the personality token system.
   // Respects user's prefers-reduced-motion OS preference.
-  const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
+  const motion = resolveStatsGridMotion(
+    tokens.personality,
+    prefersReducedMotion,
+    animate
+  );
 
   // Column axis is a component-layer concern shared by every engine
   // (Quiet Premium spec section 10): a fixed `columns`-track horizontal
   // grid, identical to classic/rustic. See resolveStatsGridColumns.
   const gridStyle: React.CSSProperties = {
-    display: 'grid',
+    display: "grid",
     gridTemplateColumns: resolveStatsGridColumns(columns),
     gap,
     ...style,
@@ -464,7 +456,9 @@ export default function ModernStatsGrid(props: StatsGridProps) {
 
   return (
     <div
-      className={['ds-pattern-stats-grid', 'ds-engine-modern', className].filter(Boolean).join(' ')}
+      className={["ds-pattern-stats-grid", "ds-engine-modern", className]
+        .filter(Boolean)
+        .join(" ")}
       data-part="root"
       data-loading="false"
       data-variant={variant}

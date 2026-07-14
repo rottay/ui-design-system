@@ -1,0 +1,13 @@
+/**
+ * MediaSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
+ * unlayered. The selected card rule clears Card's interactive hover selector,
+ * preserving the former inline border throughout every interaction state.
+ */
+
+.ds-surface.ds-media .ds-media__item[data-selected='true'] .ds-media__card.ds-media__card.ds-media__card[data-part='root'][data-variant='outlined'] {
+  border-color: var(--ds-color-primary-500);
+}
+
+.ds-surface.ds-media .ds-media__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}

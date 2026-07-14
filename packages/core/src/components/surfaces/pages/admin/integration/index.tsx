@@ -44,14 +44,14 @@ function ApiKeysSection({ config }: { config: IntegrationSurfaceConfig }): React
                   className="ds-integration__divider"
                   justify="between"
                   align="center"
-                  style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
+                  style={{ padding: '8px 0' }}
                 >
                   <Stack spacing="xs">
                     <Text style={{ fontWeight: 500 }}>{key.name}</Text>
                     <Text
                       className="ds-integration__muted-text"
                       data-part="muted-text"
-                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12, fontFamily: 'monospace' }}
+                      style={{ fontSize: 12, fontFamily: 'monospace' }}
                     >
                       {key.key}
                     </Text>
@@ -63,7 +63,7 @@ function ApiKeysSection({ config }: { config: IntegrationSurfaceConfig }): React
                     <Text
                       className="ds-integration__muted-text"
                       data-part="muted-text"
-                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                      style={{ fontSize: 12 }}
                     >
                       Created {key.createdAt}
                     </Text>
@@ -108,14 +108,14 @@ function WebhooksSection({ config }: { config: IntegrationSurfaceConfig }): Reac
                   className="ds-integration__divider"
                   justify="between"
                   align="center"
-                  style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
+                  style={{ padding: '8px 0' }}
                 >
                   <Stack spacing="xs">
                     <Text style={{ fontWeight: 500, fontFamily: 'monospace', fontSize: 13 }}>{wh.url}</Text>
                     <Text
                       className="ds-integration__muted-text"
                       data-part="muted-text"
-                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                      style={{ fontSize: 12 }}
                     >
                       Events: {wh.events.join(', ')}
                     </Text>
@@ -157,7 +157,7 @@ function ConnectedAppsSection({ config }: { config: IntegrationSurfaceConfig }):
                 className="ds-integration__divider"
                 justify="between"
                 align="center"
-                style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
+                style={{ padding: '8px 0' }}
               >
                 <Flex gap={12} align="center">
                   {app.icon}
@@ -167,7 +167,7 @@ function ConnectedAppsSection({ config }: { config: IntegrationSurfaceConfig }):
                       <Text
                         className="ds-integration__muted-text"
                         data-part="muted-text"
-                        style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                        style={{ fontSize: 12 }}
                       >{app.description}</Text>
                     )}
                   </Stack>

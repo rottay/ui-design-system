@@ -1,0 +1,5 @@
+/** SidebarSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-sidebar[data-bordered='false'] > .ds-sidebar__panel.ds-sidebar__panel[data-part='root'] {
+  border-right: none;
+}

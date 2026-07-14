@@ -257,11 +257,6 @@ export function ChatSurface({
                 placeholder={config.presentation.composerPlaceholder ?? tSurface('chat.placeholder')}
                 rows={config.visual.composerRows ?? 4}
                 disabled={config.behavior.sending}
-                style={
-                  profileDefaults.accentPosition !== 'none'
-                    ? { borderColor: 'var(--ds-color-primary)' }
-                    : undefined
-                }
               />
               <Button
                 className="ds-chat__send-button"

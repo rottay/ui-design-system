@@ -1,0 +1,35 @@
+/**
+ * SurfaceAccentBar skin (WO-SKIN-06 / CK-I). Engine-agnostic: the helper
+ * renders one tree under every engine.
+ *
+ * DELIBERATELY UNLAYERED. Every tenant layer sorts before Tailwind preflight;
+ * an unlayered skin keeps the component paint above that reset while leaving
+ * caller inline overrides in charge.
+ *
+ * The caller-controlled thickness remains inline as the
+ * `--ds-accent-bar-thickness` hatch. Position selects its original corner
+ * shape. `ds-accent-bar-shimmer` is intentionally referenced by the component
+ * but not defined here: the keyframe is absent from the existing runtime, and
+ * defining it would introduce new motion rather than preserve current paint.
+ */
+
+.ds-surface.ds-accent-bar[data-part='bar'][data-position='top'] {
+  border-radius: var(--ds-accent-bar-thickness) var(--ds-accent-bar-thickness) 0 0;
+}
+
+.ds-surface.ds-accent-bar[data-part='bar'][data-position='left'] {
+  border-radius: var(--ds-accent-bar-thickness) 0 0 var(--ds-accent-bar-thickness);
+}
+
+.ds-surface.ds-accent-bar[data-part='bar'][data-style='solid'] {
+  background: var(--ds-color-primary);
+}
+
+/* Secondary falls back to primary for single-brand products. */
+.ds-surface.ds-accent-bar[data-part='bar'][data-style='gradient'] {
+  background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)));
+}
+
+.ds-surface.ds-accent-bar[data-part='bar'][data-style='animated'] {
+  background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)), var(--ds-color-primary));
+}

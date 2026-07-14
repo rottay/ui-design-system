@@ -86,7 +86,6 @@ function ImportPanel({
                 className="ds-import-export__dropzone"
                 variant="outlined"
                 style={{
-                  border: '2px dashed var(--ds-color-border)',
                   textAlign: 'center',
                   padding: '32px 16px',
                 }}
@@ -96,14 +95,13 @@ function ImportPanel({
                     <Text
                       className="ds-import-export__muted-text"
                       data-part="muted-text"
-                      style={{ color: 'var(--ds-color-text-muted)' }}
                     >
                       Drop a file here or click to browse
                     </Text>
                     <Text
                       className="ds-import-export__muted-text"
                       data-part="muted-text"
-                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                      style={{ fontSize: 12 }}
                     >
                       Accepted formats: {importConfig.acceptedFormats.join(', ')}
                     </Text>
@@ -121,7 +119,7 @@ function ImportPanel({
                 <Text
                   className="ds-import-export__muted-text"
                   data-part="muted-text"
-                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                  style={{ fontSize: 13 }}
                 >
                   Need a template? Download it from the provided URL.
                 </Text>
@@ -140,14 +138,13 @@ function ImportPanel({
                 <Card
                   className="ds-import-export__error-card"
                   variant="outlined"
-                  style={{ borderColor: 'var(--ds-color-error-500)' }}
                 >
                   <Card.Body>
                     <Stack spacing="xs">
                       <Text
                         className="ds-import-export__error-title"
                         data-part="error-title"
-                        style={{ fontWeight: 600, color: 'var(--ds-color-error-500)' }}
+                        style={{ fontWeight: 600 }}
                       >
                         Validation Errors
                       </Text>
@@ -159,7 +156,7 @@ function ImportPanel({
                           key={i}
                           className="ds-import-export__muted-text"
                           data-part="muted-text"
-                          style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                          style={{ fontSize: 13 }}
                         >
                           Row {err.row}, {err.field}: {err.message}
                         </Text>
@@ -168,7 +165,7 @@ function ImportPanel({
                         <Text
                           className="ds-import-export__muted-text"
                           data-part="muted-text"
-                          style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                          style={{ fontSize: 12 }}
                         >
                           ...and {importResult.errors.length - 5} more
                         </Text>
@@ -198,7 +195,7 @@ function ImportPanel({
               <Text
                 className="ds-import-export__success-message"
                 data-part="success-message"
-                style={{ fontWeight: 600, color: 'var(--ds-color-success-500)' }}
+                style={{ fontWeight: 600 }}
               >
                 Import completed successfully
               </Text>
@@ -286,7 +283,7 @@ function ExportPanel({
               <Text
                 className="ds-import-export__muted-text"
                 data-part="muted-text"
-                style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                style={{ fontSize: 12 }}
               >
                 {selectedFields.length} of {exportConfig.fields.length} selected
               </Text>
@@ -341,7 +338,7 @@ function HistoryPanel({
               className="ds-import-export__divider"
               justify="between"
               align="center"
-              style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
+              style={{ padding: '8px 0' }}
             >
               <Flex gap={12} align="center">
                 <Tag color={entry.type === 'import' ? 'processing' : 'default'}>
@@ -351,7 +348,7 @@ function HistoryPanel({
                 <Text
                   className="ds-import-export__muted-text"
                   data-part="muted-text"
-                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                  style={{ fontSize: 13 }}
                 >
                   {entry.recordCount} records
                 </Text>

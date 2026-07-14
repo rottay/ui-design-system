@@ -68,13 +68,7 @@ export function SurfaceAccentBar({
   // overflow:hidden (handled by SurfaceAccentBarWrapper).
   const baseStyle: React.CSSProperties = {
     position: 'absolute' as const,
-    // Gradient falls back to primary-only when --ds-color-secondary is not
-    // defined, keeping single-brand products visually clean.
-    background:
-      barStyle === 'gradient'
-        ? 'linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)))'
-        : 'var(--ds-color-primary)',
-    borderRadius: isTop ? `${thickness}px ${thickness}px 0 0` : `${thickness}px 0 0 ${thickness}px`,
+    ...({ '--ds-accent-bar-thickness': `${thickness}px` } as React.CSSProperties),
     ...(isTop
       ? { top: 0, left: 0, right: 0, height: thickness }
       : { top: 0, left: 0, bottom: 0, width: thickness }),
@@ -85,8 +79,6 @@ export function SurfaceAccentBar({
   // defined in the global DS stylesheet.
   if (barStyle === 'animated') {
     baseStyle.backgroundSize = '200% 100%';
-    baseStyle.background =
-      'linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)), var(--ds-color-primary))';
     baseStyle.animation = 'ds-accent-bar-shimmer 3s ease-in-out infinite';
   }
 

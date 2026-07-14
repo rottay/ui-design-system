@@ -62,31 +62,6 @@ function normalizeGap(gap: number | string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Inline <style> for hover effects
-// ---------------------------------------------------------------------------
-
-const GALLERY_HOVER_STYLES = `
-.ds-gallery-card:hover {
-  box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-text-primary, #000) 10%, transparent);
-  transform: translateY(-2px);
-}
-.ds-gallery-card:hover img {
-  transform: scale(1.04);
-}
-.ds-gallery-card .ds-gallery-checkbox {
-  opacity: 0;
-}
-.ds-gallery-card:hover .ds-gallery-checkbox,
-.ds-gallery-card .ds-gallery-checkbox:has(input:checked) {
-  opacity: 1;
-}
-.ds-gallery-card:focus-visible {
-  outline: 2px solid var(--ds-color-primary, #1677ff);
-  outline-offset: 2px;
-}
-`;
-
-// ---------------------------------------------------------------------------
 // Image placeholder for null/empty URLs
 // ---------------------------------------------------------------------------
 
@@ -103,8 +78,6 @@ function ImagePlaceholder({ aspectRatio }: { aspectRatio: string }) {
       style={{
         width: '100%',
         aspectRatio,
-        background: 'var(--ds-color-bg-tertiary, #e8e8e8)',
-        color: 'var(--ds-color-text-disabled, #bbb)',
       }}
     >
       <ImageIcon data-part="image-placeholder-icon" style={{ width: 32, height: 32, opacity: 0.5 }} />
@@ -158,7 +131,6 @@ function DefaultGalleryCard<T>({
               height: '100%',
               objectFit: 'cover',
               display: 'block',
-              transition: 'transform 0.25s ease',
             }}
             loading="lazy"
           />
@@ -171,14 +143,12 @@ function DefaultGalleryCard<T>({
           data-part="caption"
           style={{
             padding: '8px 10px',
-            background: 'var(--ds-color-bg-primary, #fff)',
           }}
         >
           <Text
             data-part="caption-text"
             size="sm"
             style={{
-              color: 'var(--ds-color-text-primary)',
               overflow: 'hidden',
               textOverflow: 'ellipsis',
               whiteSpace: 'nowrap',
@@ -267,14 +237,8 @@ function GalleryCardWrapper<T>({
       onClick={handleClick}
       style={{
         position: 'relative',
-        borderRadius: 'var(--ds-radius-md, 8px)',
         overflow: 'hidden',
-        border: selected
-          ? '2px solid var(--ds-color-primary, #1677ff)'
-          : '1px solid var(--ds-color-border, #e0e0e0)',
-        background: 'var(--ds-color-bg-primary, #fff)',
         cursor: onItemClick ? 'pointer' : 'default',
-        transition: 'box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease',
       }}
       className="ds-gallery-card"
     >
@@ -301,13 +265,8 @@ function GalleryCardWrapper<T>({
             top: 8,
             left: 8,
             zIndex: 2,
-            background: 'color-mix(in srgb, var(--ds-color-bg-primary, #fff) 85%, transparent)',
-            borderRadius: 'var(--ds-radius-sm, 6px)',
-            boxShadow: 'var(--ds-elevation-1, 0 1px 3px rgba(0,0,0,0.12))',
             padding: 2,
             lineHeight: 0,
-            transition: 'background 0.15s ease, opacity 0.15s ease',
-            backdropFilter: 'blur(4px)',
           }}
           className="ds-gallery-checkbox"
         >
@@ -368,10 +327,7 @@ function GallerySkeletonGrid({
           key={i}
           data-part="skeleton-card"
           style={{
-            borderRadius: 'var(--ds-radius-md, 8px)',
             overflow: 'hidden',
-            border: '1px solid var(--ds-color-border, #e0e0e0)',
-            background: 'var(--ds-color-bg-primary, #fff)',
           }}
         >
           <Skeleton
@@ -563,7 +519,6 @@ export function PatternGalleryView<T extends object>(
   if (loading) {
     return (
       <>
-        <style>{GALLERY_HOVER_STYLES}</style>
         <GallerySkeletonGrid
           columns={columns}
           minColumnWidth={minColumnWidth}
@@ -589,15 +544,12 @@ export function PatternGalleryView<T extends object>(
         data-empty="true"
         style={{
           padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
-          borderRadius: 'var(--ds-radius-lg, 12px)',
-          border: '1px dashed var(--ds-color-border, #d9d9d9)',
-          background: 'var(--ds-color-bg-secondary, #fafafa)',
           textAlign: 'center',
           ...style,
         }}
       >
         {emptyState ?? (
-          <Text data-part="empty-state" style={{ color: 'var(--ds-color-text-muted)' }}>No items</Text>
+          <Text data-part="empty-state">No items</Text>
         )}
       </Box>
     );
@@ -645,8 +597,6 @@ export function PatternGalleryView<T extends object>(
 
   return (
     <Stack spacing="md">
-      <style>{GALLERY_HOVER_STYLES}</style>
-
       {shortcutsActive ? (
         <ShortcutScope id={scopeId}>
           {grid}

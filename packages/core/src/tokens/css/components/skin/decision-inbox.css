@@ -1,0 +1,22 @@
+/** DecisionInboxSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-header'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='skeleton-row'] {
+  border-bottom: 1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary));
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__divider[data-part='divider'][data-divider-kind='review-rail'] {
+  background: var(--ds-color-border-secondary);
+}
+
+.ds-surface.ds-decision-inbox .ds-decision-inbox__selection-bar.ds-decision-inbox__selection-bar[data-part='root'] {
+  border-color: var(--ds-color-primary);
+  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
+}

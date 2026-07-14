@@ -48,10 +48,6 @@ export function BulkSelectToggle({
         onClick={onToggle}
         style={{
           gap: 6,
-          transition: 'all 0.2s ease',
-          ...(active && {
-            boxShadow: '0 0 0 2px var(--ds-color-primary-200)',
-          }),
         }}
       >
         {active ? (
@@ -60,7 +56,6 @@ export function BulkSelectToggle({
             style={{
               width: 14,
               height: 14,
-              animation: 'slideInCheckbox 0.2s ease-out',
             }}
           />
         ) : (
@@ -74,7 +69,6 @@ export function BulkSelectToggle({
           className="ds-bulk-select-toggle__count"
           variant="primary"
           style={{
-            animation: 'slideInCheckbox 0.2s ease-out',
             fontFamily: 'monospace',
             fontSize: 12,
           }}

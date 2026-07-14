@@ -125,7 +125,6 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
       className="ds-decision-inbox__muted-text"
       data-part="muted-text"
       size="xs"
-      style={{ color: 'var(--ds-color-text-muted)' }}
     >
       {hours}h {mins}m
     </Text>
@@ -160,8 +159,9 @@ function DecisionInboxSkeleton() {
             <Flex
               className="ds-decision-inbox__divider"
               data-part="divider"
+              data-divider-kind="skeleton-header"
               gap={4}
-              style={{ paddingBottom: 'var(--ds-spacing-sm, 8px)', borderBottom: '1px solid var(--ds-color-border-secondary)' }}
+              style={{ paddingBottom: 'var(--ds-spacing-sm, 8px)' }}
             >
               <Skeleton variant="text" width="25%" height={14} />
               <Skeleton variant="text" width="20%" height={14} />
@@ -173,12 +173,12 @@ function DecisionInboxSkeleton() {
               <Flex
                 className="ds-decision-inbox__divider"
                 data-part="divider"
+                data-divider-kind="skeleton-row"
                 key={i}
                 gap={4}
                 align="center"
                 style={{
                   padding: 'var(--ds-spacing-sm, 8px) 0',
-                  borderBottom: '1px solid var(--ds-color-border-subtle, var(--ds-color-border-secondary))',
                 }}
               >
                 <Skeleton variant="text" width="25%" height={14} />
@@ -383,10 +383,6 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
         <Card
           className="ds-decision-inbox__selection-bar"
           variant="outlined"
-          style={{
-            borderColor: 'var(--ds-color-primary)',
-            background: 'var(--ds-color-primary-bg, var(--ds-color-bg-tertiary))',
-          }}
         >
           <Card.Body>
             <Flex align="center" gap={3} wrap="wrap">
@@ -505,9 +501,9 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                     <Box
                       className="ds-decision-inbox__divider"
                       data-part="divider"
+                      data-divider-kind="review-rail"
                       style={{
                         height: 1,
-                        background: 'var(--ds-color-border-secondary)',
                       }}
                     />
 
@@ -539,9 +535,9 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                     <Box
                       className="ds-decision-inbox__divider"
                       data-part="divider"
+                      data-divider-kind="review-rail"
                       style={{
                         height: 1,
-                        background: 'var(--ds-color-border-secondary)',
                       }}
                     />
 

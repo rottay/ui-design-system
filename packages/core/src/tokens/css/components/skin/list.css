@@ -1,0 +1,9 @@
+/** ListSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-list .ds-list__card-label[data-part='card-label'][data-part='card-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-list .ds-list__card-value[data-part='card-value'][data-part='card-value'] {
+  color: var(--ds-color-text-primary);
+}

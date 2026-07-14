@@ -130,14 +130,6 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
   const activeTabContent = tabs.find((t) => t.key === activeTab);
   const showSidebar = !hideSidebar && metadata && metadata.length > 0;
 
-  const statusColors: Record<string, string> = {
-    success: 'var(--ds-color-success)',
-    warning: 'var(--ds-color-warning)',
-    error: 'var(--ds-color-error)',
-    info: 'var(--ds-color-info)',
-    default: 'var(--ds-color-text-muted)',
-  };
-
   return (
     <Stack
       className="ds-surface ds-record-workbench"
@@ -171,9 +163,6 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                     data-variant={status.variant ?? 'default'}
                     style={{
                       padding: '2px 10px',
-                      borderRadius: 'var(--ds-radius-full, 9999px)',
-                      border: `1px solid ${statusColors[status.variant ?? 'default']}`,
-                      color: statusColors[status.variant ?? 'default'],
                       fontSize: '12px',
                       fontWeight: 500,
                     }}
@@ -221,7 +210,6 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
         style={{
           display: 'flex',
           gap: 0,
-          borderBottom: '1px solid var(--ds-color-border-primary)',
           overflowX: 'auto',
         }}
       >
@@ -241,13 +229,6 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
               onClick={() => handleTabChange(tab.key)}
               icon={tab.icon}
               style={{
-                borderRadius: 0,
-                borderBottom: isActive
-                  ? '2px solid var(--ds-color-primary)'
-                  : '2px solid transparent',
-                color: isActive
-                  ? 'var(--ds-color-text-primary)'
-                  : 'var(--ds-color-text-muted)',
                 fontWeight: isActive ? 600 : 400,
                 whiteSpace: 'nowrap',
               }}
@@ -260,10 +241,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                   style={{
                     marginLeft: '8px',
                     padding: '1px 6px',
-                    borderRadius: 'var(--ds-radius-full, 9999px)',
-                    background: 'var(--ds-color-bg-tertiary)',
                     fontSize: '11px',
-                    color: 'var(--ds-color-text-muted)',
                   }}
                 >
                   {tab.badge}
@@ -319,7 +297,6 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
             style={{
               width: sidebarWidth,
               flexShrink: 0,
-              borderLeft: '1px solid var(--ds-color-border-secondary)',
               paddingLeft: '20px',
             }}
           >

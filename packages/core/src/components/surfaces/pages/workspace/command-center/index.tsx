@@ -92,37 +92,6 @@ export interface CommandCenterSurfaceProps {
 }
 
 // ---------------------------------------------------------------------------
-// Insight type -> DS token mapping
-// ---------------------------------------------------------------------------
-
-const INSIGHT_TOKENS: Record<string, {
-  border: string;
-  bg: string;
-  accent: string;
-}> = {
-  info: {
-    border: 'var(--ds-color-info)',
-    bg: 'var(--ds-color-info-bg, var(--ds-color-bg-secondary))',
-    accent: 'var(--ds-color-info)',
-  },
-  warning: {
-    border: 'var(--ds-color-warning)',
-    bg: 'var(--ds-color-warning-bg, var(--ds-color-bg-secondary))',
-    accent: 'var(--ds-color-warning)',
-  },
-  success: {
-    border: 'var(--ds-color-success)',
-    bg: 'var(--ds-color-success-bg, var(--ds-color-bg-secondary))',
-    accent: 'var(--ds-color-success)',
-  },
-  error: {
-    border: 'var(--ds-color-error)',
-    bg: 'var(--ds-color-error-bg, var(--ds-color-bg-secondary))',
-    accent: 'var(--ds-color-error)',
-  },
-};
-
-// ---------------------------------------------------------------------------
 // Mapping helpers
 // ---------------------------------------------------------------------------
 
@@ -164,8 +133,6 @@ function mapActivityItems(items: ActivityItem[]): Activity[] {
 // ---------------------------------------------------------------------------
 
 function InsightCard({ insight }: { insight: InsightItem }) {
-  const tokens = INSIGHT_TOKENS[insight.type] ?? INSIGHT_TOKENS.info;
-
   return (
     <Card className="ds-command-center__insight-card" variant="outlined">
       <Card.Body>
@@ -185,8 +152,6 @@ function InsightCard({ insight }: { insight: InsightItem }) {
               width: 4,
               alignSelf: 'stretch',
               minHeight: 32,
-              borderRadius: 'var(--ds-radius-full, 9999px)',
-              background: tokens.accent,
               flexShrink: 0,
             }}
           />
@@ -236,13 +201,10 @@ function QuickActionCard({ action }: { action: QuickAction }) {
               style={{
                 width: 36,
                 height: 36,
-                borderRadius: 'var(--ds-radius-md, 8px)',
-                background: 'var(--ds-color-bg-tertiary, var(--ds-color-bg-secondary))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
-                color: 'var(--ds-color-text-secondary)',
               }}
             >
               {action.icon}

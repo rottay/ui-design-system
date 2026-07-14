@@ -1,0 +1,9 @@
+/**
+ * ActivitySurface pagination skin (WO-SKIN-06 CK-I). PatternActivityLog and
+ * pagination are sibling scope islands, so this selector anchors on the
+ * pagination island itself rather than inventing a false descendant root.
+ */
+
+.ds-surface.ds-activity.ds-activity__pagination > .ds-activity__muted-text[data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}

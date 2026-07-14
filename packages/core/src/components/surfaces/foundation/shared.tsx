@@ -124,7 +124,7 @@ export function SurfaceSectionCard({
               <Stack data-part="header-copy" spacing="xs">
                 {title && <Text data-part="title" style={{ fontSize: 18, fontWeight: 700 }}>{title}</Text>}
                 {description && (
-                  <Text data-part="description" style={{ color: 'var(--ds-color-text-muted)' }}>{description}</Text>
+                  <Text data-part="description">{description}</Text>
                 )}
               </Stack>
               {actions}

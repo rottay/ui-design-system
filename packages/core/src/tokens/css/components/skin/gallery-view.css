@@ -1,0 +1,80 @@
+/**
+ * GalleryView skin (WO-SKIN-06 CK-I).
+ * Deliberately unlayered. The hover, checkbox-reveal and focus mechanisms are
+ * the exact former injected stylesheet, now anchored to the gallery scope.
+ */
+
+.ds-pattern-gallery-view [data-part='image-placeholder'] {
+  background: var(--ds-color-bg-tertiary, #e8e8e8);
+  color: var(--ds-color-text-disabled, #bbb);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card [data-part='image'] {
+  transition: transform 0.25s ease;
+}
+
+.ds-pattern-gallery-view .ds-gallery-card [data-part='caption'] {
+  background: var(--ds-color-bg-primary, #fff);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card [data-part='caption-text'][data-part='caption-text'][data-part='caption-text'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-bg-primary, #fff);
+  transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+}
+
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='true'] {
+  border: 2px solid var(--ds-color-primary, #1677ff);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card[data-part='card'][data-selected='false'] {
+  border: 1px solid var(--ds-color-border, #e0e0e0);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card:hover {
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-text-primary, #000) 10%, transparent);
+  transform: translateY(-2px);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card:hover img {
+  transform: scale(1.04);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox {
+  opacity: 0;
+  background: color-mix(in srgb, var(--ds-color-bg-primary, #fff) 85%, transparent);
+  border-radius: var(--ds-radius-sm, 6px);
+  box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0,0,0,0.12));
+  transition: background 0.15s ease, opacity 0.15s ease;
+  backdrop-filter: blur(4px);
+}
+
+.ds-pattern-gallery-view .ds-gallery-card:hover .ds-gallery-checkbox,
+.ds-pattern-gallery-view .ds-gallery-card .ds-gallery-checkbox:has(input:checked) {
+  opacity: 1;
+}
+
+.ds-pattern-gallery-view .ds-gallery-card:focus-visible {
+  outline: 2px solid var(--ds-color-primary, #1677ff);
+  outline-offset: 2px;
+}
+
+.ds-pattern-gallery-view [data-part='skeleton-card'][data-part='skeleton-card'][data-part='skeleton-card'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-border, #e0e0e0);
+  background: var(--ds-color-bg-primary, #fff);
+}
+
+.ds-pattern-gallery-view[data-part='root'][data-part='root'][data-empty='true'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  border: 1px dashed var(--ds-color-border, #d9d9d9);
+  background: var(--ds-color-bg-secondary, #fafafa);
+}
+
+.ds-pattern-gallery-view [data-part='empty-state'][data-part='empty-state'][data-part='empty-state'][data-part='empty-state'] {
+  color: var(--ds-color-text-muted);
+}

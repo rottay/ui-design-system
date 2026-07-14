@@ -1,0 +1,9 @@
+/**
+ * ChatSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
+ * unlayered. The repeated private hook and root part keep the accent border
+ * above every modern/rustic Textarea focus/status rule, matching inline style.
+ */
+
+.ds-surface.ds-chat.ds-chat--accented .ds-chat__composer-input.ds-chat__composer-input.ds-chat__composer-input[data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
+  border-color: var(--ds-color-primary);
+}

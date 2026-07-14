@@ -56,7 +56,7 @@ function ProfileSectionCard({
                 <Text
                   className="ds-profile__muted-text"
                   data-part="muted-text"
-                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                  style={{ fontSize: 13 }}
                 >
                   {section.description}
                 </Text>
@@ -79,7 +79,7 @@ function ProfileSectionCard({
                 <Text
                   className="ds-profile__muted-text"
                   data-part="muted-text"
-                  style={{ fontSize: 13, fontWeight: 500, color: 'var(--ds-color-text-muted)' }}
+                  style={{ fontSize: 13, fontWeight: 500 }}
                 >
                   {field.label}
                 </Text>

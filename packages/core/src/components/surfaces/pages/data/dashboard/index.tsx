@@ -150,7 +150,6 @@ export function DashboardSurface({
                             <Text
                               className="ds-dashboard__muted-text"
                               data-part="muted-text"
-                              style={{ color: 'var(--ds-color-text-muted)' }}
                             >
                               {section.description}
                             </Text>

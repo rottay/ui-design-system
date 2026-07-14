@@ -1,0 +1,21 @@
+/** ReportSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-report
+  .ds-report__template-card.ds-report__template-card--selected[data-part="root"][data-interactive="true"][data-variant="outlined"]:not(
+    [data-tone]
+  ),
+.ds-surface.ds-report
+  .ds-report__template-card.ds-report__template-card--selected[data-part="root"][data-hoverable="true"][data-clickable="true"][data-variant="outlined"]:not(
+    [data-tone]
+  ) {
+  border-color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-report
+  .ds-report__muted-text[data-part="muted-text"][data-part="muted-text"] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-report .ds-report__divider[data-part="divider"] {
+  border-top: 1px solid var(--ds-color-border);
+}

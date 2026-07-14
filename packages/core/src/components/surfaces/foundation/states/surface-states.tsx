@@ -126,7 +126,6 @@ export function SurfaceEmptyStateCard({
               data-part="icon"
               style={{
                 fontSize: 48,
-                color: 'var(--ds-color-text-disabled)',
                 lineHeight: 1,
               }}
             >
@@ -140,7 +139,6 @@ export function SurfaceEmptyStateCard({
               style={{
                 fontWeight: 600,
                 fontSize: 16,
-                color: 'var(--ds-color-text-primary)',
               }}
             >
               {title ?? tSurface('states.empty_title')}
@@ -148,7 +146,6 @@ export function SurfaceEmptyStateCard({
             <Text
               data-part="description"
               style={{
-                color: 'var(--ds-color-text-muted)',
                 fontSize: 14,
               }}
             >
@@ -250,13 +247,9 @@ export function SurfaceStaleBanner({
   return (
     <Flex className="ds-surface ds-stale-banner" data-part="banner" data-refreshing={refreshing ? 'true' : 'false'} gap={3} align="center" style={{
       padding: '8px 12px',
-      borderRadius: 'var(--ds-radius-md, 8px)',
-      background: 'var(--ds-color-info-bg, rgba(59,130,246,0.08))',
-      border: '1px solid var(--ds-color-info-border, rgba(59,130,246,0.2))',
-      color: 'var(--ds-color-info)',
       fontSize: 13,
     }}>
-      <Text data-part="description" style={{ flex: 1, color: 'inherit' }}>{message ?? tSurface('states.stale_message')}</Text>
+      <Text data-part="description" style={{ flex: 1 }}>{message ?? tSurface('states.stale_message')}</Text>
       {onRefresh && (
         <Button className="ds-stale-banner__refresh" variant="ghost" size="sm" onClick={onRefresh} loading={refreshing}>
           {tSurface('states.refresh')}

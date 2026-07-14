@@ -36,13 +36,6 @@ function DefaultSearchResult({
       clickable
       hoverable
       style={{
-        backgroundColor: selected
-          ? 'var(--ds-search-result-bg-hover, var(--ds-search-result-bg, var(--ds-card-bg)))'
-          : 'var(--ds-search-result-bg, var(--ds-card-bg))',
-        borderColor: selected
-          ? 'var(--ds-color-primary-500)'
-          : 'var(--ds-search-result-border, var(--ds-card-border-color, var(--ds-color-border-subtle)))',
-        boxShadow: 'var(--ds-search-result-shadow, var(--ds-card-shadow, none))',
         '--ds-card-bg-hover': 'var(--ds-search-result-bg-hover, var(--ds-card-bg-hover))',
       } as React.CSSProperties}
     >
@@ -65,7 +58,7 @@ function DefaultSearchResult({
               <Text
                 className="ds-search__result-title"
                 data-part="result-title"
-                style={{ fontWeight: 700, color: 'var(--ds-search-result-title-color, var(--ds-color-text-primary))' }}
+                style={{ fontWeight: 700 }}
               >
                 {result.title}
               </Text>
@@ -73,7 +66,6 @@ function DefaultSearchResult({
                 <Text
                   className="ds-search__result-meta"
                   data-part="result-meta"
-                  style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}
                 >
                   {result.description}
                 </Text>
@@ -82,7 +74,6 @@ function DefaultSearchResult({
                 <Box
                   className="ds-search__result-meta"
                   data-part="result-meta"
-                  style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}
                 >
                   {result.meta}
                 </Box>
@@ -206,7 +197,6 @@ export function SearchSurface({
               className="ds-search__empty-state"
               data-part="empty-state"
               data-state="query"
-              style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}
             >
               <SurfaceEmptyState
                 title={tSurface('search.empty_query_title')}
@@ -220,7 +210,6 @@ export function SearchSurface({
               className="ds-search__empty-state"
               data-part="empty-state"
               data-state="results"
-              style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}
             >
               <SurfaceEmptyState
                 title={tSurface('search.empty_results_title')}
@@ -313,7 +302,6 @@ export function SearchSurface({
                             <Text
                               className="ds-search__muted-text"
                               data-part="muted-text"
-                              style={{ color: 'var(--ds-color-text-muted)' }}
                             >
                               {selectedResult.description}
                             </Text>

@@ -1,0 +1,25 @@
+/** ImportExportSurface skin (WO-SKIN-06 / CK-I), deliberately unlayered. */
+
+.ds-surface.ds-import-export .ds-import-export__dropzone[data-part='root'][data-variant] {
+  border: 2px dashed var(--ds-color-border);
+}
+
+.ds-surface.ds-import-export .ds-import-export__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-import-export .ds-import-export__error-card[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error-500);
+}
+
+.ds-surface.ds-import-export .ds-import-export__error-title[data-part='error-title'][data-part='error-title'] {
+  color: var(--ds-color-error-500);
+}
+
+.ds-surface.ds-import-export .ds-import-export__success-message[data-part='success-message'][data-part='success-message'] {
+  color: var(--ds-color-success-500);
+}
+
+.ds-surface.ds-import-export .ds-import-export__divider.ds-import-export__divider {
+  border-bottom: 1px solid var(--ds-color-border);
+}

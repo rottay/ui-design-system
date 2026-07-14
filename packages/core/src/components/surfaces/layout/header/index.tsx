@@ -64,7 +64,6 @@ export function HeaderSurface({
           <Text
             className="ds-header__muted-text"
             data-part="muted-text"
-            style={{ color: 'var(--ds-color-text-muted)' }}
           >
             {config.presentation.description}
           </Text>
@@ -86,7 +85,6 @@ export function HeaderSurface({
                     <Text
                       className="ds-header__muted-text"
                       data-part="muted-text"
-                      style={{ color: 'var(--ds-color-text-muted)' }}
                     >{tab.description}</Text>
                   )}
                   <Box>{tab.content}</Box>

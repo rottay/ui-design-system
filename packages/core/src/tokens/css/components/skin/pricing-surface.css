@@ -1,0 +1,8 @@
+/**
+ * PricingSurface skin (WO-SKIN-06 CK-I). Engine-agnostic and deliberately
+ * unlayered; specificity clears Typography's color rule.
+ */
+
+.ds-surface.ds-pricing .ds-pricing__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}

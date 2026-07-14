@@ -5,8 +5,8 @@
  * Used by app-platform, app-bithire, and app-evnto in their
  * renderCell config factories.
  *
- * All renderers use DS primitives (Box, Flex, Stack, Text, Badge, Avatar)
- * and DS CSS variables only. Zero domain awareness.
+ * All renderers expose DS anatomy hooks and use DS CSS variables only.
+ * They intentionally return lightweight raw elements and have zero domain awareness.
  *
  * @example
  * ```tsx
@@ -91,6 +91,15 @@ export interface ScoreOptions {
 
 export type CellBadgeVariant = 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
 
+const CELL_BADGE_VARIANTS = new Set<CellBadgeVariant>([
+  'primary',
+  'secondary',
+  'success',
+  'warning',
+  'error',
+  'info',
+]);
+
 // ── Renderers ─────────────────────────────────────────────
 
 /**
@@ -130,9 +139,6 @@ function avatarName(
       style: {
         width: dim,
         height: dim,
-        borderRadius: 'var(--ds-radius-full, 9999px)',
-        background: 'var(--ds-avatar-default-bg, var(--ds-color-neutral-200))',
-        color: 'var(--ds-avatar-default-color, var(--ds-color-text-secondary))',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -146,7 +152,6 @@ function avatarName(
         'data-part': 'name',
         style: {
           fontWeight: 500,
-          color: 'var(--ds-color-text-primary)',
           fontSize: 'var(--ds-font-size-sm, 14px)',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
@@ -157,7 +162,6 @@ function avatarName(
         'data-part': 'subtitle',
         style: {
           fontSize: 'var(--ds-font-size-xs, 12px)',
-          color: 'var(--ds-color-text-muted)',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -187,11 +191,11 @@ function nameStack(
   },
     React.createElement('div', {
       'data-part': 'name',
-      style: { fontWeight: 500, color: 'var(--ds-color-text-primary)' },
+      style: { fontWeight: 500 },
     }, name),
     subtitle ? React.createElement('div', {
       'data-part': 'subtitle',
-      style: { fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' },
+      style: { fontSize: 'var(--ds-font-size-xs, 12px)' },
     }, subtitle) : null,
   );
 }
@@ -208,16 +212,7 @@ function renderBadge(
   variant: CellBadgeVariant,
   part: 'status-badge' | 'simple-badge',
 ): React.ReactElement {
-  const variantColors: Record<string, { bg: string; color: string; border: string }> = {
-    primary: { bg: 'var(--ds-color-alpha-primary-10, rgba(59,130,246,0.1))', color: 'var(--ds-color-primary)', border: 'var(--ds-color-alpha-primary-20, rgba(59,130,246,0.2))' },
-    secondary: { bg: 'var(--ds-color-alpha-black-100, rgba(0,0,0,0.06))', color: 'var(--ds-color-text-secondary)', border: 'transparent' },
-    success: { bg: 'var(--ds-color-success-bg, rgba(34,197,94,0.1))', color: 'var(--ds-color-success)', border: 'var(--ds-color-success-border, rgba(34,197,94,0.2))' },
-    warning: { bg: 'var(--ds-color-warning-bg, rgba(245,158,11,0.1))', color: 'var(--ds-color-warning)', border: 'var(--ds-color-warning-border, rgba(245,158,11,0.2))' },
-    error: { bg: 'var(--ds-color-error-bg, rgba(239,68,68,0.1))', color: 'var(--ds-color-error)', border: 'var(--ds-color-error-border, rgba(239,68,68,0.2))' },
-    info: { bg: 'var(--ds-color-info-bg, rgba(59,130,246,0.1))', color: 'var(--ds-color-info)', border: 'var(--ds-color-info-border, rgba(59,130,246,0.2))' },
-  };
-  const resolvedVariant = variantColors[variant] ? variant : 'secondary';
-  const v = variantColors[resolvedVariant];
+  const resolvedVariant = CELL_BADGE_VARIANTS.has(variant) ? variant : 'secondary';
   return React.createElement('span', {
     className: CELL_RENDERER_SCOPE_CLASS,
     'data-part': part,
@@ -226,13 +221,9 @@ function renderBadge(
       display: 'inline-flex',
       alignItems: 'center',
       padding: '2px 8px',
-      borderRadius: 'var(--ds-radius-sm, 6px)',
       fontSize: 'var(--ds-font-size-xs, 12px)',
       fontWeight: 500,
       lineHeight: '18px',
-      background: v.bg,
-      color: v.color,
-      border: `1px solid ${v.border}`,
       whiteSpace: 'nowrap',
     },
   }, label);
@@ -279,9 +270,9 @@ function mono(
     style: {
       fontFamily: 'var(--ds-font-family-mono, monospace)',
       fontSize: `var(--ds-font-size-${options?.size ?? 'sm'}, 13px)`,
-      color: options?.color ?? 'var(--ds-color-text-muted)',
+      '--ds-cell-renderers-mono-color': options?.color ?? 'var(--ds-color-text-muted)',
       whiteSpace: 'nowrap',
-    },
+    } as React.CSSProperties,
   }, truncated);
 }
 
@@ -312,13 +303,12 @@ function iconText(
       className: 'ds-cell-renderers__icon',
       'data-part': 'icon',
       size: options?.iconSize ?? 14,
-      style: { color: 'var(--ds-color-text-muted)', flexShrink: 0 },
+      style: { flexShrink: 0 },
     }),
     React.createElement('span', {
       'data-part': 'value',
       style: {
         fontSize: 'var(--ds-font-size-sm, 14px)',
-        color: value ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)',
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
@@ -349,11 +339,11 @@ function countWithIcon(
       className: 'ds-cell-renderers__icon',
       'data-part': 'icon',
       size: 14,
-      style: { color: 'var(--ds-color-text-muted)', flexShrink: 0 },
+      style: { flexShrink: 0 },
     }),
     React.createElement('span', {
       'data-part': 'value',
-      style: { color: 'var(--ds-color-text-primary)', fontSize: 'var(--ds-font-size-sm, 14px)' },
+      style: { fontSize: 'var(--ds-font-size-sm, 14px)' },
     }, label ? `${count} ${label}` : String(count)),
   );
 }
@@ -369,7 +359,6 @@ function date(
     className: CELL_RENDERER_SCOPE_CLASS,
     'data-part': 'date',
     'data-empty': 'true',
-    style: { color: 'var(--ds-color-text-disabled)' },
   }, '--');
 
   const d = typeof value === 'string' ? new Date(value) : value;
@@ -389,7 +378,6 @@ function date(
     'data-empty': 'false',
     style: {
       fontSize: 'var(--ds-font-size-sm, 14px)',
-      color: 'var(--ds-color-text-muted)',
       fontFamily: options?.mono !== false ? 'var(--ds-font-family-mono, monospace)' : undefined,
       whiteSpace: 'nowrap',
     },
@@ -424,11 +412,8 @@ function tags(
         style: {
           display: 'inline-flex',
           padding: '1px 6px',
-          borderRadius: 'var(--ds-radius-sm, 6px)',
           fontSize: 'var(--ds-font-size-xs, 12px)',
           fontWeight: 500,
-          background: 'var(--ds-color-alpha-black-100, rgba(0,0,0,0.06))',
-          color: 'var(--ds-color-text-secondary)',
           whiteSpace: 'nowrap',
         },
       }, tag),
@@ -437,7 +422,7 @@ function tags(
       ? React.createElement('span', {
           'data-part': 'overflow',
           'data-count': overflow,
-          style: { fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' },
+          style: { fontSize: 'var(--ds-font-size-xs, 12px)' },
         }, `+${overflow}`)
       : null,
   );
@@ -457,12 +442,6 @@ function score(
   const low = options?.thresholds?.low ?? 33;
   const mid = options?.thresholds?.mid ?? 66;
   const band = value <= low ? 'low' : value <= mid ? 'mid' : 'high';
-  const barColor = value <= low
-    ? 'var(--ds-color-error)'
-    : value <= mid
-      ? 'var(--ds-color-warning)'
-      : 'var(--ds-color-success)';
-
   const width = options?.barWidth ?? 60;
   const height = options?.barHeight ?? 6;
 
@@ -471,15 +450,18 @@ function score(
     'data-part': 'score',
     'data-band': band,
     'data-value': value,
-    style: { display: 'flex', alignItems: 'center', gap: 8 },
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 8,
+      '--ds-cell-renderers-score-radius': `${height / 2}px`,
+    } as React.CSSProperties,
   },
     React.createElement('div', {
       'data-part': 'score-track',
       style: {
         width,
         height,
-        borderRadius: height / 2,
-        background: 'var(--ds-color-border, rgba(0,0,0,0.1))',
         overflow: 'hidden',
       },
     },
@@ -489,9 +471,6 @@ function score(
         style: {
           width: `${Math.min(100, Math.max(0, value))}%`,
           height: '100%',
-          borderRadius: height / 2,
-          background: barColor,
-          transition: 'width 300ms ease-out',
         },
       }),
     ),
@@ -501,7 +480,6 @@ function score(
       style: {
         fontSize: 'var(--ds-font-size-xs, 12px)',
         fontWeight: 600,
-        color: barColor,
         minWidth: 24,
       },
     }, value),
@@ -527,7 +505,6 @@ function boolean(
     'data-empty': value == null ? 'true' : 'false',
     style: {
       fontSize: 'var(--ds-font-size-sm, 14px)',
-      color: isTrue ? 'var(--ds-color-success)' : 'var(--ds-color-text-muted)',
       fontWeight: isTrue ? 500 : 400,
     },
   }, isTrue ? (options?.trueLabel ?? 'Yes') : (options?.falseLabel ?? 'No'));
@@ -551,7 +528,6 @@ function truncated(
       overflow: 'hidden',
       textOverflow: 'ellipsis',
       fontSize: 'var(--ds-font-size-sm, 14px)',
-      color: 'var(--ds-color-text-primary)',
     },
   }, value ?? '--');
 }

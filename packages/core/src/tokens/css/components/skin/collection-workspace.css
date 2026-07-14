@@ -1,0 +1,281 @@
+/**
+ * CollectionWorkspaceSurface skin (WO-SKIN-06 / CK-I). Engine-agnostic and
+ * deliberately unlayered. The surface owns composition: raw Box/Flex/Text
+ * anatomy uses data parts; composed primitives keep their BEM landing hooks.
+ * Caller styles remain inline and therefore retain their original precedence.
+ */
+
+/* ENHANCED_CSS moved byte-for-byte from the conditional runtime style tag.
+   The ds-collection-enhanced class preserves its original condition. */
+.ds-collection-enhanced tr[data-row-key]:hover td {
+  background: color-mix(in srgb, var(--ds-color-primary) 5%, transparent) !important;
+  transition: background 140ms ease, box-shadow 140ms ease !important;
+}
+.ds-collection-enhanced tr[data-row-key]:hover {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--ds-color-primary) 8%, transparent),
+    inset 0 -1px 0 color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+}
+.ds-collection-enhanced tr[data-row-key]:hover td:first-child {
+  box-shadow: inset 3px 0 0 color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+}
+.ds-collection-enhanced tr[data-selected="true"] td {
+  background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent) !important;
+}
+.ds-collection-enhanced tr[data-row-key]:hover button:hover,
+.ds-collection-enhanced tr[data-row-key]:hover a:hover {
+  transform: translateY(-1px);
+  color: var(--ds-color-primary);
+  transition: transform 120ms ease, color 120ms ease;
+}
+.ds-collection-enhanced thead th {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.ds-collection-enhanced tbody td {
+  vertical-align: middle;
+  line-height: 1.3;
+  transition: background 140ms ease, box-shadow 140ms ease;
+}
+.ds-collection-enhanced .ds-resize-handle:hover .ds-resize-handle__bar,
+.ds-collection-enhanced .ds-resize-handle:focus-visible .ds-resize-handle__bar {
+  opacity: 1;
+  background: var(--ds-color-primary);
+}
+.ds-collection-enhanced .ds-collection-preview-rail__resize:hover > *,
+.ds-collection-enhanced .ds-collection-preview-rail__resize:focus-visible > * {
+  left: 5px !important;
+  width: 4px !important;
+  background: color-mix(in srgb, var(--ds-color-primary) 74%, transparent) !important;
+}
+.ds-collection-enhanced .ds-collection-preview-rail__resize:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ds-color-primary) 42%, transparent);
+  outline-offset: -2px;
+}
+
+/* PAGE_SIZE_CONTROL_CSS moved byte-for-byte from its runtime style tag. */
+.ds-collection-page-size-control {
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    box-shadow 140ms ease;
+}
+.ds-collection-page-size-control:hover {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+  box-shadow: 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 6%, transparent);
+}
+.ds-collection-page-size-control:focus-within {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 42%, var(--ds-color-border-secondary));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent),
+    0 8px 18px color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+}
+.ds-collection-page-size-control__picker {
+  transition:
+    border-color 140ms ease,
+    background-color 140ms ease,
+    color 140ms ease;
+}
+.ds-collection-page-size-control__value,
+.ds-collection-page-size-control__chevron {
+  transition:
+    color 140ms ease,
+    transform 140ms ease;
+}
+.ds-collection-page-size-control:hover .ds-collection-page-size-control__picker,
+.ds-collection-page-size-control:focus-within .ds-collection-page-size-control__picker {
+  background: color-mix(in srgb, var(--ds-color-primary) 13%, var(--ds-surface-card-bg));
+  border-color: color-mix(in srgb, var(--ds-color-primary) 34%, var(--ds-color-border-secondary));
+  color: var(--ds-color-primary);
+}
+.ds-collection-page-size-control:hover .ds-collection-page-size-control__chevron,
+.ds-collection-page-size-control:focus-within .ds-collection-page-size-control__chevron {
+  color: var(--ds-color-primary);
+  transform: translateY(1px);
+}
+.ds-collection-page-size-control__select:focus {
+  outline: none;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__utility-icon-toggle[data-part='utility-icon-toggle'][data-active='false'] {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__utility-icon-toggle[data-part='utility-icon-toggle'][data-active='true'] {
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__summary[data-part='page-size-summary'][data-part='page-size-summary'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control[data-part='page-size-control'] {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 74%, transparent);
+  background: color-mix(in srgb, var(--ds-surface-card-bg) 90%, transparent);
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__range[data-part='page-size-range'][data-part='page-size-range'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__picker[data-part='page-size-picker'] {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, var(--ds-color-border-secondary));
+  background: color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card-bg));
+  color: var(--ds-color-text-primary);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-primary) 55%, transparent);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__unit[data-part='page-size-unit'][data-part='page-size-unit'],
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__suffix[data-part='page-size-suffix'][data-part='page-size-suffix'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__value[data-part='page-size-value'][data-part='page-size-value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__select[data-part='page-size-select'] {
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: transparent;
+  opacity: 0;
+  outline: none;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-page-size-control__chevron[data-part='page-size-chevron'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-preview-rail[data-part='preview-rail'] {
+  border-left: 2px solid color-mix(in srgb, var(--ds-color-primary) 18%, var(--ds-color-border-secondary));
+  background: color-mix(in srgb, var(--ds-surface-card) 50%, var(--ds-color-bg-primary) 50%);
+  border-radius: 0 var(--ds-radius-sm, 6px) var(--ds-radius-sm, 6px) 0;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-preview-rail__resize[data-part='preview-rail-resize'] {
+  border: 0;
+  background: transparent;
+  transform: translateX(-50%);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-preview-rail__resize-bar[data-part='preview-rail-resize-bar'] {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--ds-surface-card) 70%, transparent);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__focused-row[data-part='focused-row'][data-focused='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
+  border-radius: var(--ds-radius-xs, 3px);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__shortcut-label[data-part='shortcut-label'][data-part='shortcut-label'] {
+  color: color-mix(in srgb, var(--ds-color-text-muted) 74%, white 6%);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__shortcut[data-part='shortcut'] {
+  color: color-mix(in srgb, var(--ds-color-text-muted) 88%, white 12%);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__context-slot[data-part='context-slot'] {
+  background: var(--ds-surface-card);
+  border-bottom: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-surface.ds-collection-workspace.ds-collection-shell .ds-collection-workspace__context-slot[data-part='context-slot'] {
+  background: transparent;
+  border-bottom: none;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__context-slot[data-part='context-slot'][data-collapsed='false'],
+.ds-surface.ds-collection-workspace .ds-collection-workspace__stats-slot[data-part='stats-slot'][data-collapsed='false'] {
+  opacity: 1;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__context-slot[data-part='context-slot'][data-collapsed='true'],
+.ds-surface.ds-collection-workspace .ds-collection-workspace__stats-slot[data-part='stats-slot'][data-collapsed='true'] {
+  opacity: 0;
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__masthead[data-part='masthead'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 14%, transparent) 0%, color-mix(in srgb, var(--ds-surface-card) 8%, transparent) 44%, transparent 100%), radial-gradient(88% 90% at 16% 8%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 68%);
+  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__toolbar-row[data-part='toolbar-row'] {
+  border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 30%, transparent);
+}
+
+.ds-surface.ds-collection-workspace.ds-collection-shell .ds-collection-workspace__toolbar-row[data-part='toolbar-row'] {
+  border-top: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 16%, transparent);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__views-strip[data-part='views-strip'][data-active='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__views-strip[data-part='views-strip'][data-active='false'] {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__divider[data-part='divider'] {
+  background: var(--ds-color-border-subtle);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__filters-strip[data-part='filters-strip'][data-active='true'] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__filters-strip[data-part='filters-strip'][data-active='false'] {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__muted-text[data-part='muted-text'][data-part='muted-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__filter-count[data-part='filter-count'] {
+  border-radius: 8px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__filter-reset[data-part='filter-reset'] {
+  border: 0;
+  background: transparent;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__selection-count[data-part='selection-count'] {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar[data-part='sticky-action-bar'] {
+  background: var(--ds-color-bg-primary);
+  border-top: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-surface.ds-collection-workspace .ds-collection-workspace__sticky-primary-action[data-part='sticky-primary-action'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, #fff);
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+}

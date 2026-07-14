@@ -93,7 +93,6 @@ export function VisualizationSurface({
                             <Text
                               className="ds-visualization__muted-text"
                               data-part="muted-text"
-                              style={{ color: 'var(--ds-color-text-muted)' }}
                             >
                               {view.description}
                             </Text>
