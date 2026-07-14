@@ -20,7 +20,14 @@ export const ARC09_PAINT_KEY_RE = new RegExp(
     ")\\s*:",
 );
 // border*/table box-model that is layout, not paint.
-export const ARC09_PAINT_EXEMPT = new Set(["borderCollapse", "borderSpacing"]);
+export const ARC09_PAINT_EXEMPT = new Set([
+  "borderCollapse",
+  "borderSpacing",
+  // Not CSS properties at all -- they are PROP names that the `border*` family
+  // pattern happens to match. Counting them invents paint that cannot exist.
+  "bordered",
+  "borderless",
+]);
 
 /**
  * The same paint names in ES6 SHORTHAND position: `style={{ color }}`, or a bare
