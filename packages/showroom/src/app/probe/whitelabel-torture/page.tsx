@@ -198,16 +198,18 @@ import {
   PatternPricingTable,
   PatternEmptyState,
   TokenInspector,
+  PatternTenantPreview,
+  BrandingPreviewSandbox,
+  PatternBrandStudio,
+  rottayBrandTheme,
+  bithireBrandTheme,
+  type BrandTheme,
+  type TenantAppearance,
 } from '@rottay/design-system';
 import type { ActivityItem, KeyMetric, StatItem, FilterPillConfig } from '@rottay/design-system';
 import { TagIcon } from '@rottay/design-system/icons';
 import { StateGallery, FLAGSHIP_SLUGS } from '@/components/state-gallery';
-import {
-  TortureSurface,
-  TORTURE_FIXTURES,
-  type TortureFixture,
-  type ProbeEngine,
-} from '@/components/torture-surface';
+import { TortureSurface, TORTURE_FIXTURES, type TortureFixture, type ProbeEngine } from '@/components/torture-surface';
 import { SurfacesLongTailFixture } from '@/components/surfaces-long-tail-fixture';
 
 // ---------------------------------------------------------------------------
@@ -322,8 +324,16 @@ const FIELD_FILTERS_DEFINITIONS: FieldFilterDefinition[] = [
 ];
 
 const FIELD_FILTERS_PRESETS: FieldFilterPreset[] = [
-  { key: 'active-emea', label: 'Active in EMEA', values: { status: 'active', region: 'emea' } },
-  { key: 'new-joins', label: 'New joins', values: { joinedAt: '30d', status: 'active' } },
+  {
+    key: 'active-emea',
+    label: 'Active in EMEA',
+    values: { status: 'active', region: 'emea' },
+  },
+  {
+    key: 'new-joins',
+    label: 'New joins',
+    values: { joinedAt: '30d', status: 'active' },
+  },
 ];
 
 const FIELD_FILTERS_VALUES: Record<string, string> = {
@@ -334,7 +344,10 @@ const FIELD_FILTERS_VALUES: Record<string, string> = {
 };
 
 const FIELD_FILTERS_VISUALS: Record<string, FieldFilterVisual> = {
-  status: { icon: <TagIcon style={{ width: 15, height: 15 }} />, description: 'Filter by lifecycle status.' },
+  status: {
+    icon: <TagIcon style={{ width: 15, height: 15 }} />,
+    description: 'Filter by lifecycle status.',
+  },
 };
 
 // Chrome the WO-ENG-02 flagship galleries never reach, rendered so the probe
@@ -365,7 +378,6 @@ function ChromeExtras() {
     </Stack>
   );
 }
-
 
 // A clickable Card, rendered only behind `?interactive=1`.
 //
@@ -666,21 +678,44 @@ const DETAIL_PANEL_PROPS: DetailPanelProps<DetailFixtureEntity> = {
   title: 'Acme Corp',
   subtitle: 'Enterprise customer since 2019',
   status: { label: 'On Leave', color: '#f59e0b' },
-  breadcrumbs: [
-    { label: 'Customers', href: '/customers' },
-    { label: 'Acme Corp' },
-  ],
+  breadcrumbs: [{ label: 'Customers', href: '/customers' }, { label: 'Acme Corp' }],
   onBack: () => undefined,
   actions: [
-    { key: 'edit', label: 'Edit', variant: 'primary', onClick: () => undefined },
-    { key: 'archive', label: 'Archive', variant: 'danger', onClick: () => undefined, loading: true },
+    {
+      key: 'edit',
+      label: 'Edit',
+      variant: 'primary',
+      onClick: () => undefined,
+    },
+    {
+      key: 'archive',
+      label: 'Archive',
+      variant: 'danger',
+      onClick: () => undefined,
+      loading: true,
+    },
     { key: 'view', label: 'View', variant: 'ghost', onClick: () => undefined },
     { key: 'more', label: 'More', onClick: () => undefined, disabled: true },
   ],
   tabs: [
-    { key: 'overview', label: 'Overview', content: <Text size="sm">Overview content</Text>, badge: 3 },
-    { key: 'billing', label: 'Billing', content: <Text size="sm">Billing content</Text> },
-    { key: 'history', label: 'History', content: <Text size="sm">History content</Text>, disabled: true, badge: 'New' },
+    {
+      key: 'overview',
+      label: 'Overview',
+      content: <Text size="sm">Overview content</Text>,
+      badge: 3,
+    },
+    {
+      key: 'billing',
+      label: 'Billing',
+      content: <Text size="sm">Billing content</Text>,
+    },
+    {
+      key: 'history',
+      label: 'History',
+      content: <Text size="sm">History content</Text>,
+      disabled: true,
+      badge: 'New',
+    },
   ],
   sidebar: <Text size="sm">Sidebar content</Text>,
   footer: <Text size="sm">Footer content</Text>,
@@ -734,14 +769,45 @@ interface DataTableFixtureRow {
 }
 
 const DATA_TABLE_ROWS: DataTableFixtureRow[] = [
-  { id: 'dt-1', name: 'Ada Lovelace', role: 'Engineer', status: 'active', amount: 1200 },
-  { id: 'dt-2', name: 'Grace Hopper', role: 'Admiral', status: 'active', amount: 980 },
-  { id: 'dt-3', name: 'Alan Turing', role: 'Researcher', status: 'inactive', amount: 640 },
-  { id: 'dt-4', name: 'Katherine Johnson', role: 'Mathematician', status: 'active', amount: 1500 },
+  {
+    id: 'dt-1',
+    name: 'Ada Lovelace',
+    role: 'Engineer',
+    status: 'active',
+    amount: 1200,
+  },
+  {
+    id: 'dt-2',
+    name: 'Grace Hopper',
+    role: 'Admiral',
+    status: 'active',
+    amount: 980,
+  },
+  {
+    id: 'dt-3',
+    name: 'Alan Turing',
+    role: 'Researcher',
+    status: 'inactive',
+    amount: 640,
+  },
+  {
+    id: 'dt-4',
+    name: 'Katherine Johnson',
+    role: 'Mathematician',
+    status: 'active',
+    amount: 1500,
+  },
 ];
 
 const DATA_TABLE_COLUMNS: ColumnDef<DataTableFixtureRow>[] = [
-  { key: 'name', header: 'Name', accessorKey: 'name', sortable: true, pin: 'left', width: 160 },
+  {
+    key: 'name',
+    header: 'Name',
+    accessorKey: 'name',
+    sortable: true,
+    pin: 'left',
+    width: 160,
+  },
   {
     key: 'status',
     header: 'Status',
@@ -782,22 +848,28 @@ function DataTableStates() {
           groupBy="status"
           expandedRow={(row) => <Text size="sm">{`Details for ${row.name}`}</Text>}
           bulkActions={[
-            { key: 'archive', label: 'Archive', variant: 'danger', onExecute: () => undefined },
-            { key: 'export', label: 'Export', variant: 'primary', onExecute: () => undefined },
+            {
+              key: 'archive',
+              label: 'Archive',
+              variant: 'danger',
+              onExecute: () => undefined,
+            },
+            {
+              key: 'export',
+              label: 'Export',
+              variant: 'primary',
+              onExecute: () => undefined,
+            },
           ]}
-          pagination={{ current: 1, pageSize: 2, total: DATA_TABLE_ROWS.length, onChange: () => undefined }}
+          pagination={{
+            current: 1,
+            pageSize: 2,
+            total: DATA_TABLE_ROWS.length,
+            onChange: () => undefined,
+          }}
         />
-        <PatternDataTable<DataTableFixtureRow>
-          data={[]}
-          rowKey="id"
-          columns={DATA_TABLE_COLUMNS}
-          loading
-        />
-        <PatternDataTable<DataTableFixtureRow>
-          data={[]}
-          rowKey="id"
-          columns={DATA_TABLE_COLUMNS}
-        />
+        <PatternDataTable<DataTableFixtureRow> data={[]} rowKey="id" columns={DATA_TABLE_COLUMNS} loading />
+        <PatternDataTable<DataTableFixtureRow> data={[]} rowKey="id" columns={DATA_TABLE_COLUMNS} />
       </Stack>
     </Box>
   );
@@ -828,7 +900,9 @@ function FieldsStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-fields-input">
-          <Text size="xs" color="secondary">Input</Text>
+          <Text size="xs" color="secondary">
+            Input
+          </Text>
           <Input placeholder="Plain" />
           <Input prefix="$" suffix="USD" clearable defaultValue="120" />
           <Input error errorMessage="This field is required" defaultValue="bad value" />
@@ -844,27 +918,35 @@ function FieldsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-slider">
-          <Text size="xs" color="secondary">Slider</Text>
+          <Text size="xs" color="secondary">
+            Slider
+          </Text>
           <Slider defaultValue={40} />
           <Slider range defaultValue={[20, 70]} marks={{ 0: 'Min', 100: 'Max' }} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-inputnumber">
-          <Text size="xs" color="secondary">InputNumber</Text>
+          <Text size="xs" color="secondary">
+            InputNumber
+          </Text>
           <InputNumber defaultValue={12} />
           <InputNumber prefix="$" suffix="USD" addonBefore="Qty" addonAfter="ea" defaultValue={5} />
           <InputNumber status="error" defaultValue={-1} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-passwordinput">
-          <Text size="xs" color="secondary">PasswordInput</Text>
+          <Text size="xs" color="secondary">
+            PasswordInput
+          </Text>
           <PasswordInput defaultValue="hunter2" />
           <PasswordInput error errorMessage="Too short" defaultValue="a" />
           <PasswordInput strengthIndicator strengthLevel="good" defaultValue="Abcd1234" />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-radio">
-          <Text size="xs" color="secondary">Radio</Text>
+          <Text size="xs" color="secondary">
+            Radio
+          </Text>
           <Radio name="probe-radio" label="Unchecked" />
           <Radio name="probe-radio" label="Checked" checked onChange={() => undefined} />
           <Radio name="probe-radio" label="Disabled" disabled />
@@ -879,13 +961,17 @@ function FieldsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-taginput">
-          <Text size="xs" color="secondary">TagInput</Text>
+          <Text size="xs" color="secondary">
+            TagInput
+          </Text>
           <TagInput value={['design', 'system']} onChange={() => undefined} />
           <TagInput value={[]} error errorMessage="At least one tag required" onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-checkbox">
-          <Text size="xs" color="secondary">Checkbox</Text>
+          <Text size="xs" color="secondary">
+            Checkbox
+          </Text>
           <Checkbox label="Unchecked" />
           <Checkbox label="Checked" checked onChange={() => undefined} />
           <Checkbox label="Indeterminate" indeterminate onChange={() => undefined} />
@@ -900,7 +986,9 @@ function FieldsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-form">
-          <Text size="xs" color="secondary">Form</Text>
+          <Text size="xs" color="secondary">
+            Form
+          </Text>
           <Form>
             <Form.Item label="Email" required help="We never share it">
               <Input placeholder="you@example.com" />
@@ -912,7 +1000,9 @@ function FieldsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-toggle">
-          <Text size="xs" color="secondary">Toggle</Text>
+          <Text size="xs" color="secondary">
+            Toggle
+          </Text>
           <Toggle label="Off" checked={false} onChange={() => undefined} />
           <Toggle label="On" checked onChange={() => undefined} />
           <Toggle label="Error" error checked={false} onChange={() => undefined} />
@@ -920,7 +1010,9 @@ function FieldsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-switch">
-          <Text size="xs" color="secondary">Switch</Text>
+          <Text size="xs" color="secondary">
+            Switch
+          </Text>
           <Switch checked={false} onChange={() => undefined} checkedChildren="On" unCheckedChildren="Off" />
           <Switch checked onChange={() => undefined} checkedChildren="On" unCheckedChildren="Off" />
           <Switch disabled />
@@ -928,26 +1020,34 @@ function FieldsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-otpinput">
-          <Text size="xs" color="secondary">OTPInput</Text>
+          <Text size="xs" color="secondary">
+            OTPInput
+          </Text>
           <OTPInput length={6} value="12" onChange={() => undefined} />
           <OTPInput length={6} value="" error errorMessage="Invalid code" onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-textarea">
-          <Text size="xs" color="secondary">Textarea</Text>
+          <Text size="xs" color="secondary">
+            Textarea
+          </Text>
           <Textarea placeholder="Comment" rows={3} />
           <Textarea status="error" defaultValue="Bad value" rows={3} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-button-icon">
-          <Text size="xs" color="secondary">Button.Icon</Text>
+          <Text size="xs" color="secondary">
+            Button.Icon
+          </Text>
           <Button.Icon icon={<span aria-hidden>+</span>} aria-label="Add" />
           <Button.Icon icon={<span aria-hidden>+</span>} aria-label="Add (disabled)" disabled />
           <Button.Icon icon={<span aria-hidden>+</span>} aria-label="Add (loading)" loading />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-formfield">
-          <Text size="xs" color="secondary">FormField</Text>
+          <Text size="xs" color="secondary">
+            FormField
+          </Text>
           <FormField label="Username" name="probe-username" required help="3-20 characters">
             <Input />
           </FormField>
@@ -957,7 +1057,9 @@ function FieldsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-fields-voiceinputbutton">
-          <Text size="xs" color="secondary">VoiceInputButton</Text>
+          <Text size="xs" color="secondary">
+            VoiceInputButton
+          </Text>
           <VoiceInputButton lang="en-US" onTranscript={() => undefined} />
         </Stack>
       </Box>
@@ -991,7 +1093,11 @@ const CASCADER_OPTIONS = [
     value: 'us',
     label: 'United States',
     children: [
-      { value: 'us-ca', label: 'California', children: [{ value: 'us-ca-sf', label: 'San Francisco' }] },
+      {
+        value: 'us-ca',
+        label: 'California',
+        children: [{ value: 'us-ca-sf', label: 'San Francisco' }],
+      },
       { value: 'us-ny', label: 'New York' },
     ],
   },
@@ -1035,7 +1141,9 @@ function DropdownsStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-dropdowns-select">
-          <Text size="xs" color="secondary">Select</Text>
+          <Text size="xs" color="secondary">
+            Select
+          </Text>
           <Select options={DROPDOWN_OPTIONS} placeholder="Choose a team" onChange={() => undefined} />
           <Select options={DROPDOWN_OPTIONS} defaultValue="engineering" onChange={() => undefined} />
           <Select
@@ -1050,30 +1158,42 @@ function DropdownsStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-dropdowns-treeselect">
-          <Text size="xs" color="secondary">TreeSelect</Text>
+          <Text size="xs" color="secondary">
+            TreeSelect
+          </Text>
           <TreeSelect treeData={TREE_SELECT_DATA} placeholder="Choose a node" onChange={() => undefined} />
           <TreeSelect treeData={TREE_SELECT_DATA} defaultValue="frontend" onChange={() => undefined} />
           <TreeSelect treeData={TREE_SELECT_DATA} disabled defaultValue="design" onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-dropdowns-cascader">
-          <Text size="xs" color="secondary">Cascader</Text>
+          <Text size="xs" color="secondary">
+            Cascader
+          </Text>
           <Cascader options={CASCADER_OPTIONS} placeholder="Choose a location" onChange={() => undefined} />
           <Cascader options={CASCADER_OPTIONS} defaultValue={['us', 'us-ca', 'us-ca-sf']} onChange={() => undefined} />
           <Cascader options={CASCADER_OPTIONS} disabled defaultValue={['ca']} onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-dropdowns-autocomplete">
-          <Text size="xs" color="secondary">AutoComplete</Text>
+          <Text size="xs" color="secondary">
+            AutoComplete
+          </Text>
           <AutoComplete options={AUTOCOMPLETE_OPTIONS} placeholder="Search a framework" onChange={() => undefined} />
           <AutoComplete options={AUTOCOMPLETE_OPTIONS} defaultValue="React" onChange={() => undefined} />
           <AutoComplete options={AUTOCOMPLETE_OPTIONS} disabled defaultValue="Vue" onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-dropdowns-mentions">
-          <Text size="xs" color="secondary">Mentions</Text>
+          <Text size="xs" color="secondary">
+            Mentions
+          </Text>
           <Mentions options={MENTIONS_OPTIONS} placeholder="Type @ to mention someone" onChange={() => undefined} />
-          <Mentions options={MENTIONS_OPTIONS} defaultValue="Hey @ada, can you review this?" onChange={() => undefined} />
+          <Mentions
+            options={MENTIONS_OPTIONS}
+            defaultValue="Hey @ada, can you review this?"
+            onChange={() => undefined}
+          />
           <Mentions options={MENTIONS_OPTIONS} disabled defaultValue="Assigned to @grace" onChange={() => undefined} />
         </Stack>
       </Box>
@@ -1089,9 +1209,24 @@ function DropdownsStates() {
 // This section is what `pickers-batch.spec.ts` photographs and reads
 // computed styles from.
 const PICKERS_UPLOAD_FILES = [
-  { uid: 'file-done', name: 'quarterly-report.pdf', status: 'done' as const, percent: 100 },
-  { uid: 'file-uploading', name: 'roadmap-deck.pptx', status: 'uploading' as const, percent: 42 },
-  { uid: 'file-error', name: 'budget.xlsx', status: 'error' as const, percent: 0 },
+  {
+    uid: 'file-done',
+    name: 'quarterly-report.pdf',
+    status: 'done' as const,
+    percent: 100,
+  },
+  {
+    uid: 'file-uploading',
+    name: 'roadmap-deck.pptx',
+    status: 'uploading' as const,
+    percent: 42,
+  },
+  {
+    uid: 'file-error',
+    name: 'budget.xlsx',
+    status: 'error' as const,
+    percent: 0,
+  },
 ];
 
 const PICKERS_TRANSFER_ITEMS = [
@@ -1103,9 +1238,7 @@ const PICKERS_TRANSFER_ITEMS = [
 
 const PICKERS_TRANSFER_TARGET_KEYS = ['engineering'];
 
-const PICKERS_COLOR_PRESETS = [
-  { label: 'Brand', colors: ['#1677ff', '#52c41a', '#f5222d'] },
-];
+const PICKERS_COLOR_PRESETS = [{ label: 'Brand', colors: ['#1677ff', '#52c41a', '#f5222d'] }];
 
 function PickersStates() {
   return (
@@ -1126,35 +1259,37 @@ function PickersStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-pickers-datepicker">
-          <Text size="xs" color="secondary">DatePicker</Text>
+          <Text size="xs" color="secondary">
+            DatePicker
+          </Text>
           <DatePicker placeholder="Choose a date" onChange={() => undefined} />
           <DatePicker defaultValue="2026-03-15" onChange={() => undefined} />
           <DatePicker disabled defaultValue="2026-01-01" onChange={() => undefined} />
-          <DatePicker.RangePicker
-            defaultValue={['2026-01-01', '2026-01-10']}
-            onChange={() => undefined}
-          />
+          <DatePicker.RangePicker defaultValue={['2026-01-01', '2026-01-10']} onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-pickers-timepicker">
-          <Text size="xs" color="secondary">TimePicker</Text>
+          <Text size="xs" color="secondary">
+            TimePicker
+          </Text>
           <TimePicker placeholder="Choose a time" onChange={() => undefined} />
           <TimePicker defaultValue="14:30" onChange={() => undefined} />
           <TimePicker disabled defaultValue="09:00" onChange={() => undefined} />
-          <TimePicker.RangePicker
-            defaultValue={['09:00', '17:00']}
-            onChange={() => undefined}
-          />
+          <TimePicker.RangePicker defaultValue={['09:00', '17:00']} onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-pickers-upload">
-          <Text size="xs" color="secondary">Upload</Text>
+          <Text size="xs" color="secondary">
+            Upload
+          </Text>
           <Upload fileList={PICKERS_UPLOAD_FILES} onChange={() => undefined} />
           <Upload.Dragger fileList={PICKERS_UPLOAD_FILES} onChange={() => undefined} height={120} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-pickers-transfer">
-          <Text size="xs" color="secondary">Transfer</Text>
+          <Text size="xs" color="secondary">
+            Transfer
+          </Text>
           <Transfer
             dataSource={PICKERS_TRANSFER_ITEMS}
             defaultTargetKeys={PICKERS_TRANSFER_TARGET_KEYS}
@@ -1164,7 +1299,9 @@ function PickersStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-pickers-colorpicker">
-          <Text size="xs" color="secondary">ColorPicker</Text>
+          <Text size="xs" color="secondary">
+            ColorPicker
+          </Text>
           <ColorPicker defaultValue="#1677ff" showText presets={PICKERS_COLOR_PRESETS} onChange={() => undefined} />
           <ColorPicker disabled defaultValue="#52c41a" onChange={() => undefined} />
         </Stack>
@@ -1201,7 +1338,9 @@ function StatusFbStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-statusfb-alert">
-          <Text size="xs" color="secondary">Alert</Text>
+          <Text size="xs" color="secondary">
+            Alert
+          </Text>
           <Alert type="info" message="Info alert" description="Informational description text." />
           <Alert type="success" message="Success alert" description="Everything worked." />
           <Alert type="warning" message="Warning alert" description="Something needs attention." />
@@ -1210,7 +1349,9 @@ function StatusFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-statusfb-progress">
-          <Text size="xs" color="secondary">Progress</Text>
+          <Text size="xs" color="secondary">
+            Progress
+          </Text>
           <Progress type="line" percent={42} status="normal" />
           <Progress type="line" percent={42} status="success" />
           <Progress type="line" percent={42} status="error" />
@@ -1221,7 +1362,9 @@ function StatusFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-statusfb-skeleton">
-          <Text size="xs" color="secondary">Skeleton</Text>
+          <Text size="xs" color="secondary">
+            Skeleton
+          </Text>
           {/* Shape-variant branch (engines/*.tsx early return) */}
           <Skeleton variant="rounded" width="100%" height={80} />
           {/* Text/default-variant branch (avatar + title + paragraph) */}
@@ -1237,7 +1380,9 @@ function StatusFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-statusfb-spinner">
-          <Text size="xs" color="secondary">Spinner</Text>
+          <Text size="xs" color="secondary">
+            Spinner
+          </Text>
           <Spinner size="sm" label="Small" />
           <Spinner size="md" label="Medium" />
           <Spinner size="lg" label="Large" />
@@ -1245,7 +1390,9 @@ function StatusFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-statusfb-rate">
-          <Text size="xs" color="secondary">Rate</Text>
+          <Text size="xs" color="secondary">
+            Rate
+          </Text>
           <Rate defaultValue={5} count={5} onChange={() => undefined} />
           <Rate defaultValue={2.5} allowHalf onChange={() => undefined} />
           <Rate defaultValue={3} readOnly onChange={() => undefined} />
@@ -1314,7 +1461,9 @@ function OverlayFbStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-overlayfb-modal">
-          <Text size="xs" color="secondary">Modal</Text>
+          <Text size="xs" color="secondary">
+            Modal
+          </Text>
           <Button data-testid="probe-overlayfb-modal-trigger" onClick={() => setModalOpen(true)}>
             Open modal
           </Button>
@@ -1331,7 +1480,9 @@ function OverlayFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlayfb-drawer">
-          <Text size="xs" color="secondary">Drawer</Text>
+          <Text size="xs" color="secondary">
+            Drawer
+          </Text>
           <Button data-testid="probe-overlayfb-drawer-trigger" onClick={() => setDrawerOpen(true)}>
             Open drawer
           </Button>
@@ -1346,7 +1497,9 @@ function OverlayFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlayfb-toast">
-          <Text size="xs" color="secondary">Toast</Text>
+          <Text size="xs" color="secondary">
+            Toast
+          </Text>
           <Toast
             variant="success"
             title="Inline toast"
@@ -1363,7 +1516,9 @@ function OverlayFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlayfb-message">
-          <Text size="xs" color="secondary">Message</Text>
+          <Text size="xs" color="secondary">
+            Message
+          </Text>
           <MessageItem
             id="probe-overlayfb-message-1"
             type="success"
@@ -1375,7 +1530,9 @@ function OverlayFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlayfb-notification">
-          <Text size="xs" color="secondary">Notification</Text>
+          <Text size="xs" color="secondary">
+            Notification
+          </Text>
           <NotificationItem
             id="probe-overlayfb-notification-1"
             type="warning"
@@ -1388,7 +1545,9 @@ function OverlayFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlayfb-result">
-          <Text size="xs" color="secondary">Result</Text>
+          <Text size="xs" color="secondary">
+            Result
+          </Text>
           <Result
             status="success"
             title="All done"
@@ -1443,7 +1602,9 @@ function OverlayStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-overlay-modal">
-          <Text size="xs" color="secondary">Modal</Text>
+          <Text size="xs" color="secondary">
+            Modal
+          </Text>
           <Button data-testid="probe-overlay-modal-trigger" onClick={() => setModalOpen(true)}>
             Open modal
           </Button>
@@ -1459,7 +1620,9 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-tour">
-          <Text size="xs" color="secondary">Tour</Text>
+          <Text size="xs" color="secondary">
+            Tour
+          </Text>
           <span data-testid="probe-overlay-tour-target" style={{ display: 'inline-block', padding: 4 }}>
             Target element
           </span>
@@ -1486,7 +1649,9 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-confirmdialog">
-          <Text size="xs" color="secondary">ConfirmDialog</Text>
+          <Text size="xs" color="secondary">
+            ConfirmDialog
+          </Text>
           <Button data-testid="probe-overlay-confirmdialog-trigger" onClick={() => setConfirmDialogOpen(true)}>
             Open confirm dialog
           </Button>
@@ -1501,7 +1666,9 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-alertdialog">
-          <Text size="xs" color="secondary">AlertDialog</Text>
+          <Text size="xs" color="secondary">
+            AlertDialog
+          </Text>
           <Button data-testid="probe-overlay-alertdialog-trigger" onClick={() => setAlertDialogOpen(true)}>
             Open alert dialog
           </Button>
@@ -1519,7 +1686,9 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-popconfirm">
-          <Text size="xs" color="secondary">Popconfirm</Text>
+          <Text size="xs" color="secondary">
+            Popconfirm
+          </Text>
           <Popconfirm
             title="Remove item?"
             description="This action cannot be undone."
@@ -1532,7 +1701,9 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-sheet">
-          <Text size="xs" color="secondary">Sheet</Text>
+          <Text size="xs" color="secondary">
+            Sheet
+          </Text>
           <Button data-testid="probe-overlay-sheet-trigger" onClick={() => setSheetOpen(true)}>
             Open sheet
           </Button>
@@ -1542,7 +1713,9 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-contextmenu">
-          <Text size="xs" color="secondary">ContextMenu</Text>
+          <Text size="xs" color="secondary">
+            ContextMenu
+          </Text>
           <ContextMenu
             items={[
               { key: 'edit', label: 'Edit', shortcut: 'Ctrl+E' },
@@ -1561,21 +1734,27 @@ function OverlayStates() {
                   textAlign: 'center' as const,
                 }}
               >
-                <Text size="xs" color="secondary">Right-click here</Text>
+                <Text size="xs" color="secondary">
+                  Right-click here
+                </Text>
               </Box>
             }
           />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-popover">
-          <Text size="xs" color="secondary">Popover</Text>
+          <Text size="xs" color="secondary">
+            Popover
+          </Text>
           <Popover title="Popover title" content="Popover content text." trigger="click" arrow>
             <Button data-testid="probe-overlay-popover-trigger">Open popover</Button>
           </Popover>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-dropdown">
-          <Text size="xs" color="secondary">Dropdown</Text>
+          <Text size="xs" color="secondary">
+            Dropdown
+          </Text>
           <Dropdown
             trigger={['click']}
             menu={{
@@ -1593,7 +1772,9 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-hovercard">
-          <Text size="xs" color="secondary">HoverCard</Text>
+          <Text size="xs" color="secondary">
+            HoverCard
+          </Text>
           <HoverCard
             content="Hover card content."
             openDelay={0}
@@ -1603,9 +1784,17 @@ function OverlayStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-overlay-watermark">
-          <Text size="xs" color="secondary">Watermark</Text>
+          <Text size="xs" color="secondary">
+            Watermark
+          </Text>
           <Watermark content="Draft">
-            <Box style={{ padding: 24, minHeight: 100, background: 'var(--ds-color-bg-primary)' }}>
+            <Box
+              style={{
+                padding: 24,
+                minHeight: 100,
+                background: 'var(--ds-color-bg-primary)',
+              }}
+            >
               <Text size="sm">Watermarked content</Text>
             </Box>
           </Watermark>
@@ -1653,9 +1842,22 @@ const NAV_STEPS_ITEMS = [
 ];
 
 const NAV_TABS_ITEMS = [
-  { key: 'tab-1', label: 'Overview', children: <Text size="xs">Overview content</Text> },
-  { key: 'tab-2', label: 'Activity 4', children: <Text size="xs">Activity content</Text> },
-  { key: 'tab-3', label: 'Settings', disabled: true, children: <Text size="xs">Settings content</Text> },
+  {
+    key: 'tab-1',
+    label: 'Overview',
+    children: <Text size="xs">Overview content</Text>,
+  },
+  {
+    key: 'tab-2',
+    label: 'Activity 4',
+    children: <Text size="xs">Activity content</Text>,
+  },
+  {
+    key: 'tab-3',
+    label: 'Settings',
+    disabled: true,
+    children: <Text size="xs">Settings content</Text>,
+  },
 ];
 
 const NAV_SEGMENTED_OPTIONS = [
@@ -1695,17 +1897,32 @@ function NavFbStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-nav-menu">
-          <Text size="xs" color="secondary">Menu (items form)</Text>
-          <Menu items={NAV_MENU_ITEMS} selectedKeys={['selected']} defaultOpenKeys={['submenu']} onSelect={() => undefined} />
+          <Text size="xs" color="secondary">
+            Menu (items form)
+          </Text>
+          <Menu
+            items={NAV_MENU_ITEMS}
+            selectedKeys={['selected']}
+            defaultOpenKeys={['submenu']}
+            onSelect={() => undefined}
+          />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-menu-compound">
-          <Text size="xs" color="secondary">Menu (compound form)</Text>
+          <Text size="xs" color="secondary">
+            Menu (compound form)
+          </Text>
           <Menu selectedKeys={['compound-selected']} onSelect={() => undefined}>
-            <Menu.Item itemKey="compound-home" icon={<TagIcon />}>Home</Menu.Item>
+            <Menu.Item itemKey="compound-home" icon={<TagIcon />}>
+              Home
+            </Menu.Item>
             <Menu.Item itemKey="compound-selected">Selected item</Menu.Item>
-            <Menu.Item itemKey="compound-disabled" disabled>Disabled item</Menu.Item>
-            <Menu.Item itemKey="compound-danger" danger>Danger item</Menu.Item>
+            <Menu.Item itemKey="compound-disabled" disabled>
+              Disabled item
+            </Menu.Item>
+            <Menu.Item itemKey="compound-danger" danger>
+              Danger item
+            </Menu.Item>
             <Menu.Divider />
             <Menu.SubMenu itemKey="compound-submenu" title="Submenu">
               <Menu.Item itemKey="compound-submenu-child">Child</Menu.Item>
@@ -1717,10 +1934,18 @@ function NavFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-floatbutton">
-          <Text size="xs" color="secondary">FloatButton</Text>
+          <Text size="xs" color="secondary">
+            FloatButton
+          </Text>
           <Box style={{ display: 'flex', gap: 12, position: 'relative' }}>
             <FloatButton icon={<TagIcon />} type="default" badge={{ count: 3 }} style={{ position: 'static' }} />
-            <FloatButton icon={<TagIcon />} type="primary" shape="circle" badge={{ dot: true }} style={{ position: 'static' }} />
+            <FloatButton
+              icon={<TagIcon />}
+              type="primary"
+              shape="circle"
+              badge={{ dot: true }}
+              style={{ position: 'static' }}
+            />
           </Box>
           <FloatButton.Group trigger="click" icon={<TagIcon />} style={{ position: 'static' }}>
             <FloatButton icon={<TagIcon />} style={{ position: 'static' }} />
@@ -1729,22 +1954,30 @@ function NavFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-tabs">
-          <Text size="xs" color="secondary">Tabs</Text>
+          <Text size="xs" color="secondary">
+            Tabs
+          </Text>
           <Tabs items={NAV_TABS_ITEMS} activeKey="tab-1" type="line" onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-steps">
-          <Text size="xs" color="secondary">Steps</Text>
+          <Text size="xs" color="secondary">
+            Steps
+          </Text>
           <Steps items={NAV_STEPS_ITEMS} current={1} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-stepper">
-          <Text size="xs" color="secondary">Stepper (items form)</Text>
+          <Text size="xs" color="secondary">
+            Stepper (items form)
+          </Text>
           <Stepper items={NAV_STEPS_ITEMS} current={1} clickable onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-stepper-compound">
-          <Text size="xs" color="secondary">Stepper (compound form)</Text>
+          <Text size="xs" color="secondary">
+            Stepper (compound form)
+          </Text>
           <Stepper current={0}>
             <Stepper.Step title="Account" status="finish" />
             <Stepper.Step title="Profile" status="process" />
@@ -1756,43 +1989,64 @@ function NavFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-pagination">
-          <Text size="xs" color="secondary">Pagination</Text>
+          <Text size="xs" color="secondary">
+            Pagination
+          </Text>
           <Pagination current={1} total={100} pageSize={10} onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-segmented">
-          <Text size="xs" color="secondary">Segmented</Text>
+          <Text size="xs" color="secondary">
+            Segmented
+          </Text>
           <Segmented options={NAV_SEGMENTED_OPTIONS} value="list" onChange={() => undefined} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-backtop">
-          <Text size="xs" color="secondary">BackTop</Text>
+          <Text size="xs" color="secondary">
+            BackTop
+          </Text>
           <BackTop visibilityHeight={0} style={{ position: 'static' }} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-breadcrumb">
-          <Text size="xs" color="secondary">Breadcrumb (items form)</Text>
+          <Text size="xs" color="secondary">
+            Breadcrumb (items form)
+          </Text>
           <Breadcrumb items={NAV_BREADCRUMB_ITEMS} />
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-breadcrumb-compound">
-          <Text size="xs" color="secondary">Breadcrumb (compound form)</Text>
+          <Text size="xs" color="secondary">
+            Breadcrumb (compound form)
+          </Text>
           <Breadcrumb items={[]}>
             <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
-            <Breadcrumb.Item href="/docs" icon={<TagIcon />}>Docs</Breadcrumb.Item>
+            <Breadcrumb.Item href="/docs" icon={<TagIcon />}>
+              Docs
+            </Breadcrumb.Item>
             <Breadcrumb.Item>Current page</Breadcrumb.Item>
           </Breadcrumb>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-bottomtabbar">
-          <Text size="xs" color="secondary">BottomTabBar</Text>
+          <Text size="xs" color="secondary">
+            BottomTabBar
+          </Text>
           <Box style={{ position: 'relative', height: 64 }}>
-            <BottomTabBar items={NAV_BOTTOMTABBAR_ITEMS} activeKey="home" onChange={() => undefined} style={{ position: 'static' }} />
+            <BottomTabBar
+              items={NAV_BOTTOMTABBAR_ITEMS}
+              activeKey="home"
+              onChange={() => undefined}
+              style={{ position: 'static' }}
+            />
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-anchor">
-          <Text size="xs" color="secondary">Anchor</Text>
+          <Text size="xs" color="secondary">
+            Anchor
+          </Text>
           <Anchor affix={false}>
             <Anchor.Link href="#nav-anchor-intro" title="Introduction" />
             <Anchor.Link href="#nav-anchor-features" title="Features">
@@ -1802,24 +2056,34 @@ function NavFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-mobileheader">
-          <Text size="xs" color="secondary">MobileHeader</Text>
+          <Text size="xs" color="secondary">
+            MobileHeader
+          </Text>
           <Box style={{ position: 'relative' }}>
             <MobileHeader title="Order Details" onBack={() => undefined} style={{ position: 'static' }} />
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-actiondock">
-          <Text size="xs" color="secondary">ActionDock</Text>
+          <Text size="xs" color="secondary">
+            ActionDock
+          </Text>
           <Box style={{ position: 'relative', height: 64 }}>
             <ActionDock position="bottom" style={{ position: 'static' }}>
-              <Button variant="secondary" style={{ flex: 1 }}>Cancel</Button>
-              <Button variant="primary" style={{ flex: 1 }}>Save</Button>
+              <Button variant="secondary" style={{ flex: 1 }}>
+                Cancel
+              </Button>
+              <Button variant="primary" style={{ flex: 1 }}>
+                Save
+              </Button>
             </ActionDock>
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-affix">
-          <Text size="xs" color="secondary">Affix</Text>
+          <Text size="xs" color="secondary">
+            Affix
+          </Text>
           <Affix offsetTop={0}>
             <Box style={{ padding: 8, background: 'var(--ds-color-bg-primary)' }}>
               <Text size="xs">Affixed content</Text>
@@ -1828,11 +2092,17 @@ function NavFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-nav-link">
-          <Text size="xs" color="secondary">Link</Text>
+          <Text size="xs" color="secondary">
+            Link
+          </Text>
           <Stack spacing="xs">
             <NavLink href="/nav-link-default">Default link</NavLink>
-            <NavLink href="/nav-link-primary" type="primary">Primary link</NavLink>
-            <NavLink href="/nav-link-disabled" disabled>Disabled link</NavLink>
+            <NavLink href="/nav-link-primary" type="primary">
+              Primary link
+            </NavLink>
+            <NavLink href="/nav-link-disabled" disabled>
+              Disabled link
+            </NavLink>
           </Stack>
         </Stack>
       </Box>
@@ -1878,42 +2148,105 @@ function Display1States() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-display1-card">
-          <Text size="xs" color="secondary">Card</Text>
+          <Text size="xs" color="secondary">
+            Card
+          </Text>
           <Stack spacing="sm">
             <Card variant="elevated" title="Elevated" description="Rest state" />
-            <Card variant="outlined" title="Outlined" hoverable divider actions={[<Button key="a" size="xs">Action</Button>]} />
+            <Card
+              variant="outlined"
+              title="Outlined"
+              hoverable
+              divider
+              actions={[
+                <Button key="a" size="xs">
+                  Action
+                </Button>,
+              ]}
+            />
             <Card variant="filled" colorVariant="success" title="Toned" clickable onClick={() => undefined} />
             <Card variant="ghost" loading title="Loading" />
-            <Card.Header title="Header title" subtitle="Header subtitle" divider avatar={<Avatar size="sm" name="AB" />} extra={<Button size="xs">Extra</Button>} />
+            <Card.Header
+              title="Header title"
+              subtitle="Header subtitle"
+              divider
+              avatar={<Avatar size="sm" name="AB" />}
+              extra={<Button size="xs">Extra</Button>}
+            />
             <Card.Body padding="sm">Body content</Card.Body>
-            <Card.Footer divider align="space-between" actions={[<Button key="f" size="xs">Save</Button>]} />
-            <Card.Image src={DISPLAY1_VALID_IMG} alt="Cover" height={64} overlay={<Badge variant="success" content="New" />} gradient />
+            <Card.Footer
+              divider
+              align="space-between"
+              actions={[
+                <Button key="f" size="xs">
+                  Save
+                </Button>,
+              ]}
+            />
+            <Card.Image
+              src={DISPLAY1_VALID_IMG}
+              alt="Cover"
+              height={64}
+              overlay={<Badge variant="success" content="New" />}
+              gradient
+            />
           </Stack>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-image">
-          <Text size="xs" color="secondary">Image (loaded / loading / error)</Text>
+          <Text size="xs" color="secondary">
+            Image (loaded / loading / error)
+          </Text>
           <Box style={{ display: 'flex', gap: 8 }}>
             <Image src={DISPLAY1_VALID_IMG} alt="Loaded" width={64} height={64} bordered shadow />
             <Image src="" alt="Loading" width={64} height={64} />
             <Image src={DISPLAY1_BROKEN_IMG} alt="Errored" width={64} height={64} />
-            <Image src={DISPLAY1_VALID_IMG} alt="Zoomable" width={64} height={64} zoomable hoverOverlay={<Text size="xs">View</Text>} />
+            <Image
+              src={DISPLAY1_VALID_IMG}
+              alt="Zoomable"
+              width={64}
+              height={64}
+              zoomable
+              hoverOverlay={<Text size="xs">View</Text>}
+            />
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-carousel">
-          <Text size="xs" color="secondary">Carousel</Text>
+          <Text size="xs" color="secondary">
+            Carousel
+          </Text>
           <Box style={{ position: 'relative', height: 120 }}>
             <Carousel arrows dots>
-              <div style={{ background: 'var(--ds-color-primary)', width: '100%', height: '100%' }} />
-              <div style={{ background: 'var(--ds-color-secondary)', width: '100%', height: '100%' }} />
-              <div style={{ background: 'var(--ds-color-success)', width: '100%', height: '100%' }} />
+              <div
+                style={{
+                  background: 'var(--ds-color-primary)',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+              <div
+                style={{
+                  background: 'var(--ds-color-secondary)',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
+              <div
+                style={{
+                  background: 'var(--ds-color-success)',
+                  width: '100%',
+                  height: '100%',
+                }}
+              />
             </Carousel>
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-qrcode">
-          <Text size="xs" color="secondary">QRCode (active / loading / expired / scanned)</Text>
+          <Text size="xs" color="secondary">
+            QRCode (active / loading / expired / scanned)
+          </Text>
           <Box style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <QRCode value="https://rottay.com" size={72} bordered />
             <QRCode value="https://rottay.com" size={72} status="loading" />
@@ -1923,7 +2256,9 @@ function Display1States() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-avatar">
-          <Text size="xs" color="secondary">Avatar (xs / md / xl -- P-75 clip/halo baseline, unfixed)</Text>
+          <Text size="xs" color="secondary">
+            Avatar (xs / md / xl -- P-75 clip/halo baseline, unfixed)
+          </Text>
           <Box style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <Avatar size="xs" name="AB" />
             <Avatar size="md" name="CD" />
@@ -1941,32 +2276,60 @@ function Display1States() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-badge">
-          <Text size="xs" color="secondary">Badge</Text>
-          <Box style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <Text size="xs" color="secondary">
+            Badge
+          </Text>
+          <Box
+            style={{
+              display: 'flex',
+              gap: 8,
+              flexWrap: 'wrap',
+              alignItems: 'center',
+            }}
+          >
             <Badge variant="primary" content="Solid" badgeStyle="solid" />
             <Badge variant="success" content="Soft" badgeStyle="soft" />
             <Badge variant="warning" content="Outline" badgeStyle="outline" bordered />
             <Badge variant="error" dot />
             <Badge tone="info" content="Closable" closable onClose={() => undefined} />
             <Badge variant="primary" count={5}>
-              <Box style={{ width: 32, height: 32, background: 'var(--ds-surface-panel)', borderRadius: 6 }} />
+              <Box
+                style={{
+                  width: 32,
+                  height: 32,
+                  background: 'var(--ds-surface-panel)',
+                  borderRadius: 6,
+                }}
+              />
             </Badge>
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-tag">
-          <Text size="xs" color="secondary">Tag</Text>
+          <Text size="xs" color="secondary">
+            Tag
+          </Text>
           <Box style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <Tag variant="default">Default</Tag>
-            <Tag variant="primary" outlined>Outlined</Tag>
-            <Tag variant="success" bordered>Bordered</Tag>
-            <Tag variant="warning" closable onClose={() => undefined}>Closable</Tag>
-            <Tag variant="error" clickable onClick={() => undefined} icon={<TagIcon />}>Clickable</Tag>
+            <Tag variant="primary" outlined>
+              Outlined
+            </Tag>
+            <Tag variant="success" bordered>
+              Bordered
+            </Tag>
+            <Tag variant="warning" closable onClose={() => undefined}>
+              Closable
+            </Tag>
+            <Tag variant="error" clickable onClick={() => undefined} icon={<TagIcon />}>
+              Clickable
+            </Tag>
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-kbd">
-          <Text size="xs" color="secondary">Kbd</Text>
+          <Text size="xs" color="secondary">
+            Kbd
+          </Text>
           <Box style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <Kbd size="sm">Shift</Kbd>
             <Kbd size="md">Ctrl</Kbd>
@@ -1975,7 +2338,9 @@ function Display1States() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display1-empty">
-          <Text size="xs" color="secondary">Empty</Text>
+          <Text size="xs" color="secondary">
+            Empty
+          </Text>
           <Box style={{ display: 'flex', gap: 16 }}>
             <Empty description="No records" image="default">
               <Button size="xs">Create</Button>
@@ -2041,7 +2406,9 @@ function Display2States() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-display2-tree">
-          <Text size="xs" color="secondary">Tree (selected / expanded / disabled / checkable)</Text>
+          <Text size="xs" color="secondary">
+            Tree (selected / expanded / disabled / checkable)
+          </Text>
           <Tree
             treeData={DISPLAY2_TREE_DATA}
             defaultExpandedKeys={['documents']}
@@ -2055,7 +2422,9 @@ function Display2States() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-calendar">
-          <Text size="xs" color="secondary">Calendar (selected != today, disabled Sundays)</Text>
+          <Text size="xs" color="secondary">
+            Calendar (selected != today, disabled Sundays)
+          </Text>
           <Calendar
             value={new Date(2026, 6, 8)}
             disabledDate={(date) => date.getDay() === 0}
@@ -2065,7 +2434,9 @@ function Display2States() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-list">
-          <Text size="xs" color="secondary">List (bordered, header/footer, split)</Text>
+          <Text size="xs" color="secondary">
+            List (bordered, header/footer, split)
+          </Text>
           <List
             header="Team members"
             footer="3 members"
@@ -2074,9 +2445,24 @@ function Display2States() {
             renderItem={(item) => {
               const name = String(item);
               return (
-                <List.Item key={name} actions={[<Button key="edit" size="xs">Edit</Button>]}>
+                <List.Item
+                  key={name}
+                  actions={[
+                    <Button key="edit" size="xs">
+                      Edit
+                    </Button>,
+                  ]}
+                >
                   <List.Item.Meta
-                    avatar={<Avatar size="sm" name={name.split(' ').map((part) => part[0]).join('')} />}
+                    avatar={
+                      <Avatar
+                        size="sm"
+                        name={name
+                          .split(' ')
+                          .map((part) => part[0])
+                          .join('')}
+                      />
+                    }
                     title={name}
                     description="Member"
                   />
@@ -2087,24 +2473,38 @@ function Display2States() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-timeline">
-          <Text size="xs" color="secondary">Timeline (tones + pending)</Text>
+          <Text size="xs" color="secondary">
+            Timeline (tones + pending)
+          </Text>
           <Timeline pending="Recording...">
-            <Timeline.Item color="success" label="09:00">Order placed</Timeline.Item>
-            <Timeline.Item color="warning" label="09:15">Payment pending</Timeline.Item>
-            <Timeline.Item color="error" label="09:30">Payment failed</Timeline.Item>
+            <Timeline.Item color="success" label="09:00">
+              Order placed
+            </Timeline.Item>
+            <Timeline.Item color="warning" label="09:15">
+              Payment pending
+            </Timeline.Item>
+            <Timeline.Item color="error" label="09:30">
+              Payment failed
+            </Timeline.Item>
           </Timeline>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-descriptions">
-          <Text size="xs" color="secondary">Descriptions (bordered, horizontal, spanning cell)</Text>
+          <Text size="xs" color="secondary">
+            Descriptions (bordered, horizontal, spanning cell)
+          </Text>
           <Descriptions title="Order #1029" bordered column={2}>
             <Descriptions.Item label="Status">Shipped</Descriptions.Item>
-            <Descriptions.Item label="Total" span={2}>$128.00</Descriptions.Item>
+            <Descriptions.Item label="Total" span={2}>
+              $128.00
+            </Descriptions.Item>
           </Descriptions>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-statistic">
-          <Text size="xs" color="secondary">Statistic + Countdown (trend variants, loading)</Text>
+          <Text size="xs" color="secondary">
+            Statistic + Countdown (trend variants, loading)
+          </Text>
           <Box style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
             <Statistic title="Revenue" value={128000} prefix="$" valueType="positive" />
             <Statistic title="Errors" value={12} valueType="negative" />
@@ -2114,29 +2514,45 @@ function Display2States() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-typography">
-          <Text size="xs" color="secondary">Typography (Heading / Text / Paragraph / Link)</Text>
+          <Text size="xs" color="secondary">
+            Typography (Heading / Text / Paragraph / Link)
+          </Text>
           <Stack spacing="xs">
-            <Heading level="h3" color="primary">Section heading</Heading>
+            <Heading level="h3" color="primary">
+              Section heading
+            </Heading>
             <Text color="muted">Muted inline text</Text>
             <Paragraph color="secondary">A short paragraph of body copy for size comparison.</Paragraph>
-            <Link href="/display2-link" color="primary">Learn more</Link>
+            <Link href="/display2-link" color="primary">
+              Learn more
+            </Link>
           </Stack>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-tooltip">
-          <Text size="xs" color="secondary">Tooltip (closed at rest; hover to open)</Text>
+          <Text size="xs" color="secondary">
+            Tooltip (closed at rest; hover to open)
+          </Text>
           <Box style={{ paddingTop: 32, paddingBottom: 16 }}>
             <Tooltip content="Pinned tooltip content" placement="top">
-              <Button data-testid="probe-display2-tooltip-trigger" size="xs">Hover me</Button>
+              <Button data-testid="probe-display2-tooltip-trigger" size="xs">
+                Hover me
+              </Button>
             </Tooltip>
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-display2-callout">
-          <Text size="xs" color="secondary">Callout (tones + closable + action)</Text>
+          <Text size="xs" color="secondary">
+            Callout (tones + closable + action)
+          </Text>
           <Stack spacing="xs">
-            <Callout tone="info" title="Heads up" closable onClose={() => undefined}>Informational message.</Callout>
-            <Callout tone="danger" title="Error" action={<Button size="xs">Retry</Button>}>Something failed.</Callout>
+            <Callout tone="info" title="Heads up" closable onClose={() => undefined}>
+              Informational message.
+            </Callout>
+            <Callout tone="danger" title="Error" action={<Button size="xs">Retry</Button>}>
+              Something failed.
+            </Callout>
           </Stack>
         </Stack>
       </Box>
@@ -2178,20 +2594,36 @@ function LayoutStates() {
         }}
       >
         <Stack spacing="xs" data-testid="probe-layout-box">
-          <Text size="xs" color="secondary">Box</Text>
+          <Text size="xs" color="secondary">
+            Box
+          </Text>
           <Box style={{ padding: 12, border: '1px dashed var(--ds-color-border)' }}>
             <Text size="xs">Plain style-injection Box</Text>
           </Box>
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-layout-layout">
-          <Text size="xs" color="secondary">Layout (Sider expanded / Sider collapsed / Header / Content / Footer)</Text>
-          <Layout hasSider style={{ minHeight: 220, border: '1px solid var(--ds-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+          <Text size="xs" color="secondary">
+            Layout (Sider expanded / Sider collapsed / Header / Content / Footer)
+          </Text>
+          <Layout
+            hasSider
+            style={{
+              minHeight: 220,
+              border: '1px solid var(--ds-color-border)',
+              borderRadius: 8,
+              overflow: 'hidden',
+            }}
+          >
             <Layout.Sider theme="dark" collapsible collapsed={false} width={140} style={{ minHeight: 220 }}>
-              <Text size="xs" style={{ padding: 8, display: 'block' }}>Nav (expanded)</Text>
+              <Text size="xs" style={{ padding: 8, display: 'block' }}>
+                Nav (expanded)
+              </Text>
             </Layout.Sider>
             <Layout.Sider theme="light" collapsible collapsed width={80} style={{ minHeight: 220 }}>
-              <Text size="xs" style={{ padding: 8, display: 'block' }}>Nav</Text>
+              <Text size="xs" style={{ padding: 8, display: 'block' }}>
+                Nav
+              </Text>
             </Layout.Sider>
             <Layout style={{ minHeight: 220 }}>
               <Layout.Header height={48}>
@@ -2208,7 +2640,9 @@ function LayoutStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-layout-collapse">
-          <Text size="xs" color="secondary">Collapse (expanded / collapsed / disabled)</Text>
+          <Text size="xs" color="secondary">
+            Collapse (expanded / collapsed / disabled)
+          </Text>
           <Collapse defaultActiveKey={['open']}>
             <Collapse.Panel header="Open panel" panelKey="open">
               <Text size="xs">Expanded content</Text>
@@ -2223,12 +2657,21 @@ function LayoutStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-layout-divider">
-          <Text size="xs" color="secondary">Divider (horizontal/vertical x plain/with-text)</Text>
+          <Text size="xs" color="secondary">
+            Divider (horizontal/vertical x plain/with-text)
+          </Text>
           <Stack spacing="sm">
             <Divider />
             <Divider>With text</Divider>
           </Stack>
-          <Box style={{ display: 'flex', alignItems: 'center', height: 48, gap: 12 }}>
+          <Box
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              height: 48,
+              gap: 12,
+            }}
+          >
             <Text size="xs">Left</Text>
             <Divider orientation="vertical" />
             <Text size="xs">Mid</Text>
@@ -2238,24 +2681,48 @@ function LayoutStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-layout-splitter">
-          <Text size="xs" color="secondary">Splitter (horizontal / vertical, at rest)</Text>
-          <Box style={{ height: 100, border: '1px solid var(--ds-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+          <Text size="xs" color="secondary">
+            Splitter (horizontal / vertical, at rest)
+          </Text>
+          <Box
+            style={{
+              height: 100,
+              border: '1px solid var(--ds-color-border)',
+              borderRadius: 8,
+              overflow: 'hidden',
+            }}
+          >
             <Splitter layout="horizontal">
               <Splitter.Panel defaultSize={40}>
-                <Text size="xs" style={{ padding: 8, display: 'block' }}>Left</Text>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>
+                  Left
+                </Text>
               </Splitter.Panel>
               <Splitter.Panel>
-                <Text size="xs" style={{ padding: 8, display: 'block' }}>Right</Text>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>
+                  Right
+                </Text>
               </Splitter.Panel>
             </Splitter>
           </Box>
-          <Box style={{ height: 100, border: '1px solid var(--ds-color-border)', borderRadius: 8, overflow: 'hidden' }}>
+          <Box
+            style={{
+              height: 100,
+              border: '1px solid var(--ds-color-border)',
+              borderRadius: 8,
+              overflow: 'hidden',
+            }}
+          >
             <Splitter layout="vertical">
               <Splitter.Panel defaultSize={40}>
-                <Text size="xs" style={{ padding: 8, display: 'block' }}>Top</Text>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>
+                  Top
+                </Text>
               </Splitter.Panel>
               <Splitter.Panel>
-                <Text size="xs" style={{ padding: 8, display: 'block' }}>Bottom</Text>
+                <Text size="xs" style={{ padding: 8, display: 'block' }}>
+                  Bottom
+                </Text>
               </Splitter.Panel>
             </Splitter>
           </Box>
@@ -2279,16 +2746,26 @@ function LayoutStates() {
 const FORMS_FILTER_FIELDS: FilterFieldDefinition[] = [
   { key: 'name', label: 'Name', type: 'text' },
   { key: 'age', label: 'Age', type: 'number' },
-  { key: 'status', label: 'Status', type: 'select', options: [
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' },
-  ] },
+  {
+    key: 'status',
+    label: 'Status',
+    type: 'select',
+    options: [
+      { value: 'active', label: 'Active' },
+      { value: 'inactive', label: 'Inactive' },
+    ],
+  },
   { key: 'joined', label: 'Joined', type: 'date' },
   { key: 'active', label: 'Active', type: 'boolean' },
-  { key: 'tags', label: 'Tags', type: 'multiSelect', options: [
-    { value: 'vip', label: 'VIP' },
-    { value: 'new', label: 'New' },
-  ] },
+  {
+    key: 'tags',
+    label: 'Tags',
+    type: 'multiSelect',
+    options: [
+      { value: 'vip', label: 'VIP' },
+      { value: 'new', label: 'New' },
+    ],
+  },
 ];
 
 // Root group (AND) with a first text rule, a second number rule ("AND"
@@ -2307,7 +2784,12 @@ const FORMS_FILTER_VALUE: FilterGroup = {
       logic: 'or',
       rules: [
         { id: 'fb-r3', field: 'status', operator: 'equals', value: 'active' },
-        { id: 'fb-r4', field: 'joined', operator: 'equals', value: '2026-01-01' },
+        {
+          id: 'fb-r4',
+          field: 'joined',
+          operator: 'equals',
+          value: '2026-01-01',
+        },
         { id: 'fb-r5', field: 'active', operator: 'equals', value: true },
         { id: 'fb-r6', field: 'tags', operator: 'in', value: 'vip' },
       ],
@@ -2317,15 +2799,25 @@ const FORMS_FILTER_VALUE: FilterGroup = {
 
 const FORMS_BUILDER_FIELDS: FieldDef[] = [
   { name: 'fullName', label: 'Full name', type: 'text', required: true },
-  { name: 'role', label: 'Role', type: 'select', options: [
-    { label: 'Engineer', value: 'engineer' },
-    { label: 'Designer', value: 'designer' },
-  ] },
+  {
+    name: 'role',
+    label: 'Role',
+    type: 'select',
+    options: [
+      { label: 'Engineer', value: 'engineer' },
+      { label: 'Designer', value: 'designer' },
+    ],
+  },
   { name: 'active', label: 'Active', type: 'checkbox' },
-  { name: 'plan', label: 'Plan', type: 'radio', options: [
-    { label: 'Free', value: 'free' },
-    { label: 'Pro', value: 'pro' },
-  ] },
+  {
+    name: 'plan',
+    label: 'Plan',
+    type: 'radio',
+    options: [
+      { label: 'Free', value: 'free' },
+      { label: 'Pro', value: 'pro' },
+    ],
+  },
   { name: 'notify', label: 'Notify', type: 'switch' },
   { name: 'startDate', label: 'Start date', type: 'date' },
   { name: 'resume', label: 'Resume', type: 'file' },
@@ -2341,8 +2833,18 @@ const FORMS_BUILDER_FIELDS: FieldDef[] = [
 // String(val)` -- deliberately not a token, transcribed byte-exact).
 const FORMS_BUILDER_READONLY_FIELDS: FieldDef[] = [
   { name: 'active', label: 'Active', type: 'checkbox' },
-  { name: 'role', label: 'Role', type: 'select', options: [{ label: 'Engineer', value: 'engineer' }] },
-  { name: 'tags', label: 'Tags', type: 'multi-select', options: [{ label: 'VIP', value: 'vip' }] },
+  {
+    name: 'role',
+    label: 'Role',
+    type: 'select',
+    options: [{ label: 'Engineer', value: 'engineer' }],
+  },
+  {
+    name: 'tags',
+    label: 'Tags',
+    type: 'multi-select',
+    options: [{ label: 'VIP', value: 'vip' }],
+  },
   { name: 'brandColor', label: 'Brand color', type: 'color' },
   { name: 'rating', label: 'Rating', type: 'rating' },
   { name: 'resume', label: 'Resume', type: 'file' },
@@ -2361,9 +2863,24 @@ const FORMS_BUILDER_READONLY_VALUES: Record<string, unknown> = {
 };
 
 const FORMS_WIZARD_STEPS: WizardStep[] = [
-  { key: 'account', title: 'Account', description: 'Basic info', content: <Text size="xs">Account step content</Text> },
-  { key: 'profile', title: 'Profile', description: 'Tell us more', content: <Text size="xs">Profile step content</Text>, optional: true },
-  { key: 'review', title: 'Review', content: <Text size="xs">Review step content</Text> },
+  {
+    key: 'account',
+    title: 'Account',
+    description: 'Basic info',
+    content: <Text size="xs">Account step content</Text>,
+  },
+  {
+    key: 'profile',
+    title: 'Profile',
+    description: 'Tell us more',
+    content: <Text size="xs">Profile step content</Text>,
+    optional: true,
+  },
+  {
+    key: 'review',
+    title: 'Review',
+    content: <Text size="xs">Review step content</Text>,
+  },
 ];
 
 const FORMS_INVOICE_BASE: InvoiceData = {
@@ -2388,8 +2905,20 @@ const FORMS_INVOICE_BASE: InvoiceData = {
     email: 'ap@acme.example',
   },
   items: [
-    { id: 'li-1', description: 'Design system license', quantity: 1, unitPrice: 4800, total: 4800 },
-    { id: 'li-2', description: 'Onboarding support', quantity: 2, unitPrice: 600, total: 1200 },
+    {
+      id: 'li-1',
+      description: 'Design system license',
+      quantity: 1,
+      unitPrice: 4800,
+      total: 4800,
+    },
+    {
+      id: 'li-2',
+      description: 'Onboarding support',
+      quantity: 2,
+      unitPrice: 600,
+      total: 1200,
+    },
   ],
   subtotal: 6000,
   taxRate: 8.5,
@@ -2400,17 +2929,14 @@ const FORMS_INVOICE_BASE: InvoiceData = {
 
 // One minimal invoice per status -- exercises every `data-status` value on
 // `status-badge` (draft/sent/paid/overdue).
-const FORMS_INVOICE_STATUSES: Array<'draft' | 'sent' | 'paid' | 'overdue'> = [
-  'draft',
-  'sent',
-  'paid',
-  'overdue',
-];
+const FORMS_INVOICE_STATUSES: Array<'draft' | 'sent' | 'paid' | 'overdue'> = ['draft', 'sent', 'paid', 'overdue'];
 
 function FormsFbFilterBuilder() {
   return (
     <Stack spacing="xs" data-testid="probe-forms-filter-builder">
-      <Text size="xs" color="secondary">FilterBuilder</Text>
+      <Text size="xs" color="secondary">
+        FilterBuilder
+      </Text>
       <PatternFilterBuilder
         fields={FORMS_FILTER_FIELDS}
         value={FORMS_FILTER_VALUE}
@@ -2433,16 +2959,24 @@ function FormsFbFilterBuilder() {
 function FormsFbFormBuilder() {
   return (
     <Stack spacing="xs" data-testid="probe-forms-form-builder">
-      <Text size="xs" color="secondary">FormBuilder (vertical)</Text>
+      <Text size="xs" color="secondary">
+        FormBuilder (vertical)
+      </Text>
       <PatternFormBuilder
         fields={FORMS_BUILDER_FIELDS}
         layout="vertical"
         title="Team member"
         description="Basic profile details."
         onSubmit={() => undefined}
-        actions={<Button size="sm" variant="primary">Save</Button>}
+        actions={
+          <Button size="sm" variant="primary">
+            Save
+          </Button>
+        }
       />
-      <Text size="xs" color="secondary">FormBuilder (steps -- active/completed/upcoming)</Text>
+      <Text size="xs" color="secondary">
+        FormBuilder (steps -- active/completed/upcoming)
+      </Text>
       <PatternFormBuilder
         fields={FORMS_BUILDER_FIELDS}
         layout="steps"
@@ -2451,14 +2985,18 @@ function FormsFbFormBuilder() {
         onStepChange={() => undefined}
         onSubmit={() => undefined}
       />
-      <Text size="xs" color="secondary">FormBuilder (read-only)</Text>
+      <Text size="xs" color="secondary">
+        FormBuilder (read-only)
+      </Text>
       <PatternFormBuilder
         fields={FORMS_BUILDER_READONLY_FIELDS}
         readOnly
         values={FORMS_BUILDER_READONLY_VALUES}
         onSubmit={() => undefined}
       />
-      <Text size="xs" color="secondary">FormBuilder (loading)</Text>
+      <Text size="xs" color="secondary">
+        FormBuilder (loading)
+      </Text>
       <PatternFormBuilder fields={FORMS_BUILDER_FIELDS} onSubmit={() => undefined} loading />
     </Stack>
   );
@@ -2467,7 +3005,9 @@ function FormsFbFormBuilder() {
 function FormsFbStepWizard() {
   return (
     <Stack spacing="xs" data-testid="probe-forms-step-wizard">
-      <Text size="xs" color="secondary">StepWizard (horizontal, mid-step, skip)</Text>
+      <Text size="xs" color="secondary">
+        StepWizard (horizontal, mid-step, skip)
+      </Text>
       <PatternStepWizard
         steps={FORMS_WIZARD_STEPS}
         currentStep={1}
@@ -2476,7 +3016,9 @@ function FormsFbStepWizard() {
         allowSkip
         orientation="horizontal"
       />
-      <Text size="xs" color="secondary">StepWizard (horizontal, last step)</Text>
+      <Text size="xs" color="secondary">
+        StepWizard (horizontal, last step)
+      </Text>
       <PatternStepWizard
         steps={FORMS_WIZARD_STEPS}
         currentStep={FORMS_WIZARD_STEPS.length - 1}
@@ -2484,7 +3026,9 @@ function FormsFbStepWizard() {
         onComplete={() => undefined}
         orientation="horizontal"
       />
-      <Text size="xs" color="secondary">StepWizard (vertical)</Text>
+      <Text size="xs" color="secondary">
+        StepWizard (vertical)
+      </Text>
       <PatternStepWizard
         steps={FORMS_WIZARD_STEPS}
         currentStep={1}
@@ -2492,7 +3036,9 @@ function FormsFbStepWizard() {
         onComplete={() => undefined}
         orientation="vertical"
       />
-      <Text size="xs" color="secondary">StepWizard (loading)</Text>
+      <Text size="xs" color="secondary">
+        StepWizard (loading)
+      </Text>
       <PatternStepWizard steps={FORMS_WIZARD_STEPS} onComplete={() => undefined} loading />
     </Stack>
   );
@@ -2501,7 +3047,9 @@ function FormsFbStepWizard() {
 function FormsFbInvoiceTemplate() {
   return (
     <Stack spacing="xs" data-testid="probe-forms-invoice-template">
-      <Text size="xs" color="secondary">InvoiceTemplate (full, paid)</Text>
+      <Text size="xs" color="secondary">
+        InvoiceTemplate (full, paid)
+      </Text>
       <PatternInvoiceTemplate
         invoice={{ ...FORMS_INVOICE_BASE, status: 'paid' }}
         onPrint={() => undefined}
@@ -2516,7 +3064,15 @@ function FormsFbInvoiceTemplate() {
               date: '2026-07-01',
               company: { name: 'Rottay Inc.' },
               client: { name: 'Acme Corp' },
-              items: [{ id: 'li-1', description: 'Line item', quantity: 1, unitPrice: 100, total: 100 }],
+              items: [
+                {
+                  id: 'li-1',
+                  description: 'Line item',
+                  quantity: 1,
+                  unitPrice: 100,
+                  total: 100,
+                },
+              ],
               subtotal: 100,
               tax: 0,
               total: 100,
@@ -2526,9 +3082,20 @@ function FormsFbInvoiceTemplate() {
           />
         </Box>
       ))}
-      <Text size="xs" color="secondary">InvoiceTemplate (loading)</Text>
+      <Text size="xs" color="secondary">
+        InvoiceTemplate (loading)
+      </Text>
       <PatternInvoiceTemplate
-        invoice={{ number: 'INV-LOADING', date: '2026-07-01', company: { name: 'Rottay Inc.' }, client: { name: 'Acme Corp' }, items: [], subtotal: 0, tax: 0, total: 0 }}
+        invoice={{
+          number: 'INV-LOADING',
+          date: '2026-07-01',
+          company: { name: 'Rottay Inc.' },
+          client: { name: 'Acme Corp' },
+          items: [],
+          subtotal: 0,
+          tax: 0,
+          total: 0,
+        }}
         loading
       />
     </Stack>
@@ -2606,16 +3173,22 @@ const RECORD_FORM_SECTIONS = [
 function RecordFbFormSections() {
   return (
     <Stack spacing="xs" data-testid="probe-record-form-sections">
-      <Text size="xs" color="secondary">FormSections (card, collapsible -- two open, two closed)</Text>
+      <Text size="xs" color="secondary">
+        FormSections (card, collapsible -- two open, two closed)
+      </Text>
       <FormSections
         sections={RECORD_FORM_SECTIONS}
         collapsible
         activeKeys={['fs-default', 'fs-editorial']}
         onChange={() => undefined}
       />
-      <Text size="xs" color="secondary">FormSections (divided, non-collapsible)</Text>
+      <Text size="xs" color="secondary">
+        FormSections (divided, non-collapsible)
+      </Text>
       <FormSections sections={RECORD_FORM_SECTIONS.slice(0, 2)} appearance="divided" />
-      <Text size="xs" color="secondary">FormFactsCard</Text>
+      <Text size="xs" color="secondary">
+        FormFactsCard
+      </Text>
       <FormFactsCard
         eyebrow="Summary"
         title="Account facts"
@@ -2640,11 +3213,15 @@ const RECORD_SUMMARY_ITEMS = [
 function RecordFbRecord() {
   return (
     <Stack spacing="xs" data-testid="probe-record-record">
-      <Text size="xs" color="secondary">RecordSummaryStrip (all 5 variants)</Text>
+      <Text size="xs" color="secondary">
+        RecordSummaryStrip (all 5 variants)
+      </Text>
       {RECORD_SUMMARY_VARIANTS.map((variant) => (
         <RecordSummaryStrip key={variant} items={RECORD_SUMMARY_ITEMS} variant={variant} />
       ))}
-      <Text size="xs" color="secondary">RecordFieldGrid (plain / mono / empty / href / copy)</Text>
+      <Text size="xs" color="secondary">
+        RecordFieldGrid (plain / mono / empty / href / copy)
+      </Text>
       <RecordFieldGrid>
         <RecordField label="Name" value="Ada Lovelace" />
         <RecordField label="Reference" value="REC-0091" mono />
@@ -2652,7 +3229,9 @@ function RecordFbRecord() {
         <RecordField label="Profile" value="View profile" href="/probe/record" />
         <RecordField label="API key" value="sk_live_••••" mono copyValue="sk_live_secret" />
       </RecordFieldGrid>
-      <Text size="xs" color="secondary">RecordActionBar</Text>
+      <Text size="xs" color="secondary">
+        RecordActionBar
+      </Text>
       <RecordActionBar
         meta="3 unsaved changes"
         actionItems={[
@@ -2660,7 +3239,9 @@ function RecordFbRecord() {
           { label: 'Save', variant: 'primary', onClick: () => undefined },
         ]}
       />
-      <Text size="xs" color="secondary">RecordPanel</Text>
+      <Text size="xs" color="secondary">
+        RecordPanel
+      </Text>
       <RecordPanel>
         <Text size="sm">Generic panel content.</Text>
       </RecordPanel>
@@ -2672,7 +3253,9 @@ function RecordFbEditFields() {
   const [advancedExpanded, setAdvancedExpanded] = useState(true);
   return (
     <Stack spacing="xs" data-testid="probe-record-edit-fields">
-      <Text size="xs" color="secondary">InlineEditorGroup (two editors, one headerless)</Text>
+      <Text size="xs" color="secondary">
+        InlineEditorGroup (two editors, one headerless)
+      </Text>
       <InlineEditorGroup>
         <InlineEditor title="Profile" eyebrow="Section 01" description="Primary identity fields.">
           <InlineEditGrid kind="primary">
@@ -2707,35 +3290,45 @@ function RecordFbEditFields() {
           </InlineEditGrid>
         </InlineEditor>
       </InlineEditorGroup>
-      <Text size="xs" color="secondary">InlineEditFooter (plain / error / saving)</Text>
+      <Text size="xs" color="secondary">
+        InlineEditFooter (plain / error / saving)
+      </Text>
       <InlineEditFooter summary="No changes yet" onCancel={() => undefined} onSave={() => undefined} />
       <InlineEditFooter
         error="Fix the highlighted fields before saving"
         onCancel={() => undefined}
         onSave={() => undefined}
       />
-      <InlineEditFooter
-        dirtySummary="3 fields changed"
-        onCancel={() => undefined}
-        onSave={() => undefined}
-        isSaving
-      />
+      <InlineEditFooter dirtySummary="3 fields changed" onCancel={() => undefined} onSave={() => undefined} isSaving />
     </Stack>
   );
 }
 
 const APPROVAL_WORKFLOW_STEPS: ApprovalStep[] = [
-  { key: 'manager', approver: 'Jane Smith', status: 'approved', timestamp: '2026-07-01T09:00:00Z', comments: 'Looks good' },
+  {
+    key: 'manager',
+    approver: 'Jane Smith',
+    status: 'approved',
+    timestamp: '2026-07-01T09:00:00Z',
+    comments: 'Looks good',
+  },
   { key: 'director', approver: 'Bob Johnson', status: 'pending' },
   { key: 'finance', approver: 'Finance Team', status: 'skipped' },
-  { key: 'legal', approver: 'Legal Dept', status: 'rejected', comments: 'Needs revision' },
+  {
+    key: 'legal',
+    approver: 'Legal Dept',
+    status: 'rejected',
+    comments: 'Needs revision',
+  },
   { key: 'exec', approver: 'Executive Sponsor', status: 'escalated' },
 ];
 
 function RecordFbApprovalWorkflow() {
   return (
     <Stack spacing="xs" data-testid="probe-record-approval-workflow">
-      <Text size="xs" color="secondary">ApprovalWorkflow (all 5 statuses, current step pending)</Text>
+      <Text size="xs" color="secondary">
+        ApprovalWorkflow (all 5 statuses, current step pending)
+      </Text>
       <PatternApprovalWorkflow
         title="Expense Report"
         entity="EXP-9981"
@@ -2745,7 +3338,9 @@ function RecordFbApprovalWorkflow() {
         onReject={() => undefined}
         onEscalate={() => undefined}
       />
-      <Text size="xs" color="secondary">ApprovalWorkflow (loading)</Text>
+      <Text size="xs" color="secondary">
+        ApprovalWorkflow (loading)
+      </Text>
       <PatternApprovalWorkflow title="Loading" steps={[]} loading />
     </Stack>
   );
@@ -2753,9 +3348,23 @@ function RecordFbApprovalWorkflow() {
 
 function buildGuidedDraftSections(): FormSection[] {
   return [
-    { key: 'basics', title: 'Basics', render: () => <Text size="xs">Basics content</Text>, isComplete: true },
-    { key: 'details', title: 'Details', render: () => <Text size="xs">Details content</Text>, hasErrors: true },
-    { key: 'review', title: 'Review', render: () => <Text size="xs">Review content</Text> },
+    {
+      key: 'basics',
+      title: 'Basics',
+      render: () => <Text size="xs">Basics content</Text>,
+      isComplete: true,
+    },
+    {
+      key: 'details',
+      title: 'Details',
+      render: () => <Text size="xs">Details content</Text>,
+      hasErrors: true,
+    },
+    {
+      key: 'review',
+      title: 'Review',
+      render: () => <Text size="xs">Review content</Text>,
+    },
   ];
 }
 
@@ -2763,7 +3372,9 @@ function RecordFbGuidedDraftForm() {
   const sections = buildGuidedDraftSections();
   return (
     <Stack spacing="xs" data-testid="probe-record-guided-draft-form">
-      <Text size="xs" color="secondary">GuidedDraftFormSurface (scroll, sidebar nav, unsaved)</Text>
+      <Text size="xs" color="secondary">
+        GuidedDraftFormSurface (scroll, sidebar nav, unsaved)
+      </Text>
       <GuidedDraftFormSurface
         title="New job posting"
         subtitle="Draft-heavy create flow"
@@ -2772,7 +3383,9 @@ function RecordFbGuidedDraftForm() {
         onSubmit={() => undefined}
         adaptive={{ desktop: { formLayout: 'sidebar-nav' } }}
       />
-      <Text size="xs" color="secondary">GuidedDraftFormSurface (scroll, pill nav, saving)</Text>
+      <Text size="xs" color="secondary">
+        GuidedDraftFormSurface (scroll, pill nav, saving)
+      </Text>
       <GuidedDraftFormSurface
         title="New job posting"
         sections={sections}
@@ -2780,7 +3393,9 @@ function RecordFbGuidedDraftForm() {
         onSubmit={() => undefined}
         adaptive={{ desktop: { formLayout: 'pill-nav' } }}
       />
-      <Text size="xs" color="secondary">GuidedDraftFormSurface (scroll, dropdown nav, saved, with templates + recovery)</Text>
+      <Text size="xs" color="secondary">
+        GuidedDraftFormSurface (scroll, dropdown nav, saved, with templates + recovery)
+      </Text>
       <GuidedDraftFormSurface
         title="New job posting"
         sections={sections}
@@ -2788,10 +3403,26 @@ function RecordFbGuidedDraftForm() {
         lastSavedAt="2 min ago"
         onSubmit={() => undefined}
         adaptive={{ desktop: { formLayout: 'dropdown-nav' } }}
-        draftRecovery={{ hasDraft: true, onRecover: () => undefined, onDiscard: () => undefined, draftDate: 'yesterday' }}
-        templates={{ items: [{ id: 't1', name: 'Standard template', description: 'Common fields pre-filled.' }], onSelect: () => undefined }}
+        draftRecovery={{
+          hasDraft: true,
+          onRecover: () => undefined,
+          onDiscard: () => undefined,
+          draftDate: 'yesterday',
+        }}
+        templates={{
+          items: [
+            {
+              id: 't1',
+              name: 'Standard template',
+              description: 'Common fields pre-filled.',
+            },
+          ],
+          onSelect: () => undefined,
+        }}
       />
-      <Text size="xs" color="secondary">GuidedDraftFormSurface (wizard mode, error status, validation issues)</Text>
+      <Text size="xs" color="secondary">
+        GuidedDraftFormSurface (wizard mode, error status, validation issues)
+      </Text>
       <GuidedDraftFormSurface
         title="New job posting"
         sections={sections}
@@ -2800,7 +3431,11 @@ function RecordFbGuidedDraftForm() {
         onSubmit={() => undefined}
         validationIssues={[
           { field: 'Title', message: 'Title is required', severity: 'error' },
-          { field: 'Budget', message: 'Budget looks unusually high', severity: 'warning' },
+          {
+            field: 'Budget',
+            message: 'Budget looks unusually high',
+            severity: 'warning',
+          },
         ]}
       />
     </Stack>
@@ -2818,8 +3453,17 @@ function RecordFbSurfaces() {
     },
     behavior: {
       fields: [],
-      submitAction: { id: 'submit-record', label: 'Create record', variant: 'primary', onClick: () => undefined },
-      cancelAction: { id: 'cancel-record', label: 'Cancel', onClick: () => undefined },
+      submitAction: {
+        id: 'submit-record',
+        label: 'Create record',
+        variant: 'primary',
+        onClick: () => undefined,
+      },
+      cancelAction: {
+        id: 'cancel-record',
+        label: 'Cancel',
+        onClick: () => undefined,
+      },
     },
   };
 
@@ -2831,8 +3475,19 @@ function RecordFbSurfaces() {
       aside: <Text size="xs">Setup guidance</Text>,
     },
     behavior: {
-      steps: [{ key: 'review', title: 'Review', content: <Text size="xs">Review the setup</Text> }],
-      submitAction: { id: 'complete-setup', label: 'Complete setup', variant: 'primary', onClick: () => undefined },
+      steps: [
+        {
+          key: 'review',
+          title: 'Review',
+          content: <Text size="xs">Review the setup</Text>,
+        },
+      ],
+      submitAction: {
+        id: 'complete-setup',
+        label: 'Complete setup',
+        variant: 'primary',
+        onClick: () => undefined,
+      },
     },
   };
 
@@ -2845,18 +3500,33 @@ function RecordFbSurfaces() {
     },
     behavior: {
       fields: [],
-      submitAction: { id: 'save-workspace', label: 'Save changes', variant: 'primary', onClick: () => undefined },
-      cancelAction: { id: 'cancel-edit', label: 'Cancel', onClick: () => undefined },
+      submitAction: {
+        id: 'save-workspace',
+        label: 'Save changes',
+        variant: 'primary',
+        onClick: () => undefined,
+      },
+      cancelAction: {
+        id: 'cancel-edit',
+        label: 'Cancel',
+        onClick: () => undefined,
+      },
     },
   };
 
   return (
     <Stack spacing="xs" data-testid="probe-record-surfaces">
-      <Text size="xs" color="secondary">FormSurface</Text>
+      <Text size="xs" color="secondary">
+        FormSurface
+      </Text>
       <FormSurface config={formConfig} />
-      <Text size="xs" color="secondary">WizardSurface</Text>
+      <Text size="xs" color="secondary">
+        WizardSurface
+      </Text>
       <WizardSurface config={wizardConfig} />
-      <Text size="xs" color="secondary">DetailFormSurface</Text>
+      <Text size="xs" color="secondary">
+        DetailFormSurface
+      </Text>
       <DetailFormSurface config={detailFormConfig} />
     </Stack>
   );
@@ -2924,7 +3594,9 @@ function HeadersFbDetailHeader() {
 
   return (
     <Stack spacing="xs" data-testid="probe-headers-detail">
-      <Text size="xs" color="secondary">DetailHeader (all 4 archetypes -- Detail-specific numbers, not Edit/Form&apos;s)</Text>
+      <Text size="xs" color="secondary">
+        DetailHeader (all 4 archetypes -- Detail-specific numbers, not Edit/Form&apos;s)
+      </Text>
       <DetailHeader
         title="Acme Corp (editorial)"
         subtitle="Enterprise customer since 2019"
@@ -2964,15 +3636,13 @@ function HeadersFbDetailHeader() {
           archetype={archetype}
         />
       ))}
-      <Text size="xs" color="secondary">DetailHeader (avatar image variant, no tabs, no metadata)</Text>
+      <Text size="xs" color="secondary">
+        DetailHeader (avatar image variant, no tabs, no metadata)
+      </Text>
       {/* renderAvatarNode picks the image branch only for a string
           starting with 'http' or '/' -- a broken-image glyph is fine
           evidence for the chrome/layout this probe captures. */}
-      <DetailHeader
-        title="Grace Hopper"
-        backHref="/people"
-        avatar="/probe-avatar-placeholder.png"
-      />
+      <DetailHeader title="Grace Hopper" backHref="/people" avatar="/probe-avatar-placeholder.png" />
     </Stack>
   );
 }
@@ -2980,7 +3650,9 @@ function HeadersFbDetailHeader() {
 function HeadersFbEditHeader() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-edit">
-      <Text size="xs" color="secondary">EditHeader (all 4 archetypes -- byte-identical recipe to FormHeader, NOT Detail&apos;s)</Text>
+      <Text size="xs" color="secondary">
+        EditHeader (all 4 archetypes -- byte-identical recipe to FormHeader, NOT Detail&apos;s)
+      </Text>
       {HEADERS_DETAIL_ARCHETYPES.map((archetype) => (
         <EditHeader
           key={archetype}
@@ -2998,7 +3670,9 @@ function HeadersFbEditHeader() {
           onCancel={() => undefined}
         />
       ))}
-      <Text size="xs" color="secondary">EditHeader (loading)</Text>
+      <Text size="xs" color="secondary">
+        EditHeader (loading)
+      </Text>
       <EditHeader title="Loading" backHref="/x" loading />
     </Stack>
   );
@@ -3007,7 +3681,9 @@ function HeadersFbEditHeader() {
 function HeadersFbFormHeader() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-form">
-      <Text size="xs" color="secondary">FormHeader (all 4 archetypes -- byte-identical recipe to EditHeader)</Text>
+      <Text size="xs" color="secondary">
+        FormHeader (all 4 archetypes -- byte-identical recipe to EditHeader)
+      </Text>
       {HEADERS_DETAIL_ARCHETYPES.map((archetype) => (
         <FormHeader
           key={archetype}
@@ -3029,7 +3705,9 @@ function HeadersFbFormHeader() {
 function HeadersFbCollectionHeader() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-collection">
-      <Text size="xs" color="secondary">CollectionHeader (dotted title, editorial-tech, quickActions all 3 variants, meta-item all 3 tones)</Text>
+      <Text size="xs" color="secondary">
+        CollectionHeader (dotted title, editorial-tech, quickActions all 3 variants, meta-item all 3 tones)
+      </Text>
       <CollectionHeader
         eyebrow="Workspace"
         title="Candidates"
@@ -3043,13 +3721,26 @@ function HeadersFbCollectionHeader() {
         ]}
         shortcuts={[{ key: 's', label: '⌘K search' }]}
         quickActions={[
-          { key: 'q1', label: 'Invite', onClick: () => undefined, variant: 'primary' },
-          { key: 'q2', label: 'Export', onClick: () => undefined, variant: 'secondary' },
+          {
+            key: 'q1',
+            label: 'Invite',
+            onClick: () => undefined,
+            variant: 'primary',
+          },
+          {
+            key: 'q2',
+            label: 'Export',
+            onClick: () => undefined,
+            variant: 'secondary',
+          },
           { key: 'q3', label: 'More', onClick: () => undefined },
         ]}
         surfaceVariant="default"
       />
-      <Text size="xs" color="secondary">CollectionHeader (display title, embedded, no quickActions -- title-accent + no-quickActions secondary-rail branch)</Text>
+      <Text size="xs" color="secondary">
+        CollectionHeader (display title, embedded, no quickActions -- title-accent + no-quickActions secondary-rail
+        branch)
+      </Text>
       <CollectionHeader
         eyebrow="Workspace"
         title="Overview"
@@ -3059,29 +3750,38 @@ function HeadersFbCollectionHeader() {
         shortcuts={[{ key: 's', label: '⌘K search' }]}
         surfaceVariant="embedded"
       />
-      <Text size="xs" color="secondary">CollectionHeader (default title treatment, default layout, not embedded)</Text>
-      <CollectionHeader
-        eyebrow="Workspace"
-        title="Reports"
-        subtitle="Weekly report summary"
-        surfaceVariant="default"
-      />
+      <Text size="xs" color="secondary">
+        CollectionHeader (default title treatment, default layout, not embedded)
+      </Text>
+      <CollectionHeader eyebrow="Workspace" title="Reports" subtitle="Weekly report summary" surfaceVariant="default" />
       {/* The quick-actions PILL container's background/boxShadow only
           branch on `editorialTech` when `embedded` is true (not-embedded
           collapses to one value regardless of editorialTech), and the pill
           only renders at all when quickActions is non-empty. These two
           instances cover the two embedded+quickActions states. */}
-      <Text size="xs" color="secondary">CollectionHeader (embedded, editorial-tech, quickActions -- quick-actions pill embedded+editorialTech branch)</Text>
+      <Text size="xs" color="secondary">
+        CollectionHeader (embedded, editorial-tech, quickActions -- quick-actions pill embedded+editorialTech branch)
+      </Text>
       <CollectionHeader
         eyebrow="Workspace"
         title="Pipeline"
         titleTreatment="dotted"
         subtitle="Embedded editorial-tech with quick actions"
         layoutVariant="editorial-tech"
-        quickActions={[{ key: 'q1', label: 'Invite', onClick: () => undefined, variant: 'primary' }]}
+        quickActions={[
+          {
+            key: 'q1',
+            label: 'Invite',
+            onClick: () => undefined,
+            variant: 'primary',
+          },
+        ]}
         surfaceVariant="embedded"
       />
-      <Text size="xs" color="secondary">CollectionHeader (embedded, default layout, quickActions -- quick-actions pill embedded+non-editorialTech branch)</Text>
+      <Text size="xs" color="secondary">
+        CollectionHeader (embedded, default layout, quickActions -- quick-actions pill embedded+non-editorialTech
+        branch)
+      </Text>
       <CollectionHeader
         eyebrow="Workspace"
         title="Pipeline"
@@ -3096,36 +3796,78 @@ function HeadersFbCollectionHeader() {
 function HeadersFbDashboardHeader() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-dashboard">
-      <Text size="xs" color="secondary">DashboardHeader (compact, status=live -- animating; toHaveScreenshot freezes CSS animations by default, see REST TRUTH note in the spec)</Text>
+      <Text size="xs" color="secondary">
+        DashboardHeader (compact, status=live -- animating; toHaveScreenshot freezes CSS animations by default, see REST
+        TRUTH note in the spec)
+      </Text>
       <DashboardHeader
         title="Overview"
         icon={<TagIcon style={{ width: 16, height: 16 }} />}
         status={{ state: 'live' }}
-        metrics={[{ key: 'm1', label: 'Users', value: 128, change: { value: '4%', direction: 'up' } }]}
+        metrics={[
+          {
+            key: 'm1',
+            label: 'Users',
+            value: 128,
+            change: { value: '4%', direction: 'up' },
+          },
+        ]}
         actions={[{ key: 'a1', label: 'Refresh', onClick: () => undefined }]}
         compact
       />
-      <Text size="xs" color="secondary">DashboardHeader (full, status=connected -- static, all 3 metric-change directions)</Text>
+      <Text size="xs" color="secondary">
+        DashboardHeader (full, status=connected -- static, all 3 metric-change directions)
+      </Text>
       <DashboardHeader
         title="Overview"
         subtitle="Live operational metrics"
         icon={<TagIcon style={{ width: 18, height: 18 }} />}
         status={{ state: 'connected' }}
         metrics={[
-          { key: 'm1', label: 'Users', value: 128, change: { value: '4%', direction: 'up' } },
-          { key: 'm2', label: 'Errors', value: 3, change: { value: '2%', direction: 'down' } },
-          { key: 'm3', label: 'Latency', value: '120ms', change: { value: '0%', direction: 'flat' } },
+          {
+            key: 'm1',
+            label: 'Users',
+            value: 128,
+            change: { value: '4%', direction: 'up' },
+          },
+          {
+            key: 'm2',
+            label: 'Errors',
+            value: 3,
+            change: { value: '2%', direction: 'down' },
+          },
+          {
+            key: 'm3',
+            label: 'Latency',
+            value: '120ms',
+            change: { value: '0%', direction: 'flat' },
+          },
         ]}
         actions={[
           { key: 'a1', label: 'Refresh', onClick: () => undefined },
-          { key: 'a2', label: 'Export', onClick: () => undefined, variant: 'primary' },
+          {
+            key: 'a2',
+            label: 'Export',
+            onClick: () => undefined,
+            variant: 'primary',
+          },
         ]}
       />
-      <Text size="xs" color="secondary">DashboardHeader (full, status=syncing -- animating)</Text>
-      <DashboardHeader title="Overview" status={{ state: 'syncing' }} metrics={[{ key: 'm1', label: 'Sync', value: '82%' }]} />
-      <Text size="xs" color="secondary">DashboardHeader (full, status=offline)</Text>
+      <Text size="xs" color="secondary">
+        DashboardHeader (full, status=syncing -- animating)
+      </Text>
+      <DashboardHeader
+        title="Overview"
+        status={{ state: 'syncing' }}
+        metrics={[{ key: 'm1', label: 'Sync', value: '82%' }]}
+      />
+      <Text size="xs" color="secondary">
+        DashboardHeader (full, status=offline)
+      </Text>
       <DashboardHeader title="Overview" status={{ state: 'offline' }} />
-      <Text size="xs" color="secondary">DashboardHeader (full, status=warning)</Text>
+      <Text size="xs" color="secondary">
+        DashboardHeader (full, status=warning)
+      </Text>
       <DashboardHeader title="Overview" status={{ state: 'warning' }} />
     </Stack>
   );
@@ -3177,11 +3919,7 @@ function HeadersFbStates() {
 // render the CLASSIC engine, which this checkpoint does not own.
 // ---------------------------------------------------------------------------
 
-const HP_CRUMBS = [
-  { label: 'Home', href: '/' },
-  { label: 'Events', href: '/events' },
-  { label: 'Event #1234' },
-];
+const HP_CRUMBS = [{ label: 'Home', href: '/' }, { label: 'Events', href: '/events' }, { label: 'Event #1234' }];
 
 const HP_STATUS: CockpitStatus[] = [
   { label: 'Active', variant: 'success' },
@@ -3195,7 +3933,12 @@ const HP_QUICK_ACTIONS: WorkbenchQuickAction[] = [
   { label: 'Save', onClick: () => undefined, variant: 'primary' },
   { label: 'Delete', onClick: () => undefined, variant: 'danger' },
   { label: 'Archive', onClick: () => undefined, variant: 'default' },
-  { label: 'Locked', onClick: () => undefined, variant: 'default', disabled: true },
+  {
+    label: 'Locked',
+    onClick: () => undefined,
+    variant: 'default',
+    disabled: true,
+  },
 ];
 
 const HP_SAVED_VIEWS = [
@@ -3206,7 +3949,9 @@ const HP_SAVED_VIEWS = [
 function HeadersPatternsFbCockpit() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-patterns-cockpit">
-      <Text size="xs" color="secondary">CockpitHeader (all five status variants)</Text>
+      <Text size="xs" color="secondary">
+        CockpitHeader (all five status variants)
+      </Text>
       <PatternCockpitHeader
         title="Event #1234"
         subtitle="Summer Music Festival — Main Stage"
@@ -3222,7 +3967,9 @@ function HeadersPatternsFbCockpit() {
 function HeadersPatternsFbCockpitSticky() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-patterns-cockpit-sticky">
-      <Text size="xs" color="secondary">CockpitHeader (sticky — compact on scroll)</Text>
+      <Text size="xs" color="secondary">
+        CockpitHeader (sticky — compact on scroll)
+      </Text>
       <PatternCockpitHeader
         title="Event #1234"
         subtitle="Sticky instance"
@@ -3238,7 +3985,9 @@ function HeadersPatternsFbCockpitSticky() {
 function HeadersPatternsFbPageShell() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-patterns-page-shell">
-      <Text size="xs" color="secondary">PageShell (tabs, labelled back, badge, header content)</Text>
+      <Text size="xs" color="secondary">
+        PageShell (tabs, labelled back, badge, header content)
+      </Text>
       <PatternPageShell
         title="Users"
         subtitle="Manage platform users"
@@ -3248,8 +3997,16 @@ function HeadersPatternsFbPageShell() {
         headerContent={<Text size="xs">Header content slot</Text>}
         actions={<Button size="sm">Add User</Button>}
         tabs={[
-          { key: 'all', label: 'All', content: <Text size="xs">All records</Text> },
-          { key: 'archived', label: 'Archived', content: <Text size="xs">Archived records</Text> },
+          {
+            key: 'all',
+            label: 'All',
+            content: <Text size="xs">All records</Text>,
+          },
+          {
+            key: 'archived',
+            label: 'Archived',
+            content: <Text size="xs">Archived records</Text>,
+          },
         ]}
         activeTab="all"
         onTabChange={() => undefined}
@@ -3266,7 +4023,9 @@ function HeadersPatternsFbPageShell() {
 function HeadersPatternsFbPageShellNoTabs() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-patterns-page-shell-notabs">
-      <Text size="xs" color="secondary">PageShell (no tabs — the bare rule branch)</Text>
+      <Text size="xs" color="secondary">
+        PageShell (no tabs — the bare rule branch)
+      </Text>
       <PatternPageShell title="Users" subtitle="No tabs">
         <Text size="xs">Content</Text>
       </PatternPageShell>
@@ -3277,7 +4036,9 @@ function HeadersPatternsFbPageShellNoTabs() {
 function HeadersPatternsFbWorkbench() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-patterns-workbench">
-      <Text size="xs" color="secondary">WorkbenchHeader (three quick-action variants + disabled)</Text>
+      <Text size="xs" color="secondary">
+        WorkbenchHeader (three quick-action variants + disabled)
+      </Text>
       <PatternWorkbenchHeader
         title="Operations Dashboard"
         subtitle="Morning briefing"
@@ -3294,7 +4055,9 @@ function HeadersPatternsFbWorkbench() {
 function HeadersPatternsFbLoading() {
   return (
     <Stack spacing="xs" data-testid="probe-headers-patterns-loading">
-      <Text size="xs" color="secondary">Loading branches (cockpit 6 blocks / page-shell 5 / workbench 6)</Text>
+      <Text size="xs" color="secondary">
+        Loading branches (cockpit 6 blocks / page-shell 5 / workbench 6)
+      </Text>
       <PatternCockpitHeader title="Loading" loading />
       <PatternPageShell title="Loading" loading>
         <Text size="xs">Body</Text>
@@ -3354,22 +4117,53 @@ const NAV_ENVIRONMENTS = [
 ];
 
 const NAV_COMMAND_ITEMS = [
-  { id: 'nav-dashboard', label: 'Open dashboard', description: 'Jump to the control plane', group: 'Navigation', shortcut: 'G D', onSelect: () => undefined },
-  { id: 'nav-approvals', label: 'Review approvals', description: 'Pending sign-offs', group: 'Actions', shortcut: 'A', onSelect: () => undefined },
+  {
+    id: 'nav-dashboard',
+    label: 'Open dashboard',
+    description: 'Jump to the control plane',
+    group: 'Navigation',
+    shortcut: 'G D',
+    onSelect: () => undefined,
+  },
+  {
+    id: 'nav-approvals',
+    label: 'Review approvals',
+    description: 'Pending sign-offs',
+    group: 'Actions',
+    shortcut: 'A',
+    onSelect: () => undefined,
+  },
 ];
 
 const NAV_COMMAND_RECENT = [
-  { id: 'nav-recent', label: 'Create event', description: 'Last used', shortcut: 'C', onSelect: () => undefined },
+  {
+    id: 'nav-recent',
+    label: 'Create event',
+    description: 'Last used',
+    shortcut: 'C',
+    onSelect: () => undefined,
+  },
 ];
 
 const NAV_SHORTCUTS = [
   { key: 'ctrl+k', description: 'Open command palette', category: 'Global' },
-  { key: 'shift+?', description: 'Show keyboard shortcuts', category: 'Global' },
+  {
+    key: 'shift+?',
+    description: 'Show keyboard shortcuts',
+    category: 'Global',
+  },
   { key: 'g d', description: 'Go to dashboard', category: 'Navigation' },
 ];
 
 const NAV_WORKSPACES = [
-  { id: 'ws-1', name: 'Rottay Shell', role: 'Admin', plan: 'enterprise', unreadCount: 5, online: 23 },
+  {
+    id: 'ws-1',
+    name: 'Rottay Shell',
+    role: 'Admin',
+    plan: 'enterprise',
+    unreadCount: 5,
+    online: 23,
+  },
   { id: 'ws-2', name: 'BitHire Ops', role: 'Member', plan: 'pro' },
 ];
 
@@ -3391,17 +4185,90 @@ const DASH_ACTIVITY: ActivityItem[] = [
 ];
 
 const DASH_METRICS: KeyMetric[] = [
-  { label: 'Open roles', value: '42', change: '+3', positive: true, icon: TagIcon, trend: 'up', progress: 80 },
-  { label: 'Time to hire', value: '18d', change: '-2', positive: false, icon: TagIcon, trend: 'down', progress: 40 },
-  { label: 'Offers out', value: '12', change: '+5', positive: true, icon: TagIcon, trend: 'up', progress: 65 },
-  { label: 'Declines', value: '4', change: '-1', positive: false, icon: TagIcon, trend: 'down', progress: 20 },
+  {
+    label: 'Open roles',
+    value: '42',
+    change: '+3',
+    positive: true,
+    icon: TagIcon,
+    trend: 'up',
+    progress: 80,
+  },
+  {
+    label: 'Time to hire',
+    value: '18d',
+    change: '-2',
+    positive: false,
+    icon: TagIcon,
+    trend: 'down',
+    progress: 40,
+  },
+  {
+    label: 'Offers out',
+    value: '12',
+    change: '+5',
+    positive: true,
+    icon: TagIcon,
+    trend: 'up',
+    progress: 65,
+  },
+  {
+    label: 'Declines',
+    value: '4',
+    change: '-1',
+    positive: false,
+    icon: TagIcon,
+    trend: 'down',
+    progress: 20,
+  },
 ];
 
 const DASH_STATS: StatItem[] = [
-  { key: 'rev', label: 'Revenue', value: 128400, change: 8, changeType: 'increase', periodLabel: 'this week', prefix: '$', icon: <TagIcon />, insight: 'Ahead of plan', sparkDots: [30, 45, 60, 40, 80, 70, 95], accentColor: 'primary' },
-  { key: 'churn', label: 'Churn', value: 12, change: 2, changeType: 'decrease', periodLabel: 'this week', suffix: '%', icon: <TagIcon />, insight: 'Watch closely', sparkDots: [20, 25, 30, 22, 40, 35, 50], accentColor: 'error' },
-  { key: 'nps', label: 'NPS', value: 52, change: 0, changeType: 'neutral', periodLabel: 'this week', icon: <TagIcon />, accentColor: 'success' },
-  { key: 'load', label: 'Load', value: 60, suffix: '%', progress: 60, icon: <TagIcon />, accentColor: 'warning' },
+  {
+    key: 'rev',
+    label: 'Revenue',
+    value: 128400,
+    change: 8,
+    changeType: 'increase',
+    periodLabel: 'this week',
+    prefix: '$',
+    icon: <TagIcon />,
+    insight: 'Ahead of plan',
+    sparkDots: [30, 45, 60, 40, 80, 70, 95],
+    accentColor: 'primary',
+  },
+  {
+    key: 'churn',
+    label: 'Churn',
+    value: 12,
+    change: 2,
+    changeType: 'decrease',
+    periodLabel: 'this week',
+    suffix: '%',
+    icon: <TagIcon />,
+    insight: 'Watch closely',
+    sparkDots: [20, 25, 30, 22, 40, 35, 50],
+    accentColor: 'error',
+  },
+  {
+    key: 'nps',
+    label: 'NPS',
+    value: 52,
+    change: 0,
+    changeType: 'neutral',
+    periodLabel: 'this week',
+    icon: <TagIcon />,
+    accentColor: 'success',
+  },
+  {
+    key: 'load',
+    label: 'Load',
+    value: 60,
+    suffix: '%',
+    progress: 60,
+    icon: <TagIcon />,
+    accentColor: 'warning',
+  },
 ];
 
 // WO-SKIN-06 CK-A -- dashboard-widgets family. Every ActivityItem type (all 5)
@@ -3420,7 +4287,11 @@ function DashboardWidgetsStates() {
 
       <Box
         data-testid="probe-dashboard-activity"
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 16 }}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: 16,
+        }}
       >
         <Box data-testid="probe-dashboard-activity-ticker">
           <ActivityTicker items={DASH_ACTIVITY} viewAllHref="#" />
@@ -3438,7 +4309,11 @@ function DashboardWidgetsStates() {
 
       <Box
         data-testid="probe-dashboard-metrics"
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 16 }}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: 16,
+        }}
       >
         <Box data-testid="probe-dashboard-metrics-minimal">
           <MetricsMinimal metrics={DASH_METRICS} />
@@ -3456,19 +4331,67 @@ function DashboardWidgetsStates() {
 
       <Box
         data-testid="probe-dashboard-terminal"
-        style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 16 }}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+          gap: 16,
+        }}
       >
         <Box data-testid="probe-dashboard-terminal-1">
-          <DataTerminalCard variant={1} label="Tickets" value={1234} change="+12%" trend="up" progress={85} path="#" subtitle="This week" icon={TagIcon} hideOnFocus={false} />
+          <DataTerminalCard
+            variant={1}
+            label="Tickets"
+            value={1234}
+            change="+12%"
+            trend="up"
+            progress={85}
+            path="#"
+            subtitle="This week"
+            icon={TagIcon}
+            hideOnFocus={false}
+          />
         </Box>
         <Box data-testid="probe-dashboard-terminal-2">
-          <DataTerminalCard variant={2} label="Revenue" value={982} change="-4%" trend="down" progress={60} path="#" subtitle="This week" icon={TagIcon} hideOnFocus={false} />
+          <DataTerminalCard
+            variant={2}
+            label="Revenue"
+            value={982}
+            change="-4%"
+            trend="down"
+            progress={60}
+            path="#"
+            subtitle="This week"
+            icon={TagIcon}
+            hideOnFocus={false}
+          />
         </Box>
         <Box data-testid="probe-dashboard-terminal-3">
-          <DataTerminalCard variant={3} label="Signups" value={451} change="+8%" trend="up" progress={30} path="#" subtitle="This week" icon={TagIcon} hideOnFocus={false} />
+          <DataTerminalCard
+            variant={3}
+            label="Signups"
+            value={451}
+            change="+8%"
+            trend="up"
+            progress={30}
+            path="#"
+            subtitle="This week"
+            icon={TagIcon}
+            hideOnFocus={false}
+          />
         </Box>
         <Box data-testid="probe-dashboard-terminal-4">
-          <DataTerminalCard variant={4} label="Latency" value={73} change="-2%" trend="down" progress={90} path="#" subtitle="This week" icon={TagIcon} hideOnFocus={false} />
+          <DataTerminalCard
+            variant={4}
+            label="Latency"
+            value={73}
+            change="-2%"
+            trend="down"
+            progress={90}
+            path="#"
+            subtitle="This week"
+            icon={TagIcon}
+            hideOnFocus={false}
+          />
         </Box>
         <Box data-testid="probe-dashboard-terminal-stat">
           <DataTerminalStat label="Errors" value={12} change="+1" trend="up" progress={50} icon={TagIcon} />
@@ -3486,7 +4409,12 @@ function NavigationPatternsFbStates() {
   return (
     <Box
       data-testid="probe-navigation-patterns"
-      style={{ borderRadius: 16, border: '1px solid var(--ds-color-border)', background: 'var(--ds-color-bg-elevated)', padding: 16 }}
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
     >
       <Stack spacing="lg" fullWidth>
         <Stack spacing="xs" data-testid="probe-navigation-patterns-command-palette">
@@ -3537,12 +4465,7 @@ function NavigationPatternsFbStates() {
         </Stack>
 
         <Stack spacing="xs" data-testid="probe-navigation-patterns-locale-switcher">
-          <PatternLocaleSwitcher
-            locale="en"
-            onChange={() => undefined}
-            locales={DEFAULT_LOCALES}
-            showLabel
-          />
+          <PatternLocaleSwitcher locale="en" onChange={() => undefined} locales={DEFAULT_LOCALES} showLabel />
         </Stack>
       </Stack>
     </Box>
@@ -3578,18 +4501,45 @@ const COMM_COMMENTS = [
       { emoji: '👀', count: 1, active: false },
     ],
     replies: [
-      { id: 'cm-1-r1', author: { name: 'Dev Costa' }, content: 'Yes, on track.', timestamp: '1h ago' },
+      {
+        id: 'cm-1-r1',
+        author: { name: 'Dev Costa' },
+        content: 'Yes, on track.',
+        timestamp: '1h ago',
+      },
     ],
   },
 ];
 
 const COMM_NOTIFICATIONS = [
-  { id: 'cn-1', title: 'Deployment succeeded', message: 'v2.4 is live on production', type: 'success' as const, read: false, timestamp: '5m ago', action: { label: 'View', onClick: () => undefined } },
-  { id: 'cn-2', title: 'License expiring soon', message: 'Renew within 14 days', type: 'warning' as const, read: true, timestamp: '1d ago' },
+  {
+    id: 'cn-1',
+    title: 'Deployment succeeded',
+    message: 'v2.4 is live on production',
+    type: 'success' as const,
+    read: false,
+    timestamp: '5m ago',
+    action: { label: 'View', onClick: () => undefined },
+  },
+  {
+    id: 'cn-2',
+    title: 'License expiring soon',
+    message: 'Renew within 14 days',
+    type: 'warning' as const,
+    read: true,
+    timestamp: '1d ago',
+  },
 ];
 
 const COMM_ACTIVITIES = [
-  { id: 'ca-1', user: { name: 'Priya Shah' }, action: 'created record', timestamp: new Date().toISOString(), entityType: 'order', entityId: '881' },
+  {
+    id: 'ca-1',
+    user: { name: 'Priya Shah' },
+    action: 'created record',
+    timestamp: new Date().toISOString(),
+    entityType: 'order',
+    entityId: '881',
+  },
   {
     id: 'ca-2',
     user: { name: 'Dev Costa', avatar: 'https://i.pravatar.cc/48?img=12' },
@@ -3597,7 +4547,12 @@ const COMM_ACTIVITIES = [
     timestamp: new Date().toISOString(),
     diff: { status: { from: 'draft', to: 'active' } },
   },
-  { id: 'ca-3', user: { name: 'Ana Ruiz' }, action: 'deleted record', timestamp: new Date().toISOString() },
+  {
+    id: 'ca-3',
+    user: { name: 'Ana Ruiz' },
+    action: 'deleted record',
+    timestamp: new Date().toISOString(),
+  },
 ];
 
 interface CommFeedItem {
@@ -3613,7 +4568,12 @@ const COMM_FEED_ITEMS: CommFeedItem[] = [
 ];
 
 const COMM_DIFF_ROWS = [
-  { label: 'name', before: 'Q1 Draft', after: 'Q1 Final', change: 'updated' as const },
+  {
+    label: 'name',
+    before: 'Q1 Draft',
+    after: 'Q1 Final',
+    change: 'updated' as const,
+  },
   { label: 'owner', after: 'Priya Shah', change: 'added' as const },
   { label: 'legacy_id', before: 'ORD-881', change: 'removed' as const },
 ];
@@ -3624,7 +4584,12 @@ function CommunicationFbStates() {
   return (
     <Box
       data-testid="probe-communication"
-      style={{ borderRadius: 16, border: '1px solid var(--ds-color-border)', background: 'var(--ds-color-bg-elevated)', padding: 16 }}
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
     >
       <Stack spacing="lg" fullWidth>
         <Stack spacing="xs" data-testid="probe-communication-comment-thread">
@@ -3674,7 +4639,9 @@ function CommunicationFbStates() {
         </Stack>
 
         <Stack spacing="sm" data-testid="probe-communication-assistant">
-          <Text size="xs" color="secondary">assistant -- 8 exports</Text>
+          <Text size="xs" color="secondary">
+            assistant -- 8 exports
+          </Text>
           <Stack direction="horizontal" spacing="sm" align="center">
             <AssistantStatusBadge label="Streaming" tone="info" />
             <StreamingText text="Drafting a response..." streaming />
@@ -3701,10 +4668,17 @@ function CommunicationFbStates() {
         </Stack>
 
         <Stack spacing="sm" data-testid="probe-communication-presence">
-          <Text size="xs" color="secondary">presence -- 3 exports</Text>
+          <Text size="xs" color="secondary">
+            presence -- 3 exports
+          </Text>
           <PresenceBar
             users={[
-              { id: 'pu-1', name: 'Priya Shah', avatar: 'https://i.pravatar.cc/48?img=12', color: '#e74c3c' },
+              {
+                id: 'pu-1',
+                name: 'Priya Shah',
+                avatar: 'https://i.pravatar.cc/48?img=12',
+                color: '#e74c3c',
+              },
               { id: 'pu-2', name: 'Dev Costa', color: '#3498db' },
               { id: 'pu-3', name: 'Ana Ruiz', color: '#2ecc71' },
               { id: 'pu-4', name: 'Sam Lee', color: '#9b59b6' },
@@ -3712,7 +4686,14 @@ function CommunicationFbStates() {
             maxVisible={2}
           />
           <PresenceTypingIndicator users={[{ name: 'Priya Shah' }, { name: 'Dev Costa' }]} />
-          <Box style={{ position: 'relative', height: 100, borderRadius: 8, border: '1px dashed var(--ds-color-border)' }}>
+          <Box
+            style={{
+              position: 'relative',
+              height: 100,
+              borderRadius: 8,
+              border: '1px dashed var(--ds-color-border)',
+            }}
+          >
             <LiveCursor user={{ name: 'Priya Shah', color: '#e74c3c' }} position={{ x: 40, y: 30 }} />
           </Box>
         </Stack>
@@ -3732,15 +4713,33 @@ function CommunicationFbStates() {
 // ---------------------------------------------------------------------------
 
 const WC_FILTER_PILLS: FilterPillConfig[] = [
-  { key: 'status', label: 'Status', value: 'active', options: [{ value: 'active', label: 'Active' }, { value: 'all', label: 'All' }] },
-  { key: 'owner', label: 'Owner', value: '', options: [{ value: '', label: 'Anyone' }] },
+  {
+    key: 'status',
+    label: 'Status',
+    value: 'active',
+    options: [
+      { value: 'active', label: 'Active' },
+      { value: 'all', label: 'All' },
+    ],
+  },
+  {
+    key: 'owner',
+    label: 'Owner',
+    value: '',
+    options: [{ value: '', label: 'Anyone' }],
+  },
 ];
 
 function WorkspaceChromeFbStates() {
   return (
     <Box
       data-testid="probe-workspace"
-      style={{ borderRadius: 16, border: '1px solid var(--ds-color-border)', background: 'var(--ds-color-bg-elevated)', padding: 16 }}
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
     >
       <Stack spacing="lg" fullWidth>
         <Stack spacing="xs" data-testid="probe-workspace-list-toolbar">
@@ -3796,7 +4795,10 @@ function WorkspaceChromeFbStates() {
 
         <Stack spacing="xs" data-testid="probe-workspace-column-menu">
           <ColumnMenu
-            columns={[{ key: 'name', title: 'Name' }, { key: 'email', title: 'Email' }]}
+            columns={[
+              { key: 'name', title: 'Name' },
+              { key: 'email', title: 'Email' },
+            ]}
             visibleColumns={['name']}
             onColumnsChange={() => undefined}
             onReset={() => undefined}
@@ -3806,8 +4808,20 @@ function WorkspaceChromeFbStates() {
         <Stack spacing="xs" data-testid="probe-workspace-saved-views-menu">
           <SavedViewsMenu
             views={[
-              { key: 'sys-1', label: 'All', kind: 'system', isSystem: true, isDefault: true, state: {} },
-              { key: 'custom-1', label: 'Mine', kind: 'custom', state: { query: 'x' } },
+              {
+                key: 'sys-1',
+                label: 'All',
+                kind: 'system',
+                isSystem: true,
+                isDefault: true,
+                state: {},
+              },
+              {
+                key: 'custom-1',
+                label: 'Mine',
+                kind: 'custom',
+                state: { query: 'x' },
+              },
             ]}
             activeViewKey="sys-1"
             onViewSelect={() => undefined}
@@ -3823,7 +4837,14 @@ function WorkspaceChromeFbStates() {
 
         <Stack spacing="xs" data-testid="probe-workspace-active-filters-bar">
           <ActiveFiltersBar
-            activeFilters={[{ key: 'status', label: 'Status', value: 'active', displayValue: 'Active' }]}
+            activeFilters={[
+              {
+                key: 'status',
+                label: 'Status',
+                value: 'active',
+                displayValue: 'Active',
+              },
+            ]}
             onRemoveFilter={() => undefined}
             onClearAll={() => undefined}
             onAddFilter={() => undefined}
@@ -3832,7 +4853,10 @@ function WorkspaceChromeFbStates() {
 
         <Stack spacing="xs" data-testid="probe-workspace-scope-switcher">
           <ScopeSwitcher
-            scopes={[{ key: 'all', label: 'All', count: 12 }, { key: 'mine', label: 'Mine', count: 3 }]}
+            scopes={[
+              { key: 'all', label: 'All', count: 12 },
+              { key: 'mine', label: 'Mine', count: 3 },
+            ]}
             activeScope="all"
             onScopeChange={() => undefined}
             variant="inline"
@@ -3843,7 +4867,12 @@ function WorkspaceChromeFbStates() {
           <ViewModeSwitcher
             modes={[
               { key: 'table', icon: <TagIcon />, label: 'Table' },
-              { key: 'cards', icon: <TagIcon />, label: 'Cards', disabled: true },
+              {
+                key: 'cards',
+                icon: <TagIcon />,
+                label: 'Cards',
+                disabled: true,
+              },
             ]}
             value="table"
             onChange={() => undefined}
@@ -3860,7 +4889,12 @@ function WorkspaceChromeFbStates() {
 
         <Stack spacing="xs" data-testid="probe-workspace-search-command-bar">
           <SearchCommandBar
-            command={{ placeholder: 'Search...', value: '', onSearch: () => undefined, hint: 'Try a name or ID' }}
+            command={{
+              placeholder: 'Search...',
+              value: '',
+              onSearch: () => undefined,
+              hint: 'Try a name or ID',
+            }}
             surfaceVariant="embedded"
             layoutVariant="editorial-tech"
           />
@@ -3883,29 +4917,98 @@ function WorkspaceChromeFbStates() {
 // ---------------------------------------------------------------------------
 
 const MISC_H2_FILES = [
-  { id: 'image-1', name: 'campaign-photo.jpg', type: 'file' as const, mimeType: 'image/jpeg', size: 512_000, modifiedAt: '2026-07-12T12:00:00.000Z' },
-  { id: 'pdf-1', name: 'quarterly-report.pdf', type: 'file' as const, mimeType: 'application/pdf', size: 2_048_000, modifiedAt: '2026-07-11T12:00:00.000Z' },
-  { id: 'text-1', name: 'release-notes.txt', type: 'file' as const, mimeType: 'text/plain', size: 8_192, modifiedAt: '2026-07-10T12:00:00.000Z' },
-  { id: 'other-1', name: 'workspace.bin', type: 'file' as const, mimeType: 'application/octet-stream', size: 64_000, modifiedAt: '2026-07-09T12:00:00.000Z' },
+  {
+    id: 'image-1',
+    name: 'campaign-photo.jpg',
+    type: 'file' as const,
+    mimeType: 'image/jpeg',
+    size: 512_000,
+    modifiedAt: '2026-07-12T12:00:00.000Z',
+  },
+  {
+    id: 'pdf-1',
+    name: 'quarterly-report.pdf',
+    type: 'file' as const,
+    mimeType: 'application/pdf',
+    size: 2_048_000,
+    modifiedAt: '2026-07-11T12:00:00.000Z',
+  },
+  {
+    id: 'text-1',
+    name: 'release-notes.txt',
+    type: 'file' as const,
+    mimeType: 'text/plain',
+    size: 8_192,
+    modifiedAt: '2026-07-10T12:00:00.000Z',
+  },
+  {
+    id: 'other-1',
+    name: 'workspace.bin',
+    type: 'file' as const,
+    mimeType: 'application/octet-stream',
+    size: 64_000,
+    modifiedAt: '2026-07-09T12:00:00.000Z',
+  },
 ];
 
 const MISC_H2_FOLDERS = [
-  { id: 'folder-1', name: 'Brand assets', type: 'folder' as const, childCount: 12, modifiedAt: '2026-07-13T12:00:00.000Z' },
+  {
+    id: 'folder-1',
+    name: 'Brand assets',
+    type: 'folder' as const,
+    childCount: 12,
+    modifiedAt: '2026-07-13T12:00:00.000Z',
+  },
 ];
 
 const MISC_H2_SELECTED = ['folder-1', 'pdf-1'];
 
 const MISC_H2_PROFILE_ACTIONS = [
-  { key: 'message', label: 'Message', variant: 'primary' as const, onClick: () => undefined },
+  {
+    key: 'message',
+    label: 'Message',
+    variant: 'primary' as const,
+    onClick: () => undefined,
+  },
   { key: 'archive', label: 'Archive', onClick: () => undefined },
-  { key: 'remove', label: 'Remove', variant: 'danger' as const, disabled: true, onClick: () => undefined },
+  {
+    key: 'remove',
+    label: 'Remove',
+    variant: 'danger' as const,
+    disabled: true,
+    onClick: () => undefined,
+  },
 ];
 
 const MISC_H2_PROFILES = [
-  { name: 'Ari Chen', role: 'Platform lead', email: 'ari@example.test', department: 'Platform', status: 'active' as const },
-  { name: 'Bea Costa', role: 'Product designer', email: 'bea@example.test', department: 'Design', status: 'away' as const },
-  { name: 'Cy Diaz', role: 'Security engineer', email: 'cy@example.test', department: 'Security', status: 'busy' as const },
-  { name: 'Dee Evans', role: 'Support manager', email: 'dee@example.test', department: 'Support', status: 'offline' as const },
+  {
+    name: 'Ari Chen',
+    role: 'Platform lead',
+    email: 'ari@example.test',
+    department: 'Platform',
+    status: 'active' as const,
+  },
+  {
+    name: 'Bea Costa',
+    role: 'Product designer',
+    email: 'bea@example.test',
+    department: 'Design',
+    status: 'away' as const,
+  },
+  {
+    name: 'Cy Diaz',
+    role: 'Security engineer',
+    email: 'cy@example.test',
+    department: 'Security',
+    status: 'busy' as const,
+  },
+  {
+    name: 'Dee Evans',
+    role: 'Support manager',
+    email: 'dee@example.test',
+    department: 'Support',
+    status: 'offline' as const,
+  },
 ];
 
 const MISC_H2_PLANS = [
@@ -3932,7 +5035,12 @@ const MISC_H2_PLANS = [
 ];
 
 const MISC_H2_FEATURES = [
-  { key: 'storage', label: 'Storage', description: 'Included object storage', category: 'Capacity' },
+  {
+    key: 'storage',
+    label: 'Storage',
+    description: 'Included object storage',
+    category: 'Capacity',
+  },
   { key: 'automation', label: 'Workflow automation', category: 'Operations' },
   { key: 'support', label: 'Priority support', category: 'Operations' },
 ];
@@ -3947,11 +5055,18 @@ function MiscH2FbStates() {
   return (
     <Box
       data-testid="probe-misc-h2"
-      style={{ borderRadius: 16, border: '1px solid var(--ds-color-border)', background: 'var(--ds-color-bg-elevated)', padding: 16 }}
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
     >
       <Stack spacing="lg" fullWidth>
         <Stack spacing="sm" data-testid="probe-misc-h2-file-manager">
-          <Text size="xs" color="secondary">File manager -- list/grid, MIME, selection, empty/loading</Text>
+          <Text size="xs" color="secondary">
+            File manager -- list/grid, MIME, selection, empty/loading
+          </Text>
           <Box data-testid="probe-misc-h2-file-list" style={MISC_H2_GROUP_STYLE}>
             <PatternFileManager
               files={MISC_H2_FILES}
@@ -3978,7 +5093,13 @@ function MiscH2FbStates() {
               onViewModeChange={() => undefined}
             />
           </Box>
-          <Box style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}>
+          <Box
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: 12,
+            }}
+          >
             <Box data-testid="probe-misc-h2-file-empty" style={MISC_H2_GROUP_STYLE}>
               <PatternFileManager files={[]} folders={[]} emptyMessage="No workspace files" />
             </Box>
@@ -3989,10 +5110,17 @@ function MiscH2FbStates() {
         </Stack>
 
         <Stack spacing="sm" data-testid="probe-misc-h2-user-profile">
-          <Text size="xs" color="secondary">User profile -- full/compact, statuses, online/offline, actions/loading</Text>
+          <Text size="xs" color="secondary">
+            User profile -- full/compact, statuses, online/offline, actions/loading
+          </Text>
           <Box
             data-testid="probe-misc-h2-user-full"
-            style={{ ...MISC_H2_GROUP_STYLE, display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 12 }}
+            style={{
+              ...MISC_H2_GROUP_STYLE,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
+              gap: 12,
+            }}
           >
             {MISC_H2_PROFILES.map((user, index) => (
               <PatternUserProfileCard
@@ -4006,7 +5134,12 @@ function MiscH2FbStates() {
           </Box>
           <Box
             data-testid="probe-misc-h2-user-compact"
-            style={{ ...MISC_H2_GROUP_STYLE, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}
+            style={{
+              ...MISC_H2_GROUP_STYLE,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: 12,
+            }}
           >
             <PatternUserProfileCard user={MISC_H2_PROFILES[0]} variant="compact" online />
             <PatternUserProfileCard user={MISC_H2_PROFILES[3]} variant="compact" online={false} />
@@ -4017,7 +5150,9 @@ function MiscH2FbStates() {
         </Stack>
 
         <Stack spacing="sm" data-testid="probe-misc-h2-pricing">
-          <Text size="xs" color="secondary">Pricing -- monthly/yearly, highlighted/plain, feature tri-state, loading</Text>
+          <Text size="xs" color="secondary">
+            Pricing -- monthly/yearly, highlighted/plain, feature tri-state, loading
+          </Text>
           <Box data-testid="probe-misc-h2-pricing-monthly" style={MISC_H2_GROUP_STYLE}>
             <PatternPricingTable
               plans={MISC_H2_PLANS}
@@ -4044,23 +5179,41 @@ function MiscH2FbStates() {
         </Stack>
 
         <Stack spacing="sm" data-testid="probe-misc-h2-empty-state">
-          <Text size="xs" color="secondary">Empty state -- primary/default/secondary actions and loading</Text>
+          <Text size="xs" color="secondary">
+            Empty state -- primary/default/secondary actions and loading
+          </Text>
           <Box
             data-testid="probe-misc-h2-empty-actions"
-            style={{ ...MISC_H2_GROUP_STYLE, display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12 }}
+            style={{
+              ...MISC_H2_GROUP_STYLE,
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: 12,
+            }}
           >
             <PatternEmptyState
               icon={<span aria-hidden="true">&#8709;</span>}
               title="No candidates yet"
               description="Create the first candidate or review the guide."
-              action={{ label: 'Create candidate', variant: 'primary', onClick: () => undefined }}
-              secondaryAction={{ label: 'Open guide', onClick: () => undefined }}
+              action={{
+                label: 'Create candidate',
+                variant: 'primary',
+                onClick: () => undefined,
+              }}
+              secondaryAction={{
+                label: 'Open guide',
+                onClick: () => undefined,
+              }}
             />
             <PatternEmptyState
               icon={<span aria-hidden="true">&#8635;</span>}
               title="No matching records"
               description="Reset the current filters."
-              action={{ label: 'Reset filters', variant: 'default', onClick: () => undefined }}
+              action={{
+                label: 'Reset filters',
+                variant: 'default',
+                onClick: () => undefined,
+              }}
             />
           </Box>
           <Box data-testid="probe-misc-h2-empty-loading" style={MISC_H2_GROUP_STYLE}>
@@ -4069,21 +5222,126 @@ function MiscH2FbStates() {
         </Stack>
 
         <Stack spacing="sm" data-testid="probe-misc-h2-token-inspector">
-          <Text size="xs" color="secondary">Token inspector -- activate with Ctrl+Shift+T, hover target, click to pin</Text>
+          <Text size="xs" color="secondary">
+            Token inspector -- activate with Ctrl+Shift+T, hover target, click to pin
+          </Text>
           <Box
             data-testid="probe-misc-h2-token-target"
-            style={{
-              ...MISC_H2_GROUP_STYLE,
-              '--ds-misc-h2-inspector-font': 'monospace',
-              background: 'var(--ds-color-bg-primary)',
-              color: 'var(--ds-color-text-primary)',
-              boxShadow: 'var(--ds-elevation-1)',
-              fontFamily: 'var(--ds-misc-h2-inspector-font)',
-            } as CSSProperties}
+            style={
+              {
+                ...MISC_H2_GROUP_STYLE,
+                '--ds-misc-h2-inspector-font': 'monospace',
+                background: 'var(--ds-color-bg-primary)',
+                color: 'var(--ds-color-text-primary)',
+                boxShadow: 'var(--ds-elevation-1)',
+                fontFamily: 'var(--ds-misc-h2-inspector-font)',
+              } as CSSProperties
+            }
           >
             Deterministic token target
           </Box>
           <TokenInspector />
+        </Stack>
+      </Stack>
+    </Box>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// WO-SKIN-06 CK-H1 -- tenant and branding preview inert fixture (?ckH1=1).
+//
+// The fixture intentionally uses the real rottay/bithire BrandTheme sources.
+// TenantPreview exposes all ten steps of both palettes and every finite sample
+// state; BrandingPreviewSandbox covers its createElement-only hierarchy; Brand
+// Studio renders its editor, live ColorField swatches and both scoped grounds.
+// ---------------------------------------------------------------------------
+
+const CK_H1_LOGO =
+  'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"%3E%3Crect width="32" height="32" rx="8" fill="%234f46e5"/%3E%3Cpath d="M9 22V10h7.5a5 5 0 0 1 0 10H13v2H9Zm4-6h3.2a1 1 0 1 0 0-2H13v2Z" fill="white"/%3E%3C/svg%3E';
+
+function CkH1States({ fixture, engine }: { fixture: TortureFixture; engine: ProbeEngine }) {
+  const theme: BrandTheme = fixture === 'bithire' ? bithireBrandTheme : rottayBrandTheme;
+  const primaryColor = theme.palette?.primaryColor ?? '#4f46e5';
+  const secondaryColor = theme.palette?.secondaryColor ?? '#0ea5e9';
+  const appearance = useMemo<TenantAppearance>(
+    () => ({
+      general: {
+        palette: {
+          primary: primaryColor,
+          secondary: secondaryColor,
+          accent: theme.palette?.accentColor,
+        },
+        typography: {
+          fontFamilyBase: theme.typography?.fontFamilyBase,
+          fontFamilyHeading: theme.typography?.fontFamilyHeading,
+        },
+        shape: { buttonStyle: 'soft' },
+        surfaces: { elevation: 'elevated' },
+      },
+      advanced: { chrome: theme.chrome },
+    }),
+    [primaryColor, secondaryColor, theme]
+  );
+
+  return (
+    <Box
+      data-testid="probe-ck-h1"
+      style={{
+        borderRadius: 16,
+        border: '1px solid var(--ds-color-border)',
+        background: 'var(--ds-color-bg-elevated)',
+        padding: 16,
+      }}
+    >
+      <Stack spacing="lg" fullWidth>
+        <Stack spacing="sm" data-testid="probe-ck-h1-tenant-preview">
+          <Text size="xs" color="secondary">
+            Tenant preview — both ten-step palettes and all sample states ({engine})
+          </Text>
+          <PatternTenantPreview
+            config={{
+              slug: `ck-h1-${fixture}-${engine}`,
+              name: `${theme.name} / ${engine}`,
+              primaryColor,
+              secondaryColor,
+              logo: CK_H1_LOGO,
+              engine,
+              personality: 'formal',
+            }}
+            components={['button', 'card', 'input', 'badge', 'table']}
+            showColorPalette
+            showPersonalityInfo
+          />
+        </Stack>
+
+        <Stack spacing="sm" data-testid="probe-ck-h1-branding-sandbox">
+          <Text size="xs" color="secondary">
+            Branding preview sandbox — full finite-state createElement tree
+          </Text>
+          <BrandingPreviewSandbox appearance={appearance} />
+        </Stack>
+
+        <Stack spacing="sm" data-testid="probe-ck-h1-brand-studio">
+          <Text size="xs" color="secondary">
+            Brand Studio — live swatches, dark/light grounds and contrast reports
+          </Text>
+          <PatternBrandStudio
+            value={theme}
+            title={`${theme.name} Brand Studio`}
+            description="Deterministic CK-H1 migration baseline"
+            onChange={() => undefined}
+            galleries={({ surface }) => (
+              <Stack spacing="sm" fullWidth>
+                <Text size="xs" color="secondary">
+                  {surface} preview states
+                </Text>
+                <Button variant="primary">Primary action</Button>
+                <Input value="Deterministic input" readOnly />
+                <Badge variant="success">Active</Badge>
+                <Card title="Preview card">Scoped BrandTheme surface</Card>
+              </Stack>
+            )}
+          />
         </Stack>
       </Stack>
     </Box>
@@ -4125,6 +5383,7 @@ function TortureContent() {
   const communication = useMemo(() => searchParams.get('communication') === '1', [searchParams]);
   const workspace = useMemo(() => searchParams.get('workspace') === '1', [searchParams]);
   const miscH2 = useMemo(() => searchParams.get('miscH2') === '1', [searchParams]);
+  const ckH1 = useMemo(() => searchParams.get('ckH1') === '1', [searchParams]);
   const longTail = useMemo(() => searchParams.get('longTail') === '1', [searchParams]);
 
   // WO-ENG-11 compares engines on an otherwise identical surface.
@@ -4147,7 +5406,11 @@ function TortureContent() {
     <TortureSurface fixture={fixture} rtl={rtl} engine={engine}>
       <Box
         data-testid="probe-ground"
-        style={{ minHeight: '100vh', padding: 24, background: 'var(--ds-color-bg-primary)' }}
+        style={{
+          minHeight: '100vh',
+          padding: 24,
+          background: 'var(--ds-color-bg-primary)',
+        }}
       >
         <Box style={{ maxWidth: contentWidth ?? 1360, margin: '0 auto' }}>
           <Stack spacing="lg" fullWidth>
@@ -4156,11 +5419,21 @@ function TortureContent() {
                 as={'h1' as never}
                 size="lg"
                 weight="bold"
-                style={{ display: 'block', color: 'var(--ds-color-text-primary)' }}
+                style={{
+                  display: 'block',
+                  color: 'var(--ds-color-text-primary)',
+                }}
               >
                 Whitelabel torture — {fixture}
               </Text>
-              <Text size="sm" style={{ display: 'block', marginTop: 4, color: 'var(--ds-color-text-secondary)' }}>
+              <Text
+                size="sm"
+                style={{
+                  display: 'block',
+                  marginTop: 4,
+                  color: 'var(--ds-color-text-secondary)',
+                }}
+              >
                 Hostile-tenant proof: every color, font, and radius below derives from the {fixture} fixture, never
                 hardcoded. Load ?fixture=rottay for the reference comparison.
               </Text>
@@ -4211,6 +5484,7 @@ function TortureContent() {
             {communication && <CommunicationFbStates />}
             {workspace && <WorkspaceChromeFbStates />}
             {miscH2 && <MiscH2FbStates />}
+            {ckH1 && <CkH1States fixture={fixture} engine={engine} />}
             {longTail && <SurfacesLongTailFixture />}
 
             <Box
@@ -4252,7 +5526,11 @@ function TortureContent() {
                 <Text
                   size="sm"
                   weight="semibold"
-                  style={{ display: 'block', color: 'var(--ds-color-text-secondary)', textTransform: 'capitalize' }}
+                  style={{
+                    display: 'block',
+                    color: 'var(--ds-color-text-secondary)',
+                    textTransform: 'capitalize',
+                  }}
                 >
                   {slug}
                 </Text>

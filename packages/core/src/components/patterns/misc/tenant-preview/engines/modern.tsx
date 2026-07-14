@@ -66,9 +66,7 @@ const badgeBaseStyle: React.CSSProperties = {
 
 /** Parses hex color to RGB; handles shorthand (#abc) and full (#aabbcc) */
 function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
-  const normalized = hex.length === 4
-    ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}`
-    : hex;
+  const normalized = hex.length === 4 ? `#${hex[1]}${hex[1]}${hex[2]}${hex[2]}${hex[3]}${hex[3]}` : hex;
   const match = /^#([0-9a-fA-F]{6})$/.exec(normalized);
   if (!match) return null;
   const parsed = Number.parseInt(match[1], 16);
@@ -131,10 +129,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
   const previewRef = useRef<HTMLDivElement>(null);
 
   /* Build full tenant config from creation input -- memoized for performance */
-  const tenantConfig = useMemo(
-    () => createTenantConfig(creationConfig),
-    [creationConfig]
-  );
+  const tenantConfig = useMemo(() => createTenantConfig(creationConfig), [creationConfig]);
 
   /* Resolve personality preset tokens for the info grid */
   const personalityInfo = useMemo(() => {
@@ -143,21 +138,22 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     return { preset, tokens };
   }, [creationConfig.personality]);
 
-  const primaryPalette = useMemo(
-    () => buildPaletteSteps(creationConfig.primaryColor),
-    [creationConfig.primaryColor]
-  );
+  const primaryPalette = useMemo(() => buildPaletteSteps(creationConfig.primaryColor), [creationConfig.primaryColor]);
 
   const secondaryPalette = useMemo(
-    () => creationConfig.secondaryColor ? buildPaletteSteps(creationConfig.secondaryColor) : null,
+    () => (creationConfig.secondaryColor ? buildPaletteSteps(creationConfig.secondaryColor) : null),
     [creationConfig.secondaryColor]
   );
 
   /* Generate scoped CSS; dark mode excluded since this is a preview card */
-  const previewCss = useMemo(() => generateTenantCss(tenantConfig, {
-    includeDarkSelector: false,
-    includeSystemDarkSelector: false,
-  }), [tenantConfig]);
+  const previewCss = useMemo(
+    () =>
+      generateTenantCss(tenantConfig, {
+        includeDarkSelector: false,
+        includeSystemDarkSelector: false,
+      }),
+    [tenantConfig]
+  );
 
   /* Set data-tenant attribute for CSS scoping; cleanup on unmount */
   useEffect(() => {
@@ -176,21 +172,75 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
     <div
       ref={previewRef}
       className={`ds-pattern-tenant-preview ds-engine-modern ${className ?? ''}`}
-      style={{ background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-1)', ...style }}
+      data-part="root"
+      style={{
+        background: 'var(--ds-surface-card)',
+        borderRadius: 'var(--ds-radius-lg)',
+        boxShadow: 'var(--ds-elevation-1)',
+        ...style,
+      }}
     >
       <style dangerouslySetInnerHTML={{ __html: previewCss }} />
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, padding: 20 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 24,
+          padding: 20,
+        }}
+      >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 16, borderBottom: '1px solid var(--ds-color-border)' }}>
+        <div
+          data-part="header"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 12,
+            paddingBottom: 16,
+            borderBottom: '1px solid var(--ds-color-border)',
+          }}
+        >
           {creationConfig.logo && (
-            <div style={{ width: 32, height: 32, borderRadius: 'var(--ds-radius-md)', overflow: 'hidden', flexShrink: 0 }}>
-              <img src={creationConfig.logo} alt={creationConfig.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            <div
+              data-part="logo"
+              style={{
+                width: 32,
+                height: 32,
+                borderRadius: 'var(--ds-radius-md)',
+                overflow: 'hidden',
+                flexShrink: 0,
+              }}
+            >
+              <img
+                src={creationConfig.logo}
+                alt={creationConfig.name}
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
             </div>
           )}
           <div>
-            <h2 style={{ fontSize: 18, fontWeight: 600, lineHeight: 1.3, margin: 0, color: 'var(--ds-color-text-primary)' }}>{creationConfig.name}</h2>
-            <p style={{ fontSize: 12, opacity: 0.6, margin: 0, color: 'var(--ds-color-text-secondary)' }}>
+            <h2
+              data-part="tenant-name"
+              style={{
+                fontSize: 18,
+                fontWeight: 600,
+                lineHeight: 1.3,
+                margin: 0,
+                color: 'var(--ds-color-text-primary)',
+              }}
+            >
+              {creationConfig.name}
+            </h2>
+            <p
+              data-part="tenant-slug"
+              style={{
+                fontSize: 12,
+                opacity: 0.6,
+                margin: 0,
+                color: 'var(--ds-color-text-secondary)',
+              }}
+            >
               {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
             </p>
           </div>
@@ -198,35 +248,87 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
 
         {/* Color Palette */}
         {showColorPalette && (
-          <div>
-            <div style={sectionLabelStyle}>
+          <div data-part="palette">
+            <div data-part="swatch-label" data-palette="all" style={sectionLabelStyle}>
               Color Palette
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div>
-                <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>Primary</div>
-                <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-md)', overflow: 'hidden' }}>
+              <div data-palette="primary">
+                <div
+                  data-part="swatch-label"
+                  data-palette="primary"
+                  style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}
+                >
+                  Primary
+                </div>
+                <div
+                  data-part="palette"
+                  data-palette="primary"
+                  style={{
+                    display: 'flex',
+                    borderRadius: 'var(--ds-radius-md)',
+                    overflow: 'hidden',
+                  }}
+                >
                   {primaryPalette.map(({ step, color }) => (
                     <div
                       key={step}
                       title={`${step}: ${color}`}
-                      style={{ flex: 1, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: color }}
+                      data-part="swatch"
+                      data-palette="primary"
+                      data-step={step}
+                      style={{
+                        flex: 1,
+                        height: 32,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        backgroundColor: color,
+                      }}
                     >
                       {step === 500 && (
-                        <span style={{ fontSize: 9, fontWeight: 700, color: primaryFg }}>500</span>
+                        <span
+                          data-part="swatch-label"
+                          data-palette="primary"
+                          data-step={step}
+                          style={{
+                            fontSize: 9,
+                            fontWeight: 700,
+                            color: primaryFg,
+                          }}
+                        >
+                          500
+                        </span>
                       )}
                     </div>
                   ))}
                 </div>
               </div>
               {secondaryPalette && (
-                <div>
-                  <div style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}>Secondary</div>
-                  <div style={{ display: 'flex', borderRadius: 'var(--ds-radius-md)', overflow: 'hidden' }}>
+                <div data-palette="secondary">
+                  <div
+                    data-part="swatch-label"
+                    data-palette="secondary"
+                    style={{ fontSize: 12, opacity: 0.6, marginBottom: 4 }}
+                  >
+                    Secondary
+                  </div>
+                  <div
+                    data-part="palette"
+                    data-palette="secondary"
+                    style={{
+                      display: 'flex',
+                      borderRadius: 'var(--ds-radius-md)',
+                      overflow: 'hidden',
+                    }}
+                  >
                     {secondaryPalette.map(({ step, color }) => (
                       <div
                         key={step}
                         title={`${step}: ${color}`}
+                        data-part="swatch"
+                        data-palette="secondary"
+                        data-step={step}
                         style={{ flex: 1, height: 24, backgroundColor: color }}
                       />
                     ))}
@@ -242,11 +344,8 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             Each sample type is gated behind the components array for selective rendering. */}
         {components.length > 0 && (
           <div>
-            <div style={sectionLabelStyle}>
-              Component Preview
-            </div>
+            <div style={sectionLabelStyle}>Component Preview</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-
               {/* Buttons -- inline token styles with tenant color */}
               {components.includes('button') && (
                 <div>
@@ -254,17 +353,62 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     <button
                       type="button"
-                      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', backgroundColor: primary500, color: primaryFg }}
+                      data-part="button"
+                      data-variant="primary"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: 32,
+                        padding: '0 12px',
+                        fontSize: 13,
+                        borderRadius: 'var(--ds-radius-md)',
+                        border: 'none',
+                        cursor: 'pointer',
+                        backgroundColor: primary500,
+                        color: primaryFg,
+                      }}
                     >
                       Primary
                     </button>
                     <button
                       type="button"
-                      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: `1px solid ${primary500}`, cursor: 'pointer', background: 'transparent', color: primary500 }}
+                      data-part="button"
+                      data-variant="outlined"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: 32,
+                        padding: '0 12px',
+                        fontSize: 13,
+                        borderRadius: 'var(--ds-radius-md)',
+                        border: `1px solid ${primary500}`,
+                        cursor: 'pointer',
+                        background: 'transparent',
+                        color: primary500,
+                      }}
                     >
                       Outlined
                     </button>
-                    <button type="button" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', background: 'transparent', color: 'var(--ds-color-text-primary)' }}>
+                    <button
+                      type="button"
+                      data-part="button"
+                      data-variant="default"
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        height: 32,
+                        padding: '0 12px',
+                        fontSize: 13,
+                        borderRadius: 'var(--ds-radius-md)',
+                        border: 'none',
+                        cursor: 'pointer',
+                        background: 'transparent',
+                        color: 'var(--ds-color-text-primary)',
+                      }}
+                    >
                       Default
                     </button>
                   </div>
@@ -275,12 +419,53 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
               {components.includes('card') && (
                 <div>
                   <div style={subLabelStyle}>Card</div>
-                  <div style={{ background: 'var(--ds-surface-card)', border: '1px solid var(--ds-color-border)', borderRadius: 'var(--ds-radius-md)', boxShadow: 'var(--ds-elevation-1)' }}>
-                    <div style={{ padding: '12px 16px', display: 'flex', flexDirection: 'column', gap: 4 }}>
+                  <div
+                    data-part="sample-card"
+                    style={{
+                      background: 'var(--ds-surface-card)',
+                      border: '1px solid var(--ds-color-border)',
+                      borderRadius: 'var(--ds-radius-md)',
+                      boxShadow: 'var(--ds-elevation-1)',
+                    }}
+                  >
+                    <div
+                      style={{
+                        padding: '12px 16px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 4,
+                      }}
+                    >
                       {/* Accent bar reinforces brand identity within card containers */}
-                      <div style={{ height: 4, borderRadius: 'var(--ds-radius-full)', marginBottom: 8, backgroundColor: primary500 }} />
-                      <h3 style={{ fontSize: 14, fontWeight: 600, margin: 0, color: 'var(--ds-color-text-primary)' }}>Sample Card Title</h3>
-                      <p style={{ fontSize: 12, opacity: 0.6, margin: 0, color: 'var(--ds-color-text-secondary)' }}>
+                      <div
+                        data-part="accent-bar"
+                        style={{
+                          height: 4,
+                          borderRadius: 'var(--ds-radius-full)',
+                          marginBottom: 8,
+                          backgroundColor: primary500,
+                        }}
+                      />
+                      <h3
+                        data-part="preview-card-title"
+                        style={{
+                          fontSize: 14,
+                          fontWeight: 600,
+                          margin: 0,
+                          color: 'var(--ds-color-text-primary)',
+                        }}
+                      >
+                        Sample Card Title
+                      </h3>
+                      <p
+                        data-part="preview-card-body"
+                        style={{
+                          fontSize: 12,
+                          opacity: 0.6,
+                          margin: 0,
+                          color: 'var(--ds-color-text-secondary)',
+                        }}
+                      >
                         This card demonstrates the tenant branding applied to a container component.
                       </p>
                     </div>
@@ -295,6 +480,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                     type="text"
                     placeholder="Type something..."
                     readOnly
+                    data-part="sample-input"
                     style={{
                       height: 32,
                       padding: '0 12px',
@@ -318,12 +504,38 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                     {/* Primary badge with tenant's primary color */}
                     <span
-                      style={{ ...badgeBaseStyle, backgroundColor: primary500, color: primaryFg }}
+                      data-part="badge"
+                      data-status="active"
+                      style={{
+                        ...badgeBaseStyle,
+                        backgroundColor: primary500,
+                        color: primaryFg,
+                      }}
                     >
                       Active
                     </span>
-                    <span style={{ ...badgeBaseStyle, background: 'color-mix(in srgb, var(--ds-color-warning) 15%, transparent)', color: 'var(--ds-color-warning)' }}>Pending</span>
-                    <span style={{ ...badgeBaseStyle, background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' }}>Draft</span>
+                    <span
+                      data-part="badge"
+                      data-status="pending"
+                      style={{
+                        ...badgeBaseStyle,
+                        background: 'color-mix(in srgb, var(--ds-color-warning) 15%, transparent)',
+                        color: 'var(--ds-color-warning)',
+                      }}
+                    >
+                      Pending
+                    </span>
+                    <span
+                      data-part="badge"
+                      data-status="draft"
+                      style={{
+                        ...badgeBaseStyle,
+                        background: 'var(--ds-surface-panel)',
+                        color: 'var(--ds-color-text-secondary)',
+                      }}
+                    >
+                      Draft
+                    </span>
                   </div>
                 </div>
               )}
@@ -333,30 +545,134 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 <div>
                   <div style={subLabelStyle}>Table</div>
                   <div style={{ overflowX: 'auto' }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                    <table
+                      data-part="sample-table"
+                      style={{
+                        width: '100%',
+                        borderCollapse: 'collapse',
+                        fontSize: 13,
+                      }}
+                    >
                       <thead>
-                        <tr style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
-                          <th style={{ textAlign: 'left', padding: '8px 12px', fontWeight: 600, fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Name</th>
-                          <th style={{ textAlign: 'left', padding: '8px 12px', fontWeight: 600, fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Status</th>
-                          <th style={{ textAlign: 'right', padding: '8px 12px', fontWeight: 600, fontSize: 12, color: 'var(--ds-color-text-secondary)' }}>Amount</th>
+                        <tr
+                          data-part="table-head"
+                          style={{
+                            borderBottom: '1px solid var(--ds-color-border)',
+                          }}
+                        >
+                          <th
+                            data-part="preview-table-cell"
+                            data-variant="head"
+                            style={{
+                              textAlign: 'left',
+                              padding: '8px 12px',
+                              fontWeight: 600,
+                              fontSize: 12,
+                              color: 'var(--ds-color-text-secondary)',
+                            }}
+                          >
+                            Name
+                          </th>
+                          <th
+                            data-part="preview-table-cell"
+                            data-variant="head"
+                            style={{
+                              textAlign: 'left',
+                              padding: '8px 12px',
+                              fontWeight: 600,
+                              fontSize: 12,
+                              color: 'var(--ds-color-text-secondary)',
+                            }}
+                          >
+                            Status
+                          </th>
+                          <th
+                            data-part="preview-table-cell"
+                            data-variant="head"
+                            style={{
+                              textAlign: 'right',
+                              padding: '8px 12px',
+                              fontWeight: 600,
+                              fontSize: 12,
+                              color: 'var(--ds-color-text-secondary)',
+                            }}
+                          >
+                            Amount
+                          </th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
-                          <td style={{ padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>Project Alpha</td>
-                          <td style={{ padding: '8px 12px' }}>
+                        <tr
+                          style={{
+                            borderBottom: '1px solid var(--ds-color-border)',
+                          }}
+                        >
+                          <td
+                            data-part="preview-table-cell"
+                            style={{
+                              padding: '8px 12px',
+                              color: 'var(--ds-color-text-primary)',
+                            }}
+                          >
+                            Project Alpha
+                          </td>
+                          <td data-part="preview-table-cell" style={{ padding: '8px 12px' }}>
                             <span
-                              style={{ ...badgeBaseStyle, backgroundColor: `${primary500}18`, color: primary500 }}
+                              data-part="badge"
+                              data-status="active"
+                              style={{
+                                ...badgeBaseStyle,
+                                backgroundColor: `${primary500}18`,
+                                color: primary500,
+                              }}
                             >
                               Active
                             </span>
                           </td>
-                          <td style={{ textAlign: 'right', padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>$12,400</td>
+                          <td
+                            data-part="preview-table-cell"
+                            style={{
+                              textAlign: 'right',
+                              padding: '8px 12px',
+                              color: 'var(--ds-color-text-primary)',
+                            }}
+                          >
+                            $12,400
+                          </td>
                         </tr>
                         <tr>
-                          <td style={{ padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>Project Beta</td>
-                          <td style={{ padding: '8px 12px' }}><span style={{ ...badgeBaseStyle, background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' }}>Pending</span></td>
-                          <td style={{ textAlign: 'right', padding: '8px 12px', color: 'var(--ds-color-text-primary)' }}>$8,200</td>
+                          <td
+                            data-part="preview-table-cell"
+                            style={{
+                              padding: '8px 12px',
+                              color: 'var(--ds-color-text-primary)',
+                            }}
+                          >
+                            Project Beta
+                          </td>
+                          <td data-part="preview-table-cell" style={{ padding: '8px 12px' }}>
+                            <span
+                              data-part="badge"
+                              data-status="pending"
+                              style={{
+                                ...badgeBaseStyle,
+                                background: 'var(--ds-surface-panel)',
+                                color: 'var(--ds-color-text-secondary)',
+                              }}
+                            >
+                              Pending
+                            </span>
+                          </td>
+                          <td
+                            data-part="preview-table-cell"
+                            style={{
+                              textAlign: 'right',
+                              padding: '8px 12px',
+                              color: 'var(--ds-color-text-primary)',
+                            }}
+                          >
+                            $8,200
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -371,21 +687,57 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             so designers can verify the preset configuration. */}
         {showPersonalityInfo && (
           <div>
-            <div style={sectionLabelStyle}>
-              Personality: {personalityInfo.preset}
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 8 }}>
+            <div style={sectionLabelStyle}>Personality: {personalityInfo.preset}</div>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+                gap: 8,
+              }}
+            >
               {[
-                { label: 'Animation', value: personalityInfo.tokens.animation?.entrance ?? 'fade' },
-                { label: 'Intensity', value: String(personalityInfo.tokens.animation?.intensity ?? 0.5) },
-                { label: 'Card Elevation', value: personalityInfo.tokens.card?.defaultElevation ?? 'sm' },
-                { label: 'Card Border', value: personalityInfo.tokens.card?.showBorder ? 'Yes' : 'No' },
-                { label: 'Badge Shape', value: personalityInfo.tokens.accent?.badgeShape ?? 'rounded' },
-                { label: 'Label Style', value: personalityInfo.tokens.typography?.labelStyle ?? 'sentence' },
-                { label: 'Hover Lift', value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px` },
-                { label: 'Accent Bar', value: personalityInfo.tokens.accent?.barPosition ?? 'top' },
+                {
+                  label: 'Animation',
+                  value: personalityInfo.tokens.animation?.entrance ?? 'fade',
+                },
+                {
+                  label: 'Intensity',
+                  value: String(personalityInfo.tokens.animation?.intensity ?? 0.5),
+                },
+                {
+                  label: 'Card Elevation',
+                  value: personalityInfo.tokens.card?.defaultElevation ?? 'sm',
+                },
+                {
+                  label: 'Card Border',
+                  value: personalityInfo.tokens.card?.showBorder ? 'Yes' : 'No',
+                },
+                {
+                  label: 'Badge Shape',
+                  value: personalityInfo.tokens.accent?.badgeShape ?? 'rounded',
+                },
+                {
+                  label: 'Label Style',
+                  value: personalityInfo.tokens.typography?.labelStyle ?? 'sentence',
+                },
+                {
+                  label: 'Hover Lift',
+                  value: `${personalityInfo.tokens.animation?.hoverLift ?? 0}px`,
+                },
+                {
+                  label: 'Accent Bar',
+                  value: personalityInfo.tokens.accent?.barPosition ?? 'top',
+                },
               ].map(({ label, value }) => (
-                <div key={label} style={{ borderRadius: 'var(--ds-radius-md)', padding: 8, background: 'var(--ds-surface-inset)' }}>
+                <div
+                  key={label}
+                  data-part="personality-tile"
+                  style={{
+                    borderRadius: 'var(--ds-radius-md)',
+                    padding: 8,
+                    background: 'var(--ds-surface-inset)',
+                  }}
+                >
                   <div style={{ fontSize: 11, opacity: 0.5 }}>{label}</div>
                   <div style={{ fontSize: 12, fontWeight: 500 }}>{value}</div>
                 </div>

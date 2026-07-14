@@ -126,135 +126,476 @@ export function BrandingPreviewSandbox({
     width: compact ? 200 : 260,
   };
 
-  return React.createElement(React.Fragment, null,
+  return React.createElement(
+    React.Fragment,
+    null,
     // Inject scoped CSS
     React.createElement('style', {
       dangerouslySetInnerHTML: { __html: scopedCss },
     }),
 
     // Sandbox container
-    React.createElement('div', {
-      [scopeAttr]: '',
-      style: {
-        background: 'var(--ds-color-bg-primary, var(--ds-layout-bg, #fff))',
-        color: 'var(--ds-color-text-primary)',
-        fontFamily: 'var(--ds-font-family-base, inherit)',
-        padding: 24,
-        borderRadius: 12,
-        border: '1px solid var(--ds-color-border)',
+    React.createElement(
+      'div',
+      {
+        [scopeAttr]: '',
+        className: 'ds-pattern-branding-preview-sandbox',
+        'data-part': 'root',
+        'data-state': compact ? 'compact' : 'full',
+        style: {
+          background: 'var(--ds-color-bg-primary, var(--ds-layout-bg, #fff))',
+          color: 'var(--ds-color-text-primary)',
+          fontFamily: 'var(--ds-font-family-base, inherit)',
+          padding: 24,
+          borderRadius: 12,
+          border: '1px solid var(--ds-color-border)',
+        },
       },
-    },
       // Buttons section
-      showLabels && React.createElement('div', { style: labelStyle }, 'Buttons'),
-      React.createElement('div', { style: { ...sectionStyle, ...rowStyle } },
-        React.createElement('button', { style: { ...btnBase, background: 'var(--ds-button-primary-bg, var(--ds-color-primary))', color: 'var(--ds-button-primary-color, #fff)' } }, 'Primary'),
-        React.createElement('button', { style: { ...btnBase, background: 'var(--ds-button-secondary-bg, transparent)', color: 'var(--ds-button-secondary-color, var(--ds-color-text-primary))', borderColor: 'var(--ds-button-secondary-border, var(--ds-color-border))' } }, 'Secondary'),
-        React.createElement('button', { style: { ...btnBase, background: 'var(--ds-button-default-bg, transparent)', color: 'var(--ds-button-default-color, var(--ds-color-text-primary))', borderColor: 'var(--ds-button-default-border, var(--ds-color-border))' } }, 'Default'),
-        React.createElement('button', { style: { ...btnBase, background: 'var(--ds-button-ghost-bg, transparent)', color: 'var(--ds-button-ghost-color, var(--ds-color-text-muted))' } }, 'Ghost'),
+      showLabels &&
+        React.createElement('div', { 'data-part': 'header', 'data-state': 'buttons', style: labelStyle }, 'Buttons'),
+      React.createElement(
+        'div',
+        {
+          'data-part': 'surface',
+          'data-state': 'buttons',
+          style: { ...sectionStyle, ...rowStyle },
+        },
+        React.createElement(
+          'button',
+          {
+            'data-part': 'button',
+            'data-variant': 'primary',
+            style: {
+              ...btnBase,
+              background: 'var(--ds-button-primary-bg, var(--ds-color-primary))',
+              color: 'var(--ds-button-primary-color, #fff)',
+            },
+          },
+          'Primary'
+        ),
+        React.createElement(
+          'button',
+          {
+            'data-part': 'button',
+            'data-variant': 'secondary',
+            style: {
+              ...btnBase,
+              background: 'var(--ds-button-secondary-bg, transparent)',
+              color: 'var(--ds-button-secondary-color, var(--ds-color-text-primary))',
+              borderColor: 'var(--ds-button-secondary-border, var(--ds-color-border))',
+            },
+          },
+          'Secondary'
+        ),
+        React.createElement(
+          'button',
+          {
+            'data-part': 'button',
+            'data-variant': 'default',
+            style: {
+              ...btnBase,
+              background: 'var(--ds-button-default-bg, transparent)',
+              color: 'var(--ds-button-default-color, var(--ds-color-text-primary))',
+              borderColor: 'var(--ds-button-default-border, var(--ds-color-border))',
+            },
+          },
+          'Default'
+        ),
+        React.createElement(
+          'button',
+          {
+            'data-part': 'button',
+            'data-variant': 'ghost',
+            style: {
+              ...btnBase,
+              background: 'var(--ds-button-ghost-bg, transparent)',
+              color: 'var(--ds-button-ghost-color, var(--ds-color-text-muted))',
+            },
+          },
+          'Ghost'
+        )
       ),
 
       // Inputs section
-      showLabels && React.createElement('div', { style: labelStyle }, 'Inputs'),
-      React.createElement('div', { style: { ...sectionStyle, ...rowStyle } },
-        React.createElement('input', { style: inputBase, placeholder: 'Text input...', readOnly: true }),
-        React.createElement('input', { style: { ...inputBase, borderColor: 'var(--ds-input-error-border, var(--ds-color-error))' }, placeholder: 'Error state', readOnly: true }),
+      showLabels &&
+        React.createElement('div', { 'data-part': 'header', 'data-state': 'inputs', style: labelStyle }, 'Inputs'),
+      React.createElement(
+        'div',
+        {
+          'data-part': 'surface',
+          'data-state': 'inputs',
+          style: { ...sectionStyle, ...rowStyle },
+        },
+        React.createElement('input', {
+          'data-part': 'input',
+          'data-state': 'default',
+          style: inputBase,
+          placeholder: 'Text input...',
+          readOnly: true,
+        }),
+        React.createElement('input', {
+          'data-part': 'input',
+          'data-state': 'error',
+          style: {
+            ...inputBase,
+            borderColor: 'var(--ds-input-error-border, var(--ds-color-error))',
+          },
+          placeholder: 'Error state',
+          readOnly: true,
+        })
       ),
 
       // Cards section
-      showLabels && React.createElement('div', { style: labelStyle }, 'Cards'),
-      React.createElement('div', { style: { ...sectionStyle, ...rowStyle } },
-        React.createElement('div', { style: cardBase },
-          React.createElement('div', { style: { fontWeight: 600, color: 'var(--ds-card-title-color, var(--ds-color-text-primary))', marginBottom: 4 } }, 'Card Title'),
-          React.createElement('div', { style: { fontSize: 13, color: 'var(--ds-card-body-color, var(--ds-color-text-muted))' } }, 'Card body text with secondary color.'),
+      showLabels &&
+        React.createElement('div', { 'data-part': 'header', 'data-state': 'cards', style: labelStyle }, 'Cards'),
+      React.createElement(
+        'div',
+        {
+          'data-part': 'surface',
+          'data-state': 'cards',
+          style: { ...sectionStyle, ...rowStyle },
+        },
+        React.createElement(
+          'div',
+          { 'data-part': 'card', 'data-state': 'default', style: cardBase },
+          React.createElement(
+            'div',
+            {
+              'data-part': 'preview-card-title',
+              style: {
+                fontWeight: 600,
+                color: 'var(--ds-card-title-color, var(--ds-color-text-primary))',
+                marginBottom: 4,
+              },
+            },
+            'Card Title'
+          ),
+          React.createElement(
+            'div',
+            {
+              'data-part': 'preview-card-body',
+              style: {
+                fontSize: 13,
+                color: 'var(--ds-card-body-color, var(--ds-color-text-muted))',
+              },
+            },
+            'Card body text with secondary color.'
+          )
         ),
-        !compact && React.createElement('div', { style: { ...cardBase, boxShadow: 'var(--ds-card-shadow-hover, 0 8px 24px rgba(0,0,0,0.1))' } },
-          React.createElement('div', { style: { fontWeight: 600, color: 'var(--ds-card-title-color, var(--ds-color-text-primary))', marginBottom: 4 } }, 'Elevated Card'),
-          React.createElement('div', { style: { fontSize: 13, color: 'var(--ds-card-body-color, var(--ds-color-text-muted))' } }, 'With hover shadow applied.'),
-        ),
+        !compact &&
+          React.createElement(
+            'div',
+            {
+              'data-part': 'card',
+              'data-state': 'elevated',
+              style: {
+                ...cardBase,
+                boxShadow: 'var(--ds-card-shadow-hover, 0 8px 24px rgba(0,0,0,0.1))',
+              },
+            },
+            React.createElement(
+              'div',
+              {
+                'data-part': 'preview-card-title',
+                style: {
+                  fontWeight: 600,
+                  color: 'var(--ds-card-title-color, var(--ds-color-text-primary))',
+                  marginBottom: 4,
+                },
+              },
+              'Elevated Card'
+            ),
+            React.createElement(
+              'div',
+              {
+                'data-part': 'preview-card-body',
+                style: {
+                  fontSize: 13,
+                  color: 'var(--ds-card-body-color, var(--ds-color-text-muted))',
+                },
+              },
+              'With hover shadow applied.'
+            )
+          )
       ),
 
       // Badges section
-      showLabels && React.createElement('div', { style: labelStyle }, 'Badges'),
-      React.createElement('div', { style: { ...sectionStyle, ...rowStyle } },
+      showLabels &&
+        React.createElement('div', { 'data-part': 'header', 'data-state': 'badges', style: labelStyle }, 'Badges'),
+      React.createElement(
+        'div',
+        {
+          'data-part': 'surface',
+          'data-state': 'badges',
+          style: { ...sectionStyle, ...rowStyle },
+        },
         ...[
-          { label: 'Active', bg: 'var(--ds-color-success-bg, rgba(34,197,94,0.1))', color: 'var(--ds-color-success)' },
-          { label: 'Warning', bg: 'var(--ds-color-warning-bg, rgba(245,158,11,0.1))', color: 'var(--ds-color-warning)' },
-          { label: 'Error', bg: 'var(--ds-color-error-bg, rgba(239,68,68,0.1))', color: 'var(--ds-color-error)' },
-          { label: 'Info', bg: 'var(--ds-color-info-bg, rgba(59,130,246,0.1))', color: 'var(--ds-color-info)' },
-        ].map(badge =>
-          React.createElement('span', {
-            key: badge.label,
-            style: { padding: '2px 8px', borderRadius: 'var(--ds-radius-sm, 6px)', fontSize: 12, fontWeight: 500, background: badge.bg, color: badge.color },
-          }, badge.label),
-        ),
+          {
+            label: 'Active',
+            bg: 'var(--ds-color-success-bg, rgba(34,197,94,0.1))',
+            color: 'var(--ds-color-success)',
+          },
+          {
+            label: 'Warning',
+            bg: 'var(--ds-color-warning-bg, rgba(245,158,11,0.1))',
+            color: 'var(--ds-color-warning)',
+          },
+          {
+            label: 'Error',
+            bg: 'var(--ds-color-error-bg, rgba(239,68,68,0.1))',
+            color: 'var(--ds-color-error)',
+          },
+          {
+            label: 'Info',
+            bg: 'var(--ds-color-info-bg, rgba(59,130,246,0.1))',
+            color: 'var(--ds-color-info)',
+          },
+        ].map((badge) =>
+          React.createElement(
+            'span',
+            {
+              key: badge.label,
+              'data-part': 'badge',
+              'data-state': badge.label.toLowerCase(),
+              style: {
+                padding: '2px 8px',
+                borderRadius: 'var(--ds-radius-sm, 6px)',
+                fontSize: 12,
+                fontWeight: 500,
+                background: badge.bg,
+                color: badge.color,
+              },
+            },
+            badge.label
+          )
+        )
       ),
 
       // Table preview (mini)
-      !compact && React.createElement(React.Fragment, null,
-        showLabels && React.createElement('div', { style: labelStyle }, 'Table'),
-        React.createElement('div', {
-          style: {
-            ...sectionStyle,
-            borderRadius: 'var(--ds-radius-md, 8px)',
-            border: '1px solid var(--ds-table-border, var(--ds-color-border))',
-            overflow: 'hidden',
-          },
-        },
-          // Header
-          React.createElement('div', {
-            style: {
-              display: 'flex',
-              padding: 'var(--ds-table-cell-padding, 10px 16px)',
-              background: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
-              fontSize: 'var(--ds-table-header-font-size, 13px)',
-              fontWeight: 'var(--ds-table-header-font-weight, 500)' as unknown as number,
-              color: 'var(--ds-table-header-color, var(--ds-color-text-muted))',
-              borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))',
-            },
-          },
-            React.createElement('div', { style: { flex: 2 } }, 'Name'),
-            React.createElement('div', { style: { flex: 1 } }, 'Status'),
-            React.createElement('div', { style: { flex: 1, textAlign: 'right' as const } }, 'Date'),
-          ),
-          // Rows
-          ...['John Doe', 'Jane Smith'].map((name, i) =>
-            React.createElement('div', {
-              key: name,
+      !compact &&
+        React.createElement(
+          React.Fragment,
+          null,
+          showLabels &&
+            React.createElement(
+              'div',
+              {
+                'data-part': 'header',
+                'data-state': 'table',
+                style: labelStyle,
+              },
+              'Table'
+            ),
+          React.createElement(
+            'div',
+            {
+              'data-part': 'table',
               style: {
-                display: 'flex',
-                padding: 'var(--ds-table-cell-padding, 10px 16px)',
-                fontSize: 'var(--ds-table-cell-font-size, 14px)',
-                color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
-                background: i % 2 === 1 ? 'var(--ds-table-row-bg-striped, transparent)' : 'var(--ds-table-row-bg, transparent)',
-                borderBottom: '1px solid var(--ds-table-row-border, var(--ds-color-border))',
+                ...sectionStyle,
+                borderRadius: 'var(--ds-radius-md, 8px)',
+                border: '1px solid var(--ds-table-border, var(--ds-color-border))',
+                overflow: 'hidden',
               },
             },
-              React.createElement('div', { style: { flex: 2, fontWeight: 500 } }, name),
-              React.createElement('div', { style: { flex: 1 } },
-                React.createElement('span', {
-                  style: { padding: '1px 6px', borderRadius: 4, fontSize: 11, background: 'var(--ds-color-success-bg, rgba(34,197,94,0.1))', color: 'var(--ds-color-success)' },
-                }, 'Active'),
+            // Header
+            React.createElement(
+              'div',
+              {
+                'data-part': 'table-head',
+                style: {
+                  display: 'flex',
+                  padding: 'var(--ds-table-cell-padding, 10px 16px)',
+                  background: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
+                  fontSize: 'var(--ds-table-header-font-size, 13px)',
+                  fontWeight: 'var(--ds-table-header-font-weight, 500)' as unknown as number,
+                  color: 'var(--ds-table-header-color, var(--ds-color-text-muted))',
+                  borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))',
+                },
+              },
+              React.createElement(
+                'div',
+                {
+                  'data-part': 'preview-table-cell',
+                  'data-variant': 'head',
+                  style: { flex: 2 },
+                },
+                'Name'
               ),
-              React.createElement('div', { style: { flex: 1, textAlign: 'right' as const, color: 'var(--ds-color-text-muted)', fontFamily: 'var(--ds-font-family-mono, monospace)', fontSize: 12 } }, 'Apr 17, 2026'),
+              React.createElement(
+                'div',
+                {
+                  'data-part': 'preview-table-cell',
+                  'data-variant': 'head',
+                  style: { flex: 1 },
+                },
+                'Status'
+              ),
+              React.createElement(
+                'div',
+                {
+                  'data-part': 'preview-table-cell',
+                  'data-variant': 'head',
+                  style: { flex: 1, textAlign: 'right' as const },
+                },
+                'Date'
+              )
             ),
-          ),
+            // Rows
+            ...['John Doe', 'Jane Smith'].map((name, i) =>
+              React.createElement(
+                'div',
+                {
+                  key: name,
+                  'data-part': 'surface',
+                  'data-state': i % 2 === 1 ? 'striped' : 'default',
+                  style: {
+                    display: 'flex',
+                    padding: 'var(--ds-table-cell-padding, 10px 16px)',
+                    fontSize: 'var(--ds-table-cell-font-size, 14px)',
+                    color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
+                    background:
+                      i % 2 === 1
+                        ? 'var(--ds-table-row-bg-striped, transparent)'
+                        : 'var(--ds-table-row-bg, transparent)',
+                    borderBottom: '1px solid var(--ds-table-row-border, var(--ds-color-border))',
+                  },
+                },
+                React.createElement(
+                  'div',
+                  {
+                    'data-part': 'preview-table-cell',
+                    'data-variant': 'name',
+                    style: { flex: 2, fontWeight: 500 },
+                  },
+                  name
+                ),
+                React.createElement(
+                  'div',
+                  {
+                    'data-part': 'preview-table-cell',
+                    'data-variant': 'status',
+                    style: { flex: 1 },
+                  },
+                  React.createElement(
+                    'span',
+                    {
+                      'data-part': 'badge',
+                      'data-state': 'active',
+                      style: {
+                        padding: '1px 6px',
+                        borderRadius: 4,
+                        fontSize: 11,
+                        background: 'var(--ds-color-success-bg, rgba(34,197,94,0.1))',
+                        color: 'var(--ds-color-success)',
+                      },
+                    },
+                    'Active'
+                  )
+                ),
+                React.createElement(
+                  'div',
+                  {
+                    'data-part': 'preview-table-cell',
+                    'data-variant': 'date',
+                    style: {
+                      flex: 1,
+                      textAlign: 'right' as const,
+                      color: 'var(--ds-color-text-muted)',
+                      fontFamily: 'var(--ds-font-family-mono, monospace)',
+                      fontSize: 12,
+                    },
+                  },
+                  'Apr 17, 2026'
+                )
+              )
+            )
+          )
         ),
-      ),
 
       // Typography preview
-      !compact && React.createElement(React.Fragment, null,
-        showLabels && React.createElement('div', { style: labelStyle }, 'Typography'),
-        React.createElement('div', { style: sectionStyle },
-          React.createElement('div', { style: { fontSize: 24, fontWeight: 700, fontFamily: 'var(--ds-font-family-heading, inherit)', letterSpacing: 'var(--ds-letter-spacing-heading, -0.02em)', color: 'var(--ds-color-text-primary)' } }, 'Heading Text'),
-          React.createElement('div', { style: { fontSize: 14, fontFamily: 'var(--ds-font-family-base, inherit)', lineHeight: 'var(--ds-line-height-body, 1.6)', color: 'var(--ds-color-text-secondary)', marginTop: 4 } }, 'Body text in the base font family. This is how paragraph text will look with the selected fonts and colors.'),
-          React.createElement('div', { style: { fontSize: 12, fontFamily: 'var(--ds-font-family-mono, monospace)', color: 'var(--ds-color-text-muted)', marginTop: 4 } }, 'const monospace = "code preview";'),
+      !compact &&
+        React.createElement(
+          React.Fragment,
+          null,
+          showLabels &&
+            React.createElement(
+              'div',
+              {
+                'data-part': 'header',
+                'data-state': 'typography',
+                style: labelStyle,
+              },
+              'Typography'
+            ),
+          React.createElement(
+            'div',
+            {
+              'data-part': 'surface',
+              'data-state': 'typography',
+              style: sectionStyle,
+            },
+            React.createElement(
+              'div',
+              {
+                'data-part': 'title',
+                style: {
+                  fontSize: 24,
+                  fontWeight: 700,
+                  fontFamily: 'var(--ds-font-family-heading, inherit)',
+                  letterSpacing: 'var(--ds-letter-spacing-heading, -0.02em)',
+                  color: 'var(--ds-color-text-primary)',
+                },
+              },
+              'Heading Text'
+            ),
+            React.createElement(
+              'div',
+              {
+                'data-part': 'subtitle',
+                'data-variant': 'body',
+                style: {
+                  fontSize: 14,
+                  fontFamily: 'var(--ds-font-family-base, inherit)',
+                  lineHeight: 'var(--ds-line-height-body, 1.6)',
+                  color: 'var(--ds-color-text-secondary)',
+                  marginTop: 4,
+                },
+              },
+              'Body text in the base font family. This is how paragraph text will look with the selected fonts and colors.'
+            ),
+            React.createElement(
+              'div',
+              {
+                'data-part': 'subtitle',
+                'data-variant': 'code',
+                style: {
+                  fontSize: 12,
+                  fontFamily: 'var(--ds-font-family-mono, monospace)',
+                  color: 'var(--ds-color-text-muted)',
+                  marginTop: 4,
+                },
+              },
+              'const monospace = "code preview";'
+            )
+          )
         ),
-      ),
 
       // Footer: var count
-      React.createElement('div', {
-        style: { fontSize: 10, color: 'var(--ds-color-text-disabled)', textAlign: 'center' as const, marginTop: 8 },
-      }, `${Object.keys(cssVars).length} CSS variables applied`),
-    ),
+      React.createElement(
+        'div',
+        {
+          'data-part': 'subtitle',
+          'data-variant': 'variable-count',
+          style: {
+            fontSize: 10,
+            color: 'var(--ds-color-text-disabled)',
+            textAlign: 'center' as const,
+            marginTop: 8,
+          },
+        },
+        `${Object.keys(cssVars).length} CSS variables applied`
+      )
+    )
   );
 }

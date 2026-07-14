@@ -29,10 +29,7 @@ import React, { useCallback, useId, useMemo, useState } from 'react';
 
 import { Badge, Box, Button, Card, Flex, Heading, Input, Select, Stack, Text } from '../../../primitives';
 import { compileBrandTheme } from '../../../../compilers/brand-theme';
-import {
-  validateBrandingContrast,
-  type BrandingColors,
-} from '../../../../_internal/a11y/contrast';
+import { validateBrandingContrast, type BrandingColors } from '../../../../_internal/a11y/contrast';
 import type {
   BrandChrome,
   BrandControlsChrome,
@@ -154,7 +151,7 @@ const DEFAULT_LIGHT_SURFACE: BrandStudioSurfaceConfig = {
 
 function resolveSurface(
   base: BrandStudioSurfaceConfig,
-  override: Partial<BrandStudioSurfaceConfig> | undefined,
+  override: Partial<BrandStudioSurfaceConfig> | undefined
 ): BrandStudioSurfaceConfig {
   if (!override) return base;
   return {
@@ -208,12 +205,10 @@ function pickHex(vars: Record<string, string>, keys: string[]): string | undefin
 export function deriveBrandingColors(
   vars: Record<string, string>,
   surface: BrandStudioSurfaceKey,
-  declaredKeys?: ReadonlySet<string>,
+  declaredKeys?: ReadonlySet<string>
 ): BrandingColors {
   const backgroundKeys =
-    surface === 'dark'
-      ? ['--ds-color-dark-bg', '--ds-color-bg-primary']
-      : ['--ds-color-bg-primary'];
+    surface === 'dark' ? ['--ds-color-dark-bg', '--ds-color-bg-primary'] : ['--ds-color-bg-primary'];
 
   const pickDeclared = (keys: string[]): string | undefined => {
     for (const key of keys) {
@@ -249,7 +244,7 @@ export function deriveBrandingColors(
 function applyDarkPaletteOverrides(
   vars: Record<string, string>,
   theme: BrandTheme,
-  surfaceKey: BrandStudioSurfaceKey,
+  surfaceKey: BrandStudioSurfaceKey
 ): Record<string, string> {
   if (surfaceKey !== 'dark') return vars;
   const darkPrimary = theme.palette?.darkPrimaryColor;
@@ -295,7 +290,7 @@ export function buildSurfaceVariables(theme: BrandTheme, surface: BrandStudioSur
  */
 export function evaluateBrandThemeContrast(
   theme: BrandTheme,
-  surface: BrandStudioSurfaceConfig,
+  surface: BrandStudioSurfaceConfig
 ): BrandStudioContrastReport {
   const { vars, declaredKeys } = buildSurfaceVariables(theme, surface);
   const colors = deriveBrandingColors(vars, surface.key, declaredKeys);
@@ -357,7 +352,13 @@ const fieldLabelStyle: React.CSSProperties = {
 
 function FieldLabel({ children }: { children: React.ReactNode }): React.ReactElement {
   return (
-    <Text size="xs" weight="semibold" style={fieldLabelStyle}>
+    <Text
+      className="ds-pattern-brand-studio__field-label"
+      data-part="field-label"
+      size="xs"
+      weight="semibold"
+      style={fieldLabelStyle}
+    >
       {children}
     </Text>
   );
@@ -373,11 +374,13 @@ function ColorField({
   onChange: (value: string) => void;
 }): React.ReactElement {
   return (
-    <Box>
+    <Box className="ds-pattern-brand-studio__field" data-part="field">
       <FieldLabel>{label}</FieldLabel>
       <Flex gap={8} align="center">
         <Box
           aria-hidden
+          className="ds-pattern-brand-studio__color-swatch"
+          data-part="color-swatch"
           style={{
             width: 28,
             height: 28,
@@ -388,6 +391,8 @@ function ColorField({
           }}
         />
         <Input
+          className="ds-pattern-brand-studio__field-input"
+          data-part="field-input"
           value={value ?? ''}
           placeholder="#000000"
           onChange={(next) => onChange(next)}
@@ -410,9 +415,16 @@ function TextField({
   onChange: (value: string) => void;
 }): React.ReactElement {
   return (
-    <Box>
+    <Box className="ds-pattern-brand-studio__field" data-part="field">
       <FieldLabel>{label}</FieldLabel>
-      <Input value={value ?? ''} placeholder={placeholder} onChange={(next) => onChange(next)} style={{ width: '100%' }} />
+      <Input
+        className="ds-pattern-brand-studio__field-input"
+        data-part="field-input"
+        value={value ?? ''}
+        placeholder={placeholder}
+        onChange={(next) => onChange(next)}
+        style={{ width: '100%' }}
+      />
     </Box>
   );
 }
@@ -429,9 +441,11 @@ function NumberField({
   onChange: (value: number | undefined) => void;
 }): React.ReactElement {
   return (
-    <Box>
+    <Box className="ds-pattern-brand-studio__field" data-part="field">
       <FieldLabel>{label}</FieldLabel>
       <Input
+        className="ds-pattern-brand-studio__field-input"
+        data-part="field-input"
         value={value == null ? '' : String(value)}
         placeholder={placeholder}
         onChange={(next) => {
@@ -461,9 +475,11 @@ function SelectField<T extends string>({
   onChange: (value: T) => void;
 }): React.ReactElement {
   return (
-    <Box>
+    <Box className="ds-pattern-brand-studio__field" data-part="field">
       <FieldLabel>{label}</FieldLabel>
       <Select
+        className="ds-pattern-brand-studio__field-input"
+        data-part="field-input"
         value={value}
         options={options}
         placeholder="Inherit"
@@ -480,15 +496,11 @@ const EDITOR_GRID: React.CSSProperties = {
   gap: 12,
 };
 
-function EditorSection({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}): React.ReactElement {
+function EditorSection({ title, children }: { title: string; children: React.ReactNode }): React.ReactElement {
   return (
     <Box
+      className="ds-pattern-brand-studio__section"
+      data-part="section"
       style={{
         padding: 16,
         borderRadius: 12,
@@ -513,6 +525,10 @@ function EditorSection({
 function ContrastReportView({ report }: { report: BrandStudioContrastReport }): React.ReactElement {
   return (
     <Box
+      className="ds-pattern-brand-studio__contrast-summary"
+      data-part="contrast-summary"
+      data-ground={report.surface}
+      data-state={report.valid ? 'pass' : 'fail'}
       style={{
         marginTop: 12,
         padding: 12,
@@ -521,16 +537,43 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
         background: 'var(--ds-color-bg-surface, var(--ds-color-bg-secondary))',
       }}
     >
-      <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
-        <Text size="xs" weight="semibold" style={{ display: 'block', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--ds-color-text-muted)' }}>
+      <Flex
+        className="ds-pattern-brand-studio__contrast-row"
+        data-part="contrast-row"
+        align="center"
+        justify="between"
+        gap={8}
+        style={{ flexWrap: 'wrap' }}
+      >
+        <Text
+          size="xs"
+          weight="semibold"
+          style={{
+            display: 'block',
+            textTransform: 'uppercase',
+            letterSpacing: '0.08em',
+            color: 'var(--ds-color-text-muted)',
+          }}
+        >
           {report.surface === 'dark' ? 'Dark ground' : 'Light ground'} contrast
         </Text>
-        <Badge variant={report.valid ? 'success' : 'error'}>
+        <Badge
+          className="ds-pattern-brand-studio__contrast-state"
+          data-state={report.valid ? 'pass' : 'fail'}
+          variant={report.valid ? 'success' : 'error'}
+        >
           {report.valid ? 'WCAG AA clean' : `${report.violations.length} failing`}
         </Badge>
       </Flex>
       {report.violations.length === 0 ? (
-        <Text size="xs" style={{ display: 'block', marginTop: 8, color: 'var(--ds-color-text-secondary)' }}>
+        <Text
+          size="xs"
+          style={{
+            display: 'block',
+            marginTop: 8,
+            color: 'var(--ds-color-text-secondary)',
+          }}
+        >
           Every checkable color pair meets its required ratio.
         </Text>
       ) : (
@@ -540,6 +583,9 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
             return (
               <Box
                 key={violation.pair}
+                className="ds-pattern-brand-studio__violation"
+                data-part="violation"
+                data-severity="error"
                 style={{
                   padding: '8px 10px',
                   borderRadius: 8,
@@ -547,7 +593,14 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                   background: 'var(--ds-color-bg-primary)',
                 }}
               >
-                <Flex align="center" justify="between" gap={8} style={{ flexWrap: 'wrap' }}>
+                <Flex
+                  className="ds-pattern-brand-studio__contrast-row"
+                  data-part="contrast-row"
+                  align="center"
+                  justify="between"
+                  gap={8}
+                  style={{ flexWrap: 'wrap' }}
+                >
                   <Text size="xs" weight="semibold" style={{ display: 'block' }}>
                     {violation.pair}
                   </Text>
@@ -555,11 +608,16 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                     {violation.ratio.toFixed(2)} : 1 &middot; needs {violation.required} : 1 ({violation.level})
                   </Text>
                 </Flex>
-                <Text size="xs" style={{ display: 'block', marginTop: 4, color: 'var(--ds-color-text-muted)' }}>
+                <Text
+                  size="xs"
+                  style={{
+                    display: 'block',
+                    marginTop: 4,
+                    color: 'var(--ds-color-text-muted)',
+                  }}
+                >
                   {violation.foreground} on {violation.background}
-                  {suggestion
-                    ? ` → try ${suggestion.suggestedColor} (${suggestion.newRatio.toFixed(2)} : 1)`
-                    : ''}
+                  {suggestion ? ` → try ${suggestion.suggestedColor} (${suggestion.newRatio.toFixed(2)} : 1)` : ''}
                 </Text>
               </Box>
             );
@@ -599,8 +657,20 @@ function PreviewPanel({
   }, [mergedVars, scopeClass]);
 
   return (
-    <Box>
-      <Flex align="center" justify="between" gap={8} style={{ marginBottom: 8, flexWrap: 'wrap' }}>
+    <Box
+      className="ds-pattern-brand-studio__preview-panel"
+      data-part="preview-panel"
+      data-surface={surface.key}
+      data-ground={surface.baseTheme}
+    >
+      <Flex
+        className="ds-pattern-brand-studio__preview-header"
+        data-part="preview-header"
+        align="center"
+        justify="between"
+        gap={8}
+        style={{ marginBottom: 8, flexWrap: 'wrap' }}
+      >
         <Text size="sm" weight="semibold" style={{ display: 'block' }}>
           {surface.label ?? surface.key}
         </Text>
@@ -608,7 +678,10 @@ function PreviewPanel({
       </Flex>
       <style dangerouslySetInnerHTML={{ __html: scopedCss }} />
       <Box
-        className={scopeClass}
+        className={`${scopeClass} ds-pattern-brand-studio__preview-content`}
+        data-part="preview-content"
+        data-surface={surface.key}
+        data-ground={surface.baseTheme}
         style={{
           padding: 20,
           borderRadius: 14,
@@ -619,9 +692,19 @@ function PreviewPanel({
         }}
       >
         {galleries ? (
-          galleries({ surface: surface.key, baseTheme: surface.baseTheme, tenantSlug: surface.tenantSlug })
+          galleries({
+            surface: surface.key,
+            baseTheme: surface.baseTheme,
+            tenantSlug: surface.tenantSlug,
+          })
         ) : (
-          <Text size="sm" style={{ display: 'block', color: 'var(--ds-color-text-secondary)' }}>
+          <Text
+            size="sm"
+            style={{
+              display: 'block',
+              color: 'var(--ds-color-text-secondary)',
+            }}
+          >
             Pass a galleries slot to render live component states here.
           </Text>
         )}
@@ -635,19 +718,28 @@ function PreviewPanel({
 // Editor
 // ---------------------------------------------------------------------------
 
-const HEADING_WEIGHT_OPTIONS: Array<{ value: 'lighter' | 'normal' | 'heavier'; label: string }> = [
+const HEADING_WEIGHT_OPTIONS: Array<{
+  value: 'lighter' | 'normal' | 'heavier';
+  label: string;
+}> = [
   { value: 'lighter', label: 'Lighter' },
   { value: 'normal', label: 'Normal' },
   { value: 'heavier', label: 'Heavier' },
 ];
 
-const LABEL_STYLE_OPTIONS: Array<{ value: 'uppercase' | 'sentence' | 'capitalize'; label: string }> = [
+const LABEL_STYLE_OPTIONS: Array<{
+  value: 'uppercase' | 'sentence' | 'capitalize';
+  label: string;
+}> = [
   { value: 'uppercase', label: 'Uppercase' },
   { value: 'sentence', label: 'Sentence' },
   { value: 'capitalize', label: 'Capitalize' },
 ];
 
-const ENTRANCE_OPTIONS: Array<{ value: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce'; label: string }> = [
+const ENTRANCE_OPTIONS: Array<{
+  value: 'none' | 'fade' | 'slideUp' | 'spring' | 'bounce';
+  label: string;
+}> = [
   { value: 'none', label: 'None' },
   { value: 'fade', label: 'Fade' },
   { value: 'slideUp', label: 'Slide up' },
@@ -655,14 +747,20 @@ const ENTRANCE_OPTIONS: Array<{ value: 'none' | 'fade' | 'slideUp' | 'spring' | 
   { value: 'bounce', label: 'Bounce' },
 ];
 
-const PULSE_OPTIONS: Array<{ value: 'none' | 'slow' | 'normal' | 'fast'; label: string }> = [
+const PULSE_OPTIONS: Array<{
+  value: 'none' | 'slow' | 'normal' | 'fast';
+  label: string;
+}> = [
   { value: 'none', label: 'None' },
   { value: 'slow', label: 'Slow' },
   { value: 'normal', label: 'Normal' },
   { value: 'fast', label: 'Fast' },
 ];
 
-const SKELETON_OPTIONS: Array<{ value: 'pulse' | 'shimmer' | 'wave'; label: string }> = [
+const SKELETON_OPTIONS: Array<{
+  value: 'pulse' | 'shimmer' | 'wave';
+  label: string;
+}> = [
   { value: 'pulse', label: 'Pulse' },
   { value: 'shimmer', label: 'Shimmer' },
   { value: 'wave', label: 'Wave' },
@@ -718,61 +816,425 @@ function BrandThemeEditor({
   const tabs = theme.chrome?.tabs ?? {};
 
   return (
-    <Stack spacing="md">
+    <Stack className="ds-pattern-brand-studio__editor" data-part="editor" spacing="md">
       <EditorSection title="Palette">
-        <ColorField label="Primary" value={palette.primaryColor} onChange={(v) => emit((d) => { draftPalette(d).primaryColor = v; })} />
-        <ColorField label="Secondary" value={palette.secondaryColor} onChange={(v) => emit((d) => { draftPalette(d).secondaryColor = v; })} />
-        <ColorField label="Accent" value={palette.accentColor} onChange={(v) => emit((d) => { draftPalette(d).accentColor = v; })} />
-        <ColorField label="Success" value={palette.successColor} onChange={(v) => emit((d) => { draftPalette(d).successColor = v; })} />
-        <ColorField label="Warning" value={palette.warningColor} onChange={(v) => emit((d) => { draftPalette(d).warningColor = v; })} />
-        <ColorField label="Error" value={palette.errorColor} onChange={(v) => emit((d) => { draftPalette(d).errorColor = v; })} />
-        <ColorField label="Info" value={palette.infoColor} onChange={(v) => emit((d) => { draftPalette(d).infoColor = v; })} />
-        <ColorField label="Dark primary (dark ground)" value={palette.darkPrimaryColor} onChange={(v) => emit((d) => { draftPalette(d).darkPrimaryColor = v; })} />
-        <ColorField label="Dark background (dark ground)" value={palette.darkBackgroundColor} onChange={(v) => emit((d) => { draftPalette(d).darkBackgroundColor = v; })} />
+        <ColorField
+          label="Primary"
+          value={palette.primaryColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).primaryColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Secondary"
+          value={palette.secondaryColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).secondaryColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Accent"
+          value={palette.accentColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).accentColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Success"
+          value={palette.successColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).successColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Warning"
+          value={palette.warningColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).warningColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Error"
+          value={palette.errorColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).errorColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Info"
+          value={palette.infoColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).infoColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Dark primary (dark ground)"
+          value={palette.darkPrimaryColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).darkPrimaryColor = v;
+            })
+          }
+        />
+        <ColorField
+          label="Dark background (dark ground)"
+          value={palette.darkBackgroundColor}
+          onChange={(v) =>
+            emit((d) => {
+              draftPalette(d).darkBackgroundColor = v;
+            })
+          }
+        />
       </EditorSection>
 
       <EditorSection title="Typography">
-        <TextField label="Base font" value={typography.fontFamilyBase} placeholder="Inter, sans-serif" onChange={(v) => emit((d) => { d.typography = { ...(d.typography ?? {}), fontFamilyBase: v }; })} />
-        <TextField label="Heading font" value={typography.fontFamilyHeading} placeholder="Inter, sans-serif" onChange={(v) => emit((d) => { d.typography = { ...(d.typography ?? {}), fontFamilyHeading: v }; })} />
-        <TextField label="Mono font" value={typography.fontFamilyMono} placeholder="monospace" onChange={(v) => emit((d) => { d.typography = { ...(d.typography ?? {}), fontFamilyMono: v }; })} />
-        <TextField label="Display font" value={typography.fontFamilyDisplay} placeholder="Inter, sans-serif" onChange={(v) => emit((d) => { d.typography = { ...(d.typography ?? {}), fontFamilyDisplay: v }; })} />
-        <SelectField label="Heading weight" value={typography.headingWeightBias} options={HEADING_WEIGHT_OPTIONS} onChange={(v) => emit((d) => { d.typography = { ...(d.typography ?? {}), headingWeightBias: v }; })} />
-        <SelectField label="Label style" value={typography.labelStyle} options={LABEL_STYLE_OPTIONS} onChange={(v) => emit((d) => { d.typography = { ...(d.typography ?? {}), labelStyle: v }; })} />
+        <TextField
+          label="Base font"
+          value={typography.fontFamilyBase}
+          placeholder="Inter, sans-serif"
+          onChange={(v) =>
+            emit((d) => {
+              d.typography = { ...(d.typography ?? {}), fontFamilyBase: v };
+            })
+          }
+        />
+        <TextField
+          label="Heading font"
+          value={typography.fontFamilyHeading}
+          placeholder="Inter, sans-serif"
+          onChange={(v) =>
+            emit((d) => {
+              d.typography = { ...(d.typography ?? {}), fontFamilyHeading: v };
+            })
+          }
+        />
+        <TextField
+          label="Mono font"
+          value={typography.fontFamilyMono}
+          placeholder="monospace"
+          onChange={(v) =>
+            emit((d) => {
+              d.typography = { ...(d.typography ?? {}), fontFamilyMono: v };
+            })
+          }
+        />
+        <TextField
+          label="Display font"
+          value={typography.fontFamilyDisplay}
+          placeholder="Inter, sans-serif"
+          onChange={(v) =>
+            emit((d) => {
+              d.typography = { ...(d.typography ?? {}), fontFamilyDisplay: v };
+            })
+          }
+        />
+        <SelectField
+          label="Heading weight"
+          value={typography.headingWeightBias}
+          options={HEADING_WEIGHT_OPTIONS}
+          onChange={(v) =>
+            emit((d) => {
+              d.typography = { ...(d.typography ?? {}), headingWeightBias: v };
+            })
+          }
+        />
+        <SelectField
+          label="Label style"
+          value={typography.labelStyle}
+          options={LABEL_STYLE_OPTIONS}
+          onChange={(v) =>
+            emit((d) => {
+              d.typography = { ...(d.typography ?? {}), labelStyle: v };
+            })
+          }
+        />
       </EditorSection>
 
       <EditorSection title="Surfaces">
-        <TextField label="Radius sm" value={radius.sm} placeholder="4px" onChange={(v) => emit((d) => { const s = draftSurfaces(d); s.borderRadius = { ...(s.borderRadius ?? {}), sm: v }; })} />
-        <TextField label="Radius md" value={radius.md} placeholder="8px" onChange={(v) => emit((d) => { const s = draftSurfaces(d); s.borderRadius = { ...(s.borderRadius ?? {}), md: v }; })} />
-        <TextField label="Radius lg" value={radius.lg} placeholder="12px" onChange={(v) => emit((d) => { const s = draftSurfaces(d); s.borderRadius = { ...(s.borderRadius ?? {}), lg: v }; })} />
-        <TextField label="Radius xl" value={radius.xl} placeholder="16px" onChange={(v) => emit((d) => { const s = draftSurfaces(d); s.borderRadius = { ...(s.borderRadius ?? {}), xl: v }; })} />
-        <NumberField label="Effect intensity" value={surfaces.effectIntensity} placeholder="1" onChange={(v) => emit((d) => { d.surfaces = { ...(d.surfaces ?? {}), effectIntensity: v }; })} />
-        <NumberField label="Density scale" value={surfaces.densityScale} placeholder="1" onChange={(v) => emit((d) => { d.surfaces = { ...(d.surfaces ?? {}), densityScale: v }; })} />
+        <TextField
+          label="Radius sm"
+          value={radius.sm}
+          placeholder="4px"
+          onChange={(v) =>
+            emit((d) => {
+              const s = draftSurfaces(d);
+              s.borderRadius = { ...(s.borderRadius ?? {}), sm: v };
+            })
+          }
+        />
+        <TextField
+          label="Radius md"
+          value={radius.md}
+          placeholder="8px"
+          onChange={(v) =>
+            emit((d) => {
+              const s = draftSurfaces(d);
+              s.borderRadius = { ...(s.borderRadius ?? {}), md: v };
+            })
+          }
+        />
+        <TextField
+          label="Radius lg"
+          value={radius.lg}
+          placeholder="12px"
+          onChange={(v) =>
+            emit((d) => {
+              const s = draftSurfaces(d);
+              s.borderRadius = { ...(s.borderRadius ?? {}), lg: v };
+            })
+          }
+        />
+        <TextField
+          label="Radius xl"
+          value={radius.xl}
+          placeholder="16px"
+          onChange={(v) =>
+            emit((d) => {
+              const s = draftSurfaces(d);
+              s.borderRadius = { ...(s.borderRadius ?? {}), xl: v };
+            })
+          }
+        />
+        <NumberField
+          label="Effect intensity"
+          value={surfaces.effectIntensity}
+          placeholder="1"
+          onChange={(v) =>
+            emit((d) => {
+              d.surfaces = { ...(d.surfaces ?? {}), effectIntensity: v };
+            })
+          }
+        />
+        <NumberField
+          label="Density scale"
+          value={surfaces.densityScale}
+          placeholder="1"
+          onChange={(v) =>
+            emit((d) => {
+              d.surfaces = { ...(d.surfaces ?? {}), densityScale: v };
+            })
+          }
+        />
       </EditorSection>
 
       <EditorSection title="Motion">
-        <SelectField label="Entrance" value={motion.entrance} options={ENTRANCE_OPTIONS} onChange={(v) => emit((d) => { d.motion = { ...(d.motion ?? {}), entrance: v }; })} />
-        <NumberField label="Entrance duration (ms)" value={motion.entranceDuration} placeholder="200" onChange={(v) => emit((d) => { d.motion = { ...(d.motion ?? {}), entranceDuration: v }; })} />
-        <NumberField label="Hover lift" value={motion.hoverLift} placeholder="0" onChange={(v) => emit((d) => { d.motion = { ...(d.motion ?? {}), hoverLift: v }; })} />
-        <NumberField label="Hover scale" value={motion.hoverScale} placeholder="1" onChange={(v) => emit((d) => { d.motion = { ...(d.motion ?? {}), hoverScale: v }; })} />
-        <SelectField label="Pulse speed" value={motion.pulseSpeed} options={PULSE_OPTIONS} onChange={(v) => emit((d) => { d.motion = { ...(d.motion ?? {}), pulseSpeed: v }; })} />
-        <SelectField label="Skeleton" value={motion.skeletonStyle} options={SKELETON_OPTIONS} onChange={(v) => emit((d) => { d.motion = { ...(d.motion ?? {}), skeletonStyle: v }; })} />
+        <SelectField
+          label="Entrance"
+          value={motion.entrance}
+          options={ENTRANCE_OPTIONS}
+          onChange={(v) =>
+            emit((d) => {
+              d.motion = { ...(d.motion ?? {}), entrance: v };
+            })
+          }
+        />
+        <NumberField
+          label="Entrance duration (ms)"
+          value={motion.entranceDuration}
+          placeholder="200"
+          onChange={(v) =>
+            emit((d) => {
+              d.motion = { ...(d.motion ?? {}), entranceDuration: v };
+            })
+          }
+        />
+        <NumberField
+          label="Hover lift"
+          value={motion.hoverLift}
+          placeholder="0"
+          onChange={(v) =>
+            emit((d) => {
+              d.motion = { ...(d.motion ?? {}), hoverLift: v };
+            })
+          }
+        />
+        <NumberField
+          label="Hover scale"
+          value={motion.hoverScale}
+          placeholder="1"
+          onChange={(v) =>
+            emit((d) => {
+              d.motion = { ...(d.motion ?? {}), hoverScale: v };
+            })
+          }
+        />
+        <SelectField
+          label="Pulse speed"
+          value={motion.pulseSpeed}
+          options={PULSE_OPTIONS}
+          onChange={(v) =>
+            emit((d) => {
+              d.motion = { ...(d.motion ?? {}), pulseSpeed: v };
+            })
+          }
+        />
+        <SelectField
+          label="Skeleton"
+          value={motion.skeletonStyle}
+          options={SKELETON_OPTIONS}
+          onChange={(v) =>
+            emit((d) => {
+              d.motion = { ...(d.motion ?? {}), skeletonStyle: v };
+            })
+          }
+        />
       </EditorSection>
 
       <EditorSection title="Chrome">
-        <ColorField label="Primary button bg" value={buttonPrimary.bg} onChange={(v) => emit((d) => { const ctl = draftControls(d); ctl.buttonPrimary = { ...(ctl.buttonPrimary ?? {}), bg: v }; })} />
-        <ColorField label="Primary button text" value={buttonPrimary.color} onChange={(v) => emit((d) => { const ctl = draftControls(d); ctl.buttonPrimary = { ...(ctl.buttonPrimary ?? {}), color: v }; })} />
-        <ColorField label="Input bg" value={input.bg} onChange={(v) => emit((d) => { const ctl = draftControls(d); ctl.input = { ...(ctl.input ?? {}), bg: v }; })} />
-        <ColorField label="Input border" value={input.border} onChange={(v) => emit((d) => { const ctl = draftControls(d); ctl.input = { ...(ctl.input ?? {}), border: v }; })} />
-        <ColorField label="Card bg" value={cardComponent.bg} onChange={(v) => emit((d) => { const c = draftChrome(d); c.cardComponent = { ...(c.cardComponent ?? {}), bg: v }; })} />
-        <ColorField label="Card text" value={cardComponent.color} onChange={(v) => emit((d) => { const c = draftChrome(d); c.cardComponent = { ...(c.cardComponent ?? {}), color: v }; })} />
-        <ColorField label="Card muted text" value={cardComponent.colorMuted} onChange={(v) => emit((d) => { const c = draftChrome(d); c.cardComponent = { ...(c.cardComponent ?? {}), colorMuted: v }; })} />
-        <ColorField label="Card border" value={cardComponent.border} onChange={(v) => emit((d) => { const c = draftChrome(d); c.cardComponent = { ...(c.cardComponent ?? {}), border: v }; })} />
-        <ColorField label="Table header bg" value={table.headerBg} onChange={(v) => emit((d) => { const c = draftChrome(d); c.table = { ...(c.table ?? {}), headerBg: v }; })} />
-        <ColorField label="Table row hover" value={table.rowBgHover} onChange={(v) => emit((d) => { const c = draftChrome(d); c.table = { ...(c.table ?? {}), rowBgHover: v }; })} />
-        <ColorField label="Modal bg" value={modal.bg} onChange={(v) => emit((d) => { const c = draftChrome(d); c.modal = { ...(c.modal ?? {}), bg: v }; })} />
-        <ColorField label="Modal overlay" value={modal.overlayBg} onChange={(v) => emit((d) => { const c = draftChrome(d); c.modal = { ...(c.modal ?? {}), overlayBg: v }; })} />
-        <ColorField label="Active tab color" value={tabs.colorActive} onChange={(v) => emit((d) => { const c = draftChrome(d); c.tabs = { ...(c.tabs ?? {}), colorActive: v }; })} />
-        <ColorField label="Tabs border" value={tabs.border} onChange={(v) => emit((d) => { const c = draftChrome(d); c.tabs = { ...(c.tabs ?? {}), border: v }; })} />
+        <ColorField
+          label="Primary button bg"
+          value={buttonPrimary.bg}
+          onChange={(v) =>
+            emit((d) => {
+              const ctl = draftControls(d);
+              ctl.buttonPrimary = { ...(ctl.buttonPrimary ?? {}), bg: v };
+            })
+          }
+        />
+        <ColorField
+          label="Primary button text"
+          value={buttonPrimary.color}
+          onChange={(v) =>
+            emit((d) => {
+              const ctl = draftControls(d);
+              ctl.buttonPrimary = { ...(ctl.buttonPrimary ?? {}), color: v };
+            })
+          }
+        />
+        <ColorField
+          label="Input bg"
+          value={input.bg}
+          onChange={(v) =>
+            emit((d) => {
+              const ctl = draftControls(d);
+              ctl.input = { ...(ctl.input ?? {}), bg: v };
+            })
+          }
+        />
+        <ColorField
+          label="Input border"
+          value={input.border}
+          onChange={(v) =>
+            emit((d) => {
+              const ctl = draftControls(d);
+              ctl.input = { ...(ctl.input ?? {}), border: v };
+            })
+          }
+        />
+        <ColorField
+          label="Card bg"
+          value={cardComponent.bg}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.cardComponent = { ...(c.cardComponent ?? {}), bg: v };
+            })
+          }
+        />
+        <ColorField
+          label="Card text"
+          value={cardComponent.color}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.cardComponent = { ...(c.cardComponent ?? {}), color: v };
+            })
+          }
+        />
+        <ColorField
+          label="Card muted text"
+          value={cardComponent.colorMuted}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.cardComponent = { ...(c.cardComponent ?? {}), colorMuted: v };
+            })
+          }
+        />
+        <ColorField
+          label="Card border"
+          value={cardComponent.border}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.cardComponent = { ...(c.cardComponent ?? {}), border: v };
+            })
+          }
+        />
+        <ColorField
+          label="Table header bg"
+          value={table.headerBg}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.table = { ...(c.table ?? {}), headerBg: v };
+            })
+          }
+        />
+        <ColorField
+          label="Table row hover"
+          value={table.rowBgHover}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.table = { ...(c.table ?? {}), rowBgHover: v };
+            })
+          }
+        />
+        <ColorField
+          label="Modal bg"
+          value={modal.bg}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.modal = { ...(c.modal ?? {}), bg: v };
+            })
+          }
+        />
+        <ColorField
+          label="Modal overlay"
+          value={modal.overlayBg}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.modal = { ...(c.modal ?? {}), overlayBg: v };
+            })
+          }
+        />
+        <ColorField
+          label="Active tab color"
+          value={tabs.colorActive}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.tabs = { ...(c.tabs ?? {}), colorActive: v };
+            })
+          }
+        />
+        <ColorField
+          label="Tabs border"
+          value={tabs.border}
+          onChange={(v) =>
+            emit((d) => {
+              const c = draftChrome(d);
+              c.tabs = { ...(c.tabs ?? {}), border: v };
+            })
+          }
+        />
       </EditorSection>
     </Stack>
   );
@@ -800,20 +1262,17 @@ export function PatternBrandStudio({
       mutate(draft);
       onChange?.(draft);
     },
-    [theme, onChange],
+    [theme, onChange]
   );
 
   const surfaces = useMemo<BrandStudioSurfaceConfig[]>(
-    () => [
-      resolveSurface(DEFAULT_DARK_SURFACE, darkSurface),
-      resolveSurface(DEFAULT_LIGHT_SURFACE, lightSurface),
-    ],
-    [darkSurface, lightSurface],
+    () => [resolveSurface(DEFAULT_DARK_SURFACE, darkSurface), resolveSurface(DEFAULT_LIGHT_SURFACE, lightSurface)],
+    [darkSurface, lightSurface]
   );
 
   const reports = useMemo(
     () => surfaces.map((surface) => evaluateBrandThemeContrast(theme, surface)),
-    [theme, surfaces],
+    [theme, surfaces]
   );
 
   const [hostileReports, setHostileReports] = useState<BrandStudioContrastReport[] | null>(null);
@@ -824,8 +1283,13 @@ export function PatternBrandStudio({
   }, [theme, surfaces]);
 
   return (
-    <Stack spacing="lg">
-      <Stack spacing="xs">
+    <Stack
+      className="ds-pattern-brand-studio"
+      data-part="root"
+      data-state={hostileReports ? 'checked' : 'idle'}
+      spacing="lg"
+    >
+      <Stack className="ds-pattern-brand-studio__preview-header" data-part="preview-header" spacing="xs">
         <Flex align="center" gap={8} style={{ flexWrap: 'wrap' }}>
           <Heading level="h2" size="xl" weight="bold">
             {title}
@@ -840,22 +1304,37 @@ export function PatternBrandStudio({
       </Stack>
 
       <Box
-        className="brand-studio-layout"
+        className="brand-studio-layout ds-pattern-brand-studio__preview-grid"
+        data-part="preview-grid"
         style={{
           display: 'grid',
           gap: 24,
           alignItems: 'start',
         }}
       >
-        <Stack spacing="md">
-          <Text size="sm" weight="semibold" style={{ display: 'block', color: 'var(--ds-color-text-secondary)' }}>
+        <Stack className="ds-pattern-brand-studio__editor" data-part="editor" spacing="md">
+          <Text
+            size="sm"
+            weight="semibold"
+            style={{
+              display: 'block',
+              color: 'var(--ds-color-text-secondary)',
+            }}
+          >
             Bounded BrandTheme fields
           </Text>
           <BrandThemeEditor theme={theme} emit={emit} />
         </Stack>
 
-        <Stack spacing="lg">
-          <Text size="sm" weight="semibold" style={{ display: 'block', color: 'var(--ds-color-text-secondary)' }}>
+        <Stack className="ds-pattern-brand-studio__preview-grid" data-part="preview-grid" spacing="lg">
+          <Text
+            size="sm"
+            weight="semibold"
+            style={{
+              display: 'block',
+              color: 'var(--ds-color-text-secondary)',
+            }}
+          >
             Live preview on both grounds
           </Text>
           {surfaces.map((surface, index) => (
@@ -870,6 +1349,9 @@ export function PatternBrandStudio({
           ))}
 
           <Card
+            className="ds-pattern-brand-studio__action-panel"
+            data-part="action"
+            data-state={hostileReports ? 'complete' : 'idle'}
             style={{
               padding: 16,
               border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border))',
@@ -882,11 +1364,23 @@ export function PatternBrandStudio({
                   <Text size="sm" weight="semibold" style={{ display: 'block' }}>
                     Hostile input check
                   </Text>
-                  <Text size="xs" style={{ display: 'block', color: 'var(--ds-color-text-muted)' }}>
+                  <Text
+                    size="xs"
+                    style={{
+                      display: 'block',
+                      color: 'var(--ds-color-text-muted)',
+                    }}
+                  >
                     Applies deliberately extreme values and reports the failing color pairs per ground.
                   </Text>
                 </Box>
-                <Button variant="primary" onClick={runHostileCheck}>
+                <Button
+                  className="ds-pattern-brand-studio__action"
+                  data-part="action"
+                  data-state={hostileReports ? 'complete' : 'idle'}
+                  variant="primary"
+                  onClick={runHostileCheck}
+                >
                   Run check
                 </Button>
               </Flex>
