@@ -55,12 +55,6 @@ export function ScopeSwitcher({
         padding: isInline ? 0 : '8px 16px',
         overflowX: 'auto',
         WebkitOverflowScrolling: 'touch',
-        borderBottom: isInline
-          ? 'none'
-          : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
-        background: isInline
-          ? 'transparent'
-          : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, var(--ds-color-bg-primary) 5%), color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%))',
       }}
     >
       <Flex
@@ -89,24 +83,12 @@ export function ScopeSwitcher({
                 gap: 8,
                 height: isInline ? 30 : 32,
                 padding: isInline ? '0 11px' : '0 12px',
-                borderRadius: 9999,
-                border: isActive
-                  ? '1px solid color-mix(in srgb, var(--ds-color-primary) 42%, transparent)'
-                  : '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 80%, transparent)',
-                background: isActive
-                  ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card)))'
-                  : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 90%, white 10%), color-mix(in srgb, var(--ds-surface-card) 86%, var(--ds-color-bg-primary) 14%))',
-                color: isActive
-                  ? 'var(--ds-color-text-primary)'
-                  : 'var(--ds-color-text-secondary)',
                 fontSize: 13,
                 fontWeight: isActive ? 700 : 600,
                 cursor: 'pointer',
-                outline: 'none',
                 transition: 'transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease, color 0.16s ease',
                 whiteSpace: 'nowrap',
                 flexShrink: 0,
-                boxShadow: isActive ? '0 6px 16px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)' : 'inset 0 1px 0 color-mix(in srgb, white 4%, transparent)',
               }}
             >
               <Text
@@ -115,7 +97,6 @@ export function ScopeSwitcher({
                 style={{
                   fontSize: 12,
                   fontWeight: 'inherit',
-                  color: 'inherit',
                   lineHeight: 1,
                 }}
               >
@@ -132,13 +113,6 @@ export function ScopeSwitcher({
                     minWidth: 18,
                     height: 18,
                     padding: '0 6px',
-                    borderRadius: 999,
-                    background: isActive
-                      ? 'color-mix(in srgb, var(--ds-color-primary) 18%, transparent)'
-                      : 'color-mix(in srgb, var(--ds-color-bg-primary) 60%, transparent)',
-                    color: isActive
-                      ? 'var(--ds-color-primary)'
-                      : 'var(--ds-color-text-muted)',
                     fontSize: 10,
                     fontWeight: 700,
                     lineHeight: 1,

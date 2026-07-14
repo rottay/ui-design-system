@@ -337,6 +337,20 @@
 @import '../components/skin/assistant.css';
 @import '../components/skin/presence.css';
 
+/* WO-SKIN-06 CK-C: workspace chrome paints from unlayered skins. */
+@import '../engines/modern/skin/list-toolbar.css';
+@import '../engines/modern/skin/saved-views.css';
+@import '../engines/rustic/skin/saved-views.css';
+@import '../components/skin/active-filters-bar.css';
+@import '../components/skin/column-menu.css';
+@import '../components/skin/export-button.css';
+@import '../components/skin/saved-views-menu.css';
+@import '../components/skin/scope-switcher.css';
+@import '../components/skin/search-command-bar.css';
+@import '../components/skin/status-filter-pills.css';
+@import '../components/skin/table-toolbar.css';
+@import '../components/skin/view-mode-switcher.css';
+
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)

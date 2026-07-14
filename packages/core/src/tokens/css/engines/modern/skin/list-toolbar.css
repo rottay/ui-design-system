@@ -1,0 +1,258 @@
+/**
+ * Modern ListToolbar skin — deliberately unlayered (P-47).
+ * Layered rules sort before Tailwind's base layer and cannot reliably paint
+ * these elements. The two root classes plus repeated target parts give every
+ * real border colour at least (0,4,0), above the tenant floor at (0,3,1).
+ * Text colour rules repeat the target part three times to reach (0,5,0) and
+ * outrank the Typography engine skin.
+ *
+ * Input and Button caller overrides remain inline: those primitives do not
+ * expose a ListToolbar-specific landing without broadening the anatomy contract.
+ */
+
+/* Root shell -------------------------------------------------------------- */
+
+.ds-pattern-list-toolbar.ds-engine-modern[data-part='root'][data-part='root'] {
+  background: var(--ds-toolbar-bg, var(--ds-surface-card, var(--ds-color-bg-primary)));
+  border: 1px solid var(--ds-toolbar-border, var(--ds-color-border));
+  border-bottom: 1px solid var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
+  border-radius: var(--ds-toolbar-radius, var(--ds-radius-md, 8px)) var(--ds-toolbar-radius, var(--ds-radius-md, 8px)) 0 0;
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+  box-shadow: var(--ds-toolbar-shadow, none);
+}
+
+/* Shared controls --------------------------------------------------------- */
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__icon-button[data-part='icon-button'][data-part='icon-button'] {
+  border: 1px solid var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-toolbar-control-bg, transparent);
+  color: var(--ds-toolbar-control-color, var(--ds-color-text-secondary));
+  outline: none;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__icon-button[data-part='icon-button'][data-part='icon-button']:hover {
+  background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+  border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__segmented-control[data-part='segmented-control'][data-part='segmented-control'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  border: 1px solid var(--ds-toolbar-control-border, var(--ds-toolbar-border, var(--ds-color-border)));
+  background: var(--ds-toolbar-control-bg, transparent);
+  color: var(--ds-toolbar-control-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__segment[data-part='segment'][data-part='segment'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-toolbar-control-color, var(--ds-color-text-secondary));
+  outline: none;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__segment[data-part='segment'][data-active='true'] {
+  background: var(--ds-filter-pill-active-bg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__segment[data-part='segment']:hover:not([data-active='true']) {
+  background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__segment-indicator[data-part='segment-indicator'] {
+  border-radius: 1px;
+  background: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__divider[data-part='divider'] {
+  background: var(--ds-toolbar-divider, var(--ds-toolbar-border, var(--ds-color-border)));
+}
+
+/* Filter controls --------------------------------------------------------- */
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger[data-part='filter-trigger'][data-part='filter-trigger'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  border: 1px solid var(--ds-filter-pill-border, transparent);
+  background: var(--ds-filter-pill-bg, transparent);
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+  box-shadow: var(--ds-filter-pill-shadow, none);
+  outline: none;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger[data-part='filter-trigger'][data-part='filter-trigger'][data-active='true'] {
+  border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
+  background: var(--ds-filter-pill-active-bg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+  box-shadow: var(--ds-filter-pill-active-shadow, var(--ds-filter-pill-shadow, none));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger[data-part='filter-trigger'][data-part='filter-trigger']:hover:not([data-active='true']) {
+  border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
+  background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-trigger[data-part='filter-trigger'][data-part='filter-trigger']:focus {
+  box-shadow: var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-badge[data-part='filter-badge'][data-part='filter-badge'] {
+  border-radius: 9px;
+  background: var(--ds-filter-pill-count-active-bg, var(--ds-filter-pill-active-color, var(--ds-color-primary)));
+  border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'][data-part='filter-dropdown-item'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+  outline: none;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item'][data-selected='true'] {
+  background: var(--ds-filter-pill-active-bg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item']:hover:not([data-selected='true']) {
+  background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-dropdown-item[data-part='filter-dropdown-item']
+  > .rottay-typography[data-part='root'] {
+  color: inherit;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-checkmark[data-part='filter-checkmark'][data-part='filter-checkmark'][data-part='filter-checkmark'] {
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__settings-empty[data-part='settings-empty'][data-part='settings-empty'][data-part='settings-empty'] {
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__density-option[data-part='density-option'][data-part='density-option'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  border: 1px solid var(--ds-filter-pill-border, transparent);
+  background: var(--ds-filter-pill-bg, transparent);
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+  outline: none;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__density-option[data-part='density-option'][data-part='density-option'][data-active='true'] {
+  border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
+  background: var(--ds-filter-pill-active-bg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__density-option[data-part='density-option'][data-part='density-option']:hover:not([data-active='true']) {
+  border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
+  background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__density-option-icon[data-part='density-option-icon'] {
+  color: inherit;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__density-option[data-part='density-option']
+  > .rottay-typography[data-part='root'] {
+  color: inherit;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__density-checkmark[data-part='density-checkmark'][data-part='density-checkmark'][data-part='density-checkmark'] {
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+/* Mobile overflow --------------------------------------------------------- */
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__mobile-overflow-label[data-part='mobile-overflow-label'][data-part='mobile-overflow-label'][data-part='mobile-overflow-label'] {
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item'][data-part='mobile-overflow-item'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-toolbar-control-color, var(--ds-color-text-secondary));
+  outline: none;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item']:hover {
+  background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__mobile-overflow-item-icon[data-part='mobile-overflow-item-icon'] {
+  color: inherit;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__mobile-overflow-item[data-part='mobile-overflow-item']
+  > .rottay-typography[data-part='root'] {
+  color: inherit;
+}
+
+/* Title and search -------------------------------------------------------- */
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__title-icon[data-part='title-icon'] {
+  color: var(--ds-toolbar-control-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__title[data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__search-icon[data-part='search-icon'] {
+  color: var(--ds-search-icon-color, var(--ds-color-text-muted));
+}
+
+/* Active-filter strip ----------------------------------------------------- */
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-chips-strip[data-part='filter-chips-strip'][data-part='filter-chips-strip'] {
+  border-top: 1px solid var(--ds-toolbar-border-bottom, var(--ds-toolbar-border, var(--ds-color-border)));
+  background: var(--ds-filter-pill-frame-bg, transparent);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-chips-icon[data-part='filter-chips-icon'] {
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chips-count[data-part='filter-chips-count'][data-part='filter-chips-count'][data-part='filter-chips-count'],
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip-label[data-part='filter-chip-label'][data-part='filter-chip-label'][data-part='filter-chip-label'] {
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__filter-chip[data-part='filter-chip'] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern
+  .ds-list-toolbar__filter-chip-value[data-part='filter-chip-value'][data-part='filter-chip-value'][data-part='filter-chip-value'] {
+  color: var(--ds-toolbar-color, var(--ds-color-text-primary));
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__clear-all[data-part='clear-all'][data-part='clear-all'] {
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+  outline: none;
+}
+
+.ds-pattern-list-toolbar.ds-engine-modern .ds-list-toolbar__count-badge[data-part='count-badge'][data-part='count-badge'] {
+  border-radius: 9px;
+  background: var(--ds-filter-pill-count-active-bg, var(--ds-filter-pill-active-color, var(--ds-color-primary)));
+  border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
+  color: var(--ds-color-text-on-primary);
+}

@@ -260,22 +260,17 @@ export function ExportButton<T = unknown>({
               position: 'absolute',
               top: -32,
               left: '50%',
-              transform: 'translateX(-50%)',
               padding: '4px 10px',
-              borderRadius: 6,
-              background: 'var(--ds-color-bg-success, #16a34a)',
-              color: 'var(--ds-color-text-on-success, #fff)',
               fontSize: 12,
               fontWeight: 600,
               whiteSpace: 'nowrap',
               pointerEvents: 'none',
               zIndex: 9999,
-              animation: 'ds-export-toast-fade 1.8s ease forwards',
             }}
           >
             <Flex gap={1} style={{ alignItems: 'center' }}>
               <Check size={12} />
-              <Text data-part="toast-label" style={{ fontSize: 12, fontWeight: 600, color: 'inherit' }}>
+              <Text data-part="toast-label" style={{ fontSize: 12, fontWeight: 600 }}>
                 Copied!
               </Text>
             </Flex>
@@ -300,15 +295,9 @@ export function ExportButton<T = unknown>({
               position: 'fixed',
               top: dropdownPos.top,
               left: dropdownPos.left,
-              transform: 'translateX(-100%)',
               zIndex: 9998,
               minWidth: 200,
               padding: 4,
-              borderRadius: 8,
-              border: '1px solid var(--ds-color-border, #e2e2e2)',
-              background: 'var(--ds-color-bg-elevated, #fff)',
-              boxShadow:
-                '0 4px 12px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 3px color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
             }}
           >
             {formats.map((fmt) => {
@@ -329,29 +318,10 @@ export function ExportButton<T = unknown>({
                     gap: 10,
                     width: '100%',
                     padding: '8px 12px',
-                    borderRadius: 6,
-                    border: 'none',
-                    background: 'transparent',
-                    color: 'var(--ds-color-text-primary, #1a1a1a)',
                     fontSize: 13,
                     fontWeight: 500,
                     cursor: 'pointer',
-                    outline: 'none',
                     transition: 'background 120ms ease',
-                  }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLElement>) => {
-                    (e.currentTarget as HTMLElement).style.background =
-                      'var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent))';
-                  }}
-                  onMouseLeave={(e: React.MouseEvent<HTMLElement>) => {
-                    (e.currentTarget as HTMLElement).style.background = 'transparent';
-                  }}
-                  onFocus={(e: React.FocusEvent<HTMLElement>) => {
-                    (e.currentTarget as HTMLElement).style.background =
-                      'var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent))';
-                  }}
-                  onBlur={(e: React.FocusEvent<HTMLElement>) => {
-                    (e.currentTarget as HTMLElement).style.background = 'transparent';
                   }}
                 >
                   <Flex
@@ -362,8 +332,6 @@ export function ExportButton<T = unknown>({
                       width: 24,
                       height: 24,
                       flexShrink: 0,
-                      borderRadius: 4,
-                      color: 'var(--ds-color-text-secondary, #666)',
                     }}
                   >
                     {meta.icon}
@@ -373,7 +341,6 @@ export function ExportButton<T = unknown>({
                     style={{
                       fontSize: 13,
                       fontWeight: 500,
-                      color: 'inherit',
                     }}
                   >
                     {meta.label}
@@ -384,16 +351,6 @@ export function ExportButton<T = unknown>({
           </Box>,
           document.body,
         )}
-
-      {/* Toast animation keyframes -- injected once */}
-      <style>{`
-        @keyframes ds-export-toast-fade {
-          0%   { opacity: 0; transform: translateX(-50%) translateY(4px); }
-          10%  { opacity: 1; transform: translateX(-50%) translateY(0); }
-          80%  { opacity: 1; transform: translateX(-50%) translateY(0); }
-          100% { opacity: 0; transform: translateX(-50%) translateY(-4px); }
-        }
-      `}</style>
     </>
   );
 }

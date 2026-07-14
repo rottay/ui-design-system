@@ -1,0 +1,61 @@
+/**
+ * ActiveFiltersBar skin — engine-agnostic and deliberately unlayered.
+ * Unlayered paint outranks Tailwind preflight while caller inline styles keep
+ * their per-instance override precedence. Border paint reaches the tenant
+ * border floor at (0,4,0); composed Text color reaches (0,5,0).
+ */
+
+.ds-structure.ds-active-filters-bar[data-part='root'][data-part='root'] {
+  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%));
+}
+.ds-structure.ds-active-filters-bar[data-part='root'][data-part='root'][data-embedded='true'] {
+  border-bottom: none;
+  background: transparent;
+}
+
+.ds-structure.ds-active-filters-bar [data-part='pill'][data-part='pill'][data-part='pill'] {
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  color: var(--ds-color-primary);
+}
+
+.ds-structure.ds-active-filters-bar [data-part='chip'][data-part='chip'] {
+  border-radius: 999px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card)));
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+}
+.ds-structure.ds-active-filters-bar [data-part='chip-label'][data-part='chip-label'][data-part='chip-label'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-structure.ds-active-filters-bar [data-part='chip-value'][data-part='chip-value'][data-part='chip-value'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-structure.ds-active-filters-bar [data-part='chip-remove'][data-part='chip-remove'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent);
+  border-radius: 9999px;
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-active-filters-bar [data-part='clear-all'][data-part='clear-all'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent);
+  border-radius: 999px;
+  color: var(--ds-color-text-secondary);
+}
+.ds-structure.ds-active-filters-bar [data-part='clear-all'] > .rottay-typography[data-color] {
+  color: inherit;
+}
+
+.ds-structure.ds-active-filters-bar [data-part='add-filter'][data-part='add-filter'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  border-radius: 999px;
+  color: var(--ds-color-primary);
+}
+.ds-structure.ds-active-filters-bar [data-part='add-filter'] > .rottay-typography[data-color] {
+  color: inherit;
+}

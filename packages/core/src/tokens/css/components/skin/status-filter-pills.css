@@ -1,0 +1,81 @@
+/**
+ * StatusFilterPills skin — deliberately unlayered (P-47).
+ * Layered rules sort before Tailwind's base layer and cannot reliably paint
+ * these elements. This component has one scope class, so border-colour rules
+ * repeat their target part three times to reach (0,4,0). Text colour rules
+ * repeat it four times to reach (0,5,0) and outrank the Typography engine skin.
+ */
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'] {
+  border-radius: 9999px;
+  border: 1px solid var(--ds-filter-pill-border, transparent);
+  background: var(--ds-filter-pill-bg, transparent);
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+  outline: none;
+  box-shadow: var(--ds-filter-pill-shadow, none);
+  backdrop-filter: blur(6px);
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill'][data-selected='true'] {
+  border: 1px solid var(--ds-filter-pill-active-border, var(--ds-color-primary));
+  background: var(--ds-filter-pill-active-bg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent));
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+  box-shadow: var(--ds-filter-pill-active-shadow, var(--ds-filter-pill-shadow, none));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:hover:not([data-selected='true']) {
+  background: var(--ds-filter-pill-hover-bg, var(--ds-surface-highlight, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)));
+  border-color: var(--ds-filter-pill-hover-border, var(--ds-toolbar-control-border, var(--ds-color-border)));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill[data-part='pill'][data-part='pill'][data-part='pill']:focus {
+  box-shadow: var(--ds-filter-pill-focus-ring, 0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 22%, transparent));
+}
+
+.ds-pattern-status-filter-pills .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'] {
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill-icon[data-part='pill-icon'][data-part='pill-icon'][data-selected='true'] {
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'] {
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__pill-label[data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-part='pill-label'][data-selected='true'] {
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'] {
+  border-radius: 999px;
+  background: var(--ds-filter-pill-count-bg, color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent));
+  border: 1px solid var(--ds-filter-pill-count-border, transparent);
+  box-shadow: var(--ds-filter-pill-count-ring, none);
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge[data-part='count-badge'][data-part='count-badge'][data-part='count-badge'][data-selected='true'] {
+  background: var(--ds-filter-pill-count-active-bg, var(--ds-filter-pill-active-color, var(--ds-color-primary)));
+  border: 1px solid var(--ds-filter-pill-count-active-border, transparent);
+  box-shadow: var(--ds-filter-pill-count-active-ring, none);
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'] {
+  color: var(--ds-filter-pill-color, var(--ds-color-text-secondary));
+}
+
+.ds-pattern-status-filter-pills
+  .ds-status-filter-pills__count-badge-text[data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-part='count-badge-text'][data-selected='true'] {
+  color: var(--ds-filter-pill-active-color, var(--ds-color-primary));
+}

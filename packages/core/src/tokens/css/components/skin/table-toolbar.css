@@ -1,0 +1,33 @@
+/**
+ * TableToolbar skin — engine-agnostic and deliberately unlayered.
+ * Search paint lands where caller style landed: the modern Input wrapper and
+ * the rustic Input shell. The rustic selector outranks every Input state.
+ */
+
+.ds-structure.ds-table-toolbar[data-part='root'][data-part='root'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+.ds-structure.ds-table-toolbar .ds-table-toolbar__divider[data-part='divider'] {
+  border-radius: 1px;
+  background: linear-gradient(180deg, transparent 0%, var(--ds-color-border) 20%, var(--ds-color-border) 80%, transparent 100%);
+  box-shadow: 1px 0 0 rgba(255, 255, 255, 0.04);
+}
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field
+  > .ds-table-toolbar__search-icon[data-part='search-icon'] {
+  transform: translateY(-50%);
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field
+  > .ds-table-toolbar__search-icon[data-part='search-icon']
+  + .ds-table-toolbar__search-input:has(> .rottay-input.rottay-input--modern[data-part='root']),
+.ds-structure.ds-table-toolbar
+  .ds-table-toolbar__search-field
+  > .ds-table-toolbar__search-icon[data-part='search-icon']
+  + div
+  > .ds-table-toolbar__search-input.rottay-input.rottay-input--rustic[data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'][data-part='root'] {
+  background: var(--ds-color-bg-secondary);
+  border: 1px solid var(--ds-color-border);
+}

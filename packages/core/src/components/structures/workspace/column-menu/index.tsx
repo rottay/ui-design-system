@@ -99,9 +99,6 @@ function CountPill({ label }: { label: string }) {
         minWidth: 26,
         height: 22,
         padding: '0 8px',
-        borderRadius: 999,
-        background: 'color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent)',
-        color: 'var(--ds-color-text-secondary)',
         fontSize: 11,
         fontWeight: 600,
       }}
@@ -450,6 +447,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
         as="button"
         data-part="trigger"
         data-open={isOpen}
+        data-compact={compact}
         className="ds-structure ds-column-menu"
         ref={triggerRef}
         onClick={isOpen ? () => setIsOpen(false) : handleOpen}
@@ -464,14 +462,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           height: compact ? 32 : 42,
           minHeight: compact ? 32 : 42,
           padding: 0,
-          borderRadius: compact ? 8 : 12,
-          border: isOpen
-            ? '1px solid color-mix(in srgb, var(--ds-color-primary) 34%, transparent)'
-            : '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-          background: isOpen
-            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)))'
-            : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))',
-          color: isOpen ? 'var(--ds-color-primary)' : 'var(--ds-color-text-primary)',
           cursor: 'pointer',
           transition: 'border-color 0.16s ease, background 0.16s ease, color 0.16s ease',
         }}
@@ -480,17 +470,13 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
           <Box
             data-part="trigger-icon"
             data-open={isOpen}
+            data-compact={compact}
             style={{
               width: compact ? 22 : 28,
               height: compact ? 22 : 28,
-              borderRadius: compact ? 7 : 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: isOpen
-                ? 'color-mix(in srgb, var(--ds-color-primary) 16%, transparent)'
-                : 'color-mix(in srgb, var(--ds-color-bg-primary) 56%, transparent)',
-              color: 'inherit',
               flexShrink: 0,
             }}
           >
@@ -513,14 +499,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               left: panelPosition.left,
               width: panelPosition.width,
               zIndex: 2000,
-              background:
-                'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 95%, white 5%), color-mix(in srgb, var(--ds-color-bg-primary) 34%, var(--ds-surface-card)))',
-              border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 72%, transparent)',
-              borderRadius: 22,
-              boxShadow:
-                '0 28px 72px color-mix(in srgb, var(--ds-color-primary) 18%, transparent), 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 62%, transparent) inset',
-              backdropFilter: 'blur(18px) saturate(1.05)',
-              WebkitBackdropFilter: 'blur(18px) saturate(1.05)',
               overflow: 'hidden',
             }}
           >
@@ -528,10 +506,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               data-part="header"
               style={{
                 padding: '18px 20px 16px',
-                borderBottom:
-                  '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)',
-                background:
-                  'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 12%, transparent), color-mix(in srgb, var(--ds-color-bg-primary) 12%, transparent))',
               }}
             >
               <Flex align="start" justify="between" gap={12}>
@@ -551,7 +525,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                       marginTop: 4,
                       fontSize: 12,
                       lineHeight: 1.45,
-                      color: 'color-mix(in srgb, var(--ds-color-text-muted) 92%, var(--ds-color-text-secondary) 8%)',
                     }}
                   >
                     Configure the table surface before applying.
@@ -569,10 +542,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                       gap: 6,
                       minHeight: 30,
                       padding: '0 12px',
-                      borderRadius: 999,
-                      border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-                      background: 'color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent)',
-                      color: 'var(--ds-color-text-secondary)',
                       cursor: 'pointer',
                       fontSize: 12,
                       fontWeight: 600,
@@ -586,12 +555,11 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
             </Box>
 
             <Box
+              data-part="body"
               style={{
                 padding: 14,
                 maxHeight: 430,
                 overflowY: 'auto',
-                background:
-                  'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 8%, transparent), transparent)',
               }}
             >
               <Flex direction="column" gap={8}>
@@ -616,20 +584,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                         onDragOver={(event: React.DragEvent<HTMLElement>) => handleColumnDragOver(event, column.key)}
                         onDrop={(event: React.DragEvent<HTMLElement>) => handleColumnDrop(event, column.key)}
                         style={{
-                          border: isDragTarget
-                            ? '1px solid color-mix(in srgb, var(--ds-color-primary) 54%, transparent)'
-                            : isVisible
-                            ? '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)'
-                            : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)',
-                          borderRadius: 16,
-                          background: isDragTarget
-                            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-primary) 16%))'
-                            : isVisible
-                            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))'
-                            : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))',
-                          boxShadow: isVisible
-                            ? '0 10px 22px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 56%, transparent) inset'
-                            : '0 1px 0 color-mix(in srgb, white 4%, transparent) inset',
                           overflow: 'hidden',
                           opacity: isDragging ? 0.58 : 1,
                           transition: 'border-color 0.16s ease, background 0.16s ease, opacity 0.16s ease',
@@ -655,12 +609,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 width: 24,
                                 height: 28,
                                 padding: 0,
-                                border: 'none',
-                                borderRadius: 8,
-                                background: 'transparent',
-                                color: isDragTarget || isDragging
-                                  ? 'var(--ds-color-primary)'
-                                  : 'color-mix(in srgb, var(--ds-color-text-secondary) 82%, var(--ds-color-text-muted) 18%)',
                                 cursor: isDragging ? 'grabbing' : 'grab',
                                 flexShrink: 0,
                               }}
@@ -680,9 +628,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   size="sm"
                                   style={{
                                     display: 'block',
-                                    color: isVisible
-                                      ? 'var(--ds-color-text-primary)'
-                                      : 'color-mix(in srgb, var(--ds-color-text-primary) 86%, var(--ds-color-text-muted) 14%)',
                                     fontWeight: 600,
                                   }}
                                 >
@@ -696,7 +641,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     style={{
                                       fontSize: 10,
                                       fontWeight: 600,
-                                      color: 'var(--ds-color-primary)',
                                       textTransform: 'uppercase',
                                       letterSpacing: '0.04em',
                                     }}
@@ -712,9 +656,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                   size="xs"
                                   style={{
                                     display: 'block',
-                                    color: isVisible
-                                      ? 'color-mix(in srgb, var(--ds-color-text-secondary) 82%, var(--ds-color-text-muted) 18%)'
-                                      : 'var(--ds-color-text-muted)',
                                     fontSize: 12,
                                   }}
                                 >
@@ -733,10 +674,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                       gap: 3,
                                       height: 18,
                                       padding: '0 6px',
-                                      borderRadius: 6,
-                                      border: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)',
-                                      background: 'color-mix(in srgb, var(--ds-color-bg-primary) 32%, transparent)',
-                                      color: 'var(--ds-color-text-muted)',
                                       cursor: 'pointer',
                                       fontSize: 10,
                                       fontWeight: 600,
@@ -773,14 +710,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                       width: 56,
                                       height: 22,
                                       padding: '0 4px',
-                                      borderRadius: 6,
-                                      border: '1px solid color-mix(in srgb, var(--ds-color-primary) 40%, transparent)',
-                                      background: 'var(--ds-surface-card)',
-                                      color: 'var(--ds-color-text-primary)',
                                       fontSize: 11,
                                       fontWeight: 600,
                                       fontVariantNumeric: 'tabular-nums',
-                                      outline: 'none',
                                       textAlign: 'center',
                                     }}
                                   />
@@ -858,10 +790,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                               gap: 6,
                               width: '100%',
                               padding: '8px 6px 6px',
-                              background: 'transparent',
-                              border: 'none',
                               cursor: 'pointer',
-                              color: 'var(--ds-color-text-muted)',
                             }}
                           >
                             {isCollapsed ? (
@@ -877,7 +806,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                 fontSize: 11,
                                 letterSpacing: '0.06em',
                                 textTransform: 'uppercase',
-                                color: 'var(--ds-color-text-muted)',
                               }}
                             >
                               {section.label}
@@ -908,7 +836,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     style={{
                       marginTop: 8,
                       paddingTop: 14,
-                      borderTop: '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)',
                     }}
                   >
                     <Flex align="center" justify="between" gap={12} style={{ marginBottom: 10 }}>
@@ -922,7 +849,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             fontSize: 11,
                             letterSpacing: '0.08em',
                             textTransform: 'uppercase',
-                            color: 'var(--ds-color-text-muted)',
                           }}
                         >
                           Row actions
@@ -934,7 +860,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             display: 'block',
                             marginTop: 4,
                             fontSize: 12,
-                            color: 'var(--ds-color-text-muted)',
                           }}
                         >
                           Choose which quick actions stay visible in the table.
@@ -953,16 +878,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                             data-part="action-row"
                             data-visible={isVisible}
                             style={{
-                              border: isVisible
-                                ? '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)'
-                                : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)',
-                              borderRadius: 16,
-                              background: isVisible
-                                ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))'
-                                : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, white 6%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))',
-                              boxShadow: isVisible
-                                ? '0 10px 22px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 56%, transparent) inset'
-                                : '0 1px 0 color-mix(in srgb, white 4%, transparent) inset',
                               overflow: 'hidden',
                             }}
                           >
@@ -981,9 +896,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     size="sm"
                                     style={{
                                       display: 'block',
-                                      color: isVisible
-                                        ? 'var(--ds-color-text-primary)'
-                                        : 'color-mix(in srgb, var(--ds-color-text-primary) 86%, var(--ds-color-text-muted) 14%)',
                                       fontWeight: 600,
                                     }}
                                   >
@@ -996,9 +908,6 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                                     style={{
                                       display: 'block',
                                       marginTop: 4,
-                                      color: isVisible
-                                        ? 'color-mix(in srgb, var(--ds-color-text-secondary) 82%, var(--ds-color-text-muted) 18%)'
-                                        : 'var(--ds-color-text-muted)',
                                       fontSize: 12,
                                     }}
                                   >
@@ -1027,13 +936,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
               data-part="footer"
               style={{
                 padding: 12,
-                borderTop:
-                  '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)',
-                background:
-                  'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent), color-mix(in srgb, var(--ds-color-bg-primary) 28%, transparent))',
               }}
             >
-              <Text data-part="footer-hint" size="xs" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+              <Text data-part="footer-hint" size="xs" style={{ fontSize: 12 }}>
                 Column widths are also adjustable directly from the table header.
               </Text>
               <Box
@@ -1046,15 +951,9 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                   justifyContent: 'center',
                   minHeight: 40,
                   padding: '0 16px',
-                  borderRadius: 13,
-                  border: '1px solid color-mix(in srgb, var(--ds-color-primary) 32%, transparent)',
-                  background:
-                    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 18%, transparent), color-mix(in srgb, var(--ds-color-primary) 10%, transparent))',
-                  color: 'color-mix(in srgb, var(--ds-color-primary) 88%, white 12%)',
                   cursor: 'pointer',
                   fontSize: 13,
                   fontWeight: 700,
-                  boxShadow: '0 10px 22px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)',
                 }}
               >
                 Apply columns
@@ -1093,10 +992,6 @@ function IconButton({
         justifyContent: 'center',
         width: 28,
         height: 28,
-        borderRadius: 10,
-        border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-        background: 'transparent',
-        color: disabled ? 'var(--ds-color-text-disabled)' : 'var(--ds-color-text-secondary)',
         cursor: disabled ? 'not-allowed' : 'pointer',
         opacity: disabled ? 0.45 : 1,
       }}

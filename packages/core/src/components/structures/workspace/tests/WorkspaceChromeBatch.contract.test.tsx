@@ -39,27 +39,15 @@ import { mockMatchMedia } from '../../../../_internal/testing/helpers/match-medi
 // since a panel rule nested under the trigger's class is the single most
 // common way this checkpoint's future skins would silently no-op.
 //
-// P-79 EXTENDS TO Input, AND IT IS WORSE THAN Card's SHAPE (see CK-F's Card
-// finding for the precedent). Empirically probed here: modern's <Input>
-// HARDCODES its own `data-part="root"` on the rendered <input> (overriding
-// any custom value, same mechanism as Card) AND -- unlike Card -- DROPS a
-// caller's `className` entirely (Card at least merges className). rustic's
-// <Input> is worse still: it forwards NEITHER `data-part` NOR `className` --
-// the rendered <input> carries only the props Input's own rustic engine
-// explicitly destructures (value/type/style/aria-invalid). Concretely this
-// means the `data-part="search-input"` / `data-part="input"` stamps on the
-// three <Input> call sites in this checkpoint (list-toolbar's two search
-// inputs, table-toolbar's search-input, search-command-bar's input) NEVER
-// reach the DOM in EITHER engine, and -- because className is also dropped
-// -- the SCOPE CLASS does not reach those elements either. A future skin
-// rule scoped to `[data-part='search-input']` or anchored via the scope
-// class will silently never match on the actual <input> node for any of
-// these three files. The stamps are left in source anyway (harmless,
-// inert, and this is exactly what a contract test is for: proving what
-// does and doesn't survive) -- this file asserts the OBSERVED reality
-// (the <input> renders, found by tag/placeholder, not by data-part) rather
-// than the aspirational one. Reported to the team as the single most
-// consequential P-79 finding in this checkpoint.
+// P-79 EXTENDS TO Input (see CK-F's Card finding for the precedent). The
+// caller's custom `data-part="search-input"` / `data-part="input"` never
+// reaches the painted node: both engines emit their own `data-part="root"`.
+// Caller className DOES survive, but on the exact node that receives caller
+// style: modern's outer wrapper and rustic's painted shell. CK-C therefore
+// stamps a private BEM class on the Input call and keys two selector shapes
+// from it, preserving the original style landing per engine. These tests pin
+// both shapes so a superficially plausible `.rottay-input` descendant rule
+// cannot transpose modern's paint from its wrapper onto the native input.
 //
 // KNOWN GAPS IN THIS TEST'S COVERAGE (stamped in source, not exercised here):
 //   - search-command-bar's voice UI (voice-badge/voice-toggle/voice-help/
@@ -128,6 +116,7 @@ describe('list-toolbar -- data-part contract (CK-C)', () => {
     expect(q(container, '[data-part="filter-trigger"][data-active="true"]')).toHaveLength(1);
     expect(q(container, '[data-part="filter-trigger"][data-active="false"]')).toHaveLength(1);
     expect(q(container, '[data-part="filter-badge"]')).toHaveLength(1);
+    expect(q(container, '.ds-list-toolbar__filter-trigger')).toHaveLength(2);
     // density + view segmented controls -- both are nested inside a <Tooltip>,
     // a separately lazy-loaded DS primitive; wait for it specifically before
     // asserting (its Suspense chunk resolves on a later tick than root's).
@@ -201,10 +190,14 @@ describe('saved-views -- data-part contract (CK-C)', () => {
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-pattern-saved-views');
     expect(root.className).toContain(`ds-engine-${engine}`);
+    if (engine === 'rustic') {
+      expect(root.getAttribute('data-loading')).toBe('false');
+    }
 
     const pillPart = engine === 'modern' ? 'pill' : 'tab';
     expect(q(container, `[data-part="${pillPart}"][data-active="true"]`)).toHaveLength(1);
     expect(q(container, `[data-part="${pillPart}"][data-active="false"]`)).toHaveLength(1);
+    expect(q(container, `.ds-saved-views__${pillPart}`)).toHaveLength(2);
     expect(q(container, '[data-part="default-star"][data-default="true"]')).toHaveLength(1);
     expect(q(container, '[data-part="create-button"]')).toHaveLength(1);
 
@@ -260,6 +253,8 @@ describe('saved-views -- data-part contract (CK-C)', () => {
     expect(root.className).toContain(`ds-engine-${engine}`);
     if (engine === 'modern') {
       expect(q(container, '[data-part="spinner"]')).toHaveLength(1);
+    } else {
+      expect(root.getAttribute('data-loading')).toBe('true');
     }
   });
 });
@@ -286,6 +281,7 @@ describe('status-filter-pills -- data-part contract (CK-C)', () => {
 
     expect(q(container, '[data-part="pill"][data-selected="true"]')).toHaveLength(1);
     expect(q(container, '[data-part="pill"][data-selected="false"]')).toHaveLength(1);
+    expect(q(container, '.ds-status-filter-pills__pill')).toHaveLength(2);
     expect(q(container, '[data-part="pill-label"]')).toHaveLength(2);
     expect(q(container, '[data-part="count-badge"][data-selected="true"]')).toHaveLength(1);
     expect(q(container, '[data-part="count-badge-text"]')).toHaveLength(2);
@@ -583,10 +579,17 @@ describe('table-toolbar -- data-part contract (CK-C)', () => {
     expect(root.className).toContain('ds-table-toolbar');
 
     expect(q(container, '[data-part="search-icon"]')).toHaveLength(1);
-    // The data-part="search-input" stamp on <Input> does not reach the DOM --
-    // see the P-79/Input file-header note. Assert the input renders by tag
-    // instead of by the (dead) data-part.
+    // The requested data-part does not survive, but the caller class lands on
+    // the same node as caller style (wrapper in modern, shell in rustic).
     await waitFor(() => expect(container.querySelector('input')).not.toBeNull());
+    const searchInputPaintNode = container.querySelector('.ds-table-toolbar__search-input') as HTMLElement;
+    expect(searchInputPaintNode).not.toBeNull();
+    if (engine === 'modern') {
+      expect(searchInputPaintNode.matches('.rottay-input')).toBe(false);
+      expect(searchInputPaintNode.querySelector('.rottay-input.rottay-input--modern[data-part="root"]')).not.toBeNull();
+    } else {
+      expect(searchInputPaintNode.matches('.rottay-input.rottay-input--rustic[data-part="root"]')).toBe(true);
+    }
     expect(q(container, '[data-part="divider"]')).toHaveLength(1);
   });
 });
@@ -614,9 +617,17 @@ describe('search-command-bar -- data-part contract (CK-C)', () => {
 
     expect(q(container, '[data-part="search-shell"]')).toHaveLength(1);
     expect(q(container, '[data-part="search-icon"]')).toHaveLength(1);
-    // The data-part="input" stamp on <Input> does not reach the DOM -- see
-    // the P-79/Input file-header note. Assert by tag instead.
+    // Preserve Input's engine-specific caller-style landing node; see the
+    // P-79/Input file-header note.
     await waitFor(() => expect(container.querySelector('input')).not.toBeNull());
+    const commandInputPaintNode = container.querySelector('.ds-search-command-bar__input') as HTMLElement;
+    expect(commandInputPaintNode).not.toBeNull();
+    if (engine === 'modern') {
+      expect(commandInputPaintNode.matches('.rottay-input')).toBe(false);
+      expect(commandInputPaintNode.querySelector('.rottay-input.rottay-input--modern[data-part="root"]')).not.toBeNull();
+    } else {
+      expect(commandInputPaintNode.matches('.rottay-input.rottay-input--rustic[data-part="root"]')).toBe(true);
+    }
     expect(q(container, '[data-part="status"]')).toHaveLength(1);
     expect(q(container, '[data-part="actions-slot"]')).toHaveLength(1);
 

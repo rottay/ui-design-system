@@ -3,11 +3,10 @@
 /**
  * @fileoverview Rustic (Vanilla/CSS-variable) engine for the SavedViews bar pattern.
  * Zero external UI library dependency -- renders a horizontal tab strip with
- * inline styles referencing `--ds-*` CSS custom properties. Supports drag-and-drop
- * reorder, inline rename, a hand-crafted context menu (rename/duplicate/delete +
- * custom actions), and an inline "Create view" input. Mouse-hover background
- * effects are applied via inline onMouseEnter/Leave handlers since no CSS
- * framework is available.
+ * inline layout styles and engine skin paint referencing `--ds-*` CSS custom
+ * properties. Supports drag-and-drop reorder, inline rename, a hand-crafted
+ * context menu (rename/duplicate/delete + custom actions), and an inline
+ * "Create view" input.
  *
  * @example
  * <RusticSavedViewsBar
@@ -24,10 +23,10 @@ import React, { useCallback, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 
 /**
- * Rustic engine saved views bar using only inline styles and CSS variables.
- * Mirrors Classic/Modern feature set (tab strip, DnD reorder, rename, duplicate,
- * delete, custom actions, create) without any third-party UI dependency.
- * Hover effects use onMouseEnter/Leave since no CSS pseudo-classes are available.
+ * Rustic engine saved views bar using inline layout styles and CSS-variable
+ * skin paint. Mirrors Classic/Modern feature set (tab strip, DnD reorder,
+ * rename, duplicate, delete, custom actions, create) without any third-party
+ * UI dependency.
  *
  * @param props - {@link SavedViewsBarProps}
  * @returns A horizontal flex container acting as a tab bar for saved views.
@@ -146,13 +145,13 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
     return (
       <div
         data-part="root"
+        data-loading={true}
         className={`ds-pattern-saved-views ds-engine-rustic ${className ?? ''}`}
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           minHeight: 40,
-          color: 'var(--ds-color-text-muted)',
           fontSize: 13,
           ...style,
         }}
@@ -168,12 +167,12 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
   return (
     <div
       data-part="root"
+      data-loading={false}
       className={`ds-pattern-saved-views ds-engine-rustic ${className ?? ''}`}
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: 2,
-        borderBottom: '1px solid var(--ds-color-border)',
         padding: '0 8px',
         minHeight: 40,
         overflowX: 'auto',
@@ -193,6 +192,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
           <div
             key={view.id}
             data-part="tab"
+            className="ds-saved-views__tab"
             data-active={isActive}
             data-drop-target={isDropTarget}
             data-dragging={isDragging}
@@ -207,14 +207,8 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
               alignItems: 'center',
               gap: 6,
               padding: '6px 12px',
-              borderBottom: isActive
-                ? '2px solid var(--ds-color-primary, var(--ds-color-primary-500))'
-                : '2px solid transparent',
               cursor: 'pointer',
               opacity: isDragging ? 0.4 : 1,
-              borderLeft: isDropTarget
-                ? '2px solid var(--ds-color-primary, var(--ds-color-primary-500))'
-                : '2px solid transparent',
               transition: 'opacity 0.15s, border-color 0.15s',
               whiteSpace: 'nowrap',
               flexShrink: 0,
@@ -227,9 +221,9 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
             {onViewReorder && (
               <span
                 data-part="drag-handle"
+                className="ds-saved-views__drag-handle"
                 style={{
                   fontSize: 10,
-                  color: 'var(--ds-color-text-muted, var(--ds-color-text-tertiary))',
                   cursor: 'grab',
                   lineHeight: 1,
                 }}
@@ -242,6 +236,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
               <input
                 type="text"
                 data-part="rename-input"
+                className="ds-saved-views__rename-input"
                 value={editingName}
                 onChange={(e) => setEditingName(e.target.value)}
                 onKeyDown={(e) => {
@@ -254,23 +249,16 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                   width: 120,
                   padding: '2px 6px',
                   fontSize: 13,
-                  border: '1px solid var(--ds-color-border)',
-                  borderRadius: 3,
-                  outline: 'none',
-                  background: 'var(--ds-color-background, var(--ds-color-bg-elevated))',
-                  color: 'var(--ds-color-text, var(--ds-color-text-primary))',
                 }}
               />
             ) : (
               <span
                 data-part="tab-label"
+                className="ds-saved-views__tab-label"
                 data-active={isActive}
                 style={{
                   fontSize: 13,
                   fontWeight: isActive ? 600 : 400,
-                  color: isActive
-                    ? 'var(--ds-color-primary, var(--ds-color-primary-500))'
-                    : 'var(--ds-color-text, var(--ds-color-text-primary))',
                 }}
               >
                 {view.name}
@@ -279,10 +267,10 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
             {view.isDefault && (
               <span
                 data-part="default-star"
+                className="ds-saved-views__default-star"
                 data-default={true}
                 style={{
                   fontSize: 10,
-                  color: 'var(--ds-color-warning)',
                   lineHeight: 1,
                 }}
               >
@@ -293,6 +281,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
               <div style={{ position: 'relative' }}>
                 <button
                   data-part="menu-trigger"
+                  className="ds-saved-views__menu-trigger"
                   data-open={isMenuOpen}
                   onClick={(e) => {
                     e.stopPropagation();
@@ -305,13 +294,9 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: 'none',
-                    background: 'transparent',
                     cursor: 'pointer',
-                    color: 'var(--ds-color-text-muted, var(--ds-color-text-tertiary))',
                     fontSize: 14,
                     padding: 0,
-                    borderRadius: 3,
                   }}
                 >
                   &#x22EE;
@@ -320,6 +305,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                   <div
                     ref={menuRef}
                     data-part="menu-panel"
+                    className="ds-saved-views__menu-panel"
                     data-open={isMenuOpen}
                     style={{
                       position: 'absolute',
@@ -327,16 +313,13 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                       right: 0,
                       zIndex: 50,
                       minWidth: 140,
-                      background: 'var(--ds-color-surface, var(--ds-color-bg-elevated))',
-                      border: '1px solid var(--ds-color-border)',
-                      borderRadius: 6,
-                      boxShadow: 'var(--ds-saved-views-menu-shadow, var(--ds-shadow-lg))',
                       padding: 4,
                     }}
                   >
                     {allowRename && (
                       <button
                         data-part="menu-item"
+                        className="ds-saved-views__menu-item"
                         data-danger={false}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -345,21 +328,9 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                         style={{
                           width: '100%',
                           padding: '6px 10px',
-                          border: 'none',
-                          background: 'transparent',
                           cursor: 'pointer',
                           textAlign: 'left',
                           fontSize: 13,
-                          borderRadius: 4,
-                          color: 'var(--ds-color-text, var(--ds-color-text-primary))',
-                        }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLButtonElement).style.background =
-                            'var(--ds-color-bg-secondary)';
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLButtonElement).style.background =
-                            'transparent';
                         }}
                       >
                         Rename
@@ -368,6 +339,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                     {onViewDuplicate && (
                       <button
                         data-part="menu-item"
+                        className="ds-saved-views__menu-item"
                         data-danger={false}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -377,21 +349,9 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                         style={{
                           width: '100%',
                           padding: '6px 10px',
-                          border: 'none',
-                          background: 'transparent',
                           cursor: 'pointer',
                           textAlign: 'left',
                           fontSize: 13,
-                          borderRadius: 4,
-                          color: 'var(--ds-color-text, var(--ds-color-text-primary))',
-                        }}
-                        onMouseEnter={(e) => {
-                          (e.currentTarget as HTMLButtonElement).style.background =
-                            'var(--ds-color-bg-secondary)';
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLButtonElement).style.background =
-                            'transparent';
                         }}
                       >
                         Duplicate
@@ -401,6 +361,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                       <button
                         key={action.key}
                         data-part="menu-item"
+                        className="ds-saved-views__menu-item"
                         data-danger={!!action.danger}
                         data-disabled={!!action.disabled}
                         disabled={action.disabled}
@@ -412,26 +373,10 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                         style={{
                           width: '100%',
                           padding: '6px 10px',
-                          border: 'none',
-                          background: 'transparent',
                           cursor: action.disabled ? 'not-allowed' : 'pointer',
                           textAlign: 'left',
                           fontSize: 13,
-                          borderRadius: 4,
-                          color: action.danger
-                            ? 'var(--ds-color-danger, var(--ds-color-error))'
-                            : 'var(--ds-color-text, var(--ds-color-text-primary))',
                           opacity: action.disabled ? 0.5 : 1,
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!action.disabled) {
-                            (e.currentTarget as HTMLButtonElement).style.background =
-                              'var(--ds-color-bg-secondary)';
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          (e.currentTarget as HTMLButtonElement).style.background =
-                            'transparent';
                         }}
                       >
                         {action.label}
@@ -443,14 +388,15 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                       <>
                         <div
                           data-part="divider"
+                          className="ds-saved-views__divider"
                           style={{
                             height: 1,
-                            background: 'var(--ds-color-border)',
                             margin: '4px 0',
                           }}
                         />
                         <button
                           data-part="menu-item"
+                          className="ds-saved-views__menu-item"
                           data-danger={true}
                           onClick={(e) => {
                             e.stopPropagation();
@@ -460,21 +406,9 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
                           style={{
                             width: '100%',
                             padding: '6px 10px',
-                            border: 'none',
-                            background: 'transparent',
                             cursor: 'pointer',
                             textAlign: 'left',
                             fontSize: 13,
-                            borderRadius: 4,
-                            color: 'var(--ds-color-danger, var(--ds-color-error))',
-                          }}
-                          onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.background =
-                              'var(--ds-color-bg-secondary)';
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.background =
-                              'transparent';
                           }}
                         >
                           Delete
@@ -502,6 +436,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
           <input
             type="text"
             data-part="create-input"
+            className="ds-saved-views__create-input"
             placeholder={newViewPlaceholder}
             value={newViewName}
             onChange={(e) => setNewViewName(e.target.value)}
@@ -518,11 +453,6 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
               width: 140,
               padding: '4px 8px',
               fontSize: 13,
-              border: '1px solid var(--ds-color-border)',
-              borderRadius: 4,
-              outline: 'none',
-              background: 'var(--ds-color-background, var(--ds-color-bg-elevated))',
-              color: 'var(--ds-color-text, var(--ds-color-text-primary))',
             }}
           />
         </div>
@@ -530,6 +460,7 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
         canCreate && (
           <button
             data-part="create-button"
+            className="ds-saved-views__create-button"
             onClick={() => setIsCreating(true)}
             data-testid="create-view-button"
             style={{
@@ -537,21 +468,9 @@ export default function RusticSavedViewsBar(props: SavedViewsBarProps) {
               alignItems: 'center',
               gap: 4,
               padding: '4px 10px',
-              border: 'none',
-              background: 'transparent',
               cursor: 'pointer',
               fontSize: 13,
-              color: 'var(--ds-color-text-muted, var(--ds-color-text-tertiary))',
               flexShrink: 0,
-              borderRadius: 4,
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                'var(--ds-color-bg-secondary)';
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.background =
-                'transparent';
             }}
           >
             <span style={{ fontSize: 16, lineHeight: 1 }}>+</span>

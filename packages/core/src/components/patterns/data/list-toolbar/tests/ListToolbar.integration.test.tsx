@@ -52,7 +52,14 @@ describe('PatternListToolbar integration', () => {
         expect(await screen.findByText('All')).toBeInTheDocument();
       }
       await waitFor(() => {
-        expect(document.querySelector('.toolbar-token-contract')?.getAttribute('style')).toContain('--ds-toolbar-shadow');
+        const root = document.querySelector('.toolbar-token-contract') as HTMLElement | null;
+        expect(root).not.toBeNull();
+        if (engine === 'modern') {
+          expect(root?.getAttribute('data-part')).toBe('root');
+          expect(root?.style.boxShadow).toBe('');
+        } else {
+          expect(root?.getAttribute('style')).toContain('--ds-toolbar-shadow');
+        }
       });
     },
     45000,

@@ -62,14 +62,11 @@ function ToolbarDivider() {
   return (
     <Box
       data-part="divider"
+      className="ds-table-toolbar__divider"
       style={{
         width: 2,
         height: 28,
         flexShrink: 0,
-        borderRadius: 1,
-        background:
-          'linear-gradient(180deg, transparent 0%, var(--ds-color-border) 20%, var(--ds-color-border) 80%, transparent 100%)',
-        boxShadow: '1px 0 0 rgba(255, 255, 255, 0.04)',
         marginInline: 4,
       }}
     />
@@ -93,36 +90,33 @@ export function TableToolbar({
       className="ds-structure ds-table-toolbar"
       style={{
         padding: '10px 16px',
-        borderBottom: '1px solid var(--ds-color-border)',
       }}
     >
       <Flex align="center" gap={0}>
         {/* Left: Search + leftContent */}
         <Flex align="center" gap={8} style={{ flexShrink: 0, paddingRight: 12 }}>
           {onSearchChange && (
-            <Box style={{ position: 'relative', width: 476 }}>
+            <Box className="ds-table-toolbar__search-field" style={{ position: 'relative', width: 476 }}>
               <Search
                 data-part="search-icon"
+                className="ds-table-toolbar__search-icon"
                 style={{
                   position: 'absolute',
                   left: 10,
                   top: '50%',
-                  transform: 'translateY(-50%)',
                   width: 15,
                   height: 15,
-                  color: 'var(--ds-color-text-muted)',
                   pointerEvents: 'none',
                 }}
               />
               <Input
                 data-part="search-input"
+                className="ds-table-toolbar__search-input"
                 placeholder={searchPlaceholder}
                 value={search ?? ''}
                 onChange={(value: string) => onSearchChange(value)}
                 style={{
                   paddingLeft: 32,
-                  background: 'var(--ds-color-bg-secondary)',
-                  border: '1px solid var(--ds-color-border)',
                   fontSize: 13,
                 }}
               />

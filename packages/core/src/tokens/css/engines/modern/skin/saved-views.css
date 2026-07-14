@@ -1,0 +1,157 @@
+/**
+ * Modern SavedViews skin — filled-pill engine treatment.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so layered paint loses to preflight regardless of
+ * specificity. Unlayered rules outrank preflight and still yield to caller
+ * inline styles.
+ *
+ * SPECIFICITY (P-48): the root's two classes contribute (0,2,0). Rules that
+ * paint a border color repeat the target data-part or pair it with a contract
+ * state to reach at least (0,4,0), above the tenant border floor (0,3,1).
+ * Other paint needs only the root pair plus one target attribute (0,3,0).
+ *
+ * The solid active pill and modern-only unsaved dot are intentional engine
+ * semantics. They do not have rustic equivalents.
+ */
+
+@keyframes ds-views-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__spinner[data-part="spinner"] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__input[data-part="input"],
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__create-input[data-part="create-input"] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-inset);
+  color: inherit;
+  outline: none;
+  box-shadow: none;
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__input[data-part="input"][data-part="input"],
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__create-input[data-part="create-input"][data-part="create-input"] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__input[data-part="input"]:focus,
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__create-input[data-part="create-input"]:focus {
+  border-color: var(--ds-focus-ring-color);
+  box-shadow: 0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__pill[data-part="pill"] {
+  color: var(--ds-color-text);
+  background: transparent;
+  border-radius: var(--ds-radius-full, 9999px);
+  box-shadow: none;
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__pill[data-part="pill"][data-part="pill"] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill[data-part="pill"][data-active="true"] {
+  color: var(--ds-color-primary-foreground);
+  background: var(--ds-color-primary);
+  border-color: var(--ds-color-primary);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill[data-part="pill"][data-active="false"]:hover {
+  background: var(--ds-surface-highlight);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__pill[data-part="pill"][data-drop-target="true"] {
+  box-shadow: inset 2px 0 0 var(--ds-color-primary);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__unsaved-dot[data-part="unsaved-dot"] {
+  border-radius: 50%;
+  background: var(--ds-color-primary);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__unsaved-dot[data-part="unsaved-dot"][data-active="true"] {
+  background: var(--ds-color-primary-foreground);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__default-star[data-part="default-star"] {
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__default-star[data-part="default-star"][data-active="true"] {
+  color: var(--ds-color-primary-foreground);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__menu-trigger[data-part="menu-trigger"] {
+  border: none;
+  background: transparent;
+  border-radius: var(--ds-radius-sm);
+  color: inherit;
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__menu-trigger[data-part="menu-trigger"][data-active="false"]:hover {
+  background: var(--ds-surface-highlight);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__menu-trigger[data-part="menu-trigger"][data-active="true"]:hover {
+  background: var(--ds-color-alpha-white-20);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__menu-panel[data-part="menu-panel"] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__menu-panel[data-part="menu-panel"][data-part="menu-panel"] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__menu-item[data-part="menu-item"] {
+  border: none;
+  background: transparent;
+  border-radius: var(--ds-radius-sm);
+  color: inherit;
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__menu-item[data-part="menu-item"]:hover {
+  background: var(--ds-surface-highlight);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__menu-item[data-part="menu-item"][data-danger="true"] {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__menu-divider[data-part="menu-divider"] {
+  background: var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__create-button[data-part="create-button"] {
+  background: transparent;
+  border-radius: var(--ds-radius-full, 9999px);
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-saved-views.ds-engine-modern
+  .ds-saved-views__create-button[data-part="create-button"][data-part="create-button"] {
+  border: 1px dashed var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-modern .ds-saved-views__create-button[data-part="create-button"]:hover {
+  background: var(--ds-surface-highlight);
+}

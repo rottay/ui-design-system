@@ -16,26 +16,7 @@ import type { ComponentType } from 'react';
 type LucideIcon = ComponentType<any>;
 
 import { Box, Flex, Text } from '../../../primitives';
-import {
-  FILTER_PILL_ACTIVE_BG,
-  FILTER_PILL_ACTIVE_BORDER,
-  FILTER_PILL_ACTIVE_COLOR,
-  FILTER_PILL_ACTIVE_SHADOW,
-  FILTER_PILL_BG,
-  FILTER_PILL_BORDER,
-  FILTER_PILL_COLOR,
-  FILTER_PILL_COUNT_ACTIVE_BG,
-  FILTER_PILL_COUNT_ACTIVE_BORDER,
-  FILTER_PILL_COUNT_ACTIVE_RING,
-  FILTER_PILL_COUNT_BG,
-  FILTER_PILL_COUNT_BORDER,
-  FILTER_PILL_COUNT_RING,
-  FILTER_PILL_FOCUS_RING,
-  FILTER_PILL_HOVER_BG,
-  FILTER_PILL_HOVER_BORDER,
-  FILTER_PILL_SHADOW,
-  TRANSITION,
-} from '../list-toolbar/tokens';
+import { TRANSITION } from '../list-toolbar/tokens';
 
 export interface StatusFilterPillOption {
   value: string;
@@ -88,6 +69,7 @@ export function StatusFilterPills({
             key={option.value}
             as="button"
             data-part="pill"
+            className="ds-status-filter-pills__pill"
             data-selected={isSelected}
             onClick={() => onChange(option.value)}
             style={{
@@ -95,56 +77,29 @@ export function StatusFilterPills({
               alignItems: 'center',
               gap: 6,
               padding,
-              borderRadius: 9999,
-              border: `1px solid ${isSelected ? FILTER_PILL_ACTIVE_BORDER : FILTER_PILL_BORDER}`,
-              background: isSelected ? FILTER_PILL_ACTIVE_BG : FILTER_PILL_BG,
-              color: isSelected ? FILTER_PILL_ACTIVE_COLOR : FILTER_PILL_COLOR,
               cursor: 'pointer',
               transition: `background ${TRANSITION}, border-color ${TRANSITION}, color ${TRANSITION}, box-shadow ${TRANSITION}`,
-              outline: 'none',
-              boxShadow: isSelected ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW,
-              backdropFilter: 'blur(6px)',
-            }}
-            onMouseEnter={(event) => {
-              if (!isSelected) {
-                event.currentTarget.style.background = FILTER_PILL_HOVER_BG;
-                event.currentTarget.style.borderColor = FILTER_PILL_HOVER_BORDER;
-              }
-            }}
-            onMouseLeave={(event) => {
-              if (!isSelected) {
-                event.currentTarget.style.background = FILTER_PILL_BG;
-                event.currentTarget.style.borderColor = FILTER_PILL_BORDER;
-              }
-            }}
-            onFocus={(event) => {
-              event.currentTarget.style.boxShadow = FILTER_PILL_FOCUS_RING;
-            }}
-            onBlur={(event) => {
-              event.currentTarget.style.boxShadow = isSelected ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW;
             }}
           >
             {Icon && (
               <Icon
                 data-part="pill-icon"
+                className="ds-status-filter-pills__pill-icon"
                 data-selected={isSelected}
                 style={{
                   width: size === 'sm' ? 12 : 14,
                   height: size === 'sm' ? 12 : 14,
-                  color: isSelected
-                    ? FILTER_PILL_ACTIVE_COLOR
-                    : FILTER_PILL_COLOR,
                 }}
               />
             )}
             <Text
               data-part="pill-label"
+              className="ds-status-filter-pills__pill-label"
               data-selected={isSelected}
               size="sm"
               style={{
                 fontSize,
                 fontWeight: isSelected ? 500 : 400,
-                color: isSelected ? FILTER_PILL_ACTIVE_COLOR : FILTER_PILL_COLOR,
               }}
             >
               {option.label}
@@ -152,6 +107,7 @@ export function StatusFilterPills({
             {showCounts && option.count !== undefined && (
               <Box
                 data-part="count-badge"
+                className="ds-status-filter-pills__count-badge"
                 data-selected={isSelected}
                 style={{
                   display: 'inline-flex',
@@ -160,22 +116,16 @@ export function StatusFilterPills({
                   minWidth: size === 'sm' ? 18 : 20,
                   height: size === 'sm' ? 18 : 20,
                   padding: '0 6px',
-                  borderRadius: 999,
-                  background: isSelected ? FILTER_PILL_COUNT_ACTIVE_BG : FILTER_PILL_COUNT_BG,
-                  border: `1px solid ${isSelected ? FILTER_PILL_COUNT_ACTIVE_BORDER : FILTER_PILL_COUNT_BORDER}`,
-                  boxShadow: isSelected ? FILTER_PILL_COUNT_ACTIVE_RING : FILTER_PILL_COUNT_RING,
                 }}
               >
                 <Text
                   data-part="count-badge-text"
+                  className="ds-status-filter-pills__count-badge-text"
                   data-selected={isSelected}
                   size="sm"
                   style={{
                     fontSize: fontSize - 1,
                     fontFamily: 'var(--ds-font-family-mono, monospace)',
-                    color: isSelected
-                      ? FILTER_PILL_ACTIVE_COLOR
-                      : FILTER_PILL_COLOR,
                   }}
                 >
                   {option.count}

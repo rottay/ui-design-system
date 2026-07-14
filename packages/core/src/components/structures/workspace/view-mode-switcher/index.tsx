@@ -100,9 +100,6 @@ export function ViewModeSwitcher({
       style={{
         display: 'inline-flex',
         alignItems: 'center',
-        borderRadius: 8,
-        border: '1px solid var(--ds-color-border-secondary)',
-        background: 'var(--ds-color-bg-primary)',
         padding: 2,
         gap: 2,
       }}
@@ -118,6 +115,7 @@ export function ViewModeSwitcher({
             role="radio"
             aria-checked={isActive}
             data-part="button"
+            className="ds-view-mode-switcher__button"
             data-selected={isActive}
             data-disabled={isDisabled}
             aria-label={mode.label}
@@ -156,23 +154,9 @@ export function ViewModeSwitcher({
               width: btnSize,
               height: btnSize,
               padding: iconPad,
-              borderRadius: 6,
-              border: 'none',
               cursor: isDisabled ? 'not-allowed' : 'pointer',
-              outline: 'none',
               transition:
                 'background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease',
-              background: isActive
-                ? 'color-mix(in srgb, var(--ds-color-primary) 14%, var(--ds-surface-card))'
-                : 'transparent',
-              color: isDisabled
-                ? 'var(--ds-color-text-disabled)'
-                : isActive
-                  ? 'var(--ds-color-primary)'
-                  : 'var(--ds-color-text-muted)',
-              boxShadow: isActive
-                ? '0 1px 3px color-mix(in srgb, var(--ds-color-primary) 12%, transparent)'
-                : 'none',
               opacity: isDisabled ? 0.5 : 1,
             }}
           >

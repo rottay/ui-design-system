@@ -110,7 +110,7 @@ function SearchIcon() {
 
 function VoiceInputIcon({ status }: { status: 'idle' | 'listening' | 'transcribing' | 'error' | 'unsupported' }) {
   if (status === 'transcribing') {
-    return <LoaderCircle style={{ width: 15, height: 15, animation: 'workspaceCommandSpin 1s linear infinite' }} />;
+    return <LoaderCircle style={{ width: 15, height: 15, animation: 'ds-search-command-bar-spin 1s linear infinite' }} />;
   }
 
   if (status === 'listening') {
@@ -131,16 +131,13 @@ function CommandSuggestionChip({
     <Box
       as="button"
       data-part="suggestion-chip"
+      className="ds-search-command-bar__suggestion-chip"
       onClick={onClick}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         minHeight: 30,
         padding: '0 11px',
-        borderRadius: 999,
-        border: '1px solid var(--ds-color-border-subtle)',
-        background: 'var(--ds-surface-panel)',
-        color: 'var(--ds-color-text-secondary)',
         cursor: 'pointer',
         fontSize: 12,
         fontWeight: 600,
@@ -267,14 +264,6 @@ export function SearchCommandBar({
 
     return null;
   }, [command.hint, errorMessage, voiceStatus]);
-
-  const statusTone = voiceStatus === 'error'
-    ? 'var(--ds-color-error)'
-    : voiceStatus === 'listening'
-      ? 'var(--ds-color-primary)'
-      : voiceStatus === 'transcribing'
-        ? 'var(--ds-color-warning)'
-        : 'var(--ds-color-text-muted)';
 
   // Derived 5-way state for the skin's data-voice-status hook: raw `voiceStatus`
   // has no "needs-permission" member, but the paint conditionals throughout this
@@ -405,25 +394,8 @@ export function SearchCommandBar({
               : '2px 20px 10px'
             : '8px 16px 8px'
           : '10px 16px 12px',
-        borderBottom: embedded ? 'none' : '1px solid var(--ds-color-border-subtle)',
-        background: embedded ? 'transparent' : 'var(--ds-surface-card)',
       }}
     >
-      {/* TODO: R1-deferred: extract keyframe animations to CSS layer */}
-      <style>
-        {`
-          @keyframes workspaceCommandPulse {
-            0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 22%, transparent); }
-            70% { box-shadow: 0 0 0 10px color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
-            100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ds-color-primary) 0%, transparent); }
-          }
-          @keyframes workspaceCommandSpin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-          }
-        `}
-      </style>
-
       <Box style={{ position: 'relative', zIndex: 1 }}>
         {topRailSlot && (
           <Box
@@ -449,6 +421,7 @@ export function SearchCommandBar({
           <Box style={{ minWidth: 0, flex: '1 1 720px' }}>
             <Box
               data-part="search-shell"
+              className="ds-search-command-bar__search-shell"
               data-voice-status={voiceStatusForSkin}
               data-voice-active={isVoiceActive}
               data-editorial-tech={editorialTech}
@@ -456,35 +429,15 @@ export function SearchCommandBar({
               style={{
                 position: 'relative',
                 padding: editorialTech ? 5 : 6,
-                borderRadius: editorialTech ? 18 : 15,
-                border:
-                  voiceStatus === 'error'
-                    ? '1px solid var(--ds-color-error)'
-                    : isVoiceActive
-                      ? '1px solid var(--ds-color-primary)'
-                      : editorialTech && embedded
-                        ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 78%, transparent)'
-                        : '1px solid var(--ds-color-border-subtle)',
-                background: embedded
-                  ? editorialTech
-                    ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-panel) 82%, transparent) 0%, color-mix(in srgb, var(--ds-surface-panel) 68%, transparent) 100%)'
-                    : 'color-mix(in srgb, var(--ds-surface-panel) 76%, transparent)'
-                  : 'var(--ds-surface-panel)',
-                boxShadow: embedded
-                  ? editorialTech
-                    ? '0 10px 28px color-mix(in srgb, var(--ds-color-primary) 12%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 58%, transparent)'
-                    : '0 12px 28px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 52%, transparent)'
-                  : 'var(--ds-elevation-1)',
               }}
             >
               <Box
                 data-part="search-icon"
+                className="ds-search-command-bar__search-icon"
                 style={{
                   position: 'absolute',
                   left: 24,
                   top: '50%',
-                  transform: 'translateY(-50%)',
-                  color: 'var(--ds-color-text-muted)',
                   pointerEvents: 'none',
                   display: 'flex',
                   alignItems: 'center',
@@ -495,6 +448,7 @@ export function SearchCommandBar({
               <Input
                 id="entity-workspace-command-input"
                 data-part="input"
+                className="ds-search-command-bar__input"
                 data-voice-status={voiceStatusForSkin}
                 data-voice-active={isVoiceActive}
                 data-editorial-tech={editorialTech}
@@ -508,31 +462,16 @@ export function SearchCommandBar({
                   paddingRight: inputRightPadding,
                   fontSize: 14,
                   letterSpacing: '-0.01em',
-                  background: embedded
-                    ? editorialTech
-                      ? 'color-mix(in srgb, var(--ds-surface-panel) 78%, transparent)'
-                      : 'color-mix(in srgb, var(--ds-surface-panel) 84%, transparent)'
-                    : 'var(--ds-surface-panel)',
-                  border:
-                    voiceStatus === 'error'
-                      ? '1px solid var(--ds-color-error)'
-                      : isVoiceActive
-                        ? '1px solid var(--ds-color-primary)'
-                        : editorialTech && embedded
-                          ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 58%, transparent)'
-                          : '1px solid var(--ds-color-border-subtle)',
-                  borderRadius: editorialTech ? '18px' : 'var(--ds-radius-xl, 16px)',
-                  boxShadow: 'none',
                 }}
               />
 
               {voiceSupported && (
                 <Box
+                  className="ds-search-command-bar__voice-controls"
                   style={{
                     position: 'absolute',
                     right: 18,
                     top: '50%',
-                    transform: 'translateY(-50%)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: 8,
@@ -543,6 +482,7 @@ export function SearchCommandBar({
                     <Box
                       as="button"
                       data-part="clear"
+                      className="ds-search-command-bar__clear"
                       onClick={() => handleInputChange('')}
                       aria-label="Clear search"
                       title="Clear search"
@@ -554,10 +494,6 @@ export function SearchCommandBar({
                         width: 28,
                         minWidth: 28,
                         padding: 0,
-                        borderRadius: 999,
-                        border: '1px solid var(--ds-color-border-subtle)',
-                        background: 'var(--ds-surface-panel)',
-                        color: 'var(--ds-color-text-secondary)',
                         cursor: 'pointer',
                         flexShrink: 0,
                       }}
@@ -569,6 +505,7 @@ export function SearchCommandBar({
                   {showInlineVoiceBadge && (
                     <Box
                       data-part="voice-badge"
+                      className="ds-search-command-bar__voice-badge"
                       data-voice-status={voiceStatusForSkin}
                       style={{
                         display: 'inline-flex',
@@ -576,26 +513,6 @@ export function SearchCommandBar({
                         gap: 6,
                         minHeight: 24,
                         padding: '0 8px',
-                        borderRadius: 999,
-                        border: voiceStatus === 'error'
-                          ? '1px solid var(--ds-color-error)'
-                          : needsVoicePermission
-                            ? '1px solid var(--ds-color-warning)'
-                            : '1px solid var(--ds-color-border-subtle)',
-                        background: voiceStatus === 'error'
-                          ? 'color-mix(in srgb, var(--ds-color-error) 8%, transparent)'
-                          : needsVoicePermission
-                            ? 'color-mix(in srgb, var(--ds-color-warning) 8%, transparent)'
-                            : 'var(--ds-surface-panel)',
-                        color: voiceStatus === 'error'
-                          ? 'var(--ds-color-error)'
-                          : needsVoicePermission
-                            ? 'var(--ds-color-warning)'
-                            : voiceStatus === 'listening'
-                              ? 'var(--ds-color-primary)'
-                              : voiceStatus === 'transcribing'
-                                ? 'var(--ds-color-warning)'
-                                : 'var(--ds-color-text-secondary)',
                         flexShrink: 1,
                         minWidth: 0,
                       }}
@@ -603,11 +520,11 @@ export function SearchCommandBar({
                       <VoiceInputIcon status={voiceStatus} />
                       <Text
                         data-part="voice-badge-label"
+                        className="ds-search-command-bar__voice-badge-label"
                         size="xs"
                         style={{
                           fontSize: 11,
                           fontWeight: 600,
-                          color: 'inherit',
                           whiteSpace: 'nowrap',
                         }}
                       >
@@ -619,6 +536,7 @@ export function SearchCommandBar({
                   <Box
                     as="button"
                     data-part="voice-toggle"
+                    className="ds-search-command-bar__voice-toggle"
                     data-voice-status={voiceStatusForSkin}
                     data-voice-active={isVoiceActive}
                     onClick={handleVoiceToggle}
@@ -644,25 +562,9 @@ export function SearchCommandBar({
                       width: 32,
                       minWidth: 32,
                       padding: 0,
-                      borderRadius: 999,
-                      border: voiceStatus === 'error'
-                        ? '1px solid var(--ds-color-error)'
-                        : isVoiceActive
-                          ? '1px solid var(--ds-color-primary)'
-                          : '1px solid var(--ds-color-border-subtle)',
-                      background: voiceStatus === 'error'
-                        ? 'color-mix(in srgb, var(--ds-color-error) 10%, var(--ds-surface-card))'
-                        : isVoiceActive
-                          ? 'color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card))'
-                          : 'var(--ds-surface-panel)',
-                      color: voiceStatus === 'error'
-                        ? 'var(--ds-color-error)'
-                        : isVoiceActive
-                          ? 'var(--ds-color-primary)'
-                          : 'var(--ds-color-text-secondary)',
                       cursor: 'pointer',
                       transition: 'background 0.14s ease, border-color 0.14s ease, color 0.14s ease',
-                      animation: voiceStatus === 'listening' ? 'workspaceCommandPulse 1.6s ease-out infinite' : undefined,
+                      animation: voiceStatus === 'listening' ? 'ds-search-command-bar-pulse 1.6s ease-out infinite' : undefined,
                     }}
                   >
                     <VoiceInputIcon status={voiceStatus} />
@@ -673,6 +575,7 @@ export function SearchCommandBar({
               {showVoiceHelp && (
                 <Box
                   data-part="voice-help"
+                  className="ds-search-command-bar__voice-help"
                   data-permission-blocked={isVoicePermissionBlocked}
                   style={{
                     position: 'absolute',
@@ -681,12 +584,6 @@ export function SearchCommandBar({
                     width: 420,
                     zIndex: 180,
                     padding: 18,
-                    borderRadius: 18,
-                    border: isVoicePermissionBlocked
-                      ? '1px solid var(--ds-color-error)'
-                      : '1px solid var(--ds-color-warning)',
-                    background: 'var(--ds-surface-card)',
-                    boxShadow: 'var(--ds-elevation-2)',
                   }}
                 >
                   <Flex align="start" justify="between" gap={10}>
@@ -696,13 +593,13 @@ export function SearchCommandBar({
                       </Text>
                       <Text
                         data-part="voice-help-description"
+                        className="ds-search-command-bar__voice-help-description"
                         size="xs"
                         style={{
                           display: 'block',
                           marginTop: 4,
                           fontSize: 12,
                           lineHeight: 1.5,
-                          color: 'var(--ds-color-text-secondary)',
                         }}
                       >
                         {isVoicePermissionBlocked
@@ -715,6 +612,7 @@ export function SearchCommandBar({
                     <Box
                       as="button"
                       data-part="close"
+                      className="ds-search-command-bar__voice-help-close"
                       onClick={() => setShowVoiceHelp(false)}
                       aria-label="Close microphone help"
                       style={{
@@ -723,10 +621,6 @@ export function SearchCommandBar({
                         justifyContent: 'center',
                         width: 28,
                         height: 28,
-                        borderRadius: 999,
-                        border: '1px solid var(--ds-color-border-subtle)',
-                        background: 'transparent',
-                        color: 'var(--ds-color-text-secondary)',
                         cursor: 'pointer',
                         flexShrink: 0,
                       }}
@@ -738,10 +632,10 @@ export function SearchCommandBar({
                   <Box
                     as="ol"
                     data-part="voice-help-list"
+                    className="ds-search-command-bar__voice-help-list"
                     style={{
                       margin: '12px 0 0',
                       paddingLeft: 18,
-                      color: 'var(--ds-color-text-secondary)',
                       fontSize: 12,
                       lineHeight: 1.55,
                     }}
@@ -772,11 +666,11 @@ export function SearchCommandBar({
                   <Flex align="center" justify="between" gap={12} style={{ marginTop: 16 }}>
                     <Text
                       data-part="voice-help-hint"
+                      className="ds-search-command-bar__voice-help-hint"
                       size="xs"
                       style={{
                         flex: 1,
                         fontSize: 11,
-                        color: 'var(--ds-color-text-muted)',
                         lineHeight: 1.45,
                       }}
                     >
@@ -790,6 +684,7 @@ export function SearchCommandBar({
                       <Box
                         as="button"
                         data-part="voice-help-cancel"
+                        className="ds-search-command-bar__voice-help-cancel"
                         onClick={() => {
                           setShowVoiceHelp(false);
                           resetVoiceFeedback();
@@ -802,10 +697,6 @@ export function SearchCommandBar({
                           minHeight: 38,
                           minWidth: 96,
                           padding: '0 14px',
-                          borderRadius: 999,
-                          border: '1px solid var(--ds-color-border-subtle)',
-                          background: 'transparent',
-                          color: 'var(--ds-color-text-secondary)',
                           cursor: 'pointer',
                           fontSize: 12,
                           fontWeight: 600,
@@ -817,6 +708,7 @@ export function SearchCommandBar({
                       <Box
                         as="button"
                         data-part="voice-help-confirm"
+                        className="ds-search-command-bar__voice-help-confirm"
                         onClick={
                           isVoicePermissionBlocked
                             ? () => {
@@ -834,10 +726,6 @@ export function SearchCommandBar({
                           minHeight: 38,
                           minWidth: 156,
                           padding: '0 16px',
-                          borderRadius: 999,
-                          border: '1px solid var(--ds-color-primary)',
-                          background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
-                          color: 'var(--ds-color-primary)',
                           cursor: 'pointer',
                           fontSize: 12,
                           fontWeight: 700,
@@ -861,10 +749,10 @@ export function SearchCommandBar({
               >
                 <Text
                   data-part="status"
+                  className="ds-search-command-bar__status"
                   data-voice-status={voiceStatus}
                   size="xs"
                   style={{
-                    color: statusTone,
                     fontSize: 11,
                     lineHeight: 1.45,
                   }}
@@ -894,6 +782,7 @@ export function SearchCommandBar({
                 <Box
                   data-ds-search-shell-slot="true"
                   data-part="suggestions"
+                  className="ds-search-command-bar__suggestions"
                   data-editorial-tech={editorialTech}
                   style={{
                     display: 'inline-flex',
@@ -903,20 +792,17 @@ export function SearchCommandBar({
                     justifyContent: 'flex-end',
                     minHeight: 44,
                     padding: editorialTech ? '6px 0 6px 16px' : '6px 0 6px 18px',
-                    borderLeft: editorialTech
-                      ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)'
-                      : '1px solid var(--ds-color-border-subtle)',
                   }}
                 >
                   <Text
                     data-part="suggestions-label"
+                    className="ds-search-command-bar__suggestions-label"
                     size="xs"
                     style={{
                       fontSize: 10,
                       fontWeight: 700,
                       letterSpacing: '0.08em',
                       textTransform: 'uppercase' as const,
-                      color: 'var(--ds-color-text-muted)',
                     }}
                   >
                     Smart refine
@@ -937,15 +823,13 @@ export function SearchCommandBar({
                 <Box
                   data-ds-search-shell-slot="true"
                   data-part="actions-slot"
+                  className="ds-search-command-bar__actions-slot"
                   data-editorial-tech={editorialTech}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     minHeight: 44,
                     padding: editorialTech ? '6px 0 6px 16px' : '6px 0 6px 18px',
-                    borderLeft: editorialTech
-                      ? '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent)'
-                      : '1px solid var(--ds-color-border-subtle)',
                   }}
                 >
                   {actionsSlot}
@@ -958,11 +842,10 @@ export function SearchCommandBar({
       {embedded && editorialTech && (
         <Box
           data-part="divider"
+          className="ds-search-command-bar__divider"
           style={{
             marginTop: 10,
             height: 1,
-            background:
-              'linear-gradient(90deg, color-mix(in srgb, var(--ds-color-border-subtle) 72%, transparent) 0%, color-mix(in srgb, var(--ds-color-border-subtle) 34%, transparent) 44%, transparent 100%)',
           }}
         />
       )}

@@ -1,0 +1,129 @@
+/**
+ * Rustic SavedViews skin — tab-underline engine treatment.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's `base` layer, so layered paint loses to preflight regardless of
+ * specificity. Unlayered rules outrank preflight and still yield to caller
+ * inline styles.
+ *
+ * SPECIFICITY (P-48): the root's two classes contribute (0,2,0). Rules that
+ * paint a border color repeat the target data-part or pair it with a contract
+ * state to reach at least (0,4,0), above the tenant border floor (0,3,1).
+ * Other paint needs only the root pair plus one target attribute (0,3,0).
+ *
+ * The active underline is intentionally unrelated to modern's filled pill.
+ * Rustic has no unsaved-dot affordance, and its context separator is `divider`.
+ */
+
+.ds-pattern-saved-views.ds-engine-rustic[data-part="root"][data-loading="true"] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic[data-part="root"][data-part="root"][data-loading="false"] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__tab[data-part="tab"][data-part="tab"] {
+  border-bottom: 2px solid transparent;
+  border-left: 2px solid transparent;
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__tab[data-part="tab"][data-active="true"] {
+  border-bottom-color: var(--ds-color-primary, var(--ds-color-primary-500));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic
+  .ds-saved-views__tab[data-part="tab"][data-drop-target="true"] {
+  border-left-color: var(--ds-color-primary, var(--ds-color-primary-500));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__drag-handle[data-part="drag-handle"] {
+  color: var(--ds-color-text-muted, var(--ds-color-text-tertiary));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__rename-input[data-part="rename-input"] {
+  border-radius: 3px;
+  outline: none;
+  background: var(--ds-color-background, var(--ds-color-bg-elevated));
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic
+  .ds-saved-views__rename-input[data-part="rename-input"][data-part="rename-input"] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__tab-label[data-part="tab-label"] {
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic
+  .ds-saved-views__tab-label[data-part="tab-label"][data-active="true"] {
+  color: var(--ds-color-primary, var(--ds-color-primary-500));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__default-star[data-part="default-star"] {
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__menu-trigger[data-part="menu-trigger"] {
+  border: none;
+  background: transparent;
+  border-radius: 3px;
+  color: var(--ds-color-text-muted, var(--ds-color-text-tertiary));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__menu-panel[data-part="menu-panel"] {
+  background: var(--ds-color-surface, var(--ds-color-bg-elevated));
+  border-radius: 6px;
+  box-shadow: var(--ds-saved-views-menu-shadow, var(--ds-shadow-lg));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic
+  .ds-saved-views__menu-panel[data-part="menu-panel"][data-part="menu-panel"] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__menu-item[data-part="menu-item"] {
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic
+  .ds-saved-views__menu-item[data-part="menu-item"]:hover:not([data-disabled="true"]) {
+  background: var(--ds-color-bg-secondary);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic
+  .ds-saved-views__menu-item[data-part="menu-item"][data-danger="true"] {
+  color: var(--ds-color-danger, var(--ds-color-error));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__divider[data-part="divider"] {
+  background: var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__create-input[data-part="create-input"] {
+  border-radius: 4px;
+  outline: none;
+  background: var(--ds-color-background, var(--ds-color-bg-elevated));
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic
+  .ds-saved-views__create-input[data-part="create-input"][data-part="create-input"] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__create-button[data-part="create-button"] {
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: var(--ds-color-text-muted, var(--ds-color-text-tertiary));
+}
+
+.ds-pattern-saved-views.ds-engine-rustic .ds-saved-views__create-button[data-part="create-button"]:hover {
+  background: var(--ds-color-bg-secondary);
+}

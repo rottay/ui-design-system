@@ -58,33 +58,8 @@ import {
 import type { ListToolbarProps, FilterPillConfig, DensityKey } from '../ListToolbar.types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 import {
-  FILTER_PILL_ACTIVE_BG,
-  FILTER_PILL_ACTIVE_BORDER,
-  FILTER_PILL_ACTIVE_COLOR,
-  FILTER_PILL_ACTIVE_SHADOW,
-  FILTER_PILL_BG,
-  FILTER_PILL_BORDER,
-  FILTER_PILL_COLOR,
-  FILTER_PILL_COUNT_ACTIVE_BG,
-  FILTER_PILL_COUNT_ACTIVE_BORDER,
-  FILTER_PILL_FOCUS_RING,
-  FILTER_PILL_FRAME_BG,
-  FILTER_PILL_HOVER_BG,
-  FILTER_PILL_HOVER_BORDER,
-  FILTER_PILL_SHADOW,
-  SEARCH_ICON_COLOR,
-  TOOLBAR_BG,
-  TOOLBAR_BORDER,
-  TOOLBAR_BORDER_BOTTOM,
-  TOOLBAR_COLOR,
-  TOOLBAR_CONTROL_BG,
-  TOOLBAR_CONTROL_BORDER,
-  TOOLBAR_CONTROL_COLOR,
-  TOOLBAR_DIVIDER,
   TOOLBAR_GAP,
   TOOLBAR_PADDING,
-  TOOLBAR_RADIUS,
-  TOOLBAR_SHADOW,
   EASE_OUT,
   MOTION_FAST,
   searchInputStyle,
@@ -97,12 +72,6 @@ import {
 const T = `${MOTION_FAST} ${EASE_OUT}`;
 
 const RADIUS_SM = 'var(--ds-radius-sm, 6px)';
-const RADIUS_MD = TOOLBAR_RADIUS;
-
-const COLOR_TEXT_PRIMARY = TOOLBAR_COLOR;
-const COLOR_TEXT_SECONDARY = TOOLBAR_CONTROL_COLOR;
-const COLOR_TEXT_MUTED = FILTER_PILL_COLOR;
-const COLOR_TEXT_ON_PRIMARY = 'var(--ds-color-text-on-primary)';
 
 // Spacing constants (px)
 const GAP_INTRA = 6;   // within a group
@@ -121,21 +90,10 @@ const iconButtonBase: React.CSSProperties = {
   justifyContent: 'center',
   width: ICON_BTN_SIZE,
   height: ICON_BTN_SIZE,
-  border: `1px solid ${TOOLBAR_CONTROL_BORDER}`,
-  borderRadius: RADIUS_SM,
-  background: TOOLBAR_CONTROL_BG,
-  color: TOOLBAR_CONTROL_COLOR,
   cursor: 'pointer',
   flexShrink: 0,
   transition: `background ${T}, color ${T}, border-color ${T}`,
   padding: 0,
-  outline: 'none',
-};
-
-/** Hover style applied via onMouseEnter/Leave for icon buttons. */
-const iconButtonHover: React.CSSProperties = {
-  background: FILTER_PILL_HOVER_BG,
-  color: COLOR_TEXT_PRIMARY,
 };
 
 // ============================================================================
@@ -151,23 +109,6 @@ const DENSITY_OPTIONS: {
   { key: 'comfortable', icon: <AlignCenter size={14} />, label: 'Comfortable' },
   { key: 'spacious', icon: <AlignLeft size={14} />, label: 'Spacious' },
 ];
-
-// ============================================================================
-// HOOKS
-// ============================================================================
-
-/** Small helper for hover state on icon buttons. */
-function useHover() {
-  const [hovered, setHovered] = useState(false);
-  const handlers = useMemo(
-    () => ({
-      onMouseEnter: () => setHovered(true),
-      onMouseLeave: () => setHovered(false),
-    }),
-    [],
-  );
-  return { hovered, handlers };
-}
 
 // ============================================================================
 // SUB-COMPONENTS
@@ -187,14 +128,11 @@ function SegmentedControl({
   return (
     <Box
       data-part="segmented-control"
+      className="ds-list-toolbar__segmented-control"
       style={{
         display: 'inline-flex',
-        borderRadius: RADIUS_SM,
-        border: `1px solid ${TOOLBAR_CONTROL_BORDER}`,
         overflow: 'hidden',
         flexShrink: 0,
-        background: TOOLBAR_CONTROL_BG,
-        color: TOOLBAR_CONTROL_COLOR,
         ...extraStyle,
       }}
     >
@@ -221,30 +159,24 @@ function Segment({
   children: React.ReactNode;
   style?: React.CSSProperties;
 }) {
-  const { hovered, handlers } = useHover();
-
   return (
     <Box
       as="button"
       data-part="segment"
+      className="ds-list-toolbar__segment"
       data-active={active}
       onClick={onClick}
       aria-label={ariaLabel}
       title={titleText}
-      {...handlers}
       style={{
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
         width: ICON_BTN_SIZE,
         height: 30,
-        border: 'none',
-        background: active ? FILTER_PILL_ACTIVE_BG : hovered ? FILTER_PILL_HOVER_BG : 'transparent',
-        color: active ? FILTER_PILL_ACTIVE_COLOR : hovered ? COLOR_TEXT_PRIMARY : TOOLBAR_CONTROL_COLOR,
         cursor: 'pointer',
         transition: `background ${T}, color ${T}`,
         padding: 0,
-        outline: 'none',
         position: 'relative' as const,
         ...extraStyle,
       }}
@@ -254,14 +186,13 @@ function Segment({
       {active && (
         <Box
           data-part="segment-indicator"
+          className="ds-list-toolbar__segment-indicator"
           style={{
             position: 'absolute',
             bottom: 0,
             left: '20%',
             right: '20%',
             height: 2,
-            borderRadius: 1,
-            background: FILTER_PILL_ACTIVE_COLOR,
             transition: `opacity ${T}`,
           }}
         />
@@ -286,19 +217,15 @@ function IconButton({
   children: React.ReactNode;
   style?: React.CSSProperties;
 }) {
-  const { hovered, handlers } = useHover();
-
   const btn = (
     <Box
       as="button"
       data-part="icon-button"
+      className="ds-list-toolbar__icon-button"
       onClick={onClick}
       aria-label={ariaLabel}
-      {...handlers}
       style={{
         ...iconButtonBase,
-        ...(hovered ? iconButtonHover : {}),
-        borderColor: hovered ? FILTER_PILL_HOVER_BORDER : TOOLBAR_CONTROL_BORDER,
         ...extraStyle,
       }}
     >
@@ -324,10 +251,10 @@ function ToolbarDivider() {
   return (
     <Box
       data-part="divider"
+      className="ds-list-toolbar__divider"
       style={{
         width: 1,
         height: 20,
-        background: TOOLBAR_DIVIDER,
         flexShrink: 0,
         marginInline: 4,
         opacity: 0.6,
@@ -346,7 +273,6 @@ function FilterButton({
   onFilterChange?: (key: string, value: unknown) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const { hovered, handlers } = useHover();
   const isActive = pill.value && pill.value !== '' && pill.value !== 'all';
   const activeLabel = pill.options.find((o) => o.value === pill.value)?.label;
 
@@ -379,43 +305,21 @@ function FilterButton({
       <Box
         as="button"
         data-part="filter-trigger"
+        className="ds-list-toolbar__filter-trigger"
         data-active={!!isActive}
-        {...handlers}
         style={{
           display: 'inline-flex',
           alignItems: 'center',
           gap: 6,
           height: ICON_BTN_SIZE,
           padding: '0 12px',
-          borderRadius: RADIUS_SM,
-          border: isActive
-            ? `1px solid ${FILTER_PILL_ACTIVE_BORDER}`
-            : `1px solid ${hovered ? FILTER_PILL_HOVER_BORDER : FILTER_PILL_BORDER}`,
-          background: isActive
-            ? FILTER_PILL_ACTIVE_BG
-            : hovered
-              ? FILTER_PILL_HOVER_BG
-              : FILTER_PILL_BG,
-          color: isActive
-            ? FILTER_PILL_ACTIVE_COLOR
-            : hovered
-              ? COLOR_TEXT_PRIMARY
-              : FILTER_PILL_COLOR,
-          boxShadow: isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW,
           fontSize: 13,
           fontWeight: 500,
           cursor: 'pointer',
           transition: `border-color ${T}, background ${T}, color ${T}`,
           whiteSpace: 'nowrap' as const,
           flexShrink: 0,
-          outline: 'none',
           lineHeight: 1,
-        }}
-        onFocus={(event) => {
-          event.currentTarget.style.boxShadow = FILTER_PILL_FOCUS_RING;
-        }}
-        onBlur={(event) => {
-          event.currentTarget.style.boxShadow = isActive ? FILTER_PILL_ACTIVE_SHADOW : FILTER_PILL_SHADOW;
         }}
       >
         {pill.label}
@@ -423,6 +327,7 @@ function FilterButton({
           <Box
             as="span"
             data-part="filter-badge"
+            className="ds-list-toolbar__filter-badge"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -430,10 +335,6 @@ function FilterButton({
               minWidth: 18,
               height: 18,
               padding: '0 5px',
-              borderRadius: 9,
-              background: FILTER_PILL_COUNT_ACTIVE_BG,
-              border: `1px solid ${FILTER_PILL_COUNT_ACTIVE_BORDER}`,
-              color: COLOR_TEXT_ON_PRIMARY,
               fontSize: 11,
               fontWeight: 600,
               lineHeight: 1,
@@ -460,45 +361,32 @@ function FilterDropdownItem({
   selected: boolean;
   onClick: () => void;
 }) {
-  const { hovered, handlers } = useHover();
-
   return (
     <Box
       as="button"
       data-part="filter-dropdown-item"
+      className="ds-list-toolbar__filter-dropdown-item"
       data-selected={selected}
       onClick={onClick}
-      {...handlers}
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: 8,
         width: '100%',
         padding: '8px 12px',
-        border: 'none',
-        background: selected
-          ? FILTER_PILL_ACTIVE_BG
-          : hovered
-            ? FILTER_PILL_HOVER_BG
-            : 'transparent',
-        color: selected
-          ? FILTER_PILL_ACTIVE_COLOR
-          : FILTER_PILL_COLOR,
         fontWeight: selected ? 500 : 400,
         fontSize: 13,
         cursor: 'pointer',
         transition: `background ${T}`,
         textAlign: 'left' as const,
-        borderRadius: RADIUS_SM,
-        outline: 'none',
         lineHeight: 1.4,
       }}
     >
-      <Text as="span" style={{ flex: 1, fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>
+      <Text as="span" style={{ flex: 1, fontSize: 'inherit', fontWeight: 'inherit' }}>
         {label}
       </Text>
       {selected && (
-        <Text data-part="filter-checkmark" as="span" style={{ fontSize: 12, opacity: 0.6, color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}>
+        <Text data-part="filter-checkmark" className="ds-list-toolbar__filter-checkmark" as="span" style={{ fontSize: 12, opacity: 0.6, flexShrink: 0 }}>
           &#10003;
         </Text>
       )}
@@ -604,9 +492,9 @@ function SettingsDropdown({
                 children: columnSettingsContent ?? (
                   <Text
                     data-part="settings-empty"
+                    className="ds-list-toolbar__settings-empty"
                     style={{
                       fontSize: 13,
-                      color: COLOR_TEXT_MUTED,
                       padding: '16px 0',
                       textAlign: 'center' as const,
                     }}
@@ -641,9 +529,9 @@ function SettingsDropdown({
                 children: savedViewsContent ?? (
                   <Text
                     data-part="settings-empty"
+                    className="ds-list-toolbar__settings-empty"
                     style={{
                       fontSize: 13,
-                      color: COLOR_TEXT_MUTED,
                       padding: '16px 0',
                       textAlign: 'center' as const,
                     }}
@@ -682,59 +570,45 @@ function DensityOptionRow({
   active: boolean;
   onClick: () => void;
 }) {
-  const { hovered, handlers } = useHover();
-
   return (
     <Box
       as="button"
       data-part="density-option"
+      className="ds-list-toolbar__density-option"
       data-active={active}
       onClick={onClick}
-      {...handlers}
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: 10,
         width: '100%',
         padding: '8px 10px',
-        borderRadius: RADIUS_SM,
-        border: active
-          ? `1px solid ${FILTER_PILL_ACTIVE_BORDER}`
-          : `1px solid ${hovered ? FILTER_PILL_HOVER_BORDER : FILTER_PILL_BORDER}`,
-        background: active
-          ? FILTER_PILL_ACTIVE_BG
-          : hovered
-            ? FILTER_PILL_HOVER_BG
-            : FILTER_PILL_BG,
         cursor: 'pointer',
         transition: `background ${T}, border-color ${T}`,
         textAlign: 'left' as const,
-        color: active
-          ? FILTER_PILL_ACTIVE_COLOR
-          : FILTER_PILL_COLOR,
         fontSize: 13,
         fontWeight: active ? 500 : 400,
-        outline: 'none',
       }}
     >
       <Box
         data-part="density-option-icon"
+        className="ds-list-toolbar__density-option-icon"
         style={{
           display: 'flex',
           alignItems: 'center',
-          color: 'inherit',
         }}
       >
         {icon}
       </Box>
-      <Text as="span" style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>
+      <Text as="span" style={{ fontSize: 'inherit', fontWeight: 'inherit' }}>
         {label}
       </Text>
       {active && (
         <Text
           data-part="density-checkmark"
+          className="ds-list-toolbar__density-checkmark"
           as="span"
-          style={{ marginLeft: 'auto', fontSize: 12, color: FILTER_PILL_ACTIVE_COLOR }}
+          style={{ marginLeft: 'auto', fontSize: 12 }}
         >
           &#10003;
         </Text>
@@ -773,10 +647,10 @@ function MobileOverflow({
           <Box style={{ padding: '6px 14px' }}>
             <Text
               data-part="mobile-overflow-label"
+              className="ds-list-toolbar__mobile-overflow-label"
               style={{
                 fontSize: 11,
                 fontWeight: 600,
-                color: COLOR_TEXT_MUTED,
                 textTransform: 'uppercase' as const,
                 letterSpacing: '0.06em',
                 marginBottom: 8,
@@ -791,10 +665,10 @@ function MobileOverflow({
           <Box style={{ padding: '6px 14px' }}>
             <Text
               data-part="mobile-overflow-label"
+              className="ds-list-toolbar__mobile-overflow-label"
               style={{
                 fontSize: 11,
                 fontWeight: 600,
-                color: COLOR_TEXT_MUTED,
                 textTransform: 'uppercase' as const,
                 letterSpacing: '0.06em',
                 marginBottom: 8,
@@ -809,9 +683,9 @@ function MobileOverflow({
           {onExport && (
             <Box
               data-part="divider"
+              className="ds-list-toolbar__divider"
               style={{
                 height: 1,
-                background: TOOLBAR_DIVIDER,
                 marginInline: 14,
                 opacity: 0.5,
               }}
@@ -851,35 +725,29 @@ function MobileOverflowItem({
   label: string;
   onClick: () => void;
 }) {
-  const { hovered, handlers } = useHover();
-
   return (
     <Box
       as="button"
       data-part="mobile-overflow-item"
+      className="ds-list-toolbar__mobile-overflow-item"
       onClick={onClick}
-      {...handlers}
       style={{
         display: 'flex',
         alignItems: 'center',
         gap: 10,
         width: '100%',
         padding: '8px 14px',
-        border: 'none',
-        background: hovered ? FILTER_PILL_HOVER_BG : 'transparent',
-        color: hovered ? COLOR_TEXT_PRIMARY : TOOLBAR_CONTROL_COLOR,
         fontSize: 13,
         fontWeight: 500,
         cursor: 'pointer',
         transition: `background ${T}, color ${T}`,
         textAlign: 'left' as const,
-        outline: 'none',
       }}
     >
-      <Box data-part="mobile-overflow-item-icon" style={{ display: 'flex', alignItems: 'center', color: 'inherit', flexShrink: 0 }}>
+      <Box data-part="mobile-overflow-item-icon" className="ds-list-toolbar__mobile-overflow-item-icon" style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
         {icon}
       </Box>
-      <Text as="span" style={{ fontSize: 'inherit', fontWeight: 'inherit', color: 'inherit' }}>
+      <Text as="span" style={{ fontSize: 'inherit', fontWeight: 'inherit' }}>
         {label}
       </Text>
     </Box>
@@ -965,12 +833,6 @@ export default function ModernListToolbar({
       data-part="root"
       className={`ds-pattern-list-toolbar ds-engine-modern ${className ?? ''}`}
       style={{
-        background: TOOLBAR_BG,
-        border: `1px solid ${TOOLBAR_BORDER}`,
-        borderBottom: `1px solid ${TOOLBAR_BORDER_BOTTOM}`,
-        borderRadius: `${RADIUS_MD} ${RADIUS_MD} 0 0`,
-        color: TOOLBAR_COLOR,
-        boxShadow: TOOLBAR_SHADOW,
         ...style,
       }}
     >
@@ -987,8 +849,8 @@ export default function ModernListToolbar({
                   {icon && (
                     <Box
                       data-part="title-icon"
+                      className="ds-list-toolbar__title-icon"
                       style={{
-                        color: COLOR_TEXT_SECONDARY,
                         display: 'flex',
                         alignItems: 'center',
                         flexShrink: 0,
@@ -999,10 +861,10 @@ export default function ModernListToolbar({
                   )}
                   <Text
                     data-part="title"
+                    className="ds-list-toolbar__title"
                     style={{
                       fontSize: 15,
                       fontWeight: 600,
-                      color: COLOR_TEXT_PRIMARY,
                       whiteSpace: 'nowrap',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
@@ -1052,8 +914,8 @@ export default function ModernListToolbar({
               prefix={
                 <Search
                   data-part="search-icon"
+                  className="ds-list-toolbar__search-icon"
                   size={14}
-                  style={{ color: SEARCH_ICON_COLOR }}
                 />
               }
               suffix={
@@ -1110,8 +972,8 @@ export default function ModernListToolbar({
                   {icon && (
                     <Box
                       data-part="title-icon"
+                      className="ds-list-toolbar__title-icon"
                       style={{
-                        color: COLOR_TEXT_SECONDARY,
                         display: 'flex',
                         alignItems: 'center',
                       }}
@@ -1121,10 +983,10 @@ export default function ModernListToolbar({
                   )}
                   <Text
                     data-part="title"
+                    className="ds-list-toolbar__title"
                     style={{
                       fontSize: 14,
                       fontWeight: 600,
-                      color: COLOR_TEXT_PRIMARY,
                       whiteSpace: 'nowrap',
                       letterSpacing: 0,
                     }}
@@ -1156,8 +1018,8 @@ export default function ModernListToolbar({
               prefix={
                 <Search
                   data-part="search-icon"
+                  className="ds-list-toolbar__search-icon"
                   size={14}
-                  style={{ color: SEARCH_ICON_COLOR }}
                 />
               }
               suffix={
@@ -1273,27 +1135,27 @@ export default function ModernListToolbar({
       {hasActiveFilters && (
         <Flex
           data-part="filter-chips-strip"
+          className="ds-list-toolbar__filter-chips-strip"
           align="center"
           gap={8}
           wrap="wrap"
           style={{
             padding: '8px 16px',
-            borderTop: `1px solid ${TOOLBAR_BORDER_BOTTOM}`,
-            background: FILTER_PILL_FRAME_BG,
           }}
         >
           <Flex align="center" gap={6} style={{ flexShrink: 0 }}>
             <Filter
               data-part="filter-chips-icon"
+              className="ds-list-toolbar__filter-chips-icon"
               size={12}
-              style={{ color: FILTER_PILL_ACTIVE_COLOR, flexShrink: 0 }}
+              style={{ flexShrink: 0 }}
             />
             <Text
               data-part="filter-chips-count"
+              className="ds-list-toolbar__filter-chips-count"
               style={{
                 fontSize: 12,
                 fontWeight: 500,
-                color: COLOR_TEXT_MUTED,
                 whiteSpace: 'nowrap',
               }}
             >
@@ -1303,10 +1165,10 @@ export default function ModernListToolbar({
 
           <Box
             data-part="divider"
+            className="ds-list-toolbar__divider"
             style={{
               width: 1,
               height: 14,
-              background: TOOLBAR_DIVIDER,
               flexShrink: 0,
               opacity: 0.5,
             }}
@@ -1316,19 +1178,19 @@ export default function ModernListToolbar({
             <Tag
               key={chip.key}
               data-part="filter-chip"
+              className="ds-list-toolbar__filter-chip"
               closable
               onClose={() => onFilterChange?.(chip.key, '')}
               size="sm"
               style={{
                 fontSize: 12,
                 transition: `opacity ${T}`,
-                borderRadius: RADIUS_SM,
               }}
             >
-              <Text data-part="filter-chip-label" as="span" style={{ fontSize: 12, color: COLOR_TEXT_MUTED, fontWeight: 400 }}>
+              <Text data-part="filter-chip-label" className="ds-list-toolbar__filter-chip-label" as="span" style={{ fontSize: 12, fontWeight: 400 }}>
                 {chip.label}:
               </Text>{' '}
-              <Text data-part="filter-chip-value" as="span" style={{ fontSize: 12, fontWeight: 500, color: COLOR_TEXT_PRIMARY }}>
+              <Text data-part="filter-chip-value" className="ds-list-toolbar__filter-chip-value" as="span" style={{ fontSize: 12, fontWeight: 500 }}>
                 {chip.value}
               </Text>
             </Tag>
@@ -1340,21 +1202,17 @@ export default function ModernListToolbar({
               <Box
                 as="button"
                 data-part="clear-all"
+                className="ds-list-toolbar__clear-all"
                 onClick={onClearFilters}
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: 4,
                   padding: '4px 10px',
-                  border: 'none',
-                  borderRadius: RADIUS_SM,
-                  background: 'transparent',
-                  color: COLOR_TEXT_MUTED,
                   fontSize: 12,
                   fontWeight: 500,
                   cursor: 'pointer',
                   transition: `color ${T}, background ${T}`,
-                  outline: 'none',
                   flexShrink: 0,
                 }}
               >
@@ -1383,6 +1241,7 @@ function FilterCountBadge({ count }: { count: number }) {
   return (
     <Box
       data-part="count-badge"
+      className="ds-list-toolbar__count-badge"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -1390,10 +1249,6 @@ function FilterCountBadge({ count }: { count: number }) {
         minWidth: 18,
         height: 18,
         padding: '0 5px',
-        borderRadius: 9,
-        background: FILTER_PILL_COUNT_ACTIVE_BG,
-        border: `1px solid ${FILTER_PILL_COUNT_ACTIVE_BORDER}`,
-        color: COLOR_TEXT_ON_PRIMARY,
         fontSize: 10,
         fontWeight: 700,
         lineHeight: 1,

@@ -2,10 +2,10 @@
 
 /**
  * @fileoverview Modern engine for the SavedViews bar pattern.
- * Renders a premium horizontal pill/chip strip using DS token-driven inline
- * styles with drag-and-drop reorder, inline rename, a custom dropdown context
- * menu (rename/duplicate/delete), and a "Create view" button with inline text
- * input.
+ * Renders a premium horizontal pill/chip strip using DS token-driven layout
+ * styles and engine skin paint, with drag-and-drop reorder, inline rename, a
+ * custom dropdown context menu (rename/duplicate/delete), and a "Create view"
+ * button with inline text input.
  *
  * All styling uses CSS custom properties from the design system:
  * - Surfaces: --ds-surface-card, --ds-surface-highlight, --ds-surface-inset
@@ -32,41 +32,21 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { SavedViewsBarProps, SavedView } from '../SavedViews.types';
 
 /* ---------------------------------------------------------------------------
- * Shared inline-style constants
+ * Shared layout-style constants
  * ----------------------------------------------------------------------- */
 
 const inlineInputStyle: React.CSSProperties = {
   height: 26,
   padding: '0 8px',
   fontSize: 13,
-  border: '1px solid var(--ds-color-border)',
-  borderRadius: 'var(--ds-radius-sm)',
-  background: 'var(--ds-surface-inset)',
-  color: 'inherit',
-  outline: 'none',
   boxSizing: 'border-box' as const,
   width: 130,
   transition: `border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
                box-shadow var(--ds-motion-fast) var(--ds-motion-ease-out)`,
 };
 
-const inputFocusHandler = (e: React.FocusEvent<HTMLInputElement>) => {
-  e.currentTarget.style.borderColor = 'var(--ds-focus-ring-color)';
-  e.currentTarget.style.boxShadow =
-    '0 0 0 var(--ds-focus-ring-width) var(--ds-focus-ring-color)';
-};
-
-const inputBlurStyleHandler = (e: React.FocusEvent<HTMLInputElement>) => {
-  e.currentTarget.style.borderColor = 'var(--ds-color-border)';
-  e.currentTarget.style.boxShadow = 'none';
-};
-
-/** Reusable menu-item base style factory */
-function menuItemStyle(
-  isHovered: boolean,
-  isDanger?: boolean,
-  isDisabled?: boolean,
-): React.CSSProperties {
+/** Reusable menu-item layout style factory */
+function menuItemStyle(isDisabled?: boolean): React.CSSProperties {
   return {
     display: 'flex',
     alignItems: 'center',
@@ -74,11 +54,7 @@ function menuItemStyle(
     width: '100%',
     padding: '6px 10px',
     fontSize: 13,
-    border: 'none',
-    background: isHovered ? 'var(--ds-surface-highlight)' : 'transparent',
-    borderRadius: 'var(--ds-radius-sm)',
     cursor: isDisabled ? 'not-allowed' : 'pointer',
-    color: isDanger ? 'var(--ds-color-error)' : 'inherit',
     opacity: isDisabled ? 0.5 : 1,
     textAlign: 'left' as const,
     transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
@@ -90,8 +66,9 @@ function menuItemStyle(
  * ----------------------------------------------------------------------- */
 
 /**
- * Modern engine saved views bar built on DS token-driven inline styles.
- * Renders a scrollable horizontal pill list with drag-and-drop reorder,
+ * Modern engine saved views bar built on DS token-driven layout styles and
+ * skin paint. Renders a scrollable horizontal pill list with drag-and-drop
+ * reorder,
  * inline rename, a manually-controlled dropdown menu per pill, and an
  * inline create input. Default views (isDefault) are protected from deletion.
  *
@@ -130,9 +107,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
   const [dragViewId, setDragViewId] = useState<string | null>(null);
   const [dropTargetId, setDropTargetId] = useState<string | null>(null);
   const [hoveredViewId, setHoveredViewId] = useState<string | null>(null);
-  const [hoveredMenuItem, setHoveredMenuItem] = useState<string | null>(null);
-  const [hoveredMenuBtn, setHoveredMenuBtn] = useState<string | null>(null);
-  const [hoveredCreateBtn, setHoveredCreateBtn] = useState(false);
 
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -236,7 +210,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
         }}
       >
         <svg
-          className="loading-spinner"
+          className="loading-spinner ds-saved-views__spinner"
           data-part="spinner"
           width="18"
           height="18"
@@ -244,7 +218,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           xmlns="http://www.w3.org/2000/svg"
           style={{
             animation: 'ds-views-spin 1s linear infinite',
-            color: 'var(--ds-color-primary)',
           }}
         >
           <circle
@@ -258,7 +231,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             strokeLinecap="round"
           />
         </svg>
-        <style>{`@keyframes ds-views-spin { to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
@@ -301,18 +273,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           fontSize: 13,
           fontWeight: isActive ? 600 : 400,
           lineHeight: '20px',
-          color: isActive ? 'var(--ds-color-primary-foreground)' : 'var(--ds-color-text)',
-          background: isActive
-            ? 'var(--ds-color-primary)'
-            : isHovered
-              ? 'var(--ds-surface-highlight)'
-              : 'transparent',
-          border: isActive
-            ? '1px solid var(--ds-color-primary)'
-            : '1px solid var(--ds-color-border)',
-          borderRadius: 'var(--ds-radius-full, 9999px)',
           opacity: isDragging ? 0.4 : 1,
-          boxShadow: isDropTarget ? 'inset 2px 0 0 var(--ds-color-primary)' : 'none',
           transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
                        color var(--ds-motion-fast) var(--ds-motion-ease-out),
                        border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -326,6 +287,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           <div
             key={view.id}
             data-part="pill"
+            className="ds-saved-views__pill"
             data-active={isActive}
             data-dragging={isDragging}
             data-drop-target={isDropTarget}
@@ -368,6 +330,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               <input
                 type="text"
                 data-part="input"
+                className="ds-saved-views__input"
                 style={inlineInputStyle}
                 value={editingName}
                 onChange={(e) => setEditingName(e.target.value)}
@@ -379,7 +342,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                   }
                 }}
                 onBlur={handleRenameConfirm}
-                onFocus={inputFocusHandler}
                 onClick={(e) => e.stopPropagation()}
                 autoFocus
               />
@@ -391,16 +353,13 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             {view.config && (view as any).isDirty && (
               <span
                 data-part="unsaved-dot"
+                className="ds-saved-views__unsaved-dot"
                 data-dirty={true}
                 data-active={isActive}
                 style={{
                   display: 'inline-block',
                   width: 6,
                   height: 6,
-                  borderRadius: '50%',
-                  background: isActive
-                    ? 'var(--ds-color-primary-foreground)'
-                    : 'var(--ds-color-primary)',
                   flexShrink: 0,
                 }}
                 title="Unsaved changes"
@@ -411,6 +370,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
             {view.isDefault && (
               <svg
                 data-part="default-star"
+                className="ds-saved-views__default-star"
                 data-default={true}
                 data-active={isActive}
                 xmlns="http://www.w3.org/2000/svg"
@@ -419,9 +379,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 style={{
-                  color: isActive
-                    ? 'var(--ds-color-primary-foreground)'
-                    : 'var(--ds-color-warning)',
                   flexShrink: 0,
                 }}
               >
@@ -438,6 +395,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 <button
                   type="button"
                   data-part="menu-trigger"
+                  className="ds-saved-views__menu-trigger"
                   data-open={isMenuOpen}
                   data-active={isActive}
                   style={{
@@ -447,16 +405,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                     width: 20,
                     height: 20,
                     padding: 0,
-                    border: 'none',
-                    background:
-                      hoveredMenuBtn === view.id
-                        ? isActive
-                          ? 'var(--ds-color-alpha-white-20)'
-                          : 'var(--ds-surface-highlight)'
-                        : 'transparent',
-                    borderRadius: 'var(--ds-radius-sm)',
                     cursor: 'pointer',
-                    color: 'inherit',
                     opacity: isHovered || isMenuOpen ? 1 : 0,
                     transition: `opacity var(--ds-motion-fast) var(--ds-motion-ease-out),
                                  background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
@@ -466,8 +415,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                     e.stopPropagation();
                     setOpenMenuId(isMenuOpen ? null : view.id);
                   }}
-                  onMouseEnter={() => setHoveredMenuBtn(view.id)}
-                  onMouseLeave={() => setHoveredMenuBtn(null)}
                   aria-label={`${view.name} options`}
                 >
                   <svg
@@ -491,6 +438,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                 {isMenuOpen && (
                   <div
                     data-part="menu-panel"
+                    className="ds-saved-views__menu-panel"
                     data-open={isMenuOpen}
                     style={{
                       position: 'absolute',
@@ -498,10 +446,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                       right: 0,
                       marginTop: 4,
                       minWidth: 160,
-                      background: 'var(--ds-surface-card)',
-                      border: '1px solid var(--ds-color-border)',
-                      borderRadius: 'var(--ds-radius-md)',
-                      boxShadow: 'var(--ds-elevation-3)',
                       padding: 4,
                       zIndex: 50,
                       overflow: 'hidden',
@@ -512,14 +456,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                       <button
                         type="button"
                         data-part="menu-item"
+                        className="ds-saved-views__menu-item"
                         data-danger={false}
-                        style={menuItemStyle(
-                          hoveredMenuItem === `rename-${view.id}`,
-                        )}
-                        onMouseEnter={() =>
-                          setHoveredMenuItem(`rename-${view.id}`)
-                        }
-                        onMouseLeave={() => setHoveredMenuItem(null)}
+                        style={menuItemStyle()}
                         onClick={() => handleRenameStart(view)}
                       >
                         <svg
@@ -542,14 +481,9 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                       <button
                         type="button"
                         data-part="menu-item"
+                        className="ds-saved-views__menu-item"
                         data-danger={false}
-                        style={menuItemStyle(
-                          hoveredMenuItem === `duplicate-${view.id}`,
-                        )}
-                        onMouseEnter={() =>
-                          setHoveredMenuItem(`duplicate-${view.id}`)
-                        }
-                        onMouseLeave={() => setHoveredMenuItem(null)}
+                        style={menuItemStyle()}
                         onClick={() => {
                           onViewDuplicate(view.id);
                           setOpenMenuId(null);
@@ -577,18 +511,11 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                         key={action.key}
                         type="button"
                         data-part="menu-item"
+                        className="ds-saved-views__menu-item"
                         data-danger={!!action.danger}
                         data-disabled={!!action.disabled}
                         disabled={action.disabled}
-                        style={menuItemStyle(
-                          hoveredMenuItem === `custom-${action.key}`,
-                          action.danger,
-                          action.disabled,
-                        )}
-                        onMouseEnter={() =>
-                          setHoveredMenuItem(`custom-${action.key}`)
-                        }
-                        onMouseLeave={() => setHoveredMenuItem(null)}
+                        style={menuItemStyle(action.disabled)}
                         onClick={() => {
                           action.onClick();
                           setOpenMenuId(null);
@@ -603,24 +530,18 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
                       <>
                         <div
                           data-part="menu-divider"
+                          className="ds-saved-views__menu-divider"
                           style={{
                             height: 1,
-                            background: 'var(--ds-color-border)',
                             margin: '4px 0',
                           }}
                         />
                         <button
                           type="button"
                           data-part="menu-item"
+                          className="ds-saved-views__menu-item"
                           data-danger={true}
-                          style={menuItemStyle(
-                            hoveredMenuItem === `delete-${view.id}`,
-                            true,
-                          )}
-                          onMouseEnter={() =>
-                            setHoveredMenuItem(`delete-${view.id}`)
-                          }
-                          onMouseLeave={() => setHoveredMenuItem(null)}
+                          style={menuItemStyle()}
                           onClick={() => {
                             onViewDelete(view.id);
                             setOpenMenuId(null);
@@ -665,6 +586,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           <input
             type="text"
             data-part="create-input"
+            className="ds-saved-views__create-input"
             style={inlineInputStyle}
             placeholder={newViewPlaceholder}
             value={newViewName}
@@ -680,7 +602,6 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               if (!newViewName.trim()) setIsCreating(false);
               else handleCreate();
             }}
-            onFocus={inputFocusHandler}
             autoFocus
             data-testid="new-view-input"
           />
@@ -690,6 +611,7 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
           <button
             type="button"
             data-part="create-button"
+            className="ds-saved-views__create-button"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -697,20 +619,12 @@ export default function ModernSavedViewsBar(props: SavedViewsBarProps) {
               padding: '4px 10px',
               fontSize: 13,
               fontWeight: 500,
-              border: '1px dashed var(--ds-color-border)',
-              background: hoveredCreateBtn
-                ? 'var(--ds-surface-highlight)'
-                : 'transparent',
-              borderRadius: 'var(--ds-radius-full, 9999px)',
               cursor: 'pointer',
-              color: 'var(--ds-color-text-muted)',
               flexShrink: 0,
               transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
                            color var(--ds-motion-fast) var(--ds-motion-ease-out),
                            border-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
             }}
-            onMouseEnter={() => setHoveredCreateBtn(true)}
-            onMouseLeave={() => setHoveredCreateBtn(false)}
             onClick={() => setIsCreating(true)}
             data-testid="create-view-button"
           >

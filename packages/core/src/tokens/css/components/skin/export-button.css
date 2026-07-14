@@ -1,0 +1,68 @@
+/**
+ * ExportButton skin — engine-agnostic and deliberately unlayered so it beats
+ * layered base/preflight paint (P-47).
+ * The dropdown is portaled under document.body and therefore owns a standalone
+ * two-class panel scope. Border selectors repeat data-part for the tenant
+ * border-color floor (P-48); the toast remains under the trigger-side root.
+ */
+
+/* trigger-side toast ------------------------------------------------------ */
+
+.ds-structure.ds-export-button [data-part='toast'] {
+  border-radius: 6px;
+  background: var(--ds-color-bg-success, #16a34a);
+  color: var(--ds-color-text-on-success, #fff);
+  transform: translateX(-50%);
+  animation: ds-export-toast-fade 1.8s ease forwards;
+}
+
+.ds-structure.ds-export-button
+  [data-part='toast-label'][data-part='toast-label'][data-part='toast-label'] {
+  color: inherit;
+}
+
+/* standalone portaled dropdown ------------------------------------------- */
+
+.ds-structure.ds-export-button-panel[data-part='panel'] {
+  border-radius: 8px;
+  background: var(--ds-color-bg-elevated, #fff);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--ds-color-primary) 10%, transparent), 0 1px 3px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  transform: translateX(-100%);
+}
+
+.ds-structure.ds-export-button-panel[data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border, #e2e2e2);
+}
+
+.ds-structure.ds-export-button-panel [data-part='menu-item'] {
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ds-color-text-primary, #1a1a1a);
+  outline: none;
+}
+
+.ds-structure.ds-export-button-panel [data-part='menu-item'][data-part='menu-item'] {
+  border: none;
+}
+
+.ds-structure.ds-export-button-panel [data-part='menu-item']:hover,
+.ds-structure.ds-export-button-panel [data-part='menu-item']:focus {
+  background: var(--ds-color-bg-hover, color-mix(in srgb, var(--ds-color-primary) 5%, transparent));
+}
+
+.ds-structure.ds-export-button-panel [data-part='menu-icon'] {
+  border-radius: 4px;
+  color: var(--ds-color-text-secondary, #666);
+}
+
+.ds-structure.ds-export-button-panel
+  [data-part='menu-label'][data-part='menu-label'][data-part='menu-label'] {
+  color: inherit;
+}
+
+@keyframes ds-export-toast-fade {
+  0% { opacity: 0; transform: translateX(-50%) translateY(4px); }
+  10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  100% { opacity: 0; transform: translateX(-50%) translateY(-4px); }
+}

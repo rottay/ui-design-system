@@ -1,0 +1,206 @@
+/**
+ * SavedViewsMenu skin — engine-agnostic and deliberately unlayered so it
+ * beats layered base/preflight paint (P-47).
+ * The document.body portal uses its own standalone two-class panel scope;
+ * nothing in this file assumes trigger-to-panel ancestry. Border selectors
+ * repeat data-part to clear the tenant border-color floor (P-48).
+ */
+
+/* trigger ----------------------------------------------------------------- */
+
+.ds-structure.ds-saved-views-menu[data-part='trigger'] {
+  border-radius: 12px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%));
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-saved-views-menu[data-part='trigger'][data-part='trigger'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu[data-part='trigger'][data-open='true'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)));
+}
+
+.ds-structure.ds-saved-views-menu[data-part='trigger'][data-part='trigger'][data-open='true'] {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 34%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu [data-part='trigger-icon'] {
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 56%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-saved-views-menu [data-part='trigger-icon'][data-open='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+  color: var(--ds-color-primary);
+}
+
+/* standalone portaled panel ---------------------------------------------- */
+
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'] {
+  border-radius: 18px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, white 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)));
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel[data-part='panel'][data-part='panel'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='header'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='header-description'][data-part='header-description'][data-part='header-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='count-pill'] {
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+
+/* active card stays at 8%; StatusPill primary stays at 12% ---------------- */
+
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card'] {
+  border-radius: 14px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='active-card'][data-part='active-card'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='active-card-description'][data-part='active-card-description'][data-part='active-card-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'] {
+  border-radius: 999px;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='neutral'] {
+  background: color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='action-button'][data-part='action-button'][data-tone='neutral'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 86%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='action-button'][data-tone='primary'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 9%, transparent);
+  color: var(--ds-color-primary);
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='action-button'][data-part='action-button'][data-tone='primary'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 26%, transparent);
+}
+
+/* list sections ----------------------------------------------------------- */
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='section-header'][data-part='section-header'][data-part='section-header'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item'] {
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item'][data-part='view-item'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='view-item'][data-active='true'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)));
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='view-item'][data-part='view-item'][data-active='true'] {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 28%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='view-item-label'][data-part='view-item-label'][data-part='view-item-label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='view-item-description'][data-part='view-item-description'][data-part='view-item-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='checkmark'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='delete'] {
+  border-radius: 10px;
+  background: transparent;
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='delete'][data-part='delete'] {
+  border: 1px solid color-mix(in srgb, var(--ds-color-danger) 18%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='glyph'] {
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='glyph'][data-active='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 14%, transparent);
+  color: var(--ds-color-primary);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'] {
+  border-radius: 999px;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'][data-tone='neutral'] {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='status-pill'][data-tone='primary'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 12%, transparent);
+  color: var(--ds-color-primary);
+}
+
+/* empty states ------------------------------------------------------------ */
+
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'] {
+  border-radius: 14px;
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-part='empty-state'] {
+  border: 1px dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state'][data-empty-state='persona'] {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent);
+}
+
+.ds-structure.ds-saved-views-menu-panel [data-part='empty-state-icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-saved-views-menu-panel
+  [data-part='empty-state-description'][data-part='empty-state-description'][data-part='empty-state-description'] {
+  color: var(--ds-color-text-muted);
+}

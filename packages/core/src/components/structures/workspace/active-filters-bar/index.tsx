@@ -64,12 +64,6 @@ export function ActiveFiltersBar({
       className="ds-structure ds-active-filters-bar"
       style={{
         padding: embedded ? '6px 16px 10px' : '10px 16px 12px',
-        borderBottom: embedded
-          ? 'none'
-          : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
-        background: embedded
-          ? 'transparent'
-          : 'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 94%, var(--ds-color-bg-primary) 6%), color-mix(in srgb, var(--ds-surface-card) 90%, var(--ds-color-bg-primary) 10%))',
       }}
     >
       <Flex
@@ -90,14 +84,10 @@ export function ActiveFiltersBar({
                 alignItems: 'center',
                 minHeight: 24,
                 padding: '0 9px',
-                borderRadius: 999,
-                border: '1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent)',
-                background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
                 fontSize: 10,
                 fontWeight: 700,
                 textTransform: 'uppercase' as const,
                 letterSpacing: '0.11em',
-                color: 'var(--ds-color-primary)',
               }}
             >
               {activeFilters.length} active
@@ -112,11 +102,6 @@ export function ActiveFiltersBar({
                   gap: 8,
                   minHeight: 32,
                   padding: '0 10px 0 12px',
-                  borderRadius: 999,
-                  background:
-                    'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card)))',
-                  border: '1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent)',
-                  boxShadow: 'inset 0 1px 0 color-mix(in srgb, white 4%, transparent)',
                 }}
               >
                 <Text
@@ -127,7 +112,6 @@ export function ActiveFiltersBar({
                     fontWeight: 700,
                     textTransform: 'uppercase' as const,
                     letterSpacing: '0.08em',
-                    color: 'var(--ds-color-text-muted)',
                     lineHeight: 1,
                     whiteSpace: 'nowrap',
                   }}
@@ -140,7 +124,6 @@ export function ActiveFiltersBar({
                   style={{
                     fontSize: 12,
                     fontWeight: 600,
-                    color: 'var(--ds-color-text-primary)',
                     lineHeight: 1,
                     whiteSpace: 'nowrap',
                   }}
@@ -158,11 +141,7 @@ export function ActiveFiltersBar({
                     width: 24,
                     height: 24,
                     padding: 0,
-                    border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)',
-                    background: 'color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent)',
                     cursor: 'pointer',
-                    borderRadius: 9999,
-                    color: 'var(--ds-color-text-secondary)',
                     transition: 'background 0.15s ease, color 0.15s ease, border-color 0.15s ease',
                     flexShrink: 0,
                   }}
@@ -195,17 +174,13 @@ export function ActiveFiltersBar({
               gap: 6,
               minHeight: 32,
               padding: '0 12px',
-              border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-              background: 'color-mix(in srgb, var(--ds-color-bg-primary) 52%, transparent)',
               cursor: 'pointer',
-              borderRadius: 999,
               fontSize: 12,
-              color: 'var(--ds-color-text-secondary)',
               transition: 'border-color 0.15s ease, background 0.15s ease, color 0.15s ease',
             }}
           >
             <X style={{ width: 12, height: 12 }} />
-            <Text size="xs" style={{ fontSize: 12, color: 'inherit', fontWeight: 600 }}>
+            <Text size="xs" style={{ fontSize: 12, fontWeight: 600 }}>
               Clear all
             </Text>
           </Box>
@@ -221,17 +196,13 @@ export function ActiveFiltersBar({
                 gap: 6,
                 minHeight: 32,
                 padding: '0 12px',
-                border: '1px solid color-mix(in srgb, var(--ds-color-primary) 24%, transparent)',
-                background: 'color-mix(in srgb, var(--ds-color-primary) 8%, transparent)',
                 cursor: 'pointer',
-                borderRadius: 999,
                 fontSize: 12,
-                color: 'var(--ds-color-primary)',
                 transition: 'opacity 0.15s ease, background 0.15s ease',
               }}
             >
               <Plus style={{ width: 12, height: 12 }} />
-              <Text size="xs" style={{ fontSize: 12, color: 'inherit', fontWeight: 700 }}>
+              <Text size="xs" style={{ fontSize: 12, fontWeight: 700 }}>
                 Add filter
               </Text>
             </Box>

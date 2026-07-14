@@ -96,11 +96,6 @@ const triggerButtonStyle = {
   gap: 10,
   minHeight: 40,
   padding: '0 12px',
-  borderRadius: 12,
-  border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, transparent)',
-  background:
-    'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 92%, white 8%), color-mix(in srgb, var(--ds-surface-card) 88%, var(--ds-color-bg-primary) 12%))',
-  color: 'var(--ds-color-text-primary)',
   cursor: 'pointer',
   transition: 'border-color 0.16s ease, background 0.16s ease, color 0.16s ease',
 } as const;
@@ -344,12 +339,6 @@ export function SavedViewsMenu({
           minHeight: 42,
           padding: 0,
           justifyContent: 'center',
-          borderColor: isOpen
-            ? 'color-mix(in srgb, var(--ds-color-primary) 34%, transparent)'
-            : triggerButtonStyle.border,
-          background: isOpen
-            ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 12%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)))'
-            : triggerButtonStyle.background,
         }}
       >
         <Flex align="center" justify="center" style={{ minWidth: 0 }}>
@@ -359,14 +348,9 @@ export function SavedViewsMenu({
             style={{
               width: 28,
               height: 28,
-              borderRadius: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              background: isOpen
-                ? 'color-mix(in srgb, var(--ds-color-primary) 16%, transparent)'
-                : 'color-mix(in srgb, var(--ds-color-bg-primary) 56%, transparent)',
-              color: isOpen ? 'var(--ds-color-primary)' : 'var(--ds-color-text-secondary)',
               flexShrink: 0,
             }}
           >
@@ -389,11 +373,6 @@ export function SavedViewsMenu({
               left: panelPosition.left,
               width: panelPosition.width,
               zIndex: 2000,
-              background:
-                'linear-gradient(180deg, color-mix(in srgb, var(--ds-surface-card) 98%, white 2%), color-mix(in srgb, var(--ds-color-bg-primary) 28%, var(--ds-surface-card)))',
-              border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)',
-              borderRadius: 18,
-              boxShadow: '0 24px 60px color-mix(in srgb, var(--ds-color-primary) 16%, transparent)',
               overflow: 'hidden',
             }}
           >
@@ -401,10 +380,6 @@ export function SavedViewsMenu({
               data-part="header"
               style={{
                 padding: '16px 18px 14px',
-                borderBottom:
-                  '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 82%, transparent)',
-                background:
-                  'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, transparent), transparent)',
               }}
             >
               <Flex align="start" justify="between" gap={12}>
@@ -419,7 +394,6 @@ export function SavedViewsMenu({
                       display: 'block',
                       marginTop: 4,
                       fontSize: 12,
-                      color: 'var(--ds-color-text-muted)',
                     }}
                   >
                     Switch between curated workspace states without leaving the list.
@@ -438,10 +412,6 @@ export function SavedViewsMenu({
                   style={{
                     marginTop: 14,
                     padding: 14,
-                    borderRadius: 14,
-                    border: '1px solid color-mix(in srgb, var(--ds-color-primary) 20%, transparent)',
-                    background:
-                      'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)))',
                   }}
                 >
                   <Flex align="start" justify="between" gap={12}>
@@ -457,7 +427,6 @@ export function SavedViewsMenu({
                           style={{
                             display: 'block',
                             marginTop: 4,
-                            color: 'var(--ds-color-text-muted)',
                             fontSize: 12,
                           }}
                         >
@@ -480,6 +449,7 @@ export function SavedViewsMenu({
                       <Box
                         as="button"
                         data-part="action-button"
+                        data-tone="neutral"
                         onClick={handleDuplicateActiveView}
                         style={{
                           display: 'inline-flex',
@@ -487,10 +457,6 @@ export function SavedViewsMenu({
                           gap: 6,
                           minHeight: 32,
                           padding: '0 12px',
-                          borderRadius: 999,
-                          border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 86%, transparent)',
-                          background: 'color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%)',
-                          color: 'var(--ds-color-text-secondary)',
                           cursor: 'pointer',
                           fontSize: 12,
                           fontWeight: 600,
@@ -505,6 +471,7 @@ export function SavedViewsMenu({
                       <Box
                         as="button"
                         data-part="action-button"
+                        data-tone="neutral"
                         onClick={handleShareActiveView}
                         style={{
                           display: 'inline-flex',
@@ -512,10 +479,6 @@ export function SavedViewsMenu({
                           gap: 6,
                           minHeight: 32,
                           padding: '0 12px',
-                          borderRadius: 999,
-                          border: '1px solid color-mix(in srgb, var(--ds-color-border-secondary) 86%, transparent)',
-                          background: 'color-mix(in srgb, var(--ds-surface-card) 84%, var(--ds-color-bg-primary) 16%)',
-                          color: 'var(--ds-color-text-secondary)',
                           cursor: 'pointer',
                           fontSize: 12,
                           fontWeight: 600,
@@ -530,6 +493,7 @@ export function SavedViewsMenu({
                       <Box
                         as="button"
                         data-part="action-button"
+                        data-tone="primary"
                         onClick={() => {
                           onSaveCurrentView();
                           setIsOpen(false);
@@ -540,10 +504,6 @@ export function SavedViewsMenu({
                           gap: 6,
                           minHeight: 32,
                           padding: '0 12px',
-                          borderRadius: 999,
-                          border: '1px solid color-mix(in srgb, var(--ds-color-primary) 26%, transparent)',
-                          background: 'color-mix(in srgb, var(--ds-color-primary) 9%, transparent)',
-                          color: 'var(--ds-color-primary)',
                           cursor: 'pointer',
                           fontSize: 12,
                           fontWeight: 700,
@@ -611,15 +571,13 @@ export function SavedViewsMenu({
               {personaViews.length === 0 && (onSaveCurrentView || onViewSave) && (
                 <Box
                   data-part="empty-state"
+                  data-empty-state="persona"
                   style={{
                     padding: '18px 16px',
-                    borderRadius: 14,
-                    border: '1px dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent)',
-                    background: 'color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent)',
                   }}
                 >
                   <Flex align="start" gap={10}>
-                    <Sparkles data-part="empty-state-icon" style={{ width: 16, height: 16, color: 'var(--ds-color-text-muted)', marginTop: 2 }} />
+                    <Sparkles data-part="empty-state-icon" style={{ width: 16, height: 16, marginTop: 2 }} />
                     <Box style={{ minWidth: 0 }}>
                       <Text size="sm" weight="medium" style={{ display: 'block' }}>
                         No persona views yet
@@ -630,7 +588,6 @@ export function SavedViewsMenu({
                         style={{
                           display: 'block',
                           marginTop: 4,
-                          color: 'var(--ds-color-text-muted)',
                         }}
                       >
                         Save the current slice or duplicate a system view to start a personal workspace.
@@ -643,10 +600,9 @@ export function SavedViewsMenu({
               {views.length === 0 && (
                 <Box
                   data-part="empty-state"
+                  data-empty-state="all"
                   style={{
                     padding: '28px 16px',
-                    borderRadius: 14,
-                    border: '1px dashed color-mix(in srgb, var(--ds-color-border-subtle) 92%, transparent)',
                     textAlign: 'center' as const,
                   }}
                 >
@@ -656,7 +612,6 @@ export function SavedViewsMenu({
                       width: 18,
                       height: 18,
                       margin: '0 auto 8px',
-                      color: 'var(--ds-color-text-muted)',
                     }}
                   />
                   <Text size="sm" weight="medium" style={{ display: 'block' }}>
@@ -668,7 +623,6 @@ export function SavedViewsMenu({
                     style={{
                       display: 'block',
                       marginTop: 4,
-                      color: 'var(--ds-color-text-muted)',
                     }}
                   >
                     Create curated filters and column layouts once save is wired for this workspace.
@@ -704,7 +658,6 @@ function Section({
             fontWeight: 700,
             textTransform: 'uppercase' as const,
             letterSpacing: '0.08em',
-            color: 'var(--ds-color-text-muted)',
           }}
         >
           {title}
@@ -738,13 +691,6 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
         width: '100%',
         padding: 0,
         textAlign: 'left' as const,
-        border: isActive
-          ? '1px solid color-mix(in srgb, var(--ds-color-primary) 28%, transparent)'
-          : '1px solid color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)',
-        borderRadius: 14,
-        background: isActive
-          ? 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-primary) 8%, var(--ds-surface-card)), color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card)))'
-          : 'color-mix(in srgb, var(--ds-surface-card) 92%, var(--ds-color-bg-primary) 8%)',
         cursor: 'pointer',
       }}
     >
@@ -758,7 +704,6 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
                 size="sm"
                 weight={isActive ? 'medium' : undefined}
                 style={{
-                  color: 'var(--ds-color-text-primary)',
                   maxWidth: 180,
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
@@ -777,7 +722,6 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
               style={{
                 display: 'block',
                 marginTop: 5,
-                color: 'var(--ds-color-text-muted)',
                 fontSize: 12,
               }}
             >
@@ -794,7 +738,6 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
               style={{
                 width: 14,
                 height: 14,
-                color: 'var(--ds-color-primary)',
               }}
             />
           )}
@@ -810,10 +753,6 @@ function ViewItem({ view, isActive, onSelect, onDelete }: ViewItemProps) {
                 justifyContent: 'center',
                 width: 28,
                 height: 28,
-                borderRadius: 10,
-                border: '1px solid color-mix(in srgb, var(--ds-color-danger) 18%, transparent)',
-                background: 'transparent',
-                color: 'var(--ds-color-text-muted)',
                 cursor: 'pointer',
               }}
             >
@@ -835,15 +774,10 @@ function ViewGlyph({ isSystem, active }: { isSystem?: boolean; active?: boolean 
       style={{
         width: 30,
         height: 30,
-        borderRadius: 10,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         flexShrink: 0,
-        background: active
-          ? 'color-mix(in srgb, var(--ds-color-primary) 14%, transparent)'
-          : 'color-mix(in srgb, var(--ds-color-bg-primary) 54%, transparent)',
-        color: active ? 'var(--ds-color-primary)' : 'var(--ds-color-text-secondary)',
       }}
     >
       <Icon style={{ width: 14, height: 14 }} />
@@ -862,9 +796,6 @@ function CountPill({ label }: { label: string }) {
         minWidth: 24,
         height: 22,
         padding: '0 8px',
-        borderRadius: 999,
-        background: 'color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent)',
-        color: 'var(--ds-color-text-secondary)',
         fontSize: 11,
         fontWeight: 600,
       }}
@@ -891,12 +822,6 @@ function StatusPill({
         gap: 4,
         height: 20,
         padding: '0 8px',
-        borderRadius: 999,
-        background:
-          tone === 'primary'
-            ? 'color-mix(in srgb, var(--ds-color-primary) 12%, transparent)'
-            : 'color-mix(in srgb, var(--ds-color-bg-primary) 72%, transparent)',
-        color: tone === 'primary' ? 'var(--ds-color-primary)' : 'var(--ds-color-text-secondary)',
         fontSize: 11,
         fontWeight: 600,
       }}
