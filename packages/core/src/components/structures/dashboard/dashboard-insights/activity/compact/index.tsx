@@ -34,17 +34,17 @@ function CompactItem({ item, index }: { item: ActivityProps["items"][0]; index: 
   const IconComponent = config.icons[index % config.icons.length];
 
   return (
-    <Box className="activity-compact-item-v3" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{ padding: "10px 14px", background: "var(--ds-color-bg-primary)", border: "1px solid var(--ds-color-border-secondary)", position: "relative", overflow: "hidden", cursor: "pointer" }}>
-      <Box style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: isHovered ? 5 : 3, background: config.gradient, transition: "width 0.3s ease" }} />
-      <Flex align="center" gap={12} style={{ position: "relative", paddingLeft: 4 }}>
-        <Box style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ds-color-" + item.type + "-100)", border: "1px solid var(--ds-color-" + item.type + "-200)", flexShrink: 0, position: "relative", transition: "transform 0.3s ease", transform: isHovered ? "scale(1.1)" : "scale(1)" }}>
+    <Box className="activity-compact-item-v3" data-part="item" data-type={item.type} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{ padding: "10px 14px", background: "var(--ds-color-bg-primary)", border: "1px solid var(--ds-color-border-secondary)", position: "relative", overflow: "hidden", cursor: "pointer" }}>
+      <Box data-part="accent-bar" data-type={item.type} style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: isHovered ? 5 : 3, background: config.gradient, transition: "width 0.3s ease" }} />
+      <Flex align="center" gap={12} data-part="item-row" style={{ position: "relative", paddingLeft: 4 }}>
+        <Box data-part="item-icon-box" data-type={item.type} style={{ width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ds-color-" + item.type + "-100)", border: "1px solid var(--ds-color-" + item.type + "-200)", flexShrink: 0, position: "relative", transition: "transform 0.3s ease", transform: isHovered ? "scale(1.1)" : "scale(1)" }}>
           <IconComponent style={{ width: 12, height: 12, color: "var(--ds-color-" + item.type + ")" }} />
         </Box>
         <Stack spacing="none" style={{ flex: 1, minWidth: 0 }}>
-          <Text size="xs" style={{ color: "var(--ds-color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: 500 }}>{item.text}</Text>
+          <Text size="xs" data-part="item-text" style={{ color: "var(--ds-color-text-primary)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", fontWeight: 500 }}>{item.text}</Text>
           <Flex align="center" gap={4}>
-            <Box style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--ds-color-" + item.type + ")" }} />
-            <Text size="xs" style={{ color: "var(--ds-color-text-muted)", fontFamily: "monospace", fontSize: 9 }}>{item.time} ago</Text>
+            <Box data-part="item-dot" data-type={item.type} style={{ width: 4, height: 4, borderRadius: "50%", background: "var(--ds-color-" + item.type + ")" }} />
+            <Text size="xs" data-part="item-time" style={{ color: "var(--ds-color-text-muted)", fontFamily: "monospace", fontSize: 9 }}>{item.time} ago</Text>
           </Flex>
         </Stack>
         <ChevronRight style={{ width: 12, height: 12, color: "var(--ds-color-" + item.type + ")", opacity: isHovered ? 1 : 0, transform: isHovered ? "translateX(0)" : "translateX(-6px)", transition: "all 0.3s ease" }} />
@@ -55,30 +55,30 @@ function CompactItem({ item, index }: { item: ActivityProps["items"][0]; index: 
 
 export function ActivityCompact({ items, schedule: _schedule = [], viewAllHref, viewAllLabel = "View all" }: ActivityProps) {
   return (
-    <Box style={{ height: 415, padding: "16px", background: "var(--ds-color-bg-secondary)", border: "1px solid var(--ds-color-border-secondary)", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" }}>
-      <Flex align="center" justify="between" style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid var(--ds-color-border-secondary)", position: "relative" }}>
+    <Box className="ds-activity-compact" data-part="root" style={{ height: 415, padding: "16px", background: "var(--ds-color-bg-secondary)", border: "1px solid var(--ds-color-border-secondary)", position: "relative", display: "flex", flexDirection: "column", overflow: "hidden" }}>
+      <Flex align="center" justify="between" data-part="header" style={{ paddingBottom: 12, marginBottom: 12, borderBottom: "1px solid var(--ds-color-border-secondary)", position: "relative" }}>
         <Flex align="center" gap={10}>
-          <Box style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", position: "relative" }}>
+          <Box data-part="bell-box" style={{ width: 32, height: 32, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", position: "relative" }}>
             <Bell style={{ width: 14, height: 14, color: "var(--ds-color-primary)" }} />
-            <Box style={{ position: "absolute", top: -4, right: -4, width: 14, height: 14, borderRadius: "50%", background: "var(--ds-color-error)", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid var(--ds-color-bg-secondary)" }}>
-              <Text style={{ fontSize: 8, color: "white", fontWeight: 700 }}>{items.length}</Text>
+            <Box data-part="badge" style={{ position: "absolute", top: -4, right: -4, width: 14, height: 14, borderRadius: "50%", background: "var(--ds-color-error)", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid var(--ds-color-bg-secondary)" }}>
+              <Text data-part="badge-count" style={{ fontSize: 8, color: "white", fontWeight: 700 }}>{items.length}</Text>
             </Box>
           </Box>
           <Stack spacing="none">
-            <Text weight="bold" style={{ color: "var(--ds-color-text-primary)" }}>Recent Activity</Text>
-            <Text size="xs" style={{ color: "var(--ds-color-text-muted)", fontFamily: "monospace", fontSize: 9 }}>{items.length} UPDATES</Text>
+            <Text weight="bold" data-part="title" style={{ color: "var(--ds-color-text-primary)" }}>Recent Activity</Text>
+            <Text size="xs" data-part="update-count" style={{ color: "var(--ds-color-text-muted)", fontFamily: "monospace", fontSize: 9 }}>{items.length} UPDATES</Text>
           </Stack>
         </Flex>
         {viewAllHref ? (
           <NavLinkAnchor href={viewAllHref} style={{ textDecoration: "none" }}>
-            <Flex align="center" gap={4} className="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
-              <Text size="xs" weight="medium" style={{ color: "var(--ds-color-primary)" }}>{viewAllLabel}</Text>
+            <Flex align="center" gap={4} className="view-all-link" data-part="view-all-link" style={{ padding: "6px 10px", background: "var(--ds-color-primary-100)", border: "1px solid var(--ds-color-primary-200)", transition: "all 0.2s ease" }}>
+              <Text size="xs" weight="medium" data-part="view-all-label" style={{ color: "var(--ds-color-primary)" }}>{viewAllLabel}</Text>
               <ExternalLink style={{ width: 10, height: 10, color: "var(--ds-color-primary)" }} />
             </Flex>
           </NavLinkAnchor>
         ) : null}
       </Flex>
-      <Box style={{ flex: 1, overflowY: "auto", minHeight: 0 }} className="activity-scroll">
+      <Box data-part="scroll-area" style={{ flex: 1, overflowY: "auto", minHeight: 0 }} className="activity-scroll">
         <Stack spacing="sm">
           {items.map((item: ActivityItem, i: number) => <CompactItem key={i} item={item} index={i} />)}
         </Stack>

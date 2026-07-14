@@ -49,6 +49,8 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
   return (
     <Box
       className="metric-row-v3"
+      data-part="metric-row"
+      data-positive={metric.positive}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       style={{
@@ -62,6 +64,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
       }}
     >
       <Box
+        data-part="accent-bar"
         style={{
           position: "absolute",
           left: 0,
@@ -75,6 +78,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
 
       <Box
         className="row-shimmer"
+        data-part="shimmer"
         style={{
           position: "absolute",
           top: 0,
@@ -90,6 +94,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
         <Flex align="center" gap={14}>
           <Box
             className="metric-row-icon"
+            data-part="metric-icon-box"
             style={{
               width: 40,
               height: 40,
@@ -102,6 +107,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
             }}
           >
             <metric.icon
+              data-part="metric-icon"
               style={{
                 width: 18,
                 height: 18,
@@ -114,6 +120,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
             <Text
               size="sm"
               weight="medium"
+              data-part="metric-label"
               style={{ color: METRIC_CARD_VALUE_COLOR }}
             >
               {metric.label}
@@ -122,17 +129,20 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
               {metric.positive ? (
                 <TrendingUp
                   className="trend-icon"
+                  data-part="trend-icon"
                   style={{ width: 12, height: 12, color: trendColor }}
                 />
               ) : (
                 <TrendingDown
                   className="trend-icon"
+                  data-part="trend-icon"
                   style={{ width: 12, height: 12, color: trendColor }}
                 />
               )}
               <Text
                 size="xs"
                 weight="bold"
+                data-part="metric-change"
                 style={{
                   color: trendColor,
                   fontFamily: METRIC_MONO_FONT,
@@ -147,6 +157,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
         <Box style={{ position: "relative" }}>
           <Text
             className="metric-row-value"
+            data-part="metric-value"
             style={{
               fontSize: 28,
               fontWeight: 800,
@@ -169,6 +180,8 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
 export function MetricsRows({ metrics }: MetricsProps) {
   return (
     <Box
+      className="ds-metrics-rows"
+      data-part="root"
       style={{
         height: 415,
         padding: "16px",
@@ -185,6 +198,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
       <Flex
         align="center"
         justify="between"
+        data-part="header"
         style={{
           paddingBottom: 12,
           marginBottom: 12,
@@ -195,6 +209,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
         <Flex align="center" gap={10}>
           <Box
             className="header-icon"
+            data-part="panel-icon-box"
             style={{
               width: 32,
               height: 32,
@@ -205,14 +220,15 @@ export function MetricsRows({ metrics }: MetricsProps) {
               border: `1px solid ${METRIC_PANEL_ICON_BORDER}`,
             }}
           >
-            <Activity style={{ width: 16, height: 16, color: METRIC_CARD_ICON_COLOR }} />
+            <Activity data-part="panel-icon" style={{ width: 16, height: 16, color: METRIC_CARD_ICON_COLOR }} />
           </Box>
-          <Text weight="bold" style={{ color: METRIC_PANEL_TITLE_COLOR }}>
+          <Text weight="bold" data-part="title" style={{ color: METRIC_PANEL_TITLE_COLOR }}>
             Key Metrics
           </Text>
         </Flex>
         <Box
           className="live-badge-v3"
+          data-part="live-badge"
           style={{
             padding: "6px 12px",
             background: METRIC_PANEL_BADGE_BG,
@@ -222,6 +238,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
           <Flex align="center" gap={6}>
             <Box
               className="live-dot-v3"
+              data-part="live-dot"
               style={{
                 width: 8,
                 height: 8,
@@ -232,6 +249,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
             <Text
               size="xs"
               weight="bold"
+              data-part="live-label"
               style={{ color: METRIC_PANEL_BADGE_COLOR, fontFamily: METRIC_MONO_FONT }}
             >
               LIVE
@@ -241,6 +259,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
       </Flex>
 
       <Box
+        data-part="scroll-area"
         style={{
           flex: 1,
           overflowY: "auto",

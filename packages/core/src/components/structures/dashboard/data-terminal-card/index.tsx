@@ -209,6 +209,7 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
         }}
       >
         <Box
+          data-part="live-pulse-ring"
           style={{
             position: "absolute",
             inset: 0,
@@ -218,6 +219,7 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
           }}
         />
         <Box
+          data-part="live-ring"
           style={{
             position: "absolute",
             inset: 0,
@@ -226,7 +228,7 @@ function LiveIndicator({ color = DS.success }: { color?: string }) {
           }}
         />
       </Box>
-      <Text style={{ fontSize: 9, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>
+      <Text data-part="live-label" style={{ fontSize: 9, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>
         LIVE
       </Text>
     </Flex>
@@ -243,6 +245,7 @@ function ActivityIndicator() {
       {[0, 1, 2, 3, 4].map((i) => (
         <Box
           key={i}
+          data-part="activity-bar"
           style={{
             width: 2,
             height: ACTIVITY_BAR_HEIGHTS[i],
@@ -261,6 +264,7 @@ function QuickAction({ icon: Icon, label }: { icon: LucideIcon; label: string })
   return (
     <Box
       as="button"
+      data-part="quick-action"
       onClick={(e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); }}
       style={{
         display: "flex",
@@ -273,8 +277,8 @@ function QuickAction({ icon: Icon, label }: { icon: LucideIcon; label: string })
         transition: "all 0.2s ease",
       }}
     >
-      <Icon style={{ width: 11, height: 11, color: DS.textMuted }} />
-      <Text style={{ fontSize: 9, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>{label}</Text>
+      <Icon data-part="quick-action-icon" style={{ width: 11, height: 11, color: DS.textMuted }} />
+      <Text data-part="quick-action-label" style={{ fontSize: 9, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>{label}</Text>
     </Box>
   );
 }
@@ -283,8 +287,10 @@ function QuickAction({ icon: Icon, label }: { icon: LucideIcon; label: string })
 function ProgressBar({ progress, height = 4 }: { progress: number; height?: number }) {
   const color = getProgressColor(progress);
   return (
-    <Box style={{ height, background: DS.border, borderRadius: height / 2, overflow: "hidden" }}>
+    <Box data-part="progress-track" style={{ height, background: DS.border, borderRadius: height / 2, overflow: "hidden" }}>
       <Box
+        data-part="progress-fill"
+        data-band={progress >= 80 ? "high" : progress >= 50 ? "mid" : "low"}
         style={{
           height: "100%",
           width: `${progress}%`,
@@ -297,6 +303,7 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
       >
         {/* Shimmer effect */}
         <Box
+          data-part="progress-shimmer"
           style={{
             position: "absolute",
             inset: 0,
@@ -312,8 +319,8 @@ function ProgressBar({ progress, height = 4 }: { progress: number; height?: numb
 // Stats item component for consistent layout
 function StatItem({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <Box style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-      <Text style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.08em", display: "block" }}>
+    <Box data-part="stat-item" style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      <Text data-part="stat-item-label" style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.08em", display: "block" }}>
         {label}
       </Text>
       <Box>{children}</Box>
@@ -334,6 +341,11 @@ function CommandCard({
   return (
     <NavLinkAnchor href={path} style={{ textDecoration: "none", display: "block", height: "100%" }}>
       <Box
+        className="ds-data-terminal-card"
+        data-part="root"
+        data-variant="1"
+        data-trend={trend}
+        data-band={progress >= 80 ? "high" : progress >= 50 ? "mid" : "low"}
         style={{
           position: "relative",
           height: "100%",
@@ -348,6 +360,7 @@ function CommandCard({
       >
         {/* Terminal header */}
         <Box
+          data-part="terminal-bar"
           style={{
             padding: "8px 14px",
             background: DS.backgroundSubtle,
@@ -359,37 +372,38 @@ function CommandCard({
         >
           <Flex align="center" gap={10}>
             <Flex gap={5}>
-              <Box style={{ width: 10, height: 10, borderRadius: "50%", background: DS.error, opacity: 0.8 }} />
-              <Box style={{ width: 10, height: 10, borderRadius: "50%", background: DS.warning, opacity: 0.8 }} />
-              <Box style={{ width: 10, height: 10, borderRadius: "50%", background: DS.success, opacity: 0.8 }} />
+              <Box data-part="terminal-dot" style={{ width: 10, height: 10, borderRadius: "50%", background: DS.error, opacity: 0.8 }} />
+              <Box data-part="terminal-dot" style={{ width: 10, height: 10, borderRadius: "50%", background: DS.warning, opacity: 0.8 }} />
+              <Box data-part="terminal-dot" style={{ width: 10, height: 10, borderRadius: "50%", background: DS.success, opacity: 0.8 }} />
             </Flex>
-            <Text style={{ fontSize: 11, color: DS.textMuted, fontFamily: "monospace" }}>
+            <Text data-part="terminal-filename" style={{ fontSize: 11, color: DS.textMuted, fontFamily: "monospace" }}>
               {label.toLowerCase().replace(/\s+/g, "_")}.sys
             </Text>
           </Flex>
           <Flex align="center" gap={8}>
             <ActivityIndicator />
-            <Box style={{ width: 8, height: 8, background: progressColor, borderRadius: "50%", animation: "dtc-heartbeat 1.5s ease-in-out infinite" }} />
+            <Box data-part="heartbeat-dot" style={{ width: 8, height: 8, background: progressColor, borderRadius: "50%", animation: "dtc-heartbeat 1.5s ease-in-out infinite" }} />
           </Flex>
         </Box>
 
         {/* Content */}
         <Box style={{ flex: 1, padding: 16, display: "flex", flexDirection: "column" }}>
           {/* Command prompt header */}
-          <Box style={{ paddingBottom: 12, borderBottom: `1px solid ${DS.border}`, marginBottom: 16 }}>
+          <Box data-part="prompt-header" style={{ paddingBottom: 12, borderBottom: `1px solid ${DS.border}`, marginBottom: 16 }}>
             <Flex align="center" gap={8}>
-              <Text style={{ fontSize: 12, color: DS.success, fontFamily: "monospace" }}>$</Text>
-              <Icon style={{ width: 14, height: 14, color: DS.textSecondary }} />
-              <Text style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace", letterSpacing: "0.05em" }}>
+              <Text data-part="prompt-symbol" style={{ fontSize: 12, color: DS.success, fontFamily: "monospace" }}>$</Text>
+              <Icon data-part="prompt-icon" style={{ width: 14, height: 14, color: DS.textSecondary }} />
+              <Text data-part="prompt-label" style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace", letterSpacing: "0.05em" }}>
                 {label.toUpperCase()}
               </Text>
-              <Box style={{ width: 8, height: 2, background: DS.textMuted, animation: "dtc-typing 1s step-end infinite" }} />
+              <Box data-part="cursor" style={{ width: 8, height: 2, background: DS.textMuted, animation: "dtc-typing 1s step-end infinite" }} />
             </Flex>
           </Box>
 
           {/* Main value section */}
           <Box style={{ flex: 1, display: "flex", alignItems: "center" }}>
             <Text
+              data-part="value"
               style={{
                 fontSize: 56,
                 fontWeight: 900,
@@ -405,6 +419,7 @@ function CommandCard({
 
           {/* Stats grid - well segmented */}
           <Box
+            data-part="stats-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr",
@@ -416,15 +431,15 @@ function CommandCard({
           >
             <StatItem label="CHANGE">
               <Flex align="center" gap={4}>
-                {isPositive ? <TrendingUp style={{ width: 14, height: 14, color: trendColor }} /> : <TrendingDown style={{ width: 14, height: 14, color: trendColor }} />}
-                <Text style={{ fontSize: 14, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
+                {isPositive ? <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14, color: trendColor }} /> : <TrendingDown data-part="trend-icon" style={{ width: 14, height: 14, color: trendColor }} />}
+                <Text data-part="change-value" style={{ fontSize: 14, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
               </Flex>
             </StatItem>
             <StatItem label="PERIOD">
-              <Text style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace" }}>{subtitle || "This week"}</Text>
+              <Text data-part="period-value" style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace" }}>{subtitle || "This week"}</Text>
             </StatItem>
             <StatItem label="TARGET">
-              <Text style={{ fontSize: 14, fontWeight: 700, color: progressColor, fontFamily: "monospace" }}>{progress}%</Text>
+              <Text data-part="target-value" style={{ fontSize: 14, fontWeight: 700, color: progressColor, fontFamily: "monospace" }}>{progress}%</Text>
             </StatItem>
           </Box>
 
@@ -435,7 +450,7 @@ function CommandCard({
         </Box>
 
         {/* Actions footer */}
-        <Box style={{ padding: "10px 14px", borderTop: `1px solid ${DS.border}`, background: DS.backgroundSubtle }}>
+        <Box data-part="actions-footer" style={{ padding: "10px 14px", borderTop: `1px solid ${DS.border}`, background: DS.backgroundSubtle }}>
           <Flex gap={8}>
             <QuickAction icon={Eye} label="VIEW" />
             <QuickAction icon={Plus} label="ADD" />
@@ -461,6 +476,11 @@ function HUDCard({
   return (
     <NavLinkAnchor href={path} style={{ textDecoration: "none", display: "block", height: "100%" }}>
       <Box
+        className="ds-data-terminal-card"
+        data-part="root"
+        data-variant="2"
+        data-trend={trend}
+        data-band={progress >= 80 ? "high" : progress >= 50 ? "mid" : "low"}
         style={{
           position: "relative",
           height: "100%",
@@ -475,6 +495,7 @@ function HUDCard({
       >
         {/* Grid texture */}
         <Box
+          data-part="grid-texture"
           style={{
             position: "absolute",
             inset: 0,
@@ -488,6 +509,7 @@ function HUDCard({
 
         {/* Scan line */}
         <Box
+          data-part="scan-line"
           style={{
             position: "absolute",
             left: 0,
@@ -500,10 +522,10 @@ function HUDCard({
         />
 
         {/* Corner brackets */}
-        <Box style={{ position: "absolute", top: 10, left: 10, width: 18, height: 18, borderTop: `2px solid ${DS.textMuted}`, borderLeft: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite" }} />
-        <Box style={{ position: "absolute", top: 10, right: 10, width: 18, height: 18, borderTop: `2px solid ${DS.textMuted}`, borderRight: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite 0.5s" }} />
-        <Box style={{ position: "absolute", bottom: 10, left: 10, width: 18, height: 18, borderBottom: `2px solid ${DS.textMuted}`, borderLeft: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite 1s" }} />
-        <Box style={{ position: "absolute", bottom: 10, right: 10, width: 18, height: 18, borderBottom: `2px solid ${DS.textMuted}`, borderRight: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite 1.5s" }} />
+        <Box data-part="corner-bracket" style={{ position: "absolute", top: 10, left: 10, width: 18, height: 18, borderTop: `2px solid ${DS.textMuted}`, borderLeft: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite" }} />
+        <Box data-part="corner-bracket" style={{ position: "absolute", top: 10, right: 10, width: 18, height: 18, borderTop: `2px solid ${DS.textMuted}`, borderRight: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite 0.5s" }} />
+        <Box data-part="corner-bracket" style={{ position: "absolute", bottom: 10, left: 10, width: 18, height: 18, borderBottom: `2px solid ${DS.textMuted}`, borderLeft: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite 1s" }} />
+        <Box data-part="corner-bracket" style={{ position: "absolute", bottom: 10, right: 10, width: 18, height: 18, borderBottom: `2px solid ${DS.textMuted}`, borderRight: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 3s ease-in-out infinite 1.5s" }} />
 
         {/* Content */}
         <Box style={{ position: "relative", zIndex: 1, flex: 1, padding: 20, display: "flex", flexDirection: "column" }}>
@@ -511,22 +533,22 @@ function HUDCard({
           <Box style={{ paddingBottom: 14, borderBottom: `1px solid ${DS.border}` }}>
             <Flex align="start" justify="between">
               <Flex align="center" gap={12}>
-                <Box style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${DS.border}`, background: DS.backgroundSubtle }}>
-                  <Icon style={{ width: 18, height: 18, color: DS.textSecondary }} />
+                <Box data-part="header-icon-box" style={{ width: 36, height: 36, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${DS.border}`, background: DS.backgroundSubtle }}>
+                  <Icon data-part="header-icon" style={{ width: 18, height: 18, color: DS.textSecondary }} />
                 </Box>
                 <Box>
-                  <Text style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.15em", marginBottom: 4, display: "block" }}>
+                  <Text data-part="tracking-label" style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.15em", marginBottom: 4, display: "block" }}>
                     TRACKING
                   </Text>
-                  <Text style={{ fontSize: 13, color: DS.textSecondary, fontFamily: "monospace", fontWeight: 700, display: "block" }}>
+                  <Text data-part="header-label" style={{ fontSize: 13, color: DS.textSecondary, fontFamily: "monospace", fontWeight: 700, display: "block" }}>
                     {label.toUpperCase()}
                   </Text>
                 </Box>
               </Flex>
-              <Box style={{ padding: "4px 10px", background: DS.backgroundSubtle, border: `1px solid ${progressColor}` }}>
+              <Box data-part="status-badge" style={{ padding: "4px 10px", background: DS.backgroundSubtle, border: `1px solid ${progressColor}` }}>
                 <Flex align="center" gap={6}>
-                  <Box style={{ width: 6, height: 6, borderRadius: "50%", background: progressColor, animation: "dtc-heartbeat 1.5s ease-in-out infinite" }} />
-                  <Text style={{ fontSize: 9, color: progressColor, fontFamily: "monospace", fontWeight: 700, letterSpacing: "0.05em" }}>
+                  <Box data-part="status-dot" style={{ width: 6, height: 6, borderRadius: "50%", background: progressColor, animation: "dtc-heartbeat 1.5s ease-in-out infinite" }} />
+                  <Text data-part="status-label" style={{ fontSize: 9, color: progressColor, fontFamily: "monospace", fontWeight: 700, letterSpacing: "0.05em" }}>
                     {statusLabel}
                   </Text>
                 </Flex>
@@ -537,6 +559,7 @@ function HUDCard({
           {/* Main value section */}
           <Box style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "20px 0" }}>
             <Text
+              data-part="value"
               style={{
                 fontSize: 64,
                 fontWeight: 900,
@@ -548,26 +571,26 @@ function HUDCard({
               {typeof value === "number" ? value.toLocaleString() : value}
             </Text>
             <Flex align="center" gap={12} style={{ marginTop: 16 }}>
-              <Box style={{ padding: "6px 12px", background: DS.backgroundSubtle, border: `1px solid ${trendColor}` }}>
+              <Box data-part="trend-badge" style={{ padding: "6px 12px", background: DS.backgroundSubtle, border: `1px solid ${trendColor}` }}>
                 <Flex align="center" gap={6}>
-                  {isPositive ? <TrendingUp style={{ width: 14, height: 14, color: trendColor }} /> : <TrendingDown style={{ width: 14, height: 14, color: trendColor }} />}
-                  <Text style={{ fontSize: 13, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
+                  {isPositive ? <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14, color: trendColor }} /> : <TrendingDown data-part="trend-icon" style={{ width: 14, height: 14, color: trendColor }} />}
+                  <Text data-part="change-value" style={{ fontSize: 13, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
                 </Flex>
               </Box>
-              <Text style={{ fontSize: 12, color: DS.textSubtle, fontFamily: "monospace" }}>
+              <Text data-part="period-value" style={{ fontSize: 12, color: DS.textSubtle, fontFamily: "monospace" }}>
                 {subtitle || "this period"}
               </Text>
             </Flex>
           </Box>
 
           {/* Bottom stats section */}
-          <Box style={{ padding: "14px 16px", background: DS.backgroundSubtle, border: `1px solid ${DS.border}` }}>
+          <Box data-part="stats-panel" style={{ padding: "14px 16px", background: DS.backgroundSubtle, border: `1px solid ${DS.border}` }}>
             <Flex align="center" justify="between">
               <Box>
-                <Text style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.1em", display: "block", marginBottom: 6 }}>
+                <Text data-part="completion-label" style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.1em", display: "block", marginBottom: 6 }}>
                   COMPLETION
                 </Text>
-                <Text style={{ fontSize: 18, color: progressColor, fontFamily: "monospace", fontWeight: 700, display: "block" }}>
+                <Text data-part="completion-value" style={{ fontSize: 18, color: progressColor, fontFamily: "monospace", fontWeight: 700, display: "block" }}>
                   {progress}%
                 </Text>
               </Box>
@@ -575,9 +598,9 @@ function HUDCard({
                 <ProgressBar progress={progress} height={6} />
               </Box>
               <Flex align="center" gap={8}>
-                <Activity style={{ width: 14, height: 14, color: DS.success, animation: "dtc-pulse 1s ease-in-out infinite" }} />
-                <Text style={{ fontSize: 11, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>DETAILS</Text>
-                <ArrowRight style={{ width: 12, height: 12, color: DS.textMuted }} />
+                <Activity data-part="details-icon" style={{ width: 14, height: 14, color: DS.success, animation: "dtc-pulse 1s ease-in-out infinite" }} />
+                <Text data-part="details-label" style={{ fontSize: 11, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>DETAILS</Text>
+                <ArrowRight data-part="details-arrow" style={{ width: 12, height: 12, color: DS.textMuted }} />
               </Flex>
             </Flex>
           </Box>
@@ -600,6 +623,11 @@ function CircuitCard({
   return (
     <NavLinkAnchor href={path} style={{ textDecoration: "none", display: "block", height: "100%" }}>
       <Box
+        className="ds-data-terminal-card"
+        data-part="root"
+        data-variant="3"
+        data-trend={trend}
+        data-band={progress >= 80 ? "high" : progress >= 50 ? "mid" : "low"}
         style={{
           position: "relative",
           height: "100%",
@@ -614,6 +642,7 @@ function CircuitCard({
       >
         {/* Circuit pattern */}
         <Box
+          data-part="circuit-pattern"
           style={{
             position: "absolute",
             inset: 0,
@@ -630,6 +659,7 @@ function CircuitCard({
 
         {/* Data flow line */}
         <Box
+          data-part="flow-line"
           style={{
             position: "absolute",
             top: "40%",
@@ -643,10 +673,10 @@ function CircuitCard({
         />
 
         {/* Node indicators */}
-        <Box style={{ position: "absolute", top: 12, left: 12, width: 10, height: 10, borderRadius: "50%", background: DS.backgroundSubtle, border: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 2s ease-in-out infinite" }} />
-        <Box style={{ position: "absolute", top: 12, right: 12, width: 10, height: 10, borderRadius: "50%", background: progressColor, animation: "dtc-heartbeat 1.5s ease-in-out infinite" }} />
-        <Box style={{ position: "absolute", bottom: 12, left: 12, width: 10, height: 10, borderRadius: "50%", background: DS.backgroundSubtle, border: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 2s ease-in-out infinite 1s" }} />
-        <Box style={{ position: "absolute", bottom: 12, right: 12, width: 10, height: 10, borderRadius: "50%", background: DS.backgroundSubtle, border: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 2s ease-in-out infinite 0.5s" }} />
+        <Box data-part="node-dot" style={{ position: "absolute", top: 12, left: 12, width: 10, height: 10, borderRadius: "50%", background: DS.backgroundSubtle, border: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 2s ease-in-out infinite" }} />
+        <Box data-part="node-dot-live" style={{ position: "absolute", top: 12, right: 12, width: 10, height: 10, borderRadius: "50%", background: progressColor, animation: "dtc-heartbeat 1.5s ease-in-out infinite" }} />
+        <Box data-part="node-dot" style={{ position: "absolute", bottom: 12, left: 12, width: 10, height: 10, borderRadius: "50%", background: DS.backgroundSubtle, border: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 2s ease-in-out infinite 1s" }} />
+        <Box data-part="node-dot" style={{ position: "absolute", bottom: 12, right: 12, width: 10, height: 10, borderRadius: "50%", background: DS.backgroundSubtle, border: `2px solid ${DS.textMuted}`, animation: "dtc-pulse 2s ease-in-out infinite 0.5s" }} />
 
         {/* Content */}
         <Box style={{ position: "relative", zIndex: 1, flex: 1, padding: 16, display: "flex", flexDirection: "column" }}>
@@ -654,14 +684,14 @@ function CircuitCard({
           <Box style={{ paddingBottom: 12, borderBottom: `1px solid ${DS.border}` }}>
             <Flex align="center" justify="between">
               <Flex align="center" gap={10}>
-                <Box style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${DS.border}`, background: DS.backgroundSubtle }}>
-                  <Icon style={{ width: 14, height: 14, color: DS.textSecondary }} />
+                <Box data-part="header-icon-box" style={{ width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", border: `1px solid ${DS.border}`, background: DS.backgroundSubtle }}>
+                  <Icon data-part="header-icon" style={{ width: 14, height: 14, color: DS.textSecondary }} />
                 </Box>
                 <Box>
-                  <Text style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.1em", display: "block", marginBottom: 2 }}>
+                  <Text data-part="metric-label" style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.1em", display: "block", marginBottom: 2 }}>
                     METRIC
                   </Text>
-                  <Text style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace", fontWeight: 600, letterSpacing: "0.05em", display: "block" }}>
+                  <Text data-part="header-label" style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace", fontWeight: 600, letterSpacing: "0.05em", display: "block" }}>
                     {label.toUpperCase()}
                   </Text>
                 </Box>
@@ -676,6 +706,7 @@ function CircuitCard({
           {/* Main value section */}
           <Box style={{ flex: 1, display: "flex", alignItems: "center", padding: "16px 0" }}>
             <Text
+              data-part="value"
               style={{
                 fontSize: 56,
                 fontWeight: 900,
@@ -690,6 +721,7 @@ function CircuitCard({
 
           {/* Stats grid section */}
           <Box
+            data-part="stats-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr",
@@ -701,15 +733,15 @@ function CircuitCard({
           >
             <StatItem label="CHANGE">
               <Flex align="center" gap={4}>
-                {isPositive ? <TrendingUp style={{ width: 14, height: 14, color: trendColor }} /> : <TrendingDown style={{ width: 14, height: 14, color: trendColor }} />}
-                <Text style={{ fontSize: 14, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
+                {isPositive ? <TrendingUp data-part="trend-icon" style={{ width: 14, height: 14, color: trendColor }} /> : <TrendingDown data-part="trend-icon" style={{ width: 14, height: 14, color: trendColor }} />}
+                <Text data-part="change-value" style={{ fontSize: 14, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
               </Flex>
             </StatItem>
             <StatItem label="PERIOD">
-              <Text style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace" }}>{subtitle || "This week"}</Text>
+              <Text data-part="period-value" style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace" }}>{subtitle || "This week"}</Text>
             </StatItem>
             <StatItem label="TARGET">
-              <Text style={{ fontSize: 14, fontWeight: 700, color: progressColor, fontFamily: "monospace" }}>{progress}%</Text>
+              <Text data-part="target-value" style={{ fontSize: 14, fontWeight: 700, color: progressColor, fontFamily: "monospace" }}>{progress}%</Text>
             </StatItem>
           </Box>
 
@@ -742,6 +774,11 @@ function MatrixCard({
   return (
     <NavLinkAnchor href={path} style={{ textDecoration: "none", display: "block", height: "100%" }}>
       <Box
+        className="ds-data-terminal-card"
+        data-part="root"
+        data-variant="4"
+        data-trend={trend}
+        data-band={progress >= 80 ? "high" : progress >= 50 ? "mid" : "low"}
         style={{
           position: "relative",
           height: "100%",
@@ -756,6 +793,7 @@ function MatrixCard({
       >
         {/* Dot matrix texture */}
         <Box
+          data-part="matrix-texture"
           style={{
             position: "absolute",
             inset: 0,
@@ -773,14 +811,14 @@ function MatrixCard({
           <Box style={{ paddingBottom: 12, borderBottom: `1px solid ${DS.border}` }}>
             <Flex align="center" justify="between">
               <Flex align="center" gap={10}>
-                <Box style={{ width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center", background: DS.backgroundSubtle, border: `1px solid ${DS.border}` }}>
-                  <Icon style={{ width: 14, height: 14, color: DS.textSecondary }} />
+                <Box data-part="header-icon-box" style={{ width: 30, height: 30, display: "flex", alignItems: "center", justifyContent: "center", background: DS.backgroundSubtle, border: `1px solid ${DS.border}` }}>
+                  <Icon data-part="header-icon" style={{ width: 14, height: 14, color: DS.textSecondary }} />
                 </Box>
                 <Box>
-                  <Text style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.1em", display: "block", marginBottom: 2 }}>
+                  <Text data-part="datapoint-label" style={{ fontSize: 9, color: DS.textSubtle, fontFamily: "monospace", letterSpacing: "0.1em", display: "block", marginBottom: 2 }}>
                     DATA POINT
                   </Text>
-                  <Text style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace", fontWeight: 600, letterSpacing: "0.05em", display: "block" }}>
+                  <Text data-part="header-label" style={{ fontSize: 12, color: DS.textSecondary, fontFamily: "monospace", fontWeight: 600, letterSpacing: "0.05em", display: "block" }}>
                     {label.toUpperCase()}
                   </Text>
                 </Box>
@@ -792,6 +830,7 @@ function MatrixCard({
           {/* Main value section */}
           <Box style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "20px 0" }}>
             <Text
+              data-part="value"
               style={{
                 fontSize: 68,
                 fontWeight: 900,
@@ -807,6 +846,7 @@ function MatrixCard({
 
           {/* Stats grid section */}
           <Box
+            data-part="stats-grid"
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr 1fr",
@@ -818,20 +858,20 @@ function MatrixCard({
           >
             <StatItem label="CHANGE">
               <Flex align="center" gap={4}>
-                {isPositive ? <TrendingUp style={{ width: 12, height: 12, color: trendColor }} /> : <TrendingDown style={{ width: 12, height: 12, color: trendColor }} />}
-                <Text style={{ fontSize: 13, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
+                {isPositive ? <TrendingUp data-part="trend-icon" style={{ width: 12, height: 12, color: trendColor }} /> : <TrendingDown data-part="trend-icon" style={{ width: 12, height: 12, color: trendColor }} />}
+                <Text data-part="change-value" style={{ fontSize: 13, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
               </Flex>
             </StatItem>
             <StatItem label="PERIOD">
-              <Text style={{ fontSize: 11, color: DS.textSecondary, fontFamily: "monospace" }}>{subtitle || "This week"}</Text>
+              <Text data-part="period-value" style={{ fontSize: 11, color: DS.textSecondary, fontFamily: "monospace" }}>{subtitle || "This week"}</Text>
             </StatItem>
             <StatItem label="TARGET">
-              <Text style={{ fontSize: 13, fontWeight: 700, color: progressColor, fontFamily: "monospace" }}>{progress}%</Text>
+              <Text data-part="target-value" style={{ fontSize: 13, fontWeight: 700, color: progressColor, fontFamily: "monospace" }}>{progress}%</Text>
             </StatItem>
           </Box>
 
           {/* Progress section */}
-          <Box style={{ padding: "12px 0", borderBottom: `1px solid ${DS.border}` }}>
+          <Box data-part="progress-section" style={{ padding: "12px 0", borderBottom: `1px solid ${DS.border}` }}>
             <ProgressBar progress={progress} height={4} />
           </Box>
 
@@ -839,8 +879,8 @@ function MatrixCard({
           <Flex align="center" justify="between" style={{ paddingTop: 12 }}>
             <ActivityIndicator />
             <Flex align="center" gap={6}>
-              <Text style={{ fontSize: 10, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>VIEW DETAILS</Text>
-              <ArrowRight style={{ width: 12, height: 12, color: DS.textMuted }} />
+              <Text data-part="details-label" style={{ fontSize: 10, color: DS.textMuted, fontFamily: "monospace", letterSpacing: "0.05em" }}>VIEW DETAILS</Text>
+              <ArrowRight data-part="details-arrow" style={{ width: 12, height: 12, color: DS.textMuted }} />
             </Flex>
           </Flex>
         </Box>
@@ -888,6 +928,9 @@ export function DataTerminalStat({
 
   return (
     <Box
+      className="ds-data-terminal-stat"
+      data-part="root"
+      data-trend={trend}
       style={{
         position: "relative",
         padding: 14,
@@ -899,22 +942,22 @@ export function DataTerminalStat({
         flexDirection: "column",
       }}
     >
-      <Box style={{ position: "absolute", top: 0, left: 0, width: 10, height: 10, borderTop: `2px solid ${DS.textMuted}`, borderLeft: `2px solid ${DS.textMuted}` }} />
-      <Box style={{ position: "absolute", top: 0, right: 0, width: 10, height: 10, borderTop: `2px solid ${DS.textMuted}`, borderRight: `2px solid ${DS.textMuted}` }} />
+      <Box data-part="corner-bracket" style={{ position: "absolute", top: 0, left: 0, width: 10, height: 10, borderTop: `2px solid ${DS.textMuted}`, borderLeft: `2px solid ${DS.textMuted}` }} />
+      <Box data-part="corner-bracket" style={{ position: "absolute", top: 0, right: 0, width: 10, height: 10, borderTop: `2px solid ${DS.textMuted}`, borderRight: `2px solid ${DS.textMuted}` }} />
 
       <Flex align="center" gap={6} style={{ marginBottom: 6 }}>
-        <Icon style={{ width: 12, height: 12, color: DS.textSecondary }} />
-        <Text style={{ fontSize: 9, fontWeight: 600, color: DS.textSecondary, fontFamily: "monospace", letterSpacing: "0.1em" }}>{label.toUpperCase()}</Text>
+        <Icon data-part="stat-icon" style={{ width: 12, height: 12, color: DS.textSecondary }} />
+        <Text data-part="stat-label" style={{ fontSize: 9, fontWeight: 600, color: DS.textSecondary, fontFamily: "monospace", letterSpacing: "0.1em" }}>{label.toUpperCase()}</Text>
       </Flex>
 
       <Box style={{ flex: 1, display: "flex", alignItems: "center" }}>
         <Flex align="baseline" gap={6}>
-          <Text style={{ fontSize: 28, fontWeight: 800, color: DS.textPrimary, fontFamily: "monospace", lineHeight: 1 }}>
+          <Text data-part="value" style={{ fontSize: 28, fontWeight: 800, color: DS.textPrimary, fontFamily: "monospace", lineHeight: 1 }}>
             {typeof value === "number" ? value.toLocaleString() : value}
           </Text>
           <Flex align="center" gap={3}>
-            {isPositive ? <TrendingUp style={{ width: 10, height: 10, color: trendColor }} /> : <TrendingDown style={{ width: 10, height: 10, color: trendColor }} />}
-            <Text style={{ fontSize: 11, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
+            {isPositive ? <TrendingUp data-part="trend-icon" style={{ width: 10, height: 10, color: trendColor }} /> : <TrendingDown data-part="trend-icon" style={{ width: 10, height: 10, color: trendColor }} />}
+            <Text data-part="change-value" style={{ fontSize: 11, fontWeight: 700, color: trendColor, fontFamily: "monospace" }}>{change || "--"}</Text>
           </Flex>
         </Flex>
       </Box>

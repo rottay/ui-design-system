@@ -92,6 +92,7 @@ const KEYFRAMES = `
 function SkeletonBar({ width, height }: { width: number; height: number }) {
   return (
     <Box
+      data-part="skeleton-bar"
       style={{
         width,
         height,
@@ -109,6 +110,7 @@ function SkeletonDots() {
       {Array.from({ length: 7 }).map((_, i) => (
         <Box
           key={`sk-dot-${i}`}
+          data-part="skeleton-dot"
           style={{
             width: 4,
             height: 4,
@@ -126,6 +128,7 @@ function SkeletonDots() {
 function SkeletonCard() {
   return (
     <Box
+      data-part="skeleton-card"
       style={{
         flex: '1 1 0',
         minWidth: 0,
@@ -146,6 +149,7 @@ function SkeletonCard() {
       </Flex>
       {/* Skeleton gradient glow */}
       <Box
+        data-part="skeleton-glow"
         style={{
           position: 'absolute' as const,
           bottom: 0,
@@ -185,6 +189,8 @@ function SparklineDots({
         return (
           <Box
             key={`dot-${i}`}
+            data-part="spark-dot"
+            data-accent={accent}
             style={{
               width: 4,
               height: 4,
@@ -285,10 +291,12 @@ function ChangeIndicator({
         : MinusIcon;
 
   return (
-    <Flex direction="column" align="end" gap={2}>
-      <Flex align="center" gap={3} style={{ color }}>
+    <Flex direction="column" align="end" gap={2} data-part="change-indicator">
+      <Flex align="center" gap={3} data-part="change-row" data-change={changeType} style={{ color }}>
         <IconComponent size={13} />
         <Text
+          data-part="change-value"
+          data-change={changeType}
           style={{
             fontSize: 13,
             fontWeight: 600,
@@ -302,6 +310,7 @@ function ChangeIndicator({
       </Flex>
       {periodLabel && (
         <Text
+          data-part="change-period"
           style={{
             fontSize: 10,
             fontWeight: 500,
@@ -327,6 +336,7 @@ function ProgressBar({ value, accent }: { value: number; accent: AccentColor }) 
 
   return (
     <Box
+      data-part="progress-track"
       style={{
         width: '100%',
         height: 3,
@@ -337,6 +347,8 @@ function ProgressBar({ value, accent }: { value: number; accent: AccentColor }) 
       }}
     >
       <Box
+        data-part="progress-fill"
+        data-accent={accent}
         style={{
           width: `${clamped}%`,
           height: '100%',
@@ -397,6 +409,8 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
 
   return (
     <Box
+      data-part="stat-card"
+      data-accent={accent}
       style={cardStyle}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => { setHovered(false); setPressed(false); }}
@@ -407,6 +421,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
       {/* Label row: label left, icon right */}
       <Flex justify="between" align="center">
         <Text
+          data-part="stat-label"
           style={{
             fontSize: 11,
             fontWeight: 600,
@@ -420,6 +435,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
         </Text>
         {stat.icon && (
           <Box
+            data-part="stat-icon"
             style={{
               color: 'var(--ds-color-text-muted)',
               opacity: 0.6,
@@ -442,6 +458,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
         <Flex align="baseline" gap={4}>
           {stat.prefix && (
             <Text
+              data-part="stat-prefix"
               style={{
                 fontSize: 20,
                 fontWeight: 500,
@@ -453,6 +470,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
             </Text>
           )}
           <Text
+            data-part="stat-value"
             style={{
               fontSize: compact ? 28 : 36,
               fontWeight: 800,
@@ -465,6 +483,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
           </Text>
           {stat.suffix && (
             <Text
+              data-part="stat-suffix"
               style={{
                 fontSize: compact ? 12 : 14,
                 fontWeight: 500,
@@ -505,6 +524,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
       {/* Contextual insight */}
       {stat.insight && (
         <Text
+          data-part="stat-insight"
           style={{
             fontSize: 11,
             fontWeight: 400,
@@ -520,6 +540,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
 
       {/* Gradient glow from bottom */}
       <Box
+        data-part="card-glow"
         style={{
           position: 'absolute',
           bottom: 0,
@@ -554,9 +575,10 @@ function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
   const columns = isMobile ? 1 : isTablet ? 2 : Math.max(Math.min(stats.length, 4), 1);
 
   return (
-    <Box>
+    <Box className="ds-stats-header" data-part="root">
       <style dangerouslySetInnerHTML={{ __html: KEYFRAMES }} />
       <Box
+        data-part="card-grid"
         style={{
           display: 'grid',
           gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
