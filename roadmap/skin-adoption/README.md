@@ -85,13 +85,22 @@ real-engines suite must do the same.
 The pipeline certified inertness by re-running the paint counter against a stashed tree and diffing:
 byte-identical counts ⇒ zero paint moved. That proof is real and it is **incomplete**.
 
-CK-D/R's pre-step wrapped three `<Card>`s in a `<Box>` (a reasonable first attempt at a real problem
-— Card eats `data-part`). A wrapper `<div>` moves no paint keys, so the counter said INERT. It *is*
-inert by the counter's definition. But it changes the element tree, and an extra div in a flex or
-stack context changes layout. **The baselines were then recorded from that DOM** — photographing a
-tree that was already a deviation from the component's original, and that ceased to exist the moment
-the wrapper was correctly removed. The reference was wrong in both directions, and every downstream
-byte-exactness claim would have been measured against it.
+CK-D/R's pre-step wrapped three `<Card>`s in a `<Box>` to obtain a stampable node (a reasonable first
+attempt at a real problem — Card eats `data-part`). **A wrapper `<div>` moves no paint keys, so the
+counter reports the pre-step INERT** — and by the counter's definition it *is*. But it changes the
+element tree, and an extra div in a flex or stack context changes layout.
+
+**This was a near miss, not a failure, and the distinction matters.** The wrapper was removed on
+adjudication *before* any baseline was recorded (verified: HEAD's `guided-draft-form` has zero
+wrapper `<Box>`es, no commit has touched these files since the pre-step landed, and the corrected
+tree is what the build photographed). Nothing downstream was measured against a bad reference.
+
+**The law stands anyway, and it stands precisely because nothing in the chain would have caught it.**
+Had the wrapper survived one more step, the counters would still have read INERT, the baselines would
+have photographed a tree that was already a deviation from the component's original, and every
+byte-exactness claim afterwards would have been measured against it — with no gate anywhere raising a
+hand. The pipeline was one adjudication away from certifying a lie. Do not wait to be that lucky
+twice.
 
 **So a pre-step is inert iff BOTH hold:**
 
