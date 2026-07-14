@@ -19,7 +19,6 @@ import {
   FormHeader,
   FormSections,
   InlineEditField,
-  InlineEditFooter,
   InlineEditGrid,
   InlineEditor,
   InlineEditorGroup,

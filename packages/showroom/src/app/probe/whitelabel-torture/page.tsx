@@ -275,6 +275,7 @@ const CAPTURE_WIDTHS: Record<string, number> = {
 const ARABIC_LONG_LABEL = 'إدارة المستأجرين والأذونات على مستوى المنصة بالكامل';
 const ARABIC_LONG_VALUE = 'قيمة طويلة جدًا للتحقق من عدم اقتطاع النص في الواجهة العربية';
 const ARABIC_LONG_TITLE = 'لوحة تحكم المشرف العام لإدارة الحسابات';
+const COUNTDOWN_TARGET = Date.now() + 3_600_000;
 
 const EXTRAS_ROWS = [{ key: 'op-14', name: 'Operations', owner: 'Daniel' }];
 const EXTRAS_COLUMNS = [
@@ -2533,7 +2534,7 @@ function Display2States() {
             <Statistic title="Revenue" value={128000} prefix="$" valueType="positive" />
             <Statistic title="Errors" value={12} valueType="negative" />
             <Statistic title="Loading" value={0} loading />
-            <Statistic.Countdown title="Sale ends" value={Date.now() + 3600000} valueType="warning" />
+            <Statistic.Countdown title="Sale ends" value={COUNTDOWN_TARGET} valueType="warning" />
           </Box>
         </Stack>
 

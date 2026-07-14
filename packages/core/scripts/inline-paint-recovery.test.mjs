@@ -55,19 +55,16 @@ test('the twenty runtime paint sites keep their exact property identity', () => 
   assert.equal((chartExport.source.match(/\.style\.setProperty\(prop, value\)/g) ?? []).length, 2);
   const runtimeSvg = analyzeRuntimeSvgPaint(chartExport.source, chartExport.file);
   assert.equal(runtimeSvg.count, 4);
-  assert.equal(runtimeSvg.classifiedPaint, 2);
-  assert.equal(runtimeSvg.unclassified, 2);
+  assert.equal(runtimeSvg.classifiedPaint, 4);
+  assert.equal(runtimeSvg.unclassified, 0);
+  assert.deepEqual(runtimeSvg.unclassifiedSites, []);
   assert.deepEqual(
-    runtimeSvg.unclassifiedSites.map(({ method, expression }) => ({
-      method,
-      expression,
-    })),
+    runtimeSvg.sites.map(({ kind, property }) => ({ kind, property })),
     [
-      { method: 'setAttribute', expression: 'prop' },
-      {
-        method: 'setAttribute',
-        expression: "prop === 'color' ? 'fill' : prop",
-      },
+      { kind: 'dom-set-attribute', property: 'fill' },
+      { kind: 'dom-set-attribute', property: 'computed-paint-copy' },
+      { kind: 'dom-set-attribute', property: 'computed-paint-copy' },
+      { kind: 'dom-set-attribute', property: 'fill' },
     ]
   );
 });

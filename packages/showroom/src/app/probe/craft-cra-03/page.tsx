@@ -144,7 +144,7 @@ function TooltipShortcutProbe() {
   return (
     <Stack spacing="md">
       <Text size="sm" style={{ color: SECONDARY }}>
-        The Tooltip primitive's new <code>shortcut</code> prop renders formatted key
+        The Tooltip primitive&apos;s new <code>shortcut</code> prop renders formatted key
         chips (via <code>formatShortcutKey</code>) alongside the content. Shown open by
         default for capture.
       </Text>
@@ -167,9 +167,9 @@ function CommandPaletteProbe() {
       <Stack spacing="md">
         <Text size="sm" style={{ color: SECONDARY }}>
           Press <code>?</code> (or open the palette with <code>Cmd/Ctrl+K</code> and
-          search "keyboard shortcuts") to open the cheatsheet, populated from every
+          search &quot;keyboard shortcuts&quot;) to open the cheatsheet, populated from every
           registered command AND scoped shortcut on this page -- including the
-          gallery's j/k/x/enter above.
+          gallery&apos;s j/k/x/enter above.
         </Text>
         <ConnectedCommandPalette />
       </Stack>

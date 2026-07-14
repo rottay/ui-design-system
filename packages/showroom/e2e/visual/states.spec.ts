@@ -231,7 +231,8 @@ function cellKey(fixture: Fixture, engine: Engine, subject: string, state: State
  * the entire hover rule neutralized at `!important`.
  */
 function paintOf(cell: Cell): Cell {
-  const { 'data-state': _state, ...paint } = cell;
+  const paint = { ...cell };
+  Reflect.deleteProperty(paint, 'data-state');
   return paint;
 }
 
@@ -584,6 +585,5 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
 
 test.afterAll(async () => {
   if (!RECORDING) return;
-  // eslint-disable-next-line no-console
   console.log(`state-matrix.json holds ${Object.keys(readPersisted()).length} cells`);
 });

@@ -361,6 +361,11 @@ describe('package exports', () => {
     expect(rootPkg.version).toBe(corePkg.version);
   });
 
+  it('root package should be private so releases publish from packages/core only', () => {
+    const rootPkg = JSON.parse(readFileSync(join(DS_ROOT, 'package.json'), 'utf-8'));
+    expect(rootPkg.private).toBe(true);
+  });
+
   it('core package.json sideEffects should include CSS', () => {
     const corePkg = JSON.parse(readFileSync(PACKAGE_MANIFEST, 'utf-8'));
     expect(corePkg.sideEffects).toContain('*.css');

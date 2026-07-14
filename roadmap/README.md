@@ -171,39 +171,37 @@ Each of these was paid for. They are not style preferences.
    seeded in the same commit that adds it, and `--check` now refuses one that is
    not.
 
-## The pre-existing failure baseline (measured, not assumed)
+## The current failure baseline (measured, not assumed)
 
-`pnpm test` in `packages/core` fails **17 tests** at HEAD. All 17 also fail at
-`9d59a97a`, the commit before this program's first, verified by checking that
-commit out into a throwaway worktree and running the same files. This program
-has introduced **zero** unit regressions.
+> **AMENDMENT (2026-07-14, 2.19.0 release candidate):** the 17-test ledger
+> measured on 2026-07-09 was correct for that checkout, but it is not the current
+> allow-list. After the Stage-1 migrations and explicit root/core version sync,
+> a single combined run of the exact remaining files reports **10 failed files,
+> 13 failed tests and 82 passed tests**. This supersedes 17 as the release
+> threshold; it does not rewrite the historical measurement.
 
-Do not quote a smaller number. An earlier note in this session claimed "3 stable
-pre-existing failures"; that count came from a narrower run and was repeated
-without being remeasured. The real set:
+The current set is exact:
 
-| Count | Tests | Cause |
+| Count | Tests | Observed failure |
 | --- | --- | --- |
-| 12 | `List`, `Statistic`, `Typography`, `Slider`, `Popover`, `Pagination`, `Skeleton`, `TimePicker` (×5) engine-advanced/integration | `happy-dom@20.9.0` silently drops a `background` shorthand whose value is a nested `var(--a, var(--b, #lit))`. The declaration vanishes from the serialized inline style; the assertion looks for it and does not find it. The components are correct — the DOM implementation is not. Verified directly against `happy-dom`: `background: var(--a)` survives, `background: var(--a, var(--b, #0066CC))` does not, and `background-color` with a nested fallback serializes to `null`. |
-| 2 | `source-governance` version match, token mirror | Known. |
-| 1 | `whitelabel-field-coverage` bithire `.ant-` selectors | Known. |
-| 1 | `PatternCommandPalette` engine-advanced | Test timeout, identical at base. |
-| 1 | `TimePicker` real-engines | Same happy-dom cause. |
+| 6 | `TimePicker.integration` (×3), `TimePicker.modern-engine-advanced` (×2), `TimePicker.real-engines` (×1) | Modern's expected time inputs/handlers are absent; rustic returns the no-seconds value `09:30` where the test expects `09:30:00`. |
+| 4 | `List.rustic`, `Statistic.rustic`, `Typography.modern`, `Popover.modern` advanced coverage | Assertions still require prior inline paint, utility classes or DOM/class shapes instead of the rendered skin contract. These tests remain red; the release does not weaken them. |
+| 1 | `source-governance` public token mirror | Six runtime files still import or export the public token mirror. Root/core version parity is now green. |
+| 1 | `whitelabel-field-coverage` | BitHire's tenant CSS still contains 25 `.ant-` selectors. |
+| 1 | `PatternCommandPalette` modern advanced coverage | The modern case hits the 30-second timeout under the combined run; classic and rustic pass. |
 
-**Confirmed by a run that finished (2026-07-09).** `npx vitest run` in `packages/core`:
-`Test Files 22 failed | 430 passed (452)`, `Tests 19 failed | 6432 passed | 21 skipped`.
-Seventeen are the table above. The other two were an executor's in-flight work
-order, not regressions.
+The full suite immediately before the two release corrections reported
+`502/513` passing files, `7690` passed tests, `21` skipped tests and `15` failed
+tests across 11 files. The stale Card token-fidelity assertion was corrected to
+read the engine together with its skin and proved 9/9; root/core version parity
+was fixed and proved in the source-governance
+focal. Those two corrections produce the 13-test set above, which was rerun as a
+single ledger command.
 
-Three tests that WERE regressions from this program have since been found and
-fixed, each verified against `9d59a97a` first: `Card.real-engines` (a variant
-token lost its only consumer), `Statistic.modern-engine-advanced` (a motion work
-order retimed a fallback), and `ColorPicker.engine-advanced` (WO-ARC-01). None
-of them were caught by a counter. See P-39 and P-40.
-
-The fix for the twelve is not to weaken the assertions. It is either a
-`happy-dom` upgrade or a longhand emission. Until one of those lands, this table
-is the contract: **17, and no test outside it may go red.**
+The earlier **17** remains historical evidence from `9d59a97a`; it must not be
+quoted as the current threshold. Conversely, the current allow-list is not a
+waiver: no test outside these ten files may go red, and each listed defect must
+be fixed or deliberately respecified in its own work order.
 
 ## State model (this plan cannot rot silently)
 

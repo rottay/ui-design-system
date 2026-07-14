@@ -111,7 +111,8 @@ runtime-SVG floor is registered per file and certified at the exact post-migrati
 ### WO-SKIN-07 Skin-adoption program certification + release
 - Full core suite (respect the standing failure ledger), full visual suite, `--check`, docs
   contract pages extended per batch (the data-part-contracts README grows with each WO), minor
-  version publish + app repins, and the stage-2 backlog handoff (consolidated proposals list).
+  version publish + the gated BitHire repin, deferred-consumer release markers,
+  and the stage-2 backlog handoff (consolidated proposals list).
 - **Size** — M.
 
 #### Stage-2 handoff and release boundary

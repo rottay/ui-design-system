@@ -1,5 +1,41 @@
 # @rottay/design-system
 
+## 2.19.0
+
+### Minor Changes
+
+- 4209c59: Complete Stage-1 skin adoption by extending the input work released in 2.18.0 across feedback,
+  overlay, navigation, display, layout, patterns, structures, surfaces, tenant previews and
+  visualization. Migratable static and finite-state paint now lives in scope-anchored, unlayered skins
+  with stable `data-part`/state hooks wherever the rendered owner can expose them. Composition-blocked
+  paint plus caller-, datum-, tenant-, user-, document-derived and runtime-SVG paint remains at exact
+  executable floors and is explicitly handed to Stage 2. This is a byte-exact ownership release, not
+  an intentional visual redesign; every public tenant/vertical CSS entrypoint is regenerated.
+
+## 2.18.0
+
+### Minor Changes
+
+- 52d1804d: Complete WO-SKIN-02: all 25 input components now paint from 52
+  unlayered skins on the public `data-part` contract. This release also makes
+  every Stack engine forward the HTML attributes already promised by
+  `StackProps`.
+
+## 2.17.0
+
+### Minor Changes
+
+- 0c372387: Complete WO-ARC-09: six workspace-tier components now paint from
+  unlayered skins on the public `data-part` contract. Add `subtle` and `inherit`
+  to `TextColor`, and add `data-part` to `BaseComponentProps`.
+
+## 2.16.6
+
+### Patch Changes
+
+- 2fe56546: Add the public `@rottay/design-system/commercial` entrypoint and its
+  monochrome component and CSS kit.
+
 ## 2.16.5
 
 ### Patch Changes
