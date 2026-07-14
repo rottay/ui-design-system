@@ -147,6 +147,14 @@ export function countArc09PaintInFile(text) {
         pendingTypeBody = false;
       }
       if (c === "{") {
+        // `const { bordered, backgroundColor } = props` is a DESTRUCTURING PATTERN,
+        // not an object literal: its keys are PROP NAMES that merely resemble paint
+        // (`bordered` matches the `border*` family). Counting them invents paint that
+        // does not exist -- Card rustic reported a phantom site this way.
+        const beforeDestr = text.slice(Math.max(0, i - 12), i);
+        if (/\b(const|let|var)\s*$/.test(beforeDestr) && !inTypeBody()) {
+          typeBodyDepths.push(stack.length);
+        }
         // A RETURN-TYPE annotation opens a type body too: `function f(x: T): { color: string }`.
         // Its innermost bracket is `{`, so without this its members read as paint. The
         // `)` -> `:` -> `{` signature is unambiguous; an object literal's `key: {` is
