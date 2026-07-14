@@ -98,7 +98,11 @@ export function EditorSurface({
       {/* Split layout with preview rail only activates when all three conditions
           are met: split mode requested, preview content exists, and viewport is
           wide enough. Otherwise the editor uses the full width. */}
-      <Grid columns={config.visual.layout === 'split' && config.presentation.preview && !shouldStack ? 12 : 1} gap="lg">
+      <Grid
+        className={`ds-surface ds-editor ds-editor--${config.visual.layout === 'split' && config.presentation.preview && !shouldStack ? 'split' : 'full'}${loading ? ' ds-editor--loading' : ''}`}
+        columns={config.visual.layout === 'split' && config.presentation.preview && !shouldStack ? 12 : 1}
+        gap="lg"
+      >
         <Grid.Item span={config.visual.layout === 'split' && config.presentation.preview && !shouldStack ? 8 : undefined}>
           <SurfaceSectionCard
             title={tSurface('editor.title')}
@@ -107,7 +111,7 @@ export function EditorSurface({
           >
             <Stack spacing="md">
               {config.presentation.helperText && (
-                <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                <Text className="ds-editor__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>
                   {config.presentation.helperText}
                 </Text>
               )}
@@ -118,6 +122,7 @@ export function EditorSurface({
                   mechanism. */}
               {config.presentation.renderEditor?.(value, setValue) ?? (
                 <Textarea
+                  className="ds-editor__input"
                   value={value}
                   onChange={(nextValue) => setValue(nextValue)}
                   placeholder={config.behavior.placeholder}
@@ -135,7 +140,7 @@ export function EditorSurface({
 
         {config.presentation.preview && (
           <Grid.Item span={!shouldStack ? 4 : undefined}>
-            <Card variant="outlined">
+            <Card className="ds-editor__preview" variant="outlined">
               <Card.Body>{config.presentation.preview}</Card.Body>
             </Card>
           </Grid.Item>

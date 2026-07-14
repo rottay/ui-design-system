@@ -27,6 +27,11 @@ function DefaultSearchResult({
 }): React.ReactElement {
   return (
     <Card
+      className={
+        selected
+          ? 'ds-search__result-card ds-search__result-card--selected'
+          : 'ds-search__result-card'
+      }
       variant="outlined"
       clickable
       hoverable
@@ -57,16 +62,28 @@ function DefaultSearchResult({
               </Box>
             )}
             <Stack spacing="xs">
-              <Text style={{ fontWeight: 700, color: 'var(--ds-search-result-title-color, var(--ds-color-text-primary))' }}>
+              <Text
+                className="ds-search__result-title"
+                data-part="result-title"
+                style={{ fontWeight: 700, color: 'var(--ds-search-result-title-color, var(--ds-color-text-primary))' }}
+              >
                 {result.title}
               </Text>
               {result.description && (
-                <Text style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}>
+                <Text
+                  className="ds-search__result-meta"
+                  data-part="result-meta"
+                  style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}
+                >
                   {result.description}
                 </Text>
               )}
               {result.meta && (
-                <Box style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}>
+                <Box
+                  className="ds-search__result-meta"
+                  data-part="result-meta"
+                  style={{ color: 'var(--ds-search-result-meta-color, var(--ds-color-text-muted))' }}
+                >
                   {result.meta}
                 </Box>
               )}
@@ -148,7 +165,14 @@ export function SearchSurface({
       actions={<SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />}
       loading={loading}
     >
-      <Stack spacing="lg">
+      <Stack
+        className="ds-surface ds-search"
+        data-part="root"
+        data-layout={config.visual.layout}
+        data-loading={loading ? 'true' : 'false'}
+        data-preview={showPreview ? 'true' : 'false'}
+        spacing="lg"
+      >
         <SurfaceSectionCard>
           <Stack spacing="md">
             <Input.Search
@@ -178,7 +202,12 @@ export function SearchSurface({
             misleading empty states during fetches. */}
         {!hasEnoughQuery && !loading ? (
           config.presentation.emptyQueryState ?? (
-            <Box style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}>
+            <Box
+              className="ds-search__empty-state"
+              data-part="empty-state"
+              data-state="query"
+              style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}
+            >
               <SurfaceEmptyState
                 title={tSurface('search.empty_query_title')}
                 description={emptyQueryDescription}
@@ -187,7 +216,12 @@ export function SearchSurface({
           )
         ) : config.behavior.results.length === 0 && !loading ? (
           config.presentation.emptyResultsState ?? (
-            <Box style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}>
+            <Box
+              className="ds-search__empty-state"
+              data-part="empty-state"
+              data-state="results"
+              style={{ background: 'var(--ds-search-empty-bg, transparent)', borderRadius: 'var(--ds-radius-lg)' }}
+            >
               <SurfaceEmptyState
                 title={tSurface('search.empty_results_title')}
                 description={tSurface('search.empty_results_description')}
@@ -276,7 +310,11 @@ export function SearchSurface({
                         <Stack spacing="sm">
                           <Text style={{ fontWeight: 700 }}>{selectedResult.title}</Text>
                           {selectedResult.description && (
-                            <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                            <Text
+                              className="ds-search__muted-text"
+                              data-part="muted-text"
+                              style={{ color: 'var(--ds-color-text-muted)' }}
+                            >
                               {selectedResult.description}
                             </Text>
                           )}

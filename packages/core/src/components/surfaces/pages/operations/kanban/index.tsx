@@ -53,9 +53,16 @@ export function KanbanSurface({
       actions={actionsNode}
       loading={loading}
     >
-      <Stack spacing="lg">
+      <Stack
+        className="ds-surface ds-kanban"
+        data-part="root"
+        data-loading={loading ? 'true' : 'false'}
+        data-has-items={hasItems ? 'true' : 'false'}
+        data-has-filters={config.behavior.filters && config.behavior.filters.length > 0 ? 'true' : 'false'}
+        spacing="lg"
+      >
         {config.behavior.filters && config.behavior.filters.length > 0 && (
-          <Card variant="outlined">
+          <Card className="ds-kanban__filters" variant="outlined">
             <Card.Body>
               <PatternFilterPanel
                 filters={config.behavior.filters}
@@ -70,7 +77,7 @@ export function KanbanSurface({
         )}
 
         {!hasItems && !loading ? (
-          <Card variant="outlined">
+          <Card className="ds-kanban__empty-state" variant="outlined">
             <Card.Body>
               {config.presentation.emptyState ?? (
                 <SurfaceEmptyState

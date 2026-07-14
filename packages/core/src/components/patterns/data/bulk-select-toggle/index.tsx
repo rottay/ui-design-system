@@ -33,8 +33,16 @@ export function BulkSelectToggle({
   size = 'sm',
 }: BulkSelectToggleProps) {
   return (
-    <Flex align="center" gap={8}>
+    <Flex
+      className="ds-pattern-bulk-select-toggle"
+      data-part="root"
+      data-active={active ? 'true' : 'false'}
+      data-has-selection={selectedCount > 0 ? 'true' : 'false'}
+      align="center"
+      gap={8}
+    >
       <Button
+        className="ds-bulk-select-toggle__trigger"
         variant={active ? 'primary' : 'ghost'}
         size={size}
         onClick={onToggle}
@@ -48,6 +56,7 @@ export function BulkSelectToggle({
       >
         {active ? (
           <X
+            data-part="icon"
             style={{
               width: 14,
               height: 14,
@@ -55,13 +64,14 @@ export function BulkSelectToggle({
             }}
           />
         ) : (
-          <MousePointerSquareDashed style={{ width: 14, height: 14 }} />
+          <MousePointerSquareDashed data-part="icon" style={{ width: 14, height: 14 }} />
         )}
-        <Text size="sm">{active ? 'Done' : 'Select'}</Text>
+        <Text data-part="label" size="sm">{active ? 'Done' : 'Select'}</Text>
       </Button>
 
       {active && selectedCount > 0 && (
         <Badge
+          className="ds-bulk-select-toggle__count"
           variant="primary"
           style={{
             animation: 'slideInCheckbox 0.2s ease-out',

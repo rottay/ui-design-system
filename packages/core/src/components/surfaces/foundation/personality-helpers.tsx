@@ -90,7 +90,16 @@ export function SurfaceAccentBar({
     baseStyle.animation = 'ds-accent-bar-shimmer 3s ease-in-out infinite';
   }
 
-  return <Box style={baseStyle} aria-hidden />;
+  return (
+    <Box
+      className="ds-surface ds-accent-bar"
+      data-part="bar"
+      data-position={position}
+      data-style={barStyle}
+      style={baseStyle}
+      aria-hidden
+    />
+  );
 }
 
 /**

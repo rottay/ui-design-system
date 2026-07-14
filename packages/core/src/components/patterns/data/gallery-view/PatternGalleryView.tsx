@@ -97,6 +97,7 @@ const GALLERY_HOVER_STYLES = `
 function ImagePlaceholder({ aspectRatio }: { aspectRatio: string }) {
   return (
     <Flex
+      data-part="image-placeholder"
       align="center"
       justify="center"
       style={{
@@ -106,7 +107,7 @@ function ImagePlaceholder({ aspectRatio }: { aspectRatio: string }) {
         color: 'var(--ds-color-text-disabled, #bbb)',
       }}
     >
-      <ImageIcon style={{ width: 32, height: 32, opacity: 0.5 }} />
+      <ImageIcon data-part="image-placeholder-icon" style={{ width: 32, height: 32, opacity: 0.5 }} />
     </Flex>
   );
 }
@@ -141,6 +142,7 @@ function DefaultGalleryCard<T>({
     <>
       {hasImage ? (
         <Box
+          data-part="image-frame"
           style={{
             width: '100%',
             aspectRatio,
@@ -148,6 +150,7 @@ function DefaultGalleryCard<T>({
           }}
         >
           <img
+            data-part="image"
             src={imageUrl as string}
             alt={typeof caption === 'string' ? caption : ''}
             style={{
@@ -165,12 +168,14 @@ function DefaultGalleryCard<T>({
       )}
       {caption != null && String(caption).length > 0 && (
         <Box
+          data-part="caption"
           style={{
             padding: '8px 10px',
             background: 'var(--ds-color-bg-primary, #fff)',
           }}
         >
           <Text
+            data-part="caption-text"
             size="sm"
             style={{
               color: 'var(--ds-color-text-primary)',
@@ -252,6 +257,9 @@ function GalleryCardWrapper<T>({
 
   return (
     <Box
+      data-part="card"
+      data-selected={selected ? 'true' : 'false'}
+      data-selectable={selectable ? 'true' : 'false'}
       role={onItemClick ? 'button' : undefined}
       ref={focusable ? itemRef : undefined}
       tabIndex={focusable ? tabIndex : undefined}
@@ -286,6 +294,8 @@ function GalleryCardWrapper<T>({
       {selectable && (
         <Box
           data-gallery-checkbox=""
+          data-part="checkbox"
+          data-selected={selected ? 'true' : 'false'}
           style={{
             position: 'absolute',
             top: 8,
@@ -302,6 +312,7 @@ function GalleryCardWrapper<T>({
           className="ds-gallery-checkbox"
         >
           <Checkbox
+            className="ds-gallery-view__checkbox-control"
             checked={selected}
             onChange={handleCheckboxChange}
             size="sm"
@@ -345,10 +356,17 @@ function GallerySkeletonGrid({
   };
 
   return (
-    <Box className={className} style={gridStyle}>
+    <Box
+      className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-loading="true"
+      data-empty="false"
+      style={gridStyle}
+    >
       {Array.from({ length: SKELETON_COUNT }, (_, i) => (
         <Box
           key={i}
+          data-part="skeleton-card"
           style={{
             borderRadius: 'var(--ds-radius-md, 8px)',
             overflow: 'hidden',
@@ -357,6 +375,7 @@ function GallerySkeletonGrid({
           }}
         >
           <Skeleton
+            className="ds-gallery-view__skeleton-image"
             variant="rectangular"
             style={{
               width: '100%',
@@ -364,8 +383,8 @@ function GallerySkeletonGrid({
               display: 'block',
             }}
           />
-          <Box style={{ padding: '8px 10px' }}>
-            <Skeleton variant="text" style={{ width: '70%', height: 14 }} />
+          <Box data-part="skeleton-caption" style={{ padding: '8px 10px' }}>
+            <Skeleton className="ds-gallery-view__skeleton-caption" variant="text" style={{ width: '70%', height: 14 }} />
           </Box>
         </Box>
       ))}
@@ -564,7 +583,10 @@ export function PatternGalleryView<T extends object>(
   if (data.length === 0) {
     return (
       <Box
-        className={className}
+        className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
+        data-part="root"
+        data-loading="false"
+        data-empty="true"
         style={{
           padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
           borderRadius: 'var(--ds-radius-lg, 12px)',
@@ -575,7 +597,7 @@ export function PatternGalleryView<T extends object>(
         }}
       >
         {emptyState ?? (
-          <Text style={{ color: 'var(--ds-color-text-muted)' }}>No items</Text>
+          <Text data-part="empty-state" style={{ color: 'var(--ds-color-text-muted)' }}>No items</Text>
         )}
       </Box>
     );
@@ -586,7 +608,15 @@ export function PatternGalleryView<T extends object>(
   // -------------------------------------------------------------------------
 
   const grid = (
-    <Box className={className} style={gridStyle} onKeyDown={focusable ? roving.handleKeyDown : undefined}>
+    <Box
+      className={['ds-pattern-gallery-view', className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-loading="false"
+      data-empty="false"
+      data-selectable={selectable ? 'true' : 'false'}
+      style={gridStyle}
+      onKeyDown={focusable ? roving.handleKeyDown : undefined}
+    >
       {data.map((item, index) => {
         const key = getItemKey(item, index);
         return (

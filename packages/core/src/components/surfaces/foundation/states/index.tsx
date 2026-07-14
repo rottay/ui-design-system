@@ -40,18 +40,24 @@ export function SurfaceLoadingState({
       : 'wave';
 
   return (
-    <Card variant="outlined">
-      <Card.Body>
-        <Stack spacing="md">
-          <Stack spacing="xs">
-            <Text style={{ fontWeight: 700 }}>
+    <Card className="ds-surface ds-loading-state" variant="outlined">
+      <Card.Body className="ds-loading-state__body">
+        <Stack data-part="content" spacing="md">
+          <Stack data-part="copy" spacing="xs">
+            <Text data-part="title" style={{ fontWeight: 700 }}>
               {title ?? tSurface('states.loading_title')}
             </Text>
-            <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+            <Text data-part="description" style={{ color: 'var(--ds-color-text-muted)' }}>
               {description ?? tSurface('states.loading_description')}
             </Text>
           </Stack>
-          <Skeleton variant="text" rows={lines} animation={skeletonAnimation} active />
+          <Skeleton
+            className="ds-loading-state__skeleton"
+            variant="text"
+            rows={lines}
+            animation={skeletonAnimation}
+            active
+          />
         </Stack>
       </Card.Body>
     </Card>
@@ -75,6 +81,7 @@ export function SurfaceEmptyState({
 
   return (
     <PatternEmptyState
+      className="ds-surface ds-empty-state"
       title={title ?? tSurface('states.empty_title')}
       description={description ?? tSurface('states.empty_description')}
       icon={icon}
@@ -113,20 +120,21 @@ export function SurfaceErrorState({
   const normalized = normalizeSurfaceError(error);
 
   return (
-    <Card variant="outlined">
-      <Card.Body>
-        <Stack spacing="md">
-          <Text style={{ fontWeight: 700 }}>
+    <Card className="ds-surface ds-error-state" variant="outlined">
+      <Card.Body className="ds-error-state__body">
+        <Stack data-part="content" spacing="md">
+          <Text data-part="title" style={{ fontWeight: 700 }}>
             {title ?? tSurface('states.error_title')}
           </Text>
           <Alert
+            className="ds-error-state__alert"
             type="error"
             showIcon
             message={normalized.message}
             description={normalized.description}
           />
           {onRetry && (
-            <Button variant="primary" onClick={() => onRetry()}>
+            <Button className="ds-error-state__retry" variant="primary" onClick={() => onRetry()}>
               {retryLabel ?? tSurface('states.retry')}
             </Button>
           )}

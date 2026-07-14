@@ -76,6 +76,8 @@ export function SettingsSurface({
     <Stack spacing={sectionSpacing}>
       {tab.description && (
         <Text
+          className="ds-settings__muted-text"
+          data-part="muted-text"
           size="sm"
           style={{
             color: 'var(--ds-color-text-muted)',
@@ -110,6 +112,8 @@ export function SettingsSurface({
     <Stack spacing={sectionSpacing}>
       {config.presentation.intro && (
         <Text
+          className="ds-settings__muted-text"
+          data-part="muted-text"
           size="sm"
           style={{
             color: 'var(--ds-color-text-muted)',
@@ -123,6 +127,7 @@ export function SettingsSurface({
       {config.presentation.footer && (
         shouldRenderContentCard ? (
           <Card
+            className="ds-settings__footer-card"
             variant={profileDefaults.cardVariant}
             style={{
               borderColor: 'var(--ds-color-border-secondary)',
@@ -147,7 +152,11 @@ export function SettingsSurface({
   );
 
   const settingsContent = (
-    <Grid columns={config.presentation.sidebar && !shouldStack ? 12 : 1} gap="lg">
+    <Grid
+      className={`ds-surface ds-settings ds-settings--${shouldStack ? 'stacked' : 'wide'}`}
+      columns={config.presentation.sidebar && !shouldStack ? 12 : 1}
+      gap="lg"
+    >
       <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
         {framedContent}
       </Grid.Item>

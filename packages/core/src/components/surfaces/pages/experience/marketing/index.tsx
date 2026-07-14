@@ -32,7 +32,7 @@ export function MarketingSurface({
       : config.presentation.supporting;
 
   const heroNode = heroContent ? (
-    <Box style={{ width: '100%' }}>
+    <Box className="ds-marketing__hero" data-part="hero" style={{ width: '100%' }}>
       {heroContent}
     </Box>
   ) : null;
@@ -43,6 +43,8 @@ export function MarketingSurface({
         <Flex align="center" gap={10} wrap="wrap">
           {config.presentation.eyebrow ? (
             <Text
+              className="ds-marketing__muted-text"
+              data-part="muted-text"
               style={{
                 fontSize: 12,
                 fontWeight: 700,
@@ -76,6 +78,8 @@ export function MarketingSurface({
         </Text>
         {config.presentation.description ? (
           <Text
+            className="ds-marketing__description"
+            data-part="description"
             style={{
               fontSize: isMobile ? 16 : 18,
               lineHeight: isMobile ? 1.75 : 1.85,
@@ -103,6 +107,11 @@ export function MarketingSurface({
 
   return (
     <Box
+      className="ds-surface ds-marketing"
+      data-part="root"
+      data-layout={shouldStack ? 'stacked' : 'split'}
+      data-mobile={isMobile ? 'true' : 'false'}
+      data-hero-position={heroFirst ? 'start' : 'end'}
       style={{
         minHeight: '100vh',
         paddingBottom: isMobile ? 40 : 72,

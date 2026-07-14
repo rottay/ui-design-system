@@ -48,6 +48,7 @@ export function ActivitySurface({
       loading={loading}
     >
       <PatternActivityLog
+        className="ds-surface ds-activity"
         activities={activities}
         filters={config.behavior.filters}
         onFilterChange={config.behavior.onFilterChange}
@@ -69,8 +70,8 @@ export function ActivitySurface({
       {/* Pagination lives at the surface level because the pattern does not
           own data fetching -- the app controls page boundaries. */}
       {config.behavior.pagination && (
-        <Flex justify="end" style={{ marginTop: 16 }}>
-          <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+        <Flex className="ds-surface ds-activity ds-activity__pagination" data-part="pagination" justify="end" style={{ marginTop: 16 }}>
+          <Text className="ds-activity__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
             Page {config.behavior.pagination.current} - {config.behavior.pagination.total} total entries
           </Text>
         </Flex>

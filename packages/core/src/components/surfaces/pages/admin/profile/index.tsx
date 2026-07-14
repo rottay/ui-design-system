@@ -46,14 +46,18 @@ function ProfileSectionCard({
   }, [onSave, section.key, values]);
 
   return (
-    <Card variant="outlined">
+    <Card className="ds-profile__section-card" variant="outlined">
       <Card.Body>
         <Stack spacing="md">
           <Flex justify="between" align="center">
             <Stack spacing="xs">
               <Text style={{ fontSize: 16, fontWeight: 600 }}>{section.label}</Text>
               {section.description && (
-                <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                <Text
+                  className="ds-profile__muted-text"
+                  data-part="muted-text"
+                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                >
                   {section.description}
                 </Text>
               )}
@@ -72,7 +76,11 @@ function ProfileSectionCard({
           <Stack spacing="sm">
             {section.fields.map((field) => (
               <Stack key={field.key} spacing="xs">
-                <Text style={{ fontSize: 13, fontWeight: 500, color: 'var(--ds-color-text-muted)' }}>
+                <Text
+                  className="ds-profile__muted-text"
+                  data-part="muted-text"
+                  style={{ fontSize: 13, fontWeight: 500, color: 'var(--ds-color-text-muted)' }}
+                >
                   {field.label}
                 </Text>
                 {editing && !field.readOnly ? (
@@ -154,7 +162,13 @@ export function ProfileSurface({
   ) : null;
 
   const mainContent = (
-    <Stack spacing="lg">
+    <Stack
+      className="ds-surface ds-profile"
+      data-part="root"
+      data-layout={isSidebarLayout && !shouldStack ? 'sidebar' : 'stacked'}
+      data-loading={loading ? 'true' : 'false'}
+      spacing="lg"
+    >
       {!isSidebarLayout && config.presentation.avatar && (
         <Card variant="outlined">
           <Card.Body>

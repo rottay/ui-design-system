@@ -53,6 +53,11 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
   // on the main column prevents content from overflowing into the sidebar.
   return (
     <Box
+      className="ds-surface ds-sidebar"
+      data-part="root"
+      data-collapsed={collapsed ? 'true' : 'false'}
+      data-stacked={shouldStack ? 'true' : 'false'}
+      data-bordered={config.visual.bordered === false ? 'false' : 'true'}
       style={{
         display: shouldStack ? 'flex' : 'grid',
         flexDirection: shouldStack ? 'column' : undefined,
@@ -66,6 +71,7 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
       }}
     >
       <Card
+        className="ds-sidebar__panel"
         variant="outlined"
         style={{
           minHeight: '100%',
@@ -76,6 +82,8 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
           <Flex direction="column" gap={16}>
             {config.visual.collapsible && (
               <Button
+                className="ds-sidebar__toggle"
+                data-collapsed={collapsed ? 'true' : 'false'}
                 variant="secondary"
                 size="sm"
                 onClick={() => setCollapsed(!collapsed)}
@@ -86,7 +94,7 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
               </Button>
             )}
 
-            <Box>{config.presentation.sidebar}</Box>
+            <Box className="ds-sidebar__navigation" data-part="navigation">{config.presentation.sidebar}</Box>
             <SurfaceActionBar
               actions={config.behavior.actions}
               permissions={config.permissions}
@@ -97,13 +105,13 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
         </Card.Body>
       </Card>
 
-      <Flex direction="column" gap={16}>
+      <Flex className="ds-sidebar__main" data-part="main" direction="column" gap={16}>
         {config.presentation.header}
         <Box>{config.presentation.content}</Box>
       </Flex>
 
       {config.presentation.aside && (
-        <Card variant="outlined">
+        <Card className="ds-sidebar__aside" variant="outlined">
           <Card.Body>{config.presentation.aside}</Card.Body>
         </Card>
       )}

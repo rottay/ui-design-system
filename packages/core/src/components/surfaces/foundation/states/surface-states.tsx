@@ -50,10 +50,11 @@ export function SurfaceLoadingSkeleton({
       : 'wave';
 
   return (
-    <Stack spacing="md">
+    <Stack className="ds-surface ds-loading-skeleton" data-part="root" spacing="md">
       {showHeader && (
-        <Flex gap={4} align="center">
+        <Flex data-part="header" gap={4} align="center">
           <Skeleton
+            className="ds-loading-skeleton__header-primary"
             variant="text"
             rows={1}
             animation={skeletonAnimation}
@@ -61,6 +62,7 @@ export function SurfaceLoadingSkeleton({
             style={{ width: '30%', height: 24 }}
           />
           <Skeleton
+            className="ds-loading-skeleton__header-secondary"
             variant="text"
             rows={1}
             animation={skeletonAnimation}
@@ -69,7 +71,13 @@ export function SurfaceLoadingSkeleton({
           />
         </Flex>
       )}
-      <Skeleton variant="text" rows={rows} animation={skeletonAnimation} active />
+      <Skeleton
+        className="ds-loading-skeleton__rows"
+        variant="text"
+        rows={rows}
+        animation={skeletonAnimation}
+        active
+      />
     </Stack>
   );
 }
@@ -110,11 +118,12 @@ export function SurfaceEmptyStateCard({
   const { tSurface } = useSurfaceTranslations();
 
   return (
-    <Card variant="outlined">
-      <Card.Body>
-        <Flex direction="column" align="center" gap={4} style={{ padding: '48px 24px' }}>
+    <Card className="ds-surface ds-empty-state-card" variant="outlined">
+      <Card.Body className="ds-empty-state-card__body">
+        <Flex data-part="content" direction="column" align="center" gap={4} style={{ padding: '48px 24px' }}>
           {icon && (
             <Text
+              data-part="icon"
               style={{
                 fontSize: 48,
                 color: 'var(--ds-color-text-disabled)',
@@ -124,8 +133,9 @@ export function SurfaceEmptyStateCard({
               {icon}
             </Text>
           )}
-          <Stack spacing="xs" style={{ textAlign: 'center' }}>
+          <Stack data-part="copy" spacing="xs" style={{ textAlign: 'center' }}>
             <Text
+              data-part="title"
               as="p"
               style={{
                 fontWeight: 600,
@@ -136,6 +146,7 @@ export function SurfaceEmptyStateCard({
               {title ?? tSurface('states.empty_title')}
             </Text>
             <Text
+              data-part="description"
               style={{
                 color: 'var(--ds-color-text-muted)',
                 fontSize: 14,
@@ -145,7 +156,7 @@ export function SurfaceEmptyStateCard({
             </Text>
           </Stack>
           {action && (
-            <Button variant="primary" onClick={action.onClick}>
+            <Button className="ds-empty-state-card__action" variant="primary" onClick={action.onClick}>
               {action.label}
             </Button>
           )}
@@ -188,18 +199,19 @@ export function SurfaceErrorStateCard({
     (error instanceof Error ? error.message : typeof error === 'string' ? error : tSurface('states.error_description'));
 
   return (
-    <Card variant="outlined">
-      <Card.Body>
-        <Stack spacing="md">
+    <Card className="ds-surface ds-error-state-card" variant="outlined">
+      <Card.Body className="ds-error-state-card__body">
+        <Stack data-part="content" spacing="md">
           <Alert
+            className="ds-error-state-card__alert"
             type="error"
             showIcon
             message={title ?? tSurface('states.error_title')}
             description={errorMessage}
           />
           {onRetry && (
-            <Flex justify="center">
-              <Button variant="primary" onClick={onRetry}>
+            <Flex data-part="actions" justify="center">
+              <Button className="ds-error-state-card__retry" variant="primary" onClick={onRetry}>
                 {tSurface('states.retry')}
               </Button>
             </Flex>
@@ -236,7 +248,7 @@ export function SurfaceStaleBanner({
   const { tSurface } = useSurfaceTranslations();
 
   return (
-    <Flex gap={3} align="center" style={{
+    <Flex className="ds-surface ds-stale-banner" data-part="banner" data-refreshing={refreshing ? 'true' : 'false'} gap={3} align="center" style={{
       padding: '8px 12px',
       borderRadius: 'var(--ds-radius-md, 8px)',
       background: 'var(--ds-color-info-bg, rgba(59,130,246,0.08))',
@@ -244,9 +256,9 @@ export function SurfaceStaleBanner({
       color: 'var(--ds-color-info)',
       fontSize: 13,
     }}>
-      <Text style={{ flex: 1, color: 'inherit' }}>{message ?? tSurface('states.stale_message')}</Text>
+      <Text data-part="description" style={{ flex: 1, color: 'inherit' }}>{message ?? tSurface('states.stale_message')}</Text>
       {onRefresh && (
-        <Button variant="ghost" size="sm" onClick={onRefresh} loading={refreshing}>
+        <Button className="ds-stale-banner__refresh" variant="ghost" size="sm" onClick={onRefresh} loading={refreshing}>
           {tSurface('states.refresh')}
         </Button>
       )}
@@ -279,6 +291,7 @@ export function SurfaceOfflineBanner({
 
   return (
     <Alert
+      className="ds-surface ds-offline-banner"
       type="warning"
       showIcon
       message={message ?? tSurface('states.offline_message')}

@@ -175,7 +175,11 @@ export function ChatSurface({
   // present and viewport is wide enough. On mobile or when no sidebar
   // content is provided, it collapses to a single column.
   const chatContent = (
-    <Grid columns={config.presentation.sidebar && !shouldStack ? 12 : 1} gap={sectionSpacing}>
+    <Grid
+      className={`ds-surface ds-chat ds-chat--${config.presentation.sidebar && !shouldStack ? 'split' : 'stacked'} ds-chat--${profileDefaults.accentPosition !== 'none' ? 'accented' : 'plain'}${loading ? ' ds-chat--loading' : ''}`}
+      columns={config.presentation.sidebar && !shouldStack ? 12 : 1}
+      gap={sectionSpacing}
+    >
       <Grid.Item span={config.presentation.sidebar && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
           {config.presentation.headerContent}
@@ -190,6 +194,8 @@ export function ChatSurface({
               )
             ) : (
               <Stack
+                className="ds-chat__transcript"
+                data-part="transcript"
                 spacing="md"
                 style={{
                   maxHeight: config.visual.transcriptHeight ?? 520,
@@ -229,7 +235,7 @@ export function ChatSurface({
                   ))
                 )}
                 {config.behavior.assistantTyping ? (
-                  <Box style={{ '--ds-typing-speed': typingSpeed } as React.CSSProperties}>
+                  <Box className="ds-chat__typing" data-part="typing-indicator" style={{ '--ds-typing-speed': typingSpeed } as React.CSSProperties}>
                     <TypingIndicator
                       label={config.behavior.typingLabel ?? tSurface('chat.typing')}
                     />
@@ -245,6 +251,7 @@ export function ChatSurface({
                   matching primary border to visually tie it to the accent
                   theme. Without an accent, the default border is used. */}
               <Textarea
+                className="ds-chat__composer-input"
                 value={draft}
                 onChange={(nextValue) => setDraft(nextValue)}
                 placeholder={config.presentation.composerPlaceholder ?? tSurface('chat.placeholder')}
@@ -257,6 +264,7 @@ export function ChatSurface({
                 }
               />
               <Button
+                className="ds-chat__send-button"
                 variant="primary"
                 onClick={() => void handleSend()}
                 loading={config.behavior.sending}
@@ -273,7 +281,7 @@ export function ChatSurface({
 
       {config.presentation.sidebar && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
-          <Card variant={profileDefaults.cardVariant}>
+          <Card className="ds-chat__sidebar" variant={profileDefaults.cardVariant}>
             <Card.Body>{config.presentation.sidebar}</Card.Body>
           </Card>
         </Grid.Item>

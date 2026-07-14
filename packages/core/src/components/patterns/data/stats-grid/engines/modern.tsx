@@ -61,20 +61,22 @@ function Sparkline({ data, color, id }: { data: number[]; color?: string; id: st
 
   return (
     <svg
+      data-part="sparkline"
       viewBox="0 0 80 28"
       width={80}
       height={28}
       style={{ marginTop: 8, display: 'block', overflow: 'visible' }}
       aria-hidden="true"
     >
-      <defs>
+      <defs data-part="sparkline-defs">
         <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={strokeColor} stopOpacity={0.2} />
           <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
         </linearGradient>
       </defs>
-      <polygon points={fillPoints} fill={`url(#${gradientId})`} />
+      <polygon data-part="sparkline-area" points={fillPoints} fill={`url(#${gradientId})`} />
       <polyline
+        data-part="sparkline-line"
         points={points}
         fill="none"
         stroke={strokeColor}
@@ -181,6 +183,8 @@ function TrendIndicator({ change, changeType }: { change: number; changeType?: S
 
   return (
     <span
+      data-part="trend"
+      data-change={changeType ?? 'neutral'}
       style={{
         ...style,
         ...bgStyle,
@@ -245,6 +249,9 @@ function StatCard({
 
   return (
     <div
+      data-part="card"
+      data-variant={variant || 'default'}
+      data-interactive={onClick ? 'true' : 'false'}
       style={{ ...cardStyle, ...interactiveStyle }}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
@@ -253,9 +260,10 @@ function StatCard({
       aria-label={onClick ? `${stat.label}: ${stat.value}` : undefined}
     >
       {/* Label row: icon + label */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+      <div data-part="label-row" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
         {stat.icon && (
           <span
+            data-part="icon"
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -273,6 +281,7 @@ function StatCard({
           </span>
         )}
         <span
+          data-part="label"
           style={{
             fontSize: 13,
             fontWeight: 500,
@@ -286,9 +295,10 @@ function StatCard({
       </div>
 
       {/* Value row: main value + trend */}
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+      <div data-part="value-row" style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
         <span
           className="ds-nums-tabular"
+          data-part="value"
           style={{
             fontSize: 28,
             fontWeight: 700,
@@ -301,6 +311,7 @@ function StatCard({
           {displayValue}
           {stat.suffix && (
             <span
+              data-part="suffix"
               style={{
                 fontSize: 14,
                 fontWeight: 400,
@@ -321,6 +332,7 @@ function StatCard({
       {/* Description */}
       {stat.description && (
         <span
+          data-part="description"
           style={{
             fontSize: 12,
             color: 'var(--ds-color-text-muted)',
@@ -365,7 +377,9 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
     <>
       <style>{shimmerKeyframes}</style>
       <div
-        className="ds-stats-grid-skeleton"
+        className="ds-pattern-stats-grid ds-engine-modern ds-stats-grid-skeleton"
+        data-part="root"
+        data-loading="true"
         style={{
           display: 'grid',
           gridTemplateColumns: resolveStatsGridColumns(columns),
@@ -376,6 +390,7 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
           <div
             key={i}
             className="ds-stats-grid-skeleton__item"
+            data-part="skeleton"
             style={{
               background: 'var(--ds-surface-card)',
               boxShadow: 'var(--ds-elevation-1)',
@@ -387,11 +402,11 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
             }}
           >
             {/* Label shimmer */}
-            <div className="ds-stats-grid-skeleton__bar" style={{ ...shimmerBg, width: '40%', height: 12 }} />
+            <div className="ds-stats-grid-skeleton__bar" data-part="skeleton-bar" data-kind="label" style={{ ...shimmerBg, width: '40%', height: 12 }} />
             {/* Value shimmer */}
-            <div className="ds-stats-grid-skeleton__bar" style={{ ...shimmerBg, width: '65%', height: 28 }} />
+            <div className="ds-stats-grid-skeleton__bar" data-part="skeleton-bar" data-kind="value" style={{ ...shimmerBg, width: '65%', height: 28 }} />
             {/* Trend shimmer */}
-            <div className="ds-stats-grid-skeleton__bar" style={{ ...shimmerBg, width: '30%', height: 16 }} />
+            <div className="ds-stats-grid-skeleton__bar" data-part="skeleton-bar" data-kind="trend" style={{ ...shimmerBg, width: '30%', height: 16 }} />
           </div>
         ))}
       </div>
@@ -448,7 +463,13 @@ export default function ModernStatsGrid(props: StatsGridProps) {
   if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
 
   return (
-    <div className={className || undefined} style={gridStyle}>
+    <div
+      className={['ds-pattern-stats-grid', 'ds-engine-modern', className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-loading="false"
+      data-variant={variant}
+      style={gridStyle}
+    >
       {stats.map((stat) => {
         const defaultRender = (
           <StatCard

@@ -33,6 +33,15 @@
 
 import React from 'react';
 
+const CELL_RENDERER_SCOPE_CLASS = 'ds-pattern-cell-renderers';
+
+type CellRendererIcon = React.ComponentType<{
+  size?: number;
+  style?: React.CSSProperties;
+  className?: string;
+  'data-part'?: string;
+}>;
+
 // ── Types ─────────────────────────────────────────────────
 
 export interface AvatarNameOptions {
@@ -110,9 +119,14 @@ function avatarName(
     .toUpperCase();
 
   return React.createElement('div', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'avatar-name',
+    'data-size': size,
+    'data-has-subtitle': subtitle ? 'true' : 'false',
     style: { display: 'flex', alignItems: 'center', gap: 'var(--ds-spacing-3, 12px)' },
   },
     React.createElement('div', {
+      'data-part': 'avatar',
       style: {
         width: dim,
         height: dim,
@@ -127,8 +141,9 @@ function avatarName(
         flexShrink: 0,
       },
     }, initials),
-    React.createElement('div', { style: { minWidth: 0 } },
+    React.createElement('div', { 'data-part': 'content', style: { minWidth: 0 } },
       React.createElement('div', {
+        'data-part': 'name',
         style: {
           fontWeight: 500,
           color: 'var(--ds-color-text-primary)',
@@ -139,6 +154,7 @@ function avatarName(
         },
       }, name),
       subtitle ? React.createElement('div', {
+        'data-part': 'subtitle',
         style: {
           fontSize: 'var(--ds-font-size-xs, 12px)',
           color: 'var(--ds-color-text-muted)',
@@ -164,11 +180,17 @@ function nameStack(
   name: string,
   subtitle?: string | null,
 ): React.ReactElement {
-  return React.createElement('div', null,
+  return React.createElement('div', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'name-stack',
+    'data-has-subtitle': subtitle ? 'true' : 'false',
+  },
     React.createElement('div', {
+      'data-part': 'name',
       style: { fontWeight: 500, color: 'var(--ds-color-text-primary)' },
     }, name),
     subtitle ? React.createElement('div', {
+      'data-part': 'subtitle',
       style: { fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' },
     }, subtitle) : null,
   );
@@ -181,9 +203,10 @@ function nameStack(
  * [Active]  (green badge)
  * ```
  */
-function statusBadge(
+function renderBadge(
   label: string,
-  variant: CellBadgeVariant = 'secondary',
+  variant: CellBadgeVariant,
+  part: 'status-badge' | 'simple-badge',
 ): React.ReactElement {
   const variantColors: Record<string, { bg: string; color: string; border: string }> = {
     primary: { bg: 'var(--ds-color-alpha-primary-10, rgba(59,130,246,0.1))', color: 'var(--ds-color-primary)', border: 'var(--ds-color-alpha-primary-20, rgba(59,130,246,0.2))' },
@@ -193,8 +216,12 @@ function statusBadge(
     error: { bg: 'var(--ds-color-error-bg, rgba(239,68,68,0.1))', color: 'var(--ds-color-error)', border: 'var(--ds-color-error-border, rgba(239,68,68,0.2))' },
     info: { bg: 'var(--ds-color-info-bg, rgba(59,130,246,0.1))', color: 'var(--ds-color-info)', border: 'var(--ds-color-info-border, rgba(59,130,246,0.2))' },
   };
-  const v = variantColors[variant] ?? variantColors.secondary;
+  const resolvedVariant = variantColors[variant] ? variant : 'secondary';
+  const v = variantColors[resolvedVariant];
   return React.createElement('span', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': part,
+    'data-variant': resolvedVariant,
     style: {
       display: 'inline-flex',
       alignItems: 'center',
@@ -211,6 +238,13 @@ function statusBadge(
   }, label);
 }
 
+function statusBadge(
+  label: string,
+  variant: CellBadgeVariant = 'secondary',
+): React.ReactElement {
+  return renderBadge(label, variant, 'status-badge');
+}
+
 /**
  * Simple badge (fixed variant, typically secondary).
  */
@@ -218,7 +252,7 @@ function simpleBadge(
   label: string,
   variant: CellBadgeVariant = 'secondary',
 ): React.ReactElement {
-  return statusBadge(label, variant);
+  return renderBadge(label, variant, 'simple-badge');
 }
 
 /**
@@ -238,6 +272,10 @@ function mono(
     : display;
 
   return React.createElement('span', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'mono',
+    'data-empty': value == null ? 'true' : 'false',
+    'data-size': options?.size ?? 'sm',
     style: {
       fontFamily: 'var(--ds-font-family-mono, monospace)',
       fontSize: `var(--ds-font-size-${options?.size ?? 'sm'}, 13px)`,
@@ -255,12 +293,15 @@ function mono(
  * ```
  */
 function iconText(
-  Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>,
+  Icon: CellRendererIcon,
   value: string | null | undefined,
   options?: IconTextOptions,
 ): React.ReactElement {
   const display = value || options?.placeholder || '--';
   return React.createElement('div', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'icon-text',
+    'data-empty': value ? 'false' : 'true',
     style: {
       display: 'inline-flex',
       alignItems: 'center',
@@ -268,10 +309,13 @@ function iconText(
     },
   },
     React.createElement(Icon, {
+      className: 'ds-cell-renderers__icon',
+      'data-part': 'icon',
       size: options?.iconSize ?? 14,
       style: { color: 'var(--ds-color-text-muted)', flexShrink: 0 },
     }),
     React.createElement('span', {
+      'data-part': 'value',
       style: {
         fontSize: 'var(--ds-font-size-sm, 14px)',
         color: value ? 'var(--ds-color-text-primary)' : 'var(--ds-color-text-muted)',
@@ -291,18 +335,24 @@ function iconText(
  * ```
  */
 function countWithIcon(
-  Icon: React.ComponentType<{ size?: number; style?: React.CSSProperties }>,
+  Icon: CellRendererIcon,
   count: number,
   label?: string,
 ): React.ReactElement {
   return React.createElement('div', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'count-with-icon',
+    'data-has-label': label ? 'true' : 'false',
     style: { display: 'inline-flex', alignItems: 'center', gap: 6 },
   },
     React.createElement(Icon, {
+      className: 'ds-cell-renderers__icon',
+      'data-part': 'icon',
       size: 14,
       style: { color: 'var(--ds-color-text-muted)', flexShrink: 0 },
     }),
     React.createElement('span', {
+      'data-part': 'value',
       style: { color: 'var(--ds-color-text-primary)', fontSize: 'var(--ds-font-size-sm, 14px)' },
     }, label ? `${count} ${label}` : String(count)),
   );
@@ -316,6 +366,9 @@ function date(
   options?: { format?: 'short' | 'long' | 'relative'; mono?: boolean },
 ): React.ReactElement {
   if (!value) return React.createElement('span', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'date',
+    'data-empty': 'true',
     style: { color: 'var(--ds-color-text-disabled)' },
   }, '--');
 
@@ -331,6 +384,9 @@ function date(
   }
 
   return React.createElement('span', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'date',
+    'data-empty': 'false',
     style: {
       fontSize: 'var(--ds-font-size-sm, 14px)',
       color: 'var(--ds-color-text-muted)',
@@ -356,11 +412,15 @@ function tags(
   const overflow = items.length - max;
 
   return React.createElement('div', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'tags',
+    'data-empty': items.length === 0 ? 'true' : 'false',
     style: { display: 'flex', flexWrap: 'wrap', gap: 4, alignItems: 'center' },
   },
     ...visible.map(tag =>
       React.createElement('span', {
         key: tag,
+        'data-part': 'tag',
         style: {
           display: 'inline-flex',
           padding: '1px 6px',
@@ -375,6 +435,8 @@ function tags(
     ),
     overflow > 0
       ? React.createElement('span', {
+          'data-part': 'overflow',
+          'data-count': overflow,
           style: { fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' },
         }, `+${overflow}`)
       : null,
@@ -394,6 +456,7 @@ function score(
 ): React.ReactElement {
   const low = options?.thresholds?.low ?? 33;
   const mid = options?.thresholds?.mid ?? 66;
+  const band = value <= low ? 'low' : value <= mid ? 'mid' : 'high';
   const barColor = value <= low
     ? 'var(--ds-color-error)'
     : value <= mid
@@ -404,9 +467,14 @@ function score(
   const height = options?.barHeight ?? 6;
 
   return React.createElement('div', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'score',
+    'data-band': band,
+    'data-value': value,
     style: { display: 'flex', alignItems: 'center', gap: 8 },
   },
     React.createElement('div', {
+      'data-part': 'score-track',
       style: {
         width,
         height,
@@ -416,6 +484,8 @@ function score(
       },
     },
       React.createElement('div', {
+        'data-part': 'score-bar',
+        'data-band': band,
         style: {
           width: `${Math.min(100, Math.max(0, value))}%`,
           height: '100%',
@@ -426,6 +496,8 @@ function score(
       }),
     ),
     React.createElement('span', {
+      'data-part': 'score-value',
+      'data-band': band,
       style: {
         fontSize: 'var(--ds-font-size-xs, 12px)',
         fontWeight: 600,
@@ -449,6 +521,10 @@ function boolean(
 ): React.ReactElement {
   const isTrue = Boolean(value);
   return React.createElement('span', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'boolean',
+    'data-value': isTrue ? 'true' : 'false',
+    'data-empty': value == null ? 'true' : 'false',
     style: {
       fontSize: 'var(--ds-font-size-sm, 14px)',
       color: isTrue ? 'var(--ds-color-success)' : 'var(--ds-color-text-muted)',
@@ -465,6 +541,9 @@ function truncated(
   maxWidth?: number | string,
 ): React.ReactElement {
   return React.createElement('span', {
+    className: CELL_RENDERER_SCOPE_CLASS,
+    'data-part': 'truncated',
+    'data-empty': value == null ? 'true' : 'false',
     style: {
       display: 'inline-block',
       maxWidth: maxWidth ?? 200,

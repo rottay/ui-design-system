@@ -109,16 +109,22 @@ export function SurfaceSectionCard({
   }
 
   return (
-    <Card variant="outlined">
-      <Card.Body>
-        <Stack spacing="md">
+    <Card className="ds-surface ds-section-card" variant="outlined">
+      <Card.Body className="ds-section-card__body">
+        <Stack data-part="content" spacing="md">
           {/* The header chrome stays optional so the same wrapper can be used for plain sections. */}
           {(title || description || actions) && (
-            <Flex justify="between" align="start" gap={12}>
-              <Stack spacing="xs">
-                {title && <Text style={{ fontSize: 18, fontWeight: 700 }}>{title}</Text>}
+            <Flex
+              data-part="header"
+              data-has-actions={actions ? 'true' : 'false'}
+              justify="between"
+              align="start"
+              gap={12}
+            >
+              <Stack data-part="header-copy" spacing="xs">
+                {title && <Text data-part="title" style={{ fontSize: 18, fontWeight: 700 }}>{title}</Text>}
                 {description && (
-                  <Text style={{ color: 'var(--ds-color-text-muted)' }}>{description}</Text>
+                  <Text data-part="description" style={{ color: 'var(--ds-color-text-muted)' }}>{description}</Text>
                 )}
               </Stack>
               {actions}

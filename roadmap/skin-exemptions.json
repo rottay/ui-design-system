@@ -139,6 +139,10 @@
         "floor": 8,
         "why": "BrandTheme DRAFT mutations (ctl.buttonPrimary = { ..., color: v }) and a hostile-theme test fixture. The admin's keystroke is written into a theme object, not painted. Lines 229, 323, 328, 763, 765, 767, 769, 775.",
         "$note": "This file appears in two exemption families; its total floor is the SUM (1 runtime-value + 8 not-paint = 9)."
+      },
+      "surfaces/pages/operations/kanban/index.tsx": {
+        "floor": 1,
+        "why": "`color: col.color` builds the KanbanColumnDef passed to PatternKanbanBoard; it is domain-data forwarding, not a DOM style object. No CSS selector can replace this TypeScript value without changing the public column contract."
       }
     }
   }

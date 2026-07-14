@@ -208,6 +208,7 @@ import {
   type TortureFixture,
   type ProbeEngine,
 } from '@/components/torture-surface';
+import { SurfacesLongTailFixture } from '@/components/surfaces-long-tail-fixture';
 
 // ---------------------------------------------------------------------------
 // Whitelabel torture probe (WO-GAT-03 hostile-tenant whitelabel proof)
@@ -222,6 +223,7 @@ import {
 //   ?rtl=1                                       Arabic locale + RTL proof block
 //   ?slug=button                                 capture a single flagship in isolation
 //   ?w=360|768|1280                              fixed content width for the responsive law
+//   ?longTail=1                                  CK-I surface long-tail evidence
 //
 // torture-dark and torture-light compile their CSS at render via the dynamic
 // tenant path and are never registered as product tenants or build artifacts.
@@ -4123,6 +4125,7 @@ function TortureContent() {
   const communication = useMemo(() => searchParams.get('communication') === '1', [searchParams]);
   const workspace = useMemo(() => searchParams.get('workspace') === '1', [searchParams]);
   const miscH2 = useMemo(() => searchParams.get('miscH2') === '1', [searchParams]);
+  const longTail = useMemo(() => searchParams.get('longTail') === '1', [searchParams]);
 
   // WO-ENG-11 compares engines on an otherwise identical surface.
   const engine = useMemo<ProbeEngine>(() => {
@@ -4208,6 +4211,7 @@ function TortureContent() {
             {communication && <CommunicationFbStates />}
             {workspace && <WorkspaceChromeFbStates />}
             {miscH2 && <MiscH2FbStates />}
+            {longTail && <SurfacesLongTailFixture />}
 
             <Box
               data-testid="probe-extras"

@@ -33,12 +33,14 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
       : config.presentation.hero;
 
   const formPanel = (
-      <Card variant="outlined">
+      <Card className="ds-auth__form-panel" variant="outlined">
       <Card.Body>
         <Stack spacing="lg">
           <Stack spacing="sm">
             {config.presentation.eyebrow && (
               <Text
+                className="ds-auth__muted-text"
+                data-part="muted-text"
                 style={{
                   fontSize: 12,
                   fontWeight: 700,
@@ -52,7 +54,7 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
             )}
             <Text style={{ fontSize: 28, fontWeight: 700 }}>{config.presentation.title}</Text>
             {config.presentation.subtitle && (
-              <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+              <Text className="ds-auth__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>
                 {config.presentation.subtitle}
               </Text>
             )}
@@ -73,13 +75,18 @@ export function AuthSurface({ config }: AuthSurfaceProps): React.ReactElement {
   );
 
   const heroPanel = heroContent ? (
-    <Card variant="elevated">
+    <Card className="ds-auth__hero-panel" variant="elevated">
       <Card.Body>{heroContent}</Card.Body>
     </Card>
   ) : null;
 
   return (
     <Box
+      className="ds-surface ds-auth"
+      data-part="root"
+      data-layout={isSplitLayout ? 'split' : 'centered'}
+      data-mobile={isMobile ? 'true' : 'false'}
+      data-hero-position={heroFirst ? 'start' : 'end'}
       style={{
         minHeight: '100vh',
         background:

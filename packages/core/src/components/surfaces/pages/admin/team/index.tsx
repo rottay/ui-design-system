@@ -44,6 +44,7 @@ function MemberRow({
 }): React.ReactElement {
   return (
     <Flex
+      className="ds-team__divider"
       justify="between"
       align="center"
       style={{ padding: '12px 0', borderBottom: '1px solid var(--ds-color-border)' }}
@@ -52,7 +53,11 @@ function MemberRow({
         {member.avatar}
         <Stack spacing="xs">
           <Text style={{ fontWeight: 600 }}>{member.name}</Text>
-          <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+          <Text
+            className="ds-team__muted-text"
+            data-part="muted-text"
+            style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+          >
             {member.email}
           </Text>
         </Stack>
@@ -77,7 +82,11 @@ function MemberRow({
         ) : (
           // Fall back to the role label from the roles list; if not found
           // (stale data), show the raw role id as last resort.
-          <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+          <Text
+            className="ds-team__muted-text"
+            data-part="muted-text"
+            style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+          >
             {config.behavior.roles.find((r) => r.id === member.role)?.label ?? member.role}
           </Text>
         )}
@@ -124,7 +133,7 @@ export function TeamSurface({
       loading={loading}
     >
       {config.behavior.members.length === 0 ? (
-        <Card variant="outlined">
+        <Card className="ds-surface ds-team ds-team--empty" variant="outlined">
           <Card.Body>
             {config.presentation.emptyState ?? (
               <SurfaceEmptyState
@@ -135,7 +144,7 @@ export function TeamSurface({
           </Card.Body>
         </Card>
       ) : (
-        <Card variant="outlined">
+        <Card className="ds-surface ds-team ds-team--populated" variant="outlined">
           <Card.Body>
             <Stack spacing="xs">
               {config.behavior.members.map((member) =>

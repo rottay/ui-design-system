@@ -121,7 +121,12 @@ function SlaBadge({ deadline, warningMin = 60, criticalMin = 15 }: {
   const hours = Math.floor(diffMin / 60);
   const mins = diffMin % 60;
   return (
-    <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+    <Text
+      className="ds-decision-inbox__muted-text"
+      data-part="muted-text"
+      size="xs"
+      style={{ color: 'var(--ds-color-text-muted)' }}
+    >
       {hours}h {mins}m
     </Text>
   );
@@ -152,7 +157,12 @@ function DecisionInboxSkeleton() {
         <Card.Body>
           <Stack spacing="sm">
             {/* Header row */}
-            <Flex gap={4} style={{ paddingBottom: 'var(--ds-spacing-sm, 8px)', borderBottom: '1px solid var(--ds-color-border-secondary)' }}>
+            <Flex
+              className="ds-decision-inbox__divider"
+              data-part="divider"
+              gap={4}
+              style={{ paddingBottom: 'var(--ds-spacing-sm, 8px)', borderBottom: '1px solid var(--ds-color-border-secondary)' }}
+            >
               <Skeleton variant="text" width="25%" height={14} />
               <Skeleton variant="text" width="20%" height={14} />
               <Skeleton variant="text" width="15%" height={14} />
@@ -161,6 +171,8 @@ function DecisionInboxSkeleton() {
             {/* Data rows */}
             {Array.from({ length: 5 }).map((_, i) => (
               <Flex
+                className="ds-decision-inbox__divider"
+                data-part="divider"
                 key={i}
                 gap={4}
                 align="center"
@@ -307,7 +319,13 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
   // Show full-page skeleton on initial load when no data at all
   if (isLoading && (!workspaceConfig.data || workspaceConfig.data.length === 0)) {
     return (
-      <Stack spacing="md">
+      <Stack
+        className="ds-surface ds-decision-inbox"
+        data-part="root"
+        data-loading="true"
+        data-empty="false"
+        spacing="md"
+      >
         {headerSlot}
         <DecisionInboxSkeleton />
         {footerSlot}
@@ -316,15 +334,23 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
   }
 
   return (
-    <Stack spacing="md">
+    <Stack
+      className="ds-surface ds-decision-inbox"
+      data-part="root"
+      data-loading={isLoading ? 'true' : 'false'}
+      data-empty={isEmpty ? 'true' : 'false'}
+      spacing="md"
+    >
       {headerSlot}
 
       {/* Header */}
       <Flex align="center" justify="between">
         <Box>
-          <Text size="xl" weight="semibold">{queueName}</Text>
+          <Text className="ds-decision-inbox__title" data-part="title" size="xl" weight="semibold">{queueName}</Text>
           {subtitle && (
             <Text
+              className="ds-decision-inbox__muted-text"
+              data-part="muted-text"
               size="sm"
               color="muted"
               style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
@@ -355,6 +381,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
       {/* Batch decision bar */}
       {batchDecisions && workspace.hasSelection && workspace.selectedKeys.length > 1 && (
         <Card
+          className="ds-decision-inbox__selection-bar"
           variant="outlined"
           style={{
             borderColor: 'var(--ds-color-primary)',
@@ -371,6 +398,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
               {/* Reason input for batch (if pending action requires it) */}
               {pendingAction && (
                 <Textarea
+                  className="ds-decision-inbox__batch-reason"
                   value={reasonText}
                   onChange={(val) => setReasonText(val)}
                   placeholder="Enter reason..."
@@ -448,6 +476,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
               }}
             >
               <Card
+                className="ds-decision-inbox__review-card"
                 variant="outlined"
                 style={{
                   position: isDesktop ? 'sticky' : 'relative',
@@ -474,6 +503,8 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
 
                     {/* Divider */}
                     <Box
+                      className="ds-decision-inbox__divider"
+                      data-part="divider"
                       style={{
                         height: 1,
                         background: 'var(--ds-color-border-secondary)',
@@ -494,6 +525,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
                           Reason
                         </Text>
                         <Textarea
+                          className="ds-decision-inbox__review-reason"
                           value={reasonText}
                           onChange={(val) => setReasonText(val)}
                           placeholder="Enter reason for this decision..."
@@ -505,6 +537,8 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
 
                     {/* Divider before actions */}
                     <Box
+                      className="ds-decision-inbox__divider"
+                      data-part="divider"
                       style={{
                         height: 1,
                         background: 'var(--ds-color-border-secondary)',

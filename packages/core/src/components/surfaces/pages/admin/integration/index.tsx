@@ -41,13 +41,18 @@ function ApiKeysSection({ config }: { config: IntegrationSurfaceConfig }): React
               {apiKeys.map((key) => (
                 <Flex
                   key={key.id}
+                  className="ds-integration__divider"
                   justify="between"
                   align="center"
                   style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
                 >
                   <Stack spacing="xs">
                     <Text style={{ fontWeight: 500 }}>{key.name}</Text>
-                    <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12, fontFamily: 'monospace' }}>
+                    <Text
+                      className="ds-integration__muted-text"
+                      data-part="muted-text"
+                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12, fontFamily: 'monospace' }}
+                    >
                       {key.key}
                     </Text>
                   </Stack>
@@ -55,7 +60,11 @@ function ApiKeysSection({ config }: { config: IntegrationSurfaceConfig }): React
                     <Tag color={key.status === 'active' ? 'success' : key.status === 'expired' ? 'warning' : 'default'}>
                       {key.status ?? 'active'}
                     </Tag>
-                    <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                    <Text
+                      className="ds-integration__muted-text"
+                      data-part="muted-text"
+                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                    >
                       Created {key.createdAt}
                     </Text>
                     {onRevokeKey && (
@@ -96,13 +105,18 @@ function WebhooksSection({ config }: { config: IntegrationSurfaceConfig }): Reac
               {webhooks.map((wh) => (
                 <Flex
                   key={wh.id}
+                  className="ds-integration__divider"
                   justify="between"
                   align="center"
                   style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
                 >
                   <Stack spacing="xs">
                     <Text style={{ fontWeight: 500, fontFamily: 'monospace', fontSize: 13 }}>{wh.url}</Text>
-                    <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                    <Text
+                      className="ds-integration__muted-text"
+                      data-part="muted-text"
+                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                    >
                       Events: {wh.events.join(', ')}
                     </Text>
                   </Stack>
@@ -140,6 +154,7 @@ function ConnectedAppsSection({ config }: { config: IntegrationSurfaceConfig }):
             {connectedApps.map((app) => (
               <Flex
                 key={app.id}
+                className="ds-integration__divider"
                 justify="between"
                 align="center"
                 style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
@@ -149,7 +164,11 @@ function ConnectedAppsSection({ config }: { config: IntegrationSurfaceConfig }):
                   <Stack spacing="xs">
                     <Text style={{ fontWeight: 500 }}>{app.name}</Text>
                     {app.description && (
-                      <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>{app.description}</Text>
+                      <Text
+                        className="ds-integration__muted-text"
+                        data-part="muted-text"
+                        style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                      >{app.description}</Text>
                     )}
                   </Stack>
                 </Flex>
@@ -184,6 +203,7 @@ export function IntegrationSurface({
   // excluded from the tab bar when empty to avoid a confusing blank tab.
   const content = useTabs ? (
     <Tabs
+      className="ds-surface ds-integration ds-integration--tabs"
       items={[
         {
           key: 'api-keys',
@@ -205,7 +225,12 @@ export function IntegrationSurface({
       ]}
     />
   ) : (
-    <Stack spacing="lg">
+    <Stack
+      className="ds-surface ds-integration ds-integration--sections"
+      data-part="root"
+      data-loading={loading ? 'true' : 'false'}
+      spacing="lg"
+    >
       <ApiKeysSection config={config} />
       <WebhooksSection config={config} />
       <ConnectedAppsSection config={config} />

@@ -62,7 +62,11 @@ export function VisualizationSurface({
           />
         )
       ) : (
-        <Grid columns={config.presentation.aside && !responsiveLayout.shouldStack ? 12 : 1} gap="lg">
+        <Grid
+          className={`ds-surface ds-visualization ds-visualization--${responsiveLayout.shouldStack ? 'stacked' : 'wide'}`}
+          columns={config.presentation.aside && !responsiveLayout.shouldStack ? 12 : 1}
+          gap="lg"
+        >
           <Grid.Item span={config.presentation.aside && !responsiveLayout.shouldStack ? 8 : undefined}>
             <Stack spacing="lg">
               {config.presentation.intro}
@@ -86,7 +90,11 @@ export function VisualizationSurface({
                       children: (
                         <Stack spacing="md">
                           {view.description && (
-                            <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                            <Text
+                              className="ds-visualization__muted-text"
+                              data-part="muted-text"
+                              style={{ color: 'var(--ds-color-text-muted)' }}
+                            >
                               {view.description}
                             </Text>
                           )}

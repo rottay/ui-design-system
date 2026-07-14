@@ -52,9 +52,14 @@ export function PricingSurface({
       actions={actionsNode}
       loading={loading}
     >
-      <Stack spacing="lg">
+      <Stack
+        className="ds-surface ds-pricing"
+        data-part="root"
+        data-loading={loading ? 'true' : 'false'}
+        spacing="lg"
+      >
         {config.presentation.intro && (
-          <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+          <Text className="ds-pricing__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>
             {config.presentation.intro}
           </Text>
         )}

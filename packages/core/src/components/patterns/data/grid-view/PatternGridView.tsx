@@ -87,6 +87,8 @@ function SelectableCard<T>({
 }): React.ReactElement {
   return (
     <Box
+      data-part="card-shell"
+      data-selected={selected ? 'true' : 'false'}
       style={{
         position: 'relative',
         borderRadius: 'var(--ds-collection-card-radius, var(--ds-premium-card-radius, var(--ds-radius-lg, 12px)))',
@@ -98,6 +100,7 @@ function SelectableCard<T>({
     >
       {/* Checkbox overlay */}
       <Box
+        data-part="checkbox-overlay"
         style={{
           position: 'absolute',
           top: 8,
@@ -106,6 +109,7 @@ function SelectableCard<T>({
         }}
       >
         <Checkbox
+          className="ds-grid-view__checkbox-control"
           checked={selected}
           onChange={() => onToggle(itemKey)}
           size="sm"
@@ -147,9 +151,15 @@ function GridSkeleton({
   };
 
   return (
-    <Box className={className} style={gridStyle}>
+    <Box
+      className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-loading="true"
+      data-empty="false"
+      style={gridStyle}
+    >
       {Array.from({ length: SKELETON_COUNT }).map((_, index) => (
-        <SkeletonCard key={index} lines={3} />
+        <SkeletonCard className="ds-grid-view__skeleton" key={index} lines={3} />
       ))}
     </Box>
   );
@@ -258,7 +268,10 @@ export function PatternGridView<T>(
   if (data.length === 0) {
     return (
       <Box
-        className={className}
+        className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
+        data-part="root"
+        data-loading="false"
+        data-empty="true"
         style={{
           padding: 'var(--ds-spacing-8, 32px) var(--ds-spacing-5, 20px)',
           borderRadius: 'var(--ds-radius-lg, 12px)',
@@ -268,7 +281,7 @@ export function PatternGridView<T>(
         }}
       >
         {emptyState ?? (
-          <Text style={{ color: 'var(--ds-color-text-muted)' }}>No data</Text>
+          <Text data-part="empty-state" style={{ color: 'var(--ds-color-text-muted)' }}>No data</Text>
         )}
       </Box>
     );
@@ -280,7 +293,14 @@ export function PatternGridView<T>(
 
   return (
     <Stack spacing="md">
-      <Box className={className} style={gridStyle}>
+      <Box
+        className={['ds-pattern-grid-view', className].filter(Boolean).join(' ')}
+        data-part="root"
+        data-loading="false"
+        data-empty="false"
+        data-selectable={selectable ? 'true' : 'false'}
+        style={gridStyle}
+      >
         {data.map((item, index) => {
           const key = getItemKey(item, index);
 

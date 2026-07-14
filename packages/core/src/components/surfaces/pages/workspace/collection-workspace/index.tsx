@@ -507,6 +507,9 @@ function UtilityIcon({
   return (
     <Box
       as="button"
+      className="ds-collection-workspace__utility-icon-toggle"
+      data-part="utility-icon-toggle"
+      data-active={active ? 'true' : 'false'}
       onClick={onClick}
       title={label}
       aria-label={label}
@@ -583,6 +586,8 @@ function PageSizeControl({
   if (!pagination || options.length <= 1) {
     return (
       <Text
+        className="ds-collection-page-size-control__summary"
+        data-part="page-size-summary"
         size="xs"
         style={{
           fontSize: 11,
@@ -603,6 +608,8 @@ function PageSizeControl({
       <Box
         as="label"
         className="ds-collection-page-size-control"
+        data-part="page-size-control"
+        data-load-mode={isIncremental ? 'incremental' : 'paged'}
         title={isIncremental ? 'Cards per batch' : 'Rows per page'}
         style={{
           display: 'inline-flex',
@@ -622,6 +629,8 @@ function PageSizeControl({
         }}
       >
         <Text
+          className="ds-collection-page-size-control__range"
+          data-part="page-size-range"
           as="span"
           size="xs"
           style={{
@@ -635,6 +644,7 @@ function PageSizeControl({
         </Text>
         <Box
           className="ds-collection-page-size-control__picker"
+          data-part="page-size-picker"
           style={{
             position: 'relative',
             display: 'inline-flex',
@@ -651,6 +661,8 @@ function PageSizeControl({
           }}
         >
           <Text
+            className="ds-collection-page-size-control__unit"
+            data-part="page-size-unit"
             as="span"
             size="xs"
             style={{
@@ -667,6 +679,7 @@ function PageSizeControl({
           <Text
             as="span"
             className="ds-collection-page-size-control__value"
+            data-part="page-size-value"
             size="xs"
             style={{
               color: 'var(--ds-color-text-primary)',
@@ -678,6 +691,8 @@ function PageSizeControl({
             {pagination.pageSize}
           </Text>
           <Text
+            className="ds-collection-page-size-control__suffix"
+            data-part="page-size-suffix"
             as="span"
             size="xs"
             style={{
@@ -692,6 +707,7 @@ function PageSizeControl({
           <select
             aria-label={isIncremental ? 'Cards per batch' : 'Rows per page'}
             className="ds-collection-page-size-control__select"
+            data-part="page-size-select"
             value={pagination.pageSize}
             onChange={(event) => pagination.onChange(1, Number(event.currentTarget.value))}
             style={{
@@ -724,6 +740,7 @@ function PageSizeControl({
           <ChevronDown
             aria-hidden
             className="ds-collection-page-size-control__chevron"
+            data-part="page-size-chevron"
             size={13}
             strokeWidth={2.3}
             style={{
@@ -1046,6 +1063,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       return (
         <Box
           className="ds-collection-preview-rail"
+          data-part="preview-rail"
+          data-resizable={previewRailResizable ? 'true' : 'false'}
           style={{
             width: configuredWidth,
             minWidth: configuredWidth,
@@ -1077,6 +1096,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               onMouseDown={handlePreviewRailResizeStart}
               onKeyDown={handlePreviewRailResizeKeyDown}
               className="ds-collection-preview-rail__resize"
+              data-part="preview-rail-resize"
               style={{
                 position: 'absolute',
                 top: 0,
@@ -1093,6 +1113,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               }}
             >
               <Box
+                className="ds-collection-preview-rail__resize-bar"
+                data-part="preview-rail-resize-bar"
                 aria-hidden
                 style={{
                   position: 'absolute',
@@ -1378,6 +1400,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       if (key !== focusedKey) return defaultRender;
       return (
         <Box
+          className="ds-collection-workspace__focused-row"
+          data-part="focused-row"
+          data-focused="true"
           style={{
             position: 'relative',
             background: 'color-mix(in srgb, var(--ds-color-primary) 7%, transparent)',
@@ -1407,6 +1432,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
     return (
       <Stack
+        className="ds-surface ds-collection-workspace"
+        data-part="root"
+        data-surface-mode={surfaceMode}
+        data-view-mode={effectiveViewMode}
+        data-loading={loading ? 'true' : 'false'}
+        data-premium="false"
         spacing="md"
         style={{
           width: '100%',
@@ -1418,9 +1449,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       >
         {headerSlot}
         {!showToolbar && surfaceMode !== 'embed' && (
-          <Box>
-            <Text size="xl" weight="semibold">{title}</Text>
-            {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
+          <Box className="ds-collection-workspace__header" data-part="header">
+            <Text className="ds-collection-workspace__title" data-part="title" size="xl" weight="semibold">{title}</Text>
+            {subtitle && <Text className="ds-collection-workspace__muted-text" data-part="muted-text" size="sm" color="muted">{subtitle}</Text>}
           </Box>
         )}
         {showToolbar && (
@@ -1443,7 +1474,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               primaryAction={primaryAction}
               onExport={handleExport}
             />
-            {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
+            {subtitle && <Text className="ds-collection-workspace__muted-text" data-part="muted-text" size="sm" color="muted">{subtitle}</Text>}
           </>
         )}
         {controls?.scopes?.enabled && controls.scopes.scopes.length > 0 && (
@@ -1480,8 +1511,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             layout={filterLayout}
           />
         )}
-        <Flex gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box style={{ flex: '1 1 0%', minWidth: 0 }}>
+        <Flex className="ds-collection-workspace__content" data-part="content" gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
+          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0 }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
@@ -1571,6 +1602,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const commandTopRailSlot = promotedShortcuts ? (
     <Flex align="center" gap={10} wrap="wrap" justify="end">
       <Text
+        className="ds-collection-workspace__shortcut-label"
+        data-part="shortcut-label"
         size="xs"
         style={{
           fontSize: 9,
@@ -1584,6 +1617,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       </Text>
       {promotedShortcuts.map((shortcut) => (
         <Box
+          className="ds-collection-workspace__shortcut"
+          data-part="shortcut"
           key={shortcut.key}
           style={{
             display: 'inline-flex',
@@ -1632,21 +1667,26 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       )}
 
       {showContextChrome && (
-        <Box style={{
-          padding: slotsCollapsed
-            ? 0
-            : editorialTechMasthead
-              ? '0 20px 12px'
-              : '0 16px 12px',
-          marginTop: slotsCollapsed ? 0 : editorialTechMasthead ? 0 : 2,
-          background: useWorkspaceShell ? 'transparent' : 'var(--ds-surface-card)',
-          borderBottom: useWorkspaceShell ? 'none' : '1px solid var(--ds-color-border-subtle)',
-          maxHeight: slotsCollapsed ? 0 : 320,
-          opacity: slotsCollapsed ? 0 : 1,
-          overflow: slotsCollapsed ? 'hidden' : 'visible',
-          transition: 'max-height 250ms ease-out, opacity 250ms ease-out, padding 250ms ease-out',
-          pointerEvents: slotsCollapsed ? 'none' : undefined,
-        }}>
+        <Box
+          className="ds-collection-workspace__context-slot"
+          data-part="context-slot"
+          data-collapsed={slotsCollapsed ? 'true' : 'false'}
+          style={{
+            padding: slotsCollapsed
+              ? 0
+              : editorialTechMasthead
+                ? '0 20px 12px'
+                : '0 16px 12px',
+            marginTop: slotsCollapsed ? 0 : editorialTechMasthead ? 0 : 2,
+            background: useWorkspaceShell ? 'transparent' : 'var(--ds-surface-card)',
+            borderBottom: useWorkspaceShell ? 'none' : '1px solid var(--ds-color-border-subtle)',
+            maxHeight: slotsCollapsed ? 0 : 320,
+            opacity: slotsCollapsed ? 0 : 1,
+            overflow: slotsCollapsed ? 'hidden' : 'visible',
+            transition: 'max-height 250ms ease-out, opacity 250ms ease-out, padding 250ms ease-out',
+            pointerEvents: slotsCollapsed ? 'none' : undefined,
+          }}
+        >
           {resolvedContextSlot}
         </Box>
       )}
@@ -1656,7 +1696,13 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   const premiumContent = (
     <Stack
       spacing="none"
-      className={enhanced ? 'ds-collection-enhanced' : undefined}
+      className={['ds-collection-workspace__content', enhanced ? 'ds-collection-enhanced' : undefined].filter(Boolean).join(' ')}
+      data-part="content"
+      data-surface-mode={surfaceMode}
+      data-view-mode={effectiveViewMode}
+      data-loading={loading ? 'true' : 'false'}
+      data-premium="true"
+      data-enhanced={enhanced ? 'true' : 'false'}
       style={{
         width: '100%',
         maxWidth: '100%',
@@ -1674,6 +1720,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       {enhanced && <style dangerouslySetInnerHTML={{ __html: ENHANCED_CSS }} />}
       {editorialTechMasthead ? (
         <Box
+          className="ds-collection-workspace__masthead"
+          data-part="masthead"
           style={{
             position: 'relative',
             paddingBottom: 6,
@@ -1691,14 +1739,19 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* 4. Stats slot (optional, collapsible) */}
       {showStatsChrome && (
-        <Box style={{
-          padding: slotsCollapsed ? 0 : '14px 16px 10px',
-          maxHeight: slotsCollapsed ? 0 : 400,
-          opacity: slotsCollapsed ? 0 : 1,
-          overflow: slotsCollapsed ? 'hidden' : 'visible',
-          transition: 'max-height 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1)',
-          pointerEvents: slotsCollapsed ? 'none' : undefined,
-        }}>
+        <Box
+          className="ds-collection-workspace__stats-slot"
+          data-part="stats-slot"
+          data-collapsed={slotsCollapsed ? 'true' : 'false'}
+          style={{
+            padding: slotsCollapsed ? 0 : '14px 16px 10px',
+            maxHeight: slotsCollapsed ? 0 : 400,
+            opacity: slotsCollapsed ? 0 : 1,
+            overflow: slotsCollapsed ? 'hidden' : 'visible',
+            transition: 'max-height 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1), padding 300ms cubic-bezier(0.4,0,0.2,1)',
+            pointerEvents: slotsCollapsed ? 'none' : undefined,
+          }}
+        >
           {resolvedStatsSlot}
         </Box>
       )}
@@ -1708,6 +1761,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           for consumers (WO-UX-03): apps must target these hooks, never the
           inline-style values, which may change in any release. */}
       <Box
+        className="ds-collection-workspace__toolbar-row"
+        data-part="toolbar-row"
+        data-filters-expanded={filtersExpanded ? 'true' : 'false'}
         data-ds-collection-toolbar-row="true"
         style={{
           padding: '6px 16px 0',
@@ -1720,6 +1776,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         }}
       >
         <Flex
+          className="ds-collection-workspace__controls-row"
+          data-part="controls-row"
           align="center"
           gap={10}
           wrap={posture.isPhone ? 'wrap' : 'nowrap'}
@@ -1736,10 +1794,15 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             }}
           >
             <Box
+              className="ds-collection-workspace__strip-host"
+              data-part="strip-host"
               data-ds-collection-strip-host="true"
               style={{ position: 'relative', minHeight: 44, overflow: 'visible' }}
             >
               <Box
+                className="ds-collection-workspace__views-strip"
+                data-part="views-strip"
+                data-active={filtersExpanded ? 'false' : 'true'}
                 data-ds-collection-views-strip="true"
                 style={{
                   maxHeight: filtersExpanded ? 0 : 52,
@@ -1763,6 +1826,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
                   {hasScopes && hasSavedViews && (
                     <Box
+                      className="ds-collection-workspace__divider"
+                      data-part="divider"
                       style={{
                         width: 1,
                         height: 18,
@@ -1795,6 +1860,9 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
               {hasFilters && (
                 <Box
+                  className="ds-collection-workspace__filters-strip"
+                  data-part="filters-strip"
+                  data-active={filtersExpanded ? 'true' : 'false'}
                   data-ds-collection-filters-strip="true"
                   style={{
                     maxHeight: filtersExpanded ? (posture.isPhone ? 96 : 48) : 0,
@@ -1821,6 +1889,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                     <Flex align="center" gap={6} style={{ flexShrink: 0 }}>
                       <Box
                         as="span"
+                        className="ds-collection-workspace__muted-text"
+                        data-part="muted-text"
                         style={{
                           fontSize: 9,
                           fontWeight: 700,
@@ -1835,6 +1905,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                       {activeFilterCount > 0 && (
                         <Box
                           as="span"
+                          className="ds-collection-workspace__filter-count"
+                          data-part="filter-count"
                           style={{
                             display: 'inline-flex',
                             alignItems: 'center',
@@ -1894,6 +1966,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
                     {activeFilterCount > 0 && (
                       <Box
                         as="button"
+                        className="ds-collection-workspace__filter-reset"
+                        data-part="filter-reset"
                         onClick={clearFilters}
                         style={{
                           padding: '2px 8px',
@@ -1915,7 +1989,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             </Box>
           </Box>
 
-          <Flex align="center" gap={4} style={{ flexShrink: 0 }}>
+          <Flex className="ds-collection-workspace__utilities" data-part="utilities" align="center" gap={4} style={{ flexShrink: 0 }}>
             {canToggleSelectionMode && (
               <UtilityIcon
                 icon={<CheckSquare2 size={15} />}
@@ -2021,10 +2095,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* 6. Smart selection sets (visible only while selection mode is on) */}
       {selectionEnabled && behavior?.smartSelection && behavior.smartSelection.length > 0 && workspace.selectedKeys.length > 0 && (
-        <Box style={{ padding: '6px 16px' }}>
+        <Box className="ds-collection-workspace__smart-selection" data-part="smart-selection" style={{ padding: '6px 16px' }}>
           <Flex align="center" gap={8} wrap="wrap">
             <Box
               as="span"
+              className="ds-collection-workspace__selection-count"
+              data-part="selection-count"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -2043,6 +2119,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             </Box>
             <Box
               as="span"
+              className="ds-collection-workspace__muted-text"
+              data-part="muted-text"
               style={{
                 fontSize: 10,
                 fontWeight: 700,
@@ -2071,6 +2149,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* 7. Table + preview rail */}
       <Box
+        className="ds-collection-workspace__body"
+        data-part="body"
         data-ds-collection-body="true"
         style={{
           width: '100%',
@@ -2083,8 +2163,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
             : null),
         }}
       >
-        <Flex gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
-          <Box style={{ flex: '1 1 0%', minWidth: 0 }}>
+        <Flex className="ds-collection-workspace__body-content" data-part="body-content" gap={4} style={{ width: '100%', alignItems: 'stretch' }}>
+          <Box className="ds-collection-workspace__collection" data-part="collection" style={{ flex: '1 1 0%', minWidth: 0 }}>
             <CollectionRenderDispatch<T>
               viewMode={effectiveViewMode}
               viewModes={viewModes}
@@ -2167,7 +2247,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           previewEmphasis={shellConfig?.previewEmphasis}
           focusActive={Boolean(focusedKey)}
           previewActive={Boolean(showPreviewRail)}
-          className={enhanced ? 'ds-collection-enhanced' : undefined}
+          className={['ds-surface ds-collection-workspace', enhanced ? 'ds-collection-enhanced' : undefined].filter(Boolean).join(' ')}
           style={{
             width: '100%',
             maxWidth: presentation?.maxWidth,
@@ -2179,6 +2259,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         </WorkspaceShell>
       ) : (
         <Box
+          className="ds-surface ds-collection-workspace"
+          data-part="root"
+          data-surface-mode={surfaceMode}
+          data-view-mode={effectiveViewMode}
+          data-loading={loading ? 'true' : 'false'}
+          data-premium="true"
           style={{
             width: '100%',
             maxWidth: presentation?.maxWidth,
@@ -2192,20 +2278,26 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
       {/* Sticky bottom action bar (phone posture) */}
       {posture.actionBar === 'sticky-bottom' && primaryAction && (
-        <Box style={{
-          position: 'sticky',
-          bottom: 0,
-          padding: 'var(--ds-spacing-sm, 8px) var(--ds-spacing-md, 16px)',
-          background: 'var(--ds-color-bg-primary)',
-          borderTop: '1px solid var(--ds-color-border-secondary)',
-          zIndex: 10,
-        }}>
+        <Box
+          className="ds-surface ds-collection-workspace ds-collection-workspace__sticky-action-bar"
+          data-part="sticky-action-bar"
+          style={{
+            position: 'sticky',
+            bottom: 0,
+            padding: 'var(--ds-spacing-sm, 8px) var(--ds-spacing-md, 16px)',
+            background: 'var(--ds-color-bg-primary)',
+            borderTop: '1px solid var(--ds-color-border-secondary)',
+            zIndex: 10,
+          }}
+        >
           <Flex gap={3} justify="between" align="center">
             {workspace.hasSelection && (
-              <Text size="sm" color="muted">{workspace.selectedKeys.length} selected</Text>
+              <Text className="ds-collection-workspace__muted-text" data-part="muted-text" size="sm" color="muted">{workspace.selectedKeys.length} selected</Text>
             )}
             <Box
               as="button"
+              className="ds-collection-workspace__sticky-primary-action"
+              data-part="sticky-primary-action"
               onClick={primaryAction.onClick}
               style={{
                 marginLeft: 'auto',

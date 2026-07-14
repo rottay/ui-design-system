@@ -109,7 +109,13 @@ export function DashboardSurface({
   }
 
   const dashboardContent = (
-    <Stack spacing={sectionSpacing}>
+    <Stack
+      className="ds-surface ds-dashboard"
+      data-part="root"
+      data-mobile={isMobile ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
+      spacing={sectionSpacing}
+    >
       {config.presentation.headerContent}
 
       {/* Stats stay optional so the same surface can power sparse and dense dashboards. */}
@@ -141,7 +147,11 @@ export function DashboardSurface({
                             </Text>
                           )}
                           {section.description && (
-                            <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                            <Text
+                              className="ds-dashboard__muted-text"
+                              data-part="muted-text"
+                              style={{ color: 'var(--ds-color-text-muted)' }}
+                            >
                               {section.description}
                             </Text>
                           )}

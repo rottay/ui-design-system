@@ -41,7 +41,11 @@ function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactE
           <Flex justify="between" align="center">
             <Stack spacing="xs">
               <Text style={{ fontSize: 20, fontWeight: 700 }}>{currentPlan.name}</Text>
-              <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+              <Text
+                className="ds-billing__muted-text"
+                data-part="muted-text"
+                style={{ color: 'var(--ds-color-text-muted)' }}
+              >
                 {currentPlan.price} / {currentPlan.interval}
               </Text>
             </Stack>
@@ -61,7 +65,12 @@ function PlanSection({ config }: { config: BillingSurfaceConfig }): React.ReactE
           {currentPlan.features.length > 0 && (
             <Stack spacing="xs">
               {currentPlan.features.map((feature, i) => (
-                <Text key={i} style={{ color: 'var(--ds-color-text-muted)', fontSize: 14 }}>
+                <Text
+                  key={i}
+                  className="ds-billing__muted-text"
+                  data-part="muted-text"
+                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 14 }}
+                >
                   {feature}
                 </Text>
               ))}
@@ -93,7 +102,11 @@ function UsageSection({ config }: { config: BillingSurfaceConfig }): React.React
               <Stack key={i} spacing="xs">
                 <Flex justify="between" align="center">
                   <Text style={{ fontWeight: 500 }}>{item.label}</Text>
-                  <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                  <Text
+                    className="ds-billing__muted-text"
+                    data-part="muted-text"
+                    style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                  >
                     {item.current} / {item.limit} {item.unit}
                   </Text>
                 </Flex>
@@ -118,7 +131,13 @@ function InvoicesSection({ config }: { config: BillingSurfaceConfig }): React.Re
         <Stack spacing="md">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>Invoices</Text>
           {invoices.map((invoice) => (
-            <Flex key={invoice.id} justify="between" align="center" style={BILLING_ROW_STYLE}>
+            <Flex
+              key={invoice.id}
+              className="ds-billing__divider"
+              justify="between"
+              align="center"
+              style={BILLING_ROW_STYLE}
+            >
               <Flex gap={12} align="center">
                 <Text style={{ fontWeight: 500 }}>{invoice.date}</Text>
                 <Text>{invoice.amount}</Text>
@@ -154,13 +173,27 @@ function PaymentMethodsSection({ config }: { config: BillingSurfaceConfig }): Re
         <Stack spacing="md">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>Payment Methods</Text>
           {paymentMethods.map((method) => (
-            <Flex key={method.id} justify="between" align="center" style={BILLING_ROW_STYLE}>
+            <Flex
+              key={method.id}
+              className="ds-billing__divider"
+              justify="between"
+              align="center"
+              style={BILLING_ROW_STYLE}
+            >
               <Flex gap={12} align="center">
                 <Text style={{ fontWeight: 500 }}>{method.type}</Text>
-                <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                <Text
+                  className="ds-billing__muted-text"
+                  data-part="muted-text"
+                  style={{ color: 'var(--ds-color-text-muted)' }}
+                >
                   **** {method.last4}
                 </Text>
-                <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                <Text
+                  className="ds-billing__muted-text"
+                  data-part="muted-text"
+                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                >
                   Exp {method.expiry}
                 </Text>
                 {method.isDefault && (
@@ -186,6 +219,7 @@ export function BillingSurface({
   // are excluded from the tab bar entirely to avoid confusing empty tabs.
   const content = useTabs ? (
     <Tabs
+      className="ds-surface ds-billing ds-billing--tabs"
       items={[
         {
           key: 'plan',
@@ -214,7 +248,12 @@ export function BillingSurface({
       ]}
     />
   ) : (
-    <Stack spacing="lg">
+    <Stack
+      className="ds-surface ds-billing ds-billing--sections"
+      data-part="root"
+      data-loading={loading ? 'true' : 'false'}
+      spacing="lg"
+    >
       <PlanSection config={config} />
       <UsageSection config={config} />
       <InvoicesSection config={config} />

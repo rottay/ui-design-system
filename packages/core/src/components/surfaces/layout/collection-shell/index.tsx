@@ -85,7 +85,17 @@ export function WorkspaceShell({
 
   return (
     <Box
-      className={className}
+      className={['ds-surface ds-collection-shell', className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-variant={variant}
+      data-mood={mood}
+      data-intensity={intensity}
+      data-continuity={continuity}
+      data-field-pattern={fieldPattern}
+      data-focus-reaction={focusReaction ? 'true' : 'false'}
+      data-preview-emphasis={previewEmphasis ? 'true' : 'false'}
+      data-focus-active={focusActive ? 'true' : 'false'}
+      data-preview-active={previewActive ? 'true' : 'false'}
       style={{
         position: 'relative',
         overflow: 'hidden',
@@ -109,6 +119,7 @@ export function WorkspaceShell({
         <>
           {showOrbitalField && (
             <ParticleField
+              className="ds-collection-shell__orbital-field"
               count={intensity === 'high' ? 3600 : intensity === 'medium' ? 2800 : 2200}
               density="high"
               intensity={intensity}
@@ -134,6 +145,7 @@ export function WorkspaceShell({
           )}
           {showAmbientField && (
             <ParticleField
+              className="ds-collection-shell__ambient-field"
               count={intensity === 'high' ? 1400 : intensity === 'medium' ? 980 : 700}
               density="low"
               intensity={intensity === 'high' ? 'medium' : 'low'}
@@ -160,6 +172,8 @@ export function WorkspaceShell({
       )}
 
       <Box
+        className="ds-collection-shell__overlay"
+        data-part="overlay"
         style={{
           position: 'absolute',
           inset: 0,
@@ -170,6 +184,8 @@ export function WorkspaceShell({
       />
 
       <Box
+        className="ds-collection-shell__content"
+        data-part="content"
         style={{
           position: 'relative',
           zIndex: 1,

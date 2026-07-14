@@ -81,7 +81,13 @@ export function AuditSurface({
       actions={actionsNode}
       loading={loading}
     >
-      <Stack spacing="lg">
+      <Stack
+        className="ds-surface ds-audit"
+        data-part="root"
+        data-density={config.visual.density ?? 'default'}
+        data-loading={loading ? 'true' : 'false'}
+        spacing="lg"
+      >
         {config.behavior.filters.length > 0 && (
           <Card variant="outlined">
             <Card.Body>
@@ -126,7 +132,11 @@ export function AuditSurface({
 
         {config.behavior.pagination && (
           <Flex justify="end">
-            <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+            <Text
+              className="ds-audit__muted-text"
+              data-part="muted-text"
+              style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+            >
               Page {config.behavior.pagination.current} - {config.behavior.pagination.total} total entries
             </Text>
           </Flex>

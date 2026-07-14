@@ -75,7 +75,7 @@ function ImportPanel({
   }
 
   return (
-    <Card variant="outlined">
+    <Card className="ds-import-export__import-card" variant="outlined">
       <Card.Body>
         <Stack spacing="lg">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>Import Data</Text>
@@ -83,6 +83,7 @@ function ImportPanel({
           {step === 'upload' && (
             <Stack spacing="md">
               <Card
+                className="ds-import-export__dropzone"
                 variant="outlined"
                 style={{
                   border: '2px dashed var(--ds-color-border)',
@@ -92,10 +93,18 @@ function ImportPanel({
               >
                 <Card.Body>
                   <Stack spacing="md">
-                    <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                    <Text
+                      className="ds-import-export__muted-text"
+                      data-part="muted-text"
+                      style={{ color: 'var(--ds-color-text-muted)' }}
+                    >
                       Drop a file here or click to browse
                     </Text>
-                    <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                    <Text
+                      className="ds-import-export__muted-text"
+                      data-part="muted-text"
+                      style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                    >
                       Accepted formats: {importConfig.acceptedFormats.join(', ')}
                     </Text>
                     <Button
@@ -109,7 +118,11 @@ function ImportPanel({
                 </Card.Body>
               </Card>
               {importConfig.templateUrl && (
-                <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                <Text
+                  className="ds-import-export__muted-text"
+                  data-part="muted-text"
+                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                >
                   Need a template? Download it from the provided URL.
                 </Text>
               )}
@@ -124,22 +137,39 @@ function ImportPanel({
                 <Tag color="default">Total: {importResult.totalRows}</Tag>
               </Flex>
               {importResult.errors && importResult.errors.length > 0 && (
-                <Card variant="outlined" style={{ borderColor: 'var(--ds-color-error-500)' }}>
+                <Card
+                  className="ds-import-export__error-card"
+                  variant="outlined"
+                  style={{ borderColor: 'var(--ds-color-error-500)' }}
+                >
                   <Card.Body>
                     <Stack spacing="xs">
-                      <Text style={{ fontWeight: 600, color: 'var(--ds-color-error-500)' }}>
+                      <Text
+                        className="ds-import-export__error-title"
+                        data-part="error-title"
+                        style={{ fontWeight: 600, color: 'var(--ds-color-error-500)' }}
+                      >
                         Validation Errors
                       </Text>
                       {/* Cap displayed errors at 5 to prevent the preview step from
                   becoming unreadable with hundreds of validation failures. The
                   overflow count is shown below. */}
               {importResult.errors.slice(0, 5).map((err, i) => (
-                        <Text key={i} style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                        <Text
+                          key={i}
+                          className="ds-import-export__muted-text"
+                          data-part="muted-text"
+                          style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                        >
                           Row {err.row}, {err.field}: {err.message}
                         </Text>
                       ))}
                       {importResult.errors.length > 5 && (
-                        <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                        <Text
+                          className="ds-import-export__muted-text"
+                          data-part="muted-text"
+                          style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                        >
                           ...and {importResult.errors.length - 5} more
                         </Text>
                       )}
@@ -165,7 +195,11 @@ function ImportPanel({
 
           {step === 'complete' && (
             <Stack spacing="md">
-              <Text style={{ fontWeight: 600, color: 'var(--ds-color-success-500)' }}>
+              <Text
+                className="ds-import-export__success-message"
+                data-part="success-message"
+                style={{ fontWeight: 600, color: 'var(--ds-color-success-500)' }}
+              >
                 Import completed successfully
               </Text>
               <Button variant="secondary" onClick={() => { setStep('upload'); setImportResult(null); }}>
@@ -225,7 +259,7 @@ function ExportPanel({
   }
 
   return (
-    <Card variant="outlined">
+    <Card className="ds-import-export__export-card" variant="outlined">
       <Card.Body>
         <Stack spacing="lg">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>Export Data</Text>
@@ -249,7 +283,11 @@ function ExportPanel({
           <Stack spacing="md">
             <Flex justify="between" align="center">
               <Text style={{ fontWeight: 500 }}>Fields</Text>
-              <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+              <Text
+                className="ds-import-export__muted-text"
+                data-part="muted-text"
+                style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+              >
                 {selectedFields.length} of {exportConfig.fields.length} selected
               </Text>
             </Flex>
@@ -293,13 +331,14 @@ function HistoryPanel({
   if (!history || history.length === 0) return null;
 
   return (
-    <Card variant="outlined">
+    <Card className="ds-import-export__history-card" variant="outlined">
       <Card.Body>
         <Stack spacing="md">
           <Text style={{ fontSize: 16, fontWeight: 600 }}>History</Text>
           {history.map((entry) => (
             <Flex
               key={entry.id}
+              className="ds-import-export__divider"
               justify="between"
               align="center"
               style={{ padding: '8px 0', borderBottom: '1px solid var(--ds-color-border)' }}
@@ -309,7 +348,11 @@ function HistoryPanel({
                   {entry.type}
                 </Tag>
                 <Text style={{ fontWeight: 500 }}>{entry.date}</Text>
-                <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                <Text
+                  className="ds-import-export__muted-text"
+                  data-part="muted-text"
+                  style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}
+                >
                   {entry.recordCount} records
                 </Text>
               </Flex>
@@ -350,7 +393,13 @@ export function ImportExportSurface({
       }}
       loading={loading}
     >
-      <Stack spacing="lg">
+      <Stack
+        className="ds-surface ds-import-export"
+        data-part="root"
+        data-loading={loading ? 'true' : 'false'}
+        data-mode={mode}
+        spacing="lg"
+      >
         {showImport && <ImportPanel config={config} />}
         {showExport && <ExportPanel config={config} />}
         <HistoryPanel config={config} />

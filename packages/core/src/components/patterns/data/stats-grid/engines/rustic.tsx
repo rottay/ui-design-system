@@ -49,8 +49,9 @@ function normalizeSparkline(data: number[], width = 80, height = 30): string {
 function Sparkline({ data, color }: { data: number[]; color?: string }) {
   if (!data || data.length < 2) return null;
   return (
-    <svg viewBox="0 0 80 30" width={80} height={30} style={{ display: 'block', marginTop: 8 }}>
+    <svg data-part="sparkline" viewBox="0 0 80 30" width={80} height={30} style={{ display: 'block', marginTop: 8 }}>
       <polyline
+        data-part="sparkline-line"
         points={normalizeSparkline(data)}
         fill="none"
         stroke={color || 'var(--ds-color-primary)'}
@@ -171,6 +172,9 @@ function StatCard({
 
   return (
     <div
+      data-part="card"
+      data-variant={variant || 'default'}
+      data-interactive={onClick ? 'true' : 'false'}
       style={{
         ...variantStyles[variant || 'default'],
         padding: 'var(--ds-card-body-padding, 20px)',
@@ -204,9 +208,10 @@ function StatCard({
         el.style.transform = 'translateY(0) scale(1)';
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-        {stat.icon && <span style={{ fontSize: 16 }}>{stat.icon}</span>}
+      <div data-part="label-row" style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+        {stat.icon && <span data-part="icon" style={{ fontSize: 16 }}>{stat.icon}</span>}
         <span
+          data-part="label"
           style={{
             fontSize: 13,
             fontWeight: 500,
@@ -220,6 +225,7 @@ function StatCard({
       </div>
       <div
         className="ds-nums-tabular"
+        data-part="value"
         style={{
           fontSize: 28,
           fontWeight: 'var(--ds-typography-heading-font-weight, 700)' as unknown as number,
@@ -231,13 +237,15 @@ function StatCard({
         {stat.prefix}
         {displayValue}
         {stat.suffix && (
-          <span style={{ fontSize: 14, fontWeight: 400, marginLeft: 4 }}>{stat.suffix}</span>
+          <span data-part="suffix" style={{ fontSize: 14, fontWeight: 400, marginLeft: 4 }}>{stat.suffix}</span>
         )}
       </div>
       {/* Trend badge: pill-shaped indicator with a tinted background
            matching the trend direction (green for up, red for down). */}
       {stat.change != null && (
         <div
+          data-part="trend"
+          data-change={stat.changeType ?? 'neutral'}
           style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -257,12 +265,13 @@ function StatCard({
             transition: `transform ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
           }}
         >
-          {arrow && <span style={{ fontSize: 13, lineHeight: 1 }}>{arrow}</span>}
+          {arrow && <span data-part="trend-icon" style={{ fontSize: 13, lineHeight: 1 }}>{arrow}</span>}
           {Math.abs(stat.change)}%
         </div>
       )}
       {stat.description && (
         <div
+          data-part="description"
           style={{
             fontSize: 12,
             color: 'var(--ds-stats-grid-description-color, var(--ds-color-text-muted))',
@@ -307,18 +316,25 @@ function LoadingSkeleton({
   return (
     <>
       <style>{`@keyframes pulse { 0%, 100% { opacity: 1 } 50% { opacity: 0.4 } } @keyframes wave { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }`}</style>
-      <div style={{ display: 'grid', gridTemplateColumns: resolveStatsGridColumns(columns), gap }}>
+      <div
+        className="ds-pattern-stats-grid ds-engine-rustic"
+        data-part="root"
+        data-loading="true"
+        data-skeleton-animation={animation}
+        style={{ display: 'grid', gridTemplateColumns: resolveStatsGridColumns(columns), gap }}
+      >
         {Array.from({ length: columns }).map((_, i) => (
           <div
             key={i}
+            data-part="skeleton"
             style={{
               ...variantStyles.default,
               padding: 16,
             }}
           >
-            <div style={{ ...pulseStyle, width: '50%', height: 12, marginBottom: 8 }} />
-            <div style={{ ...pulseStyle, width: '70%', height: 24, marginBottom: 6 }} />
-            <div style={{ ...pulseStyle, width: '30%', height: 10 }} />
+            <div data-part="skeleton-bar" data-kind="label" style={{ ...pulseStyle, width: '50%', height: 12, marginBottom: 8 }} />
+            <div data-part="skeleton-bar" data-kind="value" style={{ ...pulseStyle, width: '70%', height: 24, marginBottom: 6 }} />
+            <div data-part="skeleton-bar" data-kind="trend" style={{ ...pulseStyle, width: '30%', height: 10 }} />
           </div>
         ))}
       </div>
@@ -363,7 +379,10 @@ export default function RusticStatsGrid(props: StatsGridProps) {
 
   return (
     <div
-      className={className}
+      className={['ds-pattern-stats-grid', 'ds-engine-rustic', className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-loading="false"
+      data-variant={variant}
       style={{
         display: 'grid',
         gridTemplateColumns: resolveStatsGridColumns(columns),

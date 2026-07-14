@@ -167,11 +167,20 @@ function InsightCard({ insight }: { insight: InsightItem }) {
   const tokens = INSIGHT_TOKENS[insight.type] ?? INSIGHT_TOKENS.info;
 
   return (
-    <Card variant="outlined">
+    <Card className="ds-command-center__insight-card" variant="outlined">
       <Card.Body>
-        <Flex align="center" gap={3}>
+        <Flex
+          className="ds-command-center__insight-tile"
+          data-part="insight-tile"
+          data-tone={insight.type}
+          align="center"
+          gap={3}
+        >
           {/* Accent bar */}
           <Box
+            className="ds-command-center__insight-accent"
+            data-part="insight-accent"
+            data-tone={insight.type}
             style={{
               width: 4,
               alignSelf: 'stretch',
@@ -182,9 +191,11 @@ function InsightCard({ insight }: { insight: InsightItem }) {
             }}
           />
           <Box style={{ flex: 1, minWidth: 0 }}>
-            <Text size="sm" weight="medium">{insight.title}</Text>
+            <Text className="ds-command-center__insight-title" data-part="insight-title" size="sm" weight="medium">{insight.title}</Text>
             {insight.description && (
               <Text
+                className="ds-command-center__muted-text"
+                data-part="muted-text"
                 size="xs"
                 color="muted"
                 style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
@@ -211,6 +222,7 @@ function InsightCard({ insight }: { insight: InsightItem }) {
 function QuickActionCard({ action }: { action: QuickAction }) {
   return (
     <Card
+      className="ds-command-center__quick-action-card"
       variant="outlined"
       style={{ cursor: 'pointer', transition: 'box-shadow 0.15s ease, border-color 0.15s ease' }}
       onClick={action.onClick}
@@ -219,6 +231,8 @@ function QuickActionCard({ action }: { action: QuickAction }) {
         <Flex align="center" gap={3}>
           {action.icon && (
             <Box
+              className="ds-command-center__quick-action-icon"
+              data-part="quick-action-icon"
               style={{
                 width: 36,
                 height: 36,
@@ -235,9 +249,11 @@ function QuickActionCard({ action }: { action: QuickAction }) {
             </Box>
           )}
           <Box style={{ flex: 1, minWidth: 0 }}>
-            <Text size="sm" weight="medium">{action.label}</Text>
+            <Text className="ds-command-center__quick-action-title" data-part="quick-action-title" size="sm" weight="medium">{action.label}</Text>
             {action.description && (
               <Text
+                className="ds-command-center__muted-text"
+                data-part="muted-text"
                 size="xs"
                 color="muted"
                 style={{ marginTop: 'var(--ds-spacing-xs, 4px)' }}
@@ -342,11 +358,17 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
     (!sections || sections.length === 0);
 
   return (
-    <Stack spacing="lg">
+    <Stack
+      className="ds-surface ds-command-center"
+      data-part="root"
+      data-loading={loading ? 'true' : 'false'}
+      data-empty={hasNoContent ? 'true' : 'false'}
+      spacing="lg"
+    >
       {headerSlot}
 
       {/* Header with greeting */}
-      <Box>
+      <Box className="ds-command-center__header" data-part="header">
         {loading ? (
           <>
             <Skeleton variant="text" width="30%" height={14} style={{ marginBottom: 8 }} />
@@ -356,6 +378,8 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
           <>
             {greeting && (
               <Text
+                className="ds-command-center__muted-text"
+                data-part="muted-text"
                 size="sm"
                 color="muted"
                 style={{ marginBottom: 'var(--ds-spacing-xs, 4px)' }}
@@ -363,7 +387,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
                 {greeting}
               </Text>
             )}
-            <Text size="xl" weight="semibold">{title}</Text>
+            <Text className="ds-command-center__title" data-part="title" size="xl" weight="semibold">{title}</Text>
           </>
         )}
       </Box>
@@ -412,6 +436,8 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
       {quickActions && quickActions.length > 0 && (
         <Box>
           <Text
+            className="ds-command-center__muted-text"
+            data-part="muted-text"
             size="sm"
             weight="medium"
             color="muted"
@@ -441,7 +467,7 @@ export function CommandCenterSurface(props: CommandCenterSurfaceProps) {
         </Box>
       )}
       {recentActivity && recentActivity.items.length > 0 && (
-        <Card variant="outlined">
+        <Card className="ds-command-center__recent-activity" variant="outlined">
           <Card.Body>
             <Flex
               align="center"

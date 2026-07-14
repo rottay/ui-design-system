@@ -48,7 +48,7 @@ function NotificationList({
 }): React.ReactElement {
   if (notifications.length === 0) {
     return (
-      <Card variant="outlined">
+      <Card className="ds-notification__empty-card" variant="outlined">
         <Card.Body>
           {emptyState ?? (
             <SurfaceEmptyState
@@ -62,13 +62,14 @@ function NotificationList({
   }
 
   return (
-    <Stack spacing="sm">
+    <Stack className="ds-notification__list" data-part="notification-list" spacing="sm">
       {/* Read notifications are dimmed (opacity 0.7) and lose the accent
           border. The left border on unread items provides a quick visual
           scan indicator without requiring a separate badge. */}
       {notifications.map((notification) => (
         <Card
           key={notification.id}
+          className={`ds-notification__item ds-notification__item--${notification.read ? 'read' : 'unread'}`}
           variant="outlined"
           style={{
             opacity: notification.read ? 0.7 : 1,
@@ -81,11 +82,11 @@ function NotificationList({
             <Flex justify="between" align="start" gap={12}>
               <Flex gap={12} align="start" style={{ flex: 1 }}>
                 {notification.icon && (
-                  <Box style={{ flexShrink: 0, marginTop: 2 }}>{notification.icon}</Box>
+                  <Box className="ds-notification__icon" data-part="icon" style={{ flexShrink: 0, marginTop: 2 }}>{notification.icon}</Box>
                 )}
                 <Stack spacing="xs" style={{ flex: 1 }}>
                   <Flex gap={8} align="center">
-                    <Text style={{ fontWeight: notification.read ? 400 : 600 }}>
+                    <Text className="ds-notification__title" data-part="title" style={{ fontWeight: notification.read ? 400 : 600 }}>
                       {notification.title}
                     </Text>
                     {notification.type && (
@@ -95,11 +96,11 @@ function NotificationList({
                     )}
                   </Flex>
                   {notification.message && (
-                    <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                    <Text className="ds-notification__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
                       {notification.message}
                     </Text>
                   )}
-                  <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                  <Text className="ds-notification__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
                     {notification.timestamp}
                   </Text>
                 </Stack>
@@ -120,13 +121,13 @@ function NotificationList({
                     size="sm"
                     onClick={() => onDelete([notification.id])}
                   >
-                    <Text style={{ fontSize: 12, color: 'var(--ds-color-error-500)' }}>Delete</Text>
+                    <Text className="ds-notification__destructive-text" data-part="destructive-text" style={{ fontSize: 12, color: 'var(--ds-color-error-500)' }}>Delete</Text>
                   </Button>
                 )}
               </Flex>
             </Flex>
             {notification.action && (
-              <Box style={{ marginTop: 8 }}>
+              <Box className="ds-notification__item-action" data-part="item-action" style={{ marginTop: 8 }}>
                 <Button
                   variant="secondary"
                   size="sm"
@@ -172,7 +173,7 @@ function PreferencesPanel({
   }
 
   return (
-    <Stack spacing="lg">
+    <Stack className="ds-notification__preferences" data-part="preferences" spacing="lg">
       {Object.entries(grouped).map(([category, prefs]) => (
         <Card key={category} variant="outlined">
           <Card.Body>
@@ -186,7 +187,7 @@ function PreferencesPanel({
                       <Tag color="default" style={{ fontSize: 11 }}>{pref.channel}</Tag>
                     </Flex>
                     {pref.description && (
-                      <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
+                      <Text className="ds-notification__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)', fontSize: 13 }}>
                         {pref.description}
                       </Text>
                     )}
@@ -244,6 +245,7 @@ export function NotificationSurface({
 
   const content = useTabs ? (
     <Tabs
+      className={`ds-surface ds-notification ds-notification--tabs${loading ? ' ds-notification--loading' : ''}`}
       items={[
         {
           key: 'notifications',
@@ -263,7 +265,13 @@ export function NotificationSurface({
       ]}
     />
   ) : (
-    <Stack spacing="xl">
+    <Stack
+      className="ds-surface ds-notification ds-notification--sections"
+      data-part="root"
+      data-layout="sections"
+      data-loading={loading ? 'true' : 'false'}
+      spacing="xl"
+    >
       <Stack spacing="md">
         <Text style={{ fontSize: 18, fontWeight: 600 }}>Notifications</Text>
         {notificationsContent}

@@ -39,6 +39,12 @@ Drafted by a peer, adjudicated by the orchestrator. Load-bearing claims DRILLED 
   STOP-AND-VERIFY (report the cross-component overlap, let the team decide ownership), but the trap is
   "preserve + report," never "drop dead selectors." Migration agents: transcribe ALL of ENHANCED_CSS
   verbatim into the skin; the only open decision is the `.ds-resize-handle` ownership flag, not deletion.
+- **`operations/kanban/index.tsx`'s `color: col.color` is NOT paint and is NOT a C hatch.** The value is
+  copied into a `KanbanColumnDef` and passed to `PatternKanbanBoard`; no DOM `style` prop is written in
+  this surface. The child pattern owns the eventual per-column paint and its own runtime-value floors.
+  **RULING: leave this TypeScript value byte-identical and register a floor of 1 under
+  `SKIN-EXEMPT-NOT-PAINT`.** CK-I therefore owns **7**, not 8, real C hatch sites. Its final scoped
+  residual is 16: 8 crash-safe fallback sites + 7 story/test-helper sites + this 1 NOT-PAINT site.
 
 **Judgment calls:** 5-unit population split — ACCEPTED. `surface-states` 5 exports in one skin file —
 ACCEPTED (organizational). Thin-tail consolidation (one shared skin vs per-file) — DEFERRED to the
@@ -83,35 +89,29 @@ described pre-migration content that no longer exists in the current source. **T
 466 (inventory) minus 72 (CK-D's own claimed forms total) predicts 394, close to but not exactly my
 397 — a ~3-site gap I did not fully chase given the time budget, most likely explained by lexer
 changes landing between the inventory's writing and now (the inventory itself documents at least two
-such changes mid-task: commit `de431091` and the still-open comment-adjacency bug in item 2). The
+such changes mid-task: commit `de431091` and the historical comment-adjacency report adjudicated in
+item 2). The
 magnitude is small enough not to change this contract's shape; flagging the residual rather than
 presenting the 397 figure as reconciled to the last site. Every section below uses the corrected
 43/397 figures. If the orchestrator has independent reason to believe any of the forms files still
 need attention, that's a different, much smaller task than what the inventory describes — the 66-site
 `guided-draft-form` narrative is not live work.
 
-**2. Confirmed correct, re-verified independently:** the comment-adjacency counter bug is **still live
-in the current script**, not a hypothetical — I read `scripts/lib/inline-paint-counter.mjs` directly
-(lines 91-95, 248-253) and found the exact self-documenting comment the inventory describes: "live
-paint right after a comment would read as `inlinePaint: 0` -- migrated." This means **every zero or
-low count in this checkpoint (mine or the inventory's) is a floor, not a proof of completeness** — a
-file the pre-step or a migrating agent reads as "done" because the counter says 0 could still carry a
-real, comment-adjacent site. This is not local to CK-I; it is a program-wide measurement defect,
-already reported to the orchestrator per the inventory, not re-litigated here — but it changes this
-checkpoint's certification methodology (§6) more than any prior checkpoint's, because CK-I's
-`surfaces/pages/**` files are dense with short, commented helper blocks (the exact shape that trips
-the bug) in a way CK-C/CK-H2's component files were not.
+**2. Re-adjudicated against the current counter:** the historical comment-adjacency defect is fixed.
+`scripts/lib/inline-paint-counter.mjs` now tracks `prevMeaningful`, so comments no longer hide a live
+paint declaration that follows them. A fresh measurement reports both sites in
+`personality-helpers.tsx` (2, not the stale 1 from the inventory). Zero remains necessary but is never
+the only certification evidence: the AST invariant, direct source review and visual diff still guard
+against a future lexer blind spot.
 
 **3. A real, substantial finding the inventory never mentions: `collection-workspace/index.tsx` injects
-a THIRD `<style>` block, `ENHANCED_CSS`, that cross-targets another component's classes and contains
-two dead selectors.** The inventory's §7 only names `PAGE_SIZE_CONTROL_CSS` (6 selectors). Reading the
-file directly found a second, separate injection at `index.tsx:397-441` (rendered conditionally at
-`:1674`, gated on `enhanced = presentation?.enhancedInteractions ?? false`, `:799`) with ~13 rules
-covering row hover/selection/focus-visible states. Two of its selectors,
-`.ds-collection-preview-rail__resize:hover`/`:focus-visible` (`:433-439`), target a class that
-**grep-confirmed does not exist anywhere in the codebase** — `structures/workspace/
-selection-preview-rail/index.tsx` carries `ds-selection-preview-rail__close` but nothing named
-`__resize` — a dead, inert selector pair. The other rules target `.ds-resize-handle`/
+a THIRD `<style>` block, `ENHANCED_CSS`, that cross-targets another component's classes.** The
+inventory's §7 only names `PAGE_SIZE_CONTROL_CSS` (6 selectors). Reading the file directly found a
+second, separate injection at `index.tsx:397-441` (rendered conditionally when `enhanced =
+presentation?.enhancedInteractions ?? false`) with ~13 live row hover/selection/focus-visible rules.
+Its `.ds-collection-preview-rail__resize:hover`/`:focus-visible` selectors target the resize handle
+rendered by this same file and must be preserved byte-exact. The remaining rules target
+`.ds-resize-handle`/
 `.ds-resize-handle__bar` (`:432-436`), which **are real and are ALSO independently styled by
 `patterns/data/data-table/engines/modern.tsx:900-905`** with a near-identical `:hover`/`:focus-visible`
 rule set for the same classes. When `collection-workspace` renders an internal `PatternDataTable` with
@@ -233,6 +233,11 @@ is sharp, and it does not track the `surfaces/` vs `patterns/` folder boundary e
   primitive's own `data-part` where one exists. This is not a new law invented for this contract — it
   is read directly from the three already-shipped surface skins (`guided-draft-form.css`,
   `detail-form-surface.css`, `wizard-surface.css`), all of which apply it identically (DRAFTER NOTE 4).
+  `ActivitySurface` is the explicit sibling-island exception: the `PatternActivityLog` and the
+  pagination `Flex` each carry `ds-surface ds-activity` because there is no common owned wrapper.
+  Pagination rules therefore anchor on the same node
+  (`.ds-surface.ds-activity[data-part="pagination"]` or `.ds-activity__pagination`), never on the false
+  descendant shape `.ds-surface.ds-activity [data-part="pagination"]`.
 
 **Q2 answered**: `surfaces/foundation/**` is the first genuinely-shared vocabulary confirmed in this
 whole program (unlike CK-C/CK-D/CK-G's false starts) — verified by real import-path grep, not
@@ -252,8 +257,9 @@ now moot per DRAFTER NOTE 1, since `guided-draft-form` is out of scope, but the 
 not moot) both trace a `background: <bareIdentifier>` to a bounded lookup table, not an open caller
 value. **The law this checkpoint adds to the program**: `background: <bareIdentifier>` shape alone is
 never sufficient evidence of a hatch — trace the identifier to its source before classifying. The
-checkpoint's real hatch sites (`stat.color`, `col.color`, `mono`'s `options?.color`, `score`'s
-`height`) are genuinely open-ended caller values; `cell-renderers`' `barColor` and (formerly)
+checkpoint's real hatch sites (`stat.color`, `mono`'s `options?.color`, `score`'s `height`, and the
+accent-bar magnitude) are genuinely open-ended caller values; `operations/kanban`'s `col.color` is
+domain-data forwarding rather than DOM paint, while `cell-renderers`' `barColor` and (formerly)
 `guided-draft-form`'s status color are not.
 
 ---
@@ -270,8 +276,8 @@ checkpoint's real hatch sites (`stat.color`, `col.color`, `mono`'s `options?.col
   `components/skin/surface-states.css` (`states/index.tsx` + `states/surface-states.tsx` — the 5-part
   lifecycle kit). `SurfaceErrorBoundary.tsx` is **read, not migrated** — file its exemption, do not
   write a skin for it. `story-helpers.tsx`/`test-utils.tsx` are **not migrated** — dev/test-only, no
-  user-facing skin applies. Owns Trap 1 (the comment-adjacency bug's live production instance,
-  `personality-helpers.tsx:73`) and Trap 3 (the crash-safe exemption).
+  user-facing skin applies. Owns Trap 1 (the comment-adjacent background in
+  `personality-helpers.tsx`, now correctly counted) and Trap 3 (the crash-safe exemption).
 - **Unit I-2 — `stats-grid` + `gallery-view` + `grid-view` + `cell-renderers` + `bulk-select-toggle`**
   (6 files, ~137 sites). Skins: `engines/modern/skin/stats-grid.css`, `engines/rustic/skin/
   stats-grid.css` (stats-grid is engine-split), `components/skin/gallery-view.css`,
@@ -290,8 +296,8 @@ checkpoint's real hatch sites (`stat.color`, `col.color`, `mono`'s `options?.col
   `components/skin/decision-inbox.css`, `components/skin/collection-shell.css`,
   `components/skin/layout-header.css`, `components/skin/layout-sidebar.css` (8 files). **The highest-
   complexity unit** — owns Trap 2 (the newly-found `ENHANCED_CSS` cross-component collision risk with
-  `data-table`'s own resize-handle CSS, plus its two dead `.ds-collection-preview-rail__resize`
-  selectors), the `PAGE_SIZE_CONTROL_CSS` real hover/focus-within mechanism, `render-dispatch`'s
+  `data-table`'s own resize-handle CSS, plus the live `.ds-collection-preview-rail__resize`
+  selectors that must be preserved), the `PAGE_SIZE_CONTROL_CSS` real hover/focus-within mechanism, `render-dispatch`'s
   hand-rolled pagination footer (flag the DS `Pagination` primitive duplication to the team, do not
   fix it here), and `command-center`'s `Record<string, {...}>` mapped-type false-positive (a new
   variant of the interface-member blind spot — 9 real sites, not 10). Give it the most careful agent.
@@ -305,8 +311,9 @@ checkpoint's real hatch sites (`stat.color`, `col.color`, `mono`'s `options?.col
   dedup opportunity this checkpoint's uniformity makes safe). Recommend the orchestrator decide this
   once, not per-file.
 - **Unit I-5 — thin tail B: `surfaces/pages/{experience,operations}/**`** (9 files, ~19 sites). Same
-  shape and same one-shared-rule-set option as Unit I-4. Owns the one confirmed real hatch site in
-  the whole thin tail: `operations/kanban/index.tsx:42` (`color: col.color`, per-column caller accent).
+  shape and same one-shared-rule-set option as Unit I-4. Its `operations/kanban/index.tsx:42`
+  `color: col.color` occurrence is a NOT-PAINT counter false positive: preserve it as domain-data
+  forwarding and protect its floor; do not manufacture a CSS hatch in this surface.
 
 Agents run in parallel; each stages ONLY its own files by explicit path (never `git add -A` — shared
 tree). **Entrypoint wiring is reserved for the orchestrator** — agents create skin files but do NOT
@@ -372,37 +379,49 @@ Never a bare `[data-part]` — always anchor to the scope class.
 ### 2.3 The two invariants (inert until proven — kit + README law)
 
 The pre-step must prove BOTH before any paint moves: (a) the counter is byte-identical to HEAD for all
-43 files in scope — **but see DRAFTER NOTE 2: given the comment-adjacency bug, a byte-identical
-counter reading proves no OBJECT-LITERAL paint moved, it does NOT prove no comment-adjacent site was
-silently dropped during editing** — the pre-step's diff review must also confirm no paint-bearing line
-was deleted alongside a comment it sat next to; (b) the element tree is unchanged, proven by a
+43 files in scope, with a direct source review as an independent guard against lexer blind spots;
+(b) the element tree is unchanged, proven by a
 TS-compiler AST diff with attributes stripped, DRILLED. Record visual baselines for all files in scope
 (both engines for `stats-grid`) after stamping, and stability-pass them before any unit starts writing
 CSS.
+
+### 2.4 Pre-step evidence (certified 2026-07-14)
+
+- Exact scope: **43 files / 397 counter sites**. Of those, **40 production renderables / 382 sites**
+  are migratable; the permanent excluded tail is 15 sites (`SurfaceErrorBoundary` 8 crash-safe,
+  story/test helpers 7). Paint counters are byte-identical before/after anatomy: **397 → 397** overall
+  and **382 → 382** across the migratable sources.
+- The stripped-AST drill preserves the rendered element/behavior tree for all 40 sources: 38 are
+  mechanically identical after removing `className`/`data-*`; `personality-helpers` differs only by
+  inert parentheses and `cell-renderers` by the reviewed internal split needed to give two existing
+  createElement branches distinct anatomy. No paint moved.
+- `operations/kanban` keeps `color: col.color` byte-identical as domain-data forwarding and carries
+  the exact `SKIN-EXEMPT-NOT-PAINT` floor of 1. CK-I has 7 real bounded C hatches. The three excluded
+  files are untouched.
+- Focused contracts: **12/12** green across both test files. They render all 39 conceptual public
+  renderables, both stats engines, the premium/enhanced collection branch, the resizable preview
+  rail, and Activity's two sibling scope islands.
+- Visual evidence: **32 committed baselines** (8 families × rottay dark/bithire light ×
+  modern/rustic), recorded in 4/4 passing cases and then passed **two independent 4/4 no-update
+  stability runs** at `maxDiffPixelRatio: 0.0005`. The clock and particle RNG are fixed.
+- Core/showroom typechecks, the core production build, the showroom production build and
+  `engine-token-audit --check` are green; skin parse/unwired/exemption/dead-part gates remain exact 0.
 
 ---
 
 ## 3. The five traps — each is a STOP-AND-VERIFY, not a footnote
 
-**Trap 1 — the comment-adjacency counter bug has at least one confirmed live production instance in
-this checkpoint's own scope, and it is not fixed.** `surfaces/foundation/personality-helpers.tsx:73`'s
-`background:` key (real, STATE-SELECTED, consumed by all 8 real importers of `SurfaceAccentBar`) sits
-immediately after a 2-line comment and is invisible to the counter — the file reports 1 site, the real
-number is 2. Unit I-1 must migrate BOTH sites (the counted one and this one), verified by reading the
-function, not by driving the counter to 0 (0 is achievable while leaving this site behind, since it
-was never counted to begin with). This is very likely not the only instance in the checkpoint's dense,
-heavily-commented `surfaces/pages/**` files — every unit should treat "counter shows 0" as necessary,
-not sufficient, and do one direct read of each file's paint-bearing functions regardless of what the
-counter reports.
+**Trap 1 — preserve the comment-adjacent paint even though the counter now sees it.**
+`surfaces/foundation/personality-helpers.tsx` reports the correct 2 sites, including
+`SurfaceAccentBar`'s comment-adjacent `background`. Unit I-1 must migrate both and still perform a
+direct read: a zero counter is necessary, not sufficient, even after the lexer fix.
 
 **Trap 2 — `collection-workspace/index.tsx` injects a THIRD stylesheet, `ENHANCED_CSS`, with a real
-cross-component collision risk and two dead selectors; STOP-AND-VERIFY before migrating it.** Confirmed
-at `index.tsx:397-441` (definition), `:1674` (conditional render, gated on `enhanced =
-presentation?.enhancedInteractions ?? false` at `:799`). Two of its rules
-(`.ds-collection-preview-rail__resize:hover`/`:focus-visible`, `:433-439`) target a class that does
-not exist anywhere in the codebase — dead, safe to drop or safe to carry as inert (either is
-byte-exact; dropping changes nothing rendered, carrying changes nothing rendered — record the choice,
-don't silently decide). The remaining rules target `.ds-resize-handle`/`.ds-resize-handle__bar`
+cross-component collision risk; STOP-AND-VERIFY before migrating it.** Confirmed at
+`index.tsx:397-441`, gated on `enhanced = presentation?.enhancedInteractions ?? false`. Its
+`.ds-collection-preview-rail__resize:hover`/`:focus-visible` rules target the live resize handle and
+its child bar in this same file: preserve every one byte-exact. The remaining rules target
+`.ds-resize-handle`/`.ds-resize-handle__bar`
 (`:432-436`), which **are also independently styled by `patterns/data/data-table/engines/
 modern.tsx:900-905`** with near-identical `:hover`/`:focus-visible` rules for the same classes — a
 live, pre-existing cascade-collision risk (whichever injected `<style>` tag lands later in the DOM
@@ -455,11 +474,12 @@ this mechanism behind entirely.
 
 **Zero category-B (runtime-value) sites confirmed anywhere in CK-I** (inventory §9, matches CK-G's
 finding — B is concentrated in the brand-preview trio and chart leaves, neither in this checkpoint).
-**8 real category-C hatch sites**, all genuinely open-ended caller values (not the `background:
+**7 real category-C hatch sites**, all genuinely open-ended caller values (not the `background:
 <bareIdentifier>`-shaped false positives Q3 corrects): `cell-renderers`' `mono`'s `options?.color` +
 `score`'s `height/2` (×2) = 3 sites; `stats-grid`'s `stat.color` (×3, modern icon+value, rustic value)
-= 3 sites; `operations/kanban`'s `col.color` = 1 site; `surfaces/foundation/personality-helpers.tsx`'s
-`SurfaceAccentBar` `borderRadius` (thickness-driven magnitude) = 1 site. Use the standard
+= 3 sites; `surfaces/foundation/personality-helpers.tsx`'s `SurfaceAccentBar` `borderRadius`
+(thickness-driven magnitude) = 1 site. `operations/kanban`'s `col.color` is separately protected as
+one `SKIN-EXEMPT-NOT-PAINT` site because it builds a `KanbanColumnDef`, not a DOM style. Use the standard
 quoted-custom-property hatch (`'--ds-<comp>-<field>': value`) for each — name `stats-grid`'s
 `--ds-stats-grid-accent` (grep-confirmed free, matches the inventory's own naming suggestion).
 **Plus the one new permanent exemption**, `SurfaceErrorBoundary`'s 8 sites under
@@ -508,8 +528,8 @@ table.
 
 Per unit, in order: (1) **byte-exact** = the component's/surface's visual spec passes against the
 committed pre-step baselines, 0 pixels over `maxDiffPixelRatio: 0.0005`, stability-re-run; (2)
-**counter delta reconciled by hand, with the comment-adjacency caveat explicit** — given Trap 1's
-confirmed live instance, no unit may certify solely on "counter shows 0"; each unit's report must
+**counter delta reconciled by hand, with an independent direct read** — no unit may certify solely on
+"counter shows 0"; each unit's report must
 state it re-read every migrated function's source once, independent of the counter, specifically
 checking for a paint key sitting immediately after a comment; (3) **no cross-component bleed** = every
 rule scope-anchored (zero bare `[data-part]`), Unit I-3 additionally confirms its `ENHANCED_CSS`
@@ -534,8 +554,8 @@ just skipped silently. Only after a unit certifies does the orchestrator append 
 - Does not migrate `SurfaceErrorBoundary.tsx` — permanent `SKIN-EXEMPT-CRASH-SAFE-FALLBACK` exemption
   (Trap 3), not a future-work item.
 - Does not migrate `story-helpers.tsx`/`test-utils.tsx` — dev/test-only, no production skin applies.
-- Does not fix the comment-adjacency counter bug (Trap 1) — that is the lexer owner's fix, already
-  reported; this contract works around it via mandatory direct-read verification instead.
+- Does not change the already-fixed comment-adjacency lexer behavior (Trap 1); mandatory direct-read
+  verification remains independent defense in depth.
 - Does not resolve the `ENHANCED_CSS`/`data-table` cascade-collision risk (Trap 2) as a side effect of
   migration — reports it, lets the team decide ownership.
 - Does not define the missing `ds-accent-bar-shimmer` keyframe (§5) — carries the current,

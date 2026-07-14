@@ -30,6 +30,7 @@ function DefaultMediaCard({
 }): React.ReactElement {
   return (
     <Card
+      className="ds-media__card"
       variant="outlined"
       hoverable
       clickable
@@ -50,7 +51,7 @@ function DefaultMediaCard({
             <Stack spacing="xs">
               {item.title && <Text style={{ fontWeight: 700 }}>{item.title}</Text>}
               {item.description && (
-                <Text style={{ color: 'var(--ds-color-text-muted)' }}>{item.description}</Text>
+                <Text className="ds-media__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>{item.description}</Text>
               )}
               {item.meta}
             </Stack>
@@ -142,7 +143,11 @@ export function MediaSurface({
           />
         )
       ) : (
-        <Grid columns={showDetailsRail && !shouldStack ? 12 : 1} gap="lg">
+        <Grid
+          className={`ds-surface ds-media ds-media--${showDetailsRail && !shouldStack ? 'split' : 'stacked'}${loading ? ' ds-media--loading' : ''}`}
+          columns={showDetailsRail && !shouldStack ? 12 : 1}
+          gap="lg"
+        >
           <Grid.Item span={showDetailsRail && !shouldStack ? 7 : undefined}>
             <Stack spacing="lg">
               <Grid
@@ -159,6 +164,9 @@ export function MediaSurface({
                   return (
                     <Box
                       key={item.id}
+                      className="ds-media__item"
+                      data-part="media-item"
+                      data-selected={selected ? 'true' : 'false'}
                       onClick={() => setSelectedItem(item)}
                       style={{ cursor: 'pointer' }}
                     >
@@ -202,7 +210,7 @@ export function MediaSurface({
                     <Stack spacing="xs">
                       {selectedItem.meta}
                       {selectedItem.description && (
-                        <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                        <Text className="ds-media__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>
                           {selectedItem.description}
                         </Text>
                       )}

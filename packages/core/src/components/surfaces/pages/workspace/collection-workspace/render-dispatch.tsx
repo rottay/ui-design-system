@@ -140,6 +140,8 @@ function renderFallbackCard<T extends object>({
 
   return (
     <Box
+      className="ds-collection-render-dispatch__fallback-card"
+      data-part="fallback-card"
       style={{
         minHeight: 172,
         height: '100%',
@@ -157,6 +159,8 @@ function renderFallbackCard<T extends object>({
     >
       <Box style={{ minWidth: 0 }}>
         <Text
+          className="ds-collection-render-dispatch__muted-text"
+          data-part="muted-text"
           size="xs"
           style={{
             display: 'block',
@@ -171,6 +175,8 @@ function renderFallbackCard<T extends object>({
           {primaryColumn ? getColumnHeader(primaryColumn as ColumnDef<unknown>) : 'Record'}
         </Text>
         <Text
+          className="ds-collection-render-dispatch__fallback-title"
+          data-part="title"
           weight="semibold"
           style={{
             display: 'block',
@@ -195,6 +201,8 @@ function renderFallbackCard<T extends object>({
         {detailColumns.slice(0, 4).map((column) => (
           <Box key={column.key} style={{ minWidth: 0 }}>
             <Text
+              className="ds-collection-render-dispatch__muted-text"
+              data-part="muted-text"
               size="xs"
               style={{
                 display: 'block',
@@ -209,6 +217,8 @@ function renderFallbackCard<T extends object>({
               {getColumnHeader(column as ColumnDef<unknown>)}
             </Text>
             <Text
+              className="ds-collection-render-dispatch__fallback-value"
+              data-part="fallback-value"
               size="sm"
               style={{
                 display: 'block',
@@ -226,6 +236,8 @@ function renderFallbackCard<T extends object>({
 
       {actionContent ? (
         <Box
+          className="ds-collection-render-dispatch__fallback-actions"
+          data-part="fallback-actions"
           style={{
             marginTop: 'auto',
             paddingTop: 10,
@@ -275,6 +287,8 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
 
   return (
     <Box
+      className="ds-surface ds-collection-render-dispatch ds-collection-render-dispatch__pagination"
+      data-part="pagination"
       style={{
         display: 'flex',
         alignItems: 'center',
@@ -288,12 +302,20 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
         background: 'var(--ds-color-bg-primary, #fff)',
       }}
     >
-      <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+      <Text
+        className="ds-collection-render-dispatch__muted-text"
+        data-part="muted-text"
+        size="sm"
+        style={{ color: 'var(--ds-color-text-muted)' }}
+      >
         {start}-{end} of {total.toLocaleString()}
       </Text>
 
       <Box style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
         <button
+          className="ds-collection-render-dispatch__pagination-prev"
+          data-part="pagination-prev"
+          data-disabled={canGoBack ? 'false' : 'true'}
           type="button"
           disabled={!canGoBack}
           onClick={() => pagination.onChange(current - 1, pageSize)}
@@ -302,10 +324,18 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
         >
           Previous
         </button>
-        <Text size="sm" style={{ color: 'var(--ds-color-text-muted)' }}>
+        <Text
+          className="ds-collection-render-dispatch__muted-text"
+          data-part="muted-text"
+          size="sm"
+          style={{ color: 'var(--ds-color-text-muted)' }}
+        >
           Page {current} of {totalPages}
         </Text>
         <button
+          className="ds-collection-render-dispatch__pagination-next"
+          data-part="pagination-next"
+          data-disabled={canGoForward ? 'false' : 'true'}
           type="button"
           disabled={!canGoForward}
           onClick={() => pagination.onChange(current + 1, pageSize)}
@@ -318,6 +348,8 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
 
       {pageSizeOptions.length > 1 ? (
         <label
+          className="ds-collection-render-dispatch__page-size"
+          data-part="page-size"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -328,6 +360,8 @@ function renderPaginationFooter(pagination?: PaginationConfig | false): ReactNod
         >
           Rows
           <select
+            className="ds-collection-render-dispatch__page-size-select"
+            data-part="page-size-select"
             value={pageSize}
             onChange={(event) => pagination.onChange(1, Number(event.currentTarget.value))}
             style={{
@@ -398,6 +432,9 @@ function CardsIncrementalFooter({
 
   return (
     <Box
+      className="ds-surface ds-collection-render-dispatch ds-collection-render-dispatch__incremental-footer"
+      data-part="incremental-footer"
+      data-can-load-more={canLoadMore ? 'true' : 'false'}
       ref={sentinelRef}
       style={{
         display: 'flex',
@@ -411,11 +448,18 @@ function CardsIncrementalFooter({
         fontWeight: 650,
       }}
     >
-      <Text size="xs" style={{ color: 'inherit', fontSize: 12, fontVariantNumeric: 'tabular-nums' }}>
+      <Text
+        className="ds-collection-render-dispatch__incremental-count"
+        data-part="incremental-count"
+        size="xs"
+        style={{ color: 'inherit', fontSize: 12, fontVariantNumeric: 'tabular-nums' }}
+      >
         {total === 0 ? '0 results' : `Showing 1-${visible} of ${total.toLocaleString()}`}
       </Text>
       {canLoadMore ? (
         <button
+          className="ds-collection-render-dispatch__load-more"
+          data-part="load-more"
           type="button"
           onClick={loadMore}
           style={{
@@ -433,7 +477,12 @@ function CardsIncrementalFooter({
           Load more
         </button>
       ) : (
-        <Text size="xs" style={{ color: 'inherit', fontSize: 12 }}>
+        <Text
+          className="ds-collection-render-dispatch__incremental-end"
+          data-part="incremental-end"
+          size="xs"
+          style={{ color: 'inherit', fontSize: 12 }}
+        >
           End of cards
         </Text>
       )}
@@ -465,7 +514,7 @@ export function CollectionRenderDispatch<T extends object>(
 
   // Error state
   if (error) {
-    return <Box padding="lg">{error}</Box>;
+    return <Box className="ds-surface ds-collection-render-dispatch" data-part="root" data-view-mode={viewMode} data-state="error" padding="lg">{error}</Box>;
   }
 
   // ── Grid mode ──
@@ -474,10 +523,11 @@ export function CollectionRenderDispatch<T extends object>(
     // Grid uses cards config renderCard if grid doesn't have its own
     const cardRenderer = viewModes.cards?.renderCard ?? mobileCard;
     if (!cardRenderer) {
-      return <Box padding="lg"><Text style={{ color: 'var(--ds-color-text-muted)' }}>Grid mode requires a card renderer (viewModes.cards.renderCard or mobileCard)</Text></Box>;
+      return <Box className="ds-surface ds-collection-render-dispatch" data-part="root" data-view-mode="grid" data-state="error" padding="lg"><Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>Grid mode requires a card renderer (viewModes.cards.renderCard or mobileCard)</Text></Box>;
     }
     return (
       <PatternGridView<T>
+        className="ds-surface ds-collection-render-dispatch"
         data={data}
         renderCard={cardRenderer}
         rowKey={rowKey}
@@ -499,6 +549,7 @@ export function CollectionRenderDispatch<T extends object>(
     const gl = viewModes.gallery;
     return (
       <PatternGalleryView<T>
+        className="ds-surface ds-collection-render-dispatch"
         data={data}
         imageField={gl.imageField}
         captionField={gl.captionField}
@@ -535,17 +586,26 @@ export function CollectionRenderDispatch<T extends object>(
     const columnDefs = kc.columns ?? Array.from(groupMap.keys()).map(id => ({ id, title: id }));
 
     return (
-      <Box style={{
-        display: 'flex',
-        gap: kc.columnGap ?? 'var(--ds-spacing-4, 16px)',
-        overflowX: 'auto',
-        padding: '4px 0',
-        minHeight: 200,
-      }}>
+      <Box
+        className="ds-surface ds-collection-render-dispatch"
+        data-part="root"
+        data-view-mode="kanban"
+        data-loading={loading ? 'true' : 'false'}
+        style={{
+          display: 'flex',
+          gap: kc.columnGap ?? 'var(--ds-spacing-4, 16px)',
+          overflowX: 'auto',
+          padding: '4px 0',
+          minHeight: 200,
+        }}
+      >
         {columnDefs.map((col: { id: string; title: string }) => {
           const items = groupMap.get(col.id) ?? [];
           return (
             <Box
+              className="ds-collection-render-dispatch__kanban-column"
+              data-part="kanban-column"
+              data-column-id={col.id}
               key={col.id}
               style={{
                 minWidth: kc.columnMinWidth ?? 280,
@@ -556,31 +616,35 @@ export function CollectionRenderDispatch<T extends object>(
                 padding: 'var(--ds-spacing-3, 12px)',
               }}
             >
-              <Box style={{
-                marginBottom: 'var(--ds-spacing-3, 12px)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
+              <Box
+                className="ds-collection-render-dispatch__kanban-header"
+                data-part="kanban-header"
+                style={{
+                  marginBottom: 'var(--ds-spacing-3, 12px)',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
                 {kc.renderColumnHeader
                   ? kc.renderColumnHeader(col.id, col.title, items.length)
                   : (
                     <Text style={{ fontWeight: 600, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
-                      {col.title} <span style={{ color: 'var(--ds-color-text-muted)', fontWeight: 400 }}>({items.length})</span>
+                      {col.title} <span className="ds-collection-render-dispatch__kanban-count" data-part="kanban-count" style={{ color: 'var(--ds-color-text-muted)', fontWeight: 400 }}>({items.length})</span>
                     </Text>
                   )
                 }
               </Box>
               <Box style={{ display: 'flex', flexDirection: 'column', gap: 'var(--ds-spacing-2, 8px)' }}>
                 {items.length === 0 && (
-                  <Text style={{ color: 'var(--ds-color-text-disabled)', fontSize: 12, textAlign: 'center' as const, padding: 16 }}>
+                  <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-disabled)', fontSize: 12, textAlign: 'center' as const, padding: 16 }}>
                     No items
                   </Text>
                 )}
                 {items.map((item) => (
                   <Box key={resolveKey(item, rowKey)}>
                     {kc.renderCard?.(item, col.id) ?? mobileCard?.(item, 0) ?? (
-                      <Text style={{ color: 'var(--ds-color-text-muted)' }}>No card renderer</Text>
+                      <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>No card renderer</Text>
                     )}
                   </Box>
                 ))}
@@ -589,8 +653,8 @@ export function CollectionRenderDispatch<T extends object>(
           );
         })}
         {loading && data.length === 0 && (
-          <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 32 }}>
-            <Text style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</Text>
+          <Box className="ds-collection-render-dispatch__loading-state" data-part="loading-state" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', padding: 32 }}>
+            <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</Text>
           </Box>
         )}
       </Box>
@@ -603,27 +667,39 @@ export function CollectionRenderDispatch<T extends object>(
 
     if (loading && data.length === 0) {
       return (
-        <Box style={{
-          padding: '32px 20px',
-          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 16px))',
-          border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
-          background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
-        }}>
-          <Text style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</Text>
+        <Box
+          className="ds-surface ds-collection-render-dispatch"
+          data-part="root"
+          data-view-mode="cards"
+          data-state="loading"
+          style={{
+            padding: '32px 20px',
+            borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 16px))',
+            border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
+            background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
+          }}
+        >
+          <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</Text>
         </Box>
       );
     }
     if (data.length === 0) {
       return (
-        <Box style={{
-          borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 16px))',
-          border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
-          background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
-          overflow: 'hidden',
-        }}>
+        <Box
+          className="ds-surface ds-collection-render-dispatch"
+          data-part="root"
+          data-view-mode="cards"
+          data-state="empty"
+          style={{
+            borderRadius: 'var(--ds-collection-card-radius, var(--ds-radius-xl, 16px))',
+            border: '1px solid var(--ds-listing-grid-empty-border, var(--ds-collection-card-border, var(--ds-color-border)))',
+            background: 'var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-card-bg, var(--ds-surface-card))))',
+            overflow: 'hidden',
+          }}
+        >
           {emptyState ?? (
-            <Box style={{ padding: '32px 20px' }}>
-              <Text style={{ color: 'var(--ds-color-text-muted)' }}>No data</Text>
+            <Box className="ds-collection-render-dispatch__empty-state" data-part="empty-state" style={{ padding: '32px 20px' }}>
+              <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" style={{ color: 'var(--ds-color-text-muted)' }}>No data</Text>
             </Box>
           )}
         </Box>
@@ -640,28 +716,37 @@ export function CollectionRenderDispatch<T extends object>(
 
     return (
       <>
-        <Box style={{
-          display: 'grid',
-          gridTemplateColumns: cardColumns
-            ? cardColumns === 'auto'
-              ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
-              : `repeat(${cardColumns}, minmax(0, 1fr))`
-            : 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))',
-          gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
-          padding: '1px 1px 8px',
-          boxSizing: 'border-box',
-          alignItems: 'stretch',
-          ['--ds-listing-grid-min-card-width' as string]:
-            viewModes?.cards?.minCardWidth
-              ? typeof viewModes.cards.minCardWidth === 'number'
-                ? `${viewModes.cards.minCardWidth}px`
-                : viewModes.cards.minCardWidth
-              : undefined,
-        } as React.CSSProperties}>
+        <Box
+          className="ds-surface ds-collection-render-dispatch"
+          data-part="root"
+          data-view-mode="cards"
+          data-state="ready"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: cardColumns
+              ? cardColumns === 'auto'
+                ? 'repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr))'
+                : `repeat(${cardColumns}, minmax(0, 1fr))`
+              : 'var(--ds-listing-grid-columns, repeat(auto-fill, minmax(var(--ds-listing-grid-min-card-width, 280px), 1fr)))',
+            gap: viewModes?.cards?.gap ?? 'var(--ds-listing-grid-gap, var(--ds-spacing-4, 16px))',
+            padding: '1px 1px 8px',
+            boxSizing: 'border-box',
+            alignItems: 'stretch',
+            ['--ds-listing-grid-min-card-width' as string]:
+              viewModes?.cards?.minCardWidth
+                ? typeof viewModes.cards.minCardWidth === 'number'
+                  ? `${viewModes.cards.minCardWidth}px`
+                  : viewModes.cards.minCardWidth
+                : undefined,
+          } as React.CSSProperties}
+        >
           {data.map((item, i) => {
             const isLoneFinalCard = hasLoneFinalCard && i === data.length - 1;
             return (
             <Box
+              className="ds-collection-render-dispatch__card-item"
+              data-part="card-item"
+              data-lone-final={isLoneFinalCard ? 'true' : 'false'}
               key={resolveKey(item, rowKey)}
               onClick={() => onRowClick?.(item, i)}
               style={{
@@ -690,15 +775,20 @@ export function CollectionRenderDispatch<T extends object>(
   // ── Calendar mode (placeholder - apps wire PatternCalendarView) ──
   if (viewMode === 'calendar' && viewModes?.calendar) {
     return (
-      <Box style={{
-        padding: 'var(--ds-spacing-6, 24px)',
-        textAlign: 'center',
-        border: '1px dashed var(--ds-color-border)',
-        borderRadius: 'var(--ds-radius-lg, 12px)',
-        color: 'var(--ds-color-text-muted)',
-      }}>
+      <Box
+        className="ds-surface ds-collection-render-dispatch"
+        data-part="root"
+        data-view-mode="calendar"
+        style={{
+          padding: 'var(--ds-spacing-6, 24px)',
+          textAlign: 'center',
+          border: '1px dashed var(--ds-color-border)',
+          borderRadius: 'var(--ds-radius-lg, 12px)',
+          color: 'var(--ds-color-text-muted)',
+        }}
+      >
         <Text>Calendar view: {data.length} items with date field "{String(viewModes.calendar.startField)}"</Text>
-        <Text size="sm" style={{ marginTop: 8, color: 'var(--ds-color-text-disabled)' }}>
+        <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text" size="sm" style={{ marginTop: 8, color: 'var(--ds-color-text-disabled)' }}>
           Wire PatternCalendarView here for full calendar rendering
         </Text>
       </Box>
@@ -708,6 +798,7 @@ export function CollectionRenderDispatch<T extends object>(
   // ── Default: Table mode ──
   return (
     <PatternDataTable<T>
+      className="ds-surface ds-collection-render-dispatch"
       data={data}
       columns={columns}
       rowKey={rowKey}

@@ -194,6 +194,8 @@ function DefaultCardView<TView>({
                     return (
                       <Box key={column.key}>
                         <Text
+                          className="ds-list__card-label"
+                          data-part="card-label"
                           style={{
                             fontSize: 12,
                             fontWeight: 600,
@@ -203,7 +205,11 @@ function DefaultCardView<TView>({
                         >
                           {column.header}
                         </Text>
-                        <Text style={{ color: 'var(--ds-color-text-primary)' }}>
+                        <Text
+                          className="ds-list__card-value"
+                          data-part="card-value"
+                          style={{ color: 'var(--ds-color-text-primary)' }}
+                        >
                           {buildSurfaceCellRenderer(
                             config,
                             column.key,
@@ -386,7 +392,14 @@ export function ListSurface<TRaw, TView extends object>({
   }
 
   const listContent = (
-    <Stack spacing={resolvedSectionSpacing}>
+    <Stack
+      className="ds-surface ds-list"
+      data-part="root"
+      data-view={effectiveView}
+      data-mobile={isMobile ? 'true' : 'false'}
+      data-loading={loading ? 'true' : 'false'}
+      spacing={resolvedSectionSpacing}
+    >
       {/* --------------------------------------------------------------- */}
       {/* Toolbar: canonical PatternListToolbar when config.toolbar is set */}
       {/* --------------------------------------------------------------- */}

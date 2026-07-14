@@ -139,12 +139,17 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
   };
 
   return (
-    <Stack spacing="md">
+    <Stack
+      className="ds-surface ds-record-workbench"
+      data-part="root"
+      data-loading={loading ? 'true' : 'false'}
+      spacing="md"
+    >
       {headerSlot}
       {breadcrumbs}
 
       {/* Record header */}
-      <Flex align="center" gap={4}>
+      <Flex className="ds-record-workbench__header" data-part="header" align="center" gap={4}>
         {loading ? (
           <Flex align="center" gap={4} style={{ flex: 1 }}>
             {avatar && <Skeleton variant="circular" width={40} height={40} />}
@@ -158,9 +163,12 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
             {avatar && <Box>{avatar}</Box>}
             <Box style={{ flex: 1 }}>
               <Flex align="center" gap={2}>
-                <Text size="xl" weight="semibold">{title}</Text>
+                <Text className="ds-record-workbench__title" data-part="title" size="xl" weight="semibold">{title}</Text>
                 {status && (
                   <span
+                    className="ds-record-workbench__status-badge"
+                    data-part="status-badge"
+                    data-variant={status.variant ?? 'default'}
                     style={{
                       padding: '2px 10px',
                       borderRadius: 'var(--ds-radius-full, 9999px)',
@@ -174,7 +182,7 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
                   </span>
                 )}
               </Flex>
-              {subtitle && <Text size="sm" color="muted">{subtitle}</Text>}
+              {subtitle && <Text className="ds-record-workbench__muted-text" data-part="muted-text" size="sm" color="muted">{subtitle}</Text>}
             </Box>
           </>
         )}
@@ -184,6 +192,8 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
           <Flex gap={2}>
             {actions.map((action) => (
               <Button
+                className="ds-record-workbench__action"
+                data-action-variant={action.variant ?? 'default'}
                 key={action.key}
                 variant={
                   action.variant === 'primary'
@@ -205,6 +215,8 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
 
       {/* Tab bar */}
       <div
+        className="ds-record-workbench__tab-list"
+        data-part="tab-list"
         role="tablist"
         style={{
           display: 'flex',
@@ -217,6 +229,8 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
           const isActive = activeTab === tab.key;
           return (
             <Button
+              className="ds-record-workbench__tab"
+              data-active={isActive ? 'true' : 'false'}
               key={tab.key}
               id={tabId(tab.key)}
               role="tab"
@@ -241,6 +255,8 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
               {tab.label}
               {tab.badge !== undefined && (
                 <span
+                  className="ds-record-workbench__tab-badge"
+                  data-part="tab-badge"
                   style={{
                     marginLeft: '8px',
                     padding: '1px 6px',
@@ -259,9 +275,11 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
       </div>
 
       {/* Content area with optional sidebar */}
-      <Flex gap={5}>
+      <Flex className="ds-record-workbench__content" data-part="content" gap={5}>
         {/* Main content */}
         <Box
+          className="ds-record-workbench__tabpanel"
+          data-part="tabpanel"
           role="tabpanel"
           id={panelId(activeTab)}
           aria-labelledby={tabId(activeTab)}
@@ -296,6 +314,8 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
         {/* Sidebar */}
         {showSidebar && (
           <Box
+            className="ds-record-workbench__sidebar"
+            data-part="sidebar"
             style={{
               width: sidebarWidth,
               flexShrink: 0,
@@ -312,11 +332,11 @@ export function RecordWorkbenchSurface(props: RecordWorkbenchSurfaceProps) {
               </Stack>
             ) : (
               <>
-                <Text size="sm" weight="medium" style={{ marginBottom: '16px' }}>Details</Text>
+                <Text className="ds-record-workbench__sidebar-title" data-part="sidebar-title" size="sm" weight="medium" style={{ marginBottom: '16px' }}>Details</Text>
                 <Stack spacing="sm">
                   {metadata.map((field) => (
                     <Box key={field.key}>
-                      <Text size="xs" color="muted">{field.label}</Text>
+                      <Text className="ds-record-workbench__muted-text" data-part="muted-text" size="xs" color="muted">{field.label}</Text>
                       <Box style={{ marginTop: '2px' }}>
                         {typeof field.value === 'string' ? (
                           <Text size="sm">{field.value}</Text>

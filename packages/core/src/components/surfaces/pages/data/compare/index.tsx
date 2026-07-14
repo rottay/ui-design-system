@@ -55,7 +55,11 @@ export function CompareSurface({
           <Stack spacing="xs">
             <Text style={{ fontWeight: 600 }}>{row.label}</Text>
             {row.description && (
-              <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+              <Text
+                className="ds-compare__muted-text"
+                data-part="muted-text"
+                style={{ color: 'var(--ds-color-text-muted)' }}
+              >
                 {row.description}
               </Text>
             )}
@@ -69,7 +73,11 @@ export function CompareSurface({
         <Stack spacing="xs">
           <Text style={{ fontWeight: 700 }}>{subject.label}</Text>
           {subject.description && (
-            <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+            <Text
+              className="ds-compare__muted-text"
+              data-part="muted-text"
+              style={{ color: 'var(--ds-color-text-muted)' }}
+            >
               {subject.description}
             </Text>
           )}
@@ -100,13 +108,21 @@ export function CompareSurface({
           />
         )
       ) : (
-        <Stack spacing="lg">
+        <Stack
+          className="ds-surface ds-compare"
+          data-part="root"
+          data-layout={responsive.shouldStack ? 'stacked' : 'table'}
+          data-loading={loading ? 'true' : 'false'}
+          spacing="lg"
+        >
           {config.presentation.intro}
 
           {config.behavior.sections.map((section) => (
             <Stack key={section.key} spacing="md">
               {(section.title || section.description) && (
                 <Box
+                  className="ds-compare__section-heading"
+                  data-part="section-heading"
                   style={{
                     padding: '16px',
                     borderRadius: 'var(--ds-radius-lg)',
@@ -116,7 +132,11 @@ export function CompareSurface({
                   <Stack spacing="xs">
                     {section.title && <Text style={{ fontWeight: 700 }}>{section.title}</Text>}
                     {section.description && (
-                      <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                      <Text
+                        className="ds-compare__muted-text"
+                        data-part="muted-text"
+                        style={{ color: 'var(--ds-color-text-muted)' }}
+                      >
                         {section.description}
                       </Text>
                     )}
@@ -136,7 +156,11 @@ export function CompareSurface({
                           <Stack spacing="xs">
                             <Text style={{ fontWeight: 700 }}>{row.label}</Text>
                             {row.description && (
-                              <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+                              <Text
+                                className="ds-compare__muted-text"
+                                data-part="muted-text"
+                                style={{ color: 'var(--ds-color-text-muted)' }}
+                              >
                                 {row.description}
                               </Text>
                             )}
@@ -145,6 +169,8 @@ export function CompareSurface({
                           {config.behavior.subjects.map((subject) => (
                             <Box
                               key={`${row.key}-${subject.key}`}
+                              className="ds-compare__divider"
+                              data-part="divider"
                               style={{
                                 paddingTop: '12px',
                                 borderTop: '1px solid var(--ds-color-border-subtle)',

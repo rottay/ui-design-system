@@ -47,6 +47,11 @@ function TemplateSelector({
       {templates.map((template) => (
         <Card
           key={template.id}
+          className={
+            selectedTemplate === template.id
+              ? 'ds-report__template-card ds-report__template-card--selected'
+              : 'ds-report__template-card'
+          }
           variant="outlined"
           hoverable
           clickable
@@ -66,12 +71,20 @@ function TemplateSelector({
               <Stack spacing="xs">
                 <Text style={{ fontWeight: 500 }}>{template.name}</Text>
                 {template.description && (
-                  <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                  <Text
+                    className="ds-report__muted-text"
+                    data-part="muted-text"
+                    style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}
+                  >
                     {template.description}
                   </Text>
                 )}
                 {template.category && (
-                  <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 11 }}>
+                  <Text
+                    className="ds-report__muted-text"
+                    data-part="muted-text"
+                    style={{ color: 'var(--ds-color-text-muted)', fontSize: 11 }}
+                  >
                     {template.category}
                   </Text>
                 )}
@@ -139,7 +152,11 @@ function ReportResults({
       <Card variant="outlined">
         <Card.Body>
           <Flex justify="center" style={{ padding: '32px 0' }}>
-            <Text style={{ color: 'var(--ds-color-text-muted)' }}>Generating report...</Text>
+            <Text
+              className="ds-report__muted-text"
+              data-part="muted-text"
+              style={{ color: 'var(--ds-color-text-muted)' }}
+            >Generating report...</Text>
           </Flex>
         </Card.Body>
       </Card>
@@ -175,11 +192,19 @@ function ReportResults({
   }));
 
   const summaryFooter = reportData.summary ? (
-    <Box style={{ marginTop: 16, padding: '12px 0', borderTop: '1px solid var(--ds-color-border)' }}>
+    <Box
+      className="ds-report__divider"
+      data-part="divider"
+      style={{ marginTop: 16, padding: '12px 0', borderTop: '1px solid var(--ds-color-border)' }}
+    >
       <Flex gap={16} wrap="wrap">
         {Object.entries(reportData.summary).map(([key, value]) => (
           <Stack key={key} spacing="xs">
-            <Text style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{key}</Text>
+            <Text
+              className="ds-report__muted-text"
+              data-part="muted-text"
+              style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}
+            >{key}</Text>
             <Text style={{ fontWeight: 600 }}>{String(value)}</Text>
           </Stack>
         ))}
@@ -277,12 +302,21 @@ export function ReportSurface({
       loading={loading}
     >
       {isSidebarLayout && !shouldStack ? (
-        <Grid columns={12} gap="lg">
+        <Grid
+          className="ds-surface ds-report ds-report--sidebar"
+          columns={12}
+          gap="lg"
+        >
           <Grid.Item span={4}>{sidebarContent}</Grid.Item>
           <Grid.Item span={8}>{mainContent}</Grid.Item>
         </Grid>
       ) : (
-        <Stack spacing="lg">
+        <Stack
+          className={`ds-surface ds-report ds-report--${isSidebarLayout ? 'stacked-sidebar' : 'top-filters'}`}
+          data-part="root"
+          data-loading={loading ? 'true' : 'false'}
+          spacing="lg"
+        >
           {!isSidebarLayout && (
             <Flex gap={16} wrap="wrap" align="end">
               <Box style={{ flex: 1, minWidth: 200 }}>

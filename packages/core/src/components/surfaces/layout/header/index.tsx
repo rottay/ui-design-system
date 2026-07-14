@@ -54,9 +54,18 @@ export function HeaderSurface({
       actions={actionsNode}
       loading={loading}
     >
-      <Stack spacing="lg">
+      <Stack
+        className="ds-surface ds-header"
+        data-part="root"
+        data-loading={loading ? 'true' : 'false'}
+        spacing="lg"
+      >
         {config.presentation.description && (
-          <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+          <Text
+            className="ds-header__muted-text"
+            data-part="muted-text"
+            style={{ color: 'var(--ds-color-text-muted)' }}
+          >
             {config.presentation.description}
           </Text>
         )}
@@ -74,7 +83,11 @@ export function HeaderSurface({
               children: (
                 <Stack spacing="md">
                   {tab.description && (
-                    <Text style={{ color: 'var(--ds-color-text-muted)' }}>{tab.description}</Text>
+                    <Text
+                      className="ds-header__muted-text"
+                      data-part="muted-text"
+                      style={{ color: 'var(--ds-color-text-muted)' }}
+                    >{tab.description}</Text>
                   )}
                   <Box>{tab.content}</Box>
                 </Stack>
