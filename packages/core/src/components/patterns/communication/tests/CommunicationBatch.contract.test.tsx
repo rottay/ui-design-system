@@ -499,5 +499,9 @@ describe('presence -- data-part contract (CK-F)', () => {
     const root = await waitForPart(container, 'root');
     expect(root.className).toContain('ds-presence-live-cursor');
     expect(q(container, '[data-part="cursor-badge"]')).toHaveLength(1);
+    const fill = q(container, '[data-part="cursor-fill"]')[0];
+    const outline = q(container, '[data-part="cursor-outline"]')[0];
+    expect(fill).toHaveAttribute('fill', '#e74c3c');
+    expect(outline).toHaveAttribute('stroke', 'var(--ds-color-surface, #fff)');
   });
 });

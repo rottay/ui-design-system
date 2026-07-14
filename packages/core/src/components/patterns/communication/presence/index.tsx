@@ -362,10 +362,12 @@ export function LiveCursor({
         style={{ display: 'block' }}
       >
         <path
+          data-part="cursor-fill"
           d="M0.928 0.32L14.728 10.52C15.108 10.79 14.918 11.39 14.448 11.39H8.168L5.128 19.14C4.978 19.52 4.448 19.52 4.298 19.14L0.288 0.93C0.208 0.55 0.598 0.09 0.928 0.32Z"
           fill={cursorColor}
         />
         <path
+          data-part="cursor-outline"
           d="M0.928 0.32L14.728 10.52C15.108 10.79 14.918 11.39 14.448 11.39H8.168L5.128 19.14C4.978 19.52 4.448 19.52 4.298 19.14L0.288 0.93C0.208 0.55 0.598 0.09 0.928 0.32Z"
           stroke="var(--ds-color-surface, #fff)"
           strokeWidth="0.8"
