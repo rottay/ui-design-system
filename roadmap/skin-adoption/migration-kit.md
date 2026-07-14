@@ -37,6 +37,16 @@ inline (uncounted) and consume it from a static CSS rule:
   `src/tokens/css/engines/rustic/skin/<kebab>.css`.
 - **Engine-agnostic** file (single render tree — a `compound/*`, or a component with no
   engine split): one file — `src/tokens/css/components/skin/<kebab>.css`.
+
+**Scope-class prefix convention (a pre-step chose the wrong one on CK-G, 2026-07-14).** The DS uses
+TWO scope-class prefixes by TIER, and a skin must anchor on its tier's:
+- **primitives** → `rottay-<comp>` (rottay-button, rottay-divider, rottay-tag).
+- **patterns / structures** → `ds-pattern-<comp>` / `ds-<comp>` (ds-pattern-detail-panel,
+  ds-pattern-filter-panel, ds-pattern-cockpit-header, ds-pattern-page-shell). A component under
+  `patterns/` or `structures/` that anchors on `rottay-*` is the one family a tenant CSS author can't
+  find where its siblings live. **Check for an EXISTING scope class first** — several pattern roots
+  already carry `ds-pattern-<comp>`; reuse it, do not mint a redundant parallel class on top of it.
+  Grep-verify any class you mint is FREE across CSS **and** CSS-in-JS.
 - DO **NOT** edit `foundation/base.css` or `entrypoints/styles.css` — the orchestrator
   wires every `@import`. DO **NOT** write or touch ANY test file. Your skin does not need
   to be imported for your verification (the counter reads TSX; existing vitest checks DOM,
