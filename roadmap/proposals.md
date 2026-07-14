@@ -1035,3 +1035,25 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Adjacent** — `dashboard-insights`'s `useVariant` hook has the same `Math.random()` shape but ZERO callers anywhere in core or the showroom: its 8 renderers are individually exported and directly mountable, so the trap is inert there. Do not "fix" it by wiring it up.
 - **Ask** — make the seed deterministic across the server/client boundary (derive it from a stable input, or hoist the choice to the consumer), then decide whether a randomly-chosen card variant is a feature at all.
 - **Status** — OPEN.
+
+### P-78 Tooltip rustic's placement transform has never applied — a later key overwrites it
+
+- **Context** — Surfaced by WO-SKIN-05's byte-exact gate. The migration moved the bubble's
+  visibility scale into the skin; the baseline then moved, and the reason was not the scale.
+- **Evidence** — `Tooltip/engines/rustic.tsx` builds the bubble's style object as
+  `{ ...PLACEMENT_MAP[placement], …, transform: visible ? 'scale(1)' : 'scale(0.95)' }`.
+  `PLACEMENT_MAP` supplies its own `transform` (the centering `translateX(-50%)` / `translateY(-50%)`),
+  and the later literal key **overwrites it**. So the bubble has never been translate-centered in
+  the rustic engine: its transform is only ever the scale.
+- **How the migration found it** — moving the scale out of the inline object let the placement's
+  translate survive for the first time, which MOVED the tooltip. The pixel gate caught it (31 px at
+  the corner of an element shot). The value was byte-identical; the CASCADE was not.
+- **Frozen** — the inline `transform` is restored verbatim, and the skin declares no transform. The
+  migration preserves the defect, as it must: a byte-exact pass may not fix a bug, however tempting.
+- **Ask** — decide whether the bubble should be translate-centered (it probably should), then land
+  it as a VISUAL change with re-recorded baselines.
+- **The general lesson, which is why this is written down** — **an object literal's later key
+  silently wins over an earlier spread.** Any migration that lifts one such key out of the object
+  hands the cascade back to the spread, and the pixels move even though every value is identical.
+  Before moving a paint key out of a style object, grep the object for a spread that also sets it.
+- **Status** — OPEN.
