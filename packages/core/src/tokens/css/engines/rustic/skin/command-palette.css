@@ -1,0 +1,131 @@
+/**
+ * Rustic CommandPalette skin (WO-SKIN-06 CK-G).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight. Unlayered outranks preflight
+ * and still yields to a caller's inline `style` (the dialog spreads `...style`).
+ *
+ * SCOPE ROOT: the overlay `<div>` carries `ds-pattern-command-palette ds-engine-rustic`
+ * + `data-part='root'`. NOT portaled (position:fixed, DOM descendant of the scope).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting `border-color`
+ * on every element. A border COLOR must reach (0,4,0): two root classes + `data-part`
+ * REPEATED. `3px solid transparent` IS a color and must hold the (0,4,0) floor, or the
+ * inactive row grows a tinted left rail. Non-border paint wins at (0,3,0); `border` and
+ * `outline: none` resets are color-free and exempt.
+ *
+ * TOKENS: rustic honors the tenant-themeable --ds-command-palette-* namespace (with
+ * generic fallbacks). Modern reads generic tokens only — a live cross-engine theming
+ * difference preserved verbatim; do not unify the two vocabularies.
+ *
+ * INTERACTION: the keyboard-active row keys on `[data-active='true']`; pointer hover
+ * keys on `:hover:not([data-active='true'])` — the `!isSelected` guard the removed
+ * onMouseEnter/Leave writes had. The input focus line moves to
+ * `[data-part='search']:focus-within`: the input is the search wrapper's only focusable
+ * child, and the original wrote box-shadow on that parent element.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* entrance keyframes (were injected per-render via an inline <style> tag; the
+   backdrop/dialog `animation` references still name these). */
+@keyframes ds-cmd-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ds-cmd-panel-in {
+  from { opacity: 0; transform: scale(0.96) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* backdrop */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='backdrop'] {
+  background: var(--ds-command-palette-backdrop, var(--ds-overlay-bg));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* dialog card */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='dialog'] {
+  background: var(--ds-command-palette-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-command-palette-shadow, var(--ds-shadow-dialog, var(--ds-shadow-xl)));
+}
+
+/* search wrapper bottom rule + inset focus line (was an imperative box-shadow write
+   on the input's parentElement). */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='search'][data-part='search'] {
+  border-bottom: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='search']:focus-within {
+  box-shadow: inset 0 -1px 0 0 var(--ds-command-palette-focus-line, var(--ds-color-primary-200));
+}
+
+/* search input (border + outline resets are color-free → exempt from the floor) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='input'] {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+/* section label (the Recent heading and the group headers share one const) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='group-label'] {
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+}
+
+/* row — rest. Both channels are explicit in the source ternary's inactive branch;
+   the transparent 3px left rail reserves space so the row does not shift when the
+   selection moves, and must hold (0,4,0) against the tenant border-color floor. */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'] {
+  background: transparent;
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item'] {
+  border-left: 3px solid transparent;
+}
+
+/* row — keyboard-active (data-active) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-active='true'] {
+  background: var(--ds-command-palette-item-active-bg, var(--ds-color-primary-50));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item'][data-active='true'] {
+  border-left-color: var(--ds-command-palette-item-active-border, var(--ds-color-primary-500));
+}
+
+/* row — pointer hover, only while NOT keyboard-active (the !isSelected guard) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item']:hover:not([data-active='true']) {
+  background: var(--ds-command-palette-item-hover-bg, var(--ds-color-bg-hover));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item']:hover:not([data-active='true']) {
+  border-left-color: var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300));
+}
+
+/* row description */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='description'] {
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+}
+
+/* shortcut badge (padding/font ride inline props on the element) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='shortcut'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-palette-shortcut-bg, var(--ds-color-surface-muted, var(--ds-color-neutral-50)));
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+  box-shadow: var(--ds-command-palette-shortcut-shadow, var(--ds-shadow-sm));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='shortcut'][data-part='shortcut'] {
+  border: 1px solid var(--ds-command-palette-shortcut-border, var(--ds-color-border));
+}
+
+/* empty state */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-command-palette-empty-color, var(--ds-color-text-muted));
+}
+
+/* footer */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='footer'] {
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+}

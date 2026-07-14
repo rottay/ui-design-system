@@ -20,6 +20,12 @@ import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react'
 import type { CommandPaletteProps, CommandItem } from '../CommandPalette.types';
 import { menuSectionTitleStyle } from '../../../_internal/engines/modern/styles';
 
+// The grouped section label's color is owned by the skin so a tenant's
+// `--ds-search-category-color` override reaches it; an inline color would beat the
+// unlayered skin, so the label spreads this color-free copy of the shared title style.
+// (The Recent heading keeps the full `menuSectionTitleStyle`, muted, unchanged.)
+const { color: _menuSectionTitleColor, ...menuSectionTitleBase } = menuSectionTitleStyle;
+
 /**
  * Modern (token-driven) command palette with full keyboard navigation.
  * @param props - CommandPaletteProps controlling open state, items, search, and footer.
@@ -153,30 +159,22 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
 
   return (
     <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] ds-pattern-command-palette ds-engine-modern" data-part="root" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
-      {/* Backdrop: scrim (kept) + glass layer (spec section 5). Frost tint + backdrop
-          blur scale with --ds-effect-intensity, collapsing to a plain scrim at 0.
-          Glass is sanctioned on overlay backdrops only. */}
+      {/* Backdrop: scrim + sanctioned glass layer; painted by the engine skin. */}
       <div
         className="absolute inset-0"
         data-part="backdrop"
-        style={{
-          backgroundColor: 'var(--ds-color-bg-overlay)',
-          backgroundImage: 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))',
-          backdropFilter: 'var(--ds-glass-backdrop-filter)',
-          WebkitBackdropFilter: 'var(--ds-glass-backdrop-filter)',
-        }}
         onClick={() => onOpenChange(false)}
       />
       {/* Dialog */}
-      <div className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`} data-part="dialog" style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)' }}>
+      <div className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`} data-part="dialog">
         {/* Search */}
-        <div className="p-3" data-part="search" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
+        <div className="p-3" data-part="search">
           <input
             ref={inputRef}
             type="text"
             data-part="input"
             className="w-full text-lg focus:outline-none"
-            style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 16px)', border: 'none', background: 'transparent', color: 'inherit' }}
+            style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 16px)' }}
             placeholder={placeholder}
             value={query}
             onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}
@@ -208,20 +206,17 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                     data-active={activeIndex === idx}
                     onClick={() => handleSelect(item)}
                     className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}
-                    onMouseEnter={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = 'var(--ds-surface-inset)'; }}
-                    onMouseLeave={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = ''; }}
                   >
                     <div className="flex items-center gap-2">
                       {item.icon}
                       <div>
                         <div className="font-medium text-sm">{item.label}</div>
                         {item.description && (
-                          <div className="text-xs" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
+                          <div className="text-xs" data-part="description">{item.description}</div>
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}
@@ -235,8 +230,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
               <div
                 data-part="group-label"
                 style={{
-                  ...menuSectionTitleStyle,
-                  color: 'var(--ds-search-category-color, var(--ds-color-text-muted))',
+                  ...menuSectionTitleBase,
                   paddingLeft: 20,
                   paddingRight: 20,
                   paddingTop: 12,
@@ -260,34 +254,31 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                     data-active={activeIndex === idx}
                     onClick={() => handleSelect(item)}
                     className={`flex items-center justify-between px-4 py-2 cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                    style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}
-                    onMouseEnter={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = 'var(--ds-surface-inset)'; }}
-                    onMouseLeave={(e) => { if (activeIndex !== idx) (e.currentTarget as HTMLElement).style.background = ''; }}
                   >
                     <div className="flex items-center gap-2">
                       {item.icon}
                       <div>
                         <div className="font-medium text-sm">{item.label}</div>
                         {item.description && (
-                          <div className="text-xs" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
+                          <div className="text-xs" data-part="description">{item.description}</div>
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="text-center py-8 text-sm" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
+            <div className="text-center py-8 text-sm" data-part="empty">
               {emptyMessage}
             </div>
           )}
         </div>
         {/* Footer */}
         {footer && (
-          <div className="px-4 py-2 text-xs" data-part="footer" style={{ borderTop: '1px solid var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>
+          <div className="px-4 py-2 text-xs" data-part="footer">
             {footer}
           </div>
         )}

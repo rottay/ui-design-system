@@ -99,16 +99,12 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
   const backdrop: React.CSSProperties = {
     position: 'absolute',
     inset: 0,
-    background: 'var(--ds-shortcuts-overlay-backdrop, var(--ds-color-bg-overlay))',
   };
 
   /** Dialog container -- spread caller style last so it can override defaults.
    *  Max-width prevents the panel from growing too wide on large screens. */
   const dialog: React.CSSProperties = {
     position: 'relative',
-    background: 'var(--ds-shortcuts-overlay-bg, var(--ds-color-bg-elevated))',
-    borderRadius: 'var(--ds-radius-lg, 12px)',
-    boxShadow: 'var(--ds-shortcuts-overlay-shadow, var(--ds-shadow-dialog))',
     width: '100%',
     maxWidth: 520,
     overflow: 'hidden',
@@ -121,43 +117,32 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '12px 20px',
-    borderBottom: '1px solid var(--ds-color-border)',
   };
 
   const titleStyle: React.CSSProperties = {
     fontSize: 15,
     fontWeight: 600,
-    color: 'var(--ds-color-text-primary)',
     margin: 0,
   };
 
   /** Close button is transparent with muted text to stay visually recessive */
   const closeButtonStyle: React.CSSProperties = {
-    background: 'transparent',
-    border: 'none',
     cursor: 'pointer',
     fontSize: 18,
-    color: 'var(--ds-color-text-muted)',
     padding: '4px 8px',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
     lineHeight: 1,
   };
 
   /** Search wrapper provides a border-bottom separator between search and content */
   const searchWrapperStyle: React.CSSProperties = {
     padding: '8px 20px',
-    borderBottom: '1px solid var(--ds-color-border)',
   };
 
   /** Input is visually borderless and transparent to blend into the dialog chrome */
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '8px 0',
-    border: 'none',
-    outline: 'none',
     fontSize: 13,
-    background: 'transparent',
-    color: 'var(--ds-color-text)',
   };
 
   /** Category labels use uppercase + letter-spacing for a subtle section divider feel */
@@ -166,7 +151,6 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     textTransform: 'uppercase',
     letterSpacing: 0.8,
     fontWeight: 600,
-    color: 'var(--ds-color-text-muted)',
     padding: '8px 20px 4px',
   };
 
@@ -180,7 +164,6 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
 
   const descriptionStyle: React.CSSProperties = {
     fontSize: 13,
-    color: 'var(--ds-color-text-primary)',
   };
 
   /** Keyboard key badge -- uses monospace font and bg token for kbd appearance */
@@ -190,12 +173,8 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
     justifyContent: 'center',
     minWidth: 22,
     padding: '2px 6px',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
-    border: '1px solid var(--ds-color-border)',
-    background: 'var(--ds-shortcuts-overlay-kbd-bg, var(--ds-color-bg-secondary))',
     fontSize: 11,
     fontFamily: 'var(--ds-font-mono, monospace)',
-    color: 'var(--ds-color-text-muted)',
     lineHeight: '18px',
   };
 
@@ -265,7 +244,6 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
               style={{
                 textAlign: 'center',
                 padding: '32px 0',
-                color: 'var(--ds-color-text-muted)',
                 fontSize: 13,
               }}
             >
@@ -278,10 +256,8 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
           <div
             data-part="footer"
             style={{
-              borderTop: '1px solid var(--ds-color-border)',
               padding: '8px 20px',
               fontSize: 12,
-              color: 'var(--ds-color-text-muted)',
             }}
           >
             {footer}

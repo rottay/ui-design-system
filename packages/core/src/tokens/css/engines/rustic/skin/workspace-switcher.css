@@ -1,0 +1,127 @@
+/**
+ * WorkspaceSwitcher — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the `data-part` REPEATED (0,2,0), or a contract
+ * attribute (`[data-active]`), to beat the tenant's unlayered `…*` border-color
+ * floor at (0,3,1). `border: none` resets carry no color and stay at (0,3,0).
+ * Non-border paint wins unlayered at (0,3,0).
+ *
+ * AVATAR (three call sites, one part). The trigger and list avatars paint
+ * `background: var(--ds-color-primary)` + `border-radius: var(--ds-radius-md)`;
+ * the current-user avatar diverges to `var(--ds-color-accent)` + `50%` and is
+ * the ONLY `[data-part='avatar']` that is not a descendant of `[data-part=
+ * 'trigger']` or `[data-part='item']`. So the base rule carries the current-user
+ * (minority) values and the trigger/item descendants override them at (0,4,0);
+ * `color` is shared and stays on the base. No new stamp was needed.
+ *
+ * The row's left border is always present (3px, reserving layout space), so it
+ * has a base transparent rule and an active-color override — both reach (0,4,0)
+ * and the active rule is ordered last to win. The row background is
+ * STATE-SELECTED (focus over active); [data-focused] is ordered after
+ * [data-active] for the same reason.
+ *
+ * Values transcribed verbatim from engines/rustic.tsx (raw token fallbacks and
+ * `var(--ds-color-*)` chains kept exactly).
+ */
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger'] {
+  background: none;
+  color: var(--ds-color-text);
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='avatar'] {
+  background: var(--ds-color-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger'] [data-part='avatar'],
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'] [data-part='avatar'] {
+  background: var(--ds-color-primary);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='avatar-img'] {
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shadow-xl);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-part='item'] {
+  border-left: 3px solid transparent;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-active='true'] {
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+  border-left: 3px solid var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-focused='true'] {
+  background: var(--ds-color-bg-muted, var(--ds-color-neutral-100));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='meta'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='online-dot'] {
+  background: var(--ds-color-success);
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='badge'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: 9px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='settings'] {
+  background: none;
+  color: var(--ds-color-text-muted);
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='divider'] {
+  background: var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create'] {
+  background: none;
+  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create'][data-part='create'] {
+  border: 1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='user-email'] {
+  color: var(--ds-color-text-muted);
+}

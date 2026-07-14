@@ -1,0 +1,49 @@
+/**
+ * LocaleSwitcher — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), to beat
+ * the tenant's unlayered `…*` border-color floor at (0,3,1). `border: none`
+ * resets carry no color and stay at (0,3,0). Non-border paint wins at (0,3,0).
+ *
+ * The option's three-way background was `isFocused ? hoverBg : isActive ?
+ * insetBg : transparent`, so focus outranks active: the [data-focused] rule is
+ * ordered AFTER [data-active] so it wins at equal specificity when a row is
+ * both. Modern's focus/active values genuinely differ (hoverBg carries a
+ * fallback, insetBg does not) — the divergence is preserved, not normalized
+ * (rustic collapses both to one token; that asymmetry is intentional).
+ *
+ * Values transcribed verbatim from engines/modern.tsx.
+ */
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true'] {
+  background: var(--ds-surface-inset, var(--ds-color-neutral-100));
+}

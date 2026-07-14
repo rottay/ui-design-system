@@ -26,10 +26,6 @@ const triggerBaseStyle: CSSProperties = {
   alignItems: 'center',
   justifyContent: 'center',
   gap: 6,
-  background: 'transparent',
-  color: 'var(--ds-color-text-primary, #1a1a1a)',
-  border: '1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9))',
-  borderRadius: 'var(--ds-radius-md, 8px)',
   cursor: 'pointer',
   fontFamily: 'inherit',
   lineHeight: 1,
@@ -59,10 +55,6 @@ const dropdownStyle: CSSProperties = {
   minWidth: 180,
   maxHeight: 280,
   overflowY: 'auto',
-  background: 'var(--ds-surface-card, #fff)',
-  border: '1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9))',
-  borderRadius: 'var(--ds-radius-lg, 12px)',
-  boxShadow: 'var(--ds-elevation-2, 0 4px 12px rgba(0,0,0,0.12))',
   padding: 4,
 };
 
@@ -71,13 +63,9 @@ const menuItemBaseStyle: CSSProperties = {
   alignItems: 'center',
   gap: 8,
   padding: '8px 12px',
-  borderRadius: 'var(--ds-radius-md, 8px)',
   fontSize: 'var(--ds-font-size-md, 16px)',
   cursor: 'pointer',
   transition: 'background 150ms ease-out',
-  color: 'var(--ds-color-text-primary, #1a1a1a)',
-  background: 'transparent',
-  border: 'none',
   width: '100%',
   textAlign: 'left' as const,
   fontFamily: 'inherit',
@@ -287,11 +275,6 @@ export default function RusticLocaleSwitcher(props: LocaleSwitcherProps) {
                 style={{
                   ...menuItemBaseStyle,
                   fontWeight: isActive ? 600 : 400,
-                  background: isFocused
-                    ? 'var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5))'
-                    : isActive
-                      ? 'var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5))'
-                      : 'transparent',
                 }}
                 onMouseEnter={() => setFocusIndex(idx)}
                 onMouseLeave={() => { if (focusIndex === idx) setFocusIndex(-1); }}
@@ -311,7 +294,7 @@ export default function RusticLocaleSwitcher(props: LocaleSwitcherProps) {
                     viewBox="0 0 20 20"
                     fill="currentColor"
                     data-part="check"
-                    style={{ color: 'var(--ds-color-primary, #1677ff)', flexShrink: 0 }}
+                    style={{ flexShrink: 0 }}
                     aria-hidden="true"
                   >
                     <path

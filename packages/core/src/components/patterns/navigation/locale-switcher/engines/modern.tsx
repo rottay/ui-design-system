@@ -17,7 +17,7 @@
 import React, { useState, useRef, useEffect, useCallback, type CSSProperties } from 'react';
 import type { LocaleSwitcherProps, LocaleDef } from '../LocaleSwitcher.types';
 import { DEFAULT_LOCALES } from '../LocaleSwitcher.types';
-import { popupPanelStyle, menuItemStyle } from '../../../_internal/engines/modern/styles';
+import { popupPanelStyle } from '../../../_internal/engines/modern/styles';
 
 /* ------------------------------------------------------------------ */
 /*  Check-mark SVG path for the active locale indicator                */
@@ -30,7 +30,7 @@ const CheckIcon = () => (
     viewBox="0 0 20 20"
     fill="currentColor"
     data-part="check"
-    style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}
+    style={{ flexShrink: 0 }}
     aria-hidden="true"
   >
     <path
@@ -66,10 +66,6 @@ const ChevronIcon = () => (
 /*  Trigger button base styles                                         */
 /* ------------------------------------------------------------------ */
 const triggerBaseStyle: CSSProperties = {
-  background: 'transparent',
-  color: 'var(--ds-color-text-primary)',
-  border: '1px solid var(--ds-color-border-subtle, var(--ds-color-border))',
-  borderRadius: 'var(--ds-radius-md)',
   cursor: 'pointer',
   display: 'inline-flex',
   alignItems: 'center',
@@ -93,11 +89,6 @@ const triggerMdStyle: CSSProperties = {
   padding: '0 10px',
   fontSize: 14,
 };
-
-/* ------------------------------------------------------------------ */
-/*  Menu item hover style (applied via onMouseEnter / focusIndex)       */
-/* ------------------------------------------------------------------ */
-const menuItemHoverBg = 'var(--ds-surface-inset, var(--ds-color-neutral-100))';
 
 /**
  * Modern (token-driven) implementation of the LocaleSwitcher pattern.
@@ -297,13 +288,16 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
                 data-locale-option
                 data-testid={`locale-option-${loc.code}`}
                 style={{
-                  ...menuItemStyle,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  padding: '8px 12px',
+                  fontSize: 14,
+                  cursor: 'pointer',
+                  transition: 'background var(--ds-motion-fast) ease-out',
+                  width: '100%',
+                  textAlign: 'left',
                   fontWeight: isActive ? 600 : 400,
-                  background: isFocused
-                    ? menuItemHoverBg
-                    : isActive
-                      ? 'var(--ds-surface-inset)'
-                      : 'transparent',
                 }}
                 onMouseEnter={() => setFocusIndex(idx)}
                 onMouseLeave={() => { if (focusIndex === idx) setFocusIndex(-1); }}

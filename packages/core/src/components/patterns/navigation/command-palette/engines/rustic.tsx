@@ -2,10 +2,10 @@
 
 /**
  * @fileoverview Rustic (Vanilla CSS) engine for the CommandPalette pattern.
- * Renders a searchable command list in a hand-crafted fixed overlay using only
- * inline styles backed by --ds-* design tokens. Includes custom CSS keyframe
- * animations (backdrop fade-in, panel scale-in) injected via an inline <style>
- * tag, and a left-border accent indicator for the active item.
+ * Renders a searchable command list in a hand-crafted fixed overlay. Paint and the
+ * entrance keyframe animations (backdrop fade-in, panel scale-in) live in the engine
+ * skin (`tokens/css/engines/rustic/skin/command-palette.css`); a left-border accent
+ * indicates the active item.
  *
  * @example
  * <RusticCommandPalette
@@ -128,22 +128,14 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
     paddingTop: '15vh',
   };
 
-  // Backdrop uses both background color and backdrop-filter blur for depth.
-  // WebkitBackdropFilter is included for Safari compatibility.
   const backdrop: React.CSSProperties = {
     position: 'absolute',
     inset: 0,
-    background: 'var(--ds-command-palette-backdrop, var(--ds-overlay-bg))',
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
     animation: `ds-cmd-backdrop-in ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   };
 
   const dialog: React.CSSProperties = {
     position: 'relative',
-    background: 'var(--ds-command-palette-bg, var(--ds-color-bg-elevated))',
-    borderRadius: 'var(--ds-radius-lg, 12px)',
-    boxShadow: 'var(--ds-command-palette-shadow, var(--ds-shadow-dialog, var(--ds-shadow-xl)))',
     width: '100%',
     maxWidth: 560,
     overflow: 'hidden',
@@ -154,12 +146,8 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '16px 20px',
-    border: 'none',
-    outline: 'none',
     fontSize: 18,
     fontWeight: 400,
-    background: 'transparent',
-    color: 'var(--ds-color-text, var(--ds-color-text-primary))',
     letterSpacing: '-0.01em',
   };
 
@@ -168,7 +156,6 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
     fontWeight: 600,
     textTransform: 'uppercase',
     letterSpacing: 'var(--ds-typography-heading-letter-spacing, 0.08em)',
-    color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))',
     padding: '12px 20px 6px',
   };
 
@@ -192,34 +179,8 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
           padding: '10px 20px',
           cursor: item.disabled ? 'not-allowed' : 'pointer',
           opacity: item.disabled ? 0.5 : 1,
-          background: isSelected
-            ? 'var(--ds-command-palette-item-active-bg, var(--ds-color-primary-50))'
-            : 'transparent',
-          // The left border accent marks the keyboard-active item. A transparent
-          // border on inactive items reserves the 3px space so content doesn't
-          // shift horizontally when the selection moves.
-          borderLeft: isSelected
-            ? '3px solid var(--ds-command-palette-item-active-border, var(--ds-color-primary-500))'
-            : '3px solid transparent',
           transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
           marginLeft: -1,
-        }}
-        // Imperative hover styling because inline styles cannot express :hover
-        // pseudo-selectors. Only applied to non-selected items to avoid
-        // overriding the active highlight.
-        onMouseEnter={(e) => {
-          if (!isSelected) {
-            const el = e.currentTarget as HTMLElement;
-            el.style.borderLeftColor = 'var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300))';
-            el.style.background = 'var(--ds-command-palette-item-hover-bg, var(--ds-color-bg-hover))';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isSelected) {
-            const el = e.currentTarget as HTMLElement;
-            el.style.borderLeftColor = 'transparent';
-            el.style.background = 'transparent';
-          }
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -227,7 +188,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
           <div>
             <div style={{ fontWeight: 500, fontSize: 14 }}>{item.label}</div>
             {item.description && (
-              <div data-part="description" style={{ fontSize: 12, color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))' }}>
+              <div data-part="description" style={{ fontSize: 12 }}>
                 {item.description}
               </div>
             )}
@@ -238,14 +199,9 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
             data-part="shortcut"
             style={{
               padding: '3px 8px',
-              borderRadius: 'var(--ds-radius-sm, 6px)',
-              border: '1px solid var(--ds-command-palette-shortcut-border, var(--ds-color-border))',
-              background: 'var(--ds-command-palette-shortcut-bg, var(--ds-color-surface-muted, var(--ds-color-neutral-50)))',
               fontSize: 11,
               fontWeight: 500,
               fontFamily: 'var(--ds-font-family-mono, ui-monospace, monospace)',
-              color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))',
-              boxShadow: 'var(--ds-command-palette-shortcut-shadow, var(--ds-shadow-sm))',
               letterSpacing: '0.02em',
             }}
           >
@@ -262,12 +218,9 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
 
   return (
     <div className="ds-pattern-command-palette ds-engine-rustic" data-part="root" style={overlay}>
-      {/* Inject CSS keyframes for entrance animations. Using an inline <style>
-          tag keeps the rustic engine fully self-contained with no external CSS. */}
-      <style>{`@keyframes ds-cmd-backdrop-in { from { opacity: 0; } to { opacity: 1; } } @keyframes ds-cmd-panel-in { from { opacity: 0; transform: scale(0.96) translateY(-10px); } to { opacity: 1; transform: scale(1) translateY(0); } }`}</style>
       <div style={backdrop} data-part="backdrop" onClick={() => onOpenChange(false)} />
       <div className={className} data-part="dialog" style={dialog}>
-        <div data-part="search" style={{ borderBottom: '1px solid var(--ds-command-palette-border, var(--ds-color-border))' }}>
+        <div data-part="search">
           <input
             ref={inputRef}
             type="text"
@@ -277,15 +230,6 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
             value={query}
             onChange={(e) => { setQuery(e.target.value); onSearch?.(e.target.value); }}
             onKeyDown={handleKeyDown}
-            // Add a subtle inset shadow line on focus to indicate the active
-            // input area, matching the Rustic personality's refined micro-feedback.
-            onFocus={(e) => {
-              (e.currentTarget.parentElement as HTMLElement).style.boxShadow =
-                'inset 0 -1px 0 0 var(--ds-command-palette-focus-line, var(--ds-color-primary-200))';
-            }}
-            onBlur={(e) => {
-              (e.currentTarget.parentElement as HTMLElement).style.boxShadow = 'none';
-            }}
           />
         </div>
         <div style={{ maxHeight, overflowY: 'auto', padding: '4px 0' }}>
@@ -300,7 +244,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
           )}
           {Object.entries(grouped).map(([group, groupItems]) => (
             <div key={group}>
-              {group && <div style={groupLabel}>{group}</div>}
+              {group && <div data-part="group-label" style={groupLabel}>{group}</div>}
               {groupItems.map((item) => {
                 itemIndex++;
                 return renderItem(item, itemIndex);
@@ -313,7 +257,6 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
               style={{
                 textAlign: 'center',
                 padding: '24px 0',
-                color: 'var(--ds-command-palette-empty-color, var(--ds-color-text-muted))',
                 fontSize: 14,
               }}
             >
@@ -325,10 +268,8 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
           <div
             data-part="footer"
             style={{
-              borderTop: '1px solid var(--ds-command-palette-border, var(--ds-color-border))',
               padding: '8px 16px',
               fontSize: 12,
-              color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))',
             }}
           >
             {footer}

@@ -1,0 +1,95 @@
+/**
+ * WorkspaceSwitcher — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), or a
+ * contract attribute (`[data-active]`), to beat the tenant's unlayered `…*`
+ * border-color floor at (0,3,1). `border: none` resets carry no color and stay
+ * at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * The `[data-part='panel']` rules re-express what `popupPanelStyle` supplied by
+ * spread: the spread set `boxShadow: var(--ds-elevation-2)` INLINE and the JSX
+ * overrode it to `elevation-3` on the same element — inline wins over any skin,
+ * so the panel surface had to move off the spread entirely to become skinnable
+ * (padding stays inline). Byte-identical render.
+ *
+ * The row's three-way background was `isFocused ? inset : isActive ? tint : {}`,
+ * so focus outranks active: the [data-focused] rule is ordered AFTER
+ * [data-active] to win at equal specificity when a row is both; the row's
+ * left-border color depends only on active, so it lives on the active rule and
+ * survives when focus overrides the background.
+ *
+ * Values transcribed verbatim from engines/modern.tsx.
+ */
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-fallback'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  border-color: var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='online-dot'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='badge'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='divider'][data-part='divider'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'][data-part='create'] {
+  border: 1px solid var(--ds-color-border);
+}

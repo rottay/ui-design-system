@@ -1,0 +1,161 @@
+/**
+ * EnvironmentToggle — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the `data-part` REPEATED (0,2,0), or a contract
+ * attribute (`[data-variant]`/`[data-active]`), to beat the tenant's unlayered
+ * `…*` border-color floor at (0,3,1). `border: none` resets carry no color and
+ * stay at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * THE HATCH. `EnvironmentDef.color` is consumer-supplied config data — it cannot
+ * live in a static rule, so it rides two custom properties emitted inline
+ * (quoted keys = uncounted):
+ *   --ds-envtoggle-accent       = activeEnv.color / env.color (the raw color)
+ *   --ds-envtoggle-accent-soft  = activeEnv.color + '15'      (the banner tint)
+ * The `'15'` suffix is a two-digit HEX ALPHA byte (0x15 = 21/255 ≈ 8.24%), NOT
+ * 15% — so the value is passed through ALREADY CONCATENATED and consumed
+ * directly (`background: var(--ds-envtoggle-accent-soft)`); no color-mix, no
+ * percentage, no arithmetic. Byte-exact by construction.
+ *
+ * The three toggle variants share `[data-part='option']` but paint differently,
+ * so option rules are scoped by the parent toggle's `[data-variant]`. Active
+ * state selects the accent; position selects the segmented corner radii.
+ *
+ * The `[data-part='panel']` rules re-express what `popupPanelStyle` supplied by
+ * spread: the spread set `boxShadow: var(--ds-elevation-2)` INLINE and the JSX
+ * overrode it to `elevation-3` on the same element — inline wins over any skin,
+ * so the surface had to move off the spread to be skinnable (padding stays
+ * inline). Byte-identical render.
+ *
+ * Values transcribed verbatim from engines/modern.tsx.
+ */
+
+/* dropdown trigger ------------------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+/* status dot — trigger + dropdown option (both read the per-element accent) */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='dot'] {
+  background: var(--ds-envtoggle-accent);
+}
+
+/* pill badge — trigger + dropdown option (spread pillBadgeSmStyle keeps its
+   non-paint keys inline; bg rides the accent, text color is a static token) */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='badge'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* dropdown panel (was popupPanelStyle + elevation-3 override) ------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* dropdown option (active row highlight) + check ------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'][data-active='true'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+/* pills variant --------------------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-envtoggle-accent);
+}
+
+/* segmented (default toggle) variant ------------------------------------ */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='first'] {
+  border-radius: var(--ds-radius-md) 0 0 var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='last'] {
+  border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='middle'] {
+  border-radius: 0;
+}
+
+/* non-production banner (soft tint bg + accent border/text) -------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'] {
+  background: var(--ds-envtoggle-accent-soft);
+  color: var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'][data-part='banner'] {
+  border-bottom: 2px solid var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot'] {
+  background: var(--ds-envtoggle-accent);
+}
+
+/* production-confirmation modal ----------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-dialog'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-cancel'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-submit'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-backdrop'] {
+  background: var(--ds-color-alpha-black-50);
+}

@@ -1,0 +1,83 @@
+/**
+ * ShortcutsOverlay — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), to
+ * beat the tenant's unlayered `…*` border-color floor at (0,3,1). `border:
+ * none`/`outline: none` resets carry no color and stay at (0,3,0). Non-border
+ * paint wins unlayered at (0,3,0).
+ *
+ * Values transcribed verbatim from engines/rustic.tsx. The rustic engine reads
+ * the component's own `--ds-shortcuts-overlay-*` namespace (backdrop/bg/shadow/
+ * kbd-bg) with generic fallbacks; both are preserved exactly (modern reads
+ * generic tokens only — engine asymmetry preserved). 100% STATIC.
+ */
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='backdrop'] {
+  background: var(--ds-shortcuts-overlay-backdrop, var(--ds-color-bg-overlay));
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='dialog'] {
+  background: var(--ds-shortcuts-overlay-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shortcuts-overlay-shadow, var(--ds-shadow-dialog));
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='close'] {
+  background: transparent;
+  color: var(--ds-color-text-muted);
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='search'][data-part='search'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='input'] {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ds-color-text);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='category-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='description'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd'] {
+  background: var(--ds-shortcuts-overlay-kbd-bg, var(--ds-color-bg-secondary));
+  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd'][data-part='kbd'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='footer'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}

@@ -40,10 +40,6 @@ const dropdownStyle: CSSProperties = {
   zIndex: 50,
   width: 280,
   maxHeight: 440,
-  background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-  border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  borderRadius: 'var(--ds-radius-lg, 12px)',
-  boxShadow: 'var(--ds-shadow-xl)',
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
@@ -51,10 +47,8 @@ const dropdownStyle: CSSProperties = {
 
 const headerStyle: CSSProperties = {
   padding: '8px 12px',
-  borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
   fontSize: 'var(--ds-font-size-xs, 12px)',
   fontWeight: 600,
-  color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
   textTransform: 'uppercase',
   letterSpacing: '0.05em',
 };
@@ -62,34 +56,26 @@ const headerStyle: CSSProperties = {
 const avatarStyle = (size: number): CSSProperties => ({
   width: size,
   height: size,
-  borderRadius: 'var(--ds-radius-md, 8px)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   fontWeight: 600,
   fontSize: size > 28 ? 13 : 10,
-  background: 'var(--ds-color-primary)',
-  color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
   overflow: 'hidden',
   flexShrink: 0,
 });
 
 const linkBtnStyle: CSSProperties = {
-  background: 'none',
-  border: 'none',
   padding: '2px 4px',
   cursor: 'pointer',
-  color: 'var(--ds-color-text-muted)',
   fontSize: 12,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  borderRadius: 'var(--ds-radius-sm, 6px)',
 };
 
 const dividerStyle: CSSProperties = {
   height: 1,
-  background: 'var(--ds-color-border-primary, var(--ds-color-neutral-200))',
   margin: 0,
 };
 
@@ -184,12 +170,8 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           alignItems: 'center',
           gap: 8,
           padding: position === 'sidebar' ? '6px 10px' : '4px 8px',
-          background: 'none',
-          border: 'none',
           cursor: 'pointer',
-          borderRadius: 'var(--ds-radius-md, 8px)',
           width: position === 'sidebar' ? '100%' : undefined,
-          color: 'var(--ds-color-text)',
         }}
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
@@ -259,14 +241,6 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     gap: 10,
                     padding: '8px 12px',
                     cursor: 'pointer',
-                    background: isFocused
-                      ? 'var(--ds-color-bg-muted, var(--ds-color-neutral-100))'
-                      : isActive
-                      ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))'
-                      : undefined,
-                    borderLeft: isActive
-                      ? '3px solid var(--ds-color-primary)'
-                      : '3px solid transparent',
                     transition: 'background 0.15s',
                   }}
                   onClick={() => {
@@ -298,15 +272,15 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                         {ws.name}
                       </span>
                       {isActive && (
-                        <span data-part="check" style={{ color: 'var(--ds-color-primary)', fontSize: 12 }}>{'\u2713'}</span>
+                        <span data-part="check" style={{ fontSize: 12 }}>{'\u2713'}</span>
                       )}
                     </div>
-                    <div data-part="meta" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+                    <div data-part="meta" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--ds-font-size-xs, 12px)' }}>
                       {ws.role && <span>{ws.role}</span>}
                       {ws.plan && <span style={{ textTransform: 'capitalize' }}>{ws.plan}</span>}
                       {typeof ws.online === 'number' && (
                         <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                          <span data-part="online-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--ds-color-success)', display: 'inline-block' }} />
+                          <span data-part="online-dot" style={{ width: 5, height: 5, display: 'inline-block' }} />
                           {ws.online}
                         </span>
                       )}
@@ -317,9 +291,6 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       <span data-part="badge" style={{
                         minWidth: 18,
                         height: 18,
-                        borderRadius: 9,
-                        background: 'var(--ds-color-primary)',
-                        color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
                         fontSize: 10,
                         fontWeight: 600,
                         display: 'flex',
@@ -360,12 +331,8 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   style={{
                     width: '100%',
                     padding: '6px 12px',
-                    background: 'none',
-                    border: '1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-                    borderRadius: 'var(--ds-radius-md, 8px)',
                     cursor: 'pointer',
                     fontSize: 'var(--ds-font-size-sm, 14px)',
-                    color: 'var(--ds-color-text-muted)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -391,17 +358,13 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                 style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px' }}
                 data-testid="workspace-current-user"
               >
-                <div data-part="avatar" style={{
-                  ...avatarStyle(28),
-                  borderRadius: '50%',
-                  background: 'var(--ds-color-accent)',
-                }}>
+                <div data-part="avatar" style={avatarStyle(28)}>
                   {currentUser.avatar ? (
                     <img
                       src={currentUser.avatar}
                       alt={currentUser.name}
                       data-part="avatar-img"
-                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   ) : (
                     getInitials(currentUser.name)
@@ -420,7 +383,6 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   {currentUser.email && (
                     <div data-part="user-email" style={{
                       fontSize: 'var(--ds-font-size-xs, 12px)',
-                      color: 'var(--ds-color-text-muted)',
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',

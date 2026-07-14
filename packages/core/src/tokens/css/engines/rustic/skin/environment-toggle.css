@@ -1,0 +1,175 @@
+/**
+ * EnvironmentToggle — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the `data-part` REPEATED (0,2,0), or a second
+ * contract attribute (`[data-variant]`/`[data-active]`), to beat the tenant's
+ * unlayered `…*` border-color floor at (0,3,1). `border: none` resets carry no
+ * color and stay at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * THE HATCH. `EnvironmentDef.color` is consumer-supplied config data, so it
+ * rides two custom properties emitted inline (quoted keys = uncounted):
+ *   --ds-envtoggle-accent       = the raw color (dots, active option, badges,
+ *                                 banner border/text)
+ *   --ds-envtoggle-accent-soft  = color + '15' (the banner tint)
+ * The `'15'` suffix is a two-digit HEX ALPHA byte (≈ 8.24%), NOT 15% — the value
+ * is passed through ALREADY CONCATENATED and consumed directly; no color-mix, no
+ * percentage, no arithmetic.
+ *
+ * ds-pulse IS DEAD: `dotStyle` names `animation: ds-pulse 2s infinite` for the
+ * banner dot, but `@keyframes ds-pulse` exists nowhere, so the rustic banner dot
+ * has never pulsed. It is left dead — defining the keyframe would start it
+ * pulsing (a visual change). Modern's dot pulses via Tailwind's real
+ * `animate-pulse`; the asymmetry is intentional and preserved.
+ *
+ * The three variants share `[data-part='option']` and `[data-part='badge']` but
+ * paint differently, so those rules are scoped by the parent toggle's
+ * `[data-variant]`. The dropdown badges ride the accent; the pills/segmented
+ * badge is a static alpha pill (renderBadge). All values (incl. raw token
+ * fallbacks) transcribed verbatim from engines/rustic.tsx.
+ */
+
+/* status / banner dots (dotStyle) --------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='dot'],
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner-dot'] {
+  background: var(--ds-envtoggle-accent);
+  border-radius: 50%;
+}
+
+/* segmented (default toggle) container (toggleContainerStyle) ------------ */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='toggle'][data-variant='toggle'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+/* dropdown panel (dropdownStyle) ---------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-md, 8px);
+  box-shadow: var(--ds-shadow-lg);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* dropdown trigger (button) --------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger'] {
+  background: none;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* dropdown options + check ---------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border: none;
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option'][data-active='true'] {
+  background: var(--ds-color-bg-muted, var(--ds-color-neutral-100));
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+/* pills variant options (pillBtnStyle) ---------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border: none;
+}
+
+/* segmented variant options (btnStyle) ---------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border: none;
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* badges: pills/segmented (static alpha pill) vs dropdown (accent) ------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='badge'],
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='badge'] {
+  background: var(--ds-color-alpha-white-20);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='badge'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: 3px;
+}
+
+/* non-production banner (soft tint bg + accent border/text) -------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner'] {
+  background: var(--ds-envtoggle-accent-soft);
+  color: var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner'][data-part='banner'] {
+  border-bottom: 2px solid var(--ds-envtoggle-accent);
+}
+
+/* production-confirmation modal ----------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-overlay'] {
+  background: var(--ds-color-alpha-black-40);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-dialog'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shadow-2xl);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-message'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel'] {
+  background: none;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel'][data-part='confirm-cancel'] {
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-submit'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}

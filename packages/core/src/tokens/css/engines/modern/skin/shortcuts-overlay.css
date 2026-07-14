@@ -1,0 +1,71 @@
+/**
+ * ShortcutsOverlay — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * border-color on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
+ * (0,2,0). `border: none`/`outline: none` resets carry no color and stay at
+ * (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * Values transcribed verbatim from engines/modern.tsx. This component is 100%
+ * STATIC — no state selectors, no hatch, no keyframes.
+ */
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
+  background: var(--ds-color-bg-overlay);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='header'][data-part='header'] {
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='close'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: 50%;
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='search'][data-part='search'] {
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='input'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'] {
+  background: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'][data-part='kbd'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'][data-part='footer'] {
+  border-color: var(--ds-color-border);
+}

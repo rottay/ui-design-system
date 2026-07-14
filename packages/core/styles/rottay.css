@@ -32460,6 +32460,490 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
+ * Modern CommandPalette skin (WO-SKIN-06 CK-G).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style` (the root/dialog forward the caller's `style`/`className`).
+ *
+ * SCOPE ROOT: the palette's outer `<div>` carries
+ * `ds-pattern-command-palette ds-engine-modern` + `data-part='root'`; every painted
+ * element is a descendant with its own `data-part`. NOT portaled — the dialog is a
+ * `position:fixed` DOM descendant of the tenant-scoped root, so descendant selectors
+ * from the scope class reach it (no portal-root escape).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint wins unlayered at (0,3,0). A `border: none` reset carries no color
+ * and is exempt.
+ *
+ * TOKENS: modern reads GENERIC tokens (--ds-color, --ds-surface, --ds-elevation)
+ * and never the --ds-command-palette-* namespace — that namespace is rustic-only, and
+ * mapping modern onto it would newly make modern tenant-themeable through a channel it
+ * has never honored. Two vocabularies, one per engine; the split is preserved verbatim.
+ *
+ * INTERACTION: the keyboard-active row keys on `[data-active='true']`; pointer hover
+ * keys on `:hover:not([data-active='true'])` so it never repaints the keyboard-selected
+ * row — the exact `activeIndex !== idx` guard the removed onMouseEnter/Leave writes had.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* backdrop: scrim + sanctioned glass layer. Frost tint + backdrop blur scale with
+   --ds-effect-intensity, collapsing to a plain scrim at 0; glass is sanctioned on
+   overlay backdrops only (spec section 5). */
+.ds-pattern-command-palette.ds-engine-modern [data-part='backdrop'] {
+  background-color: var(--ds-color-bg-overlay);
+  background-image: linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint));
+  backdrop-filter: var(--ds-glass-backdrop-filter);
+  -webkit-backdrop-filter: var(--ds-glass-backdrop-filter);
+}
+
+/* dialog card (radius rides the `rounded-xl` Tailwind utility on the element). */
+.ds-pattern-command-palette.ds-engine-modern [data-part='dialog'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-2);
+}
+
+/* search wrapper bottom rule */
+.ds-pattern-command-palette.ds-engine-modern [data-part='search'][data-part='search'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+/* search input (the `border: none` reset is color-free → exempt from the floor;
+   outline is reset via the element's `focus:outline-none` Tailwind class, not here). */
+.ds-pattern-command-palette.ds-engine-modern [data-part='input'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+/* grouped section label. The "Recent" heading is intentionally NOT keyed here: it
+   carries no data-part and keeps the shared section-title muted color inline, while
+   the grouped label reads --ds-search-category-color (a live per-tenant override). */
+.ds-pattern-command-palette.ds-engine-modern [data-part='group-label'] {
+  color: var(--ds-search-category-color, var(--ds-color-text-muted));
+}
+
+/* row: keyboard-active and pointer-hover-while-not-active both resolve to the inset
+   surface; the `:not([data-active='true'])` guard keeps a hovered pointer off the
+   keyboard-selected row (a plain :hover would light two rows at once). */
+.ds-pattern-command-palette.ds-engine-modern [data-part='item'][data-active='true'],
+.ds-pattern-command-palette.ds-engine-modern [data-part='item']:hover:not([data-active='true']) {
+  background: var(--ds-surface-inset);
+}
+
+/* row description */
+.ds-pattern-command-palette.ds-engine-modern [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* shortcut kbd badge (padding/font ride inline props on the element) */
+.ds-pattern-command-palette.ds-engine-modern [data-part='shortcut'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-inset);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='shortcut'][data-part='shortcut'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/* empty state */
+.ds-pattern-command-palette.ds-engine-modern [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* footer */
+.ds-pattern-command-palette.ds-engine-modern [data-part='footer'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-command-palette.ds-engine-modern [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/**
+ * EnvironmentToggle — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the `data-part` REPEATED (0,2,0), or a contract
+ * attribute (`[data-variant]`/`[data-active]`), to beat the tenant's unlayered
+ * `…*` border-color floor at (0,3,1). `border: none` resets carry no color and
+ * stay at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * THE HATCH. `EnvironmentDef.color` is consumer-supplied config data — it cannot
+ * live in a static rule, so it rides two custom properties emitted inline
+ * (quoted keys = uncounted):
+ *   --ds-envtoggle-accent       = activeEnv.color / env.color (the raw color)
+ *   --ds-envtoggle-accent-soft  = activeEnv.color + '15'      (the banner tint)
+ * The `'15'` suffix is a two-digit HEX ALPHA byte (0x15 = 21/255 ≈ 8.24%), NOT
+ * 15% — so the value is passed through ALREADY CONCATENATED and consumed
+ * directly (`background: var(--ds-envtoggle-accent-soft)`); no color-mix, no
+ * percentage, no arithmetic. Byte-exact by construction.
+ *
+ * The three toggle variants share `[data-part='option']` but paint differently,
+ * so option rules are scoped by the parent toggle's `[data-variant]`. Active
+ * state selects the accent; position selects the segmented corner radii.
+ *
+ * The `[data-part='panel']` rules re-express what `popupPanelStyle` supplied by
+ * spread: the spread set `boxShadow: var(--ds-elevation-2)` INLINE and the JSX
+ * overrode it to `elevation-3` on the same element — inline wins over any skin,
+ * so the surface had to move off the spread to be skinnable (padding stays
+ * inline). Byte-identical render.
+ *
+ * Values transcribed verbatim from engines/modern.tsx.
+ */
+
+/* dropdown trigger ------------------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+/* status dot — trigger + dropdown option (both read the per-element accent) */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='dot'] {
+  background: var(--ds-envtoggle-accent);
+}
+
+/* pill badge — trigger + dropdown option (spread pillBadgeSmStyle keeps its
+   non-paint keys inline; bg rides the accent, text color is a static token) */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='badge'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* dropdown panel (was popupPanelStyle + elevation-3 override) ------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+/* dropdown option (active row highlight) + check ------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='dropdown'] [data-part='option'][data-active='true'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+/* pills variant --------------------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='pills'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-envtoggle-accent);
+}
+
+/* segmented (default toggle) variant ------------------------------------ */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='first'] {
+  border-radius: var(--ds-radius-md) 0 0 var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='last'] {
+  border-radius: 0 var(--ds-radius-md) var(--ds-radius-md) 0;
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-variant='toggle'] [data-part='option'][data-position='middle'] {
+  border-radius: 0;
+}
+
+/* non-production banner (soft tint bg + accent border/text) -------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'] {
+  background: var(--ds-envtoggle-accent-soft);
+  color: var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='banner'][data-part='banner'] {
+  border-bottom: 2px solid var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='banner-dot'] {
+  background: var(--ds-envtoggle-accent);
+}
+
+/* production-confirmation modal ----------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-dialog'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-cancel'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-submit'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-environment-toggle.ds-engine-modern [data-part='confirm-backdrop'] {
+  background: var(--ds-color-alpha-black-50);
+}
+
+/**
+ * WorkspaceSwitcher — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), or a
+ * contract attribute (`[data-active]`), to beat the tenant's unlayered `…*`
+ * border-color floor at (0,3,1). `border: none` resets carry no color and stay
+ * at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * The `[data-part='panel']` rules re-express what `popupPanelStyle` supplied by
+ * spread: the spread set `boxShadow: var(--ds-elevation-2)` INLINE and the JSX
+ * overrode it to `elevation-3` on the same element — inline wins over any skin,
+ * so the panel surface had to move off the spread entirely to become skinnable
+ * (padding stays inline). Byte-identical render.
+ *
+ * The row's three-way background was `isFocused ? inset : isActive ? tint : {}`,
+ * so focus outranks active: the [data-focused] rule is ordered AFTER
+ * [data-active] to win at equal specificity when a row is both; the row's
+ * left-border color depends only on active, so it lives on the active rule and
+ * survives when focus overrides the background.
+ *
+ * Values transcribed verbatim from engines/modern.tsx.
+ */
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='avatar-fallback'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-subtle);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-active='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+  border-color: var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='item'][data-focused='true'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='online-dot'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='badge'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='settings'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='divider'][data-part='divider'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-modern [data-part='create'][data-part='create'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/**
+ * ShortcutsOverlay — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * border-color on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
+ * (0,2,0). `border: none`/`outline: none` resets carry no color and stay at
+ * (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * Values transcribed verbatim from engines/modern.tsx. This component is 100%
+ * STATIC — no state selectors, no hatch, no keyframes.
+ */
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='backdrop'] {
+  background: var(--ds-color-bg-overlay);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='dialog'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-3);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='header'][data-part='header'] {
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='close'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: 50%;
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='search'][data-part='search'] {
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='input'] {
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='category-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'] {
+  background: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-sm);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='kbd'][data-part='kbd'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-modern [data-part='footer'][data-part='footer'] {
+  border-color: var(--ds-color-border);
+}
+
+/**
+ * LocaleSwitcher — Modern engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
+ * still yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), to beat
+ * the tenant's unlayered `…*` border-color floor at (0,3,1). `border: none`
+ * resets carry no color and stay at (0,3,0). Non-border paint wins at (0,3,0).
+ *
+ * The option's three-way background was `isFocused ? hoverBg : isActive ?
+ * insetBg : transparent`, so focus outranks active: the [data-focused] rule is
+ * ordered AFTER [data-active] so it wins at equal specificity when a row is
+ * both. Modern's focus/active values genuinely differ (hoverBg carries a
+ * fallback, insetBg does not) — the divergence is preserved, not normalized
+ * (rustic collapses both to one token; that asymmetry is intentional).
+ *
+ * Values transcribed verbatim from engines/modern.tsx.
+ */
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-active='true'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-locale-switcher.ds-engine-modern [data-part='option'][data-focused='true'] {
+  background: var(--ds-surface-inset, var(--ds-color-neutral-100));
+}
+
+/**
  * Rustic StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
@@ -32674,6 +33158,586 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .ds-pattern-page-shell.ds-engine-rustic [data-part='tab'][data-active='true'] {
   border-bottom: 2px solid var(--ds-color-primary);
   color: var(--ds-color-primary);
+}
+
+/**
+ * Rustic CommandPalette skin (WO-SKIN-06 CK-G).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight. Unlayered outranks preflight
+ * and still yields to a caller's inline `style` (the dialog spreads `...style`).
+ *
+ * SCOPE ROOT: the overlay `<div>` carries `ds-pattern-command-palette ds-engine-rustic`
+ * + `data-part='root'`. NOT portaled (position:fixed, DOM descendant of the scope).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting `border-color`
+ * on every element. A border COLOR must reach (0,4,0): two root classes + `data-part`
+ * REPEATED. `3px solid transparent` IS a color and must hold the (0,4,0) floor, or the
+ * inactive row grows a tinted left rail. Non-border paint wins at (0,3,0); `border` and
+ * `outline: none` resets are color-free and exempt.
+ *
+ * TOKENS: rustic honors the tenant-themeable --ds-command-palette-* namespace (with
+ * generic fallbacks). Modern reads generic tokens only — a live cross-engine theming
+ * difference preserved verbatim; do not unify the two vocabularies.
+ *
+ * INTERACTION: the keyboard-active row keys on `[data-active='true']`; pointer hover
+ * keys on `:hover:not([data-active='true'])` — the `!isSelected` guard the removed
+ * onMouseEnter/Leave writes had. The input focus line moves to
+ * `[data-part='search']:focus-within`: the input is the search wrapper's only focusable
+ * child, and the original wrote box-shadow on that parent element.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* entrance keyframes (were injected per-render via an inline <style> tag; the
+   backdrop/dialog `animation` references still name these). */
+@keyframes ds-cmd-backdrop-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes ds-cmd-panel-in {
+  from { opacity: 0; transform: scale(0.96) translateY(-10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* backdrop */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='backdrop'] {
+  background: var(--ds-command-palette-backdrop, var(--ds-overlay-bg));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* dialog card */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='dialog'] {
+  background: var(--ds-command-palette-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-command-palette-shadow, var(--ds-shadow-dialog, var(--ds-shadow-xl)));
+}
+
+/* search wrapper bottom rule + inset focus line (was an imperative box-shadow write
+   on the input's parentElement). */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='search'][data-part='search'] {
+  border-bottom: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='search']:focus-within {
+  box-shadow: inset 0 -1px 0 0 var(--ds-command-palette-focus-line, var(--ds-color-primary-200));
+}
+
+/* search input (border + outline resets are color-free → exempt from the floor) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='input'] {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+/* section label (the Recent heading and the group headers share one const) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='group-label'] {
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+}
+
+/* row — rest. Both channels are explicit in the source ternary's inactive branch;
+   the transparent 3px left rail reserves space so the row does not shift when the
+   selection moves, and must hold (0,4,0) against the tenant border-color floor. */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'] {
+  background: transparent;
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item'] {
+  border-left: 3px solid transparent;
+}
+
+/* row — keyboard-active (data-active) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-active='true'] {
+  background: var(--ds-command-palette-item-active-bg, var(--ds-color-primary-50));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item'][data-active='true'] {
+  border-left-color: var(--ds-command-palette-item-active-border, var(--ds-color-primary-500));
+}
+
+/* row — pointer hover, only while NOT keyboard-active (the !isSelected guard) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item']:hover:not([data-active='true']) {
+  background: var(--ds-command-palette-item-hover-bg, var(--ds-color-bg-hover));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='item'][data-part='item']:hover:not([data-active='true']) {
+  border-left-color: var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300));
+}
+
+/* row description */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='description'] {
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+}
+
+/* shortcut badge (padding/font ride inline props on the element) */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='shortcut'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-command-palette-shortcut-bg, var(--ds-color-surface-muted, var(--ds-color-neutral-50)));
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+  box-shadow: var(--ds-command-palette-shortcut-shadow, var(--ds-shadow-sm));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='shortcut'][data-part='shortcut'] {
+  border: 1px solid var(--ds-command-palette-shortcut-border, var(--ds-color-border));
+}
+
+/* empty state */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-command-palette-empty-color, var(--ds-color-text-muted));
+}
+
+/* footer */
+.ds-pattern-command-palette.ds-engine-rustic [data-part='footer'] {
+  color: var(--ds-command-palette-group-color, var(--ds-color-text-muted));
+}
+.ds-pattern-command-palette.ds-engine-rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-command-palette-border, var(--ds-color-border));
+}
+
+/**
+ * EnvironmentToggle — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the `data-part` REPEATED (0,2,0), or a second
+ * contract attribute (`[data-variant]`/`[data-active]`), to beat the tenant's
+ * unlayered `…*` border-color floor at (0,3,1). `border: none` resets carry no
+ * color and stay at (0,3,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * THE HATCH. `EnvironmentDef.color` is consumer-supplied config data, so it
+ * rides two custom properties emitted inline (quoted keys = uncounted):
+ *   --ds-envtoggle-accent       = the raw color (dots, active option, badges,
+ *                                 banner border/text)
+ *   --ds-envtoggle-accent-soft  = color + '15' (the banner tint)
+ * The `'15'` suffix is a two-digit HEX ALPHA byte (≈ 8.24%), NOT 15% — the value
+ * is passed through ALREADY CONCATENATED and consumed directly; no color-mix, no
+ * percentage, no arithmetic.
+ *
+ * ds-pulse IS DEAD: `dotStyle` names `animation: ds-pulse 2s infinite` for the
+ * banner dot, but `@keyframes ds-pulse` exists nowhere, so the rustic banner dot
+ * has never pulsed. It is left dead — defining the keyframe would start it
+ * pulsing (a visual change). Modern's dot pulses via Tailwind's real
+ * `animate-pulse`; the asymmetry is intentional and preserved.
+ *
+ * The three variants share `[data-part='option']` and `[data-part='badge']` but
+ * paint differently, so those rules are scoped by the parent toggle's
+ * `[data-variant]`. The dropdown badges ride the accent; the pills/segmented
+ * badge is a static alpha pill (renderBadge). All values (incl. raw token
+ * fallbacks) transcribed verbatim from engines/rustic.tsx.
+ */
+
+/* status / banner dots (dotStyle) --------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='dot'],
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner-dot'] {
+  background: var(--ds-envtoggle-accent);
+  border-radius: 50%;
+}
+
+/* segmented (default toggle) container (toggleContainerStyle) ------------ */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='toggle'][data-variant='toggle'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+/* dropdown panel (dropdownStyle) ---------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-md, 8px);
+  box-shadow: var(--ds-shadow-lg);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* dropdown trigger (button) --------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger'] {
+  background: none;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* dropdown options + check ---------------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border: none;
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='option'][data-active='true'] {
+  background: var(--ds-color-bg-muted, var(--ds-color-neutral-100));
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+/* pills variant options (pillBtnStyle) ---------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border: none;
+}
+
+/* segmented variant options (btnStyle) ---------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border: none;
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='option'][data-active='true'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* badges: pills/segmented (static alpha pill) vs dropdown (accent) ------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='pills'] [data-part='badge'],
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='toggle'] [data-part='badge'] {
+  background: var(--ds-color-alpha-white-20);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-variant='dropdown'] [data-part='badge'] {
+  background: var(--ds-envtoggle-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: 3px;
+}
+
+/* non-production banner (soft tint bg + accent border/text) -------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner'] {
+  background: var(--ds-envtoggle-accent-soft);
+  color: var(--ds-envtoggle-accent);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='banner'][data-part='banner'] {
+  border-bottom: 2px solid var(--ds-envtoggle-accent);
+}
+
+/* production-confirmation modal ----------------------------------------- */
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-overlay'] {
+  background: var(--ds-color-alpha-black-40);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-dialog'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shadow-2xl);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-message'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel'] {
+  background: none;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-cancel'][data-part='confirm-cancel'] {
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));
+}
+
+.ds-pattern-environment-toggle.ds-engine-rustic [data-part='confirm-submit'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+/**
+ * WorkspaceSwitcher — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the `data-part` REPEATED (0,2,0), or a contract
+ * attribute (`[data-active]`), to beat the tenant's unlayered `…*` border-color
+ * floor at (0,3,1). `border: none` resets carry no color and stay at (0,3,0).
+ * Non-border paint wins unlayered at (0,3,0).
+ *
+ * AVATAR (three call sites, one part). The trigger and list avatars paint
+ * `background: var(--ds-color-primary)` + `border-radius: var(--ds-radius-md)`;
+ * the current-user avatar diverges to `var(--ds-color-accent)` + `50%` and is
+ * the ONLY `[data-part='avatar']` that is not a descendant of `[data-part=
+ * 'trigger']` or `[data-part='item']`. So the base rule carries the current-user
+ * (minority) values and the trigger/item descendants override them at (0,4,0);
+ * `color` is shared and stays on the base. No new stamp was needed.
+ *
+ * The row's left border is always present (3px, reserving layout space), so it
+ * has a base transparent rule and an active-color override — both reach (0,4,0)
+ * and the active rule is ordered last to win. The row background is
+ * STATE-SELECTED (focus over active); [data-focused] is ordered after
+ * [data-active] for the same reason.
+ *
+ * Values transcribed verbatim from engines/rustic.tsx (raw token fallbacks and
+ * `var(--ds-color-*)` chains kept exactly).
+ */
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger'] {
+  background: none;
+  color: var(--ds-color-text);
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='avatar'] {
+  background: var(--ds-color-accent);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='trigger'] [data-part='avatar'],
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'] [data-part='avatar'] {
+  background: var(--ds-color-primary);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='avatar-img'] {
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shadow-xl);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-part='item'] {
+  border-left: 3px solid transparent;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-active='true'] {
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+  border-left: 3px solid var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='item'][data-focused='true'] {
+  background: var(--ds-color-bg-muted, var(--ds-color-neutral-100));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='check'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='meta'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='online-dot'] {
+  background: var(--ds-color-success);
+  border-radius: 50%;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='badge'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+  border-radius: 9px;
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='settings'] {
+  background: none;
+  color: var(--ds-color-text-muted);
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='divider'] {
+  background: var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create'] {
+  background: none;
+  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='create'][data-part='create'] {
+  border: 1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary));
+}
+
+.ds-pattern-workspace-switcher.ds-engine-rustic [data-part='user-email'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * ShortcutsOverlay — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), to
+ * beat the tenant's unlayered `…*` border-color floor at (0,3,1). `border:
+ * none`/`outline: none` resets carry no color and stay at (0,3,0). Non-border
+ * paint wins unlayered at (0,3,0).
+ *
+ * Values transcribed verbatim from engines/rustic.tsx. The rustic engine reads
+ * the component's own `--ds-shortcuts-overlay-*` namespace (backdrop/bg/shadow/
+ * kbd-bg) with generic fallbacks; both are preserved exactly (modern reads
+ * generic tokens only — engine asymmetry preserved). 100% STATIC.
+ */
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='backdrop'] {
+  background: var(--ds-shortcuts-overlay-backdrop, var(--ds-color-bg-overlay));
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='dialog'] {
+  background: var(--ds-shortcuts-overlay-bg, var(--ds-color-bg-elevated));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shortcuts-overlay-shadow, var(--ds-shadow-dialog));
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='close'] {
+  background: transparent;
+  color: var(--ds-color-text-muted);
+  border: none;
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='search'][data-part='search'] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='input'] {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ds-color-text);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='category-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='description'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd'] {
+  background: var(--ds-shortcuts-overlay-kbd-bg, var(--ds-color-bg-secondary));
+  color: var(--ds-color-text-muted);
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='kbd'][data-part='kbd'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='footer'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-shortcuts-overlay.ds-engine-rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/**
+ * LocaleSwitcher — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), to beat
+ * the tenant's unlayered `…*` border-color floor at (0,3,1). `border: none`
+ * resets carry no color and stay at (0,3,0). Non-border paint wins at (0,3,0).
+ *
+ * The option's background is STATE-SELECTED on focus/active. Rustic collapses
+ * BOTH branches to the same token (`var(--ds-surface-inset, …)`) — it does not
+ * visually distinguish hover-focus from selected-active. That is preserved
+ * exactly (modern's two branches differ; the cross-engine asymmetry is
+ * intentional). The raw hex fallbacks (#1a1a1a / #d9d9d9 / #fff / #f5f5f5 /
+ * #1677ff) are this engine's own and are transcribed verbatim.
+ *
+ * Values transcribed verbatim from engines/rustic.tsx.
+ */
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='check'] {
+  color: var(--ds-color-primary, #1677ff);
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, #1a1a1a);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-surface-card, #fff);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, #1a1a1a);
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-active='true'] {
+  background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-focused='true'] {
+  background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));
 }
 
 /**

@@ -1,0 +1,59 @@
+/**
+ * LocaleSwitcher — Rustic engine skin. DELIBERATELY UNLAYERED (P-47):
+ * every `@layer rottay-*` sorts before Tailwind's base layer, so a layered
+ * rule cannot paint these elements; unlayered outranks preflight and still
+ * yields to a caller's inline `style`.
+ *
+ * SPECIFICITY (P-48): a rule that paints a border COLOR must reach (0,4,0):
+ * two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0), to beat
+ * the tenant's unlayered `…*` border-color floor at (0,3,1). `border: none`
+ * resets carry no color and stay at (0,3,0). Non-border paint wins at (0,3,0).
+ *
+ * The option's background is STATE-SELECTED on focus/active. Rustic collapses
+ * BOTH branches to the same token (`var(--ds-surface-inset, …)`) — it does not
+ * visually distinguish hover-focus from selected-active. That is preserved
+ * exactly (modern's two branches differ; the cross-engine asymmetry is
+ * intentional). The raw hex fallbacks (#1a1a1a / #d9d9d9 / #fff / #f5f5f5 /
+ * #1677ff) are this engine's own and are transcribed verbatim.
+ *
+ * Values transcribed verbatim from engines/rustic.tsx.
+ */
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='check'] {
+  color: var(--ds-color-primary, #1677ff);
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, #1a1a1a);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='trigger'][data-part='trigger'] {
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-surface-card, #fff);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'] {
+  background: transparent;
+  color: var(--ds-color-text-primary, #1a1a1a);
+  border: none;
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-active='true'] {
+  background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));
+}
+
+.ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-focused='true'] {
+  background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));
+}
