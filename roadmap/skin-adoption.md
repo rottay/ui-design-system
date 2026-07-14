@@ -82,8 +82,8 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | --- | --- | --- | --- |
 | **CK-D** | forms + record + workflow + form-surfaces | 591 | CERTIFIED byte-exact (`4418cc9f`) |
 | **CK-B** | headers (5 structures + 4 patterns/misc) | 334 | CERTIFIED byte-exact (`475cf1fb`) |
-| CK-A | dashboard widgets | 439 | pre-step in flight (unblocked — the `variant` prop pins it) |
-| **CK-G** | navigation patterns | 279 | pre-step COMMITTED (`b4e215d6`); **migration in flight** |
+| **CK-A** | dashboard widgets | 439 | pre-step COMMITTED (`cd5b2bcd`); **migration in flight** |
+| **CK-G** | navigation patterns | 279 | CERTIFIED byte-exact (`67ff3f35`) |
 | CK-F | communication | 272 | inventoried |
 | CK-C | workspace chrome | 466 | inventoried — 28 imperative writes, the densest |
 | CK-H2 | misc | ~216 | inventoried |
