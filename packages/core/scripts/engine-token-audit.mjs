@@ -29,6 +29,10 @@
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from "node:fs";
 import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
+import {
+  collectBelowFloorFailures,
+  countPremiumEffectConsumers,
+} from "./lib/effect-consumer-counter.mjs";
 import { countDeadParts } from "./skin-dead-part-audit.mjs";
 import postcss from "postcss";
 import { resolve, dirname, join, sep } from "node:path";
@@ -716,23 +720,21 @@ function fleetInlinePaintCounters() {
 }
 
 /**
- * Count render-layer files that CONSUME each sanctioned premium effect family
+ * Count render-owned files that CONSUME each sanctioned premium effect family
  * (spec section 5): gradient (surface-tint + accent), glass (overlay backdrops),
- * signal-glow. Scans src/components + src/motion (the render layer) and requires
- * a real `var(--ds-<family>...)` usage, so token definitions (premium.css), the
- * compiler, the useTokens() catalog, tenant artifacts, and comment mentions do
- * not count. The premium layer measured 1/0/0 (gradient/glass/glow) dead at the
- * 2026-07-06 baseline; WO-ENG-05 wires each family to > 0 sanctioned consumers
- * (enforced as a floor via MIN below).
+ * signal-glow. Stage 1 moved component paint from TSX into unlayered skin CSS,
+ * so the consumer set is now src/components + src/motion + source skin files.
+ * Only the source skins are scanned (never their two entrypoint imports or
+ * generated bundles), and the helper de-duplicates paths. In CSS, only values
+ * of painted declarations count; custom-property definitions/aliases do not.
+ * The compiler, useTokens() catalog, tenant artifacts, and token-definition
+ * sheets remain outside the consumer set. The premium layer measured 1/0/0
+ * (gradient/glass/glow) dead at the 2026-07-06 baseline; WO-ENG-05 wires each
+ * family to > 0 sanctioned consumers (enforced as a floor via MIN below).
  */
 function countEffectConsumers() {
   const roots = [componentsDir, join(root, "src/motion")];
-  const families = {
-    gradient: /var\(\s*--ds-gradient-/,
-    glass: /var\(\s*--ds-glass-/,
-    glow: /var\(\s*--ds-shadow-glow-/,
-  };
-  const counts = { gradient: 0, glass: 0, glow: 0 };
+  const sourceFiles = [];
   function walk(dir) {
     if (!existsSync(dir)) return;
     for (const entry of readdirSync(dir)) {
@@ -744,14 +746,14 @@ function countEffectConsumers() {
       }
       if (!/\.tsx?$/.test(full)) continue;
       if (/__tests__|\.(test|spec|stories)\./.test(rel)) continue;
-      const text = readFileSync(full, "utf8");
-      for (const [fam, re] of Object.entries(families)) {
-        if (re.test(text)) counts[fam] += 1;
-      }
+      sourceFiles.push(full);
     }
   }
   for (const r of roots) walk(r);
-  return counts;
+  return countPremiumEffectConsumers({
+    sourceFiles,
+    skinFiles: collectSkinFiles(),
+  });
 }
 
 /* ============================================================================
@@ -2536,10 +2538,7 @@ if (mode === "check") {
   for (const [k, expected] of Object.entries(EXACT)) {
     if (counters[k] !== expected) invariant.push(`${k}: ${counters[k]} != required ${expected}`);
   }
-  const belowFloor = [];
-  for (const [k, min] of Object.entries(MIN)) {
-    if ((counters[k] ?? 0) < min) belowFloor.push(`${k}: ${counters[k]} < required >= ${min}`);
-  }
+  const belowFloor = collectBelowFloorFailures(counters, MIN);
   if (risen.length || invariant.length || belowFloor.length || unbaselined.length) {
     console.error("engine-token-audit --check FAILED:");
     for (const u of unbaselined) console.error("  - counter has no baseline, so it gates nothing: " + u);
