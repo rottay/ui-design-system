@@ -396,3 +396,37 @@ per file, that the premise was wrong.
 sites are category A, it is DaisyUI-coupling-free, and it is suppression-risk-free (zero theme.css /
 personality.css rules target any of its components). There is no legacy layer to reconcile. It is
 mechanically simple work; it is just SIX skins, not one.
+
+---
+
+## TWO TRAPS FROM THE CK-G INVENTORY THAT GENERALIZE (2026-07-13)
+
+### The hex-alpha suffix is NOT a percentage — `+ '15'` is 8.24%, not 15%
+
+`environment-toggle` builds its banner tint as `activeEnv.color + '15'` — an 8-digit hex where
+`15` is the ALPHA BYTE. `0x15 = 21`, and `21/255 = 8.24%`. A migration that "modernizes" this
+into `color-mix(in srgb, var(--x) 15%, transparent)` — reading the `15` as a percentage, which is
+exactly what it looks like — **silently darkens the banner by nearly a factor of two, in both
+engines**. The pixel gate would catch it (the baseline moves), but only if that state is
+photographed; and the agent would have "fixed" something that was never broken.
+
+Generalize: **a numeric literal glued to a colour is an alpha byte, not a percentage.** Any
+`color + 'NN'` pattern converts to `NN/255`, never to `NN%`. Grep for `+ '` next to a colour
+variable before touching any tint.
+
+### An engine pair can read two DIFFERENT token vocabularies for the same slot
+
+`command-palette` rustic honours `--ds-command-palette-*` — a real, tenant-themeable namespace
+declared in `default.css` with light/dark overrides. Its modern engine **ignores that namespace
+entirely** and reads generic `--ds-color-*`/`--ds-surface-*` instead. So a tenant that themes the
+command palette changes it in one engine and not the other, today.
+
+This is a live, pre-existing theming inconsistency, and it is a TRAP for the migration:
+consolidating onto either vocabulary changes what a tenant override reaches. Preserve both, record
+the divergence, and let it be fixed as a deliberate theming decision with its own baselines.
+
+**The pattern behind both**: this program keeps finding that the code means something other than
+what it looks like. `+ '15'` looks like a percentage. A ternary's colon looks like a key's colon
+(it inflated the counter until today). A declared token looks live (P-73). A declared rule looks
+like it paints (P-76). A token file that exists looks adopted (CK-C). **Read what it DOES, not
+what it RESEMBLES.**
