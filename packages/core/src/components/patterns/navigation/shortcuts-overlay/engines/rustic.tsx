@@ -207,18 +207,20 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
   };
 
   return (
-    <div style={overlay}>
-      <div style={backdrop} onClick={handleClose} />
+    <div className="ds-pattern-shortcuts-overlay ds-engine-rustic" data-part="root" style={overlay}>
+      <div style={backdrop} data-part="backdrop" onClick={handleClose} />
       <div
         className={className}
+        data-part="dialog"
         style={dialog}
         role="dialog"
         aria-label={title}
       >
         {/* Header */}
-        <div style={headerStyle}>
-          <h2 style={titleStyle}>{title}</h2>
+        <div style={headerStyle} data-part="header">
+          <h2 style={titleStyle} data-part="title">{title}</h2>
           <button
+            data-part="close"
             style={closeButtonStyle}
             onClick={handleClose}
             aria-label="Close"
@@ -227,10 +229,11 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
           </button>
         </div>
         {/* Search */}
-        <div style={searchWrapperStyle}>
+        <div style={searchWrapperStyle} data-part="search">
           <input
             ref={inputRef}
             type="text"
+            data-part="input"
             style={inputStyle}
             placeholder={searchPlaceholder}
             value={query}
@@ -241,13 +244,13 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
         <div style={{ maxHeight: 400, overflowY: 'auto', padding: '4px 0' }}>
           {Object.entries(grouped).map(([category, items]) => (
             <div key={category} style={{ padding: '4px 0' }}>
-              <div style={categoryLabelStyle}>{category}</div>
+              <div style={categoryLabelStyle} data-part="category-label">{category}</div>
               {items.map((item) => (
-                <div key={item.key} style={itemStyle}>
-                  <span style={descriptionStyle}>{item.description}</span>
+                <div key={item.key} style={itemStyle} data-part="item">
+                  <span style={descriptionStyle} data-part="description">{item.description}</span>
                   <div style={keysContainerStyle}>
                     {formatShortcutKey(item.key).map((segment, i) => (
-                      <span key={i} style={kbdStyle}>
+                      <span key={i} style={kbdStyle} data-part="kbd">
                         {segment}
                       </span>
                     ))}
@@ -258,6 +261,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
           ))}
           {filtered.length === 0 && (
             <div
+              data-part="empty"
               style={{
                 textAlign: 'center',
                 padding: '32px 0',
@@ -272,6 +276,7 @@ export default function RusticShortcutsOverlay(props: ShortcutsOverlayProps) {
         {/* Footer */}
         {footer && (
           <div
+            data-part="footer"
             style={{
               borderTop: '1px solid var(--ds-color-border)',
               padding: '8px 20px',

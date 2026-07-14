@@ -171,12 +171,14 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
   return (
     <div
       ref={containerRef}
-      className={className}
+      className={`ds-pattern-workspace-switcher ds-engine-rustic ${className ?? ''}`}
+      data-part="root"
       style={{ position: 'relative', display: 'inline-block', ...style }}
       onKeyDown={handleKeyDown}
     >
       {/* Trigger */}
       <button
+        data-part="trigger"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -193,7 +195,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
         data-testid="workspace-trigger"
         aria-label="Switch workspace"
       >
-        <div style={avatarStyle(position === 'sidebar' ? 32 : 24)}>
+        <div data-part="avatar" style={avatarStyle(position === 'sidebar' ? 32 : 24)}>
           {activeWorkspace?.logo ? (
             <img
               src={activeWorkspace.logo}
@@ -224,6 +226,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
       {/* Dropdown */}
       {open && (
         <div
+          data-part="panel"
           style={{
             ...dropdownStyle,
             ...(position === 'sidebar'
@@ -234,7 +237,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           aria-label="Workspaces"
         >
           {/* Header */}
-          <div style={headerStyle}>Workspaces</div>
+          <div data-part="header" style={headerStyle}>Workspaces</div>
 
           {/* Workspace list */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '4px 0', maxHeight: 260 }}>
@@ -246,6 +249,9 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   key={ws.id}
                   role="option"
                   aria-selected={isActive}
+                  data-part="item"
+                  data-active={isActive}
+                  data-focused={isFocused}
                   data-testid={`workspace-item-${ws.id}`}
                   style={{
                     display: 'flex',
@@ -269,7 +275,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   }}
                   onMouseEnter={() => setFocusIndex(idx)}
                 >
-                  <div style={avatarStyle(36)}>
+                  <div data-part="avatar" style={avatarStyle(36)}>
                     {ws.logo ? (
                       <img
                         src={ws.logo}
@@ -292,15 +298,15 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                         {ws.name}
                       </span>
                       {isActive && (
-                        <span style={{ color: 'var(--ds-color-primary)', fontSize: 12 }}>{'\u2713'}</span>
+                        <span data-part="check" style={{ color: 'var(--ds-color-primary)', fontSize: 12 }}>{'\u2713'}</span>
                       )}
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+                    <div data-part="meta" style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
                       {ws.role && <span>{ws.role}</span>}
                       {ws.plan && <span style={{ textTransform: 'capitalize' }}>{ws.plan}</span>}
                       {typeof ws.online === 'number' && (
                         <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}>
-                          <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--ds-color-success)', display: 'inline-block' }} />
+                          <span data-part="online-dot" style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--ds-color-success)', display: 'inline-block' }} />
                           {ws.online}
                         </span>
                       )}
@@ -308,7 +314,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                     {typeof ws.unreadCount === 'number' && ws.unreadCount > 0 && (
-                      <span style={{
+                      <span data-part="badge" style={{
                         minWidth: 18,
                         height: 18,
                         borderRadius: 9,
@@ -326,6 +332,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     )}
                     {onSettings && (
                       <button
+                        data-part="settings"
                         style={{ ...linkBtnStyle, opacity: isFocused ? 1 : 0.4 }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -346,9 +353,10 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Create workspace */}
           {showCreateButton && onCreate && (
             <>
-              <div style={dividerStyle} />
+              <div data-part="divider" style={dividerStyle} />
               <div style={{ padding: '6px 12px' }}>
                 <button
+                  data-part="create"
                   style={{
                     width: '100%',
                     padding: '6px 12px',
@@ -378,12 +386,12 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Current user */}
           {currentUser && (
             <>
-              <div style={dividerStyle} />
+              <div data-part="divider" style={dividerStyle} />
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px' }}
                 data-testid="workspace-current-user"
               >
-                <div style={{
+                <div data-part="avatar" style={{
                   ...avatarStyle(28),
                   borderRadius: '50%',
                   background: 'var(--ds-color-accent)',
@@ -392,6 +400,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     <img
                       src={currentUser.avatar}
                       alt={currentUser.name}
+                      data-part="avatar-img"
                       style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
                     />
                   ) : (
@@ -409,7 +418,7 @@ export default function RusticWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                     {currentUser.name}
                   </div>
                   {currentUser.email && (
-                    <div style={{
+                    <div data-part="user-email" style={{
                       fontSize: 'var(--ds-font-size-xs, 12px)',
                       color: 'var(--ds-color-text-muted)',
                       overflow: 'hidden',

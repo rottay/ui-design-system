@@ -193,7 +193,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
   const renderBadge = (env: EnvironmentDef) => {
     if (!env.badge) return null;
     return (
-      <span style={{
+      <span data-part="badge" style={{
         fontSize: 9,
         fontWeight: 600,
         padding: '1px 5px',
@@ -213,8 +213,9 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
     /* Dropdown variant: positioned absolutely below the trigger button */
     if (variant === 'dropdown') {
       return (
-        <div ref={containerRef} style={{ position: 'relative', display: 'inline-block' }}>
+        <div ref={containerRef} style={{ position: 'relative', display: 'inline-block' }} data-part="toggle" data-variant="dropdown">
           <button
+            data-part="trigger"
             style={{
               display: 'flex',
               alignItems: 'center',
@@ -230,10 +231,10 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
             onClick={() => setDropdownOpen(!dropdownOpen)}
             data-testid="env-toggle-trigger"
           >
-            <span style={dotStyle(activeEnv?.color ?? 'var(--ds-color-border-secondary, var(--ds-color-border-primary))')} />
+            <span data-part="dot" style={dotStyle(activeEnv?.color ?? 'var(--ds-color-border-secondary, var(--ds-color-border-primary))')} />
             {activeEnv?.name ?? 'Select'}
             {activeEnv?.badge && (
-              <span style={{
+              <span data-part="badge" style={{
                 fontSize: 9,
                 fontWeight: 600,
                 padding: '1px 5px',
@@ -248,10 +249,12 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
           </button>
 
           {dropdownOpen && (
-            <div style={dropdownStyle}>
+            <div style={dropdownStyle} data-part="panel">
               {environments.map(env => (
                 <button
                   key={env.id}
+                  data-part="option"
+                  data-active={env.id === activeEnvironment}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -269,10 +272,10 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
                   onClick={() => handleSwitch(env.id)}
                   data-testid={`env-option-${env.id}`}
                 >
-                  <span style={dotStyle(env.color)} />
+                  <span data-part="dot" style={dotStyle(env.color)} />
                   <span style={{ flex: 1 }}>{env.name}</span>
                   {env.badge && (
-                    <span style={{
+                    <span data-part="badge" style={{
                       fontSize: 9,
                       fontWeight: 600,
                       padding: '1px 5px',
@@ -284,7 +287,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
                     </span>
                   )}
                   {env.id === activeEnvironment && (
-                    <span style={{ color: 'var(--ds-color-primary)', fontSize: 12 }}>{'\u2713'}</span>
+                    <span data-part="check" style={{ color: 'var(--ds-color-primary)', fontSize: 12 }}>{'\u2713'}</span>
                   )}
                 </button>
               ))}
@@ -297,10 +300,12 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
     /* Pills variant: individually rounded buttons with active color highlight */
     if (variant === 'pills') {
       return (
-        <div style={pillContainerStyle} data-testid="env-toggle-trigger">
+        <div style={pillContainerStyle} data-part="toggle" data-variant="pills" data-testid="env-toggle-trigger">
           {environments.map(env => (
             <button
               key={env.id}
+              data-part="option"
+              data-active={env.id === activeEnvironment}
               style={pillBtnStyle(env.id === activeEnvironment, env.color)}
               onClick={() => handleSwitch(env.id)}
               data-testid={`env-option-${env.id}`}
@@ -316,10 +321,12 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
 
     /* Default: radio-style toggle -- buttons share the container's border radius via overflow:hidden */
     return (
-      <div style={toggleContainerStyle} data-testid="env-toggle-trigger">
+      <div style={toggleContainerStyle} data-part="toggle" data-variant="toggle" data-testid="env-toggle-trigger">
         {environments.map(env => (
           <button
             key={env.id}
+            data-part="option"
+            data-active={env.id === activeEnvironment}
             style={btnStyle(env.id === activeEnvironment, env.color)}
             onClick={() => handleSwitch(env.id)}
             data-testid={`env-option-${env.id}`}
@@ -334,10 +341,11 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
   };
 
   return (
-    <div className={className} style={style}>
+    <div className={`ds-pattern-environment-toggle ds-engine-rustic ${className ?? ''}`} data-part="root" style={style}>
       {/* Banner */}
       {showBanner && !isProduction && activeEnv && (
         <div
+          data-part="banner"
           style={{
             ...bannerBaseStyle,
             background: activeEnv.color + '15',
@@ -346,7 +354,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
           }}
           data-testid="env-banner"
         >
-          <span style={dotStyle(activeEnv.color, true)} />
+          <span data-part="banner-dot" style={dotStyle(activeEnv.color, true)} />
           {bannerMessage ?? `You are viewing the ${activeEnv.name} environment`}
         </div>
       )}
@@ -358,13 +366,13 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
 
       {/* Production confirmation modal -- overlay click dismisses, inner box stops propagation */}
       {confirmEnv && (
-        <div style={modalOverlayStyle} onClick={() => setConfirmEnv(null)}>
+        <div style={modalOverlayStyle} data-part="confirm-overlay" onClick={() => setConfirmEnv(null)}>
           {/* stopPropagation prevents the overlay's dismiss handler from catching inner clicks */}
-          <div style={modalBoxStyle} onClick={(e) => e.stopPropagation()}>
+          <div style={modalBoxStyle} data-part="confirm-dialog" onClick={(e) => e.stopPropagation()}>
             <div style={{ fontSize: 'var(--ds-font-size-lg, 16px)', fontWeight: 700, marginBottom: 12 }}>
               Switch to Production
             </div>
-            <div style={{
+            <div data-part="confirm-message" style={{
               fontSize: 'var(--ds-font-size-sm, 14px)',
               color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
               marginBottom: 20,
@@ -374,6 +382,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
               <button
+                data-part="confirm-cancel"
                 style={{
                   padding: '6px 14px',
                   background: 'none',
@@ -388,6 +397,7 @@ export default function RusticEnvironmentToggle(props: EnvironmentToggleProps) {
                 Cancel
               </button>
               <button
+                data-part="confirm-submit"
                 style={{
                   padding: '6px 14px',
                   background: 'var(--ds-color-error)',

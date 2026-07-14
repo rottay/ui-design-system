@@ -152,12 +152,13 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
   let itemIndex = -1;
 
   return (
-    <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
+    <div ref={dialogRef} onKeyDown={handleFocusTrap} className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] ds-pattern-command-palette ds-engine-modern" data-part="root" style={style} role="dialog" aria-modal="true" aria-label="Command palette">
       {/* Backdrop: scrim (kept) + glass layer (spec section 5). Frost tint + backdrop
           blur scale with --ds-effect-intensity, collapsing to a plain scrim at 0.
           Glass is sanctioned on overlay backdrops only. */}
       <div
         className="absolute inset-0"
+        data-part="backdrop"
         style={{
           backgroundColor: 'var(--ds-color-bg-overlay)',
           backgroundImage: 'linear-gradient(var(--ds-glass-scrim-tint), var(--ds-glass-scrim-tint))',
@@ -167,12 +168,13 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
         onClick={() => onOpenChange(false)}
       />
       {/* Dialog */}
-      <div className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`} style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)' }}>
+      <div className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`} data-part="dialog" style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-2)' }}>
         {/* Search */}
-        <div className="p-3" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
+        <div className="p-3" data-part="search" style={{ borderBottom: '1px solid var(--ds-color-border)' }}>
           <input
             ref={inputRef}
             type="text"
+            data-part="input"
             className="w-full text-lg focus:outline-none"
             style={{ padding: 'var(--ds-spacing-2, 8px) 0', fontSize: 'var(--ds-font-size-lg, 16px)', border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={placeholder}
@@ -202,6 +204,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                     role="option"
                     aria-selected={activeIndex === idx}
                     aria-disabled={item.disabled || undefined}
+                    data-part="item"
+                    data-active={activeIndex === idx}
                     onClick={() => handleSelect(item)}
                     className={`flex items-center justify-between px-3 py-2 rounded-lg cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                     style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}
@@ -213,11 +217,11 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                       <div>
                         <div className="font-medium text-sm">{item.label}</div>
                         {item.description && (
-                          <div className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
+                          <div className="text-xs" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}
@@ -229,6 +233,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
             <div key={group}>
               {group && (
               <div
+                data-part="group-label"
                 style={{
                   ...menuSectionTitleStyle,
                   color: 'var(--ds-search-category-color, var(--ds-color-text-muted))',
@@ -251,6 +256,8 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                     role="option"
                     aria-selected={activeIndex === idx}
                     aria-disabled={item.disabled || undefined}
+                    data-part="item"
+                    data-active={activeIndex === idx}
                     onClick={() => handleSelect(item)}
                     className={`flex items-center justify-between px-4 py-2 cursor-pointer ${item.disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
                     style={activeIndex === idx ? { background: 'var(--ds-surface-inset)' } : undefined}
@@ -262,25 +269,25 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
                       <div>
                         <div className="font-medium text-sm">{item.label}</div>
                         {item.description && (
-                          <div className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
+                          <div className="text-xs" data-part="description" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.description}</div>
                         )}
                       </div>
                     </div>
-                    {item.shortcut && <kbd style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
+                    {item.shortcut && <kbd data-part="shortcut" style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>{item.shortcut}</kbd>}
                   </div>
                 );
               })}
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="text-center py-8 text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+            <div className="text-center py-8 text-sm" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
               {emptyMessage}
             </div>
           )}
         </div>
         {/* Footer */}
         {footer && (
-          <div className="px-4 py-2 text-xs" style={{ borderTop: '1px solid var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>
+          <div className="px-4 py-2 text-xs" data-part="footer" style={{ borderTop: '1px solid var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>
             {footer}
           </div>
         )}

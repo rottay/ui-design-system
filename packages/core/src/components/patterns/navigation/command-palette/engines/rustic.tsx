@@ -182,6 +182,8 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
     return (
       <div
         key={item.id}
+        data-part="item"
+        data-active={isSelected}
         onClick={() => handleSelect(item)}
         style={{
           display: 'flex',
@@ -225,7 +227,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
           <div>
             <div style={{ fontWeight: 500, fontSize: 14 }}>{item.label}</div>
             {item.description && (
-              <div style={{ fontSize: 12, color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))' }}>
+              <div data-part="description" style={{ fontSize: 12, color: 'var(--ds-command-palette-group-color, var(--ds-color-text-muted))' }}>
                 {item.description}
               </div>
             )}
@@ -233,6 +235,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
         </div>
         {item.shortcut && (
           <span
+            data-part="shortcut"
             style={{
               padding: '3px 8px',
               borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -258,16 +261,17 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
   let itemIndex = -1;
 
   return (
-    <div style={overlay}>
+    <div className="ds-pattern-command-palette ds-engine-rustic" data-part="root" style={overlay}>
       {/* Inject CSS keyframes for entrance animations. Using an inline <style>
           tag keeps the rustic engine fully self-contained with no external CSS. */}
       <style>{`@keyframes ds-cmd-backdrop-in { from { opacity: 0; } to { opacity: 1; } } @keyframes ds-cmd-panel-in { from { opacity: 0; transform: scale(0.96) translateY(-10px); } to { opacity: 1; transform: scale(1) translateY(0); } }`}</style>
-      <div style={backdrop} onClick={() => onOpenChange(false)} />
-      <div className={className} style={dialog}>
-        <div style={{ borderBottom: '1px solid var(--ds-command-palette-border, var(--ds-color-border))' }}>
+      <div style={backdrop} data-part="backdrop" onClick={() => onOpenChange(false)} />
+      <div className={className} data-part="dialog" style={dialog}>
+        <div data-part="search" style={{ borderBottom: '1px solid var(--ds-command-palette-border, var(--ds-color-border))' }}>
           <input
             ref={inputRef}
             type="text"
+            data-part="input"
             style={inputStyle}
             placeholder={placeholder}
             value={query}
@@ -287,7 +291,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
         <div style={{ maxHeight, overflowY: 'auto', padding: '4px 0' }}>
           {!query && recentItems && recentItems.length > 0 && (
             <div>
-              <div style={groupLabel}>Recent</div>
+              <div data-part="group-label" style={groupLabel}>Recent</div>
               {recentItems.map((item) => {
                 itemIndex++;
                 return renderItem(item, itemIndex);
@@ -305,6 +309,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
           ))}
           {filtered.length === 0 && (
             <div
+              data-part="empty"
               style={{
                 textAlign: 'center',
                 padding: '24px 0',
@@ -318,6 +323,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
         </div>
         {footer && (
           <div
+            data-part="footer"
             style={{
               borderTop: '1px solid var(--ds-command-palette-border, var(--ds-color-border))',
               padding: '8px 16px',

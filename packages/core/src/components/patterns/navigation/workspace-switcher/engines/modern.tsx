@@ -118,11 +118,13 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
     <div
       ref={containerRef}
       className={`ds-pattern-workspace-switcher ds-engine-modern relative ${className ?? ''}`}
+      data-part="root"
       style={style}
       onKeyDown={handleKeyDown}
     >
       {/* Trigger */}
       <button
+        data-part="trigger"
         style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8, padding: '0 12px', height: 40, borderRadius: 'var(--ds-radius-md)', ...(position === 'sidebar' ? { width: '100%', justifyContent: 'flex-start' } : {}) }}
         onClick={() => setOpen(!open)}
         data-testid="workspace-trigger"
@@ -133,7 +135,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
             {activeWorkspace?.logo ? (
               <img src={activeWorkspace.logo} alt={activeWorkspace.name} />
             ) : (
-              <div className="flex items-center justify-center w-full h-full text-xs font-bold" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
+              <div className="flex items-center justify-center w-full h-full text-xs font-bold" data-part="avatar-fallback" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
                 {activeWorkspace ? getInitials(activeWorkspace.name) : '?'}
               </div>
             )}
@@ -156,12 +158,13 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           className={`absolute z-50 mt-1 w-72 overflow-hidden ${
             position === 'sidebar' ? 'left-full top-0 ml-2' : 'top-full left-0'
           }`}
+          data-part="panel"
           style={{ ...popupPanelStyle, boxShadow: 'var(--ds-elevation-3)', padding: 0 }}
           role="listbox"
           aria-label="Workspaces"
         >
           {/* Header */}
-          <div style={{ padding: '6px 12px', borderBottom: '1px solid var(--ds-color-border)' }}>
+          <div data-part="header" style={{ padding: '6px 12px', borderBottom: '1px solid var(--ds-color-border)' }}>
             <span style={menuSectionTitleStyle}>Workspaces</span>
           </div>
 
@@ -175,6 +178,9 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                   key={ws.id}
                   role="option"
                   aria-selected={isActive}
+                  data-part="item"
+                  data-active={isActive}
+                  data-focused={isFocused}
                   data-testid={`workspace-item-${ws.id}`}
                   // Three visual states: keyboard-focused (--ds-surface-inset), active workspace
                   // (subtle primary tint + left accent border), and default (hover highlight).
@@ -196,7 +202,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       {ws.logo ? (
                         <img src={ws.logo} alt={ws.name} />
                       ) : (
-                        <div className="flex items-center justify-center w-full h-full text-sm font-bold" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
+                        <div className="flex items-center justify-center w-full h-full text-sm font-bold" data-part="avatar-fallback" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
                           {getInitials(ws.name)}
                         </div>
                       )}
@@ -209,7 +215,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       <span className={`text-sm truncate ${isActive ? 'font-semibold' : ''}`}>{ws.name}</span>
                       {/* Checkmark confirms which workspace is currently active. */}
                       {isActive && (
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 flex-shrink-0" style={{ color: 'var(--ds-color-primary)' }} viewBox="0 0 20 20" fill="currentColor">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 flex-shrink-0" data-part="check" style={{ color: 'var(--ds-color-primary)' }} viewBox="0 0 20 20" fill="currentColor">
                           <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                         </svg>
                       )}
@@ -221,7 +227,7 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       {typeof ws.online === 'number' && (
                         <span className="flex items-center gap-1">
                           {/* Green dot indicates active members. */}
-                          <span className="w-1.5 h-1.5 rounded-full inline-block" style={{ background: 'var(--ds-color-success)' }} />
+                          <span className="w-1.5 h-1.5 rounded-full inline-block" data-part="online-dot" style={{ background: 'var(--ds-color-success)' }} />
                           {ws.online}
                         </span>
                       )}
@@ -232,10 +238,11 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
                       to keep the row visually clean. */}
                   <div className="flex items-center gap-1.5">
                     {typeof ws.unreadCount === 'number' && ws.unreadCount > 0 && (
-                      <span style={{ ...pillBadgeSmStyle, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>{ws.unreadCount}</span>
+                      <span data-part="badge" style={{ ...pillBadgeSmStyle, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>{ws.unreadCount}</span>
                     )}
                     {onSettings && (
                       <button
+                        data-part="settings"
                         style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: isFocused ? 1 : 0, transition: 'opacity var(--ds-motion-fast)' }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -258,9 +265,10 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Create workspace */}
           {showCreateButton && onCreate && (
             <>
-              <div style={{ borderTop: '1px solid var(--ds-color-border)', margin: '0' }} />
+              <div data-part="divider" style={{ borderTop: '1px solid var(--ds-color-border)', margin: '0' }} />
               <div className="px-3 py-2">
                 <button
+                  data-part="create"
                   style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%' }}
                   onClick={() => {
                     onCreate();
@@ -280,14 +288,14 @@ export default function ModernWorkspaceSwitcher(props: WorkspaceSwitcherProps) {
           {/* Current user */}
           {currentUser && (
             <>
-              <div style={{ borderTop: '1px solid var(--ds-color-border)', margin: '0' }} />
+              <div data-part="divider" style={{ borderTop: '1px solid var(--ds-color-border)', margin: '0' }} />
               <div className="flex items-center gap-2 px-3 py-2" data-testid="workspace-current-user">
                 <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
                   <div className="w-7 h-7 rounded-full">
                     {currentUser.avatar ? (
                       <img src={currentUser.avatar} alt={currentUser.name} />
                     ) : (
-                      <div className="flex items-center justify-center w-full h-full text-xs font-bold" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
+                      <div className="flex items-center justify-center w-full h-full text-xs font-bold" data-part="avatar-fallback" style={{ background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>
                         {getInitials(currentUser.name)}
                       </div>
                     )}

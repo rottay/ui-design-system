@@ -97,18 +97,20 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
   return (
     /* Fixed overlay with 10vh top offset so the dialog sits comfortably below
          the page header rather than dead-center, which feels more natural for reference panels */
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh]" style={style} role="dialog" aria-modal="true" aria-label={title}>
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-[10vh] ds-pattern-shortcuts-overlay ds-engine-modern" data-part="root" style={style} role="dialog" aria-modal="true" aria-label={title}>
       {/* Semi-transparent backdrop closes the dialog on click */}
-      <div className="absolute inset-0" style={{ background: 'var(--ds-color-bg-overlay)' }} onClick={handleClose} />
+      <div className="absolute inset-0" data-part="backdrop" style={{ background: 'var(--ds-color-bg-overlay)' }} onClick={handleClose} />
       {/* Dialog card -- max-w-lg prevents overly wide layouts on ultrawide screens */}
       <div
         className={`relative rounded-xl w-full max-w-lg overflow-hidden ${className}`}
+        data-part="dialog"
         style={{ background: 'var(--ds-surface-card)', boxShadow: 'var(--ds-elevation-3)' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b px-5 py-3" style={{ borderColor: 'var(--ds-color-border)' }}>
+        <div className="flex items-center justify-between border-b px-5 py-3" data-part="header" style={{ borderColor: 'var(--ds-color-border)' }}>
           <h2 className="text-base font-semibold">{title}</h2>
           <button
+            data-part="close"
             style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 'var(--ds-control-sm-size, 32px)', width: 'var(--ds-control-sm-size, 32px)', padding: 0, fontSize: 'var(--ds-font-size-xs, 12px)', borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
             onClick={handleClose}
             aria-label="Close"
@@ -117,10 +119,11 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
           </button>
         </div>
         {/* Search */}
-        <div className="border-b px-5 py-2" style={{ borderColor: 'var(--ds-color-border)' }}>
+        <div className="border-b px-5 py-2" data-part="search" style={{ borderColor: 'var(--ds-color-border)' }}>
           <input
             ref={inputRef}
             type="text"
+            data-part="input"
             className="w-full focus:outline-none"
             style={{ padding: 'var(--ds-spacing-1-5, 6px) 0', fontSize: 'var(--ds-font-size-sm, 14px)', border: 'none', background: 'transparent', color: 'inherit' }}
             placeholder={searchPlaceholder}
@@ -133,7 +136,7 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
           {Object.entries(grouped).map(([category, items]) => (
             <div key={category} className="py-1">
               <div className="px-5 py-1">
-                <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <span className="text-xs uppercase tracking-wider font-semibold" data-part="category-label" style={{ color: 'var(--ds-color-text-secondary)' }}>
                   {category}
                 </span>
               </div>
@@ -142,12 +145,13 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
                 <div
                   key={item.key}
                   className="flex items-center justify-between px-5 py-1.5"
+                  data-part="item"
                 >
                   <span className="text-sm">{item.description}</span>
                   {/* formatShortcutKey splits "ctrl+shift+s" into ["Ctrl", "Shift", "S"] */}
                   <div className="flex items-center gap-1">
                     {formatShortcutKey(item.key).map((segment, i) => (
-                      <kbd key={i} style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>
+                      <kbd key={i} data-part="kbd" style={{ padding: '2px 6px', borderRadius: 'var(--ds-radius-sm)', border: '1px solid var(--ds-color-border)', background: 'var(--ds-surface-inset)', fontSize: 'var(--ds-font-size-xs, 12px)', fontFamily: 'var(--ds-font-family-mono, monospace)' }}>
                         {segment}
                       </kbd>
                     ))}
@@ -157,14 +161,14 @@ export default function ModernShortcutsOverlay(props: ShortcutsOverlayProps) {
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="text-center py-8 text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+            <div className="text-center py-8 text-sm" data-part="empty" style={{ color: 'var(--ds-color-text-secondary)' }}>
               {emptyMessage}
             </div>
           )}
         </div>
         {/* Footer */}
         {footer && (
-          <div className="border-t px-5 py-2 text-xs" style={{ borderColor: 'var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>
+          <div className="border-t px-5 py-2 text-xs" data-part="footer" style={{ borderColor: 'var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>
             {footer}
           </div>
         )}

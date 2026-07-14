@@ -29,6 +29,7 @@ const CheckIcon = () => (
     height={14}
     viewBox="0 0 20 20"
     fill="currentColor"
+    data-part="check"
     style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}
     aria-hidden="true"
   >
@@ -230,12 +231,14 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
     <div
       ref={containerRef}
       className={`ds-pattern-locale-switcher ds-engine-modern ${className ?? ''}`}
+      data-part="root"
       style={{ position: 'relative', display: 'inline-block', ...style }}
       onKeyDown={handleKeyDown}
     >
       {/* Trigger button */}
       <button
         type="button"
+        data-part="trigger"
         style={triggerStyle}
         onClick={() => {
           setOpen(prev => !prev);
@@ -262,6 +265,7 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
         <div
           ref={menuRef}
           role="listbox"
+          data-part="panel"
           aria-activedescendant={focusIndex >= 0 ? `locale-option-${locales[focusIndex].code}` : undefined}
           style={{
             ...popupPanelStyle,
@@ -287,6 +291,9 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
                 type="button"
                 role="option"
                 aria-selected={isActive}
+                data-part="option"
+                data-active={isActive}
+                data-focused={isFocused}
                 data-locale-option
                 data-testid={`locale-option-${loc.code}`}
                 style={{
