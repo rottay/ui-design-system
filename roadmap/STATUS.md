@@ -17,7 +17,7 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 14:16 — CK-H2 inert pre-step banked at 28421f66: all 9 counters unchanged (216), AST/createElement invariant green, 25/25 anatomy tests, 30 production baselines stable across 7 Playwright cases. Global effect gate repaired at c9393add to count live skin CSS consumers; full engine audit is green without weakening floors. H2 migration and CK-I anatomy now parallel. |
+| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 14:35 — CK-H2 CERTIFIED byte-exact at c229859c: 9 skins, 213/216 counted sites moved with 3 deliberate file-manager modern caller-precedence residuals; all skin gates 0; 115/115 focused tests; core/showroom production builds green; 30 committed screenshots pass twice (7/7 + 7/7) without snapshot updates. Independent adversarial review found no code defects. CK-I inert anatomy is complete and its contract/production evidence is now being banked. |
 
 ## Next up (todo, dependencies satisfied)
 
