@@ -1,0 +1,21 @@
+/** Treemap skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-chart-treemap [data-part='legend-swatch'] {
+  border-radius: 2px;
+}
+
+.ds-chart-treemap [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-treemap [data-part='tile-surface'] {
+  stroke: var(--ds-color-bg-primary);
+}
+
+.ds-chart-treemap [data-part='tile-label'] {
+  fill: var(--ds-color-text-on-primary, var(--ds-color-white));
+}
+
+.ds-chart-treemap [data-part='tile-value'] {
+  fill: color-mix(in srgb, var(--ds-color-text-on-primary, var(--ds-color-white)) 70%, transparent);
+}

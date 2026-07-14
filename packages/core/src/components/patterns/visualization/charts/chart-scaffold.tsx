@@ -22,7 +22,6 @@ const VISUALLY_HIDDEN_STYLE: CSSProperties = {
   overflow: 'hidden',
   clip: 'rect(0, 0, 0, 0)',
   whiteSpace: 'nowrap',
-  border: 0,
 };
 
 export interface ChartSummaryTable {
@@ -218,7 +217,6 @@ export function ChartScaffold({
             alignItems: 'center',
             justifyContent: 'center',
             height: '100%',
-            color: 'var(--ds-color-text-secondary)',
           }}
         >
           {loadingLabel}
@@ -237,9 +235,9 @@ export function ChartScaffold({
     >
       {title ? (
         <div data-part="heading" style={{ marginBottom: 4 }}>
-          <div data-part="title" style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
+          <div data-part="title" style={{ fontSize: 16, fontWeight: 600 }}>{title}</div>
           {subtitle ? (
-            <div data-part="subtitle" style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>
+            <div data-part="subtitle" style={{ fontSize: 13 }}>{subtitle}</div>
           ) : null}
         </div>
       ) : null}

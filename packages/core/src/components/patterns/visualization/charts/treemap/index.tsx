@@ -81,8 +81,8 @@ export const TreeMap = memo(function TreeMap({
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
         <div key={d.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: palette[i % palette.length], display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.name}</span>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-label">{d.name}</span>
         </div>
       ))}
     </div>
@@ -126,7 +126,6 @@ export const TreeMap = memo(function TreeMap({
       .attr('height', (d: any) => Math.max(0, d.y1 - d.y0))
       .attr('fill', (_, i) => palette[i % palette.length])
       .attr('rx', 3)
-      .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 1);
 
     if (chartPersonality.animate) {
@@ -150,7 +149,6 @@ export const TreeMap = memo(function TreeMap({
         .attr('data-part', 'tile-label')
         .attr('x', 4)
         .attr('y', 14)
-        .style('fill', 'var(--ds-color-text-on-primary, var(--ds-color-white))')
         .style('font-size', '11px')
         .style('font-weight', '500')
         .style('pointer-events', 'none')
@@ -167,7 +165,6 @@ export const TreeMap = memo(function TreeMap({
         .attr('data-part', 'tile-value')
         .attr('x', 4)
         .attr('y', 26)
-        .style('fill', 'color-mix(in srgb, var(--ds-color-text-on-primary, var(--ds-color-white)) 70%, transparent)')
         .style('font-size', '10px')
         .style('pointer-events', 'none')
         .each(function (d: any) {

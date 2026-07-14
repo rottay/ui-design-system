@@ -54,11 +54,6 @@ const TOOLTIP_STYLE: CSSProperties = {
   position: 'absolute',
   pointerEvents: 'none',
   zIndex: 10,
-  background: 'var(--ds-color-bg-elevated)',
-  border: '1px solid var(--ds-color-border)',
-  color: 'var(--ds-color-text-primary)',
-  boxShadow: 'var(--ds-shadow-lg)',
-  borderRadius: 'var(--ds-radius-md)',
   padding: '8px 12px',
   fontSize: 12,
   maxWidth: 280,
@@ -162,7 +157,6 @@ export function ChartTooltip({
 const SWATCH_STYLE: CSSProperties = {
   width: 8,
   height: 8,
-  borderRadius: '50%',
   display: 'inline-block',
   flexShrink: 0,
 };
@@ -190,7 +184,7 @@ export function TooltipValue({
   return (
     <div className="ds-chart-tooltip-value" data-part="tooltip-value" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
       {color ? <span data-part="swatch" style={{ ...SWATCH_STYLE, backgroundColor: color }} /> : null}
-      <span data-part="label" style={{ color: 'var(--ds-color-text-secondary)' }}>{label}</span>
+      <span data-part="label">{label}</span>
       <span data-part="value" className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{value}</span>
     </div>
   );
@@ -227,7 +221,6 @@ export function TooltipSeries({
           style={{
             fontWeight: 600,
             marginBottom: 2,
-            color: 'var(--ds-color-text-primary)',
           }}
         >
           {title}
@@ -242,7 +235,7 @@ export function TooltipSeries({
           style={{ display: 'flex', alignItems: 'center', gap: 6 }}
         >
           <span data-part="swatch" style={{ ...SWATCH_STYLE, backgroundColor: item.color }} />
-          <span data-part="label" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.name}</span>
+          <span data-part="label">{item.name}</span>
           <span data-part="value" className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{item.value}</span>
         </div>
       ))}

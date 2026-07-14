@@ -62,7 +62,7 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
         {toolbar}
         {/* Plain text loading indicator -- no framework spinner dependency */}
         {loading ? (
-          <div data-part="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+          <div data-part="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height }}>
             Loading...
           </div>
         ) : (
@@ -74,9 +74,6 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
               data-part="map-placeholder"
               style={{
                 height,
-                borderRadius: 'var(--ds-radius-md, 8px)',
-                background: 'var(--ds-color-bg-info, var(--ds-color-bg-secondary))',
-                border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -84,16 +81,16 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
               }}
             >
               <div data-part="placeholder-content" style={{ textAlign: 'center' }}>
-                <div data-part="placeholder-label" data-detail="title" style={{ fontSize: 14, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div data-part="placeholder-label" data-detail="title" style={{ fontSize: 14 }}>
                   Map placeholder
                 </div>
-                <div data-part="placeholder-label" data-detail="location" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>
+                <div data-part="placeholder-label" data-detail="location" style={{ fontSize: 12, marginTop: 4 }}>
                   {center
                     ? `Center: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`
                     : 'No center set'}
                   {zoom != null ? ` | Zoom: ${zoom}` : ''}
                 </div>
-                <div data-part="placeholder-label" data-detail="count" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div data-part="placeholder-label" data-detail="count" style={{ fontSize: 12 }}>
                   {markers.length} marker{markers.length !== 1 ? 's' : ''}
                 </div>
               </div>
@@ -101,7 +98,7 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
 
             {/* Marker list */}
             {markers.length === 0 ? (
-              <div data-part="empty" style={{ textAlign: 'center', padding: 24, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', fontSize: 14 }}>
+              <div data-part="empty" style={{ textAlign: 'center', padding: 24, fontSize: 14 }}>
                 No markers
               </div>
             ) : (
@@ -109,8 +106,6 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
               <div
                 data-part="marker-list"
                 style={{
-                  border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-                  borderRadius: 'var(--ds-radius-md, 8px)',
                   overflow: 'hidden',
                 }}
               >
@@ -127,14 +122,6 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                       style={{
                         padding: '10px 14px',
                         cursor: 'pointer',
-                        background: isSelected
-                          ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))'
-                          : 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-                        /* Only render bottom border between items, not after the last one */
-                        borderBottom:
-                          i < markers.length - 1
-                            ? '1px solid var(--ds-color-border-primary, var(--ds-color-border))'
-                            : undefined,
                       }}
                     >
                       {/* Custom renderMarker replaces the entire row content when provided */}
@@ -150,7 +137,6 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                               style={{
                                 width: 12,
                                 height: 12,
-                                borderRadius: '50%',
                                 background: marker.color,
                                 flexShrink: 0,
                               }}
@@ -158,11 +144,11 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                           )}
                           <div>
                             {/* Selected markers get bold weight for visual emphasis */}
-                            <div data-part="marker-label" style={{ fontSize: 14, fontWeight: isSelected ? 600 : 400, color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>
+                            <div data-part="marker-label" style={{ fontSize: 14, fontWeight: isSelected ? 600 : 400 }}>
                               {marker.label ?? marker.id}
                             </div>
                             {/* Coordinates at 4-decimal precision (~11m accuracy) */}
-                            <div data-part="coordinates" style={{ fontSize: 11, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                            <div data-part="coordinates" style={{ fontSize: 11 }}>
                               {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
                             </div>
                           </div>

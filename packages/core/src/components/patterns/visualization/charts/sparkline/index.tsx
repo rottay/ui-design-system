@@ -280,7 +280,6 @@ export const Sparkline = memo(function Sparkline({
           cy={computed.endDot.cy}
           r={strokeWidth + 1}
           fill={resolvedColor}
-          stroke="var(--ds-color-bg-primary)"
           strokeWidth={1}
         />
       )}
@@ -292,8 +291,6 @@ export const Sparkline = memo(function Sparkline({
           cx={computed.minDot.cx}
           cy={computed.minDot.cy}
           r={strokeWidth}
-          fill="var(--ds-color-error)"
-          stroke="var(--ds-color-bg-primary)"
           strokeWidth={1}
         />
       )}
@@ -305,8 +302,6 @@ export const Sparkline = memo(function Sparkline({
           cx={computed.maxDot.cx}
           cy={computed.maxDot.cy}
           r={strokeWidth}
-          fill="var(--ds-color-success)"
-          stroke="var(--ds-color-bg-primary)"
           strokeWidth={1}
         />
       )}

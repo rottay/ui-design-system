@@ -34,15 +34,6 @@ function formatDateKey(ts: string | Date): string {
   return date.toLocaleDateString();
 }
 
-/** Maps semantic item types to DS token badge styles. */
-const typeBadgeStyle: Record<string, React.CSSProperties> = {
-  default: { background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' },
-  success: { background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' },
-  warning: { background: 'color-mix(in srgb, var(--ds-color-warning) 15%, transparent)', color: 'var(--ds-color-warning)' },
-  error: { background: 'color-mix(in srgb, var(--ds-color-error) 15%, transparent)', color: 'var(--ds-color-error)' },
-  info: { background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' },
-};
-
 /**
  * Modern (DaisyUI/Tailwind) engine for the Timeline pattern component.
  *
@@ -107,7 +98,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
           {item.icon ? (
             <span data-part="marker-icon" data-type={item.type ?? 'default'} className="flex items-center justify-center w-5 h-5">{item.icon}</span>
           ) : (
-            <svg data-part="marker-icon" data-type={item.type ?? 'default'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5" style={{ color: item.type === 'error' ? 'var(--ds-color-error)' : item.type === 'success' ? 'var(--ds-color-success)' : item.type === 'warning' ? 'var(--ds-color-warning)' : 'var(--ds-color-primary)' }}>
+            <svg data-part="marker-icon" data-type={item.type ?? 'default'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="ds-timeline-modern__marker-icon w-5 h-5">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
             </svg>
           )}
@@ -121,13 +112,13 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
         >
           <div className="flex items-center gap-2 mb-1">
             {item.user?.avatar && (
-              <div data-part="avatar" style={{ display: 'inline-flex', width: 24, height: 24, borderRadius: '50%', overflow: 'hidden' }}>
+              <div data-part="avatar" className="ds-timeline-modern__avatar" style={{ display: 'inline-flex', width: 24, height: 24, overflow: 'hidden' }}>
                 <img src={item.user.avatar} alt={item.user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             )}
             {item.user && <span className="text-xs font-semibold">{item.user.name}</span>}
             {item.type && item.type !== 'default' && (
-              <span data-part="type-badge" data-type={item.type} style={{ display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', padding: '1px 5px', fontSize: 10, ...typeBadgeStyle[item.type] }}>{item.type}</span>
+              <span data-part="type-badge" data-type={item.type} className="ds-timeline-modern__type-badge" style={{ display: 'inline-flex', alignItems: 'center', padding: '1px 5px', fontSize: 10 }}>{item.type}</span>
             )}
           </div>
           <div className="font-semibold text-sm">{item.title}</div>
@@ -161,7 +152,7 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   if (loading) {
     return (
       <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} className={[ROOT_CLASS_NAME, 'flex justify-center items-center py-12', className].filter(Boolean).join(' ')} style={style}>
-        <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+        <span data-part="spinner" className="ds-timeline-modern__spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }

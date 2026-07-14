@@ -1,0 +1,89 @@
+/** Rustic CalendarView pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='toolbar']
+  [data-part='toolbar-action'][data-part='toolbar-action'],
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='toolbar']
+  > [data-part='view-controls']
+  > [data-part='view-select'][data-part='view-select'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='toolbar']
+  [data-part='month-title'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='loading'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='grid'][data-part='grid'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='weekday'][data-part='weekday'] {
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-muted));
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-part='day-cell'] {
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-last-column='false'] {
+  border-right: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-empty='false'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-empty='true'] {
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-muted));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  > [data-part='date-label'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-today='true']
+  > [data-part='date-label'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  [data-part='event'] {
+  border-radius: var(--ds-radius-xs, 3px);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+.ds-pattern-calendar-view.ds-engine-rustic[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  > [data-part='overflow-count'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}

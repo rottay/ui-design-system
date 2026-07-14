@@ -51,21 +51,12 @@ function filterTree(nodes: TreeNode[], query: string): TreeNode[] {
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
-    color: 'var(--ds-color-neutral-900)',
-    background: 'var(--ds-color-neutral-0, #fff)',
-    border: '1px solid var(--ds-color-neutral-200)',
-    borderRadius: 'var(--ds-radius-lg)',
     padding: '0.75rem 1rem',
   } as React.CSSProperties,
   searchInput: {
     width: '100%',
     padding: '0.375rem 0.625rem',
     fontSize: 'var(--ds-font-size-sm)',
-    border: '1px solid var(--ds-color-neutral-300)',
-    borderRadius: 'var(--ds-radius-md)',
-    outline: 'none',
-    background: 'var(--ds-color-neutral-0, #fff)',
-    color: 'var(--ds-color-neutral-900)',
     marginBottom: '0.5rem',
   } as React.CSSProperties,
   nodeRow: (depth: number, selected: boolean, disabled?: boolean) => ({
@@ -74,11 +65,8 @@ const s = {
     gap: '0.375rem',
     padding: '0.25rem 0.5rem',
     paddingLeft: `${depth * 1.25 + 0.5}rem`,
-    borderRadius: 'var(--ds-radius-md)',
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.4 : 1,
-    background: selected ? 'var(--ds-color-primary-50, #eff6ff)' : 'transparent',
-    color: selected ? 'var(--ds-color-primary-700)' : 'var(--ds-color-neutral-900)',
     fontWeight: selected ? 500 : 400,
     fontSize: 'var(--ds-font-size-sm)',
     transition: 'background 100ms',
@@ -89,11 +77,8 @@ const s = {
     justifyContent: 'center',
     width: 20,
     height: 20,
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
     padding: 0,
-    color: 'var(--ds-color-neutral-500)',
     fontSize: 12,
     flexShrink: 0,
     visibility: visible ? 'visible' : 'hidden',
@@ -101,12 +86,10 @@ const s = {
   checkbox: {
     width: 14,
     height: 14,
-    accentColor: 'var(--ds-color-primary-600)',
     cursor: 'pointer',
     flexShrink: 0,
   } as React.CSSProperties,
   dragHandle: {
-    color: 'var(--ds-color-neutral-300)',
     cursor: 'grab',
     fontSize: 'var(--ds-font-size-xs)',
     flexShrink: 0,
@@ -115,8 +98,6 @@ const s = {
   skeleton: (w: string, h: string) => ({
     width: w,
     height: h,
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-neutral-200)',
     animation: 'pulse 1.5s ease-in-out infinite',
   } as React.CSSProperties),
 };
@@ -206,6 +187,7 @@ export default function RusticTreeView(props: TreeViewProps) {
             data-part="node-row"
             data-selected={selected}
             data-disabled={Boolean(node.disabled)}
+            className="ds-tree-view-rustic__node-row"
             style={s.nodeRow(depth, selected, node.disabled)}
             onClick={() => !node.disabled && handleSelect(node.key)}
             draggable={draggable && !node.disabled}
@@ -214,6 +196,7 @@ export default function RusticTreeView(props: TreeViewProps) {
               data-part="toggle"
               data-visible={Boolean(hasChildren)}
               data-expanded={expanded}
+              className="ds-tree-view-rustic__toggle"
               style={s.toggleBtn(!!hasChildren)}
               onClick={(e) => { e.stopPropagation(); handleToggle(node.key); }}
             >
@@ -222,6 +205,7 @@ export default function RusticTreeView(props: TreeViewProps) {
             {checkable && (
               <input
                 data-part="checkbox"
+                className="ds-tree-view-rustic__checkbox"
                 type="checkbox"
                 style={s.checkbox}
                 checked={checked}
@@ -229,7 +213,7 @@ export default function RusticTreeView(props: TreeViewProps) {
                 onClick={(e) => e.stopPropagation()}
               />
             )}
-            {draggable && <span data-part="drag-handle" style={s.dragHandle}>::</span>}
+            {draggable && <span data-part="drag-handle" className="ds-tree-view-rustic__drag-handle" style={s.dragHandle}>::</span>}
             {node.icon && <span style={{ flexShrink: 0 }}>{node.icon}</span>}
             <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {renderNode ? renderNode(node, depth) : node.label}
@@ -246,7 +230,7 @@ export default function RusticTreeView(props: TreeViewProps) {
       <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...s.container, ...style }}>
         <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
         {[1, 2, 3, 4, 5].map((i) => (
-          <div data-part="skeleton" key={i} style={{ ...s.skeleton(`${70 - (i % 3) * 10}%`, '1.25rem'), marginLeft: `${(i % 3) * 1.25}rem`, marginBottom: '0.375rem' }} />
+          <div data-part="skeleton" className="ds-tree-view-rustic__skeleton" key={i} style={{ ...s.skeleton(`${70 - (i % 3) * 10}%`, '1.25rem'), marginLeft: `${(i % 3) * 1.25}rem`, marginBottom: '0.375rem' }} />
         ))}
       </div>
     );
@@ -257,6 +241,7 @@ export default function RusticTreeView(props: TreeViewProps) {
       {searchable && (
         <input
           data-part="search-input"
+          className="ds-tree-view-rustic__search-input"
           type="text"
           style={s.searchInput}
           placeholder={searchPlaceholder}

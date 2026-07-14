@@ -119,7 +119,6 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: 300,
-          color: 'var(--ds-color-text-muted)',
           fontSize: 14,
           ...style,
         }}
@@ -172,12 +171,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 style={{
                   padding: '10px 14px',
                   marginBottom: 8,
-                  borderRadius: 'var(--ds-radius-sm, 6px)',
-                  background: 'var(--ds-color-bg-secondary, var(--ds-color-neutral-50))',
                   borderTop: column.color
                     ? `3px solid ${column.color}`
                     : '3px solid var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-                  borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
                 }}
               >
                 {renderColumnHeader ? (
@@ -204,7 +200,6 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
                           fontSize: 13,
                           letterSpacing: 'var(--ds-typography-heading-letter-spacing, 0.01em)',
-                          color: 'var(--ds-color-text-primary, var(--ds-color-text))',
                         }}
                       >
                         {column.title}
@@ -217,16 +212,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           justifyContent: 'center',
                           minWidth: 22,
                           height: 22,
-                          borderRadius: 11,
                           fontSize: 11,
                           fontWeight: 600,
                           padding: '0 6px',
-                          background: isOverLimit
-                            ? 'var(--ds-color-error, var(--ds-color-danger))'
-                            : 'var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-                          color: isOverLimit
-                            ? 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))'
-                            : 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
                         }}
                       >
                         {column.items.length}
@@ -247,17 +235,8 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   data-empty={column.items.length === 0}
                   style={{
                     flex: 1,
-                    borderRadius: 'var(--ds-radius-sm, 6px)',
                     padding: 8,
                     minHeight: 100,
-                    // Swap to primary-tinted background + dashed border when
-                    // this column is the active drop target.
-                    background: isDropping
-                      ? 'var(--ds-color-primary-50, var(--ds-color-bg-muted))'
-                      : 'var(--ds-color-bg-primary, var(--ds-color-background))',
-                    border: isDropping
-                      ? '2px dashed var(--ds-color-primary)'
-                      : '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
                     transition: `background ${RUSTIC_DURATION} ${RUSTIC_EASING}, border ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
                   }}
                   onDragOver={(e) =>
@@ -271,7 +250,6 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       style={{
                         padding: 24,
                         textAlign: 'center',
-                        color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
                       }}
                     >
                       {emptyColumn}
@@ -298,37 +276,18 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           onDrop={(e) => handleDrop(e, column.id, index)}
                           onDragEnd={handleDragEnd}
                           onClick={() => onItemClick?.(item, column.id)}
+                          onMouseLeave={(e) => {
+                            if (!isDragging) e.currentTarget.dataset.hoverCycle = 'settled';
+                          }}
                           style={{
                             marginBottom: 8,
                             padding: 12,
-                            borderRadius: 'var(--ds-radius-sm, 6px)',
-                            background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-                            border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-                            boxShadow: 'var(--ds-card-shadow, var(--ds-shadow-sm))',
                             cursor: isDragging ? 'grabbing' : onItemClick ? 'pointer' : 'grab',
                             // Slight rotation + scale on drag gives a physical
                             // "picked up" feel, reinforcing the direct-manipulation
                             // metaphor without needing a drag preview image.
                             opacity: isDragging ? 0.6 : 1,
-                            transform: isDragging ? 'rotate(2deg) scale(1.02)' : 'translateY(0)',
                             transition: `opacity ${RUSTIC_DURATION} ${RUSTIC_EASING}, transform ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
-                          }}
-                          // Direct DOM manipulation for hover because CSS :hover
-                          // cannot reference CSS variables conditionally on drag
-                          // state, and we need to suppress the lift when dragging.
-                          onMouseEnter={(e) => {
-                            if (!isDragging) {
-                              const el = e.currentTarget as HTMLDivElement;
-                              el.style.boxShadow = 'var(--ds-card-shadow-hover, var(--ds-shadow-md))';
-                              el.style.transform = 'var(--ds-card-hover-transform, translateY(-2px))';
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (!isDragging) {
-                              const el = e.currentTarget as HTMLDivElement;
-                              el.style.boxShadow = 'var(--ds-card-shadow, none)';
-                              el.style.transform = 'translateY(0)';
-                            }
                           }}
                         >
                           {renderCard(item, column.id)}
@@ -349,11 +308,6 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         width: '100%',
                         marginTop: 4,
                         padding: '8px 0',
-                        border:
-                          '1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-                        borderRadius: 'var(--ds-radius-sm, 6px)',
-                        background: 'transparent',
-                        color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
                         fontSize: 13,
                         cursor: 'pointer',
                         display: 'flex',
@@ -361,18 +315,6 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         justifyContent: 'center',
                         gap: 6,
                         transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
-                      }}
-                      onMouseEnter={(e) => {
-                        const el = e.currentTarget as HTMLButtonElement;
-                        el.style.borderColor = 'var(--ds-color-primary)';
-                        el.style.color = 'var(--ds-color-primary)';
-                        el.style.background = 'var(--ds-color-primary-50, var(--ds-color-bg-muted))';
-                      }}
-                      onMouseLeave={(e) => {
-                        const el = e.currentTarget as HTMLButtonElement;
-                        el.style.borderColor = 'var(--ds-color-border-secondary, var(--ds-color-border-primary))';
-                        el.style.color = 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))';
-                        el.style.background = 'transparent';
                       }}
                     >
                       <span style={{ fontSize: 16, lineHeight: 1 }}>+</span>

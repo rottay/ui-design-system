@@ -137,8 +137,7 @@ export const NetworkGraph = memo(function NetworkGraph({
         .attr('orient', 'auto')
         .append('path')
         .attr('data-part', 'edge-marker-path')
-        .attr('d', 'M0,-5L10,0L0,5')
-        .attr('fill', 'var(--ds-color-border-primary)');
+        .attr('d', 'M0,-5L10,0L0,5');
     }
 
     // Clone input data so D3's simulation can mutate x/y/vx/vy without side
@@ -168,7 +167,6 @@ export const NetworkGraph = memo(function NetworkGraph({
       .attr('class', 'link')
       .attr('data-part', 'edge')
       .attr('data-state', 'idle')
-      .attr('stroke', 'var(--ds-color-border-primary)')
       .attr('stroke-opacity', 0.5)
       .attr('stroke-width', (d: any) => Math.sqrt(d.value ?? 1));
 
@@ -209,7 +207,6 @@ export const NetworkGraph = memo(function NetworkGraph({
       .attr('data-part', 'node-mark')
       .attr('r', (d) => d.size ?? 8)
       .attr('fill', (d) => d.color ?? groupColor(d.group))
-      .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 2);
 
     if (chartPersonality.tooltip) {
@@ -222,7 +219,6 @@ export const NetworkGraph = memo(function NetworkGraph({
       .attr('data-part', 'node-label')
       .attr('dx', 12)
       .attr('dy', 4)
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px')
       .style('pointer-events', 'none')
       .text((d) => d.label ?? d.id);
@@ -263,8 +259,8 @@ export const NetworkGraph = memo(function NetworkGraph({
     <div data-part="legend" data-variant={directed ? 'directed' : 'undirected'} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {groups.map((group, i) => (
         <div key={group} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors[i % colors.length], display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{group}</span>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: colors[i % colors.length], display: 'inline-block' }} />
+          <span data-part="legend-label">{group}</span>
         </div>
       ))}
     </div>

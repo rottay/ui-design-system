@@ -164,12 +164,11 @@ export const ScatterChart = memo(function ScatterChart({
               style={{
                 width: 10,
                 height: 10,
-                borderRadius: '50%',
                 backgroundColor: d.color ?? colors[i % colors.length],
                 display: 'inline-block',
               }}
             />
-            <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+            <span data-part="legend-label">{d.label}</span>
           </div>
         ))}
     </div>
@@ -223,7 +222,6 @@ export const ScatterChart = memo(function ScatterChart({
       .call(axisBottom(x).ticks(tickCount))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Y axis
@@ -233,7 +231,6 @@ export const ScatterChart = memo(function ScatterChart({
       .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Grid lines
@@ -246,7 +243,6 @@ export const ScatterChart = memo(function ScatterChart({
         .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
         .selectAll('line')
         .attr('data-part', 'grid-line')
-        .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
       g.selectAll('.grid-h .domain').remove();
@@ -260,7 +256,6 @@ export const ScatterChart = memo(function ScatterChart({
         .call(axisBottom(x).ticks(tickCount).tickSize(-innerHeight).tickFormat(() => ''))
         .selectAll('line')
         .attr('data-part', 'grid-line')
-        .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
       g.selectAll('.grid-v .domain').remove();
@@ -283,7 +278,6 @@ export const ScatterChart = memo(function ScatterChart({
           .attr('x2', x(x2))
           .attr('y1', y(y1))
           .attr('y2', y(y2))
-          .style('stroke', 'var(--ds-color-text-secondary)')
           .style('stroke-width', 1.5)
           .style('stroke-dasharray', '6,4')
           .style('opacity', 0.6);
@@ -389,7 +383,6 @@ export const ScatterChart = memo(function ScatterChart({
         .attr('x', chartWidth / 2)
         .attr('y', chartHeight - 4)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(xLabel);
     }
@@ -403,14 +396,12 @@ export const ScatterChart = memo(function ScatterChart({
         .attr('x', -chartHeight / 2)
         .attr('y', 14)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(yLabel);
     }
 
     // Style axis lines
-    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
-    svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
 
     // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()

@@ -160,7 +160,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 data-part="column-header"
                 className="rounded-xl px-4 py-3 mb-2"
                 style={{
-                  background: 'var(--ds-surface-inset)',
                   borderTop: column.color
                     ? `3px solid ${column.color}`
                     : undefined,
@@ -177,12 +176,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       </span>
                       <div
                         data-part="wip-badge"
-                        style={{
-                          ...pillBadgeSmStyle,
-                          ...(isOverLimit
-                            ? { background: 'color-mix(in srgb, var(--ds-color-error) 15%, transparent)', color: 'var(--ds-color-error)' }
-                            : { background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' }),
-                        }}
+                        style={pillBadgeSmStyle}
                       >
                         {column.items.length}
                         {column.limit !== undefined && ` / ${column.limit}`}
@@ -203,21 +197,13 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   className={`flex-1 rounded-xl p-2 min-h-[100px] transition-colors ${
                     isDropping ? 'ring-2' : ''
                   }`}
-                  style={{
-                    background: isDropping
-                      ? 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)'
-                      : 'var(--ds-surface-card)',
-                    '--tw-ring-color': isDropping
-                      ? 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)'
-                      : undefined,
-                  } as React.CSSProperties}
                   onDragOver={(e) =>
                     handleDragOver(e, column.id, column.items.length)
                   }
                   onDrop={(e) => handleDrop(e, column.id, column.items.length)}
                 >
                   {column.items.length === 0 && emptyColumn ? (
-                    <div data-part="empty-column" className="flex items-center justify-center p-6" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                    <div data-part="empty-column" className="flex items-center justify-center p-6">
                       {emptyColumn}
                     </div>
                   ) : (
@@ -253,7 +239,6 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                               ? 'opacity-40'
                               : 'opacity-100'
                           }`}
-                          style={{ background: 'var(--ds-surface-card)', borderColor: 'var(--ds-color-border)', boxShadow: 'var(--ds-elevation-1)', borderRadius: 'var(--ds-radius-lg)' }}
                         >
                           <div data-part="card-content" style={{ padding: 12 }}>
                             {renderCard(item, column.id)}
@@ -266,7 +251,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   {onAddItem && (
                     <button
                       data-part="add-item"
-                      style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px dashed var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%', marginTop: 8 }}
+                      style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%', marginTop: 8 }}
                       onClick={() => onAddItem(column.id)}
                     >
                       <svg

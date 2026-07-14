@@ -1,0 +1,84 @@
+/*
+ * WO-SKIN-06 CK-E — shared chart foundation paint.
+ *
+ * Every rule is anchored to the production scope that owns the element. The
+ * repeated scope class gives paint declarations specificity (0,4,0) where the
+ * tenant universal floor would otherwise win. Geometry and runtime series
+ * colours remain in React/D3.
+ */
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='loading'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] > [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='heading'] > [data-part='subtitle'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] > [data-part='accessible-summary'] {
+  border: 0;
+}
+
+.ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-background'] {
+  fill: var(--ds-color-bg-secondary, #f5f5f5);
+  stroke: var(--ds-color-border-subtle);
+}
+
+.ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-separator'] {
+  stroke: var(--ds-color-border-subtle);
+}
+
+.ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-dim'] {
+  fill: var(--ds-color-bg-primary);
+}
+
+.ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-selection'] {
+  fill: var(--ds-color-primary);
+}
+
+.ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-selection-border'] {
+  fill: none;
+  stroke: var(--ds-color-primary);
+}
+
+.ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-handle'] {
+  fill: var(--ds-color-primary);
+}
+
+.ds-chart-brush.ds-chart-brush[data-part='chart-brush'] > [data-part='brush-interaction'] {
+  fill: transparent;
+}
+
+.ds-chart-tooltip.ds-chart-tooltip[data-part='chart-tooltip'][data-state] {
+  background: var(--ds-color-bg-elevated);
+  border: 1px solid var(--ds-color-border);
+  color: var(--ds-color-text-primary);
+  box-shadow: var(--ds-shadow-lg);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-chart-tooltip-value.ds-chart-tooltip-value[data-part='tooltip-value'] > [data-part='swatch'],
+.ds-chart-tooltip-series.ds-chart-tooltip-series[data-part='tooltip-series'] [data-part='swatch'] {
+  border-radius: 50%;
+}
+
+.ds-chart-tooltip-value.ds-chart-tooltip-value[data-part='tooltip-value'] > [data-part='label'],
+.ds-chart-tooltip-series.ds-chart-tooltip-series[data-part='tooltip-series'] [data-part='label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-tooltip-series.ds-chart-tooltip-series[data-part='tooltip-series'] > [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] [data-part='crosshair-line'] {
+  stroke: var(--ds-color-border);
+}
+
+.ds-chart-scaffold.ds-chart-scaffold[data-part='chart-scaffold'] [data-part='crosshair-dot'] {
+  stroke: var(--ds-color-bg-primary);
+}

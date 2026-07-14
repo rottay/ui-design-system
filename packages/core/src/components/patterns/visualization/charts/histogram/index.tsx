@@ -153,13 +153,13 @@ export const Histogram = memo(function Histogram({
   const legendNode = legend ? (
     <div data-part="legend" data-variant={density ? 'density' : 'frequency'} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       <div data-part="legend-item" data-series="histogram" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-        <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: color, display: 'inline-block' }} />
-        <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{density ? 'Density' : 'Frequency'}</span>
+        <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: color, display: 'inline-block' }} />
+        <span data-part="legend-label">{density ? 'Density' : 'Frequency'}</span>
       </div>
       {cumulativeLine ? (
         <div data-part="legend-item" data-series="cumulative" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
           <span data-part="legend-swatch" style={{ width: 12, height: 2, backgroundColor: cumulativeColor, display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>Cumulative</span>
+          <span data-part="legend-label">Cumulative</span>
         </div>
       ) : null}
     </div>
@@ -217,7 +217,6 @@ export const Histogram = memo(function Histogram({
       .call(xAxis)
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Y axis
@@ -227,7 +226,6 @@ export const Histogram = memo(function Histogram({
       .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Horizontal grid lines
@@ -238,7 +236,6 @@ export const Histogram = memo(function Histogram({
       .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
       .selectAll('line')
       .attr('data-part', 'grid-line')
-      .style('stroke', 'var(--ds-color-border-secondary)')
       .style('stroke-opacity', 0.5);
 
     g.selectAll('.grid .domain').remove();
@@ -302,7 +299,6 @@ export const Histogram = memo(function Histogram({
         .attr('data-series', 'histogram')
         .attr('x', (d) => (x(d.x0 ?? 0) + x(d.x1 ?? 0)) / 2)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-primary)')
         .style('font-size', '11px')
         .text((_, i) => density ? yValues[i].toFixed(2) : yValues[i]);
 
@@ -363,7 +359,10 @@ export const Histogram = memo(function Histogram({
           .attr('text-anchor', 'start')
           .attr('dx', 6);
 
-        rightAxis.select('.domain').style('stroke', cumulativeColor).style('stroke-opacity', 0.4);
+        // Keep the caller-derived site as a presentation attribute. The chart
+        // skin deliberately wins over it to preserve the pre-migration output:
+        // the later global domain pass historically overwrote this colour.
+        rightAxis.select('.domain').attr('stroke', cumulativeColor).style('stroke-opacity', 0.4);
 
         // Line path
         const lineGenerator = d3Line<{ cx: number; cy: number }>()
@@ -428,7 +427,6 @@ export const Histogram = memo(function Histogram({
         .attr('x', chartWidth / 2)
         .attr('y', chartHeight - 4)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(xLabel);
     }
@@ -442,14 +440,12 @@ export const Histogram = memo(function Histogram({
         .attr('x', -chartHeight / 2)
         .attr('y', 14)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(yLabel);
     }
 
     // Style axis lines
-    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
-    svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
   }, [
     values,

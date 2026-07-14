@@ -12,10 +12,12 @@ import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const chartsRoot = join(packageRoot, 'src/components/patterns/visualization/charts');
+const skinsRoot = join(packageRoot, 'src/tokens/css/components/skin');
 
 const CHARTS = {
   area: {
     directory: 'area-chart',
+    skin: 'chart-area.css',
     scope: 'ds-chart-area',
     start: [4, 16],
     floor: [2, 8],
@@ -24,6 +26,7 @@ const CHARTS = {
   },
   bar: {
     directory: 'bar-chart',
+    skin: 'chart-bar.css',
     scope: 'ds-chart-bar',
     start: [6, 29],
     floor: [2, 6],
@@ -32,6 +35,7 @@ const CHARTS = {
   },
   radar: {
     directory: 'radar-chart',
+    skin: 'chart-radar.css',
     scope: 'ds-chart-radar',
     start: [5, 7],
     floor: [3, 3],
@@ -40,6 +44,7 @@ const CHARTS = {
   },
   treemap: {
     directory: 'treemap',
+    skin: 'chart-treemap.css',
     scope: 'ds-chart-treemap',
     start: [3, 4],
     floor: [1, 1],
@@ -48,6 +53,7 @@ const CHARTS = {
   },
   pie: {
     directory: 'pie-chart',
+    skin: 'chart-pie.css',
     scope: 'ds-chart-pie',
     start: [3, 3],
     floor: [1, 1],
@@ -56,6 +62,7 @@ const CHARTS = {
   },
   bullet: {
     directory: 'bullet',
+    skin: 'chart-bullet.css',
     scope: 'ds-chart-bullet',
     start: [14, 10],
     floor: [12, 6],
@@ -64,6 +71,7 @@ const CHARTS = {
   },
   waterfall: {
     directory: 'waterfall',
+    skin: 'chart-waterfall.css',
     scope: 'ds-chart-waterfall',
     start: [6, 14],
     floor: [4, 2],
@@ -72,6 +80,7 @@ const CHARTS = {
   },
   line: {
     directory: 'line-chart',
+    skin: 'chart-line.css',
     scope: 'ds-chart-line',
     start: [4, 14],
     floor: [2, 5],
@@ -80,6 +89,7 @@ const CHARTS = {
   },
   gantt: {
     directory: 'gantt-chart',
+    skin: 'chart-gantt.css',
     scope: 'ds-chart-gantt',
     start: [0, 9],
     floor: [0, 2],
@@ -88,6 +98,7 @@ const CHARTS = {
   },
   heatmap: {
     directory: 'heatmap',
+    skin: 'chart-heatmap.css',
     scope: 'ds-chart-heatmap',
     start: [0, 5],
     floor: [0, 1],
@@ -96,6 +107,7 @@ const CHARTS = {
   },
   calendarHeatmap: {
     directory: 'calendar-heatmap',
+    skin: 'chart-calendar-heatmap.css',
     scope: 'ds-chart-calendar-heatmap',
     start: [0, 3],
     floor: [0, 1],
@@ -110,6 +122,10 @@ function sourcePath(chart) {
 
 function source(chart) {
   return readFileSync(sourcePath(chart), 'utf8');
+}
+
+function skin(chart) {
+  return readFileSync(join(skinsRoot, chart.skin), 'utf8');
 }
 
 function authoredParts(text) {
@@ -144,7 +160,7 @@ function renderAnatomy(text, path) {
   return anatomy.join('\n');
 }
 
-test('CK-E chart slices A+B retain their exact 80 + 79 pre-step paint counts', () => {
+test('CK-E chart slices A+B reach their exact 28 + 35 Stage-1 floors', () => {
   const totals = { inline: 0, runtime: 0 };
 
   for (const [name, chart] of Object.entries(CHARTS)) {
@@ -153,14 +169,14 @@ test('CK-E chart slices A+B retain their exact 80 + 79 pre-step paint counts', (
     const inline = countArc09PaintInFile(text, path);
     const runtime = analyzeRuntimeSvgPaint(text, path);
 
-    assert.equal(inline, chart.start[0], `${name} inline paint drifted during the inert pre-step`);
-    assert.equal(runtime.count, chart.start[1], `${name} runtime SVG paint drifted during the inert pre-step`);
+    assert.equal(inline, chart.floor[0], `${name} inline paint missed its Stage-1 floor`);
+    assert.equal(runtime.count, chart.floor[1], `${name} runtime SVG paint missed its Stage-1 floor`);
     assert.equal(runtime.unclassified, 0, `${name} introduced unclassified runtime SVG paint`);
     totals.inline += inline;
     totals.runtime += runtime.count;
   }
 
-  assert.deepEqual(totals, { inline: 45, runtime: 114 });
+  assert.deepEqual(totals, { inline: 27, runtime: 36 });
 });
 
 test('CK-E chart slices A+B expose every planned scope and anatomy hook', () => {
@@ -181,6 +197,44 @@ test('CK-E chart slices A+B expose every planned scope and anatomy hook', () => 
   assert.match(source(CHARTS.waterfall), /\.attr\('data-status',\s*\(d\) => d\.type\)/);
   assert.match(source(CHARTS.line), /\.attr\('data-x-type',\s*xType\)/);
   assert.match(source(CHARTS.calendarHeatmap), /\.attr\('data-state',\s*\(d\) => \{/);
+});
+
+test('CK-E chart slices A+B skins are scope-anchored and reference live anatomy', () => {
+  for (const [name, chart] of Object.entries(CHARTS)) {
+    const css = skin(chart);
+    const cssWithoutComments = css.replace(/\/\*[\s\S]*?\*\//g, '');
+    const parts = authoredParts(source(chart));
+
+    assert.doesNotMatch(css, /!important/, `${name} skin must not use !important`);
+    for (const match of cssWithoutComments.matchAll(/([^{}]+)\{/g)) {
+      for (const selector of match[1].split(',')) {
+        assert.match(
+          selector.trim(),
+          new RegExp(`^\\.${chart.scope}(?:\\s|\\[|\\.|:|$)`),
+          `${name} has an unscoped skin selector: ${selector.trim()}`,
+        );
+      }
+    }
+    for (const match of css.matchAll(/\[data-part='([^']+)'\]/g)) {
+      assert.ok(parts.has(match[1]), `${name} skin references dead data-part="${match[1]}"`);
+    }
+  }
+
+  for (const name of ['area', 'bar', 'waterfall', 'line', 'gantt']) {
+    const css = skin(CHARTS[name]);
+    const secondary = css.indexOf('stroke: var(--ds-color-border-secondary)');
+    const finalPrimary = css.lastIndexOf('stroke: var(--ds-color-border-primary)');
+    assert.ok(secondary >= 0 && finalPrimary > secondary, `${name} lost the final tick/grid overwrite`);
+    assert.equal(css.match(/\[data-part='grid-line'\]/g)?.length, 2, `${name} must preserve both grid writes`);
+  }
+
+  for (const name of ['area', 'line']) {
+    assert.match(
+      skin(CHARTS[name]),
+      /\[data-part='interaction-overlay'\]\s*\{\s*fill:\s*transparent;/,
+      `${name} overlay must remain pointer-painted`,
+    );
+  }
 });
 
 test('CK-E chart slices A+B preserve the pre-step React and D3 element anatomy', () => {

@@ -12,7 +12,13 @@ import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const chartsRoot = join(packageRoot, 'src/components/patterns/visualization/charts');
+const cssRoot = join(packageRoot, 'src/tokens/css');
 const exemptionsPath = resolve(packageRoot, '../..', 'roadmap/skin-exemptions.json');
+const foundationSkinPath = join(cssRoot, 'components/skin/chart-foundation.css');
+const entrypointPaths = [
+  join(cssRoot, 'foundation/base.css'),
+  join(cssRoot, 'entrypoints/styles.css'),
+];
 
 const FILES = {
   scaffold: { path: 'chart-scaffold.tsx', start: [4, 0], floor: [0, 0], topology: '7128c939d91ecdb86bf4861f6e98c64f12ad69f5b313ddecc1b2280425814ae0' },
@@ -70,7 +76,7 @@ function renderAnatomy(text, path) {
   return anatomy.join('\n');
 }
 
-test('CK-E foundation retains its exact 34 inline + 8 runtime pre-step sites', () => {
+test('CK-E foundation lands at its exact 8 inline + 5 runtime Stage-1 floor', () => {
   let inlineTotal = 0;
   let runtimeTotal = 0;
   for (const [name, entry] of Object.entries(FILES)) {
@@ -78,13 +84,13 @@ test('CK-E foundation retains its exact 34 inline + 8 runtime pre-step sites', (
     const text = source(entry);
     const inline = countArc09PaintInFile(text, path);
     const runtime = analyzeRuntimeSvgPaint(text, path);
-    assert.equal(inline, entry.start[0], `${name} inline paint drifted during the inert pre-step`);
-    assert.equal(runtime.count, entry.start[1], `${name} runtime SVG paint drifted during the inert pre-step`);
+    assert.equal(inline, entry.floor[0], `${name} inline paint missed its Stage-1 floor`);
+    assert.equal(runtime.count, entry.floor[1], `${name} runtime SVG paint missed its Stage-1 floor`);
     assert.equal(runtime.unclassified, 0, `${name} introduced unclassified runtime SVG paint`);
     inlineTotal += inline;
     runtimeTotal += runtime.count;
   }
-  assert.deepEqual([inlineTotal, runtimeTotal], [34, 8]);
+  assert.deepEqual([inlineTotal, runtimeTotal], [8, 5]);
 });
 
 test('CK-E foundation exposes scaffold, brush, tooltip and crosshair anatomy', () => {
@@ -146,12 +152,41 @@ test('CK-E foundation floors pin theme data, tooltip swatches, crosshair data an
   assert.equal(theme.match(/background: FALLBACK_HEX\.surfaceBg/g)?.length, 1);
   assert.equal(theme.match(/background: `var\(\$\{CSS_VARS\.surfaceBg\}\)`/g)?.length, 2);
   assert.equal(theme.match(/background: resolveName\(CSS_VARS\.surfaceBg, FALLBACK_HEX\.surfaceBg\)/g)?.length, 1);
-  assert.equal(source(FILES.exportHook).match(/backgroundColor: '#ffffff'/g)?.length, 1);
+  assert.doesNotMatch(source(FILES.exportHook), /backgroundColor: '#ffffff'/);
+  assert.match(source(FILES.exporter), /const bgColor = options\.backgroundColor \?\? '#ffffff';/);
   const start = Object.values(FILES).reduce((sum, entry) => sum + entry.start[0] + entry.start[1], 0);
   const floor = Object.values(FILES).reduce((sum, entry) => sum + entry.floor[0] + entry.floor[1], 0);
   assert.equal(start, 42);
   assert.equal(floor, 13);
   assert.equal(start - floor, 29);
+});
+
+test('CK-E foundation skin owns every migrated paint and is wired through both entrypoints', () => {
+  const skin = readFileSync(foundationSkinPath, 'utf8');
+  assert.doesNotMatch(skin, /@layer|!important/);
+  for (const scope of [
+    '.ds-chart-scaffold.ds-chart-scaffold',
+    '.ds-chart-brush.ds-chart-brush',
+    '.ds-chart-tooltip.ds-chart-tooltip',
+    '.ds-chart-tooltip-value.ds-chart-tooltip-value',
+    '.ds-chart-tooltip-series.ds-chart-tooltip-series',
+  ]) {
+    assert.match(skin, new RegExp(scope.replaceAll('.', '\\.')), `foundation skin lacks ${scope}`);
+  }
+  for (const declaration of [
+    'background: var(--ds-color-bg-elevated)',
+    'border: 1px solid var(--ds-color-border)',
+    'box-shadow: var(--ds-shadow-lg)',
+    'fill: var(--ds-color-primary)',
+    'fill: transparent',
+    'stroke: var(--ds-color-border)',
+    'stroke: var(--ds-color-bg-primary)',
+  ]) {
+    assert.ok(skin.includes(declaration), `foundation skin lacks ${declaration}`);
+  }
+  for (const entrypointPath of entrypointPaths) {
+    assert.match(readFileSync(entrypointPath, 'utf8'), /@import '\.\.\/components\/skin\/chart-foundation\.css';/);
+  }
 });
 
 test('CK-E foundation preserves its pre-step React, D3 and DOM element anatomy', () => {

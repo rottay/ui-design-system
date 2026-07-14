@@ -1,0 +1,6 @@
+/** CalendarHeatMap skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-chart-calendar-heatmap [data-part='day-label'],
+.ds-chart-calendar-heatmap [data-part='month-label'] {
+  fill: var(--ds-color-text-secondary);
+}

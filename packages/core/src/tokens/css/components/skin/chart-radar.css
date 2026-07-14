@@ -1,0 +1,22 @@
+/** RadarChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-chart-radar [data-part='legend-swatch'] {
+  border-radius: 2px;
+}
+
+.ds-chart-radar [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-radar [data-part='grid-level'],
+.ds-chart-radar [data-part='axis-line'] {
+  stroke: var(--ds-color-border-secondary);
+}
+
+.ds-chart-radar [data-part='axis-label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-radar [data-part='series-point'] {
+  stroke: var(--ds-color-bg-primary);
+}

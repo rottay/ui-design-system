@@ -1,0 +1,53 @@
+/** Modern Timeline pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='success'] {
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='warning'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='error'] {
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__avatar[data-part='avatar'] {
+  border-radius: 50%;
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'] {
+  border-radius: 9999px;
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='default'],
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='info'] {
+  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
+  color: var(--ds-color-info);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='success'] {
+  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='warning'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error'] {
+  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']
+  > .ds-timeline-modern__spinner[data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}

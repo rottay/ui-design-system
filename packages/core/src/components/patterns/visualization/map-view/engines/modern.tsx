@@ -64,7 +64,7 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
         {/* Loading state replaces the entire map + list with a centered DaisyUI spinner */}
         {loading ? (
           <div data-part="loading" className="flex justify-center items-center" style={{ height }}>
-            <span data-part="spinner" style={{ display: 'inline-block', width: 32, height: 32, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+            <span data-part="spinner" style={{ display: 'inline-block', width: 32, height: 32, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
           </div>
         ) : (
           <>
@@ -74,17 +74,17 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
             <div
               data-part="map-placeholder"
               className="rounded-lg flex items-center justify-center mb-4 border"
-              style={{ height, background: 'color-mix(in srgb, var(--ds-color-info) 10%, transparent)', borderColor: 'var(--ds-color-border)' }}
+              style={{ height }}
             >
               <div data-part="placeholder-content" className="text-center">
-                <div data-part="placeholder-label" data-detail="title" className="text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>Map placeholder</div>
-                <div data-part="placeholder-label" data-detail="location" className="text-xs mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <div data-part="placeholder-label" data-detail="title" className="text-sm">Map placeholder</div>
+                <div data-part="placeholder-label" data-detail="location" className="text-xs mt-1">
                   {center
                     ? `Center: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`
                     : 'No center set'}
                   {zoom != null ? ` | Zoom: ${zoom}` : ''}
                 </div>
-                <div data-part="placeholder-label" data-detail="count" className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                <div data-part="placeholder-label" data-detail="count" className="text-xs">
                   {markers.length} marker{markers.length !== 1 ? 's' : ''}
                 </div>
               </div>
@@ -92,9 +92,9 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
 
             {/* Marker list -- uses divide-y for row separators without manual border logic */}
             {markers.length === 0 ? (
-              <div data-part="empty" className="text-center py-8 text-sm" style={{ color: 'var(--ds-color-text-secondary)' }}>No markers</div>
+              <div data-part="empty" className="text-center py-8 text-sm">No markers</div>
             ) : (
-              <div data-part="marker-list" className="divide-y rounded-lg overflow-hidden border" style={{ borderColor: 'var(--ds-color-border)', '--tw-divide-color': 'var(--ds-color-border)' } as React.CSSProperties}>
+              <div data-part="marker-list" className="divide-y rounded-lg overflow-hidden border" style={{ '--tw-divide-color': 'var(--ds-color-border)' } as React.CSSProperties}>
                 {markers.map((marker, i) => {
                   /* Selected marker gets a primary tint background */
                   const isSelected = marker.id === selectedMarkerId;
@@ -106,7 +106,6 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
                       key={marker.id}
                       onClick={() => onMarkerClick?.(marker)}
                       className="p-3 cursor-pointer"
-                      style={isSelected ? { background: 'color-mix(in srgb, var(--ds-color-primary) 10%, transparent)' } : {}}
                     >
                       {/* Custom renderer takes priority; default shows icon, color dot, label, and coords */}
                       {renderMarker ? (
@@ -128,7 +127,7 @@ export default function ModernMapView<T>(props: MapViewProps<T>) {
                               {marker.label ?? marker.id}
                             </div>
                             {/* Coordinates formatted to 4 decimal places (~11m precision) */}
-                            <div data-part="coordinates" className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                            <div data-part="coordinates" className="text-xs">
                               {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
                             </div>
                           </div>

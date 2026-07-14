@@ -1,0 +1,21 @@
+/** BulletChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-chart-bullet [data-part='legend-swatch'][data-variant='target'] {
+  border-radius: 0;
+}
+
+.ds-chart-bullet [data-part='legend-swatch'][data-variant='range'] {
+  border-radius: 2px;
+}
+
+.ds-chart-bullet [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-bullet [data-part='item-label'] {
+  fill: var(--ds-color-text-primary);
+}
+
+.ds-chart-bullet [data-part='value-label'] {
+  fill: var(--ds-color-text-secondary);
+}

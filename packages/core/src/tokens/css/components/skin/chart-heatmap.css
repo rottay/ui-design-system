@@ -1,0 +1,10 @@
+/** HeatMap skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-chart-heatmap [data-part='axis-tick-label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-heatmap [data-part='axis-domain'],
+.ds-chart-heatmap [data-part='axis-tick'] {
+  stroke: var(--ds-color-border-primary);
+}

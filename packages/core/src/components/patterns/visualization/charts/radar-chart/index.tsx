@@ -82,8 +82,8 @@ export const RadarChart = memo(function RadarChart({
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {allSeries.map((s, i) => (
         <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-label">{s.name}</span>
         </div>
       ))}
     </div>
@@ -132,7 +132,6 @@ export const RadarChart = memo(function RadarChart({
         .attr('data-part', 'grid-level')
         .attr('points', points.map((p) => p.join(',')).join(' '))
         .attr('fill', 'none')
-        .attr('stroke', 'var(--ds-color-border-secondary)')
         .attr('stroke-opacity', 0.5);
     }
 
@@ -145,7 +144,6 @@ export const RadarChart = memo(function RadarChart({
         .attr('y1', 0)
         .attr('x2', radius * Math.cos(angle))
         .attr('y2', radius * Math.sin(angle))
-        .attr('stroke', 'var(--ds-color-border-secondary)')
         .attr('stroke-opacity', 0.5);
     });
 
@@ -160,7 +158,6 @@ export const RadarChart = memo(function RadarChart({
           .attr('y', labelR * Math.sin(angle))
           .attr('text-anchor', 'middle')
           .attr('dominant-baseline', 'middle')
-          .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '11px')
           .text(axis);
       });
@@ -206,7 +203,6 @@ export const RadarChart = memo(function RadarChart({
           .attr('cy', r * Math.sin(angle))
           .attr('r', 3.5)
           .attr('fill', color)
-          .attr('stroke', 'var(--ds-color-bg-primary)')
           .attr('stroke-width', 1.5);
 
         if (chartPersonality.tooltip) {

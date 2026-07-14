@@ -82,8 +82,8 @@ export const PieChart = memo(function PieChart({
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
         <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-label">{d.label}</span>
         </div>
       ))}
     </div>
@@ -141,7 +141,6 @@ export const PieChart = memo(function PieChart({
       .attr('data-part', 'slice-surface')
       .attr('data-variant', donut ? 'donut' : 'pie')
       .attr('fill', (d, i) => d.data.color ?? palette[i % palette.length])
-      .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 2);
 
     if (chartPersonality.tooltip) {
@@ -176,7 +175,6 @@ export const PieChart = memo(function PieChart({
         .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .style('fill', 'var(--ds-color-text-primary)')
         .style('font-size', '11px')
         .style('pointer-events', 'none')
         .text((d) => {

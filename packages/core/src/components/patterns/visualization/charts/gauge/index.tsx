@@ -73,11 +73,23 @@ function degreesToRadians(degrees: number): number {
 }
 
 /** Default segment configuration: red (0-33), yellow (34-66), green (67-100). */
-const DEFAULT_SEGMENTS: GaugeSegment[] = [
-  { from: 0, to: 33, color: 'var(--ds-color-error)', label: 'Low' },
-  { from: 33, to: 66, color: 'var(--ds-color-warning)', label: 'Medium' },
-  { from: 66, to: 100, color: 'var(--ds-color-success)', label: 'High' },
+const DEFAULT_SEGMENTS: Array<Omit<GaugeSegment, 'color'>> = [
+  { from: 0, to: 33, label: 'Low' },
+  { from: 33, to: 66, label: 'Medium' },
+  { from: 66, to: 100, label: 'High' },
 ];
+
+const DEFAULT_SEGMENT_TONES = ['error', 'warning', 'success'] as const;
+const DEFAULT_SEGMENT_COLORS = [
+  'var(--ds-color-error)',
+  'var(--ds-color-warning)',
+  'var(--ds-color-success)',
+] as const;
+
+function segmentTone(usesDefaultSegments: boolean, index: number): 'custom' | (typeof DEFAULT_SEGMENT_TONES)[number] {
+  if (!usesDefaultSegments) return 'custom';
+  return DEFAULT_SEGMENT_TONES[index % DEFAULT_SEGMENT_TONES.length] ?? 'error';
+}
 
 /**
  * Renders a gauge/dial chart with a segmented arc background and an animated
@@ -95,7 +107,7 @@ export const GaugeChart = memo(function GaugeChart({
   value,
   min = 0,
   max = 100,
-  segments = DEFAULT_SEGMENTS,
+  segments: providedSegments,
   showValue = true,
   formatValue,
   label,
@@ -125,6 +137,12 @@ export const GaugeChart = memo(function GaugeChart({
   const compactState = useChartCompact({ compact, autoCompact, compactBreakpoint, containerWidth: dimensions.width });
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 400;
   const chartHeight = compactState.isCompact ? Math.max(height, compactState.minHeight) : height;
+  // Only the private defaults move their SVG fill to the finite skin. Every
+  // caller-owned array keeps the original fill contract, including an
+  // explicitly empty color string.
+  const usesDefaultSegments = providedSegments === undefined;
+  const segments: ReadonlyArray<Omit<GaugeSegment, 'color'> & { color?: string }> =
+    providedSegments ?? DEFAULT_SEGMENTS;
 
   // Clamp value to [min, max] range
   const clampedValue = Math.max(min, Math.min(max, value));
@@ -158,10 +176,20 @@ export const GaugeChart = memo(function GaugeChart({
   // Legend node
   const legendNode = legend ? (
     <div data-part="legend" data-variant="gauge" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      {segments.map((seg) => (
+      {segments.map((seg, index) => (
         <div key={`${seg.from}-${seg.to}`} data-part="legend-item" data-state={seg === activeSegment ? 'active' : 'inactive'} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: seg.color, display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{seg.label ?? `${seg.from}-${seg.to}`}</span>
+          <span
+            data-part="legend-swatch"
+            data-color-source={usesDefaultSegments ? 'default' : 'custom'}
+            data-tone={segmentTone(usesDefaultSegments, index)}
+            style={{
+              width: 12,
+              height: 12,
+              backgroundColor: usesDefaultSegments ? DEFAULT_SEGMENT_COLORS[index] : seg.color,
+              display: 'inline-block',
+            }}
+          />
+          <span data-part="legend-label">{seg.label ?? `${seg.from}-${seg.to}`}</span>
         </div>
       ))}
     </div>
@@ -205,12 +233,11 @@ export const GaugeChart = memo(function GaugeChart({
     g.append('path')
       .attr('data-part', 'track')
       .attr('d', backgroundArc({} as any) as string)
-      .attr('fill', 'var(--ds-color-bg-tertiary)')
       .attr('opacity', 0.4);
 
     // Render each segment as a separate arc band.
     const range = max - min;
-    segments.forEach((seg) => {
+    segments.forEach((seg, index) => {
       const segStartFraction = Math.max(0, (seg.from - min) / range);
       const segEndFraction = Math.min(1, (seg.to - min) / range);
       const segStartAngle = startRad + totalAngle * segStartFraction;
@@ -224,9 +251,11 @@ export const GaugeChart = memo(function GaugeChart({
         .cornerRadius(1);
 
       const segPath = g.append('path')
-      .attr('data-part', 'segment')
-      .attr('data-state', seg === activeSegment ? 'active' : 'inactive')
-        .attr('fill', seg.color)
+        .attr('data-part', 'segment')
+        .attr('data-state', seg === activeSegment ? 'active' : 'inactive')
+        .attr('data-color-source', usesDefaultSegments ? 'default' : 'custom')
+        .attr('data-tone', segmentTone(usesDefaultSegments, index))
+        .attr('fill', usesDefaultSegments ? null : (seg.color ?? null))
         .attr('opacity', 0.85);
 
       if (chartPersonality.animate) {
@@ -327,7 +356,6 @@ export const GaugeChart = memo(function GaugeChart({
         .attr('y', 8)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .style('fill', 'var(--ds-color-text-primary)')
         .style('font-size', `${Math.max(16, radius * 0.22)}px`)
         .style('font-weight', '600')
         .text(displayValue);
@@ -350,7 +378,6 @@ export const GaugeChart = memo(function GaugeChart({
         .attr('y', showValue ? 32 : 8)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', `${Math.max(11, radius * 0.11)}px`)
         .text(label);
 
@@ -366,7 +393,7 @@ export const GaugeChart = memo(function GaugeChart({
   }, [
     chartWidth, chartHeight, clampedValue, min, max, segments, showValue,
     displayValue, label, startAngle, endAngle, innerRadius, showNeedle,
-    needleColor, chartPersonality, compactState.compactTooltip,
+    needleColor, chartPersonality, compactState.compactTooltip, usesDefaultSegments,
   ]);
 
   return (

@@ -175,8 +175,8 @@ export const BarChart = memo(function BarChart({
       <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
         {series!.map((s, i) => (
           <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-            <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: seriesColors[i], display: 'inline-block' }} />
-            <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+            <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: seriesColors[i], display: 'inline-block' }} />
+            <span data-part="legend-label">{s.name}</span>
           </div>
         ))}
       </div>
@@ -184,8 +184,8 @@ export const BarChart = memo(function BarChart({
       <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
         {singleData.map((d, i) => (
           <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-            <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
-            <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+            <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
+            <span data-part="legend-label">{d.label}</span>
           </div>
         ))}
       </div>
@@ -302,14 +302,12 @@ export const BarChart = memo(function BarChart({
             .call(axisBottom(x0))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y).ticks(tickCount))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           // Grid
@@ -318,7 +316,6 @@ export const BarChart = memo(function BarChart({
             .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
             .selectAll('line')
             .attr('data-part', 'grid-line')
-            .style('stroke', 'var(--ds-color-border-secondary)')
             .style('stroke-opacity', 0.5);
           g.selectAll('.grid .domain').remove();
 
@@ -378,7 +375,6 @@ export const BarChart = memo(function BarChart({
                 .attr('y', (d) => y(d[1]) + (y(d[0]) - y(d[1])) / 2)
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'central')
-                .style('fill', 'var(--ds-color-text-primary)')
                 .style('font-size', '10px')
                 .text((d) => {
                   const val = d[1] - d[0];
@@ -403,14 +399,12 @@ export const BarChart = memo(function BarChart({
             .call(axisBottom(x0))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y).ticks(tickCount))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           // Grid
@@ -419,7 +413,6 @@ export const BarChart = memo(function BarChart({
             .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
             .selectAll('line')
             .attr('data-part', 'grid-line')
-            .style('stroke', 'var(--ds-color-border-secondary)')
             .style('stroke-opacity', 0.5);
           g.selectAll('.grid .domain').remove();
 
@@ -481,7 +474,6 @@ export const BarChart = memo(function BarChart({
                 .attr('data-part', 'value-label')
                 .attr('x', (x1(s.name) ?? 0) + x1.bandwidth() / 2)
                 .attr('text-anchor', 'middle')
-                .style('fill', 'var(--ds-color-text-primary)')
                 .style('font-size', '10px')
                 .each(function (_cat) {
                   const pt = s.data.find((d) => String(d.x) === _cat);
@@ -517,14 +509,12 @@ export const BarChart = memo(function BarChart({
             .call(axisBottom(x).ticks(tickCount))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y0))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           stackedData.forEach((layer, layerIdx) => {
@@ -586,14 +576,12 @@ export const BarChart = memo(function BarChart({
             .call(axisBottom(x).ticks(tickCount))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y0))
             .selectAll('text')
             .attr('data-part', 'axis-tick-label')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           const categoryGroups = g.selectAll('.category-group')
@@ -662,14 +650,12 @@ export const BarChart = memo(function BarChart({
           .call(axisBottom(x))
           .selectAll('text')
           .attr('data-part', 'axis-tick-label')
-          .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
         g.append('g')
           .call(axisLeft(y).ticks(tickCount))
           .selectAll('text')
           .attr('data-part', 'axis-tick-label')
-          .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
         g.append('g')
@@ -677,7 +663,6 @@ export const BarChart = memo(function BarChart({
           .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
           .selectAll('line')
           .attr('data-part', 'grid-line')
-          .style('stroke', 'var(--ds-color-border-secondary)')
           .style('stroke-opacity', 0.5);
         g.selectAll('.grid .domain').remove();
 
@@ -726,7 +711,6 @@ export const BarChart = memo(function BarChart({
             .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
             .attr('y', (d) => y(d.value) - 5)
             .attr('text-anchor', 'middle')
-            .style('fill', 'var(--ds-color-text-primary)')
             .style('font-size', '11px')
             .text((d) => d.value);
         }
@@ -746,14 +730,12 @@ export const BarChart = memo(function BarChart({
           .call(axisBottom(x).ticks(tickCount))
           .selectAll('text')
           .attr('data-part', 'axis-tick-label')
-          .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
         g.append('g')
           .call(axisLeft(y))
           .selectAll('text')
           .attr('data-part', 'axis-tick-label')
-          .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
         const bars = g
@@ -800,7 +782,6 @@ export const BarChart = memo(function BarChart({
             .attr('x', (d) => x(d.value) + 5)
             .attr('y', (d) => (y(d.label) ?? 0) + y.bandwidth() / 2)
             .attr('dominant-baseline', 'middle')
-            .style('fill', 'var(--ds-color-text-primary)')
             .style('font-size', '11px')
             .text((d) => d.value);
         }
@@ -817,7 +798,6 @@ export const BarChart = memo(function BarChart({
         .attr('x', chartWidth / 2)
         .attr('y', chartHeight - 4)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(xAxisLabel);
     }
@@ -831,15 +811,13 @@ export const BarChart = memo(function BarChart({
         .attr('x', -chartHeight / 2)
         .attr('y', 14)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(yAxisLabel);
     }
 
     // Style axis lines
-    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-    svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
 
     // Assigned last so the crosshair paints on top of every bar; the
     // `attachBarHover` closures above only read `crosshair` at hover time.

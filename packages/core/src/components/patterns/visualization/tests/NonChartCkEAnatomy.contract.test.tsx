@@ -134,6 +134,34 @@ describe('CK-E non-chart inert anatomy', () => {
     expect(q(loading.container, '[data-part="spinner"]')).toHaveLength(engine === 'modern' ? 1 : 0);
   });
 
+  it('pins Rustic Kanban card hover-cycle state without imperative paint', () => {
+    const props = {
+      columns: [{ id: 'todo', title: 'Todo', items: [{ id: 'task-1' }] }],
+      itemKey: (item: { id: string }) => item.id,
+      renderCard: (item: { id: string }) => <span>{item.id}</span>,
+      onItemMove: () => undefined,
+    };
+    const normal = render(<RusticKanbanBoard {...props} />);
+    const card = normal.container.querySelector('[data-part="card"]') as HTMLElement;
+
+    expect(card).not.toHaveAttribute('data-hover-cycle');
+    fireEvent.mouseLeave(card);
+    expect(card).toHaveAttribute('data-hover-cycle', 'settled');
+    fireEvent.mouseEnter(card);
+    expect(card).toHaveAttribute('data-hover-cycle', 'settled');
+
+    const dataTransfer = { effectAllowed: 'move', dropEffect: 'move', setData: () => undefined };
+    fireEvent.dragStart(card, { dataTransfer });
+    expect(card).toHaveAttribute('data-dragging', 'true');
+    expect(card).toHaveAttribute('data-hover-cycle', 'settled');
+    card.removeAttribute('data-hover-cycle');
+    fireEvent.mouseLeave(card);
+    expect(card).not.toHaveAttribute('data-hover-cycle');
+    fireEvent.dragEnd(card);
+    fireEvent.mouseLeave(card);
+    expect(card).toHaveAttribute('data-hover-cycle', 'settled');
+  });
+
   it.each(ENGINES)('pins Timeline semantic/grouped and terminal anatomy (%s)', (engine) => {
     const Component = engine === 'modern' ? ModernTimeline : RusticTimeline;
     const timestamp = new Date('2026-07-14T12:00:00Z');

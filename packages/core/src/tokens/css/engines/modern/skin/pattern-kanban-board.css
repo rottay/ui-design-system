@@ -1,0 +1,72 @@
+/** Modern KanbanBoard pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-header'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column'][data-over-limit='false']
+  > [data-part='column-header']
+  [data-part='wip-badge'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column'][data-over-limit='true']
+  > [data-part='column-header']
+  [data-part='wip-badge'] {
+  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'][data-dropping='false'] {
+  background: var(--ds-surface-card);
+}
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'][data-dropping='true'] {
+  --tw-ring-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='empty-column'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card-list']
+  > [data-part='card'][data-part='card'] {
+  background: var(--ds-surface-card);
+  border-color: var(--ds-color-border);
+  box-shadow: var(--ds-elevation-1);
+  border-radius: var(--ds-radius-lg);
+}
+
+.ds-pattern-kanban-board.ds-engine-modern[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='add-item'][data-part='add-item'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px dashed var(--ds-color-border);
+}

@@ -1,0 +1,32 @@
+/** WaterfallChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-chart-waterfall [data-part='legend-swatch'] {
+  border-radius: 2px;
+}
+
+.ds-chart-waterfall [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-waterfall [data-part='axis-tick-label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-waterfall [data-part='grid-line'] {
+  stroke: var(--ds-color-border-secondary);
+}
+
+.ds-chart-waterfall [data-part='connector'] {
+  stroke: var(--ds-color-border-primary);
+}
+
+.ds-chart-waterfall [data-part='value-label'] {
+  fill: var(--ds-color-text-primary);
+}
+
+/* The former final `.tick line` D3 write also repainted grid ticks. */
+.ds-chart-waterfall [data-part='axis-domain'],
+.ds-chart-waterfall [data-part='axis-tick'],
+.ds-chart-waterfall [data-part='grid-line'] {
+  stroke: var(--ds-color-border-primary);
+}

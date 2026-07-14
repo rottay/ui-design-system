@@ -146,8 +146,8 @@ export const WaterfallChart = memo(function WaterfallChart({
         { label: 'Total', color: totalColor },
       ].map((item) => (
         <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" data-status={item.label.toLowerCase()} style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: item.color, display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.label}</span>
+          <span data-part="legend-swatch" data-status={item.label.toLowerCase()} style={{ width: 12, height: 12, backgroundColor: item.color, display: 'inline-block' }} />
+          <span data-part="legend-label">{item.label}</span>
         </div>
       ))}
     </div>
@@ -200,7 +200,6 @@ export const WaterfallChart = memo(function WaterfallChart({
         .call(axisBottom(x))
         .selectAll('text')
         .attr('data-part', 'axis-tick-label')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
       // Y axis
@@ -208,7 +207,6 @@ export const WaterfallChart = memo(function WaterfallChart({
         .call(axisLeft(y).ticks(tickCount))
         .selectAll('text')
         .attr('data-part', 'axis-tick-label')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
       // Grid lines
@@ -217,7 +215,6 @@ export const WaterfallChart = memo(function WaterfallChart({
         .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
         .selectAll('line')
         .attr('data-part', 'grid-line')
-        .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
       g.selectAll('.grid .domain').remove();
@@ -236,7 +233,6 @@ export const WaterfallChart = memo(function WaterfallChart({
               .attr('x2', nextXPos)
               .attr('y1', yPos)
               .attr('y2', yPos)
-              .style('stroke', 'var(--ds-color-border-primary)')
               .style('stroke-width', 1)
               .style('stroke-dasharray', '4,3');
           }
@@ -297,7 +293,6 @@ export const WaterfallChart = memo(function WaterfallChart({
             return d.value >= 0 ? topY - 5 : y(Math.min(d.start, d.end)) + 14;
           })
           .attr('text-anchor', 'middle')
-          .style('fill', 'var(--ds-color-text-primary)')
           .style('font-size', '11px')
           .text((d) => formatVal(d.value));
       }
@@ -319,7 +314,6 @@ export const WaterfallChart = memo(function WaterfallChart({
         .call(axisBottom(x).ticks(tickCount))
         .selectAll('text')
         .attr('data-part', 'axis-tick-label')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
       // Y axis
@@ -327,7 +321,6 @@ export const WaterfallChart = memo(function WaterfallChart({
         .call(axisLeft(y))
         .selectAll('text')
         .attr('data-part', 'axis-tick-label')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
       // Grid lines
@@ -336,7 +329,6 @@ export const WaterfallChart = memo(function WaterfallChart({
         .call(axisBottom(x).ticks(tickCount).tickSize(-innerHeight).tickFormat(() => ''))
         .selectAll('line')
         .attr('data-part', 'grid-line')
-        .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
       g.selectAll('.grid .domain').remove();
@@ -355,7 +347,6 @@ export const WaterfallChart = memo(function WaterfallChart({
               .attr('x2', xPos)
               .attr('y1', yPos)
               .attr('y2', nextYPos)
-              .style('stroke', 'var(--ds-color-border-primary)')
               .style('stroke-width', 1)
               .style('stroke-dasharray', '4,3');
           }
@@ -416,16 +407,14 @@ export const WaterfallChart = memo(function WaterfallChart({
           })
           .attr('dominant-baseline', 'middle')
           .attr('text-anchor', (d) => (d.value >= 0 ? 'start' : 'end'))
-          .style('fill', 'var(--ds-color-text-primary)')
           .style('font-size', '11px')
           .text((d) => formatVal(d.value));
       }
     }
 
     // Style axis lines
-    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-    svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
   }, [data, chartWidth, chartHeight, orientation, increaseColor, decreaseColor, totalColor, showConnectors, showValues, formatVal, chartPersonality, margin, tickCount, compactState.compactTooltip]);
 
   return (

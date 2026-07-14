@@ -1,0 +1,133 @@
+/** Rustic KanbanBoard pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root'][data-loading='true'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-header'][data-part='column-header'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-secondary, var(--ds-color-neutral-50));
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-header']
+  [data-part='column-title'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column'][data-over-limit='false']
+  > [data-part='column-header']
+  [data-part='wip-badge'] {
+  border-radius: 11px;
+  background: var(--ds-color-border-secondary, var(--ds-color-border-primary));
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column'][data-over-limit='true']
+  > [data-part='column-header']
+  [data-part='wip-badge'] {
+  border-radius: 11px;
+  background: var(--ds-color-error, var(--ds-color-danger));
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'][data-dropping='false'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-primary, var(--ds-color-background));
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body'][data-dropping='true'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+  border: 2px dashed var(--ds-color-primary);
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='empty-column'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card'][data-part='card'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  box-shadow: var(--ds-card-shadow, var(--ds-shadow-sm));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card'][data-dragging='false'] {
+  transform: translateY(0);
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card'][data-dragging='true'] {
+  transform: rotate(2deg) scale(1.02);
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card'][data-hover-cycle='settled'] {
+  box-shadow: var(--ds-card-shadow, none);
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='card'][data-dragging='false']:hover {
+  box-shadow: var(--ds-card-shadow-hover, var(--ds-shadow-md));
+  transform: var(--ds-card-hover-transform, translateY(-2px));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='add-item'][data-part='add-item'] {
+  border: 1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary));
+  border-radius: var(--ds-radius-sm, 6px);
+  background: transparent;
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-kanban-board.ds-engine-rustic[data-part='root']
+  > [data-part='board']
+  > [data-part='column']
+  > [data-part='column-body']
+  > [data-part='add-item']:hover {
+  border-color: var(--ds-color-primary);
+  color: var(--ds-color-primary);
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}

@@ -39,15 +39,6 @@ export interface ChartCrosshairHandle {
 }
 
 // ---------------------------------------------------------------------------
-// Tokens
-// ---------------------------------------------------------------------------
-
-/** Guide-line stroke -- a neutral border token, never a data/series color. */
-const CROSSHAIR_LINE_COLOR = 'var(--ds-color-border)';
-/** Focus-dot ring -- matches the persistent line-chart dot stroke convention. */
-const CROSSHAIR_DOT_RING_COLOR = 'var(--ds-color-bg-primary)';
-
-// ---------------------------------------------------------------------------
 // Crosshair
 // ---------------------------------------------------------------------------
 
@@ -81,7 +72,6 @@ export function createChartCrosshair(
     .attr('data-axis', 'x')
     .attr('y1', 0)
     .attr('y2', innerHeight)
-    .attr('stroke', CROSSHAIR_LINE_COLOR)
     .attr('stroke-width', 1)
     .attr('stroke-dasharray', '3,3');
 
@@ -92,7 +82,6 @@ export function createChartCrosshair(
     .attr('data-axis', 'y')
     .attr('x1', 0)
     .attr('x2', innerWidth)
-    .attr('stroke', CROSSHAIR_LINE_COLOR)
     .attr('stroke-width', 1)
     .attr('stroke-dasharray', '3,3')
     .style('opacity', 0);
@@ -119,7 +108,6 @@ export function createChartCrosshair(
       .attr('class', 'chart-crosshair-dot')
       .attr('data-part', 'crosshair-dot')
       .attr('r', 4)
-      .attr('stroke', CROSSHAIR_DOT_RING_COLOR)
       .attr('stroke-width', 2)
       .merge(dots)
       .attr('cx', x)

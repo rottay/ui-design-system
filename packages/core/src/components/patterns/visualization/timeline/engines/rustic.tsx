@@ -62,7 +62,6 @@ const styles = {
     top: 0,
     bottom: 0,
     width: 2,
-    background: 'var(--ds-color-neutral-200)',
   },
   item: {
     position: 'relative' as const,
@@ -75,34 +74,26 @@ const styles = {
     top: 4,
     width: 16,
     height: 16,
-    borderRadius: '50%',
-    background: color,
-    border: '3px solid var(--ds-color-background)',
-    boxShadow: `0 0 0 2px ${color}`,
+    '--ds-pattern-timeline-marker-color': color,
     zIndex: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-  }),
+  } as CSSProperties),
   iconDot: (color: string): CSSProperties => ({
     position: 'absolute',
     left: 4,
     top: 0,
     width: 24,
     height: 24,
-    borderRadius: '50%',
-    background: 'var(--ds-color-background)',
-    border: `2px solid ${color}`,
+    '--ds-pattern-timeline-marker-color': color,
     zIndex: 1,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: 12,
-  }),
+  } as CSSProperties),
   card: (clickable: boolean): CSSProperties => ({
-    background: 'var(--ds-color-background)',
-    border: '1px solid var(--ds-color-neutral-200)',
-    borderRadius: 'var(--ds-radius-md, 8px)',
     padding: '12px 16px',
     cursor: clickable ? 'pointer' : undefined,
     transition: 'box-shadow 0.15s',
@@ -110,16 +101,13 @@ const styles = {
   title: {
     fontWeight: 600,
     fontSize: 'var(--ds-font-size-sm, 14px)',
-    color: 'var(--ds-color-text)',
   } as CSSProperties,
   timestamp: {
     fontSize: 'var(--ds-font-size-xs, 12px)',
-    color: 'var(--ds-color-text-muted)',
     marginLeft: 8,
   } as CSSProperties,
   description: {
     fontSize: 'var(--ds-font-size-xs, 12px)',
-    color: 'var(--ds-color-text-secondary)',
     marginTop: 4,
   } as CSSProperties,
   user: {
@@ -131,29 +119,24 @@ const styles = {
   avatar: {
     width: 20,
     height: 20,
-    borderRadius: '50%',
     objectFit: 'cover' as const,
   },
   userName: {
     fontSize: 'var(--ds-font-size-xs, 12px)',
     fontWeight: 600,
-    color: 'var(--ds-color-text)',
   } as CSSProperties,
   dateGroup: {
     fontSize: 'var(--ds-font-size-sm, 14px)',
     fontWeight: 600,
-    color: 'var(--ds-color-text-secondary)',
     marginBottom: 12,
   } as CSSProperties,
   loading: {
     textAlign: 'center' as const,
     padding: 48,
-    color: 'var(--ds-color-text-muted)',
   },
   empty: {
     textAlign: 'center' as const,
     padding: 48,
-    color: 'var(--ds-color-text-muted)',
   },
 };
 
@@ -206,32 +189,30 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
       <div data-part="item" data-type={item.type ?? 'default'} key={item.key} style={styles.item}>
         {/* Icon items get a larger ring-style dot; plain items get a solid circle. */}
         {item.icon ? (
-          <div data-part="marker" data-variant="icon" style={styles.iconDot(color)}>{item.icon}</div>
+          <div data-part="marker" data-variant="icon" className="ds-timeline-rustic__marker" style={styles.iconDot(color)}>{item.icon}</div>
         ) : (
-          <div data-part="marker" data-variant="solid" style={styles.dot(color)} />
+          <div data-part="marker" data-variant="solid" className="ds-timeline-rustic__marker" style={styles.dot(color)} />
         )}
         <div
           data-part="item-card"
           data-clickable={Boolean(onItemClick)}
+          className="ds-timeline-rustic__item-card"
           style={styles.card(!!onItemClick)}
           onClick={onItemClick ? () => onItemClick(item) : undefined}
-          // Imperative hover shadow because inline styles cannot express :hover.
-          onMouseEnter={(e) => { if (onItemClick) (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)'; }}
-          onMouseLeave={(e) => { if (onItemClick) (e.currentTarget as HTMLElement).style.boxShadow = 'none'; }}
         >
           {item.user && (
             <div style={styles.user}>
-              {item.user.avatar && <img data-part="avatar" src={item.user.avatar} alt={item.user.name} style={styles.avatar} />}
-              <span data-part="user-name" style={styles.userName}>{item.user.name}</span>
+              {item.user.avatar && <img data-part="avatar" className="ds-timeline-rustic__avatar" src={item.user.avatar} alt={item.user.name} style={styles.avatar} />}
+              <span data-part="user-name" className="ds-timeline-rustic__user-name" style={styles.userName}>{item.user.name}</span>
             </div>
           )}
           <div>
-            <span data-part="title" style={styles.title}>{item.title}</span>
+            <span data-part="title" className="ds-timeline-rustic__title" style={styles.title}>{item.title}</span>
             {showTimestamp && (
-              <span data-part="timestamp" style={styles.timestamp}>{formatTimestamp(item.timestamp)}</span>
+              <span data-part="timestamp" className="ds-timeline-rustic__timestamp" style={styles.timestamp}>{formatTimestamp(item.timestamp)}</span>
             )}
           </div>
-          {item.description && <div data-part="description" style={styles.description}>{item.description}</div>}
+          {item.description && <div data-part="description" className="ds-timeline-rustic__description" style={styles.description}>{item.description}</div>}
         </div>
       </div>
     );
@@ -241,7 +222,7 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
    *  vertical connector line as an absolutely-positioned child. */
   const renderList = (list: TimelineItem<T>[]) => (
     <div data-part="list" style={styles.container}>
-      <div data-part="connector" style={styles.line} />
+      <div data-part="connector" className="ds-timeline-rustic__connector" style={styles.line} />
       {list.map((item) => {
         const defaultRender = buildDefaultRender(item);
         return renderItem ? (
@@ -277,7 +258,7 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
       {grouped ? (
         Object.entries(grouped).map(([dateKey, group]) => (
           <div data-part="date-group" key={dateKey} style={{ marginBottom: 24 }}>
-            <div data-part="date-heading" style={styles.dateGroup}>{dateKey}</div>
+            <div data-part="date-heading" className="ds-timeline-rustic__date-heading" style={styles.dateGroup}>{dateKey}</div>
             {renderList(group)}
           </div>
         ))

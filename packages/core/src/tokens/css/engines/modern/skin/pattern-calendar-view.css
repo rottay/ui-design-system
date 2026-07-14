@@ -1,0 +1,82 @@
+/**
+ * Modern CalendarView pattern skin (WO-SKIN-06 CK-E).
+ * Deliberately unlayered. All selectors are owned by the modern pattern root;
+ * border-colour declarations clear the tenant floor through root/part state.
+ */
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='toolbar']
+  [data-part='toolbar-action'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='toolbar']
+  > [data-part='view-controls']
+  > [data-part='view-select'][data-part='view-select'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+  background: transparent;
+  color: inherit;
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='loading']
+  > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid'][data-part='grid'] {
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='weekday'][data-part='weekday'] {
+  background: var(--ds-surface-inset);
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-part='day-cell'] {
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-empty='false'] {
+  background: var(--ds-surface-card);
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-empty='true'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell'][data-today='true']
+  > [data-part='date-label'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  [data-part='event'] {
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-calendar-view.ds-engine-modern[data-part='root']
+  > [data-part='grid']
+  > [data-part='day-cell']
+  > [data-part='overflow-count'] {
+  color: var(--ds-color-text-secondary);
+}

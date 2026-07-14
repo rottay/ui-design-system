@@ -1,0 +1,47 @@
+/** Modern MapView pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-pattern-map-view.ds-engine-modern[data-part='root']
+  > [data-part='content']
+  > [data-part='loading']
+  > [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+.ds-pattern-map-view.ds-engine-modern[data-part='root']
+  > [data-part='content']
+  > [data-part='map-placeholder'][data-part='map-placeholder'] {
+  background: color-mix(in srgb, var(--ds-color-info) 10%, transparent);
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-map-view.ds-engine-modern[data-part='root']
+  > [data-part='content']
+  > [data-part='map-placeholder']
+  > [data-part='placeholder-content']
+  > [data-part='placeholder-label'],
+.ds-pattern-map-view.ds-engine-modern[data-part='root'] > [data-part='content'] > [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-map-view.ds-engine-modern[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list'][data-part='marker-list'] {
+  border-color: var(--ds-color-border);
+}
+
+.ds-pattern-map-view.ds-engine-modern[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row'][data-selected='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+
+.ds-pattern-map-view.ds-engine-modern[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row']
+  [data-part='coordinates'] {
+  color: var(--ds-color-text-secondary);
+}

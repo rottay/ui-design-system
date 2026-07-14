@@ -100,21 +100,6 @@ const HANDLE_WIDTH = 6;
 const MIN_DRAG_PX = 4;
 
 // ---------------------------------------------------------------------------
-// CSS variable references for brush visuals
-// ---------------------------------------------------------------------------
-
-const BRUSH_COLORS = {
-  /** Selection rectangle fill */
-  selectionFill: 'var(--ds-color-primary)',
-  /** Drag handle fill */
-  handleFill: 'var(--ds-color-primary)',
-  /** Dimmed (non-selected) overlay fill */
-  dimFill: 'var(--ds-color-bg-primary)',
-  /** Brush area border */
-  borderStroke: 'var(--ds-color-border-subtle)',
-} as const;
-
-// ---------------------------------------------------------------------------
 // Hook
 // ---------------------------------------------------------------------------
 
@@ -400,8 +385,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
         y: brushY,
         width: plotWidth,
         height: brushAreaHeight,
-        fill: 'var(--ds-color-bg-secondary, #f5f5f5)',
-        stroke: BRUSH_COLORS.borderStroke,
         strokeWidth: 1,
       }),
     );
@@ -416,7 +399,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
         y1: brushY,
         x2: plotLeft + plotWidth,
         y2: brushY,
-        stroke: BRUSH_COLORS.borderStroke,
         strokeWidth: 1,
       }),
     );
@@ -437,7 +419,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
             y: brushY,
             width: pixelSelection.left,
             height: brushAreaHeight,
-            fill: BRUSH_COLORS.dimFill,
             opacity: 0.5,
             pointerEvents: 'none',
           }),
@@ -456,7 +437,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
             y: brushY,
             width: plotWidth - pixelSelection.right,
             height: brushAreaHeight,
-            fill: BRUSH_COLORS.dimFill,
             opacity: 0.5,
             pointerEvents: 'none',
           }),
@@ -473,7 +453,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
           y: brushY,
           width: Math.max(selWidth, 1),
           height: brushAreaHeight,
-          fill: BRUSH_COLORS.selectionFill,
           opacity: 0.2,
           pointerEvents: 'none',
         }),
@@ -489,8 +468,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
           y: brushY,
           width: Math.max(selWidth, 1),
           height: brushAreaHeight,
-          fill: 'none',
-          stroke: BRUSH_COLORS.selectionFill,
           strokeWidth: 1,
           opacity: 0.6,
           pointerEvents: 'none',
@@ -509,7 +486,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
           width: HANDLE_WIDTH,
           height: brushAreaHeight - 8,
           rx: 2,
-          fill: BRUSH_COLORS.handleFill,
           opacity: 0.8,
           pointerEvents: 'none',
           style: { cursor: 'ew-resize' },
@@ -528,7 +504,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
           width: HANDLE_WIDTH,
           height: brushAreaHeight - 8,
           rx: 2,
-          fill: BRUSH_COLORS.handleFill,
           opacity: 0.8,
           pointerEvents: 'none',
           style: { cursor: 'ew-resize' },
@@ -546,7 +521,6 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
         y: brushY,
         width: plotWidth,
         height: brushAreaHeight,
-        fill: 'transparent',
         style: {
           cursor: isBrushing
             ? 'grabbing'

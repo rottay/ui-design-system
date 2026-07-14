@@ -112,7 +112,6 @@ export const HeatMap = memo(function HeatMap({
       .call(axisBottom(x))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px')
       .attr('transform', 'rotate(-45)')
       .attr('text-anchor', 'end');
@@ -122,7 +121,6 @@ export const HeatMap = memo(function HeatMap({
       .call(axisLeft(y))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px');
 
     // Each cell is one rect whose fill is computed via the sequential colour
@@ -154,9 +152,8 @@ export const HeatMap = memo(function HeatMap({
       cells.append('title').text((d) => `${d.x}, ${d.y}: ${d.value}`);
     }
 
-    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-    svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
   }, [
     data,
     chartWidth,

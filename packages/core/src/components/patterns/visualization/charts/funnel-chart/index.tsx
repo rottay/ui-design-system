@@ -81,8 +81,8 @@ export const FunnelChart = memo(function FunnelChart({
     <div data-part="legend" data-orientation={orientation} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
         <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span data-part="legend-label">{d.label}</span>
         </div>
       ))}
     </div>
@@ -162,7 +162,6 @@ export const FunnelChart = memo(function FunnelChart({
           .attr('x', innerWidth / 2)
           .attr('y', centerY - 6)
           .attr('text-anchor', 'middle')
-          .style('fill', 'var(--ds-color-text-on-primary)')
           .style('font-size', '13px')
           .style('font-weight', '600')
           .style('pointer-events', 'none')
@@ -176,7 +175,6 @@ export const FunnelChart = memo(function FunnelChart({
           .attr('x', innerWidth / 2)
           .attr('y', centerY + 10)
           .attr('text-anchor', 'middle')
-          .style('fill', 'color-mix(in srgb, var(--ds-color-text-on-primary) 80%, transparent)')
           .style('font-size', '11px')
           .style('pointer-events', 'none')
           .text(valueText);
@@ -189,7 +187,6 @@ export const FunnelChart = memo(function FunnelChart({
             .attr('x', innerWidth + 8)
             .attr('y', yPos + 4)
             .attr('dominant-baseline', 'middle')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '10px')
             .text(`${rate}%`);
         }
@@ -243,7 +240,6 @@ export const FunnelChart = memo(function FunnelChart({
           .attr('x', xPos + segmentWidth / 2)
           .attr('y', innerHeight / 2)
           .attr('text-anchor', 'middle')
-          .style('fill', 'var(--ds-color-text-on-primary)')
           .style('font-size', '12px')
           .style('font-weight', '600')
           .style('pointer-events', 'none')

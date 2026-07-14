@@ -538,7 +538,6 @@ export const SankeyChart = memo(function SankeyChart({
         })
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '10px')
         .style('pointer-events', 'none')
         .text((d) => fmt(d.value));
@@ -599,11 +598,11 @@ export const SankeyChart = memo(function SankeyChart({
             ? linkHoverOpacity
             : linkOpacity * 0.3,
         );
-        select(this).attr('data-state', 'hovered').select('rect').attr('stroke', 'var(--ds-color-text-primary)').attr('stroke-width', 1.5);
+        select(this).attr('data-state', 'hovered');
       })
       .on('mouseleave', function () {
         linkPaths.attr('stroke-opacity', linkOpacity);
-        select(this).attr('data-state', 'idle').select('rect').attr('stroke', null).attr('stroke-width', null);
+        select(this).attr('data-state', 'idle');
       });
 
     if (onNodeClick) {
@@ -632,7 +631,6 @@ export const SankeyChart = memo(function SankeyChart({
           return d.depth === maxCol ? 'end' : 'start';
         })
         .attr('dominant-baseline', 'central')
-        .style('fill', 'var(--ds-color-text-primary)')
         .style('font-size', '12px')
         .style('font-weight', '500')
         .style('pointer-events', 'none')
@@ -652,7 +650,6 @@ export const SankeyChart = memo(function SankeyChart({
           return d.depth === maxCol ? 'end' : 'start';
         })
         .attr('dominant-baseline', 'central')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '10px')
         .style('pointer-events', 'none')
         .text((d) => fmt(d.value));
@@ -699,12 +696,11 @@ export const SankeyChart = memo(function SankeyChart({
             style={{
               width: 12,
               height: 12,
-              borderRadius: 2,
               backgroundColor: n.color ?? colors[i % colors.length],
               display: 'inline-block',
             }}
           />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{n.label}</span>
+          <span data-part="legend-label">{n.label}</span>
         </div>
       ))}
     </div>

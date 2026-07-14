@@ -32,7 +32,11 @@
  *      only for a literal `data-part=` attribute calls five live rules dead. So a
  *      bare `part="X"` prop counts as a stamp too.
  *
- * Both make the gate CONSERVATIVE, which is the right bias: a gate that cries
+ *   3. PARTS STAMPED BY D3. Chart renderers create SVG anatomy through
+ *      `.attr('data-part', 'axis-tick')`, not JSX. Treating only React syntax
+ *      as production anatomy makes every live chart skin look dead.
+ *
+ * All three make the gate CONSERVATIVE, which is the right bias: a gate that cries
  * wolf gets ignored, and an ignored gate is worse than no gate.
  */
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
@@ -48,7 +52,19 @@ const SKIN_DIRS = [
   'tokens/css/components/skin',
 ];
 
-/** Every `data-part` the source stamps -- as an attribute, or handed to a `part` prop. */
+/** Every literal `data-part` a single TS/TSX source stamps. */
+export function collectStampedPartsFromSource(src) {
+  const stamped = new Set();
+  for (const m of src.matchAll(/data-part\s*=\s*["'`{\s]*([a-z0-9-]+)/gi)) stamped.add(m[1]);
+  for (const m of src.matchAll(/["']data-part["']\s*:\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
+  // D3-authored SVG anatomy uses selection.attr(name, value).
+  for (const m of src.matchAll(/\.attr\(\s*["']data-part["']\s*,\s*["']([a-z0-9-]+)["']\s*\)/gi)) stamped.add(m[1]);
+  // A `part` prop forwarded onto a data-part by the receiving component.
+  for (const m of src.matchAll(/\bpart\s*=\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
+  return stamped;
+}
+
+/** Every `data-part` the source stamps -- as an attribute, D3 attr, or forwarded prop. */
 function collectStampedParts() {
   const stamped = new Set();
   const walk = (dir) => {
@@ -58,10 +74,7 @@ function collectStampedParts() {
         if (!/node_modules/.test(p)) walk(p);
       } else if (/\.tsx?$/.test(entry.name)) {
         const src = readFileSync(p, 'utf8');
-        for (const m of src.matchAll(/data-part\s*=\s*["'`{\s]*([a-z0-9-]+)/gi)) stamped.add(m[1]);
-        for (const m of src.matchAll(/["']data-part["']\s*:\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
-        // A `part` prop forwarded onto a data-part by the receiving component.
-        for (const m of src.matchAll(/\bpart\s*=\s*["']([a-z0-9-]+)["']/gi)) stamped.add(m[1]);
+        for (const part of collectStampedPartsFromSource(src)) stamped.add(part);
       }
     }
   };

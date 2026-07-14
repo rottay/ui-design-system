@@ -5,6 +5,7 @@ import { dirname, join } from 'node:path';
 import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
+import postcss from 'postcss';
 import ts from 'typescript';
 
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
@@ -12,6 +13,7 @@ import { analyzeRuntimeSvgPaint } from './lib/runtime-svg-paint-counter.mjs';
 
 const packageRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
 const chartsRoot = join(packageRoot, 'src/components/patterns/visualization/charts');
+const skinPath = join(packageRoot, 'src/tokens/css/components/skin/chart-c.css');
 
 const CHARTS = {
   histogram: {
@@ -113,7 +115,7 @@ function renderAnatomy(text, path) {
   return anatomy.join('\n');
 }
 
-test('CK-E chart slice C retains its exact 25 inline + 57 runtime pre-step sites', () => {
+test('CK-E chart slice C lands its exact 9 inline + 20 runtime Stage-1 target', () => {
   let inlineTotal = 0;
   let runtimeTotal = 0;
   for (const [name, chart] of Object.entries(CHARTS)) {
@@ -121,13 +123,13 @@ test('CK-E chart slice C retains its exact 25 inline + 57 runtime pre-step sites
     const text = source(chart);
     const inline = countArc09PaintInFile(text, path);
     const runtime = analyzeRuntimeSvgPaint(text, path);
-    assert.equal(inline, chart.start[0], `${name} inline paint drifted during the inert pre-step`);
-    assert.equal(runtime.count, chart.start[1], `${name} runtime SVG paint drifted during the inert pre-step`);
+    assert.equal(inline, chart.floor[0], `${name} inline paint drifted from the Stage-1 target`);
+    assert.equal(runtime.count, chart.floor[1], `${name} runtime SVG paint drifted from the Stage-1 target`);
     assert.equal(runtime.unclassified, 0, `${name} introduced unclassified runtime SVG paint`);
     inlineTotal += inline;
     runtimeTotal += runtime.count;
   }
-  assert.deepEqual([inlineTotal, runtimeTotal], [25, 57]);
+  assert.deepEqual([inlineTotal, runtimeTotal], [9, 20]);
 });
 
 test('CK-E chart slice C exposes every planned scope, part and finite state', () => {
@@ -155,6 +157,92 @@ test('CK-E chart slice C preserves its pre-step React and D3 element anatomy', (
     const digest = createHash('sha256').update(renderAnatomy(source(chart), path)).digest('hex');
     assert.equal(digest, chart.topology, `${name} React/D3 element anatomy drifted`);
   }
+});
+
+test('CK-E chart slice C skin owns every static paint scope without importance escalation', () => {
+  const css = readFileSync(skinPath, 'utf8');
+  assert.doesNotThrow(() => postcss.parse(css, { from: skinPath }));
+  assert.doesNotMatch(css, /!important/);
+
+  for (const [name, chart] of Object.entries(CHARTS)) {
+    assert.match(css, new RegExp(`\\.${chart.scope}(?:\\s|\\[)`), `${name} is absent from chart-c.css`);
+  }
+
+  const requiredRules = [
+    [".ds-chart-histogram [data-part='axis-domain']", 'stroke: var(--ds-color-border-primary)'],
+    [".ds-chart-scatter [data-part='trend-line']", 'stroke: var(--ds-color-text-secondary)'],
+    [".ds-chart-gauge [data-part='track']", 'fill: var(--ds-color-bg-tertiary)'],
+    [":where(.ds-chart-sankey [data-part='node'][data-state='hovered'] [data-part='node-mark'])", 'stroke: var(--ds-color-text-primary)'],
+    [".ds-chart-sparkline [data-part='min-dot']", 'fill: var(--ds-color-error)'],
+    [".ds-chart-funnel [data-part='segment-value']", 'fill: color-mix(in srgb, var(--ds-color-text-on-primary) 80%, transparent)'],
+    [".ds-chart-network-graph [data-part='edge-marker-path']", 'fill: var(--ds-color-border-primary)'],
+  ];
+  for (const [selector, declaration] of requiredRules) {
+    assert.ok(css.includes(selector), `missing selector ${selector}`);
+    assert.ok(css.includes(declaration), `missing declaration ${declaration}`);
+  }
+});
+
+test('CK-E chart slice C preserves the three adversarial cascade/runtime contracts', () => {
+  const css = readFileSync(skinPath, 'utf8');
+  for (const scope of ['histogram', 'scatter']) {
+    const gridSelector = `.ds-chart-${scope} [data-part='grid-line']`;
+    const firstGridRule = css.indexOf(gridSelector);
+    const finalGridRule = css.lastIndexOf(gridSelector);
+    assert.ok(firstGridRule >= 0 && finalGridRule > firstGridRule, `${scope} grid must preserve its final axis repaint`);
+    assert.match(
+      css.slice(finalGridRule, css.indexOf('}', finalGridRule) + 1),
+      /stroke:\s*var\(--ds-color-border-primary\)/,
+      `${scope} grid final paint must remain border-primary`
+    );
+  }
+
+  const histogram = source(CHARTS.histogram);
+  assert.match(histogram, /rightAxis\.select\('\.domain'\)\.attr\('stroke', cumulativeColor\)/);
+  assert.doesNotMatch(histogram, /rightAxis\.select\('\.domain'\)\.style\('stroke', cumulativeColor\)/);
+
+  const gauge = source(CHARTS.gauge);
+  assert.match(gauge, /color: string;/);
+  assert.doesNotMatch(gauge, /color\?: string;/);
+  assert.match(gauge, /segments: providedSegments,/);
+  assert.match(gauge, /const usesDefaultSegments = providedSegments === undefined;/);
+  assert.match(gauge, /providedSegments \?\? DEFAULT_SEGMENTS;/);
+  assert.match(gauge, /data-color-source=\{usesDefaultSegments \? 'default' : 'custom'\}/);
+  assert.match(gauge, /\.attr\('data-color-source', usesDefaultSegments \? 'default' : 'custom'\)/);
+  assert.match(gauge, /\.attr\('fill', usesDefaultSegments \? null : \(seg\.color \?\? null\)\)/);
+  assert.match(gauge, /backgroundColor: usesDefaultSegments \? DEFAULT_SEGMENT_COLORS\[index\] : seg\.color/);
+  assert.doesNotMatch(gauge, /seg\.color\s*\?(?!\?)/);
+  const defaultSegmentBlock = gauge.slice(
+    gauge.indexOf('const DEFAULT_SEGMENTS:'),
+    gauge.indexOf('const DEFAULT_SEGMENT_TONES')
+  );
+  assert.equal(
+    defaultSegmentBlock.match(/\{ from: \d+, to: \d+, label: '[^']+' \}/g)?.length,
+    3
+  );
+  assert.doesNotMatch(defaultSegmentBlock, /color:/);
+  const defaultColorBlock = gauge.slice(
+    gauge.indexOf('const DEFAULT_SEGMENT_COLORS'),
+    gauge.indexOf('function segmentTone')
+  );
+  assert.equal(defaultColorBlock.match(/'var\(--ds-color-(?:error|warning|success)\)'/g)?.length, 3);
+
+  for (const tone of ['error', 'warning', 'success']) {
+    assert.match(
+      css,
+      new RegExp(`:where\\(\\.ds-chart-gauge \\[data-part='segment'\\]\\[data-color-source='default'\\]\\[data-tone='${tone}'\\]\\)`)
+    );
+  }
+  assert.doesNotMatch(css, /data-part='legend-swatch'\]\[data-color-source='default'/);
+  assert.match(
+    css,
+    /:where\(\.ds-chart-sankey \[data-part='node'\]\[data-state='hovered'\] \[data-part='node-mark'\]\)/
+  );
+
+  const sankey = source(CHARTS.sankey);
+  assert.match(sankey, /select\(this\)\.attr\('data-state', 'hovered'\);/);
+  assert.match(sankey, /select\(this\)\.attr\('data-state', 'idle'\);/);
+  assert.doesNotMatch(sankey, /select\('rect'\)\.attr\('stroke'/);
 });
 
 test('CK-E chart slice C reconciles the exact Stage-1 boundary 82 -> 29', () => {

@@ -1,0 +1,71 @@
+/** Rustic MapView pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='loading'],
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='map-placeholder']
+  > [data-part='placeholder-content']
+  > [data-part='placeholder-label'],
+.ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='empty'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='map-placeholder'][data-part='map-placeholder'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-bg-info, var(--ds-color-bg-secondary));
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list'][data-part='marker-list'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row'][data-selected='false'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row'][data-selected='true'] {
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row'][data-last='false'] {
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row']
+  [data-part='marker-color'] {
+  border-radius: 50%;
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row']
+  [data-part='marker-label'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-map-view.ds-engine-rustic[data-part='root']
+  > [data-part='content']
+  > [data-part='marker-list']
+  > [data-part='marker-row']
+  [data-part='coordinates'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}

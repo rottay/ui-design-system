@@ -129,7 +129,6 @@ export const GanttChart = memo(function GanttChart({
       .call(axisBottom(x).ticks(6))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px');
 
     // Task names
@@ -137,7 +136,6 @@ export const GanttChart = memo(function GanttChart({
       .call(axisLeft(y).tickFormat((id) => parsedTasks.find((t) => t.id === id)?.name ?? id))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Grid
@@ -145,9 +143,8 @@ export const GanttChart = memo(function GanttChart({
       .call(axisBottom(x).ticks(6).tickSize(innerHeight).tickFormat(() => ''))
       .attr('opacity', 0.15)
       .selectAll('line')
-      .attr('data-part', 'grid-line')
-      .style('stroke', 'var(--ds-color-border-secondary)');
-    g.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+      .attr('data-part', 'grid-line');
+    g.selectAll('.domain').attr('data-part', 'axis-domain');
 
     // Task bars are rendered as two overlapping rects per task: a translucent
     // background bar (full duration) and an opaque progress bar (partial width).
@@ -225,7 +222,6 @@ export const GanttChart = memo(function GanttChart({
           .attr('x2', x(now))
           .attr('y1', 0)
           .attr('y2', innerHeight)
-          .attr('stroke', 'var(--ds-color-error-500)')
           .attr('stroke-width', 1.5)
           .attr('stroke-dasharray', '4,3');
 
@@ -234,14 +230,12 @@ export const GanttChart = memo(function GanttChart({
           .attr('x', x(now))
           .attr('y', -6)
           .attr('text-anchor', 'middle')
-          .style('fill', 'var(--ds-color-error-500)')
           .style('font-size', '10px')
           .text('Today');
       }
     }
 
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-    svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
   }, [
     tasks,
     chartWidth,

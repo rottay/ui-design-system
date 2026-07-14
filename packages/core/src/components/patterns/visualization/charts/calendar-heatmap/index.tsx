@@ -244,7 +244,6 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
           .attr('dy', '0.35em')
           .attr('text-anchor', 'end')
           .style('font-size', '10px')
-          .style('fill', 'var(--ds-color-text-secondary)')
           .text(label);
       });
     }
@@ -269,7 +268,6 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
           .attr('y', monthLabelHeight - 4)
           .attr('text-anchor', 'start')
           .style('font-size', '10px')
-          .style('fill', 'var(--ds-color-text-secondary)')
           .text(fmtMonth(monthDate));
       });
     }

@@ -1,0 +1,33 @@
+/** LineChart skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-chart-line [data-part='legend-swatch'] {
+  border-radius: 1px;
+}
+
+.ds-chart-line [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-line [data-part='axis-tick-label'],
+.ds-chart-line [data-part='axis-label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-line [data-part='grid-line'] {
+  stroke: var(--ds-color-border-secondary);
+}
+
+.ds-chart-line [data-part='series-point'] {
+  stroke: var(--ds-color-bg-primary);
+}
+
+.ds-chart-line [data-part='interaction-overlay'] {
+  fill: transparent;
+}
+
+/* The former final `.tick line` D3 write also repainted grid ticks. */
+.ds-chart-line [data-part='axis-domain'],
+.ds-chart-line [data-part='axis-tick'],
+.ds-chart-line [data-part='grid-line'] {
+  stroke: var(--ds-color-border-primary);
+}

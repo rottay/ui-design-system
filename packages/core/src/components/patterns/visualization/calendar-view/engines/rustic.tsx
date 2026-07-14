@@ -107,10 +107,6 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
   // so it renders correctly even without a full DS theme loaded.
   const btn: React.CSSProperties = {
     padding: '4px 10px',
-    border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
-    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    color: 'var(--ds-color-text-primary, var(--ds-color-text))',
     cursor: 'pointer',
     fontSize: 13,
   };
@@ -131,7 +127,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
         <div data-part="toolbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
           <div data-part="navigation" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button data-part="toolbar-action" data-action="previous" style={btn} onClick={() => navigateMonth(-1)}>{'<'}</button>
-            <span data-part="month-title" style={{ fontWeight: 600, fontSize: 16, color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>
+            <span data-part="month-title" style={{ fontWeight: 600, fontSize: 16 }}>
               {formatMonth(currentDate)}
             </span>
             <button data-part="toolbar-action" data-action="next" style={btn} onClick={() => navigateMonth(1)}>{'>'}</button>
@@ -152,13 +148,13 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
         </div>
       )}
       {loading ? (
-        <div data-part="loading" style={{ textAlign: 'center', padding: 40, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+        <div data-part="loading" style={{ textAlign: 'center', padding: 40 }}>
           Loading...
         </div>
       ) : (
-        <div data-part="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))', borderRadius: 'var(--ds-radius-md, 8px)', overflow: 'hidden' }}>
+        <div data-part="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', overflow: 'hidden' }}>
           {DAY_NAMES.map((d) => (
-            <div data-part="weekday" key={d} style={{ textAlign: 'center', fontSize: 12, fontWeight: 600, padding: '8px 0', background: 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))', borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-border))' }}>
+            <div data-part="weekday" key={d} style={{ textAlign: 'center', fontSize: 12, fontWeight: 600, padding: '8px 0' }}>
               {d}
             </div>
           ))}
@@ -179,11 +175,6 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                 style={{
                   minHeight: 80,
                   padding: 4,
-                  // Suppress the right border on the last column (Saturday) to
-                  // avoid a double-border with the grid's outer border.
-                  borderRight: (i + 1) % 7 !== 0 ? '1px solid var(--ds-color-border-primary, var(--ds-color-border))' : undefined,
-                  borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-                  background: cell ? 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))' : 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))',
                   cursor: cell ? 'pointer' : 'default',
                 }}
               >
@@ -194,7 +185,6 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                       textAlign: 'right',
                       padding: '2px 4px',
                       fontWeight: isToday ? 700 : 400,
-                      color: isToday ? 'var(--ds-color-primary)' : 'var(--ds-color-text-primary, var(--ds-color-text))',
                     }}>
                       {cell.getDate()}
                     </div>
@@ -209,9 +199,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                           fontSize: 11,
                           padding: '1px 4px',
                           marginTop: 2,
-                          borderRadius: 'var(--ds-radius-xs, 3px)',
                           background: ev.color ?? 'var(--ds-color-primary)',
-                          color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
                           overflow: 'hidden',
                           textOverflow: 'ellipsis',
                           whiteSpace: 'nowrap',
@@ -222,7 +210,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                       </div>
                     ))}
                     {dayEvents.length > 3 && (
-                      <div data-part="overflow-count" style={{ fontSize: 10, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', padding: '0 4px' }}>
+                      <div data-part="overflow-count" style={{ fontSize: 10, padding: '0 4px' }}>
                         +{dayEvents.length - 3} more
                       </div>
                     )}

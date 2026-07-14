@@ -183,11 +183,10 @@ export const BulletChart = memo(function BulletChart({
           <span data-part="legend-swatch" data-variant={item.label === 'Target' ? 'target' : 'range'} style={{
             width: item.label === 'Target' ? 2 : 12,
             height: 12,
-            borderRadius: item.label === 'Target' ? 0 : 2,
             backgroundColor: item.color,
             display: 'inline-block',
           }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.label}</span>
+          <span data-part="legend-label">{item.label}</span>
         </div>
       ))}
     </div>
@@ -314,7 +313,6 @@ export const BulletChart = memo(function BulletChart({
             .attr('y', yOffset + barHeight / 2)
             .attr('text-anchor', 'end')
             .attr('dominant-baseline', 'middle')
-            .style('fill', 'var(--ds-color-text-primary)')
             .style('font-size', '12px')
             .style('font-weight', '500')
             .text(item.label);
@@ -337,7 +335,6 @@ export const BulletChart = memo(function BulletChart({
             .attr('y', yOffset + barHeight / 2)
             .attr('text-anchor', 'start')
             .attr('dominant-baseline', 'middle')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '11px')
             .text(formatVal(item.value));
 
@@ -476,7 +473,6 @@ export const BulletChart = memo(function BulletChart({
             .attr('y', barTop + barAreaHeight + 16)
             .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'middle')
-            .style('fill', 'var(--ds-color-text-primary)')
             .style('font-size', '12px')
             .style('font-weight', '500')
             .text(item.label);
@@ -499,7 +495,6 @@ export const BulletChart = memo(function BulletChart({
             .attr('y', barTop - 8)
             .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'middle')
-            .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '11px')
             .text(formatVal(item.value));
 

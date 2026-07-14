@@ -1,0 +1,57 @@
+/** Rustic Timeline pattern skin (WO-SKIN-06 CK-E), deliberately unlayered. */
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__connector[data-part='connector'] {
+  background: var(--ds-color-neutral-200);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='solid'] {
+  border-radius: 50%;
+  background: var(--ds-pattern-timeline-marker-color);
+  border: 3px solid var(--ds-color-background);
+  box-shadow: 0 0 0 2px var(--ds-pattern-timeline-marker-color);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='icon'] {
+  border-radius: 50%;
+  background: var(--ds-color-background);
+  border: 2px solid var(--ds-pattern-timeline-marker-color);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__item-card[data-part='item-card'][data-part='item-card'] {
+  background: var(--ds-color-background);
+  border: 1px solid var(--ds-color-neutral-200);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root']
+  .ds-timeline-rustic__item-card[data-part='item-card'][data-clickable='true'] {
+  box-shadow: none;
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root']
+  .ds-timeline-rustic__item-card[data-part='item-card'][data-clickable='true']:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__title[data-part='title'],
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__user-name[data-part='user-name'] {
+  color: var(--ds-color-text);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__timestamp[data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__description[data-part='description'],
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__date-heading[data-part='date-heading'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__avatar[data-part='avatar'] {
+  border-radius: 50%;
+}
+
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'][data-loading='true'],
+.ds-pattern-timeline.ds-engine-rustic[data-part='root'] > [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}

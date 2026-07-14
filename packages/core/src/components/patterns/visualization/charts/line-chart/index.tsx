@@ -108,8 +108,8 @@ export const LineChart = memo(function LineChart({
     <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {series.map((s, i) => (
         <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span data-part="legend-swatch" style={{ width: 12, height: 3, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block', borderRadius: 1 }} />
-          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+          <span data-part="legend-swatch" style={{ width: 12, height: 3, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-label">{s.name}</span>
         </div>
       ))}
     </div>
@@ -161,7 +161,6 @@ export const LineChart = memo(function LineChart({
       .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
       .selectAll('line')
       .attr('data-part', 'grid-line')
-      .style('stroke', 'var(--ds-color-border-secondary)')
       .style('stroke-opacity', 0.5);
     const domainEl = g.selectAll('.domain').node();
     if (domainEl) select(domainEl).remove();
@@ -172,14 +171,12 @@ export const LineChart = memo(function LineChart({
       .call(axisBottom(x as any).ticks(tickCount))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     g.append('g')
       .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
       .attr('data-part', 'axis-tick-label')
-      .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Polymorphic accessor that narrows the scale type so each data point is
@@ -295,7 +292,6 @@ export const LineChart = memo(function LineChart({
           .attr('cy', (d) => y(d.y))
           .attr('r', 4)
           .attr('fill', color)
-          .attr('stroke', 'var(--ds-color-bg-primary)')
           .attr('stroke-width', 2);
       }
     });
@@ -317,7 +313,6 @@ export const LineChart = memo(function LineChart({
         .attr('data-part', 'interaction-overlay')
         .attr('width', innerWidth)
         .attr('height', innerHeight)
-        .attr('fill', 'transparent')
         .style('pointer-events', 'all')
         .on('mousemove', (event: MouseEvent) => {
           const local = plotLocalPointerPosition(event, svgRef.current, margin);
@@ -370,7 +365,6 @@ export const LineChart = memo(function LineChart({
         .attr('x', chartWidth / 2)
         .attr('y', chartHeight - 4)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(xAxisLabel);
     }
@@ -384,14 +378,12 @@ export const LineChart = memo(function LineChart({
         .attr('x', -chartHeight / 2)
         .attr('y', 14)
         .attr('text-anchor', 'middle')
-        .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px')
         .text(yAxisLabel);
     }
 
-    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
-    svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
 
     // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
     // above), which would otherwise leave a stale React-side tooltip pointing at

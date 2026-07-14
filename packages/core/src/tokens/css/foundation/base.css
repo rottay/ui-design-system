@@ -406,6 +406,31 @@
 @import '../components/skin/branding-preview-sandbox.css';
 @import '../components/skin/brand-studio.css';
 
+/* WO-SKIN-06 CK-E: chart and visualization paint from unlayered skins. */
+@import '../components/skin/chart-foundation.css';
+@import '../components/skin/chart-area.css';
+@import '../components/skin/chart-bar.css';
+@import '../components/skin/chart-bullet.css';
+@import '../components/skin/chart-calendar-heatmap.css';
+@import '../components/skin/chart-gantt.css';
+@import '../components/skin/chart-heatmap.css';
+@import '../components/skin/chart-line.css';
+@import '../components/skin/chart-pie.css';
+@import '../components/skin/chart-radar.css';
+@import '../components/skin/chart-treemap.css';
+@import '../components/skin/chart-waterfall.css';
+@import '../components/skin/chart-c.css';
+@import '../engines/modern/skin/pattern-calendar-view.css';
+@import '../engines/modern/skin/pattern-kanban-board.css';
+@import '../engines/modern/skin/pattern-map-view.css';
+@import '../engines/modern/skin/pattern-timeline.css';
+@import '../engines/modern/skin/pattern-tree-view.css';
+@import '../engines/rustic/skin/pattern-calendar-view.css';
+@import '../engines/rustic/skin/pattern-kanban-board.css';
+@import '../engines/rustic/skin/pattern-map-view.css';
+@import '../engines/rustic/skin/pattern-timeline.css';
+@import '../engines/rustic/skin/pattern-tree-view.css';
+
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
 
 /* Layer 5: Personality overrides */

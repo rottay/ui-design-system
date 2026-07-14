@@ -1,0 +1,189 @@
+/**
+ * WO-SKIN-06 CK-E — visualization chart slice C skin.
+ *
+ * Deliberately unlayered. The seven chart roots are engine-agnostic and own
+ * their DOM/SVG anatomy through a unique `.ds-chart-*` scope plus `data-part`.
+ * This file contains only static paint transcribed from the component sources.
+ * Caller-, palette- and datum-derived paint remains authored at runtime under
+ * the exact CK-E floors (9 inline + 20 runtime SVG sites across this slice).
+ */
+
+/* Histogram ---------------------------------------------------------------- */
+
+.ds-chart-histogram [data-part='legend-item'][data-series='histogram'] [data-part='legend-swatch'] {
+  border-radius: 2px;
+}
+
+.ds-chart-histogram [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-histogram [data-part='axis-tick-label'],
+.ds-chart-histogram [data-part='axis-label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-histogram [data-part='grid-line'] {
+  stroke: var(--ds-color-border-secondary);
+}
+
+.ds-chart-histogram [data-part='value-label'] {
+  fill: var(--ds-color-text-primary);
+}
+
+.ds-chart-histogram [data-part='axis-domain'],
+.ds-chart-histogram [data-part='axis-tick'],
+.ds-chart-histogram [data-part='grid-line'] {
+  stroke: var(--ds-color-border-primary);
+}
+
+/* Scatter ------------------------------------------------------------------ */
+
+.ds-chart-scatter [data-part='legend-swatch'] {
+  border-radius: 50%;
+}
+
+.ds-chart-scatter [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-scatter [data-part='axis-tick-label'],
+.ds-chart-scatter [data-part='axis-label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-scatter [data-part='grid-line'] {
+  stroke: var(--ds-color-border-secondary);
+}
+
+.ds-chart-scatter [data-part='trend-line'] {
+  stroke: var(--ds-color-text-secondary);
+}
+
+.ds-chart-scatter [data-part='axis-domain'],
+.ds-chart-scatter [data-part='axis-tick'],
+.ds-chart-scatter [data-part='grid-line'] {
+  stroke: var(--ds-color-border-primary);
+}
+
+/* Gauge -------------------------------------------------------------------- */
+
+.ds-chart-gauge [data-part='legend-swatch'] {
+  border-radius: 2px;
+}
+
+.ds-chart-gauge [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-gauge [data-part='track'] {
+  fill: var(--ds-color-bg-tertiary);
+}
+
+:where(.ds-chart-gauge [data-part='segment'][data-color-source='default'][data-tone='error']) {
+  fill: var(--ds-color-error);
+}
+
+:where(.ds-chart-gauge [data-part='segment'][data-color-source='default'][data-tone='warning']) {
+  fill: var(--ds-color-warning);
+}
+
+:where(.ds-chart-gauge [data-part='segment'][data-color-source='default'][data-tone='success']) {
+  fill: var(--ds-color-success);
+}
+
+.ds-chart-gauge [data-part='value-label'] {
+  fill: var(--ds-color-text-primary);
+}
+
+.ds-chart-gauge [data-part='label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+/* Sankey ------------------------------------------------------------------- */
+
+.ds-chart-sankey [data-part='legend-swatch'] {
+  border-radius: 2px;
+}
+
+.ds-chart-sankey [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-sankey [data-part='link-label'],
+.ds-chart-sankey [data-part='node-value'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+.ds-chart-sankey [data-part='node-label'] {
+  fill: var(--ds-color-text-primary);
+}
+
+:where(.ds-chart-sankey [data-part='node'][data-state='hovered'] [data-part='node-mark']) {
+  stroke: var(--ds-color-text-primary);
+  stroke-width: 1.5;
+}
+
+/* Sparkline ---------------------------------------------------------------- */
+
+.ds-chart-sparkline [data-part='end-dot'] {
+  stroke: var(--ds-color-bg-primary);
+}
+
+.ds-chart-sparkline [data-part='min-dot'] {
+  fill: var(--ds-color-error);
+  stroke: var(--ds-color-bg-primary);
+}
+
+.ds-chart-sparkline [data-part='max-dot'] {
+  fill: var(--ds-color-success);
+  stroke: var(--ds-color-bg-primary);
+}
+
+/* Funnel ------------------------------------------------------------------- */
+
+.ds-chart-funnel [data-part='legend-swatch'] {
+  border-radius: 2px;
+}
+
+.ds-chart-funnel [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-funnel [data-part='segment-label'] {
+  fill: var(--ds-color-text-on-primary);
+}
+
+.ds-chart-funnel [data-part='segment-value'] {
+  fill: color-mix(in srgb, var(--ds-color-text-on-primary) 80%, transparent);
+}
+
+.ds-chart-funnel [data-part='conversion-label'] {
+  fill: var(--ds-color-text-secondary);
+}
+
+/* Network graph ------------------------------------------------------------ */
+
+.ds-chart-network-graph [data-part='legend-swatch'] {
+  border-radius: 50%;
+}
+
+.ds-chart-network-graph [data-part='legend-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-chart-network-graph [data-part='edge-marker-path'] {
+  fill: var(--ds-color-border-primary);
+}
+
+.ds-chart-network-graph [data-part='edge'] {
+  stroke: var(--ds-color-border-primary);
+}
+
+.ds-chart-network-graph [data-part='node-mark'] {
+  stroke: var(--ds-color-bg-primary);
+}
+
+.ds-chart-network-graph [data-part='node-label'] {
+  fill: var(--ds-color-text-secondary);
+}

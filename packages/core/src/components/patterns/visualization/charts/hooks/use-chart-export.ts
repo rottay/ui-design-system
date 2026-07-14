@@ -89,7 +89,6 @@ export function useChartExport(
       doExport({
         format: 'png',
         scale: 2,
-        backgroundColor: '#ffffff',
         filename: 'chart',
         ...options,
       }),

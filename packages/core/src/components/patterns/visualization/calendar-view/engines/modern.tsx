@@ -113,15 +113,15 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
       {toolbar ?? (
         <div data-part="toolbar" className="flex items-center justify-between mb-4">
           <div data-part="navigation" className="flex items-center gap-2">
-            <button data-part="toolbar-action" data-action="previous" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => navigateMonth(-1)}>{'<'}</button>
+            <button data-part="toolbar-action" data-action="previous" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => navigateMonth(-1)}>{'<'}</button>
             <h3 data-part="month-title" className="text-lg font-semibold">{formatMonth(currentDate)}</h3>
-            <button data-part="toolbar-action" data-action="next" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => navigateMonth(1)}>{'>'}</button>
+            <button data-part="toolbar-action" data-action="next" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => navigateMonth(1)}>{'>'}</button>
           </div>
           <div data-part="view-controls" className="flex items-center gap-2">
-            <button data-part="toolbar-action" data-action="today" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={() => onDateChange?.(new Date())}>Today</button>
+            <button data-part="toolbar-action" data-action="today" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={() => onDateChange?.(new Date())}>Today</button>
             <select
               data-part="view-select"
-              style={{ padding: '4px 8px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit' }}
+              style={{ padding: '4px 8px', fontSize: 13 }}
               value={view}
               onChange={(e) => onViewChange?.(e.target.value as any)}
             >
@@ -137,12 +137,12 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
           event sets. */}
       {loading ? (
         <div data-part="loading" className="flex justify-center py-12">
-          <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+          <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
         </div>
       ) : (
-        <div data-part="grid" className="grid grid-cols-7 border rounded-lg overflow-hidden" style={{ borderColor: 'var(--ds-color-border)' }}>
+        <div data-part="grid" className="grid grid-cols-7 border rounded-lg overflow-hidden">
           {DAY_NAMES.map((d) => (
-            <div data-part="weekday" key={d} className="text-center text-xs font-semibold py-2 border-b" style={{ background: 'var(--ds-surface-inset)', borderColor: 'var(--ds-color-border)' }}>
+            <div data-part="weekday" key={d} className="text-center text-xs font-semibold py-2 border-b">
               {d}
             </div>
           ))}
@@ -163,14 +163,10 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                 className={`min-h-[80px] p-1 border-r border-b last:border-r-0 ${
                   cell ? 'cursor-pointer' : ''
                 }`}
-                style={{
-                  borderColor: 'var(--ds-color-border)',
-                  background: cell ? 'var(--ds-surface-card)' : 'var(--ds-surface-inset)',
-                }}
               >
                 {cell && (
                   <>
-                    <div data-part="date-label" className={`text-xs text-right px-1 ${isToday ? 'font-bold' : ''}`} style={isToday ? { color: 'var(--ds-color-primary)' } : undefined}>
+                    <div data-part="date-label" className={`text-xs text-right px-1 ${isToday ? 'font-bold' : ''}`}>
                       {cell.getDate()}
                     </div>
                     {/* Show at most 3 event chips per cell to keep the grid compact;
@@ -183,13 +179,13 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
                         className="text-[11px] px-1 mt-0.5 rounded truncate cursor-pointer"
                         // Per-event color must be inline because it varies per item;
                         // falls back to the DS primary token when no color is set.
-                        style={{ color: 'var(--ds-color-text-on-primary)', background: ev.color ?? 'var(--ds-color-primary)' }}
+                        style={{ background: ev.color ?? 'var(--ds-color-primary)' }}
                       >
                         {renderEvent ? renderEvent(ev) : ev.title}
                       </div>
                     ))}
                     {dayEvents.length > 3 && (
-                      <div data-part="overflow-count" className="text-[10px] px-1" style={{ color: 'var(--ds-color-text-secondary)' }}>+{dayEvents.length - 3} more</div>
+                      <div data-part="overflow-count" className="text-[10px] px-1">+{dayEvents.length - 3} more</div>
                     )}
                   </>
                 )}
