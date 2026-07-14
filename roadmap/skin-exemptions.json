@@ -34,8 +34,9 @@
       },
       "patterns/visualization/charts/**": {
         "floor": 39,
-        "why": "Per-datum and per-series colour: palette[i % palette.length] across bar/pie/treemap/scatter/funnel/network/line/area/radar/sankey, caller-supplied d.color/item.color/seg.color, and bullet's resolvedRangeColors. Plus use-chart-theme.ts:291, which resolves a CSS var to hex via getComputedStyle because D3 needs hex for colour interpolation -- correct as written, must stay.",
-        "$note": "A glob: the per-file split lives in wo-skin-06-ck-e-inventory.md. Resolve it to concrete files when CK-E is contracted."
+        "why": "Per-datum and per-series colour. TWO shapes, and the second was MISSED by the triage: (1) `d.color ?? palette[i % palette.length]` as the actual data-mark fill in bar/line/area/radar/scatter/pie/treemap/funnel/network; (2) a caller-overridable prop typed `?: string` whose DEFAULT is a static token but whose value is arbitrary once overridden -- gauge.needleColor, histogram.color, histogram.cumulativeColor, waterfall.increaseColor/decreaseColor/totalColor, bullet.valueColor/targetColor. A default that looks static does not make the site static.",
+        "$note": "STILL A GLOB -- the gate SKIPS it, so it protects nothing yet. Resolve to per-file floors from wo-skin-06-ck-e-inventory.md's per-file sections BEFORE contracting CK-E. Also add the 6 B sites outside charts: kanban-board 2, calendar-view 2, map-view 2.",
+        "$excluded": "charts/hooks/use-chart-theme.ts:291 is DEAD CODE (the hook has no callers). Do NOT exempt it -- exempting dead code freezes it in place. Delete the hook or wire it; either way that is a product decision, not an exemption."
       }
     }
   },
