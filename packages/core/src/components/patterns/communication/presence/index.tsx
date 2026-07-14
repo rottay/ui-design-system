@@ -128,6 +128,8 @@ export function PresenceBar({
 
   return (
     <Box
+      className="ds-presence-bar"
+      data-part="root"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -140,6 +142,7 @@ export function PresenceBar({
         return (
           <Box
             key={user.id}
+            data-part="avatar"
             title={showNames ? user.name : undefined}
             style={{
               width: dims.avatar,
@@ -174,6 +177,7 @@ export function PresenceBar({
               />
             ) : (
               <Text
+                data-part="avatar-initials"
                 style={{
                   fontSize: dims.font,
                   fontWeight: 600,
@@ -191,6 +195,7 @@ export function PresenceBar({
 
       {overflowCount > 0 && (
         <Box
+          data-part="overflow-badge"
           title={users
             .slice(maxVisible)
             .map((u) => u.name)
@@ -213,6 +218,7 @@ export function PresenceBar({
           }}
         >
           <Text
+            data-part="overflow-badge-count"
             style={{
               fontSize: dims.font,
               fontWeight: 600,
@@ -267,6 +273,8 @@ export function PresenceTypingIndicator({
 
   return (
     <Box
+      className="ds-presence-typing-indicator"
+      data-part="root"
       role="status"
       aria-live="polite"
       style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
@@ -276,6 +284,7 @@ export function PresenceTypingIndicator({
         {[0, 1, 2].map((index) => (
           <Box
             key={index}
+            data-part="typing-dot"
             style={{
               width: 5,
               height: 5,
@@ -287,6 +296,7 @@ export function PresenceTypingIndicator({
         ))}
       </Box>
       <Text
+        data-part="label"
         style={{
           fontSize: 13,
           color: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))',
@@ -333,6 +343,8 @@ export function LiveCursor({
 
   return (
     <Box
+      className="ds-presence-live-cursor"
+      data-part="root"
       aria-hidden="true"
       style={{
         position: 'absolute',
@@ -366,6 +378,7 @@ export function LiveCursor({
 
       {/* Name label badge */}
       <Box
+        data-part="cursor-badge"
         style={{
           position: 'absolute',
           left: 12,

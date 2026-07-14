@@ -113,6 +113,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
   return (
     <div
       ref={dropdownRef}
+      data-part="root"
       className={`ds-pattern-notification-center ds-engine-modern ${className ?? ''}`}
       style={{ ...style, position: 'relative', display: 'inline-block' }}
     >
@@ -121,6 +122,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
       <div
         tabIndex={0}
         role="button"
+        data-part="trigger"
         style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 40, width: 40, padding: 0, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
         onClick={() => handleOpenChange(!isOpen)}
         data-testid="notification-trigger"
@@ -132,7 +134,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
             {displayCount > 0 && (
-              <span style={{ position: 'absolute', top: -4, right: -4, display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', padding: '1px 6px', fontSize: 11, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>{displayCount}</span>
+              <span data-part="badge" style={{ position: 'absolute', top: -4, right: -4, display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', padding: '1px 6px', fontSize: 11, background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)' }}>{displayCount}</span>
             )}
           </div>
         )}
@@ -140,19 +142,19 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="z-50 mt-2 w-[360px]" style={{ position: 'absolute', right: 0, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-3)', padding: 12 }}>
+        <div data-part="panel" className="z-50 mt-2 w-[360px]" style={{ position: 'absolute', right: 0, background: 'var(--ds-surface-card)', borderRadius: 'var(--ds-radius-lg)', boxShadow: 'var(--ds-elevation-3)', padding: 12 }}>
           <div style={{ padding: 0 }}>
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'var(--ds-color-border)' }}>
+            <div data-part="header" className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: 'var(--ds-color-border)' }}>
               <span className="font-semibold text-sm">Notifications</span>
               <div className="flex gap-2">
                 {onReadAll && displayCount > 0 && (
-                  <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onReadAll}>
+                  <button data-part="mark-all-read" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onReadAll}>
                     Mark all read
                   </button>
                 )}
                 {onClearAll && notifications.length > 0 && (
-                  <button style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onClearAll}>
+                  <button data-part="clear-all" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onClearAll}>
                     Clear all
                   </button>
                 )}
@@ -172,6 +174,8 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                   {visibleNotifications.map(item => (
                     <li key={item.id}>
                       <div
+                        data-part="row"
+                        data-unread={!item.read}
                         className="flex gap-3 items-start p-3 rounded-none border-b"
                         style={{
                           borderColor: 'var(--ds-color-border)',
@@ -181,7 +185,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                       >
                         {/* Type icon: custom icon takes priority, otherwise a
                             Unicode glyph matching the notification type */}
-                        <div className="mt-0.5 text-lg" style={typeColorStyles[item.type]}>
+                        <div data-part="icon" data-type={item.type} className="mt-0.5 text-lg" style={typeColorStyles[item.type]}>
                           {item.icon || (
                             item.type === 'success' ? '\u2713' :
                             item.type === 'error' ? '\u2717' :
@@ -193,7 +197,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                           <div className="flex items-center gap-2">
                             <span className={`text-sm ${!item.read ? 'font-semibold' : ''}`}>{item.title}</span>
                             {/* Small primary dot next to unread titles for visual emphasis */}
-                            {!item.read && <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--ds-color-primary)' }} />}
+                            {!item.read && <div data-part="unread-dot" data-unread={true} className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: 'var(--ds-color-primary)' }} />}
                           </div>
                           <p className="text-xs opacity-60 mt-0.5 line-clamp-2">{item.message}</p>
                           <div className="flex justify-between items-center mt-1">
@@ -202,6 +206,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                                 firing the row-level onRead handler */}
                             {item.action && (
                               <button
+                                data-part="action"
                                 style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
                                 onClick={(e) => { e.stopPropagation(); item.action!.onClick(); }}
                               >
@@ -213,6 +218,7 @@ export default function ModernNotificationCenter(props: NotificationCenterProps)
                         {/* Dismiss button: low opacity by default, full on hover */}
                         {onClear && (
                           <button
+                            data-part="dismiss"
                             style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: '50%', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3, transition: 'opacity var(--ds-motion-fast)' }}
                             onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
                             onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.opacity = '0.3'; }}

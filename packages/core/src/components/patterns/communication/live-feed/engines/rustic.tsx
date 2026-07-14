@@ -155,19 +155,19 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   // preserve existing items so users see continuous content.
   if (loading && items.length === 0) {
     return (
-      <div className={className} style={{ ...s.container, ...style }}>
+      <div data-part="root" className={`ds-pattern-live-feed ds-engine-rustic ${className ?? ''}`} style={{ ...s.container, ...style }}>
         {/* Inline @keyframes since rustic engine has no external CSS dependency. */}
         <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
-        <div style={s.skeleton('30%', '1rem')} />
+        <div data-part="skeleton" style={s.skeleton('30%', '1rem')} />
         {[1, 2, 3].map((i) => (
-          <div key={i} style={{ ...s.skeleton('100%', '3.5rem'), marginTop: '0.5rem' }} />
+          <div key={i} data-part="skeleton" style={{ ...s.skeleton('100%', '3.5rem'), marginTop: '0.5rem' }} />
         ))}
       </div>
     );
   }
 
   return (
-    <div className={className} style={{ ...s.container, ...style }}>
+    <div data-part="root" className={`ds-pattern-live-feed ds-engine-rustic ${className ?? ''}`} style={{ ...s.container, ...style }}>
       {/* Two keyframes injected inline:
           - pulse: skeleton loading shimmer
           - feedPulse: background flash on newly arrived feed items,
@@ -178,7 +178,7 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         <div style={s.headerRow}>
           <div>{header}</div>
           {onRefresh && (
-            <button style={s.refreshBtn} onClick={onRefresh} aria-label="Refresh">
+            <button data-part="refresh" style={s.refreshBtn} onClick={onRefresh} aria-label="Refresh">
               &#8635;
             </button>
           )}
@@ -188,8 +188,8 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
       {/* New items bar -- clickable banner that tells the user how many unseen items
           are buffered. The parent decides how to merge them into the visible list. */}
       {newItemsCount != null && newItemsCount > 0 && (
-        <div style={s.newBar} onClick={onShowNewItems}>
-          <span style={s.newBadge}>{newItemsCount}</span>
+        <div data-part="banner" style={s.newBar} onClick={onShowNewItems}>
+          <span data-part="badge" style={s.newBadge}>{newItemsCount}</span>
           new {newItemsCount === 1 ? 'item' : 'items'}
         </div>
       )}
@@ -198,7 +198,7 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
           when omitted, the list grows without constraint. */}
       <div style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
         {displayItems.length === 0 ? (
-          emptyState ?? <div style={s.empty}>No items</div>
+          emptyState ?? <div data-part="empty" style={s.empty}>No items</div>
         ) : (
           <div style={s.feedList}>
             {/* New items receive feedPulse animation: a 1s background flash from
@@ -218,7 +218,7 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
       {/* Load-more button. Text changes to "Loading..." during fetch to give
           the user feedback without adding a separate spinner element. */}
       {hasMore && onLoadMore && (
-        <button style={s.loadMore} onClick={onLoadMore}>
+        <button data-part="load-more" style={s.loadMore} onClick={onLoadMore}>
           {loading ? 'Loading...' : 'Load more'}
         </button>
       )}

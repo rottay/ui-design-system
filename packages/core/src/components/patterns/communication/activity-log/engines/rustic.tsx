@@ -94,8 +94,8 @@ export default function RusticActivityLog(props: ActivityLogProps) {
 
   if (loading) {
     return (
-      <div className={className} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
-        <span style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+      <div data-part="root" className={`ds-pattern-activity-log ds-engine-rustic ${className ?? ''}`} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
+        <span data-part="loading" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
       </div>
     );
   }
@@ -148,12 +148,13 @@ export default function RusticActivityLog(props: ActivityLogProps) {
   });
 
   return (
-    <div className={className} style={{ ...containerStyle, ...style }}>
+    <div data-part="root" className={`ds-pattern-activity-log ds-engine-rustic ${className ?? ''}`} style={{ ...containerStyle, ...style }}>
       {/* Filters */}
       {onFilterChange && (
         <div style={{ display: 'flex', gap: 8, marginBottom: 16, flexWrap: 'wrap' }}>
           {actionTypes && actionTypes.length > 0 && (
             <select
+              data-part="filter"
               style={selectStyle}
               value={filters?.type?.[0] || ''}
               onChange={(e) => {
@@ -167,6 +168,7 @@ export default function RusticActivityLog(props: ActivityLogProps) {
           )}
           {users && users.length > 0 && (
             <select
+              data-part="filter"
               style={selectStyle}
               value={filters?.user?.[0] || ''}
               onChange={(e) => {
@@ -182,7 +184,7 @@ export default function RusticActivityLog(props: ActivityLogProps) {
       )}
 
       {activities.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
+        <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
           {emptyMessage}
         </div>
       ) : (
@@ -193,8 +195,8 @@ export default function RusticActivityLog(props: ActivityLogProps) {
               <div key={activity.id} style={{ display: 'flex', gap: 12 }}>
                 {/* Timeline line + dot */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 10 }}>
-                  <div style={dotStyle(color)} />
-                  {index < activities.length - 1 && <div style={{ ...lineStyle, flex: 1 }} />}
+                  <div data-part="dot" data-action-category={color} style={dotStyle(color)} />
+                  {index < activities.length - 1 && <div data-part="line" style={{ ...lineStyle, flex: 1 }} />}
                 </div>
 
                 {/* Content */}
@@ -209,29 +211,29 @@ export default function RusticActivityLog(props: ActivityLogProps) {
                   {renderActivity ? renderActivity(activity) : (
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-                        <div style={avatarStyle(24)}>
+                        <div data-part="avatar" style={avatarStyle(24)}>
                           {activity.user.avatar ? (
                             <img src={activity.user.avatar} alt={activity.user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           ) : (
                             activity.user.name.charAt(0).toUpperCase()
                           )}
                         </div>
-                        <span style={{ fontWeight: 500, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
+                        <span data-part="user" style={{ fontWeight: 500, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                           {activity.user.name}
                         </span>
-                        <span style={tagStyle(color)}>{activity.action}</span>
+                        <span data-part="badge" data-action-category={color} style={tagStyle(color)}>{activity.action}</span>
                         {activity.entityType && (
-                          <span style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+                          <span data-part="entity" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
                             on {activity.entityType}
                             {activity.entityId ? ` #${activity.entityId}` : ''}
                           </span>
                         )}
                       </div>
-                      <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 4, marginLeft: 32 }}>
+                      <div data-part="timestamp" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 4, marginLeft: 32 }}>
                         {formatTimestamp(activity.timestamp)}
                       </div>
                       {activity.diff && (
-                        <div style={{ marginTop: 8, marginLeft: 32, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+                        <div data-part="diff" style={{ marginTop: 8, marginLeft: 32, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
                           {Object.entries(activity.diff).map(([field, { from, to }]) => (
                             <div key={field}>
                               <strong>{field}:</strong>{' '}

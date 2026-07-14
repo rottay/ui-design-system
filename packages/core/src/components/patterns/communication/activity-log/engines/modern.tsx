@@ -125,6 +125,7 @@ function formatAbsoluteTime(ts: string): string {
 function DiffView({ diff }: { diff: Record<string, { from: unknown; to: unknown }> }) {
   return (
     <div
+      data-part="diff"
       style={{
         marginTop: 8,
         padding: '8px 12px',
@@ -137,6 +138,7 @@ function DiffView({ diff }: { diff: Record<string, { from: unknown; to: unknown 
       {Object.entries(diff).map(([field, { from, to }]) => (
         <div
           key={field}
+          data-part="diff-row"
           style={{
             display: 'flex',
             alignItems: 'baseline',
@@ -144,14 +146,14 @@ function DiffView({ diff }: { diff: Record<string, { from: unknown; to: unknown 
             color: 'var(--ds-color-text-secondary)',
           }}
         >
-          <span style={{ fontWeight: 600, color: 'var(--ds-color-text-primary)', minWidth: 60 }}>
+          <span data-part="diff-cell" data-diff-role="label" style={{ fontWeight: 600, color: 'var(--ds-color-text-primary)', minWidth: 60 }}>
             {field}:
           </span>
-          <span style={{ textDecoration: 'line-through', color: 'var(--ds-color-text-muted)' }}>
+          <span data-part="diff-cell" data-diff-role="from" style={{ textDecoration: 'line-through', color: 'var(--ds-color-text-muted)' }}>
             {String(from)}
           </span>
-          <span style={{ color: 'var(--ds-color-text-muted)' }}>{'\u2192'}</span>
-          <span style={{ fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>
+          <span data-part="diff-cell" data-diff-role="arrow" style={{ color: 'var(--ds-color-text-muted)' }}>{'\u2192'}</span>
+          <span data-part="diff-cell" data-diff-role="to" style={{ fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>
             {String(to)}
           </span>
         </div>
@@ -169,6 +171,7 @@ function Avatar({ name, src, size = 28 }: { name: string; src?: string; size?: n
   if (src) {
     return (
       <img
+        data-part="avatar"
         src={src}
         alt={name}
         style={{
@@ -184,6 +187,7 @@ function Avatar({ name, src, size = 28 }: { name: string; src?: string; size?: n
 
   return (
     <span
+      data-part="avatar"
       style={{
         display: 'inline-flex',
         alignItems: 'center',
@@ -232,6 +236,7 @@ function LoadingSkeleton() {
           <div key={i} style={{ display: 'flex', gap: 16 }}>
             {/* Dot skeleton */}
             <div
+              data-part="skeleton"
               style={{
                 ...shimmerBg,
                 width: 10,
@@ -243,8 +248,8 @@ function LoadingSkeleton() {
             />
             {/* Content skeleton */}
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ ...shimmerBg, width: '60%', height: 14 }} />
-              <div style={{ ...shimmerBg, width: '40%', height: 10 }} />
+              <div data-part="skeleton" style={{ ...shimmerBg, width: '60%', height: 14 }} />
+              <div data-part="skeleton" style={{ ...shimmerBg, width: '40%', height: 10 }} />
             </div>
           </div>
         ))}
@@ -260,6 +265,7 @@ function LoadingSkeleton() {
 function EmptyState({ message }: { message: string }) {
   return (
     <div
+      data-part="empty"
       style={{
         display: 'flex',
         flexDirection: 'column',
@@ -331,6 +337,8 @@ function TimelineItem({
       >
         {/* Dot indicator */}
         <div
+          data-part="dot"
+          data-action-category={category}
           style={{
             width: 24,
             height: 24,
@@ -354,6 +362,7 @@ function TimelineItem({
         {/* Connecting line */}
         {!isLast && (
           <div
+            data-part="line"
             style={{
               width: 2,
               flex: 1,
@@ -393,6 +402,7 @@ function TimelineItem({
             >
               <Avatar name={activity.user.name} src={activity.user.avatar} size={24} />
               <span
+                data-part="user"
                 style={{
                   fontSize: 14,
                   fontWeight: 600,
@@ -401,11 +411,12 @@ function TimelineItem({
               >
                 {activity.user.name}
               </span>
-              <span style={getActionBadgeStyle(category)}>
+              <span data-part="badge" data-action-category={category} style={getActionBadgeStyle(category)}>
                 {activity.action}
               </span>
               {activity.entityType && (
                 <span
+                  data-part="entity"
                   style={{
                     fontSize: 12,
                     color: 'var(--ds-color-text-muted)',
@@ -419,6 +430,7 @@ function TimelineItem({
 
             {/* Timestamp: relative with absolute tooltip */}
             <div
+              data-part="timestamp"
               title={formatAbsoluteTime(activity.timestamp)}
               style={{
                 fontSize: 12,
@@ -472,7 +484,8 @@ export default function ModernActivityLog(props: ActivityLogProps) {
   if (loading) {
     return (
       <div
-        className={className || undefined}
+        data-part="root"
+        className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
         style={{
           ...style,
           background: 'var(--ds-surface-card)',
@@ -488,7 +501,8 @@ export default function ModernActivityLog(props: ActivityLogProps) {
 
   return (
     <div
-      className={className || undefined}
+      data-part="root"
+      className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
       style={{
         ...style,
         background: 'var(--ds-surface-card)',

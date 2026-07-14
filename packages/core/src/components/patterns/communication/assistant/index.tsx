@@ -183,7 +183,7 @@ export function AssistantStatusBadge({
   tone = 'neutral',
 }: AssistantStatusBadgeProps): React.ReactElement {
   return (
-    <Tag variant={toneToVariant(tone)} outlined size="sm">
+    <Tag className="ds-assistant-status-badge" data-part="root" variant={toneToVariant(tone)} outlined size="sm">
       {label}
     </Tag>
   );
@@ -218,7 +218,7 @@ export function StreamingText({
     as === 'markdown' ? 'var(--ds-font-family-mono, inherit)' : undefined;
 
   return (
-    <Box>
+    <Box className="ds-assistant-streaming-text" data-part="root">
       {streaming && !reduceMotion ? (
         <ShimmerText text={text} style={{ whiteSpace: 'pre-wrap', fontFamily }} />
       ) : (
@@ -231,6 +231,7 @@ export function StreamingText({
               a static position instead of blinking. */}
           <style>{ASSISTANT_CARET_KEYFRAMES}</style>
           <Text
+            data-part="caret"
             aria-hidden="true"
             style={{
               marginLeft: 4,
@@ -264,6 +265,8 @@ export function TypingIndicator({
 }: TypingIndicatorProps): React.ReactElement {
   return (
     <Box
+      className="ds-assistant-typing-indicator"
+      data-part="root"
       role="status"
       aria-live="polite"
       style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
@@ -273,6 +276,7 @@ export function TypingIndicator({
         {[0, 1, 2].map((index) => (
           <Box
             key={index}
+            data-part="typing-dot"
             style={{
               width: 6,
               height: 6,
@@ -316,7 +320,7 @@ export function ToolCallCard({
   const terminal = status === 'complete' || status === 'error';
 
   return (
-    <Card variant="outlined">
+    <Card className="ds-assistant-tool-call-card" data-part="root" variant="outlined">
       <Card.Body>
         <Stack spacing="sm">
           <Stack direction="horizontal" justify="space-between" align="center">
@@ -339,7 +343,7 @@ export function ToolCallCard({
                   <Box />
                 )}
                 {duration ? (
-                  <Text size="sm" style={{ color: toneToColorVar(tone) }}>
+                  <Text data-part="tool-card" data-tone={tone} size="sm" style={{ color: toneToColorVar(tone) }}>
                     {duration}
                   </Text>
                 ) : null}
@@ -395,12 +399,16 @@ export function AssistantStatusIndicator({
 
   return (
     <Box
+      className="ds-assistant-status-indicator"
+      data-part="root"
       role="status"
       aria-live="polite"
       style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
       {animate ? <style>{ASSISTANT_DOT_KEYFRAMES}</style> : null}
       <Box
+        data-part="dot"
+        data-status={status}
         aria-hidden="true"
         style={{
           width: 8,
@@ -434,7 +442,7 @@ export function PreviewDiffCard({
   meta,
 }: PreviewDiffCardProps): React.ReactElement {
   return (
-    <Card variant="outlined">
+    <Card className="ds-assistant-preview-diff-card" data-part="root" variant="outlined">
       <Card.Body>
         <Stack spacing="sm">
           {title ? <Text style={{ fontWeight: 700 }}>{title}</Text> : null}
@@ -463,6 +471,7 @@ export function PreviewDiffCard({
             return (
               <Stack
                 key={`diff-row-${index}`}
+                data-part="divider"
                 direction="horizontal"
                 spacing="sm"
                 align="center"
@@ -474,6 +483,9 @@ export function PreviewDiffCard({
                 <Box style={{ flex: 3, minWidth: 0 }}>
                   {row.before !== undefined ? (
                     <Text
+                      data-part="preview-cell"
+                      data-diff-side="before"
+                      data-change={change}
                       size="sm"
                       style={{
                         color: beforeColor,
@@ -498,6 +510,9 @@ export function PreviewDiffCard({
                 <Box style={{ flex: 3, minWidth: 0 }}>
                   {row.after !== undefined ? (
                     <Text
+                      data-part="preview-cell"
+                      data-diff-side="after"
+                      data-change={change}
                       size="sm"
                       style={{
                         color: afterColor,
@@ -541,7 +556,7 @@ export function ConfirmActionCard({
   actions,
 }: ConfirmActionCardProps): React.ReactElement {
   return (
-    <Card variant="outlined">
+    <Card className="ds-assistant-confirm-action-card" data-part="root" variant="outlined">
       <Card.Body>
         <Stack spacing="sm">
           {title ? <Text style={{ fontWeight: 700 }}>{title}</Text> : null}
@@ -652,6 +667,8 @@ export function MessageBubble({
 
   return (
     <Box
+      className="ds-assistant-message-bubble"
+      data-part="root"
       style={{
         display: 'flex',
         justifyContent: alignEnd ? 'flex-end' : 'flex-start',
@@ -692,7 +709,7 @@ export function MessageBubble({
             {timestamp || status || meta ? (
               <Stack spacing="xs">
                 {timestamp ? (
-                  <Text style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                  <Text data-part="timestamp" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
                     {timestamp}
                   </Text>
                 ) : null}

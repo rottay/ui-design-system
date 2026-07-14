@@ -171,7 +171,8 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
   return (
     <div
       ref={containerRef}
-      className={className}
+      data-part="root"
+      className={`ds-pattern-notification-center ds-engine-rustic ${className ?? ''}`}
       style={{ position: 'relative', display: 'inline-block', ...style }}
     >
       {/* Trigger: custom element or default bell emoji button.
@@ -183,28 +184,29 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
         </div>
       ) : (
         <button
+          data-part="trigger"
           style={triggerBtnStyle}
           onClick={() => handleOpenChange(!isOpen)}
           aria-label="Notifications"
           data-testid="notification-trigger"
         >
           {'\uD83D\uDD14'}
-          {displayCount > 0 && <span style={badgeStyle}>{displayCount}</span>}
+          {displayCount > 0 && <span data-part="badge" style={badgeStyle}>{displayCount}</span>}
         </button>
       )}
 
       {/* Dropdown */}
       {isOpen && (
-        <div style={dropdownStyle}>
+        <div data-part="panel" style={dropdownStyle}>
           {/* Header */}
-          <div style={headerStyle}>
+          <div data-part="header" style={headerStyle}>
             <span style={{ fontWeight: 600, fontSize: 'var(--ds-font-size-sm, 14px)' }}>Notifications</span>
             <div style={{ display: 'flex', gap: 4 }}>
               {onReadAll && displayCount > 0 && (
-                <button style={linkBtnStyle} onClick={onReadAll}>Mark all read</button>
+                <button data-part="mark-all-read" style={linkBtnStyle} onClick={onReadAll}>Mark all read</button>
               )}
               {onClearAll && notifications.length > 0 && (
-                <button style={linkBtnStyle} onClick={onClearAll}>Clear all</button>
+                <button data-part="clear-all" style={linkBtnStyle} onClick={onClearAll}>Clear all</button>
               )}
             </div>
           </div>
@@ -213,13 +215,15 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
               background. Each row is clickable to trigger onRead. */}
           <div style={{ flex: 1, overflowY: 'auto', maxHeight: 360 }}>
             {visibleNotifications.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
+              <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
                 {emptyMessage}
               </div>
             ) : (
               visibleNotifications.map(item => (
                 <div
                   key={item.id}
+                  data-part="row"
+                  data-unread={!item.read}
                   style={{
                     display: 'flex',
                     gap: 10,
@@ -233,7 +237,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                 >
                   {/* Type icon: custom icon or Unicode fallback. Colored with
                       the semantic token matching the notification type. */}
-                  <span style={{ fontSize: 16, marginTop: 2, flexShrink: 0, color: typeColors[item.type] }}>
+                  <span data-part="icon" data-type={item.type} style={{ fontSize: 16, marginTop: 2, flexShrink: 0, color: typeColors[item.type] }}>
                     {item.icon || (
                       item.type === 'success' ? '\u2713' :
                       item.type === 'error' ? '\u2717' :
@@ -249,19 +253,20 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                       </span>
                       {/* Small primary dot for visual unread indicator */}
                       {!item.read && (
-                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--ds-color-primary)', flexShrink: 0 }} />
+                        <span data-part="unread-dot" data-unread={true} style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--ds-color-primary)', flexShrink: 0 }} />
                       )}
                     </div>
-                    <div style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 2 }}>
+                    <div data-part="message" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 2 }}>
                       {item.message}
                     </div>
                     {/* Footer row: timestamp + optional action button */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
-                      <span style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', opacity: 0.7 }}>
+                      <span data-part="timestamp" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', opacity: 0.7 }}>
                         {formatTimestamp(item.timestamp)}
                       </span>
                       {item.action && (
                         <button
+                          data-part="action"
                           style={linkBtnStyle}
                           onClick={(e) => { e.stopPropagation(); item.action!.onClick(); }}
                         >
@@ -274,6 +279,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                       visually with the notification content */}
                   {onClear && (
                     <button
+                      data-part="dismiss"
                       style={{ ...linkBtnStyle, color: 'var(--ds-color-text-muted)', opacity: 0.5, fontSize: 14, padding: 2 }}
                       onClick={(e) => { e.stopPropagation(); onClear(item.id); }}
                     >

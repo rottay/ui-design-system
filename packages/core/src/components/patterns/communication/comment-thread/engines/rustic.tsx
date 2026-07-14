@@ -152,7 +152,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
   return (
     <div style={{ marginLeft: depth > 0 ? 24 : 0 }}>
       <div style={{ display: 'flex', gap: 12, marginBottom: 12 }}>
-        <div style={avatarStyle(32)}>
+        <div data-part="avatar" style={avatarStyle(32)}>
           {comment.author.avatar ? (
             <img src={comment.author.avatar} alt={comment.author.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           ) : (
@@ -175,14 +175,15 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
           {editing ? (
             <div style={{ marginBottom: 8 }}>
               <textarea
+                data-part="edit-textarea"
                 style={{ ...textareaStyle, marginBottom: 8 }}
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
                 rows={2}
               />
               <div style={{ display: 'flex', gap: 8 }}>
-                <button style={primaryBtnStyle} onClick={handleEdit}>Save</button>
-                <button style={btnStyle} onClick={() => { setEditing(false); setEditText(comment.content); }}>Cancel</button>
+                <button data-part="save" style={primaryBtnStyle} onClick={handleEdit}>Save</button>
+                <button data-part="cancel" style={btnStyle} onClick={() => { setEditing(false); setEditText(comment.content); }}>Cancel</button>
               </div>
             </div>
           ) : (
@@ -197,6 +198,8 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               {comment.reactions.map(r => (
                 <button
                   key={r.emoji}
+                  data-part="reaction"
+                  data-active={r.active}
                   style={{
                     ...btnStyle,
                     padding: '2px 8px',
@@ -216,13 +219,13 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               Edit and delete are restricted to the comment owner. */}
           <div style={{ display: 'flex', gap: 8 }}>
             {depth < maxDepth && onReply && (
-              <button style={linkBtnStyle} onClick={() => setReplyVisible(!replyVisible)}>Reply</button>
+              <button data-part="reply" style={linkBtnStyle} onClick={() => setReplyVisible(!replyVisible)}>Reply</button>
             )}
             {isOwner && onEdit && (
-              <button style={linkBtnStyle} onClick={() => setEditing(true)}>Edit</button>
+              <button data-part="edit" style={linkBtnStyle} onClick={() => setEditing(true)}>Edit</button>
             )}
             {isOwner && onDelete && (
-              <button style={{ ...linkBtnStyle, color: 'var(--ds-color-error, #ef4444)' }} onClick={() => onDelete(comment.id)}>Delete</button>
+              <button data-part="delete" style={{ ...linkBtnStyle, color: 'var(--ds-color-error, #ef4444)' }} onClick={() => onDelete(comment.id)}>Delete</button>
             )}
           </div>
 
@@ -230,6 +233,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
           {replyVisible && (
             <div style={{ marginTop: 8 }}>
               <textarea
+                data-part="reply-textarea"
                 style={{ ...textareaStyle, marginBottom: 8 }}
                 value={replyText}
                 onChange={(e) => setReplyText(e.target.value)}
@@ -238,13 +242,14 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               />
               <div style={{ display: 'flex', gap: 8 }}>
                 <button
+                  data-part="reply-submit"
                   style={{ ...primaryBtnStyle, opacity: replyText.trim() ? 1 : 0.5 }}
                   onClick={handleReply}
                   disabled={!replyText.trim()}
                 >
                   Reply
                 </button>
-                <button style={btnStyle} onClick={() => setReplyVisible(false)}>Cancel</button>
+                <button data-part="reply-cancel" style={btnStyle} onClick={() => setReplyVisible(false)}>Cancel</button>
               </div>
             </div>
           )}
@@ -254,7 +259,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
       {/* Nested replies -- rendered recursively with a left border line for
           visual threading. Stops at maxDepth to cap DOM nesting depth. */}
       {comment.replies && comment.replies.length > 0 && depth < maxDepth && (
-        <div style={{ borderLeft: '2px solid var(--ds-color-neutral-200, #e5e7eb)', paddingLeft: 12 }}>
+        <div data-part="nested-line" style={{ borderLeft: '2px solid var(--ds-color-neutral-200, #e5e7eb)', paddingLeft: 12 }}>
           {comment.replies.map(reply => (
             <CommentNode
               key={reply.id}
@@ -310,19 +315,19 @@ export default function RusticCommentThread(props: CommentThreadProps) {
 
   if (loading) {
     return (
-      <div className={className} style={{ textAlign: 'center', padding: 48, ...style }}>
-        <span style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+      <div data-part="root" className={`ds-pattern-comment-thread ds-engine-rustic ${className ?? ''}`} style={{ textAlign: 'center', padding: 48, ...style }}>
+        <span data-part="loading" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
       </div>
     );
   }
 
   return (
-    <div className={className} style={style}>
+    <div data-part="root" className={`ds-pattern-comment-thread ds-engine-rustic ${className ?? ''}`} style={style}>
       {/* New comment input -- only rendered when both onAdd and currentUser
           are provided. Without a user identity we cannot attribute the comment. */}
       {onAdd && currentUser && (
         <div style={{ display: 'flex', gap: 12, marginBottom: 24 }}>
-          <div style={avatarStyle(32)}>
+          <div data-part="avatar" style={avatarStyle(32)}>
             {currentUser.avatar ? (
               <img src={currentUser.avatar} alt={currentUser.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
@@ -331,6 +336,7 @@ export default function RusticCommentThread(props: CommentThreadProps) {
           </div>
           <div style={{ flex: 1 }}>
             <textarea
+              data-part="composer"
               style={{ ...textareaStyle, marginBottom: 8 }}
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
@@ -338,6 +344,7 @@ export default function RusticCommentThread(props: CommentThreadProps) {
               placeholder={placeholder}
             />
             <button
+              data-part="submit"
               style={{ ...primaryBtnStyle, opacity: newComment.trim() ? 1 : 0.5 }}
               onClick={handleAdd}
               disabled={!newComment.trim()}
@@ -350,7 +357,7 @@ export default function RusticCommentThread(props: CommentThreadProps) {
 
       {/* Comments */}
       {comments.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
+        <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
           {emptyMessage}
         </div>
       ) : (
