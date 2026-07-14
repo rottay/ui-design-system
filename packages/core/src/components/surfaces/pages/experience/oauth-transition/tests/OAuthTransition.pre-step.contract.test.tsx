@@ -1,15 +1,21 @@
 import { createHash } from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { basename, resolve } from 'node:path';
 
 import { cleanup, render } from '@testing-library/react';
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { OAuthTransitionScreen } from '../index';
-import { oauthTransitionStyles } from '../styles';
 import type { OAuthProvider } from '../types';
 
 const EXPECTED_CSS_LENGTH = 53_076;
 const EXPECTED_CSS_LINE_COUNT = 2_226;
 const EXPECTED_CSS_SHA256 = '9af44d8087a899dc9434b06f6c2970328204b16f55d718c83a86e0d64deea697';
+const coreRoot = basename(process.cwd()) === 'core' ? process.cwd() : resolve(process.cwd(), 'packages/core');
+const oauthTransitionCss = readFileSync(
+  resolve(coreRoot, 'src/tokens/css/components/skin/oauth-transition.css'),
+  'utf8',
+);
 
 const EXPECTED_KEYFRAMES = [
   'rottay-transition-travel',
@@ -51,6 +57,22 @@ const CRITICAL_SELECTORS = [
   '.rottay-transition-root[data-phase="return"][data-compact="true"] .rottay-transition-quiet-node.is-origin {',
 ] as const;
 
+const EXPECTED_INLINE_PALETTE_PROPERTIES = [
+  '--rh-accent',
+  '--rh-accent-soft',
+  '--rh-bg',
+  '--rh-bg-alt',
+  '--rh-glow',
+  '--rh-glow-soft',
+  '--rh-ink',
+  '--rh-line',
+  '--rh-line-strong',
+  '--rh-muted',
+  '--rh-panel',
+  '--rh-panel-soft',
+  '--rh-shadow',
+] as const;
+
 function getRoot(container: HTMLElement): HTMLElement {
   const root = container.querySelector<HTMLElement>('.rottay-transition-root');
   expect(root).not.toBeNull();
@@ -63,26 +85,34 @@ function getTopProviderSvg(container: HTMLElement): SVGElement {
   return icon as SVGElement;
 }
 
+function expectInlinePaletteContract(root: HTMLElement): void {
+  const inlinePaletteProperties = Array.from({ length: root.style.length }, (_, index) => root.style.item(index))
+    .filter((property) => property.startsWith('--rh-'))
+    .sort();
+
+  expect(inlinePaletteProperties).toEqual(EXPECTED_INLINE_PALETTE_PROPERTIES);
+}
+
 afterEach(() => cleanup());
 
-describe('OAuthTransition inert pre-step contract', () => {
-  it('pins the complete injected stylesheet byte-for-byte and names its critical mechanisms', () => {
-    const digest = createHash('sha256').update(oauthTransitionStyles).digest('hex');
-    const keyframes = Array.from(oauthTransitionStyles.matchAll(/@keyframes\s+([\w-]+)/g), (match) => match[1]);
-    const mediaQueries = Array.from(oauthTransitionStyles.matchAll(/@media\s*([^\{]+)/g), (match) => match[1].trim());
+describe('OAuthTransition byte-exact skin migration contract', () => {
+  it('pins the complete external skin byte-for-byte and names its critical mechanisms', () => {
+    const digest = createHash('sha256').update(oauthTransitionCss).digest('hex');
+    const keyframes = Array.from(oauthTransitionCss.matchAll(/@keyframes\s+([\w-]+)/g), (match) => match[1]);
+    const mediaQueries = Array.from(oauthTransitionCss.matchAll(/@media\s*([^\{]+)/g), (match) => match[1].trim());
 
-    expect(oauthTransitionStyles).toHaveLength(EXPECTED_CSS_LENGTH);
-    expect(oauthTransitionStyles.split('\n')).toHaveLength(EXPECTED_CSS_LINE_COUNT);
+    expect(oauthTransitionCss).toHaveLength(EXPECTED_CSS_LENGTH);
+    expect(oauthTransitionCss.split('\n')).toHaveLength(EXPECTED_CSS_LINE_COUNT);
     expect(digest).toBe(EXPECTED_CSS_SHA256);
     expect(keyframes).toEqual(EXPECTED_KEYFRAMES);
     expect(mediaQueries).toEqual(['(max-width: 720px)', '(prefers-reduced-motion: reduce)']);
 
     for (const selector of CRITICAL_SELECTORS) {
-      expect(oauthTransitionStyles, `missing critical selector ${selector}`).toContain(selector);
+      expect(oauthTransitionCss, `missing critical selector ${selector}`).toContain(selector);
     }
   });
 
-  it('renders the light redirect contract with its style block, palette variables, progress and Google marks', () => {
+  it('renders the light redirect contract without a style block and preserves palette, progress and Google marks', () => {
     const { container } = render(
       <OAuthTransitionScreen
         appId="bithire"
@@ -103,10 +133,9 @@ describe('OAuthTransition inert pre-step contract', () => {
     expect(root.style.getPropertyValue('--rh-bg')).toBe('#ece6dc');
     expect(root.style.getPropertyValue('--rh-ink')).toBe('#12100d');
     expect(root.style.getPropertyValue('--rh-shadow')).toBe('0 40px 90px rgba(28, 24, 18, 0.18)');
+    expectInlinePaletteContract(root);
 
-    const styleBlocks = root.querySelectorAll('style');
-    expect(styleBlocks).toHaveLength(1);
-    expect(styleBlocks[0]?.textContent).toBe(oauthTransitionStyles);
+    expect(root.querySelectorAll('style')).toHaveLength(0);
     expect(root.querySelector('.rottay-transition-title')).toHaveTextContent('Redirecting to Google for Bithire.');
     expect(root.querySelector('.rottay-transition-provider-copy strong')).toHaveTextContent('Google');
     expect(root.querySelector('.rottay-transition-provider-copy span')).toHaveTextContent('Redirect in progress');
@@ -131,7 +160,7 @@ describe('OAuthTransition inert pre-step contract', () => {
     ]);
   });
 
-  it('renders the compact dark return contract with return copy, variables, progress and Microsoft marks', () => {
+  it('renders the compact dark return contract without a style block and preserves copy, palette and Microsoft marks', () => {
     const { container } = render(
       <OAuthTransitionScreen
         appId="platform"
@@ -152,9 +181,9 @@ describe('OAuthTransition inert pre-step contract', () => {
     expect(root.style.getPropertyValue('--rh-bg')).toBe('#040404');
     expect(root.style.getPropertyValue('--rh-ink')).toBe('#f4efe8');
     expect(root.style.getPropertyValue('--rh-shadow')).toBe('0 40px 100px rgba(0, 0, 0, 0.58)');
+    expectInlinePaletteContract(root);
 
-    expect(root.querySelectorAll('style')).toHaveLength(1);
-    expect(root.querySelector('style')?.textContent).toBe(oauthTransitionStyles);
+    expect(root.querySelectorAll('style')).toHaveLength(0);
     expect(root.querySelector('.rottay-transition-title')).toHaveTextContent('Back to Rottay Platform.');
     expect(root.querySelector('.rottay-transition-provider-copy strong')).toHaveTextContent('Microsoft');
     expect(root.querySelector('.rottay-transition-provider-copy span')).toHaveTextContent('Return confirmed');

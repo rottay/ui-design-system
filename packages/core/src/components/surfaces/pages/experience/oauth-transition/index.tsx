@@ -3,10 +3,10 @@
  * transition surface used across all Rottay verticals.
  *
  * This is a self-contained, full-page surface that renders a branded transition
- * animation during OAuth redirects and returns. It uses its own CSS-in-JS styles
- * (injected via a <style> element) and its own palette system (--rh-* variables),
- * intentionally decoupled from the DS token system since it renders outside the
- * normal app shell during auth flows.
+ * animation during OAuth redirects and returns. Its byte-exact skin is loaded
+ * through the shared CSS entrypoints while its palette stays on the root as
+ * --rh-* variables, intentionally decoupled from the DS token system since it
+ * renders outside the normal app shell during auth flows.
  */
 
 import type { CSSProperties, JSX } from 'react';
@@ -17,7 +17,6 @@ import {
   getOAuthTransitionVariant,
 } from './config';
 import { renderOAuthProviderIcon } from './provider-icons';
-import { oauthTransitionStyles } from './styles';
 import type {
   OAuthTransitionPhase,
   OAuthTransitionScreenProps,
@@ -512,7 +511,6 @@ export function OAuthTransitionScreen({
       data-transition={transitionState}
       style={vars}
     >
-      <style>{oauthTransitionStyles}</style>
       <div className="rottay-transition-background" />
       <div className="rottay-transition-grid" />
       <div className="rottay-transition-noise" />

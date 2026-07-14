@@ -402,6 +402,10 @@
 @import '../components/skin/pricing-surface.css';
 @import '../components/skin/activity-surface.css';
 
+/* Hidden-channel recovery: byte-exact component CSS, deliberately unlayered. */
+@import '../components/skin/oauth-transition.css';
+@import '../components/skin/loading-overlay.css';
+
 
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)

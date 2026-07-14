@@ -17,7 +17,7 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 15:42 — CK-I CERTIFIED byte-exact at 84f3cd70: 38 unlayered skins; 381 true DOM-paint sites moved, one adjudicated NOT-PAINT counter residual and 15 permanent exclusions untouched; adversarial parity fixes for StatsGrid event order/consumer DOM and Report Card specificity; 12/12 contracts + 7/7 advanced tests; core/showroom production builds green; 32 committed baselines pass two independent 4/4 no-update runs. Full-scope audit then found OAuth injected-CSS and Presence SVG blind channels; those are being closed as an addendum before CK-H1/CK-E. |
+| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 16:57 — Presence, OAuthTransition y LoadingOverlay addenda certificados; censos fail-closed de inline, runtime SVG y embedded CSS integrados a CI. Deuda honesta de recuperación: 130 paints inline ocultos + 195 paints embedded CSS; siguiente paso: migración/adjudicación masiva antes de CK-H1 y CK-E. |
 
 ## Next up (todo, dependencies satisfied)
 

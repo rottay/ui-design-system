@@ -36,13 +36,22 @@ jobs:
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             CHANGED=$(git diff --name-only origin/${{ github.base_ref }}...HEAD)
           else
-            CHANGED=$(git diff --name-only HEAD~1 2>/dev/null || git diff --name-only HEAD)
+            BEFORE="${{ github.event.before }}"
+            SHA="${{ github.sha }}"
+            ZERO_SHA="0000000000000000000000000000000000000000"
+            if [ -n "$BEFORE" ] && [ "$BEFORE" != "$ZERO_SHA" ] && git cat-file -e "$BEFORE^{commit}" 2>/dev/null; then
+              CHANGED=$(git diff --name-only "$BEFORE...$SHA")
+            else
+              # A new branch has no previous SHA. Treat its complete tree as
+              # changed so no package gate can false-negative on the first push.
+              CHANGED=$(git ls-tree -r --name-only "$SHA")
+            fi
           fi
 
           CORE="false"
           SHOWROOM="false"
 
-          if echo "$CHANGED" | grep -q '^packages/core/'; then
+          if echo "$CHANGED" | grep -qE '^(packages/core/|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
             CORE="true"
           fi
 
@@ -98,6 +107,9 @@ jobs:
       # (test:ci does not trigger the `pretest` hook, so it is gated explicitly.)
       - name: Engine token + APCA audit
         run: pnpm --filter @rottay/design-system run engine-audit:check
+
+      - name: Audit machinery regression tests
+        run: pnpm --filter @rottay/design-system run test:scripts
 
       # Must run BEFORE Build. `build` runs `build:vertical-css`, which regenerates
       # every first-party artifact in place -- so by the time any test runs, a

@@ -209,13 +209,11 @@ or misreport work.**
   the 15 real sites + this 1 phantom resolve to; do not chase it to 0 by touching
   the type annotation.
 - presence:358,362 — `fill={cursorColor}` / `stroke="var(--ds-color-surface,#fff)"`
-  are SVG presentation attributes as bare JSX props, counter-invisible.
-  `fill={cursorColor}` is genuine RUNTIME (per-user) → **stays inline** (§ runtime
-  rule below). `stroke="..."` is STATIC but is an SVG attribute, not a style key —
-  leave it as the JSX attribute it is (moving a static SVG presentation attr into
-  a CSS `stroke:` rule is a channel change, not byte-exact; keep it inline).
-  Neither shows in the counter, so presence reaching `fleet.inlinePaint: 0` does
-  NOT mean presence is fully migrated — F3 reports the delta by hand.
+  are SVG presentation attributes as bare JSX props and were invisible to the
+  original inline counter. **Superseded by the post-certification amendment:**
+  `fill={cursorColor}` is genuine RUNTIME (per-user) and stays inline, protected
+  by `runtimeSvgFloor: 1`; the fixed stroke is STATIC and now lives in the
+  Presence skin. The fleet-wide runtime-SVG channel makes both sites executable.
 
 **Trap 4 — notification-center modern's dismiss hover is imperative
 `.style.opacity =` (uncounted).** Real behavior, invisible to the counter. F1
@@ -229,16 +227,16 @@ verify by reading, and note it in the delta report.
 
 ## 4. Runtime, exemptions, specificity
 
-**RUNTIME stays inline — no exemption file needed for CK-F.** The inventory's
-final report is explicit: this checkpoint needs "no B-category exemption and no
-C-category custom-property hatch beyond what presence already uses." Presence's
+**RUNTIME stays inline — the final executable floors supersede the original
+no-exemption ruling.** Presence's
 per-user identity colors (`ringColor`/`cursorColor = user.color || DEFAULT_COLOR`
 at lines 148 border, 181 color, 373 background, + the SVG fill at 358) are
 genuine per-user runtime — they stay inline exactly as written. Their STATIC
 siblings on the same elements (borderRadius, the overflow-badge's neutral tokens,
 LiveCursor's hardcoded `#fff` color and `boxShadow` — preserve the hardcode
-byte-exact, flag it, do not "fix" it) move to the skin. Do NOT add any
-`skin-exemptions.json` entry for this checkpoint.
+byte-exact, flag it, do not "fix" it) move to the skin. The executable contract
+is `floor: 3` for the inline runtime sites plus `runtimeSvgFloor: 1` for the
+cursor fill; the two channels cannot satisfy each other.
 
 **Specificity (P-48).**
 - Engine-split components (comment-thread, notification-center, activity-log,
@@ -315,6 +313,33 @@ lines to `foundation/base.css` and commit that unit.
 - Does not reconcile activity-log's classifier logic (trap 2 — record only).
 - Does not "fix" LiveCursor's hardcoded `#fff`/`boxShadow` (preserve byte-exact,
   flag only).
-- Does not add exemption entries (§4 — no runtime hatch needed).
+- Retains only the four true runtime sites recorded in §4; their two independent
+  exemption floors are exact, not a blanket escape hatch.
 - Does not chase assistant's counter to 0 through the line-157 type annotation.
 - Does not let agents wire entrypoints (orchestrator-owned).
+
+---
+
+## Post-certification amendment — Presence runtime-SVG channel closure (2026-07-14)
+
+The full-ecosystem audit made the two cursor SVG presentation attributes executable and therefore
+corrected one narrow CK-F ruling above. Static SVG presentation paint is part of the skin boundary
+whether authored through JSX, D3 or DOM mutation. The earlier instruction to preserve the fixed
+outline `stroke` in JSX would leave a real static-paint escape hatch and is superseded here; all
+other CK-F findings and byte-exact constraints remain in force.
+
+Final ownership law:
+
+- `fill={cursorColor}` on `[data-part='cursor-fill']` remains runtime-authored. It is genuine
+  per-user identity data and is protected by an exact `runtimeSvgFloor: 1` for Presence.
+- The fixed outline `stroke="var(--ds-color-surface,#fff)"` moves to the already-unlayered Presence
+  skin under the existing `ds-presence-live-cursor` scope.
+- Geometry (`d`, `strokeWidth`, SVG dimensions/viewBox), position, opacity and motion remain in the
+  component unchanged.
+- This is no longer an invisible exception: the retained runtime fill has its own independently
+  enforced channel floor, and any second Presence runtime-SVG paint site fails the global gate.
+
+Certified result: `LiveCursor` emits no inline outline stroke and `presence.css` owns exactly the
+scoped `stroke: var(--ds-color-surface, #fff)` rule. The communication contract passes `42/42`, the
+core production build is green, and all six committed communication screenshots pass without
+snapshot updates. The global census reports exactly the single intended Presence runtime SVG paint.

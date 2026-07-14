@@ -84,6 +84,21 @@ async function openProbe(page: Page, fixture: Fixture, engine: Engine): Promise<
   const fixtureGround = FIXTURES.find((f) => f.id === fixture)?.ground ?? 'dark';
   await waitForGroundPaint(page, fixtureGround);
 
+  // The cursor outline is now skin-owned. Resolve the token through a real
+  // browser style so a missing selector cannot hide inside screenshot tolerance.
+  const outlinePaintMatchesToken = await container
+    .locator(".ds-presence-live-cursor [data-part='cursor-outline']")
+    .first()
+    .evaluate((outline) => {
+      const probe = document.createElement('span');
+      probe.style.color = 'var(--ds-color-surface, #fff)';
+      document.body.append(probe);
+      const expected = getComputedStyle(probe).color;
+      probe.remove();
+      return getComputedStyle(outline).stroke === expected;
+    });
+  expect(outlinePaintMatchesToken).toBe(true);
+
   return container;
 }
 

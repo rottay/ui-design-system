@@ -1,4 +1,4 @@
-export const oauthTransitionStyles = `
+
 .rottay-transition-root {
   position: relative;
   min-height: 100vh;
@@ -2223,4 +2223,3 @@ export const oauthTransitionStyles = `
     transition-duration: 0.001ms !important;
   }
 }
-`;

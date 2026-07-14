@@ -1,12 +1,13 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
 // ---------------------------------------------------------------------------
-// OAuth Transition inert pre-step visual evidence.
+// OAuth Transition byte-exact external-skin visual evidence.
 //
 // The shared visual config serves a pre-built production showroom (`next
 // start`) and forces reduced motion. Every case below asserts the real content,
-// phase, palette variables, progress state, provider SVG and injected style
-// block before Playwright is allowed to record/compare a screenshot.
+// phase, palette variables, progress state, provider SVG, absence of runtime
+// style injection and computed paint from the external stylesheet before
+// Playwright is allowed to compare a screenshot.
 // ---------------------------------------------------------------------------
 
 type Tone = 'light' | 'dark';
@@ -157,18 +158,41 @@ async function assertScenarioContent(fixture: Locator, root: Locator, scenario: 
       : `Redirecting to ${scenario.expected.provider}`,
   );
 
-  const styleBlock = root.locator(':scope > style');
-  await expect(styleBlock).toHaveCount(1);
-  // A <style> element exposes its stylesheet through textContent, while
-  // HTMLElement.innerText is intentionally empty in Chromium. Playwright's
-  // toContainText reads the latter, so inspect the DOM channel React writes.
-  const injectedCss = await styleBlock.evaluate((element) => element.textContent ?? '');
-  expect(injectedCss).toContain('@keyframes rottay-transition-travel');
-  expect(injectedCss).toContain('@media (max-width: 720px)');
-  expect(injectedCss).toContain('@media (prefers-reduced-motion: reduce)');
+  await expect(root.locator('style')).toHaveCount(0);
   expect(await root.evaluate((element) => (element as HTMLElement).style.getPropertyValue('--rh-bg'))).toBe(
     scenario.expected.background,
   );
+
+  const externalPaint = await root.evaluate((element) => {
+    const rootStyle = getComputedStyle(element);
+    const card = element.querySelector('.rottay-transition-card');
+    const grid = element.querySelector('.rottay-transition-grid');
+    if (!card || !grid) throw new Error('OAuth Transition paint nodes are missing');
+
+    const stylesheetContainsRootRule = Array.from(document.styleSheets).some((sheet) => {
+      try {
+        return Array.from(sheet.cssRules).some((rule) => rule.cssText.includes('.rottay-transition-root'));
+      } catch {
+        return false;
+      }
+    });
+
+    return {
+      stylesheetContainsRootRule,
+      backgroundImage: rootStyle.backgroundImage,
+      color: rootStyle.color,
+      cardBackgroundImage: getComputedStyle(card).backgroundImage,
+      cardBorderRadius: getComputedStyle(card).borderRadius,
+      gridAnimationName: getComputedStyle(grid).animationName,
+    };
+  });
+
+  expect(externalPaint.stylesheetContainsRootRule).toBe(true);
+  expect(externalPaint.backgroundImage).toContain('radial-gradient');
+  expect(externalPaint.cardBackgroundImage).not.toBe('none');
+  expect(externalPaint.cardBorderRadius).toBe(scenario.compact ? '28px' : '34px');
+  expect(externalPaint.color).toBe(scenario.tone === 'light' ? 'rgb(18, 16, 13)' : 'rgb(244, 239, 232)');
+  expect(externalPaint.gridAnimationName).toBe('rottay-transition-grid-drift');
 
   const providerSvg = root.locator('.rottay-transition-provider-icon svg');
   await expect(providerSvg).toHaveCount(1);

@@ -33,9 +33,20 @@ import {
   collectBelowFloorFailures,
   countPremiumEffectConsumers,
 } from "./lib/effect-consumer-counter.mjs";
+import { countSkinExemptionBreaches } from "./lib/skin-exemption-audit.mjs";
+import { countRuntimeSvgPaintByFile } from "./lib/runtime-svg-paint-counter.mjs";
+import { countEmbeddedCssPaintByFile } from "./lib/embedded-css-paint-counter.mjs";
+import { collectMissingPrefixedCounters } from "./lib/counter-presence-audit.mjs";
+import {
+  ARC09_INLINE_PAINT_FILES,
+  collectFleetInlinePaintSourceFiles,
+} from "./lib/fleet-inline-paint-census.mjs";
+import {
+  collectSourceFiles as collectRuntimeSvgSourceFiles,
+} from "./runtime-svg-paint-census.mjs";
 import { countDeadParts } from "./skin-dead-part-audit.mjs";
 import postcss from "postcss";
-import { resolve, dirname, join, sep } from "node:path";
+import { resolve, dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 // WO-GAT-04 (accessibility CI, proposal P-10): APCA is the perceptually-accurate contrast model
 // (the successor to WCAG-2 ratios) used by the `a11y.apcaPairings` counter below. `apca-w3` is a
@@ -658,34 +669,10 @@ function countInlineStateLiterals() {
  * matters here: `filter:` and `transform:` are also data-table/filter-panel
  * config keys, and only the ones inside an inline style object are paint.
  */
-const ARC09_PAINT_FILES = [
-  // checkpoint 1 — Table (primitive, engine-split, pre-gated by the flagship slug)
-  "primitives/display/Table/engines/modern.tsx",
-  "primitives/display/Table/engines/rustic.tsx",
-  // checkpoint 2 — field-filters-panel (engine-agnostic, single file)
-  "structures/workspace/field-filters-panel/index.tsx",
-  // checkpoint 3 — filter-panel (engine-split; root gets the engine-class pair added)
-  "patterns/forms/filter-panel/engines/modern.tsx",
-  "patterns/forms/filter-panel/engines/rustic.tsx",
-  // checkpoint 4 — selection-preview-rail (engine-agnostic, single file)
-  "structures/workspace/selection-preview-rail/index.tsx",
-  // checkpoint 5 — detail-panel (engine-split)
-  "patterns/data/detail-panel/engines/modern.tsx",
-  "patterns/data/detail-panel/engines/rustic.tsx",
-  // checkpoint 6 — data-table (compound: engines + the three shared agnostic files)
-  "patterns/data/data-table/engines/modern.tsx",
-  "patterns/data/data-table/engines/rustic.tsx",
-  "patterns/data/data-table/cell-editors/index.tsx",
-  "patterns/data/data-table/DataTableMobileCards.tsx",
-  "patterns/data/data-table/PatternDataTable.tsx",
-];
-
-
-
 /** Per-file `arc09.inlinePaint.<path>` counters, spread into the counter map. */
 function arc09InlinePaintCounters() {
   const out = {};
-  for (const rel of ARC09_PAINT_FILES) {
+  for (const rel of ARC09_INLINE_PAINT_FILES) {
     const full = join(componentsDir, rel);
     out[`arc09.inlinePaint.${rel}`] = existsSync(full)
       ? countArc09PaintInFile(readFileSync(full, "utf8"))
@@ -696,25 +683,95 @@ function arc09InlinePaintCounters() {
 
 /**
  * Per-file `fleet.inlinePaint.<path>` counters for the WO-SKIN lane: every
- * component file the census (scripts/skin-census.mjs -> roadmap/skin-census.json)
- * measured with inline paint. Decrease-only against the baseline, same lexer as
- * arc09.inlinePaint (both import scripts/lib/inline-paint-counter.mjs). A file
- * that leaves the tree counts as 0 (migrated or legitimately deleted); a file
- * ABSENT from the census that grows paint is caught by the census re-run each
- * WO-SKIN batch performs, not by this ratchet.
+ * TypeScript source admitted by the historical skin-census law below
+ * primitives/patterns/structures/surfaces, including files currently at zero.
+ * That law intentionally retains the already-baselined `story-helpers.tsx` and
+ * `test-utils.tsx` files (7 sites total); it excludes actual test/story catalog
+ * files, classic engines and the thirteen ARC-09-owned paths. Decrease-only,
+ * using the exact lexer ARC-09 uses. Dynamic enumeration means a new file cannot
+ * bypass the ratchet and a deleted file cannot silently remove its key;
+ * reverse-presence checking below owns the latter half.
  */
 function fleetInlinePaintCounters() {
-  const censusPath = join(repoRoot, "roadmap/skin-census.json");
-  if (!existsSync(censusPath)) return {};
-  const census = JSON.parse(readFileSync(censusPath, "utf8"));
-  const out = {};
-  for (const comp of census.components ?? []) {
-    for (const f of comp.files ?? []) {
-      const full = join(componentsDir, f.file);
-      out[`fleet.inlinePaint.${f.file}`] = existsSync(full)
-        ? countArc09PaintInFile(readFileSync(full, "utf8"))
-        : 0;
-    }
+  const sourceFiles = collectFleetInlinePaintSourceFiles(componentsDir);
+  const out = {
+    "fleet.inlinePaint.filesScanned": sourceFiles.length,
+  };
+  let total = 0;
+  for (const file of sourceFiles) {
+    const rel = relative(componentsDir, file).replaceAll("\\", "/");
+    const count = countArc09PaintInFile(
+      readFileSync(file, "utf8")
+    );
+    out[`fleet.inlinePaint.${rel}`] = count;
+    total += count;
+  }
+  out["fleet.inlinePaint.total"] = total;
+  return out;
+}
+
+/**
+ * Per-file runtime-SVG paint ratchet for the whole productive component tree.
+ *
+ * The inline-paint lexer cannot see D3 setters, intrinsic SVG JSX attributes,
+ * or DOM `setAttribute` writes. The AST counter covers those channels over the
+ * whole productive component tree and intentionally emits a key for every source
+ * file, including current zeros: a new file or a reintroduced site therefore
+ * cannot hide behind a stale, hand-maintained renderer list. `count` includes
+ * computed property names classified fail-closed as possible paint. The
+ * aggregate unclassified counter catches a refactor from a literal paint name
+ * to a computed alias even when that file's total site count stays unchanged.
+ *
+ * Canvas paint is a separate channel. Structural SVG values (`none`,
+ * `currentColor`, local paint-server references and nullish removals) are
+ * reported separately so the checkpoint can prove their disposition without
+ * misrepresenting them as authored colour decisions.
+ */
+function runtimeSvgPaintCounters() {
+  const sourceFiles = collectRuntimeSvgSourceFiles(componentsDir, {
+    productionOnly: true,
+  });
+  const result = countRuntimeSvgPaintByFile(sourceFiles);
+  const out = {
+    // These two sentinels make collector deletion/collapse observable even when
+    // every per-file key would otherwise disappear from the current map.
+    "runtimeSvgPaint.filesScanned": Object.keys(result.files).length,
+    "runtimeSvgPaint.total": result.total,
+    "runtimeSvgPaint.unclassified": result.unclassified,
+    "runtimeSvgPaint.ignoredStructural": result.ignoredStructural,
+  };
+
+  for (const [file, counts] of Object.entries(result.files)) {
+    const rel = relative(componentsDir, file).replaceAll("\\", "/");
+    out[`runtimeSvgPaint.${rel}`] = counts.count;
+  }
+  return out;
+}
+
+/**
+ * Per-file ratchet for source-authored paint declarations inside real injected
+ * CSS strings/templates. This is intentionally separate from JavaScript inline
+ * paint and runtime SVG/D3 paint: one channel cannot pay down another. Every
+ * productive component source emits a key, including current zeros; parse
+ * failures and computed CSS property names count fail-closed.
+ */
+function embeddedCssPaintCounters() {
+  const sourceFiles = collectRuntimeSvgSourceFiles(componentsDir, {
+    productionOnly: true,
+  });
+  const result = countEmbeddedCssPaintByFile(sourceFiles);
+  const out = {
+    "embeddedCssPaint.filesScanned": Object.keys(result.files).length,
+    "embeddedCssPaint.total": result.total,
+    "embeddedCssPaint.classifiedPaint": result.classifiedPaint,
+    "embeddedCssPaint.unclassified": result.unclassified,
+    "embeddedCssPaint.parseFailures": result.parseFailures,
+    "embeddedCssPaint.dynamicProperties": result.dynamicProperties,
+    "embeddedCssPaint.unknownSinks": result.unknownSinks,
+  };
+  for (const [file, counts] of Object.entries(result.files)) {
+    const rel = relative(componentsDir, file).replaceAll("\\", "/");
+    out[`embeddedCssPaint.${rel}`] = counts.count;
   }
   return out;
 }
@@ -2188,9 +2245,17 @@ const counters = {
   // per-datum chart colour, a per-user identity colour) cannot live in a skin. They
   // are NOT pending work -- carrying them as debt that can never reach 0 is a lie in
   // the ratchet, and it sends migration agents chasing an impossible zero. Each is
-  // declared with a FLOOR in roadmap/skin-exemptions.json; this counts the files that
-  // have been migrated BELOW theirs, i.e. paint that cannot live in CSS was deleted.
-  "skins.exemptionsBreached": countExemptionBreaches(),
+  // declared with concrete per-file channel FLOORS in roadmap/skin-exemptions.json.
+  // Inline and runtime-SVG floors are summed separately across families before
+  // comparison; malformed configuration, globs, missing files and files migrated
+  // below either sum all breach this exact-0 gate.
+  // This proves aggregate per-file cardinality only. The checkpoint contract plus its
+  // focused and visual tests prove that the remaining sites are the intended expressions
+  // and still render correctly; this counter does not infer source-site identity.
+  "skins.exemptionsBreached": countSkinExemptionBreaches({
+    exemptionsPath: join(repoRoot, "roadmap/skin-exemptions.json"),
+    componentsDir,
+  }),
   // WO-SKIN-06 (P-79): the THIRD way a skin silently paints nothing. It parses
   // (skins.parseErrors) and it is imported (skins.unwired), but every one of its
   // selectors anchors on a `[data-part='X']` the source never stamps -- because
@@ -2204,6 +2269,8 @@ const counters = {
   // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
   ...arc09InlinePaintCounters(),
   ...fleetInlinePaintCounters(),
+  ...runtimeSvgPaintCounters(),
+  ...embeddedCssPaintCounters(),
 };
 
 
@@ -2243,44 +2310,6 @@ function countSkinParseErrors() {
     }
   }
   return errors;
-}
-
-/**
- * WO-SKIN-06: the named exemptions hold their floor.
- *
- * A file in roadmap/skin-exemptions.json carries sites whose paint VALUE is runtime
- * data -- no CSS rule can hold them, and one custom property per swatch or per datum
- * would be strictly worse code than the inline value. Its floor is how many sites must
- * REMAIN inline.
- *
- * Checked from BELOW: if a file drops under its floor, a migration deleted paint that
- * cannot live in CSS and something renders wrong today. Above the floor is fine -- that
- * is ordinary un-migrated work, already covered by the decrease-only ratchet. Glob
- * entries are skipped: they are a planning aid and must be resolved to concrete files
- * before their checkpoint is contracted. Exact-0 breaches.
- */
-function countExemptionBreaches() {
-  const path = join(repoRoot, "roadmap/skin-exemptions.json");
-  if (!existsSync(path)) return 0;
-  const doc = JSON.parse(readFileSync(path, "utf8"));
-  let breaches = 0;
-  for (const [family, group] of Object.entries(doc)) {
-    if (family.startsWith("$") || !group || typeof group !== "object") continue;
-    for (const [file, entry] of Object.entries(group.files ?? {})) {
-      if (file.includes("*")) continue;
-      const full = join(componentsDir, file);
-      if (!existsSync(full)) continue;
-      const actual = countArc09PaintInFile(readFileSync(full, "utf8"));
-      if (actual < entry.floor) {
-        breaches += 1;
-        console.error(
-          `  - exemption breached (${family}): ${file} is at ${actual}, below its floor of ${entry.floor} -- ` +
-            "paint whose VALUE is runtime data was migrated into CSS, where it cannot live.",
-        );
-      }
-    }
-  }
-  return breaches;
 }
 
 /**
@@ -2390,10 +2419,17 @@ const EXACT = {
   "skins.parseErrors": 0,
   // A skin no entrypoint imports is just as dead, and just as silent.
   "skins.unwired": 0,
-  // Nobody may migrate a site whose paint VALUE is runtime data.
+  // Summed exemption cardinality floors and their configuration must remain valid;
+  // checkpoint evidence, not this aggregate counter, owns source-site identity.
   "skins.exemptionsBreached": 0,
   // A skin rule anchored on a data-part the source never stamps reaches nobody.
   "skins.deadParts": 0,
+  // Embedded CSS must stay fully classifiable. Any parser ambiguity, computed
+  // sink/property or other unknown fails closed instead of certifying a zero.
+  "embeddedCssPaint.unclassified": 0,
+  "embeddedCssPaint.parseFailures": 0,
+  "embeddedCssPaint.dynamicProperties": 0,
+  "embeddedCssPaint.unknownSinks": 0,
 };
 
 /**
@@ -2407,6 +2443,14 @@ const MIN = {
   "effects.gradientConsumers": 1,
   "effects.glassConsumers": 1,
   "effects.glowConsumers": 1,
+  // Measured productive four-tier fleet cardinality after dynamic enumeration.
+  "fleet.inlinePaint.filesScanned": 769,
+  // Measured productive component source cardinality after global SVG expansion.
+  // More files are healthy; a missing subtree or disabled collector is not.
+  "runtimeSvgPaint.filesScanned": 1047,
+  // Same productive component universe, independently parsed for real CSS
+  // injected by JSX, React.createElement, DOM style nodes or CSSStyleSheet.
+  "embeddedCssPaint.filesScanned": 1047,
 };
 
 const mode = process.argv.includes("--check")
@@ -2534,17 +2578,54 @@ if (mode === "check") {
     }
     if (v > baseline[k]) risen.push(`${k}: ${v} > baseline ${baseline[k]}`);
   }
+  // The current->baseline loop above cannot see keys that vanished with a file,
+  // subtree, or collector spread. Runtime SVG, fleet inline paint and embedded
+  // CSS each emit one key for every eligible source file (including zeros), so
+  // baseline-only keys are an explicit failure until a deliberate measured
+  // baseline change retires them.
+  const missingRuntimeCounters = collectMissingPrefixedCounters(
+    counters,
+    baseline,
+    "runtimeSvgPaint."
+  );
+  const missingFleetCounters = collectMissingPrefixedCounters(
+    counters,
+    baseline,
+    "fleet.inlinePaint."
+  );
+  const missingEmbeddedCssCounters = collectMissingPrefixedCounters(
+    counters,
+    baseline,
+    "embeddedCssPaint."
+  );
   const invariant = [];
   for (const [k, expected] of Object.entries(EXACT)) {
     if (counters[k] !== expected) invariant.push(`${k}: ${counters[k]} != required ${expected}`);
   }
   const belowFloor = collectBelowFloorFailures(counters, MIN);
-  if (risen.length || invariant.length || belowFloor.length || unbaselined.length) {
+  if (
+    risen.length ||
+    invariant.length ||
+    belowFloor.length ||
+    unbaselined.length ||
+    missingRuntimeCounters.length ||
+    missingFleetCounters.length ||
+    missingEmbeddedCssCounters.length
+  ) {
     console.error("engine-token-audit --check FAILED:");
     for (const u of unbaselined) console.error("  - counter has no baseline, so it gates nothing: " + u);
     for (const r of risen) console.error("  - rose above baseline: " + r);
     for (const r of invariant) console.error("  - invariant broken: " + r);
     for (const r of belowFloor) console.error("  - below required floor: " + r);
+    for (const key of missingRuntimeCounters) {
+      console.error("  - baseline runtime SVG counter disappeared: " + key);
+    }
+    for (const key of missingFleetCounters) {
+      console.error("  - baseline fleet inline-paint counter disappeared: " + key);
+    }
+    for (const key of missingEmbeddedCssCounters) {
+      console.error("  - baseline embedded-CSS counter disappeared: " + key);
+    }
     process.exit(1);
   }
   console.log("engine-token-audit --check OK (all counters within baseline; invariants and floors hold)");

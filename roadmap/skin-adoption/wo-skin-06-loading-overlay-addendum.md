@@ -7,7 +7,7 @@ Platform payments and refunds screens. It appears in the fleet census with five 
 but no revised WO-SKIN-06 checkpoint claimed it. Its injected keyframe string adds two more paint-family
 `transform` declarations that the historical inline counter cannot see.
 
-This is pending Stage-1 extraction work, not a certified residual.
+This was Stage-1 extraction work, not a residual; the certification below records its closure.
 
 ## Accepted pre-migration contract
 
@@ -38,3 +38,25 @@ The migration may add one engine-agnostic unlayered skin and must:
 
 The final gate is inline `5 -> 0`, embedded CSS `2 -> 0`, unit/anatomy green, both skin entrypoints
 wired, production builds green and two independent no-update visual passes.
+
+## Certified result — 2026-07-14
+
+The orphan is recovered without changing its public API, layout, timing, copy or consumer-owned
+logo slot:
+
+- `loading-overlay/index.tsx` now has `0` of the `5` original inline paint declarations and no
+  runtime `<style>` producer.
+- Both complete keyframes live in the unlayered, engine-agnostic
+  `components/skin/loading-overlay.css`; only their globally-safe names changed to
+  `ds-loading-overlay-pulse` and `ds-loading-overlay-dots`.
+- The component contributes `0` embedded-CSS paint declarations (`2 -> 0`) and both canonical CSS
+  entrypoints import the new skin.
+- The focused contract is green (`5/5`), including modern/rustic anatomy and the hidden branch.
+- Core and showroom production builds are green.
+- The four committed Rottay-dark/Bithire-light × modern/rustic screenshots passed two independent
+  `4/4` Playwright runs without snapshot updates. Computed background, blur, radius, text/dot color
+  and both animation names are also asserted in the browser.
+
+No new residual or exemption was introduced. The global fleet and embedded-CSS baselines are
+regenerated only after this recovery so the gate records the post-migration tree rather than
+grandfathering the removed channels.

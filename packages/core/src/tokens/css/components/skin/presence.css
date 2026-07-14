@@ -10,15 +10,16 @@
  * specificity. Unlayered outranks preflight and still yields to a caller's
  * inline `style`.
  *
- * RUNTIME STAYS INLINE, no exemption entry needed: PresenceBar's avatar ring
+ * RUNTIME STAYS INLINE under exact executable floors: PresenceBar's avatar ring
  * `border` and avatar-initials `color` (both `ringColor = user.color ||
  * DEFAULT_COLOR`), and LiveCursor's `cursor-badge` `background` (same shape
  * via `cursorColor`) are genuine per-user caller data and are not represented
  * here at all -- they remain exactly as written in index.tsx. LiveCursor's
  * SVG `fill={cursorColor}` (per-user, a JSX presentation attribute, not a
- * style key) and `stroke="var(--ds-color-surface, #fff)"` (static but also a
- * JSX attribute) stay inline for the same reason; moving the static `stroke`
- * into a CSS `stroke:` rule would be a channel change, not a byte-exact move.
+ * style key) remains runtime-authored. The outline stroke is static and is
+ * owned by the scoped skin rule below. The three inline identity sites carry
+ * `floor: 3`; the intrinsic SVG fill carries an independent
+ * `runtimeSvgFloor: 1`.
  *
  * RUNTIME HATCH: `--ds-presence-badge-ring` carries the overflow badge's ring
  * WIDTH, which tracks the `size` prop (`sm`: 2px, `md`: 2.5px) and has no
@@ -106,4 +107,8 @@
   color: #fff;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.ds-presence-live-cursor [data-part='cursor-outline'] {
+  stroke: var(--ds-color-surface, #fff);
 }

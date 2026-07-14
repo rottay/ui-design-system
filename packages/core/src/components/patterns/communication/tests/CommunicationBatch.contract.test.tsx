@@ -502,6 +502,6 @@ describe('presence -- data-part contract (CK-F)', () => {
     const fill = q(container, '[data-part="cursor-fill"]')[0];
     const outline = q(container, '[data-part="cursor-outline"]')[0];
     expect(fill).toHaveAttribute('fill', '#e74c3c');
-    expect(outline).toHaveAttribute('stroke', 'var(--ds-color-surface, #fff)');
+    expect(outline).not.toHaveAttribute('stroke');
   });
 });

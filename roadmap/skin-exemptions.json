@@ -5,10 +5,11 @@
     "pending work: carrying them as debt that can never reach 0 is a lie in the ratchet, and it sends",
     "migration agents chasing an impossible zero.",
     "",
-    "Each entry declares a FLOOR: the number of sites that must REMAIN inline in that file. The gate",
-    "enforces it in both directions -- a file may not drop below its floor (someone migrated paint",
-    "that cannot live in CSS), and the floor is what a migration's exit criterion is measured against",
-    "instead of 0.",
+    "Each entry declares one or both CHANNEL FLOORS: `floor` for inline object-literal/imperative",
+    "paint, `runtimeSvgFloor` for D3/DOM/JSX SVG, and `embeddedCssFloor` for declarations inside",
+    "real injected CSS strings/templates. The gate enforces each channel independently -- no channel",
+    "can satisfy another channel's floor -- and the floors are",
+    "what a migration's exit criterion is measured against instead of 0.",
     "",
     "Counts come from the WO-SKIN-06 inventories (ck-e, ck-h, ck-f). Update them ONLY with a measured",
     "recount, never to make a gate go green."
@@ -30,7 +31,8 @@
       },
       "patterns/communication/presence/index.tsx": {
         "floor": 3,
-        "why": "Per-user identity colours (ringColor/cursorColor) that stay inline: the avatar ring border, the avatar-initials colour, and the LiveCursor name-badge background -- 3 COUNTER-VISIBLE runtime object-literal sites. A 4th true-runtime site (the LiveCursor SVG `fill={cursorColor}` presentation attribute) is also inline but is INVISIBLE to the inline-paint counter (it is a JSX attribute, not a style-object key), so the counter's floor is 3, not the 4-site true-runtime total the CK-F inventory recorded. Recalibrated to the counter's measurement basis after the CK-F migration verified all runtime sites correctly inline at counter=3."
+        "runtimeSvgFloor": 1,
+        "why": "Per-user identity colours (ringColor/cursorColor) that stay runtime-authored: the avatar ring border, avatar-initials colour, and LiveCursor name-badge background are 3 inline-counter sites; the LiveCursor SVG `fill={cursorColor}` is 1 intrinsic-SVG JSX site protected separately by runtimeSvgFloor. Together these are the 4 true-runtime sites recorded by CK-F, without letting either measurement channel substitute for the other."
       },
       "patterns/visualization/charts/bar-chart/index.tsx": {
         "floor": 2,
@@ -92,6 +94,10 @@
         "floor": 2,
         "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE \u00d75, SWATCH_STYLE \u00d71, label colors \u00d73) are all static tokens."
       },
+      "patterns/visualization/charts/tooltip/crosshair.ts": {
+        "runtimeSvgFloor": 1,
+        "why": "The crosshair dot's `.attr('fill', (d) => d.color)` paints the per-datum colour supplied to the D3 overlay. CK-E's direct inventory identifies this exact B-runtime setter; runtimeSvgFloor protects it in the AST channel."
+      },
       "patterns/visualization/kanban-board/engines/modern.tsx": {
         "floor": 1,
         "why": "Column header `borderTop: column.color ? \\`3px solid ${column.color}\\` : undefined` -- per-column caller-supplied accent color, no enum."
@@ -119,9 +125,22 @@
       "patterns/forms/form-builder/engines/modern.tsx": {
         "floor": 1,
         "why": "form-builder/engines/modern.tsx:282 -- the color field's read-only swatch paints `background: String(val)`, the hex the USER PICKED in that field. A value computed from data; no token set can hold it. No rustic twin (rustic renders no swatch)."
+      },
+      "surfaces/pages/experience/oauth-transition/provider-icons/index.tsx": {
+        "runtimeSvgFloor": 9,
+        "why": "Nine intrinsic-SVG JSX paint attributes encode the canonical Google, LinkedIn and Microsoft provider marks. These colours are external brand identity, not tenant chrome; tokenizing them would make a skin incorrectly recolour the providers. The AST census measures exactly 9 authored paint sites in this file."
       }
     },
-    "$excluded": "charts/hooks/use-chart-theme.ts:291 is DEAD CODE (the hook has no callers anywhere in the repo, verified by grep). Do NOT exempt it -- exempting dead code freezes it in place with the gate's blessing. Wire it up or delete it; either way that is a product decision, not an exemption. charts/tooltip/crosshair.ts's dot-fill B site (`.attr('fill', (d) => d.color)`) is also real B but is 100% D3-imperative -- the file's own census count is 0, so it is invisible to this counter-based gate and cannot be floor-protected here at all; same for gauge/index.tsx's `needleColor` (see that file's own why)."
+    "$excluded": "charts/hooks/use-chart-theme.ts:291 is DEAD CODE (the hook has no callers anywhere in the repo, verified by grep). Do NOT exempt it -- exempting dead code freezes it in place with the gate's blessing. Wire it up or delete it; either way that is a product decision, not an exemption. gauge/index.tsx's `needleColor` is real D3-runtime paint, but its three setter uses were not promoted to executable floors here because this pass only adds floors with unequivocal checkpoint inventory evidence at exact site cardinality; see that file's own why."
+  },
+  "SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT": {
+    "$why": "Source-authored CSS that intentionally remains inside a component because moving it to the global skin would change selector reach or activate behavior for unrelated consumers.",
+    "files": {
+      "patterns/data/table-checkbox-styles/index.tsx": {
+        "embeddedCssFloor": 7,
+        "why": "TableCheckboxStyles is itself an opt-in CSS injector. Its seven paint declarations belong to that explicit mounted contract; globalizing them would broaden selector reach and can activate animations or hover behavior where the component was never mounted. The embedded-CSS AST/PostCSS census measures exactly 7 paint declarations."
+      }
+    }
   },
   "SKIN-EXEMPT-CRASH-SAFE-FALLBACK": {
     "$why": "Paint that must render when the theming provider itself has crashed. It cannot depend on a token, a skin, or anything the failure might have taken down.",

@@ -169,6 +169,7 @@ describe('Area and line chart advanced coverage', () => {
         series={[
           {
             name: 'Seated',
+            color: '#123456',
             data: [
               { x: 'Mon', y: 10 },
               { x: 'Tue', y: 12 },
@@ -177,6 +178,7 @@ describe('Area and line chart advanced coverage', () => {
           },
           {
             name: 'Standing',
+            color: '#abcdef',
             data: [
               { x: 'Mon', y: 4 },
               { x: 'Tue', y: 5 },
@@ -209,7 +211,16 @@ describe('Area and line chart advanced coverage', () => {
     expect(tooltip.style.visibility).toBe('visible');
     expect(tooltip).toHaveTextContent('Seated');
     expect(tooltip).toHaveTextContent('Standing');
-    expect(container.querySelectorAll('.chart-crosshair-dot').length).toBe(2);
+    const crosshairDots = Array.from(
+      container.querySelectorAll<SVGCircleElement>('.chart-crosshair-dot'),
+    );
+    expect(crosshairDots).toHaveLength(2);
+    // The runtime-SVG exemption is identity-bound: each focus dot must retain
+    // the corresponding series datum's caller-authored color.
+    expect(crosshairDots.map((dot) => dot.getAttribute('fill'))).toEqual([
+      '#123456',
+      '#abcdef',
+    ]);
 
     fireEvent.mouseLeave(overlay);
     expect(tooltip.style.visibility).toBe('hidden');

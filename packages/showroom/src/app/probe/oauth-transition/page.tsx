@@ -14,8 +14,9 @@ import {
 // OAuth Transition production-capture probe.
 //
 // This route renders the real DS surface without a provider or substitute
-// shell: OAuthTransitionScreen deliberately owns its full-page CSS and --rh-*
-// palette because it runs outside the authenticated application shell.
+// shell: OAuthTransitionScreen uses its externalized full-page DS skin and
+// still owns its runtime --rh-* palette because it runs outside the
+// authenticated application shell.
 //
 //   ?tone=light|dark          selects the production light/dark direction
 //   ?phase=redirect|return    selects the real copy and motion direction

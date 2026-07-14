@@ -70,7 +70,7 @@ classic untouched; caller className/style semantics unchanged.
   (runtime-measured, canvas/svg data-driven paint stays).
 - **Size** — XL.
 
-#### WO-SKIN-06 execution state (2026-07-13)
+#### WO-SKIN-06 execution state (2026-07-14)
 
 Decomposed into **9 checkpoints**, fully inventoried. The plan is
 `skin-adoption/wo-skin-06-plan.md`, which **REPLACES the triage's §6 decomposition** — the triage
@@ -87,8 +87,10 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | **CK-F** | communication | 271 | CERTIFIED byte-exact (`9d85264c`) — banked P-87 (color-on-`<Text>`=(0,5,0)) |
 | **CK-C** | workspace chrome | 466 | CERTIFIED byte-exact (`f0046708`) — 12 skins; 458/466 counted sites moved, 8 deliberate P-88/shared-token residuals |
 | **CK-H2** | misc | 216 | CERTIFIED byte-exact (`c229859c`) — 9 skins; 213/216 counted sites moved, 3 deliberate caller-precedence residuals |
-| **CK-I** | long tail (surfaces) | 397 | PRE-STEP CERTIFIED (`7a6d60ac`) — 40 renderables / 382 migratable sites; 12/12 contracts; 32 baselines stable twice; forms excluded (already CK-D) |
-| CK-E / CK-H1 | visualization / brand-preview trio | 308 / 237 | LAST — deferred until the exemption machinery is observed executing |
+| **CK-I** | long tail (surfaces) | 397 | CERTIFIED byte-exact (`8a5afeec`) — 43 files; forms excluded (already CK-D); OAuth hidden channel recovered by addendum |
+| Recovery | hidden inline/embedded CSS + orphan channels | 130 + 195 + addenda | IN PROGRESS — Presence/OAuth/Loading certified; 130 newly visible inline sites need adjudication and 195 static embedded declarations in 23 files remain |
+| CK-H1 | tenant/branding previews | 235 current | PENDING — 190 static sites migrate; exact final inline floor 45 |
+| CK-E | visualization | 476 instrumented | PENDING — includes inline + runtime-SVG channels and visualization-specific runtime floors |
 
 **The pipeline that works** (three migrations in parallel is the unlock): inventory → contract
 (orchestrator) → **inert pre-step** (anatomy + torture section + spec + contract test; baselines
@@ -99,10 +101,11 @@ and `skins.unwired` fails the build if it is forgotten) → certify.
 **Proving a pre-step is inert is mechanical, not a judgement call**: re-run the paint counter against
 a stashed tree and diff. Byte-identical counts ⇒ zero paint moved. Do not eyeball a diff.
 
-**Category-B exemptions are live** (`roadmap/skin-exemptions.json`, 25 files, floor 101). The gate
-enforces a FLOOR per file — a file may not drop BELOW it, because that means paint whose value is
-runtime data was migrated into CSS, where it cannot live. It was a glob until 2026-07-13, and the
-gate **skips globs**, so it protected nothing while looking like it did.
+**Exemptions are executable and channel-specific** (`roadmap/skin-exemptions.json`: 32 entries;
+`inlineFloor=102`, `runtimeSvgFloor=11`, `embeddedCssFloor=7`). The gate enforces each floor per
+file and per channel: runtime-authored paint cannot be moved into static CSS, SVG paint cannot
+substitute for an inline floor, and the one bounded embedded-CSS contract cannot absorb debt from
+another file. The original glob loophole was removed on 2026-07-13.
 
 ### WO-SKIN-07 Skin-adoption program certification + release
 - Full core suite (respect the standing failure ledger), full visual suite, `--check`, docs

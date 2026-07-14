@@ -11,15 +11,29 @@ const SOURCE = readFileSync(
   'src/components/structures/feedback/loading-overlay/index.tsx',
   'utf8',
 );
+const SKIN = readFileSync(
+  'src/tokens/css/components/skin/loading-overlay.css',
+  'utf8',
+);
 
-describe('LoadingOverlay inert pre-step contract', () => {
-  it('pins the five inline paints and both embedded transform declarations', () => {
-    expect(SOURCE).toContain("background: 'var(--ds-color-bg-primary, rgba(15,23,42,0.85))'");
-    expect(SOURCE).toContain("backdropFilter: 'blur(2px)'");
-    expect(SOURCE).toContain("borderRadius: 'inherit'");
-    expect(SOURCE.match(/color: 'var\(--ds-color-text-muted\)'/g)).toHaveLength(2);
-    expect(SOURCE).toContain('0%, 100% { opacity: 0.4; transform: scale(1); }');
-    expect(SOURCE).toContain('50% { opacity: 1; transform: scale(1.08); }');
+describe('LoadingOverlay skin contract', () => {
+  it('moves the five static paints and both complete keyframes out of runtime markup', () => {
+    expect(SOURCE).not.toContain("background: 'var(--ds-color-bg-primary, rgba(15,23,42,0.85))'");
+    expect(SOURCE).not.toContain("backdropFilter: 'blur(2px)'");
+    expect(SOURCE).not.toContain("borderRadius: 'inherit'");
+    expect(SOURCE).not.toContain("color: 'var(--ds-color-text-muted)'");
+    expect(SOURCE).not.toContain('@keyframes lo-');
+    expect(SOURCE).toContain('ds-loading-overlay-pulse 1.8s ease-in-out infinite');
+    expect(SOURCE).toContain('ds-loading-overlay-dots 1.4s ease-in-out');
+
+    expect(SKIN).toContain('background: var(--ds-color-bg-primary, rgba(15,23,42,0.85));');
+    expect(SKIN).toContain('backdrop-filter: blur(2px);');
+    expect(SKIN).toContain('border-radius: inherit;');
+    expect(SKIN.match(/color: var\(--ds-color-text-muted\);/g)).toHaveLength(1);
+    expect(SKIN).toContain('@keyframes ds-loading-overlay-pulse');
+    expect(SKIN).toContain('0%, 100% { opacity: 0.4; transform: scale(1); }');
+    expect(SKIN).toContain('50% { opacity: 1; transform: scale(1.08); }');
+    expect(SKIN).toContain('@keyframes ds-loading-overlay-dots');
   });
 
   it.each(ENGINES)('renders nothing when hidden (%s)', (engine) => {
@@ -58,10 +72,6 @@ describe('LoadingOverlay inert pre-step contract', () => {
     const dots = container.querySelectorAll<HTMLElement>('[data-part="dot"]');
     expect(dots).toHaveLength(3);
 
-    const style = container.querySelector('style');
-    expect(style).not.toBeNull();
-    expect(style?.textContent).toContain('@keyframes lo-pulse');
-    expect(style?.textContent).toContain('transform: scale(1.08)');
-    expect(style?.textContent).toContain('@keyframes lo-dots');
+    expect(container.querySelector('style')).toBeNull();
   });
 });

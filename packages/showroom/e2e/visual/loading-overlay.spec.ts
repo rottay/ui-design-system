@@ -50,7 +50,7 @@ async function openCase(
 }
 
 for (const item of CASES) {
-  test(`${item.fixture} / ${item.engine} / LoadingOverlay inert pre-step`, async ({ page }) => {
+  test(`${item.fixture} / ${item.engine} / LoadingOverlay certified skin`, async ({ page }) => {
     const { stage, root } = await openCase(page, item.fixture, item.engine, item.ground);
 
     await expect(root.locator('[data-part="logo"]')).toHaveCount(1);
@@ -58,12 +58,29 @@ for (const item of CASES) {
     await expect(root.locator('[data-part="dot"]')).toHaveCount(3);
     await expect(root.locator('[data-testid="loading-overlay-logo-mark"]')).toHaveCount(1);
 
-    const styleBlock = stage.locator(':scope > style');
-    await expect(styleBlock).toHaveCount(1);
-    const embeddedCss = await styleBlock.evaluate((element) => element.textContent ?? '');
-    expect(embeddedCss).toContain('@keyframes lo-pulse');
-    expect(embeddedCss).toContain('transform: scale(1.08)');
-    expect(embeddedCss).toContain('@keyframes lo-dots');
+    await expect(stage.locator(':scope > style')).toHaveCount(0);
+    const paint = await root.evaluate((element) => {
+      const rootStyle = getComputedStyle(element);
+      const message = element.querySelector('[data-part="message"]');
+      const dot = element.querySelector('[data-part="dot"]');
+      const logo = element.querySelector('[data-part="logo"]');
+      return {
+        background: rootStyle.backgroundColor,
+        backdropFilter: rootStyle.backdropFilter,
+        borderRadius: rootStyle.borderRadius,
+        messageColor: message ? getComputedStyle(message).color : '',
+        dotColor: dot ? getComputedStyle(dot).color : '',
+        logoAnimation: logo ? getComputedStyle(logo).animationName : '',
+        dotAnimation: dot ? getComputedStyle(dot).animationName : '',
+      };
+    });
+    expect(paint.background).not.toBe('rgba(0, 0, 0, 0)');
+    expect(paint.backdropFilter).toBe('blur(2px)');
+    expect(paint.borderRadius).not.toBe('0px');
+    expect(paint.messageColor).not.toBe('');
+    expect(paint.dotColor).toBe(paint.messageColor);
+    expect(paint.logoAnimation).toBe('ds-loading-overlay-pulse');
+    expect(paint.dotAnimation).toBe('ds-loading-overlay-dots');
 
     await expect(stage).toHaveScreenshot(`loading-overlay-${item.fixture}-${item.engine}.png`);
   });
