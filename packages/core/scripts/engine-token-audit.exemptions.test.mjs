@@ -1,24 +1,21 @@
-import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { dirname, join } from "node:path";
-import test from "node:test";
-import {
-  collectSkinExemptionFailures,
-  countSkinExemptionBreaches,
-} from "./lib/skin-exemption-audit.mjs";
+import assert from 'node:assert/strict';
+import { mkdirSync, mkdtempSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
+import test from 'node:test';
+import { collectSkinExemptionFailures, countSkinExemptionBreaches } from './lib/skin-exemption-audit.mjs';
 
 function fixture() {
-  const dir = mkdtempSync(join(tmpdir(), "skin-exemption-audit-"));
-  const componentsDir = join(dir, "components");
-  const exemptionsPath = join(dir, "skin-exemptions.json");
+  const dir = mkdtempSync(join(tmpdir(), 'skin-exemption-audit-'));
+  const componentsDir = join(dir, 'components');
+  const exemptionsPath = join(dir, 'skin-exemptions.json');
   mkdirSync(componentsDir);
 
   return {
     dir,
     componentsDir,
     exemptionsPath,
-    writeComponent(path, source = "paint paint paint\n") {
+    writeComponent(path, source = 'paint paint paint\n') {
       const full = join(componentsDir, path);
       mkdirSync(dirname(full), { recursive: true });
       writeFileSync(full, source);
@@ -32,10 +29,8 @@ function fixture() {
         exemptionsPath,
         componentsDir,
         countPaint: (source) => source.match(/paint/g)?.length ?? 0,
-        countRuntimeSvgPaint: (source) =>
-          source.match(/runtime/g)?.length ?? 0,
-        countEmbeddedCssPaint: (source) =>
-          source.match(/embedded/g)?.length ?? 0,
+        countRuntimeSvgPaint: (source) => source.match(/runtime/g)?.length ?? 0,
+        countEmbeddedCssPaint: (source) => source.match(/embedded/g)?.length ?? 0,
         ...options,
       });
     },
@@ -46,16 +41,13 @@ function family(files) {
   return { files };
 }
 
-test("floors for one canonical path are summed across exemption families", () => {
+test('floors for one canonical path are summed across exemption families', () => {
   const f = fixture();
   try {
-    f.writeComponent(
-      "shared.tsx",
-      "paint paint paint paint paint paint paint paint\n"
-    );
+    f.writeComponent('shared.tsx', 'paint paint paint paint paint paint paint paint\n');
     f.writeConfig({
-      "RUNTIME-VALUE": family({ "shared.tsx": { floor: 1 } }),
-      "NOT-PAINT": family({ "shared.tsx": { floor: 8 } }),
+      'RUNTIME-VALUE': family({ 'shared.tsx': { floor: 1 } }),
+      'NOT-PAINT': family({ 'shared.tsx': { floor: 8 } }),
     });
 
     let countCalls = 0;
@@ -66,7 +58,7 @@ test("floors for one canonical path are summed across exemption families", () =>
       },
     });
 
-    assert.equal(countCalls, 1, "the shared file must be measured once");
+    assert.equal(countCalls, 1, 'the shared file must be measured once');
     assert.equal(failures.length, 1);
     assert.match(failures[0], /combined floor of 9/);
     assert.match(failures[0], /RUNTIME-VALUE=1 \+ NOT-PAINT=8/);
@@ -75,13 +67,13 @@ test("floors for one canonical path are summed across exemption families", () =>
   }
 });
 
-test("a file at the sum of all of its floors passes", () => {
+test('a file at the sum of all of its floors passes', () => {
   const f = fixture();
   try {
-    f.writeComponent("shared.tsx", "paint ".repeat(9));
+    f.writeComponent('shared.tsx', 'paint '.repeat(9));
     f.writeConfig({
-      A: family({ "shared.tsx": { floor: 4 } }),
-      B: family({ "shared.tsx": { floor: 5 } }),
+      A: family({ 'shared.tsx': { floor: 4 } }),
+      B: family({ 'shared.tsx': { floor: 5 } }),
     });
 
     assert.deepEqual(f.audit(), []);
@@ -90,15 +82,36 @@ test("a file at the sum of all of its floors passes", () => {
   }
 });
 
-test("runtime SVG floors are measured independently from inline floors", () => {
+test('inline exemption counting receives the canonical target path', () => {
   const f = fixture();
   try {
-    f.writeComponent("shared.tsx", "paint paint runtime runtime runtime\n");
+    const target = f.writeComponent('nested/target.tsx', 'paint\n');
+    f.writeConfig({ A: family({ 'nested/target.tsx': { floor: 1 } }) });
+
+    let observedPath;
+    const failures = f.audit({
+      countPaint(source, canonicalPath) {
+        observedPath = canonicalPath;
+        return source.match(/paint/g)?.length ?? 0;
+      },
+    });
+
+    assert.deepEqual(failures, []);
+    assert.equal(observedPath, realpathSync(target));
+  } finally {
+    rmSync(f.dir, { recursive: true, force: true });
+  }
+});
+
+test('runtime SVG floors are measured independently from inline floors', () => {
+  const f = fixture();
+  try {
+    f.writeComponent('shared.tsx', 'paint paint runtime runtime runtime\n');
     f.writeConfig({
       A: family({
-        "shared.tsx": { floor: 2, runtimeSvgFloor: 1 },
+        'shared.tsx': { floor: 2, runtimeSvgFloor: 1 },
       }),
-      B: family({ "shared.tsx": { runtimeSvgFloor: 3 } }),
+      B: family({ 'shared.tsx': { runtimeSvgFloor: 3 } }),
     });
 
     let inlineCalls = 0;
@@ -114,8 +127,8 @@ test("runtime SVG floors are measured independently from inline floors", () => {
       },
     });
 
-    assert.equal(inlineCalls, 1, "the inline channel is measured once");
-    assert.equal(runtimeCalls, 1, "the runtime SVG channel is measured once");
+    assert.equal(inlineCalls, 1, 'the inline channel is measured once');
+    assert.equal(runtimeCalls, 1, 'the runtime SVG channel is measured once');
     assert.equal(failures.length, 1);
     assert.match(failures[0], /exemption breached \(runtime SVG\)/);
     assert.match(failures[0], /combined runtimeSvgFloor of 4/);
@@ -128,9 +141,9 @@ test("runtime SVG floors are measured independently from inline floors", () => {
 test("one paint channel cannot satisfy the other channel's floor", () => {
   const f = fixture();
   try {
-    f.writeComponent("target.tsx", "paint ".repeat(20));
+    f.writeComponent('target.tsx', 'paint '.repeat(20));
     f.writeConfig({
-      A: family({ "target.tsx": { floor: 1, runtimeSvgFloor: 1 } }),
+      A: family({ 'target.tsx': { floor: 1, runtimeSvgFloor: 1 } }),
     });
 
     const failures = f.audit();
@@ -141,13 +154,13 @@ test("one paint channel cannot satisfy the other channel's floor", () => {
   }
 });
 
-test("embedded CSS floors are independent from inline and runtime SVG floors", () => {
+test('embedded CSS floors are independent from inline and runtime SVG floors', () => {
   const f = fixture();
   try {
-    f.writeComponent("target.tsx", "paint ".repeat(20) + "runtime ".repeat(20));
+    f.writeComponent('target.tsx', 'paint '.repeat(20) + 'runtime '.repeat(20));
     f.writeConfig({
       A: family({
-        "target.tsx": {
+        'target.tsx': {
           floor: 1,
           runtimeSvgFloor: 1,
           embeddedCssFloor: 1,
@@ -163,13 +176,13 @@ test("embedded CSS floors are independent from inline and runtime SVG floors", (
   }
 });
 
-test("embedded CSS floors sum separately across exemption families", () => {
+test('embedded CSS floors sum separately across exemption families', () => {
   const f = fixture();
   try {
-    f.writeComponent("target.tsx", "embedded embedded embedded\n");
+    f.writeComponent('target.tsx', 'embedded embedded embedded\n');
     f.writeConfig({
-      A: family({ "target.tsx": { embeddedCssFloor: 1 } }),
-      B: family({ "target.tsx": { embeddedCssFloor: 3 } }),
+      A: family({ 'target.tsx': { embeddedCssFloor: 1 } }),
+      B: family({ 'target.tsx': { embeddedCssFloor: 3 } }),
     });
 
     let countCalls = 0;
@@ -188,12 +201,12 @@ test("embedded CSS floors sum separately across exemption families", () => {
   }
 });
 
-test("an embedded-CSS-only exemption entry is valid", () => {
+test('an embedded-CSS-only exemption entry is valid', () => {
   const f = fixture();
   try {
-    f.writeComponent("target.tsx", "embedded\n");
+    f.writeComponent('target.tsx', 'embedded\n');
     f.writeConfig({
-      A: family({ "target.tsx": { embeddedCssFloor: 1 } }),
+      A: family({ 'target.tsx': { embeddedCssFloor: 1 } }),
     });
 
     assert.deepEqual(f.audit(), []);
@@ -202,12 +215,12 @@ test("an embedded-CSS-only exemption entry is valid", () => {
   }
 });
 
-test("a runtime-only exemption entry is valid", () => {
+test('a runtime-only exemption entry is valid', () => {
   const f = fixture();
   try {
-    f.writeComponent("target.tsx", "runtime\n");
+    f.writeComponent('target.tsx', 'runtime\n');
     f.writeConfig({
-      A: family({ "target.tsx": { runtimeSvgFloor: 1 } }),
+      A: family({ 'target.tsx': { runtimeSvgFloor: 1 } }),
     });
 
     assert.deepEqual(f.audit(), []);
@@ -216,15 +229,15 @@ test("a runtime-only exemption entry is valid", () => {
   }
 });
 
-test("the floor gate intentionally proves aggregate cardinality, not source identity", () => {
+test('the floor gate intentionally proves aggregate cardinality, not source identity', () => {
   const f = fixture();
   try {
-    f.writeComponent("target.tsx", "ordinary paint\n");
+    f.writeComponent('target.tsx', 'ordinary paint\n');
     f.writeConfig({
       A: family({
-        "target.tsx": {
+        'target.tsx': {
           floor: 1,
-          why: "Checkpoint contracts and visual tests identify the protected expression.",
+          why: 'Checkpoint contracts and visual tests identify the protected expression.',
         },
       }),
     });
@@ -235,7 +248,7 @@ test("the floor gate intentionally proves aggregate cardinality, not source iden
   }
 });
 
-test("a missing exemption configuration is a breach instead of a vacuous zero", () => {
+test('a missing exemption configuration is a breach instead of a vacuous zero', () => {
   const f = fixture();
   try {
     const messages = [];
@@ -252,10 +265,10 @@ test("a missing exemption configuration is a breach instead of a vacuous zero", 
   }
 });
 
-test("a configured path that does not exist fails explicitly", () => {
+test('a configured path that does not exist fails explicitly', () => {
   const f = fixture();
   try {
-    f.writeConfig({ A: family({ "missing.tsx": { floor: 1 } }) });
+    f.writeConfig({ A: family({ 'missing.tsx': { floor: 1 } }) });
 
     const failures = f.audit();
     assert.equal(failures.length, 1);
@@ -265,11 +278,11 @@ test("a configured path that does not exist fails explicitly", () => {
   }
 });
 
-test("an unresolved glob fails even when it would match files", () => {
+test('an unresolved glob fails even when it would match files', () => {
   const f = fixture();
   try {
-    f.writeComponent("charts/bar.tsx");
-    f.writeConfig({ A: family({ "charts/**": { floor: 1 } }) });
+    f.writeComponent('charts/bar.tsx');
+    f.writeConfig({ A: family({ 'charts/**': { floor: 1 } }) });
 
     const failures = f.audit();
     assert.equal(failures.length, 1);
@@ -280,31 +293,29 @@ test("an unresolved glob fails even when it would match files", () => {
   }
 });
 
-test("invalid floors cannot silently disable comparison", async (t) => {
+test('invalid floors cannot silently disable comparison', async (t) => {
   const invalidFloors = [
-    ["missing", undefined],
-    ["string", "1"],
-    ["zero", 0],
-    ["negative", -1],
-    ["fractional", 1.5],
-    ["null", null],
+    ['missing', undefined],
+    ['string', '1'],
+    ['zero', 0],
+    ['negative', -1],
+    ['fractional', 1.5],
+    ['null', null],
   ];
 
   for (const [label, floor] of invalidFloors) {
     await t.test(label, () => {
       const f = fixture();
       try {
-        f.writeComponent("target.tsx");
+        f.writeComponent('target.tsx');
         const entry = floor === undefined ? {} : { floor };
-        f.writeConfig({ A: family({ "target.tsx": entry }) });
+        f.writeConfig({ A: family({ 'target.tsx': entry }) });
 
         const failures = f.audit();
         assert.equal(failures.length, 1);
         assert.match(
           failures[0],
-          floor === undefined
-            ? /must declare floor, runtimeSvgFloor, and\/or embeddedCssFloor/
-            : /invalid floor/
+          floor === undefined ? /must declare floor, runtimeSvgFloor, and\/or embeddedCssFloor/ : /invalid floor/
         );
       } finally {
         rmSync(f.dir, { recursive: true, force: true });
@@ -313,16 +324,16 @@ test("invalid floors cannot silently disable comparison", async (t) => {
   }
 });
 
-test("invalid runtime SVG floors cannot silently disable comparison", async (t) => {
-  const invalidFloors = ["1", 0, -1, 1.5, null];
+test('invalid runtime SVG floors cannot silently disable comparison', async (t) => {
+  const invalidFloors = ['1', 0, -1, 1.5, null];
 
   for (const runtimeSvgFloor of invalidFloors) {
     await t.test(JSON.stringify(runtimeSvgFloor), () => {
       const f = fixture();
       try {
-        f.writeComponent("target.tsx");
+        f.writeComponent('target.tsx');
         f.writeConfig({
-          A: family({ "target.tsx": { runtimeSvgFloor } }),
+          A: family({ 'target.tsx': { runtimeSvgFloor } }),
         });
 
         const failures = f.audit();
@@ -335,16 +346,16 @@ test("invalid runtime SVG floors cannot silently disable comparison", async (t) 
   }
 });
 
-test("invalid embedded CSS floors cannot silently disable comparison", async (t) => {
-  const invalidFloors = ["1", 0, -1, 1.5, null];
+test('invalid embedded CSS floors cannot silently disable comparison', async (t) => {
+  const invalidFloors = ['1', 0, -1, 1.5, null];
 
   for (const embeddedCssFloor of invalidFloors) {
     await t.test(JSON.stringify(embeddedCssFloor), () => {
       const f = fixture();
       try {
-        f.writeComponent("target.tsx");
+        f.writeComponent('target.tsx');
         f.writeConfig({
-          A: family({ "target.tsx": { embeddedCssFloor } }),
+          A: family({ 'target.tsx': { embeddedCssFloor } }),
         });
 
         const failures = f.audit();
@@ -357,28 +368,20 @@ test("invalid embedded CSS floors cannot silently disable comparison", async (t)
   }
 });
 
-test("malformed families, files maps, and entries are reported rather than skipped", async (t) => {
+test('malformed families, files maps, and entries are reported rather than skipped', async (t) => {
   const cases = [
-    ["non-object family", { A: null }, /family A must be an object/],
-    ["missing files map", { A: {} }, /missing its files map/],
-    [
-      "non-object files map",
-      { A: { files: [] } },
-      /A\.files must be an object/,
-    ],
-    ["empty files map", { A: { files: {} } }, /A\.files must not be empty/],
-    [
-      "non-object entry",
-      { A: family({ "target.tsx": null }) },
-      /entry .* must be an object/,
-    ],
+    ['non-object family', { A: null }, /family A must be an object/],
+    ['missing files map', { A: {} }, /missing its files map/],
+    ['non-object files map', { A: { files: [] } }, /A\.files must be an object/],
+    ['empty files map', { A: { files: {} } }, /A\.files must not be empty/],
+    ['non-object entry', { A: family({ 'target.tsx': null }) }, /entry .* must be an object/],
   ];
 
   for (const [label, document, expected] of cases) {
     await t.test(label, () => {
       const f = fixture();
       try {
-        f.writeComponent("target.tsx");
+        f.writeComponent('target.tsx');
         f.writeConfig(document);
 
         const failures = f.audit();
@@ -391,15 +394,15 @@ test("malformed families, files maps, and entries are reported rather than skipp
   }
 });
 
-test("unknown executable keys are breaches while $metadata and entry why remain allowed", async (t) => {
-  await t.test("family typo beside a valid files map", () => {
+test('unknown executable keys are breaches while $metadata and entry why remain allowed', async (t) => {
+  await t.test('family typo beside a valid files map', () => {
     const f = fixture();
     try {
-      f.writeComponent("target.tsx");
+      f.writeComponent('target.tsx');
       f.writeConfig({
         A: {
-          files: { "target.tsx": { floor: 1 } },
-          fiels: { "silently-ignored.tsx": { floor: 8 } },
+          files: { 'target.tsx': { floor: 1 } },
+          fiels: { 'silently-ignored.tsx': { floor: 8 } },
         },
       });
 
@@ -411,38 +414,35 @@ test("unknown executable keys are breaches while $metadata and entry why remain 
     }
   });
 
-  await t.test("entry typo beside a valid floor", () => {
+  await t.test('entry typo beside a valid floor', () => {
     const f = fixture();
     try {
-      f.writeComponent("target.tsx");
+      f.writeComponent('target.tsx');
       f.writeConfig({
-        A: family({ "target.tsx": { floor: 1, whi: "typo" } }),
+        A: family({ 'target.tsx': { floor: 1, whi: 'typo' } }),
       });
 
       const failures = f.audit();
       assert.equal(failures.length, 1);
-      assert.match(
-        failures[0],
-        /entry \(A: target\.tsx\) has unknown key "whi"/
-      );
+      assert.match(failures[0], /entry \(A: target\.tsx\) has unknown key "whi"/);
     } finally {
       rmSync(f.dir, { recursive: true, force: true });
     }
   });
 
-  await t.test("metadata at every schema level and entry why", () => {
+  await t.test('metadata at every schema level and entry why', () => {
     const f = fixture();
     try {
-      f.writeComponent("target.tsx");
+      f.writeComponent('target.tsx');
       f.writeConfig({
-        $comment: "root metadata",
+        $comment: 'root metadata',
         A: {
-          $why: "family metadata",
+          $why: 'family metadata',
           files: {
-            "target.tsx": {
+            'target.tsx': {
               floor: 1,
-              why: "human-readable reason",
-              $note: "entry metadata",
+              why: 'human-readable reason',
+              $note: 'entry metadata',
             },
           },
         },
@@ -455,11 +455,11 @@ test("unknown executable keys are breaches while $metadata and entry why remain 
   });
 });
 
-test("invalid JSON, a non-object root, and a vacuous document fail explicitly", async (t) => {
-  await t.test("invalid JSON", () => {
+test('invalid JSON, a non-object root, and a vacuous document fail explicitly', async (t) => {
+  await t.test('invalid JSON', () => {
     const f = fixture();
     try {
-      writeFileSync(f.exemptionsPath, "{");
+      writeFileSync(f.exemptionsPath, '{');
       const failures = f.audit();
       assert.equal(failures.length, 1);
       assert.match(failures[0], /not valid JSON/);
@@ -468,7 +468,7 @@ test("invalid JSON, a non-object root, and a vacuous document fail explicitly", 
     }
   });
 
-  await t.test("array root", () => {
+  await t.test('array root', () => {
     const f = fixture();
     try {
       f.writeConfig([]);
@@ -480,11 +480,11 @@ test("invalid JSON, a non-object root, and a vacuous document fail explicitly", 
     }
   });
 
-  await t.test("metadata-only root", () => {
+  await t.test('metadata-only root', () => {
     const f = fixture();
     try {
       f.writeConfig({
-        $comment: "all executable families were accidentally omitted",
+        $comment: 'all executable families were accidentally omitted',
       });
       const failures = f.audit();
       assert.equal(failures.length, 1);
@@ -495,11 +495,11 @@ test("invalid JSON, a non-object root, and a vacuous document fail explicitly", 
   });
 });
 
-test("targets outside the components tree cannot be exempted", () => {
+test('targets outside the components tree cannot be exempted', () => {
   const f = fixture();
   try {
-    writeFileSync(join(f.dir, "outside.tsx"), "paint\n");
-    f.writeConfig({ A: family({ "../outside.tsx": { floor: 1 } }) });
+    writeFileSync(join(f.dir, 'outside.tsx'), 'paint\n');
+    f.writeConfig({ A: family({ '../outside.tsx': { floor: 1 } }) });
 
     const failures = f.audit();
     assert.equal(failures.length, 1);

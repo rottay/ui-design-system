@@ -30,6 +30,12 @@
  * ===========================================================================
  */
 
+/* ---- centered stack placement (was static container inline transform) ---- */
+.rottay-toast-container[data-placement='top-center'][data-center-transform='true'],
+.rottay-toast-container[data-placement='bottom-center'][data-center-transform='true'] {
+  transform: translateX(-50%);
+}
+
 /* ---- stack item: compress/fan transform, depth-derived, via a hatch ---- */
 .rottay-toast-container > [data-stack-depth] {
   transform: var(--ds-toast-stack-transform);

@@ -1,0 +1,38 @@
+/** Static Menu and Tabs rules formerly injected by their modern engines. */
+
+.rottay-menu--modern a:focus-visible,
+.rottay-menu--modern summary:focus-visible {
+  outline: 2px solid var(--ds-color-primary) !important;
+  outline-offset: -2px !important;
+}
+
+.rottay-menu--modern details[open] > summary > span:last-child {
+  transform: rotate(90deg);
+}
+
+.rottay-menu--modern summary::-webkit-details-marker,
+.rottay-menu--modern summary::marker {
+  display: none;
+  content: '';
+}
+
+[data-tabs-id]::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes rottay-tabs-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-tabs-id] [role='tab']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color) !important;
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px)) !important;
+  border-radius: var(--ds-radius-sm);
+}

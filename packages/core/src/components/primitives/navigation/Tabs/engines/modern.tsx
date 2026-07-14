@@ -27,7 +27,11 @@
 import React, { useCallback, useId, useLayoutEffect, useRef, useState } from 'react';
 import type { TabsProps, TabItem, TabsSize } from '../Tabs.types';
 import { TABS_DEFAULTS } from '../Tabs.types';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import {
+  isResponsiveValue,
+  generateResponsiveCSS,
+  type ResponsivePropEntry,
+} from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
 // ============================================================================
@@ -42,10 +46,37 @@ const TRANSITION_FAST = [
   'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)',
 ].join(', ');
 
-const SIZE_CONFIG: Record<string, { height: string; fontSize: string; padding: string; iconSize: string; badgeFontSize: string }> = {
-  sm: { height: 'var(--ds-tabs-sm-height, 32px)', fontSize: 'var(--ds-font-size-xs, 12px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', iconSize: 'var(--ds-tabs-sm-icon-size, 14px)', badgeFontSize: 'var(--ds-font-size-2xs, 10px)' },
-  md: { height: 'var(--ds-tabs-md-height, 36px)', fontSize: 'var(--ds-font-size-sm, 14px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-md-icon-size, 16px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
-  lg: { height: 'var(--ds-tabs-lg-height, 40px)', fontSize: 'var(--ds-font-size-base, 15px)', padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', iconSize: 'var(--ds-tabs-lg-icon-size, 18px)', badgeFontSize: 'var(--ds-font-size-2xs, 11px)' },
+const SIZE_CONFIG: Record<
+  string,
+  {
+    height: string;
+    fontSize: string;
+    padding: string;
+    iconSize: string;
+    badgeFontSize: string;
+  }
+> = {
+  sm: {
+    height: 'var(--ds-tabs-sm-height, 32px)',
+    fontSize: 'var(--ds-font-size-xs, 12px)',
+    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
+    iconSize: 'var(--ds-tabs-sm-icon-size, 14px)',
+    badgeFontSize: 'var(--ds-font-size-2xs, 10px)',
+  },
+  md: {
+    height: 'var(--ds-tabs-md-height, 36px)',
+    fontSize: 'var(--ds-font-size-sm, 14px)',
+    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
+    iconSize: 'var(--ds-tabs-md-icon-size, 16px)',
+    badgeFontSize: 'var(--ds-font-size-2xs, 11px)',
+  },
+  lg: {
+    height: 'var(--ds-tabs-lg-height, 40px)',
+    fontSize: 'var(--ds-font-size-base, 15px)',
+    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
+    iconSize: 'var(--ds-tabs-lg-icon-size, 18px)',
+    badgeFontSize: 'var(--ds-font-size-2xs, 11px)',
+  },
 };
 
 // ============================================================================
@@ -71,12 +102,7 @@ interface IndicatorPos {
 // Tab item style by type
 // ============================================================================
 
-function getTabItemStyle(
-  type: string,
-  isActive: boolean,
-  isDisabled: boolean,
-  sizeKey: string,
-): React.CSSProperties {
+function getTabItemStyle(type: string, isActive: boolean, isDisabled: boolean, sizeKey: string): React.CSSProperties {
   const sizeStyle = SIZE_CONFIG[sizeKey] || SIZE_CONFIG.md;
   const base: React.CSSProperties = {
     transition: TRANSITION_FAST,
@@ -200,9 +226,18 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
 
   if (sizeIsResponsive) {
     const TABS_SIZE_STYLES: Record<string, { padding: string; fontSize: string }> = {
-      sm: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)', fontSize: 'var(--ds-font-size-xs, 12px)' },
-      md: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-sm, 14px)' },
-      lg: { padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)', fontSize: 'var(--ds-font-size-base, 15px)' },
+      sm: {
+        padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
+        fontSize: 'var(--ds-font-size-xs, 12px)',
+      },
+      md: {
+        padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
+        fontSize: 'var(--ds-font-size-sm, 14px)',
+      },
+      lg: {
+        padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-4, 16px)',
+        fontSize: 'var(--ds-font-size-base, 15px)',
+      },
     };
     responsiveEntries.push({
       cssProperty: 'padding',
@@ -218,9 +253,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
   const responsiveElementId = needsResponsiveCSS ? `tabs-${tabsId}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(responsiveElementId, responsiveEntries)
-    : null;
+  const responsive = needsResponsiveCSS ? generateResponsiveCSS(responsiveElementId, responsiveEntries) : null;
 
   const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
   const tabListRef = useRef<HTMLDivElement>(null);
@@ -354,19 +387,20 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
   // The `transform` is the one genuinely RUNTIME paint value in this family: it
   // is measured from `getBoundingClientRect()` on every active-tab change, so it
   // cannot be enumerated as CSS states and stays inline (contract-exempt).
-  const indicatorStyle: React.CSSProperties | null = (type === 'line' && indicatorPos)
-    ? {
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        height: '2px',
-        width: '1px',
-        transformOrigin: 'left',
-        transform: `translateX(${indicatorPos.left}px) scaleX(${indicatorPos.width})`,
-        transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
-        pointerEvents: 'none',
-      }
-    : null;
+  const indicatorStyle: React.CSSProperties | null =
+    type === 'line' && indicatorPos
+      ? {
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          height: '2px',
+          width: '1px',
+          transformOrigin: 'left',
+          transform: `translateX(${indicatorPos.left}px) scaleX(${indicatorPos.width})`,
+          transition: 'transform var(--ds-motion-normal) var(--ds-motion-ease-out)',
+          pointerEvents: 'none',
+        }
+      : null;
 
   // ============================================================================
   // Render
@@ -379,23 +413,7 @@ export default function ModernTabs(props: TabsProps): React.ReactElement {
       data-part="root"
       data-variant={type || 'line'}
     >
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
-
-      {/* Scrollbar hide + fade-in keyframe + focus visible */}
-      <style dangerouslySetInnerHTML={{ __html: `
-        [data-tabs-id="${tabsId}"]::-webkit-scrollbar { display: none; }
-        @keyframes rottay-tabs-fade-in {
-          from { opacity: 0; transform: translateY(2px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        [data-tabs-id="${tabsId}"] [role="tab"]:focus-visible {
-          outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color) !important;
-          outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px)) !important;
-          border-radius: var(--ds-radius-sm);
-        }
-      `}} />
+      {responsive && responsive.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
 
       {/* Tab List */}
       <div

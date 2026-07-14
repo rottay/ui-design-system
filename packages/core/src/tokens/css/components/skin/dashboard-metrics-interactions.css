@@ -1,0 +1,251 @@
+/**
+ * Dashboard metrics interaction recovery.
+ *
+ * Declaration values and token fallback chains stay byte-exact. Every rule is
+ * attached to its component scope without extra selector weight, and the bare
+ * `slideIn`, `glow`, and `dotGlow` names are component-namespaced as required
+ * by the lane's collision law.
+ */
+
+/* minimal ----------------------------------------------------------------- */
+
+:where(.ds-metrics-minimal) .minimal-metric-row {
+  animation: ds-metrics-minimal-slide-in 0.4s ease-out both;
+  transition: all 0.2s ease;
+}
+
+:where(.ds-metrics-minimal) .minimal-metric-row:hover {
+  background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+  transform: translateX(4px);
+}
+
+:where(.ds-metrics-minimal) .live-dot {
+  animation: ds-metrics-minimal-glow 2s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-minimal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-metrics-minimal-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 16px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}
+
+/* cards ------------------------------------------------------------------- */
+
+:where(.ds-metrics-cards) .metric-card-v3 {
+  animation: ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-metrics-cards) .metric-card-v3:hover {
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+}
+
+:where(.ds-metrics-cards) .metric-card-v3:hover .metric-value-v3 {
+  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+:where(.ds-metrics-cards) .live-dot-v3 {
+  animation: ds-metrics-cards-dot-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-cards-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-metrics-cards-dot-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 16px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-cards) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-cards) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-cards) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-cards) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}
+
+/* chart ------------------------------------------------------------------- */
+
+:where(.ds-metrics-chart) .metric-chart-row-v3 {
+  animation: ds-metrics-chart-slide-in 0.4s ease-out both;
+  transition: all 0.2s ease;
+}
+
+:where(.ds-metrics-chart) .metric-chart-row-v3:hover {
+  background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+  transform: translateX(4px);
+}
+
+:where(.ds-metrics-chart) .live-dot-chart {
+  animation: ds-metrics-chart-glow 2s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-chart-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-metrics-chart-glow {
+  0%, 100% {
+    box-shadow: 0 0 3px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 6px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 6px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 12px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-chart) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-chart) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-chart) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-chart) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}
+
+/* rows -------------------------------------------------------------------- */
+
+:where(.ds-metrics-rows) .metric-row-v3 {
+  animation: ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-metrics-rows) .metric-row-v3:hover {
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  transform: translateX(6px);
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+}
+
+:where(.ds-metrics-rows) .metric-row-v3:hover .metric-row-value {
+  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+:where(.ds-metrics-rows) .metric-row-v3:hover .row-shimmer {
+  animation: ds-metrics-rows-shimmer 0.8s ease-in-out;
+}
+
+:where(.ds-metrics-rows) .live-dot-v3 {
+  animation: ds-metrics-rows-dot-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-rows-row-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-metrics-rows-shimmer {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes ds-metrics-rows-dot-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 16px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-rows) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-rows) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-rows) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-rows) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}

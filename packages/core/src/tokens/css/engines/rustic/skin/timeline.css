@@ -22,9 +22,9 @@
  * the default circle goes transparent and drops its ring so the custom content
  * shows through without overlap.
  *
- * The `@keyframes rottay-timeline-pulse` driving the pending dot stays in the
- * component's own `<style>` block: `animation` is not a paint channel, the name
- * is already collision-safe, and no other engine defines it.
+ * The collision-safe `@keyframes rottay-timeline-pulse` driving the pending dot
+ * now lives once in `components/skin/primitive-motion.css`; the animation name
+ * and frame body remain unchanged.
  *
  * SPECIFICITY (P-48): the dot's `border` shorthand clears the tenant's unlayered
  * (0,3,1) `*` border-color floor at (0,5,0). Values transcribed verbatim from

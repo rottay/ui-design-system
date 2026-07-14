@@ -20,6 +20,24 @@
  * wins unlayered at (0,3,0) or higher.
  */
 
+/* Input.Group ------------------------------------------------------------- */
+/* The old cloneElement mutations deliberately overrode a child's own inline
+   radii. Author-important rules preserve that precedence exactly. */
+.rottay-input-group[data-compact='true'] > :first-child:not(:last-child) {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.rottay-input-group[data-compact='true'] > :last-child:not(:first-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.rottay-input-group[data-compact='true'] > :not(:first-child):not(:last-child) {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
 /* Addon ------------------------------------------------------------------- */
 .rottay-input-addon.ds-input-addon[data-part='root'] {
   background-color: var(--ds-color-bg-secondary);

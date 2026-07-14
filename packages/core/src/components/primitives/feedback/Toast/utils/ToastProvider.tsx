@@ -1,7 +1,8 @@
 /**
  * @fileoverview ToastProvider - context provider for toast stack state management.
  * Uses a reducer pattern for predictable state transitions (ADD, DISMISS, PAUSE, etc.).
- * Injects CSS animation keyframes on mount and exposes imperative methods via context.
+ * Preserves the legacy animation compatibility hook and exposes imperative methods via context.
+ * Toast paint and keyframes come from the required public stylesheet.
  *
  * @example
  * ```tsx
@@ -17,21 +18,8 @@
 
 'use client';
 
-import React, {
-  createContext,
-  useContext,
-  useReducer,
-  useCallback,
-  useMemo,
-  useEffect,
-  ReactNode,
-} from 'react';
-import type {
-  ToastState,
-  ToastOptions,
-  ToastMethods,
-  ToastProviderConfig,
-} from '../Toast.types';
+import React, { createContext, useContext, useReducer, useCallback, useMemo, useEffect, ReactNode } from 'react';
+import type { ToastState, ToastOptions, ToastMethods, ToastProviderConfig } from '../Toast.types';
 import { TOAST_DEFAULTS, TOAST_CONTAINER_DEFAULTS } from '../Toast.types';
 import { injectToastStyles } from './animations';
 import { clearToastMethods, setToastMethods } from './useToast';
@@ -75,27 +63,24 @@ function toastReducer(state: ToastState[], action: ToastDispatchAction): ToastSt
     case 'UPDATE':
       return state.map((toast) =>
         toast.id === action.payload.id
-          ? { ...toast, options: { ...toast.options, ...action.payload.options } }
+          ? {
+              ...toast,
+              options: { ...toast.options, ...action.payload.options },
+            }
           : toast
       );
 
     case 'DISMISS':
-      return state.map((toast) =>
-        toast.id === action.payload ? { ...toast, visible: false } : toast
-      );
+      return state.map((toast) => (toast.id === action.payload ? { ...toast, visible: false } : toast));
 
     case 'DISMISS_ALL':
       return state.map((toast) => ({ ...toast, visible: false }));
 
     case 'PAUSE':
-      return state.map((toast) =>
-        toast.id === action.payload ? { ...toast, paused: true } : toast
-      );
+      return state.map((toast) => (toast.id === action.payload ? { ...toast, paused: true } : toast));
 
     case 'RESUME':
-      return state.map((toast) =>
-        toast.id === action.payload ? { ...toast, paused: false } : toast
-      );
+      return state.map((toast) => (toast.id === action.payload ? { ...toast, paused: false } : toast));
 
     case 'REMOVE':
       return state.filter((toast) => toast.id !== action.payload);
@@ -150,7 +135,7 @@ export function ToastProvider({
 }: ToastProviderProps): React.ReactElement {
   const [toasts, dispatch] = useReducer(toastReducer, []);
 
-  // Inject CSS animation keyframes once on mount
+  // Preserve the legacy no-op hook; CSS arrives through the public stylesheet.
   useEffect(() => {
     injectToastStyles();
   }, []);
@@ -194,11 +179,7 @@ export function ToastProvider({
 
   /** Shorthand: success variant. */
   const success = useCallback(
-    (
-      title: ReactNode,
-      description?: ReactNode,
-      options?: Partial<ToastOptions>
-    ): string => {
+    (title: ReactNode, description?: ReactNode, options?: Partial<ToastOptions>): string => {
       return show({
         ...options,
         title,
@@ -211,11 +192,7 @@ export function ToastProvider({
 
   /** Shorthand: error variant. */
   const error = useCallback(
-    (
-      title: ReactNode,
-      description?: ReactNode,
-      options?: Partial<ToastOptions>
-    ): string => {
+    (title: ReactNode, description?: ReactNode, options?: Partial<ToastOptions>): string => {
       return show({
         ...options,
         title,
@@ -228,11 +205,7 @@ export function ToastProvider({
 
   /** Shorthand: warning variant. */
   const warning = useCallback(
-    (
-      title: ReactNode,
-      description?: ReactNode,
-      options?: Partial<ToastOptions>
-    ): string => {
+    (title: ReactNode, description?: ReactNode, options?: Partial<ToastOptions>): string => {
       return show({
         ...options,
         title,
@@ -245,11 +218,7 @@ export function ToastProvider({
 
   /** Shorthand: info variant. */
   const info = useCallback(
-    (
-      title: ReactNode,
-      description?: ReactNode,
-      options?: Partial<ToastOptions>
-    ): string => {
+    (title: ReactNode, description?: ReactNode, options?: Partial<ToastOptions>): string => {
       return show({
         ...options,
         title,
@@ -271,12 +240,9 @@ export function ToastProvider({
   }, []);
 
   /** Merge new options into an existing toast (e.g. update progress). */
-  const update = useCallback(
-    (id: string, options: Partial<ToastOptions>): void => {
-      dispatch({ type: 'UPDATE', payload: { id, options } });
-    },
-    []
-  );
+  const update = useCallback((id: string, options: Partial<ToastOptions>): void => {
+    dispatch({ type: 'UPDATE', payload: { id, options } });
+  }, []);
 
   // Bundle methods into a stable object for context consumers
   const methods = useMemo<ToastMethods>(
@@ -297,7 +263,9 @@ export function ToastProvider({
   // outside of React component trees.
   useEffect(() => {
     setToastMethods(methods);
-    return () => { clearToastMethods(); };
+    return () => {
+      clearToastMethods();
+    };
   }, [methods]);
   const contextValue = useMemo<ToastContextValue>(
     () => ({
@@ -309,11 +277,7 @@ export function ToastProvider({
     [toasts, config, methods]
   );
 
-  return (
-    <ToastContext.Provider value={contextValue}>
-      {children}
-    </ToastContext.Provider>
-  );
+  return <ToastContext.Provider value={contextValue}>{children}</ToastContext.Provider>;
 }
 
 ToastProvider.displayName = 'ToastProvider';

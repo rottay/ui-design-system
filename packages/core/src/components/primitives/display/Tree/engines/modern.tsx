@@ -45,10 +45,7 @@ import {
 
 // Wraps the matching substring in a warning-tinted span for search highlighting.
 // Uses DS tokens so the highlight tracks tenant themes across light and dark modes.
-function highlightText(
-  text: React.ReactNode,
-  searchValue: string,
-): React.ReactNode {
+function highlightText(text: React.ReactNode, searchValue: string): React.ReactNode {
   if (!searchValue || typeof text !== 'string') return text;
   const idx = text.toLowerCase().indexOf(searchValue.toLowerCase());
   if (idx === -1) return text;
@@ -91,10 +88,10 @@ const LoadingSpinner: React.FC = () => (
 // Drop indicator line
 // ---------------------------------------------------------------------------
 
-const DropIndicator: React.FC<{ position: 'before' | 'inside' | 'after'; level: number }> = ({
-  position,
-  level,
-}) => {
+const DropIndicator: React.FC<{
+  position: 'before' | 'inside' | 'after';
+  level: number;
+}> = ({ position, level }) => {
   if (position === 'inside') return null;
   const left = level * 24;
   return (
@@ -107,7 +104,12 @@ const DropIndicator: React.FC<{ position: 'before' | 'inside' | 'after'; level: 
         paddingLeft: left,
       }}
     >
-      <div className="h-0.5 rounded-full" style={{ animation: 'rottay-drop-indicator var(--ds-motion-slow) ease-out' }} />
+      <div
+        className="h-0.5 rounded-full"
+        style={{
+          animation: 'rottay-drop-indicator var(--ds-motion-slow) ease-out',
+        }}
+      />
     </div>
   );
 };
@@ -148,7 +150,10 @@ interface TreeNodeInternalProps extends TreeDataNode {
   onDragOverInternal: (key: TreeEngineKey, e: React.DragEvent, level: number) => void;
   onDropInternal: (key: TreeEngineKey, e: React.DragEvent) => void;
   onDragEndInternal: () => void;
-  dropTarget: { key: TreeEngineKey; position: 'before' | 'inside' | 'after' } | null;
+  dropTarget: {
+    key: TreeEngineKey;
+    position: 'before' | 'inside' | 'after';
+  } | null;
   nodeRef: (key: TreeEngineKey, el: HTMLDivElement | null) => void;
   isLast: boolean;
   parentIsLast: boolean[];
@@ -235,12 +240,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
   };
 
   return (
-    <div
-      className="rottay-tree-node relative"
-      data-part="node"
-      data-key={nodeKey}
-      ref={(el) => nodeRef(nodeKey, el)}
-    >
+    <div className="rottay-tree-node relative" data-part="node" data-key={nodeKey} ref={(el) => nodeRef(nodeKey, el)}>
       {/* Tree lines */}
       {showLine && level > 0 && (
         <>
@@ -251,9 +251,11 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
                 className="absolute top-0 bottom-0 border-l"
                 data-part="connector"
                 data-axis="vertical"
-                style={{ left: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)` }}
+                style={{
+                  left: `calc(${i} * var(--ds-tree-indent, 24px) + 12px)`,
+                }}
               />
-            ) : null,
+            ) : null
           )}
           <div
             className="absolute border-t"
@@ -311,18 +313,22 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           blockNode ? 'w-full' : 'inline-flex',
           // "inside" drop target uses ring-inset so the indicator does not
           // overlap adjacent nodes (ring-2 alone would extend outward).
-          isDropTarget && dropPosition === 'inside'
-            ? 'ring-2 ring-inset'
-            : '',
+          isDropTarget && dropPosition === 'inside' ? 'ring-2 ring-inset' : '',
         ]
           .filter(Boolean)
           .join(' ')}
         style={{
           padding: 'var(--ds-tree-node-padding, 4px 8px)',
           paddingLeft,
-          ...(isFocused ? { '--tw-ring-color': 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)' } as React.CSSProperties : {}),
+          ...(isFocused
+            ? ({
+                '--tw-ring-color': 'color-mix(in srgb, var(--ds-color-primary) 30%, transparent)',
+              } as React.CSSProperties)
+            : {}),
           ...(isDropTarget && dropPosition === 'inside'
-            ? { '--tw-ring-color': 'var(--ds-color-primary)' } as React.CSSProperties
+            ? ({
+                '--tw-ring-color': 'var(--ds-color-primary)',
+              } as React.CSSProperties)
             : {}),
         }}
         onClick={handleClick}
@@ -368,18 +374,31 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           <button
             type="button"
             data-part="tree-node-toggle"
-            style={{ width: 'var(--ds-tree-switcher-size, 24px)', height: 'var(--ds-tree-switcher-size, 24px)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 12, marginRight: 4, flexShrink: 0 }}
+            style={{
+              width: 'var(--ds-tree-switcher-size, 24px)',
+              height: 'var(--ds-tree-switcher-size, 24px)',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: 0,
+              fontSize: 12,
+              marginRight: 4,
+              flexShrink: 0,
+            }}
             onClick={handleToggle}
             aria-label={isExpanded ? 'Collapse' : 'Expand'}
             tabIndex={-1}
           >
             <span
-              className={[
-                'inline-block transition-transform duration-200',
-                isExpanded ? 'rotate-90' : '',
-              ].join(' ')}
+              className={['inline-block transition-transform duration-200', isExpanded ? 'rotate-90' : ''].join(' ')}
             >
-              <svg width="var(--ds-tree-icon-size, 12px)" height="var(--ds-tree-icon-size, 12px)" viewBox="0 0 16 16" fill="currentColor">
+              <svg
+                width="var(--ds-tree-icon-size, 12px)"
+                height="var(--ds-tree-icon-size, 12px)"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+              >
                 <path d="M6 4l4 4-4 4z" />
               </svg>
             </span>
@@ -418,7 +437,10 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
           <span
             className="mr-2 flex-shrink-0 flex items-center"
             data-part="icon"
-            style={{ width: 'var(--ds-tree-icon-size, 16px)', height: 'var(--ds-tree-icon-size, 16px)' }}
+            style={{
+              width: 'var(--ds-tree-icon-size, 16px)',
+              height: 'var(--ds-tree-icon-size, 16px)',
+            }}
           >
             {icon}
           </span>
@@ -427,10 +449,7 @@ const TreeNodeInternal: React.FC<TreeNodeInternalProps> = ({
         {/* Title */}
         <span
           data-part="tree-node-label"
-          className={[
-            'truncate',
-            !isFiltered && filteredKeys ? 'opacity-40' : '',
-          ].join(' ')}
+          className={['truncate', !isFiltered && filteredKeys ? 'opacity-40' : ''].join(' ')}
         >
           {displayTitle}
         </span>
@@ -543,18 +562,15 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   const nodeRefs = useRef<Map<TreeEngineKey, HTMLDivElement>>(new Map());
   const loadedKeysRef = useRef<Set<TreeEngineKey>>(new Set());
 
-  const registerNodeRef = useCallback(
-    (key: TreeEngineKey, el: HTMLDivElement | null) => {
-      if (el) nodeRefs.current.set(key, el);
-      else nodeRefs.current.delete(key);
-    },
-    [],
-  );
+  const registerNodeRef = useCallback((key: TreeEngineKey, el: HTMLDivElement | null) => {
+    if (el) nodeRefs.current.set(key, el);
+    else nodeRefs.current.delete(key);
+  }, []);
 
   // Find node helper
   const findNode = useCallback(
     (key: TreeEngineKey): TreeDataNode | undefined => findNodeByKey(treeData, key),
-    [treeData],
+    [treeData]
   );
 
   // Parent map
@@ -562,13 +578,11 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
 
   // State
   const [expandedKeys, setExpandedKeys] = useState<TreeEngineKey[]>(
-    defaultExpandAll ? collectAllKeys(treeData) : defaultExpandedKeys.map(normalizeTreeKey),
+    defaultExpandAll ? collectAllKeys(treeData) : defaultExpandedKeys.map(normalizeTreeKey)
   );
-  const [selectedKeys, setSelectedKeys] = useState<TreeEngineKey[]>(
-    defaultSelectedKeys.map(normalizeTreeKey),
-  );
+  const [selectedKeys, setSelectedKeys] = useState<TreeEngineKey[]>(defaultSelectedKeys.map(normalizeTreeKey));
   const [checkedKeys, setCheckedKeys] = useState<TreeEngineKey[]>(
-    Array.isArray(defaultCheckedKeys) ? defaultCheckedKeys.map(normalizeTreeKey) : [],
+    Array.isArray(defaultCheckedKeys) ? defaultCheckedKeys.map(normalizeTreeKey) : []
   );
   const [focusedKey, setFocusedKey] = useState<TreeEngineKey | null>(null);
   const [loadingKeys, setLoadingKeys] = useState<TreeEngineKey[]>([]);
@@ -581,15 +595,11 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   // Resolve controlled vs uncontrolled -- when the consumer provides controlled
   // keys we normalize them on every render (cheap string coercion). When
   // uncontrolled, internal state is the source of truth.
-  const actualExpandedKeys = controlledExpandedKeys
-    ? controlledExpandedKeys.map(normalizeTreeKey)
-    : expandedKeys;
-  const actualSelectedKeys = controlledSelectedKeys
-    ? controlledSelectedKeys.map(normalizeTreeKey)
-    : selectedKeys;
+  const actualExpandedKeys = controlledExpandedKeys ? controlledExpandedKeys.map(normalizeTreeKey) : expandedKeys;
+  const actualSelectedKeys = controlledSelectedKeys ? controlledSelectedKeys.map(normalizeTreeKey) : selectedKeys;
   const actualCheckedKeys = Array.isArray(controlledCheckedKeys)
     ? controlledCheckedKeys.map(normalizeTreeKey)
-    : (controlledCheckedKeys?.checked.map(normalizeTreeKey) ?? checkedKeys);
+    : controlledCheckedKeys?.checked.map(normalizeTreeKey) ?? checkedKeys;
 
   // Half-checked (indeterminate) keys: a parent is half-checked when some but
   // not all of its descendants are checked. Skipped in strict mode because
@@ -622,10 +632,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   // Flatten the tree into a linear list of keys representing the currently
   // visible nodes (respecting which branches are expanded). This powers
   // ArrowUp/ArrowDown keyboard navigation with O(1) index lookups.
-  const visibleKeys = useMemo(
-    () => flattenVisibleKeys(treeData, actualExpandedKeys),
-    [treeData, actualExpandedKeys],
-  );
+  const visibleKeys = useMemo(() => flattenVisibleKeys(treeData, actualExpandedKeys), [treeData, actualExpandedKeys]);
 
   // -----------------------------------------------------------------------
   // Event handlers
@@ -634,9 +641,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
   const handleToggle = useCallback(
     async (key: TreeEngineKey) => {
       const isExpanding = !actualExpandedKeys.includes(key);
-      const newKeys = isExpanding
-        ? [...actualExpandedKeys, key]
-        : actualExpandedKeys.filter((k) => k !== key);
+      const newKeys = isExpanding ? [...actualExpandedKeys, key] : actualExpandedKeys.filter((k) => k !== key);
       setExpandedKeys(newKeys);
 
       const node = findNode(key);
@@ -658,19 +663,20 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         }
       }
     },
-    [actualExpandedKeys, findNode, onExpand, loadData],
+    [actualExpandedKeys, findNode, onExpand, loadData]
   );
 
   const handleSelect = useCallback(
     (key: TreeEngineKey, node: TreeDataNode) => {
       if (node.selectable === false) return;
-      const newKeys = actualSelectedKeys.includes(key)
-        ? actualSelectedKeys.filter((k) => k !== key)
-        : [key];
+      const newKeys = actualSelectedKeys.includes(key) ? actualSelectedKeys.filter((k) => k !== key) : [key];
       setSelectedKeys(newKeys);
-      onSelect?.(newKeys, { node, selected: !actualSelectedKeys.includes(key) });
+      onSelect?.(newKeys, {
+        node,
+        selected: !actualSelectedKeys.includes(key),
+      });
     },
-    [actualSelectedKeys, onSelect],
+    [actualSelectedKeys, onSelect]
   );
 
   const handleCheck = useCallback(
@@ -706,9 +712,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
           for (const [childK, parentK] of parentMap) {
             const parentNode = findNode(parentK);
             if (!parentNode || !parentNode.children) continue;
-            const allChildrenChecked = parentNode.children.every((c) =>
-              newChecked.includes(normalizeTreeKey(c.key)),
-            );
+            const allChildrenChecked = parentNode.children.every((c) => newChecked.includes(normalizeTreeKey(c.key)));
             if (allChildrenChecked && !newChecked.includes(parentK)) {
               newChecked.push(parentK);
               changed = true;
@@ -722,13 +726,10 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         setCheckedKeys(newChecked);
 
         const newHalfChecked = computeHalfCheckedKeys(treeData, newChecked, parentMap);
-        onCheck?.(
-          { checked: newChecked, halfChecked: newHalfChecked },
-          { node, checked: isChecking },
-        );
+        onCheck?.({ checked: newChecked, halfChecked: newHalfChecked }, { node, checked: isChecking });
       }
     },
-    [actualCheckedKeys, treeCheckStrictly, parentMap, findNode, treeData, onCheck],
+    [actualCheckedKeys, treeCheckStrictly, parentMap, findNode, treeData, onCheck]
   );
 
   // -----------------------------------------------------------------------
@@ -746,7 +747,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       const node = findNode(key);
       if (node) onDragStart?.({ node });
     },
-    [findNode, onDragStart],
+    [findNode, onDragStart]
   );
 
   const handleDragOver = useCallback(
@@ -768,7 +769,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       }
       setDropTarget({ key, position });
     },
-    [dragKey],
+    [dragKey]
   );
 
   const handleDrop = useCallback(
@@ -787,7 +788,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       setDragKey(null);
       setDropTarget(null);
     },
-    [dragKey, dropTarget, findNode, onDrop],
+    [dragKey, dropTarget, findNode, onDrop]
   );
 
   const handleDragEnd = useCallback(() => {
@@ -885,7 +886,7 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       handleToggle,
       handleCheck,
       handleSelect,
-    ],
+    ]
   );
 
   // -----------------------------------------------------------------------
@@ -903,9 +904,6 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       onKeyDown={handleKeyDown}
       tabIndex={-1}
     >
-      {/* Inline keyframe for the drop indicator's expand-from-center animation.
-          Injected via dangerouslySetInnerHTML to avoid needing a global CSS file. */}
-      <style dangerouslySetInnerHTML={{ __html: `@keyframes rottay-drop-indicator{from{opacity:0;transform:scaleX(0.3)}to{opacity:1;transform:scaleX(1)}}` }} />
       {treeData.map((node, index) => {
         const { key: rawNodeKey, ...nodeRest } = node;
         const nodeKey = normalizeTreeKey(rawNodeKey);

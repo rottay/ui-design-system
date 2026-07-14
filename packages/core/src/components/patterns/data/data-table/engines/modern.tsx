@@ -93,9 +93,7 @@ type InlineEditorControls = {
  * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
  * @returns A data table rendered with DS-token-styled native HTML elements.
  */
-export default function ModernDataTable<T extends object>(
-  props: DataTablePatternProps<T>
-) {
+export default function ModernDataTable<T extends object>(props: DataTablePatternProps<T>) {
   const {
     data,
     columns,
@@ -198,7 +196,7 @@ export default function ModernDataTable<T extends object>(
         setInternalEditingCell(cell);
       }
     },
-    [controlledEditingCell],
+    [controlledEditingCell]
   );
 
   // --- Column resize state ---
@@ -232,20 +230,18 @@ export default function ModernDataTable<T extends object>(
   // Derived values
   // ---------------------------------------------------------------------------
 
-  const getRowKey = useCallback(
-    (row: T, index: number) => resolveRowKey(row, rowKey, index),
-    [rowKey]
-  );
+  const getRowKey = useCallback((row: T, index: number) => resolveRowKey(row, rowKey, index), [rowKey]);
 
   const selectionCellPadding = SELECTION_CELL_PADDING_MAP[density] ?? SELECTION_CELL_PADDING_MAP.comfortable;
-  const leadingDataColumnPadding = LEADING_DATA_COLUMN_PADDING_MAP[density] ?? LEADING_DATA_COLUMN_PADDING_MAP.comfortable;
+  const leadingDataColumnPadding =
+    LEADING_DATA_COLUMN_PADDING_MAP[density] ?? LEADING_DATA_COLUMN_PADDING_MAP.comfortable;
   const actionCellPadding = ACTION_CELL_PADDING_MAP[density] ?? ACTION_CELL_PADDING_MAP.comfortable;
   const resolvedSelectionColumnWidth = 22;
   const resolvedActionsColumnWidth = actionsColumnWidth ?? 120;
   const resolveColumnWidth = useCallback(
     (col: NonNullable<DataTablePatternProps<T>['columns']>[number]) =>
       columnWidths?.[col.key] ?? col.width ?? (resizable ? col.minWidth : undefined),
-    [columnWidths, resizable],
+    [columnWidths, resizable]
   );
 
   // --- Process columns: visibility filter -> reorder sort ---
@@ -256,9 +252,7 @@ export default function ModernDataTable<T extends object>(
     if (columnVisibility && visibleColumnKeys) {
       const lockedSet = new Set(lockedColumns ?? []);
       const visibleSet = new Set(visibleColumnKeys);
-      cols = cols.filter(
-        (col) => lockedSet.has(col.key) || visibleSet.has(col.key)
-      );
+      cols = cols.filter((col) => lockedSet.has(col.key) || visibleSet.has(col.key));
     }
 
     // 2. Column reordering
@@ -275,10 +269,7 @@ export default function ModernDataTable<T extends object>(
   }, [columns, columnVisibility, visibleColumnKeys, lockedColumns, reorderable, columnOrder]);
 
   // Pre-filter once so the render loop and colSpan calculations always agree.
-  const visibleColumns = useMemo(
-    () => processedColumns.filter((c) => c.visible !== false),
-    [processedColumns]
-  );
+  const visibleColumns = useMemo(() => processedColumns.filter((c) => c.visible !== false), [processedColumns]);
 
   // ---------------------------------------------------------------------------
   // Inline editing helpers
@@ -303,7 +294,7 @@ export default function ModernDataTable<T extends object>(
         return prevIdx >= 0 ? editableCols[prevIdx].key : null;
       }
     },
-    [visibleColumns],
+    [visibleColumns]
   );
 
   /** Discard the current inline edit without saving the draft value. */
@@ -343,7 +334,7 @@ export default function ModernDataTable<T extends object>(
       setEditingCell({ rowKey: rk, columnKey: colKey });
       onCellEditStart?.(row, colKey);
     },
-    [discardActiveInlineEdit, editingCell, savingCell, visibleColumns, setEditingCell, onCellEditStart],
+    [discardActiveInlineEdit, editingCell, savingCell, visibleColumns, setEditingCell, onCellEditStart]
   );
 
   /** Handle saving a cell value from the inline editor. */
@@ -367,7 +358,7 @@ export default function ModernDataTable<T extends object>(
         setSavingCell(null);
       }
     },
-    [visibleColumns, onCellEdit, setEditingCell],
+    [visibleColumns, onCellEdit, setEditingCell]
   );
 
   /** Handle cancelling inline editing. */
@@ -378,7 +369,7 @@ export default function ModernDataTable<T extends object>(
       activeInlineEditRef.current = null;
       setEditingCell(null);
     },
-    [onCellEditCancel, setEditingCell],
+    [onCellEditCancel, setEditingCell]
   );
 
   // ---------------------------------------------------------------------------
@@ -387,9 +378,10 @@ export default function ModernDataTable<T extends object>(
 
   // Resolve container height from maxHeight for the virtual scroll hook.
   // Only activate when both `virtualized` and a numeric `maxHeight` are set.
-  const resolvedContainerHeight = typeof maxHeight === 'number'
-    ? maxHeight
-    : typeof maxHeight === 'string' && maxHeight.endsWith('px')
+  const resolvedContainerHeight =
+    typeof maxHeight === 'number'
+      ? maxHeight
+      : typeof maxHeight === 'string' && maxHeight.endsWith('px')
       ? parseInt(maxHeight, 10)
       : 600; // sensible fallback when maxHeight is a CSS value like "60vh"
 
@@ -401,16 +393,14 @@ export default function ModernDataTable<T extends object>(
   });
 
   // When virtualized, only render the visible slice of data.
-  const virtualizedData = virtualized
-    ? data.slice(virtualScroll.startIndex, virtualScroll.endIndex)
-    : data;
+  const virtualizedData = virtualized ? data.slice(virtualScroll.startIndex, virtualScroll.endIndex) : data;
 
   // Bottom spacer height: total height minus offset of rendered rows minus
   // rendered rows' total height.
   const virtualBottomSpacerHeight = virtualized
-    ? virtualScroll.totalHeight
-      - virtualScroll.offsetTop
-      - (virtualScroll.endIndex - virtualScroll.startIndex) * virtualRowHeight
+    ? virtualScroll.totalHeight -
+      virtualScroll.offsetTop -
+      (virtualScroll.endIndex - virtualScroll.startIndex) * virtualRowHeight
     : 0;
 
   // ---------------------------------------------------------------------------
@@ -507,9 +497,7 @@ export default function ModernDataTable<T extends object>(
 
         if (!targetKey || targetKey === sourceKey) return;
 
-        const currentOrder = columnOrder && columnOrder.length > 0
-          ? columnOrder
-          : processedColumns.map((c) => c.key);
+        const currentOrder = columnOrder && columnOrder.length > 0 ? columnOrder : processedColumns.map((c) => c.key);
         const newOrder = [...currentOrder];
         const sourceIdx = newOrder.indexOf(sourceKey);
         const targetIdx = newOrder.indexOf(targetKey);
@@ -545,7 +533,7 @@ export default function ModernDataTable<T extends object>(
       e.dataTransfer.setData('text/plain', key);
       setDragSourceKey(key);
     },
-    [reorderable, onColumnReorder],
+    [reorderable, onColumnReorder]
   );
 
   const handleHeaderDragOver = useCallback(
@@ -555,7 +543,7 @@ export default function ModernDataTable<T extends object>(
       e.dataTransfer.dropEffect = 'move';
       setDragOverKey(key);
     },
-    [dragSourceKey],
+    [dragSourceKey]
   );
 
   const handleHeaderDrop = useCallback(
@@ -567,9 +555,7 @@ export default function ModernDataTable<T extends object>(
 
       if (!sourceKey || sourceKey === targetKey || !onColumnReorder) return;
 
-      const currentOrder = columnOrder && columnOrder.length > 0
-        ? columnOrder
-        : processedColumns.map((c) => c.key);
+      const currentOrder = columnOrder && columnOrder.length > 0 ? columnOrder : processedColumns.map((c) => c.key);
       const newOrder = [...currentOrder];
       const sourceIdx = newOrder.indexOf(sourceKey);
       const targetIdx = newOrder.indexOf(targetKey);
@@ -579,7 +565,7 @@ export default function ModernDataTable<T extends object>(
       newOrder.splice(targetIdx, 0, sourceKey);
       onColumnReorder(newOrder);
     },
-    [columnOrder, dragSourceKey, onColumnReorder, processedColumns],
+    [columnOrder, dragSourceKey, onColumnReorder, processedColumns]
   );
 
   const handleHeaderDragEnd = useCallback(() => {
@@ -605,17 +591,14 @@ export default function ModernDataTable<T extends object>(
   );
 
   /** Build sticky style for a pinned cell */
-  const getPinnedStyle = useCallback(
-    (side: 'left' | 'right' | undefined): React.CSSProperties => {
-      if (!side) return {};
-      return {
-        position: 'sticky',
-        [side]: 0,
-        zIndex: 2,
-      };
-    },
-    []
-  );
+  const getPinnedStyle = useCallback((side: 'left' | 'right' | undefined): React.CSSProperties => {
+    if (!side) return {};
+    return {
+      position: 'sticky',
+      [side]: 0,
+      zIndex: 2,
+    };
+  }, []);
 
   // ---------------------------------------------------------------------------
   // Selection handlers
@@ -624,9 +607,7 @@ export default function ModernDataTable<T extends object>(
   // Toggle individual row selection. We re-derive the full selected rows array
   // from keys rather than caching it, because data can change between renders.
   const toggleSelection = (key: string, _row: T) => {
-    const next = selectedKeys.includes(key)
-      ? selectedKeys.filter((k) => k !== key)
-      : [...selectedKeys, key];
+    const next = selectedKeys.includes(key) ? selectedKeys.filter((k) => k !== key) : [...selectedKeys, key];
     if (!controlledSelectedKeys) setInternalSelectedKeys(next);
     const selectedRows = data.filter((r, i) => next.includes(getRowKey(r, i)));
     onSelectionChange?.(next, selectedRows);
@@ -652,7 +633,10 @@ export default function ModernDataTable<T extends object>(
   const handleSort = (key: string) => {
     if (!onSortChange) return;
     if (sorting?.key === key) {
-      onSortChange({ key, direction: sorting.direction === 'asc' ? 'desc' : 'asc' });
+      onSortChange({
+        key,
+        direction: sorting.direction === 'asc' ? 'desc' : 'asc',
+      });
     } else {
       onSortChange({ key, direction: 'asc' });
     }
@@ -729,13 +713,8 @@ export default function ModernDataTable<T extends object>(
       const target = event.target;
       const isElementTarget = target instanceof Element;
       const isEditableCellClick =
-        editTrigger === 'doubleClick'
-        && isElementTarget
-        && Boolean(target.closest('td[data-editable="true"]'));
-      const isEditingAwayClick =
-        Boolean(editingCell)
-        && isElementTarget
-        && !target.closest('td[data-editing="true"]');
+        editTrigger === 'doubleClick' && isElementTarget && Boolean(target.closest('td[data-editable="true"]'));
+      const isEditingAwayClick = Boolean(editingCell) && isElementTarget && !target.closest('td[data-editing="true"]');
 
       if (isEditableCellClick || isEditingAwayClick) {
         clearPendingEditableRowClick();
@@ -749,7 +728,7 @@ export default function ModernDataTable<T extends object>(
       clearPendingEditableRowClick();
       onRowClick(row, index);
     },
-    [clearPendingEditableRowClick, editTrigger, editingCell, onRowClick],
+    [clearPendingEditableRowClick, editTrigger, editingCell, onRowClick]
   );
 
   /** A double-click away from the active editor abandons its unsaved draft. */
@@ -763,7 +742,7 @@ export default function ModernDataTable<T extends object>(
 
       discardActiveInlineEdit();
     },
-    [clearPendingEditableRowClick, discardActiveInlineEdit, editingCell, savingCell],
+    [clearPendingEditableRowClick, discardActiveInlineEdit, editingCell, savingCell]
   );
 
   useEffect(() => clearPendingEditableRowClick, [clearPendingEditableRowClick]);
@@ -772,81 +751,79 @@ export default function ModernDataTable<T extends object>(
     inlineEditorControlsRef.current = null;
   }, [editingCell?.rowKey, editingCell?.columnKey]);
 
-  const renderInlineEditActions = useCallback(
-    (isSaving: boolean) => {
-      const buttonBaseStyle: React.CSSProperties = {
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: 30,
-        height: 30,
-        padding: 0,
-        cursor: isSaving ? 'wait' : 'pointer',
-        transition: 'background var(--ds-motion-fast) ease, border-color var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease, opacity var(--ds-motion-fast) ease',
-      };
+  const renderInlineEditActions = useCallback((isSaving: boolean) => {
+    const buttonBaseStyle: React.CSSProperties = {
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 30,
+      height: 30,
+      padding: 0,
+      cursor: isSaving ? 'wait' : 'pointer',
+      transition:
+        'background var(--ds-motion-fast) ease, border-color var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease, opacity var(--ds-motion-fast) ease',
+    };
 
-      const stopActionEvent = (event: React.SyntheticEvent) => {
-        event.preventDefault();
-        event.stopPropagation();
-      };
+    const stopActionEvent = (event: React.SyntheticEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+    };
 
-      return (
-        <span
-          aria-label="Inline edit actions"
+    return (
+      <span
+        aria-label="Inline edit actions"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+          gap: 6,
+          minWidth: 0,
+          width: '100%',
+        }}
+      >
+        <button
+          type="button"
+          aria-label={isSaving ? 'Saving edit' : 'Save edit'}
+          title={isSaving ? 'Saving edit' : 'Save edit'}
+          disabled={isSaving}
+          data-part="inline-edit-action"
+          data-variant="save"
+          onPointerDown={stopActionEvent}
+          onMouseDown={stopActionEvent}
+          onClick={(event) => {
+            stopActionEvent(event);
+            if (!isSaving) inlineEditorControlsRef.current?.save();
+          }}
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            gap: 6,
-            minWidth: 0,
-            width: '100%',
+            ...buttonBaseStyle,
+            opacity: isSaving ? 0.72 : 1,
           }}
         >
-          <button
-            type="button"
-            aria-label={isSaving ? 'Saving edit' : 'Save edit'}
-            title={isSaving ? 'Saving edit' : 'Save edit'}
-            disabled={isSaving}
-            data-part="inline-edit-action"
-            data-variant="save"
-            onPointerDown={stopActionEvent}
-            onMouseDown={stopActionEvent}
-            onClick={(event) => {
-              stopActionEvent(event);
-              if (!isSaving) inlineEditorControlsRef.current?.save();
-            }}
-            style={{
-              ...buttonBaseStyle,
-              opacity: isSaving ? 0.72 : 1,
-            }}
-          >
-            <Check size={15} strokeWidth={2.4} aria-hidden />
-          </button>
-          <button
-            type="button"
-            aria-label="Cancel edit"
-            title="Cancel edit"
-            disabled={isSaving}
-            data-part="inline-edit-action"
-            data-variant="cancel"
-            onPointerDown={stopActionEvent}
-            onMouseDown={stopActionEvent}
-            onClick={(event) => {
-              stopActionEvent(event);
-              if (!isSaving) inlineEditorControlsRef.current?.cancel();
-            }}
-            style={{
-              ...buttonBaseStyle,
-              opacity: isSaving ? 0.5 : 1,
-            }}
-          >
-            <X size={15} strokeWidth={2.4} aria-hidden />
-          </button>
-        </span>
-      );
-    },
-    [],
-  );
+          <Check size={15} strokeWidth={2.4} aria-hidden />
+        </button>
+        <button
+          type="button"
+          aria-label="Cancel edit"
+          title="Cancel edit"
+          disabled={isSaving}
+          data-part="inline-edit-action"
+          data-variant="cancel"
+          onPointerDown={stopActionEvent}
+          onMouseDown={stopActionEvent}
+          onClick={(event) => {
+            stopActionEvent(event);
+            if (!isSaving) inlineEditorControlsRef.current?.cancel();
+          }}
+          style={{
+            ...buttonBaseStyle,
+            opacity: isSaving ? 0.5 : 1,
+          }}
+        >
+          <X size={15} strokeWidth={2.4} aria-hidden />
+        </button>
+      </span>
+    );
+  }, []);
 
   // Focus the active row element when activeRowIndex changes
   useEffect(() => {
@@ -869,11 +846,7 @@ export default function ModernDataTable<T extends object>(
   const tableClasses = 'ds-modern-table';
 
   // Total column count for colSpan (selection + expand + data + actions)
-  const totalColSpan =
-    visibleColumns.length +
-    (selectable ? 1 : 0) +
-    (expandedRow ? 1 : 0) +
-    (actions ? 1 : 0);
+  const totalColSpan = visibleColumns.length + (selectable ? 1 : 0) + (expandedRow ? 1 : 0) + (actions ? 1 : 0);
 
   // ---------------------------------------------------------------------------
   // Render
@@ -895,83 +868,6 @@ export default function ModernDataTable<T extends object>(
         ...style,
       }}
     >
-      {/* Premium polish styles for resize handles, row hover, keyboard nav, etc. */}
-      <style>{`
-        .ds-engine-modern .ds-resize-handle:hover .ds-resize-handle__bar,
-        .ds-engine-modern .ds-resize-handle:focus-visible .ds-resize-handle__bar {
-          width: 3px !important;
-          background: var(--ds-color-primary) !important;
-        }
-        .ds-engine-modern .ds-resize-handle:focus-visible {
-          outline: 2px solid var(--ds-color-primary);
-          outline-offset: -2px;
-          border-radius: 2px;
-        }
-        .ds-engine-modern th[data-col-key]:hover {
-          background-color: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
-        }
-        .ds-engine-modern th[data-col-key][data-sortable="true"]:focus-visible {
-          outline: 2px solid var(--ds-color-primary);
-          outline-offset: -2px;
-          border-radius: 2px;
-        }
-        .ds-engine-modern tr[data-row-index]:focus-visible {
-          outline: none;
-          box-shadow: inset 3px 0 0 0 var(--ds-color-primary);
-          background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent) !important;
-        }
-        .ds-engine-modern td[data-editable="true"] {
-          cursor: text;
-          transition:
-            background-color var(--ds-motion-fast) ease,
-            box-shadow var(--ds-motion-fast) ease,
-            transform var(--ds-motion-fast) ease;
-        }
-        .ds-engine-modern td[data-editable="true"]:hover::after {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 2px;
-          background: var(--ds-color-primary);
-          opacity: 0.4;
-          pointer-events: none;
-        }
-        .ds-engine-modern td[data-editable="true"]:hover {
-          background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
-          box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
-        }
-        .ds-engine-modern td[data-editing="true"] {
-          overflow: visible !important;
-          padding: 4px 6px !important;
-          background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)) !important;
-          box-shadow:
-            inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent),
-            0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
-          animation: ds-inline-edit-enter var(--ds-motion-normal) var(--ds-motion-ease-out);
-        }
-        @keyframes ds-inline-edit-enter {
-          from {
-            transform: scale(0.985);
-            opacity: 0.78;
-          }
-          to {
-            transform: scale(1);
-            opacity: 1;
-          }
-        }
-        .ds-engine-modern td[data-cell-dirty="true"]::before {
-          content: '';
-          position: absolute;
-          left: 0;
-          top: 0;
-          bottom: 0;
-          width: 3px;
-          background: var(--ds-color-warning);
-          pointer-events: none;
-        }
-      `}</style>
       {header}
 
       {/* Toolbar slot */}
@@ -999,9 +895,7 @@ export default function ModernDataTable<T extends object>(
             scrollbarGutter: 'stable both-edges',
             overscrollBehavior: 'contain',
             minWidth: 0,
-            ...(maxHeight
-              ? { maxHeight, overflowY: 'auto' as const }
-              : { overflowY: 'hidden' as const }),
+            ...(maxHeight ? { maxHeight, overflowY: 'auto' as const } : { overflowY: 'hidden' as const }),
           }}
         >
           {/* Loading state: skeleton rows with shimmer animation */}
@@ -1039,7 +933,7 @@ export default function ModernDataTable<T extends object>(
                     display: 'flex',
                     gap: 16,
                     padding: '16px 16px',
-                    animation: 'ds-shimmer 1.8s ease-in-out infinite',
+                    animation: 'ds-data-table-shimmer 1.8s ease-in-out infinite',
                     animationDelay: `${i * 100}ms`,
                   }}
                 >
@@ -1055,13 +949,6 @@ export default function ModernDataTable<T extends object>(
                   ))}
                 </div>
               ))}
-              {/* Inline keyframes for skeleton shimmer */}
-              <style>{`
-                @keyframes ds-shimmer {
-                  0%, 100% { opacity: 1; }
-                  50% { opacity: 0.35; }
-                }
-              `}</style>
             </div>
           ) : data.length === 0 ? (
             /* Empty state: centered, muted, generous padding */
@@ -1148,10 +1035,7 @@ export default function ModernDataTable<T extends object>(
                   zIndex: stickyHeader ? 10 : undefined,
                 }}
               >
-                <tr
-                  ref={headerRowRef}
-                  data-part="header-row"
-                >
+                <tr ref={headerRowRef} data-part="header-row">
                   {/* Select-all checkbox */}
                   {selectable && (
                     <th
@@ -1231,11 +1115,21 @@ export default function ModernDataTable<T extends object>(
                         data-sortable={col.sortable ? 'true' : undefined}
                         data-part="header-cell"
                         data-pinned={pinSide ? 'true' : 'false'}
-                        data-drag-over={dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key ? 'true' : 'false'}
+                        data-drag-over={
+                          dragOverKey === col.key && dragSourceKey && dragSourceKey !== col.key ? 'true' : 'false'
+                        }
                         draggable={reorderable && !!onColumnReorder}
-                        title={reorderable && onColumnReorder ? `Drag header to move ${typeof col.header === 'string' ? col.header : col.key}` : undefined}
-                        onDragStart={reorderable && onColumnReorder ? (e) => handleHeaderDragStart(e, col.key) : undefined}
-                        onDragOver={reorderable && onColumnReorder ? (e) => handleHeaderDragOver(e, col.key) : undefined}
+                        title={
+                          reorderable && onColumnReorder
+                            ? `Drag header to move ${typeof col.header === 'string' ? col.header : col.key}`
+                            : undefined
+                        }
+                        onDragStart={
+                          reorderable && onColumnReorder ? (e) => handleHeaderDragStart(e, col.key) : undefined
+                        }
+                        onDragOver={
+                          reorderable && onColumnReorder ? (e) => handleHeaderDragOver(e, col.key) : undefined
+                        }
                         onDrop={reorderable && onColumnReorder ? (e) => handleHeaderDrop(e, col.key) : undefined}
                         onDragEnd={reorderable && onColumnReorder ? handleHeaderDragEnd : undefined}
                         onClick={col.sortable ? () => handleSort(col.key) : undefined}
@@ -1271,7 +1165,9 @@ export default function ModernDataTable<T extends object>(
                                 padding: 0,
                                 transition: `opacity var(--ds-motion-fast), border-color var(--ds-motion-fast), background-color var(--ds-motion-fast)`,
                               }}
-                              aria-label={`Drag to reorder column ${typeof col.header === 'string' ? col.header : col.key}`}
+                              aria-label={`Drag to reorder column ${
+                                typeof col.header === 'string' ? col.header : col.key
+                              }`}
                               role="button"
                             >
                               <GripVertical size={13} strokeWidth={2.2} aria-hidden />
@@ -1361,28 +1257,17 @@ export default function ModernDataTable<T extends object>(
                             }}
                             onMouseDown={(e) => {
                               e.stopPropagation();
-                              handleResizeStart(
-                                e,
-                                col.key,
-                                typeof resolvedWidth === 'number' ? resolvedWidth : 150
-                              );
+                              handleResizeStart(e, col.key, typeof resolvedWidth === 'number' ? resolvedWidth : 150);
                             }}
                             onKeyDown={(e) => {
                               if (!onColumnResize) return;
-                              const currentW =
-                                typeof resolvedWidth === 'number' ? resolvedWidth : 150;
+                              const currentW = typeof resolvedWidth === 'number' ? resolvedWidth : 150;
                               if (e.key === 'ArrowRight') {
                                 e.preventDefault();
-                                onColumnResize(
-                                  col.key,
-                                  Math.min(currentW + 10, col.maxWidth ?? 1000)
-                                );
+                                onColumnResize(col.key, Math.min(currentW + 10, col.maxWidth ?? 1000));
                               } else if (e.key === 'ArrowLeft') {
                                 e.preventDefault();
-                                onColumnResize(
-                                  col.key,
-                                  Math.max(currentW - 10, col.minWidth ?? 50)
-                                );
+                                onColumnResize(col.key, Math.max(currentW - 10, col.minWidth ?? 50));
                               }
                             }}
                             onClick={(e) => e.stopPropagation()}
@@ -1429,298 +1314,297 @@ export default function ModernDataTable<T extends object>(
                 {/* --------------------------------------------------------- */}
                 {/* Grouped rendering: group headers + collapsible sections    */}
                 {/* --------------------------------------------------------- */}
-                {isGrouped && (() => {
-                  let globalIndex = 0;
+                {isGrouped &&
+                  (() => {
+                    let globalIndex = 0;
 
-                  return sections.map((section, sectionIndex) => {
-                    const isCollapsed = collapsedGroups.has(section.groupValue);
-                    const isLastSection = sectionIndex === sections.length - 1;
+                    return sections.map((section, sectionIndex) => {
+                      const isCollapsed = collapsedGroups.has(section.groupValue);
+                      const isLastSection = sectionIndex === sections.length - 1;
 
-                    // Build aggregate summary chips for the default header
-                    const aggregateChips = Object.entries(section.aggregates).map(
-                      ([colKey, value]) => {
+                      // Build aggregate summary chips for the default header
+                      const aggregateChips = Object.entries(section.aggregates).map(([colKey, value]) => {
                         const col = visibleColumns.find((c) => c.key === colKey);
-                        const label = col
-                          ? (typeof col.header === 'string' ? col.header : colKey)
-                          : colKey;
+                        const label = col ? (typeof col.header === 'string' ? col.header : colKey) : colKey;
                         return `${label}: ${String(value ?? '')}`;
-                      },
-                    );
+                      });
 
-                    const sectionStartIndex = globalIndex;
-                    const sectionRows: React.ReactElement[] = [];
+                      const sectionStartIndex = globalIndex;
+                      const sectionRows: React.ReactElement[] = [];
 
-                    // -- Data rows (hidden when collapsed) --
-                    if (!isCollapsed) {
-                      section.items.forEach((row, localIndex) => {
-                        const index = sectionStartIndex + localIndex;
-                        const key = getRowKey(row, index);
-                        const isRowExpanded = expandedKeys.has(key);
-                        const isSelected = selectedKeys.includes(key);
-                        const isRowEditing = editingCell?.rowKey === key;
-                        const isRowSaving = savingCell?.rowKey === key;
-                        const isLastRowInSection = localIndex === section.items.length - 1;
-                        const isLastRowOverall = isLastSection && isLastRowInSection;
+                      // -- Data rows (hidden when collapsed) --
+                      if (!isCollapsed) {
+                        section.items.forEach((row, localIndex) => {
+                          const index = sectionStartIndex + localIndex;
+                          const key = getRowKey(row, index);
+                          const isRowExpanded = expandedKeys.has(key);
+                          const isSelected = selectedKeys.includes(key);
+                          const isRowEditing = editingCell?.rowKey === key;
+                          const isRowSaving = savingCell?.rowKey === key;
+                          const isLastRowInSection = localIndex === section.items.length - 1;
+                          const isLastRowOverall = isLastSection && isLastRowInSection;
 
-                        sectionRows.push(
-                          <React.Fragment key={key}>
-                            <tr
-                              data-row-index={index}
-                              data-part="body-row"
-                              data-selected={isSelected ? 'true' : 'false'}
-                              data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
-                              data-hoverable={hoverable ? 'true' : 'false'}
-                              data-last={isLastRowOverall ? 'true' : 'false'}
-                              tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
-                              role="row"
-                              onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
-                              onDoubleClick={handleEditAbandonDoubleClick}
-                              onKeyDown={(e) => handleRowKeyDown(e, row, index)}
-                              onFocus={() => setActiveRowIndex(index)}
-                              style={{
-                                cursor: onRowClick ? 'pointer' : undefined,
-                                transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                              }}
-                            >
-                              {selectable && (
-                                <td
-                                  data-part="selection-cell"
-                                  style={{
-                                    padding: selectionCellPadding,
-                                    width: resolvedSelectionColumnWidth,
-                                    minWidth: resolvedSelectionColumnWidth,
-                                    maxWidth: resolvedSelectionColumnWidth,
-                                    boxSizing: 'border-box',
-                                    verticalAlign: 'middle',
-                                    textAlign: 'left',
-                                  }}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <ModernCheckbox
-                                    size="sm"
-                                    checked={isSelected}
-                                    onChange={() => toggleSelection(key, row)}
-                                  />
-                                </td>
-                              )}
-                              {expandedRow && (
-                                <td data-part="expand-cell" style={{ padding: densityPadding }}>
-                                  <button
-                                    data-part="expand-button"
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setExpandedKeys((prev) => {
-                                        const next = new Set(prev);
-                                        next.has(key) ? next.delete(key) : next.add(key);
-                                        return next;
-                                      });
-                                    }}
-                                    style={{
-                                      display: 'inline-flex',
-                                      alignItems: 'center',
-                                      justifyContent: 'center',
-                                      width: 24,
-                                      height: 24,
-                                      cursor: 'pointer',
-                                      fontSize: 12,
-                                      transition: `background var(--ds-motion-fast)`,
-                                    }}
-                                  >
-                                    {isRowExpanded ? '\u25BC' : '\u25B6'}
-                                  </button>
-                                </td>
-                              )}
-                              {/* Data cells (grouped path -- with inline editing) */}
-                              {visibleColumns.map((col, columnIndex) => {
-                                const pinSide = getPinSide(col.key, col.pin);
-                                const pinnedStyle = getPinnedStyle(pinSide);
-                                const resolvedWidth = resolveColumnWidth(col);
-                                const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
-
-                                const editableCfg = resolveEditableConfig(col.editable);
-                                const isCellEditable = editableCfg != null
-                                  && (!editableCfg.canEdit || editableCfg.canEdit(row));
-                                const isCellEditing = editingCell?.rowKey === key
-                                  && editingCell?.columnKey === col.key;
-                                const cellValue = resolveAccessor(col, row);
-
-                                const grpTriggerProps: Record<string, unknown> = {};
-                                if (isCellEditable && !isCellEditing) {
-                                  const handler = (e: React.MouseEvent) => {
-                                    clearPendingEditableRowClick();
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    enterEditMode(key, col.key, row);
-                                  };
-                                  if (editTrigger === 'click') {
-                                    grpTriggerProps.onClick = handler;
-                                  } else {
-                                    grpTriggerProps.onDoubleClick = handler;
-                                  }
-                                }
-
-                                return (
+                          sectionRows.push(
+                            <React.Fragment key={key}>
+                              <tr
+                                data-row-index={index}
+                                data-part="body-row"
+                                data-selected={isSelected ? 'true' : 'false'}
+                                data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
+                                data-hoverable={hoverable ? 'true' : 'false'}
+                                data-last={isLastRowOverall ? 'true' : 'false'}
+                                tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
+                                role="row"
+                                onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
+                                onDoubleClick={handleEditAbandonDoubleClick}
+                                onKeyDown={(e) => handleRowKeyDown(e, row, index)}
+                                onFocus={() => setActiveRowIndex(index)}
+                                style={{
+                                  cursor: onRowClick ? 'pointer' : undefined,
+                                  transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+                                }}
+                              >
+                                {selectable && (
                                   <td
-                                    key={col.key}
-                                    data-col-priority={col.priority || undefined}
-                                    data-editable={isCellEditable ? 'true' : undefined}
-                                    data-editing={isCellEditing ? 'true' : undefined}
-                                    data-part="data-cell"
-                                    data-pinned={pinSide ? 'true' : 'false'}
-                                    title={isCellEditable && !isCellEditing
-                                      ? editTrigger === 'click'
-                                        ? 'Click to edit'
-                                        : 'Double-click to edit'
-                                      : undefined}
-                                    {...grpTriggerProps}
-                                    className={col.align === 'right' ? 'ds-nums-tabular' : undefined}
+                                    data-part="selection-cell"
                                     style={{
-                                      textAlign: col.align,
-                                      width: resolvedWidth,
-                                      minWidth: col.minWidth,
-                                      maxWidth: col.maxWidth,
-                                      padding: isCellEditing
-                                        ? '4px 6px'
-                                        : isLeadingDataColumn && selectable
+                                      padding: selectionCellPadding,
+                                      width: resolvedSelectionColumnWidth,
+                                      minWidth: resolvedSelectionColumnWidth,
+                                      maxWidth: resolvedSelectionColumnWidth,
+                                      boxSizing: 'border-box',
+                                      verticalAlign: 'middle',
+                                      textAlign: 'left',
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <ModernCheckbox
+                                      size="sm"
+                                      checked={isSelected}
+                                      onChange={() => toggleSelection(key, row)}
+                                    />
+                                  </td>
+                                )}
+                                {expandedRow && (
+                                  <td data-part="expand-cell" style={{ padding: densityPadding }}>
+                                    <button
+                                      data-part="expand-button"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setExpandedKeys((prev) => {
+                                          const next = new Set(prev);
+                                          next.has(key) ? next.delete(key) : next.add(key);
+                                          return next;
+                                        });
+                                      }}
+                                      style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        width: 24,
+                                        height: 24,
+                                        cursor: 'pointer',
+                                        fontSize: 12,
+                                        transition: `background var(--ds-motion-fast)`,
+                                      }}
+                                    >
+                                      {isRowExpanded ? '\u25BC' : '\u25B6'}
+                                    </button>
+                                  </td>
+                                )}
+                                {/* Data cells (grouped path -- with inline editing) */}
+                                {visibleColumns.map((col, columnIndex) => {
+                                  const pinSide = getPinSide(col.key, col.pin);
+                                  const pinnedStyle = getPinnedStyle(pinSide);
+                                  const resolvedWidth = resolveColumnWidth(col);
+                                  const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
+
+                                  const editableCfg = resolveEditableConfig(col.editable);
+                                  const isCellEditable =
+                                    editableCfg != null && (!editableCfg.canEdit || editableCfg.canEdit(row));
+                                  const isCellEditing =
+                                    editingCell?.rowKey === key && editingCell?.columnKey === col.key;
+                                  const cellValue = resolveAccessor(col, row);
+
+                                  const grpTriggerProps: Record<string, unknown> = {};
+                                  if (isCellEditable && !isCellEditing) {
+                                    const handler = (e: React.MouseEvent) => {
+                                      clearPendingEditableRowClick();
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      enterEditMode(key, col.key, row);
+                                    };
+                                    if (editTrigger === 'click') {
+                                      grpTriggerProps.onClick = handler;
+                                    } else {
+                                      grpTriggerProps.onDoubleClick = handler;
+                                    }
+                                  }
+
+                                  return (
+                                    <td
+                                      key={col.key}
+                                      data-col-priority={col.priority || undefined}
+                                      data-editable={isCellEditable ? 'true' : undefined}
+                                      data-editing={isCellEditing ? 'true' : undefined}
+                                      data-part="data-cell"
+                                      data-pinned={pinSide ? 'true' : 'false'}
+                                      title={
+                                        isCellEditable && !isCellEditing
+                                          ? editTrigger === 'click'
+                                            ? 'Click to edit'
+                                            : 'Double-click to edit'
+                                          : undefined
+                                      }
+                                      {...grpTriggerProps}
+                                      className={col.align === 'right' ? 'ds-nums-tabular' : undefined}
+                                      style={{
+                                        textAlign: col.align,
+                                        width: resolvedWidth,
+                                        minWidth: col.minWidth,
+                                        maxWidth: col.maxWidth,
+                                        padding: isCellEditing
+                                          ? '4px 6px'
+                                          : isLeadingDataColumn && selectable
                                           ? leadingDataColumnPadding
                                           : densityPadding,
-                                      position: (pinnedStyle.position as any)
-                                        || (isCellEditable ? 'relative' : undefined),
-                                      left: pinnedStyle.left as any,
-                                      right: pinnedStyle.right as any,
-                                      zIndex: pinnedStyle.zIndex as any,
-                                      overflow: isCellEditing ? 'visible' : 'hidden',
-                                      textOverflow: isCellEditing ? undefined : 'ellipsis',
-                                      whiteSpace: isCellEditing ? undefined : 'nowrap',
-                                      fontSize: 14,
-                                    }}
-                                  >
-                                    {isCellEditing && editableCfg ? (
-                                      <InlineCellEditor
-                                        value={cellValue}
-                                        row={row}
-                                        columnKey={col.key}
-                                        config={editableCfg}
-                                        onSave={(newValue) =>
-                                          handleCellSave(row, key, col.key, newValue, cellValue)
-                                        }
-                                        onCancel={() => handleCellCancel(row, col.key)}
-                                        onControlsChange={(controls) => {
-                                          if (editingCell?.rowKey === key && editingCell.columnKey === col.key) {
-                                            inlineEditorControlsRef.current = controls;
+                                        position:
+                                          (pinnedStyle.position as any) || (isCellEditable ? 'relative' : undefined),
+                                        left: pinnedStyle.left as any,
+                                        right: pinnedStyle.right as any,
+                                        zIndex: pinnedStyle.zIndex as any,
+                                        overflow: isCellEditing ? 'visible' : 'hidden',
+                                        textOverflow: isCellEditing ? undefined : 'ellipsis',
+                                        whiteSpace: isCellEditing ? undefined : 'nowrap',
+                                        fontSize: 14,
+                                      }}
+                                    >
+                                      {isCellEditing && editableCfg ? (
+                                        <InlineCellEditor
+                                          value={cellValue}
+                                          row={row}
+                                          columnKey={col.key}
+                                          config={editableCfg}
+                                          onSave={(newValue) => handleCellSave(row, key, col.key, newValue, cellValue)}
+                                          onCancel={() => handleCellCancel(row, col.key)}
+                                          onControlsChange={(controls) => {
+                                            if (editingCell?.rowKey === key && editingCell.columnKey === col.key) {
+                                              inlineEditorControlsRef.current = controls;
+                                            }
+                                          }}
+                                          onTabNext={
+                                            tabNavigation
+                                              ? () => {
+                                                  const nextCol = findAdjacentEditableCol(col.key, 'next', row);
+                                                  if (nextCol) {
+                                                    enterEditMode(key, nextCol, row);
+                                                  } else {
+                                                    setEditingCell(null);
+                                                  }
+                                                }
+                                              : undefined
                                           }
-                                        }}
-                                        onTabNext={
-                                          tabNavigation
-                                            ? () => {
-                                                const nextCol = findAdjacentEditableCol(
-                                                  col.key, 'next', row,
-                                                );
-                                                if (nextCol) {
-                                                  enterEditMode(key, nextCol, row);
-                                                } else {
-                                                  setEditingCell(null);
+                                          onTabPrev={
+                                            tabNavigation
+                                              ? () => {
+                                                  const prevCol = findAdjacentEditableCol(col.key, 'prev', row);
+                                                  if (prevCol) {
+                                                    enterEditMode(key, prevCol, row);
+                                                  } else {
+                                                    setEditingCell(null);
+                                                  }
                                                 }
-                                              }
-                                            : undefined
-                                        }
-                                        onTabPrev={
-                                          tabNavigation
-                                            ? () => {
-                                                const prevCol = findAdjacentEditableCol(
-                                                  col.key, 'prev', row,
-                                                );
-                                                if (prevCol) {
-                                                  enterEditMode(key, prevCol, row);
-                                                } else {
-                                                  setEditingCell(null);
-                                                }
-                                              }
-                                            : undefined
-                                        }
-                                      />
-                                    ) : col.render
-                                      ? col.render(cellValue, row, index)
-                                      : String(cellValue ?? '')}
-                                  </td>
-                                );
-                              })}
-                              {actions && (
-                                <td
-                                  data-part="actions-cell"
-                                  style={{
-                                    textAlign: 'right',
-                                    width: resolvedActionsColumnWidth,
-                                    minWidth: resolvedActionsColumnWidth,
-                                    padding: actionCellPadding,
-                                    position: 'sticky',
-                                    right: 0,
-                                    zIndex: 2,
-                                    whiteSpace: 'nowrap',
-                                  }}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  {isRowEditing
-                                    ? renderInlineEditActions(isRowSaving)
-                                    : actions(row, index)}
-                                </td>
-                              )}
-                            </tr>
-                            {expandedRow && isRowExpanded && (
-                              <tr>
-                                <td
-                                  colSpan={totalColSpan}
-                                  data-part="expanded-row"
-                                  data-last={isLastRowOverall ? 'true' : 'false'}
-                                  style={{
-                                    padding: 0,
-                                  }}
-                                >
-                                  <div
-                                    data-part="expanded-row-content"
+                                              : undefined
+                                          }
+                                        />
+                                      ) : col.render ? (
+                                        col.render(cellValue, row, index)
+                                      ) : (
+                                        String(cellValue ?? '')
+                                      )}
+                                    </td>
+                                  );
+                                })}
+                                {actions && (
+                                  <td
+                                    data-part="actions-cell"
                                     style={{
-                                      width: '100%',
-                                      padding: '12px 16px',
+                                      textAlign: 'right',
+                                      width: resolvedActionsColumnWidth,
+                                      minWidth: resolvedActionsColumnWidth,
+                                      padding: actionCellPadding,
+                                      position: 'sticky',
+                                      right: 0,
+                                      zIndex: 2,
+                                      whiteSpace: 'nowrap',
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {isRowEditing ? renderInlineEditActions(isRowSaving) : actions(row, index)}
+                                  </td>
+                                )}
+                              </tr>
+                              {expandedRow && isRowExpanded && (
+                                <tr>
+                                  <td
+                                    colSpan={totalColSpan}
+                                    data-part="expanded-row"
+                                    data-last={isLastRowOverall ? 'true' : 'false'}
+                                    style={{
+                                      padding: 0,
                                     }}
                                   >
-                                    {expandedRow(row)}
-                                  </div>
-                                </td>
-                              </tr>
-                            )}
-                          </React.Fragment>,
-                        );
-                      });
-                    }
+                                    <div
+                                      data-part="expanded-row-content"
+                                      style={{
+                                        width: '100%',
+                                        padding: '12px 16px',
+                                      }}
+                                    >
+                                      {expandedRow(row)}
+                                    </div>
+                                  </td>
+                                </tr>
+                              )}
+                            </React.Fragment>
+                          );
+                        });
+                      }
 
-                    globalIndex += section.items.length;
+                      globalIndex += section.items.length;
 
-                    return (
-                      <React.Fragment key={`group-${section.groupValue}`}>
-                        {/* Group header row */}
-                        <tr
-                          role="row"
-                          aria-expanded={!isCollapsed}
-                          data-part="group-header-row"
-                          data-collapsed={isCollapsed ? 'true' : 'false'}
-                          onClick={() => toggleGroup(section.groupValue)}
-                          style={{
-                            cursor: 'pointer',
-                          }}
-                        >
-                          <td
-                            colSpan={totalColSpan}
-                            data-part="group-header-cell"
+                      return (
+                        <React.Fragment key={`group-${section.groupValue}`}>
+                          {/* Group header row */}
+                          <tr
+                            role="row"
+                            aria-expanded={!isCollapsed}
+                            data-part="group-header-row"
+                            data-collapsed={isCollapsed ? 'true' : 'false'}
+                            onClick={() => toggleGroup(section.groupValue)}
                             style={{
-                              padding: densityPadding,
-                              fontSize: 13,
-                              fontWeight: 600,
+                              cursor: 'pointer',
                             }}
                           >
-                            {renderGroupHeader
-                              ? renderGroupHeader(section.groupValue, section.items, !isCollapsed)
-                              : (
-                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                            <td
+                              colSpan={totalColSpan}
+                              data-part="group-header-cell"
+                              style={{
+                                padding: densityPadding,
+                                fontSize: 13,
+                                fontWeight: 600,
+                              }}
+                            >
+                              {renderGroupHeader ? (
+                                renderGroupHeader(section.groupValue, section.items, !isCollapsed)
+                              ) : (
+                                <span
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    gap: 8,
+                                  }}
+                                >
                                   <span
                                     data-part="group-header-chevron"
                                     data-collapsed={isCollapsed ? 'true' : 'false'}
@@ -1767,7 +1651,14 @@ export default function ModernDataTable<T extends object>(
                                       {aggregateChips.map((chip, ci) => (
                                         <span key={ci}>
                                           {ci > 0 && (
-                                            <span style={{ margin: '0 2px', opacity: 0.4 }}>{'\u00B7'}</span>
+                                            <span
+                                              style={{
+                                                margin: '0 2px',
+                                                opacity: 0.4,
+                                              }}
+                                            >
+                                              {'\u00B7'}
+                                            </span>
                                           )}
                                           {chip}
                                         </span>
@@ -1776,278 +1667,273 @@ export default function ModernDataTable<T extends object>(
                                   )}
                                 </span>
                               )}
-                          </td>
-                        </tr>
-                        {sectionRows}
-                      </React.Fragment>
-                    );
-                  });
-                })()}
+                            </td>
+                          </tr>
+                          {sectionRows}
+                        </React.Fragment>
+                      );
+                    });
+                  })()}
 
                 {/* --------------------------------------------------------- */}
                 {/* Flat rendering (no groupBy): virtual scroll + inline edit  */}
                 {/* --------------------------------------------------------- */}
                 {!isGrouped && (
                   <>
-                {/* Virtual scroll: top spacer row to push visible content down */}
-                {virtualized && virtualScroll.offsetTop > 0 && (
-                  <tr aria-hidden="true" data-part="virtual-spacer" style={{ height: virtualScroll.offsetTop }}>
-                    <td colSpan={totalColSpan} data-part="virtual-spacer" style={{ padding: 0 }} />
-                  </tr>
-                )}
-                {virtualizedData.map((row, sliceIndex) => {
-                  // When virtualized, the actual data index is offset by startIndex
-                  const index = virtualized ? virtualScroll.startIndex + sliceIndex : sliceIndex;
-                  const key = getRowKey(row, index);
-                  const isExpanded = expandedKeys.has(key);
-                  const isSelected = selectedKeys.includes(key);
-                  const isRowEditing = editingCell?.rowKey === key;
-                  const isRowSaving = savingCell?.rowKey === key;
-                  const isLastRow = index === data.length - 1;
-
-                  return (
-                    <React.Fragment key={key}>
-                      <tr
-                        data-row-index={index}
-                        data-part="body-row"
-                        data-selected={isSelected ? 'true' : 'false'}
-                        data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
-                        data-hoverable={hoverable ? 'true' : 'false'}
-                        data-last={isLastRow ? 'true' : 'false'}
-                        tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
-                        role="row"
-                        onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
-                        onDoubleClick={handleEditAbandonDoubleClick}
-                        onKeyDown={(e) => handleRowKeyDown(e, row, index)}
-                        onFocus={() => setActiveRowIndex(index)}
-                        style={{
-                          cursor: onRowClick ? 'pointer' : undefined,
-                          height: virtualized ? virtualRowHeight : undefined,
-                          boxSizing: virtualized ? 'border-box' : undefined,
-                          transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                        }}
-                      >
-                        {/* Selection checkbox */}
-                        {selectable && (
-                          <td
-                            data-part="selection-cell"
-                            style={{
-                              padding: selectionCellPadding,
-                              width: resolvedSelectionColumnWidth,
-                              minWidth: resolvedSelectionColumnWidth,
-                              maxWidth: resolvedSelectionColumnWidth,
-                              boxSizing: 'border-box',
-                              verticalAlign: 'middle',
-                              textAlign: 'left',
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            <ModernCheckbox
-                              size="sm"
-                              checked={isSelected}
-                              onChange={() => toggleSelection(key, row)}
-                            />
-                          </td>
-                        )}
-                        {/* Expand toggle */}
-                        {expandedRow && (
-                          <td data-part="expand-cell" style={{ padding: densityPadding }}>
-                            <button
-                              data-part="expand-button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setExpandedKeys((prev) => {
-                                  const next = new Set(prev);
-                                  next.has(key) ? next.delete(key) : next.add(key);
-                                  return next;
-                                });
-                              }}
-                              style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: 24,
-                                height: 24,
-                                cursor: 'pointer',
-                                fontSize: 12,
-                                transition: `background var(--ds-motion-fast)`,
-                              }}
-                            >
-                              {isExpanded ? '\u25BC' : '\u25B6'}
-                            </button>
-                          </td>
-                        )}
-                        {/* Data cells (with inline editing support) */}
-                        {visibleColumns.map((col, columnIndex) => {
-                          const pinSide = getPinSide(col.key, col.pin);
-                          const pinnedStyle = getPinnedStyle(pinSide);
-                          const resolvedWidth = resolveColumnWidth(col);
-                          const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
-
-                          // Inline editing: resolve config and state for this cell
-                          const editableCfg = resolveEditableConfig(col.editable);
-                          const isCellEditable = editableCfg != null
-                            && (!editableCfg.canEdit || editableCfg.canEdit(row));
-                          const isCellEditing = editingCell?.rowKey === key
-                            && editingCell?.columnKey === col.key;
-                          const cellValue = resolveAccessor(col, row);
-
-                          // Build the edit-trigger event handler
-                          const triggerProps: Record<string, unknown> = {};
-                          if (isCellEditable && !isCellEditing) {
-                            const handler = (e: React.MouseEvent) => {
-                              clearPendingEditableRowClick();
-                              e.preventDefault();
-                              e.stopPropagation();
-                              enterEditMode(key, col.key, row);
-                            };
-                            if (editTrigger === 'click') {
-                              triggerProps.onClick = handler;
-                            } else {
-                              triggerProps.onDoubleClick = handler;
-                            }
-                          }
-
-                          return (
-                            <td
-                              key={col.key}
-                              data-col-priority={col.priority || undefined}
-                              data-editable={isCellEditable ? 'true' : undefined}
-                              data-editing={isCellEditing ? 'true' : undefined}
-                              data-part="data-cell"
-                              data-pinned={pinSide ? 'true' : 'false'}
-                              title={isCellEditable && !isCellEditing
-                                ? editTrigger === 'click'
-                                  ? 'Click to edit'
-                                  : 'Double-click to edit'
-                                : undefined}
-                              {...triggerProps}
-                              className={col.align === 'right' ? 'ds-nums-tabular' : undefined}
-                              style={{
-                                textAlign: col.align,
-                                width: resolvedWidth,
-                                minWidth: col.minWidth,
-                                maxWidth: col.maxWidth,
-                                padding: isCellEditing
-                                  ? '4px 6px'
-                                  : isLeadingDataColumn && selectable
-                                    ? leadingDataColumnPadding
-                                    : densityPadding,
-                                position: (pinnedStyle.position as any)
-                                  || (isCellEditable ? 'relative' : undefined),
-                                left: pinnedStyle.left as any,
-                                right: pinnedStyle.right as any,
-                                zIndex: pinnedStyle.zIndex as any,
-                                overflow: isCellEditing ? 'visible' : 'hidden',
-                                textOverflow: isCellEditing ? undefined : 'ellipsis',
-                                whiteSpace: isCellEditing ? undefined : 'nowrap',
-                                fontSize: 14,
-                              }}
-                            >
-                              {isCellEditing && editableCfg ? (
-                                <InlineCellEditor
-                                  value={cellValue}
-                                  row={row}
-                                  columnKey={col.key}
-                                  config={editableCfg}
-                                  onSave={(newValue) =>
-                                    handleCellSave(row, key, col.key, newValue, cellValue)
-                                  }
-                                  onCancel={() => handleCellCancel(row, col.key)}
-                                  onControlsChange={(controls) => {
-                                    if (editingCell?.rowKey === key && editingCell.columnKey === col.key) {
-                                      inlineEditorControlsRef.current = controls;
-                                    }
-                                  }}
-                                  onTabNext={
-                                    tabNavigation
-                                      ? () => {
-                                          const nextCol = findAdjacentEditableCol(
-                                            col.key, 'next', row,
-                                          );
-                                          if (nextCol) {
-                                            enterEditMode(key, nextCol, row);
-                                          } else {
-                                            setEditingCell(null);
-                                          }
-                                        }
-                                      : undefined
-                                  }
-                                  onTabPrev={
-                                    tabNavigation
-                                      ? () => {
-                                          const prevCol = findAdjacentEditableCol(
-                                            col.key, 'prev', row,
-                                          );
-                                          if (prevCol) {
-                                            enterEditMode(key, prevCol, row);
-                                          } else {
-                                            setEditingCell(null);
-                                          }
-                                        }
-                                      : undefined
-                                  }
-                                />
-                              ) : col.render
-                                ? col.render(cellValue, row, index)
-                                : String(cellValue ?? '')}
-                            </td>
-                          );
-                        })}
-                        {/* Actions cell */}
-                        {actions && (
-                          <td
-                            data-part="actions-cell"
-                            style={{
-                              textAlign: 'right',
-                              width: resolvedActionsColumnWidth,
-                              minWidth: resolvedActionsColumnWidth,
-                              padding: actionCellPadding,
-                              position: 'sticky',
-                              right: 0,
-                              zIndex: 2,
-                              whiteSpace: 'nowrap',
-                            }}
-                            onClick={(e) => e.stopPropagation()}
-                          >
-                            {isRowEditing
-                              ? renderInlineEditActions(isRowSaving)
-                              : actions(row, index)}
-                          </td>
-                        )}
+                    {/* Virtual scroll: top spacer row to push visible content down */}
+                    {virtualized && virtualScroll.offsetTop > 0 && (
+                      <tr aria-hidden="true" data-part="virtual-spacer" style={{ height: virtualScroll.offsetTop }}>
+                        <td colSpan={totalColSpan} data-part="virtual-spacer" style={{ padding: 0 }} />
                       </tr>
-                      {/* Expanded row content */}
-                      {expandedRow && isExpanded && (
-                        <tr>
-                          <td
-                            colSpan={totalColSpan}
-                            data-part="expanded-row"
+                    )}
+                    {virtualizedData.map((row, sliceIndex) => {
+                      // When virtualized, the actual data index is offset by startIndex
+                      const index = virtualized ? virtualScroll.startIndex + sliceIndex : sliceIndex;
+                      const key = getRowKey(row, index);
+                      const isExpanded = expandedKeys.has(key);
+                      const isSelected = selectedKeys.includes(key);
+                      const isRowEditing = editingCell?.rowKey === key;
+                      const isRowSaving = savingCell?.rowKey === key;
+                      const isLastRow = index === data.length - 1;
+
+                      return (
+                        <React.Fragment key={key}>
+                          <tr
+                            data-row-index={index}
+                            data-part="body-row"
+                            data-selected={isSelected ? 'true' : 'false'}
+                            data-striped={striped && index % 2 === 1 ? 'true' : 'false'}
+                            data-hoverable={hoverable ? 'true' : 'false'}
                             data-last={isLastRow ? 'true' : 'false'}
+                            tabIndex={(activeRowIndex < 0 ? index === 0 : activeRowIndex === index) ? 0 : -1}
+                            role="row"
+                            onClick={onRowClick ? (event) => handleRowClick(event, row, index) : undefined}
+                            onDoubleClick={handleEditAbandonDoubleClick}
+                            onKeyDown={(e) => handleRowKeyDown(e, row, index)}
+                            onFocus={() => setActiveRowIndex(index)}
                             style={{
-                              padding: 0,
+                              cursor: onRowClick ? 'pointer' : undefined,
+                              height: virtualized ? virtualRowHeight : undefined,
+                              boxSizing: virtualized ? 'border-box' : undefined,
+                              transition: `background-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
                             }}
                           >
-                            <div
-                              data-part="expanded-row-content"
-                              style={{
-                                width: '100%',
-                                padding: '12px 16px',
-                              }}
-                            >
-                              {expandedRow(row)}
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </React.Fragment>
-                  );
-                })}
-                {/* Virtual scroll: bottom spacer row to maintain total scroll height */}
-                {virtualized && virtualBottomSpacerHeight > 0 && (
-                  <tr aria-hidden="true" data-part="virtual-spacer" style={{ height: virtualBottomSpacerHeight }}>
-                    <td colSpan={totalColSpan} data-part="virtual-spacer" style={{ padding: 0 }} />
-                  </tr>
-                )}
+                            {/* Selection checkbox */}
+                            {selectable && (
+                              <td
+                                data-part="selection-cell"
+                                style={{
+                                  padding: selectionCellPadding,
+                                  width: resolvedSelectionColumnWidth,
+                                  minWidth: resolvedSelectionColumnWidth,
+                                  maxWidth: resolvedSelectionColumnWidth,
+                                  boxSizing: 'border-box',
+                                  verticalAlign: 'middle',
+                                  textAlign: 'left',
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <ModernCheckbox
+                                  size="sm"
+                                  checked={isSelected}
+                                  onChange={() => toggleSelection(key, row)}
+                                />
+                              </td>
+                            )}
+                            {/* Expand toggle */}
+                            {expandedRow && (
+                              <td data-part="expand-cell" style={{ padding: densityPadding }}>
+                                <button
+                                  data-part="expand-button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setExpandedKeys((prev) => {
+                                      const next = new Set(prev);
+                                      next.has(key) ? next.delete(key) : next.add(key);
+                                      return next;
+                                    });
+                                  }}
+                                  style={{
+                                    display: 'inline-flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    width: 24,
+                                    height: 24,
+                                    cursor: 'pointer',
+                                    fontSize: 12,
+                                    transition: `background var(--ds-motion-fast)`,
+                                  }}
+                                >
+                                  {isExpanded ? '\u25BC' : '\u25B6'}
+                                </button>
+                              </td>
+                            )}
+                            {/* Data cells (with inline editing support) */}
+                            {visibleColumns.map((col, columnIndex) => {
+                              const pinSide = getPinSide(col.key, col.pin);
+                              const pinnedStyle = getPinnedStyle(pinSide);
+                              const resolvedWidth = resolveColumnWidth(col);
+                              const isLeadingDataColumn = columnIndex === 0 && !expandedRow;
+
+                              // Inline editing: resolve config and state for this cell
+                              const editableCfg = resolveEditableConfig(col.editable);
+                              const isCellEditable =
+                                editableCfg != null && (!editableCfg.canEdit || editableCfg.canEdit(row));
+                              const isCellEditing = editingCell?.rowKey === key && editingCell?.columnKey === col.key;
+                              const cellValue = resolveAccessor(col, row);
+
+                              // Build the edit-trigger event handler
+                              const triggerProps: Record<string, unknown> = {};
+                              if (isCellEditable && !isCellEditing) {
+                                const handler = (e: React.MouseEvent) => {
+                                  clearPendingEditableRowClick();
+                                  e.preventDefault();
+                                  e.stopPropagation();
+                                  enterEditMode(key, col.key, row);
+                                };
+                                if (editTrigger === 'click') {
+                                  triggerProps.onClick = handler;
+                                } else {
+                                  triggerProps.onDoubleClick = handler;
+                                }
+                              }
+
+                              return (
+                                <td
+                                  key={col.key}
+                                  data-col-priority={col.priority || undefined}
+                                  data-editable={isCellEditable ? 'true' : undefined}
+                                  data-editing={isCellEditing ? 'true' : undefined}
+                                  data-part="data-cell"
+                                  data-pinned={pinSide ? 'true' : 'false'}
+                                  title={
+                                    isCellEditable && !isCellEditing
+                                      ? editTrigger === 'click'
+                                        ? 'Click to edit'
+                                        : 'Double-click to edit'
+                                      : undefined
+                                  }
+                                  {...triggerProps}
+                                  className={col.align === 'right' ? 'ds-nums-tabular' : undefined}
+                                  style={{
+                                    textAlign: col.align,
+                                    width: resolvedWidth,
+                                    minWidth: col.minWidth,
+                                    maxWidth: col.maxWidth,
+                                    padding: isCellEditing
+                                      ? '4px 6px'
+                                      : isLeadingDataColumn && selectable
+                                      ? leadingDataColumnPadding
+                                      : densityPadding,
+                                    position:
+                                      (pinnedStyle.position as any) || (isCellEditable ? 'relative' : undefined),
+                                    left: pinnedStyle.left as any,
+                                    right: pinnedStyle.right as any,
+                                    zIndex: pinnedStyle.zIndex as any,
+                                    overflow: isCellEditing ? 'visible' : 'hidden',
+                                    textOverflow: isCellEditing ? undefined : 'ellipsis',
+                                    whiteSpace: isCellEditing ? undefined : 'nowrap',
+                                    fontSize: 14,
+                                  }}
+                                >
+                                  {isCellEditing && editableCfg ? (
+                                    <InlineCellEditor
+                                      value={cellValue}
+                                      row={row}
+                                      columnKey={col.key}
+                                      config={editableCfg}
+                                      onSave={(newValue) => handleCellSave(row, key, col.key, newValue, cellValue)}
+                                      onCancel={() => handleCellCancel(row, col.key)}
+                                      onControlsChange={(controls) => {
+                                        if (editingCell?.rowKey === key && editingCell.columnKey === col.key) {
+                                          inlineEditorControlsRef.current = controls;
+                                        }
+                                      }}
+                                      onTabNext={
+                                        tabNavigation
+                                          ? () => {
+                                              const nextCol = findAdjacentEditableCol(col.key, 'next', row);
+                                              if (nextCol) {
+                                                enterEditMode(key, nextCol, row);
+                                              } else {
+                                                setEditingCell(null);
+                                              }
+                                            }
+                                          : undefined
+                                      }
+                                      onTabPrev={
+                                        tabNavigation
+                                          ? () => {
+                                              const prevCol = findAdjacentEditableCol(col.key, 'prev', row);
+                                              if (prevCol) {
+                                                enterEditMode(key, prevCol, row);
+                                              } else {
+                                                setEditingCell(null);
+                                              }
+                                            }
+                                          : undefined
+                                      }
+                                    />
+                                  ) : col.render ? (
+                                    col.render(cellValue, row, index)
+                                  ) : (
+                                    String(cellValue ?? '')
+                                  )}
+                                </td>
+                              );
+                            })}
+                            {/* Actions cell */}
+                            {actions && (
+                              <td
+                                data-part="actions-cell"
+                                style={{
+                                  textAlign: 'right',
+                                  width: resolvedActionsColumnWidth,
+                                  minWidth: resolvedActionsColumnWidth,
+                                  padding: actionCellPadding,
+                                  position: 'sticky',
+                                  right: 0,
+                                  zIndex: 2,
+                                  whiteSpace: 'nowrap',
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                {isRowEditing ? renderInlineEditActions(isRowSaving) : actions(row, index)}
+                              </td>
+                            )}
+                          </tr>
+                          {/* Expanded row content */}
+                          {expandedRow && isExpanded && (
+                            <tr>
+                              <td
+                                colSpan={totalColSpan}
+                                data-part="expanded-row"
+                                data-last={isLastRow ? 'true' : 'false'}
+                                style={{
+                                  padding: 0,
+                                }}
+                              >
+                                <div
+                                  data-part="expanded-row-content"
+                                  style={{
+                                    width: '100%',
+                                    padding: '12px 16px',
+                                  }}
+                                >
+                                  {expandedRow(row)}
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                    {/* Virtual scroll: bottom spacer row to maintain total scroll height */}
+                    {virtualized && virtualBottomSpacerHeight > 0 && (
+                      <tr aria-hidden="true" data-part="virtual-spacer" style={{ height: virtualBottomSpacerHeight }}>
+                        <td colSpan={totalColSpan} data-part="virtual-spacer" style={{ padding: 0 }} />
+                      </tr>
+                    )}
                   </>
                 )}
               </tbody>
@@ -2056,128 +1942,147 @@ export default function ModernDataTable<T extends object>(
         </div>
 
         {/* Pagination: inside the card, border-top separator */}
-        {pagination && (() => {
-          const totalPages = Math.max(1, Math.ceil(pagination.total / pagination.pageSize));
-          const isFirstPage = pagination.current <= 1;
-          const isLastPage = pagination.current >= totalPages;
+        {pagination &&
+          (() => {
+            const totalPages = Math.max(1, Math.ceil(pagination.total / pagination.pageSize));
+            const isFirstPage = pagination.current <= 1;
+            const isLastPage = pagination.current >= totalPages;
 
-          // Build page number array with ellipsis
-          const getPageNumbers = (): (number | 'ellipsis')[] => {
-            if (totalPages <= 7) {
-              return Array.from({ length: totalPages }, (_, i) => i + 1);
-            }
-            const pages: (number | 'ellipsis')[] = [1];
-            const current = pagination.current;
-            if (current > 3) pages.push('ellipsis');
-            const start = Math.max(2, current - 1);
-            const end = Math.min(totalPages - 1, current + 1);
-            for (let i = start; i <= end; i++) pages.push(i);
-            if (current < totalPages - 2) pages.push('ellipsis');
-            if (totalPages > 1) pages.push(totalPages);
-            return pages;
-          };
+            // Build page number array with ellipsis
+            const getPageNumbers = (): (number | 'ellipsis')[] => {
+              if (totalPages <= 7) {
+                return Array.from({ length: totalPages }, (_, i) => i + 1);
+              }
+              const pages: (number | 'ellipsis')[] = [1];
+              const current = pagination.current;
+              if (current > 3) pages.push('ellipsis');
+              const start = Math.max(2, current - 1);
+              const end = Math.min(totalPages - 1, current + 1);
+              for (let i = start; i <= end; i++) pages.push(i);
+              if (current < totalPages - 2) pages.push('ellipsis');
+              if (totalPages > 1) pages.push(totalPages);
+              return pages;
+            };
 
-          const navBtnStyle = (disabled: boolean): React.CSSProperties => ({
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 32,
-            padding: '0 10px',
-            fontSize: 13,
-            fontWeight: 500,
-            cursor: disabled ? 'not-allowed' : 'pointer',
-            opacity: disabled ? 0.5 : 1,
-            transition: 'background var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease',
-          });
+            const navBtnStyle = (disabled: boolean): React.CSSProperties => ({
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              height: 32,
+              padding: '0 10px',
+              fontSize: 13,
+              fontWeight: 500,
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              opacity: disabled ? 0.5 : 1,
+              transition: 'background var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease',
+            });
 
-          return (
-            <div
-              data-part="pagination-bar"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '10px 16px',
-                fontSize: 13,
-              }}
-            >
-              <span style={{ fontVariantNumeric: 'tabular-nums' }}>
-                {(pagination.current - 1) * pagination.pageSize + 1}
-                {' \u2013 '}
-                {Math.min(pagination.current * pagination.pageSize, pagination.total)}
-                {' of '}
-                {pagination.total.toLocaleString()}
-              </span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                {/* Previous */}
-                <button
-                  disabled={isFirstPage}
-                  data-part="pagination-nav-button"
-                  onClick={() => pagination.onChange(pagination.current - 1, pagination.pageSize)}
-                  style={navBtnStyle(isFirstPage)}
-                  aria-label="Previous page"
-                >
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 12L6 8L10 4" />
-                  </svg>
-                </button>
-                {/* Page numbers */}
-                {getPageNumbers().map((page, idx) =>
-                  page === 'ellipsis' ? (
-                    <span
-                      key={`ellipsis-${idx}`}
-                      data-part="pagination-ellipsis"
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 32,
-                        height: 32,
-                        fontSize: 13,
-                        userSelect: 'none',
-                      }}
+            return (
+              <div
+                data-part="pagination-bar"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '10px 16px',
+                  fontSize: 13,
+                }}
+              >
+                <span style={{ fontVariantNumeric: 'tabular-nums' }}>
+                  {(pagination.current - 1) * pagination.pageSize + 1}
+                  {' \u2013 '}
+                  {Math.min(pagination.current * pagination.pageSize, pagination.total)}
+                  {' of '}
+                  {pagination.total.toLocaleString()}
+                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                  {/* Previous */}
+                  <button
+                    disabled={isFirstPage}
+                    data-part="pagination-nav-button"
+                    onClick={() => pagination.onChange(pagination.current - 1, pagination.pageSize)}
+                    style={navBtnStyle(isFirstPage)}
+                    aria-label="Previous page"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
-                      ...
-                    </span>
-                  ) : (
-                    <button
-                      key={page}
-                      data-part="pagination-page-button"
-                      data-current={page === pagination.current ? 'true' : 'false'}
-                      onClick={() => pagination.onChange(page, pagination.pageSize)}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        width: 32,
-                        height: 32,
-                        fontSize: 13,
-                        fontWeight: page === pagination.current ? 600 : 400,
-                        cursor: 'pointer',
-                        transition: 'background var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease',
-                        fontVariantNumeric: 'tabular-nums',
-                      }}
+                      <path d="M10 12L6 8L10 4" />
+                    </svg>
+                  </button>
+                  {/* Page numbers */}
+                  {getPageNumbers().map((page, idx) =>
+                    page === 'ellipsis' ? (
+                      <span
+                        key={`ellipsis-${idx}`}
+                        data-part="pagination-ellipsis"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 32,
+                          height: 32,
+                          fontSize: 13,
+                          userSelect: 'none',
+                        }}
+                      >
+                        ...
+                      </span>
+                    ) : (
+                      <button
+                        key={page}
+                        data-part="pagination-page-button"
+                        data-current={page === pagination.current ? 'true' : 'false'}
+                        onClick={() => pagination.onChange(page, pagination.pageSize)}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          width: 32,
+                          height: 32,
+                          fontSize: 13,
+                          fontWeight: page === pagination.current ? 600 : 400,
+                          cursor: 'pointer',
+                          transition: 'background var(--ds-motion-fast) ease, color var(--ds-motion-fast) ease',
+                          fontVariantNumeric: 'tabular-nums',
+                        }}
+                      >
+                        {page}
+                      </button>
+                    )
+                  )}
+                  {/* Next */}
+                  <button
+                    disabled={isLastPage}
+                    data-part="pagination-nav-button"
+                    onClick={() => pagination.onChange(pagination.current + 1, pagination.pageSize)}
+                    style={navBtnStyle(isLastPage)}
+                    aria-label="Next page"
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
-                      {page}
-                    </button>
-                  )
-                )}
-                {/* Next */}
-                <button
-                  disabled={isLastPage}
-                  data-part="pagination-nav-button"
-                  onClick={() => pagination.onChange(pagination.current + 1, pagination.pageSize)}
-                  style={navBtnStyle(isLastPage)}
-                  aria-label="Next page"
-                >
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M6 4L10 8L6 12" />
-                  </svg>
-                </button>
+                      <path d="M6 4L10 8L6 12" />
+                    </svg>
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })()}
+            );
+          })()}
 
         {/* Bulk selection bar: sticky at bottom with elevation */}
         {bulkActions && selectedKeys.length > 0 && (
@@ -2211,9 +2116,7 @@ export default function ModernDataTable<T extends object>(
                   data-part="bulk-bar-action"
                   data-variant={action.variant ?? 'default'}
                   onClick={() => {
-                    const selectedRows = data.filter((row, i) =>
-                      selectedKeys.includes(getRowKey(row, i))
-                    );
+                    const selectedRows = data.filter((row, i) => selectedKeys.includes(getRowKey(row, i)));
                     action.onExecute(selectedRows);
                   }}
                   style={{

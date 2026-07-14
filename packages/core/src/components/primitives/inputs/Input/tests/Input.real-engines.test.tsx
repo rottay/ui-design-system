@@ -141,13 +141,7 @@ describe('Input real engine coverage', () => {
     const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
-      <ClassicInput
-        type="number"
-        defaultValue="12"
-        clearable
-        showCount
-        aria-label="Capacity without prop leaks"
-      />
+      <ClassicInput type="number" defaultValue="12" clearable showCount aria-label="Capacity without prop leaks" />
     );
 
     const joinedErrors = consoleErrorSpy.mock.calls.flat().join(' ');
@@ -178,7 +172,9 @@ describe('Input real engine coverage', () => {
       />
     );
 
-    const affixInput = screen.getByRole('textbox', { name: 'Modern affix input' });
+    const affixInput = screen.getByRole('textbox', {
+      name: 'Modern affix input',
+    });
     fireEvent.focus(affixInput);
     fireEvent.keyDown(affixInput, { key: 'Enter' });
     fireEvent.click(screen.getByRole('button', { name: /clear input/i }));
@@ -205,7 +201,9 @@ describe('Input real engine coverage', () => {
       />
     );
 
-    const plainInput = screen.getByRole('textbox', { name: 'Modern plain input' });
+    const plainInput = screen.getByRole('textbox', {
+      name: 'Modern plain input',
+    });
     expect(plainInput).toBeDisabled();
     expect(screen.getByText('Disabled field')).toBeInTheDocument();
   });
@@ -216,17 +214,8 @@ describe('Input real engine coverage', () => {
 
     renderWithEngine(
       <div>
-        <InputPassword
-          engine="rustic"
-          defaultValue="launch"
-          aria-label="Password field"
-        />
-        <InputSearch
-          engine="rustic"
-          value="launch"
-          onSearch={onSearch}
-          aria-label="Search field"
-        />
+        <InputPassword engine="rustic" defaultValue="launch" aria-label="Password field" />
+        <InputSearch engine="rustic" value="launch" onSearch={onSearch} aria-label="Search field" />
         <InputTextArea
           defaultValue="Draft"
           maxLength={20}
@@ -240,7 +229,9 @@ describe('Input real engine coverage', () => {
       'rustic'
     );
 
-    const toggleButton = await screen.findByRole('button', { name: /show password/i });
+    const toggleButton = await screen.findByRole('button', {
+      name: /show password/i,
+    });
     fireEvent.click(toggleButton);
     expect(await screen.findByLabelText('Password field')).toHaveAttribute('type', 'text');
 
@@ -261,8 +252,18 @@ describe('Input real engine coverage', () => {
     );
 
     const addons = container.querySelectorAll('.rottay-input-addon');
-    expect(addons[0]).toHaveStyle({ borderTopRightRadius: '0px' });
+    const group = container.querySelector('.rottay-input-group');
+    expect(group).toHaveAttribute('data-compact', 'true');
+    expect((addons[0] as HTMLElement).style.borderTopRightRadius).toBe('');
     expect(addons[1]).toHaveStyle({ marginLeft: '-1px' });
+
+    const compoundSkin = readFileSync(
+      join(__dirname, '../../../../../tokens/css/components/skin/input-compounds.css'),
+      'utf8'
+    );
+    expect(compoundSkin).toContain(".rottay-input-group[data-compact='true'] > :first-child:not(:last-child)");
+    expect(compoundSkin).toContain('border-top-right-radius: 0 !important;');
+    expect(compoundSkin).toContain('border-bottom-right-radius: 0 !important;');
 
     rerender(
       <InputGroup compact={false} size="sm">
@@ -274,6 +275,7 @@ describe('Input real engine coverage', () => {
     );
 
     const nonCompactAddons = container.querySelectorAll('.rottay-input-addon');
+    expect(container.querySelector('.rottay-input-group')).toHaveAttribute('data-compact', 'false');
     expect(nonCompactAddons[0]).toHaveAttribute('data-variant', 'transparent');
     expect(nonCompactAddons[1]).toHaveStyle({ marginLeft: '8px' });
   });
@@ -307,9 +309,7 @@ describe('Input real engine coverage', () => {
 
 describe('Input CSS-first skin (WO-ARC-07)', () => {
   it('modern: the plain and addon-wrapped branches stamp the identical shell contract', () => {
-    const { container: plainContainer } = render(
-      <ModernInput variant="filled" size="lg" aria-label="Plain" />
-    );
+    const { container: plainContainer } = render(<ModernInput variant="filled" size="lg" aria-label="Plain" />);
     const plainShell = screen.getByRole('textbox', { name: 'Plain' });
     expect(plainShell.tagName).toBe('INPUT');
     expect(plainShell.className).toContain('rottay-input');
@@ -319,12 +319,7 @@ describe('Input CSS-first skin (WO-ARC-07)', () => {
     expect(plainShell).toHaveAttribute('data-size', 'lg');
 
     const { container: wrappedContainer } = render(
-      <ModernInput
-        variant="filled"
-        size="lg"
-        prefix={<span>@</span>}
-        aria-label="Wrapped"
-      />
+      <ModernInput variant="filled" size="lg" prefix={<span>@</span>} aria-label="Wrapped" />
     );
     // The shell in this branch is the <label>, not the <input> -- the skin
     // paints whichever element carries `data-part='root'`.
@@ -402,24 +397,25 @@ describe('Input CSS-first skin (WO-ARC-07)', () => {
     // Card.real-engines.test.tsx reads `skin/card.css` directly. The pixels
     // themselves are measured against a real cascade by
     // `packages/showroom/e2e/visual/states.spec.ts`.
-    const skin = readFileSync(
-      join(__dirname, '../../../../../tokens/css/engines/modern/skin/input.css'),
-      'utf-8'
-    );
+    const skin = readFileSync(join(__dirname, '../../../../../tokens/css/engines/modern/skin/input.css'), 'utf-8');
 
     // No rule may substitute a box-shadow token into the outline shorthand
     // (the invalid declaration P-54 found) -- that string must not appear.
-    expect(skin).not.toContain("solid var(--ds-input-shadow-focus");
+    expect(skin).not.toContain('solid var(--ds-input-shadow-focus');
 
     // The plain focused case explicitly clears the outline with valid CSS.
-    expect(skin).toContain("[data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {\n  outline: none;");
+    expect(skin).toContain(
+      "[data-state~='focused']:not([data-invalid='true']):not([data-warning='true']):not([data-variant='unstyled']) {\n  outline: none;"
+    );
 
     // The error/warning-focused ring is a real, separate declaration -- not
     // deleted, because it is not dead (see the skin's own header comment).
     expect(skin).toContain("[data-invalid='true'][data-state~='focused']");
     expect(skin).toContain('color-mix(in srgb, var(--ds-input-error-border, var(--ds-color-error)) 15%, transparent)');
     expect(skin).toContain("[data-warning='true']:not([data-invalid='true'])[data-state~='focused']");
-    expect(skin).toContain('color-mix(in srgb, var(--ds-input-warning-border, var(--ds-color-warning)) 15%, transparent)');
+    expect(skin).toContain(
+      'color-mix(in srgb, var(--ds-input-warning-border, var(--ds-color-warning)) 15%, transparent)'
+    );
   });
 
   it('rustic: the shell is always the wrapping <div>, in both branches', () => {
@@ -429,9 +425,7 @@ describe('Input CSS-first skin (WO-ARC-07)', () => {
     expect(plainShell.tagName).toBe('DIV');
     expect(plainShell).toHaveAttribute('data-part', 'root');
 
-    const { container: wrappedContainer } = render(
-      <RusticInput prefix={<span>@</span>} aria-label="Wrapped rustic" />
-    );
+    const { container: wrappedContainer } = render(<RusticInput prefix={<span>@</span>} aria-label="Wrapped rustic" />);
     const wrappedShell = wrappedContainer.querySelector('.rottay-input--rustic') as HTMLDivElement;
     expect(wrappedShell).not.toBeNull();
     expect(wrappedShell.tagName).toBe('DIV');
@@ -467,10 +461,7 @@ describe('Input CSS-first skin (WO-ARC-07)', () => {
   });
 
   it('rustic skin: no rule keys on hover -- this engine has never repainted on it', () => {
-    const skin = readFileSync(
-      join(__dirname, '../../../../../tokens/css/engines/rustic/skin/input.css'),
-      'utf-8'
-    );
+    const skin = readFileSync(join(__dirname, '../../../../../tokens/css/engines/rustic/skin/input.css'), 'utf-8');
     // Strip comments first: the header explains the absence in prose and
     // therefore mentions the literal selector string -- a real rule using it
     // would appear outside a `/* ... */` block.

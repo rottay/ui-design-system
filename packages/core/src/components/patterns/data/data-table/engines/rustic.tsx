@@ -48,16 +48,34 @@ const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms
 // mode and keeps its original padding.
 const DENSITY_STYLES = {
   compact: {
-    th: { padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
-    td: { padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
+    th: {
+      padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)',
+      fontSize: 'var(--ds-font-size-xs)',
+    } as React.CSSProperties,
+    td: {
+      padding: 'var(--ds-density-cell-padding, 0.5rem 0.75rem)',
+      fontSize: 'var(--ds-font-size-xs)',
+    } as React.CSSProperties,
   },
   comfortable: {
-    th: { padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)', fontSize: 'var(--ds-font-size-xs)' } as React.CSSProperties,
-    td: { padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)', fontSize: 'var(--ds-font-size-sm)' } as React.CSSProperties,
+    th: {
+      padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)',
+      fontSize: 'var(--ds-font-size-xs)',
+    } as React.CSSProperties,
+    td: {
+      padding: 'var(--ds-density-cell-padding, 0.875rem 1rem)',
+      fontSize: 'var(--ds-font-size-sm)',
+    } as React.CSSProperties,
   },
   spacious: {
-    th: { padding: '1rem 1.25rem', fontSize: 'var(--ds-font-size-sm)' } as React.CSSProperties,
-    td: { padding: '1rem 1.25rem', fontSize: 'var(--ds-font-size-base)' } as React.CSSProperties,
+    th: {
+      padding: '1rem 1.25rem',
+      fontSize: 'var(--ds-font-size-sm)',
+    } as React.CSSProperties,
+    td: {
+      padding: '1rem 1.25rem',
+      fontSize: 'var(--ds-font-size-base)',
+    } as React.CSSProperties,
   },
 };
 
@@ -183,9 +201,7 @@ const styles = {
  * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
  * @returns A data table rendered entirely with inline styles and CSS variables.
  */
-export default function RusticDataTable<T extends object>(
-  props: DataTablePatternProps<T>
-) {
+export default function RusticDataTable<T extends object>(props: DataTablePatternProps<T>) {
   const {
     data,
     columns,
@@ -258,9 +274,7 @@ export default function RusticDataTable<T extends object>(
     if (columnVisibility && visibleColumns) {
       const lockedSet = new Set(lockedColumns ?? []);
       const visibleSet = new Set(visibleColumns);
-      cols = cols.filter(
-        (col) => lockedSet.has(col.key) || visibleSet.has(col.key)
-      );
+      cols = cols.filter((col) => lockedSet.has(col.key) || visibleSet.has(col.key));
     }
 
     // 2. Column reordering
@@ -355,9 +369,7 @@ export default function RusticDataTable<T extends object>(
   // Toggle individual row selection. Re-derives selected rows from keys at
   // call-time so data mutations between renders do not cause stale references.
   const toggleSelection = (key: string) => {
-    const next = selectedKeys.includes(key)
-      ? selectedKeys.filter((k) => k !== key)
-      : [...selectedKeys, key];
+    const next = selectedKeys.includes(key) ? selectedKeys.filter((k) => k !== key) : [...selectedKeys, key];
     if (!controlledSelectedKeys) setInternalSelectedKeys(next);
     const selectedRows = data.filter((r, i) => next.includes(getRowKey(r, i)));
     onSelectionChange?.(next, selectedRows);
@@ -410,33 +422,22 @@ export default function RusticDataTable<T extends object>(
   // Build pinned style for a th or td. Sticky positioning with appropriate
   // left/right offset and elevated z-index so pinned columns float above
   // the scrollable body.
-  const buildPinStyle = useCallback(
-    (side: 'left' | 'right' | undefined, isHeader: boolean): React.CSSProperties => {
-      if (!side) return {};
-      return {
-        position: 'sticky',
-        [side]: 0,
-        zIndex: isHeader ? 12 : 2,
-      };
-    },
-    []
-  );
+  const buildPinStyle = useCallback((side: 'left' | 'right' | undefined, isHeader: boolean): React.CSSProperties => {
+    if (!side) return {};
+    return {
+      position: 'sticky',
+      [side]: 0,
+      zIndex: isHeader ? 12 : 2,
+    };
+  }, []);
 
   // Pre-calculate total column count for expanded-row colSpan, avoiding
   // inline arithmetic inside the render loop.
-  const colCount =
-    processedColumns.length +
-    (selectable ? 1 : 0) +
-    (actions ? 1 : 0) +
-    (expandedRow ? 1 : 0);
+  const colCount = processedColumns.length + (selectable ? 1 : 0) + (actions ? 1 : 0) + (expandedRow ? 1 : 0);
 
   // --- Build th style for a given column ---
   const buildThStyle = useCallback(
-    (
-      col: (typeof processedColumns)[number],
-      colIdx: number,
-      isLastDataCol: boolean
-    ): React.CSSProperties => {
+    (col: (typeof processedColumns)[number], colIdx: number, isLastDataCol: boolean): React.CSSProperties => {
       const pinSide = resolvePinSide(col.key, col.pin);
       const width = columnWidths?.[col.key] ?? col.width;
 
@@ -515,9 +516,7 @@ export default function RusticDataTable<T extends object>(
             <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {col.header}
               {col.sortable && sorting?.key === col.key && (
-                <span style={{ marginLeft: 4 }}>
-                  {sorting.direction === 'asc' ? '\u2191' : '\u2193'}
-                </span>
+                <span style={{ marginLeft: 4 }}>{sorting.direction === 'asc' ? '\u2191' : '\u2193'}</span>
               )}
             </span>
             {dragOverKey === col.key && dragSourceKey !== col.key && (
@@ -541,23 +540,12 @@ export default function RusticDataTable<T extends object>(
         <>
           {col.header}
           {col.sortable && sorting?.key === col.key && (
-            <span style={{ marginLeft: 4 }}>
-              {sorting.direction === 'asc' ? '\u2191' : '\u2193'}
-            </span>
+            <span style={{ marginLeft: 4 }}>{sorting.direction === 'asc' ? '\u2191' : '\u2193'}</span>
           )}
         </>
       );
     },
-    [
-      reorderable,
-      sorting,
-      dragOverKey,
-      dragSourceKey,
-      handleDragStart,
-      handleDragOver,
-      handleDrop,
-      handleDragEnd,
-    ]
+    [reorderable, sorting, dragOverKey, dragSourceKey, handleDragStart, handleDragOver, handleDrop, handleDragEnd]
   );
 
   // --- Render resize handle ---
@@ -567,7 +555,7 @@ export default function RusticDataTable<T extends object>(
 
       const currentWidth =
         typeof (columnWidths?.[col.key] ?? col.width) === 'number'
-          ? (columnWidths?.[col.key] ?? col.width) as number
+          ? ((columnWidths?.[col.key] ?? col.width) as number)
           : 150;
 
       return (
@@ -650,23 +638,39 @@ export default function RusticDataTable<T extends object>(
 
       {/* Table wrapper merges maxHeight for scrollable body and conditionally
           removes the border when the `bordered` prop is false. */}
-      <div data-part="wrap" data-bordered={bordered ? 'true' : 'false'} style={{ ...styles.tableWrap, ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}) }}>
-        {/* Inline keyframes: Rustic engine cannot depend on global CSS, so animation
-            definitions must be co-located here. */}
-        <style>{`@keyframes ds-spin { to { transform: rotate(360deg); } } @keyframes ds-bulk-slide-down { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }`}</style>
+      <div
+        data-part="wrap"
+        data-bordered={bordered ? 'true' : 'false'}
+        style={{
+          ...styles.tableWrap,
+          ...(maxHeight ? { maxHeight, overflowY: 'auto' } : {}),
+        }}
+      >
         {/* Loading overlay renders on top of existing data to avoid layout jump;
             when data is empty, a centered spinner replaces the table entirely. */}
         {loading && data.length > 0 && (
-          <div data-part="loading-overlay" data-scrim="true" style={styles.loadingOverlay} role="status" aria-label="Loading">
+          <div
+            data-part="loading-overlay"
+            data-scrim="true"
+            style={styles.loadingOverlay}
+            role="status"
+            aria-label="Loading"
+          >
             <div data-part="loading-spinner" style={styles.loadingSpinner} aria-hidden="true" />
           </div>
         )}
         {loading && data.length === 0 ? (
           <div data-part="loading-overlay" style={styles.loadingFallback} role="status" aria-label="Loading">
-            <div data-part="loading-spinner" style={{ ...styles.loadingSpinner, margin: '0 auto' }} aria-hidden="true" />
+            <div
+              data-part="loading-spinner"
+              style={{ ...styles.loadingSpinner, margin: '0 auto' }}
+              aria-hidden="true"
+            />
           </div>
         ) : data.length === 0 ? (
-          <div data-part="empty-state" style={styles.empty}>{emptyState ?? 'No data'}</div>
+          <div data-part="empty-state" style={styles.empty}>
+            {emptyState ?? 'No data'}
+          </div>
         ) : (
           <table data-part="table" style={styles.table}>
             <thead>
@@ -744,11 +748,7 @@ export default function RusticDataTable<T extends object>(
                     <tr
                       data-part="body-row"
                       data-state={
-                        selectedKeys.includes(key)
-                          ? 'selected'
-                          : striped && index % 2 === 1
-                            ? 'striped'
-                            : 'default'
+                        selectedKeys.includes(key) ? 'selected' : striped && index % 2 === 1 ? 'striped' : 'default'
                       }
                       style={{
                         cursor: onRowClick ? 'pointer' : undefined,
@@ -840,7 +840,8 @@ export default function RusticDataTable<T extends object>(
       {pagination && (
         <div data-part="pagination-bar" style={styles.pagination}>
           <span>
-            {((pagination.current - 1) * pagination.pageSize) + 1}-{Math.min(pagination.current * pagination.pageSize, pagination.total)} of {pagination.total}
+            {(pagination.current - 1) * pagination.pageSize + 1}-
+            {Math.min(pagination.current * pagination.pageSize, pagination.total)} of {pagination.total}
           </span>
           <div style={{ display: 'flex', gap: '0.25rem' }}>
             <button

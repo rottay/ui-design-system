@@ -36,7 +36,11 @@ import React, { forwardRef, useState, useCallback, useRef, useEffect, useId } fr
 import { partAttributes, useInteractionState } from '../../../../../behavior';
 import type { InputProps, InputSize } from '../Input.types';
 import { INPUT_DEFAULTS, SIZE_MAP as INPUT_SIZE_MAP } from '../Input.types';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import {
+  isResponsiveValue,
+  generateResponsiveCSS,
+  type ResponsivePropEntry,
+} from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
@@ -70,7 +74,16 @@ function ClearButton({ onClick, visible }: { onClick: () => void; visible: boole
         flexShrink: 0,
       }}
     >
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M18 6L6 18M6 6l12 12" />
       </svg>
     </button>
@@ -165,9 +178,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
   const elementId = needsResponsiveCSS ? `input-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
 
   const size = scalarOrUndefined(sizeProp) ?? INPUT_DEFAULTS.size;
 
@@ -296,9 +307,8 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     );
   }
 
-  const responsiveStyleTag = responsive && responsive.css ? (
-    <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-  ) : null;
+  const responsiveStyleTag =
+    responsive && responsive.css ? <style dangerouslySetInnerHTML={{ __html: responsive.css }} /> : null;
   const responsiveAttrs = responsive ? responsive.attrs : {};
 
   /** The DOM contract the modern Input skin selects on. Spread onto the
@@ -334,18 +344,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     fontFamily: 'inherit',
     padding: 0,
   };
-
-  // Placeholder color (injected via a tiny style rule since ::placeholder
-  // cannot be set via inline styles).
-  const placeholderStyleId = `ds-input-ph-${reactId.replace(/:/g, '')}`;
-  const placeholderStyleTag = (
-    <style dangerouslySetInnerHTML={{ __html: `
-      .${placeholderStyleId}::placeholder {
-        color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
-        opacity: 1;
-      }
-    `}} />
-  );
 
   // Count / error message styles
   const countStyle: React.CSSProperties = {
@@ -406,7 +404,6 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     return (
       <div className={className} style={style}>
         {responsiveStyleTag}
-        {placeholderStyleTag}
         <label
           className={shellClassName}
           onClick={() => inputRef.current?.focus()}
@@ -416,7 +413,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           {...skinAttributes}
         >
           {prefix && (
-            <span data-part="affix-prefix" style={addonStyle}>{prefix}</span>
+            <span data-part="affix-prefix" style={addonStyle}>
+              {prefix}
+            </span>
           )}
 
           <input
@@ -427,7 +426,7 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
             // but it keeps the bare class present on the actual <input> for any
             // external selector (e.g. a tenant extension sheet) that targets it
             // there rather than on the shell.
-            className={`${shellClassName} ${placeholderStyleId}`}
+            className={shellClassName}
             style={innerInputStyle}
           />
 
@@ -436,7 +435,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
           )}
 
           {suffix && (
-            <span data-part="affix-suffix" style={addonStyle}>{suffix}</span>
+            <span data-part="affix-suffix" style={addonStyle}>
+              {suffix}
+            </span>
           )}
         </label>
 
@@ -447,7 +448,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         )}
 
         {hasError && errorMessage && (
-          <span data-part="error-message" style={errorMessageStyle}>{errorMessage}</span>
+          <span data-part="error-message" style={errorMessageStyle}>
+            {errorMessage}
+          </span>
         )}
       </div>
     );
@@ -457,11 +460,10 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <div className={className} style={style}>
       {responsiveStyleTag}
-      {placeholderStyleTag}
       <input
         {...inputProps}
         {...responsiveAttrs}
-        className={`${shellClassName} ${placeholderStyleId}`}
+        className={shellClassName}
         onPointerEnter={interactionHandlers.onPointerEnter}
         onPointerLeave={interactionHandlers.onPointerLeave}
         {...partAttributes('root', interaction)}
@@ -475,7 +477,9 @@ const ModernInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       )}
 
       {hasError && errorMessage && (
-        <span data-part="error-message" style={errorMessageStyle}>{errorMessage}</span>
+        <span data-part="error-message" style={errorMessageStyle}>
+          {errorMessage}
+        </span>
       )}
     </div>
   );

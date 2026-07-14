@@ -20,8 +20,9 @@
  * ZERO `:hover` rules in this file. `styles.td`'s `background-color` transition
  * stays inline (exempt, not dropped). The resize bar's hardcoded
  * `rgba(0,0,0,0.12)` is transcribed AS-IS (pre-existing token-purity residual,
- * filed as a proposal, not fixed here). The `@keyframes ds-spin` /
- * `ds-bulk-slide-down` per-instance `<style>` stays in the tsx by WO law.
+ * filed as a proposal, not fixed here). The `@keyframes ds-spin` and
+ * `ds-bulk-slide-down` definitions are owned by the canonical
+ * `components/skin/data-table-interactions.css` recovery skin.
  *
  * PINNED-TD RULE: the row's `data-state` enum (selected|striped|default) plus
  * the cell's `data-pinned='true'` drive ONE rule set that replaces the ternary

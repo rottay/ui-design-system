@@ -65,7 +65,8 @@ const ACCENT_BAR_WIDTH = 3;
 /** Border radius token */
 const RADIUS = 'var(--ds-radius-lg, 12px)';
 /** Transition for interactive states */
-const TRANSITION = 'background var(--ds-motion-fast) ease-out, color var(--ds-motion-fast) ease-out, opacity var(--ds-motion-fast) ease-out';
+const TRANSITION =
+  'background var(--ds-motion-fast) ease-out, color var(--ds-motion-fast) ease-out, opacity var(--ds-motion-fast) ease-out';
 
 function getItemPaddingLeft(level: number, inlineIndent: number): string {
   if (level <= 0) {
@@ -104,9 +105,7 @@ function getItemBaseStyle(level: number, inlineIndent: number): CSSProperties {
     paddingRight: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
     paddingBottom: 0,
     paddingLeft: 'var(--rottay-menu-item-padding-left)',
-    fontSize: isChild
-      ? 'var(--ds-sidebar-item-font-size-child, 13.9px)'
-      : 'var(--ds-sidebar-item-font-size, 15.75px)',
+    fontSize: isChild ? 'var(--ds-sidebar-item-font-size-child, 13.9px)' : 'var(--ds-sidebar-item-font-size, 15.75px)',
     fontWeight: 500,
     lineHeight: 1.28,
     textDecoration: 'none',
@@ -173,9 +172,7 @@ function getSummaryStyle(level: number, inlineIndent: number): CSSProperties {
     paddingRight: isChild ? CHILD_ITEM_PADDING_X : ITEM_PADDING_X,
     paddingBottom: 0,
     paddingLeft: 'var(--rottay-menu-item-padding-left)',
-    fontSize: isChild
-      ? 'var(--ds-sidebar-item-font-size-child, 13.9px)'
-      : 'var(--ds-sidebar-item-font-size, 15.75px)',
+    fontSize: isChild ? 'var(--ds-sidebar-item-font-size-child, 13.9px)' : 'var(--ds-sidebar-item-font-size, 15.75px)',
     fontWeight: 500,
     lineHeight: 1.28,
     cursor: 'pointer',
@@ -286,13 +283,7 @@ function MenuItemRow({
         }}
       >
         {/* Left accent bar for active top-level items */}
-        {isSelected && !isChild && (
-          <span
-            data-part="indicator"
-            aria-hidden="true"
-            style={getAccentBarStyle()}
-          />
-        )}
+        {isSelected && !isChild && <span data-part="indicator" aria-hidden="true" style={getAccentBarStyle()} />}
         {item.icon && (
           <span
             data-part="icon"
@@ -311,7 +302,15 @@ function MenuItemRow({
             {item.icon}
           </span>
         )}
-        <span data-part="label" style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span
+          data-part="label"
+          style={{
+            flex: 1,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
           {item.label}
         </span>
       </a>
@@ -349,13 +348,14 @@ function SubmenuRow({
   const [isHovered, setIsHovered] = useState(false);
   const hadSelectedDescendantRef = useRef(false);
 
-  const hasSelectedDescendant = item.children?.some(function hasSelected(child) {
-    if (selectedKeys.includes(child.key)) {
-      return true;
-    }
+  const hasSelectedDescendant =
+    item.children?.some(function hasSelected(child) {
+      if (selectedKeys.includes(child.key)) {
+        return true;
+      }
 
-    return child.children?.some(hasSelected) ?? false;
-  }) ?? false;
+      return child.children?.some(hasSelected) ?? false;
+    }) ?? false;
 
   useEffect(() => {
     if (hasSelectedDescendant && !hadSelectedDescendantRef.current && !isOpen) {
@@ -412,30 +412,32 @@ function SubmenuRow({
               {item.icon}
             </span>
           )}
-          <span data-part="label" style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          <span
+            data-part="label"
+            style={{
+              flex: 1,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
             {item.label}
           </span>
           {/* Chevron indicator */}
-              <span
-                data-part="arrow-icon"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: 14,
-                  height: 14,
-                  flexShrink: 0,
-                  opacity: 0.4,
-                  transition: 'transform var(--ds-motion-fast) ease-out',
+          <span
+            data-part="arrow-icon"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: 14,
+              height: 14,
+              flexShrink: 0,
+              opacity: 0.4,
+              transition: 'transform var(--ds-motion-fast) ease-out',
             }}
           >
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              style={{ display: 'block' }}
-            >
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ display: 'block' }}>
               <path
                 d="M4.5 3L7.5 6L4.5 9"
                 stroke="currentColor"
@@ -455,7 +457,15 @@ function SubmenuRow({
             margin: 0,
           }}
         >
-          {renderModernMenuItems(item.children || [], onItemClick, selectedKeys, openKeys, onSubmenuToggle, level + 1, inlineIndent)}
+          {renderModernMenuItems(
+            item.children || [],
+            onItemClick,
+            selectedKeys,
+            openKeys,
+            onSubmenuToggle,
+            level + 1,
+            inlineIndent
+          )}
         </ul>
       </details>
     </li>
@@ -484,7 +494,7 @@ function renderModernMenuItems(
   openKeys: string[],
   onSubmenuToggle: (key: string, nextOpen: boolean) => void,
   level: number = 0,
-  inlineIndent: number = MENU_DEFAULTS.inlineIndent,
+  inlineIndent: number = MENU_DEFAULTS.inlineIndent
 ): React.ReactNode {
   return items.map((item) => {
     // Divider
@@ -496,10 +506,20 @@ function renderModernMenuItems(
     if (item.type === 'group') {
       return (
         <li key={item.key} data-part="group" role="presentation" style={{ listStyle: 'none' }}>
-          <div data-part="group-label" style={getGroupTitleStyle()}>{item.title || item.label}</div>
+          <div data-part="group-label" style={getGroupTitleStyle()}>
+            {item.title || item.label}
+          </div>
           {item.children && (
             <ul role="group" data-part="panel" style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              {renderModernMenuItems(item.children, onItemClick, selectedKeys, openKeys, onSubmenuToggle, level + 1, inlineIndent)}
+              {renderModernMenuItems(
+                item.children,
+                onItemClick,
+                selectedKeys,
+                openKeys,
+                onSubmenuToggle,
+                level + 1,
+                inlineIndent
+              )}
             </ul>
           )}
         </li>
@@ -536,36 +556,6 @@ function renderModernMenuItems(
       />
     );
   });
-}
-
-// ============================================================================
-// Global CSS injection for :focus-visible and details[open] chevron rotation
-// ============================================================================
-
-const MODERN_MENU_STYLE_ID = 'rottay-menu-modern-styles';
-
-function ensureGlobalStyles() {
-  if (typeof document === 'undefined') return;
-  if (document.getElementById(MODERN_MENU_STYLE_ID)) return;
-
-  const style = document.createElement('style');
-  style.id = MODERN_MENU_STYLE_ID;
-  style.textContent = `
-    .rottay-menu--modern a:focus-visible,
-    .rottay-menu--modern summary:focus-visible {
-      outline: 2px solid var(--ds-color-primary) !important;
-      outline-offset: -2px !important;
-    }
-    .rottay-menu--modern details[open] > summary > span:last-child {
-      transform: rotate(90deg);
-    }
-    .rottay-menu--modern summary::-webkit-details-marker,
-    .rottay-menu--modern summary::marker {
-      display: none;
-      content: '';
-    }
-  `;
-  document.head.appendChild(style);
 }
 
 // ============================================================================
@@ -622,14 +612,6 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
   } = props;
 
   // ========================================================================
-  // Global Styles
-  // ========================================================================
-
-  useEffect(() => {
-    ensureGlobalStyles();
-  }, []);
-
-  // ========================================================================
   // State Management
   // ========================================================================
 
@@ -659,9 +641,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
         return;
       }
 
-      const nextOpenKeys = nextOpen
-        ? [...openKeys, key]
-        : openKeys.filter((openKey) => openKey !== key);
+      const nextOpenKeys = nextOpen ? [...openKeys, key] : openKeys.filter((openKey) => openKey !== key);
 
       if (controlledOpenKeys === undefined) {
         setInternalOpenKeys(nextOpenKeys);
@@ -691,9 +671,7 @@ export default function ModernMenu(props: MenuProps): React.ReactElement {
         let newSelectedKeys: string[];
 
         if (multiple) {
-          newSelectedKeys = selectedKeys.includes(key)
-            ? selectedKeys.filter((k) => k !== key)
-            : [...selectedKeys, key];
+          newSelectedKeys = selectedKeys.includes(key) ? selectedKeys.filter((k) => k !== key) : [...selectedKeys, key];
         } else {
           newSelectedKeys = [key];
         }

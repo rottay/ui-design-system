@@ -42,6 +42,9 @@ describe('Toast.Container advanced behavior', () => {
     );
 
     expect(await screen.findByTestId('custom-toast')).toHaveTextContent('Secondary stack');
+    const container = screen.getByTestId('custom-toast').closest('.rottay-toast-container');
+    expect(container).toHaveAttribute('data-center-transform', 'true');
+    expect((container as HTMLElement).style.transform).toBe('');
     expect(screen.queryByText('Primary stack')).not.toBeInTheDocument();
 
     fireEvent.mouseEnter(screen.getByTestId('custom-toast').parentElement as HTMLElement);

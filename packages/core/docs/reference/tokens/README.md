@@ -6,7 +6,7 @@ Complete CSS tokens system for the Rottay Design System. This system provides fo
 > `@rottay/design-system` is the package root, plus the `./server`, `./icons`,
 > and `./styles*` subpaths. There is **no** `@rottay/design-system/tokens`
 > entry point. Earlier versions of this README advertised one — that was
-> aspirational, not real. Token *values* (`colors`, `spacing`,
+> aspirational, not real. Token _values_ (`colors`, `spacing`,
 > `buttonTokens`, etc.) currently live inside the package as implementation
 > detail; consumers should reach them through CSS variables (preferred) or
 > the `useTokens()` React hook re-exported from the package root. The CSS
@@ -81,25 +81,27 @@ The token system is built on CSS custom properties (CSS variables) organized in 
 
 ### Import the CSS bundle
 
-The full token CSS layer ships as a single bundle. There is no per-category
-subpath in the public API; consumers should import one bundle and rely on
-the CSS cascade.
+Component skins, states, keyframes and the full token CSS layer ship through the public style
+bundles. There is no per-category subpath in the public API; consumers must import exactly one full
+or vertical bundle and rely on the CSS cascade.
 
 ```css
 /* Full CSS bundle (all verticals, suitable for dev / Storybook) */
-@import '@rottay/design-system/styles.css';
+@import "@rottay/design-system/styles.css";
 ```
 
 ```css
 /* Per-vertical bundles (smaller, prefer in production apps) */
-@import '@rottay/design-system/styles/platform';   /* Rottay platform */
-@import '@rottay/design-system/styles/bithire';    /* BitHire */
-@import '@rottay/design-system/styles/evnto';      /* Evnto */
-@import '@rottay/design-system/styles/modern';     /* Modern engine only */
+@import "@rottay/design-system/styles/platform"; /* Rottay platform */
+@import "@rottay/design-system/styles/bithire"; /* BitHire */
+@import "@rottay/design-system/styles/evnto"; /* Evnto */
 ```
 
 The selectors and CSS variables are unchanged across bundles — they only
 differ in which tenant overrides are pre-baked.
+
+`@rottay/design-system/styles/modern` is an engine-only supplemental export. It is not a
+standalone vertical bundle and does not include the base component skins or Toast keyframes.
 
 ### Read tokens from React
 
@@ -107,7 +109,7 @@ For typed access from React, use the `useTokens()` hook re-exported from
 the package root.
 
 ```typescript
-import { useTokens } from '@rottay/design-system';
+import { useTokens } from "@rottay/design-system";
 
 function MyComponent() {
   const tokens = useTokens();
@@ -192,6 +194,7 @@ const MyComponent = () => (
 ### Base Tokens
 
 #### Colors (`themes/default.css` + `tenants/*.css`)
+
 - **Primary**: Canonical primary palette (9 shades)
 - **Secondary**: Canonical secondary palette (9 shades)
 - **Neutral**: Gray scale (9 shades)
@@ -206,7 +209,9 @@ var(--ds-color-alpha-black-50) /* rgba(0, 0, 0, 0.5) */
 ```
 
 #### Spacing (`base/spacing.css`)
+
 4px grid system with semantic names:
+
 ```css
 var(--ds-spacing-4)      /* 16px */
 var(--ds-spacing-md)     /* 24px - alias for spacing-6 */
@@ -214,7 +219,9 @@ var(--ds-spacing-gutter) /* 16px - layout spacing */
 ```
 
 #### Typography (`base/typography.css`)
+
 Font families, sizes, weights, and line heights:
+
 ```css
 var(--ds-font-family-base)
 var(--ds-font-size-lg)        /* 18px */
@@ -223,7 +230,9 @@ var(--ds-line-height-normal)  /* 1.5 */
 ```
 
 #### Shadows (`base/shadows.css`)
+
 Elevation scale from xs to 3xl:
+
 ```css
 var(--ds-shadow-sm)
 var(--ds-shadow-primary-md)
@@ -231,7 +240,9 @@ var(--ds-shadow-focus-ring)
 ```
 
 #### Borders (`base/borders.css`)
+
 Border widths, radii, and styles:
+
 ```css
 var(--ds-radius-md)           /* 8px */
 var(--ds-border-default)      /* 1px solid neutral-200 */
@@ -239,7 +250,9 @@ var(--ds-border-color-focus)
 ```
 
 #### Z-Index (`base/z-index.css`)
+
 Layering system for stacking:
+
 ```css
 var(--ds-z-index-modal)       /* 1500 */
 var(--ds-z-index-tooltip)     /* 1700 */
@@ -249,6 +262,7 @@ var(--ds-z-index-dropdown)    /* 1000 */
 ### Component Tokens
 
 #### Avatar (`components/avatar.css`)
+
 - 7 sizes (xs to 3xl)
 - 3 shapes (circle, square, rounded)
 - 7 variants (default, primary, secondary, success, warning, error, gradient)
@@ -256,18 +270,21 @@ var(--ds-z-index-dropdown)    /* 1000 */
 - Group settings
 
 #### Button (`components/button.css`)
+
 - 5 sizes (xs to xl)
 - 8 variants (primary, secondary, default, ghost, dashed, text, link)
 - Semantic variants (success, warning, error)
 - Icon button settings
 
 #### Input (`components/input.css`)
+
 - 3 sizes (sm, md, lg)
 - State variants (success, warning, error)
 - Addons and affixes
 - Helper text and validation
 
 #### Card (`components/card.css`)
+
 - 4 padding sizes
 - 5 shadow elevations
 - Header, body, footer sections
@@ -275,6 +292,7 @@ var(--ds-z-index-dropdown)    /* 1000 */
 - Interactive states
 
 #### Modal (`components/modal.css`)
+
 - 6 width sizes
 - Overlay/backdrop settings
 - Header, body, footer sections
@@ -284,7 +302,9 @@ var(--ds-z-index-dropdown)    /* 1000 */
 ### Animation Tokens
 
 #### Transitions (`animations/transitions.css`)
+
 Durations, easing functions, and property-specific transitions:
+
 ```css
 var(--duration-normal)      /* 0.3s */
 var(--easing-standard)      /* cubic-bezier(0.4, 0, 0.2, 1) */
@@ -293,7 +313,9 @@ var(--transition-button)
 ```
 
 #### Keyframes (`animations/keyframes.css`)
+
 Reusable @keyframes for common animations:
+
 - Fade (in, out, up, down, left, right)
 - Scale (in, out, up, down, zoom)
 - Slide (all directions)
@@ -303,6 +325,7 @@ Reusable @keyframes for common animations:
 ### Responsive Tokens
 
 Automatic adjustments for different screen sizes:
+
 - Mobile (< 640px)
 - Tablet (640px - 1023px)
 - Desktop (>= 1024px)
@@ -312,7 +335,9 @@ Automatic adjustments for different screen sizes:
 ### Tenant Tokens
 
 #### Rottay Tenant (`artifacts/rottay/`)
+
 Default tenant with Rottay-specific customizations:
+
 - Brand color overrides
 - Component styling adjustments
 - Accent colors (teal, orange)
@@ -322,11 +347,13 @@ Default tenant with Rottay-specific customizations:
 ## 📐 Naming Conventions
 
 ### General Pattern
+
 ```
 --ds-{category}-{element}-{property}-{variant}-{state}
 ```
 
 ### Examples
+
 ```css
 /* Color tokens */
 --ds-color-primary-500
@@ -359,6 +386,7 @@ Default tenant with Rottay-specific customizations:
 Tokens automatically adjust based on:
 
 ### Screen Size
+
 ```css
 /* Mobile */
 @media (max-width: 639px) {
@@ -372,6 +400,7 @@ Tokens automatically adjust based on:
 ```
 
 ### Input Method
+
 ```css
 /* Touch devices */
 @media (hover: none) and (pointer: coarse) {
@@ -380,6 +409,7 @@ Tokens automatically adjust based on:
 ```
 
 ### User Preferences
+
 ```css
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {

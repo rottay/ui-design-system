@@ -12,7 +12,7 @@
 
 import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
 import type { BoxProps, BoxSpacing } from '../Box.types';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP, isVoidElement } from '../Box.types';
+import { BOX_DEFAULTS, SPACING_MAP, isVoidElement } from '../Box.types';
 import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
 import { scalarOrUndefined, collectBoxResponsiveEntries } from '../../shared/responsive-helpers.js';
 
@@ -132,17 +132,6 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   }
   if (props.borderStyle !== undefined) {
     style.borderStyle = props.borderStyle;
-  }
-
-  // Border radius
-  const radiusValue = props.borderRadius || props.rounded;
-  if (radiusValue && radiusValue !== 'none') {
-    style.borderRadius = RADIUS_MAP[radiusValue];
-  }
-
-  // Shadow
-  if (props.shadow && props.shadow !== 'none') {
-    style.boxShadow = SHADOW_MAP[props.shadow];
   }
 
   // Display & Position - only display inline when NOT responsive
@@ -346,16 +335,10 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
   const elementId = needsResponsiveCSS ? `box-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
 
   // Build class names with Rustic-specific prefixes
-  const classNames = [
-    'rottay-box',
-    'rottay-box--rustic',
-    className,
-  ].filter(Boolean).join(' ');
+  const classNames = ['rottay-box', 'rottay-box--rustic', className].filter(Boolean).join(' ');
 
   // Box stamps NO data-part of its own. It is the style-injection escape hatch
   // every other component composes with, so a default part would put
@@ -363,10 +346,15 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   // `.rottay-x [data-part='root']` would then reach into X's Boxes, and any query
   // for X's own root would match them too. Box's skin anchors on its class.
   const ElementType = Component as ElementType;
+  const radiusValue = props.borderRadius || props.rounded;
+  const callerOwnsRadius = Object.prototype.hasOwnProperty.call(props.style ?? {}, 'borderRadius');
+  const callerOwnsShadow = Object.prototype.hasOwnProperty.call(props.style ?? {}, 'boxShadow');
   const elementProps = {
     ...htmlAttributes,
     ref: ref as Ref<HTMLElement>,
     className: classNames,
+    'data-radius': !callerOwnsRadius && radiusValue && radiusValue !== 'none' ? radiusValue : undefined,
+    'data-shadow': !callerOwnsShadow && props.shadow && props.shadow !== 'none' ? props.shadow : undefined,
     style: computedStyle,
     ...(responsive ? responsive.attrs : {}),
   };
@@ -379,9 +367,7 @@ const RusticBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
+      {responsive && responsive.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
       {element}
     </>
   );

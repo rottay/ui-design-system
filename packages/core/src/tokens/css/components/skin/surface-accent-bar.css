@@ -32,4 +32,5 @@
 
 .ds-surface.ds-accent-bar[data-part='bar'][data-style='animated'] {
   background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)), var(--ds-color-primary));
+  background-size: 200% 100%;
 }

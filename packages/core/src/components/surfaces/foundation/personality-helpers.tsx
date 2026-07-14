@@ -52,11 +52,7 @@ export interface AccentBarProps {
   barStyle: 'solid' | 'gradient' | 'animated';
 }
 
-export function SurfaceAccentBar({
-  position,
-  thickness,
-  barStyle,
-}: AccentBarProps): React.ReactElement | null {
+export function SurfaceAccentBar({ position, thickness, barStyle }: AccentBarProps): React.ReactElement | null {
   if (position === 'none') {
     return null;
   }
@@ -68,17 +64,16 @@ export function SurfaceAccentBar({
   // overflow:hidden (handled by SurfaceAccentBarWrapper).
   const baseStyle: React.CSSProperties = {
     position: 'absolute' as const,
-    ...({ '--ds-accent-bar-thickness': `${thickness}px` } as React.CSSProperties),
-    ...(isTop
-      ? { top: 0, left: 0, right: 0, height: thickness }
-      : { top: 0, left: 0, bottom: 0, width: thickness }),
+    ...({
+      '--ds-accent-bar-thickness': `${thickness}px`,
+    } as React.CSSProperties),
+    ...(isTop ? { top: 0, left: 0, right: 0, height: thickness } : { top: 0, left: 0, bottom: 0, width: thickness }),
   };
 
   // Animated style uses a wider gradient (200%) that shifts via keyframes,
   // creating a shimmer effect. The keyframe `ds-accent-bar-shimmer` must be
   // defined in the global DS stylesheet.
   if (barStyle === 'animated') {
-    baseStyle.backgroundSize = '200% 100%';
     baseStyle.animation = 'ds-accent-bar-shimmer 3s ease-in-out infinite';
   }
 

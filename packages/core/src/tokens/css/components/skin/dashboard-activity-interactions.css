@@ -1,0 +1,245 @@
+/**
+ * Dashboard activity interaction recovery.
+ *
+ * Declaration values stay byte-exact. Every rule is attached to its component
+ * scope per CK-A law §5.3; `:where()` adds that ownership without increasing
+ * the original selector weight. The two incompatible `liveGlow` definitions
+ * are component-namespaced as CK-A inventory §1 requires.
+ */
+
+/* ticker ------------------------------------------------------------------ */
+
+:where(.ds-activity-ticker) .ticker-content-v3 {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-activity-ticker) .ticker-in {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+:where(.ds-activity-ticker) .ticker-out-left {
+  opacity: 0;
+  transform: translateX(-40px) scale(0.95);
+}
+
+:where(.ds-activity-ticker) .ticker-out-right {
+  opacity: 0;
+  transform: translateX(40px) scale(0.95);
+}
+
+:where(.ds-activity-ticker) .live-indicator {
+  animation: ds-activity-ticker-live-glow 1.5s ease-in-out infinite;
+}
+
+:where(.ds-activity-ticker) .nav-button {
+  transition: all 0.3s ease;
+}
+
+:where(.ds-activity-ticker) .nav-button:hover {
+  background: var(--ds-color-primary-100);
+  border-color: var(--ds-color-primary-200);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px var(--ds-color-primary-100);
+}
+
+:where(.ds-activity-ticker) .ticker-dot {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+:where(.ds-activity-ticker) .ticker-dot:hover {
+  transform: scale(1.2);
+}
+
+:where(.ds-activity-ticker) .ticker-progress {
+  animation: ds-activity-ticker-progress-fill 5s linear;
+}
+
+:where(.ds-activity-ticker) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+  transform: translateX(2px);
+}
+
+@keyframes ds-activity-ticker-live-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-color-success), 0 0 8px var(--ds-color-success);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-color-success), 0 0 16px var(--ds-color-success);
+    opacity: 0.6;
+  }
+}
+
+@keyframes ds-activity-ticker-progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* timeline ---------------------------------------------------------------- */
+
+:where(.ds-activity-timeline) .activity-item-v3 {
+  animation: ds-activity-timeline-item-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+:where(.ds-activity-timeline) .live-indicator {
+  animation: ds-activity-timeline-live-glow 1.5s ease-in-out infinite;
+}
+
+:where(.ds-activity-timeline) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+  transform: translateX(2px);
+}
+
+@keyframes ds-activity-timeline-item-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-activity-timeline-live-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-color-success);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 10px var(--ds-color-success);
+    opacity: 0.7;
+  }
+}
+
+:where(.ds-activity-timeline) .activity-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-primary-200) transparent;
+}
+
+:where(.ds-activity-timeline) .activity-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-activity-timeline) .activity-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-activity-timeline) .activity-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-color-primary-200);
+  border-radius: 2px;
+}
+
+/* compact ----------------------------------------------------------------- */
+
+:where(.ds-activity-compact) .activity-compact-item-v3 {
+  animation: ds-activity-compact-slide-in-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-activity-compact) .activity-compact-item-v3:hover {
+  background: var(--ds-color-primary-50);
+  border-color: var(--ds-color-primary-200);
+  transform: translateX(6px);
+  box-shadow: -4px 0 16px var(--ds-color-primary-100);
+}
+
+:where(.ds-activity-compact) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+  transform: translateX(2px);
+}
+
+@keyframes ds-activity-compact-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+:where(.ds-activity-compact) .activity-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-primary-200) transparent;
+}
+
+:where(.ds-activity-compact) .activity-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-activity-compact) .activity-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-activity-compact) .activity-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-color-primary-200);
+  border-radius: 2px;
+}
+
+/* cards ------------------------------------------------------------------- */
+
+:where(.ds-activity-cards) .activity-card-item-v3 {
+  animation: ds-activity-cards-card-slide-in 0.4s ease-out both;
+  transition: all 0.2s ease;
+}
+
+:where(.ds-activity-cards) .activity-card-item-v3:hover {
+  background: var(--ds-color-primary-50);
+  border-color: var(--ds-color-primary-200);
+  transform: translateX(4px);
+}
+
+:where(.ds-activity-cards) .time-dot {
+  animation: ds-activity-cards-dot-pulse 2s ease-in-out infinite;
+}
+
+:where(.ds-activity-cards) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+}
+
+@keyframes ds-activity-cards-card-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-activity-cards-dot-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+:where(.ds-activity-cards) .activity-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-primary-200) transparent;
+}
+
+:where(.ds-activity-cards) .activity-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-activity-cards) .activity-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-activity-cards) .activity-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-color-primary-200);
+  border-radius: 2px;
+}

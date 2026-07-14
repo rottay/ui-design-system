@@ -1,4 +1,13 @@
-import { extname } from "node:path";
+import { existsSync, readFileSync, realpathSync, statSync } from "node:fs";
+import {
+  dirname,
+  extname,
+  isAbsolute,
+  join,
+  relative,
+  resolve as resolvePath,
+  sep,
+} from "node:path";
 import ts from "typescript";
 
 // Single source of truth for the inline-paint counter: the engine-token-audit
@@ -20,7 +29,7 @@ export const ARC09_PAINT_KEY_RE = new RegExp(
       "WebkitBackdropFilter",
       "transform",
     ].join("|") +
-    ")\\s*:",
+    ")\\s*:"
 );
 // border*/table box-model that is layout, not paint.
 export const ARC09_PAINT_EXEMPT = new Set([
@@ -44,7 +53,7 @@ export const ARC09_PAINT_EXEMPT = new Set([
  * data object or destructuring pattern than paint.
  */
 export const ARC09_PAINT_SHORTHAND_RE = new RegExp(
-  ARC09_PAINT_KEY_RE.source.replace(/\\s\*:$/, "") + "\\s*(?=[,}])",
+  ARC09_PAINT_KEY_RE.source.replace(/\\s\*:$/, "") + "\\s*(?=[,}])"
 );
 
 // `React.createElement()` bypasses JSX attribute analysis. The runtime-SVG
@@ -104,6 +113,506 @@ const SVG_CREATE_ELEMENT_TAGS = new Set([
   "tspan",
   "use",
 ]);
+
+/**
+ * Same-package style producers whose authored paint is owned by their defining
+ * module, not by every consumer that spreads/calls them. The registry is
+ * deliberately export-specific and canonical-path-specific: a same-named
+ * helper in another file remains opaque and therefore fails closed.
+ *
+ * Component-owned paint producers are normally enumerated at their defining
+ * module. `Tooltip.types/PLACEMENT_MAP` is the narrow exception: its placement
+ * transforms are overwritten later in the only productive consumer before the
+ * style reaches React. The two lower-layer producers (`runtime/personality`
+ * and `tokens/ts/base/density`) return only non-paint/custom-property values.
+ * Every entry is still verified to exist and export the exact symbol.
+ */
+const ownedStyle = (transparentArgs = []) => ({
+  kind: "style",
+  ownership: "owned",
+  transparentArgs,
+});
+
+const CERTIFIED_INLINE_STYLE_PRODUCERS = new Map([
+  [
+    "components/patterns/_internal/engines/modern/styles",
+    new Map(
+      [
+        "cardBodyStyle",
+        "menuSectionTitleStyle",
+        "panelCardStyle",
+        "pillBadgeSmStyle",
+        "pillBadgeStyle",
+        "popupPanelStyle",
+        "spinnerStyle",
+      ].map((name) => [name, ownedStyle()])
+    ),
+  ],
+  [
+    "components/patterns/data/list-toolbar/tokens",
+    new Map([["searchInputStyle", ownedStyle([{ index: 0, mode: "style" }])]]),
+  ],
+  [
+    "components/primitives/feedback/Toast/utils/animations",
+    new Map([["getToastAnimationStyle", ownedStyle()]]),
+  ],
+  [
+    "components/primitives/display/Tooltip/Tooltip.types",
+    new Map([
+      [
+        "PLACEMENT_MAP",
+        {
+          kind: "style",
+          ownership: "overwritten",
+          allowedPaint: new Set(["transform"]),
+          expectedPaintCount: 4,
+          consumers: new Map([
+            [
+              "components/primitives/display/Tooltip/engines/rustic",
+              new Set(["transform"]),
+            ],
+          ]),
+        },
+      ],
+    ]),
+  ],
+  [
+    "components/primitives/layout/shared/responsive-helpers",
+    new Map([
+      ["buildStackStyles", ownedStyle([{ index: 0, mode: "propBag" }])],
+    ]),
+  ],
+  [
+    "runtime/personality/primitives",
+    new Map([
+      [
+        "mergePersonalityStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [
+            { index: 0, mode: "style" },
+            { index: 1, mode: "style" },
+          ],
+        },
+      ],
+      [
+        "resolveButtonPersonalityStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "resolveTypographyHeadingStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "resolveTypographyTextStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "resolveStatisticPersonalityStyle",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "resolveSkeletonPersonalityDefaults",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["style"]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "resolveDividerPersonalityDefaults",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set(["style"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    "tokens/ts/base/density",
+    new Map([
+      [
+        "resolveDensityStyleVars",
+        {
+          kind: "style",
+          ownership: "zeroPaint",
+          stylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    "behavior/index",
+    new Map([
+      [
+        "partAttributes",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set([""]),
+          transparentArgs: [],
+        },
+      ],
+      [
+        "useInteractionState",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set(["handlers"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+  [
+    "components/primitives/layout/shared/responsive-props",
+    new Map([
+      [
+        "generateResponsiveCSS",
+        {
+          kind: "nonStylePropBag",
+          ownership: "zeroPaint",
+          nonStylePaths: new Set(["attrs"]),
+          transparentArgs: [],
+        },
+      ],
+    ]),
+  ],
+]);
+
+const certifiedProducerCache = new Map();
+const parsedModuleCache = new Map();
+
+function coreSrcRootFor(fileName) {
+  if (!isAbsolute(fileName)) return null;
+  const marker = `${sep}packages${sep}core${sep}src${sep}`;
+  const absolute = resolvePath(fileName);
+  const markerIndex = absolute.lastIndexOf(marker);
+  return markerIndex < 0
+    ? null
+    : absolute.slice(0, markerIndex + marker.length - 1);
+}
+
+function corePackagePathFor(fileName) {
+  const root = coreSrcRootFor(fileName);
+  if (!root) return null;
+  const packageRelative = relative(root, resolvePath(fileName));
+  if (
+    packageRelative === "" ||
+    packageRelative === ".." ||
+    packageRelative.startsWith(`..${sep}`)
+  ) {
+    return null;
+  }
+  return stripModuleExtension(packageRelative.replaceAll(sep, "/"));
+}
+
+function stripModuleExtension(path) {
+  return path.replace(/\.(?:[cm]?[jt]sx?)$/i, "");
+}
+
+function resolveSamePackageModule(fileName, specifier) {
+  const coreSrcRoot = coreSrcRootFor(fileName);
+  if (!coreSrcRoot || typeof specifier !== "string") return null;
+
+  let unresolved;
+  if (specifier.startsWith("@/")) {
+    unresolved = join(coreSrcRoot, specifier.slice(2));
+  } else if (specifier.startsWith(".")) {
+    unresolved = resolvePath(dirname(fileName), specifier);
+  } else {
+    return null;
+  }
+
+  const base = stripModuleExtension(unresolved);
+  const candidates = [
+    unresolved,
+    `${base}.ts`,
+    `${base}.tsx`,
+    `${base}.js`,
+    `${base}.jsx`,
+    join(base, "index.ts"),
+    join(base, "index.tsx"),
+    join(base, "index.js"),
+    join(base, "index.jsx"),
+  ];
+  const candidate = candidates.find(
+    (path) => existsSync(path) && statSync(path).isFile()
+  );
+  if (!candidate) return null;
+
+  const canonicalRoot = realpathSync(coreSrcRoot);
+  const canonicalFile = realpathSync(candidate);
+  const packageRelative = relative(canonicalRoot, canonicalFile);
+  if (
+    packageRelative === "" ||
+    packageRelative === ".." ||
+    packageRelative.startsWith(`..${sep}`)
+  ) {
+    return null;
+  }
+  return {
+    file: canonicalFile,
+    packagePath: stripModuleExtension(packageRelative.replaceAll(sep, "/")),
+  };
+}
+
+function parsedModule(file) {
+  if (parsedModuleCache.has(file)) return parsedModuleCache.get(file);
+  const sourceFile = parseSource(readFileSync(file, "utf8"), file);
+  parsedModuleCache.set(file, sourceFile);
+  return sourceFile;
+}
+
+function declarationNamed(sourceFile, name) {
+  for (const statement of sourceFile.statements) {
+    if (
+      (ts.isFunctionDeclaration(statement) ||
+        ts.isClassDeclaration(statement) ||
+        ts.isEnumDeclaration(statement)) &&
+      statement.name?.text === name
+    ) {
+      return statement;
+    }
+    if (ts.isVariableStatement(statement)) {
+      const declaration = statement.declarationList.declarations.find(
+        (candidate) =>
+          ts.isIdentifier(candidate.name) && candidate.name.text === name
+      );
+      if (declaration) return declaration;
+    }
+  }
+  return null;
+}
+
+/** Follow an exact named re-export so a facade cannot certify a missing symbol. */
+function exportedSymbol(file, exportName, seen = new Set()) {
+  const identity = `${file}#${exportName}`;
+  if (seen.has(identity)) return null;
+  const nextSeen = new Set(seen).add(identity);
+  const sourceFile = parsedModule(file);
+
+  const direct = declarationNamed(sourceFile, exportName);
+  if (
+    direct?.parent?.parent?.modifiers?.some(
+      (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
+    ) ||
+    direct?.modifiers?.some(
+      (modifier) => modifier.kind === ts.SyntaxKind.ExportKeyword
+    )
+  ) {
+    return { file, sourceFile, node: direct };
+  }
+
+  for (const statement of sourceFile.statements) {
+    if (!ts.isExportDeclaration(statement) || !statement.exportClause) continue;
+    if (!ts.isNamedExports(statement.exportClause)) continue;
+    for (const element of statement.exportClause.elements) {
+      if (element.name.text !== exportName) continue;
+      const localName = element.propertyName?.text ?? element.name.text;
+      if (!statement.moduleSpecifier) {
+        const local = declarationNamed(sourceFile, localName);
+        return local ? { file, sourceFile, node: local } : null;
+      }
+      const specifier = staticString(statement.moduleSpecifier);
+      const resolved = resolveSamePackageModule(file, specifier);
+      return resolved
+        ? exportedSymbol(resolved.file, localName, nextSeen)
+        : null;
+    }
+  }
+  return null;
+}
+
+function returnExpressionsForContract(node) {
+  if (!ts.isFunctionLike(node)) return [];
+  if (ts.isArrowFunction(node) && !ts.isBlock(node.body)) return [node.body];
+  if (!node.body || !ts.isBlock(node.body)) return [];
+  const returned = [];
+  function visit(candidate) {
+    if (candidate !== node.body && ts.isFunctionLike(candidate)) return;
+    if (ts.isReturnStatement(candidate)) {
+      if (candidate.expression) returned.push(candidate.expression);
+      return;
+    }
+    ts.forEachChild(candidate, visit);
+  }
+  visit(node.body);
+  return returned;
+}
+
+function isProvenNonStylePropBag(node) {
+  const expression = unwrapExpression(node);
+  if (!expression) return false;
+  if (
+    expression.kind === ts.SyntaxKind.NullKeyword ||
+    expression.kind === ts.SyntaxKind.UndefinedKeyword ||
+    ts.isVoidExpression(expression)
+  ) {
+    return true;
+  }
+  if (ts.isConditionalExpression(expression)) {
+    return (
+      isProvenNonStylePropBag(expression.whenTrue) &&
+      isProvenNonStylePropBag(expression.whenFalse)
+    );
+  }
+  if (!ts.isObjectLiteralExpression(expression)) return false;
+  for (const property of expression.properties) {
+    if (ts.isSpreadAssignment(property)) return false;
+    if (!property.name) return false;
+    const name = staticPropertyName(property.name);
+    if (name === null || name === "style") return false;
+  }
+  return true;
+}
+
+function returnedExpressionHasPath(node, path) {
+  const expression = unwrapExpression(node);
+  if (!expression) return false;
+  if (ts.isConditionalExpression(expression)) {
+    return (
+      returnedExpressionHasPath(expression.whenTrue, path) &&
+      returnedExpressionHasPath(expression.whenFalse, path)
+    );
+  }
+  if (path.length === 0) return isProvenNonStylePropBag(expression);
+  if (!ts.isObjectLiteralExpression(expression)) return false;
+  const property = expression.properties.find(
+    (candidate) =>
+      (ts.isPropertyAssignment(candidate) ||
+        ts.isShorthandPropertyAssignment(candidate) ||
+        ts.isGetAccessorDeclaration(candidate)) &&
+      staticPropertyName(candidate.name) === path[0]
+  );
+  if (!property) return false;
+  if (path.length === 1) return true;
+  if (ts.isPropertyAssignment(property)) {
+    return returnedExpressionHasPath(property.initializer, path.slice(1));
+  }
+  return false;
+}
+
+function hasNonStylePropBagHazard(node) {
+  let hazard = false;
+  function visit(candidate) {
+    if (hazard) return;
+    if (ts.isObjectLiteralExpression(candidate)) {
+      for (const property of candidate.properties) {
+        if (ts.isSpreadAssignment(property)) {
+          hazard = true;
+          return;
+        }
+        if (!property.name) {
+          hazard = true;
+          return;
+        }
+        const name = staticPropertyName(property.name);
+        if (name === null || name === "style") {
+          hazard = true;
+          return;
+        }
+      }
+    }
+    ts.forEachChild(candidate, visit);
+  }
+  visit(node);
+  return hazard;
+}
+
+function paintNamesInContractNode(node) {
+  const names = [];
+  function visit(candidate) {
+    if (
+      ts.isPropertyAssignment(candidate) ||
+      ts.isShorthandPropertyAssignment(candidate) ||
+      ts.isGetAccessorDeclaration(candidate)
+    ) {
+      const name = staticPropertyName(candidate.name);
+      if (name !== null && isPaintProperty(name)) names.push(name);
+      else if (name === null && ts.isComputedPropertyName(candidate.name)) {
+        // An unresolved key could become paint; represent it as a contract
+        // violation rather than blessing it under an allow-list.
+        names.push(null);
+      }
+    }
+    ts.forEachChild(candidate, visit);
+  }
+  visit(node);
+  return names;
+}
+
+function certifiedProducerContract(entry, fileName) {
+  if (!entry?.importSource || !entry.importedName) return null;
+  const resolved = resolveSamePackageModule(fileName, entry.importSource);
+  if (!resolved) return null;
+  const contract = CERTIFIED_INLINE_STYLE_PRODUCERS.get(
+    resolved.packagePath
+  )?.get(entry.importedName);
+  if (!contract) return null;
+
+  const cacheKey = `${resolved.file}#${entry.importedName}#${contract.kind}#${contract.ownership}`;
+  if (certifiedProducerCache.has(cacheKey)) {
+    return certifiedProducerCache.get(cacheKey) ? contract : null;
+  }
+  // Mark a recursive validation as failed until it proves itself. This keeps a
+  // zero-paint producer that starts delegating to itself from recursing forever.
+  certifiedProducerCache.set(cacheKey, false);
+  const symbol = exportedSymbol(resolved.file, entry.importedName);
+  if (!symbol) return null;
+
+  let valid = true;
+  if (contract.kind === "nonStylePropBag") {
+    const returned = returnExpressionsForContract(symbol.node);
+    valid =
+      returned.length > 0 &&
+      !hasNonStylePropBagHazard(symbol.node) &&
+      [...contract.nonStylePaths].every((path) =>
+        returned.every((value) =>
+          returnedExpressionHasPath(value, path === "" ? [] : path.split("."))
+        )
+      );
+  } else if (contract.ownership === "zeroPaint") {
+    valid =
+      countArc09PaintInFile(
+        symbol.node.getText(symbol.sourceFile),
+        symbol.file
+      ) === 0;
+  } else if (contract.ownership === "overwritten") {
+    const names = paintNamesInContractNode(symbol.node);
+    valid =
+      names.length === contract.expectedPaintCount &&
+      names.every((name) => contract.allowedPaint.has(name));
+  }
+  certifiedProducerCache.set(cacheKey, valid);
+  return valid ? contract : null;
+}
 
 /**
  * Count inline paint in a TSX source: paint-named object-literal keys AND
@@ -199,9 +708,10 @@ function countExplicitObjectPaintInFile(text) {
       // extremely common object KEY (`{ type: 'success' }`); matching it would
       // silence the whole object literal that follows and hide real paint.
       const ahead = text.slice(i, i + 120);
-      const kw =
-        /^interface\s+[A-Za-z_$]/.test(ahead) ? "interface"
-        : /^type\s+[A-Za-z_$][\w$]*\s*(<[^=<>]*>)?\s*=/.test(ahead) ? "type"
+      const kw = /^interface\s+[A-Za-z_$]/.test(ahead)
+        ? "interface"
+        : /^type\s+[A-Za-z_$][\w$]*\s*(<[^=<>]*>)?\s*=/.test(ahead)
+        ? "type"
         : null;
       if (kw && !inTypeBody()) {
         pendingTypeBody = true;
@@ -246,7 +756,10 @@ function countExplicitObjectPaintInFile(text) {
     if (c === "}") {
       if (topIs("{") || topIs("$")) {
         stack.pop();
-        if (typeBodyDepths.length > 0 && typeBodyDepths[typeBodyDepths.length - 1] === stack.length) {
+        if (
+          typeBodyDepths.length > 0 &&
+          typeBodyDepths[typeBodyDepths.length - 1] === stack.length
+        ) {
           typeBodyDepths.pop();
         }
       }
@@ -266,7 +779,12 @@ function countExplicitObjectPaintInFile(text) {
     }
     // a paint key is an object-literal key (innermost bracket is `{`) starting
     // at an identifier boundary.
-    if (topIs("{") && !inTypeBody() && /[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
+    if (
+      topIs("{") &&
+      !inTypeBody() &&
+      /[A-Za-z]/.test(c) &&
+      (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))
+    ) {
       const ahead = text.slice(i, i + 48);
       // An object KEY is preceded by `{` or `,` -- and by nothing else. Without this
       // the `color` in `background: active ? color : x` reads as a second key (the
@@ -370,9 +888,7 @@ function propertyAccessParts(node) {
 function isPaintProperty(name) {
   if (typeof name !== "string" || name.startsWith("--")) return false;
   const camel = name.replace(/-([a-z])/g, (_, ch) => ch.toUpperCase());
-  return (
-    ARC09_PAINT_KEY_RE.test(camel + ":") && !ARC09_PAINT_EXEMPT.has(camel)
-  );
+  return ARC09_PAINT_KEY_RE.test(camel + ":") && !ARC09_PAINT_EXEMPT.has(camel);
 }
 
 function isStyleTypeNode(node, sourceFile) {
@@ -466,14 +982,14 @@ function collectLexicalBindings(sourceFile) {
       return;
     }
     if (ts.isObjectBindingPattern(name) || ts.isArrayBindingPattern(name)) {
-      for (const element of name.elements) {
+      for (const [bindingIndex, element] of name.elements.entries()) {
         if (!ts.isBindingElement(element)) continue;
         const boundProperty = ts.isObjectBindingPattern(name)
           ? element.propertyName
             ? staticPropertyName(element.propertyName)
             : ts.isIdentifier(element.name)
-              ? element.name.text
-              : null
+            ? element.name.text
+            : null
           : null;
         const bindingSource = entry.bindingSource ?? entry.initializer ?? null;
         addName(scope, element.name, {
@@ -482,6 +998,8 @@ function collectLexicalBindings(sourceFile) {
           type: null,
           fromBindingPattern: true,
           boundProperty,
+          bindingIndex: ts.isArrayBindingPattern(name) ? bindingIndex : null,
+          restBinding: Boolean(element.dotDotDotToken),
           bindingSource,
         });
       }
@@ -490,7 +1008,9 @@ function collectLexicalBindings(sourceFile) {
 
   function visit(node) {
     if (ts.isVariableDeclaration(node)) {
-      const list = ts.isVariableDeclarationList(node.parent) ? node.parent : null;
+      const list = ts.isVariableDeclarationList(node.parent)
+        ? node.parent
+        : null;
       const blockScoped = Boolean(
         list?.flags & (ts.NodeFlags.Let | ts.NodeFlags.Const)
       );
@@ -511,10 +1031,26 @@ function collectLexicalBindings(sourceFile) {
         ts.isNamespaceImport(node)) &&
       node.name
     ) {
+      let importDeclaration = node.parent;
+      while (importDeclaration && !ts.isImportDeclaration(importDeclaration)) {
+        importDeclaration = importDeclaration.parent;
+      }
+      const importSource =
+        importDeclaration &&
+        ts.isStringLiteralLike(importDeclaration.moduleSpecifier)
+          ? importDeclaration.moduleSpecifier.text
+          : null;
+      const importedName = ts.isImportSpecifier(node)
+        ? node.propertyName?.text ?? node.name.text
+        : ts.isImportClause(node)
+        ? "default"
+        : "*";
       add(sourceFile, node.name.text, {
         declaration: node,
         initializer: null,
         type: null,
+        importSource,
+        importedName,
       });
     } else if (
       (ts.isFunctionDeclaration(node) ||
@@ -553,7 +1089,10 @@ function callName(node) {
 }
 
 function isAssignmentOperator(kind) {
-  return kind >= ts.SyntaxKind.FirstAssignment && kind <= ts.SyntaxKind.LastAssignment;
+  return (
+    kind >= ts.SyntaxKind.FirstAssignment &&
+    kind <= ts.SyntaxKind.LastAssignment
+  );
 }
 
 function nearestFunction(node) {
@@ -597,16 +1136,53 @@ function countScopedStylePaintInFile(text, fileName) {
   const propBagBindings = new Set();
   const styleObjects = new Set();
   const propBagObjects = new Set();
+  const svgPropBagObjects = new Set();
+  const directPaintPropBagObjects = new Set();
+  const directPaintPropBagBindings = new Set();
   const bindingAssignments = new Map();
+  const propertySlotAssignments = new Map();
   const objectAssignCalls = [];
   const allNodes = [];
   const opaqueRoots = new Set();
   const visitedFunctions = new Set();
+  const visitedPropertySlots = new Set();
 
   function assignmentFor(entry, expression) {
     const values = bindingAssignments.get(entry) ?? [];
     values.push(expression);
     bindingAssignments.set(entry, values);
+  }
+
+  function propertySlotIdentity(node) {
+    let expression = unwrapExpression(node);
+    const segments = [];
+    while (
+      expression &&
+      (ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression))
+    ) {
+      const access = propertyAccessParts(expression);
+      if (!access) return null;
+      if (access.name !== null) {
+        segments.unshift(`.${access.name}`);
+      } else if (
+        ts.isElementAccessExpression(expression) &&
+        expression.argumentExpression
+      ) {
+        segments.unshift(
+          `[${expression.argumentExpression.getText(sourceFile)}]`
+        );
+      } else {
+        return null;
+      }
+      expression = unwrapExpression(access.object);
+    }
+    if (!expression || !ts.isIdentifier(expression)) return null;
+    const entry = resolve(expression);
+    if (!entry) return null;
+    return `${entry.declaration.pos}:${entry.declaration.end}${segments.join(
+      ""
+    )}`;
   }
 
   function collect(node) {
@@ -619,12 +1195,24 @@ function countScopedStylePaintInFile(text, fileName) {
       if (left && ts.isIdentifier(left)) {
         const entry = resolve(left);
         if (entry) assignmentFor(entry, node.right);
+      } else if (
+        left &&
+        (ts.isPropertyAccessExpression(left) ||
+          ts.isElementAccessExpression(left))
+      ) {
+        const identity = propertySlotIdentity(left);
+        if (identity) {
+          const values = propertySlotAssignments.get(identity) ?? [];
+          values.push(node.right);
+          propertySlotAssignments.set(identity, values);
+        }
       }
     }
     if (
       ts.isCallExpression(node) &&
       callName(node) === "assign" &&
-      propertyAccessParts(node.expression)?.object.getText(sourceFile) === "Object"
+      propertyAccessParts(node.expression)?.object.getText(sourceFile) ===
+        "Object"
     ) {
       objectAssignCalls.push(node);
     }
@@ -632,20 +1220,667 @@ function countScopedStylePaintInFile(text, fileName) {
   }
   collect(sourceFile);
 
-  function isConsumerStyleInput(entry) {
+  function isConsumerStyleInput(entry, seen = new Set()) {
+    if (!entry || seen.has(entry)) return false;
+    seen.add(entry);
     const bindingSource = unwrapExpression(entry.bindingSource);
+    // Any value received as a parameter is caller-owned, including renamed
+    // object-binding properties such as `{ overlayStyle }`.
+    if (ts.isParameter(entry.declaration)) return true;
+    if (
+      entry.fromBindingPattern === true &&
+      bindingSource &&
+      ts.isIdentifier(bindingSource)
+    ) {
+      // Rest bags may be peeled more than once (`props -> rest -> htmlProps`).
+      // Preserve caller ownership across that chain instead of turning the
+      // second destructuring layer into a false opaque local producer.
+      return (
+        bindingSource.text === "props" ||
+        isConsumerStyleInput(resolve(bindingSource), seen)
+      );
+    }
+    return false;
+  }
+
+  function isCertifiedProducerEntry(entry, seen = new Set()) {
+    if (!entry || seen.has(entry)) return false;
+    seen.add(entry);
+    const contract = certifiedProducerContract(entry, fileName);
+    if (
+      contract?.kind === "style" &&
+      (contract.ownership !== "overwritten" ||
+        isSafeOverwrittenProducerUse(entry, contract))
+    ) {
+      return true;
+    }
+
+    // A rest binding derived from a certified object producer is still owned
+    // by that producer (`const { color, ...layout } = importedStyle`). It must
+    // not become a fresh opaque consumer site.
+    const bindingSource = unwrapExpression(entry.bindingSource);
+    if (
+      entry.fromBindingPattern &&
+      bindingSource &&
+      ts.isIdentifier(bindingSource)
+    ) {
+      return isCertifiedProducerEntry(resolve(bindingSource), seen);
+    }
+    return false;
+  }
+
+  function isCertifiedNonStylePropBagEntry(entry) {
     return (
-      // Any value received as a parameter is caller-owned, including renamed
-      // object-binding properties such as `{ overlayStyle }`.
-      ts.isParameter(entry.declaration) ||
-      // A direct `const { imageStyle } = props` is equally caller-owned. Keep
-      // this deliberately demonstrable: arbitrary objects named `config` or
-      // `theme` may contain source-authored style decisions and stay fail-closed.
-      (entry.fromBindingPattern === true &&
-        bindingSource &&
-        ts.isIdentifier(bindingSource) &&
-        bindingSource.text === "props")
+      certifiedProducerContract(entry, fileName)?.kind === "nonStylePropBag"
     );
+  }
+
+  function isCertifiedNonStylePropBagValue(
+    node,
+    path = [],
+    seenEntries = new Set()
+  ) {
+    const expression = unwrapExpression(node);
+    if (!expression) return false;
+    if (
+      expression.kind === ts.SyntaxKind.NullKeyword ||
+      ts.isVoidExpression(expression) ||
+      (ts.isIdentifier(expression) &&
+        expression.text === "undefined" &&
+        !resolve(expression))
+    ) {
+      return true;
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return (
+        isCertifiedNonStylePropBagValue(
+          expression.whenTrue,
+          path,
+          new Set(seenEntries)
+        ) &&
+        isCertifiedNonStylePropBagValue(
+          expression.whenFalse,
+          path,
+          new Set(seenEntries)
+        )
+      );
+    }
+    if (
+      ts.isPropertyAccessExpression(expression) ||
+      ts.isElementAccessExpression(expression)
+    ) {
+      const access = propertyAccessParts(expression);
+      if (!access?.name) return false;
+      return isCertifiedNonStylePropBagValue(
+        access.object,
+        [access.name, ...path],
+        seenEntries
+      );
+    }
+    if (ts.isIdentifier(expression)) {
+      const entry = resolve(expression);
+      if (!entry || seenEntries.has(entry)) return false;
+      const nextSeen = new Set(seenEntries).add(entry);
+      const nextPath =
+        entry.fromBindingPattern && entry.boundProperty
+          ? [entry.boundProperty, ...path]
+          : path;
+      const sources = [
+        entry.bindingSource,
+        entry.initializer,
+        ...(bindingAssignments.get(entry) ?? []),
+      ].filter(Boolean);
+      return (
+        sources.length > 0 &&
+        sources.every((source) =>
+          isCertifiedNonStylePropBagValue(source, nextPath, nextSeen)
+        )
+      );
+    }
+    if (ts.isCallExpression(expression)) {
+      const callable = localCallable(expression);
+      const contract = callable?.entry
+        ? certifiedProducerContract(callable.entry, fileName)
+        : null;
+      return Boolean(
+        contract?.kind === "nonStylePropBag" &&
+          contract.nonStylePaths.has(path.join("."))
+      );
+    }
+    return false;
+  }
+
+  function isCertifiedStyleProducerValue(
+    node,
+    path = [],
+    seenEntries = new Set()
+  ) {
+    const expression = unwrapExpression(node);
+    if (!expression) return false;
+    if (
+      expression.kind === ts.SyntaxKind.NullKeyword ||
+      ts.isVoidExpression(expression) ||
+      (ts.isIdentifier(expression) &&
+        expression.text === "undefined" &&
+        !resolve(expression))
+    ) {
+      return true;
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return (
+        isCertifiedStyleProducerValue(
+          expression.whenTrue,
+          path,
+          new Set(seenEntries)
+        ) &&
+        isCertifiedStyleProducerValue(
+          expression.whenFalse,
+          path,
+          new Set(seenEntries)
+        )
+      );
+    }
+    if (
+      ts.isPropertyAccessExpression(expression) ||
+      ts.isElementAccessExpression(expression)
+    ) {
+      const access = propertyAccessParts(expression);
+      if (!access?.name) return false;
+      return isCertifiedStyleProducerValue(
+        access.object,
+        [access.name, ...path],
+        seenEntries
+      );
+    }
+    if (ts.isIdentifier(expression)) {
+      const entry = resolve(expression);
+      if (!entry || seenEntries.has(entry)) return false;
+      const nextSeen = new Set(seenEntries).add(entry);
+      const nextPath =
+        entry.fromBindingPattern && entry.boundProperty
+          ? [entry.boundProperty, ...path]
+          : path;
+      const sources = [
+        entry.bindingSource,
+        entry.initializer,
+        ...(bindingAssignments.get(entry) ?? []),
+      ].filter(Boolean);
+      return (
+        sources.length > 0 &&
+        sources.every((source) =>
+          isCertifiedStyleProducerValue(source, nextPath, nextSeen)
+        )
+      );
+    }
+    if (ts.isCallExpression(expression)) {
+      const callable = localCallable(expression);
+      const contract = callable?.entry
+        ? certifiedProducerContract(callable.entry, fileName)
+        : null;
+      const paths = contract?.stylePaths ?? new Set([""]);
+      return Boolean(
+        contract?.kind === "style" &&
+          contract.ownership !== "overwritten" &&
+          paths.has(path.join("."))
+      );
+    }
+    return false;
+  }
+
+  function isReactHookCall(call, hookName) {
+    const callee = unwrapExpression(call.expression);
+    if (callee && ts.isIdentifier(callee)) {
+      const entry = resolve(callee);
+      return Boolean(
+        entry?.importSource === "react" && entry.importedName === hookName
+      );
+    }
+    const access = propertyAccessParts(callee);
+    if (!access || access.name !== hookName) return false;
+    const object = unwrapExpression(access.object);
+    if (!object || !ts.isIdentifier(object)) return false;
+    const entry = resolve(object);
+    return Boolean(
+      entry?.importSource === "react" && entry.importedName === "*"
+    );
+  }
+
+  function isReactFactoryCall(call, factoryName) {
+    const callee = unwrapExpression(call.expression);
+    if (callee && ts.isIdentifier(callee)) {
+      const entry = resolve(callee);
+      return Boolean(
+        entry?.importSource === "react" && entry.importedName === factoryName
+      );
+    }
+    const access = propertyAccessParts(callee);
+    if (!access || access.name !== factoryName) return false;
+    const object = unwrapExpression(access.object);
+    if (!object || !ts.isIdentifier(object)) return false;
+    const entry = resolve(object);
+    return entry
+      ? entry.importSource === "react" &&
+          (entry.importedName === "*" || entry.importedName === "default")
+      : object.text === "React";
+  }
+
+  function staticStringValues(node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return null;
+    seen.add(expression);
+
+    if (ts.isStringLiteralLike(expression)) return new Set([expression.text]);
+    if (ts.isConditionalExpression(expression)) {
+      const left = staticStringValues(expression.whenTrue, seen);
+      const right = staticStringValues(expression.whenFalse, seen);
+      if (!left || !right) return null;
+      return new Set([...left, ...right]);
+    }
+    if (ts.isIdentifier(expression)) {
+      const entry = resolve(expression);
+      if (!entry) return null;
+      if (entry.initializer) return staticStringValues(entry.initializer, seen);
+      const type = entry.type;
+      if (!type) return null;
+      const nodes = ts.isUnionTypeNode(type) ? type.types : [type];
+      const values = [];
+      for (const candidate of nodes) {
+        if (
+          ts.isLiteralTypeNode(candidate) &&
+          ts.isStringLiteralLike(candidate.literal)
+        ) {
+          values.push(candidate.literal.text);
+        } else if (
+          candidate.kind !== ts.SyntaxKind.UndefinedKeyword &&
+          candidate.kind !== ts.SyntaxKind.NullKeyword
+        ) {
+          return null;
+        }
+      }
+      return values.length > 0 ? new Set(values) : null;
+    }
+    if (
+      ts.isPropertyAccessExpression(expression) ||
+      ts.isElementAccessExpression(expression)
+    ) {
+      const access = propertyAccessParts(expression);
+      if (!access?.name) return null;
+      const object = localObjectForExpression(access.object);
+      const property = objectLiteralProperty(object, access.name);
+      if (property && ts.isPropertyAssignment(property)) {
+        return staticStringValues(property.initializer, seen);
+      }
+      if (property && ts.isShorthandPropertyAssignment(property)) {
+        return staticStringValues(property.name, seen);
+      }
+      if (property && ts.isGetAccessorDeclaration(property)) {
+        const returned = functionReturnExpressions(property).map((value) =>
+          staticStringValues(value, new Set(seen))
+        );
+        if (returned.length === 0 || returned.some((value) => value === null)) {
+          return null;
+        }
+        return new Set(returned.flatMap((value) => [...value]));
+      }
+      return null;
+    }
+    if (ts.isCallExpression(expression)) {
+      const callable = localCallable(expression);
+      if (!callable?.fn) return null;
+      const returned = functionReturnExpressions(callable.fn).map((value) =>
+        staticStringValues(value, new Set(seen))
+      );
+      if (returned.length === 0 || returned.some((value) => value === null)) {
+        return null;
+      }
+      return new Set(returned.flatMap((value) => [...value]));
+    }
+    return null;
+  }
+
+  function isDefinitelyDataOrAriaProperty(node, seenEntries = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression) return false;
+    if (ts.isStringLiteralLike(expression)) {
+      return /^(?:data|aria)-/.test(expression.text);
+    }
+    if (ts.isTemplateExpression(expression)) {
+      return /^(?:data|aria)-/.test(expression.head.text);
+    }
+    if (ts.isIdentifier(expression)) {
+      const entry = resolve(expression);
+      if (!entry || seenEntries.has(entry) || !entry.initializer) return false;
+      return isDefinitelyDataOrAriaProperty(
+        entry.initializer,
+        new Set(seenEntries).add(entry)
+      );
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return (
+        isDefinitelyDataOrAriaProperty(expression.whenTrue, seenEntries) &&
+        isDefinitelyDataOrAriaProperty(expression.whenFalse, seenEntries)
+      );
+    }
+    return false;
+  }
+
+  function countCssTextExpression(node) {
+    const values = staticStringValues(node);
+    if (!values) return 1;
+    let maximum = 0;
+    for (const value of values) {
+      const count = value
+        .split(";")
+        .map((declaration) => declaration.trim())
+        .filter(Boolean)
+        .reduce((total, declaration) => {
+          const match = declaration.match(/^(-?[A-Za-z][\w-]*)\s*:/);
+          return total + Number(Boolean(match && isPaintProperty(match[1])));
+        }, 0);
+      maximum = Math.max(maximum, count);
+    }
+    return maximum;
+  }
+
+  function createElementTargetKind(node) {
+    const values = staticStringValues(node);
+    if (values) {
+      return [...values].some((value) => SVG_CREATE_ELEMENT_TAGS.has(value))
+        ? "svg"
+        : "html";
+    }
+    const expression = unwrapExpression(node);
+    if (!expression) return "unknown";
+    if (ts.isConditionalExpression(expression)) {
+      const branches = [
+        createElementTargetKind(expression.whenTrue),
+        createElementTargetKind(expression.whenFalse),
+      ];
+      if (branches.every((kind) => kind === "component")) return "component";
+      if (branches.every((kind) => kind === "html")) return "html";
+      if (branches.some((kind) => kind === "svg")) return "svg";
+      return "unknown";
+    }
+    // React's uppercase convention is the only non-literal proof available
+    // without a type-checker that a value denotes a component rather than an
+    // intrinsic tag. Everything else may resolve to SVG and fails closed.
+    if (ts.isIdentifier(expression) && /^[A-Z]/.test(expression.text)) {
+      return "component";
+    }
+    const access = propertyAccessParts(expression);
+    if (access) {
+      let root = unwrapExpression(access.object);
+      while (
+        root &&
+        (ts.isPropertyAccessExpression(root) ||
+          ts.isElementAccessExpression(root))
+      ) {
+        root = unwrapExpression(propertyAccessParts(root)?.object);
+      }
+      if (root && ts.isIdentifier(root) && /^[A-Z]/.test(root.text)) {
+        return "component";
+      }
+    }
+    return "unknown";
+  }
+
+  function jsxSpreadMode(node) {
+    const owner = node.parent?.parent;
+    if (
+      !owner ||
+      (!ts.isJsxOpeningElement(owner) && !ts.isJsxSelfClosingElement(owner))
+    ) {
+      return null;
+    }
+    const tag = owner.tagName.getText(sourceFile);
+    if (/^[A-Z]/.test(tag)) return null;
+    if (tag.includes(":")) return "svgPropBag";
+    if (!SVG_CREATE_ELEMENT_TAGS.has(tag)) return "propBag";
+    if (tag !== "a") return "svgPropBag";
+
+    // `<a>` exists in both HTML and SVG. It is an SVG prop bag only under an
+    // actual `<svg>` ancestor; otherwise top-level `fill`/`stroke` are ordinary
+    // DOM props and not inline style.
+    let current = owner.parent;
+    while (current) {
+      if (
+        (ts.isJsxElement(current) || ts.isJsxSelfClosingElement(current)) &&
+        (ts.isJsxElement(current)
+          ? current.openingElement.tagName.getText(sourceFile)
+          : current.tagName.getText(sourceFile)) === "svg"
+      ) {
+        return "svgPropBag";
+      }
+      current = current.parent;
+    }
+    return "propBag";
+  }
+
+  function objectLiteralProperty(object, name) {
+    if (!object || !ts.isObjectLiteralExpression(object)) return null;
+    for (const property of object.properties) {
+      if (
+        (ts.isPropertyAssignment(property) ||
+          ts.isShorthandPropertyAssignment(property) ||
+          ts.isMethodDeclaration(property) ||
+          ts.isGetAccessorDeclaration(property)) &&
+        staticPropertyName(property.name) === name
+      ) {
+        return property;
+      }
+    }
+    return null;
+  }
+
+  function localObjectForExpression(node) {
+    const expression = unwrapExpression(node);
+    if (expression && ts.isObjectLiteralExpression(expression))
+      return expression;
+    if (!expression || !ts.isIdentifier(expression)) return null;
+    const entry = resolve(expression);
+    const initializer = unwrapExpression(entry?.initializer);
+    return initializer && ts.isObjectLiteralExpression(initializer)
+      ? initializer
+      : null;
+  }
+
+  function isConsumerPropertyAccess(node) {
+    const access = propertyAccessParts(node);
+    if (!access) return false;
+
+    function isConsumerExpression(expressionNode, seen = new Set()) {
+      const expression = unwrapExpression(expressionNode);
+      if (!expression) return false;
+      if (ts.isConditionalExpression(expression)) {
+        return (
+          isConsumerExpression(expression.whenTrue, new Set(seen)) &&
+          isConsumerExpression(expression.whenFalse, new Set(seen))
+        );
+      }
+      if (
+        ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression)
+      ) {
+        return isConsumerExpression(
+          propertyAccessParts(expression)?.object,
+          seen
+        );
+      }
+      if (!ts.isIdentifier(expression)) return false;
+      const entry = resolve(expression);
+      if (!entry || seen.has(entry)) return false;
+      seen.add(entry);
+      if (isConsumerStyleInput(entry)) return true;
+      if (
+        entry.bindingSource &&
+        isConsumerExpression(entry.bindingSource, seen)
+      ) {
+        return true;
+      }
+      return Boolean(
+        entry.initializer && isConsumerExpression(entry.initializer, seen)
+      );
+    }
+
+    return isConsumerExpression(access.object);
+  }
+
+  function isCertifiedProducerPropertyAccess(node) {
+    let expression = unwrapExpression(node);
+    while (
+      expression &&
+      (ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression))
+    ) {
+      expression = unwrapExpression(propertyAccessParts(expression)?.object);
+    }
+    if (!expression || !ts.isIdentifier(expression)) return false;
+    return isCertifiedProducerEntry(resolve(expression));
+  }
+
+  function isContractedProducerPropertyAccess(node) {
+    let expression = unwrapExpression(node);
+    while (
+      expression &&
+      (ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression))
+    ) {
+      expression = unwrapExpression(propertyAccessParts(expression)?.object);
+    }
+    if (!expression || !ts.isIdentifier(expression)) return false;
+    return (
+      certifiedProducerContract(resolve(expression), fileName)?.kind === "style"
+    );
+  }
+
+  function isSafeOverwrittenProducerUse(entry, contract) {
+    const required = contract.consumers?.get(corePackagePathFor(fileName));
+    if (!required) return false;
+
+    function containsReference(node, candidates) {
+      let found = false;
+      function visit(candidate) {
+        if (found) return;
+        if (ts.isIdentifier(candidate) && candidates.has(resolve(candidate))) {
+          found = true;
+          return;
+        }
+        ts.forEachChild(candidate, visit);
+      }
+      visit(node);
+      return found;
+    }
+
+    function isAliasExpression(node, candidates) {
+      const expression = unwrapExpression(node);
+      if (!expression) return false;
+      if (ts.isIdentifier(expression))
+        return candidates.has(resolve(expression));
+      if (
+        ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression)
+      ) {
+        return isAliasExpression(
+          propertyAccessParts(expression)?.object,
+          candidates
+        );
+      }
+      if (ts.isConditionalExpression(expression)) {
+        return (
+          isAliasExpression(expression.whenTrue, candidates) &&
+          isAliasExpression(expression.whenFalse, candidates)
+        );
+      }
+      if (ts.isBinaryExpression(expression)) {
+        if (expression.operatorToken.kind === ts.SyntaxKind.CommaToken) {
+          return isAliasExpression(expression.right, candidates);
+        }
+        if (
+          expression.operatorToken.kind === ts.SyntaxKind.BarBarToken ||
+          expression.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken
+        ) {
+          return (
+            isAliasExpression(expression.left, candidates) &&
+            isAliasExpression(expression.right, candidates)
+          );
+        }
+      }
+      return false;
+    }
+
+    const derived = new Set();
+    let changed = true;
+    while (changed) {
+      changed = false;
+      const candidates = new Set([entry, ...derived]);
+      for (const candidate of entries) {
+        if (
+          candidate.initializer &&
+          !derived.has(candidate) &&
+          containsReference(candidate.initializer, candidates) &&
+          isAliasExpression(candidate.initializer, candidates)
+        ) {
+          derived.add(candidate);
+          changed = true;
+        }
+      }
+    }
+    if (derived.size === 0) return false;
+
+    const inside = (node, ancestor) =>
+      Boolean(ancestor && node.pos >= ancestor.pos && node.end <= ancestor.end);
+
+    function safeSpreadForReference(identifier) {
+      let current = identifier.parent;
+      while (current && !ts.isSpreadAssignment(current)) {
+        if (ts.isObjectLiteralExpression(current) || ts.isStatement(current)) {
+          return false;
+        }
+        current = current.parent;
+      }
+      if (!current || !ts.isObjectLiteralExpression(current.parent))
+        return false;
+      const properties = current.parent.properties;
+      const spreadIndex = properties.indexOf(current);
+      if (spreadIndex < 0) return false;
+      const laterNames = new Set(
+        properties.slice(spreadIndex + 1).flatMap((property) => {
+          if (
+            ts.isPropertyAssignment(property) ||
+            ts.isShorthandPropertyAssignment(property) ||
+            ts.isGetAccessorDeclaration(property)
+          ) {
+            const name = staticPropertyName(property.name);
+            return name === null ? [] : [name];
+          }
+          return [];
+        })
+      );
+      return [...required].every((name) => laterNames.has(name));
+    }
+
+    let safeSpreadCount = 0;
+    const relevant = new Set([entry, ...derived]);
+    for (const node of allNodes) {
+      if (!ts.isIdentifier(node)) continue;
+      const resolved = resolve(node);
+      if (!relevant.has(resolved)) continue;
+      if (inside(node, resolved.declaration)) continue;
+      if (
+        [...derived].some(
+          (candidate) =>
+            candidate !== resolved && inside(node, candidate.initializer)
+        )
+      ) {
+        continue;
+      }
+      if (safeSpreadForReference(node)) {
+        safeSpreadCount += 1;
+        continue;
+      }
+      return false;
+    }
+    return safeSpreadCount > 0;
   }
 
   function recordOpaque(node, mode, entry = null) {
@@ -677,13 +1912,300 @@ function countScopedStylePaintInFile(text, fileName) {
     visitReturns(body);
   }
 
+  function callableFromExpression(node) {
+    const candidate = unwrapExpression(node);
+    if (!candidate) return null;
+    if (ts.isFunctionLike(candidate)) return candidate;
+    if (
+      ts.isCallExpression(candidate) &&
+      (isReactHookCall(candidate, "useMemo") ||
+        isReactHookCall(candidate, "useCallback"))
+    ) {
+      const factory = unwrapExpression(candidate.arguments[0]);
+      return factory && ts.isFunctionLike(factory) ? factory : null;
+    }
+    return null;
+  }
+
   function localCallable(call) {
     const callee = unwrapExpression(call.expression);
-    if (!callee || !ts.isIdentifier(callee)) return null;
-    const entry = resolve(callee);
-    if (!entry) return null;
-    const candidate = unwrapExpression(entry.initializer) ?? entry.declaration;
-    return ts.isFunctionLike(candidate) ? { entry, fn: candidate } : { entry, fn: null };
+    if (!callee) return null;
+    if (ts.isIdentifier(callee)) {
+      const entry = resolve(callee);
+      if (!entry) return null;
+      const fn =
+        callableFromExpression(entry.initializer) ??
+        callableFromExpression(entry.declaration);
+      return { entry, fn };
+    }
+
+    const access = propertyAccessParts(callee);
+    if (!access?.name) return null;
+    const object = localObjectForExpression(access.object);
+    const property = objectLiteralProperty(object, access.name);
+    if (!property) return null;
+    const candidate = ts.isPropertyAssignment(property)
+      ? property.initializer
+      : property;
+    return { entry: null, fn: callableFromExpression(candidate) };
+  }
+
+  function reactStateSources(entry) {
+    if (
+      !entry?.fromBindingPattern ||
+      entry.bindingIndex !== 0 ||
+      !ts.isCallExpression(unwrapExpression(entry.bindingSource))
+    ) {
+      return null;
+    }
+    const stateCall = unwrapExpression(entry.bindingSource);
+    if (!isReactHookCall(stateCall, "useState")) return null;
+
+    const sources = [];
+    if (stateCall.arguments[0]) sources.push(stateCall.arguments[0]);
+    for (const node of allNodes) {
+      if (!ts.isCallExpression(node)) continue;
+      const callee = unwrapExpression(node.expression);
+      if (!callee || !ts.isIdentifier(callee)) continue;
+      const setter = resolve(callee);
+      if (
+        setter?.declaration === entry.declaration &&
+        setter.bindingIndex === 1 &&
+        node.arguments[0]
+      ) {
+        sources.push(node.arguments[0]);
+      }
+    }
+    return sources;
+  }
+
+  function functionReturnExpressions(fn) {
+    if (ts.isArrowFunction(fn) && !ts.isBlock(fn.body)) return [fn.body];
+    const body = fn.body;
+    if (!body || !ts.isBlock(body)) return [];
+    const expressions = [];
+    function visitReturns(node) {
+      if (node !== body && ts.isFunctionLike(node)) return;
+      if (ts.isReturnStatement(node)) {
+        if (node.expression) expressions.push(node.expression);
+        return;
+      }
+      ts.forEachChild(node, visitReturns);
+    }
+    visitReturns(body);
+    return expressions;
+  }
+
+  function localValues(node, seenNodes = new Set(), seenEntries = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression) return { proven: true, values: [] };
+    if (seenNodes.has(expression)) return { proven: false, values: [] };
+    const nextNodes = new Set(seenNodes).add(expression);
+
+    if (
+      expression.kind === ts.SyntaxKind.NullKeyword ||
+      ts.isVoidExpression(expression)
+    ) {
+      return { proven: true, values: [] };
+    }
+    if (
+      ts.isObjectLiteralExpression(expression) ||
+      ts.isArrayLiteralExpression(expression) ||
+      ts.isFunctionLike(expression)
+    ) {
+      return { proven: true, values: [expression] };
+    }
+    if (ts.isIdentifier(expression)) {
+      const entry = resolve(expression);
+      if (!entry) {
+        return {
+          proven: expression.text === "undefined",
+          values: [],
+        };
+      }
+      if (seenEntries.has(entry)) return { proven: false, values: [] };
+      const nextEntries = new Set(seenEntries).add(entry);
+      let sources = [
+        entry.initializer,
+        ...(bindingAssignments.get(entry) ?? []),
+      ].filter(Boolean);
+      if (sources.length === 0) sources = reactStateSources(entry) ?? [];
+      if (sources.length === 0) return { proven: false, values: [] };
+      return mergeLocalValues(
+        sources.map((source) => localValues(source, nextNodes, nextEntries))
+      );
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return mergeLocalValues([
+        localValues(expression.whenTrue, nextNodes, seenEntries),
+        localValues(expression.whenFalse, nextNodes, seenEntries),
+      ]);
+    }
+    if (ts.isBinaryExpression(expression)) {
+      if (
+        expression.operatorToken.kind === ts.SyntaxKind.CommaToken ||
+        expression.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken
+      ) {
+        return localValues(expression.right, nextNodes, seenEntries);
+      }
+      if (
+        expression.operatorToken.kind === ts.SyntaxKind.BarBarToken ||
+        expression.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken
+      ) {
+        return mergeLocalValues([
+          localValues(expression.left, nextNodes, seenEntries),
+          localValues(expression.right, nextNodes, seenEntries),
+        ]);
+      }
+    }
+    if (ts.isCallExpression(expression)) {
+      if (
+        (isReactHookCall(expression, "useMemo") ||
+          isReactHookCall(expression, "useCallback")) &&
+        expression.arguments[0]
+      ) {
+        const factory = callableFromExpression(expression.arguments[0]);
+        return factory
+          ? mergeLocalValues(
+              functionReturnExpressions(factory).map((value) =>
+                localValues(value, nextNodes, seenEntries)
+              )
+            )
+          : { proven: false, values: [] };
+      }
+      const callable = localCallable(expression);
+      if (!callable?.fn) return { proven: false, values: [] };
+      return mergeLocalValues(
+        functionReturnExpressions(callable.fn).map((value) =>
+          localValues(value, nextNodes, seenEntries)
+        )
+      );
+    }
+    if (
+      ts.isPropertyAccessExpression(expression) ||
+      ts.isElementAccessExpression(expression)
+    ) {
+      const access = propertyAccessParts(expression);
+      const base = localValues(access.object, nextNodes, seenEntries);
+      if (!base.proven) return base;
+
+      let names = access.name === null ? null : new Set([access.name]);
+      if (
+        names === null &&
+        ts.isElementAccessExpression(expression) &&
+        expression.argumentExpression
+      ) {
+        names = staticStringValues(expression.argumentExpression);
+        const argument = unwrapExpression(expression.argumentExpression);
+        if (argument && ts.isNumericLiteral(argument)) {
+          names = new Set([argument.text]);
+        }
+      }
+
+      const results = [];
+      for (const value of base.values) {
+        const candidate = unwrapExpression(value);
+        if (candidate && ts.isObjectLiteralExpression(candidate)) {
+          // A spread can supply/overwrite any requested key. Proving its exact
+          // merge semantics belongs to a future value lattice; until then the
+          // access remains unknown instead of silently losing nested shorthand.
+          if (candidate.properties.some(ts.isSpreadAssignment)) {
+            return { proven: false, values: [] };
+          }
+          const candidates = candidate.properties.filter(
+            (property) =>
+              ts.isPropertyAssignment(property) ||
+              ts.isShorthandPropertyAssignment(property) ||
+              ts.isMethodDeclaration(property) ||
+              ts.isGetAccessorDeclaration(property)
+          );
+          const namedCandidates = candidates.map((property) => {
+            const staticName = staticPropertyName(property.name);
+            const propertyNames =
+              staticName !== null
+                ? new Set([staticName])
+                : ts.isComputedPropertyName(property.name)
+                ? staticStringValues(property.name.expression)
+                : null;
+            return { property, propertyNames };
+          });
+          if (
+            namedCandidates.some(({ propertyNames }) => propertyNames === null)
+          ) {
+            return { proven: false, values: [] };
+          }
+          const properties = names
+            ? namedCandidates
+                .filter(({ propertyNames }) =>
+                  [...propertyNames].some((name) => names.has(name))
+                )
+                .map(({ property }) => property)
+            : candidates;
+          for (const property of properties) {
+            if (ts.isPropertyAssignment(property)) {
+              results.push(
+                localValues(property.initializer, nextNodes, seenEntries)
+              );
+            } else if (ts.isShorthandPropertyAssignment(property)) {
+              results.push(localValues(property.name, nextNodes, seenEntries));
+            } else if (ts.isGetAccessorDeclaration(property)) {
+              results.push(
+                mergeLocalValues(
+                  functionReturnExpressions(property).map((returned) =>
+                    localValues(returned, nextNodes, seenEntries)
+                  )
+                )
+              );
+            } else {
+              results.push({ proven: true, values: [property] });
+            }
+          }
+          continue;
+        }
+        if (candidate && ts.isArrayLiteralExpression(candidate)) {
+          if (candidate.elements.some(ts.isSpreadElement)) {
+            return { proven: false, values: [] };
+          }
+          const elements = names
+            ? [...names]
+                .map((name) => Number(name))
+                .filter(
+                  (index) =>
+                    Number.isInteger(index) &&
+                    index >= 0 &&
+                    index < candidate.elements.length
+                )
+                .map((index) => candidate.elements[index])
+            : candidate.elements.filter(
+                (element) => !ts.isSpreadElement(element)
+              );
+          for (const element of elements) {
+            results.push(localValues(element, nextNodes, seenEntries));
+          }
+          continue;
+        }
+        return { proven: false, values: [] };
+      }
+      return mergeLocalValues(results);
+    }
+    return { proven: false, values: [] };
+  }
+
+  function mergeLocalValues(results) {
+    if (results.some((result) => !result.proven)) {
+      return { proven: false, values: [] };
+    }
+    return {
+      proven: true,
+      values: results.flatMap((result) => result.values),
+    };
+  }
+
+  function markLocalObjectAccess(expression, mode) {
+    const resolved = localValues(expression);
+    if (!resolved.proven) return false;
+    for (const value of resolved.values) markExpression(value, mode);
+    return true;
   }
 
   function markExpression(node, mode) {
@@ -691,17 +2213,34 @@ function countScopedStylePaintInFile(text, fileName) {
     const expression = unwrapExpression(node);
     if (!expression) return;
 
+    if (
+      expression.kind === ts.SyntaxKind.NullKeyword ||
+      ts.isVoidExpression(expression)
+    ) {
+      return;
+    }
+
+    if (mode !== "style" && isCertifiedNonStylePropBagValue(expression)) {
+      return;
+    }
+
     if (ts.isIdentifier(expression)) {
       const entry = resolve(expression);
       if (!entry) {
+        // The global `undefined` sentinel contributes no style. A shadowed
+        // binding with the same spelling still resolves above and is analyzed.
+        if (expression.text === "undefined") return;
         recordOpaque(expression, mode);
         return;
       }
       const target = mode === "style" ? styleBindings : propBagBindings;
-      if (target.has(entry)) {
+      const directPaintMode = mode === "clonePropBag" || mode === "svgPropBag";
+      const needsDirectUpgrade =
+        directPaintMode && !directPaintPropBagBindings.has(entry);
+      if (target.has(entry) && !needsDirectUpgrade) {
         if (
           !entry.initializer &&
-          bindingAssignments.get(entry)?.length !== 0 &&
+          !isCertifiedProducerEntry(entry) &&
           (ts.isImportClause(entry.declaration) ||
             ts.isImportSpecifier(entry.declaration) ||
             ts.isNamespaceImport(entry.declaration))
@@ -711,9 +2250,17 @@ function countScopedStylePaintInFile(text, fileName) {
         return;
       }
       target.add(entry);
+      if (directPaintMode) directPaintPropBagBindings.add(entry);
       const assigned = bindingAssignments.get(entry) ?? [];
       if (entry.initializer) markExpression(entry.initializer, mode);
-      else if (assigned.length === 0) recordOpaque(expression, mode, entry);
+      else if (assigned.length === 0) {
+        const stateSources = reactStateSources(entry);
+        if (stateSources) {
+          for (const source of stateSources) markExpression(source, mode);
+        } else if (!isCertifiedProducerEntry(entry)) {
+          recordOpaque(expression, mode, entry);
+        }
+      }
       for (const value of assigned) {
         markExpression(value, mode);
       }
@@ -722,8 +2269,13 @@ function countScopedStylePaintInFile(text, fileName) {
 
     if (ts.isObjectLiteralExpression(expression)) {
       const target = mode === "style" ? styleObjects : propBagObjects;
-      if (target.has(expression)) return;
+      const directPaintMode = mode === "clonePropBag" || mode === "svgPropBag";
+      const needsDirectUpgrade =
+        directPaintMode && !directPaintPropBagObjects.has(expression);
+      if (target.has(expression) && !needsDirectUpgrade) return;
       target.add(expression);
+      if (mode === "svgPropBag") svgPropBagObjects.add(expression);
+      if (directPaintMode) directPaintPropBagObjects.add(expression);
       for (const property of expression.properties) {
         if (ts.isSpreadAssignment(property)) {
           markExpression(property.expression, mode);
@@ -732,7 +2284,43 @@ function countScopedStylePaintInFile(text, fileName) {
           staticPropertyName(property.name) === "style"
         ) {
           markExpression(property.initializer, "style");
+        } else if (
+          ts.isShorthandPropertyAssignment(property) &&
+          property.name.text === "style"
+        ) {
+          markExpression(property.name, "style");
+        } else if (
+          ts.isGetAccessorDeclaration(property) &&
+          staticPropertyName(property.name) === "style"
+        ) {
+          markFunction(property, "style");
         }
+      }
+      return;
+    }
+
+    if (ts.isFunctionLike(expression)) {
+      markFunction(expression, mode);
+      return;
+    }
+
+    if (
+      ts.isPropertyAccessExpression(expression) ||
+      ts.isElementAccessExpression(expression)
+    ) {
+      const slotIdentity = propertySlotIdentity(expression);
+      const visitIdentity = slotIdentity ? `${mode}:${slotIdentity}` : null;
+      if (slotIdentity && !visitedPropertySlots.has(visitIdentity)) {
+        visitedPropertySlots.add(visitIdentity);
+        for (const value of propertySlotAssignments.get(slotIdentity) ?? []) {
+          markExpression(value, mode);
+        }
+      }
+      if (isCertifiedStyleProducerValue(expression)) return;
+      if (isConsumerPropertyAccess(expression)) return;
+      if (isCertifiedProducerPropertyAccess(expression)) return;
+      if (!markLocalObjectAccess(expression, mode)) {
+        recordOpaque(expression, mode);
       }
       return;
     }
@@ -746,7 +2334,11 @@ function countScopedStylePaintInFile(text, fileName) {
       if (expression.operatorToken.kind === ts.SyntaxKind.CommaToken) {
         markExpression(expression.right, mode);
       } else if (
-        expression.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken ||
+        expression.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken
+      ) {
+        // The left side is the boolean guard, not a style source.
+        markExpression(expression.right, mode);
+      } else if (
         expression.operatorToken.kind === ts.SyntaxKind.BarBarToken ||
         expression.operatorToken.kind === ts.SyntaxKind.QuestionQuestionToken
       ) {
@@ -757,9 +2349,65 @@ function countScopedStylePaintInFile(text, fileName) {
     }
 
     if (ts.isCallExpression(expression)) {
+      // A callback supplied through caller-owned props (for example
+      // `column.onCell(...)`) returns a caller-owned DOM bag just like a direct
+      // `onRow(...)` parameter. Do not turn the member-call spelling into a
+      // source-authored opaque bag.
+      if (isConsumerPropertyAccess(expression.expression)) return;
+      if (
+        (isReactHookCall(expression, "useMemo") ||
+          isReactHookCall(expression, "useCallback")) &&
+        expression.arguments[0]
+      ) {
+        const factory = callableFromExpression(expression.arguments[0]);
+        if (factory) markFunction(factory, mode);
+        else recordOpaque(expression.arguments[0], mode);
+        return;
+      }
       const callable = localCallable(expression);
-      if (callable?.fn) markFunction(callable.fn, mode);
-      else recordOpaque(expression.expression, mode, callable?.entry ?? null);
+      if (callable?.fn) {
+        markFunction(callable.fn, mode);
+        return;
+      }
+      const contract = callable?.entry
+        ? certifiedProducerContract(callable.entry, fileName)
+        : null;
+      if (
+        contract?.kind === "style" &&
+        isCertifiedProducerEntry(callable.entry)
+      ) {
+        for (const transparent of contract.transparentArgs ?? []) {
+          if (expression.arguments[transparent.index]) {
+            markExpression(
+              expression.arguments[transparent.index],
+              transparent.mode
+            );
+          }
+        }
+        return;
+      }
+      if (
+        contract?.kind === "nonStylePropBag" &&
+        isCertifiedNonStylePropBagEntry(callable.entry)
+      ) {
+        return;
+      }
+      if (!isCertifiedProducerEntry(callable?.entry)) {
+        recordOpaque(expression.expression, mode, callable?.entry ?? null);
+      }
+      return;
+    }
+
+    // Any unhandled value that can execute or manufacture an object remains an
+    // opaque style source. In particular, `new StyleBag()` and
+    // `await getStyle()` must never silently certify a zero.
+    if (
+      ts.isNewExpression(expression) ||
+      ts.isAwaitExpression(expression) ||
+      ts.isTaggedTemplateExpression(expression) ||
+      ts.isYieldExpression(expression)
+    ) {
+      recordOpaque(expression, mode);
     }
   }
 
@@ -790,6 +2438,9 @@ function countScopedStylePaintInFile(text, fileName) {
       if (initializer && ts.isJsxExpression(initializer)) {
         markExpression(initializer.expression, "style");
       }
+    } else if (ts.isJsxSpreadAttribute(node)) {
+      const mode = jsxSpreadMode(node);
+      if (mode) markExpression(node.expression, mode);
     } else if (
       ts.isPropertyAssignment(node) &&
       staticPropertyName(node.name) === "style"
@@ -808,15 +2459,26 @@ function countScopedStylePaintInFile(text, fileName) {
       markExpression(node.body, "style");
     } else if (ts.isCallExpression(node) && node.arguments.length >= 2) {
       const name = callName(node);
-      if (name === "cloneElement") {
-        markExpression(node.arguments[1], "propBag");
+      if (isReactFactoryCall(node, "cloneElement")) {
+        markExpression(node.arguments[1], "clonePropBag");
+      } else if (isReactFactoryCall(node, "createElement")) {
+        const targetKind = createElementTargetKind(node.arguments[0]);
+        if (targetKind !== "component") {
+          // Unknown factories may resolve to an SVG intrinsic; a direct paint
+          // shorthand must therefore fail closed. Known HTML bags still expose
+          // nested/shorthand `style`, but not top-level DOM props such as color.
+          markExpression(
+            node.arguments[1],
+            targetKind === "html" ? "propBag" : "svgPropBag"
+          );
+        }
       } else if (
-        name === "createElement" &&
-        SVG_CREATE_ELEMENT_TAGS.has(staticString(node.arguments[0]))
+        name === "defineProperties" &&
+        propertyAccessParts(node.expression)?.object.getText(sourceFile) ===
+          "Object" &&
+        isQualifiedStyleTarget(node.arguments[0])
       ) {
-        // Intrinsic createElement prop bags are not visited by JSX-aware SVG
-        // counters. Paint shorthands here therefore belong to this channel.
-        markExpression(node.arguments[1], "propBag");
+        markExpression(node.arguments[1], "style");
       }
     }
   }
@@ -826,14 +2488,18 @@ function countScopedStylePaintInFile(text, fileName) {
   let changed = true;
   while (changed) {
     const before =
-      styleBindings.size + propBagBindings.size + styleObjects.size + propBagObjects.size;
+      styleBindings.size +
+      propBagBindings.size +
+      styleObjects.size +
+      propBagObjects.size;
     for (const call of objectAssignCalls) {
       const [target, ...sources] = call.arguments;
-      if (isStyleExpression(target)) {
+      if (isQualifiedStyleTarget(target)) {
         for (const source of sources) markExpression(source, "style");
       } else {
         const unwrapped = unwrapExpression(target);
-        const entry = unwrapped && ts.isIdentifier(unwrapped) ? resolve(unwrapped) : null;
+        const entry =
+          unwrapped && ts.isIdentifier(unwrapped) ? resolve(unwrapped) : null;
         if (entry && propBagBindings.has(entry)) {
           for (const source of sources) markExpression(source, "propBag");
         }
@@ -842,8 +2508,14 @@ function countScopedStylePaintInFile(text, fileName) {
     // Forward aliases need the reverse edge too: `cardStyle` can be proven by
     // its name/type before `alias.color = …` is encountered.
     for (const entry of entries) {
-      const sources = [entry.initializer, ...(bindingAssignments.get(entry) ?? [])].filter(Boolean);
-      if (!styleBindings.has(entry) && sources.some((source) => isStyleExpression(source))) {
+      const sources = [
+        entry.initializer,
+        ...(bindingAssignments.get(entry) ?? []),
+      ].filter(Boolean);
+      if (
+        !styleBindings.has(entry) &&
+        sources.some((source) => isStyleExpression(source))
+      ) {
         styleBindings.add(entry);
         for (const source of sources) markExpression(source, "style");
       }
@@ -854,7 +2526,11 @@ function countScopedStylePaintInFile(text, fileName) {
             const sourceEntry = resolve(expression);
             return Boolean(sourceEntry && propBagBindings.has(sourceEntry));
           }
-          return Boolean(expression && ts.isObjectLiteralExpression(expression) && propBagObjects.has(expression));
+          return Boolean(
+            expression &&
+              ts.isObjectLiteralExpression(expression) &&
+              propBagObjects.has(expression)
+          );
         });
         if (propBagSource) {
           propBagBindings.add(entry);
@@ -863,7 +2539,10 @@ function countScopedStylePaintInFile(text, fileName) {
       }
     }
     const after =
-      styleBindings.size + propBagBindings.size + styleObjects.size + propBagObjects.size;
+      styleBindings.size +
+      propBagBindings.size +
+      styleObjects.size +
+      propBagObjects.size;
     changed = after !== before;
   }
 
@@ -887,9 +2566,33 @@ function countScopedStylePaintInFile(text, fileName) {
     return styleObjects.has(node) || propBagObjects.has(node);
   }
 
-  function writeProperty(left) {
+  function isDirectPaintObject(node) {
+    return styleObjects.has(node) || directPaintPropBagObjects.has(node);
+  }
+
+  function isQualifiedStyleTarget(node) {
+    if (isStyleExpression(node)) return true;
+    // Caller-owned bags remain exempt when merely forwarded, but paint
+    // written into one by the component is component-authored mutation.
+    if (isConsumerPropertyAccess(node)) return true;
+    // A certified imported producer is safe to READ without re-counting its
+    // defining paint, but a write through that producer is new authored paint
+    // in the consumer and must never inherit the read exemption.
+    if (isContractedProducerPropertyAccess(node)) return true;
+    const resolved = localValues(node);
+    return (
+      resolved.proven &&
+      resolved.values.some((value) => {
+        const expression = unwrapExpression(value);
+        return Boolean(expression && isQualifiedObject(expression));
+      })
+    );
+  }
+
+  function writeProperty(left, value = null) {
     const access = propertyAccessParts(left);
-    if (!access || !isStyleExpression(access.object)) return 0;
+    if (!access || !isQualifiedStyleTarget(access.object)) return 0;
+    if (access.name === "cssText") return countCssTextExpression(value);
     // A computed name on a proven style object fails closed. A known non-paint
     // property (width, opacity, animation, etc.) remains outside this channel.
     return access.name === null ? 1 : Number(isPaintProperty(access.name));
@@ -899,8 +2602,23 @@ function countScopedStylePaintInFile(text, fileName) {
   for (const node of allNodes) {
     if (ts.isShorthandPropertyAssignment(node)) {
       const object = node.parent;
-      if (isQualifiedObject(object) && isPaintProperty(node.name.text)) {
+      if (isDirectPaintObject(object) && isPaintProperty(node.name.text)) {
         count += 1;
+      }
+      continue;
+    }
+
+    if (ts.isGetAccessorDeclaration(node) && isQualifiedObject(node.parent)) {
+      const name = staticPropertyName(node.name);
+      if (name !== null) {
+        count += Number(
+          isDirectPaintObject(node.parent) && isPaintProperty(name)
+        );
+      } else if (ts.isComputedPropertyName(node.name)) {
+        const values = staticStringValues(node.name.expression);
+        count += values
+          ? Number([...values].some(isPaintProperty))
+          : Number(!isDefinitelyDataOrAriaProperty(node.name.expression));
       }
       continue;
     }
@@ -912,7 +2630,16 @@ function countScopedStylePaintInFile(text, fileName) {
       if (!ts.isIdentifier(node.name)) {
         const name = staticPropertyName(node.name);
         if (name !== null) count += Number(isPaintProperty(name));
-        else if (isQualifiedObject(node.parent)) count += 1;
+        else if (ts.isComputedPropertyName(node.name)) {
+          const values = staticStringValues(node.name.expression);
+          if (values) {
+            count += Number([...values].some(isPaintProperty));
+          } else if (isQualifiedObject(node.parent)) {
+            count += Number(
+              !isDefinitelyDataOrAriaProperty(node.name.expression)
+            );
+          }
+        } else if (isQualifiedObject(node.parent)) count += 1;
       }
       continue;
     }
@@ -921,14 +2648,18 @@ function countScopedStylePaintInFile(text, fileName) {
       ts.isBinaryExpression(node) &&
       isAssignmentOperator(node.operatorToken.kind)
     ) {
-      count += writeProperty(node.left);
+      count += writeProperty(node.left, node.right);
       continue;
     }
 
     if (!ts.isCallExpression(node)) continue;
     const name = callName(node);
     const callee = propertyAccessParts(node.expression);
-    if (name === "setProperty" && callee && isStyleExpression(callee.object)) {
+    if (
+      name === "setProperty" &&
+      callee &&
+      isQualifiedStyleTarget(callee.object)
+    ) {
       if (node.arguments.length === 0) count += 1;
       else {
         const property = staticString(node.arguments[0]);
@@ -936,20 +2667,59 @@ function countScopedStylePaintInFile(text, fileName) {
       }
     } else if (
       name === "set" &&
+      propertyAccessParts(callee?.object)?.name === "attributeStyleMap" &&
+      node.arguments.length >= 1
+    ) {
+      const property = staticString(node.arguments[0]);
+      count += property === null ? 1 : Number(isPaintProperty(property));
+    } else if (
+      name === "set" &&
       callee?.object.getText(sourceFile) === "Reflect" &&
       node.arguments.length >= 2 &&
-      isStyleExpression(node.arguments[0])
+      isQualifiedStyleTarget(node.arguments[0])
     ) {
       const property = staticString(node.arguments[1]);
       count += property === null ? 1 : Number(isPaintProperty(property));
     } else if (
       name === "defineProperty" &&
-      callee?.object.getText(sourceFile) === "Object" &&
+      (callee?.object.getText(sourceFile) === "Object" ||
+        callee?.object.getText(sourceFile) === "Reflect") &&
       node.arguments.length >= 2 &&
-      isStyleExpression(node.arguments[0])
+      isQualifiedStyleTarget(node.arguments[0])
     ) {
       const property = staticString(node.arguments[1]);
       count += property === null ? 1 : Number(isPaintProperty(property));
+    } else if (
+      name === "defineProperties" &&
+      callee?.object.getText(sourceFile) === "Object" &&
+      node.arguments.length >= 2 &&
+      isQualifiedStyleTarget(node.arguments[0])
+    ) {
+      markExpression(node.arguments[1], "style");
+    } else if (name === "setAttribute" && node.arguments.length >= 1) {
+      const attribute = staticString(node.arguments[0]);
+      // Dynamic SVG presentation attributes belong to runtimeSvgPaint; this
+      // channel owns only an explicitly authored inline `style` attribute.
+      if (attribute?.toLowerCase() === "style") {
+        count += countCssTextExpression(node.arguments[1]);
+      }
+    } else if (name === "setAttributeNS" && node.arguments.length >= 2) {
+      const attribute = staticString(node.arguments[1]);
+      if (attribute?.toLowerCase() === "style") {
+        count += countCssTextExpression(node.arguments[2]);
+      }
+    } else if (name === "style" && node.arguments.length >= 2) {
+      // D3 and compatible CSS setter chains use `.style(name, value)`. SVG
+      // presentation paint (`fill`/`stroke`) and dynamic setter names remain
+      // owned by the runtime-SVG channel, but ordinary CSS paint set through
+      // `.style()` belongs here (notably inherited text `color`).
+      const property = staticString(node.arguments[0]);
+      count += Number(
+        property !== null &&
+          property !== "fill" &&
+          property !== "stroke" &&
+          isPaintProperty(property)
+      );
     }
   }
 

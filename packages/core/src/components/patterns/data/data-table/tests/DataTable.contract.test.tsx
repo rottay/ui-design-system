@@ -13,10 +13,8 @@ import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-m
 // The pre-step stamps `data-part`/`data-selected`/`data-striped`/`data-pinned`/
 // `data-drag-over`/`data-current`/`data-variant`/`data-collapsed`/`data-invalid`
 // attributes and a handful of className hooks across all five data-table
-// files without moving any paint (every imperative row-hover handler, every
-// inline `style={{}}` value, and both engines' per-instance `<style>` blocks
-// stay exactly as they were). This suite proves the stamps reach the DOM with
-// the right shape so the later migration can key CSS on them.
+// files. This suite proves the stamps reach the DOM with the right shape so the
+// canonical engine and interaction skins can key CSS on them.
 // ---------------------------------------------------------------------------
 
 interface Row {
@@ -33,7 +31,13 @@ const ROWS: Row[] = [
 ];
 
 const COLUMNS: ColumnDef<Row>[] = [
-  { key: 'name', header: 'Name', accessorKey: 'name', sortable: true, pin: 'left' },
+  {
+    key: 'name',
+    header: 'Name',
+    accessorKey: 'name',
+    sortable: true,
+    pin: 'left',
+  },
   { key: 'amount', header: 'Amount', accessorKey: 'amount' },
   { key: 'status', header: 'Status', accessorKey: 'status' },
 ];
@@ -50,88 +54,103 @@ describe('DataTable data-part contract (desktop)', () => {
     cleanup();
   });
 
-  it.each(['modern', 'rustic'] as const)('stamps the root pair, header cells, body-row, and pagination under the %s engine', async (engine) => {
-    const onExecute = vi.fn();
-    const { container } = renderWithEngine(
-      <PatternDataTable<Row>
-        engine={engine}
-        data={ROWS}
-        rowKey="id"
-        columns={COLUMNS}
-        striped
-        selectedKeys={['r1']}
-        bulkActions={[
-          { key: 'del', label: 'Delete', variant: 'danger', onExecute },
-          { key: 'export', label: 'Export', variant: 'primary', onExecute },
-          { key: 'flag', label: 'Flag', onExecute },
-        ]}
-        pagination={{ current: 2, pageSize: 1, total: 3, onChange: vi.fn() }}
-      />,
-      engine,
-    );
+  it.each(['modern', 'rustic'] as const)(
+    'stamps the root pair, header cells, body-row, and pagination under the %s engine',
+    async (engine) => {
+      const onExecute = vi.fn();
+      const { container } = renderWithEngine(
+        <PatternDataTable<Row>
+          engine={engine}
+          data={ROWS}
+          rowKey="id"
+          columns={COLUMNS}
+          striped
+          selectedKeys={['r1']}
+          bulkActions={[
+            { key: 'del', label: 'Delete', variant: 'danger', onExecute },
+            { key: 'export', label: 'Export', variant: 'primary', onExecute },
+            { key: 'flag', label: 'Flag', onExecute },
+          ]}
+          pagination={{ current: 2, pageSize: 1, total: 3, onChange: vi.fn() }}
+        />,
+        engine
+      );
 
-    const root = await waitForRoot(container);
-    expect(root.className).toContain('ds-pattern-data-table');
-    expect(root.className).toContain(`ds-engine-${engine}`);
-    // ARC-08 density asymmetry: modern carries a third root class segment,
-    // rustic reads density from its own DENSITY_STYLES lookup and never
-    // stamps a density class -- this must not be "fixed" by the pre-step.
-    if (engine === 'modern') {
-      expect(root.className).toContain('ds-table-density-comfortable');
-    } else {
-      expect(root.className).not.toContain('ds-table-density-');
+      const root = await waitForRoot(container);
+      expect(root.className).toContain('ds-pattern-data-table');
+      expect(root.className).toContain(`ds-engine-${engine}`);
+      // ARC-08 density asymmetry: modern carries a third root class segment,
+      // rustic reads density from its own DENSITY_STYLES lookup and never
+      // stamps a density class -- this must not be "fixed" by the pre-step.
+      if (engine === 'modern') {
+        expect(root.className).toContain('ds-table-density-comfortable');
+      } else {
+        expect(root.className).not.toContain('ds-table-density-');
+      }
+
+      // 3 header cells, one per column (no selection/expand/actions column here).
+      const headerCells = container.querySelectorAll('[data-part="header-cell"]');
+      expect(headerCells).toHaveLength(3);
+
+      // The 'name' column is pinned left; the other two are not.
+      const pinnedFlags = Array.from(headerCells).map((el) => el.getAttribute('data-pinned'));
+      expect(pinnedFlags).toEqual(['true', 'false', 'false']);
+
+      // 3 body rows: r1 selected, r2 struck by striping (odd index), r3 neither.
+      const bodyRows = container.querySelectorAll('[data-part="body-row"]');
+      expect(bodyRows).toHaveLength(3);
+      if (engine === 'modern') {
+        expect(Array.from(bodyRows).map((el) => el.getAttribute('data-selected'))).toEqual(['true', 'false', 'false']);
+        expect(Array.from(bodyRows).map((el) => el.getAttribute('data-striped'))).toEqual(['false', 'true', 'false']);
+      } else {
+        // Rustic consolidates the same 3-way into one data-state enum per
+        // Fable decision 3 (row data-state + td data-pinned, ONE rule instead
+        // of the 3x-duplicated pinned-td ternary).
+        expect(Array.from(bodyRows).map((el) => el.getAttribute('data-state'))).toEqual([
+          'selected',
+          'striped',
+          'default',
+        ]);
+      }
+
+      // 9 data cells (3 rows x 3 columns); the 'name' column's cells are pinned.
+      const dataCells = container.querySelectorAll('[data-part="data-cell"]');
+      expect(dataCells).toHaveLength(9);
+      const pinnedDataCells = Array.from(dataCells).filter((el) => el.getAttribute('data-pinned') === 'true');
+      expect(pinnedDataCells).toHaveLength(3);
+
+      // Pagination: ceil(3/1) = 3 page buttons, current=2 is the middle one.
+      const pageButtons = container.querySelectorAll(
+        '[data-part="pagination-page-button"], [data-part="pagination-button"]'
+      );
+      if (engine === 'modern') {
+        expect(container.querySelectorAll('[data-part="pagination-page-button"]')).toHaveLength(3);
+        expect(
+          Array.from(container.querySelectorAll('[data-part="pagination-page-button"]')).map((el) =>
+            el.getAttribute('data-current')
+          )
+        ).toEqual(['false', 'true', 'false']);
+      } else {
+        // Rustic only ever renders Previous/Next -- no per-page-number buttons,
+        // so no data-current analog exists.
+        expect(pageButtons).toHaveLength(2);
+      }
+
+      // Bulk bar: variant follows the bulkActions array order verbatim.
+      const bulkButtons = container.querySelectorAll('[data-part="bulk-bar-action"]');
+      expect(bulkButtons).toHaveLength(3);
+      expect(Array.from(bulkButtons).map((el) => el.getAttribute('data-variant'))).toEqual([
+        'danger',
+        'primary',
+        'default',
+      ]);
     }
-
-    // 3 header cells, one per column (no selection/expand/actions column here).
-    const headerCells = container.querySelectorAll('[data-part="header-cell"]');
-    expect(headerCells).toHaveLength(3);
-
-    // The 'name' column is pinned left; the other two are not.
-    const pinnedFlags = Array.from(headerCells).map((el) => el.getAttribute('data-pinned'));
-    expect(pinnedFlags).toEqual(['true', 'false', 'false']);
-
-    // 3 body rows: r1 selected, r2 struck by striping (odd index), r3 neither.
-    const bodyRows = container.querySelectorAll('[data-part="body-row"]');
-    expect(bodyRows).toHaveLength(3);
-    if (engine === 'modern') {
-      expect(Array.from(bodyRows).map((el) => el.getAttribute('data-selected'))).toEqual(['true', 'false', 'false']);
-      expect(Array.from(bodyRows).map((el) => el.getAttribute('data-striped'))).toEqual(['false', 'true', 'false']);
-    } else {
-      // Rustic consolidates the same 3-way into one data-state enum per
-      // Fable decision 3 (row data-state + td data-pinned, ONE rule instead
-      // of the 3x-duplicated pinned-td ternary).
-      expect(Array.from(bodyRows).map((el) => el.getAttribute('data-state'))).toEqual(['selected', 'striped', 'default']);
-    }
-
-    // 9 data cells (3 rows x 3 columns); the 'name' column's cells are pinned.
-    const dataCells = container.querySelectorAll('[data-part="data-cell"]');
-    expect(dataCells).toHaveLength(9);
-    const pinnedDataCells = Array.from(dataCells).filter((el) => el.getAttribute('data-pinned') === 'true');
-    expect(pinnedDataCells).toHaveLength(3);
-
-    // Pagination: ceil(3/1) = 3 page buttons, current=2 is the middle one.
-    const pageButtons = container.querySelectorAll('[data-part="pagination-page-button"], [data-part="pagination-button"]');
-    if (engine === 'modern') {
-      expect(container.querySelectorAll('[data-part="pagination-page-button"]')).toHaveLength(3);
-      expect(
-        Array.from(container.querySelectorAll('[data-part="pagination-page-button"]')).map((el) => el.getAttribute('data-current')),
-      ).toEqual(['false', 'true', 'false']);
-    } else {
-      // Rustic only ever renders Previous/Next -- no per-page-number buttons,
-      // so no data-current analog exists.
-      expect(pageButtons).toHaveLength(2);
-    }
-
-    // Bulk bar: variant follows the bulkActions array order verbatim.
-    const bulkButtons = container.querySelectorAll('[data-part="bulk-bar-action"]');
-    expect(bulkButtons).toHaveLength(3);
-    expect(Array.from(bulkButtons).map((el) => el.getAttribute('data-variant'))).toEqual(['danger', 'primary', 'default']);
-  });
+  );
 
   it('stamps group-header-row/-chevron/-count-pill and toggles data-collapsed on click (modern only -- rustic has no groupBy support)', async () => {
     const { container } = renderWithEngine(
       <PatternDataTable<Row> engine="modern" data={ROWS} rowKey="id" columns={COLUMNS} groupBy="status" />,
-      'modern',
+      'modern'
     );
 
     await waitForRoot(container);
@@ -155,7 +174,7 @@ describe('DataTable data-part contract (desktop)', () => {
     expect(chevronsAfter[1].getAttribute('data-collapsed')).toBe('false');
   });
 
-  it('stamps the inline cell editor\'s data-invalid from its local validation error (modern only -- rustic has no inline-edit parity)', async () => {
+  it("stamps the inline cell editor's data-invalid from its local validation error (modern only -- rustic has no inline-edit parity)", async () => {
     const editableColumns: ColumnDef<Row>[] = [
       {
         key: 'name',
@@ -171,7 +190,7 @@ describe('DataTable data-part contract (desktop)', () => {
 
     const { container } = renderWithEngine(
       <PatternDataTable<Row> engine="modern" data={ROWS} rowKey="id" columns={editableColumns} />,
-      'modern',
+      'modern'
     );
 
     await waitForRoot(container);
@@ -208,7 +227,7 @@ describe('DataTable data-part contract (mobile branch)', () => {
 
     const { container, rerender } = renderWithEngine(
       <PatternDataTable<Row> engine="modern" data={[]} rowKey="id" columns={COLUMNS} loading />,
-      'modern',
+      'modern'
     );
 
     const loadingPanel = await waitFor(() => {
@@ -220,9 +239,7 @@ describe('DataTable data-part contract (mobile branch)', () => {
     expect(loadingPanel.className).toContain('ds-data-table--mobile');
     expect(loadingPanel.textContent).toContain('Loading');
 
-    rerender(
-      <PatternDataTable<Row> engine="modern" data={[]} rowKey="id" columns={COLUMNS} loading={false} />,
-    );
+    rerender(<PatternDataTable<Row> engine="modern" data={[]} rowKey="id" columns={COLUMNS} loading={false} />);
 
     await waitFor(() => {
       const el = container.querySelector('[data-part="mobile-state-panel"]');
@@ -247,7 +264,7 @@ describe('DataTable data-part contract (mobile branch)', () => {
         selectedKeys={['r1']}
         bulkActions={[{ key: 'del', label: 'Delete', variant: 'danger', onExecute }]}
       />,
-      'modern',
+      'modern'
     );
 
     // At least two distinct elements carry the mobile scope pair: the

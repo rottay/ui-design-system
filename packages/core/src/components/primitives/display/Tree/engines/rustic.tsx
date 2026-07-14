@@ -9,7 +9,7 @@
  *
  * Hover states are managed via imperative `style` mutations on mouse events
  * because inline styles cannot express `:hover` pseudo-selectors. Keyframe
- * animations are injected into `<head>` once via `injectKeyframes()`.
+ * animations are supplied by the shared primitive-motion stylesheet.
  *
  * Engine: **Vanilla HTML + CSS custom properties**
  *
@@ -47,10 +47,7 @@ import {
 // Highlights the first occurrence of the search term within a tree node's title.
 // Only works on string titles -- React elements pass through unchanged since
 // we cannot safely split arbitrary JSX.
-function highlightText(
-  text: React.ReactNode,
-  searchValue: string,
-): React.ReactNode {
+function highlightText(text: React.ReactNode, searchValue: string): React.ReactNode {
   if (!searchValue || typeof text !== 'string') return text;
   const idx = text.toLowerCase().indexOf(searchValue.toLowerCase());
   if (idx === -1) return text;
@@ -106,30 +103,6 @@ const styles = {
 };
 
 // ---------------------------------------------------------------------------
-// Keyframes injection (once)
-// ---------------------------------------------------------------------------
-
-// Module-level flag ensures we only inject the keyframe stylesheet once
-// across all Tree instances on the page (avoids duplicate <style> tags).
-let stylesInjected = false;
-function injectKeyframes() {
-  if (stylesInjected || typeof document === 'undefined') return;
-  stylesInjected = true;
-  const sheet = document.createElement('style');
-  sheet.textContent = `
-    @keyframes rottay-tree-spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes rottay-tree-drop-line-in {
-      from { opacity: 0; transform: scaleX(0.5); }
-      to { opacity: 1; transform: scaleX(1); }
-    }
-  `;
-  document.head.appendChild(sheet);
-}
-
-// ---------------------------------------------------------------------------
 // TreeNodeRender
 // ---------------------------------------------------------------------------
 
@@ -165,7 +138,10 @@ interface TreeNodeRenderProps extends TreeDataNode {
   onDragOverInternal: (key: TreeEngineKey, e: React.DragEvent, level: number) => void;
   onDropInternal: (key: TreeEngineKey, e: React.DragEvent) => void;
   onDragEndInternal: () => void;
-  dropTarget: { key: TreeEngineKey; position: 'before' | 'inside' | 'after' } | null;
+  dropTarget: {
+    key: TreeEngineKey;
+    position: 'before' | 'inside' | 'after';
+  } | null;
   nodeRef: (key: TreeEngineKey, el: HTMLDivElement | null) => void;
   isLast: boolean;
   parentIsLast: boolean[];
@@ -239,7 +215,8 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
     paddingLeft,
     cursor: disabled ? 'not-allowed' : 'pointer',
     opacity: disabled ? 0.5 : !isFiltered && filteredKeys ? 0.4 : 1,
-    transition: 'background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
+    transition:
+      'background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',
     position: 'relative',
   };
 
@@ -295,7 +272,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
               bottom: 0,
               pointerEvents: 'none',
             }}
-          />,
+          />
         );
       }
     }
@@ -312,7 +289,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
           width: 12,
           pointerEvents: 'none',
         }}
-      />,
+      />
     );
     // Vertical line from parent (half or full)
     if (isLast) {
@@ -328,7 +305,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
             height: '50%',
             pointerEvents: 'none',
           }}
-        />,
+        />
       );
     } else {
       treeLineConnectors.push(
@@ -343,7 +320,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
             bottom: 0,
             pointerEvents: 'none',
           }}
-        />,
+        />
       );
     }
   }
@@ -434,11 +411,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         data-drop-target={isDropTarget || undefined}
         data-drop-position={isDropTarget ? dropPosition : undefined}
         draggable={isDraggable}
-        onDragStart={
-          isDraggable
-            ? (e) => onDragStartInternal(normalizedNodeKey, e)
-            : undefined
-        }
+        onDragStart={isDraggable ? (e) => onDragStartInternal(normalizedNodeKey, e) : undefined}
         onDragOver={
           propDraggable
             ? (e) => {
@@ -499,10 +472,21 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
         )}
 
         {/* Icon */}
-        {showIcon && icon && <span data-part="icon" style={iconStyle}>{icon}</span>}
+        {showIcon && icon && (
+          <span data-part="icon" style={iconStyle}>
+            {icon}
+          </span>
+        )}
 
         {/* Title */}
-        <span data-part="tree-node-label" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <span
+          data-part="tree-node-label"
+          style={{
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
           {displayTitle}
         </span>
       </div>
@@ -608,28 +592,20 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
 
   const resolvedShowLine = treeLine ?? showLine;
 
-  // Inject keyframe animation for spinner
-  useEffect(() => {
-    injectKeyframes();
-  }, []);
-
   // Refs
   const treeContainerRef = useRef<HTMLDivElement>(null);
   const nodeRefs = useRef<Map<TreeEngineKey, HTMLDivElement>>(new Map());
   const loadedKeysRef = useRef<Set<TreeEngineKey>>(new Set());
 
-  const registerNodeRef = useCallback(
-    (key: TreeEngineKey, el: HTMLDivElement | null) => {
-      if (el) nodeRefs.current.set(key, el);
-      else nodeRefs.current.delete(key);
-    },
-    [],
-  );
+  const registerNodeRef = useCallback((key: TreeEngineKey, el: HTMLDivElement | null) => {
+    if (el) nodeRefs.current.set(key, el);
+    else nodeRefs.current.delete(key);
+  }, []);
 
   // Find node helper
   const findNode = useCallback(
     (key: TreeEngineKey): TreeDataNode | undefined => findNodeByKey(treeData, key),
-    [treeData],
+    [treeData]
   );
 
   // Parent map
@@ -637,13 +613,11 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
 
   // State
   const [expandedKeys, setExpandedKeys] = useState<TreeEngineKey[]>(
-    defaultExpandAll ? collectAllKeys(treeData) : defaultExpandedKeys.map(normalizeTreeKey),
+    defaultExpandAll ? collectAllKeys(treeData) : defaultExpandedKeys.map(normalizeTreeKey)
   );
-  const [selectedKeys, setSelectedKeys] = useState<TreeEngineKey[]>(
-    defaultSelectedKeys.map(normalizeTreeKey),
-  );
+  const [selectedKeys, setSelectedKeys] = useState<TreeEngineKey[]>(defaultSelectedKeys.map(normalizeTreeKey));
   const [checkedKeys, setCheckedKeys] = useState<TreeEngineKey[]>(
-    Array.isArray(defaultCheckedKeys) ? defaultCheckedKeys.map(normalizeTreeKey) : [],
+    Array.isArray(defaultCheckedKeys) ? defaultCheckedKeys.map(normalizeTreeKey) : []
   );
   const [focusedKey, setFocusedKey] = useState<TreeEngineKey | null>(null);
   const [loadingKeys, setLoadingKeys] = useState<TreeEngineKey[]>([]);
@@ -656,15 +630,11 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
   // Resolve controlled vs uncontrolled -- when the consumer provides controlled
   // keys we normalize them on every render. When uncontrolled, internal state
   // is the source of truth.
-  const actualExpandedKeys = controlledExpandedKeys
-    ? controlledExpandedKeys.map(normalizeTreeKey)
-    : expandedKeys;
-  const actualSelectedKeys = controlledSelectedKeys
-    ? controlledSelectedKeys.map(normalizeTreeKey)
-    : selectedKeys;
+  const actualExpandedKeys = controlledExpandedKeys ? controlledExpandedKeys.map(normalizeTreeKey) : expandedKeys;
+  const actualSelectedKeys = controlledSelectedKeys ? controlledSelectedKeys.map(normalizeTreeKey) : selectedKeys;
   const actualCheckedKeys = Array.isArray(controlledCheckedKeys)
     ? controlledCheckedKeys.map(normalizeTreeKey)
-    : (controlledCheckedKeys?.checked.map(normalizeTreeKey) ?? checkedKeys);
+    : controlledCheckedKeys?.checked.map(normalizeTreeKey) ?? checkedKeys;
 
   // Half-checked (indeterminate) keys: a parent is half-checked when some but
   // not all of its descendants are checked. Skipped in strict mode where
@@ -697,10 +667,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
   // Flatten the tree into a linear list of keys representing the currently
   // visible nodes (respecting which branches are expanded). This powers
   // ArrowUp/ArrowDown keyboard navigation with O(1) index lookups.
-  const visibleKeys = useMemo(
-    () => flattenVisibleKeys(treeData, actualExpandedKeys),
-    [treeData, actualExpandedKeys],
-  );
+  const visibleKeys = useMemo(() => flattenVisibleKeys(treeData, actualExpandedKeys), [treeData, actualExpandedKeys]);
 
   // -----------------------------------------------------------------------
   // Event handlers
@@ -709,9 +676,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
   const handleToggle = useCallback(
     async (key: TreeEngineKey) => {
       const isExpanding = !actualExpandedKeys.includes(key);
-      const newKeys = isExpanding
-        ? [...actualExpandedKeys, key]
-        : actualExpandedKeys.filter((k) => k !== key);
+      const newKeys = isExpanding ? [...actualExpandedKeys, key] : actualExpandedKeys.filter((k) => k !== key);
       setExpandedKeys(newKeys);
 
       const node = findNode(key);
@@ -735,19 +700,20 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
         }
       }
     },
-    [actualExpandedKeys, findNode, onExpand, loadData],
+    [actualExpandedKeys, findNode, onExpand, loadData]
   );
 
   const handleSelect = useCallback(
     (key: TreeEngineKey, node: TreeDataNode) => {
       if (node.selectable === false) return;
-      const newKeys = actualSelectedKeys.includes(key)
-        ? actualSelectedKeys.filter((k) => k !== key)
-        : [key];
+      const newKeys = actualSelectedKeys.includes(key) ? actualSelectedKeys.filter((k) => k !== key) : [key];
       setSelectedKeys(newKeys);
-      onSelect?.(newKeys, { node, selected: !actualSelectedKeys.includes(key) });
+      onSelect?.(newKeys, {
+        node,
+        selected: !actualSelectedKeys.includes(key),
+      });
     },
-    [actualSelectedKeys, onSelect],
+    [actualSelectedKeys, onSelect]
   );
 
   const handleCheck = useCallback(
@@ -781,9 +747,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
           for (const [childK, parentK] of parentMap) {
             const parentNode = findNode(parentK);
             if (!parentNode || !parentNode.children) continue;
-            const allChildrenChecked = parentNode.children.every((c) =>
-              newChecked.includes(normalizeTreeKey(c.key)),
-            );
+            const allChildrenChecked = parentNode.children.every((c) => newChecked.includes(normalizeTreeKey(c.key)));
             if (allChildrenChecked && !newChecked.includes(parentK)) {
               newChecked.push(parentK);
               changed = true;
@@ -797,13 +761,10 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
         setCheckedKeys(newChecked);
 
         const newHalfChecked = computeHalfCheckedKeys(treeData, newChecked);
-        onCheck?.(
-          { checked: newChecked, halfChecked: newHalfChecked },
-          { node, checked: isChecking },
-        );
+        onCheck?.({ checked: newChecked, halfChecked: newHalfChecked }, { node, checked: isChecking });
       }
     },
-    [actualCheckedKeys, treeCheckStrictly, parentMap, findNode, treeData, onCheck],
+    [actualCheckedKeys, treeCheckStrictly, parentMap, findNode, treeData, onCheck]
   );
 
   // -----------------------------------------------------------------------
@@ -818,7 +779,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
       const node = findNode(key);
       if (node) onDragStart?.({ node });
     },
-    [findNode, onDragStart],
+    [findNode, onDragStart]
   );
 
   // Drop position is determined by where the cursor sits within the target node:
@@ -843,7 +804,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
       }
       setDropTarget({ key, position });
     },
-    [dragKey],
+    [dragKey]
   );
 
   const handleDrop = useCallback(
@@ -862,7 +823,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
       setDragKey(null);
       setDropTarget(null);
     },
-    [dragKey, dropTarget, findNode, onDrop],
+    [dragKey, dropTarget, findNode, onDrop]
   );
 
   const handleDragEnd = useCallback(() => {
@@ -893,10 +854,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
           if (currentIndex < visibleKeys.length - 1) {
             const nextKey = visibleKeys[currentIndex + 1];
             setFocusedKey(nextKey);
-            nodeRefs.current
-              .get(nextKey)
-              ?.querySelector<HTMLElement>('[data-tree-node-key]')
-              ?.focus();
+            nodeRefs.current.get(nextKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           }
           break;
         }
@@ -905,22 +863,14 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
           if (currentIndex > 0) {
             const prevKey = visibleKeys[currentIndex - 1];
             setFocusedKey(prevKey);
-            nodeRefs.current
-              .get(prevKey)
-              ?.querySelector<HTMLElement>('[data-tree-node-key]')
-              ?.focus();
+            nodeRefs.current.get(prevKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           }
           break;
         }
         case 'ArrowRight': {
           e.preventDefault();
           const node = findNode(focusedKey);
-          if (
-            node &&
-            node.children &&
-            node.children.length > 0 &&
-            !actualExpandedKeys.includes(focusedKey)
-          ) {
+          if (node && node.children && node.children.length > 0 && !actualExpandedKeys.includes(focusedKey)) {
             handleToggle(focusedKey);
           }
           break;
@@ -933,10 +883,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
             const parentKey = parentMap.get(focusedKey);
             if (parentKey !== undefined) {
               setFocusedKey(parentKey);
-              nodeRefs.current
-                .get(parentKey)
-                ?.querySelector<HTMLElement>('[data-tree-node-key]')
-                ?.focus();
+              nodeRefs.current.get(parentKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
             }
           }
           break;
@@ -971,7 +918,7 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
       handleToggle,
       handleCheck,
       handleSelect,
-    ],
+    ]
   );
 
   // -----------------------------------------------------------------------

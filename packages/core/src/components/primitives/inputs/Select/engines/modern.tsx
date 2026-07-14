@@ -19,12 +19,25 @@
 
 'use client';
 
-import React, { forwardRef, useState, useRef, useEffect, useCallback, useMemo, useImperativeHandle, useId } from 'react';
+import React, {
+  forwardRef,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  useMemo,
+  useImperativeHandle,
+  useId,
+} from 'react';
 
 import { createPortal } from 'react-dom';
 import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
-import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
+import {
+  isResponsiveValue,
+  generateResponsiveCSS,
+  type ResponsivePropEntry,
+} from '../../../layout/shared/responsive-props';
 import type { ResponsiveValue } from '../../../layout/shared/types';
 
 function scalarOrUndefined<T>(value: ResponsiveValue<T> | undefined): T | undefined {
@@ -48,28 +61,45 @@ import {
 /* ------------------------------------------------------------------ */
 
 const SIZES = {
-  xs: { height: '28px', paddingX: '8px',  fontSize: '12px', lineHeight: '16px' },
-  sm: { height: '32px', paddingX: '10px', fontSize: '14px', lineHeight: '20px' },
-  md: { height: '36px', paddingX: '12px', fontSize: '14px', lineHeight: '20px' },
-  lg: { height: '40px', paddingX: '14px', fontSize: '16px', lineHeight: '24px' },
-  xl: { height: '44px', paddingX: '16px', fontSize: '16px', lineHeight: '24px' },
+  xs: { height: '28px', paddingX: '8px', fontSize: '12px', lineHeight: '16px' },
+  sm: {
+    height: '32px',
+    paddingX: '10px',
+    fontSize: '14px',
+    lineHeight: '20px',
+  },
+  md: {
+    height: '36px',
+    paddingX: '12px',
+    fontSize: '14px',
+    lineHeight: '20px',
+  },
+  lg: {
+    height: '40px',
+    paddingX: '14px',
+    fontSize: '16px',
+    lineHeight: '24px',
+  },
+  xl: {
+    height: '44px',
+    paddingX: '16px',
+    fontSize: '16px',
+    lineHeight: '24px',
+  },
 } as const;
 
 /* ------------------------------------------------------------------ */
 /*  Shared transition string                                           */
 /* ------------------------------------------------------------------ */
 
-const TRANSITION = 'border-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-offset var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)';
+const TRANSITION =
+  'border-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-color var(--ds-motion-fast) var(--ds-motion-ease-out), outline-offset var(--ds-motion-fast) var(--ds-motion-ease-out), background-color var(--ds-motion-fast) var(--ds-motion-ease-out)';
 
 /* ------------------------------------------------------------------ */
 /*  Trigger shell builder (matches Input shell exactly)                */
 /* ------------------------------------------------------------------ */
 
-function buildTriggerStyle(
-  size: keyof typeof SIZES,
-  variant: string,
-  isDisabled: boolean,
-): React.CSSProperties {
+function buildTriggerStyle(size: keyof typeof SIZES, variant: string, isDisabled: boolean): React.CSSProperties {
   const s = SIZES[size];
 
   const base: React.CSSProperties = {
@@ -124,7 +154,17 @@ const DROPDOWN_STYLE: React.CSSProperties = {
 
 function CheckIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={{ flexShrink: 0 }}
+    >
       <path d="M20 6L9 17l-5-5" />
     </svg>
   );
@@ -162,7 +202,18 @@ function ChevronIcon({ isOpen }: { isOpen: boolean }) {
 
 function SearchIcon() {
   return (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" data-part="search-icon" style={{ flexShrink: 0 }}>
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      data-part="search-icon"
+      style={{ flexShrink: 0 }}
+    >
       <circle cx="11" cy="11" r="8" />
       <path d="M21 21l-4.35-4.35" />
     </svg>
@@ -193,7 +244,16 @@ function ClearButton({ onClick }: { onClick: (e: React.MouseEvent) => void }) {
         transition: 'background-color var(--ds-motion-fast)',
       }}
     >
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <svg
+        width="14"
+        height="14"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
         <path d="M18 6L6 18M6 6l12 12" />
       </svg>
     </button>
@@ -276,9 +336,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   const needsResponsiveCSS = responsiveEntries.length > 0;
   const elementId = needsResponsiveCSS ? `select-${reactId.replace(/:/g, '')}` : '';
-  const responsiveCSS = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsiveCSS = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
 
   const size = scalarOrUndefined(sizeProp) ?? SELECT_DEFAULTS.size;
 
@@ -318,11 +376,19 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const nativeSelectRef = useRef<HTMLSelectElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [scrollTop, setScrollTop] = useState(0);
-  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [dropdownPosition, setDropdownPosition] = useState({
+    top: 0,
+    left: 0,
+    width: 0,
+  });
 
-  useImperativeHandle(ref, () => {
-    return nativeSelectRef.current ?? inputRef.current ?? containerRef.current ?? document.createElement('div');
-  }, []);
+  useImperativeHandle(
+    ref,
+    () => {
+      return nativeSelectRef.current ?? inputRef.current ?? containerRef.current ?? document.createElement('div');
+    },
+    []
+  );
 
   // Sync with controlled value
   useEffect(() => {
@@ -348,14 +414,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   // Build renderable list
   const renderableItems = useMemo(() => {
     if (isSearchable && searchValue) {
-      return filteredOptions.map((opt) => ({ type: 'option' as const, option: opt }));
+      return filteredOptions.map((opt) => ({
+        type: 'option' as const,
+        option: opt,
+      }));
     }
     return buildRenderableList(filteredOptions, optionGroups);
   }, [filteredOptions, optionGroups, isSearchable, searchValue]);
 
   const hasRichDropdownOptions = useMemo(
     () => allOptions.some((option) => Boolean(option.icon || option.description)),
-    [allOptions],
+    [allOptions]
   );
 
   // Selectable indices (skip headers + disabled)
@@ -371,12 +440,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
 
   // Virtual scroll config
   const virtualEnabled = !!virtual;
-  const itemHeight = virtual && typeof virtual === 'object' && virtual.itemHeight
-    ? virtual.itemHeight
-    : DEFAULT_ITEM_HEIGHT;
-  const containerHeight = virtual && typeof virtual === 'object' && virtual.containerHeight
-    ? virtual.containerHeight
-    : DEFAULT_CONTAINER_HEIGHT;
+  const itemHeight =
+    virtual && typeof virtual === 'object' && virtual.itemHeight ? virtual.itemHeight : DEFAULT_ITEM_HEIGHT;
+  const containerHeight =
+    virtual && typeof virtual === 'object' && virtual.containerHeight
+      ? virtual.containerHeight
+      : DEFAULT_CONTAINER_HEIGHT;
 
   // Virtual scroll: compute visible range
   const { visibleItems, totalHeight, offsetY } = useMemo(() => {
@@ -387,7 +456,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     const startIdx = Math.max(0, Math.floor(scrollTop / itemHeight) - VIRTUAL_BUFFER);
     const endIdx = Math.min(
       renderableItems.length,
-      Math.ceil((scrollTop + containerHeight) / itemHeight) + VIRTUAL_BUFFER,
+      Math.ceil((scrollTop + containerHeight) / itemHeight) + VIRTUAL_BUFFER
     );
     return {
       visibleItems: renderableItems.slice(startIdx, endIdx),
@@ -402,136 +471,144 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   }, [allOptions, internalValue]);
 
   // Handle selection
-  const handleSelect = useCallback((optionValue: string | number, option: SelectOption) => {
-    if (option.disabled) return;
+  const handleSelect = useCallback(
+    (optionValue: string | number, option: SelectOption) => {
+      if (option.disabled) return;
 
-    let newValue: (string | number)[];
-    if (multiple) {
-      if (internalValue.includes(optionValue)) {
-        newValue = internalValue.filter((v) => v !== optionValue);
+      let newValue: (string | number)[];
+      if (multiple) {
+        if (internalValue.includes(optionValue)) {
+          newValue = internalValue.filter((v) => v !== optionValue);
+        } else {
+          newValue = [...internalValue, optionValue];
+        }
       } else {
-        newValue = [...internalValue, optionValue];
+        newValue = [optionValue];
+        setIsOpen(false);
       }
-    } else {
-      newValue = [optionValue];
-      setIsOpen(false);
-    }
 
-    setInternalValue(newValue);
-    setSearchValue('');
+      setInternalValue(newValue);
+      setSearchValue('');
 
-    if (onChange) {
-      const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
-      onChange(
-        multiple ? newValue : newValue[0],
-        multiple ? selectedOpts : selectedOpts[0]
-      );
-    }
-  }, [multiple, internalValue, onChange, allOptions]);
+      if (onChange) {
+        const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
+        onChange(multiple ? newValue : newValue[0], multiple ? selectedOpts : selectedOpts[0]);
+      }
+    },
+    [multiple, internalValue, onChange, allOptions]
+  );
 
   // Handle clear
-  const handleClear = useCallback((e: React.MouseEvent) => {
-    e.stopPropagation();
-    setInternalValue([]);
-    setSearchValue('');
-    setFocusedIndex(-1);
-    onChange?.(multiple ? [] : '', undefined);
-    onClear?.();
-  }, [multiple, onChange, onClear]);
+  const handleClear = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setInternalValue([]);
+      setSearchValue('');
+      setFocusedIndex(-1);
+      onChange?.(multiple ? [] : '', undefined);
+      onClear?.();
+    },
+    [multiple, onChange, onClear]
+  );
 
   // Handle token separators
-  const handleSearchInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const rawValue = e.target.value;
+  const handleSearchInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const rawValue = e.target.value;
 
-    if (tokenSeparators && tokenSeparators.length > 0 && multiple) {
-      const lastChar = rawValue.slice(-1);
-      if (tokenSeparators.includes(lastChar)) {
-        const token = rawValue.slice(0, -1).trim();
-        if (token) {
-          const matchOption = allOptions.find(
-            (opt) => getLabelText(opt.label).toLowerCase() === token.toLowerCase()
-              || String(opt.value) === token,
-          );
-          if (matchOption && !internalValue.includes(matchOption.value)) {
-            const newValue = [...internalValue, matchOption.value];
-            setInternalValue(newValue);
-            const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
-            onChange?.(newValue, selectedOpts);
+      if (tokenSeparators && tokenSeparators.length > 0 && multiple) {
+        const lastChar = rawValue.slice(-1);
+        if (tokenSeparators.includes(lastChar)) {
+          const token = rawValue.slice(0, -1).trim();
+          if (token) {
+            const matchOption = allOptions.find(
+              (opt) => getLabelText(opt.label).toLowerCase() === token.toLowerCase() || String(opt.value) === token
+            );
+            if (matchOption && !internalValue.includes(matchOption.value)) {
+              const newValue = [...internalValue, matchOption.value];
+              setInternalValue(newValue);
+              const selectedOpts = allOptions.filter((opt) => newValue.includes(opt.value));
+              onChange?.(newValue, selectedOpts);
+            }
+            setSearchValue('');
+            onSearch?.('');
+            return;
           }
-          setSearchValue('');
-          onSearch?.('');
-          return;
         }
       }
-    }
 
-    setSearchValue(rawValue);
-    onSearch?.(rawValue);
-    setFocusedIndex(-1);
-  }, [tokenSeparators, multiple, allOptions, internalValue, onChange, onSearch]);
+      setSearchValue(rawValue);
+      onSearch?.(rawValue);
+      setFocusedIndex(-1);
+    },
+    [tokenSeparators, multiple, allOptions, internalValue, onChange, onSearch]
+  );
 
   // Keyboard navigation
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!isOpen) {
-      if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        setIsOpen(true);
-        if (selectableIndices.length > 0) {
-          setFocusedIndex(selectableIndices[0]);
-        }
-      }
-      return;
-    }
-
-    switch (e.key) {
-      case 'ArrowDown': {
-        e.preventDefault();
-        const currentPos = selectableIndices.indexOf(focusedIndex);
-        const nextPos = currentPos < selectableIndices.length - 1 ? currentPos + 1 : 0;
-        setFocusedIndex(selectableIndices[nextPos] ?? -1);
-        break;
-      }
-      case 'ArrowUp': {
-        e.preventDefault();
-        const currentPos = selectableIndices.indexOf(focusedIndex);
-        const prevPos = currentPos > 0 ? currentPos - 1 : selectableIndices.length - 1;
-        setFocusedIndex(selectableIndices[prevPos] ?? -1);
-        break;
-      }
-      case 'Home': {
-        e.preventDefault();
-        if (selectableIndices.length > 0) {
-          setFocusedIndex(selectableIndices[0]);
-        }
-        break;
-      }
-      case 'End': {
-        e.preventDefault();
-        if (selectableIndices.length > 0) {
-          setFocusedIndex(selectableIndices[selectableIndices.length - 1]);
-        }
-        break;
-      }
-      case 'Enter': {
-        e.preventDefault();
-        if (focusedIndex >= 0) {
-          const item = renderableItems[focusedIndex];
-          if (item?.type === 'option' && item.option && !item.option.disabled) {
-            handleSelect(item.option.value, item.option);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!isOpen) {
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setIsOpen(true);
+          if (selectableIndices.length > 0) {
+            setFocusedIndex(selectableIndices[0]);
           }
         }
-        break;
+        return;
       }
-      case 'Escape': {
-        e.preventDefault();
-        setIsOpen(false);
-        setFocusedIndex(-1);
-        break;
+
+      switch (e.key) {
+        case 'ArrowDown': {
+          e.preventDefault();
+          const currentPos = selectableIndices.indexOf(focusedIndex);
+          const nextPos = currentPos < selectableIndices.length - 1 ? currentPos + 1 : 0;
+          setFocusedIndex(selectableIndices[nextPos] ?? -1);
+          break;
+        }
+        case 'ArrowUp': {
+          e.preventDefault();
+          const currentPos = selectableIndices.indexOf(focusedIndex);
+          const prevPos = currentPos > 0 ? currentPos - 1 : selectableIndices.length - 1;
+          setFocusedIndex(selectableIndices[prevPos] ?? -1);
+          break;
+        }
+        case 'Home': {
+          e.preventDefault();
+          if (selectableIndices.length > 0) {
+            setFocusedIndex(selectableIndices[0]);
+          }
+          break;
+        }
+        case 'End': {
+          e.preventDefault();
+          if (selectableIndices.length > 0) {
+            setFocusedIndex(selectableIndices[selectableIndices.length - 1]);
+          }
+          break;
+        }
+        case 'Enter': {
+          e.preventDefault();
+          if (focusedIndex >= 0) {
+            const item = renderableItems[focusedIndex];
+            if (item?.type === 'option' && item.option && !item.option.disabled) {
+              handleSelect(item.option.value, item.option);
+            }
+          }
+          break;
+        }
+        case 'Escape': {
+          e.preventDefault();
+          setIsOpen(false);
+          setFocusedIndex(-1);
+          break;
+        }
+        default:
+          break;
       }
-      default:
-        break;
-    }
-  }, [isOpen, focusedIndex, selectableIndices, renderableItems, handleSelect]);
+    },
+    [isOpen, focusedIndex, selectableIndices, renderableItems, handleSelect]
+  );
 
   // Reset focused index when dropdown opens/closes
   useEffect(() => {
@@ -555,7 +632,10 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     const rect = containerRef.current.getBoundingClientRect();
     const gutter = 12;
     const minWidth = hasRichDropdownOptions ? 320 : 240;
-    const maxWidth = Math.min(hasRichDropdownOptions ? 440 : window.innerWidth - gutter * 2, window.innerWidth - gutter * 2);
+    const maxWidth = Math.min(
+      hasRichDropdownOptions ? 440 : window.innerWidth - gutter * 2,
+      window.innerWidth - gutter * 2
+    );
     const width = Math.min(Math.max(rect.width, minWidth), maxWidth);
     const left = Math.min(Math.max(gutter, rect.left), window.innerWidth - width - gutter);
 
@@ -603,13 +683,19 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     if (selectedOptions.length === 0) return null;
 
     if (multiple) {
-      const visibleTags = maxTagCount !== undefined
-        ? selectedOptions.slice(0, maxTagCount)
-        : selectedOptions;
+      const visibleTags = maxTagCount !== undefined ? selectedOptions.slice(0, maxTagCount) : selectedOptions;
       const hiddenCount = selectedOptions.length - visibleTags.length;
 
       return (
-        <div data-part="value" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--ds-spacing-1, 4px)', alignItems: 'center' }}>
+        <div
+          data-part="value"
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: 'var(--ds-spacing-1, 4px)',
+            alignItems: 'center',
+          }}
+        >
           {visibleTags.map((opt) => (
             <span
               key={opt.value}
@@ -648,20 +734,32 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
                   transition: 'color var(--ds-motion-fast)',
                 }}
               >
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <svg
+                  width="10"
+                  height="10"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth={2.5}
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
                   <path d="M18 6L6 18M6 6l12 12" />
                 </svg>
               </button>
             </span>
           ))}
           {hiddenCount > 0 && (
-            <span data-part="tag-count" style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              padding: '1px var(--ds-spacing-2, 8px)',
-              fontSize: 'var(--ds-font-size-xs, 12px)',
-              lineHeight: 'var(--ds-line-height-xs, 20px)',
-            }}>
+            <span
+              data-part="tag-count"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '1px var(--ds-spacing-2, 8px)',
+                fontSize: 'var(--ds-font-size-xs, 12px)',
+                lineHeight: 'var(--ds-line-height-xs, 20px)',
+              }}
+            >
               +{hiddenCount}
             </span>
           )}
@@ -669,7 +767,18 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       );
     }
 
-    return <span data-part="value" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{selectedOptions[0].label}</span>;
+    return (
+      <span
+        data-part="value"
+        style={{
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {selectedOptions[0].label}
+      </span>
+    );
   }, [selectedOptions, multiple, maxTagCount, handleSelect]);
 
   /* ---------------------------------------------------------------- */
@@ -736,10 +845,12 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     }
 
     return (
-      <div className={`ds-select-shell ds-select-shell--modern ${className || ''}`} data-part="root" style={{ ...style, position: 'relative' }}>
-        {responsiveCSS && responsiveCSS.css && (
-          <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
-        )}
+      <div
+        className={`ds-select-shell ds-select-shell--modern ${className || ''}`}
+        data-part="root"
+        style={{ ...style, position: 'relative' }}
+      >
+        {responsiveCSS && responsiveCSS.css && <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />}
         <select
           ref={nativeSelectRef}
           {...(responsiveCSS ? responsiveCSS.attrs : {})}
@@ -782,7 +893,15 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               display: 'inline-flex',
             }}
           >
-            <span data-part="loading-spinner" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />
+            <span
+              data-part="loading-spinner"
+              style={{
+                display: 'inline-block',
+                width: 12,
+                height: 12,
+                animation: 'spin var(--ds-motion-glacial) linear infinite',
+              }}
+            />
           </span>
         )}
       </div>
@@ -793,11 +912,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   /*  Custom dropdown for advanced cases                               */
   /* ---------------------------------------------------------------- */
 
-  const triggerStyle = buildTriggerStyle(
-    size as keyof typeof SIZES,
-    variant,
-    disabled,
-  );
+  const triggerStyle = buildTriggerStyle(size as keyof typeof SIZES, variant, disabled);
 
   const {
     engine: _customEngine,
@@ -898,23 +1013,46 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         onMouseEnter={() => setFocusedIndex(idx)}
       >
         {multiple && (
-          <span data-part="option-checkbox" style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '14px',
-            height: '14px',
-            flexShrink: 0,
-            transition: 'all var(--ds-motion-fast)',
-          }}>
+          <span
+            data-part="option-checkbox"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '14px',
+              height: '14px',
+              flexShrink: 0,
+              transition: 'all var(--ds-motion-fast)',
+            }}
+          >
             {isSelected && (
-              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                width="10"
+                height="10"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M20 6L9 17l-5-5" />
               </svg>
             )}
           </span>
         )}
-        {option.icon && <span data-part="option-icon" style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
+        {option.icon && (
+          <span
+            data-part="option-icon"
+            style={{
+              display: 'inline-flex',
+              flexShrink: 0,
+              marginTop: option.description ? 1 : 0,
+            }}
+          >
+            {option.icon}
+          </span>
+        )}
         <span
           style={{
             flex: 1,
@@ -925,7 +1063,15 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
             overflow: 'hidden',
           }}
         >
-          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
+          <span
+            style={{
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {option.label}
+          </span>
           {option.description && (
             <span
               data-part="option-description"
@@ -968,22 +1114,17 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     minWidth: 0,
   };
 
-  // Placeholder CSS for the search input
-  const searchPlaceholderId = `ds-sel-search-${reactId.replace(/:/g, '')}`;
-  const searchPlaceholderCSS = `
-    .${searchPlaceholderId}::placeholder {
-      color: var(--ds-color-text-muted);
-      opacity: 1;
-    }
-  `;
-
   return (
-    <div ref={containerRef} className={`ds-select-shell ds-select-shell--modern ${className || ''}`} data-part="root" data-open={isOpen || undefined} data-disabled={disabled || undefined} style={{ ...style, position: 'relative', width: '100%' }} onKeyDown={handleKeyDown}>
-      {responsiveCSS && responsiveCSS.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />
-      )}
-      <style dangerouslySetInnerHTML={{ __html: searchPlaceholderCSS }} />
-
+    <div
+      ref={containerRef}
+      className={`ds-select-shell ds-select-shell--modern ${className || ''}`}
+      data-part="root"
+      data-open={isOpen || undefined}
+      data-disabled={disabled || undefined}
+      style={{ ...style, position: 'relative', width: '100%' }}
+      onKeyDown={handleKeyDown}
+    >
+      {responsiveCSS && responsiveCSS.css && <style dangerouslySetInnerHTML={{ __html: responsiveCSS.css }} />}
       {/* Trigger */}
       <div
         {...triggerHtmlProps}
@@ -1010,12 +1151,21 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
         onFocus={onFocus as any}
         onBlur={onBlur as any}
       >
-        <div style={{ flex: 1, display: 'flex', alignItems: 'center', gap: '8px', overflow: 'hidden', minWidth: 0 }}>
+        <div
+          style={{
+            flex: 1,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            overflow: 'hidden',
+            minWidth: 0,
+          }}
+        >
           {isSearchable && isOpen ? (
             <input
               ref={inputRef}
               type="text"
-              className={searchPlaceholderId}
+              className="rottay-select__search-input"
               data-part="search-input"
               style={{
                 flex: 1,
@@ -1030,207 +1180,264 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
               placeholder={selectedOptions.length === 0 ? displayPlaceholder : ''}
               onClick={(e) => e.stopPropagation()}
             />
-          ) : displayValue || (
-            <span data-part="placeholder">{displayPlaceholder}</span>
+          ) : (
+            displayValue || <span data-part="placeholder">{displayPlaceholder}</span>
           )}
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
-          {isClearable && internalValue.length > 0 && !disabled && (
-            <ClearButton onClick={handleClear} />
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            flexShrink: 0,
+          }}
+        >
+          {isClearable && internalValue.length > 0 && !disabled && <ClearButton onClick={handleClear} />}
+          {loading && (
+            <span
+              className="rottay-select__loading-indicator"
+              data-part="loading-spinner"
+              aria-hidden="true"
+              style={{
+                display: 'inline-block',
+                width: 12,
+                height: 12,
+                animation: 'spin var(--ds-motion-glacial) linear infinite',
+              }}
+            />
           )}
-          {loading && <span className="rottay-select__loading-indicator" data-part="loading-spinner" aria-hidden="true" style={{ display: 'inline-block', width: 12, height: 12, animation: 'spin var(--ds-motion-glacial) linear infinite' }} />}
           <ChevronIcon isOpen={isOpen} />
         </div>
       </div>
 
       {/* Hidden input for form submission */}
-      {name && (
-        <input
-          type="hidden"
-          name={name}
-          value={multiple ? internalValue.join(',') : internalValue[0] || ''}
-        />
-      )}
+      {name && <input type="hidden" name={name} value={multiple ? internalValue.join(',') : internalValue[0] || ''} />}
 
       {/* Dropdown */}
-      {isOpen && typeof document !== 'undefined' && createPortal(
-        <div
-          ref={dropdownRef}
-          className="ds-select-shell__dropdown"
-          data-part="dropdown"
-          data-rottay-portal="true"
-          role="listbox"
-          style={{
-            ...DROPDOWN_STYLE,
-            position: 'fixed',
-            top: dropdownPosition.top,
-            left: dropdownPosition.left,
-            right: 'auto',
-            width: dropdownPosition.width || undefined,
-            zIndex: 2400,
-            animation: 'ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
-          }}
-        >
-          {/* Search input inside dropdown */}
-          {isSearchable && (
-            <div data-part="search-input-wrapper" style={searchInputContainerStyle}>
-              <SearchIcon />
-              <input
-                ref={!isOpen ? undefined : inputRef}
-                type="text"
-                className={searchPlaceholderId}
-                data-part="search-input"
-                style={searchInputStyle}
-                value={searchValue}
-                onChange={handleSearchInput}
-                placeholder={t('select.search') || 'Search...'}
-                onClick={(e) => e.stopPropagation()}
-                autoFocus
-              />
-            </div>
-          )}
-
-          {/* Options list */}
+      {isOpen &&
+        typeof document !== 'undefined' &&
+        createPortal(
           <div
-            data-part="option-list"
+            ref={dropdownRef}
+            className="ds-select-shell__dropdown"
+            data-part="dropdown"
+            data-rottay-portal="true"
+            role="listbox"
             style={{
-              ...(virtualEnabled ? {
-                maxHeight: `${containerHeight}px`,
-                overflowY: 'auto' as const,
-              } : {
-                maxHeight: 'var(--ds-select-max-height, 240px)',
-                overflowY: 'auto' as const,
-              }),
-              padding: isSearchable ? '6px 0 0 0' : '0',
+              ...DROPDOWN_STYLE,
+              position: 'fixed',
+              top: dropdownPosition.top,
+              left: dropdownPosition.left,
+              right: 'auto',
+              width: dropdownPosition.width || undefined,
+              zIndex: 2400,
+              animation: 'ds-select-appear var(--ds-motion-fast) var(--ds-motion-ease-out)',
             }}
-            onScroll={virtualEnabled ? handleDropdownScroll : undefined}
           >
-            {virtualEnabled ? (
-              <div style={{ height: `${totalHeight}px`, position: 'relative' }}>
-                <div style={{ position: 'absolute', top: `${offsetY}px`, left: 0, right: 0 }}>
-                  {visibleItems.length === 0 ? (
-                    <div data-part="empty" data-virtual="true" style={{ padding: '12px 16px', fontSize: '14px' }}>
-                      {noOptionsText}
-                    </div>
-                  ) : (
-                    visibleItems.map((item, idx) => {
-                      const realIdx = Math.max(0, Math.floor(scrollTop / itemHeight) - VIRTUAL_BUFFER) + idx;
-                      if (item.type === 'group-header') {
+            {/* Search input inside dropdown */}
+            {isSearchable && (
+              <div data-part="search-input-wrapper" style={searchInputContainerStyle}>
+                <SearchIcon />
+                <input
+                  ref={!isOpen ? undefined : inputRef}
+                  type="text"
+                  className="rottay-select__search-input"
+                  data-part="search-input"
+                  style={searchInputStyle}
+                  value={searchValue}
+                  onChange={handleSearchInput}
+                  placeholder={t('select.search') || 'Search...'}
+                  onClick={(e) => e.stopPropagation()}
+                  autoFocus
+                />
+              </div>
+            )}
+
+            {/* Options list */}
+            <div
+              data-part="option-list"
+              style={{
+                ...(virtualEnabled
+                  ? {
+                      maxHeight: `${containerHeight}px`,
+                      overflowY: 'auto' as const,
+                    }
+                  : {
+                      maxHeight: 'var(--ds-select-max-height, 240px)',
+                      overflowY: 'auto' as const,
+                    }),
+                padding: isSearchable ? '6px 0 0 0' : '0',
+              }}
+              onScroll={virtualEnabled ? handleDropdownScroll : undefined}
+            >
+              {virtualEnabled ? (
+                <div style={{ height: `${totalHeight}px`, position: 'relative' }}>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: `${offsetY}px`,
+                      left: 0,
+                      right: 0,
+                    }}
+                  >
+                    {visibleItems.length === 0 ? (
+                      <div data-part="empty" data-virtual="true" style={{ padding: '12px 16px', fontSize: '14px' }}>
+                        {noOptionsText}
+                      </div>
+                    ) : (
+                      visibleItems.map((item, idx) => {
+                        const realIdx = Math.max(0, Math.floor(scrollTop / itemHeight) - VIRTUAL_BUFFER) + idx;
+                        if (item.type === 'group-header') {
+                          return (
+                            <div
+                              key={`gh-${idx}`}
+                              data-part="group-label"
+                              data-virtual="true"
+                              data-divider={realIdx > 0 ? 'true' : undefined}
+                              style={{
+                                ...groupHeaderStyle,
+                                height: `${itemHeight}px`,
+                                display: 'flex',
+                                alignItems: 'center',
+                              }}
+                            >
+                              {item.groupLabel}
+                            </div>
+                          );
+                        }
+                        const option = item.option!;
+                        const isSelected = internalValue.includes(option.value);
+                        const isFocusedItem = realIdx === focusedIndex;
                         return (
                           <div
-                            key={`gh-${idx}`}
-                            data-part="group-label"
+                            key={option.value}
+                            role="option"
+                            aria-selected={isSelected}
+                            data-part="option"
                             data-virtual="true"
-                            data-divider={realIdx > 0 ? 'true' : undefined}
+                            data-selected={isSelected || undefined}
+                            data-active={isFocusedItem || undefined}
+                            data-disabled={option.disabled || undefined}
                             style={{
-                              ...groupHeaderStyle,
+                              ...optionBaseStyle,
                               height: `${itemHeight}px`,
-                              display: 'flex',
-                              alignItems: 'center',
+                              boxSizing: 'border-box',
+                              ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
+                              ...(isSelected ? { fontWeight: 500 } : {}),
                             }}
-                          >
-                            {item.groupLabel}
-                          </div>
-                        );
-                      }
-                      const option = item.option!;
-                      const isSelected = internalValue.includes(option.value);
-                      const isFocusedItem = realIdx === focusedIndex;
-                      return (
-                        <div
-                          key={option.value}
-                          role="option"
-                          aria-selected={isSelected}
-                          data-part="option"
-                          data-virtual="true"
-                          data-selected={isSelected || undefined}
-                          data-active={isFocusedItem || undefined}
-                          data-disabled={option.disabled || undefined}
-                          style={{
-                            ...optionBaseStyle,
-                            height: `${itemHeight}px`,
-                            boxSizing: 'border-box',
-                            ...(option.disabled ? { opacity: 0.4, cursor: 'not-allowed' } : {}),
-                            ...(isSelected ? { fontWeight: 500 } : {}),
-                          }}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (!option.disabled) {
-                              handleSelect(option.value, option);
-                            }
-                          }}
-                          onMouseEnter={() => setFocusedIndex(realIdx)}
-                        >
-                          {multiple && (
-                            <span data-part="option-checkbox" style={{
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              width: '16px',
-                              height: '16px',
-                              flexShrink: 0,
-                              transition: 'all var(--ds-motion-fast)',
-                            }}>
-                              {isSelected && (
-                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round">
-                                  <path d="M20 6L9 17l-5-5" />
-                                </svg>
-                              )}
-                            </span>
-                          )}
-                          {option.icon && <span data-part="option-icon" style={{ display: 'inline-flex', flexShrink: 0, marginTop: option.description ? 1 : 0 }}>{option.icon}</span>}
-                          <span
-                            style={{
-                              flex: 1,
-                              minWidth: 0,
-                              display: 'flex',
-                              flexDirection: 'column',
-                              gap: option.description ? 2 : 0,
-                              overflow: 'hidden',
+                            onClick={(e) => {
+                              e.preventDefault();
+                              if (!option.disabled) {
+                                handleSelect(option.value, option);
+                              }
                             }}
+                            onMouseEnter={() => setFocusedIndex(realIdx)}
                           >
-                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{option.label}</span>
-                            {option.description && (
+                            {multiple && (
                               <span
-                                data-part="option-description"
+                                data-part="option-checkbox"
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                  width: '16px',
+                                  height: '16px',
+                                  flexShrink: 0,
+                                  transition: 'all var(--ds-motion-fast)',
+                                }}
+                              >
+                                {isSelected && (
+                                  <svg
+                                    width="10"
+                                    height="10"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="white"
+                                    strokeWidth={3}
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M20 6L9 17l-5-5" />
+                                  </svg>
+                                )}
+                              </span>
+                            )}
+                            {option.icon && (
+                              <span
+                                data-part="option-icon"
+                                style={{
+                                  display: 'inline-flex',
+                                  flexShrink: 0,
+                                  marginTop: option.description ? 1 : 0,
+                                }}
+                              >
+                                {option.icon}
+                              </span>
+                            )}
+                            <span
+                              style={{
+                                flex: 1,
+                                minWidth: 0,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: option.description ? 2 : 0,
+                                overflow: 'hidden',
+                              }}
+                            >
+                              <span
                                 style={{
                                   overflow: 'hidden',
                                   textOverflow: 'ellipsis',
                                   whiteSpace: 'nowrap',
-                                  fontSize: 11,
-                                  lineHeight: '14px',
-                                  fontWeight: 450,
                                 }}
                               >
-                                {option.description}
+                                {option.label}
+                              </span>
+                              {option.description && (
+                                <span
+                                  data-part="option-description"
+                                  style={{
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis',
+                                    whiteSpace: 'nowrap',
+                                    fontSize: 11,
+                                    lineHeight: '14px',
+                                    fontWeight: 450,
+                                  }}
+                                >
+                                  {option.description}
+                                </span>
+                              )}
+                            </span>
+                            {!multiple && isSelected && (
+                              <span
+                                data-part="option-check"
+                                style={{
+                                  display: 'inline-flex',
+                                  flexShrink: 0,
+                                }}
+                              >
+                                <CheckIcon />
                               </span>
                             )}
-                          </span>
-                          {!multiple && isSelected && (
-                            <span data-part="option-check" style={{ display: 'inline-flex', flexShrink: 0 }}>
-                              <CheckIcon />
-                            </span>
-                          )}
-                        </div>
-                      );
-                    })
-                  )}
+                          </div>
+                        );
+                      })
+                    )}
+                  </div>
                 </div>
-              </div>
-            ) : (
-              renderableItems.length === 0 ? (
+              ) : renderableItems.length === 0 ? (
                 <div data-part="empty" style={{ padding: '12px 16px', fontSize: '14px' }}>
                   {noOptionsText}
                 </div>
               ) : (
                 renderableItems.map((item, idx) => renderOptionItem(item, idx, idx === focusedIndex))
-              )
-            )}
-          </div>
-        </div>,
-        document.body,
-      )}
+              )}
+            </div>
+          </div>,
+          document.body
+        )}
     </div>
   );
 });

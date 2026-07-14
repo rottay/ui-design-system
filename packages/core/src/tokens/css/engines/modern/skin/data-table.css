@@ -30,10 +30,9 @@
  * [data-selected='true'])` — the exact `hoverable && !isSelected` guard the two
  * (grouped + flat) `onMouseEnter` handlers evaluated.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`; the per-instance
- * `<style>` blocks (resize/sortable/focus/editable/editing pseudo-selectors +
- * `@keyframes ds-inline-edit-enter`, and the loading `@keyframes ds-shimmer`)
- * stay in the tsx by WO law and are NOT absorbed here.
+ * Values are transcribed verbatim from `engines/modern.tsx`. The former
+ * per-instance resize/sortable/focus/editable rules and keyframes now live in
+ * the canonical `components/skin/data-table-interactions.css` recovery skin.
  */
 
 /* ---- card surface ---- */
@@ -124,8 +123,8 @@
   border-radius: 1px;
 }
 
-/* ---- resize handle bar (rest; the :hover width/color swap stays in the
-        per-instance `<style>`) ---- */
+/* ---- resize handle bar (rest; the :hover width/color swap is owned by
+        data-table-interactions.css) ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part='resize-handle-bar'] {
   border-radius: 1px;
   background: var(--ds-color-border);

@@ -141,18 +141,19 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
             role="listitem"
           >
             {/* Dot */}
-            <div
-              style={dotStyle}
-              data-part="dot"
-              data-custom-dot={itemProps.dot ? 'true' : 'false'}
-              aria-hidden="true"
-            >
+            <div style={dotStyle} data-part="dot" data-custom-dot={itemProps.dot ? 'true' : 'false'} aria-hidden="true">
               {itemProps.dot}
             </div>
 
             {/* Label */}
             {itemProps.label && (
-              <div data-part="label" style={{ fontSize: 'var(--ds-timeline-label-font-size, 12px)', marginBottom: '4px' }}>
+              <div
+                data-part="label"
+                style={{
+                  fontSize: 'var(--ds-timeline-label-font-size, 12px)',
+                  marginBottom: '4px',
+                }}
+              >
                 {itemProps.label}
               </div>
             )}
@@ -169,7 +170,10 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
           data-part="item"
           data-side="start"
           data-pending="true"
-          style={{ position: 'relative', paddingBottom: TIMELINE_SIZE_MAP.itemPadding }}
+          style={{
+            position: 'relative',
+            paddingBottom: TIMELINE_SIZE_MAP.itemPadding,
+          }}
           role="listitem"
           aria-label="Pending"
         >
@@ -191,15 +195,6 @@ function RusticTimeline(props: TimelineProps): React.ReactElement {
           <div data-part="body">{pending}</div>
         </div>
       )}
-
-      {/* Inline keyframes for the pending dot pulse. Scoped via a unique
-          animation name to avoid collisions with other @keyframes on the page. */}
-      <style>{`
-        @keyframes rottay-timeline-pulse {
-          0%, 100% { opacity: 1; transform: scale(1); }
-          50% { opacity: 0.5; transform: scale(0.9); }
-        }
-      `}</style>
     </div>
   );
 }
@@ -219,12 +214,10 @@ RusticTimeline.displayName = 'RusticTimeline';
  * </Timeline.Item>
  * ```
  */
-const RusticTimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>(
-  (props, ref) => {
-    const { children } = props;
-    return <div ref={ref}>{children}</div>;
-  }
-);
+const RusticTimelineItem = forwardRef<HTMLDivElement, TimelineItemProps>((props, ref) => {
+  const { children } = props;
+  return <div ref={ref}>{children}</div>;
+});
 
 RusticTimelineItem.displayName = 'RusticTimelineItem';
 

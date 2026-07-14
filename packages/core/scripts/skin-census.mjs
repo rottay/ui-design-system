@@ -5,32 +5,32 @@
 // construction (AntD owns its paint); tests/stories/types are not shipped
 // render code. Output: a JSON artifact (machine, feeds the counter baseline
 // extension) and a markdown table (human, feeds the batch plans).
-import { readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
-import { join, relative, dirname } from "node:path";
-import { fileURLToPath } from "node:url";
-import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
+import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import { join, relative, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPONENTS = join(ROOT, "src/components");
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const COMPONENTS = join(ROOT, 'src/components');
 
 const EXCLUDE_RE =
   /(\/tests?\/|\.test\.|\.stories\.|\.types\.ts$|\/classic\.tsx$|\/engines\/classic\.tsx$|\/classic\/)/;
 
 /** Files the ARC-09 ratchet already owns (all at 0) — done, not fleet work. */
 const DONE = new Set([
-  "primitives/display/Table/engines/modern.tsx",
-  "primitives/display/Table/engines/rustic.tsx",
-  "structures/workspace/field-filters-panel/index.tsx",
-  "patterns/forms/filter-panel/engines/modern.tsx",
-  "patterns/forms/filter-panel/engines/rustic.tsx",
-  "structures/workspace/selection-preview-rail/index.tsx",
-  "patterns/data/detail-panel/engines/modern.tsx",
-  "patterns/data/detail-panel/engines/rustic.tsx",
-  "patterns/data/data-table/engines/modern.tsx",
-  "patterns/data/data-table/engines/rustic.tsx",
-  "patterns/data/data-table/cell-editors/index.tsx",
-  "patterns/data/data-table/DataTableMobileCards.tsx",
-  "patterns/data/data-table/PatternDataTable.tsx",
+  'primitives/display/Table/engines/modern.tsx',
+  'primitives/display/Table/engines/rustic.tsx',
+  'structures/workspace/field-filters-panel/index.tsx',
+  'patterns/forms/filter-panel/engines/modern.tsx',
+  'patterns/forms/filter-panel/engines/rustic.tsx',
+  'structures/workspace/selection-preview-rail/index.tsx',
+  'patterns/data/detail-panel/engines/modern.tsx',
+  'patterns/data/detail-panel/engines/rustic.tsx',
+  'patterns/data/data-table/engines/modern.tsx',
+  'patterns/data/data-table/engines/rustic.tsx',
+  'patterns/data/data-table/cell-editors/index.tsx',
+  'patterns/data/data-table/DataTableMobileCards.tsx',
+  'patterns/data/data-table/PatternDataTable.tsx',
 ]);
 
 function* walk(dir) {
@@ -44,21 +44,25 @@ function* walk(dir) {
 /** tier / group / component from a repo-relative path like
  *  primitives/inputs/Select/engines/modern.tsx */
 function identify(rel) {
-  const parts = rel.split("/");
+  const parts = rel.split('/');
   const tier = parts[0];
-  if (tier === "primitives" || tier === "patterns" || tier === "structures" || tier === "surfaces") {
-    return { tier, group: parts[1] ?? "", component: parts[2] ?? parts[1] ?? rel };
+  if (tier === 'primitives' || tier === 'patterns' || tier === 'structures' || tier === 'surfaces') {
+    return {
+      tier,
+      group: parts[1] ?? '',
+      component: parts[2] ?? parts[1] ?? rel,
+    };
   }
-  return { tier, group: "", component: parts[1] ?? rel };
+  return { tier, group: '', component: parts[1] ?? rel };
 }
 
 /** Batch assignment per the skin-adoption lane. */
 function batchOf(tier, group) {
-  if (tier === "primitives" && group === "inputs") return "WO-SKIN-02";
-  if (tier === "primitives" && group === "feedback") return "WO-SKIN-03";
-  if (tier === "primitives" && (group === "overlay" || group === "navigation")) return "WO-SKIN-04";
-  if (tier === "primitives") return "WO-SKIN-05"; // display + layout
-  return "WO-SKIN-06"; // patterns + structures + surfaces remainder
+  if (tier === 'primitives' && group === 'inputs') return 'WO-SKIN-02';
+  if (tier === 'primitives' && group === 'feedback') return 'WO-SKIN-03';
+  if (tier === 'primitives' && (group === 'overlay' || group === 'navigation')) return 'WO-SKIN-04';
+  if (tier === 'primitives') return 'WO-SKIN-05'; // display + layout
+  return 'WO-SKIN-06'; // patterns + structures + surfaces remainder
 }
 
 /** Heuristic trap markers — each true marker pushes the file toward the
@@ -81,8 +85,8 @@ const files = [];
 for (const full of walk(COMPONENTS)) {
   const rel = relative(COMPONENTS, full);
   if (EXCLUDE_RE.test(rel)) continue;
-  const text = readFileSync(full, "utf8");
-  const count = countArc09PaintInFile(text);
+  const text = readFileSync(full, 'utf8');
+  const count = countArc09PaintInFile(text, full);
   if (count === 0) continue;
   const traps = trapMarkers(text);
   const trapCount = Object.values(traps).filter(Boolean).length;
@@ -91,7 +95,7 @@ for (const full of walk(COMPONENTS)) {
     count,
     done: DONE.has(rel),
     traps,
-    modelTier: trapCount >= 1 ? "opus" : "sonnet",
+    modelTier: trapCount >= 1 ? 'opus' : 'sonnet',
     ...identify(rel),
   });
 }
@@ -102,12 +106,25 @@ const fleet = files.filter((f) => !f.done);
 const byComponent = new Map();
 for (const f of fleet) {
   const key = `${f.tier}/${f.group}/${f.component}`;
-  const entry =
-    byComponent.get(key) ??
-    { key, tier: f.tier, group: f.group, component: f.component, batch: batchOf(f.tier, f.group), modelTier: "sonnet", total: 0, files: [] };
+  const entry = byComponent.get(key) ?? {
+    key,
+    tier: f.tier,
+    group: f.group,
+    component: f.component,
+    batch: batchOf(f.tier, f.group),
+    modelTier: 'sonnet',
+    total: 0,
+    files: [],
+  };
   entry.total += f.count;
-  if (f.modelTier === "opus") entry.modelTier = "opus";
-  entry.files.push({ file: f.file, count: f.count, traps: Object.entries(f.traps).filter(([, v]) => v).map(([k]) => k) });
+  if (f.modelTier === 'opus') entry.modelTier = 'opus';
+  entry.files.push({
+    file: f.file,
+    count: f.count,
+    traps: Object.entries(f.traps)
+      .filter(([, v]) => v)
+      .map(([k]) => k),
+  });
   byComponent.set(key, entry);
 }
 const components = [...byComponent.values()].sort((a, b) => b.total - a.total);
@@ -115,20 +132,32 @@ const components = [...byComponent.values()].sort((a, b) => b.total - a.total);
 const byTierGroup = new Map();
 for (const c of components) {
   const key = `${c.tier}/${c.group}`;
-  const e = byTierGroup.get(key) ?? { key, batch: c.batch, components: 0, total: 0, opus: 0 };
+  const e = byTierGroup.get(key) ?? {
+    key,
+    batch: c.batch,
+    components: 0,
+    total: 0,
+    opus: 0,
+  };
   e.components += 1;
   e.total += c.total;
-  if (c.modelTier === "opus") e.opus += 1;
+  if (c.modelTier === 'opus') e.opus += 1;
   byTierGroup.set(key, e);
 }
 
 const byBatch = new Map();
 for (const c of components) {
-  const e = byBatch.get(c.batch) ?? { batch: c.batch, components: 0, files: 0, total: 0, opus: 0 };
+  const e = byBatch.get(c.batch) ?? {
+    batch: c.batch,
+    components: 0,
+    files: 0,
+    total: 0,
+    opus: 0,
+  };
   e.components += 1;
   e.files += c.files.length;
   e.total += c.total;
-  if (c.modelTier === "opus") e.opus += 1;
+  if (c.modelTier === 'opus') e.opus += 1;
   byBatch.set(c.batch, e);
 }
 
@@ -142,16 +171,30 @@ const summary = {
   components,
 };
 
-const out = join(ROOT, "../..", "roadmap/skin-census.json");
-writeFileSync(out, JSON.stringify(summary, null, 1) + "\n");
+const out = join(ROOT, '../..', 'roadmap/skin-census.json');
+writeFileSync(out, JSON.stringify(summary, null, 1) + '\n');
 
-console.log(`fleet: ${summary.fleetComponents} components, ${summary.fleetFiles} files, ${summary.fleetSites} paint sites`);
-console.log("\nby batch:");
+console.log(
+  `fleet: ${summary.fleetComponents} components, ${summary.fleetFiles} files, ${summary.fleetSites} paint sites`
+);
+console.log('\nby batch:');
 for (const b of summary.batches)
-  console.log(`  ${b.batch}  ${String(b.components).padStart(3)} comp  ${String(b.files).padStart(3)} files  ${String(b.total).padStart(5)} sites  (${b.opus} opus-tier)`);
-console.log("\nby tier/group:");
+  console.log(
+    `  ${b.batch}  ${String(b.components).padStart(3)} comp  ${String(b.files).padStart(3)} files  ${String(
+      b.total
+    ).padStart(5)} sites  (${b.opus} opus-tier)`
+  );
+console.log('\nby tier/group:');
 for (const g of summary.groups)
-  console.log(`  ${g.key.padEnd(28)} ${g.batch}  ${String(g.components).padStart(3)} comp  ${String(g.total).padStart(5)} sites  (${g.opus} opus)`);
-console.log("\ntop 25 components:");
+  console.log(
+    `  ${g.key.padEnd(28)} ${g.batch}  ${String(g.components).padStart(3)} comp  ${String(g.total).padStart(
+      5
+    )} sites  (${g.opus} opus)`
+  );
+console.log('\ntop 25 components:');
 for (const c of components.slice(0, 25))
-  console.log(`  ${(c.tier + "/" + c.group + "/" + c.component).padEnd(50)} ${c.batch}  ${String(c.total).padStart(4)}  ${c.modelTier}`);
+  console.log(
+    `  ${(c.tier + '/' + c.group + '/' + c.component).padEnd(50)} ${c.batch}  ${String(c.total).padStart(4)}  ${
+      c.modelTier
+    }`
+  );

@@ -27,14 +27,19 @@ pnpm add react react-dom antd @ant-design/icons
 ### 2. Wrap and render
 
 ```tsx
-import { DesignSystemProvider, Button, Text, Flex } from '@rottay/design-system';
+import {
+  DesignSystemProvider,
+  Button,
+  Text,
+  Flex,
+} from "@rottay/design-system";
 
 function App() {
   return (
     <DesignSystemProvider>
       <Flex gap="4" align="center">
         <Text as="h1">Welcome</Text>
-        <Button variant="primary" onClick={() => alert('It works')}>
+        <Button variant="primary" onClick={() => alert("It works")}>
           Click me
         </Button>
       </Flex>
@@ -63,6 +68,7 @@ Create or update the `.npmrc` file in your project root:
 ```
 
 Set `GITHUB_TOKEN` as an environment variable. The token needs:
+
 - **Scope:** `read:packages`
 - **Access:** Must belong to a user/bot with access to the `rottay` organization
 
@@ -74,35 +80,38 @@ For CI/CD pipelines (GitHub Actions), use the built-in `GITHUB_TOKEN` secret or 
 pnpm add @rottay/design-system react react-dom antd @ant-design/icons
 ```
 
-### 3. Import CSS tokens (optional but recommended)
+### 3. Import the design-system stylesheet (required)
 
-The design system ships CSS custom properties for colors, spacing, typography, and more. Import the stylesheet in your application entry point:
+The design system ships component skins, interaction states, keyframes and CSS custom properties
+through its public stylesheets. Import exactly one stylesheet in your application entry point:
 
 ```tsx
 // app/layout.tsx or index.tsx
-import '@rottay/design-system/styles.css';
+import "@rottay/design-system/styles.css";
 ```
 
-This is optional because the `DesignSystemProvider` injects critical CSS variables at runtime via the `SystemCssVariablesBridge`. However, importing the stylesheet gives you the full token set for use in your own custom CSS.
+Use the matching `@rottay/design-system/styles/<vertical>` export in a vertical application when
+appropriate. `DesignSystemProvider` still injects runtime tenant variables through
+`SystemCssVariablesBridge`, but it does not replace the static stylesheet.
 
 ### 4. Wrap your application
 
 ```tsx
-import { DesignSystemProvider } from '@rottay/design-system';
+import { DesignSystemProvider } from "@rottay/design-system";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <DesignSystemProvider>
-      {children}
-    </DesignSystemProvider>
-  );
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return <DesignSystemProvider>{children}</DesignSystemProvider>;
 }
 ```
 
 ### 5. Use components
 
 ```tsx
-import { Button, Input, Card, Text, Flex, Stack } from '@rottay/design-system';
+import { Button, Input, Card, Text, Flex, Stack } from "@rottay/design-system";
 
 function LoginForm() {
   return (
@@ -124,8 +133,8 @@ For Next.js projects, the provider must be rendered in a Client Component:
 
 ```tsx
 // components/providers.tsx
-'use client';
-import { DesignSystemProvider } from '@rottay/design-system';
+"use client";
+import { DesignSystemProvider } from "@rottay/design-system";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return <DesignSystemProvider>{children}</DesignSystemProvider>;
@@ -134,10 +143,14 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 ```tsx
 // app/layout.tsx
-import { Providers } from '@/components/providers';
-import '@rottay/design-system/styles.css';
+import { Providers } from "@/components/providers";
+import "@rottay/design-system/styles.css";
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
@@ -154,12 +167,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 The design system declares the following peer dependencies:
 
-| Package | Version | Required By |
-|---------|---------|-------------|
-| `react` | `^18.0.0 \|\| ^19.0.0` | All components |
-| `react-dom` | `^18.0.0 \|\| ^19.0.0` | All components |
-| `antd` | `^5.21.0` | Classic engine |
-| `@ant-design/icons` | `^5.5.0` | Classic engine icons |
+| Package             | Version                | Required By          |
+| ------------------- | ---------------------- | -------------------- |
+| `react`             | `^18.0.0 \|\| ^19.0.0` | All components       |
+| `react-dom`         | `^18.0.0 \|\| ^19.0.0` | All components       |
+| `antd`              | `^5.21.0`              | Classic engine       |
+| `@ant-design/icons` | `^5.5.0`               | Classic engine icons |
 
 If you only use the `modern` or `rustic` engine, `antd` and `@ant-design/icons` are still declared as peers but are not imported at runtime (the classic engine lazy-loads them). You can safely install them without bundle impact, or suppress the peer warning if you are certain you will never use the classic engine.
 
@@ -170,13 +183,13 @@ If you only use the `modern` or `rustic` engine, `antd` and `@ant-design/icons` 
 Every primitive (`Button`, `Text`, `Flex`, `Card`, `Input`, etc.) automatically renders using the active engine. No extra configuration is required.
 
 ```tsx
-import { Button, Text, Flex } from '@rottay/design-system';
+import { Button, Text, Flex } from "@rottay/design-system";
 
 function Welcome() {
   return (
     <Flex gap="4" align="center">
       <Text as="h1">Welcome</Text>
-      <Button variant="primary" onClick={() => alert('It works')}>
+      <Button variant="primary" onClick={() => alert("It works")}>
         Click me
       </Button>
     </Flex>
@@ -191,10 +204,7 @@ function Welcome() {
 Surfaces are page-level shells that handle chrome, loading, filtering, tables, and more. The simplest example is `ListSurface`.
 
 ```tsx
-import {
-  ListSurface,
-  createListSurfaceConfig,
-} from '@rottay/design-system';
+import { ListSurface, createListSurfaceConfig } from "@rottay/design-system";
 
 interface UserView {
   id: string;
@@ -204,24 +214,24 @@ interface UserView {
 
 const config = createListSurfaceConfig<UserView>({
   visual: {
-    defaultView: 'table',
+    defaultView: "table",
     allowViewSwitch: true,
   },
   presentation: {
     chrome: {
-      title: 'Users',
-      subtitle: 'Manage your team members',
+      title: "Users",
+      subtitle: "Manage your team members",
     },
   },
   behavior: {
     columns: [
-      { fieldId: 'name', key: 'name', title: 'Name' },
-      { fieldId: 'email', key: 'email', title: 'Email' },
+      { fieldId: "name", key: "name", title: "Name" },
+      { fieldId: "email", key: "email", title: "Email" },
     ],
     primaryAction: {
-      id: 'add',
-      label: 'Add User',
-      variant: 'primary',
+      id: "add",
+      label: "Add User",
+      variant: "primary",
       onClick: () => {},
     },
   },
@@ -240,12 +250,12 @@ Builder functions like `createListSurfaceConfig` are identity functions that exi
 
 The design system ships three stable engines and one pluggable engine:
 
-| Engine | Library | Character |
-|--------|---------|-----------|
-| `classic` | Ant Design | Enterprise, structured, corporate |
-| `modern` | DaisyUI/Tailwind | Contemporary, rounded, glass effects |
-| `rustic` | Vanilla HTML/CSS | Minimal, spacious, understated |
-| `custom` | Pack-scoped registry | Your own implementation |
+| Engine    | Library              | Character                            |
+| --------- | -------------------- | ------------------------------------ |
+| `classic` | Ant Design           | Enterprise, structured, corporate    |
+| `modern`  | DaisyUI/Tailwind     | Contemporary, rounded, glass effects |
+| `rustic`  | Vanilla HTML/CSS     | Minimal, spacious, understated       |
+| `custom`  | Pack-scoped registry | Your own implementation              |
 
 ### Global switch via provider
 
@@ -278,20 +288,20 @@ Tenant configuration controls branding, engine selection, locale, features, pers
 ### Inline tenant config
 
 ```tsx
-import { DesignSystemProvider } from '@rottay/design-system';
-import type { TenantConfig } from '@rottay/design-system';
+import { DesignSystemProvider } from "@rottay/design-system";
+import type { TenantConfig } from "@rottay/design-system";
 
 const tenant: TenantConfig = {
-  slug: 'acme',
-  name: 'ACME Corp',
-  engine: 'classic',
-  theme: 'base',
-  plan: 'enterprise',
-  features: ['advanced-analytics', 'export'],
+  slug: "acme",
+  name: "ACME Corp",
+  engine: "classic",
+  theme: "base",
+  plan: "enterprise",
+  features: ["advanced-analytics", "export"],
   branding: {
-    companyName: 'ACME',
-    primaryColor: '#FF5500',
-    secondaryColor: '#1A1A2E',
+    companyName: "ACME",
+    primaryColor: "#FF5500",
+    secondaryColor: "#1A1A2E",
   },
 };
 
@@ -311,7 +321,7 @@ Instead of passing an inline config, pass a `tenantSlug` and the DS resolves it 
 ```tsx
 <DesignSystemProvider
   tenantSlug="acme"
-  onTenantResolved={(cfg) => console.log('Resolved:', cfg.slug)}
+  onTenantResolved={(cfg) => console.log("Resolved:", cfg.slug)}
   onError={(err) => console.error(err)}
 >
   <App />
@@ -326,8 +336,8 @@ Product teams can tune tenant branding without forking the DS:
 <DesignSystemProvider
   tenantConfig={baseTenant}
   tenantOverrides={{
-    branding: { primaryColor: '#00CC88' },
-    features: ['beta-feature'],
+    branding: { primaryColor: "#00CC88" },
+    features: ["beta-feature"],
   }}
 >
   <App />
@@ -339,10 +349,7 @@ Product teams can tune tenant branding without forking the DS:
 Product profiles sit between engine defaults and tenant overrides, tuning animation intensity, density, chart style, and more:
 
 ```tsx
-<DesignSystemProvider
-  tenantConfig={tenant}
-  productProfile="events.organizer"
->
+<DesignSystemProvider tenantConfig={tenant} productProfile="events.organizer">
   <App />
 </DesignSystemProvider>
 ```
@@ -368,7 +375,7 @@ Or set it in tenant config:
 ```tsx
 const tenant: TenantConfig = {
   // ...
-  theme: 'dark',
+  theme: "dark",
 };
 ```
 
@@ -408,7 +415,7 @@ The DS supports `en`, `es`, `pt`, `fr`, and `ar` (with RTL) out of the box.
   locale="es"
   fallbackLocale="en"
   customTranslations={{
-    surfaces: { list: { empty: 'Sin resultados' } },
+    surfaces: { list: { empty: "Sin resultados" } },
   }}
 >
   <App />
@@ -422,16 +429,16 @@ The DS supports `en`, `es`, `pt`, `fr`, and `ar` (with RTL) out of the box.
 The DS exports test helpers from `@rottay/design-system`. Wrap components in the provider for tests:
 
 ```tsx
-import { render, screen } from '@testing-library/react';
-import { DesignSystemProvider, Button } from '@rottay/design-system';
+import { render, screen } from "@testing-library/react";
+import { DesignSystemProvider, Button } from "@rottay/design-system";
 
-test('renders a button', () => {
+test("renders a button", () => {
   render(
     <DesignSystemProvider>
       <Button variant="primary">Submit</Button>
     </DesignSystemProvider>
   );
-  expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Submit" })).toBeInTheDocument();
 });
 ```
 
@@ -451,6 +458,7 @@ test('renders a button', () => {
 ### Components render as blank / `null`
 
 The `DesignSystemProvider` shows `null` while resolving tenant configuration asynchronously. Check that:
+
 - You have a valid `tenantConfig` or `tenantSlug`
 - The `onError` callback is wired so you can see resolution failures
 - If using `tenantSlug`, the tenant exists in the registry or is reachable via the remote API
@@ -498,7 +506,7 @@ pnpm install
 Import the CSS stylesheet in your application entry:
 
 ```tsx
-import '@rottay/design-system/styles.css';
+import "@rottay/design-system/styles.css";
 ```
 
 The `SystemCssVariablesBridge` component inside the provider handles runtime personality tokens, but the base token layer (colors, spacing, typography) comes from the CSS file.
@@ -507,12 +515,12 @@ The `SystemCssVariablesBridge` component inside the provider handles runtime per
 
 ## Next Steps
 
-| Resource | Path |
-|----------|------|
-| Architecture guide | [ARCHITECTURE.md](./ARCHITECTURE.md) |
-| Engine splitting strategy | [ENGINE_SPLITTING.md](./ENGINE_SPLITTING.md) |
-| Performance budget | [PERFORMANCE_BUDGET.md](./PERFORMANCE_BUDGET.md) |
-| Full component catalog | `/.ai-docs/design-system/COMPONENT_INDEX.md` |
-| Surface reference | `/.ai-docs/design-system/SURFACES.md` |
-| Theming guide | `/.ai-docs/design-system/THEMING.md` |
-| Storybook | Run `pnpm storybook` locally |
+| Resource                  | Path                                             |
+| ------------------------- | ------------------------------------------------ |
+| Architecture guide        | [ARCHITECTURE.md](./ARCHITECTURE.md)             |
+| Engine splitting strategy | [ENGINE_SPLITTING.md](./ENGINE_SPLITTING.md)     |
+| Performance budget        | [PERFORMANCE_BUDGET.md](./PERFORMANCE_BUDGET.md) |
+| Full component catalog    | `/.ai-docs/design-system/COMPONENT_INDEX.md`     |
+| Surface reference         | `/.ai-docs/design-system/SURFACES.md`            |
+| Theming guide             | `/.ai-docs/design-system/THEMING.md`             |
+| Storybook                 | Run `pnpm storybook` locally                     |

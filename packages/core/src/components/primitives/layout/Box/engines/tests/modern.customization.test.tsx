@@ -3,7 +3,7 @@
  *
  * Tests both:
  * 1. Token map correctness (values reference CSS custom properties)
- * 2. Rendered behavior (Box renders inline styles with token refs, not Tailwind classes)
+ * 2. Rendered behavior (Box selects skin rules with data attributes, not Tailwind classes)
  */
 
 import React from 'react';
@@ -43,30 +43,49 @@ describe('Modern Box customization regression', () => {
   // the ABSENCE of old Tailwind classes and the PRESENCE of the data-component attribute
   // that proves the Modern engine rendered (not a fallback).
   it('renders padding via inline style, not Tailwind p-* class', () => {
-    const { container } = render(<ModernBox padding="md" data-testid="box">content</ModernBox>);
+    const { container } = render(
+      <ModernBox padding="md" data-testid="box">
+        content
+      </ModernBox>
+    );
     const el = container.firstElementChild as HTMLElement;
 
     // Old behavior would produce `p-4` Tailwind class — now inline style
     expect(el.className).not.toMatch(/\bp-4\b/);
   });
 
-  it('renders borderRadius via inline style, not Tailwind rounded-* class', () => {
-    const { container } = render(<ModernBox borderRadius="lg" data-testid="box">content</ModernBox>);
+  it('selects borderRadius through the skin, not a Tailwind rounded-* class', () => {
+    const { container } = render(
+      <ModernBox borderRadius="lg" data-testid="box">
+        content
+      </ModernBox>
+    );
     const el = container.firstElementChild as HTMLElement;
 
     expect(el.className).not.toMatch(/rounded-lg/);
+    expect(el).toHaveAttribute('data-radius', 'lg');
+    expect(el.style.borderRadius).toBe('');
   });
 
-  it('renders shadow via inline style, not Tailwind shadow-* class', () => {
-    const { container } = render(<ModernBox shadow="md" data-testid="box">content</ModernBox>);
+  it('selects shadow through the skin, not a Tailwind shadow-* class', () => {
+    const { container } = render(
+      <ModernBox shadow="md" data-testid="box">
+        content
+      </ModernBox>
+    );
     const el = container.firstElementChild as HTMLElement;
 
-    // Old behavior: shadow Tailwind class. New: inline boxShadow.
     expect(el.className).not.toMatch(/\bshadow\b/);
+    expect(el).toHaveAttribute('data-shadow', 'md');
+    expect(el.style.boxShadow).toBe('');
   });
 
   it('renders margin via inline style, not Tailwind m-* class', () => {
-    const { container } = render(<ModernBox margin="lg" data-testid="box">content</ModernBox>);
+    const { container } = render(
+      <ModernBox margin="lg" data-testid="box">
+        content
+      </ModernBox>
+    );
     const el = container.firstElementChild as HTMLElement;
 
     expect(el.className).not.toMatch(/\bm-6\b/);

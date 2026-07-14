@@ -16311,10 +16311,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * [data-selected='true'])` — the exact `hoverable && !isSelected` guard the two
  * (grouped + flat) `onMouseEnter` handlers evaluated.
  *
- * Values are transcribed verbatim from `engines/modern.tsx`; the per-instance
- * `<style>` blocks (resize/sortable/focus/editable/editing pseudo-selectors +
- * `@keyframes ds-inline-edit-enter`, and the loading `@keyframes ds-shimmer`)
- * stay in the tsx by WO law and are NOT absorbed here.
+ * Values are transcribed verbatim from `engines/modern.tsx`. The former
+ * per-instance resize/sortable/focus/editable rules and keyframes now live in
+ * the canonical `components/skin/data-table-interactions.css` recovery skin.
  */
 
 /* ---- card surface ---- */
@@ -16405,8 +16404,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border-radius: 1px;
 }
 
-/* ---- resize handle bar (rest; the :hover width/color swap stays in the
-        per-instance `<style>`) ---- */
+/* ---- resize handle bar (rest; the :hover width/color swap is owned by
+        data-table-interactions.css) ---- */
 .ds-pattern-data-table.ds-engine-modern [data-part='resize-handle-bar'] {
   border-radius: 1px;
   background: var(--ds-color-border);
@@ -16596,8 +16595,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * ZERO `:hover` rules in this file. `styles.td`'s `background-color` transition
  * stays inline (exempt, not dropped). The resize bar's hardcoded
  * `rgba(0,0,0,0.12)` is transcribed AS-IS (pre-existing token-purity residual,
- * filed as a proposal, not fixed here). The `@keyframes ds-spin` /
- * `ds-bulk-slide-down` per-instance `<style>` stays in the tsx by WO law.
+ * filed as a proposal, not fixed here). The `@keyframes ds-spin` and
+ * `ds-bulk-slide-down` definitions are owned by the canonical
+ * `components/skin/data-table-interactions.css` recovery skin.
  *
  * PINNED-TD RULE: the row's `data-state` enum (selected|striped|default) plus
  * the cell's `data-pinned='true'` drive ONE rule set that replaces the ternary
@@ -16850,6 +16850,125 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 }
 .ds-pattern-data-table.ds-data-table--mobile[data-part='mobile-state-panel'][data-part='mobile-state-panel'] {
   border: 1px solid color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+}
+
+/**
+ * DataTable interaction and motion stylesheet (WO-SKIN-06 embedded-CSS recovery).
+ *
+ * The selectors and declarations below are a verbatim extraction of the two
+ * per-instance `<style>` producers that used to render inside the modern table.
+ * They deliberately keep their original specificity and source order. The
+ * zero-weight `:where(.ds-pattern-data-table)` root contains their formerly
+ * mount-local reach without changing selector weight. Frame bodies remain
+ * exact. The former generic `ds-shimmer` name is the sole keyframe rename:
+ * `ds-data-table-shimmer` prevents a live same-name/different-body collision
+ * with ShimmerText's global producer.
+ */
+
+.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:hover .ds-resize-handle__bar,
+.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:focus-visible .ds-resize-handle__bar {
+  width: 3px !important;
+  background: var(--ds-color-primary) !important;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) .ds-resize-handle:focus-visible {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key]:hover {
+  background-color: color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) th[data-col-key][data-sortable='true']:focus-visible {
+  outline: 2px solid var(--ds-color-primary);
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) tr[data-row-index]:focus-visible {
+  outline: none;
+  box-shadow: inset 3px 0 0 0 var(--ds-color-primary);
+  background-color: color-mix(in srgb, var(--ds-color-primary) 6%, transparent) !important;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true'] {
+  cursor: text;
+  transition: background-color var(--ds-motion-fast) ease, box-shadow var(--ds-motion-fast) ease, transform var(--ds-motion-fast) ease;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--ds-color-primary);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editable='true']:hover {
+  background: color-mix(in srgb, var(--ds-color-primary) 4%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 16%, transparent);
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-editing='true'] {
+  overflow: visible !important;
+  padding: 4px 6px !important;
+  background: color-mix(in srgb, var(--ds-color-primary) 7%, var(--ds-surface-card)) !important;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ds-color-primary) 30%, transparent), 0 8px 18px color-mix(in srgb, var(--ds-color-primary) 8%, transparent);
+  animation: ds-inline-edit-enter var(--ds-motion-normal) var(--ds-motion-ease-out);
+}
+
+@keyframes ds-inline-edit-enter {
+  from {
+    transform: scale(0.985);
+    opacity: 0.78;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.ds-engine-modern:where(.ds-pattern-data-table) td[data-cell-dirty='true']::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--ds-color-warning);
+  pointer-events: none;
+}
+
+@keyframes ds-data-table-shimmer {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes ds-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ds-bulk-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /**
@@ -18834,6 +18953,24 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * classes + a variant/state class (or the repeated data-part). Non-border paint
  * wins unlayered at (0,3,0) or higher.
  */
+
+/* Input.Group ------------------------------------------------------------- */
+/* The old cloneElement mutations deliberately overrode a child's own inline
+   radii. Author-important rules preserve that precedence exactly. */
+.rottay-input-group[data-compact='true'] > :first-child:not(:last-child) {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+.rottay-input-group[data-compact='true'] > :last-child:not(:first-child) {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+.rottay-input-group[data-compact='true'] > :not(:first-child):not(:last-child) {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
 
 /* Addon ------------------------------------------------------------------- */
 .rottay-input-addon.ds-input-addon[data-part='root'] {
@@ -21310,6 +21447,18 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   color: var(--ds-color-text-secondary, #666);
 }
 
+/** Static placeholder paint for the modern Input and searchable Select. */
+
+.rottay-input--modern::placeholder {
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+  opacity: 1;
+}
+
+.rottay-select__search-input::placeholder {
+  color: var(--ds-color-text-muted);
+  opacity: 1;
+}
+
 /**
  * Modern TreeSelect skin (WO-SKIN-02 checkpoint B, dropdown family).
  *
@@ -23672,6 +23821,12 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * ===========================================================================
  */
 
+/* ---- centered stack placement (was static container inline transform) ---- */
+.rottay-toast-container[data-placement='top-center'][data-center-transform='true'],
+.rottay-toast-container[data-placement='bottom-center'][data-center-transform='true'] {
+  transform: translateX(-50%);
+}
+
 /* ---- stack item: compress/fan transform, depth-derived, via a hatch ---- */
 .rottay-toast-container > [data-stack-depth] {
   transform: var(--ds-toast-stack-transform);
@@ -23686,6 +23841,127 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
    `<circle data-part='fill'>` sibling, which paints via SVG stroke attributes. */
 .rottay-undo-toast [data-part='track'] > [data-part='fill'] {
   background: var(--ds-color-primary);
+}
+
+/** Toast transition keyframes (formerly injected by ToastProvider/Container). */
+
+@keyframes toast-slide-in-right {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out-right {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes toast-slide-in-left {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out-left {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes toast-slide-in-top {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out-top {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes toast-slide-in-bottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes toast-slide-out-bottom {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes toast-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes toast-fade-out {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 /**
@@ -25358,17 +25634,11 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * base layer, so a layered rule cannot paint these elements at all. Unlayered
  * still yields to a caller's inline `style`.
  *
- * THE INJECTED DOCUMENT-GLOBAL `<style>` IS LEFT VERBATIM. `ensureGlobalStyles()`
- * appends a singleton `<style id="rottay-menu-modern-styles">` to `document.head`
- * carrying an `!important` `:focus-visible` outline, a chevron rotation and a
- * `::marker` reset. It is NOT hoisted here: an `!important` stylesheet
- * declaration outranks any inline style, so that rule — not the component's
- * `onFocus` handler — is what has actually been painting the focus ring all
- * along. The handler's `.style.outline = …` writes were dead on arrival (a plain
- * inline style can never beat `!important`) and ARE removed; the CSS that really
- * paints stays exactly where it is, at exactly its old priority. The `outline:
- * none` rest state below is the same declaration the base style object carried,
- * and loses to that `!important` rule exactly as it did when it was inline.
+ * The former document-global singleton's `!important` focus ring, chevron
+ * rotation and marker reset now live once in
+ * `components/skin/navigation-static.css`. The stylesheet rule — not the old
+ * dead `onFocus` write — continues to own the focus ring at the same priority.
+ * The `outline: none` rest state below still loses to that `!important` rule.
  *
  * SCOPE ROOT carries `rottay-menu rottay-menu--modern rottay-menu--<theme>` +
  * `data-part='root'`. The theme MODIFIER CLASS (not a `data-theme` attribute) is
@@ -26874,13 +27144,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * so the separate compositor-only ratchet stays green). Its STATIC channels —
  * the fill and the radius — live here.
  *
- * THE INJECTED PER-INSTANCE `<style>` IS LEFT VERBATIM. It carries the
- * `::-webkit-scrollbar` reset, `@keyframes rottay-tabs-fade-in`, and an
- * `!important` `:focus-visible` outline, all scoped by `[data-tabs-id="…"]` to
- * one Tabs instance. Hoisting it would mean renaming the keyframe and
- * re-deriving the `!important` outline's priority against a scope it no longer
- * has — a visual risk with nothing to gain here, since the counter never saw it
- * (its content is a JS string).
+ * The former per-instance scrollbar reset, collision-safe fade keyframe and
+ * `!important` focus-visible outline now live in
+ * `components/skin/navigation-static.css`. `[data-tabs-id]` remains the
+ * component-owned hook and the declaration priority/values are unchanged.
  *
  * PRIORITY CHAIN: the source resolved ONE `color` (and one `background`) through
  * a 4-way ternary — disabled > active > hovered > default. Each CSS rule below
@@ -26983,8 +27250,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-radius: 1px 1px 0 0;
 }
 
-/* ---- the panel is focusable (tabIndex=0) but draws no ring of its own; the
-        instance-scoped `<style>` block owns the tab BUTTONS' focus ring. ---- */
+/* ---- the panel is focusable (tabIndex=0) but draws no ring of its own;
+        navigation-static.css owns the tab BUTTONS' focus ring. ---- */
 .rottay-tabs--modern[data-part='root'] [data-part='tab-panel'] {
   outline: none;
 }
@@ -27554,6 +27821,45 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   border-style: dashed;
   border-width: 1px 0 0 0;
   border-color: var(--ds-menu-divider-color, var(--ds-color-border));
+}
+
+/** Static Menu and Tabs rules formerly injected by their modern engines. */
+
+.rottay-menu--modern a:focus-visible,
+.rottay-menu--modern summary:focus-visible {
+  outline: 2px solid var(--ds-color-primary) !important;
+  outline-offset: -2px !important;
+}
+
+.rottay-menu--modern details[open] > summary > span:last-child {
+  transform: rotate(90deg);
+}
+
+.rottay-menu--modern summary::-webkit-details-marker,
+.rottay-menu--modern summary::marker {
+  display: none;
+  content: '';
+}
+
+[data-tabs-id]::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes rottay-tabs-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+[data-tabs-id] [role='tab']:focus-visible {
+  outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color) !important;
+  outline-offset: calc(-1 * var(--ds-focus-ring-offset, 2px)) !important;
+  border-radius: var(--ds-radius-sm);
 }
 
 /**
@@ -29174,6 +29480,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * ancestor that may not exist. `Content` paints nothing on this engine, so
  * it keeps its bare `rottay-layout-content` class untouched.
  *
+ * INLINE-RECOVERY ADDENDUM: Box shares this engine-level layout skin. Its
+ * engine pair plus `data-radius` / `data-shadow` selects the same token values
+ * that the engine previously assigned inline; caller inline style still wins.
+ *
  * SPECIFICITY (P-48): the one border-color-bearing declaration in this file
  * lives in the rustic skin (Sider's light-theme `border-right`), not here --
  * modern's Sider never sets a border. Every declaration below is non-border
@@ -29215,6 +29525,48 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background: var(--ds-surface-inset);
 }
 
+/* ---- Box: token radius/shadow selected by engine-stamped attributes. ---- */
+.rottay-box.rottay-box--modern[data-radius='xs'] {
+  border-radius: var(--ds-radius-xs, 0.1875rem);
+}
+.rottay-box.rottay-box--modern[data-radius='sm'] {
+  border-radius: var(--ds-radius-sm, 0.375rem);
+}
+.rottay-box.rottay-box--modern[data-radius='md'] {
+  border-radius: var(--ds-radius-md, 0.5rem);
+}
+.rottay-box.rottay-box--modern[data-radius='lg'] {
+  border-radius: var(--ds-radius-lg, 0.75rem);
+}
+.rottay-box.rottay-box--modern[data-radius='xl'] {
+  border-radius: var(--ds-radius-xl, 1rem);
+}
+.rottay-box.rottay-box--modern[data-radius='2xl'] {
+  border-radius: var(--ds-radius-2xl, 1.25rem);
+}
+.rottay-box.rottay-box--modern[data-radius='full'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.rottay-box.rottay-box--modern[data-shadow='xs'] {
+  box-shadow: var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+.rottay-box.rottay-box--modern[data-shadow='sm'] {
+  box-shadow: var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--modern[data-shadow='md'] {
+  box-shadow: var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--modern[data-shadow='lg'] {
+  box-shadow: var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--modern[data-shadow='xl'] {
+  box-shadow: var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--modern[data-shadow='2xl'] {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
 /**
  * Rustic Layout skin (WO-SKIN-05 checkpoint L).
  *
@@ -29231,6 +29583,10 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (`rottay-layout-header rottay-layout-header--rustic`, etc., added in this
  * migration) rather than relying on a `.rottay-layout[data-part='root']`
  * ancestor that may not exist.
+ *
+ * INLINE-RECOVERY ADDENDUM: Box shares this engine-level layout skin. Its
+ * engine pair plus `data-radius` / `data-shadow` selects the same token values
+ * that the engine previously assigned inline; caller inline style still wins.
  *
  * SPECIFICITY (P-48): the sider's light-theme `border-right` paints a real
  * color and must reach (0,4,0) -- the two sider classes + `[data-part=
@@ -29281,6 +29637,48 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 /* ---- footer: background (was styles.footer.backgroundColor, STATIC). ---- */
 .rottay-layout-footer.rottay-layout-footer--rustic[data-part='footer'] {
   background-color: var(--ds-layout-footer-bg, var(--ds-color-bg-secondary));
+}
+
+/* ---- Box: token radius/shadow selected by engine-stamped attributes. ---- */
+.rottay-box.rottay-box--rustic[data-radius='xs'] {
+  border-radius: var(--ds-radius-xs, 0.1875rem);
+}
+.rottay-box.rottay-box--rustic[data-radius='sm'] {
+  border-radius: var(--ds-radius-sm, 0.375rem);
+}
+.rottay-box.rottay-box--rustic[data-radius='md'] {
+  border-radius: var(--ds-radius-md, 0.5rem);
+}
+.rottay-box.rottay-box--rustic[data-radius='lg'] {
+  border-radius: var(--ds-radius-lg, 0.75rem);
+}
+.rottay-box.rottay-box--rustic[data-radius='xl'] {
+  border-radius: var(--ds-radius-xl, 1rem);
+}
+.rottay-box.rottay-box--rustic[data-radius='2xl'] {
+  border-radius: var(--ds-radius-2xl, 1.25rem);
+}
+.rottay-box.rottay-box--rustic[data-radius='full'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.rottay-box.rottay-box--rustic[data-shadow='xs'] {
+  box-shadow: var(--ds-elevation-1, 0 1px 2px 0 rgba(0, 0, 0, 0.05));
+}
+.rottay-box.rottay-box--rustic[data-shadow='sm'] {
+  box-shadow: var(--ds-elevation-2, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--rustic[data-shadow='md'] {
+  box-shadow: var(--ds-elevation-3, 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--rustic[data-shadow='lg'] {
+  box-shadow: var(--ds-elevation-4, 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--rustic[data-shadow='xl'] {
+  box-shadow: var(--ds-elevation-5, 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1));
+}
+.rottay-box.rottay-box--rustic[data-shadow='2xl'] {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
 /**
@@ -30137,9 +30535,9 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * the default circle goes transparent and drops its ring so the custom content
  * shows through without overlap.
  *
- * The `@keyframes rottay-timeline-pulse` driving the pending dot stays in the
- * component's own `<style>` block: `animation` is not a paint channel, the name
- * is already collision-safe, and no other engine defines it.
+ * The collision-safe `@keyframes rottay-timeline-pulse` driving the pending dot
+ * now lives once in `components/skin/primitive-motion.css`; the animation name
+ * and frame body remain unchanged.
  *
  * SPECIFICITY (P-48): the dot's `border` shorthand clears the tenant's unlayered
  * (0,3,1) `*` border-color floor at (0,5,0). Values transcribed verbatim from
@@ -30554,6 +30952,160 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
   background-color: var(--ds-tree-highlight-bg, #fef3c7);
   color: var(--ds-tree-highlight-color, #92400e);
   border-radius: 2px;
+}
+
+/**
+ * Primitive keyframes extracted from Timeline and Tree instance producers.
+ * Names, values and timings remain owned by the components; this file only
+ * makes the static definitions available once through the core stylesheet.
+ */
+
+@keyframes rottay-timeline-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+}
+
+@keyframes rottay-drop-indicator {
+  from {
+    opacity: 0;
+    transform: scaleX(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes rottay-tree-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rottay-tree-drop-line-in {
+  from {
+    opacity: 0;
+    transform: scaleX(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+/**
+ * ScrollArea WebKit scrollbar skin.
+ *
+ * The closed `thin|normal|wide` enum replaces the former per-instance selector
+ * interpolation.  Each declaration keeps the exact prior pixel and token value.
+ */
+
+.rottay-scroll-area-modern[data-scrollbar-size='thin'],
+.rottay-scroll-area-classic[data-scrollbar-size='thin'],
+.rottay-scroll-area-rustic[data-scrollbar-size='thin'] {
+  --ds-scroll-area-scrollbar-size: 4px;
+  --ds-scroll-area-scrollbar-radius: 2px;
+}
+
+.rottay-scroll-area-modern[data-scrollbar-size='normal'],
+.rottay-scroll-area-classic[data-scrollbar-size='normal'],
+.rottay-scroll-area-rustic[data-scrollbar-size='normal'] {
+  --ds-scroll-area-scrollbar-size: 8px;
+  --ds-scroll-area-scrollbar-radius: 4px;
+}
+
+.rottay-scroll-area-modern[data-scrollbar-size='wide'],
+.rottay-scroll-area-classic[data-scrollbar-size='wide'],
+.rottay-scroll-area-rustic[data-scrollbar-size='wide'] {
+  --ds-scroll-area-scrollbar-size: 12px;
+  --ds-scroll-area-scrollbar-radius: 6px;
+}
+
+.rottay-scroll-area-modern::-webkit-scrollbar,
+.rottay-scroll-area-classic::-webkit-scrollbar,
+.rottay-scroll-area-rustic::-webkit-scrollbar {
+  width: var(--ds-scroll-area-scrollbar-size);
+  height: var(--ds-scroll-area-scrollbar-size);
+}
+
+/* Modern */
+.rottay-scroll-area-modern::-webkit-scrollbar-track {
+  background: var(--color-base-200, oklch(0.93 0.01 240));
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+.rottay-scroll-area-modern::-webkit-scrollbar-thumb {
+  background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.3);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+.rottay-scroll-area-modern::-webkit-scrollbar-thumb:hover {
+  background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.5);
+}
+.rottay-scroll-area-modern[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.rottay-scroll-area-modern[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+  background: oklch(var(--color-base-content, 0.27 0.01 240) / 0.3);
+}
+
+/* Classic */
+.rottay-scroll-area-classic::-webkit-scrollbar-track {
+  background: var(--ds-color-neutral-100, #f5f5f5);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+.rottay-scroll-area-classic::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+  transition: background 0.2s ease;
+}
+.rottay-scroll-area-classic::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-color-neutral-500, #8c8c8c);
+}
+.rottay-scroll-area-classic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+.rottay-scroll-area-classic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+}
+.rottay-scroll-area-classic {
+  scrollbar-width: auto;
+  scrollbar-color: var(--ds-color-neutral-400, #bfbfbf) var(--ds-color-neutral-100, #f5f5f5);
+}
+.rottay-scroll-area-classic[data-scrollbar-size='thin'] {
+  scrollbar-width: thin;
+}
+
+/* Rustic */
+.rottay-scroll-area-rustic::-webkit-scrollbar-track {
+  background: var(--ds-color-neutral-100, #f5f5f5);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+}
+.rottay-scroll-area-rustic::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+  border-radius: var(--ds-scroll-area-scrollbar-radius);
+  border: 1px solid var(--ds-color-neutral-100, #f5f5f5);
+}
+.rottay-scroll-area-rustic::-webkit-scrollbar-thumb:hover {
+  background: var(--ds-color-neutral-500, #8c8c8c);
+}
+.rottay-scroll-area-rustic::-webkit-scrollbar-corner {
+  background: var(--ds-color-neutral-100, #f5f5f5);
+}
+.rottay-scroll-area-rustic[data-hide-scrollbar='true']::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-color: transparent;
+}
+.rottay-scroll-area-rustic[data-hide-scrollbar='true']:hover::-webkit-scrollbar-thumb {
+  background: var(--ds-color-neutral-400, #bfbfbf);
+  border-color: var(--ds-color-neutral-100, #f5f5f5);
 }
 
 /**
@@ -37510,6 +38062,252 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
+ * Dashboard activity interaction recovery.
+ *
+ * Declaration values stay byte-exact. Every rule is attached to its component
+ * scope per CK-A law §5.3; `:where()` adds that ownership without increasing
+ * the original selector weight. The two incompatible `liveGlow` definitions
+ * are component-namespaced as CK-A inventory §1 requires.
+ */
+
+/* ticker ------------------------------------------------------------------ */
+
+:where(.ds-activity-ticker) .ticker-content-v3 {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-activity-ticker) .ticker-in {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+}
+
+:where(.ds-activity-ticker) .ticker-out-left {
+  opacity: 0;
+  transform: translateX(-40px) scale(0.95);
+}
+
+:where(.ds-activity-ticker) .ticker-out-right {
+  opacity: 0;
+  transform: translateX(40px) scale(0.95);
+}
+
+:where(.ds-activity-ticker) .live-indicator {
+  animation: ds-activity-ticker-live-glow 1.5s ease-in-out infinite;
+}
+
+:where(.ds-activity-ticker) .nav-button {
+  transition: all 0.3s ease;
+}
+
+:where(.ds-activity-ticker) .nav-button:hover {
+  background: var(--ds-color-primary-100);
+  border-color: var(--ds-color-primary-200);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px var(--ds-color-primary-100);
+}
+
+:where(.ds-activity-ticker) .ticker-dot {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+:where(.ds-activity-ticker) .ticker-dot:hover {
+  transform: scale(1.2);
+}
+
+:where(.ds-activity-ticker) .ticker-progress {
+  animation: ds-activity-ticker-progress-fill 5s linear;
+}
+
+:where(.ds-activity-ticker) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+  transform: translateX(2px);
+}
+
+@keyframes ds-activity-ticker-live-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-color-success), 0 0 8px var(--ds-color-success);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-color-success), 0 0 16px var(--ds-color-success);
+    opacity: 0.6;
+  }
+}
+
+@keyframes ds-activity-ticker-progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* timeline ---------------------------------------------------------------- */
+
+:where(.ds-activity-timeline) .activity-item-v3 {
+  animation: ds-activity-timeline-item-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+:where(.ds-activity-timeline) .live-indicator {
+  animation: ds-activity-timeline-live-glow 1.5s ease-in-out infinite;
+}
+
+:where(.ds-activity-timeline) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+  transform: translateX(2px);
+}
+
+@keyframes ds-activity-timeline-item-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-activity-timeline-live-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-color-success);
+    opacity: 1;
+  }
+  50% {
+    box-shadow: 0 0 10px var(--ds-color-success);
+    opacity: 0.7;
+  }
+}
+
+:where(.ds-activity-timeline) .activity-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-primary-200) transparent;
+}
+
+:where(.ds-activity-timeline) .activity-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-activity-timeline) .activity-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-activity-timeline) .activity-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-color-primary-200);
+  border-radius: 2px;
+}
+
+/* compact ----------------------------------------------------------------- */
+
+:where(.ds-activity-compact) .activity-compact-item-v3 {
+  animation: ds-activity-compact-slide-in-right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-activity-compact) .activity-compact-item-v3:hover {
+  background: var(--ds-color-primary-50);
+  border-color: var(--ds-color-primary-200);
+  transform: translateX(6px);
+  box-shadow: -4px 0 16px var(--ds-color-primary-100);
+}
+
+:where(.ds-activity-compact) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+  transform: translateX(2px);
+}
+
+@keyframes ds-activity-compact-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+:where(.ds-activity-compact) .activity-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-primary-200) transparent;
+}
+
+:where(.ds-activity-compact) .activity-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-activity-compact) .activity-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-activity-compact) .activity-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-color-primary-200);
+  border-radius: 2px;
+}
+
+/* cards ------------------------------------------------------------------- */
+
+:where(.ds-activity-cards) .activity-card-item-v3 {
+  animation: ds-activity-cards-card-slide-in 0.4s ease-out both;
+  transition: all 0.2s ease;
+}
+
+:where(.ds-activity-cards) .activity-card-item-v3:hover {
+  background: var(--ds-color-primary-50);
+  border-color: var(--ds-color-primary-200);
+  transform: translateX(4px);
+}
+
+:where(.ds-activity-cards) .time-dot {
+  animation: ds-activity-cards-dot-pulse 2s ease-in-out infinite;
+}
+
+:where(.ds-activity-cards) .view-all-link:hover {
+  background: var(--ds-color-primary-200);
+}
+
+@keyframes ds-activity-cards-card-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-activity-cards-dot-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+:where(.ds-activity-cards) .activity-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-color-primary-200) transparent;
+}
+
+:where(.ds-activity-cards) .activity-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-activity-cards) .activity-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-activity-cards) .activity-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-color-primary-200);
+  border-radius: 2px;
+}
+
+/**
  * MetricsMinimal skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: tokens/css/components/skin/metrics-minimal.css — single DOM tree under
  * every engine. Scope root carries the single class `ds-metrics-minimal`,
@@ -38110,6 +38908,258 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
+ * Dashboard metrics interaction recovery.
+ *
+ * Declaration values and token fallback chains stay byte-exact. Every rule is
+ * attached to its component scope without extra selector weight, and the bare
+ * `slideIn`, `glow`, and `dotGlow` names are component-namespaced as required
+ * by the lane's collision law.
+ */
+
+/* minimal ----------------------------------------------------------------- */
+
+:where(.ds-metrics-minimal) .minimal-metric-row {
+  animation: ds-metrics-minimal-slide-in 0.4s ease-out both;
+  transition: all 0.2s ease;
+}
+
+:where(.ds-metrics-minimal) .minimal-metric-row:hover {
+  background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+  transform: translateX(4px);
+}
+
+:where(.ds-metrics-minimal) .live-dot {
+  animation: ds-metrics-minimal-glow 2s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-minimal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-metrics-minimal-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 16px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-minimal) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}
+
+/* cards ------------------------------------------------------------------- */
+
+:where(.ds-metrics-cards) .metric-card-v3 {
+  animation: ds-metrics-cards-card-enter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-metrics-cards) .metric-card-v3:hover {
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+}
+
+:where(.ds-metrics-cards) .metric-card-v3:hover .metric-value-v3 {
+  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+:where(.ds-metrics-cards) .live-dot-v3 {
+  animation: ds-metrics-cards-dot-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-cards-card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes ds-metrics-cards-dot-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 16px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-cards) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-cards) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-cards) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-cards) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}
+
+/* chart ------------------------------------------------------------------- */
+
+:where(.ds-metrics-chart) .metric-chart-row-v3 {
+  animation: ds-metrics-chart-slide-in 0.4s ease-out both;
+  transition: all 0.2s ease;
+}
+
+:where(.ds-metrics-chart) .metric-chart-row-v3:hover {
+  background: var(--ds-signal-card-section-alt-bg, var(--ds-color-bg-secondary));
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+  transform: translateX(4px);
+}
+
+:where(.ds-metrics-chart) .live-dot-chart {
+  animation: ds-metrics-chart-glow 2s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-chart-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-metrics-chart-glow {
+  0%, 100% {
+    box-shadow: 0 0 3px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 6px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 6px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 12px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-chart) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-chart) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-chart) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-chart) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}
+
+/* rows -------------------------------------------------------------------- */
+
+:where(.ds-metrics-rows) .metric-row-v3 {
+  animation: ds-metrics-rows-row-slide-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+:where(.ds-metrics-rows) .metric-row-v3:hover {
+  border-color: var(--ds-metric-card-border-hover, var(--ds-signal-card-border-hover, var(--ds-color-primary-200)));
+  transform: translateX(6px);
+  box-shadow: var(--ds-metric-card-shadow-hover, var(--ds-metric-card-shadow, var(--ds-signal-card-shadow-hover, none)));
+}
+
+:where(.ds-metrics-rows) .metric-row-v3:hover .metric-row-value {
+  color: var(--ds-metric-card-value-color-hover, var(--ds-signal-card-accent, var(--ds-color-primary)));
+}
+
+:where(.ds-metrics-rows) .metric-row-v3:hover .row-shimmer {
+  animation: ds-metrics-rows-shimmer 0.8s ease-in-out;
+}
+
+:where(.ds-metrics-rows) .live-dot-v3 {
+  animation: ds-metrics-rows-dot-glow 1.5s ease-in-out infinite;
+}
+
+@keyframes ds-metrics-rows-row-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes ds-metrics-rows-shimmer {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes ds-metrics-rows-dot-glow {
+  0%, 100% {
+    box-shadow: 0 0 4px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+  50% {
+    box-shadow: 0 0 8px var(--ds-signal-card-badge-color, var(--ds-color-success)), 0 0 16px var(--ds-signal-card-badge-color, var(--ds-color-success));
+  }
+}
+
+:where(.ds-metrics-rows) .metrics-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200))) transparent;
+}
+
+:where(.ds-metrics-rows) .metrics-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+:where(.ds-metrics-rows) .metrics-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+:where(.ds-metrics-rows) .metrics-scroll::-webkit-scrollbar-thumb {
+  background: var(--ds-metric-card-icon-border, var(--ds-signal-card-icon-border, var(--ds-color-primary-200)));
+  border-radius: 2px;
+}
+
+/**
  * StatsHeader skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: tokens/css/components/skin/stats-header.css — StatsHeader composes DS
  * primitives into one DOM tree under every engine. Scope root carries the single
@@ -38232,6 +39282,32 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-stats-header.ds-stats-header [data-part='skeleton-glow'] {
   background: linear-gradient(to top, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent), transparent);
+}
+
+/** StatsHeader keyframes formerly emitted once per rendered instance. */
+
+@keyframes pulse-card-skeleton {
+  0%, 100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes pulse-dot-ping {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.8);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 /**
@@ -38750,6 +39826,155 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
+ * DataTerminalCard animation contract.
+ *
+ * Names and frame bodies intentionally match the former module-scope DOM style
+ * injector because the component's runtime animation strings are public paint
+ * behavior. Keeping them in the canonical CSS bundle makes SSR deterministic
+ * and removes the import-time document mutation.
+ */
+
+@keyframes dtc-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dtc-pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes dtc-heartbeat {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+@keyframes dtc-breathe {
+  0%, 100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes dtc-scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(300%);
+    opacity: 0;
+  }
+}
+
+@keyframes dtc-glow {
+  0%, 100% {
+    box-shadow: 0 0 2px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 8px currentColor, 0 0 12px currentColor;
+  }
+}
+
+@keyframes dtc-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+@keyframes dtc-blink {
+  0%, 90%, 100% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 0.2;
+  }
+}
+
+@keyframes dtc-live-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 currentColor;
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px transparent;
+  }
+}
+
+@keyframes dtc-data-tick {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  10% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes dtc-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes dtc-typing {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes dtc-flow {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 40px;
+  }
+}
+
+@keyframes dtc-number-glow {
+  0%, 100% {
+    text-shadow: 0 0 10px currentColor;
+  }
+  50% {
+    text-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+}
+
+/**
  * Assistant skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
  * Home: tokens/css/components/skin/assistant.css. The kit has no engine split
  * and no single root: eight independently-exported sub-components
@@ -38954,14 +40179,16 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * specificity. Unlayered outranks preflight and still yields to a caller's
  * inline `style`.
  *
- * RUNTIME STAYS INLINE, no exemption entry needed: PresenceBar's avatar ring
+ * RUNTIME STAYS INLINE under exact executable floors: PresenceBar's avatar ring
  * `border` and avatar-initials `color` (both `ringColor = user.color ||
  * DEFAULT_COLOR`), and LiveCursor's `cursor-badge` `background` (same shape
  * via `cursorColor`) are genuine per-user caller data and are not represented
  * here at all -- they remain exactly as written in index.tsx. LiveCursor's
  * SVG `fill={cursorColor}` (per-user, a JSX presentation attribute, not a
  * style key) remains runtime-authored. The outline stroke is static and is
- * owned by the scoped skin rule below.
+ * owned by the scoped skin rule below. The three inline identity sites carry
+ * `floor: 3`; the intrinsic SVG fill carries an independent
+ * `runtimeSvgFloor: 1`.
  *
  * RUNTIME HATCH: `--ds-presence-badge-ring` carries the overflow badge's ring
  * WIDTH, which tracks the `size` prop (`sm`: 2px, `md`: 2.5px) and has no
@@ -41728,6 +42955,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-surface.ds-accent-bar[data-part='bar'][data-style='animated'] {
   background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-secondary, var(--ds-color-primary)), var(--ds-color-primary));
+  background-size: 200% 100%;
 }
 
 /**
@@ -42923,7 +44151,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 
-/* CK-I addendum: OAuth Transition's former runtime string, byte-exact and unlayered. */
+/* Hidden-channel recovery: byte-exact component CSS, deliberately unlayered. */
 
 .rottay-transition-root {
   position: relative;
@@ -45179,7 +46407,6 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 
-
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
 
 /* Layer 5: Personality overrides */
@@ -46263,11 +47490,11 @@ html {
 /* Accessibility: touch targets (unlayered) */
 @media (pointer: coarse) {
   button,
-  [role="button"],
+  [role='button'],
   a,
-  [data-ds-interactive="true"],
-  input[type="checkbox"],
-  input[type="radio"],
+  [data-ds-interactive='true'],
+  input[type='checkbox'],
+  input[type='radio'],
   select,
   .ant-btn,
   .ant-select-selector,

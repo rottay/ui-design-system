@@ -94,6 +94,7 @@
 @import '../engines/modern/skin/data-table.css';
 @import '../engines/rustic/skin/data-table.css';
 @import '../components/skin/data-table-mobile.css';
+@import '../components/skin/data-table-interactions.css';
 @import '../engines/modern/skin/form-field.css';
 @import '../engines/rustic/skin/form-field.css';
 @import '../engines/modern/skin/textarea.css';
@@ -143,6 +144,7 @@
 @import '../engines/modern/skin/select.css';
 @import '../engines/rustic/skin/select.css';
 @import '../components/skin/select-compounds.css';
+@import '../components/skin/form-placeholders.css';
 @import '../engines/modern/skin/tree-select.css';
 @import '../engines/rustic/skin/tree-select.css';
 @import '../engines/modern/skin/cascader.css';
@@ -170,6 +172,7 @@
 @import '../engines/modern/skin/toast.css';
 @import '../engines/rustic/skin/toast.css';
 @import '../components/skin/toast-compounds.css';
+@import '../components/skin/toast-animation-keyframes.css';
 @import '../engines/modern/skin/message.css';
 @import '../engines/rustic/skin/message.css';
 @import '../engines/modern/skin/notification.css';
@@ -229,6 +232,7 @@
 @import '../components/skin/bottom-tab-bar.css';
 @import '../components/skin/breadcrumb-compounds.css';
 @import '../components/skin/menu-compounds.css';
+@import '../components/skin/navigation-static.css';
 @import '../components/skin/mobile-header.css';
 @import '../components/skin/overlay-modal-compounds.css';
 @import '../components/skin/stepper-compounds.css';
@@ -272,6 +276,8 @@
 @import '../engines/rustic/skin/tooltip.css';
 @import '../engines/modern/skin/tree.css';
 @import '../engines/rustic/skin/tree.css';
+@import '../components/skin/primitive-motion.css';
+@import '../components/skin/scroll-area.css';
 @import '../engines/modern/skin/typography.css';
 @import '../engines/rustic/skin/typography.css';
 @import '../engines/modern/skin/approval-workflow.css';
@@ -328,12 +334,16 @@
 @import '../components/skin/activity-timeline.css';
 @import '../components/skin/activity-compact.css';
 @import '../components/skin/activity-cards.css';
+@import '../components/skin/dashboard-activity-interactions.css';
 @import '../components/skin/metrics-minimal.css';
 @import '../components/skin/metrics-cards.css';
 @import '../components/skin/metrics-chart.css';
 @import '../components/skin/metrics-rows.css';
+@import '../components/skin/dashboard-metrics-interactions.css';
 @import '../components/skin/stats-header.css';
+@import '../components/skin/stats-header-keyframes.css';
 @import '../components/skin/data-terminal-card.css';
+@import '../components/skin/data-terminal-card-keyframes.css';
 @import '../components/skin/assistant.css';
 @import '../components/skin/presence.css';
 
@@ -406,7 +416,6 @@
 @import '../components/skin/oauth-transition.css';
 @import '../components/skin/loading-overlay.css';
 
-
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)
    First-party tenant variable definitions. These are pure CSS custom property
@@ -440,11 +449,11 @@
    ============================================================================= */
 @media (pointer: coarse) {
   button,
-  [role="button"],
+  [role='button'],
   a,
-  [data-ds-interactive="true"],
-  input[type="checkbox"],
-  input[type="radio"],
+  [data-ds-interactive='true'],
+  input[type='checkbox'],
+  input[type='radio'],
   select,
   .ant-btn,
   .ant-select-selector,

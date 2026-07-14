@@ -39,22 +39,6 @@ function useCountUp(target: number, duration: number = 600): number {
 }
 
 // ============================================================================
-// KEYFRAMES
-// ============================================================================
-
-const KEYFRAMES = `
-@keyframes pulse-card-skeleton {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 0.2; }
-}
-@keyframes pulse-dot-ping {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.8); opacity: 0.4; }
-  100% { transform: scale(1); opacity: 1; }
-}
-`;
-
-// ============================================================================
 // SKELETON
 // ============================================================================
 
@@ -129,15 +113,7 @@ function SkeletonCard() {
 // SPARKLINE DOTS
 // ============================================================================
 
-function SparklineDots({
-  dots,
-  accent,
-  hovered,
-}: {
-  dots: number[];
-  accent: AccentColor;
-  hovered: boolean;
-}) {
+function SparklineDots({ dots, accent, hovered }: { dots: number[]; accent: AccentColor; hovered: boolean }) {
   const reducedMotion = useReducedMotion();
   const maxVal = Math.max(...dots, 1);
 
@@ -157,10 +133,7 @@ function SparklineDots({
               height: 4,
               opacity,
               transition: 'transform 200ms ease, opacity 200ms ease',
-              animation:
-                hovered && !reducedMotion
-                  ? `pulse-dot-ping 400ms ease ${i * 50}ms`
-                  : 'none',
+              animation: hovered && !reducedMotion ? `pulse-dot-ping 400ms ease ${i * 50}ms` : 'none',
             }}
           />
         );
@@ -242,11 +215,7 @@ function ChangeIndicator({
   const displayText = changeLabel ?? `${sign}${change}`;
 
   const IconComponent =
-    changeType === 'increase'
-      ? TrendingUpIcon
-      : changeType === 'decrease'
-        ? TrendingDownIcon
-        : MinusIcon;
+    changeType === 'increase' ? TrendingUpIcon : changeType === 'decrease' ? TrendingDownIcon : MinusIcon;
 
   return (
     <Flex direction="column" align="end" gap={2} data-part="change-indicator">
@@ -325,9 +294,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
   const numericTarget = isNumeric ? (stat.value as number) : 0;
   const animatedValue = useCountUp(numericTarget, 600);
 
-  const displayValue = isNumeric
-    ? animatedValue.toLocaleString()
-    : stat.value;
+  const displayValue = isNumeric ? animatedValue.toLocaleString() : stat.value;
 
   const isClickable = !!stat.onClick;
 
@@ -349,14 +316,15 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
           '--ds-stats-header-card-shadow': '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
         } as CSSProperties)
       : hovered
-        ? ({
-            '--ds-stats-header-card-transform': 'translateY(-2px)',
-            '--ds-stats-header-card-shadow': '0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
-          } as CSSProperties)
-        : ({
-            '--ds-stats-header-card-transform': 'translateY(0)',
-            '--ds-stats-header-card-shadow': '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
-          } as CSSProperties)),
+      ? ({
+          '--ds-stats-header-card-transform': 'translateY(-2px)',
+          '--ds-stats-header-card-shadow':
+            '0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
+        } as CSSProperties)
+      : ({
+          '--ds-stats-header-card-transform': 'translateY(0)',
+          '--ds-stats-header-card-shadow': '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
+        } as CSSProperties)),
   };
 
   return (
@@ -365,8 +333,13 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
       data-accent={accent}
       style={cardStyle}
       onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => { setHovered(false); setPressed(false); }}
-      onMouseDown={() => { if (isClickable) setPressed(true); }}
+      onMouseLeave={() => {
+        setHovered(false);
+        setPressed(false);
+      }}
+      onMouseDown={() => {
+        if (isClickable) setPressed(true);
+      }}
       onMouseUp={() => setPressed(false)}
       onClick={stat.onClick}
     >
@@ -400,11 +373,7 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
       </Flex>
 
       {/* Value row: value + prefix left, change right */}
-      <Flex
-        justify="between"
-        align="baseline"
-        style={{ marginTop: 10 }}
-      >
+      <Flex justify="between" align="baseline" style={{ marginTop: 10 }}>
         <Flex align="baseline" gap={4}>
           {stat.prefix && (
             <Text
@@ -456,17 +425,11 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
 
       {/* Sparkline dots */}
       {stat.sparkDots && stat.sparkDots.length > 0 && (
-        <SparklineDots
-          dots={stat.sparkDots}
-          accent={accent}
-          hovered={hovered}
-        />
+        <SparklineDots dots={stat.sparkDots} accent={accent} hovered={hovered} />
       )}
 
       {/* Progress bar (secondary, backwards compat) */}
-      {stat.progress !== undefined && !stat.sparkDots && (
-        <ProgressBar value={stat.progress} accent={accent} />
-      )}
+      {stat.progress !== undefined && !stat.sparkDots && <ProgressBar value={stat.progress} accent={accent} />}
 
       {/* Contextual insight */}
       {stat.insight && (
@@ -521,7 +484,6 @@ function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
 
   return (
     <Box className="ds-stats-header" data-part="root">
-      <style dangerouslySetInnerHTML={{ __html: KEYFRAMES }} />
       <Box
         data-part="card-grid"
         style={{
@@ -532,9 +494,7 @@ function StatsHeaderImpl({ stats, loading = false }: StatsHeaderProps) {
         }}
       >
         {loading
-          ? Array.from({ length: stats.length || 4 }).map((_, i) => (
-              <SkeletonCard key={`skeleton-${i}`} />
-            ))
+          ? Array.from({ length: stats.length || 4 }).map((_, i) => <SkeletonCard key={`skeleton-${i}`} />)
           : stats.map((stat) => <StatCard key={stat.key} stat={stat} compact={compact} />)}
       </Box>
     </Box>

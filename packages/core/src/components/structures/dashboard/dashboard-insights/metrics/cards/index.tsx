@@ -1,16 +1,14 @@
-"use client";
+'use client';
 
-import { Box, Text, Stack, Flex, Grid } from "@/components/primitives";
-import { Activity, TrendingUp, TrendingDown } from "lucide-react";
-import { useSmoothCounter } from "@/motion/hooks";
-import { DENSITY_PRESETS, resolveDensityStyleVars } from "@/tokens/ts/base/density";
-import type { MetricsProps, KeyMetric } from "../../types";
+import { Box, Text, Stack, Flex, Grid } from '@/components/primitives';
+import { Activity, TrendingUp, TrendingDown } from 'lucide-react';
+import { useSmoothCounter } from '@/motion/hooks';
+import { DENSITY_PRESETS, resolveDensityStyleVars } from '@/tokens/ts/base/density';
+import type { MetricsProps, KeyMetric } from '../../types';
 import {
   METRIC_CARD_BG,
   METRIC_CARD_BORDER,
-  METRIC_CARD_BORDER_HOVER,
   METRIC_CARD_ICON_BG,
-  METRIC_CARD_ICON_BORDER,
   METRIC_CARD_ICON_COLOR,
   METRIC_CARD_LABEL_COLOR,
   METRIC_CARD_METER_HEIGHT,
@@ -23,17 +21,14 @@ import {
   METRIC_CARD_NUMBER_MIN_WIDTH,
   METRIC_CARD_RADIUS,
   METRIC_CARD_SHADOW,
-  METRIC_CARD_SHADOW_HOVER,
   METRIC_CARD_TREND_COLOR,
   METRIC_CARD_TREND_ERROR_BG,
   METRIC_CARD_TREND_ERROR_BORDER,
   METRIC_CARD_TREND_ERROR_COLOR,
   METRIC_CARD_VALUE_COLOR,
-  METRIC_CARD_VALUE_HOVER_COLOR,
   METRIC_MONO_FONT,
   METRIC_PANEL_BADGE_BG,
   METRIC_PANEL_BADGE_BORDER,
-  METRIC_PANEL_BADGE_COLOR,
   METRIC_PANEL_BG,
   METRIC_PANEL_BORDER,
   METRIC_PANEL_ICON_BG,
@@ -41,11 +36,19 @@ import {
   METRIC_PANEL_RADIUS,
   METRIC_PANEL_SHADOW,
   METRIC_PANEL_TITLE_COLOR,
-} from "../tokens";
+} from '../tokens';
 
-function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metrics"][0]; index: number; cardPadding: string }) {
-  const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, "")) || 0;
-  const suffix = metric.value.replace(/[0-9.-]/g, "");
+function MetricCard({
+  metric,
+  index,
+  cardPadding,
+}: {
+  metric: MetricsProps['metrics'][0];
+  index: number;
+  cardPadding: string;
+}) {
+  const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, '')) || 0;
+  const suffix = metric.value.replace(/[0-9.-]/g, '');
   const animatedValue = Math.floor(useSmoothCounter(0, numericValue, 1200, index * 200));
 
   return (
@@ -54,17 +57,17 @@ function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metr
       data-part="metric-card"
       data-positive={metric.positive}
       style={{
-        position: "relative",
+        position: 'relative',
         minHeight: METRIC_CARD_MIN_HEIGHT,
         padding: cardPadding,
-        overflow: "hidden",
+        overflow: 'hidden',
       }}
     >
       <Box
         className="card-top-accent"
         data-part="top-accent"
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
           left: 0,
           right: 0,
@@ -72,27 +75,23 @@ function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metr
         }}
       />
 
-      <Stack spacing="sm" align="center" style={{ position: "relative" }}>
+      <Stack spacing="sm" align="center" style={{ position: 'relative' }}>
         <Box
           className="metric-icon-container"
           data-part="metric-icon-box"
           style={{
             width: 32,
             height: 32,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
           }}
         >
-          <metric.icon
-            className="metric-icon"
-            data-part="metric-icon"
-            style={{ width: 14, height: 14 }}
-          />
+          <metric.icon className="metric-icon" data-part="metric-icon" style={{ width: 14, height: 14 }} />
         </Box>
 
-        <Box style={{ position: "relative" }}>
+        <Box style={{ position: 'relative' }}>
           <Text
             className="metric-value-v3"
             data-part="metric-value"
@@ -103,12 +102,13 @@ function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metr
               lineHeight: 1,
               letterSpacing: 0,
               minWidth: METRIC_CARD_NUMBER_MIN_WIDTH,
-              textAlign: "center",
+              textAlign: 'center',
               fontVariantNumeric: METRIC_CARD_NUMBER_FONT_VARIANT,
-              position: "relative",
+              position: 'relative',
             }}
           >
-            {animatedValue}{suffix}
+            {animatedValue}
+            {suffix}
           </Text>
         </Box>
 
@@ -117,8 +117,8 @@ function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metr
           data-part="metric-label"
           size="xs"
           style={{
-            textTransform: "uppercase",
-            letterSpacing: "0.1em",
+            textTransform: 'uppercase',
+            letterSpacing: '0.1em',
             fontFamily: METRIC_MONO_FONT,
             fontSize: 10,
           }}
@@ -131,7 +131,7 @@ function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metr
             className="change-badge"
             data-part="change-badge"
             style={{
-              padding: "4px 8px",
+              padding: '4px 8px',
             }}
           >
             <Flex align="center" gap={6}>
@@ -140,25 +140,28 @@ function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metr
               ) : (
                 <TrendingDown className="trend-icon" data-part="trend-icon" style={{ width: 10, height: 10 }} />
               )}
-              <Text
-                size="xs"
-                weight="bold"
-                data-part="metric-change"
-                style={{ fontFamily: METRIC_MONO_FONT }}
-              >
+              <Text size="xs" weight="bold" data-part="metric-change" style={{ fontFamily: METRIC_MONO_FONT }}>
                 {metric.change}
               </Text>
             </Flex>
           </Box>
         </Flex>
 
-        <Box data-part="meter-track" style={{ width: "100%", height: METRIC_CARD_METER_HEIGHT, overflow: "hidden", marginTop: 4 }}>
+        <Box
+          data-part="meter-track"
+          style={{
+            width: '100%',
+            height: METRIC_CARD_METER_HEIGHT,
+            overflow: 'hidden',
+            marginTop: 4,
+          }}
+        >
           <Box
             className="mini-progress"
             data-part="meter-fill"
             style={{
-              height: "100%",
-              width: "75%",
+              height: '100%',
+              width: '75%',
             }}
           />
         </Box>
@@ -167,7 +170,7 @@ function MetricCard({ metric, index, cardPadding }: { metric: MetricsProps["metr
   );
 }
 
-export function MetricsCards({ metrics, density = "comfortable" }: MetricsProps) {
+export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps) {
   // Density-resolved card padding (design-language §3): a tenant/brand
   // `--ds-metric-card-padding` override wins, else the density preset
   // (`1rem` comfortable / `0.75rem` compact) with a literal fallback.
@@ -179,11 +182,11 @@ export function MetricsCards({ metrics, density = "comfortable" }: MetricsProps)
       style={{
         ...resolveDensityStyleVars(density),
         height: 415,
-        padding: "16px",
-        position: "relative",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
+        padding: '16px',
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <Flex
@@ -193,7 +196,7 @@ export function MetricsCards({ metrics, density = "comfortable" }: MetricsProps)
         style={{
           paddingBottom: 12,
           marginBottom: 12,
-          position: "relative",
+          position: 'relative',
         }}
       >
         <Flex align="center" gap={10}>
@@ -203,47 +206,34 @@ export function MetricsCards({ metrics, density = "comfortable" }: MetricsProps)
             style={{
               width: 32,
               height: 32,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
           </Box>
-          <Text weight="bold" data-part="title">Key Metrics</Text>
+          <Text weight="bold" data-part="title">
+            Key Metrics
+          </Text>
         </Flex>
-        <Box
-          className="live-badge-v3"
-          data-part="live-badge"
-          style={{ padding: "6px 12px" }}
-        >
+        <Box className="live-badge-v3" data-part="live-badge" style={{ padding: '6px 12px' }}>
           <Flex align="center" gap={6}>
             <Box className="live-dot-v3" data-part="live-dot" style={{ width: 8, height: 8 }} />
-            <Text size="xs" weight="bold" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>LIVE</Text>
+            <Text size="xs" weight="bold" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
+              LIVE
+            </Text>
           </Flex>
         </Box>
       </Flex>
 
-      <Box data-part="scroll-area" style={{ flex: 1, overflowY: "auto", minHeight: 0 }} className="metrics-scroll">
-        <Grid columns={3} gap={10} style={{ position: "relative" }}>
+      <Box data-part="scroll-area" style={{ flex: 1, overflowY: 'auto', minHeight: 0 }} className="metrics-scroll">
+        <Grid columns={3} gap={10} style={{ position: 'relative' }}>
           {metrics.map((metric: KeyMetric, i: number) => (
             <MetricCard key={metric.label} metric={metric} index={i} cardPadding={cardPadding} />
           ))}
         </Grid>
       </Box>
-
-      <style>{`
-        .metric-card-v3 { animation: cardEnter 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-        .metric-card-v3:hover { border-color: ${METRIC_CARD_BORDER_HOVER}; transform: translateY(-6px) scale(1.02); box-shadow: ${METRIC_CARD_SHADOW_HOVER}; }
-        .metric-card-v3:hover .metric-value-v3 { color: ${METRIC_CARD_VALUE_HOVER_COLOR}; }
-        .live-dot-v3 { animation: dotGlow 1.5s ease-in-out infinite; }
-        @keyframes cardEnter { from { opacity: 0; transform: translateY(30px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        @keyframes dotGlow { 0%, 100% { box-shadow: 0 0 4px ${METRIC_PANEL_BADGE_COLOR}, 0 0 8px ${METRIC_PANEL_BADGE_COLOR}; } 50% { box-shadow: 0 0 8px ${METRIC_PANEL_BADGE_COLOR}, 0 0 16px ${METRIC_PANEL_BADGE_COLOR}; } }
-        .metrics-scroll { scrollbar-width: thin; scrollbar-color: ${METRIC_CARD_ICON_BORDER} transparent; }
-        .metrics-scroll::-webkit-scrollbar { width: 4px; }
-        .metrics-scroll::-webkit-scrollbar-track { background: transparent; }
-        .metrics-scroll::-webkit-scrollbar-thumb { background: ${METRIC_CARD_ICON_BORDER}; border-radius: 2px; }
-      `}</style>
     </Box>
   );
 }

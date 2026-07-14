@@ -1,0 +1,11 @@
+/** Static placeholder paint for the modern Input and searchable Select. */
+
+.rottay-input--modern::placeholder {
+  color: var(--ds-input-color-placeholder, var(--ds-color-text-muted));
+  opacity: 1;
+}
+
+.rottay-select__search-input::placeholder {
+  color: var(--ds-color-text-muted);
+  opacity: 1;
+}

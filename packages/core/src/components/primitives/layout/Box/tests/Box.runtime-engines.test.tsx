@@ -122,17 +122,29 @@ describe('Box runtime engines', () => {
       expect(element).toHaveTextContent('Engine box');
 
       if (engine === 'modern') {
-        // Modern resolves spacing/radius/shadow through DS token inline styles.
-        const modernStyleAttr = element.getAttribute('style') || '';
-        expect(modernStyleAttr).toContain(SHADOW_MAP.lg);
+        // Modern resolves spacing through DS token inline styles and selects
+        // radius/shadow in the unlayered skin via attributes.
+        expect(element).toHaveAttribute('data-radius', 'xl');
+        expect(element).toHaveAttribute('data-shadow', 'lg');
+        expect(element.style.borderRadius).toBe('');
+        expect(element.style.boxShadow).toBe('');
         expect(element.className).toContain('grid');
         expect(element.className).toContain('absolute');
         expect(element.className).toContain('overflow-hidden');
         expect(element.className).toContain('overflow-x-auto');
         expect(element.className).toContain('overflow-y-scroll');
+      } else if (engine === 'rustic') {
+        // Rustic keeps spacing inline but shares the skin-selected radius/shadow contract.
+        expect(element).toHaveStyle({
+          padding: `${SPACING_MAP.xs} ${SPACING_MAP.md} ${SPACING_MAP['2xl']} ${SPACING_MAP['3xl']}`,
+          margin: `${SPACING_MAP.xs} ${SPACING_MAP.xl} ${SPACING_MAP['2xl']} ${SPACING_MAP['3xl']}`,
+        });
+        expect(element).toHaveAttribute('data-radius', 'xl');
+        expect(element).toHaveAttribute('data-shadow', 'lg');
+        expect(element.style.borderRadius).toBe('');
+        expect(element.style.boxShadow).toBe('');
       } else {
-        // Classic and Rustic resolve spacing/shadow/radius directly into inline styles,
-        // but the browser serializes the mixed shorthand/edge overrides into compact values.
+        // Classic remains Ant-owned and resolves the token values inline.
         expect(element).toHaveStyle({
           padding: `${SPACING_MAP.xs} ${SPACING_MAP.md} ${SPACING_MAP['2xl']} ${SPACING_MAP['3xl']}`,
           margin: `${SPACING_MAP.xs} ${SPACING_MAP.xl} ${SPACING_MAP['2xl']} ${SPACING_MAP['3xl']}`,
@@ -218,48 +230,50 @@ describe('Box runtime engines', () => {
   // engines must now render void elements with their full attribute set and no
   // children argument.
   const VOID_CASES = [
-    { as: 'input', tag: 'INPUT', attrs: { type: 'hidden', name: 'jobIdentifier', value: 'job-123' } },
-    { as: 'img', tag: 'IMG', attrs: { src: 'https://example.com/a.png', alt: 'a' } },
+    {
+      as: 'input',
+      tag: 'INPUT',
+      attrs: { type: 'hidden', name: 'jobIdentifier', value: 'job-123' },
+    },
+    {
+      as: 'img',
+      tag: 'IMG',
+      attrs: { src: 'https://example.com/a.png', alt: 'a' },
+    },
     { as: 'hr', tag: 'HR', attrs: {} },
     { as: 'br', tag: 'BR', attrs: {} },
   ] as const;
 
-  describe.each(Object.entries(ENGINE_COMPONENTS))(
-    'void elements render under the %s engine',
-    (engine, Component) => {
-      it.each(VOID_CASES)(
-        'renders <$as> with attributes and no children argument',
-        ({ as, tag, attrs }) => {
-          const ref = createRef<HTMLElement>();
-          expect(() =>
-            render(
-              <Component
-                ref={ref}
-                as={as as any}
-                data-testid={`void-${engine}-${as}`}
-                {...(attrs as Record<string, unknown>)}
-              />
-            )
-          ).not.toThrow();
+  describe.each(Object.entries(ENGINE_COMPONENTS))('void elements render under the %s engine', (engine, Component) => {
+    it.each(VOID_CASES)('renders <$as> with attributes and no children argument', ({ as, tag, attrs }) => {
+      const ref = createRef<HTMLElement>();
+      expect(() =>
+        render(
+          <Component
+            ref={ref}
+            as={as as any}
+            data-testid={`void-${engine}-${as}`}
+            {...(attrs as Record<string, unknown>)}
+          />
+        )
+      ).not.toThrow();
 
-          const el = screen.getByTestId(`void-${engine}-${as}`);
-          expect(el.tagName).toBe(tag);
-          expect(el).toHaveClass('rottay-box');
-          expect(el).toHaveClass(`rottay-box--${engine}`);
-          expect(ref.current).toBe(el);
-          // Void elements never have child nodes.
-          expect(el.childNodes.length).toBe(0);
-          for (const [key, val] of Object.entries(attrs)) {
-            if (key === 'value') {
-              expect((el as HTMLInputElement).value).toBe(val);
-            } else {
-              expect(el.getAttribute(key)).toBe(val);
-            }
-          }
+      const el = screen.getByTestId(`void-${engine}-${as}`);
+      expect(el.tagName).toBe(tag);
+      expect(el).toHaveClass('rottay-box');
+      expect(el).toHaveClass(`rottay-box--${engine}`);
+      expect(ref.current).toBe(el);
+      // Void elements never have child nodes.
+      expect(el.childNodes.length).toBe(0);
+      for (const [key, val] of Object.entries(attrs)) {
+        if (key === 'value') {
+          expect((el as HTMLInputElement).value).toBe(val);
+        } else {
+          expect(el.getAttribute(key)).toBe(val);
         }
-      );
-    }
-  );
+      }
+    });
+  });
 
   // The hidden job-identifier input on the public apply page is the exact
   // RT-ERR-01 repro: a void Box that MUST reach the DOM so the server action can
@@ -268,7 +282,13 @@ describe('Box runtime engines', () => {
     'keeps a hidden job-identifier input in the DOM under the %s engine',
     (engine, Component) => {
       render(
-        <Component as="input" type="hidden" name="jobIdentifier" value="acme-senior-eng" data-testid={`hidden-${engine}`} />
+        <Component
+          as="input"
+          type="hidden"
+          name="jobIdentifier"
+          value="acme-senior-eng"
+          data-testid={`hidden-${engine}`}
+        />
       );
       const el = screen.getByTestId(`hidden-${engine}`) as HTMLInputElement;
       expect(el.tagName).toBe('INPUT');
@@ -278,22 +298,52 @@ describe('Box runtime engines', () => {
     }
   );
 
+  it.each([
+    ['modern', ModernBox],
+    ['rustic', RusticBox],
+  ] as const)('preserves caller-owned radius/shadow precedence in the %s skin contract', (engine, Component) => {
+    render(
+      <>
+        <Component
+          data-testid={`box-caller-${engine}`}
+          rounded="xl"
+          shadow="lg"
+          style={{ borderRadius: '3px', boxShadow: 'none' }}
+        />
+        <Component
+          data-testid={`box-caller-undefined-${engine}`}
+          rounded="xl"
+          shadow="lg"
+          style={{ borderRadius: undefined, boxShadow: undefined }}
+        />
+      </>
+    );
+
+    const caller = screen.getByTestId(`box-caller-${engine}`);
+    expect(caller).not.toHaveAttribute('data-radius');
+    expect(caller).not.toHaveAttribute('data-shadow');
+    expect(caller.style.borderRadius).toBe('3px');
+    expect(caller.style.boxShadow).toBe('none');
+
+    const suppressed = screen.getByTestId(`box-caller-undefined-${engine}`);
+    expect(suppressed).not.toHaveAttribute('data-radius');
+    expect(suppressed).not.toHaveAttribute('data-shadow');
+    expect(suppressed.style.borderRadius).toBe('');
+    expect(suppressed.style.boxShadow).toBe('');
+  });
+
   it.each(Object.entries(ENGINE_COMPONENTS))(
     'does not emit spacing or radius styles when the %s engine receives none values',
     (engine, Component) => {
       render(
-        <Component
-          data-testid={`box-none-${engine}`}
-          padding="none"
-          margin="none"
-          rounded="none"
-          shadow="none"
-        >
+        <Component data-testid={`box-none-${engine}`} padding="none" margin="none" rounded="none" shadow="none">
           None values
         </Component>
       );
 
       const box = screen.getByTestId(`box-none-${engine}`);
+      expect(box).not.toHaveAttribute('data-radius');
+      expect(box).not.toHaveAttribute('data-shadow');
 
       if (engine === 'modern') {
         expect(box.className).not.toContain('p-');

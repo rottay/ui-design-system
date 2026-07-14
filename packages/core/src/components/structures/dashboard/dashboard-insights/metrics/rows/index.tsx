@@ -1,15 +1,13 @@
-"use client";
+'use client';
 
-import { Box, Text, Stack, Flex } from "@/components/primitives";
-import { Activity, TrendingUp, TrendingDown } from "lucide-react";
-import { useSmoothCounter } from "@/motion/hooks";
-import type { MetricsProps, KeyMetric } from "../../types";
+import { Box, Text, Stack, Flex } from '@/components/primitives';
+import { Activity, TrendingUp, TrendingDown } from 'lucide-react';
+import { useSmoothCounter } from '@/motion/hooks';
+import type { MetricsProps, KeyMetric } from '../../types';
 import {
   METRIC_CARD_BG,
   METRIC_CARD_BORDER,
-  METRIC_CARD_BORDER_HOVER,
   METRIC_CARD_ICON_BG,
-  METRIC_CARD_ICON_BORDER,
   METRIC_CARD_ICON_COLOR,
   METRIC_CARD_METER_FILL_ERROR,
   METRIC_CARD_METER_FILL_SUCCESS,
@@ -18,16 +16,13 @@ import {
   METRIC_CARD_PADDING,
   METRIC_CARD_RADIUS,
   METRIC_CARD_SHADOW,
-  METRIC_CARD_SHADOW_HOVER,
   METRIC_CARD_SHEEN,
   METRIC_CARD_TREND_COLOR,
   METRIC_CARD_TREND_ERROR_COLOR,
   METRIC_CARD_VALUE_COLOR,
-  METRIC_CARD_VALUE_HOVER_COLOR,
   METRIC_MONO_FONT,
   METRIC_PANEL_BADGE_BG,
   METRIC_PANEL_BADGE_BORDER,
-  METRIC_PANEL_BADGE_COLOR,
   METRIC_PANEL_BG,
   METRIC_PANEL_BORDER,
   METRIC_PANEL_ICON_BG,
@@ -35,11 +30,11 @@ import {
   METRIC_PANEL_RADIUS,
   METRIC_PANEL_SHADOW,
   METRIC_PANEL_TITLE_COLOR,
-} from "../tokens";
+} from '../tokens';
 
-function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; index: number }) {
-  const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, "")) || 0;
-  const suffix = metric.value.replace(/[0-9.-]/g, "");
+function MetricRow({ metric, index }: { metric: MetricsProps['metrics'][0]; index: number }) {
+  const numericValue = parseInt(metric.value.replace(/[^0-9.-]/g, '')) || 0;
+  const suffix = metric.value.replace(/[0-9.-]/g, '');
   const animatedValue = Math.floor(useSmoothCounter(0, numericValue, 1000, index * 150));
 
   return (
@@ -49,18 +44,18 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
       data-positive={metric.positive}
       style={{
         padding: METRIC_CARD_PADDING,
-        position: "relative",
-        overflow: "hidden",
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       <Box
         data-part="accent-bar"
         style={{
-          position: "absolute",
+          position: 'absolute',
           left: 0,
           top: 0,
           bottom: 0,
-          transition: "width 0.3s ease",
+          transition: 'width 0.3s ease',
         }}
       />
 
@@ -68,16 +63,16 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
         className="row-shimmer"
         data-part="shimmer"
         style={{
-          position: "absolute",
+          position: 'absolute',
           top: 0,
-          left: "-100%",
-          width: "100%",
-          height: "100%",
-          pointerEvents: "none",
+          left: '-100%',
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
         }}
       />
 
-      <Flex align="center" justify="between" style={{ position: "relative" }}>
+      <Flex align="center" justify="between" style={{ position: 'relative' }}>
         <Flex align="center" gap={14}>
           <Box
             className="metric-row-icon"
@@ -85,10 +80,10 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
             style={{
               width: 40,
               height: 40,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative',
             }}
           >
             <metric.icon
@@ -101,26 +96,14 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
           </Box>
 
           <Stack spacing="xs">
-            <Text
-              size="sm"
-              weight="medium"
-              data-part="metric-label"
-            >
+            <Text size="sm" weight="medium" data-part="metric-label">
               {metric.label}
             </Text>
             <Flex align="center" gap={6}>
               {metric.positive ? (
-                <TrendingUp
-                  className="trend-icon"
-                  data-part="trend-icon"
-                  style={{ width: 12, height: 12 }}
-                />
+                <TrendingUp className="trend-icon" data-part="trend-icon" style={{ width: 12, height: 12 }} />
               ) : (
-                <TrendingDown
-                  className="trend-icon"
-                  data-part="trend-icon"
-                  style={{ width: 12, height: 12 }}
-                />
+                <TrendingDown className="trend-icon" data-part="trend-icon" style={{ width: 12, height: 12 }} />
               )}
               <Text
                 size="xs"
@@ -136,7 +119,7 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
           </Stack>
         </Flex>
 
-        <Box style={{ position: "relative" }}>
+        <Box style={{ position: 'relative' }}>
           <Text
             className="metric-row-value"
             data-part="metric-value"
@@ -146,11 +129,12 @@ function MetricRow({ metric, index }: { metric: MetricsProps["metrics"][0]; inde
               fontFamily: METRIC_MONO_FONT,
               letterSpacing: 0,
               minWidth: METRIC_CARD_NUMBER_MIN_WIDTH,
-              textAlign: "right",
+              textAlign: 'right',
               fontVariantNumeric: METRIC_CARD_NUMBER_FONT_VARIANT,
             }}
           >
-            {animatedValue}{suffix}
+            {animatedValue}
+            {suffix}
           </Text>
         </Box>
       </Flex>
@@ -165,11 +149,11 @@ export function MetricsRows({ metrics }: MetricsProps) {
       data-part="root"
       style={{
         height: 415,
-        padding: "16px",
-        display: "flex",
-        flexDirection: "column",
-        position: "relative",
-        overflow: "hidden",
+        padding: '16px',
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'relative',
+        overflow: 'hidden',
       }}
     >
       <Flex
@@ -179,7 +163,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
         style={{
           paddingBottom: 12,
           marginBottom: 12,
-          position: "relative",
+          position: 'relative',
         }}
       >
         <Flex align="center" gap={10}>
@@ -189,9 +173,9 @@ export function MetricsRows({ metrics }: MetricsProps) {
             style={{
               width: 32,
               height: 32,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Activity data-part="panel-icon" style={{ width: 16, height: 16 }} />
@@ -204,7 +188,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
           className="live-badge-v3"
           data-part="live-badge"
           style={{
-            padding: "6px 12px",
+            padding: '6px 12px',
           }}
         >
           <Flex align="center" gap={6}>
@@ -216,12 +200,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
                 height: 8,
               }}
             />
-            <Text
-              size="xs"
-              weight="bold"
-              data-part="live-label"
-              style={{ fontFamily: METRIC_MONO_FONT }}
-            >
+            <Text size="xs" weight="bold" data-part="live-label" style={{ fontFamily: METRIC_MONO_FONT }}>
               LIVE
             </Text>
           </Flex>
@@ -232,7 +211,7 @@ export function MetricsRows({ metrics }: MetricsProps) {
         data-part="scroll-area"
         style={{
           flex: 1,
-          overflowY: "auto",
+          overflowY: 'auto',
           minHeight: 0,
         }}
         className="metrics-scroll"
@@ -243,49 +222,6 @@ export function MetricsRows({ metrics }: MetricsProps) {
           ))}
         </Stack>
       </Box>
-
-      <style>{`
-        .metric-row-v3 {
-          animation: rowSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .metric-row-v3:hover {
-          border-color: ${METRIC_CARD_BORDER_HOVER};
-          transform: translateX(6px);
-          box-shadow: ${METRIC_CARD_SHADOW_HOVER};
-        }
-        .metric-row-v3:hover .metric-row-value {
-          color: ${METRIC_CARD_VALUE_HOVER_COLOR};
-        }
-        .metric-row-v3:hover .row-shimmer {
-          animation: shimmer 0.8s ease-in-out;
-        }
-
-        .live-dot-v3 {
-          animation: dotGlow 1.5s ease-in-out infinite;
-        }
-
-        @keyframes rowSlideIn {
-          from { opacity: 0; transform: translateX(-30px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        @keyframes shimmer {
-          from { left: -100%; }
-          to { left: 100%; }
-        }
-        @keyframes dotGlow {
-          0%, 100% { box-shadow: 0 0 4px ${METRIC_PANEL_BADGE_COLOR}, 0 0 8px ${METRIC_PANEL_BADGE_COLOR}; }
-          50% { box-shadow: 0 0 8px ${METRIC_PANEL_BADGE_COLOR}, 0 0 16px ${METRIC_PANEL_BADGE_COLOR}; }
-        }
-
-        .metrics-scroll {
-          scrollbar-width: thin;
-          scrollbar-color: ${METRIC_CARD_ICON_BORDER} transparent;
-        }
-        .metrics-scroll::-webkit-scrollbar { width: 4px; }
-        .metrics-scroll::-webkit-scrollbar-track { background: transparent; }
-        .metrics-scroll::-webkit-scrollbar-thumb { background: ${METRIC_CARD_ICON_BORDER}; border-radius: 2px; }
-      `}</style>
     </Box>
   );
 }

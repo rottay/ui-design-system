@@ -7,7 +7,7 @@
  * This module provides:
  * - CSS keyframe definitions for all toast animations
  * - Helper functions to get animation names based on position
- * - Automatic style injection into the document head
+ * - Shared stylesheet delivery through the core skin entrypoint
  * - Position-specific slide animations
  *
  * Animations are designed to match the toast position:
@@ -17,12 +17,8 @@
  *
  * @example Using Animation Utilities
  * ```tsx
- * import { getAnimationName, injectToastStyles } from './animations';
- *
- * // Inject styles on mount
- * useEffect(() => {
- *   injectToastStyles();
- * }, []);
+ * import '@rottay/design-system/styles.css';
+ * import { getAnimationName } from './animations';
  *
  * // Get animation name for position
  * const enterAnim = getAnimationName('top-right', 'in');
@@ -77,8 +73,8 @@ function getToastAnimationEasing(phase: 'in' | 'out'): string {
  * - Progress bar animation for countdown display
  *
  * @remarks
- * These keyframes are automatically injected into the document
- * when `injectToastStyles()` is called.
+ * Compatibility export of the definitions now shipped by
+ * `toast-animation-keyframes.css` through the core stylesheet entrypoint.
  *
  * Available animations:
  * - `toast-slide-in-right` / `toast-slide-out-right`
@@ -238,10 +234,7 @@ export const TOAST_KEYFRAMES = `
  * getAnimationName('bottom-center', 'in'); // 'toast-slide-in-bottom'
  * ```
  */
-export function getAnimationName(
-  position: ToastPosition,
-  direction: 'in' | 'out'
-): string {
+export function getAnimationName(position: ToastPosition, direction: 'in' | 'out'): string {
   const [vertical, horizontal] = position.split('-') as [string, string];
 
   // Center positions use vertical direction
@@ -259,61 +252,41 @@ export function getToastAnimationStyle(
   mode: 'slide' | 'fade' = 'slide'
 ): CSSProperties {
   const animationName =
-    mode === 'fade'
-      ? direction === 'in'
-        ? 'toast-fade-in'
-        : 'toast-fade-out'
-      : getAnimationName(position, direction);
+    mode === 'fade' ? (direction === 'in' ? 'toast-fade-in' : 'toast-fade-out') : getAnimationName(position, direction);
 
   return {
-    animation: `${animationName} ${getToastAnimationDuration(direction)} ${getToastAnimationEasing(direction)} forwards`,
+    animation: `${animationName} ${getToastAnimationDuration(direction)} ${getToastAnimationEasing(
+      direction
+    )} forwards`,
   };
 }
 
 // ============================================================================
-// Style Injection
+// Legacy Injector Compatibility
 // ============================================================================
 
-/** Tracks whether styles have been injected */
-let stylesInjected = false;
-
 /**
- * Injects toast animation keyframes into the document.
+ * Backward-compatible no-op retained for consumers that called the old
+ * imperative injector. Toast keyframes now ship in the core stylesheet.
  *
  * @description
- * Creates a style element with all toast animation keyframes and
- * appends it to the document head. Safe to call multiple times;
- * subsequent calls are no-ops.
+ * Safe to call multiple times and during SSR.
  *
  * @remarks
- * - Only runs in browser environment (checks for `document`)
- * - Uses a unique ID to prevent duplicate injection
- * - Called automatically by ToastProvider and ToastContainer
+ * - Does not mutate the document
+ * - Called automatically by ToastProvider and ToastContainer for API parity
+ * - Consumers must import one public design-system stylesheet entrypoint, such as
+ *   `@rottay/design-system/styles.css` or the matching `styles/<vertical>` bundle;
+ *   this compatibility function no longer installs keyframes by itself
  *
  * @example
  * ```tsx
- * // In a component or effect
- * useEffect(() => {
- *   injectToastStyles();
- * }, []);
+ * import '@rottay/design-system/styles.css';
+ *
+ * // Legacy calls remain safe but are no longer responsible for CSS delivery.
+ * injectToastStyles();
  * ```
  */
 export function injectToastStyles(): void {
-  // Skip if not in browser or already injected
-  if (typeof document === 'undefined' || stylesInjected) return;
-
-  const styleId = 'rottay-toast-animations';
-
-  // Check if already exists in DOM
-  if (document.getElementById(styleId)) {
-    stylesInjected = true;
-    return;
-  }
-
-  // Create and inject style element
-  const styleEl = document.createElement('style');
-  styleEl.id = styleId;
-  styleEl.textContent = TOAST_KEYFRAMES;
-  document.head.appendChild(styleEl);
-  stylesInjected = true;
+  // Intentionally empty. The function remains exported to avoid an API break.
 }

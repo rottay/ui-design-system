@@ -5,17 +5,11 @@
  * base layer, so a layered rule cannot paint these elements at all. Unlayered
  * still yields to a caller's inline `style`.
  *
- * THE INJECTED DOCUMENT-GLOBAL `<style>` IS LEFT VERBATIM. `ensureGlobalStyles()`
- * appends a singleton `<style id="rottay-menu-modern-styles">` to `document.head`
- * carrying an `!important` `:focus-visible` outline, a chevron rotation and a
- * `::marker` reset. It is NOT hoisted here: an `!important` stylesheet
- * declaration outranks any inline style, so that rule — not the component's
- * `onFocus` handler — is what has actually been painting the focus ring all
- * along. The handler's `.style.outline = …` writes were dead on arrival (a plain
- * inline style can never beat `!important`) and ARE removed; the CSS that really
- * paints stays exactly where it is, at exactly its old priority. The `outline:
- * none` rest state below is the same declaration the base style object carried,
- * and loses to that `!important` rule exactly as it did when it was inline.
+ * The former document-global singleton's `!important` focus ring, chevron
+ * rotation and marker reset now live once in
+ * `components/skin/navigation-static.css`. The stylesheet rule — not the old
+ * dead `onFocus` write — continues to own the focus ring at the same priority.
+ * The `outline: none` rest state below still loses to that `!important` rule.
  *
  * SCOPE ROOT carries `rottay-menu rottay-menu--modern rottay-menu--<theme>` +
  * `data-part='root'`. The theme MODIFIER CLASS (not a `data-theme` attribute) is

@@ -87,27 +87,13 @@ export function InputGroup({
     if (!React.isValidElement<{ style?: CSSProperties; size?: string }>(child)) return child;
 
     const isFirst = index === 0;
-    const isLast = index === childArray.length - 1;
-
     const childStyle: CSSProperties = {
       ...(child.props.style || {}),
     };
 
-    // Handle border radius for compact mode
+    // Compact radii are keyed by the group's data attribute in the compound
+    // skin. Margin remains inline because it is layout, not paint.
     if (compact) {
-      if (!isFirst && !isLast) {
-        childStyle.borderTopLeftRadius = 0;
-        childStyle.borderTopRightRadius = 0;
-        childStyle.borderBottomRightRadius = 0;
-        childStyle.borderBottomLeftRadius = 0;
-      } else if (isFirst && !isLast) {
-        childStyle.borderTopRightRadius = 0;
-        childStyle.borderBottomRightRadius = 0;
-      } else if (isLast && !isFirst) {
-        childStyle.borderTopLeftRadius = 0;
-        childStyle.borderBottomLeftRadius = 0;
-      }
-
       // Remove left border for non-first items to avoid double borders
       if (!isFirst) {
         childStyle.marginLeft = -1;
@@ -126,10 +112,7 @@ export function InputGroup({
   });
 
   return (
-    <div
-      className={`rottay-input-group ${className}`}
-      style={groupStyle}
-    >
+    <div className={`rottay-input-group ${className}`} data-compact={compact ? 'true' : 'false'} style={groupStyle}>
       {enhancedChildren}
     </div>
   );

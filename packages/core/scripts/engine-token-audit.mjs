@@ -27,38 +27,30 @@
  *   node scripts/engine-token-audit.mjs --update-baseline   # rewrite the baseline to current
  *   node scripts/engine-token-audit.mjs --coverage # write the token-coverage report (informational)
  */
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from "node:fs";
-import { countArc09PaintInFile } from "./lib/inline-paint-counter.mjs";
-import {
-  collectBelowFloorFailures,
-  countPremiumEffectConsumers,
-} from "./lib/effect-consumer-counter.mjs";
-import { countSkinExemptionBreaches } from "./lib/skin-exemption-audit.mjs";
-import { countRuntimeSvgPaintByFile } from "./lib/runtime-svg-paint-counter.mjs";
-import { countEmbeddedCssPaintByFile } from "./lib/embedded-css-paint-counter.mjs";
-import { collectMissingPrefixedCounters } from "./lib/counter-presence-audit.mjs";
-import {
-  ARC09_INLINE_PAINT_FILES,
-  collectFleetInlinePaintSourceFiles,
-} from "./lib/fleet-inline-paint-census.mjs";
-import {
-  collectSourceFiles as collectRuntimeSvgSourceFiles,
-} from "./runtime-svg-paint-census.mjs";
-import { countDeadParts } from "./skin-dead-part-audit.mjs";
-import postcss from "postcss";
-import { resolve, dirname, join, relative, sep } from "node:path";
-import { fileURLToPath } from "node:url";
+import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from 'node:fs';
+import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
+import { collectBelowFloorFailures, countPremiumEffectConsumers } from './lib/effect-consumer-counter.mjs';
+import { countSkinExemptionBreaches } from './lib/skin-exemption-audit.mjs';
+import { countRuntimeSvgPaintByFile } from './lib/runtime-svg-paint-counter.mjs';
+import { countEmbeddedCssPaintByFile } from './lib/embedded-css-paint-counter.mjs';
+import { collectMissingPrefixedCounters } from './lib/counter-presence-audit.mjs';
+import { ARC09_INLINE_PAINT_FILES, collectFleetInlinePaintSourceFiles } from './lib/fleet-inline-paint-census.mjs';
+import { collectSourceFiles as collectRuntimeSvgSourceFiles } from './runtime-svg-paint-census.mjs';
+import { countDeadParts } from './skin-dead-part-audit.mjs';
+import postcss from 'postcss';
+import { resolve, dirname, join, relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 // WO-GAT-04 (accessibility CI, proposal P-10): APCA is the perceptually-accurate contrast model
 // (the successor to WCAG-2 ratios) used by the `a11y.apcaPairings` counter below. `apca-w3` is a
 // ROOT devDependency (this script resolves it via Node's upward node_modules walk to the repo
 // root, whichever workspace CWD invokes it). This is ADDITIVE gate machinery: it does NOT touch
 // the shipped WCAG validator at src/_internal/a11y/contrast/index.ts (a published /server API).
-import { calcAPCA } from "apca-w3";
+import { calcAPCA } from 'apca-w3';
 
 const here = dirname(fileURLToPath(import.meta.url));
-const root = resolve(here, "..");
-const componentsDir = join(root, "src/components");
-const baselinePath = join(here, "engine-token-audit.baseline.json");
+const root = resolve(here, '..');
+const componentsDir = join(root, 'src/components');
+const baselinePath = join(here, 'engine-token-audit.baseline.json');
 
 /**
  * Collect every `engines/<engineName>.tsx` or `engines/<engineName>/*.tsx` component source
@@ -76,7 +68,7 @@ function collectEngineFiles(dir, engineName) {
     const st = statSync(full);
     if (st.isDirectory()) {
       out.push(...collectEngineFiles(full, engineName));
-    } else if (engineRe.test(full.replace(/\\/g, "/"))) {
+    } else if (engineRe.test(full.replace(/\\/g, '/'))) {
       out.push(full);
     }
   }
@@ -85,7 +77,7 @@ function collectEngineFiles(dir, engineName) {
 
 /** Collect every modern-engine component source file (`engines/modern.tsx` or `engines/modern/*.tsx`). */
 function modernFiles(dir) {
-  return collectEngineFiles(dir, "modern");
+  return collectEngineFiles(dir, 'modern');
 }
 
 /**
@@ -104,7 +96,7 @@ function modernColorFiles(dir) {
     const st = statSync(full);
     if (st.isDirectory()) {
       out.push(...modernColorFiles(full));
-    } else if (/engines\/modern(\/[^/]+)?\.(tsx?|css)$/.test(full.replace(/\\/g, "/"))) {
+    } else if (/engines\/modern(\/[^/]+)?\.(tsx?|css)$/.test(full.replace(/\\/g, '/'))) {
       out.push(full);
     }
   }
@@ -120,7 +112,7 @@ function modernColorFiles(dir) {
  * found in this codebase needed it, and naively stripping `//` risks eating real code that
  * follows a `//` inside a string (e.g. a URL). */
 function stripBlockComments(text) {
-  return text.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, " "));
+  return text.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
 }
 
 /**
@@ -162,7 +154,8 @@ function stripBlockComments(text) {
  * and changed what the ColorPicker shows the user; its test had been red ever
  * since. A counter that cannot tell a style from a string will be paid in copy.
  */
-const CONTENT_ATTRIBUTE_RE = /\b(?:placeholder|aria-label|aria-placeholder|title|alt)\s*=\s*(?:"[^"]*"|'[^']*'|\{`[^`]*`\})/g;
+const CONTENT_ATTRIBUTE_RE =
+  /\b(?:placeholder|aria-label|aria-placeholder|title|alt)\s*=\s*(?:"[^"]*"|'[^']*'|\{`[^`]*`\})/g;
 
 /**
  * Class names DaisyUI actually paints, verified against the `daisyui@5.5.19`
@@ -175,11 +168,31 @@ const CONTENT_ATTRIBUTE_RE = /\b(?:placeholder|aria-label|aria-placeholder|title
  * less true. Decrease-only, so the residue can only shrink.
  */
 const DAISY_PAINTED_CLASSES = [
-  "alert", "skeleton", "step", "steps", "link", "breadcrumbs", "rating", "range",
-  "progress", "radial-progress", "stat-title", "stat-value", "carousel",
-  "carousel-item", "timeline", "timeline-middle", "timeline-start", "toast",
-  "toast-top", "toast-bottom", "modal", "modal-open", "modal-box",
-  "modal-backdrop", "modal-action",
+  'alert',
+  'skeleton',
+  'step',
+  'steps',
+  'link',
+  'breadcrumbs',
+  'rating',
+  'range',
+  'progress',
+  'radial-progress',
+  'stat-title',
+  'stat-value',
+  'carousel',
+  'carousel-item',
+  'timeline',
+  'timeline-middle',
+  'timeline-start',
+  'toast',
+  'toast-top',
+  'toast-bottom',
+  'modal',
+  'modal-open',
+  'modal-box',
+  'modal-backdrop',
+  'modal-action',
 ];
 
 /** Engine files that render at least one DaisyUI class in a real `className`. */
@@ -187,15 +200,18 @@ function countDaisyClassConsumers(files) {
   const painted = new Set(DAISY_PAINTED_CLASSES);
   let consumers = 0;
   for (const file of files) {
-    const text = stripBlockComments(readFileSync(file, "utf8"));
+    const text = stripBlockComments(readFileSync(file, 'utf8'));
     // Only literal class strings assigned to className, never a doc comment and
     // never `Array.prototype.join`.
     const attrs = text.matchAll(/className=(?:\{?\s*)?(?:`([^`]*)`|"([^"]*)"|'([^']*)')/g);
     let hit = false;
     for (const m of attrs) {
-      const value = m[1] ?? m[2] ?? m[3] ?? "";
+      const value = m[1] ?? m[2] ?? m[3] ?? '';
       for (const token of value.split(/[\s${}]+/)) {
-        if (painted.has(token)) { hit = true; break; }
+        if (painted.has(token)) {
+          hit = true;
+          break;
+        }
       }
       if (hit) break;
     }
@@ -205,7 +221,7 @@ function countDaisyClassConsumers(files) {
 }
 
 function countColorLiteralsInText(strippedText) {
-  const withoutContentAttributes = strippedText.replace(CONTENT_ATTRIBUTE_RE, "");
+  const withoutContentAttributes = strippedText.replace(CONTENT_ATTRIBUTE_RE, '');
   const hexRe = /(?<!&)#[0-9a-fA-F]{3,8}\b/g;
   const rgbaRe = /\brgba?\(/g;
   return {
@@ -220,7 +236,7 @@ function countColorLiterals(files) {
   let hex = 0;
   let rgba = 0;
   for (const file of files) {
-    const text = stripBlockComments(readFileSync(file, "utf8"));
+    const text = stripBlockComments(readFileSync(file, 'utf8'));
     const perFile = countColorLiteralsInText(text);
     hex += perFile.hex;
     rgba += perFile.rgba;
@@ -230,11 +246,11 @@ function countColorLiterals(files) {
 
 /** The motion token names components consume that the canon must define (else they resolve to fallbacks). */
 const ORPHAN_MOTION_NAMES = [
-  "--ds-motion-duration-fast",
-  "--ds-motion-duration-slow",
-  "--ds-motion-base",
-  "--ds-motion-gentle",
-  "--ds-motion-easing-ease-in-out",
+  '--ds-motion-duration-fast',
+  '--ds-motion-duration-slow',
+  '--ds-motion-base',
+  '--ds-motion-gentle',
+  '--ds-motion-easing-ease-in-out',
 ];
 
 /**
@@ -264,12 +280,9 @@ function countMotionLiterals(files) {
   let cubicBezier = 0;
   let rawDuration = 0;
   let orphanTokens = 0;
-  const orphanRe = new RegExp(
-    ORPHAN_MOTION_NAMES.map((n) => n.replace(/[-]/g, "\\-")).join("|"),
-    "g",
-  );
+  const orphanRe = new RegExp(ORPHAN_MOTION_NAMES.map((n) => n.replace(/[-]/g, '\\-')).join('|'), 'g');
   for (const file of files) {
-    const text = readFileSync(file, "utf8");
+    const text = readFileSync(file, 'utf8');
     const perFile = countMotionLiteralsInText(text);
     cubicBezier += perFile.cubicBezier;
     rawDuration += perFile.rawDuration;
@@ -278,8 +291,8 @@ function countMotionLiterals(files) {
   return { cubicBezier, rawDuration, orphanTokens };
 }
 
-const tokensCssDir = join(root, "src/tokens/css");
-const artifactsDir = join(tokensCssDir, "artifacts");
+const tokensCssDir = join(root, 'src/tokens/css');
+const artifactsDir = join(tokensCssDir, 'artifacts');
 
 /** Recursively collect every `.css` file under a directory. */
 function cssFilesUnder(dir) {
@@ -288,7 +301,7 @@ function cssFilesUnder(dir) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     if (statSync(full).isDirectory()) out.push(...cssFilesUnder(full));
-    else if (full.endsWith(".css")) out.push(full);
+    else if (full.endsWith('.css')) out.push(full);
   }
   return out;
 }
@@ -296,7 +309,9 @@ function cssFilesUnder(dir) {
 /** NTSC perceived luminance (0-255) of a 6-digit hex color. */
 function luminanceHex(hex) {
   const n = Number.parseInt(hex.slice(1), 16);
-  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  const r = (n >> 16) & 255,
+    g = (n >> 8) & 255,
+    b = n & 255;
   return r * 0.299 + g * 0.587 + b * 0.114;
 }
 
@@ -309,13 +324,10 @@ function luminanceHex(hex) {
  * Target: exactly 1.
  */
 function countShadowScales() {
-  const files = [
-    ...cssFilesUnder(join(tokensCssDir, "foundation")),
-    ...cssFilesUnder(join(tokensCssDir, "engines")),
-  ];
+  const files = [...cssFilesUnder(join(tokensCssDir, 'foundation')), ...cssFilesUnder(join(tokensCssDir, 'engines'))];
   let scales = 0;
   for (const f of files) {
-    const t = readFileSync(f, "utf8");
+    const t = readFileSync(f, 'utf8');
     if (/--ds-elevation-1:\s*(?!var\()[^;]*(?:rgba?\(|px|none)/.test(t)) scales += 1;
     if (/--ds-shadow-(?:sm|md|lg):\s*(?!var\()[^;]*(?:rgba?\(|px)/.test(t)) scales += 1;
   }
@@ -335,9 +347,9 @@ function countDarkPureBlackElevations() {
   if (!existsSync(artifactsDir)) return 0;
   let count = 0;
   for (const slug of readdirSync(artifactsDir)) {
-    const file = join(artifactsDir, slug, "index.css");
+    const file = join(artifactsDir, slug, 'index.css');
     if (!existsSync(file)) continue;
-    const css = readFileSync(file, "utf8");
+    const css = readFileSync(file, 'utf8');
     const bg = css.match(/--ds-color-bg-primary:\s*(#[0-9a-fA-F]{6})/);
     if (!bg || luminanceHex(bg[1]) >= 128) continue; // not a dark-surface tenant
     // Split off the light-mode counterpart block (a POSITIVE light selector, not the
@@ -345,10 +357,11 @@ function countDarkPureBlackElevations() {
     // is scanned.
     const lightIdx = css.search(/(?<!:not\()\[data-theme=['"]light['"]\]|(?<!:not\()\.light(?=[\s,{])/);
     const darkRegion = lightIdx >= 0 ? css.slice(0, lightIdx) : css;
-    const depthToken = /--ds-(?:elevation-[1-5]|shadow-(?:xs|sm|md|lg|xl|2xl)|card-shadow(?:-hover|-elevated)?):\s*([^;]+);/g;
+    const depthToken =
+      /--ds-(?:elevation-[1-5]|shadow-(?:xs|sm|md|lg|xl|2xl)|card-shadow(?:-hover|-elevated)?):\s*([^;]+);/g;
     for (const m of darkRegion.matchAll(depthToken)) {
       const val = m[1].trim();
-      if (val === "none") continue;
+      if (val === 'none') continue;
       const hasHighlight = /255/.test(val) || /color-mix|var\(--ds-color-primary/.test(val);
       const isBlackShadow = /rgba?\(\s*0\s*,\s*0\s*,\s*0/.test(val);
       if (isBlackShadow && !hasHighlight) count += 1;
@@ -369,24 +382,18 @@ function countDarkPureBlackElevations() {
  * file, to avoid flagging a lone component-specific alias. Target: exactly 1.
  */
 function countRadiusScaleDeclarations() {
-  const files = [
-    ...cssFilesUnder(join(tokensCssDir, "foundation")),
-    ...cssFilesUnder(join(tokensCssDir, "engines")),
-  ];
+  const files = [...cssFilesUnder(join(tokensCssDir, 'foundation')), ...cssFilesUnder(join(tokensCssDir, 'engines'))];
   let scales = 0;
   for (const f of files) {
-    const t = readFileSync(f, "utf8");
-    if (
-      /--ds-radius-sm:\s*(?!var\()[^;]*(?:px|rem)/.test(t) &&
-      /--ds-radius-md:\s*(?!var\()[^;]*(?:px|rem)/.test(t)
-    ) {
+    const t = readFileSync(f, 'utf8');
+    if (/--ds-radius-sm:\s*(?!var\()[^;]*(?:px|rem)/.test(t) && /--ds-radius-md:\s*(?!var\()[^;]*(?:px|rem)/.test(t)) {
       scales += 1;
     }
   }
   return scales;
 }
 
-const foundationDir = join(tokensCssDir, "foundation");
+const foundationDir = join(tokensCssDir, 'foundation');
 
 /**
  * Extract `--name: value;` declarations from the unscoped `:root { ... }`
@@ -399,22 +406,22 @@ function rootScopedDeclarations(text) {
   const declRe = /(--[a-zA-Z0-9-]+)\s*:\s*([^;]+);/g;
   let i = 0;
   while (i < text.length) {
-    if (text[i] === "{") {
+    if (text[i] === '{') {
       let depth = 1;
       let j = i + 1;
       while (j < text.length && depth > 0) {
-        if (text[j] === "{") depth += 1;
-        else if (text[j] === "}") depth -= 1;
+        if (text[j] === '{') depth += 1;
+        else if (text[j] === '}') depth -= 1;
         j += 1;
       }
       const content = text.slice(i + 1, j - 1);
-      const prevClose = text.lastIndexOf("}", i - 1);
+      const prevClose = text.lastIndexOf('}', i - 1);
       const selStart = prevClose === -1 ? 0 : prevClose + 1;
       const selector = text
         .slice(selStart, i)
-        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/\/\*[\s\S]*?\*\//g, '')
         .trim();
-      if (selector === ":root") {
+      if (selector === ':root') {
         for (const m of content.matchAll(declRe)) out.push([m[1], m[2].trim()]);
       }
       i = j;
@@ -433,11 +440,11 @@ function rootScopedDeclarations(text) {
  * different values than default.css's - default.css is the one real pages render). */
 function buildTokenDefinitions() {
   const defs = new Map();
-  const priorityFile = join(foundationDir, "themes/default.css");
+  const priorityFile = join(foundationDir, 'themes/default.css');
   const rest = cssFilesUnder(foundationDir).filter((f) => f !== priorityFile);
   for (const f of [priorityFile, ...rest]) {
     if (!existsSync(f)) continue;
-    const text = readFileSync(f, "utf8");
+    const text = readFileSync(f, 'utf8');
     for (const [name, raw] of rootScopedDeclarations(text)) {
       if (!defs.has(name)) defs.set(name, raw);
     }
@@ -470,10 +477,10 @@ function normalizeScalar(value) {
   const m = /^(-?\d*\.?\d+)(px|rem|em|ms|s)?$/.exec(value.trim());
   if (!m) return null;
   const num = Number(m[1]);
-  const unit = m[2] || "";
-  if (unit === "rem") return ["px", num * 16];
-  if (unit === "s") return ["ms", num * 1000];
-  if (unit === "") return ["num", num];
+  const unit = m[2] || '';
+  if (unit === 'rem') return ['px', num * 16];
+  if (unit === 's') return ['ms', num * 1000];
+  if (unit === '') return ['num', num];
   return [unit, num];
 }
 
@@ -492,25 +499,25 @@ function normalizeScalar(value) {
 function countFallbackParityViolations() {
   const defs = buildTokenDefinitions();
   const usageRe = /var\(\s*(--ds-[a-zA-Z0-9-]+)\s*,\s*([^,()]+)\)/g;
-  const srcDir = join(root, "src");
+  const srcDir = join(root, 'src');
   let violations = 0;
 
   function walk(dir) {
     for (const entry of readdirSync(dir)) {
       const full = join(dir, entry);
-      const rel = full.slice(srcDir.length + 1).replace(/\\/g, "/");
-      if (rel.startsWith("tokens/css/artifacts/") || rel.startsWith("tokens/css/legacy/")) continue;
+      const rel = full.slice(srcDir.length + 1).replace(/\\/g, '/');
+      if (rel.startsWith('tokens/css/artifacts/') || rel.startsWith('tokens/css/legacy/')) continue;
       if (statSync(full).isDirectory()) {
         walk(full);
         continue;
       }
       if (!/\.(tsx?|css)$/.test(full)) continue;
       if (/__tests__|\.(test|spec|stories)\./.test(rel)) continue;
-      const text = readFileSync(full, "utf8");
+      const text = readFileSync(full, 'utf8');
       for (const m of text.matchAll(usageRe)) {
         const token = m[1];
         const fallback = m[2].trim();
-        if (fallback.includes("$") || fallback.includes("`") || fallback.includes("{")) continue; // dynamic, not a literal
+        if (fallback.includes('$') || fallback.includes('`') || fallback.includes('{')) continue; // dynamic, not a literal
         const precedingContext = text.slice(Math.max(0, m.index - 40), m.index);
         if (/\.attr\(\s*['"][a-zA-Z-]+['"]\s*,\s*['"]?$/.test(precedingContext)) continue; // SVG attribute, not CSS
         const fallbackNorm = normalizeScalar(fallback);
@@ -538,19 +545,19 @@ function countFallbackParityViolations() {
  */
 function isDarkBlindFocusColor(value) {
   const v = value.trim().toLowerCase();
-  if (v === "transparent") return true;
+  if (v === 'transparent') return true;
   const hex = /^#([0-9a-f]{6})$/.exec(v);
-  if (hex) return luminanceHex("#" + hex[1]) < 96;
+  if (hex) return luminanceHex('#' + hex[1]) < 96;
   const hex3 = /^#([0-9a-f]{3})$/.exec(v);
   if (hex3) {
-    const [r, g, b] = hex3[1].split("").map((c) => parseInt(c + c, 16));
+    const [r, g, b] = hex3[1].split('').map((c) => parseInt(c + c, 16));
     return r * 0.299 + g * 0.587 + b * 0.114 < 96;
   }
   const rgb = /^rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)\s*(?:[,/]\s*([\d.]+%?))?\s*\)$/.exec(v);
   if (rgb) {
     const [r, g, b] = [rgb[1], rgb[2], rgb[3]].map(Number);
     let alpha = 1;
-    if (rgb[4] !== undefined) alpha = rgb[4].endsWith("%") ? Number(rgb[4].slice(0, -1)) / 100 : Number(rgb[4]);
+    if (rgb[4] !== undefined) alpha = rgb[4].endsWith('%') ? Number(rgb[4].slice(0, -1)) / 100 : Number(rgb[4]);
     if (alpha < 0.35) return true;
     if (r < 60 && g < 60 && b < 60) return true;
     return false;
@@ -573,9 +580,9 @@ function countDarkFocusRingDefects() {
   if (!existsSync(artifactsDir)) return 0;
   let count = 0;
   for (const slug of readdirSync(artifactsDir)) {
-    const file = join(artifactsDir, slug, "index.css");
+    const file = join(artifactsDir, slug, 'index.css');
     if (!existsSync(file)) continue;
-    const css = readFileSync(file, "utf8");
+    const css = readFileSync(file, 'utf8');
     const bg = css.match(/--ds-color-bg-primary:\s*(#[0-9a-fA-F]{6})/);
     if (!bg || luminanceHex(bg[1]) >= 128) continue; // not a dark-surface tenant
     const lightIdx = css.search(/(?<!:not\()\[data-theme=['"]light['"]\]|(?<!:not\()\.light(?=[\s,{])/);
@@ -590,10 +597,10 @@ function countDarkFocusRingDefects() {
       val = explicit[1].trim();
       const varRef = /^var\(\s*(--[a-zA-Z0-9-]+)\s*(?:,\s*([^)]+))?\)$/.exec(val);
       if (varRef) {
-        if (varRef[1] === "--ds-color-primary") val = resolvePrimary() ?? val;
+        if (varRef[1] === '--ds-color-primary') val = resolvePrimary() ?? val;
         else {
           const inner = darkRegion.match(new RegExp(`${varRef[1]}:\\s*([^;]+);`));
-          val = inner ? inner[1].trim() : (varRef[2] ? varRef[2].trim() : val);
+          val = inner ? inner[1].trim() : varRef[2] ? varRef[2].trim() : val;
         }
       }
     } else {
@@ -612,10 +619,10 @@ function countDarkFocusRingDefects() {
  * contract tokens (press scale, focus ring, elevation), not inline literals.
  */
 const FLAGSHIP_STATE_FILES = [
-  "primitives/inputs/Button/engines/modern.tsx",
-  "primitives/inputs/Input/engines/modern.tsx",
-  "primitives/inputs/Select/engines/modern.tsx",
-  "primitives/navigation/Tabs/engines/modern.tsx",
+  'primitives/inputs/Button/engines/modern.tsx',
+  'primitives/inputs/Input/engines/modern.tsx',
+  'primitives/inputs/Select/engines/modern.tsx',
+  'primitives/navigation/Tabs/engines/modern.tsx',
 ];
 
 /**
@@ -633,7 +640,7 @@ function countInlineStateLiterals() {
   for (const rel of FLAGSHIP_STATE_FILES) {
     const full = join(componentsDir, rel);
     if (!existsSync(full)) continue;
-    const text = readFileSync(full, "utf8");
+    const text = readFileSync(full, 'utf8');
     count += (text.match(scaleRe) || []).length;
     count += (text.match(shadowLiteralRe) || []).length;
   }
@@ -674,9 +681,7 @@ function arc09InlinePaintCounters() {
   const out = {};
   for (const rel of ARC09_INLINE_PAINT_FILES) {
     const full = join(componentsDir, rel);
-    out[`arc09.inlinePaint.${rel}`] = existsSync(full)
-      ? countArc09PaintInFile(readFileSync(full, "utf8"))
-      : 0;
+    out[`arc09.inlinePaint.${rel}`] = existsSync(full) ? countArc09PaintInFile(readFileSync(full, 'utf8'), full) : 0;
   }
   return out;
 }
@@ -695,18 +700,16 @@ function arc09InlinePaintCounters() {
 function fleetInlinePaintCounters() {
   const sourceFiles = collectFleetInlinePaintSourceFiles(componentsDir);
   const out = {
-    "fleet.inlinePaint.filesScanned": sourceFiles.length,
+    'fleet.inlinePaint.filesScanned': sourceFiles.length,
   };
   let total = 0;
   for (const file of sourceFiles) {
-    const rel = relative(componentsDir, file).replaceAll("\\", "/");
-    const count = countArc09PaintInFile(
-      readFileSync(file, "utf8")
-    );
+    const rel = relative(componentsDir, file).replaceAll('\\', '/');
+    const count = countArc09PaintInFile(readFileSync(file, 'utf8'), file);
     out[`fleet.inlinePaint.${rel}`] = count;
     total += count;
   }
-  out["fleet.inlinePaint.total"] = total;
+  out['fleet.inlinePaint.total'] = total;
   return out;
 }
 
@@ -735,14 +738,14 @@ function runtimeSvgPaintCounters() {
   const out = {
     // These two sentinels make collector deletion/collapse observable even when
     // every per-file key would otherwise disappear from the current map.
-    "runtimeSvgPaint.filesScanned": Object.keys(result.files).length,
-    "runtimeSvgPaint.total": result.total,
-    "runtimeSvgPaint.unclassified": result.unclassified,
-    "runtimeSvgPaint.ignoredStructural": result.ignoredStructural,
+    'runtimeSvgPaint.filesScanned': Object.keys(result.files).length,
+    'runtimeSvgPaint.total': result.total,
+    'runtimeSvgPaint.unclassified': result.unclassified,
+    'runtimeSvgPaint.ignoredStructural': result.ignoredStructural,
   };
 
   for (const [file, counts] of Object.entries(result.files)) {
-    const rel = relative(componentsDir, file).replaceAll("\\", "/");
+    const rel = relative(componentsDir, file).replaceAll('\\', '/');
     out[`runtimeSvgPaint.${rel}`] = counts.count;
   }
   return out;
@@ -761,16 +764,16 @@ function embeddedCssPaintCounters() {
   });
   const result = countEmbeddedCssPaintByFile(sourceFiles);
   const out = {
-    "embeddedCssPaint.filesScanned": Object.keys(result.files).length,
-    "embeddedCssPaint.total": result.total,
-    "embeddedCssPaint.classifiedPaint": result.classifiedPaint,
-    "embeddedCssPaint.unclassified": result.unclassified,
-    "embeddedCssPaint.parseFailures": result.parseFailures,
-    "embeddedCssPaint.dynamicProperties": result.dynamicProperties,
-    "embeddedCssPaint.unknownSinks": result.unknownSinks,
+    'embeddedCssPaint.filesScanned': Object.keys(result.files).length,
+    'embeddedCssPaint.total': result.total,
+    'embeddedCssPaint.classifiedPaint': result.classifiedPaint,
+    'embeddedCssPaint.unclassified': result.unclassified,
+    'embeddedCssPaint.parseFailures': result.parseFailures,
+    'embeddedCssPaint.dynamicProperties': result.dynamicProperties,
+    'embeddedCssPaint.unknownSinks': result.unknownSinks,
   };
   for (const [file, counts] of Object.entries(result.files)) {
-    const rel = relative(componentsDir, file).replaceAll("\\", "/");
+    const rel = relative(componentsDir, file).replaceAll('\\', '/');
     out[`embeddedCssPaint.${rel}`] = counts.count;
   }
   return out;
@@ -790,13 +793,13 @@ function embeddedCssPaintCounters() {
  * family to > 0 sanctioned consumers (enforced as a floor via MIN below).
  */
 function countEffectConsumers() {
-  const roots = [componentsDir, join(root, "src/motion")];
+  const roots = [componentsDir, join(root, 'src/motion')];
   const sourceFiles = [];
   function walk(dir) {
     if (!existsSync(dir)) return;
     for (const entry of readdirSync(dir)) {
       const full = join(dir, entry);
-      const rel = full.replace(/\\/g, "/");
+      const rel = full.replace(/\\/g, '/');
       if (statSync(full).isDirectory()) {
         walk(full);
         continue;
@@ -819,11 +822,11 @@ function countEffectConsumers() {
    render, or it is dead DaisyUI-mapping weight the drain must remove.
    ============================================================================ */
 
-const themeCssPath = join(tokensCssDir, "engines/modern/theme.css");
+const themeCssPath = join(tokensCssDir, 'engines/modern/theme.css');
 /** WO-GAT-02: the classic/rustic counterparts of `themeCssPath`, scanned by the same shared
  * `auditEngineTheme()` helper (see below) -- never a second scan implementation. */
-const classicThemeCssPath = join(tokensCssDir, "engines/classic/theme.css");
-const rusticThemeCssPath = join(tokensCssDir, "engines/rustic/theme.css");
+const classicThemeCssPath = join(tokensCssDir, 'engines/classic/theme.css');
+const rusticThemeCssPath = join(tokensCssDir, 'engines/rustic/theme.css');
 
 /** Split already-unwrapped string content on whitespace and add every
  * class-shaped token to `set`. */
@@ -850,7 +853,7 @@ function extractClassTokens(text, set) {
   }
   const templateRe = /`([^`]*)`/g;
   for (const m of text.matchAll(templateRe)) {
-    addTokensFromContent(m[1].replace(/\$\{[^}]*\}/g, " "), set);
+    addTokensFromContent(m[1].replace(/\$\{[^}]*\}/g, ' '), set);
   }
 }
 
@@ -860,8 +863,8 @@ function matchBrace(text, openIdx) {
   let depth = 1;
   let j = openIdx + 1;
   while (j < text.length && depth > 0) {
-    if (text[j] === "{") depth += 1;
-    else if (text[j] === "}") depth -= 1;
+    if (text[j] === '{') depth += 1;
+    else if (text[j] === '}') depth -= 1;
     j += 1;
   }
   return j;
@@ -878,18 +881,18 @@ function matchBrace(text, openIdx) {
  * it). Returns null if no such same-file declaration exists.
  */
 function findVarRHS(text, name) {
-  const re = new RegExp(`\\b(?:const|let|var)\\s+${name}\\b\\s*(?::[^=;]+)?=\\s*`, "g");
+  const re = new RegExp(`\\b(?:const|let|var)\\s+${name}\\b\\s*(?::[^=;]+)?=\\s*`, 'g');
   const m = re.exec(text);
   if (!m) return null;
   let k = re.lastIndex;
   let depth = 0;
   while (k < text.length) {
     const c = text[k];
-    if (c === "(" || c === "[" || c === "{") depth += 1;
-    else if (c === ")" || c === "]" || c === "}") {
+    if (c === '(' || c === '[' || c === '{') depth += 1;
+    else if (c === ')' || c === ']' || c === '}') {
       if (depth === 0) break;
       depth -= 1;
-    } else if (c === ";" && depth === 0) break;
+    } else if (c === ';' && depth === 0) break;
     k += 1;
   }
   return text.slice(re.lastIndex, k);
@@ -902,8 +905,8 @@ function collectBraceRanges(text) {
   const stack = [];
   const ranges = [];
   for (let i = 0; i < text.length; i++) {
-    if (text[i] === "{") stack.push(i);
-    else if (text[i] === "}") {
+    if (text[i] === '{') stack.push(i);
+    else if (text[i] === '}') {
       const start = stack.pop();
       if (start !== undefined) ranges.push({ start: start + 1, end: i });
     }
@@ -943,14 +946,12 @@ function collectBraceRanges(text) {
 /** JS literals/keywords that can appear as a bare identifier inside a
  * `className={...}` expression but are never a same-file variable
  * declaration worth resolving. */
-const JS_KEYWORDS = new Set([
-  "true", "false", "null", "undefined", "this", "typeof", "void",
-]);
+const JS_KEYWORDS = new Set(['true', 'false', 'null', 'undefined', 'this', 'typeof', 'void']);
 
 function buildConsumedClassSet(files) {
   const consumed = new Set();
   for (const file of files) {
-    const text = stripBlockComments(readFileSync(file, "utf8"));
+    const text = stripBlockComments(readFileSync(file, 'utf8'));
 
     const attrStringRe = /class(?:Name)?\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
     for (const m of text.matchAll(attrStringRe)) {
@@ -1022,20 +1023,39 @@ function buildConsumedClassSet(files) {
  * fairly via the fallback branch.
  */
 const GENERIC_MODIFIER_TOKENS = new Set([
-  "active", "disabled", "selected", "completed", "error", "success",
-  "warning", "info", "checked", "open", "closed", "expanded", "collapsed",
-  "hidden", "visible", "loading", "focused", "hovered", "pressed", "empty",
+  'active',
+  'disabled',
+  'selected',
+  'completed',
+  'error',
+  'success',
+  'warning',
+  'info',
+  'checked',
+  'open',
+  'closed',
+  'expanded',
+  'collapsed',
+  'hidden',
+  'visible',
+  'loading',
+  'focused',
+  'hovered',
+  'pressed',
+  'empty',
 ]);
 
 /** Binary-searchable char-offset -> 1-based line-number index. */
 function buildLineIndex(text) {
   const offsets = [0];
-  for (let k = 0; k < text.length; k++) if (text[k] === "\n") offsets.push(k + 1);
+  for (let k = 0; k < text.length; k++) if (text[k] === '\n') offsets.push(k + 1);
   return (charIdx) => {
-    let lo = 0, hi = offsets.length - 1;
+    let lo = 0,
+      hi = offsets.length - 1;
     while (lo < hi) {
       const mid = (lo + hi + 1) >> 1;
-      if (offsets[mid] <= charIdx) lo = mid; else hi = mid - 1;
+      if (offsets[mid] <= charIdx) lo = mid;
+      else hi = mid - 1;
     }
     return lo + 1;
   };
@@ -1049,7 +1069,7 @@ function parseCssRules(text, start, end) {
   let selStart = start;
   let i = start;
   while (i < end) {
-    if (text[i] === "{") {
+    if (text[i] === '{') {
       const rawSlice = text.slice(selStart, i);
       const selector = rawSlice.trim();
       // Report the offset of the selector text itself (skip the leading
@@ -1061,11 +1081,17 @@ function parseCssRules(text, start, end) {
       let depth = 1;
       let j = i + 1;
       while (j < end && depth > 0) {
-        if (text[j] === "{") depth += 1;
-        else if (text[j] === "}") depth -= 1;
+        if (text[j] === '{') depth += 1;
+        else if (text[j] === '}') depth -= 1;
         j += 1;
       }
-      rules.push({ selector, bodyStart: i + 1, bodyEnd: j - 1, selStart: trimmedStart, ruleEnd: j });
+      rules.push({
+        selector,
+        bodyStart: i + 1,
+        bodyEnd: j - 1,
+        selStart: trimmedStart,
+        ruleEnd: j,
+      });
       selStart = j;
       i = j;
     } else {
@@ -1118,9 +1144,15 @@ function selectorClassTokens(selector) {
 function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
   const allowlistPrefixes = opts.allowlistPrefixes ?? [];
   if (!existsSync(themeFile)) {
-    return { lineCount: 0, unreferencedSelectors: 0, unreferenced: [], consumedSize: 0, allowlisted: 0 };
+    return {
+      lineCount: 0,
+      unreferencedSelectors: 0,
+      unreferenced: [],
+      consumedSize: 0,
+      allowlisted: 0,
+    };
   }
-  const raw = readFileSync(themeFile, "utf8");
+  const raw = readFileSync(themeFile, 'utf8');
   const lineCount = (raw.match(/\n/g) || []).length;
   const stripped = stripBlockComments(raw);
   const lineOf = buildLineIndex(raw);
@@ -1134,18 +1166,15 @@ function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
   function walk(start, end) {
     for (const rule of parseCssRules(stripped, start, end)) {
       if (!rule.selector) continue;
-      if (rule.selector === "[data-tenant]") continue; // root engine-token block (modern)
+      if (rule.selector === '[data-tenant]') continue; // root engine-token block (modern)
       if (/^@keyframes\b/.test(rule.selector)) continue; // opaque, exempt
       if (/^@media\b/.test(rule.selector)) {
         walk(rule.bodyStart, rule.bodyEnd);
         continue;
       }
-      const tokens = rule.selector.split(",").flatMap((part) => selectorClassTokens(part));
+      const tokens = rule.selector.split(',').flatMap((part) => selectorClassTokens(part));
       if (tokens.length === 0) continue; // pure element/attribute hook (e.g. classic's `html[data-tenant]` root), not a class selector
-      if (
-        allowlistPrefixes.length > 0 &&
-        tokens.every((t) => allowlistPrefixes.some((p) => t.startsWith(p)))
-      ) {
+      if (allowlistPrefixes.length > 0 && tokens.every((t) => allowlistPrefixes.some((p) => t.startsWith(p)))) {
         allowlistedCount += 1; // e.g. classic's ant-/anticon/slick- families -- externally consumed, never dead
         continue;
       }
@@ -1167,9 +1196,16 @@ function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
       // question than the one it is named after.
       if (matched.length < checkSet.length) {
         unreferencedCount += 1;
-        unreferenced.push({ selector: rule.selector, line: lineOf(rule.selStart) });
+        unreferenced.push({
+          selector: rule.selector,
+          line: lineOf(rule.selStart),
+        });
       } else if (process.env.DEBUG_REFERENCED) {
-        referencedDebug.push({ selector: rule.selector, line: lineOf(rule.selStart), matched });
+        referencedDebug.push({
+          selector: rule.selector,
+          line: lineOf(rule.selStart),
+          matched,
+        });
       }
     }
   }
@@ -1180,7 +1216,7 @@ function auditEngineTheme(themeFile, consumerFiles, opts = {}) {
   if (process.env.DEBUG_REFERENCED) {
     console.log(`\n--- DEBUG referenced (${referencedDebug.length}) in ${themeFile} ---`);
     for (const r of referencedDebug) {
-      console.log(`  line ${r.line}: ${r.selector.replace(/\s+/g, " ")}  <-- [${r.matched.join(", ")}]`);
+      console.log(`  line ${r.line}: ${r.selector.replace(/\s+/g, ' ')}  <-- [${r.matched.join(', ')}]`);
     }
   }
 
@@ -1246,16 +1282,16 @@ function countMagicZIndex(files) {
   const literalRe = /\b(?:zIndex|z-index)\s*:\s*(['"]?)(-?\d+|auto)\1/g;
   let count = 0;
   for (const file of files) {
-    const lines = readFileSync(file, "utf8").split("\n");
+    const lines = readFileSync(file, 'utf8').split('\n');
     for (const line of lines) {
       literalRe.lastIndex = 0;
       let m;
       while ((m = literalRe.exec(line))) {
         const raw = m[2];
-        if (raw === "auto") continue;
+        if (raw === 'auto') continue;
         const num = Number(raw);
         if (num === 0 || num === -1) continue;
-        const commentIdx = line.indexOf("//");
+        const commentIdx = line.indexOf('//');
         if (commentIdx !== -1 && commentIdx > m.index) continue; // documented inline
         count += 1;
       }
@@ -1294,8 +1330,11 @@ function countMagicZIndex(files) {
  * flex-col tokens the same way, but is not implemented here.
  */
 const LAYOUT_AXIS_PATTERNS = [
-  { name: "flexDirection", re: /flexDirection:\s*['"]([a-zA-Z-]+)['"]/g },
-  { name: "gridTemplateColumns", re: /gridTemplateColumns:\s*([`'"])((?:(?!\1).)*)\1/g },
+  { name: 'flexDirection', re: /flexDirection:\s*['"]([a-zA-Z-]+)['"]/g },
+  {
+    name: 'gridTemplateColumns',
+    re: /gridTemplateColumns:\s*([`'"])((?:(?!\1).)*)\1/g,
+  },
 ];
 
 /**
@@ -1323,9 +1362,7 @@ const LAYOUT_AXIS_PATTERNS = [
  * of proportion to this narrow gate -- allowlisted instead of over-engineering
  * the regex.
  */
-const LAYOUT_AXIS_EXCEPTIONS = new Set([
-  "primitives/inputs/Toggle:flexDirection",
-]);
+const LAYOUT_AXIS_EXCEPTIONS = new Set(['primitives/inputs/Toggle:flexDirection']);
 
 /**
  * Collect every `engines/{classic,modern,rustic}` triad under `src/components`
@@ -1341,19 +1378,19 @@ function findEngineTriads(dir, base) {
     for (const entry of readdirSync(current)) {
       const full = join(current, entry);
       if (!statSync(full).isDirectory()) continue;
-      if (entry === "engines") {
+      if (entry === 'engines') {
         const rel = dirname(full.slice(base.length + 1));
         const engineFile = (name) => {
-          for (const ext of [".tsx", ".ts"]) {
+          for (const ext of ['.tsx', '.ts']) {
             const flat = join(full, `${name}${ext}`);
             if (existsSync(flat)) return flat;
           }
-          const folderIndex = join(full, name, "index.tsx");
+          const folderIndex = join(full, name, 'index.tsx');
           return existsSync(folderIndex) ? folderIndex : null;
         };
-        const classic = engineFile("classic");
-        const modern = engineFile("modern");
-        const rustic = engineFile("rustic");
+        const classic = engineFile('classic');
+        const modern = engineFile('modern');
+        const rustic = engineFile('rustic');
         if (classic && modern && rustic) out.set(rel, { classic, modern, rustic });
       } else {
         walk(full);
@@ -1370,7 +1407,7 @@ function extractLayoutAxisValues(text, re) {
   re.lastIndex = 0;
   let m;
   while ((m = re.exec(text))) {
-    values.add((m[2] !== undefined ? m[2] : m[1]).replace(/\s+/g, " ").trim());
+    values.add((m[2] !== undefined ? m[2] : m[1]).replace(/\s+/g, ' ').trim());
   }
   return [...values].sort();
 }
@@ -1406,9 +1443,9 @@ function countCrossEngineLayoutDivergences() {
   let count = 0;
   const detail = [];
   for (const [rel, triad] of triads) {
-    const classicText = readFileSync(triad.classic, "utf8");
-    const modernText = readFileSync(triad.modern, "utf8");
-    const rusticText = readFileSync(triad.rustic, "utf8");
+    const classicText = readFileSync(triad.classic, 'utf8');
+    const modernText = readFileSync(triad.modern, 'utf8');
+    const rusticText = readFileSync(triad.rustic, 'utf8');
     for (const { name, re } of LAYOUT_AXIS_PATTERNS) {
       if (LAYOUT_AXIS_EXCEPTIONS.has(`${rel}:${name}`)) continue;
       const c = extractLayoutAxisValues(classicText, re);
@@ -1452,7 +1489,7 @@ function collectCoverageFiles(dir) {
       continue;
     }
     if (!/\.tsx?$/.test(full)) continue;
-    const rel = full.replace(/\\/g, "/");
+    const rel = full.replace(/\\/g, '/');
     if (/__tests__|\.(test|spec|stories)\./.test(rel)) continue;
     out.push(full);
   }
@@ -1475,9 +1512,9 @@ function buildTokenCoverage() {
   let literalsOutstandingTotal = 0;
 
   for (const file of coverageFiles) {
-    const raw = readFileSync(file, "utf8");
+    const raw = readFileSync(file, 'utf8');
     const stripped = stripBlockComments(raw);
-    const rel = file.slice(root.length + 1).replace(/\\/g, "/");
+    const rel = file.slice(root.length + 1).replace(/\\/g, '/');
 
     const tokens = new Set();
     for (const m of raw.matchAll(DS_TOKEN_RE)) tokens.add(m[1]);
@@ -1521,57 +1558,47 @@ function renderCoverageMarkdown(coverage) {
     .slice(0, 25);
 
   const lines = [];
-  lines.push("# Token coverage report (WO-GAT-02)");
-  lines.push("");
+  lines.push('# Token coverage report (WO-GAT-02)');
+  lines.push('');
   lines.push(`Generated: ${coverage.generatedAt}`);
-  lines.push("");
-  lines.push(
-    "Informational only -- this report is NOT a blocking gate. The blocking gates remain the",
-  );
-  lines.push(
-    "modern-scoped counters in `node scripts/engine-token-audit.mjs --check` (motion/color/etc).",
-  );
-  lines.push(
-    "This report lists, per component source file across ALL engines, which `--ds-*` custom",
-  );
-  lines.push(
-    "properties it consumes and how many hardcoded literals (motion/hex/rgba, using the exact",
-  );
-  lines.push("same detection rules as the blocking counters) it still carries.");
-  lines.push("");
-  lines.push("## Summary");
-  lines.push("");
+  lines.push('');
+  lines.push('Informational only -- this report is NOT a blocking gate. The blocking gates remain the');
+  lines.push('modern-scoped counters in `node scripts/engine-token-audit.mjs --check` (motion/color/etc).');
+  lines.push('This report lists, per component source file across ALL engines, which `--ds-*` custom');
+  lines.push('properties it consumes and how many hardcoded literals (motion/hex/rgba, using the exact');
+  lines.push('same detection rules as the blocking counters) it still carries.');
+  lines.push('');
+  lines.push('## Summary');
+  lines.push('');
   lines.push(`- Files scanned: ${coverage.filesScanned}`);
   lines.push(`- Unique \`--ds-*\` tokens consumed: ${coverage.tokensConsumedUnique}`);
   lines.push(`- Hardcoded literals outstanding: ${coverage.literalsOutstandingTotal}`);
-  lines.push("");
+  lines.push('');
   lines.push(`## Top ${topLiterals.length} files by outstanding literals`);
-  lines.push("");
-  lines.push("| File | cubic-bezier | raw duration | hex | rgba | total |");
-  lines.push("| --- | --- | --- | --- | --- | --- |");
+  lines.push('');
+  lines.push('| File | cubic-bezier | raw duration | hex | rgba | total |');
+  lines.push('| --- | --- | --- | --- | --- | --- |');
   for (const f of topLiterals) {
     lines.push(
-      `| ${f.file} | ${f.literals.cubicBezier} | ${f.literals.rawDuration} | ${f.literals.hex} | ${f.literals.rgba} | ${f.literals.total} |`,
+      `| ${f.file} | ${f.literals.cubicBezier} | ${f.literals.rawDuration} | ${f.literals.hex} | ${f.literals.rgba} | ${f.literals.total} |`
     );
   }
-  lines.push("");
-  lines.push(
-    "Full per-file detail (including files with zero outstanding literals and their full",
-  );
-  lines.push("consumed-token list) is in the sibling `token-coverage.json`.");
-  lines.push("");
-  return lines.join("\n");
+  lines.push('');
+  lines.push('Full per-file detail (including files with zero outstanding literals and their full');
+  lines.push('consumed-token list) is in the sibling `token-coverage.json`.');
+  lines.push('');
+  return lines.join('\n');
 }
 
-const repoRoot = resolve(root, "..", "..");
-const gatesDir = join(repoRoot, "test-artifacts", "gates");
+const repoRoot = resolve(root, '..', '..');
+const gatesDir = join(repoRoot, 'test-artifacts', 'gates');
 
 /** Write the `--coverage` mode artifacts (JSON + Markdown) to `test-artifacts/gates/`. */
 function writeCoverageArtifacts(coverage) {
   if (!existsSync(gatesDir)) mkdirSync(gatesDir, { recursive: true });
-  const jsonPath = join(gatesDir, "token-coverage.json");
-  writeFileSync(jsonPath, JSON.stringify(coverage, null, 2) + "\n");
-  const mdPath = join(gatesDir, "token-coverage.md");
+  const jsonPath = join(gatesDir, 'token-coverage.json');
+  writeFileSync(jsonPath, JSON.stringify(coverage, null, 2) + '\n');
+  const mdPath = join(gatesDir, 'token-coverage.md');
   writeFileSync(mdPath, renderCoverageMarkdown(coverage));
   return { jsonPath, mdPath };
 }
@@ -1635,23 +1662,88 @@ const APCA_UI_MIN = 45; // large-text / UI / low-emphasis pairs
  */
 const APCA_PAIRINGS = [
   // Body-reading text (|Lc| >= 60)
-  { id: "body-text-on-page-bg", kind: "body", text: "--ds-color-text-primary", bg: "--ds-color-bg-primary" },
-  { id: "text-on-card-surface", kind: "body", text: "--ds-color-text-primary", bg: "--ds-color-bg-elevated" },
+  {
+    id: 'body-text-on-page-bg',
+    kind: 'body',
+    text: '--ds-color-text-primary',
+    bg: '--ds-color-bg-primary',
+  },
+  {
+    id: 'text-on-card-surface',
+    kind: 'body',
+    text: '--ds-color-text-primary',
+    bg: '--ds-color-bg-elevated',
+  },
   // Low-emphasis text (|Lc| >= 45): muted/secondary copy — timestamps, hints, help text
-  { id: "muted-text-on-page-bg", kind: "ui", text: "--ds-color-text-muted", bg: "--ds-color-bg-primary" },
+  {
+    id: 'muted-text-on-page-bg',
+    kind: 'ui',
+    text: '--ds-color-text-muted',
+    bg: '--ds-color-bg-primary',
+  },
   // Primary button label on its own fill (|Lc| >= 45)
-  { id: "primary-button-label", kind: "ui", text: "--ds-button-primary-color", bg: "--ds-button-primary-bg" },
+  {
+    id: 'primary-button-label',
+    kind: 'ui',
+    text: '--ds-button-primary-color',
+    bg: '--ds-button-primary-bg',
+  },
   // Badge tone label on its own tone fill (|Lc| >= 45) — the 5 gallery tones
-  { id: "badge-primary", kind: "ui", text: "--ds-badge-primary-color", bg: "--ds-badge-primary-bg" },
-  { id: "badge-secondary", kind: "ui", text: "--ds-badge-secondary-color", bg: "--ds-badge-secondary-bg" },
-  { id: "badge-success", kind: "ui", text: "--ds-badge-success-color", bg: "--ds-badge-success-bg" },
-  { id: "badge-warning", kind: "ui", text: "--ds-badge-warning-color", bg: "--ds-badge-warning-bg" },
-  { id: "badge-error", kind: "ui", text: "--ds-badge-error-color", bg: "--ds-badge-error-bg" },
+  {
+    id: 'badge-primary',
+    kind: 'ui',
+    text: '--ds-badge-primary-color',
+    bg: '--ds-badge-primary-bg',
+  },
+  {
+    id: 'badge-secondary',
+    kind: 'ui',
+    text: '--ds-badge-secondary-color',
+    bg: '--ds-badge-secondary-bg',
+  },
+  {
+    id: 'badge-success',
+    kind: 'ui',
+    text: '--ds-badge-success-color',
+    bg: '--ds-badge-success-bg',
+  },
+  {
+    id: 'badge-warning',
+    kind: 'ui',
+    text: '--ds-badge-warning-color',
+    bg: '--ds-badge-warning-bg',
+  },
+  {
+    id: 'badge-error',
+    kind: 'ui',
+    text: '--ds-badge-error-color',
+    bg: '--ds-badge-error-bg',
+  },
   // Semantic status color used AS text on the page ground (|Lc| >= 45)
-  { id: "semantic-success-text", kind: "ui", text: "--ds-color-success", bg: "--ds-color-bg-primary" },
-  { id: "semantic-info-text", kind: "ui", text: "--ds-color-info", bg: "--ds-color-bg-primary" },
-  { id: "semantic-warning-text", kind: "ui", text: "--ds-color-warning", bg: "--ds-color-bg-primary" },
-  { id: "semantic-error-text", kind: "ui", text: "--ds-color-error", bg: "--ds-color-bg-primary" },
+  {
+    id: 'semantic-success-text',
+    kind: 'ui',
+    text: '--ds-color-success',
+    bg: '--ds-color-bg-primary',
+  },
+  {
+    id: 'semantic-info-text',
+    kind: 'ui',
+    text: '--ds-color-info',
+    bg: '--ds-color-bg-primary',
+  },
+  {
+    id: 'semantic-warning-text',
+    kind: 'ui',
+    text: '--ds-color-warning',
+    bg: '--ds-color-bg-primary',
+  },
+  {
+    id: 'semantic-error-text',
+    kind: 'ui',
+    text: '--ds-color-error',
+    bg: '--ds-color-bg-primary',
+  },
 ];
 
 /**
@@ -1661,10 +1753,33 @@ const APCA_PAIRINGS = [
  * paints, not the opposite-scheme override.
  */
 const APCA_PALETTES = [
-  { id: "default", kind: "foundation", file: join(foundationDir, "themes/default.css"), theme: "dark" },
-  { id: "rottay", kind: "artifact", tenant: "rottay", file: join(artifactsDir, "rottay/index.css"), theme: "dark" },
-  { id: "bithire", kind: "artifact", tenant: "bithire", file: join(artifactsDir, "bithire/index.css"), theme: "light" },
-  { id: "evnto", kind: "artifact", tenant: "evnto", file: join(artifactsDir, "evnto/index.css"), theme: "light" },
+  {
+    id: 'default',
+    kind: 'foundation',
+    file: join(foundationDir, 'themes/default.css'),
+    theme: 'dark',
+  },
+  {
+    id: 'rottay',
+    kind: 'artifact',
+    tenant: 'rottay',
+    file: join(artifactsDir, 'rottay/index.css'),
+    theme: 'dark',
+  },
+  {
+    id: 'bithire',
+    kind: 'artifact',
+    tenant: 'bithire',
+    file: join(artifactsDir, 'bithire/index.css'),
+    theme: 'light',
+  },
+  {
+    id: 'evnto',
+    kind: 'artifact',
+    tenant: 'evnto',
+    file: join(artifactsDir, 'evnto/index.css'),
+    theme: 'light',
+  },
 ];
 
 /** Extract only the DIRECT (brace-depth-0) `--name: value;` declarations from a
@@ -1674,16 +1789,24 @@ const APCA_PALETTES = [
 function apcaTopLevelDecls(body) {
   const out = [];
   let depth = 0;
-  let seg = "";
+  let seg = '';
   for (let i = 0; i < body.length; i++) {
     const c = body[i];
-    if (c === "{") { depth += 1; seg = ""; continue; }
-    if (c === "}") { if (depth > 0) depth -= 1; seg = ""; continue; }
+    if (c === '{') {
+      depth += 1;
+      seg = '';
+      continue;
+    }
+    if (c === '}') {
+      if (depth > 0) depth -= 1;
+      seg = '';
+      continue;
+    }
     if (depth !== 0) continue;
-    if (c === ";") {
+    if (c === ';') {
       const m = /(--[a-zA-Z0-9-]+)\s*:\s*([\s\S]+)/.exec(seg);
       if (m) out.push([m[1], m[2].trim()]);
-      seg = "";
+      seg = '';
     } else {
       seg += c;
     }
@@ -1698,12 +1821,12 @@ function apcaTopLevelDecls(body) {
  * light-default tenant, or `.light`/`[data-theme='light']` for a dark-default
  * one). The opposite-scheme override block is thereby excluded. */
 function apcaBlockMatchesDefault(selector, tenant, defaultTheme) {
-  const compact = selector.replace(/\s+/g, "");
+  const compact = selector.replace(/\s+/g, '');
   const rootRe = new RegExp(
-    `^html\\[data-tenant=['"]${tenant}['"]\\](?::not\\([^)]*\\)|\\.[A-Za-z0-9_-]+|\\[data-theme=['"][^'"]*['"]\\])*$`,
+    `^html\\[data-tenant=['"]${tenant}['"]\\](?::not\\([^)]*\\)|\\.[A-Za-z0-9_-]+|\\[data-theme=['"][^'"]*['"]\\])*$`
   );
   if (!rootRe.test(compact)) return false;
-  const opp = defaultTheme === "light" ? "dark" : "light";
+  const opp = defaultTheme === 'light' ? 'dark' : 'light';
   const oppClass = new RegExp(`(?<!:not\\()\\.${opp}(?![A-Za-z0-9_-])`);
   const oppAttr = new RegExp(`(?<!:not\\()\\[data-theme=['"]${opp}['"]\\]`);
   if (oppClass.test(compact) || oppAttr.test(compact)) return false;
@@ -1729,17 +1852,17 @@ function apcaCollectDecls(cssText, matchSelector) {
  * color (color-mix / gradient / non-opaque alpha / var-bearing / unmapped
  * keyword) — the "skip-with-count" cases. */
 function apcaParseColor(raw) {
-  const str = raw.trim().replace(/\s*!important\s*$/i, "");
-  const kw = { white: "#ffffff", black: "#000000" };
+  const str = raw.trim().replace(/\s*!important\s*$/i, '');
+  const kw = { white: '#ffffff', black: '#000000' };
   if (Object.prototype.hasOwnProperty.call(kw, str.toLowerCase())) return kw[str.toLowerCase()];
   if (/^#[0-9a-fA-F]{6}$/.test(str)) return str;
   if (/^#[0-9a-fA-F]{3}$/.test(str)) return str;
-  if (/^#[0-9a-fA-F]{8}$/.test(str)) return str.slice(7).toLowerCase() === "ff" ? "#" + str.slice(1, 7) : null;
-  if (/^#[0-9a-fA-F]{4}$/.test(str)) return str[4].toLowerCase() === "f" ? "#" + str.slice(1, 4) : null;
+  if (/^#[0-9a-fA-F]{8}$/.test(str)) return str.slice(7).toLowerCase() === 'ff' ? '#' + str.slice(1, 7) : null;
+  if (/^#[0-9a-fA-F]{4}$/.test(str)) return str[4].toLowerCase() === 'f' ? '#' + str.slice(1, 4) : null;
   const m = /^rgba?\(\s*([0-9.]+)\s*[,\s]\s*([0-9.]+)\s*[,\s]\s*([0-9.]+)\s*(?:[,/]\s*([0-9.]+%?)\s*)?\)$/.exec(str);
   if (m) {
     let a = 1;
-    if (m[4] !== undefined) a = m[4].endsWith("%") ? parseFloat(m[4]) / 100 : parseFloat(m[4]);
+    if (m[4] !== undefined) a = m[4].endsWith('%') ? parseFloat(m[4]) / 100 : parseFloat(m[4]);
     if (!(a >= 1)) return null; // non-opaque needs compositing — skip
     return `rgb(${Math.round(+m[1])}, ${Math.round(+m[2])}, ${Math.round(+m[3])})`;
   }
@@ -1758,7 +1881,7 @@ function apcaResolveColor(name, defs, seen = new Set()) {
 }
 
 function apcaResolveValue(raw, defs, seen) {
-  const value = raw.trim().replace(/\s*!important\s*$/i, "");
+  const value = raw.trim().replace(/\s*!important\s*$/i, '');
   const varM = /^var\(\s*(--[a-zA-Z0-9-]+)\s*(?:,\s*([\s\S]+))?\)$/.exec(value);
   if (varM) {
     const inner = apcaResolveColor(varM[1], defs, new Set(seen));
@@ -1774,40 +1897,54 @@ function apcaResolveValue(raw, defs, seen) {
  * (unresolvable pairs), and a per-evaluation detail list for the report/evidence.
  */
 function evaluateApcaPairings() {
-  const foundationText = existsSync(APCA_PALETTES[0].file) ? readFileSync(APCA_PALETTES[0].file, "utf8") : "";
-  const foundationDefs = apcaCollectDecls(foundationText, (sel) => sel.trim() === ":root");
+  const foundationText = existsSync(APCA_PALETTES[0].file) ? readFileSync(APCA_PALETTES[0].file, 'utf8') : '';
+  const foundationDefs = apcaCollectDecls(foundationText, (sel) => sel.trim() === ':root');
   const results = [];
   let failures = 0;
   let skipped = 0;
   for (const pal of APCA_PALETTES) {
     let defs;
-    if (pal.kind === "foundation") {
+    if (pal.kind === 'foundation') {
       defs = foundationDefs;
     } else {
-      const text = existsSync(pal.file) ? readFileSync(pal.file, "utf8") : "";
+      const text = existsSync(pal.file) ? readFileSync(pal.file, 'utf8') : '';
       const artDefs = apcaCollectDecls(text, (sel) => apcaBlockMatchesDefault(sel, pal.tenant, pal.theme));
       defs = new Map([...foundationDefs, ...artDefs]); // artifact overrides foundation
     }
     for (const pair of APCA_PAIRINGS) {
       const textColor = apcaResolveColor(pair.text, defs);
       const bgColor = apcaResolveColor(pair.bg, defs);
-      const threshold = pair.kind === "body" ? APCA_BODY_MIN : APCA_UI_MIN;
+      const threshold = pair.kind === 'body' ? APCA_BODY_MIN : APCA_UI_MIN;
       if (!textColor || !bgColor) {
         skipped += 1;
         results.push({
-          palette: pal.id, pair: pair.id, kind: pair.kind, threshold, status: "skip",
-          textToken: pair.text, bgToken: pair.bg, textColor, bgColor,
+          palette: pal.id,
+          pair: pair.id,
+          kind: pair.kind,
+          threshold,
+          status: 'skip',
+          textToken: pair.text,
+          bgToken: pair.bg,
+          textColor,
+          bgColor,
         });
         continue;
       }
       const lcRaw = calcAPCA(textColor, bgColor);
-      const absLc = Math.abs(typeof lcRaw === "number" ? lcRaw : Number(lcRaw) || 0);
+      const absLc = Math.abs(typeof lcRaw === 'number' ? lcRaw : Number(lcRaw) || 0);
       const pass = absLc >= threshold;
       if (!pass) failures += 1;
       results.push({
-        palette: pal.id, pair: pair.id, kind: pair.kind, threshold,
-        textToken: pair.text, bgToken: pair.bg, textColor, bgColor,
-        lc: Number(absLc.toFixed(1)), status: pass ? "pass" : "FAIL",
+        palette: pal.id,
+        pair: pair.id,
+        kind: pair.kind,
+        threshold,
+        textToken: pair.text,
+        bgToken: pair.bg,
+        textColor,
+        bgColor,
+        lc: Number(absLc.toFixed(1)),
+        status: pass ? 'pass' : 'FAIL',
       });
     }
   }
@@ -1818,25 +1955,27 @@ function evaluateApcaPairings() {
  * printed in report mode). */
 function renderApcaMarkdown(apca) {
   const lines = [];
-  lines.push("# APCA contrast pairings (WO-GAT-04)");
-  lines.push("");
+  lines.push('# APCA contrast pairings (WO-GAT-04)');
+  lines.push('');
   lines.push(`Generated: ${new Date().toISOString()}`);
-  lines.push("");
+  lines.push('');
   lines.push(
     `Thresholds: body-text |Lc| >= ${APCA_BODY_MIN}; large-text/UI |Lc| >= ${APCA_UI_MIN}. ` +
       `Failures (below threshold): ${apca.failures}. Skipped (unresolvable, counted): ${apca.skipped}. ` +
-      `Evaluated: ${apca.evaluated}.`,
+      `Evaluated: ${apca.evaluated}.`
   );
-  lines.push("");
-  lines.push("| Palette | Pairing | Kind | Text | Bg | Lc | Floor | Status |");
-  lines.push("| --- | --- | --- | --- | --- | --- | --- | --- |");
+  lines.push('');
+  lines.push('| Palette | Pairing | Kind | Text | Bg | Lc | Floor | Status |');
+  lines.push('| --- | --- | --- | --- | --- | --- | --- | --- |');
   for (const r of apca.results) {
     lines.push(
-      `| ${r.palette} | ${r.pair} | ${r.kind} | ${r.textColor ?? r.textToken} | ${r.bgColor ?? r.bgToken} | ${r.lc ?? "—"} | ${r.threshold} | ${r.status} |`,
+      `| ${r.palette} | ${r.pair} | ${r.kind} | ${r.textColor ?? r.textToken} | ${r.bgColor ?? r.bgToken} | ${
+        r.lc ?? '—'
+      } | ${r.threshold} | ${r.status} |`
     );
   }
-  lines.push("");
-  return lines.join("\n");
+  lines.push('');
+  return lines.join('\n');
 }
 
 const files = modernFiles(componentsDir);
@@ -1845,14 +1984,14 @@ const effects = countEffectConsumers();
 const colorFiles = modernColorFiles(componentsDir);
 const color = countColorLiterals(colorFiles);
 const themeCssAudit = auditThemeCss(files);
-const classicFiles = collectEngineFiles(componentsDir, "classic");
-const rusticFiles = collectEngineFiles(componentsDir, "rustic");
+const classicFiles = collectEngineFiles(componentsDir, 'classic');
+const rusticFiles = collectEngineFiles(componentsDir, 'rustic');
 const classicThemeAudit = auditEngineTheme(classicThemeCssPath, classicFiles, {
   // "ant-" (Ant Design 5.x component classes), "anticon" (Ant Design's icon-font class -- no
   // hyphen after "ant"), "slick-" (react-slick, vendored internally by antd's Carousel). All
   // three are externally-consumed runtime classes, never written literally in DS source -- see
   // auditEngineTheme's doc comment for how this list was derived from the measured baseline.
-  allowlistPrefixes: ["ant-", "anticon", "slick-"],
+  allowlistPrefixes: ['ant-', 'anticon', 'slick-'],
 });
 const rusticThemeAudit = auditEngineTheme(rusticThemeCssPath, rusticFiles);
 const crossEngineLayoutDivergences = countCrossEngineLayoutDivergences();
@@ -1884,7 +2023,7 @@ function collectTypesFiles(dir) {
     const full = join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) out.push(...collectTypesFiles(full));
-    else if (full.endsWith(".types.ts")) out.push(full);
+    else if (full.endsWith('.types.ts')) out.push(full);
   }
   return out;
 }
@@ -1903,7 +2042,7 @@ function precededByDeprecatedTag(lines, declIndex) {
     const line = lines[j];
     if (/@deprecated/.test(line)) sawDeprecated = true;
     if (/^\s*\/\*\*/.test(line)) break; // reached the JSDoc block's opening line
-    if (line.trim() !== "" && !line.trim().startsWith("*")) break; // no JSDoc directly above
+    if (line.trim() !== '' && !line.trim().startsWith('*')) break; // no JSDoc directly above
     j -= 1;
   }
   return sawDeprecated;
@@ -1919,7 +2058,7 @@ function precededByDeprecatedTag(lines, declIndex) {
 function countRawAntdSizeUnions(files) {
   let count = 0;
   for (const file of files) {
-    const lines = readFileSync(file, "utf8").split("\n");
+    const lines = readFileSync(file, 'utf8').split('\n');
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i];
       if (!/^\s*export type \w+\s*=/.test(line)) continue;
@@ -1941,7 +2080,7 @@ function countDuplicateSizeVocabDeclarations(files) {
   const declRe = /^export type (\w*Size)\s*=/;
   const sitesByName = new Map();
   for (const file of files) {
-    for (const line of readFileSync(file, "utf8").split("\n")) {
+    for (const line of readFileSync(file, 'utf8').split('\n')) {
       const m = declRe.exec(line.trim());
       if (!m) continue;
       const name = m[1];
@@ -1990,11 +2129,11 @@ const RESPONSIVE_WIDTH_THRESHOLD_PX = 278;
  */
 const FIXED_WIDTH_EXEMPTIONS = new Set([
   // Popover content: portaled, viewport-anchored, 300 < 360.
-  "src/components/patterns/data/list-toolbar/engines/modern.tsx:300",
+  'src/components/patterns/data/list-toolbar/engines/modern.tsx:300',
   // Hover overlay: portaled, viewport-anchored, 288 < 360.
-  "src/components/primitives/overlay/HoverCard/engines/modern.tsx:288",
+  'src/components/primitives/overlay/HoverCard/engines/modern.tsx:288',
   // Calendar panel: portaled, viewport-anchored, 288 < 360.
-  "src/components/primitives/inputs/DatePicker/engines/modern.tsx:288",
+  'src/components/primitives/inputs/DatePicker/engines/modern.tsx:288',
 ]);
 
 /**
@@ -2016,14 +2155,14 @@ function countFixedWidthLiterals(skinFiles, modernThemeCss) {
   const inlineQuoted = /\b(?:minWidth|width)\s*:\s*(['"])(\d+)px\1/g;
   const inlineNumeric = /\b(?:minWidth|width)\s*:\s*(\d+)\s*[,}]/g;
   for (const file of skinFiles) {
-    const source = readFileSync(file, "utf8");
+    const source = readFileSync(file, 'utf8');
     for (const match of source.matchAll(inlineQuoted)) tally(file, Number(match[2]));
     for (const match of source.matchAll(inlineNumeric)) tally(file, Number(match[1]));
   }
 
   // Stylesheet declarations: `width: 180px` / `min-width: 180px`.
   if (existsSync(modernThemeCss)) {
-    const css = readFileSync(modernThemeCss, "utf8");
+    const css = readFileSync(modernThemeCss, 'utf8');
     for (const match of css.matchAll(/(?:^|[\s;{])(?:min-)?width\s*:\s*(\d+)px/gm)) {
       tally(modernThemeCss, Number(match[1]));
     }
@@ -2041,13 +2180,13 @@ function countFixedWidthLiterals(skinFiles, modernThemeCss) {
  * the spec bootstraps it on first run.
  */
 function countResponsiveOverflowCells() {
-  const baselineFile = join(here, "../../showroom/e2e/responsive/overflow-baseline.json");
+  const baselineFile = join(here, '../../showroom/e2e/responsive/overflow-baseline.json');
   if (!existsSync(baselineFile)) {
     // Never return 0 for a missing file: a vacuous zero would report a green
     // ratchet for a gate that is not wired at all.
     throw new Error(`responsive overflow baseline missing at ${baselineFile}`);
   }
-  const parsed = JSON.parse(readFileSync(baselineFile, "utf8"));
+  const parsed = JSON.parse(readFileSync(baselineFile, 'utf8'));
   return Array.isArray(parsed.overflowing) ? parsed.overflowing.length : 0;
 }
 
@@ -2078,23 +2217,45 @@ function countResponsiveOverflowCells() {
    ============================================================================ */
 
 const LAYOUT_PROPERTY_TOKENS_KEBAB = [
-  "top", "left", "width", "height",
-  "margin", "margin-top", "margin-right", "margin-bottom", "margin-left",
-  "padding", "padding-top", "padding-right", "padding-bottom", "padding-left",
+  'top',
+  'left',
+  'width',
+  'height',
+  'margin',
+  'margin-top',
+  'margin-right',
+  'margin-bottom',
+  'margin-left',
+  'padding',
+  'padding-top',
+  'padding-right',
+  'padding-bottom',
+  'padding-left',
 ];
 
 /** Same token set, camelCase (JS inline-style property names). */
 const LAYOUT_PROPERTY_TOKENS_CAMEL = [
-  "top", "left", "width", "height",
-  "margin", "marginTop", "marginRight", "marginBottom", "marginLeft",
-  "padding", "paddingTop", "paddingRight", "paddingBottom", "paddingLeft",
+  'top',
+  'left',
+  'width',
+  'height',
+  'margin',
+  'marginTop',
+  'marginRight',
+  'marginBottom',
+  'marginLeft',
+  'padding',
+  'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
 ];
 
 /** Count `@keyframes NAME { ... }` block bodies in `text` that declare one of LAYOUT_PROPERTY_TOKENS_KEBAB. */
 function countLayoutPropertyKeyframes(text) {
   let count = 0;
   const kfRe = /@keyframes\s+[\w-]+\s*\{/g;
-  const propRe = new RegExp(`(?:^|[\\s;{])(?:${LAYOUT_PROPERTY_TOKENS_KEBAB.join("|")})\\s*:`, "i");
+  const propRe = new RegExp(`(?:^|[\\s;{])(?:${LAYOUT_PROPERTY_TOKENS_KEBAB.join('|')})\\s*:`, 'i');
   let m;
   while ((m = kfRe.exec(text))) {
     const bodyStart = kfRe.lastIndex; // just past the opening `{`
@@ -2118,9 +2279,9 @@ function countLayoutPropertyTransitions(text) {
   const transRe = /transition(?:Property)?\s*:\s*(['"`])((?:(?!\1)[\s\S])*)\1/g;
   let m;
   while ((m = transRe.exec(text))) {
-    const segments = m[2].split(",");
+    const segments = m[2].split(',');
     for (const seg of segments) {
-      const firstToken = seg.trim().split(/\s+/)[0] || "";
+      const firstToken = seg.trim().split(/\s+/)[0] || '';
       if (LAYOUT_PROPERTY_TOKENS_CAMEL.includes(firstToken)) {
         count += 1;
         break; // one count per transition declaration, not per segment
@@ -2134,7 +2295,7 @@ function countLayoutPropertyTransitions(text) {
 function countCompositorOnlyViolations(fileList) {
   let count = 0;
   for (const file of fileList) {
-    const text = readFileSync(file, "utf8");
+    const text = readFileSync(file, 'utf8');
     count += countLayoutPropertyKeyframes(text) + countLayoutPropertyTransitions(text);
   }
   return count;
@@ -2158,15 +2319,16 @@ function countCompositorOnlyViolations(fileList) {
  * blocks were drained in this WO and must stay at 0.
  */
 function countHandAuthoredRampHex() {
-  const artifactsDir = join(tokensCssDir, "artifacts");
-  const slugs = ["bithire", "evnto", "rottay"];
-  const rampDecl = /--ds-color-(?:primary|secondary|accent|success|warning|error|info)-(?:50|100|200|300|400|500|600|700|800|900):\s*#[0-9a-fA-F]{3,8}\s*;/g;
+  const artifactsDir = join(tokensCssDir, 'artifacts');
+  const slugs = ['bithire', 'evnto', 'rottay'];
+  const rampDecl =
+    /--ds-color-(?:primary|secondary|accent|success|warning|error|info)-(?:50|100|200|300|400|500|600|700|800|900):\s*#[0-9a-fA-F]{3,8}\s*;/g;
 
   let count = 0;
   for (const slug of slugs) {
-    const extensionPath = join(artifactsDir, slug, "_source/extension.css");
+    const extensionPath = join(artifactsDir, slug, '_source/extension.css');
     if (!existsSync(extensionPath)) continue;
-    const text = readFileSync(extensionPath, "utf8");
+    const text = readFileSync(extensionPath, 'utf8');
     const matches = text.match(rampDecl);
     count += matches ? matches.length : 0;
   }
@@ -2174,73 +2336,73 @@ function countHandAuthoredRampHex() {
 }
 
 const counters = {
-  "motion.cubicBezierLiterals": motion.cubicBezier,
-  "motion.rawDurationLiterals": motion.rawDuration,
-  "motion.orphanMotionTokens": motion.orphanTokens,
+  'motion.cubicBezierLiterals': motion.cubicBezier,
+  'motion.rawDurationLiterals': motion.rawDuration,
+  'motion.orphanMotionTokens': motion.orphanTokens,
   // WO-CRA-06 (choreography layer): compositor-only law. See this counter's
   // module doc (search "Compositor-only motion gate") for exact scope.
-  "motion.compositorOnlyViolations": countCompositorOnlyViolations(files),
-  "depth.shadowScales": countShadowScales(),
-  "depth.darkPureBlackElevations": countDarkPureBlackElevations(),
-  "scale.radiusScaleDeclarations": countRadiusScaleDeclarations(),
-  "scale.fallbackParityViolations": countFallbackParityViolations(),
-  "state.darkFocusRingDefects": countDarkFocusRingDefects(),
-  "state.inlineStateLiterals": countInlineStateLiterals(),
+  'motion.compositorOnlyViolations': countCompositorOnlyViolations(files),
+  'depth.shadowScales': countShadowScales(),
+  'depth.darkPureBlackElevations': countDarkPureBlackElevations(),
+  'scale.radiusScaleDeclarations': countRadiusScaleDeclarations(),
+  'scale.fallbackParityViolations': countFallbackParityViolations(),
+  'state.darkFocusRingDefects': countDarkFocusRingDefects(),
+  'state.inlineStateLiterals': countInlineStateLiterals(),
   // NOT the authority on whether the effect renders. This is a MIN floor over
   // the number of FILES that mention var(--ds-gradient-surface); it stayed green
   // while rottay's card face measured a top-to-bottom luminance delta of exactly
   // 0.000. The pixel gate is packages/showroom/e2e/visual/effects.spec.ts, which
   // decodes a screenshot. Keep this floor: it still catches a component that
   // stops reading the token entirely.
-  "effects.gradientConsumers": effects.gradient,
-  "effects.glassConsumers": effects.glass,
-  "effects.glowConsumers": effects.glow,
+  'effects.gradientConsumers': effects.gradient,
+  'effects.glassConsumers': effects.glass,
+  'effects.glowConsumers': effects.glow,
   // WO-TOK-03 verdict 2026-07-10: DaisyUI stays; the residue is ratcheted.
-  "daisy.classConsumers": countDaisyClassConsumers(files),
-  "color.modernHexLiterals": color.hex,
-  "color.modernRgbaLiterals": color.rgba,
-  "color.handAuthoredRampSteps": countHandAuthoredRampHex(),
-  "themeCss.unreferencedSelectors": themeCssAudit.unreferencedSelectors,
-  "themeCss.lineCount": themeCssAudit.lineCount,
+  'daisy.classConsumers': countDaisyClassConsumers(files),
+  'color.modernHexLiterals': color.hex,
+  'color.modernRgbaLiterals': color.rgba,
+  'color.handAuthoredRampSteps': countHandAuthoredRampHex(),
+  'themeCss.unreferencedSelectors': themeCssAudit.unreferencedSelectors,
+  'themeCss.lineCount': themeCssAudit.lineCount,
   // WO-GAT-02: classic/rustic dead-selector counters, generalized from WO-ENG-08's modern scan
   // (`auditEngineTheme`, shared). Decrease-only, no hard target -- draining classic/rustic CSS
   // is future work; these counters only stop further growth. Classic's near-total .ant-*
   // allowlisting (see auditEngineTheme's doc comment) is reported separately, not counted here.
-  "themeCss.deadSelectorsClassic": classicThemeAudit.unreferencedSelectors,
-  "themeCss.deadSelectorsRustic": rusticThemeAudit.unreferencedSelectors,
-  "content.magicZIndex": countMagicZIndex(files),
-  "layout.crossEngineDivergences": crossEngineLayoutDivergences,
+  'themeCss.deadSelectorsClassic': classicThemeAudit.unreferencedSelectors,
+  'themeCss.deadSelectorsRustic': rusticThemeAudit.unreferencedSelectors,
+  'content.magicZIndex': countMagicZIndex(files),
+  'layout.crossEngineDivergences': crossEngineLayoutDivergences,
   // WO-GAT-04 (accessibility CI, proposal P-10): APCA text/surface pairings below their Lc
   // threshold, across the foundation + rottay/bithire/evnto palettes. Decrease-only, no hard
   // target (dark-surface saturated status colors and low-emphasis muted text sit below the bar
   // today; a future color WO ratchets them down). Skip count (unresolvable pairs) is reported,
   // not gated — see evaluateApcaPairings(). Threshold + pairing list documented at APCA_PAIRINGS.
-  "a11y.apcaPairings": apca.failures,
+  'a11y.apcaPairings': apca.failures,
   // WO-ENG-12 (spec section 13). Both decrease-only. fixedWidthLiterals is a
   // static scan; overflowCells reflects what the browser actually measured at
   // 360px and is owned by packages/showroom/e2e/responsive/.
-  "responsive.fixedWidthLiterals": countFixedWidthLiterals(files, themeCssPath),
-  "responsive.overflowCells": countResponsiveOverflowCells(),
+  'responsive.fixedWidthLiterals': countFixedWidthLiterals(files, themeCssPath),
+  'responsive.overflowCells': countResponsiveOverflowCells(),
   // WO-ARC-01 (component API normalization, proposal P-13): the offcanon-vocabulary gate --
   // see this file's "Off-canon vocabulary gate" module doc above for the counting method and
   // the @deprecated exemption rule. Both decrease-only.
-  "vocabulary.rawAntdSizeUnions": rawAntdSizeUnions,
-  "vocabulary.duplicateSizeDeclarations": duplicateSizeVocabDeclarations,
+  'vocabulary.rawAntdSizeUnions': rawAntdSizeUnions,
+  'vocabulary.duplicateSizeDeclarations': duplicateSizeVocabDeclarations,
   // WO-ARC-05: a skin adapts to its container, not to the window. Decrease-only,
   // and the baseline is 0 -- so the first viewport breakpoint added to a skin
   // fails the build, which is the point.
-  "responsive.viewportMqInSkins": countViewportMediaQueriesInSkins(),
+  'responsive.viewportMqInSkins': countViewportMediaQueriesInSkins(),
   // WO-SKIN-03: a skin that does not PARSE loads no rules at all, and every
   // other signal stays green -- the counter reads source text, tsc never sees
   // CSS, and the unit suites assert the DOM. A stray `*/` inside a header
   // comment silently voided an entire migrated skin this way. Exact-0.
-  "skins.parseErrors": countSkinParseErrors(),
+  'skins.parseErrors': countSkinParseErrors(),
   // WO-SKIN-03: a skin nobody imports paints nothing, and it fails exactly as
   // quietly as one that does not parse -- a dead agent left nine of them behind
   // this batch. Every skin must reach BOTH entrypoints: foundation/base.css
   // (which feeds the per-tenant bundles the apps actually load) and
   // entrypoints/styles.css (which feeds dist/styles.css). Exact-0.
-  "skins.unwired": countUnwiredSkins(),
+  'skins.unwired': countUnwiredSkins(),
   // WO-SKIN-06: sites whose PAINT VALUE is runtime data (a tenant's chosen hex, a
   // per-datum chart colour, a per-user identity colour) cannot live in a skin. They
   // are NOT pending work -- carrying them as debt that can never reach 0 is a lie in
@@ -2252,8 +2414,8 @@ const counters = {
   // This proves aggregate per-file cardinality only. The checkpoint contract plus its
   // focused and visual tests prove that the remaining sites are the intended expressions
   // and still render correctly; this counter does not infer source-site identity.
-  "skins.exemptionsBreached": countSkinExemptionBreaches({
-    exemptionsPath: join(repoRoot, "roadmap/skin-exemptions.json"),
+  'skins.exemptionsBreached': countSkinExemptionBreaches({
+    exemptionsPath: join(repoRoot, 'roadmap/skin-exemptions.json'),
     componentsDir,
   }),
   // WO-SKIN-06 (P-79): the THIRD way a skin silently paints nothing. It parses
@@ -2263,7 +2425,7 @@ const counters = {
   // typo. tsc accepts it, the counter does not read attributes, and the rule
   // reaches nobody. Static, exact-0: every part a skin selects for must be
   // stamped somewhere in the components tree.
-  "skins.deadParts": countDeadParts(),
+  'skins.deadParts': countDeadParts(),
   // WO-ARC-09: per-file inline-paint ratchet over the six workspace-tier
   // components' migratable files. Decrease-only; each checkpoint's exit is its
   // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
@@ -2272,7 +2434,6 @@ const counters = {
   ...runtimeSvgPaintCounters(),
   ...embeddedCssPaintCounters(),
 };
-
 
 /**
  * WO-ARC-05: viewport media queries inside the engine SKIN stylesheets.
@@ -2303,10 +2464,10 @@ function countSkinParseErrors() {
   let errors = 0;
   for (const file of collectSkinFiles()) {
     try {
-      postcss.parse(readFileSync(file, "utf8"), { from: file });
+      postcss.parse(readFileSync(file, 'utf8'), { from: file });
     } catch (err) {
       errors += 1;
-      console.error(`  - skin does not parse: ${file.replace(root + sep, "")} -- ${err.message}`);
+      console.error(`  - skin does not parse: ${file.replace(root + sep, '')} -- ${err.message}`);
     }
   }
   return errors;
@@ -2327,19 +2488,24 @@ function countSkinParseErrors() {
  * Exact-0: the first unwired skin fails the build.
  */
 function countUnwiredSkins() {
-  const entrypoints = [
-    "src/tokens/css/foundation/base.css",
-    "src/tokens/css/entrypoints/styles.css",
-  ].map((rel) => ({ rel, css: readFileSync(join(root, rel), "utf8") }));
+  const entrypoints = ['src/tokens/css/foundation/base.css', 'src/tokens/css/entrypoints/styles.css'].map((rel) => ({
+    rel,
+    css: readFileSync(join(root, rel), 'utf8'),
+  }));
 
   let unwired = 0;
   for (const file of collectSkinFiles()) {
     // The import specifier every entrypoint uses, e.g. `engines/modern/skin/toast.css`
     // or `components/skin/toast-compounds.css` -- matched as a path suffix so the
     // relative prefix (`../`) does not matter.
-    const specifier = file.slice(file.indexOf(`${sep}tokens${sep}css${sep}`) + `${sep}tokens${sep}css${sep}`.length).split(sep).join("/");
+    const specifier = file
+      .slice(file.indexOf(`${sep}tokens${sep}css${sep}`) + `${sep}tokens${sep}css${sep}`.length)
+      .split(sep)
+      .join('/');
     for (const { rel, css } of entrypoints) {
-      const imported = new RegExp(`@import\\s+['"][^'"]*${specifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}['"]`).test(css);
+      const imported = new RegExp(`@import\\s+['"][^'"]*${specifier.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]`).test(
+        css
+      );
       if (!imported) {
         unwired += 1;
         console.error(`  - skin is not imported by ${rel}: ${specifier}`);
@@ -2362,11 +2528,11 @@ function collectSkinFiles() {
     for (const entry of entries) {
       const full = join(dir, entry.name);
       if (entry.isDirectory()) walk(full);
-      else if (entry.isFile() && entry.name.endsWith(".css") && full.includes(`${sep}skin${sep}`)) skins.push(full);
+      else if (entry.isFile() && entry.name.endsWith('.css') && full.includes(`${sep}skin${sep}`)) skins.push(full);
     }
   };
-  walk(join(root, "src/tokens/css/engines"));
-  walk(join(root, "src/tokens/css/components/skin"));
+  walk(join(root, 'src/tokens/css/engines'));
+  walk(join(root, 'src/tokens/css/components/skin'));
   return skins;
 }
 
@@ -2382,16 +2548,16 @@ function countViewportMediaQueriesInSkins() {
     for (const entry of entries) {
       const full = join(dir, entry.name);
       if (entry.isDirectory()) walk(full);
-      else if (entry.isFile() && entry.name.endsWith(".css") && full.includes(`${sep}skin${sep}`)) skins.push(full);
+      else if (entry.isFile() && entry.name.endsWith('.css') && full.includes(`${sep}skin${sep}`)) skins.push(full);
     }
   };
-  walk(join(root, "src/tokens/css/engines"));
+  walk(join(root, 'src/tokens/css/engines'));
   // WO-ARC-09: the engine-agnostic skin home for structures + shared files.
-  walk(join(root, "src/tokens/css/components/skin"));
+  walk(join(root, 'src/tokens/css/components/skin'));
 
   let count = 0;
   for (const file of skins) {
-    const css = readFileSync(file, "utf8");
+    const css = readFileSync(file, 'utf8');
     for (const match of css.matchAll(/@media([^{]*)\{/g)) {
       const condition = match[1];
       if (/\b(min-width|max-width|width)\b/.test(condition)) count += 1;
@@ -2403,33 +2569,33 @@ function countViewportMediaQueriesInSkins() {
 /** Invariants checked for exact equality (not just decrease-only) in --check. */
 const EXACT = {
   // One elevation source of truth: the foundation ramp, with --ds-shadow-* aliases.
-  "depth.shadowScales": 1,
+  'depth.shadowScales': 1,
   // Layout is a component-layer concern; no undeclared modern-vs-siblings axis
   // divergence survives (WO-ENG-10, spec section 10). See
   // countCrossEngineLayoutDivergences()'s doc comment for this counter's
   // precise (intentionally narrow) detection scope and known blind spots.
-  "layout.crossEngineDivergences": 0,
+  'layout.crossEngineDivergences': 0,
   // One radius source of truth: foundation/themes/default.css.
-  "scale.radiusScaleDeclarations": 1,
+  'scale.radiusScaleDeclarations': 1,
   // No dark-blind focus ring survives on any dark-surface tenant (audit 3.4).
-  "state.darkFocusRingDefects": 0,
+  'state.darkFocusRingDefects': 0,
   // Every remaining theme.css selector is consumer-proven (WO-ENG-08, spec section 8).
-  "themeCss.unreferencedSelectors": 0,
+  'themeCss.unreferencedSelectors': 0,
   // A skin that does not parse loads no rules; nothing else in the chain sees it.
-  "skins.parseErrors": 0,
+  'skins.parseErrors': 0,
   // A skin no entrypoint imports is just as dead, and just as silent.
-  "skins.unwired": 0,
+  'skins.unwired': 0,
   // Summed exemption cardinality floors and their configuration must remain valid;
   // checkpoint evidence, not this aggregate counter, owns source-site identity.
-  "skins.exemptionsBreached": 0,
+  'skins.exemptionsBreached': 0,
   // A skin rule anchored on a data-part the source never stamps reaches nobody.
-  "skins.deadParts": 0,
+  'skins.deadParts': 0,
   // Embedded CSS must stay fully classifiable. Any parser ambiguity, computed
   // sink/property or other unknown fails closed instead of certifying a zero.
-  "embeddedCssPaint.unclassified": 0,
-  "embeddedCssPaint.parseFailures": 0,
-  "embeddedCssPaint.dynamicProperties": 0,
-  "embeddedCssPaint.unknownSinks": 0,
+  'embeddedCssPaint.unclassified': 0,
+  'embeddedCssPaint.parseFailures': 0,
+  'embeddedCssPaint.dynamicProperties': 0,
+  'embeddedCssPaint.unknownSinks': 0,
 };
 
 /**
@@ -2440,73 +2606,77 @@ const EXACT = {
  * "risen above baseline" check.
  */
 const MIN = {
-  "effects.gradientConsumers": 1,
-  "effects.glassConsumers": 1,
-  "effects.glowConsumers": 1,
+  'effects.gradientConsumers': 1,
+  'effects.glassConsumers': 1,
+  'effects.glowConsumers': 1,
   // Measured productive four-tier fleet cardinality after dynamic enumeration.
-  "fleet.inlinePaint.filesScanned": 769,
+  'fleet.inlinePaint.filesScanned': 769,
   // Measured productive component source cardinality after global SVG expansion.
   // More files are healthy; a missing subtree or disabled collector is not.
-  "runtimeSvgPaint.filesScanned": 1047,
+  'runtimeSvgPaint.filesScanned': 1047,
   // Same productive component universe, independently parsed for real CSS
   // injected by JSX, React.createElement, DOM style nodes or CSSStyleSheet.
-  "embeddedCssPaint.filesScanned": 1047,
+  'embeddedCssPaint.filesScanned': 1047,
 };
 
-const mode = process.argv.includes("--check")
-  ? "check"
-  : process.argv.includes("--update-baseline")
-    ? "update"
-    : process.argv.includes("--coverage")
-      ? "coverage"
-      : process.argv.includes("--apca-report")
-        ? "apca-report"
-        : "report";
+const mode = process.argv.includes('--check')
+  ? 'check'
+  : process.argv.includes('--update-baseline')
+  ? 'update'
+  : process.argv.includes('--coverage')
+  ? 'coverage'
+  : process.argv.includes('--apca-report')
+  ? 'apca-report'
+  : 'report';
 
-if (mode === "update") {
-  writeFileSync(baselinePath, JSON.stringify(counters, null, 2) + "\n");
-  console.log("engine-token-audit: baseline updated");
+if (mode === 'update') {
+  writeFileSync(baselinePath, JSON.stringify(counters, null, 2) + '\n');
+  console.log('engine-token-audit: baseline updated');
   console.log(counters);
   process.exit(0);
 }
 
-if (mode === "coverage") {
+if (mode === 'coverage') {
   const coverage = buildTokenCoverage();
   const { jsonPath, mdPath } = writeCoverageArtifacts(coverage);
-  console.log("engine-token-audit --coverage: wrote");
+  console.log('engine-token-audit --coverage: wrote');
   console.log(`  ${jsonPath}`);
   console.log(`  ${mdPath}`);
   console.log(
-    `engine-token-audit — token coverage: ${coverage.filesScanned} files scanned, ${coverage.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverage.literalsOutstandingTotal} hardcoded literals outstanding`,
+    `engine-token-audit — token coverage: ${coverage.filesScanned} files scanned, ${coverage.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverage.literalsOutstandingTotal} hardcoded literals outstanding`
   );
   process.exit(0);
 }
 
-if (mode === "apca-report") {
+if (mode === 'apca-report') {
   // WO-GAT-04 evidence: persist the full APCA pairing table to test-artifacts/gates/gat-04/.
-  const outDir = join(gatesDir, "gat-04");
+  const outDir = join(gatesDir, 'gat-04');
   if (!existsSync(outDir)) mkdirSync(outDir, { recursive: true });
-  const jsonPath = join(outDir, "apca-report.json");
-  const mdPath = join(outDir, "apca-report.md");
+  const jsonPath = join(outDir, 'apca-report.json');
+  const mdPath = join(outDir, 'apca-report.md');
   writeFileSync(
     jsonPath,
     JSON.stringify(
-      { generatedAt: new Date().toISOString(), thresholds: { body: APCA_BODY_MIN, ui: APCA_UI_MIN }, ...apca },
+      {
+        generatedAt: new Date().toISOString(),
+        thresholds: { body: APCA_BODY_MIN, ui: APCA_UI_MIN },
+        ...apca,
+      },
       null,
-      2,
-    ) + "\n",
+      2
+    ) + '\n'
   );
   writeFileSync(mdPath, renderApcaMarkdown(apca));
-  console.log("engine-token-audit --apca-report: wrote");
+  console.log('engine-token-audit --apca-report: wrote');
   console.log(`  ${jsonPath}`);
   console.log(`  ${mdPath}`);
   console.log(
-    `engine-token-audit — APCA pairings: ${apca.failures} below threshold, ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated`,
+    `engine-token-audit — APCA pairings: ${apca.failures} below threshold, ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated`
   );
   process.exit(0);
 }
 
-console.log("engine-token-audit — modern engine files:", files.length);
+console.log('engine-token-audit — modern engine files:', files.length);
 for (const [k, v] of Object.entries(counters)) console.log(`  ${k}: ${v}`);
 
 // WO-GAT-02: one-line token-coverage summary, appended to both report and --check output
@@ -2514,55 +2684,53 @@ for (const [k, v] of Object.entries(counters)) console.log(`  ${k}: ${v}`);
 // informational and never gates -- see buildTokenCoverage()'s doc comment).
 const coverageSummary = buildTokenCoverage();
 console.log(
-  `engine-token-audit — token coverage: ${coverageSummary.filesScanned} files scanned, ${coverageSummary.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverageSummary.literalsOutstandingTotal} hardcoded literals outstanding`,
+  `engine-token-audit — token coverage: ${coverageSummary.filesScanned} files scanned, ${coverageSummary.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverageSummary.literalsOutstandingTotal} hardcoded literals outstanding`
 );
 
 // WO-GAT-04: one-line APCA summary, appended to both report and --check output.
 console.log(
-  `engine-token-audit — APCA contrast: ${apca.failures} pairings below threshold (body>=${APCA_BODY_MIN}/ui>=${APCA_UI_MIN}), ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated across ${APCA_PALETTES.length} palettes`,
+  `engine-token-audit — APCA contrast: ${apca.failures} pairings below threshold (body>=${APCA_BODY_MIN}/ui>=${APCA_UI_MIN}), ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated across ${APCA_PALETTES.length} palettes`
 );
 
-if (mode === "report") {
-  console.log("\nengine-token-audit — APCA pairing detail:");
-  console.log("  palette   pairing                 kind  Lc     floor  status");
+if (mode === 'report') {
+  console.log('\nengine-token-audit — APCA pairing detail:');
+  console.log('  palette   pairing                 kind  Lc     floor  status');
   for (const r of apca.results) {
-    const lc = r.status === "skip" ? "  skip" : String(r.lc).padStart(5);
+    const lc = r.status === 'skip' ? '  skip' : String(r.lc).padStart(5);
     console.log(
-      `  ${r.palette.padEnd(9)} ${r.pair.padEnd(23)} ${r.kind.padEnd(4)}  ${lc}  ${String(r.threshold).padStart(4)}   ${r.status}`,
+      `  ${r.palette.padEnd(9)} ${r.pair.padEnd(23)} ${r.kind.padEnd(4)}  ${lc}  ${String(r.threshold).padStart(4)}   ${
+        r.status
+      }`
     );
   }
 }
 
-if (mode === "report") {
-  console.log(
-    `\nengine-token-audit — theme.css consumed-class set: ${themeCssAudit.consumedSize} tokens`,
-  );
-  console.log(
-    `engine-token-audit — theme.css unreferenced selectors (${themeCssAudit.unreferenced.length}):`,
-  );
+if (mode === 'report') {
+  console.log(`\nengine-token-audit — theme.css consumed-class set: ${themeCssAudit.consumedSize} tokens`);
+  console.log(`engine-token-audit — theme.css unreferenced selectors (${themeCssAudit.unreferenced.length}):`);
   for (const u of themeCssAudit.unreferenced) {
-    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, " ")}`);
+    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, ' ')}`);
   }
   console.log(
-    `\nengine-token-audit — classic/theme.css: ${classicThemeAudit.consumedSize} consumed classes, ${classicThemeAudit.allowlisted} externally-consumed (ant-/anticon/slick-) allowlisted, ${classicThemeAudit.unreferencedSelectors} dead:`,
+    `\nengine-token-audit — classic/theme.css: ${classicThemeAudit.consumedSize} consumed classes, ${classicThemeAudit.allowlisted} externally-consumed (ant-/anticon/slick-) allowlisted, ${classicThemeAudit.unreferencedSelectors} dead:`
   );
   for (const u of classicThemeAudit.unreferenced) {
-    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, " ")}`);
+    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, ' ')}`);
   }
   console.log(
-    `\nengine-token-audit — rustic/theme.css: ${rusticThemeAudit.consumedSize} consumed classes, ${rusticThemeAudit.unreferencedSelectors} dead:`,
+    `\nengine-token-audit — rustic/theme.css: ${rusticThemeAudit.consumedSize} consumed classes, ${rusticThemeAudit.unreferencedSelectors} dead:`
   );
   for (const u of rusticThemeAudit.unreferenced) {
-    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, " ")}`);
+    console.log(`  line ${u.line}: ${u.selector.replace(/\s+/g, ' ')}`);
   }
 }
 
-if (mode === "check") {
+if (mode === 'check') {
   if (!existsSync(baselinePath)) {
-    console.error("engine-token-audit --check: no baseline (run --update-baseline first)");
+    console.error('engine-token-audit --check: no baseline (run --update-baseline first)');
     process.exit(1);
   }
-  const baseline = JSON.parse(readFileSync(baselinePath, "utf8"));
+  const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
   const risen = [];
   // A counter the baseline has never heard of used to compare against Infinity,
   // so it could not rise and could not fail. It measured, printed a number, and
@@ -2583,21 +2751,9 @@ if (mode === "check") {
   // CSS each emit one key for every eligible source file (including zeros), so
   // baseline-only keys are an explicit failure until a deliberate measured
   // baseline change retires them.
-  const missingRuntimeCounters = collectMissingPrefixedCounters(
-    counters,
-    baseline,
-    "runtimeSvgPaint."
-  );
-  const missingFleetCounters = collectMissingPrefixedCounters(
-    counters,
-    baseline,
-    "fleet.inlinePaint."
-  );
-  const missingEmbeddedCssCounters = collectMissingPrefixedCounters(
-    counters,
-    baseline,
-    "embeddedCssPaint."
-  );
+  const missingRuntimeCounters = collectMissingPrefixedCounters(counters, baseline, 'runtimeSvgPaint.');
+  const missingFleetCounters = collectMissingPrefixedCounters(counters, baseline, 'fleet.inlinePaint.');
+  const missingEmbeddedCssCounters = collectMissingPrefixedCounters(counters, baseline, 'embeddedCssPaint.');
   const invariant = [];
   for (const [k, expected] of Object.entries(EXACT)) {
     if (counters[k] !== expected) invariant.push(`${k}: ${counters[k]} != required ${expected}`);
@@ -2612,21 +2768,21 @@ if (mode === "check") {
     missingFleetCounters.length ||
     missingEmbeddedCssCounters.length
   ) {
-    console.error("engine-token-audit --check FAILED:");
-    for (const u of unbaselined) console.error("  - counter has no baseline, so it gates nothing: " + u);
-    for (const r of risen) console.error("  - rose above baseline: " + r);
-    for (const r of invariant) console.error("  - invariant broken: " + r);
-    for (const r of belowFloor) console.error("  - below required floor: " + r);
+    console.error('engine-token-audit --check FAILED:');
+    for (const u of unbaselined) console.error('  - counter has no baseline, so it gates nothing: ' + u);
+    for (const r of risen) console.error('  - rose above baseline: ' + r);
+    for (const r of invariant) console.error('  - invariant broken: ' + r);
+    for (const r of belowFloor) console.error('  - below required floor: ' + r);
     for (const key of missingRuntimeCounters) {
-      console.error("  - baseline runtime SVG counter disappeared: " + key);
+      console.error('  - baseline runtime SVG counter disappeared: ' + key);
     }
     for (const key of missingFleetCounters) {
-      console.error("  - baseline fleet inline-paint counter disappeared: " + key);
+      console.error('  - baseline fleet inline-paint counter disappeared: ' + key);
     }
     for (const key of missingEmbeddedCssCounters) {
-      console.error("  - baseline embedded-CSS counter disappeared: " + key);
+      console.error('  - baseline embedded-CSS counter disappeared: ' + key);
     }
     process.exit(1);
   }
-  console.log("engine-token-audit --check OK (all counters within baseline; invariants and floors hold)");
+  console.log('engine-token-audit --check OK (all counters within baseline; invariants and floors hold)');
 }

@@ -3,17 +3,8 @@ import { describe, expect, it, vi, afterEach } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import type { ToastMethods } from '../Toast.types';
-import {
-  ToastProvider,
-  useToastContext,
-} from '../utils/ToastProvider';
-import {
-  clearToastMethods,
-  getToastMethods,
-  setToastMethods,
-  toast,
-  useToast,
-} from '../utils/useToast';
+import { ToastProvider, useToastContext } from '../utils/ToastProvider';
+import { clearToastMethods, getToastMethods, setToastMethods, toast, useToast } from '../utils/useToast';
 function ToastHookHarness(): React.ReactElement {
   const api = useToast();
 
@@ -34,7 +25,11 @@ function ToastHookHarness(): React.ReactElement {
       <button
         type="button"
         onClick={() => {
-          const id = api.show({ title: 'Custom', description: 'Body', duration: 1000 });
+          const id = api.show({
+            title: 'Custom',
+            description: 'Body',
+            duration: 1000,
+          });
           api.update(id, { description: 'Updated body' });
           api.pause(id);
           api.resume(id);
@@ -130,7 +125,7 @@ describe('Toast utilities advanced coverage', () => {
     expect(warnSpy).toHaveBeenCalled();
   });
 
-  it('resolves animation helpers and injects styles only once', async () => {
+  it('resolves animation helpers while the legacy injector remains a no-op', async () => {
     vi.resetModules();
     const { getAnimationName, getToastAnimationStyle, injectToastStyles } = await import('../utils/animations');
 
@@ -142,13 +137,15 @@ describe('Toast utilities advanced coverage', () => {
     expect(getAnimationName('top-right', 'in')).toBe('toast-slide-in-right');
     expect(getAnimationName('bottom-left', 'out')).toBe('toast-slide-out-left');
     expect(getAnimationName('top-center', 'in')).toBe('toast-slide-in-top');
-    expect(getToastAnimationStyle('bottom-center', 'out').animation).toContain('toast-slide-out-bottom 240ms ease-in-out');
+    expect(getToastAnimationStyle('bottom-center', 'out').animation).toContain(
+      'toast-slide-out-bottom 240ms ease-in-out'
+    );
     expect(getToastAnimationStyle('top-right', 'in', 'fade').animation).toContain('toast-fade-in 180ms linear');
 
     injectToastStyles();
     injectToastStyles();
 
     const styles = document.querySelectorAll('#rottay-toast-animations');
-    expect(styles).toHaveLength(1);
+    expect(styles).toHaveLength(0);
   });
 });

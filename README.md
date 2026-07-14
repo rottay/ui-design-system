@@ -14,12 +14,12 @@ packages/
 
 Components render through one of four engines selected at runtime via `createEngineComponent()`:
 
-| Engine | Backend | Use Case |
-|--------|---------|----------|
-| **classic** | Ant Design 5.x | Enterprise admin UIs |
-| **modern** | Tailwind + DaisyUI | Consumer-facing apps |
-| **rustic** | Vanilla CSS | Lightweight fallback |
-| **custom** | Pluggable | White-label tenants |
+| Engine      | Backend            | Use Case             |
+| ----------- | ------------------ | -------------------- |
+| **classic** | Ant Design 5.x     | Enterprise admin UIs |
+| **modern**  | Tailwind + DaisyUI | Consumer-facing apps |
+| **rustic**  | Vanilla CSS        | Lightweight fallback |
+| **custom**  | Pluggable          | White-label tenants  |
 
 Each primitive has engine-specific implementations (`engines/{classic,modern,rustic}/index.tsx`).
 
@@ -72,7 +72,7 @@ DS base tokens --> vertical baseline --> BrandTheme --> CSS artifacts
 109 curated icons via `createIcon()` wrapping lucide-react.
 
 ```tsx
-import { SearchIcon, PlusIcon, CheckIcon } from '@rottay/design-system/icons';
+import { SearchIcon, PlusIcon, CheckIcon } from "@rottay/design-system/icons";
 ```
 
 ### Chart System
@@ -81,24 +81,24 @@ import { SearchIcon, PlusIcon, CheckIcon } from '@rottay/design-system/icons';
 
 ## Package Exports
 
-| Export | Description |
-|--------|-------------|
-| `@rottay/design-system` | All components, hooks, utilities |
-| `@rottay/design-system/icons` | 109 curated icons |
-| `@rottay/design-system/server` | Server-only utilities (branding validation) |
-| `@rottay/design-system/eslint` | ESLint rules (no-raw-html, no-hardcoded-colors, no-db-in-components) |
-| `@rottay/design-system/styles` | Base CSS tokens |
-| `@rottay/design-system/styles/platform` | Platform vertical CSS |
-| `@rottay/design-system/styles/bithire` | BitHire vertical CSS |
-| `@rottay/design-system/styles/evnto` | Evnto vertical CSS |
-| `@rottay/design-system/styles/modern` | Modern engine CSS (Tailwind/DaisyUI) |
+| Export                                  | Description                                                            |
+| --------------------------------------- | ---------------------------------------------------------------------- |
+| `@rottay/design-system`                 | All components, hooks, utilities                                       |
+| `@rottay/design-system/icons`           | 109 curated icons                                                      |
+| `@rottay/design-system/server`          | Server-only utilities (branding validation)                            |
+| `@rottay/design-system/eslint`          | ESLint rules (no-raw-html, no-hardcoded-colors, no-db-in-components)   |
+| `@rottay/design-system/styles`          | Full bundle: component skins, states, keyframes, tokens, all tenants   |
+| `@rottay/design-system/styles/platform` | Platform vertical CSS                                                  |
+| `@rottay/design-system/styles/bithire`  | BitHire vertical CSS                                                   |
+| `@rottay/design-system/styles/evnto`    | Evnto vertical CSS                                                     |
+| `@rottay/design-system/styles/modern`   | Supplemental modern-engine CSS only; not a standalone component bundle |
 
 ## Usage
 
 ```tsx
-import { Button, Card, Flex, Text } from '@rottay/design-system';
-import { SearchIcon } from '@rottay/design-system/icons';
-import '@rottay/design-system/styles';
+import { Button, Card, Flex, Text } from "@rottay/design-system";
+import { SearchIcon } from "@rottay/design-system/icons";
+import "@rottay/design-system/styles";
 
 export default function Example() {
   return (
@@ -112,6 +112,10 @@ export default function Example() {
   );
 }
 ```
+
+Import exactly one full or vertical stylesheet at the application entry. Production applications
+should prefer their `styles/<vertical>` export. The `styles/modern` export is supplemental and does
+not contain the base component skins or Toast keyframes.
 
 ## Development
 

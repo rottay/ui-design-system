@@ -52,14 +52,20 @@ pnpm add @rottay/design-system react react-dom antd @ant-design/icons
 ```
 
 ```tsx
-import { DesignSystemProvider, Button, Text, Flex } from '@rottay/design-system';
+import "@rottay/design-system/styles.css";
+import {
+  DesignSystemProvider,
+  Button,
+  Text,
+  Flex,
+} from "@rottay/design-system";
 
 function App() {
   return (
     <DesignSystemProvider>
       <Flex gap="4" align="center">
         <Text as="h1">Hello</Text>
-        <Button variant="primary" onClick={() => alert('Works')}>
+        <Button variant="primary" onClick={() => alert("Works")}>
           Click me
         </Button>
       </Flex>
@@ -68,28 +74,33 @@ function App() {
 }
 ```
 
+Import exactly one public stylesheet entrypoint before rendering components. Applications may use
+the full `styles.css` bundle shown above or the matching `styles/<vertical>` export. Runtime
+providers supply tenant variables, but component skins, interaction states and keyframes live in
+the stylesheet.
+
 ## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [Getting Started](./GETTING_STARTED.md) | Installation, registry setup, first component, separate-repo usage |
-| [Architecture](./ARCHITECTURE.md) | System design, engine flow, token resolution, CSS layers |
-| [Structures](./docs/structures-tier.md) | What structures is, decision guide, family catalog |
+| Document                                           | Description                                                                             |
+| -------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| [Getting Started](./GETTING_STARTED.md)            | Installation, registry setup, first component, separate-repo usage                      |
+| [Architecture](./ARCHITECTURE.md)                  | System design, engine flow, token resolution, CSS layers                                |
+| [Structures](./docs/structures-tier.md)            | What structures is, decision guide, family catalog                                      |
 | [Taxonomy Reference](./docs/TAXONOMY.generated.md) | Auto-generated inventory of every tier and family (run `pnpm docs:taxonomy` to refresh) |
-| [Engine Splitting](./ENGINE_SPLITTING.md) | Code-splitting strategy and bundle entry points |
-| [Performance Budget](./PERFORMANCE_BUDGET.md) | CI-enforced size limits and Web Vitals targets |
+| [Engine Splitting](./ENGINE_SPLITTING.md)          | Code-splitting strategy and bundle entry points                                         |
+| [Performance Budget](./PERFORMANCE_BUDGET.md)      | CI-enforced size limits and Web Vitals targets                                          |
 
 ## Subpath Exports
 
-| Import | Contents |
-|--------|----------|
-| `@rottay/design-system` | Components, providers, hooks |
-| `@rottay/design-system/server` | Server-side utilities |
-| `@rottay/design-system/icons` | Icon system |
-| `@rottay/design-system/styles.css` | Full CSS bundle (all tenants, for dev/Storybook) |
-| `@rottay/design-system/styles/platform` | CSS bundle for Platform app (rottay tenant) |
-| `@rottay/design-system/styles/bithire` | CSS bundle for BitHire app |
-| `@rottay/design-system/styles/evnto` | CSS bundle for Evnto app |
+| Import                                  | Contents                                         |
+| --------------------------------------- | ------------------------------------------------ |
+| `@rottay/design-system`                 | Components, providers, hooks                     |
+| `@rottay/design-system/server`          | Server-side utilities                            |
+| `@rottay/design-system/icons`           | Icon system                                      |
+| `@rottay/design-system/styles.css`      | Full CSS bundle (all tenants, for dev/Storybook) |
+| `@rottay/design-system/styles/platform` | CSS bundle for Platform app (rottay tenant)      |
+| `@rottay/design-system/styles/bithire`  | CSS bundle for BitHire app                       |
+| `@rottay/design-system/styles/evnto`    | CSS bundle for Evnto app                         |
 
 ## Scripts
 

@@ -11,8 +11,8 @@
 'use client';
 
 import React, { forwardRef, useId, type ElementType, type Ref, type CSSProperties } from 'react';
-import type { BoxProps, BoxSpacing, BoxBorderRadius, BoxShadow } from '../Box.types';
-import { BOX_DEFAULTS, SPACING_MAP, RADIUS_MAP, SHADOW_MAP, isVoidElement } from '../Box.types';
+import type { BoxProps, BoxSpacing } from '../Box.types';
+import { BOX_DEFAULTS, SPACING_MAP, isVoidElement } from '../Box.types';
 import { isResponsiveValue, generateResponsiveCSS } from '../../shared/responsive-props';
 import { scalarOrUndefined, collectBoxResponsiveEntries } from '../../shared/responsive-helpers.js';
 
@@ -31,8 +31,14 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (padding && padding !== 'none') style.padding = SPACING_MAP[padding];
   const pxVal = scalarOrUndefined(props.paddingX) || scalarOrUndefined(props.px);
   const pyVal = scalarOrUndefined(props.paddingY) || scalarOrUndefined(props.py);
-  if (pxVal && pxVal !== 'none') { style.paddingLeft = SPACING_MAP[pxVal]; style.paddingRight = SPACING_MAP[pxVal]; }
-  if (pyVal && pyVal !== 'none') { style.paddingTop = SPACING_MAP[pyVal]; style.paddingBottom = SPACING_MAP[pyVal]; }
+  if (pxVal && pxVal !== 'none') {
+    style.paddingLeft = SPACING_MAP[pxVal];
+    style.paddingRight = SPACING_MAP[pxVal];
+  }
+  if (pyVal && pyVal !== 'none') {
+    style.paddingTop = SPACING_MAP[pyVal];
+    style.paddingBottom = SPACING_MAP[pyVal];
+  }
   const ptVal = scalarOrUndefined(props.paddingTop) || scalarOrUndefined(props.pt);
   if (ptVal && ptVal !== 'none') style.paddingTop = SPACING_MAP[ptVal];
   const prVal = scalarOrUndefined(props.paddingRight) || scalarOrUndefined(props.pr);
@@ -46,8 +52,14 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (margin && margin !== 'none') style.margin = SPACING_MAP[margin];
   const mxVal = scalarOrUndefined(props.marginX) || scalarOrUndefined(props.mx);
   const myVal = scalarOrUndefined(props.marginY) || scalarOrUndefined(props.my);
-  if (mxVal && mxVal !== 'none') { style.marginLeft = SPACING_MAP[mxVal]; style.marginRight = SPACING_MAP[mxVal]; }
-  if (myVal && myVal !== 'none') { style.marginTop = SPACING_MAP[myVal]; style.marginBottom = SPACING_MAP[myVal]; }
+  if (mxVal && mxVal !== 'none') {
+    style.marginLeft = SPACING_MAP[mxVal];
+    style.marginRight = SPACING_MAP[mxVal];
+  }
+  if (myVal && myVal !== 'none') {
+    style.marginTop = SPACING_MAP[myVal];
+    style.marginBottom = SPACING_MAP[myVal];
+  }
   const mtVal = scalarOrUndefined(props.marginTop) || scalarOrUndefined(props.mt);
   if (mtVal && mtVal !== 'none') style.marginTop = SPACING_MAP[mtVal];
   const mrVal = scalarOrUndefined(props.marginRight) || scalarOrUndefined(props.mr);
@@ -56,13 +68,6 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   if (mbVal && mbVal !== 'none') style.marginBottom = SPACING_MAP[mbVal];
   const mlVal = scalarOrUndefined(props.marginLeft) || scalarOrUndefined(props.ml);
   if (mlVal && mlVal !== 'none') style.marginLeft = SPACING_MAP[mlVal];
-
-  // Border radius — resolved via DS CSS custom properties
-  const radiusValue = props.borderRadius || props.rounded;
-  if (radiusValue && radiusValue !== 'none') style.borderRadius = RADIUS_MAP[radiusValue];
-
-  // Shadow — resolved via DS CSS custom properties
-  if (props.shadow && props.shadow !== 'none') style.boxShadow = SHADOW_MAP[props.shadow];
 
   // Dimensions - only inline when NOT responsive
   const widthValue = scalarOrUndefined(props.width) || scalarOrUndefined(props.w);
@@ -195,17 +200,14 @@ function buildBoxStyles(props: BoxProps): CSSProperties {
   return style;
 }
 
-// Spacing, radius, and shadow are now resolved via inline styles using
-// DS CSS custom properties (SPACING_MAP, RADIUS_MAP, SHADOW_MAP from types).
-// This replaces the old Tailwind class maps so tenant overrides flow through.
+// Spacing is resolved inline through DS custom properties. Radius and shadow
+// are selected by data attributes in the Box skin so tenant overrides still
+// flow through the same token values without static paint living in JS.
 
 function buildTailwindClasses(props: BoxProps): string[] {
   const classes: string[] = [];
 
-  // Spacing, radius, and shadow are now handled as inline styles via
-  // buildBoxStyles using DS CSS custom properties. This ensures tenant
-  // overrides flow through the --ds-spacing-*, --ds-radius-*, and
-  // --ds-elevation-* token system.
+  // Spacing stays inline; radius and shadow are handled by the Box skin.
 
   // Display - only scalar
   const display = scalarOrUndefined(props.display);
@@ -335,17 +337,10 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   const needsResponsiveCSS = responsiveEntries.length > 0;
 
   const elementId = needsResponsiveCSS ? `box-${reactId.replace(/:/g, '')}` : '';
-  const responsive = needsResponsiveCSS
-    ? generateResponsiveCSS(elementId, responsiveEntries)
-    : null;
+  const responsive = needsResponsiveCSS ? generateResponsiveCSS(elementId, responsiveEntries) : null;
 
   // Build class names with Modern-specific prefixes and Tailwind classes
-  const classNames = [
-    'rottay-box',
-    'rottay-box--modern',
-    ...tailwindClasses,
-    className,
-  ].filter(Boolean).join(' ');
+  const classNames = ['rottay-box', 'rottay-box--modern', ...tailwindClasses, className].filter(Boolean).join(' ');
 
   // Box stamps NO data-part of its own. It is the style-injection escape hatch
   // every other component composes with, so a default part would put
@@ -353,10 +348,15 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
   // `.rottay-x [data-part='root']` would then reach into X's Boxes, and any query
   // for X's own root would match them too. Box's skin anchors on its class.
   const ElementType = Component as ElementType;
+  const radiusValue = props.borderRadius || props.rounded;
+  const callerOwnsRadius = Object.prototype.hasOwnProperty.call(props.style ?? {}, 'borderRadius');
+  const callerOwnsShadow = Object.prototype.hasOwnProperty.call(props.style ?? {}, 'boxShadow');
   const elementProps = {
     ...htmlAttributes,
     ref: ref as Ref<HTMLElement>,
     className: classNames,
+    'data-radius': !callerOwnsRadius && radiusValue && radiusValue !== 'none' ? radiusValue : undefined,
+    'data-shadow': !callerOwnsShadow && props.shadow && props.shadow !== 'none' ? props.shadow : undefined,
     style: computedStyle,
     ...(responsive ? responsive.attrs : {}),
   };
@@ -373,9 +373,7 @@ const ModernBox = forwardRef<HTMLElement, BoxProps>((props, ref) => {
 
   return (
     <>
-      {responsive && responsive.css && (
-        <style dangerouslySetInnerHTML={{ __html: responsive.css }} />
-      )}
+      {responsive && responsive.css && <style dangerouslySetInnerHTML={{ __html: responsive.css }} />}
       {element}
     </>
   );

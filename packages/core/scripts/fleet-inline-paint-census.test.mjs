@@ -110,6 +110,241 @@ test("counter resolves local style helpers and fails closed for opaque roots", (
   assert.equal(countArc09PaintInFile(source), 4);
 });
 
+test("counter proves closed local factories, maps, hooks, state, and consumer-derived bags", () => {
+  const source = `
+    import React, { useMemo, useState } from 'react';
+    const SIZES = {
+      sm: { label: { fontSize: 12 } },
+      lg: { label: { fontSize: 16 } },
+    };
+    const factory = () => ({ root: { width: 10 } });
+    function Component({ styles, items, size }) {
+      const local = SIZES[size];
+      const made = factory();
+      const memo = useMemo(() => ({ width: 2 }), []);
+      const [state, setState] = useState({ panel: { width: 3 } });
+      setState({ panel: { width: 4 } });
+      return <>
+        {items.map((item) => <i style={item.style} />)}
+        <i style={styles?.root} />
+        <i style={local.label} />
+        <i style={made.root} />
+        <i style={memo} />
+        <i style={state.panel} />
+      </>;
+    }
+  `;
+  assert.equal(countArc09PaintInFile(source), 0);
+});
+
+test("counter keeps unknown factory and spread provenance fail-closed", () => {
+  const source = `
+    import { externalRegistry } from './external';
+    const registry = { safe: { width: 1 }, ...externalRegistry };
+    const first = <div style={registry[getKey()]} />;
+    const getExternal = () => unknownStyleFactory();
+    const second = <div style={getExternal()} />;
+  `;
+  assert.equal(countArc09PaintInFile(source), 2);
+
+  const localPaint = `
+    const color = 'red';
+    const factories = { card: () => ({ color }) };
+    const node = <div style={factories.card()} />;
+  `;
+  assert.equal(countArc09PaintInFile(localPaint), 1);
+
+  const nestedLocalSpread = `
+    const color = 'red';
+    const extension = { danger: { color } };
+    const registry = { safe: { width: 1 }, ...extension };
+    const node = <div style={registry.danger} />;
+  `;
+  assert.equal(countArc09PaintInFile(nestedLocalSpread), 1);
+
+  const unknownComputedMember = `
+    const key = getKey();
+    const registry = { [key]: { width: 1 } };
+    const node = <div style={registry.safe} />;
+  `;
+  assert.equal(countArc09PaintInFile(unknownComputedMember), 1);
+
+  const unknownStateUpdater = `
+    function Component() {
+      const [style, setStyle] = React.useState({ width: 1 });
+      setStyle((previous) => unknownStyleFactory(previous));
+      return <div style={style} />;
+    }
+  `;
+  assert.equal(countArc09PaintInFile(unknownStateUpdater), 1);
+});
+
+test(
+  "certified producers require an absolute canonical file and exact export",
+  {
+    concurrency: false,
+  },
+  () => {
+    const liveFeed = join(
+      COMPONENTS_DIR,
+      "patterns/communication/live-feed/engines/modern.tsx"
+    );
+    const tooltip = join(
+      COMPONENTS_DIR,
+      "primitives/display/Tooltip/engines/rustic.tsx"
+    );
+    const previousCwd = process.cwd();
+    process.chdir(tmpdir());
+    try {
+      assert.equal(
+        countArc09PaintInFile(readFileSync(liveFeed, "utf8"), liveFeed),
+        0
+      );
+      // PLACEMENT_MAP is certified, while the consumer's own effective
+      // transition transform remains visible exactly once.
+      assert.equal(
+        countArc09PaintInFile(readFileSync(tooltip, "utf8"), tooltip),
+        1
+      );
+    } finally {
+      process.chdir(previousCwd);
+    }
+
+    const unregisteredExport = `
+    import { TOOLTIP_DEFAULTS } from '../Tooltip.types';
+    const node = <div style={TOOLTIP_DEFAULTS} />;
+  `;
+    assert.equal(countArc09PaintInFile(unregisteredExport, tooltip), 1);
+
+    const certifiedProducerMutation = `
+    import { PLACEMENT_MAP } from '../Tooltip.types';
+    PLACEMENT_MAP.top.backgroundColor = 'red';
+    PLACEMENT_MAP[getPlacement()][getPaintProperty()] = 'blue';
+    const node = <div style={PLACEMENT_MAP.top} />;
+  `;
+    // Two authored writes plus the direct read, which is not protected by the
+    // rustic engine's verified spread-then-transform overwrite contract.
+    assert.equal(countArc09PaintInFile(certifiedProducerMutation, tooltip), 3);
+  }
+);
+
+test("certified style producers expose every transparent style input", () => {
+  const toolbar = join(
+    COMPONENTS_DIR,
+    "patterns/data/list-toolbar/engines/modern.tsx"
+  );
+  const card = join(COMPONENTS_DIR, "primitives/display/Card/Card.tsx");
+  const stack = join(
+    COMPONENTS_DIR,
+    "primitives/layout/Stack/engines/modern.tsx"
+  );
+
+  assert.equal(
+    countArc09PaintInFile(
+      `
+      import { searchInputStyle } from '../tokens';
+      const color = 'red';
+      const node = <div style={searchInputStyle({ color })} />;
+    `,
+      toolbar
+    ),
+    1
+  );
+  assert.equal(
+    countArc09PaintInFile(
+      `
+      import { mergePersonalityStyle } from '../../../../runtime/personality/primitives';
+      const color = 'red';
+      const local = { color };
+      const node = <div style={mergePersonalityStyle(local, undefined)} />;
+    `,
+      card
+    ),
+    1
+  );
+  assert.equal(
+    countArc09PaintInFile(
+      `
+      import { buildStackStyles } from '../../shared/responsive-helpers.js';
+      const color = 'red';
+      const props = { style: { color } };
+      const node = <div style={buildStackStyles(props)} />;
+    `,
+      stack
+    ),
+    1
+  );
+});
+
+test("counter follows shorthand style prop bags and opaque intrinsic spreads", () => {
+  const source = `
+    const color = 'red';
+    const style = { color };
+    React.cloneElement(child, { style });
+    React.createElement('div', { style });
+    const opaque = getProps();
+    const first = <div {...opaque} />;
+
+    // Top-level HTML color is a DOM prop, not inline style.
+    const safe = { color };
+    const second = <div {...safe} />;
+    function Consumer(props) {
+      const { ...rest } = props;
+      return <div {...rest} />;
+    }
+  `;
+  assert.equal(countArc09PaintInFile(source), 2);
+});
+
+test("counter follows replacement assignments into style-map slots", () => {
+  const source = `
+    const color = 'red';
+    const styles = { root: { width: 1 } };
+    styles.root = { color };
+    const local = <div style={styles.root} />;
+
+    function Consumer(props) {
+      props.styles.root ??= { color };
+      return <div style={props.styles.root} />;
+    }
+  `;
+  assert.equal(countArc09PaintInFile(source), 2);
+});
+
+test("counter resolves React factory aliases and fails closed on unknown tags", () => {
+  const source = `
+    import { createElement as h } from 'react';
+    const fill = 'red';
+    const stroke = 'blue';
+    const color = 'pink';
+    const tags = { path: 'path' };
+    h(tags.path, { fill });
+    const getTag = () => 'path';
+    h(getTag(), { stroke });
+    h(getUnknownTag(), { color });
+
+    h(Widget, { fill });
+    h('div', { fill });
+  `;
+  assert.equal(countArc09PaintInFile(source), 3);
+});
+
+test("counter covers opaque style constructors and modern CSS setter sinks", () => {
+  const source = `
+    const style: React.CSSProperties = {};
+    const constructed = <div style={new StyleBag()} />;
+    const awaited = <div style={await getStyle()} />;
+    Reflect.defineProperty(style, 'color', { value: 'red' });
+    element.attributeStyleMap.set('background-color', 'red');
+    selection.style('color', 'red');
+
+    // Runtime SVG owns these D3 presentation-paint setters.
+    selection.style('fill', 'red');
+    selection.style('width', '1px');
+  `;
+  assert.equal(countArc09PaintInFile(source), 5);
+});
+
 test("counter covers DOM writes, computed names, cloneElement, and SVG createElement bags", () => {
   const source = `
     import type { CSSProperties } from 'react';
@@ -127,6 +362,62 @@ test("counter covers DOM writes, computed names, cloneElement, and SVG createEle
     const pathProps = { fill };
     React.createElement('path', pathProps);
     React.createElement('div', { stroke });
+  `;
+  assert.equal(countArc09PaintInFile(source), 8);
+});
+
+test("counter fails closed on computed cloneElement props and direct nested style mutations", () => {
+  const source = `
+    const dynamicProperty = getProperty();
+    React.cloneElement(<path />, { [dynamicProperty]: 'red' });
+
+    const PLACEMENT_MAP = { top: { width: 10 } };
+    PLACEMENT_MAP.top.backgroundColor = 'red';
+    const node = <div style={PLACEMENT_MAP.top} />;
+
+    function ConsumerMutation(props) {
+      props.styles.root.backgroundColor = 'red';
+      return <div style={props.styles.root} />;
+    }
+  `;
+  assert.equal(countArc09PaintInFile(source), 3);
+});
+
+test("counter counts paint getters and fails closed on computed style getters", () => {
+  const source = `
+    const dynamicProperty = getProperty();
+    const node = <div style={{
+      get color() { return 'red'; },
+      get [dynamicProperty]() { return 'blue'; },
+      get width() { return 10; },
+    }} />;
+  `;
+  assert.equal(countArc09PaintInFile(source), 2);
+});
+
+test("counter covers CSSOM text, style attributes, descriptor bags, and resolved SVG tags", () => {
+  const source = `
+    import type { CSSProperties } from 'react';
+    const style: CSSProperties = {};
+    const descriptorKey = getDescriptorKey();
+    Object.defineProperties(style, getDescriptors());
+    Object.defineProperties(style, {
+      [descriptorKey]: { value: 'red' },
+    });
+
+    element.style.cssText = 'color: red; width: 10px';
+    element.style.cssText = getCssText();
+    element.style.cssText = '';
+    element.setAttribute('style', 'background: red; opacity: 0.5');
+    element.setAttribute(getAttributeName(), 'red');
+    element.setAttributeNS(null, 'style', 'border-color: red');
+
+    const tag = 'path';
+    const dynamicTag = getTag();
+    const fill = 'red';
+    const stroke = 'blue';
+    React.createElement(tag, { fill });
+    React.createElement(dynamicTag, { stroke });
   `;
   assert.equal(countArc09PaintInFile(source), 8);
 });
@@ -206,12 +497,12 @@ test("counter fails closed on malformed source instead of certifying zero", () =
   );
 });
 
-test("counter covers the productive false-zero regressions", () => {
+test("counter pins the productive recovered residuals", () => {
   const cases = new Map([
-    ["primitives/layout/Box/engines/modern.tsx", 10],
-    ["primitives/layout/Box/engines/rustic.tsx", 10],
-    ["primitives/inputs/Input/compound/Group/index.tsx", 8],
-    ["surfaces/foundation/personality-helpers.tsx", 1],
+    ["primitives/layout/Box/engines/modern.tsx", 8],
+    ["primitives/layout/Box/engines/rustic.tsx", 8],
+    ["primitives/inputs/Input/compound/Group/index.tsx", 0],
+    ["surfaces/foundation/personality-helpers.tsx", 0],
     ["primitives/display/Card/engines/rustic.tsx", 1],
   ]);
   for (const [relativePath, expected] of cases) {

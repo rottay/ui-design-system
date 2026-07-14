@@ -197,7 +197,6 @@ function getContainerPosition(position: ToastPosition): CSSProperties {
     base.alignItems = 'flex-end';
   } else {
     base.left = '50%';
-    base.transform = 'translateX(-50%)';
     base.alignItems = 'center';
   }
 
@@ -327,11 +326,11 @@ export function ToastContainer({
   const position = positionProp || config.position;
 
   // ========================================================================
-  // Animation Styles Injection
+  // Animation Styles Compatibility
   // ========================================================================
 
   /**
-   * Effect to inject animation keyframes on mount.
+   * Invokes the legacy no-op hook. Keyframes come from the required public stylesheet.
    */
   useEffect(() => {
     injectToastStyles();
@@ -349,7 +348,12 @@ export function ToastContainer({
    * exactly the "pops out of existence" defect this container used to have.
    */
   const positionToasts = toasts.filter((t) => (t.options.position || config.position) === position);
-  const activeIds = new Set(positionToasts.filter((t) => t.visible).slice(0, max).map((t) => t.id));
+  const activeIds = new Set(
+    positionToasts
+      .filter((t) => t.visible)
+      .slice(0, max)
+      .map((t) => t.id)
+  );
   const renderedToasts = positionToasts.filter((t) => activeIds.has(t.id) || !t.visible);
 
   // ========================================================================
@@ -409,6 +413,8 @@ export function ToastContainer({
     gap: `${gap}px`,
     ...style,
   };
+  const usesStaticCenterTransform =
+    POSITION_MAP[position].horizontal === 'center' && !Object.prototype.hasOwnProperty.call(style ?? {}, 'transform');
 
   // ========================================================================
   // Early Return
@@ -428,6 +434,7 @@ export function ToastContainer({
       ref={containerRef}
       data-part="stack-container"
       data-placement={position}
+      data-center-transform={usesStaticCenterTransform ? 'true' : undefined}
       className={`rottay-toast-container rottay-toast-container--${position} ${className}`}
       style={containerStyle}
       aria-live="polite"
@@ -462,11 +469,7 @@ export function ToastContainer({
             {renderToast ? (
               renderToast(toast)
             ) : (
-              <BaseToast
-                {...toast.options}
-                visible={toast.visible}
-                onClose={() => handleDismiss(toast.id)}
-              />
+              <BaseToast {...toast.options} visible={toast.visible} onClose={() => handleDismiss(toast.id)} />
             )}
           </ToastStackItem>
         );

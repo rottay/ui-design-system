@@ -1,178 +1,52 @@
 {
- "measuredAt": "2026-07-11",
- "fleetFiles": 376,
- "fleetSites": 6300,
- "fleetComponents": 164,
+ "measuredAt": "2026-07-14",
+ "fleetFiles": 60,
+ "fleetSites": 634,
+ "fleetComponents": 30,
  "batches": [
   {
    "batch": "WO-SKIN-02",
-   "components": 25,
-   "files": 56,
-   "total": 1133,
-   "opus": 18
-  },
-  {
-   "batch": "WO-SKIN-03",
-   "components": 11,
-   "files": 41,
-   "total": 351,
-   "opus": 10
+   "components": 1,
+   "files": 1,
+   "total": 3,
+   "opus": 0
   },
   {
    "batch": "WO-SKIN-04",
-   "components": 28,
-   "files": 64,
-   "total": 606,
-   "opus": 22
+   "components": 4,
+   "files": 5,
+   "total": 5,
+   "opus": 0
   },
   {
    "batch": "WO-SKIN-05",
-   "components": 23,
-   "files": 57,
-   "total": 628,
-   "opus": 12
+   "components": 5,
+   "files": 7,
+   "total": 21,
+   "opus": 3
   },
   {
    "batch": "WO-SKIN-06",
-   "components": 77,
-   "files": 158,
-   "total": 3582,
-   "opus": 59
+   "components": 20,
+   "files": 47,
+   "total": 605,
+   "opus": 7
   }
  ],
  "groups": [
   {
-   "key": "primitives/inputs",
-   "batch": "WO-SKIN-02",
-   "components": 25,
-   "total": 1133,
-   "opus": 18
+   "key": "patterns/visualization",
+   "batch": "WO-SKIN-06",
+   "components": 6,
+   "total": 299,
+   "opus": 4
   },
   {
    "key": "patterns/misc",
    "batch": "WO-SKIN-06",
-   "components": 11,
-   "total": 590,
-   "opus": 5
-  },
-  {
-   "key": "primitives/display",
-   "batch": "WO-SKIN-05",
-   "components": 18,
-   "total": 560,
-   "opus": 10
-  },
-  {
-   "key": "structures/dashboard",
-   "batch": "WO-SKIN-06",
-   "components": 3,
-   "total": 439,
-   "opus": 3
-  },
-  {
-   "key": "primitives/feedback",
-   "batch": "WO-SKIN-03",
-   "components": 11,
-   "total": 351,
-   "opus": 10
-  },
-  {
-   "key": "patterns/data",
-   "batch": "WO-SKIN-06",
-   "components": 8,
-   "total": 344,
-   "opus": 7
-  },
-  {
-   "key": "patterns/forms",
-   "batch": "WO-SKIN-06",
    "components": 4,
-   "total": 332,
-   "opus": 3
-  },
-  {
-   "key": "primitives/overlay",
-   "batch": "WO-SKIN-04",
-   "components": 12,
-   "total": 325,
-   "opus": 11
-  },
-  {
-   "key": "patterns/visualization",
-   "batch": "WO-SKIN-06",
-   "components": 6,
-   "total": 308,
-   "opus": 4
-  },
-  {
-   "key": "surfaces/pages",
-   "batch": "WO-SKIN-06",
-   "components": 6,
-   "total": 295,
-   "opus": 6
-  },
-  {
-   "key": "primitives/navigation",
-   "batch": "WO-SKIN-04",
-   "components": 16,
-   "total": 281,
-   "opus": 11
-  },
-  {
-   "key": "patterns/navigation",
-   "batch": "WO-SKIN-06",
-   "components": 5,
-   "total": 279,
-   "opus": 3
-  },
-  {
-   "key": "patterns/communication",
-   "batch": "WO-SKIN-06",
-   "components": 6,
-   "total": 272,
-   "opus": 4
-  },
-  {
-   "key": "structures/workspace",
-   "batch": "WO-SKIN-06",
-   "components": 8,
-   "total": 261,
-   "opus": 8
-  },
-  {
-   "key": "structures/headers",
-   "batch": "WO-SKIN-06",
-   "components": 5,
-   "total": 198,
-   "opus": 5
-  },
-  {
-   "key": "structures/record",
-   "batch": "WO-SKIN-06",
-   "components": 3,
-   "total": 123,
-   "opus": 3
-  },
-  {
-   "key": "primitives/layout",
-   "batch": "WO-SKIN-05",
-   "components": 5,
-   "total": 68,
-   "opus": 2
-  },
-  {
-   "key": "patterns/workflow",
-   "batch": "WO-SKIN-06",
-   "components": 1,
-   "total": 64,
+   "total": 238,
    "opus": 1
-  },
-  {
-   "key": "surfaces/foundation",
-   "batch": "WO-SKIN-06",
-   "components": 5,
-   "total": 27,
-   "opus": 3
   },
   {
    "key": "patterns/_internal",
@@ -189,147 +63,77 @@
    "opus": 0
   },
   {
-   "key": "surfaces/layout",
-   "batch": "WO-SKIN-06",
-   "components": 3,
-   "total": 10,
-   "opus": 3
+   "key": "primitives/layout",
+   "batch": "WO-SKIN-05",
+   "components": 1,
+   "total": 16,
+   "opus": 1
   },
   {
-   "key": "structures/feedback",
+   "key": "surfaces/foundation",
+   "batch": "WO-SKIN-06",
+   "components": 2,
+   "total": 15,
+   "opus": 0
+  },
+  {
+   "key": "patterns/data",
    "batch": "WO-SKIN-06",
    "components": 1,
-   "total": 5,
+   "total": 8,
    "opus": 1
+  },
+  {
+   "key": "patterns/communication",
+   "batch": "WO-SKIN-06",
+   "components": 3,
+   "total": 8,
+   "opus": 1
+  },
+  {
+   "key": "primitives/display",
+   "batch": "WO-SKIN-05",
+   "components": 4,
+   "total": 5,
+   "opus": 2
+  },
+  {
+   "key": "primitives/inputs",
+   "batch": "WO-SKIN-02",
+   "components": 1,
+   "total": 3,
+   "opus": 0
+  },
+  {
+   "key": "primitives/overlay",
+   "batch": "WO-SKIN-04",
+   "components": 2,
+   "total": 3,
+   "opus": 0
+  },
+  {
+   "key": "primitives/navigation",
+   "batch": "WO-SKIN-04",
+   "components": 2,
+   "total": 2,
+   "opus": 0
+  },
+  {
+   "key": "patterns/forms",
+   "batch": "WO-SKIN-06",
+   "components": 1,
+   "total": 1,
+   "opus": 0
+  },
+  {
+   "key": "surfaces/pages",
+   "batch": "WO-SKIN-06",
+   "components": 1,
+   "total": 1,
+   "opus": 0
   }
  ],
  "components": [
-  {
-   "key": "structures/dashboard/dashboard-insights",
-   "tier": "structures",
-   "group": "dashboard",
-   "component": "dashboard-insights",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 259,
-   "files": [
-    {
-     "file": "structures/dashboard/dashboard-insights/activity/ticker/index.tsx",
-     "count": 37,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "structures/dashboard/dashboard-insights/metrics/minimal/index.tsx",
-     "count": 36,
-     "traps": [
-      "hoverHandlers",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "structures/dashboard/dashboard-insights/metrics/cards/index.tsx",
-     "count": 34,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "structures/dashboard/dashboard-insights/metrics/chart/index.tsx",
-     "count": 34,
-     "traps": [
-      "hoverHandlers",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "structures/dashboard/dashboard-insights/activity/timeline/index.tsx",
-     "count": 33,
-     "traps": [
-      "hoverHandlers",
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "structures/dashboard/dashboard-insights/activity/compact/index.tsx",
-     "count": 29,
-     "traps": [
-      "hoverHandlers",
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "structures/dashboard/dashboard-insights/activity/cards/index.tsx",
-     "count": 28,
-     "traps": [
-      "hoverHandlers",
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "structures/dashboard/dashboard-insights/metrics/rows/index.tsx",
-     "count": 28,
-     "traps": [
-      "hoverHandlers",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/DatePicker",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "DatePicker",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 154,
-   "files": [
-    {
-     "file": "primitives/inputs/DatePicker/engines/modern.tsx",
-     "count": 82,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/inputs/DatePicker/engines/rustic.tsx",
-     "count": 72,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag",
-      "portal"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/dashboard/data-terminal-card",
-   "tier": "structures",
-   "group": "dashboard",
-   "component": "data-terminal-card",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 149,
-   "files": [
-    {
-     "file": "structures/dashboard/data-terminal-card/index.tsx",
-     "count": 149,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
   {
    "key": "patterns/misc/tenant-preview",
    "tier": "patterns",
@@ -337,129 +141,17 @@
    "component": "tenant-preview",
    "batch": "WO-SKIN-06",
    "modelTier": "sonnet",
-   "total": 147,
+   "total": 145,
    "files": [
     {
      "file": "patterns/misc/tenant-preview/engines/rustic.tsx",
-     "count": 76,
+     "count": 75,
      "traps": []
     },
     {
      "file": "patterns/misc/tenant-preview/engines/modern.tsx",
-     "count": 71,
+     "count": 70,
      "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Select",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Select",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 143,
-   "files": [
-    {
-     "file": "primitives/inputs/Select/engines/modern.tsx",
-     "count": 93,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "stateHover",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Select/engines/rustic.tsx",
-     "count": 49,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Select/compound/OptGroup/index.tsx",
-     "count": 1,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "surfaces/pages/workspace",
-   "tier": "surfaces",
-   "group": "pages",
-   "component": "workspace",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 141,
-   "files": [
-    {
-     "file": "surfaces/pages/workspace/collection-workspace/index.tsx",
-     "count": 64,
-     "traps": [
-      "imperativePaint",
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/workspace/collection-workspace/render-dispatch.tsx",
-     "count": 49,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/workspace/record-workbench/index.tsx",
-     "count": 11,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/workspace/command-center/index.tsx",
-     "count": 10,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/workspace/decision-inbox/index.tsx",
-     "count": 7,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/forms/filter-builder",
-   "tier": "patterns",
-   "group": "forms",
-   "component": "filter-builder",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 117,
-   "files": [
-    {
-     "file": "patterns/forms/filter-builder/engines/modern.tsx",
-     "count": 78,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "patterns/forms/filter-builder/engines/rustic.tsx",
-     "count": 39,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
     }
    ]
   },
@@ -470,7 +162,7 @@
    "component": "charts",
    "batch": "WO-SKIN-06",
    "modelTier": "opus",
-   "total": 113,
+   "total": 104,
    "files": [
     {
      "file": "patterns/visualization/charts/bullet/index.tsx",
@@ -486,30 +178,8 @@
     },
     {
      "file": "patterns/visualization/charts/tooltip/index.tsx",
-     "count": 12,
+     "count": 11,
      "traps": []
-    },
-    {
-     "file": "patterns/visualization/charts/gauge/index.tsx",
-     "count": 7,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/sankey/index.tsx",
-     "count": 7,
-     "traps": [
-      "stateHover",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/visualization/charts/area-chart/index.tsx",
-     "count": 6,
-     "traps": [
-      "stylePropIntoChild"
-     ]
     },
     {
      "file": "patterns/visualization/charts/bar-chart/index.tsx",
@@ -519,12 +189,7 @@
      ]
     },
     {
-     "file": "patterns/visualization/charts/hooks/use-chart-theme.ts",
-     "count": 6,
-     "traps": []
-    },
-    {
-     "file": "patterns/visualization/charts/line-chart/index.tsx",
+     "file": "patterns/visualization/charts/gauge/index.tsx",
      "count": 6,
      "traps": [
       "stylePropIntoChild"
@@ -552,9 +217,36 @@
      ]
     },
     {
+     "file": "patterns/visualization/charts/sankey/index.tsx",
+     "count": 5,
+     "traps": [
+      "stateHover",
+      "stylePropIntoChild"
+     ]
+    },
+    {
+     "file": "patterns/visualization/charts/area-chart/index.tsx",
+     "count": 4,
+     "traps": [
+      "stylePropIntoChild"
+     ]
+    },
+    {
      "file": "patterns/visualization/charts/chart-scaffold.tsx",
      "count": 4,
      "traps": []
+    },
+    {
+     "file": "patterns/visualization/charts/hooks/use-chart-theme.ts",
+     "count": 4,
+     "traps": []
+    },
+    {
+     "file": "patterns/visualization/charts/line-chart/index.tsx",
+     "count": 4,
+     "traps": [
+      "stylePropIntoChild"
+     ]
     },
     {
      "file": "patterns/visualization/charts/funnel-chart/index.tsx",
@@ -592,638 +284,16 @@
      ]
     },
     {
-     "file": "patterns/visualization/charts/hooks/use-chart-export.ts",
-     "count": 1,
-     "traps": []
-    },
-    {
-     "file": "patterns/visualization/charts/tooltip/crosshair.ts",
-     "count": 1,
-     "traps": [
-      "stateHover"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/forms/form-builder",
-   "tier": "patterns",
-   "group": "forms",
-   "component": "form-builder",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 105,
-   "files": [
-    {
-     "file": "patterns/forms/form-builder/engines/modern.tsx",
-     "count": 55,
-     "traps": [
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "patterns/forms/form-builder/engines/rustic.tsx",
-     "count": 50,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Upload",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Upload",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 98,
-   "files": [
-    {
-     "file": "primitives/inputs/Upload/engines/modern.tsx",
-     "count": 50,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Upload/engines/rustic.tsx",
-     "count": 48,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/navigation/environment-toggle",
-   "tier": "patterns",
-   "group": "navigation",
-   "component": "environment-toggle",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 95,
-   "files": [
-    {
-     "file": "patterns/navigation/environment-toggle/engines/rustic.tsx",
-     "count": 50,
-     "traps": []
-    },
-    {
-     "file": "patterns/navigation/environment-toggle/engines/modern.tsx",
-     "count": 45,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/list-toolbar",
-   "tier": "patterns",
-   "group": "data",
-   "component": "list-toolbar",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 94,
-   "files": [
-    {
-     "file": "patterns/data/list-toolbar/engines/modern.tsx",
-     "count": 89,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "stateHover",
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "patterns/data/list-toolbar/tokens.ts",
-     "count": 5,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/saved-views",
-   "tier": "patterns",
-   "group": "data",
-   "component": "saved-views",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 91,
-   "files": [
-    {
-     "file": "patterns/data/saved-views/engines/rustic.tsx",
-     "count": 56,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "patterns/data/saved-views/engines/modern.tsx",
-     "count": 35,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "stateHover",
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/communication/comment-thread",
-   "tier": "patterns",
-   "group": "communication",
-   "component": "comment-thread",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 81,
-   "files": [
-    {
-     "file": "patterns/communication/comment-thread/engines/modern.tsx",
-     "count": 56,
-     "traps": []
-    },
-    {
-     "file": "patterns/communication/comment-thread/engines/rustic.tsx",
-     "count": 25,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Transfer",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Transfer",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 78,
-   "files": [
-    {
-     "file": "primitives/inputs/Transfer/engines/rustic.tsx",
-     "count": 43,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Transfer/engines/modern.tsx",
-     "count": 35,
+     "file": "patterns/visualization/charts/utils/export.ts",
+     "count": 2,
      "traps": [
       "imperativePaint"
      ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/TreeSelect",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "TreeSelect",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 77,
-   "files": [
-    {
-     "file": "primitives/inputs/TreeSelect/engines/rustic.tsx",
-     "count": 40,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "portal"
-     ]
     },
     {
-     "file": "primitives/inputs/TreeSelect/engines/modern.tsx",
-     "count": 37,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Calendar",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Calendar",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 76,
-   "files": [
-    {
-     "file": "primitives/display/Calendar/engines/modern.tsx",
-     "count": 44,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/display/Calendar/engines/rustic.tsx",
-     "count": 32,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "surfaces/pages/forms",
-   "tier": "surfaces",
-   "group": "pages",
-   "component": "forms",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 72,
-   "files": [
-    {
-     "file": "surfaces/pages/forms/guided-draft-form/index.tsx",
-     "count": 66,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/forms/form/index.tsx",
-     "count": 3,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/forms/wizard/index.tsx",
-     "count": 2,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/forms/detail-form/index.tsx",
-     "count": 1,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/column-menu",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "column-menu",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 69,
-   "files": [
-    {
-     "file": "structures/workspace/column-menu/index.tsx",
-     "count": 69,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild",
-      "portal"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/stats-grid",
-   "tier": "patterns",
-   "group": "data",
-   "component": "stats-grid",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 68,
-   "files": [
-    {
-     "file": "patterns/data/stats-grid/engines/modern.tsx",
-     "count": 36,
-     "traps": []
-    },
-    {
-     "file": "patterns/data/stats-grid/engines/rustic.tsx",
-     "count": 32,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Cascader",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Cascader",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 67,
-   "files": [
-    {
-     "file": "primitives/inputs/Cascader/engines/rustic.tsx",
-     "count": 37,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Cascader/engines/modern.tsx",
-     "count": 30,
-     "traps": [
-      "hoverHandlers",
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/record/form-sections",
-   "tier": "structures",
-   "group": "record",
-   "component": "form-sections",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 65,
-   "files": [
-    {
-     "file": "structures/record/form-sections/index.tsx",
-     "count": 65,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/TimePicker",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "TimePicker",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 64,
-   "files": [
-    {
-     "file": "primitives/inputs/TimePicker/engines/modern.tsx",
-     "count": 47,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/inputs/TimePicker/engines/rustic.tsx",
-     "count": 17,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/workflow/approval-workflow",
-   "tier": "patterns",
-   "group": "workflow",
-   "component": "approval-workflow",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 64,
-   "files": [
-    {
-     "file": "patterns/workflow/approval-workflow/engines/modern.tsx",
-     "count": 40,
-     "traps": []
-    },
-    {
-     "file": "patterns/workflow/approval-workflow/engines/rustic.tsx",
-     "count": 24,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/file-manager",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "file-manager",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 64,
-   "files": [
-    {
-     "file": "patterns/misc/file-manager/engines/modern.tsx",
-     "count": 35,
-     "traps": []
-    },
-    {
-     "file": "patterns/misc/file-manager/engines/rustic.tsx",
-     "count": 29,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/navigation/workspace-switcher",
-   "tier": "patterns",
-   "group": "navigation",
-   "component": "workspace-switcher",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 64,
-   "files": [
-    {
-     "file": "patterns/navigation/workspace-switcher/engines/rustic.tsx",
-     "count": 35,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "patterns/navigation/workspace-switcher/engines/modern.tsx",
-     "count": 29,
-     "traps": [
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/communication/notification-center",
-   "tier": "patterns",
-   "group": "communication",
-   "component": "notification-center",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 62,
-   "files": [
-    {
-     "file": "patterns/communication/notification-center/engines/modern.tsx",
-     "count": 38,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "patterns/communication/notification-center/engines/rustic.tsx",
-     "count": 24,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/forms/step-wizard",
-   "tier": "patterns",
-   "group": "forms",
-   "component": "step-wizard",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 62,
-   "files": [
-    {
-     "file": "patterns/forms/step-wizard/engines/modern.tsx",
-     "count": 37,
-     "traps": [
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "patterns/forms/step-wizard/engines/rustic.tsx",
-     "count": 25,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/saved-views-menu",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "saved-views-menu",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 61,
-   "files": [
-    {
-     "file": "structures/workspace/saved-views-menu/index.tsx",
-     "count": 61,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild",
-      "portal"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Menu",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Menu",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 59,
-   "files": [
-    {
-     "file": "primitives/navigation/Menu/engines/modern.tsx",
-     "count": 31,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/navigation/Menu/engines/rustic.tsx",
-     "count": 16,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Menu/compound/Divider/index.tsx",
-     "count": 4,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Menu/compound/SubMenu/index.tsx",
-     "count": 4,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Menu/compound/Item/index.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Menu/compound/Group/index.tsx",
+     "file": "patterns/visualization/charts/hooks/use-chart-export.ts",
      "count": 1,
      "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/user-profile-card",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "user-profile-card",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 58,
-   "files": [
-    {
-     "file": "patterns/misc/user-profile-card/engines/modern.tsx",
-     "count": 30,
-     "traps": []
-    },
-    {
-     "file": "patterns/misc/user-profile-card/engines/rustic.tsx",
-     "count": 28,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/navigation/command-palette",
-   "tier": "patterns",
-   "group": "navigation",
-   "component": "command-palette",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 57,
-   "files": [
-    {
-     "file": "patterns/navigation/command-palette/engines/rustic.tsx",
-     "count": 29,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "patterns/navigation/command-palette/engines/modern.tsx",
-     "count": 28,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
     }
    ]
   },
@@ -1240,356 +310,6 @@
      "file": "patterns/misc/branding-preview-sandbox/index.tsx",
      "count": 54,
      "traps": []
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/search-command-bar",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "search-command-bar",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 54,
-   "files": [
-    {
-     "file": "structures/workspace/search-command-bar/index.tsx",
-     "count": 54,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild",
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/communication/activity-log",
-   "tier": "patterns",
-   "group": "communication",
-   "component": "activity-log",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 53,
-   "files": [
-    {
-     "file": "patterns/communication/activity-log/engines/modern.tsx",
-     "count": 32,
-     "traps": []
-    },
-    {
-     "file": "patterns/communication/activity-log/engines/rustic.tsx",
-     "count": 21,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/pricing-table",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "pricing-table",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 53,
-   "files": [
-    {
-     "file": "patterns/misc/pricing-table/engines/rustic.tsx",
-     "count": 31,
-     "traps": []
-    },
-    {
-     "file": "patterns/misc/pricing-table/engines/modern.tsx",
-     "count": 22,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/Modal",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "Modal",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 53,
-   "files": [
-    {
-     "file": "primitives/overlay/Modal/engines/modern.tsx",
-     "count": 23,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/Modal/engines/rustic.tsx",
-     "count": 15,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/Modal/compound/CloseButton/index.tsx",
-     "count": 8,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/overlay/Modal/compound/Header/index.tsx",
-     "count": 2,
-     "traps": []
-    },
-    {
-     "file": "primitives/overlay/Modal/utils/Overlay.tsx",
-     "count": 2,
-     "traps": []
-    },
-    {
-     "file": "primitives/overlay/Modal/compound/Body/index.tsx",
-     "count": 1,
-     "traps": []
-    },
-    {
-     "file": "primitives/overlay/Modal/compound/Footer/index.tsx",
-     "count": 1,
-     "traps": []
-    },
-    {
-     "file": "primitives/overlay/Modal/utils/FocusTrap.tsx",
-     "count": 1,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "structures/headers/detail",
-   "tier": "structures",
-   "group": "headers",
-   "component": "detail",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 51,
-   "files": [
-    {
-     "file": "structures/headers/detail/index.tsx",
-     "count": 51,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Tree",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Tree",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 51,
-   "files": [
-    {
-     "file": "primitives/display/Tree/engines/modern.tsx",
-     "count": 27,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/display/Tree/engines/rustic.tsx",
-     "count": 24,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Modal",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Modal",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 51,
-   "files": [
-    {
-     "file": "primitives/feedback/Modal/engines/modern.tsx",
-     "count": 27,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Modal/engines/rustic.tsx",
-     "count": 16,
-     "traps": [
-      "imperativePaint",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Modal/compound/CloseButton/index.tsx",
-     "count": 4,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Modal/compound/Header/index.tsx",
-     "count": 2,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Modal/compound/Body/index.tsx",
-     "count": 1,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Modal/compound/Footer/index.tsx",
-     "count": 1,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Input",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Input",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 50,
-   "files": [
-    {
-     "file": "primitives/inputs/Input/engines/rustic.tsx",
-     "count": 14,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Input/engines/modern.tsx",
-     "count": 11,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Input/compound/TextArea/index.tsx",
-     "count": 10,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Input/compound/Addon/index.tsx",
-     "count": 9,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Input/compound/Password/index.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Input/compound/Search/index.tsx",
-     "count": 3,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "structures/headers/edit",
-   "tier": "structures",
-   "group": "headers",
-   "component": "edit",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 49,
-   "files": [
-    {
-     "file": "structures/headers/edit/index.tsx",
-     "count": 49,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/Tour",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "Tour",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 49,
-   "files": [
-    {
-     "file": "primitives/overlay/Tour/engines/rustic.tsx",
-     "count": 25,
-     "traps": [
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/Tour/engines/modern.tsx",
-     "count": 24,
-     "traps": [
-      "portal"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/cockpit-header",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "cockpit-header",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 48,
-   "files": [
-    {
-     "file": "patterns/misc/cockpit-header/engines/modern.tsx",
-     "count": 48,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/headers/collection",
-   "tier": "structures",
-   "group": "headers",
-   "component": "collection",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 48,
-   "files": [
-    {
-     "file": "structures/headers/collection/index.tsx",
-     "count": 48,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
     }
    ]
   },
@@ -1620,178 +340,6 @@
    ]
   },
   {
-   "key": "patterns/forms/invoice-template",
-   "tier": "patterns",
-   "group": "forms",
-   "component": "invoice-template",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 48,
-   "files": [
-    {
-     "file": "patterns/forms/invoice-template/engines/rustic.tsx",
-     "count": 28,
-     "traps": []
-    },
-    {
-     "file": "patterns/forms/invoice-template/engines/modern.tsx",
-     "count": 20,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Card",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Card",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 48,
-   "files": [
-    {
-     "file": "primitives/display/Card/engines/modern.tsx",
-     "count": 19,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Card/compound/Image/index.tsx",
-     "count": 15,
-     "traps": [
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/display/Card/engines/rustic.tsx",
-     "count": 9,
-     "traps": [
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/display/Card/compound/Header/index.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Card/Card.tsx",
-     "count": 1,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Card/compound/Footer/index.tsx",
-     "count": 1,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Skeleton",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Skeleton",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 48,
-   "files": [
-    {
-     "file": "primitives/feedback/Skeleton/compound/Table/index.tsx",
-     "count": 9,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Skeleton/engines/rustic.tsx",
-     "count": 7,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Skeleton/compound/Card/index.tsx",
-     "count": 6,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Skeleton/engines/modern.tsx",
-     "count": 6,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Skeleton/compound/FormSkeleton/index.tsx",
-     "count": 5,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Skeleton/compound/ListItem/index.tsx",
-     "count": 4,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Skeleton/compound/Avatar/index.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Skeleton/compound/Paragraph/index.tsx",
-     "count": 3,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Skeleton/compound/Text/index.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Skeleton/compound/Button/index.tsx",
-     "count": 2,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Toast",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Toast",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 47,
-   "files": [
-    {
-     "file": "primitives/feedback/Toast/engines/modern.tsx",
-     "count": 27,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Toast/engines/rustic.tsx",
-     "count": 16,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Toast/compound/Container/index.tsx",
-     "count": 2,
-     "traps": [
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Toast/compound/UndoToast/index.tsx",
-     "count": 2,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
-    }
-   ]
-  },
-  {
    "key": "patterns/visualization/calendar-view",
    "tier": "patterns",
    "group": "visualization",
@@ -1808,405 +356,6 @@
     {
      "file": "patterns/visualization/calendar-view/engines/rustic.tsx",
      "count": 18,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Message",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Message",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 46,
-   "files": [
-    {
-     "file": "primitives/feedback/Message/engines/rustic.tsx",
-     "count": 28,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Message/engines/modern.tsx",
-     "count": 18,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/page-shell",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "page-shell",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 45,
-   "files": [
-    {
-     "file": "patterns/misc/page-shell/engines/modern.tsx",
-     "count": 28,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
-    },
-    {
-     "file": "patterns/misc/page-shell/engines/rustic.tsx",
-     "count": 17,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/workbench-header",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "workbench-header",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 44,
-   "files": [
-    {
-     "file": "patterns/misc/workbench-header/engines/modern.tsx",
-     "count": 44,
-     "traps": [
-      "hoverHandlers",
-      "stateHover",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/FloatButton",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "FloatButton",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 44,
-   "files": [
-    {
-     "file": "primitives/navigation/FloatButton/engines/modern.tsx",
-     "count": 29,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/navigation/FloatButton/engines/rustic.tsx",
-     "count": 15,
-     "traps": [
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/communication/live-feed",
-   "tier": "patterns",
-   "group": "communication",
-   "component": "live-feed",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 44,
-   "files": [
-    {
-     "file": "patterns/communication/live-feed/engines/modern.tsx",
-     "count": 22,
-     "traps": []
-    },
-    {
-     "file": "patterns/communication/live-feed/engines/rustic.tsx",
-     "count": 22,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/cell-renderers",
-   "tier": "patterns",
-   "group": "data",
-   "component": "cell-renderers",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 43,
-   "files": [
-    {
-     "file": "patterns/data/cell-renderers/index.tsx",
-     "count": 43,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/navigation/shortcuts-overlay",
-   "tier": "patterns",
-   "group": "navigation",
-   "component": "shortcuts-overlay",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 43,
-   "files": [
-    {
-     "file": "patterns/navigation/shortcuts-overlay/engines/rustic.tsx",
-     "count": 24,
-     "traps": []
-    },
-    {
-     "file": "patterns/navigation/shortcuts-overlay/engines/modern.tsx",
-     "count": 19,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Stepper",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Stepper",
-   "batch": "WO-SKIN-04",
-   "modelTier": "sonnet",
-   "total": 43,
-   "files": [
-    {
-     "file": "primitives/navigation/Stepper/engines/rustic.tsx",
-     "count": 19,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Stepper/compound/Step/index.tsx",
-     "count": 17,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Stepper/engines/modern.tsx",
-     "count": 4,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Stepper/compound/Content/index.tsx",
-     "count": 3,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Drawer",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Drawer",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 42,
-   "files": [
-    {
-     "file": "primitives/feedback/Drawer/engines/modern.tsx",
-     "count": 25,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Drawer/engines/rustic.tsx",
-     "count": 8,
-     "traps": [
-      "imperativePaint"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Drawer/compound/Header/index.tsx",
-     "count": 5,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Drawer/compound/Body/index.tsx",
-     "count": 2,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Drawer/compound/Footer/index.tsx",
-     "count": 2,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/ColorPicker",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "ColorPicker",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 42,
-   "files": [
-    {
-     "file": "primitives/inputs/ColorPicker/engines/modern.tsx",
-     "count": 23,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/ColorPicker/engines/rustic.tsx",
-     "count": 19,
-     "traps": [
-      "hoverHandlers",
-      "portal"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Slider",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Slider",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 42,
-   "files": [
-    {
-     "file": "primitives/inputs/Slider/engines/rustic.tsx",
-     "count": 23,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Slider/engines/modern.tsx",
-     "count": 19,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/ConfirmDialog",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "ConfirmDialog",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 42,
-   "files": [
-    {
-     "file": "primitives/overlay/ConfirmDialog/engines/modern.tsx",
-     "count": 21,
-     "traps": [
-      "imperativePaint"
-     ]
-    },
-    {
-     "file": "primitives/overlay/ConfirmDialog/engines/rustic.tsx",
-     "count": 21,
-     "traps": [
-      "imperativePaint"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/Popconfirm",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "Popconfirm",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 41,
-   "files": [
-    {
-     "file": "primitives/overlay/Popconfirm/engines/modern.tsx",
-     "count": 21,
-     "traps": []
-    },
-    {
-     "file": "primitives/overlay/Popconfirm/engines/rustic.tsx",
-     "count": 20,
-     "traps": [
-      "portal"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/InputNumber",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "InputNumber",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 39,
-   "files": [
-    {
-     "file": "primitives/inputs/InputNumber/engines/modern.tsx",
-     "count": 21,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/InputNumber/engines/rustic.tsx",
-     "count": 18,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/Sheet",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "Sheet",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 39,
-   "files": [
-    {
-     "file": "primitives/overlay/Sheet/engines/rustic.tsx",
-     "count": 20,
-     "traps": [
-      "imperativePaint",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/Sheet/engines/modern.tsx",
-     "count": 19,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Avatar",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Avatar",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 38,
-   "files": [
-    {
-     "file": "primitives/display/Avatar/engines/modern.tsx",
-     "count": 22,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Avatar/engines/rustic.tsx",
-     "count": 10,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Avatar/compound/Badge/index.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Avatar/compound/Group/index.tsx",
-     "count": 3,
      "traps": []
     }
    ]
@@ -2255,110 +404,6 @@
    ]
   },
   {
-   "key": "structures/headers/form",
-   "tier": "structures",
-   "group": "headers",
-   "component": "form",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 36,
-   "files": [
-    {
-     "file": "structures/headers/form/index.tsx",
-     "count": 36,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Badge",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Badge",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 35,
-   "files": [
-    {
-     "file": "primitives/display/Badge/engines/modern.tsx",
-     "count": 23,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/display/Badge/engines/rustic.tsx",
-     "count": 12,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Tag",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Tag",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 35,
-   "files": [
-    {
-     "file": "primitives/display/Tag/engines/modern.tsx",
-     "count": 22,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Tag/engines/rustic.tsx",
-     "count": 13,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Image",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Image",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 35,
-   "files": [
-    {
-     "file": "primitives/display/Image/engines/rustic.tsx",
-     "count": 20,
-     "traps": [
-      "stateHover",
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/display/Image/engines/modern.tsx",
-     "count": 11,
-     "traps": [
-      "stateHover"
-     ]
-    },
-    {
-     "file": "primitives/display/Image/compound/Fallback/index.tsx",
-     "count": 2,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Image/compound/Skeleton/index.tsx",
-     "count": 2,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
    "key": "patterns/visualization/tree-view",
    "tier": "patterns",
    "group": "visualization",
@@ -2377,260 +422,6 @@
     {
      "file": "patterns/visualization/tree-view/engines/modern.tsx",
      "count": 16,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "surfaces/pages/admin",
-   "tier": "surfaces",
-   "group": "pages",
-   "component": "admin",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 35,
-   "files": [
-    {
-     "file": "surfaces/pages/admin/import-export/index.tsx",
-     "count": 12,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/admin/integration/index.tsx",
-     "count": 7,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/admin/billing/index.tsx",
-     "count": 6,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/admin/settings/index.tsx",
-     "count": 4,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/admin/team/index.tsx",
-     "count": 3,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/admin/profile/index.tsx",
-     "count": 2,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/admin/audit/index.tsx",
-     "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/record/record",
-   "tier": "structures",
-   "group": "record",
-   "component": "record",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 34,
-   "files": [
-    {
-     "file": "structures/record/record/index.tsx",
-     "count": 34,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Notification",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Notification",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 34,
-   "files": [
-    {
-     "file": "primitives/feedback/Notification/engines/rustic.tsx",
-     "count": 21,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Notification/engines/modern.tsx",
-     "count": 13,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Tooltip",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Tooltip",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 34,
-   "files": [
-    {
-     "file": "primitives/display/Tooltip/engines/modern.tsx",
-     "count": 18,
-     "traps": [
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/display/Tooltip/engines/rustic.tsx",
-     "count": 10,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/display/Tooltip/compound/Content/index.tsx",
-     "count": 6,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/PasswordInput",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "PasswordInput",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 34,
-   "files": [
-    {
-     "file": "primitives/inputs/PasswordInput/engines/modern.tsx",
-     "count": 17,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/PasswordInput/engines/rustic.tsx",
-     "count": 17,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/QRCode",
-   "tier": "primitives",
-   "group": "display",
-   "component": "QRCode",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 33,
-   "files": [
-    {
-     "file": "primitives/display/QRCode/engines/modern.tsx",
-     "count": 18,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/QRCode/engines/rustic.tsx",
-     "count": 15,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Radio",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Radio",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 33,
-   "files": [
-    {
-     "file": "primitives/inputs/Radio/engines/modern.tsx",
-     "count": 13,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Radio/compound/Group/index.tsx",
-     "count": 10,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Radio/engines/rustic.tsx",
-     "count": 10,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "structures/dashboard/stats-header",
-   "tier": "structures",
-   "group": "dashboard",
-   "component": "stats-header",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 31,
-   "files": [
-    {
-     "file": "structures/dashboard/stats-header/StatsHeader.tsx",
-     "count": 31,
-     "traps": [
-      "hoverHandlers",
-      "stateHover",
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/List",
-   "tier": "primitives",
-   "group": "display",
-   "component": "List",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 31,
-   "files": [
-    {
-     "file": "primitives/display/List/engines/modern.tsx",
-     "count": 19,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/List/engines/rustic.tsx",
-     "count": 12,
      "traps": []
     }
    ]
@@ -2657,670 +448,6 @@
    ]
   },
   {
-   "key": "primitives/navigation/Tabs",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Tabs",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 28,
-   "files": [
-    {
-     "file": "primitives/navigation/Tabs/engines/modern.tsx",
-     "count": 22,
-     "traps": [
-      "hoverHandlers",
-      "stateHover",
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/navigation/Tabs/engines/rustic.tsx",
-     "count": 6,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Timeline",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Timeline",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 28,
-   "files": [
-    {
-     "file": "primitives/display/Timeline/engines/modern.tsx",
-     "count": 19,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Timeline/engines/rustic.tsx",
-     "count": 9,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Alert",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Alert",
-   "batch": "WO-SKIN-03",
-   "modelTier": "sonnet",
-   "total": 28,
-   "files": [
-    {
-     "file": "primitives/feedback/Alert/engines/rustic.tsx",
-     "count": 16,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Alert/engines/modern.tsx",
-     "count": 12,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/AutoComplete",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "AutoComplete",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 28,
-   "files": [
-    {
-     "file": "primitives/inputs/AutoComplete/engines/modern.tsx",
-     "count": 14,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/AutoComplete/engines/rustic.tsx",
-     "count": 14,
-     "traps": [
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Carousel",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Carousel",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 28,
-   "files": [
-    {
-     "file": "primitives/display/Carousel/engines/rustic.tsx",
-     "count": 13,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/display/Carousel/engines/modern.tsx",
-     "count": 12,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/display/Carousel/compound/Item/index.tsx",
-     "count": 3,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "surfaces/pages/data",
-   "tier": "surfaces",
-   "group": "pages",
-   "component": "data",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 28,
-   "files": [
-    {
-     "file": "surfaces/pages/data/search/index.tsx",
-     "count": 11,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/data/compare/index.tsx",
-     "count": 7,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/data/report/index.tsx",
-     "count": 6,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/data/list/index.tsx",
-     "count": 2,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/data/dashboard/index.tsx",
-     "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/data/visualization/index.tsx",
-     "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/TagInput",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "TagInput",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 27,
-   "files": [
-    {
-     "file": "primitives/inputs/TagInput/engines/rustic.tsx",
-     "count": 14,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/TagInput/engines/modern.tsx",
-     "count": 13,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/active-filters-bar",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "active-filters-bar",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 26,
-   "files": [
-    {
-     "file": "structures/workspace/active-filters-bar/index.tsx",
-     "count": 26,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Steps",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Steps",
-   "batch": "WO-SKIN-04",
-   "modelTier": "sonnet",
-   "total": 26,
-   "files": [
-    {
-     "file": "primitives/navigation/Steps/engines/rustic.tsx",
-     "count": 21,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Steps/engines/modern.tsx",
-     "count": 5,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Checkbox",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Checkbox",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 26,
-   "files": [
-    {
-     "file": "primitives/inputs/Checkbox/engines/modern.tsx",
-     "count": 14,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Checkbox/engines/rustic.tsx",
-     "count": 9,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Checkbox/compound/Group/index.tsx",
-     "count": 3,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Form",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Form",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 25,
-   "files": [
-    {
-     "file": "primitives/inputs/Form/engines/rustic.tsx",
-     "count": 13,
-     "traps": [
-      "stylePropIntoChild",
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Form/engines/modern.tsx",
-     "count": 12,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/record/edit-fields",
-   "tier": "structures",
-   "group": "record",
-   "component": "edit-fields",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 24,
-   "files": [
-    {
-     "file": "structures/record/edit-fields/index.tsx",
-     "count": 24,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/AlertDialog",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "AlertDialog",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 24,
-   "files": [
-    {
-     "file": "primitives/overlay/AlertDialog/engines/rustic.tsx",
-     "count": 14,
-     "traps": [
-      "imperativePaint"
-     ]
-    },
-    {
-     "file": "primitives/overlay/AlertDialog/engines/modern.tsx",
-     "count": 10,
-     "traps": [
-      "imperativePaint"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Statistic",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Statistic",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 24,
-   "files": [
-    {
-     "file": "primitives/display/Statistic/engines/modern.tsx",
-     "count": 12,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Statistic/compound/Countdown/index.tsx",
-     "count": 6,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Statistic/engines/rustic.tsx",
-     "count": 6,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/ContextMenu",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "ContextMenu",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 23,
-   "files": [
-    {
-     "file": "primitives/overlay/ContextMenu/engines/rustic.tsx",
-     "count": 16,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/ContextMenu/engines/modern.tsx",
-     "count": 7,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/export-button",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "export-button",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 22,
-   "files": [
-    {
-     "file": "structures/workspace/export-button/index.tsx",
-     "count": 22,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "textColorProp",
-      "stylePropIntoChild",
-      "keyframesTag",
-      "portal"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/Popover",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "Popover",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 22,
-   "files": [
-    {
-     "file": "primitives/overlay/Popover/engines/rustic.tsx",
-     "count": 14,
-     "traps": [
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/Popover/engines/modern.tsx",
-     "count": 8,
-     "traps": [
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/empty-state",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "empty-state",
-   "batch": "WO-SKIN-06",
-   "modelTier": "sonnet",
-   "total": 21,
-   "files": [
-    {
-     "file": "patterns/misc/empty-state/engines/modern.tsx",
-     "count": 11,
-     "traps": []
-    },
-    {
-     "file": "patterns/misc/empty-state/engines/rustic.tsx",
-     "count": 10,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/status-filter-pills",
-   "tier": "patterns",
-   "group": "data",
-   "component": "status-filter-pills",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 20,
-   "files": [
-    {
-     "file": "patterns/data/status-filter-pills/index.tsx",
-     "count": 20,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/misc/token-inspector",
-   "tier": "patterns",
-   "group": "misc",
-   "component": "token-inspector",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 20,
-   "files": [
-    {
-     "file": "patterns/misc/token-inspector/index.tsx",
-     "count": 20,
-     "traps": [
-      "stateHover"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/navigation/locale-switcher",
-   "tier": "patterns",
-   "group": "navigation",
-   "component": "locale-switcher",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 20,
-   "files": [
-    {
-     "file": "patterns/navigation/locale-switcher/engines/rustic.tsx",
-     "count": 14,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "patterns/navigation/locale-switcher/engines/modern.tsx",
-     "count": 6,
-     "traps": [
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Callout",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Callout",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 20,
-   "files": [
-    {
-     "file": "primitives/display/Callout/engines/modern.tsx",
-     "count": 12,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Callout/engines/rustic.tsx",
-     "count": 8,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Toggle",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Toggle",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 20,
-   "files": [
-    {
-     "file": "primitives/inputs/Toggle/engines/rustic.tsx",
-     "count": 12,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Toggle/engines/modern.tsx",
-     "count": 8,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/layout/Layout",
-   "tier": "primitives",
-   "group": "layout",
-   "component": "Layout",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 20,
-   "files": [
-    {
-     "file": "primitives/layout/Layout/engines/rustic.tsx",
-     "count": 12,
-     "traps": []
-    },
-    {
-     "file": "primitives/layout/Layout/engines/modern.tsx",
-     "count": 8,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/layout/Collapse",
-   "tier": "primitives",
-   "group": "layout",
-   "component": "Collapse",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 19,
-   "files": [
-    {
-     "file": "primitives/layout/Collapse/engines/modern.tsx",
-     "count": 11,
-     "traps": []
-    },
-    {
-     "file": "primitives/layout/Collapse/engines/rustic.tsx",
-     "count": 8,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Mentions",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Mentions",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 19,
-   "files": [
-    {
-     "file": "primitives/inputs/Mentions/engines/modern.tsx",
-     "count": 10,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Mentions/engines/rustic.tsx",
-     "count": 9,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Switch",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Switch",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 19,
-   "files": [
-    {
-     "file": "primitives/inputs/Switch/engines/modern.tsx",
-     "count": 10,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Switch/engines/rustic.tsx",
-     "count": 9,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
    "key": "patterns/_internal/engines",
    "tier": "patterns",
    "group": "_internal",
@@ -3332,111 +459,6 @@
     {
      "file": "patterns/_internal/engines/modern/styles.ts",
      "count": 18,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/gallery-view",
-   "tier": "patterns",
-   "group": "data",
-   "component": "gallery-view",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 18,
-   "files": [
-    {
-     "file": "patterns/data/gallery-view/PatternGalleryView.tsx",
-     "count": 18,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/Dropdown",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "Dropdown",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 18,
-   "files": [
-    {
-     "file": "primitives/overlay/Dropdown/engines/rustic.tsx",
-     "count": 11,
-     "traps": [
-      "imperativePaint",
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/Dropdown/engines/modern.tsx",
-     "count": 7,
-     "traps": [
-      "hoverHandlers",
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/layout/Box",
-   "tier": "primitives",
-   "group": "layout",
-   "component": "Box",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
-   "total": 18,
-   "files": [
-    {
-     "file": "primitives/layout/Box/engines/modern.tsx",
-     "count": 9,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/layout/Box/engines/rustic.tsx",
-     "count": 9,
-     "traps": [
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Progress",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Progress",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 18,
-   "files": [
-    {
-     "file": "primitives/feedback/Progress/engines/rustic.tsx",
-     "count": 7,
-     "traps": [
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Progress/engines/modern.tsx",
-     "count": 5,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Progress/compound/Line/index.tsx",
-     "count": 4,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Progress/compound/Circle/index.tsx",
-     "count": 2,
      "traps": []
     }
    ]
@@ -3458,555 +480,26 @@
    ]
   },
   {
-   "key": "surfaces/pages/experience",
-   "tier": "surfaces",
-   "group": "pages",
-   "component": "experience",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 17,
-   "files": [
-    {
-     "file": "surfaces/pages/experience/notification/index.tsx",
-     "count": 5,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/experience/auth/index.tsx",
-     "count": 3,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/experience/marketing/index.tsx",
-     "count": 3,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/experience/media/index.tsx",
-     "count": 3,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/experience/chat/index.tsx",
-     "count": 1,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/experience/editor/index.tsx",
-     "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/experience/pricing/index.tsx",
-     "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/communication/assistant",
-   "tier": "patterns",
-   "group": "communication",
-   "component": "assistant",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 16,
-   "files": [
-    {
-     "file": "patterns/communication/assistant/index.tsx",
-     "count": 16,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/communication/presence",
-   "tier": "patterns",
-   "group": "communication",
-   "component": "presence",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 16,
-   "files": [
-    {
-     "file": "patterns/communication/presence/index.tsx",
-     "count": 16,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild",
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Pagination",
+   "key": "primitives/layout/Box",
    "tier": "primitives",
-   "group": "navigation",
-   "component": "Pagination",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 16,
-   "files": [
-    {
-     "file": "primitives/navigation/Pagination/engines/modern.tsx",
-     "count": 11,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Pagination/engines/rustic.tsx",
-     "count": 5,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Descriptions",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Descriptions",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 16,
-   "files": [
-    {
-     "file": "primitives/display/Descriptions/engines/modern.tsx",
-     "count": 8,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Descriptions/engines/rustic.tsx",
-     "count": 8,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Segmented",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Segmented",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 16,
-   "files": [
-    {
-     "file": "primitives/navigation/Segmented/engines/modern.tsx",
-     "count": 8,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Segmented/engines/rustic.tsx",
-     "count": 8,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Result",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Result",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 15,
-   "files": [
-    {
-     "file": "primitives/feedback/Result/engines/modern.tsx",
-     "count": 9,
-     "traps": []
-    },
-    {
-     "file": "primitives/feedback/Result/engines/rustic.tsx",
-     "count": 6,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/headers/dashboard",
-   "tier": "structures",
-   "group": "headers",
-   "component": "dashboard",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 14,
-   "files": [
-    {
-     "file": "structures/headers/dashboard/index.tsx",
-     "count": 14,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Typography",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Typography",
+   "group": "layout",
+   "component": "Box",
    "batch": "WO-SKIN-05",
    "modelTier": "opus",
-   "total": 14,
+   "total": 16,
    "files": [
     {
-     "file": "primitives/display/Typography/engines/modern.tsx",
-     "count": 10,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "primitives/display/Typography/engines/rustic.tsx",
-     "count": 4,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/OTPInput",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "OTPInput",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 14,
-   "files": [
-    {
-     "file": "primitives/inputs/OTPInput/engines/modern.tsx",
+     "file": "primitives/layout/Box/engines/modern.tsx",
      "count": 8,
      "traps": [
-      "imperativePaint"
-     ]
-    },
-    {
-     "file": "primitives/inputs/OTPInput/engines/rustic.tsx",
-     "count": 6,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Spinner",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Spinner",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 13,
-   "files": [
-    {
-     "file": "primitives/feedback/Spinner/engines/modern.tsx",
-     "count": 9,
-     "traps": [
-      "keyframesTag"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Spinner/engines/rustic.tsx",
-     "count": 4,
-     "traps": [
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Textarea",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Textarea",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 13,
-   "files": [
-    {
-     "file": "primitives/inputs/Textarea/engines/rustic.tsx",
-     "count": 7,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/Textarea/engines/modern.tsx",
-     "count": 6,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/scope-switcher",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "scope-switcher",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 12,
-   "files": [
-    {
-     "file": "structures/workspace/scope-switcher/index.tsx",
-     "count": 12,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/BackTop",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "BackTop",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 12,
-   "files": [
-    {
-     "file": "primitives/navigation/BackTop/engines/rustic.tsx",
-     "count": 7,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "primitives/navigation/BackTop/engines/modern.tsx",
-     "count": 5,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Kbd",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Kbd",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
-   "total": 10,
-   "files": [
-    {
-     "file": "primitives/display/Kbd/engines/rustic.tsx",
-     "count": 6,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Kbd/engines/modern.tsx",
-     "count": 4,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/overlay/HoverCard",
-   "tier": "primitives",
-   "group": "overlay",
-   "component": "HoverCard",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 10,
-   "files": [
-    {
-     "file": "primitives/overlay/HoverCard/engines/rustic.tsx",
-     "count": 6,
-     "traps": [
-      "hoverHandlers",
-      "portal"
-     ]
-    },
-    {
-     "file": "primitives/overlay/HoverCard/engines/modern.tsx",
-     "count": 4,
-     "traps": [
       "hoverHandlers"
      ]
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/grid-view",
-   "tier": "patterns",
-   "group": "data",
-   "component": "grid-view",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 9,
-   "files": [
+    },
     {
-     "file": "patterns/data/grid-view/PatternGridView.tsx",
-     "count": 9,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/view-mode-switcher",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "view-mode-switcher",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 9,
-   "files": [
-    {
-     "file": "structures/workspace/view-mode-switcher/index.tsx",
-     "count": 9,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "surfaces/foundation/states",
-   "tier": "surfaces",
-   "group": "foundation",
-   "component": "states",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 9,
-   "files": [
-    {
-     "file": "surfaces/foundation/states/surface-states.tsx",
+     "file": "primitives/layout/Box/engines/rustic.tsx",
      "count": 8,
      "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/foundation/states/index.tsx",
-     "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/feedback/Rate",
-   "tier": "primitives",
-   "group": "feedback",
-   "component": "Rate",
-   "batch": "WO-SKIN-03",
-   "modelTier": "opus",
-   "total": 9,
-   "files": [
-    {
-     "file": "primitives/feedback/Rate/engines/rustic.tsx",
-     "count": 6,
-     "traps": [
       "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/feedback/Rate/engines/modern.tsx",
-     "count": 3,
-     "traps": [
-      "hoverHandlers"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/Button",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "Button",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 9,
-   "files": [
-    {
-     "file": "primitives/inputs/Button/compound/Icon/index.tsx",
-     "count": 6,
-     "traps": [
-      "hoverHandlers"
-     ]
-    },
-    {
-     "file": "primitives/inputs/Button/compound/Group/index.tsx",
-     "count": 3,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Breadcrumb",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Breadcrumb",
-   "batch": "WO-SKIN-04",
-   "modelTier": "sonnet",
-   "total": 9,
-   "files": [
-    {
-     "file": "primitives/navigation/Breadcrumb/engines/modern.tsx",
-     "count": 5,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Breadcrumb/engines/rustic.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Breadcrumb/compound/Item/index.tsx",
-     "count": 1,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "structures/workspace/table-toolbar",
-   "tier": "structures",
-   "group": "workspace",
-   "component": "table-toolbar",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 8,
-   "files": [
-    {
-     "file": "structures/workspace/table-toolbar/index.tsx",
-     "count": 8,
-     "traps": [
-      "stylePropIntoChild"
      ]
     }
    ]
@@ -4028,78 +521,22 @@
    ]
   },
   {
-   "key": "primitives/layout/Divider",
-   "tier": "primitives",
-   "group": "layout",
-   "component": "Divider",
-   "batch": "WO-SKIN-05",
-   "modelTier": "sonnet",
+   "key": "patterns/data/list-toolbar",
+   "tier": "patterns",
+   "group": "data",
+   "component": "list-toolbar",
+   "batch": "WO-SKIN-06",
+   "modelTier": "opus",
    "total": 8,
    "files": [
     {
-     "file": "primitives/layout/Divider/engines/rustic.tsx",
+     "file": "patterns/data/list-toolbar/tokens.ts",
      "count": 5,
      "traps": []
     },
     {
-     "file": "primitives/layout/Divider/engines/modern.tsx",
+     "file": "patterns/data/list-toolbar/engines/modern.tsx",
      "count": 3,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/FormField",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "FormField",
-   "batch": "WO-SKIN-02",
-   "modelTier": "sonnet",
-   "total": 8,
-   "files": [
-    {
-     "file": "primitives/inputs/FormField/engines/modern.tsx",
-     "count": 4,
-     "traps": []
-    },
-    {
-     "file": "primitives/inputs/FormField/engines/rustic.tsx",
-     "count": 4,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/BottomTabBar",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "BottomTabBar",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 7,
-   "files": [
-    {
-     "file": "primitives/navigation/BottomTabBar/BottomTabBar.tsx",
-     "count": 7,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "surfaces/layout/collection-shell",
-   "tier": "surfaces",
-   "group": "layout",
-   "component": "collection-shell",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 7,
-   "files": [
-    {
-     "file": "surfaces/layout/collection-shell/index.tsx",
-     "count": 7,
      "traps": [
       "stylePropIntoChild"
      ]
@@ -4128,118 +565,32 @@
    ]
   },
   {
-   "key": "primitives/navigation/Anchor",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Anchor",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 7,
-   "files": [
-    {
-     "file": "primitives/navigation/Anchor/engines/rustic.tsx",
-     "count": 5,
-     "traps": [
-      "stateHover",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "primitives/navigation/Anchor/engines/modern.tsx",
-     "count": 2,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/MobileHeader",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "MobileHeader",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 6,
-   "files": [
-    {
-     "file": "primitives/navigation/MobileHeader/MobileHeader.tsx",
-     "count": 6,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "structures/feedback/loading-overlay",
-   "tier": "structures",
-   "group": "feedback",
-   "component": "loading-overlay",
+   "key": "patterns/communication/notification-center",
+   "tier": "patterns",
+   "group": "communication",
+   "component": "notification-center",
    "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 5,
-   "files": [
-    {
-     "file": "structures/feedback/loading-overlay/index.tsx",
-     "count": 5,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/inputs/VoiceInputButton",
-   "tier": "primitives",
-   "group": "inputs",
-   "component": "VoiceInputButton",
-   "batch": "WO-SKIN-02",
-   "modelTier": "opus",
-   "total": 4,
-   "files": [
-    {
-     "file": "primitives/inputs/VoiceInputButton/index.tsx",
-     "count": 4,
-     "traps": [
-      "stylePropIntoChild",
-      "keyframesTag"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/display/Empty",
-   "tier": "primitives",
-   "group": "display",
-   "component": "Empty",
-   "batch": "WO-SKIN-05",
    "modelTier": "sonnet",
    "total": 4,
    "files": [
     {
-     "file": "primitives/display/Empty/engines/modern.tsx",
-     "count": 3,
-     "traps": []
-    },
-    {
-     "file": "primitives/display/Empty/engines/rustic.tsx",
-     "count": 1,
+     "file": "patterns/communication/notification-center/engines/modern.tsx",
+     "count": 4,
      "traps": []
     }
    ]
   },
   {
-   "key": "primitives/navigation/ActionDock",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "ActionDock",
-   "batch": "WO-SKIN-04",
+   "key": "patterns/communication/presence",
+   "tier": "patterns",
+   "group": "communication",
+   "component": "presence",
+   "batch": "WO-SKIN-06",
    "modelTier": "opus",
    "total": 3,
    "files": [
     {
-     "file": "primitives/navigation/ActionDock/ActionDock.tsx",
+     "file": "patterns/communication/presence/index.tsx",
      "count": 3,
      "traps": [
       "stylePropIntoChild"
@@ -4248,24 +599,53 @@
    ]
   },
   {
-   "key": "primitives/layout/Splitter",
-   "tier": "primitives",
-   "group": "layout",
-   "component": "Splitter",
-   "batch": "WO-SKIN-05",
-   "modelTier": "opus",
+   "key": "patterns/misc/file-manager",
+   "tier": "patterns",
+   "group": "misc",
+   "component": "file-manager",
+   "batch": "WO-SKIN-06",
+   "modelTier": "sonnet",
    "total": 3,
    "files": [
     {
-     "file": "primitives/layout/Splitter/engines/rustic.tsx",
-     "count": 2,
-     "traps": [
-      "hoverHandlers",
-      "stateHover"
-     ]
+     "file": "patterns/misc/file-manager/engines/modern.tsx",
+     "count": 3,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "primitives/inputs/Button",
+   "tier": "primitives",
+   "group": "inputs",
+   "component": "Button",
+   "batch": "WO-SKIN-02",
+   "modelTier": "sonnet",
+   "total": 3,
+   "files": [
+    {
+     "file": "primitives/inputs/Button/compound/Group/index.tsx",
+     "count": 3,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "primitives/display/Avatar",
+   "tier": "primitives",
+   "group": "display",
+   "component": "Avatar",
+   "batch": "WO-SKIN-05",
+   "modelTier": "sonnet",
+   "total": 2,
+   "files": [
+    {
+     "file": "primitives/display/Avatar/engines/modern.tsx",
+     "count": 1,
+     "traps": []
     },
     {
-     "file": "primitives/layout/Splitter/engines/modern.tsx",
+     "file": "primitives/display/Avatar/engines/rustic.tsx",
      "count": 1,
      "traps": []
     }
@@ -4278,139 +658,100 @@
    "component": "Watermark",
    "batch": "WO-SKIN-04",
    "modelTier": "sonnet",
-   "total": 3,
+   "total": 2,
    "files": [
-    {
-     "file": "primitives/overlay/Watermark/engines/rustic.tsx",
-     "count": 2,
-     "traps": []
-    },
     {
      "file": "primitives/overlay/Watermark/engines/modern.tsx",
      "count": 1,
      "traps": []
-    }
-   ]
-  },
-  {
-   "key": "surfaces/foundation/personality-helpers.tsx",
-   "tier": "surfaces",
-   "group": "foundation",
-   "component": "personality-helpers.tsx",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 2,
-   "files": [
-    {
-     "file": "surfaces/foundation/personality-helpers.tsx",
-     "count": 2,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "surfaces/layout/header",
-   "tier": "surfaces",
-   "group": "layout",
-   "component": "header",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 2,
-   "files": [
-    {
-     "file": "surfaces/layout/header/index.tsx",
-     "count": 2,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Affix",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Affix",
-   "batch": "WO-SKIN-04",
-   "modelTier": "opus",
-   "total": 2,
-   "files": [
-    {
-     "file": "primitives/navigation/Affix/engines/modern.tsx",
-     "count": 1,
-     "traps": []
     },
     {
-     "file": "primitives/navigation/Affix/engines/rustic.tsx",
-     "count": 1,
-     "traps": [
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "primitives/navigation/Link",
-   "tier": "primitives",
-   "group": "navigation",
-   "component": "Link",
-   "batch": "WO-SKIN-04",
-   "modelTier": "sonnet",
-   "total": 2,
-   "files": [
-    {
-     "file": "primitives/navigation/Link/engines/modern.tsx",
-     "count": 1,
-     "traps": []
-    },
-    {
-     "file": "primitives/navigation/Link/engines/rustic.tsx",
+     "file": "primitives/overlay/Watermark/engines/rustic.tsx",
      "count": 1,
      "traps": []
     }
    ]
   },
   {
-   "key": "surfaces/pages/operations",
-   "tier": "surfaces",
-   "group": "pages",
-   "component": "operations",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 2,
-   "files": [
-    {
-     "file": "surfaces/pages/operations/activity/index.tsx",
-     "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    },
-    {
-     "file": "surfaces/pages/operations/kanban/index.tsx",
-     "count": 1,
-     "traps": []
-    }
-   ]
-  },
-  {
-   "key": "patterns/data/bulk-select-toggle",
+   "key": "patterns/communication/activity-log",
    "tier": "patterns",
-   "group": "data",
-   "component": "bulk-select-toggle",
+   "group": "communication",
+   "component": "activity-log",
    "batch": "WO-SKIN-06",
+   "modelTier": "sonnet",
+   "total": 1,
+   "files": [
+    {
+     "file": "patterns/communication/activity-log/engines/modern.tsx",
+     "count": 1,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "patterns/forms/form-builder",
+   "tier": "patterns",
+   "group": "forms",
+   "component": "form-builder",
+   "batch": "WO-SKIN-06",
+   "modelTier": "sonnet",
+   "total": 1,
+   "files": [
+    {
+     "file": "patterns/forms/form-builder/engines/modern.tsx",
+     "count": 1,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "primitives/display/Card",
+   "tier": "primitives",
+   "group": "display",
+   "component": "Card",
+   "batch": "WO-SKIN-05",
+   "modelTier": "sonnet",
+   "total": 1,
+   "files": [
+    {
+     "file": "primitives/display/Card/engines/rustic.tsx",
+     "count": 1,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "primitives/display/Image",
+   "tier": "primitives",
+   "group": "display",
+   "component": "Image",
+   "batch": "WO-SKIN-05",
    "modelTier": "opus",
    "total": 1,
    "files": [
     {
-     "file": "patterns/data/bulk-select-toggle/index.tsx",
+     "file": "primitives/display/Image/engines/modern.tsx",
      "count": 1,
      "traps": [
-      "stylePropIntoChild"
+      "stateHover"
+     ]
+    }
+   ]
+  },
+  {
+   "key": "primitives/display/Tooltip",
+   "tier": "primitives",
+   "group": "display",
+   "component": "Tooltip",
+   "batch": "WO-SKIN-05",
+   "modelTier": "opus",
+   "total": 1,
+   "files": [
+    {
+     "file": "primitives/display/Tooltip/engines/rustic.tsx",
+     "count": 1,
+     "traps": [
+      "hoverHandlers"
      ]
     }
    ]
@@ -4432,57 +773,50 @@
    ]
   },
   {
-   "key": "primitives/overlay/AdaptiveOverlay",
+   "key": "primitives/navigation/Tabs",
+   "tier": "primitives",
+   "group": "navigation",
+   "component": "Tabs",
+   "batch": "WO-SKIN-04",
+   "modelTier": "sonnet",
+   "total": 1,
+   "files": [
+    {
+     "file": "primitives/navigation/Tabs/engines/modern.tsx",
+     "count": 1,
+     "traps": []
+    }
+   ]
+  },
+  {
+   "key": "primitives/overlay/Modal",
    "tier": "primitives",
    "group": "overlay",
-   "component": "AdaptiveOverlay",
+   "component": "Modal",
    "batch": "WO-SKIN-04",
-   "modelTier": "opus",
+   "modelTier": "sonnet",
    "total": 1,
    "files": [
     {
-     "file": "primitives/overlay/AdaptiveOverlay/index.tsx",
+     "file": "primitives/overlay/Modal/utils/Overlay.tsx",
      "count": 1,
-     "traps": [
-      "stylePropIntoChild"
-     ]
+     "traps": []
     }
    ]
   },
   {
-   "key": "surfaces/foundation/shared.tsx",
+   "key": "surfaces/pages/operations",
    "tier": "surfaces",
-   "group": "foundation",
-   "component": "shared.tsx",
+   "group": "pages",
+   "component": "operations",
    "batch": "WO-SKIN-06",
-   "modelTier": "opus",
+   "modelTier": "sonnet",
    "total": 1,
    "files": [
     {
-     "file": "surfaces/foundation/shared.tsx",
+     "file": "surfaces/pages/operations/kanban/index.tsx",
      "count": 1,
-     "traps": [
-      "textColorProp",
-      "stylePropIntoChild"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "surfaces/layout/sidebar",
-   "tier": "surfaces",
-   "group": "layout",
-   "component": "sidebar",
-   "batch": "WO-SKIN-06",
-   "modelTier": "opus",
-   "total": 1,
-   "files": [
-    {
-     "file": "surfaces/layout/sidebar/index.tsx",
-     "count": 1,
-     "traps": [
-      "stylePropIntoChild"
-     ]
+     "traps": []
     }
    ]
   }
