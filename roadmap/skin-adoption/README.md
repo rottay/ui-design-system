@@ -77,3 +77,36 @@ it was never written for.
 The ARC-09 real-engines suites now resolve ownership STRUCTURALLY: a node belongs to the component
 under test iff no other `data-part='root'` sits between it and that component's own root. Any new
 real-engines suite must do the same.
+
+## A surface owns no DOM (the eighth incident, 2026-07-13)
+
+> **A surface owns no DOM. It owns composition. Its anatomy is therefore carried by the classNames it
+> puts on the primitives it composes — never by stamping `data-part` on them.** `data-part` is for
+> DOM a component renders ITSELF.
+
+`BaseComponentProps` declares `'data-part'?: string` on **every** component ("Skin anatomy hook"), so
+`tsc` accepts the stamp everywhere. But the engines build their DOM props from explicit allowlists,
+and several never emit it. Measured, both engines:
+
+| primitive | modern | rustic |
+| --- | --- | --- |
+| Box, Stack, Flex, Text | forwards | forwards |
+| **Grid, Card** | **drops** | **drops** |
+| **Button** | **drops** | **forwards** |
+
+So a stamp on a composed `Grid`/`Card` is a **lie in the source**: it reads as anatomy and emits
+nothing. `tsc` passes, the paint counter does not read attributes, and a skin rule anchored on it
+would simply never match — the same silence as an unparseable or unimported skin, both of which
+already needed their own gate. Button is the sharp edge: the stamp EXISTS in rustic and VANISHES in
+modern.
+
+**Do not "fix" this by making the engines forward it.** That would let a composing parent OVERRIDE
+the primitive's own root part, and 85 shipped skins anchor on `[data-part='root']` — a parent stamp
+would silently strip the child's skin, which is the Typography incident mechanized fleet-wide. Filed
+as P-79; it needs its own baselines and an answer to "when parent and child both name a part, who
+wins?".
+
+Use the class. It is already in the DOM (className forwards on every primitive probed), it costs no
+DOM change, and it is what the selector law asks for anyway. Where an anatomy node has no stable
+class, ADD one in the surface's own BEM namespace. **Never add a wrapper element to obtain a
+stampable node** — that changes the tree, which changes layout, which moves pixels.

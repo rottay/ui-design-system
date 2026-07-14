@@ -1057,3 +1057,50 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   hands the cascade back to the spread, and the pixels move even though every value is identical.
   Before moving a paint key out of a style object, grep the object for a spread that also sets it.
 - **Status** — OPEN.
+
+### P-79 `data-part` is declared on every component and dropped by several — the type promises what the runtime discards
+
+- **Context** — Surfaced by WO-SKIN-06 CK-D/R's pre-step. Three form surfaces stamped their anatomy
+  and the contract test could not find it. The surfaces were not broken and did not hang: the stamps
+  never reached the DOM.
+- **Evidence** — `contracts/common/index.ts:114` declares `'data-part'?: string` on
+  `BaseComponentProps`, commented "Skin anatomy hook: identifies a component part for tenant CSS
+  selectors". Every component in the fleet therefore ACCEPTS it. Measured, both engines:
+
+  | primitive | modern | rustic |
+  | --- | --- | --- |
+  | Box, Stack, Flex, Text | forwards | forwards |
+  | **Grid, Card** | **drops** | **drops** |
+  | **Button** | **drops** | **forwards** |
+
+  `Grid`'s engines build their DOM props from an explicit allowlist (`id`, `aria-label`,
+  `data-testid`, `data-component`, `data-grid-id`) with no rest spread. A consumer's `data-part` is
+  discarded in silence.
+- **Why it is dangerous** — nothing in the chain notices. `tsc` accepts the prop (the contract
+  declares it). The paint counter does not read attributes. jsdom finds no part and, until this
+  batch, no test asked. A skin rule anchored on such a part would simply never match, and a
+  never-matching rule paints nothing — the same silence as a skin that fails to parse or is never
+  imported, both of which this program already had to build gates for.
+- **Button is the sharp edge**: a stamp that EXISTS in rustic and VANISHES in modern. Any rule keyed
+  on it works in one engine and dies in the other, which reads as an engine bug rather than a
+  missing attribute.
+- **The naive fix is a trap.** Making the engines forward `data-part` would let a composing parent
+  OVERRIDE the primitive's own root part — and 85 shipped skins anchor on `[data-part='root']`
+  (divider, tag, otp-input, filter-panel, detail-panel…). A parent stamp would then silently strip
+  the child's skin. That is the Typography/SelectionPreviewRail incident, mechanized fleet-wide.
+  Whatever lands must first answer: **when parent and child both name a part, who wins?**
+- **What CK-D does instead** (adopted 2026-07-13, no change to any primitive): **a surface owns no
+  DOM — it owns composition, so its anatomy is carried by the classNames it puts on the primitives
+  it composes.** The surfaces already carry `.ds-surface.ds-form`, `.ds-wizard`, `.ds-detail-form`,
+  `.ds-form__error-card`, and className forwards on every primitive probed. The skin anchors there.
+  Zero DOM change, zero pixel risk.
+- **Ask** — (1) decide the parent-vs-child precedence question above; (2) then either make the
+  contract honest (every component forwards) or make it narrow (only components that own DOM declare
+  `data-part`, and `BaseComponentProps` stops promising it fleet-wide). The status quo — a universal
+  promise kept by some — is the worst of the three.
+- **The gate this argues for** — there is no invariant that catches a **skin rule matching nothing**.
+  `skins.parseErrors` catches a skin that does not parse; `skins.unwired` catches one never imported;
+  nothing catches one whose selectors are dead. Given the counter lied four times and the selector
+  law has drawn blood seven, a dead-selector gate is likely the highest-value machinery left in this
+  program.
+- **Status** — OPEN.
