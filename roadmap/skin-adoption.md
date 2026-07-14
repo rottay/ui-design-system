@@ -84,11 +84,11 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | **CK-B** | headers (5 structures + 4 patterns/misc) | 334 | CERTIFIED byte-exact (`475cf1fb`) |
 | **CK-A** | dashboard widgets | 439 | CERTIFIED byte-exact (`ecfa1ad5`) |
 | **CK-G** | navigation patterns | 279 | CERTIFIED byte-exact (`67ff3f35`) |
-| CK-F | communication | 272 | inventoried |
-| CK-C | workspace chrome | 466 | inventoried — 28 imperative writes, the densest |
-| CK-H2 | misc | ~216 | inventoried |
-| CK-I | long tail | 439 | inventoried |
-| CK-E / CK-H1 | visualization / brand-preview trio | 308 / 237 | LAST — they need the category-B exemption machinery, which now exists |
+| **CK-F** | communication | 271 | CERTIFIED byte-exact (`9d85264c`) — banked P-87 (color-on-`<Text>`=(0,5,0)) |
+| CK-C | workspace chrome | 466 | contract adjudicated (`46bb06a5`) — 28 imperative writes, portal trio, P-78 |
+| CK-H2 | misc | ~216 | contract adjudicated (`879f34e9`) — category-A, token-inspector createElement |
+| CK-I | long tail (surfaces) | 397 | contract adjudicated (`77c9a202`) — forms EXCLUDED (already CK-D); averted a clobber |
+| CK-E / CK-H1 | visualization / brand-preview trio | 308 / 237 | LAST — deferred until the exemption machinery is observed executing |
 
 **The pipeline that works** (three migrations in parallel is the unlock): inventory → contract
 (orchestrator) → **inert pre-step** (anatomy + torture section + spec + contract test; baselines
