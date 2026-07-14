@@ -1,0 +1,172 @@
+/**
+ * BrandingPreviewSandbox skin (WO-SKIN-06 CK-H1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
+ * unnamed base layer. This engine-agnostic pattern has a single scope class,
+ * so border-color selectors reach (0,4,0) through repeated target parts or a
+ * finite-state attribute and clear the tenant floor at (0,3,1). All values
+ * are transcribed verbatim from the component's former inline styles;
+ * instance-scoped appearance variables remain owned by appearanceToVariables().
+ */
+
+.ds-pattern-branding-preview-sandbox[data-part='root'][data-part='root'][data-part='root'] {
+  background: var(--ds-color-bg-primary, var(--ds-layout-bg, #fff));
+  color: var(--ds-color-text-primary);
+  border-radius: 12px;
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='header'][data-part='header'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='button'][data-part='button'][data-part='button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid transparent;
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='button'][data-variant='primary'] {
+  background: var(--ds-button-primary-bg, var(--ds-color-primary));
+  color: var(--ds-button-primary-color, #fff);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='button'][data-part='button'][data-variant='secondary'] {
+  background: var(--ds-button-secondary-bg, transparent);
+  color: var(--ds-button-secondary-color, var(--ds-color-text-primary));
+  border-color: var(--ds-button-secondary-border, var(--ds-color-border));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='button'][data-part='button'][data-variant='default'] {
+  background: var(--ds-button-default-bg, transparent);
+  color: var(--ds-button-default-color, var(--ds-color-text-primary));
+  border-color: var(--ds-button-default-border, var(--ds-color-border));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='button'][data-variant='ghost'] {
+  background: var(--ds-button-ghost-bg, transparent);
+  color: var(--ds-button-ghost-color, var(--ds-color-text-muted));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='input'][data-part='input'][data-part='input'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-input-border, var(--ds-color-border));
+  background: var(--ds-input-bg, var(--ds-color-bg-primary));
+  color: var(--ds-input-color, var(--ds-color-text-primary));
+  outline: none;
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='input'][data-part='input'][data-state='error'] {
+  border-color: var(--ds-input-error-border, var(--ds-color-error));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='card'][data-part='card'][data-part='card'] {
+  border-radius: var(--ds-radius-lg, 12px);
+  border: 1px solid var(--ds-card-border, var(--ds-color-border));
+  background: var(--ds-card-bg, var(--ds-color-bg-elevated, #fff));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='card'][data-state='elevated'] {
+  box-shadow: var(--ds-card-shadow-hover, 0 8px 24px rgba(0,0,0,0.1));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='preview-card-title'][data-part='preview-card-title'] {
+  color: var(--ds-card-title-color, var(--ds-color-text-primary));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='preview-card-body'][data-part='preview-card-body'] {
+  color: var(--ds-card-body-color, var(--ds-color-text-muted));
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='surface'][data-state='badges']
+  > [data-part='badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='surface'][data-state='badges']
+  > [data-part='badge'][data-state='active'] {
+  background: var(--ds-color-success-bg, rgba(34,197,94,0.1));
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='surface'][data-state='badges']
+  > [data-part='badge'][data-state='warning'] {
+  background: var(--ds-color-warning-bg, rgba(245,158,11,0.1));
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='surface'][data-state='badges']
+  > [data-part='badge'][data-state='error'] {
+  background: var(--ds-color-error-bg, rgba(239,68,68,0.1));
+  color: var(--ds-color-error);
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='surface'][data-state='badges']
+  > [data-part='badge'][data-state='info'] {
+  background: var(--ds-color-info-bg, rgba(59,130,246,0.1));
+  color: var(--ds-color-info);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='table'][data-part='table'][data-part='table'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-table-border, var(--ds-color-border));
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='table-head'][data-part='table-head'][data-part='table-head'] {
+  background: var(--ds-table-header-bg, var(--ds-color-bg-secondary));
+  color: var(--ds-table-header-color, var(--ds-color-text-muted));
+  border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='table']
+  > [data-part='surface'][data-part='surface'] {
+  color: var(--ds-table-cell-color, var(--ds-color-text-primary));
+  border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border));
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='table']
+  > [data-part='surface'][data-state='default'] {
+  background: var(--ds-table-row-bg, transparent);
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='table']
+  > [data-part='surface'][data-state='striped'] {
+  background: var(--ds-table-row-bg-striped, transparent);
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='table']
+  [data-part='badge'][data-state='active'] {
+  border-radius: 4px;
+  background: var(--ds-color-success-bg, rgba(34,197,94,0.1));
+  color: var(--ds-color-success);
+}
+
+.ds-pattern-branding-preview-sandbox
+  [data-part='table']
+  [data-part='preview-table-cell'][data-variant='date'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='body'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='code'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-branding-preview-sandbox [data-part='subtitle'][data-variant='variable-count'] {
+  color: var(--ds-color-text-disabled);
+}

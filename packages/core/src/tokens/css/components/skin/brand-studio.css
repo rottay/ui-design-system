@@ -1,0 +1,93 @@
+/**
+ * BrandStudio skin (WO-SKIN-06 / CK-H1) — engine-agnostic and deliberately
+ * unlayered. The component renders one tree under every engine, scoped by
+ * `.ds-pattern-brand-studio`; instance-scoped surface variables remain on the
+ * preview content and the live swatch background remains inline.
+ *
+ * Border-bearing rules reach (0,4,0) to clear the tenant universal floor
+ * (P-48). Composed Text colors reach (0,5,0) so they beat Typography's own
+ * engine skin (P-87). Card drops a consumer `data-part` in every engine, so
+ * the action panel uses its surviving component class as the authoritative
+ * hook. No `!important` is required.
+ */
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__section[data-part='section'][data-part='section'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel {
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__color-swatch[data-part='color-swatch'][data-part='color-swatch'] {
+  border-color: var(--ds-color-border);
+  border-radius: 6px;
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__section[data-part='section'][data-part='section'] {
+  border-radius: 12px;
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-secondary));
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-summary[data-part='contrast-summary'][data-part='contrast-summary'] {
+  border-radius: 10px;
+  background: var(--ds-color-bg-surface, var(--ds-color-bg-secondary));
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation[data-part='violation'][data-part='violation'] {
+  border-radius: 8px;
+  background: var(--ds-color-bg-primary);
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-content[data-part='preview-content'][data-part='preview-content'] {
+  border-color: var(--ds-color-border);
+  border-radius: 14px;
+  background: var(--ds-color-bg-primary);
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-secondary));
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__field-label[data-part='field-label'][data-part='field-label'][data-part='field-label'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-label[data-part='contrast-label'][data-part='contrast-label'][data-part='contrast-label'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation-detail[data-part='violation-detail'][data-part='violation-detail'][data-part='violation-detail'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__action-helper[data-part='action-helper'][data-part='action-helper'][data-part='action-helper'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__contrast-message[data-part='contrast-message'][data-part='contrast-message'][data-part='contrast-message'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-fallback[data-part='preview-fallback'][data-part='preview-fallback'][data-part='preview-fallback'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__description[data-part='description'][data-part='description'][data-part='description'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__editor-heading[data-part='editor-heading'][data-part='editor-heading'][data-part='editor-heading'],
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__preview-heading[data-part='preview-heading'][data-part='preview-heading'][data-part='preview-heading'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-brand-studio
+  .ds-pattern-brand-studio__violation-ratio[data-part='violation-ratio'][data-part='violation-ratio'][data-part='violation-ratio'] {
+  color: var(--ds-color-error);
+}

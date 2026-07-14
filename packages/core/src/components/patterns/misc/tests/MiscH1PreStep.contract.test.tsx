@@ -10,8 +10,8 @@ import { BrandingPreviewSandbox } from '../branding-preview-sandbox';
 import ModernTenantPreview from '../tenant-preview/engines/modern';
 import RusticTenantPreview from '../tenant-preview/engines/rustic';
 
-// WO-SKIN-06 CK-H1 inert pre-step. These tests exercise the hooks that the
-// later skin extraction will consume; paint and injected-CSS behavior remain
+// WO-SKIN-06 CK-H1 migration contract. These tests exercise the hooks consumed
+// by the extracted skins; paint and injected-CSS behavior remain
 // owned by their existing focused tests plus ck-h1-inert-prestep.test.mjs.
 
 const TENANT_CONFIG = {
@@ -77,9 +77,15 @@ const SANDBOX_APPEARANCE: TenantAppearance = {
   },
 };
 
-function StudioHarness({ children }: { children: React.ReactNode }): React.ReactElement {
+function StudioHarness({
+  children,
+  engine = 'rustic',
+}: {
+  children: React.ReactNode;
+  engine?: 'modern' | 'rustic' | 'classic';
+}): React.ReactElement {
   return (
-    <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine="rustic" skipCssLoading>
+    <DesignSystemProvider tenantConfig={TEST_TENANT} forceEngine={engine} skipCssLoading>
       {children}
     </DesignSystemProvider>
   );
@@ -180,6 +186,50 @@ describe('BrandingPreviewSandbox CK-H1 createElement anatomy', () => {
 });
 
 describe('PatternBrandStudio CK-H1 anatomy and behavior', () => {
+  it.each(['modern', 'rustic', 'classic'] as const)(
+    'retains every class-authoritative skin hook on the rendered %s hosts',
+    async (engine) => {
+      const { container, unmount } = render(
+        <StudioHarness engine={engine}>
+          <PatternBrandStudio
+            value={STUDIO_THEME}
+            title={`CK-H1 ${engine} host probe`}
+            description="Host forwarding probe"
+          />
+        </StudioHarness>
+      );
+
+      await screen.findByText(`CK-H1 ${engine} host probe`);
+      const root = container.querySelector('.ds-pattern-brand-studio') as HTMLElement;
+      const actionPanel = root.querySelector('.ds-pattern-brand-studio__action-panel') as HTMLElement;
+      expect(actionPanel).not.toBeNull();
+      expect(
+        actionPanel.matches(
+          '.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel.ds-pattern-brand-studio__action-panel'
+        )
+      ).toBe(true);
+
+      for (const [className, part] of [
+        ['ds-pattern-brand-studio__color-swatch', 'color-swatch'],
+        ['ds-pattern-brand-studio__section', 'section'],
+        ['ds-pattern-brand-studio__contrast-summary', 'contrast-summary'],
+        ['ds-pattern-brand-studio__preview-content', 'preview-content'],
+        ['ds-pattern-brand-studio__field-label', 'field-label'],
+        ['ds-pattern-brand-studio__contrast-label', 'contrast-label'],
+        ['ds-pattern-brand-studio__contrast-message', 'contrast-message'],
+        ['ds-pattern-brand-studio__preview-fallback', 'preview-fallback'],
+        ['ds-pattern-brand-studio__description', 'description'],
+        ['ds-pattern-brand-studio__editor-heading', 'editor-heading'],
+        ['ds-pattern-brand-studio__preview-heading', 'preview-heading'],
+        ['ds-pattern-brand-studio__action-helper', 'action-helper'],
+      ] as const) {
+        expect(root.querySelector(`.${className}[data-part="${part}"]`), `${engine}:${part}`).not.toBeNull();
+      }
+
+      unmount();
+    }
+  );
+
   it('exposes editor, both preview grounds, contrast and action states while callbacks remain live', async () => {
     const onChange = vi.fn();
     const { container, unmount } = render(

@@ -18,18 +18,18 @@ const SOURCES = {
   studio: join(packageRoot, 'src/components/patterns/misc/brand-studio/index.tsx'),
 };
 
-const PRESTEP_PAINT_COUNTS = {
-  modern: 70,
-  rustic: 75,
-  sandbox: 54,
-  studio: 36,
+const POST_MIGRATION_PAINT_COUNTS = {
+  modern: 22,
+  rustic: 14,
+  sandbox: 0,
+  studio: 9,
 };
 
-const ATTRIBUTE_STRIPPED_TREE_SHA256 = {
-  modern: '7cf88eeb7b2183f5952d7f862032293102276c2ea04e4b617b2da9e7f39d1f72',
-  rustic: 'db044fe1a61b05063e617ccd07f16c2799b3ff2c0fb7d242a26faa0536e03fc3',
-  sandbox: '73e9f5c62652c4af18dcc092b83942b1d84de7a944d92a0f9d620f709fbd05e8',
-  studio: '2efe1c89da85ef74de96f5dd3d5bbf503aecf0dade8251cf785c08541405a817',
+const RENDER_TOPOLOGY_SHA256 = {
+  modern: 'ef39d31f1999d32935635c24d2fb766d796696e591ec5cbdb39009a1566721fe',
+  rustic: '715956838d0dc8cdc278085fd50afe6b37447e89f10676948e30fa0004bfecd1',
+  sandbox: '365c4d16b7ea690ff4dcd09b27ca18217bd896d8f5f6a7b3dafa513afb6f844e',
+  studio: '26d1cf0c2a1c95d176ecb02a13678fb4f1830962939ab4b75f8997a80a2d6496',
 };
 
 function source(path) {
@@ -47,90 +47,75 @@ function isReactCreateElement(node) {
 }
 
 /**
- * Normalize only rendered element trees while removing the mutations authorized
- * in the CK-H1 pre-step: JSX attributes and React.createElement prop bags.
- * Non-render helpers and formatting are deliberately excluded. Tags, fragments,
- * children, nesting, maps and conditional branches remain in each printed root,
- * so an added wrapper or reparented child changes the digest while a formatter or
- * later paint extraction does not.
+ * Fingerprint rendered topology only: element/component tags, fragments and
+ * their nesting. Props, style objects, text/data expressions, callback
+ * parameters and lookup arrays are intentionally absent because CK-H1 must
+ * rewrite those to extract paint. Added/removed wrappers, children or
+ * createElement nodes still change the digest.
  */
-function attributeStrippedTree(path) {
+function renderTopology(path) {
   const sourceFile = ts.createSourceFile(path, source(path), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
 
-  const transformer = (context) => {
-    const visit = (node) => {
-      if (ts.isJsxOpeningElement(node)) {
-        return ts.factory.updateJsxOpeningElement(
-          node,
-          node.tagName,
-          node.typeArguments,
-          ts.factory.createJsxAttributes([])
-        );
-      }
-      if (ts.isJsxSelfClosingElement(node)) {
-        return ts.factory.updateJsxSelfClosingElement(
-          node,
-          node.tagName,
-          node.typeArguments,
-          ts.factory.createJsxAttributes([])
-        );
-      }
-      if (isReactCreateElement(node)) {
-        const tag = ts.visitNode(node.arguments[0], visit);
-        const children = node.arguments.slice(2).map((child) => ts.visitNode(child, visit));
-        return ts.factory.updateCallExpression(node, node.expression, node.typeArguments, [
-          tag,
-          ts.factory.createNull(),
-          ...children,
-        ]);
-      }
-      return ts.visitEachChild(node, visit, context);
-    };
-    return (node) => ts.visitNode(node, visit);
+  const isRenderTree = (node) =>
+    ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node) || ts.isJsxFragment(node) || isReactCreateElement(node);
+
+  const tag = (node) => {
+    if (ts.isJsxElement(node)) return node.openingElement.tagName.getText(sourceFile);
+    if (ts.isJsxSelfClosingElement(node)) return node.tagName.getText(sourceFile);
+    if (ts.isJsxFragment(node)) return '<>';
+    return node.arguments[0]?.getText(sourceFile) ?? '<missing-tag>';
   };
 
-  const transformed = ts.transform(sourceFile, [transformer]);
-  try {
-    const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+  const nestedRenderRoots = (node) => {
     const roots = [];
-
-    const collect = (node, insideRenderTree = false) => {
-      const isRenderTree =
-        ts.isJsxElement(node) ||
-        ts.isJsxSelfClosingElement(node) ||
-        ts.isJsxFragment(node) ||
-        isReactCreateElement(node);
-
-      if (isRenderTree && !insideRenderTree) {
-        roots.push(
-          printer.printNode(ts.EmitHint.Unspecified, node, transformed.transformed[0]).replace(/\s+/g, ' ').trim()
-        );
+    const visit = (child) => {
+      if (isRenderTree(child)) {
+        roots.push(child);
+        return;
       }
-
-      ts.forEachChild(node, (child) => collect(child, insideRenderTree || isRenderTree));
+      ts.forEachChild(child, visit);
     };
+    ts.forEachChild(node, visit);
+    return roots;
+  };
 
-    collect(transformed.transformed[0]);
-    return roots.join('\n');
-  } finally {
-    transformed.dispose();
-  }
+  const serialize = (node) => {
+    const children = [];
+    const candidates = isReactCreateElement(node)
+      ? node.arguments.slice(2).flatMap((argument) => (isRenderTree(argument) ? [argument] : nestedRenderRoots(argument)))
+      : nestedRenderRoots(node);
+    for (const child of candidates) children.push(serialize(child));
+    return `${tag(node)}(${children.join(',')})`;
+  };
+
+  const roots = [];
+  const collect = (node, insideRenderTree = false) => {
+    const renderTree = isRenderTree(node);
+    if (renderTree && !insideRenderTree) roots.push(serialize(node));
+    ts.forEachChild(node, (child) => collect(child, insideRenderTree || renderTree));
+  };
+  collect(sourceFile);
+  return roots.join('\n');
 }
 
-test('CK-H1 inert pre-step keeps the exact 70/75/54/36 paint counters', () => {
+test('CK-H1 migration reaches the exact 22/14/0/9 paint floors', () => {
+  let total = 0;
   for (const [name, path] of Object.entries(SOURCES)) {
+    const count = countArc09PaintInFile(source(path), path);
     assert.equal(
-      countArc09PaintInFile(source(path), path),
-      PRESTEP_PAINT_COUNTS[name],
-      `${name} paint counter moved during the inert pre-step`
+      count,
+      POST_MIGRATION_PAINT_COUNTS[name],
+      `${name} did not reach its exact CK-H1 floor`
     );
+    total += count;
   }
+  assert.equal(total, 45, 'CK-H1 must retain exactly 45 adjudicated floor sites');
 });
 
-test('CK-H1 inert pre-step preserves each attribute-stripped element tree', () => {
+test('CK-H1 migration preserves each pre-step rendered topology', () => {
   const actual = {};
   for (const [name, path] of Object.entries(SOURCES)) {
-    actual[name] = createHash('sha256').update(attributeStrippedTree(path)).digest('hex');
+    actual[name] = createHash('sha256').update(renderTopology(path)).digest('hex');
   }
-  assert.deepEqual(actual, ATTRIBUTE_STRIPPED_TREE_SHA256, 'CK-H1 attribute-stripped trees drifted');
+  assert.deepEqual(actual, RENDER_TOPOLOGY_SHA256, 'CK-H1 rendered topology drifted');
 });

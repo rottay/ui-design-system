@@ -2,9 +2,9 @@
 
 /**
  * @fileoverview TenantPreview -- Rustic engine (Vanilla / CSS variables).
- * Renders a live preview of tenant branding using only inline styles
- * with --ds-* design tokens. Injects scoped CSS via a `<style>` tag
- * for accurate color representation. Shows palette swatches, sample
+ * Renders a live preview of tenant branding with static paint in the rustic
+ * skin and tenant-derived paint kept inline. Injects scoped CSS via a `<style>`
+ * tag for accurate color representation. Shows palette swatches, sample
  * components using component-specific tokens (--ds-button-*, --ds-card-*,
  * --ds-input-*, --ds-badge-*), and personality metadata.
  *
@@ -130,22 +130,11 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
   const primary500 = creationConfig.primaryColor;
   const primaryFg = getContrastColor(primary500);
 
-  /* Shorthand token references for consistent use across all preview sections */
-  const previewSurface = 'var(--ds-color-surface, var(--ds-color-bg-primary))';
-  const previewSurfaceSecondary = 'var(--ds-color-surface-secondary, var(--ds-color-bg-secondary))';
-  const previewSurfaceMuted = 'var(--ds-color-surface-muted, var(--ds-color-bg-secondary))';
-  const previewBorder = 'var(--ds-color-border-primary, var(--ds-color-border))';
-  const previewBorderMuted = 'var(--ds-color-border-secondary, var(--ds-color-border))';
-  const previewText = 'var(--ds-color-text, var(--ds-color-text-primary))';
-  const previewTextSecondary = 'var(--ds-color-text-secondary, var(--ds-color-text-muted))';
-  const previewOnPrimary = 'var(--ds-color-text-on-primary)';
-
   const sectionLabel: React.CSSProperties = {
     fontSize: '11px',
     fontWeight: 600,
     textTransform: 'uppercase',
     letterSpacing: '0.06em',
-    color: previewTextSecondary,
     marginBottom: '10px',
     display: 'block',
   };
@@ -157,12 +146,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
       data-part="root"
       style={{
         padding: '20px',
-        border: `1px solid ${previewBorder}`,
-        borderRadius: 'var(--ds-radius-md, 8px)',
-        backgroundColor: previewSurface,
         fontFamily: 'system-ui, -apple-system, sans-serif',
-        color: previewText,
-        boxShadow: 'var(--ds-shadow-md)',
         ...style,
       }}
     >
@@ -174,7 +158,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
         style={{
           marginBottom: '20px',
           paddingBottom: '12px',
-          borderBottom: `1px solid ${previewBorder}`,
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -186,16 +169,15 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
               style={{
                 width: '28px',
                 height: '28px',
-                borderRadius: 'var(--ds-radius-sm, 6px)',
                 objectFit: 'cover',
               }}
             />
           )}
           <div>
-            <div data-part="tenant-name" style={{ fontSize: '16px', fontWeight: 600, color: previewText }}>
+            <div data-part="tenant-name" style={{ fontSize: '16px', fontWeight: 600 }}>
               {creationConfig.name}
             </div>
-            <div data-part="tenant-slug" style={{ fontSize: '12px', color: previewTextSecondary }}>
+            <div data-part="tenant-slug" style={{ fontSize: '12px' }}>
               {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
             </div>
           </div>
@@ -215,7 +197,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 data-palette="primary"
                 style={{
                   fontSize: '11px',
-                  color: previewTextSecondary,
                   marginBottom: '3px',
                 }}
               >
@@ -226,7 +207,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 data-palette="primary"
                 style={{
                   display: 'flex',
-                  borderRadius: 'var(--ds-radius-sm, 6px)',
                   overflow: 'hidden',
                 }}
               >
@@ -271,7 +251,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                   data-palette="secondary"
                   style={{
                     fontSize: '11px',
-                    color: previewTextSecondary,
                     marginBottom: '3px',
                   }}
                 >
@@ -282,7 +261,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                   data-palette="secondary"
                   style={{
                     display: 'flex',
-                    borderRadius: 'var(--ds-radius-sm, 6px)',
                     overflow: 'hidden',
                   }}
                 >
@@ -320,7 +298,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 <div
                   style={{
                     fontSize: '11px',
-                    color: previewTextSecondary,
                     marginBottom: '6px',
                   }}
                 >
@@ -332,14 +309,9 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     data-part="button"
                     data-variant="primary"
                     style={{
-                      backgroundColor: 'var(--ds-button-primary-bg, var(--ds-color-primary-500))',
-                      color: 'var(--ds-button-primary-color, var(--ds-color-text-on-primary))',
-                      border: 'none',
                       padding: '6px 14px',
-                      borderRadius: 'var(--ds-button-radius, var(--ds-radius-sm))',
                       fontSize: '13px',
                       cursor: 'pointer',
-                      boxShadow: 'var(--ds-button-primary-shadow, var(--ds-shadow-sm))',
                     }}
                   >
                     Primary
@@ -349,11 +321,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     data-part="button"
                     data-variant="outlined"
                     style={{
-                      backgroundColor: 'transparent',
-                      color: 'var(--ds-color-primary-500)',
-                      border: '1px solid var(--ds-color-primary-500)',
                       padding: '6px 14px',
-                      borderRadius: 'var(--ds-button-radius, var(--ds-radius-sm))',
                       fontSize: '13px',
                       cursor: 'pointer',
                     }}
@@ -365,11 +333,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     data-part="button"
                     data-variant="default"
                     style={{
-                      backgroundColor: 'var(--ds-button-secondary-bg, var(--ds-color-surface-secondary))',
-                      color: 'var(--ds-button-secondary-color, var(--ds-color-text))',
-                      border: '1px solid var(--ds-button-secondary-border, var(--ds-color-border-primary))',
                       padding: '6px 14px',
-                      borderRadius: 'var(--ds-button-radius, var(--ds-radius-sm))',
                       fontSize: '13px',
                       cursor: 'pointer',
                     }}
@@ -387,7 +351,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 <div
                   style={{
                     fontSize: '11px',
-                    color: previewTextSecondary,
                     marginBottom: '6px',
                   }}
                 >
@@ -397,10 +360,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                   data-part="sample-card"
                   style={{
                     padding: '14px',
-                    borderRadius: 'var(--ds-card-radius, var(--ds-radius-sm))',
-                    border: '1px solid var(--ds-card-border, var(--ds-color-border-primary))',
-                    background: 'var(--ds-card-bg, var(--ds-color-surface))',
-                    boxShadow: 'var(--ds-card-shadow, var(--ds-shadow-sm))',
                   }}
                 >
                   {/* Accent bar in primary color for brand reinforcement */}
@@ -418,7 +377,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     style={{
                       fontSize: '13px',
                       fontWeight: 600,
-                      color: previewText,
                     }}
                   >
                     Sample Card Title
@@ -427,7 +385,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     data-part="preview-card-body"
                     style={{
                       fontSize: '12px',
-                      color: previewTextSecondary,
                       marginTop: '4px',
                     }}
                   >
@@ -443,7 +400,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 <div
                   style={{
                     fontSize: '11px',
-                    color: previewTextSecondary,
                     marginBottom: '6px',
                   }}
                 >
@@ -458,12 +414,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     width: '100%',
                     maxWidth: '280px',
                     padding: '6px 10px',
-                    borderRadius: 'var(--ds-input-radius, var(--ds-radius-sm))',
-                    border: '1px solid var(--ds-input-border, var(--ds-color-border-primary))',
                     fontSize: '13px',
-                    outline: 'none',
-                    backgroundColor: 'var(--ds-input-bg, var(--ds-color-surface))',
-                    color: 'var(--ds-input-color, var(--ds-color-text))',
                   }}
                 />
               </div>
@@ -476,26 +427,13 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 <div
                   style={{
                     fontSize: '11px',
-                    color: previewTextSecondary,
                     marginBottom: '6px',
                   }}
                 >
                   Badges
                 </div>
                 <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
-                  {['Active', 'Pending', 'Draft'].map((label, i) => {
-                    /* Each badge tier uses a different semantic color token */
-                    const colors = [
-                      {
-                        bg: 'var(--ds-color-primary-500)',
-                        fg: previewOnPrimary,
-                      },
-                      {
-                        bg: 'var(--ds-color-warning-500)',
-                        fg: previewOnPrimary,
-                      },
-                      { bg: previewSurfaceMuted, fg: previewTextSecondary },
-                    ];
+                  {['Active', 'Pending', 'Draft'].map((label) => {
                     return (
                       <span
                         key={label}
@@ -504,11 +442,8 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                         style={{
                           display: 'inline-block',
                           padding: '1px 8px',
-                          borderRadius: 'var(--ds-badge-radius, var(--ds-radius-sm))',
                           fontSize: '11px',
                           fontWeight: 500,
-                          backgroundColor: colors[i].bg,
-                          color: colors[i].fg,
                         }}
                       >
                         {label}
@@ -526,7 +461,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 <div
                   style={{
                     fontSize: '11px',
-                    color: previewTextSecondary,
                     marginBottom: '6px',
                   }}
                 >
@@ -541,7 +475,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                   }}
                 >
                   <thead>
-                    <tr data-part="table-head" style={{ borderBottom: `2px solid ${previewBorder}` }}>
+                    <tr data-part="table-head">
                       <th
                         data-part="preview-table-cell"
                         data-variant="head"
@@ -549,7 +483,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                           textAlign: 'left',
                           padding: '6px 8px',
                           fontWeight: 600,
-                          color: previewText,
                         }}
                       >
                         Name
@@ -561,7 +494,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                           textAlign: 'left',
                           padding: '6px 8px',
                           fontWeight: 600,
-                          color: previewText,
                         }}
                       >
                         Status
@@ -573,7 +505,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                           textAlign: 'right',
                           padding: '6px 8px',
                           fontWeight: 600,
-                          color: previewText,
                         }}
                       >
                         Amount
@@ -595,11 +526,8 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                     ].map((row) => (
                       <tr
                         key={row.name}
-                        style={{
-                          borderBottom: `1px solid ${previewBorderMuted}`,
-                        }}
                       >
-                        <td data-part="preview-table-cell" style={{ padding: '6px 8px', color: previewText }}>
+                        <td data-part="preview-table-cell" style={{ padding: '6px 8px' }}>
                           {row.name}
                         </td>
                         <td data-part="preview-table-cell" style={{ padding: '6px 8px' }}>
@@ -609,13 +537,7 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                             style={{
                               display: 'inline-block',
                               padding: '0px 6px',
-                              borderRadius: 'var(--ds-badge-radius, var(--ds-radius-sm))',
                               fontSize: '11px',
-                              backgroundColor:
-                                row.status === 'Active'
-                                  ? 'var(--ds-color-primary-50)'
-                                  : 'var(--ds-color-surface-muted, var(--ds-color-bg-secondary))',
-                              color: row.status === 'Active' ? 'var(--ds-color-primary-500)' : previewTextSecondary,
                             }}
                           >
                             {row.status}
@@ -626,7 +548,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                           style={{
                             padding: '6px 8px',
                             textAlign: 'right',
-                            color: previewText,
                           }}
                         >
                           {row.amount}
@@ -695,15 +616,11 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                 data-part="personality-tile"
                 style={{
                   padding: '6px 8px',
-                  backgroundColor: previewSurfaceSecondary,
-                  border: `1px solid ${previewBorderMuted}`,
-                  borderRadius: 'var(--ds-radius-sm, 6px)',
                 }}
               >
                 <div
                   style={{
                     fontSize: '10px',
-                    color: previewTextSecondary,
                     marginBottom: '1px',
                   }}
                 >
@@ -713,7 +630,6 @@ export default function RusticTenantPreview(props: TenantPreviewProps) {
                   style={{
                     fontSize: '12px',
                     fontWeight: 500,
-                    color: previewText,
                   }}
                 >
                   {value}

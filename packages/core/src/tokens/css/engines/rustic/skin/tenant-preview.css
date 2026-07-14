@@ -1,0 +1,219 @@
+/**
+ * Rustic TenantPreview skin (WO-SKIN-06 CK-H1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): it must outrank Tailwind/DaisyUI and the
+ * generated tenant reset while continuing to yield to caller inline styles.
+ * Every selector is anchored to the existing two-class component scope.
+ *
+ * The ten palette values, both mapped swatch fills, the primary-500 contrast
+ * label and the card accent bar remain inline because they are tenant-derived.
+ * The badge variants are finite authored states and therefore live here.
+ * Border-color declarations reach at least (0,4,0) to clear the generated
+ * tenant floor at (0,3,1).
+ */
+
+.ds-pattern-tenant-preview.ds-engine-rustic[data-part="root"][data-part="root"] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-md, 8px);
+  background-color: var(--ds-color-surface, var(--ds-color-bg-primary));
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+  box-shadow: var(--ds-shadow-md);
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="header"][data-part="header"] {
+  border-bottom: 1px solid
+    var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="logo"] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="tenant-name"] {
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="tenant-slug"],
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="swatch-label"] {
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="palette"][data-palette="primary"],
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="palette"][data-palette="secondary"] {
+  border-radius: var(--ds-radius-sm, 6px);
+}
+
+/* The component-preview section heading and its five unpainted category
+   wrappers intentionally retain their pre-step DOM. Structural :has() hooks
+   land the shared secondary text color without inventing new attributes. */
+.ds-pattern-tenant-preview.ds-engine-rustic
+  > div:has(
+    [data-part="button"],
+    [data-part="sample-card"],
+    [data-part="sample-input"],
+    [data-part="badge"],
+    [data-part="sample-table"]
+  )
+  > span:first-child,
+.ds-pattern-tenant-preview.ds-engine-rustic
+  div:has(> div > [data-part="button"])
+  > div:first-child,
+.ds-pattern-tenant-preview.ds-engine-rustic
+  div:has(> [data-part="sample-card"])
+  > div:first-child,
+.ds-pattern-tenant-preview.ds-engine-rustic
+  div:has(> [data-part="sample-input"])
+  > div:first-child,
+.ds-pattern-tenant-preview.ds-engine-rustic
+  div:has(> div > [data-part="badge"])
+  > div:first-child,
+.ds-pattern-tenant-preview.ds-engine-rustic
+  div:has(> [data-part="sample-table"])
+  > div:first-child {
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="button"] {
+  border-radius: var(--ds-button-radius, var(--ds-radius-sm));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="button"][data-variant="primary"] {
+  border: none;
+  background-color: var(--ds-button-primary-bg, var(--ds-color-primary-500));
+  color: var(--ds-button-primary-color, var(--ds-color-text-on-primary));
+  box-shadow: var(--ds-button-primary-shadow, var(--ds-shadow-sm));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="button"][data-variant="outlined"] {
+  border: 1px solid var(--ds-color-primary-500);
+  background-color: transparent;
+  color: var(--ds-color-primary-500);
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="button"][data-variant="default"] {
+  border: 1px solid
+    var(--ds-button-secondary-border, var(--ds-color-border-primary));
+  background-color: var(
+    --ds-button-secondary-bg,
+    var(--ds-color-surface-secondary)
+  );
+  color: var(--ds-button-secondary-color, var(--ds-color-text));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-card"][data-part="sample-card"] {
+  border: 1px solid var(--ds-card-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-card-radius, var(--ds-radius-sm));
+  background: var(--ds-card-bg, var(--ds-color-surface));
+  box-shadow: var(--ds-card-shadow, var(--ds-shadow-sm));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="preview-card-title"] {
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="preview-card-body"] {
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-input"][data-part="sample-input"] {
+  border: 1px solid var(--ds-input-border, var(--ds-color-border-primary));
+  border-radius: var(--ds-input-radius, var(--ds-radius-sm));
+  outline: none;
+  background-color: var(--ds-input-bg, var(--ds-color-surface));
+  color: var(--ds-input-color, var(--ds-color-text));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic [data-part="badge"] {
+  border-radius: var(--ds-badge-radius, var(--ds-radius-sm));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="badge"][data-status="active"] {
+  background-color: var(--ds-color-primary-500);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="badge"][data-status="pending"] {
+  background-color: var(--ds-color-warning-500);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="badge"][data-status="draft"] {
+  background-color: var(--ds-color-surface-muted, var(--ds-color-bg-secondary));
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="table-head"][data-part="table-head"] {
+  border-bottom: 2px solid
+    var(--ds-color-border-primary, var(--ds-color-border));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-table"]
+  thead
+  [data-part="preview-table-cell"],
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-table"]
+  tbody
+  [data-part="preview-table-cell"]:first-child,
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-table"]
+  tbody
+  [data-part="preview-table-cell"]:last-child {
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-table"][data-part="sample-table"]
+  tbody
+  > tr {
+  border-bottom: 1px solid
+    var(--ds-color-border-secondary, var(--ds-color-border));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-table"]
+  [data-part="badge"][data-status="active"] {
+  background-color: var(--ds-color-primary-50);
+  color: var(--ds-color-primary-500);
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="sample-table"]
+  [data-part="badge"][data-status="pending"] {
+  background-color: var(--ds-color-surface-muted, var(--ds-color-bg-secondary));
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="personality-tile"][data-part="personality-tile"] {
+  border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));
+  border-radius: var(--ds-radius-sm, 6px);
+  background-color: var(
+    --ds-color-surface-secondary,
+    var(--ds-color-bg-secondary)
+  );
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="personality-tile"]
+  > div:first-child {
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-tenant-preview.ds-engine-rustic
+  [data-part="personality-tile"]
+  > div:last-child {
+  color: var(--ds-color-text, var(--ds-color-text-primary));
+}

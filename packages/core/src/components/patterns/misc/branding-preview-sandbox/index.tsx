@@ -82,7 +82,6 @@ export function BrandingPreviewSandbox({
     fontWeight: 600,
     textTransform: 'uppercase' as const,
     letterSpacing: '0.08em',
-    color: 'var(--ds-color-text-muted)',
     marginBottom: 8,
   };
 
@@ -98,31 +97,21 @@ export function BrandingPreviewSandbox({
     alignItems: 'center',
     justifyContent: 'center',
     padding: '6px 16px',
-    borderRadius: 'var(--ds-radius-md, 8px)',
     fontSize: 13,
     fontWeight: 500,
-    border: '1px solid transparent',
     cursor: 'default',
     fontFamily: 'var(--ds-font-family-base, inherit)',
   };
 
   const inputBase: React.CSSProperties = {
     padding: '8px 12px',
-    borderRadius: 'var(--ds-radius-md, 8px)',
     fontSize: 13,
-    border: '1px solid var(--ds-input-border, var(--ds-color-border))',
-    background: 'var(--ds-input-bg, var(--ds-color-bg-primary))',
-    color: 'var(--ds-input-color, var(--ds-color-text-primary))',
     fontFamily: 'var(--ds-font-family-base, inherit)',
     width: 200,
-    outline: 'none',
   };
 
   const cardBase: React.CSSProperties = {
     padding: 16,
-    borderRadius: 'var(--ds-radius-lg, 12px)',
-    border: '1px solid var(--ds-card-border, var(--ds-color-border))',
-    background: 'var(--ds-card-bg, var(--ds-color-bg-elevated, #fff))',
     width: compact ? 200 : 260,
   };
 
@@ -143,12 +132,8 @@ export function BrandingPreviewSandbox({
         'data-part': 'root',
         'data-state': compact ? 'compact' : 'full',
         style: {
-          background: 'var(--ds-color-bg-primary, var(--ds-layout-bg, #fff))',
-          color: 'var(--ds-color-text-primary)',
           fontFamily: 'var(--ds-font-family-base, inherit)',
           padding: 24,
-          borderRadius: 12,
-          border: '1px solid var(--ds-color-border)',
         },
       },
       // Buttons section
@@ -166,11 +151,7 @@ export function BrandingPreviewSandbox({
           {
             'data-part': 'button',
             'data-variant': 'primary',
-            style: {
-              ...btnBase,
-              background: 'var(--ds-button-primary-bg, var(--ds-color-primary))',
-              color: 'var(--ds-button-primary-color, #fff)',
-            },
+            style: { ...btnBase },
           },
           'Primary'
         ),
@@ -179,12 +160,7 @@ export function BrandingPreviewSandbox({
           {
             'data-part': 'button',
             'data-variant': 'secondary',
-            style: {
-              ...btnBase,
-              background: 'var(--ds-button-secondary-bg, transparent)',
-              color: 'var(--ds-button-secondary-color, var(--ds-color-text-primary))',
-              borderColor: 'var(--ds-button-secondary-border, var(--ds-color-border))',
-            },
+            style: { ...btnBase },
           },
           'Secondary'
         ),
@@ -193,12 +169,7 @@ export function BrandingPreviewSandbox({
           {
             'data-part': 'button',
             'data-variant': 'default',
-            style: {
-              ...btnBase,
-              background: 'var(--ds-button-default-bg, transparent)',
-              color: 'var(--ds-button-default-color, var(--ds-color-text-primary))',
-              borderColor: 'var(--ds-button-default-border, var(--ds-color-border))',
-            },
+            style: { ...btnBase },
           },
           'Default'
         ),
@@ -207,11 +178,7 @@ export function BrandingPreviewSandbox({
           {
             'data-part': 'button',
             'data-variant': 'ghost',
-            style: {
-              ...btnBase,
-              background: 'var(--ds-button-ghost-bg, transparent)',
-              color: 'var(--ds-button-ghost-color, var(--ds-color-text-muted))',
-            },
+            style: { ...btnBase },
           },
           'Ghost'
         )
@@ -237,10 +204,7 @@ export function BrandingPreviewSandbox({
         React.createElement('input', {
           'data-part': 'input',
           'data-state': 'error',
-          style: {
-            ...inputBase,
-            borderColor: 'var(--ds-input-error-border, var(--ds-color-error))',
-          },
+          style: { ...inputBase },
           placeholder: 'Error state',
           readOnly: true,
         })
@@ -265,7 +229,6 @@ export function BrandingPreviewSandbox({
               'data-part': 'preview-card-title',
               style: {
                 fontWeight: 600,
-                color: 'var(--ds-card-title-color, var(--ds-color-text-primary))',
                 marginBottom: 4,
               },
             },
@@ -277,7 +240,6 @@ export function BrandingPreviewSandbox({
               'data-part': 'preview-card-body',
               style: {
                 fontSize: 13,
-                color: 'var(--ds-card-body-color, var(--ds-color-text-muted))',
               },
             },
             'Card body text with secondary color.'
@@ -289,10 +251,7 @@ export function BrandingPreviewSandbox({
             {
               'data-part': 'card',
               'data-state': 'elevated',
-              style: {
-                ...cardBase,
-                boxShadow: 'var(--ds-card-shadow-hover, 0 8px 24px rgba(0,0,0,0.1))',
-              },
+              style: { ...cardBase },
             },
             React.createElement(
               'div',
@@ -300,7 +259,6 @@ export function BrandingPreviewSandbox({
                 'data-part': 'preview-card-title',
                 style: {
                   fontWeight: 600,
-                  color: 'var(--ds-card-title-color, var(--ds-color-text-primary))',
                   marginBottom: 4,
                 },
               },
@@ -312,7 +270,6 @@ export function BrandingPreviewSandbox({
                 'data-part': 'preview-card-body',
                 style: {
                   fontSize: 13,
-                  color: 'var(--ds-card-body-color, var(--ds-color-text-muted))',
                 },
               },
               'With hover shadow applied.'
@@ -330,44 +287,20 @@ export function BrandingPreviewSandbox({
           'data-state': 'badges',
           style: { ...sectionStyle, ...rowStyle },
         },
-        ...[
-          {
-            label: 'Active',
-            bg: 'var(--ds-color-success-bg, rgba(34,197,94,0.1))',
-            color: 'var(--ds-color-success)',
-          },
-          {
-            label: 'Warning',
-            bg: 'var(--ds-color-warning-bg, rgba(245,158,11,0.1))',
-            color: 'var(--ds-color-warning)',
-          },
-          {
-            label: 'Error',
-            bg: 'var(--ds-color-error-bg, rgba(239,68,68,0.1))',
-            color: 'var(--ds-color-error)',
-          },
-          {
-            label: 'Info',
-            bg: 'var(--ds-color-info-bg, rgba(59,130,246,0.1))',
-            color: 'var(--ds-color-info)',
-          },
-        ].map((badge) =>
+        ...['Active', 'Warning', 'Error', 'Info'].map((label) =>
           React.createElement(
             'span',
             {
-              key: badge.label,
+              key: label,
               'data-part': 'badge',
-              'data-state': badge.label.toLowerCase(),
+              'data-state': label.toLowerCase(),
               style: {
                 padding: '2px 8px',
-                borderRadius: 'var(--ds-radius-sm, 6px)',
                 fontSize: 12,
                 fontWeight: 500,
-                background: badge.bg,
-                color: badge.color,
               },
             },
-            badge.label
+            label
           )
         )
       ),
@@ -393,8 +326,6 @@ export function BrandingPreviewSandbox({
               'data-part': 'table',
               style: {
                 ...sectionStyle,
-                borderRadius: 'var(--ds-radius-md, 8px)',
-                border: '1px solid var(--ds-table-border, var(--ds-color-border))',
                 overflow: 'hidden',
               },
             },
@@ -406,11 +337,8 @@ export function BrandingPreviewSandbox({
                 style: {
                   display: 'flex',
                   padding: 'var(--ds-table-cell-padding, 10px 16px)',
-                  background: 'var(--ds-table-header-bg, var(--ds-color-bg-secondary))',
                   fontSize: 'var(--ds-table-header-font-size, 13px)',
                   fontWeight: 'var(--ds-table-header-font-weight, 500)' as unknown as number,
-                  color: 'var(--ds-table-header-color, var(--ds-color-text-muted))',
-                  borderBottom: '1px solid var(--ds-table-border, var(--ds-color-border))',
                 },
               },
               React.createElement(
@@ -453,12 +381,6 @@ export function BrandingPreviewSandbox({
                     display: 'flex',
                     padding: 'var(--ds-table-cell-padding, 10px 16px)',
                     fontSize: 'var(--ds-table-cell-font-size, 14px)',
-                    color: 'var(--ds-table-cell-color, var(--ds-color-text-primary))',
-                    background:
-                      i % 2 === 1
-                        ? 'var(--ds-table-row-bg-striped, transparent)'
-                        : 'var(--ds-table-row-bg, transparent)',
-                    borderBottom: '1px solid var(--ds-table-row-border, var(--ds-color-border))',
                   },
                 },
                 React.createElement(
@@ -484,10 +406,7 @@ export function BrandingPreviewSandbox({
                       'data-state': 'active',
                       style: {
                         padding: '1px 6px',
-                        borderRadius: 4,
                         fontSize: 11,
-                        background: 'var(--ds-color-success-bg, rgba(34,197,94,0.1))',
-                        color: 'var(--ds-color-success)',
                       },
                     },
                     'Active'
@@ -501,7 +420,6 @@ export function BrandingPreviewSandbox({
                     style: {
                       flex: 1,
                       textAlign: 'right' as const,
-                      color: 'var(--ds-color-text-muted)',
                       fontFamily: 'var(--ds-font-family-mono, monospace)',
                       fontSize: 12,
                     },
@@ -544,7 +462,6 @@ export function BrandingPreviewSandbox({
                   fontWeight: 700,
                   fontFamily: 'var(--ds-font-family-heading, inherit)',
                   letterSpacing: 'var(--ds-letter-spacing-heading, -0.02em)',
-                  color: 'var(--ds-color-text-primary)',
                 },
               },
               'Heading Text'
@@ -558,7 +475,6 @@ export function BrandingPreviewSandbox({
                   fontSize: 14,
                   fontFamily: 'var(--ds-font-family-base, inherit)',
                   lineHeight: 'var(--ds-line-height-body, 1.6)',
-                  color: 'var(--ds-color-text-secondary)',
                   marginTop: 4,
                 },
               },
@@ -572,7 +488,6 @@ export function BrandingPreviewSandbox({
                 style: {
                   fontSize: 12,
                   fontFamily: 'var(--ds-font-family-mono, monospace)',
-                  color: 'var(--ds-color-text-muted)',
                   marginTop: 4,
                 },
               },
@@ -589,7 +504,6 @@ export function BrandingPreviewSandbox({
           'data-variant': 'variable-count',
           style: {
             fontSize: 10,
-            color: 'var(--ds-color-text-disabled)',
             textAlign: 'center' as const,
             marginTop: 8,
           },

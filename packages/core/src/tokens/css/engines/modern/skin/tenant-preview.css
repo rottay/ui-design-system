@@ -1,0 +1,158 @@
+/**
+ * Modern TenantPreview skin (WO-SKIN-06 CK-H1).
+ *
+ * DELIBERATELY UNLAYERED (P-47): layered component rules sort before
+ * Tailwind's base layer. Every rule is owned by the existing two-class
+ * TenantPreview scope, while caller-provided inline styles still win.
+ *
+ * SPECIFICITY (P-48): rules carrying a real border colour repeat the target
+ * part (or use an equivalent fourth class/attribute unit) to clear the
+ * tenant's unlayered `*` border-colour floor at (0,3,1). `border: none` is a
+ * colour-free reset. Values and `background` versus `backgroundColor`
+ * channels are transcribed verbatim from the modern engine.
+ */
+
+.ds-pattern-tenant-preview.ds-engine-modern[data-part="root"] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-1);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="header"][data-part="header"] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern [data-part="logo"] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="tenant-name"][data-part="tenant-name"] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="tenant-slug"][data-part="tenant-slug"] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="palette"][data-palette="primary"],
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="palette"][data-palette="secondary"] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern [data-part="button"] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="button"][data-variant="primary"],
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="button"][data-variant="default"] {
+  border: none;
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="button"][data-variant="outlined"],
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="button"][data-variant="default"] {
+  background: transparent;
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="button"][data-variant="default"] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="sample-card"][data-part="sample-card"] {
+  background: var(--ds-surface-card);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-elevation-1);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern [data-part="accent-bar"] {
+  border-radius: var(--ds-radius-full);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="preview-card-title"][data-part="preview-card-title"] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="preview-card-body"][data-part="preview-card-body"] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="sample-input"][data-part="sample-input"] {
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-card);
+  color: var(--ds-color-text-primary);
+  outline: none;
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern [data-part="badge"] {
+  border-radius: var(--ds-radius-full);
+  border: none;
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="badge"][data-status="pending"] {
+  background: color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+  color: var(--ds-color-warning);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="badge"][data-status="draft"] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="table-head"][data-part="table-head"] {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="preview-table-cell"][data-variant="head"][data-part="preview-table-cell"] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="sample-table"]
+  tbody
+  > tr:first-child {
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="sample-table"]
+  tbody
+  > tr
+  > [data-part="preview-table-cell"]:first-child,
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="sample-table"]
+  tbody
+  > tr
+  > [data-part="preview-table-cell"]:last-child {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern
+  [data-part="sample-table"]
+  [data-part="badge"][data-status="pending"] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-tenant-preview.ds-engine-modern [data-part="personality-tile"] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-inset);
+}

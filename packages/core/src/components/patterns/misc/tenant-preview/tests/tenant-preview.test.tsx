@@ -5,12 +5,20 @@
 import { describe, it, expect } from 'vitest';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 // Test the types and creation utilities that power the preview
 import type { TenantPreviewProps, PreviewComponent } from '../TenantPreview.types';
 import { createTenantConfig, type TenantCreationConfig } from '../../../../../runtime/tenant/authoring/create-tenant';
 import { generateTenantCss } from '../../../../../runtime/tenant/storage/static/generator';
 import RusticTenantPreview from '../engines/rustic';
+
+const rusticSkin = readFileSync(
+  join(__dirname, '../../../../../tokens/css/engines/rustic/skin/tenant-preview.css'),
+  'utf8'
+);
+const normalizedRusticSkin = rusticSkin.replaceAll('"', "'");
 
 describe('TenantPreview', () => {
   const sampleConfig: TenantCreationConfig = {
@@ -120,12 +128,16 @@ describe('TenantPreview', () => {
       expect(screen.getByText('Secondary')).toBeInTheDocument();
 
       const primaryButton = screen.getByRole('button', { name: 'Primary' });
-      // The button's inline style should reference DS token variables
-      expect(primaryButton.getAttribute('style')).toContain('var(--ds-button-primary-shadow');
+      expect(primaryButton.style.boxShadow).toBe('');
+      expect(normalizedRusticSkin).toContain("[data-part='button'][data-variant='primary']");
+      expect(rusticSkin).toContain('box-shadow: var(--ds-button-primary-shadow, var(--ds-shadow-sm));');
 
       const input = screen.getByPlaceholderText('Type something...');
-      // The input should be rendered and styled
       expect(input).toBeInTheDocument();
+      expect(input.style.border).toBe('');
+      expect(input.style.backgroundColor).toBe('');
+      expect(normalizedRusticSkin).toContain("[data-part='sample-input'][data-part='sample-input']");
+      expect(rusticSkin).toContain('background-color: var(--ds-input-bg, var(--ds-color-surface));');
     });
 
     it('supports hiding optional sections and rendering a focused component subset', () => {

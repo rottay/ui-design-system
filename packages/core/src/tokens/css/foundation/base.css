@@ -400,6 +400,12 @@
 @import '../components/skin/oauth-transition.css';
 @import '../components/skin/loading-overlay.css';
 
+/* WO-SKIN-06 CK-H1: tenant and branding previews paint from unlayered skins. */
+@import '../engines/modern/skin/tenant-preview.css';
+@import '../engines/rustic/skin/tenant-preview.css';
+@import '../components/skin/branding-preview-sandbox.css';
+@import '../components/skin/brand-studio.css';
+
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */
 
 /* Layer 5: Personality overrides */

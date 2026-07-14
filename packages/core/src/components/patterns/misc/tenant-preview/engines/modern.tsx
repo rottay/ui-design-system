@@ -8,7 +8,8 @@
  * sample DS-token components (buttons, card, input, badges, table), and
  * personality token metadata in a responsive grid.
  *
- * Zero DaisyUI / Tailwind utility classes -- all styling via inline DS tokens.
+ * Zero DaisyUI / Tailwind utility classes. Static paint comes from the
+ * component skin; tenant-derived paint remains inline with DS-token layout.
  *
  * @example
  * <ModernTenantPreview
@@ -54,8 +55,6 @@ const badgeBaseStyle: React.CSSProperties = {
   padding: '0 8px',
   fontSize: 11,
   fontWeight: 500,
-  borderRadius: 'var(--ds-radius-full)',
-  border: 'none',
   lineHeight: 1,
   whiteSpace: 'nowrap',
 };
@@ -174,9 +173,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
       className={`ds-pattern-tenant-preview ds-engine-modern ${className ?? ''}`}
       data-part="root"
       style={{
-        background: 'var(--ds-surface-card)',
-        borderRadius: 'var(--ds-radius-lg)',
-        boxShadow: 'var(--ds-elevation-1)',
         ...style,
       }}
     >
@@ -198,7 +194,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
             alignItems: 'center',
             gap: 12,
             paddingBottom: 16,
-            borderBottom: '1px solid var(--ds-color-border)',
           }}
         >
           {creationConfig.logo && (
@@ -207,7 +202,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
               style={{
                 width: 32,
                 height: 32,
-                borderRadius: 'var(--ds-radius-md)',
                 overflow: 'hidden',
                 flexShrink: 0,
               }}
@@ -227,7 +221,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 fontWeight: 600,
                 lineHeight: 1.3,
                 margin: 0,
-                color: 'var(--ds-color-text-primary)',
               }}
             >
               {creationConfig.name}
@@ -238,7 +231,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                 fontSize: 12,
                 opacity: 0.6,
                 margin: 0,
-                color: 'var(--ds-color-text-secondary)',
               }}
             >
               {creationConfig.slug} | {creationConfig.engine ?? 'classic'} | {creationConfig.personality ?? 'neutral'}
@@ -266,7 +258,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   data-palette="primary"
                   style={{
                     display: 'flex',
-                    borderRadius: 'var(--ds-radius-md)',
                     overflow: 'hidden',
                   }}
                 >
@@ -318,7 +309,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                     data-palette="secondary"
                     style={{
                       display: 'flex',
-                      borderRadius: 'var(--ds-radius-md)',
                       overflow: 'hidden',
                     }}
                   >
@@ -346,7 +336,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
           <div>
             <div style={sectionLabelStyle}>Component Preview</div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-              {/* Buttons -- inline token styles with tenant color */}
+              {/* Buttons -- tenant-derived values remain inline; static paint lives in the skin */}
               {components.includes('button') && (
                 <div>
                   <div style={subLabelStyle}>Buttons</div>
@@ -362,8 +352,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         height: 32,
                         padding: '0 12px',
                         fontSize: 13,
-                        borderRadius: 'var(--ds-radius-md)',
-                        border: 'none',
                         cursor: 'pointer',
                         backgroundColor: primary500,
                         color: primaryFg,
@@ -382,10 +370,8 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         height: 32,
                         padding: '0 12px',
                         fontSize: 13,
-                        borderRadius: 'var(--ds-radius-md)',
                         border: `1px solid ${primary500}`,
                         cursor: 'pointer',
-                        background: 'transparent',
                         color: primary500,
                       }}
                     >
@@ -402,11 +388,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         height: 32,
                         padding: '0 12px',
                         fontSize: 13,
-                        borderRadius: 'var(--ds-radius-md)',
-                        border: 'none',
                         cursor: 'pointer',
-                        background: 'transparent',
-                        color: 'var(--ds-color-text-primary)',
                       }}
                     >
                       Default
@@ -419,15 +401,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
               {components.includes('card') && (
                 <div>
                   <div style={subLabelStyle}>Card</div>
-                  <div
-                    data-part="sample-card"
-                    style={{
-                      background: 'var(--ds-surface-card)',
-                      border: '1px solid var(--ds-color-border)',
-                      borderRadius: 'var(--ds-radius-md)',
-                      boxShadow: 'var(--ds-elevation-1)',
-                    }}
-                  >
+                  <div data-part="sample-card">
                     <div
                       style={{
                         padding: '12px 16px',
@@ -441,7 +415,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         data-part="accent-bar"
                         style={{
                           height: 4,
-                          borderRadius: 'var(--ds-radius-full)',
                           marginBottom: 8,
                           backgroundColor: primary500,
                         }}
@@ -452,7 +425,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                           fontSize: 14,
                           fontWeight: 600,
                           margin: 0,
-                          color: 'var(--ds-color-text-primary)',
                         }}
                       >
                         Sample Card Title
@@ -463,7 +435,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                           fontSize: 12,
                           opacity: 0.6,
                           margin: 0,
-                          color: 'var(--ds-color-text-secondary)',
                         }}
                       >
                         This card demonstrates the tenant branding applied to a container component.
@@ -485,11 +456,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                       height: 32,
                       padding: '0 12px',
                       fontSize: 13,
-                      border: '1px solid var(--ds-color-border)',
-                      borderRadius: 'var(--ds-radius-md)',
-                      background: 'var(--ds-surface-card)',
-                      color: 'var(--ds-color-text-primary)',
-                      outline: 'none',
                       width: '100%',
                       maxWidth: 320,
                     }}
@@ -519,8 +485,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                       data-status="pending"
                       style={{
                         ...badgeBaseStyle,
-                        background: 'color-mix(in srgb, var(--ds-color-warning) 15%, transparent)',
-                        color: 'var(--ds-color-warning)',
                       }}
                     >
                       Pending
@@ -530,8 +494,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                       data-status="draft"
                       style={{
                         ...badgeBaseStyle,
-                        background: 'var(--ds-surface-panel)',
-                        color: 'var(--ds-color-text-secondary)',
                       }}
                     >
                       Draft
@@ -554,12 +516,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                       }}
                     >
                       <thead>
-                        <tr
-                          data-part="table-head"
-                          style={{
-                            borderBottom: '1px solid var(--ds-color-border)',
-                          }}
-                        >
+                        <tr data-part="table-head">
                           <th
                             data-part="preview-table-cell"
                             data-variant="head"
@@ -568,7 +525,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                               padding: '8px 12px',
                               fontWeight: 600,
                               fontSize: 12,
-                              color: 'var(--ds-color-text-secondary)',
                             }}
                           >
                             Name
@@ -581,7 +537,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                               padding: '8px 12px',
                               fontWeight: 600,
                               fontSize: 12,
-                              color: 'var(--ds-color-text-secondary)',
                             }}
                           >
                             Status
@@ -594,7 +549,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                               padding: '8px 12px',
                               fontWeight: 600,
                               fontSize: 12,
-                              color: 'var(--ds-color-text-secondary)',
                             }}
                           >
                             Amount
@@ -602,16 +556,11 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr
-                          style={{
-                            borderBottom: '1px solid var(--ds-color-border)',
-                          }}
-                        >
+                        <tr>
                           <td
                             data-part="preview-table-cell"
                             style={{
                               padding: '8px 12px',
-                              color: 'var(--ds-color-text-primary)',
                             }}
                           >
                             Project Alpha
@@ -634,7 +583,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                             style={{
                               textAlign: 'right',
                               padding: '8px 12px',
-                              color: 'var(--ds-color-text-primary)',
                             }}
                           >
                             $12,400
@@ -645,7 +593,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                             data-part="preview-table-cell"
                             style={{
                               padding: '8px 12px',
-                              color: 'var(--ds-color-text-primary)',
                             }}
                           >
                             Project Beta
@@ -656,8 +603,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                               data-status="pending"
                               style={{
                                 ...badgeBaseStyle,
-                                background: 'var(--ds-surface-panel)',
-                                color: 'var(--ds-color-text-secondary)',
                               }}
                             >
                               Pending
@@ -668,7 +613,6 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                             style={{
                               textAlign: 'right',
                               padding: '8px 12px',
-                              color: 'var(--ds-color-text-primary)',
                             }}
                           >
                             $8,200
@@ -733,9 +677,7 @@ export default function ModernTenantPreview(props: TenantPreviewProps) {
                   key={label}
                   data-part="personality-tile"
                   style={{
-                    borderRadius: 'var(--ds-radius-md)',
                     padding: 8,
-                    background: 'var(--ds-surface-inset)',
                   }}
                 >
                   <div style={{ fontSize: 11, opacity: 0.5 }}>{label}</div>

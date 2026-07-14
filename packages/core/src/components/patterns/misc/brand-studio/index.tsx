@@ -346,7 +346,6 @@ export function normalizeBrandTheme(value: BrandTheme | Partial<BrandTheme>): Br
 
 const fieldLabelStyle: React.CSSProperties = {
   display: 'block',
-  color: 'var(--ds-color-text-muted)',
   marginBottom: 4,
 };
 
@@ -385,8 +384,6 @@ function ColorField({
             width: 28,
             height: 28,
             flexShrink: 0,
-            borderRadius: 6,
-            border: '1px solid var(--ds-color-border)',
             background: isHex(value) ? value : 'transparent',
           }}
         />
@@ -503,9 +500,6 @@ function EditorSection({ title, children }: { title: string; children: React.Rea
       data-part="section"
       style={{
         padding: 16,
-        borderRadius: 12,
-        border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border))',
-        background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-secondary))',
       }}
     >
       <Stack spacing="sm">
@@ -532,9 +526,6 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
       style={{
         marginTop: 12,
         padding: 12,
-        borderRadius: 10,
-        border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border))',
-        background: 'var(--ds-color-bg-surface, var(--ds-color-bg-secondary))',
       }}
     >
       <Flex
@@ -546,13 +537,14 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
         style={{ flexWrap: 'wrap' }}
       >
         <Text
+          className="ds-pattern-brand-studio__contrast-label"
+          data-part="contrast-label"
           size="xs"
           weight="semibold"
           style={{
             display: 'block',
             textTransform: 'uppercase',
             letterSpacing: '0.08em',
-            color: 'var(--ds-color-text-muted)',
           }}
         >
           {report.surface === 'dark' ? 'Dark ground' : 'Light ground'} contrast
@@ -567,11 +559,12 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
       </Flex>
       {report.violations.length === 0 ? (
         <Text
+          className="ds-pattern-brand-studio__contrast-message"
+          data-part="contrast-message"
           size="xs"
           style={{
             display: 'block',
             marginTop: 8,
-            color: 'var(--ds-color-text-secondary)',
           }}
         >
           Every checkable color pair meets its required ratio.
@@ -588,9 +581,6 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                 data-severity="error"
                 style={{
                   padding: '8px 10px',
-                  borderRadius: 8,
-                  border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border))',
-                  background: 'var(--ds-color-bg-primary)',
                 }}
               >
                 <Flex
@@ -604,16 +594,22 @@ function ContrastReportView({ report }: { report: BrandStudioContrastReport }): 
                   <Text size="xs" weight="semibold" style={{ display: 'block' }}>
                     {violation.pair}
                   </Text>
-                  <Text size="xs" style={{ display: 'block', color: 'var(--ds-color-error)' }}>
+                  <Text
+                    className="ds-pattern-brand-studio__violation-ratio"
+                    data-part="violation-ratio"
+                    size="xs"
+                    style={{ display: 'block' }}
+                  >
                     {violation.ratio.toFixed(2)} : 1 &middot; needs {violation.required} : 1 ({violation.level})
                   </Text>
                 </Flex>
                 <Text
+                  className="ds-pattern-brand-studio__violation-detail"
+                  data-part="violation-detail"
                   size="xs"
                   style={{
                     display: 'block',
                     marginTop: 4,
-                    color: 'var(--ds-color-text-muted)',
                   }}
                 >
                   {violation.foreground} on {violation.background}
@@ -684,10 +680,6 @@ function PreviewPanel({
         data-ground={surface.baseTheme}
         style={{
           padding: 20,
-          borderRadius: 14,
-          border: '1px solid var(--ds-color-border)',
-          background: 'var(--ds-color-bg-primary)',
-          color: 'var(--ds-color-text-primary, var(--ds-color-text))',
           fontFamily: 'var(--ds-font-family-base, inherit)',
         }}
       >
@@ -699,10 +691,11 @@ function PreviewPanel({
           })
         ) : (
           <Text
+            className="ds-pattern-brand-studio__preview-fallback"
+            data-part="preview-fallback"
             size="sm"
             style={{
               display: 'block',
-              color: 'var(--ds-color-text-secondary)',
             }}
           >
             Pass a galleries slot to render live component states here.
@@ -1297,7 +1290,7 @@ export function PatternBrandStudio({
           <Badge variant="secondary">{theme.name}</Badge>
         </Flex>
         {description ? (
-          <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <Text className="ds-pattern-brand-studio__description" data-part="description" size="sm">
             {description}
           </Text>
         ) : null}
@@ -1314,11 +1307,12 @@ export function PatternBrandStudio({
       >
         <Stack className="ds-pattern-brand-studio__editor" data-part="editor" spacing="md">
           <Text
+            className="ds-pattern-brand-studio__editor-heading"
+            data-part="editor-heading"
             size="sm"
             weight="semibold"
             style={{
               display: 'block',
-              color: 'var(--ds-color-text-secondary)',
             }}
           >
             Bounded BrandTheme fields
@@ -1328,11 +1322,12 @@ export function PatternBrandStudio({
 
         <Stack className="ds-pattern-brand-studio__preview-grid" data-part="preview-grid" spacing="lg">
           <Text
+            className="ds-pattern-brand-studio__preview-heading"
+            data-part="preview-heading"
             size="sm"
             weight="semibold"
             style={{
               display: 'block',
-              color: 'var(--ds-color-text-secondary)',
             }}
           >
             Live preview on both grounds
@@ -1354,8 +1349,6 @@ export function PatternBrandStudio({
             data-state={hostileReports ? 'complete' : 'idle'}
             style={{
               padding: 16,
-              border: '1px solid var(--ds-color-border-secondary, var(--ds-color-border))',
-              background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-secondary))',
             }}
           >
             <Stack spacing="sm">
@@ -1365,10 +1358,11 @@ export function PatternBrandStudio({
                     Hostile input check
                   </Text>
                   <Text
+                    className="ds-pattern-brand-studio__action-helper"
+                    data-part="action-helper"
                     size="xs"
                     style={{
                       display: 'block',
-                      color: 'var(--ds-color-text-muted)',
                     }}
                   >
                     Applies deliberately extreme values and reports the failing color pairs per ground.

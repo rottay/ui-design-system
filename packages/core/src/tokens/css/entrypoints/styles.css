@@ -416,6 +416,12 @@
 @import '../components/skin/oauth-transition.css';
 @import '../components/skin/loading-overlay.css';
 
+/* WO-SKIN-06 CK-H1: tenant and branding previews paint from unlayered skins. */
+@import '../engines/modern/skin/tenant-preview.css';
+@import '../engines/rustic/skin/tenant-preview.css';
+@import '../components/skin/branding-preview-sandbox.css';
+@import '../components/skin/brand-studio.css';
+
 /* =============================================================================
    LAYER 4: TENANT OVERRIDES (rottay-tenants)
    First-party tenant variable definitions. These are pure CSS custom property
