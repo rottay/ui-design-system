@@ -228,6 +228,14 @@ then the signature pass last.
   3. **The gate's "all spec section 12 counters at target" cannot pass and never could.** The counters are decrease-only ratchets sitting at their baselines, not at zero: `color.modernHexLiterals: 13`, `content.magicZIndex: 33`, `themeCss.deadSelectorsRustic: 146`, `a11y.apcaPairings: 6`, `motion.compositorOnlyViolations: 6`, 1,516 hardcoded literals outstanding. "At target" was aspiration written before anyone counted. The honest clause is: every counter at or below baseline, and `--check` green. That is what was certified.
   4. **Owner approval** was delegated on 2026-07-09 ("auto aprobate. pedi calidad maxima pero auto aprobate"), so the "never self-approve" clause is satisfied by that delegation and recorded here rather than silently ignored.
 
+- **AMENDMENT 2026-07-14 (the hairline measurement above was invalid)** — The earlier `+11/+0`
+  claim sampled unrelated rows and incorrectly treated a shared elevation token as an engine
+  differentiator. Both modern and rustic consume the inset hairline through `--ds-card-shadow`.
+  WO-SKIN-07 replaces that assertion with a neutral, same-card A/B test for both engines; modern
+  measures `7.07` luminance contribution with computed alpha `0.04`, inside the normative
+  `0.04–0.08` range. Surface tint, cadence and full-surface pixel divergence remain the actual
+  premium-signature evidence.
+
 - **RELEASE NOTE (WO-ENG-11, recorded 2026-07-10; no publish performed)**
   - Target released version: the next `@rottay/design-system` minor after `2.16.6`. Not published, not repinned, by this or any work order in this program.
   - Token renames / retimings landed by this lane: `shadow -> elevation` (`--ds-elevation-0..5`), motion cadence `150ms -> 120ms` (`--ds-motion-fast`), the new `--ds-effect-intensity` dial, the generated `linear()` spring replacing the hardcoded cubic-bezier at `theme.css:111`, `--ds-color-bg-input` moved out of the chrome emitter into the base block, and `BrandPalette.backgroundColor` added beside `darkBackgroundColor`. `TenantConfig.engine` became optional.

@@ -34,6 +34,7 @@ const FIDELITY_MATRIX = [
   {
     component: 'Card',
     file: 'components/primitives/display/Card/engines/modern.tsx',
+    skin: 'tokens/css/engines/modern/skin/card.css',
     prefix: '--ds-card-',
     minRefs: 10,
   },

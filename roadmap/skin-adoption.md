@@ -114,10 +114,66 @@ runtime-SVG floor is registered per file and certified at the exact post-migrati
   version publish + app repins, and the stage-2 backlog handoff (consolidated proposals list).
 - **Size** — M.
 
+#### Stage-2 handoff and release boundary
 
-## Measured census (2026-07-11, WO-SKIN-01 — roadmap/skin-census.json is the machine artifact)
+Stage 1 deliberately preserved existing pixels and behavior. Its discoveries remain explicit work;
+certifying the skin move does not silently certify those defects as product decisions:
 
-Fleet: **164 components, 376 files, 6300 paint sites** (~11x the ARC-09 surface). Ratchet live:
+Two earlier audit findings also remain as transversal carryovers after factual amendments:
+
+| proposal | status | owner lane | Stage-2 handoff |
+| --- | --- | --- | --- |
+| P-38 | OPEN | architecture / public API | Preserve `Modal`/`OverlayModal`; converge the duplicated implementation or ratify tested differences. |
+| P-39 | OPEN (terminal-chain only) | gates / audit | Add an unterminated scalar `var()`-chain counter; the motion-shorthand half is withdrawn. |
+
+| proposal | status | owner lane | Stage-2 handoff |
+| --- | --- | --- | --- |
+| P-63 | OPEN | product / visual | Repair Table chrome and focus states with new fixtures and sighted baselines. |
+| P-64 | FIXED | authoring contract | Canonical skin/data-part law landed at docs commit `d76024f`; WO-SKIN-07 extends it through WO-SKIN-05/06. |
+| P-65 | OPEN | product / accessibility | Decide whether to re-enable suppressed Input focus and close-button hover paint. |
+| P-66 | OPEN | engine parity | Make classic Text exact or document the accepted lossy color contract. |
+| P-67 | OPEN | engine parity / runtime | Reconcile DetailPanel status color, pulse and interaction behavior. |
+| P-68 | OPEN | product / public API | Resolve dead DataTable paint, resize token and Card selection props. |
+| P-69 | PARTIAL | gates / audit | Keep the focal-green A/B hairline probe; extend deterministic font loading to the remaining screenshot specs. |
+| P-70 | OPEN | token architecture | Replace transcribed literals with semantic tokens under deliberate tenant baselines. |
+| P-71 | OPEN | product / engine correctness | Resolve the input-family defects individually; do not fold them into skin adoption. |
+| P-72 | OPEN | product / runtime correctness | Reconcile notification, drawer, modal, toast, progress and skeleton behavior. |
+| P-73 | OPEN | token / cascade architecture | Restore an actually tenant-themable Steps contract. |
+| P-74 | OPEN | public API / composition | Align Stepper, Breadcrumb and Tabs docs, types and all three engines. |
+| P-75 | OPEN | product / visual | Fix modern Avatar sizing/clipping with sighted baselines. |
+| P-76 | OPEN | cascade architecture | Repair layer order only with a fleet-wide app override audit and re-baseline. |
+| P-77 | OPEN | runtime correctness | Make DataTerminalCard deterministic across SSR and hydration. |
+| P-78 | OPEN | runtime correctness | Compose Tooltip placement and visibility transforms instead of overwriting one. |
+| P-79 | OPEN | public API / composition | Define attribute/part ownership and make forwarding honest across engines. |
+| P-80 | OPEN | gates / audit | Turn skin rule/state fixture coverage into a measured release ratchet. |
+| P-81 | OPEN | public API / composition | Forward documented Card attributes and repair GuidedDraftForm anchors. |
+| P-82 | OPEN | token architecture | Decide whether PageShell's dormant tenant subtitle token is public or deleted. |
+| P-83 | OPEN | public API / composition | Add and certify WorkbenchHeader `onBack`, or remove the unreachable UI. |
+| P-84 | OPEN | engine parity | Implement or explicitly reject FormBuilder sections in rustic. |
+| P-85 | OPEN | gates / audit | Teach the paint lexer to ignore type bodies inside generic arguments. |
+| P-86 | OPEN | cascade architecture | Migrate the shared internal popup/menu surfaces without de-sharing overrides. |
+| P-87 | FIXED | authoring contract | `(0,5,0)` composed-Text color law is in the kit and dependent contracts. |
+| P-88 | OPEN | public API / composition | Provide a stable owner/slot class API and engine-parity for style landings. |
+
+When published, the minor release is made available to every consumer, but a repin is not allowed
+to bypass an app's own adoption gate. The exact release disposition is:
+
+| consumer | current pin | WO-SKIN-07 disposition | governing gate |
+| --- | --- | --- | --- |
+| app-bithire | `2.18.0` | capture a same-seed `2.18.0` before gallery; repin to `2.19.0`; capture the matching after gallery, adjudicate any delta, then run full static certification | live app uses `forceEngine="modern"`; before/after evidence is mandatory |
+| app-platform | `2.17.0` | do not repin; after registry publish, record `2.19.0` as the released external version for WO-EXP-07 | WO-EXP-07 remains gated by WO-EXP-05 and owner-approved delta review |
+| app-evnto | `2.8.24` | do not repin; after registry publish, record `2.19.0` as the released external version for WO-EXP-10 | WO-EXP-10 remains gated by WO-EXP-09 and owner-approved delta review |
+
+The `platform` monorepo root override (`2.8.22`) and its auth-client peer range (`>=2.7.0`) are not
+app pins and do not move in this checkpoint. Deferred consumers repin only inside their app-owned
+work orders with clean registry lockfiles and their own sighted evidence.
+
+## Initial measured census (2026-07-11, WO-SKIN-01)
+
+Historical starting snapshot: **164 components, 376 files, 6300 paint sites** (~11x the ARC-09
+surface), preserved at commit `2454ef4f`. `roadmap/skin-census.json` is intentionally the **live
+residual**, not that frozen start; after Stage 1 it reports `30 components / 60 files / 634 sites`,
+all adjudicated by exact runtime/non-paint floors. Ratchet live:
 `fleet.inlinePaint.<file>` decrease-only counters, same lexer as arc09 (shared module
 `scripts/lib/inline-paint-counter.mjs`). Model tier from script-detected trap markers
 (imperative paint, hover handlers, state-hover, Text color, style-into-child, keyframes tags,
@@ -131,10 +187,9 @@ portals); the per-batch contract still resolves each collision exactly.
 | WO-SKIN-05 | primitives/display+layout | 23 | 57 | 628 | 12 |
 | WO-SKIN-06 | patterns+structures+surfaces | 77 | 158 | 3582 | 59 |
 
-WO-SKIN-06 is 57% of the fleet — SPLIT IT at claim time (recommendation: 06a patterns/data+forms,
-06b patterns remainder, 06c structures+surfaces; the census JSON carries the per-component
-assignment either way). Top single components: dashboard-insights 259, DatePicker 154,
-data-terminal-card 149, tenant-preview 147, Select 143, surfaces/pages/workspace 141.
+WO-SKIN-06 was 57% of the starting fleet and therefore executed as ten independently contracted
+checkpoints rather than one shared-skin unit. The table above remains historical planning evidence;
+the live residual JSON is the executable post-migration truth.
 
 Start order: 01 strictly first (everything else derives its file lists from it); 02 before the
 rest (it dissolves suppression interplays the later batches would otherwise have to reproduce);

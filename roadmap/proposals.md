@@ -595,6 +595,16 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why it matters** — This is the shape of every defect this program has found: one path follows a rule, a duplicated path ignores it, and a gate scans only one. A consumer importing `Modal` gets whichever the barrel exports; a fix applied to one is invisible in the other. The Toast `default` variant and the two chrome compilers were exactly this.
 - **Ask** — Determine which is canonical, whether both are reachable from the public barrel, and whether any app imports the non-canonical one. Then delete or merge. Needs an owner decision because it may be a breaking export change.
 - **Status** — OPEN.
+- **AMENDMENT 2026-07-14 (the export decision predates this finding)** — The package barrel is not
+  ambiguous. Since commit `236b9aa9`, `primitives/overlay/index.ts` exports `feedback/Modal` as the
+  canonical `Modal` and `overlay/Modal` as the public advanced `OverlayModal`. No app imports
+  `OverlayModal`; `AdaptiveOverlay` and the Showroom do consume the overlay family. The unresolved
+  defect is therefore not export reachability but two public contracts carrying independent types,
+  compounds, engines and skins. ARC-03 closed without performing the convergence it originally named.
+- **Revised ask** — Preserve the public `Modal` / `OverlayModal` names, but either converge both on
+  one behavior/anatomy core with parity tests, or ratify and document their intentional differences.
+  Do not delete the overlay family while `AdaptiveOverlay` consumes it.
+- **Revised status** — OPEN (architecture / public API); naming and reachability are already decided.
 
 ### P-39 Two audit counters are blind to the syntax they exist to police
 - **Found** — 2026-07-09, while attributing regressions in WO-ARC-01's certification.
@@ -604,6 +614,17 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why it matters** — Both counters are load-bearing in `--check` and both were green while the defect they name was in the tree. This is the same shape as `effects.gradientConsumers`, which counted files while the pixels were flat, and as `audit-integration`, which scanned one emitter of two.
 - **Ask** — extend `motion.rawDurationLiterals` to parse the `animation`/`transition` shorthands, and `scale.fallbackParityViolations` to require a literal at the end of every `var()` chain in an inline style. Each extension ships with a DRILL.
 - **Status** — OPEN.
+- **AMENDMENT 2026-07-14 (motion half withdrawn; fallback-chain half remains)** —
+  `countMotionLiteralsInText()` scans the complete source text and therefore sees
+  `animation`/`transition` shorthands. `pulse 2s ... infinite` reports zero because the counter
+  deliberately allows `>=1s` loop/shimmer/spinner tempos; it is not a shorthand blind spot. The
+  remaining defect is narrower: `countFallbackParityViolations()` matches only a simple scalar
+  fallback with `([^,()]+)`, so nested `var()` chains are outside the matcher and the gate cannot
+  prove a concrete terminal fallback.
+- **Revised ask** — Add a separate `scale.unterminatedScalarVarChains` counter over inline-style CSS
+  values. Follow nested `var()` fallbacks to a concrete scalar and ship a drill that removes the
+  terminal literal. Keep `fallbackParityViolations` scoped to value parity.
+- **Revised status** — OPEN for the terminal-chain gate only; the motion-shorthand claim is WITHDRAWN.
 
 ### P-40 This program shipped regressions that no gate caught
 - **Found** — 2026-07-09, certifying WO-ARC-01. Three unit tests were RED in the working tree and GREEN at the pre-program commit `9d59a97a`, verified by running them in a throwaway worktree at that commit.
@@ -916,7 +937,8 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Evidence** — skin class naming drifted across three eras: `rottay-button`/`rottay-input`/`rottay-badge` (ARC-07 legacy), `ds-card`/`ds-table` (newer, engine-split), and the WO-ARC-09 contract's `ds-pattern-data-table ds-engine-modern` / `ds-structure ds-selection-preview-rail` (agnostic). Nothing breaks (all reach (0,2,0)), but this is the last moment to legislate before five components multiply the choices. Two more rules the Table skins now encode in their headers but the DS doc does not: (a) a PAINTING `border`/`border-color` rule must reach (0,4,0) by REPEATING the data-part (`[data-part='x'][data-part='x']`), never by borrowing an incidental attribute (`role`/`aria-label`/`placeholder`) — those rot when the attribute moves; pure `border: none` resets are exempt. (b) The engine-state idiom: both engines now express transient state as CSS `:hover`/`:active`/`:focus` keyed on the SAME `data-part` names (rustic's five React hover-state hooks were removed).
 - **Why it matters** — the `data-part` contract is now the tenant re-skinning surface, which is the entire point of the migration, yet lives only in CSS comments + the WO. Per the repo's documentation rule (and P-61's standing example), a public contract belongs in `docs-engineering`.
 - **Ask** — (a) a short DS skin authoring law in `docs-engineering/engineering/design-system/runtime/engines/` covering class naming, the (0,4,0)/repeat-data-part rule, and the `:hover` idiom. (b) document the Table `data-part` contract (primitives/display + modern engine README). Docs-only; deferred because `docs-engineering` is READ-ONLY this session (same fence as P-61).
-- **Status** — OPEN.
+- **Status** — FIXED in docs commit `d76024f`: the unlayered-skin authoring law and Table's public
+  `data-part` contract are canonical under `docs-engineering/engineering/design-system/runtime/skins/`.
 
 ### P-65 Pre-existing suppressed interaction paint, now legible in the ARC-09 skins
 - **Found** — 2026-07-11, during WO-ARC-09 checkpoints 2 and 4. In both cases a component's inline `style` was silently beating a child primitive's own skin states, and the byte-exact mandate correctly reproduced the suppression via escalated selectors instead of "fixing" it.
@@ -951,6 +973,20 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Why it matters** — a gate that records and re-verifies under the same lost race certifies the wrong pixels forever; a stale dist masks real behavior changes until an unrelated rebuild ships them as a surprise.
 - **Ask** — (a) engine owner: pick the dark-elevation hairline story (raise elevation-1's inset alpha to clear >=4, or re-derive MIN_HAIRLINE_DELTA from the intended alpha) — one deliberate commit either way; (b) consider the force-load idiom for the other screenshot specs (they are stable today, but by luck of their face usage, not by construction); (c) any future session that regenerates bundles diffs them against HEAD and treats ANY unexplained subtraction as a stale-dist alarm, not a ratchet win (this session initially mis-adjudicated the .radio-sm drop as harmless shrink — it was harmless, but for the wrong reason).
 - **Status** — OPEN (a/b); (c) is a working rule, recorded in session memory.
+- **AMENDMENT 2026-07-14 (the probe was wrong, not the elevation token)** —
+  `signature.spec.ts` sampled row 1 against row 6 assuming row 1 carried the inset. Chromium paints
+  the inset on row 0; row 1's `1.38` delta is the surface gradient and remains unchanged when the
+  inset alpha varies from 0 through 0.50. Rustic also carries the same inset through
+  `--ds-card-shadow`, so the former “modern's, and only modern's” assertion was false. WO-SKIN-07
+  corrects the gate without changing a pixel: it A/B-captures the same card with its normal shadow
+  and with `--ds-card-shadow:none`, samples the first three edge rows, and separately asserts the
+  computed white inset alpha remains in the normative `0.04..0.08` range. The modern measurement is
+  `7.07` luminance contribution at alpha `0.04`; the focused gate is green.
+- **Revised ask** — Keep the shared-engine A/B hairline probe. Centralize the flagship force-load
+  idiom and adopt it only in screenshot specs that reference a face before it has started loading;
+  do not mass re-record stable baselines without reproducing a race.
+- **Revised status** — PARTIAL: the hairline item is FIXED; font-loading hardening remains OPEN. The
+  stale-bundle rule remains release practice.
 
 ### P-70 Hardcoded paint literals the WO-SKIN-02 migrations transcribed byte-exact
 - **Found** — 2026-07-12/13, across the inputs batch (WO-SKIN-02). The byte-exact law forbids tokenizing mid-migration, so every literal moved verbatim from inline styles into the skins where it is now grep-able.
@@ -992,6 +1028,15 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Frozen for WO-SKIN-04** — the migration is byte-exact and does not fix this. The pre-step stamps the compounds anyway (their anatomy is correct when they DO render), and the contract test pins the reality rather than the documentation.
 - **Ask** — decide per component: wire the children path, or delete the compound and the documentation that promises it. Do not leave a third state. Whichever is chosen, add ONE test per compound that renders the documented example and asserts it produces DOM — that is the gate this class of defect never had.
 - **Status** — OPEN.
+- **AMENDMENT 2026-07-14 (the three failures are not identical)** — `Stepper.Step` children are
+  recognized: the root harvests a subset of their props into `items` and re-renders the label through
+  its own anatomy, but bypasses the compound renderer, loses `active`, and discards
+  `Stepper.Content`. `Breadcrumb.Item` children really are ignored. `Tabs.TabPane`'s documented
+  children-only example also omits the required `items` prop; at runtime engines read only `items`,
+  ignore children, and an empty-items path renders nothing.
+- **Revised ask** — Choose one supported composition per component and align docs, types and all
+  three engines. Add executable examples proving Step plus Content, Breadcrumb.Item and Tabs.TabPane
+  produce the promised DOM.
 
 ### P-75 Avatar's size prop is broken in the modern engine — large avatars are clipped, small ones get a halo
 

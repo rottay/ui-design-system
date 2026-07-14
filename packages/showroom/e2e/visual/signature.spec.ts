@@ -14,16 +14,18 @@ import { test, expect, type Page } from '@playwright/test';
 //
 // WHAT THE MEASUREMENTS ARE, AND WHAT THEY ARE NOT
 // -----------------------------------------------
-// Four of the spec's five signature cues are measurable here. The fifth is not,
-// and this file says so rather than pretending:
+// Three differentiating cues and one shared elevation invariant are measurable
+// here. The fifth signature cue is not, and this file says so rather than
+// pretending:
 //
 //   1. motion cadence      -> `transition-duration` on the primary button.
 //                             Measured: modern 0.12s (the --ds-motion-* canon),
 //                             rustic 0.3s.
-//   2. dark-aware elevation -> the card's top hairline highlight, measured in
-//                             decoded pixels: the first row inside the box is
-//                             lighter than the rows below it. Measured: modern
-//                             +11 luminance, rustic +0.
+//   2. dark-aware elevation -> a SHARED engine invariant, not a differentiator.
+//                             The card's top hairline is measured by removing
+//                             the shadow in an A/B control and decoding the
+//                             first three rows; its computed inset alpha is
+//                             checked separately against the contract.
 //   3. surface-tint gradient -> the card face's top-to-bottom luminance delta, in
 //                             decoded pixels. NOT the `background-image` string:
 //                             that still reads `linear-gradient(...)` when the
@@ -64,8 +66,10 @@ const FLAGSHIPS: readonly string[] = ['button', 'input', 'card', 'badge', 'table
  */
 const MIN_PIXEL_DIVERGENCE = 4;
 
-/** Luminance the card's top row must exceed the rows below it by, in modern. */
-const MIN_HAIRLINE_DELTA = 4;
+/** Minimum pixel contribution and normative alpha range of the shared hairline. */
+const MIN_HAIRLINE_CONTRIBUTION = 4;
+const MIN_HAIRLINE_ALPHA = 0.04;
+const MAX_HAIRLINE_ALPHA = 0.08;
 
 /**
  * Top-to-bottom luminance delta across the card face. Measured: modern 4.0 with
@@ -91,38 +95,131 @@ async function loadProbe(page: Page, engine: string, slug?: string): Promise<voi
   await page.evaluate(() => document.fonts.ready);
 }
 
-/** Decodes the element's screenshot in-browser and returns per-row luminance. */
-async function topHairlineDelta(page: Page, selector: string): Promise<number> {
-  const shot = await page.locator(selector).first().screenshot();
-  return page.evaluate(async (url: string) => {
-    const img = new Image();
-    await new Promise((res, rej) => {
-      img.onload = res;
-      img.onerror = rej;
-      img.src = url;
-    });
-    const c = document.createElement('canvas');
-    c.width = img.naturalWidth;
-    c.height = img.naturalHeight;
-    const ctx = c.getContext('2d');
-    if (!ctx) throw new Error('no 2d context');
-    ctx.drawImage(img, 0, 0);
+function extractWhiteInsetAlpha(boxShadow: string): number | null {
+  const inset = boxShadow.match(/rgba?\([^)]+\)[^,]*\binset\b/i)?.[0];
+  const rawChannels = inset?.match(/rgba?\(([^)]+)\)/i)?.[1];
+  if (!rawChannels) return null;
 
-    const luma = (r: number, g: number, b: number) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
-    const row = (y: number) => {
-      const x0 = Math.round(c.width * 0.3);
-      const d = ctx.getImageData(x0, y, Math.round(c.width * 0.4), 1).data;
-      let sum = 0;
-      let n = 0;
-      for (let i = 0; i < d.length; i += 4) {
-        sum += luma(d[i], d[i + 1], d[i + 2]);
-        n++;
-      }
-      return sum / n;
+  // Supports Chromium's current comma serialization and the modern slash form.
+  const channels = rawChannels
+    .replace(/\//g, ' ')
+    .split(/[,\s]+/)
+    .filter(Boolean)
+    .map(Number);
+
+  if (channels.length < 3 || channels.slice(0, 3).some((channel) => channel !== 255)) {
+    return null;
+  }
+
+  const alpha = channels.length >= 4 ? channels[3] : 1;
+  return Number.isFinite(alpha) ? alpha : null;
+}
+
+/** Compares the painted top edge with a same-element, shadow-free control. */
+async function measureTopHairline(
+  page: Page,
+  selector: string
+): Promise<{ contribution: number; alpha: number | null; boxShadow: string }> {
+  const card = page.locator(selector).first();
+  const boxShadow = await card.evaluate((element) => getComputedStyle(element).boxShadow);
+
+  const capture = async () => {
+    const shot = await card.screenshot();
+    return `data:image/png;base64,${shot.toString('base64')}`;
+  };
+
+  const paintedUrl = await capture();
+  const priorInline = await card.evaluate((element) => {
+    const style = (element as HTMLElement).style;
+    return {
+      shadow: {
+        value: style.getPropertyValue('--ds-card-shadow'),
+        priority: style.getPropertyPriority('--ds-card-shadow'),
+      },
+      transition: {
+        value: style.getPropertyValue('transition'),
+        priority: style.getPropertyPriority('transition'),
+      },
     };
-    // Row 0 is the antialiased border. Row 1 carries the inset highlight.
-    return row(1) - row(6);
-  }, `data:image/png;base64,${shot.toString('base64')}`);
+  });
+
+  let controlUrl = '';
+
+  try {
+    await card.evaluate((element) => {
+      const style = (element as HTMLElement).style;
+      style.setProperty('transition', 'none', 'important');
+      style.setProperty('--ds-card-shadow', 'none', 'important');
+    });
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())))
+    );
+    controlUrl = await capture();
+  } finally {
+    await card.evaluate((element, prior) => {
+      const style = (element as HTMLElement).style;
+      const restore = (name: string, entry: { value: string; priority: string }) => {
+        if (entry.value) style.setProperty(name, entry.value, entry.priority);
+        else style.removeProperty(name);
+      };
+
+      restore('--ds-card-shadow', prior.shadow);
+      restore('transition', prior.transition);
+    }, priorInline);
+  }
+
+  const contribution = await page.evaluate(
+    async ({ paintedUrl: paintedSource, controlUrl: controlSource }) => {
+      const load = async (url: string) => {
+        const image = new Image();
+        await new Promise<void>((resolve, reject) => {
+          image.onload = () => resolve();
+          image.onerror = reject;
+          image.src = url;
+        });
+        const canvas = document.createElement('canvas');
+        canvas.width = image.naturalWidth;
+        canvas.height = image.naturalHeight;
+        const context = canvas.getContext('2d');
+        if (!context) throw new Error('no 2d context');
+        context.drawImage(image, 0, 0);
+        return context;
+      };
+
+      const painted = await load(paintedSource);
+      const control = await load(controlSource);
+      const width = Math.min(painted.canvas.width, control.canvas.width);
+      const height = Math.min(painted.canvas.height, control.canvas.height);
+      const rowLuma = (context: CanvasRenderingContext2D, y: number) => {
+        const x = Math.round(width * 0.3);
+        const sampleWidth = Math.max(1, Math.round(width * 0.4));
+        const data = context.getImageData(x, y, sampleWidth, 1).data;
+        let sum = 0;
+        for (let index = 0; index < data.length; index += 4) {
+          sum +=
+            0.2126 * data[index] +
+            0.7152 * data[index + 1] +
+            0.0722 * data[index + 2];
+        }
+        return sum / (data.length / 4);
+      };
+
+      // Fractional crop alignment can move the inset among these edge rows.
+      let maximum = Number.NEGATIVE_INFINITY;
+      for (let y = 0; y < Math.min(3, height); y++) {
+        maximum = Math.max(maximum, rowLuma(painted, y) - rowLuma(control, y));
+      }
+      return maximum;
+    },
+    { paintedUrl, controlUrl }
+  );
+
+  return {
+    contribution,
+    alpha: extractWhiteInsetAlpha(boxShadow),
+    boxShadow,
+  };
 }
 
 /** Decodes the element and averages luminance across bands at 15% and 85% height. */
@@ -158,6 +255,28 @@ async function surfaceTint(page: Page, selector: string): Promise<number> {
     return Math.abs(band(0.15) - band(0.85));
   }, `data:image/png;base64,${shot.toString('base64')}`);
 }
+
+test.describe('the shared dark-elevation contract', () => {
+  for (const engine of ['modern', 'rustic'] as const) {
+    test(`${engine} paints the normative card hairline`, async ({ page }) => {
+      await loadProbe(page, engine, 'card');
+      const sample = await measureTopHairline(page, CARD_SELECTOR);
+      const alpha = sample.alpha ?? Number.NaN;
+
+      expect(
+        sample.alpha,
+        `${engine}: no white inset hairline found in: ${sample.boxShadow}`
+      ).not.toBeNull();
+      expect(alpha).toBeGreaterThanOrEqual(MIN_HAIRLINE_ALPHA);
+      expect(alpha).toBeLessThanOrEqual(MAX_HAIRLINE_ALPHA);
+      expect(
+        sample.contribution,
+        `${engine}: removing --ds-card-shadow changed the top edge by only ` +
+          `${sample.contribution.toFixed(2)} luminance`
+      ).toBeGreaterThanOrEqual(MIN_HAIRLINE_CONTRIBUTION);
+    });
+  }
+});
 
 test.describe('modern carries a premium signature rustic does not', () => {
   test('the motion cadence differs: modern rides the canon', async ({ page }) => {
@@ -199,21 +318,6 @@ test.describe('modern carries a premium signature rustic does not', () => {
       rustic,
       `rustic's face now carries a tint of ${rustic.toFixed(2)}, so the tint is no longer modern's signature`
     ).toBeLessThan(MIN_TINT_DELTA);
-  });
-
-  test("the card's top hairline highlight is modern's, and only modern's", async ({ page }) => {
-    await loadProbe(page, 'modern', 'card');
-    const modern = await topHairlineDelta(page, '[data-testid="probe-card"] [class*="card"]');
-
-    await loadProbe(page, 'rustic', 'card');
-    const rustic = await topHairlineDelta(page, '[data-testid="probe-card"] [class*="card"]');
-
-    expect(
-      modern,
-      `the modern card's first row is only ${modern.toFixed(2)} brighter than its face; the ` +
-        `dark-aware elevation highlight is gone`
-    ).toBeGreaterThanOrEqual(MIN_HAIRLINE_DELTA);
-    expect(modern, `rustic (${rustic.toFixed(2)}) now shows the highlight too`).toBeGreaterThan(rustic);
   });
 
   for (const slug of FLAGSHIPS) {

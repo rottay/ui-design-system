@@ -11,17 +11,18 @@
 | [gates](./gates.md) | 4 | 0 | 0 | 4 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
 | [architecture](./architecture.md) | 9 | 0 | 0 | 9 |
-| [skin-adoption](./skin-adoption.md) | 6 | 0 | 1 | 7 |
+| [skin-adoption](./skin-adoption.md) | 6 | 1 | 0 | 7 |
 
 ## In progress
 
-(none)
+| WO | Title | Claimed by | Since | Last progress |
+| --- | --- | --- | --- | --- |
+| WO-SKIN-07 | Skin-adoption program certification + release | ds-agent | 2026-07-14 | 2026-07-14 20:05 — Full core suite completed: 502/513 files, 7690 passed, 21 skipped, 15 failed across 11 files. Release review found one WO-SKIN false negative outside the historical 17-test ledger: Card token-fidelity read the migrated engine source but not its skin; the corrected focal is 9/9, making the code-equivalent tally 14 failures across 10 files. Root/core version sync in 2.19.0 removes one more known failure; the exact post-sync ledger is recorded at release close. P-69 hairline probe is now a same-card A/B shared contract with no production paint change: hairline 2/2 and full signature 11/11 green. |
 
 ## Next up (todo, dependencies satisfied)
 
 | WO | Title | Size | Lane | Programs |
 | --- | --- | --- | --- | --- |
-| WO-SKIN-07 | Skin-adoption program certification + release | M | skin-adoption |  |
 
 ## Blocked (waiting on dependencies)
 
