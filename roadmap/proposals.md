@@ -1227,3 +1227,24 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Ask** — add `onBack` to `WorkbenchHeaderProps` and wire it (a visual change with new baselines),
   or delete the component. Either is a product decision.
 - **Status** — OPEN.
+
+### P-84 rustic FormBuilder silently ignores section delimiters
+
+- **Context** — Found by the CK-D/F migration while adjudicating whether `s.sectionDivider` (a style
+  const with no usages) was dead code. The orchestrator asked the right question — not "who
+  references this?" but **"what SHOULD reference this, and does that thing exist?"** — and the answer
+  turned out to be a product gap, not dead code.
+- **Evidence** — `form-builder/engines/modern.tsx` has full section machinery: `groupedSections`,
+  `section-divider`, `section-header`, `section-title`, collapse state, measured heights.
+  `form-builder/engines/rustic.tsx` contains the string `section` (any case) **zero times**. It
+  renders one flat field list.
+- **The bug** — a consumer passing `section:` delimiter fields gets a **sectioned form in modern and
+  a flat one in rustic, from the same config, with no error and no warning.** The `s.sectionDivider`
+  const is a vestige of a feature that engine never implemented.
+- **Disposition in the migration** — the const is deleted (it renders nothing, so deleting it is
+  pixel-neutral). **The gap is reported, not buried.** Implementing sections in rustic is a visual
+  change with its own baselines.
+- **Ask** — either implement section grouping in rustic FormBuilder, or make the engine reject a
+  config it cannot honour. Silently rendering a different form than the caller asked for is the worst
+  of the three options.
+- **Status** — OPEN.
