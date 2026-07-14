@@ -1,6 +1,6 @@
 {
  "$schema": "roadmap work-order state registry (single source of WO status; specs live in the engine-modern lane .md file)",
- "updated": "2026-07-13",
+ "updated": "2026-07-14",
  "rules": {
   "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
   "claim_requires": "all dependsOn done",
@@ -1601,7 +1601,7 @@
    "lane": "skin-adoption",
    "order": 5,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-SKIN-01",
     "WO-SKIN-02"
@@ -1611,7 +1611,9 @@
    "notes": "Owner-approved 2026-07-11 (stage-1 byte-exact plumbing; stage-2 visual improvement is a later program). Normative lane doc: roadmap/skin-adoption.md; authoring law: docs-engineering/engineering/design-system/runtime/skins/README.md. File lists are hypotheses until WO-SKIN-01 census corrects them.",
    "progressLog": [],
    "claimedBy": "ds-agent",
-   "claimedAt": "2026-07-13"
+   "claimedAt": "2026-07-13",
+   "doneAt": "2026-07-14",
+   "evidence": "The display + layout families paint from unlayered skins. 23 components (9 surfaces+media, 9 data-display, 5 layout), 624 sites to 3 legitimate residuals (Avatar's consumer textColor x2 -- the text-colour-never-to-CSS law -- and Image's objectFit class map whose key is named 'fill'). 46 new skins wired into base.css + entrypoints/styles.css. THREE MIGRATIONS RAN IN PARALLEL (D1/D2/L), the orchestrator reserving the entrypoint wiring. CERTIFICATION: full visual suite 365 pass / 1 red (P-69 hairline, ledger-known); display+layout unit suites 1636 pass / 3 fail = the standing ledger (List, Statistic, Typography); engine-token-audit --check green. THE BYTE-EXACT GATE CAUGHT TWO REAL CASCADE DEFECTS, neither a mis-copied value: (1) Typography's skin required [data-part='root'], but SelectionPreviewRail RE-STAMPS the Text it composes ('identity-title'), so no rule matched and the rail's text inherited white -- a component that can be composed must not require a data-part it does not control; its skin anchors on its CLASS. (2) Tooltip rustic's style object set  twice -- the placement map's centering translate, then the visibility scale -- and the later key silently overwrote the spread. Lifting the scale into the skin let the translate survive and the tooltip MOVED, with every value byte-identical (P-78). Also: two visual-spec locators broke because Typography now stamps data-part='root' and the fixtures label each component with a <Text> -- the 7th incident of the shared-vocabulary law; both anchored to their component's scope class. FOUR COUNTER BUGS FIXED THIS BATCH (blind to ES6 shorthand; inflating on a ternary's colon, on a return-type annotation, and on a destructured prop named 'bordered' -- 36 phantom sites removed from the fleet), each found by an agent hand-counting a file and reconciling against the gate. Proposals P-75..P-78 filed."
   },
   {
    "id": "WO-SKIN-06",
