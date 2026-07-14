@@ -307,7 +307,7 @@ export function FormSections({
   };
 
   return (
-    <Stack spacing="lg" style={style}>
+    <Stack className="ds-structure ds-form-sections" data-part="root" spacing="lg" style={style}>
       {sections.map((section, index) => {
         const isOpen = resolvedKeys.includes(section.key);
         const resolvedAppearance = section.appearance ?? appearance ?? (!collapsible ? 'divided' : 'card');
@@ -352,6 +352,7 @@ export function FormSections({
           <Flex align="center" justify="between" gap={14}>
             <Flex align="start" gap={14} style={{ minWidth: 0, flex: 1 }}>
               <Box
+                data-part="section-index"
                 style={{
                   width: 28,
                   height: 28,
@@ -374,6 +375,7 @@ export function FormSections({
               <Stack spacing="xs" style={{ flex: 1, minWidth: 0 }}>
                 <Flex align="center" gap={8} wrap="wrap">
                   <Text
+                    data-part="section-title"
                     style={{
                       fontSize: 16,
                       fontWeight: 700,
@@ -389,6 +391,7 @@ export function FormSections({
 
                 {section.description ? (
                   <Text
+                    data-part="section-description"
                     size="sm"
                     style={{
                       color: 'var(--ds-color-text-secondary)',
@@ -405,6 +408,7 @@ export function FormSections({
             <Flex align="center" gap={10} style={{ flexShrink: 0 }}>
               {section.summary ? (
                 <Box
+                  data-part="section-summary"
                   style={{
                     maxWidth: 360,
                     padding: '5px 10px',
@@ -430,6 +434,8 @@ export function FormSections({
 
               {collapsible ? (
                 <Box
+                  data-part="section-toggle"
+                  data-open={isOpen}
                   style={{
                     width: 28,
                     height: 28,
@@ -443,7 +449,7 @@ export function FormSections({
                     transition: 'transform 180ms ease, border-color 180ms ease',
                   }}
                 >
-                  <ChevronDown style={{ width: 15, height: 15, color: 'var(--ds-color-text-secondary)' }} />
+                  <ChevronDown data-part="section-toggle-icon" style={{ width: 15, height: 15, color: 'var(--ds-color-text-secondary)' }} />
                 </Box>
               ) : null}
             </Flex>
@@ -453,11 +459,16 @@ export function FormSections({
         return (
           <Box
             key={section.key}
+            data-part="section"
+            data-tone={resolvedTone}
+            data-appearance={resolvedAppearance}
+            data-open={isOpen}
             style={getSectionShellStyles(resolvedAppearance, isOpen, index, resolvedTone)}
           >
             {collapsible ? (
               <button
                 type="button"
+                data-part="section-header"
                 aria-expanded={isOpen}
                 onClick={() => toggleSection(section.key)}
                 style={{
@@ -470,7 +481,7 @@ export function FormSections({
                 {sectionHeader}
               </button>
             ) : (
-              <Box style={headerShellStyle}>
+              <Box data-part="section-header" style={headerShellStyle}>
                 {sectionHeader}
               </Box>
             )}
@@ -484,6 +495,8 @@ export function FormSections({
             >
               <Box style={{ overflow: 'hidden' }}>
                 <Box
+                  data-part="section-content"
+                  data-open={isOpen}
                   style={{
                     padding: contentPadding,
                     opacity: isOpen ? 1 : 0,
@@ -517,6 +530,8 @@ export function FormFactsCard({
 
   return (
     <Box
+      className="ds-structure ds-form-sections"
+      data-part="facts-card"
       style={{
         width: '100%',
         borderRadius: 16,
@@ -530,6 +545,7 @@ export function FormFactsCard({
         <Stack spacing="sm">
           {eyebrow ? (
             <Text
+              data-part="facts-card-eyebrow"
               size="xs"
               weight="bold"
               style={{
@@ -542,11 +558,11 @@ export function FormFactsCard({
               {eyebrow}
             </Text>
           ) : null}
-          <Text style={{ fontSize: 17, fontWeight: 700, color: 'var(--ds-color-text-primary)' }}>
+          <Text data-part="facts-card-title" style={{ fontSize: 17, fontWeight: 700, color: 'var(--ds-color-text-primary)' }}>
             {title}
           </Text>
           {description ? (
-            <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+            <Text data-part="facts-card-description" size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
               {description}
             </Text>
           ) : null}
@@ -556,6 +572,7 @@ export function FormFactsCard({
           {visibleItems.map((item) => (
             <Flex
               key={item.label}
+              data-part="facts-card-item"
               align="start"
               justify="between"
               gap={16}
@@ -566,6 +583,7 @@ export function FormFactsCard({
             >
               <Stack spacing="xs" style={{ minWidth: 0, flex: 1 }}>
                 <Text
+                  data-part="facts-card-item-label"
                   size="xs"
                   weight="bold"
                   style={{
@@ -578,12 +596,13 @@ export function FormFactsCard({
                   {item.label}
                 </Text>
                 {item.helper ? (
-                  <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                  <Text data-part="facts-card-item-helper" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
                     {item.helper}
                   </Text>
                 ) : null}
               </Stack>
               <Text
+                data-part="facts-card-item-value"
                 size="sm"
                 weight="medium"
                 style={{
@@ -626,6 +645,8 @@ function SectionChip({
 
   return (
     <Box
+      data-part="section-chip"
+      data-badge-tone={tone}
       style={{
         borderRadius: 999,
         padding: '4px 8px',

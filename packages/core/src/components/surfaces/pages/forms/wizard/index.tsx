@@ -297,17 +297,17 @@ export function WizardSurface({
       : config.presentation.aside;
 
   const wizardContent = (
-    <Grid columns={asideNode && !shouldStack ? 12 : 1} gap={sectionSpacing}>
+    <Grid className="ds-surface ds-wizard" columns={asideNode && !shouldStack ? 12 : 1} gap={sectionSpacing}>
       <Grid.Item span={asideNode && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
           {config.presentation.description && (
-            <Text style={{ color: 'var(--ds-color-text-muted)' }}>
+            <Text data-part="description" style={{ color: 'var(--ds-color-text-muted)' }}>
               {config.presentation.description}
             </Text>
           )}
 
           {config.presentation.error && (
-            <Card variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error-500)' }}>
+            <Card className="ds-wizard__error-card" variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error-500)' }}>
               <Card.Body>{config.presentation.error}</Card.Body>
             </Card>
           )}
@@ -362,7 +362,7 @@ export function WizardSurface({
 
       {asideNode && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
-          <Card variant={profileDefaults.cardVariant}>
+          <Card className="ds-wizard__aside-card" variant={profileDefaults.cardVariant}>
             <Card.Body>{asideNode}</Card.Body>
           </Card>
         </Grid.Item>

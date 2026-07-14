@@ -92,8 +92,8 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
   /* Text-only loading state -- no spinner dependency since this engine avoids frameworks */
   if (loading) {
     return (
-      <div className={className} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
-        <span style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+      <div data-part="root" data-loading="true" className={className} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
+        <span data-part="loading-text" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
       </div>
     );
   }
@@ -117,42 +117,42 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
   };
 
   return (
-    <div className={className} style={{ ...containerStyle, ...style }}>
+    <div data-part="root" className={className} style={{ ...containerStyle, ...style }}>
       {/* Actions */}
       {showActions && (onPrint || onExport) && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 16 }} className="no-print">
-          {onPrint && <button style={btnStyle} onClick={onPrint}>Print</button>}
-          {onExport && <button style={btnStyle} onClick={onExport}>Export</button>}
+        <div data-part="actions-bar" style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 16 }} className="no-print">
+          {onPrint && <button data-part="print-button" style={btnStyle} onClick={onPrint}>Print</button>}
+          {onExport && <button data-part="export-button" style={btnStyle} onClick={onExport}>Export</button>}
         </div>
       )}
 
       {/* Header -- company branding on left, invoice metadata on right */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 32 }}>
+      <div data-part="header" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 32 }}>
         <div>
           {/* Company logo is optional; falls back to name-only when absent */}
           {invoice.company.logo && (
-            <img src={invoice.company.logo} alt={invoice.company.name} style={{ height: 48, marginBottom: 8 }} />
+            <img data-part="company-logo" src={invoice.company.logo} alt={invoice.company.name} style={{ height: 48, marginBottom: 8 }} />
           )}
-          <div style={{ fontSize: 20, fontWeight: 700 }}>{invoice.company.name}</div>
-          {invoice.company.address && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.company.address}</div>}
+          <div data-part="company-name" style={{ fontSize: 20, fontWeight: 700 }}>{invoice.company.name}</div>
+          {invoice.company.address && <div data-part="company-address-line" data-field="address" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.company.address}</div>}
           {invoice.company.city && (
-            <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
+            <div data-part="company-address-line" data-field="city" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
               {invoice.company.city}{invoice.company.country ? `, ${invoice.company.country}` : ''}
             </div>
           )}
-          {invoice.company.taxId && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>Tax ID: {invoice.company.taxId}</div>}
-          {invoice.company.email && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.company.email}</div>}
+          {invoice.company.taxId && <div data-part="company-address-line" data-field="taxId" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>Tax ID: {invoice.company.taxId}</div>}
+          {invoice.company.email && <div data-part="company-address-line" data-field="email" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.company.email}</div>}
         </div>
         {/* Invoice metadata -- watermark at 10% opacity for a subtle document label */}
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 28, fontWeight: 800, opacity: 0.1, marginBottom: 8 }}>INVOICE</div>
-          <div style={{ fontSize: 14 }}><strong>Invoice #:</strong> {invoice.number}</div>
-          <div style={{ fontSize: 14 }}><strong>Date:</strong> {invoice.date}</div>
-          {invoice.dueDate && <div style={{ fontSize: 14 }}><strong>Due:</strong> {invoice.dueDate}</div>}
+        <div data-part="metadata" style={{ textAlign: 'right' }}>
+          <div data-part="watermark" style={{ fontSize: 28, fontWeight: 800, opacity: 0.1, marginBottom: 8 }}>INVOICE</div>
+          <div data-part="metadata-line" data-field="number" style={{ fontSize: 14 }}><strong>Invoice #:</strong> {invoice.number}</div>
+          <div data-part="metadata-line" data-field="date" style={{ fontSize: 14 }}><strong>Date:</strong> {invoice.date}</div>
+          {invoice.dueDate && <div data-part="metadata-line" data-field="dueDate" style={{ fontSize: 14 }}><strong>Due:</strong> {invoice.dueDate}</div>}
           {/* Status badge -- uses --ds-* color tokens from the statusColors map.
               White text is hardcoded since all status colors have sufficient contrast. */}
           {invoice.status && (
-            <div style={{
+            <div data-part="status-badge" data-status={invoice.status} style={{
               display: 'inline-block',
               padding: '2px 10px',
               borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -169,39 +169,39 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
       </div>
 
       {/* Bill To */}
-      <div style={sectionBg}>
-        <div style={labelStyle}>Bill To</div>
-        <div style={{ fontWeight: 600 }}>{invoice.client.name}</div>
-        {invoice.client.address && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.client.address}</div>}
+      <div data-part="bill-to" style={sectionBg}>
+        <div data-part="section-label" style={labelStyle}>Bill To</div>
+        <div data-part="client-name" style={{ fontWeight: 600 }}>{invoice.client.name}</div>
+        {invoice.client.address && <div data-part="client-address-line" data-field="address" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.client.address}</div>}
         {invoice.client.city && (
-          <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
+          <div data-part="client-address-line" data-field="city" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
             {invoice.client.city}{invoice.client.country ? `, ${invoice.client.country}` : ''}
           </div>
         )}
-        {invoice.client.taxId && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>Tax ID: {invoice.client.taxId}</div>}
-        {invoice.client.email && <div style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.client.email}</div>}
+        {invoice.client.taxId && <div data-part="client-address-line" data-field="taxId" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>Tax ID: {invoice.client.taxId}</div>}
+        {invoice.client.email && <div data-part="client-address-line" data-field="email" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.client.email}</div>}
       </div>
 
       {/* Line Items -- native HTML table with manually applied thStyle/tdStyle from above.
           borderCollapse ensures consistent cell borders without double-line artifacts. */}
-      <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
+      <table data-part="items-table" style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 24 }}>
         <thead>
-          <tr>
-            <th style={{ ...thStyle, width: 40, textAlign: 'left' }}>#</th>
-            <th style={{ ...thStyle, textAlign: 'left' }}>Description</th>
-            <th style={{ ...thStyle, width: 60, textAlign: 'center' }}>Qty</th>
-            <th style={{ ...thStyle, width: 110, textAlign: 'right' }}>Unit Price</th>
-            <th style={{ ...thStyle, width: 110, textAlign: 'right' }}>Total</th>
+          <tr data-part="items-header-row">
+            <th data-part="items-header-cell" data-col="index" style={{ ...thStyle, width: 40, textAlign: 'left' }}>#</th>
+            <th data-part="items-header-cell" data-col="description" style={{ ...thStyle, textAlign: 'left' }}>Description</th>
+            <th data-part="items-header-cell" data-col="quantity" style={{ ...thStyle, width: 60, textAlign: 'center' }}>Qty</th>
+            <th data-part="items-header-cell" data-col="unit-price" style={{ ...thStyle, width: 110, textAlign: 'right' }}>Unit Price</th>
+            <th data-part="items-header-cell" data-col="total" style={{ ...thStyle, width: 110, textAlign: 'right' }}>Total</th>
           </tr>
         </thead>
         <tbody>
           {invoice.items.map((item, i) => (
-            <tr key={item.id}>
-              <td style={tdStyle}>{i + 1}</td>
-              <td style={tdStyle}>{item.description}</td>
-              <td style={{ ...tdStyle, textAlign: 'center' }}>{item.quantity}</td>
-              <td style={{ ...tdStyle, textAlign: 'right' }}>{formatCurrency(item.unitPrice)}</td>
-              <td style={{ ...tdStyle, textAlign: 'right' }}>{formatCurrency(item.total)}</td>
+            <tr key={item.id} data-part="items-row">
+              <td data-part="items-cell" data-col="index" style={tdStyle}>{i + 1}</td>
+              <td data-part="items-cell" data-col="description" style={tdStyle}>{item.description}</td>
+              <td data-part="items-cell" data-col="quantity" style={{ ...tdStyle, textAlign: 'center' }}>{item.quantity}</td>
+              <td data-part="items-cell" data-col="unit-price" style={{ ...tdStyle, textAlign: 'right' }}>{formatCurrency(item.unitPrice)}</td>
+              <td data-part="items-cell" data-col="total" style={{ ...tdStyle, textAlign: 'right' }}>{formatCurrency(item.total)}</td>
             </tr>
           ))}
         </tbody>
@@ -209,20 +209,20 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
 
       {/* Totals -- fixed 280px column right-aligned for consistent number alignment */}
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <div style={{ width: 280 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>
+        <div data-part="totals" style={{ width: 280 }}>
+          <div data-part="totals-row" data-row="subtotal" style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>
             <span>Subtotal</span>
             <span>{formatCurrency(invoice.subtotal)}</span>
           </div>
           {/* Tax line -- muted color to de-emphasize relative to grand total */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, color: 'var(--ds-color-text-muted)' }}>
+          <div data-part="totals-row" data-row="tax" style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, color: 'var(--ds-color-text-muted)' }}>
             <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
             <span>{formatCurrency(invoice.tax)}</span>
           </div>
           {/* Horizontal rule separating subtotal/tax from the grand total */}
-          <div style={{ borderTop: '2px solid var(--ds-color-neutral-200, #e5e7eb)', margin: '8px 0' }} />
+          <div data-part="totals-divider" style={{ borderTop: '2px solid var(--ds-color-neutral-200, #e5e7eb)', margin: '8px 0' }} />
           {/* Grand total -- larger font makes this the visual focal point */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 18, fontWeight: 700 }}>
+          <div data-part="totals-row" data-row="total" style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 18, fontWeight: 700 }}>
             <span>Total</span>
             <span>{formatCurrency(invoice.total)}</span>
           </div>
@@ -231,9 +231,9 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
 
       {/* Notes -- pre-wrap preserves user-entered line breaks in the notes field */}
       {invoice.notes && (
-        <div style={{ ...sectionBg, marginTop: 32, marginBottom: 0 }}>
-          <div style={labelStyle}>Notes</div>
-          <div style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)', whiteSpace: 'pre-wrap' }}>
+        <div data-part="notes" style={{ ...sectionBg, marginTop: 32, marginBottom: 0 }}>
+          <div data-part="section-label" style={labelStyle}>Notes</div>
+          <div data-part="notes-text" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)', whiteSpace: 'pre-wrap' }}>
             {invoice.notes}
           </div>
         </div>

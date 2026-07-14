@@ -73,7 +73,7 @@ export function DetailFormSurface({
     >
       <Stack spacing="lg">
         {config.presentation.error && (
-          <Card variant="outlined" style={{ borderColor: 'var(--ds-color-error-500)' }}>
+          <Card className="ds-detail-form__error-card" variant="outlined" style={{ borderColor: 'var(--ds-color-error-500)' }}>
             <Card.Body>{config.presentation.error}</Card.Body>
           </Card>
         )}
@@ -136,7 +136,7 @@ export function DetailFormSurface({
   ) {
     return (
       <PageShellSurface chrome={chrome} loading={loading}>
-        <Stack spacing="lg">
+        <Stack className="ds-surface ds-detail-form ds-detail-form--stacked" spacing="lg">
           {formNode}
           {(config.presentation.summary || config.presentation.aside) && summaryNode}
         </Stack>
@@ -146,7 +146,7 @@ export function DetailFormSurface({
 
   return (
     <PageShellSurface chrome={chrome} loading={loading}>
-      <Grid columns={12} gap="lg">
+      <Grid className="ds-surface ds-detail-form ds-detail-form--split" columns={12} gap="lg">
         <Grid.Item span={config.visual.formSpan ?? 8}>{formNode}</Grid.Item>
         <Grid.Item span={config.visual.summarySpan ?? 4}>{summaryNode}</Grid.Item>
       </Grid>

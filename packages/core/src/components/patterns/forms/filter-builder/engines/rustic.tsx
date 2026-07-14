@@ -312,6 +312,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       return (
         <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <input
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             type={fieldDef.type === 'number' ? 'number' : 'text'}
             style={{ ...inputStyle, width: 80 }}
             placeholder="From"
@@ -332,6 +334,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             and
           </span>
           <input
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             type={fieldDef.type === 'number' ? 'number' : 'text'}
             style={{ ...inputStyle, width: 80 }}
             placeholder="To"
@@ -351,6 +355,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       case 'number':
         return (
           <input
+            data-part="value-input"
+            data-field-type="number"
             type="number"
             style={{ ...inputStyle, width: 100 }}
             placeholder={fieldDef.placeholder ?? 'Value'}
@@ -361,6 +367,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       case 'date':
         return (
           <input
+            data-part="value-input"
+            data-field-type="date"
             type="date"
             style={{ ...inputStyle, width: 140 }}
             value={rule.value ?? ''}
@@ -371,6 +379,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       case 'multiSelect':
         return (
           <select
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             style={{ ...selectStyle, minWidth: 120 }}
             value={rule.value ?? ''}
             onChange={(e) => handleValueChange(rule.id, e.target.value)}
@@ -398,6 +408,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             }}
           >
             <input
+              data-part="value-input"
+              data-field-type="boolean"
               type="checkbox"
               checked={rule.value === true}
               onChange={(e) => handleValueChange(rule.id, e.target.checked)}
@@ -408,6 +420,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       default:
         return (
           <input
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             type="text"
             style={{ ...inputStyle, width: 150 }}
             placeholder={fieldDef.placeholder ?? 'Value'}
@@ -428,6 +442,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       <div
         key={rule.id}
         data-testid={`filter-rule-${rule.id}`}
+        data-part="rule"
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -436,6 +451,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         }}
       >
         <div
+          data-part="rule-logic-label"
           style={{
             width: 56,
             textAlign: 'center',
@@ -449,6 +465,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         </div>
 
         <select
+          data-part="field-select"
           style={{ ...selectStyle, minWidth: 120 }}
           value={rule.field}
           onChange={(e) => handleFieldChange(rule.id, e.target.value)}
@@ -462,6 +479,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         </select>
 
         <select
+          data-part="operator-select"
           style={{ ...selectStyle, minWidth: 130 }}
           value={rule.operator}
           onChange={(e) => handleOperatorChange(rule.id, e.target.value as FilterOperator)}
@@ -479,6 +497,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         <button
           onClick={() => handleRemoveNode(rule.id)}
           aria-label="Remove rule"
+          data-part="remove-button"
           style={{
             width: 24,
             height: 24,
@@ -511,6 +530,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       <div
         key={group.id}
         data-testid={`filter-group-${group.id}`}
+        data-part="group"
+        data-root={isRoot || undefined}
         style={{
           borderLeft: isRoot
             ? 'none'
@@ -541,6 +562,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             <button
               onClick={() => handleToggleLogic(group.id)}
               data-testid={`logic-toggle-${group.id}`}
+              data-part="logic-toggle"
+              data-logic={group.logic}
               style={{
                 padding: '3px 12px',
                 border:
@@ -567,6 +590,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             <button
               onClick={() => handleRemoveNode(group.id)}
               aria-label="Remove group"
+              data-part="remove-button"
               style={{
                 width: 24,
                 height: 24,
@@ -604,6 +628,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
           <button
             onClick={() => handleAddRule(group.id)}
             data-testid={`add-rule-${group.id}`}
+            data-part="add-rule-button"
             style={smallBtnStyle}
           >
             <span style={{ fontSize: 14, lineHeight: 1 }}>+</span>
@@ -613,6 +638,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             <button
               onClick={() => handleAddGroup(group.id)}
               data-testid={`add-group-${group.id}`}
+              data-part="add-group-button"
               style={smallBtnStyle}
             >
               <span style={{ fontSize: 12, lineHeight: 1 }}>&#9633;</span>
@@ -624,6 +650,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
               <button
                 onClick={() => setAddFilterOpen((prev) => !prev)}
                 data-testid="add-filter-button"
+                data-part="add-filter-trigger"
+                data-open={addFilterOpen}
                 style={{
                   ...smallBtnStyle,
                   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
@@ -635,6 +663,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
               {addFilterOpen && (
                 <div
                   data-testid="add-filter-dropdown"
+                  data-part="add-filter-dropdown"
+                  data-open="true"
                   style={{
                     position: 'absolute',
                     top: '100%',
@@ -654,6 +684,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
                   {fields.map((f) => (
                     <div
                       key={f.key}
+                      data-part="add-filter-option"
                       onClick={() => {
                         handleAddRule(group.id, f.key);
                         setAddFilterOpen(false);
@@ -690,6 +721,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             <button
               onClick={onClear}
               data-testid="clear-filters"
+              data-part="clear-button"
               style={{
                 padding: '4px 8px',
                 border: 'none',
@@ -710,6 +742,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
   if (loading) {
     return (
       <div
+        data-part="root"
+        data-loading="true"
         className={className}
         style={{
           display: 'flex',
@@ -727,7 +761,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
   }
 
   return (
-    <div className={className} style={style}>
+    <div data-part="root" className={className} style={style}>
       {renderGroup(value, 0)}
     </div>
   );

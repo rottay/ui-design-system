@@ -155,6 +155,9 @@ export function RecordSummaryStrip({
 
   return (
     <Box
+      className="ds-structure ds-record"
+      data-part="summary-strip"
+      data-variant={variant}
       style={{
         width: '100%',
         borderRadius: 18,
@@ -172,8 +175,9 @@ export function RecordSummaryStrip({
         }}
       >
         {visibleItems.map((item) => (
-          <Stack key={item.label} spacing={4} style={{ minWidth: 0 }}>
+          <Stack key={item.label} data-part="summary-item" spacing={4} style={{ minWidth: 0 }}>
             <Text
+              data-part="summary-item-label"
               size="xs"
               weight="bold"
               style={{
@@ -186,6 +190,7 @@ export function RecordSummaryStrip({
               {item.label}
             </Text>
             <Text
+              data-part="summary-item-value"
               size={variant === 'metrics' ? 'md' : 'sm'}
               weight="medium"
               style={{
@@ -198,7 +203,7 @@ export function RecordSummaryStrip({
               {item.value}
             </Text>
             {item.helper ? (
-              <Text size="xs" style={{ color: variantStyles.helperColor, lineHeight: 1.5 }}>
+              <Text data-part="summary-item-helper" size="xs" style={{ color: variantStyles.helperColor, lineHeight: 1.5 }}>
                 {item.helper}
               </Text>
             ) : null}
@@ -220,6 +225,8 @@ export function RecordFieldGrid({
 }) {
   return (
     <Box
+      className="ds-structure ds-record"
+      data-part="field-grid"
       style={{
         display: 'grid',
         gridTemplateColumns: columns,
@@ -294,6 +301,7 @@ export function RecordField({
   const primitiveValue = typeof resolved.content === 'string' || typeof resolved.content === 'number';
   const valueNode = primitiveValue ? (
     <Text
+      data-part="field-value"
       size="sm"
       weight="medium"
       style={{
@@ -339,6 +347,10 @@ export function RecordField({
 
   return (
     <Box
+      className="ds-structure ds-record"
+      data-part="field"
+      data-empty={resolved.empty}
+      data-mono={mono}
       style={{
         gridColumn: `span ${span}`,
         minWidth: 0,
@@ -352,6 +364,7 @@ export function RecordField({
     >
       <Stack spacing={6}>
         <Text
+          data-part="field-label"
           size="xs"
           weight="bold"
           style={{
@@ -382,7 +395,7 @@ export function RecordField({
         </Flex>
 
         {helper ? (
-          <Text size="xs" style={{ color: secondaryText, lineHeight: 1.5 }}>
+          <Text data-part="field-helper" size="xs" style={{ color: secondaryText, lineHeight: 1.5 }}>
             {helper}
           </Text>
         ) : null}
@@ -429,6 +442,8 @@ export function RecordActionBar({
 
   return (
     <Flex
+      className="ds-structure ds-record"
+      data-part="action-bar"
       justify="between"
       align="end"
       gap={16}
@@ -442,7 +457,7 @@ export function RecordActionBar({
         ...style,
       }}
     >
-      <Box style={{ minWidth: 0, flex: 1 }}>
+      <Box data-part="action-bar-meta" style={{ minWidth: 0, flex: 1 }}>
         {typeof meta === 'string' ? (
           <Stack spacing={4}>
             <Text
@@ -481,6 +496,8 @@ export function RecordPanel({
 }) {
   return (
     <Box
+      className="ds-structure ds-record"
+      data-part="panel"
       style={{
         width: '100%',
         borderRadius: 18,

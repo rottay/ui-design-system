@@ -74,6 +74,7 @@ export function FormSurface({
 
   const actionsNode = (
     <Flex
+      data-part="actions"
       direction={isMobile ? 'column' : 'row'}
       gap={8}
       wrap="wrap"
@@ -122,13 +123,14 @@ export function FormSurface({
   // enough. This keeps the form full-width by default, matching the most
   // common create/edit screen layout without explicit configuration.
   const formContent = (
-    <Grid columns={showAside && !shouldStack ? 12 : 1} gap={sectionSpacing} style={{ width: '100%' }}>
+    <Grid className="ds-surface ds-form" columns={showAside && !shouldStack ? 12 : 1} gap={sectionSpacing} style={{ width: '100%' }}>
       <Grid.Item span={showAside && !shouldStack ? 8 : undefined}>
         <Card variant={profileDefaults.cardVariant} style={{ width: '100%' }}>
           <Card.Body>
             <Stack spacing={sectionSpacing}>
               {config.presentation.description && (
                 <Text
+                  data-part="description"
                   size="sm"
                   style={{
                     color: 'var(--ds-color-text-muted)',
@@ -140,7 +142,7 @@ export function FormSurface({
               )}
 
               {config.presentation.error && (
-                <Card variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error)' }}>
+                <Card className="ds-form__error-card" variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error)' }}>
                   <Card.Body>{config.presentation.error}</Card.Body>
                 </Card>
               )}
@@ -173,6 +175,7 @@ export function FormSurface({
       {showAside && (
         <Grid.Item span={!shouldStack ? 4 : undefined}>
           <Card
+            className="ds-form__aside-card"
             variant={profileDefaults.cardVariant}
             style={{
               position: shouldStack ? undefined : 'sticky',

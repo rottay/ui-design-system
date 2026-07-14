@@ -285,6 +285,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       return (
         <div className="flex items-center gap-1">
           <input
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             type={fieldDef.type === 'number' ? 'number' : 'text'}
             style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', width: 80 }}
             placeholder="From"
@@ -298,6 +300,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           />
           <span className="text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>and</span>
           <input
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             type={fieldDef.type === 'number' ? 'number' : 'text'}
             style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', width: 80 }}
             placeholder="To"
@@ -317,6 +321,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       case 'number':
         return (
           <input
+            data-part="value-input"
+            data-field-type="number"
             type="number"
             style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', width: 112 }}
             placeholder={fieldDef.placeholder ?? 'Value'}
@@ -327,6 +333,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       case 'date':
         return (
           <input
+            data-part="value-input"
+            data-field-type="date"
             type="date"
             style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', width: 144 }}
             value={rule.value ?? ''}
@@ -337,6 +345,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       case 'multiSelect':
         return (
           <select
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', minWidth: 120 }}
             value={rule.value ?? ''}
             onChange={(e) => handleValueChange(rule.id, e.target.value)}
@@ -354,6 +364,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       case 'boolean':
         return (
           <input
+            data-part="value-input"
+            data-field-type="boolean"
             type="checkbox"
             style={{ width: 36, height: 18, cursor: 'pointer' }}
             checked={rule.value === true}
@@ -363,6 +375,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       default:
         return (
           <input
+            data-part="value-input"
+            data-field-type={fieldDef.type}
             type="text"
             style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', width: 160 }}
             placeholder={fieldDef.placeholder ?? 'Value'}
@@ -383,13 +397,15 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       <div
         key={rule.id}
         data-testid={`filter-rule-${rule.id}`}
+        data-part="rule"
         className={`flex items-center gap-2 ${compact ? 'py-1' : 'py-1.5'}`}
       >
-        <div className="w-14 text-center text-xs font-medium uppercase" style={{ color: 'var(--ds-color-text-secondary)' }}>
+        <div data-part="rule-logic-label" className="w-14 text-center text-xs font-medium uppercase" style={{ color: 'var(--ds-color-text-secondary)' }}>
           {isFirst ? 'Where' : parentLogic.toUpperCase()}
         </div>
 
         <select
+          data-part="field-select"
           style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', minWidth: 120 }}
           value={rule.field}
           onChange={(e) => handleFieldChange(rule.id, e.target.value)}
@@ -403,6 +419,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         </select>
 
         <select
+          data-part="operator-select"
           style={{ padding: compact ? '2px 6px' : '4px 8px', fontSize: compact ? 12 : 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', minWidth: 130 }}
           value={rule.operator}
           onChange={(e) => handleOperatorChange(rule.id, e.target.value as FilterOperator)}
@@ -418,6 +435,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         {fieldDef && renderValueInput(rule, fieldDef)}
 
         <button
+          data-part="remove-button"
           style={{ background: 'transparent', color: 'var(--ds-color-error)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
           onClick={() => handleRemoveNode(rule.id)}
           aria-label="Remove rule"
@@ -453,6 +471,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
       <div
         key={group.id}
         data-testid={`filter-group-${group.id}`}
+        data-part="group"
+        data-root={isRoot || undefined}
         className={
           isRoot
             ? ''
@@ -463,6 +483,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         {!isRoot && (
           <div className="flex items-center justify-between mb-1">
             <button
+              data-part="logic-toggle"
+              data-logic={group.logic}
               style={group.logic === 'and'
                 ? { background: 'var(--ds-color-primary)', color: 'var(--ds-color-text-on-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }
                 : { background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', cursor: 'pointer' }
@@ -473,6 +495,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
               {group.logic.toUpperCase()}
             </button>
             <button
+              data-part="remove-button"
               style={{ background: 'transparent', color: 'var(--ds-color-error)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
               onClick={() => handleRemoveNode(group.id)}
               aria-label="Remove group"
@@ -503,6 +526,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
 
         <div className="flex items-center gap-2 mt-2">
           <button
+            data-part="add-rule-button"
             style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: '1px dashed var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
             onClick={() => handleAddRule(group.id)}
             data-testid={`add-rule-${group.id}`}
@@ -525,6 +549,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           </button>
           {canNest && (
             <button
+              data-part="add-group-button"
               style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: '1px dashed var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
               onClick={() => handleAddGroup(group.id)}
               data-testid={`add-group-${group.id}`}
@@ -549,6 +574,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
           {showAddFilter && isRoot && (
             <div style={{ position: 'relative', display: 'inline-block' }}>
               <button
+                data-part="add-filter-trigger"
+                data-open={addFilterOpen}
                 style={{ background: 'var(--ds-color-bg-elevated, transparent)', color: 'var(--ds-color-text-primary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 4 }}
                 onClick={() => setAddFilterOpen((prev) => !prev)}
                 data-testid="add-filter-button"
@@ -561,6 +588,8 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
               {addFilterOpen && (
                 <div
                   data-testid="add-filter-dropdown"
+                  data-part="add-filter-dropdown"
+                  data-open="true"
                   style={{
                     position: 'absolute',
                     top: '100%',
@@ -580,6 +609,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
                   {fields.map((f) => (
                     <div
                       key={f.key}
+                      data-part="add-filter-option"
                       onClick={() => {
                         handleAddRule(group.id, f.key);
                         setAddFilterOpen(false);
@@ -614,6 +644,7 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
         {isRoot && showClear && onClear && group.rules.length > 0 && (
           <div className="mt-3">
             <button
+              data-part="clear-button"
               style={{ background: 'transparent', color: 'var(--ds-color-text-secondary)', height: 24, padding: '0 8px', fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }}
               onClick={onClear}
               data-testid="clear-filters"
@@ -629,16 +660,18 @@ export default function ModernFilterBuilder(props: FilterBuilderProps) {
   if (loading) {
     return (
       <div
+        data-part="root"
+        data-loading="true"
         className={`flex items-center justify-center min-h-[100px] ${className ?? ''}`}
         style={style}
       >
-        <span className="loading-spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+        <span data-part="spinner" className="loading-spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }
 
   return (
-    <div className={className} style={style}>
+    <div data-part="root" className={className} style={style}>
       {renderGroup(value, 0)}
     </div>
   );

@@ -148,6 +148,8 @@ function DraftStatusBadge({ status, lastSavedAt }: { status: DraftStatus; lastSa
 
   return (
     <Flex
+      data-part="draft-status"
+      data-status={status}
       align="center"
       gap={2}
       style={{
@@ -157,6 +159,8 @@ function DraftStatusBadge({ status, lastSavedAt }: { status: DraftStatus; lastSa
       }}
     >
       <Box
+        data-part="draft-status-dot"
+        data-status={status}
         style={{
           width: 6,
           height: 6,
@@ -165,7 +169,7 @@ function DraftStatusBadge({ status, lastSavedAt }: { status: DraftStatus; lastSa
           flexShrink: 0,
         }}
       />
-      <Text size="xs" style={{ color, whiteSpace: 'nowrap' }}>{label}</Text>
+      <Text data-part="draft-status-label" size="xs" style={{ color, whiteSpace: 'nowrap' }}>{label}</Text>
     </Flex>
   );
 }
@@ -197,8 +201,9 @@ function SectionNav({
     }));
 
     return (
-      <Box style={{ marginBottom: 4 }}>
+      <Box data-part="section-nav" data-layout="dropdown" style={{ marginBottom: 4 }}>
         <Text
+          data-part="section-nav-label"
           size="xs"
           weight="semibold"
           style={{
@@ -227,8 +232,9 @@ function SectionNav({
   // -- Tablet: horizontal scrollable pill bar -----------------------------
   if (layout === 'pills') {
     return (
-      <Box style={{ marginBottom: 4 }}>
+      <Box data-part="section-nav" data-layout="pills" style={{ marginBottom: 4 }}>
         <Text
+          data-part="section-nav-label"
           size="xs"
           weight="semibold"
           style={{
@@ -242,6 +248,7 @@ function SectionNav({
           Sections
         </Text>
         <Flex
+          data-part="section-nav-list"
           gap={2}
           align="center"
           style={{
@@ -255,6 +262,10 @@ function SectionNav({
             return (
               <Button
                 key={section.key}
+                className="ds-guided-draft-form__section-nav-item"
+                data-active={isActive}
+                data-errors={Boolean(section.hasErrors)}
+                data-complete={Boolean(section.isComplete)}
                 variant="ghost"
                 size="sm"
                 onClick={() => onSectionClick(section.key)}
@@ -280,20 +291,21 @@ function SectionNav({
               >
                 <Flex align="center" gap={1}>
                   {section.icon && (
-                    <Box style={{ flexShrink: 0, opacity: isActive ? 1 : 0.7 }}>
+                    <Box data-part="section-nav-item-icon" style={{ flexShrink: 0, opacity: isActive ? 1 : 0.7 }}>
                       {section.icon}
                     </Box>
                   )}
-                  <Text size="sm" style={{ color: 'inherit', whiteSpace: 'nowrap' }}>
+                  <Text data-part="section-nav-item-label" size="sm" style={{ color: 'inherit', whiteSpace: 'nowrap' }}>
                     {section.title}
                   </Text>
                   {section.isComplete && (
-                    <Text size="xs" style={{ color: 'var(--ds-color-success)', flexShrink: 0 }}>
+                    <Text data-part="section-nav-item-complete" size="xs" style={{ color: 'var(--ds-color-success)', flexShrink: 0 }}>
                       ✓
                     </Text>
                   )}
                   {section.hasErrors && (
                     <Box
+                      data-part="section-nav-item-error-dot"
                       style={{
                         width: 6,
                         height: 6,
@@ -315,6 +327,8 @@ function SectionNav({
   // -- Desktop: vertical sticky sidebar -----------------------------------
   return (
     <Box
+      data-part="section-nav"
+      data-layout="sidebar"
       style={{
         width: 220,
         minWidth: 180,
@@ -327,6 +341,7 @@ function SectionNav({
       }}
     >
       <Text
+        data-part="section-nav-label"
         size="xs"
         weight="semibold"
         style={{
@@ -340,12 +355,16 @@ function SectionNav({
       >
         Sections
       </Text>
-      <Stack spacing="xs">
+      <Stack data-part="section-nav-list" spacing="xs">
         {sections.map((section) => {
           const isActive = activeSection === section.key;
           return (
             <Button
               key={section.key}
+              className="ds-guided-draft-form__section-nav-item"
+              data-active={isActive}
+              data-errors={Boolean(section.hasErrors)}
+              data-complete={Boolean(section.isComplete)}
               variant="ghost"
               size="sm"
               onClick={() => onSectionClick(section.key)}
@@ -372,11 +391,12 @@ function SectionNav({
               <Flex align="center" gap={2} style={{ width: '100%' }}>
                 <Flex align="center" gap={2} style={{ flex: 1, minWidth: 0 }}>
                   {section.icon && (
-                    <Box style={{ flexShrink: 0, opacity: isActive ? 1 : 0.7 }}>
+                    <Box data-part="section-nav-item-icon" style={{ flexShrink: 0, opacity: isActive ? 1 : 0.7 }}>
                       {section.icon}
                     </Box>
                   )}
                   <Text
+                    data-part="section-nav-item-label"
                     size="sm"
                     style={{
                       overflow: 'hidden',
@@ -389,12 +409,13 @@ function SectionNav({
                   </Text>
                 </Flex>
                 {section.isComplete && (
-                  <Text size="xs" style={{ color: 'var(--ds-color-success)', flexShrink: 0 }}>
+                  <Text data-part="section-nav-item-complete" size="xs" style={{ color: 'var(--ds-color-success)', flexShrink: 0 }}>
                     ✓
                   </Text>
                 )}
                 {section.hasErrors && (
                   <Box
+                    data-part="section-nav-item-error-dot"
                     style={{
                       width: 6,
                       height: 6,
@@ -428,6 +449,7 @@ function TemplateCard({
 }) {
   return (
     <Card
+      className="ds-guided-draft-form__template-card"
       variant={cardVariant}
       style={{
         cursor: 'pointer',
@@ -436,6 +458,7 @@ function TemplateCard({
     >
       <Card.Body>
         <Button
+          className="ds-guided-draft-form__template-card-trigger"
           variant="ghost"
           onClick={onSelect}
           style={{
@@ -451,6 +474,7 @@ function TemplateCard({
           <Stack spacing="xs">
             {template.icon && (
               <Box
+                data-part="template-card-icon"
                 style={{
                   fontSize: 24,
                   color: 'var(--ds-color-primary)',
@@ -460,11 +484,11 @@ function TemplateCard({
                 {template.icon}
               </Box>
             )}
-            <Text size="sm" weight="semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
+            <Text data-part="template-card-title" size="sm" weight="semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
               {template.name}
             </Text>
             {template.description && (
-              <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+              <Text data-part="template-card-description" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
                 {template.description}
               </Text>
             )}
@@ -577,18 +601,20 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
   );
 
   const content = (
-    <Stack spacing={sectionSpacing}>
+    <Stack className="ds-surface ds-guided-draft-form" data-part="root" data-mode={mode} spacing={sectionSpacing}>
       {headerSlot}
 
       {/* Draft recovery banner */}
       {draftRecovery?.hasDraft && (
         <Card
+          className="ds-guided-draft-form__draft-recovery"
           variant={profileDefaults.cardVariant}
           style={{ borderColor: 'var(--ds-color-info)' }}
         >
           <Card.Body>
             <Flex align="center" gap={3}>
               <Box
+                data-part="draft-recovery-icon"
                 style={{
                   width: 32,
                   height: 32,
@@ -605,10 +631,10 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                 ↻
               </Box>
               <Box style={{ flex: 1 }}>
-                <Text size="sm" weight="medium" style={{ color: 'var(--ds-color-text-primary)' }}>
+                <Text data-part="draft-recovery-title" size="sm" weight="medium" style={{ color: 'var(--ds-color-text-primary)' }}>
                   Unsaved draft found
                 </Text>
-                <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+                <Text data-part="draft-recovery-description" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
                   {draftRecovery.draftDate
                     ? `Last edited ${draftRecovery.draftDate}`
                     : 'You have an unsaved draft.'}
@@ -637,6 +663,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
 
       {/* Title bar with progress */}
       <Flex
+        data-part="title-bar"
         align={isMobile ? 'stretch' : 'center'}
         gap={3}
         style={{
@@ -646,6 +673,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       >
         <Box style={{ flex: 1, minWidth: 0 }}>
           <Text
+            data-part="title"
             size="xl"
             weight="semibold"
             style={{ fontWeight: headingWeight, color: 'var(--ds-color-text-primary)' }}
@@ -654,6 +682,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
           </Text>
           {subtitle && (
             <Text
+              data-part="subtitle"
               size="sm"
               style={{ color: 'var(--ds-color-text-muted)', marginTop: 2 }}
             >
@@ -662,7 +691,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
           )}
         </Box>
         {showProgress && (
-          <Flex align="center" gap={2} style={{ minWidth: 120 }}>
+          <Flex data-part="progress" align="center" gap={2} style={{ minWidth: 120 }}>
             <Progress
               percent={progressPercent}
               strokeWidth={4}
@@ -690,6 +719,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       {/* Template picker */}
       {showTemplates && templates && (
         <Box
+          data-part="template-picker"
           style={{
             display: 'grid',
             gridTemplateColumns: isMobile
@@ -715,7 +745,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       {/* Content: section nav + form body */}
       {shouldStack ? (
         // Tablet / Mobile: stack vertically -- nav on top, form below
-        <Stack spacing={sectionSpacing}>
+        <Stack data-part="content" data-layout="stacked" spacing={sectionSpacing}>
           <SectionNav
             sections={sections}
             activeSection={activeSection}
@@ -723,7 +753,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             headingWeight={headingWeight}
             layout={sectionNavLayout}
           />
-          <Box style={{ minWidth: 0 }}>
+          <Box data-part="content-body" style={{ minWidth: 0 }}>
             {mode === 'wizard' ? (
               <PatternStepWizard
                 steps={wizardSteps}
@@ -742,19 +772,26 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                 {sections.map((section) => (
                   <Card
                     key={section.key}
+                    className={[
+                      'ds-guided-draft-form__section-card',
+                      activeSection === section.key ? 'ds-guided-draft-form__section-card--active' : '',
+                      section.isComplete ? 'ds-guided-draft-form__section-card--complete' : '',
+                      section.hasErrors ? 'ds-guided-draft-form__section-card--errors' : '',
+                    ].filter(Boolean).join(' ')}
                     variant={profileDefaults.cardVariant}
                     id={`section-${section.key}`}
                   >
                     <Card.Body>
                       <Stack spacing="sm">
-                        <Box>
+                        <Box data-part="section-card-header">
                           <Flex align="center" gap={2}>
                             {section.icon && (
-                              <Box style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+                              <Box data-part="section-card-icon" style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}>
                                 {section.icon}
                               </Box>
                             )}
                             <Text
+                              data-part="section-card-title"
                               size="md"
                               weight="semibold"
                               style={{
@@ -766,6 +803,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                             </Text>
                             {section.isComplete && (
                               <Text
+                                data-part="section-card-complete"
                                 size="xs"
                                 style={{
                                   color: 'var(--ds-color-success)',
@@ -777,6 +815,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                             )}
                             {section.hasErrors && (
                               <Text
+                                data-part="section-card-errors"
                                 size="xs"
                                 style={{
                                   color: 'var(--ds-color-error)',
@@ -789,6 +828,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                           </Flex>
                           {section.description && (
                             <Text
+                              data-part="section-card-description"
                               size="sm"
                               style={{
                                 color: 'var(--ds-color-text-muted)',
@@ -810,7 +850,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         </Stack>
       ) : (
         // Desktop: side-by-side layout with sidebar
-        <Flex gap={5}>
+        <Flex data-part="content" data-layout="sidebar" gap={5}>
           <SectionNav
             sections={sections}
             activeSection={activeSection}
@@ -818,7 +858,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             headingWeight={headingWeight}
             layout="sidebar"
           />
-          <Box style={{ flex: 1, minWidth: 0 }}>
+          <Box data-part="content-body" style={{ flex: 1, minWidth: 0 }}>
             {mode === 'wizard' ? (
               <PatternStepWizard
                 steps={wizardSteps}
@@ -837,19 +877,26 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                 {sections.map((section) => (
                   <Card
                     key={section.key}
+                    className={[
+                      'ds-guided-draft-form__section-card',
+                      activeSection === section.key ? 'ds-guided-draft-form__section-card--active' : '',
+                      section.isComplete ? 'ds-guided-draft-form__section-card--complete' : '',
+                      section.hasErrors ? 'ds-guided-draft-form__section-card--errors' : '',
+                    ].filter(Boolean).join(' ')}
                     variant={profileDefaults.cardVariant}
                     id={`section-${section.key}`}
                   >
                     <Card.Body>
                       <Stack spacing="sm">
-                        <Box>
+                        <Box data-part="section-card-header">
                           <Flex align="center" gap={2}>
                             {section.icon && (
-                              <Box style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+                              <Box data-part="section-card-icon" style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}>
                                 {section.icon}
                               </Box>
                             )}
                             <Text
+                              data-part="section-card-title"
                               size="md"
                               weight="semibold"
                               style={{
@@ -861,6 +908,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                             </Text>
                             {section.isComplete && (
                               <Text
+                                data-part="section-card-complete"
                                 size="xs"
                                 style={{
                                   color: 'var(--ds-color-success)',
@@ -872,6 +920,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                             )}
                             {section.hasErrors && (
                               <Text
+                                data-part="section-card-errors"
                                 size="xs"
                                 style={{
                                   color: 'var(--ds-color-error)',
@@ -884,6 +933,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                           </Flex>
                           {section.description && (
                             <Text
+                              data-part="section-card-description"
                               size="sm"
                               style={{
                                 color: 'var(--ds-color-text-muted)',
@@ -908,6 +958,12 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
       {/* Validation summary */}
       {validationIssues && validationIssues.length > 0 && (
         <Card
+          className={[
+            'ds-guided-draft-form__validation-summary',
+            errorCount > 0
+              ? 'ds-guided-draft-form__validation-summary--error'
+              : 'ds-guided-draft-form__validation-summary--warning',
+          ].join(' ')}
           variant={profileDefaults.cardVariant}
           style={{
             borderColor: errorCount > 0
@@ -919,6 +975,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             <Stack spacing="sm">
               <Flex align="center" gap={2}>
                 <Box
+                  data-part="validation-summary-dot"
                   style={{
                     width: 8,
                     height: 8,
@@ -929,7 +986,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                     flexShrink: 0,
                   }}
                 />
-                <Text size="sm" weight="semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
+                <Text data-part="validation-summary-title" size="sm" weight="semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
                   {errorCount > 0 ? `${errorCount} error${errorCount > 1 ? 's' : ''}` : ''}
                   {errorCount > 0 && warningCount > 0 ? ', ' : ''}
                   {warningCount > 0 ? `${warningCount} warning${warningCount > 1 ? 's' : ''}` : ''}
@@ -937,8 +994,10 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               </Flex>
               <Stack spacing="xs">
                 {validationIssues.slice(0, 5).map((issue, i) => (
-                  <Flex key={i} align="baseline" gap={2}>
+                  <Flex key={i} data-part="validation-issue" data-severity={issue.severity} align="baseline" gap={2}>
                     <Box
+                      data-part="validation-issue-dot"
+                      data-severity={issue.severity}
                       style={{
                         width: 4,
                         height: 4,
@@ -953,6 +1012,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                     <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
                       <Text
                         as="span"
+                        data-part="validation-issue-field"
                         size="xs"
                         weight="medium"
                         style={{
@@ -981,6 +1041,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
 
       {/* Sticky submit bar */}
       <Box
+        data-part="submit-bar"
         style={{
           position: 'sticky',
           bottom: 0,
@@ -994,6 +1055,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         }}
       >
         <Card
+          className="ds-guided-draft-form__submit-bar-card"
           variant={profileDefaults.cardVariant}
           style={{
             borderRadius: 0,
@@ -1008,6 +1070,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               <Stack spacing="sm">
                 {showProgress && (
                   <Text
+                    data-part="submit-bar-progress"
                     size="xs"
                     style={{
                       color: 'var(--ds-color-text-muted)',
@@ -1046,7 +1109,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               // Tablet / Desktop: horizontal row
               <Flex align="center" gap={3}>
                 {showProgress && (
-                  <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+                  <Text data-part="submit-bar-progress" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
                     {completedCount} of {sections.length} sections complete
                   </Text>
                 )}

@@ -246,10 +246,10 @@ export default function RusticStepWizard(props: StepWizardProps) {
   // typical rendered height to prevent layout shift.
   if (loading) {
     return (
-      <div className={className} style={{ ...s.container, ...style }}>
+      <div data-part="root" data-loading="true" className={className} style={{ ...s.container, ...style }}>
         <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
-        <div style={s.skeleton('100%', '1.5rem')} />
-        <div style={{ ...s.skeleton('100%', '12rem'), marginTop: '1.5rem' }} />
+        <div data-part="skeleton-progress" style={s.skeleton('100%', '1.5rem')} />
+        <div data-part="skeleton-content" style={{ ...s.skeleton('100%', '12rem'), marginTop: '1.5rem' }} />
       </div>
     );
   }
@@ -257,28 +257,28 @@ export default function RusticStepWizard(props: StepWizardProps) {
   const isVertical = orientation === 'vertical';
 
   return (
-    <div className={className} style={{ ...s.container, ...style }}>
+    <div data-part="root" className={className} style={{ ...s.container, ...style }}>
       {/* Horizontal step indicators: dot + label pairs connected by lines.
           Completed steps show a checkmark; active/future steps show their number. */}
       {showProgress && !isVertical && (
         <>
-          <div style={s.stepsHorizontal}>
+          <div data-part="step-rail" data-orientation="horizontal" style={s.stepsHorizontal}>
             {steps.map((step, i) => (
               <React.Fragment key={step.key}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
-                  <div style={s.stepDot(i === current, i < current)}>
+                <div data-part="step" data-active={i === current} data-completed={i < current} style={{ display: 'flex', alignItems: 'center', gap: '0.375rem' }}>
+                  <div data-part="step-indicator" data-active={i === current} data-completed={i < current} style={s.stepDot(i === current, i < current)}>
                     {i < current ? '\u2713' : i + 1}
                   </div>
-                  <span style={s.stepLabel(i === current)}>{step.title}</span>
+                  <span data-part="step-title" data-active={i === current} style={s.stepLabel(i === current)}>{step.title}</span>
                 </div>
                 {/* Connecting line between dots; colored primary when completed */}
-                {i < steps.length - 1 && <div style={s.stepLine(i < current)} />}
+                {i < steps.length - 1 && <div data-part="step-connector" data-completed={i < current} style={s.stepLine(i < current)} />}
               </React.Fragment>
             ))}
           </div>
           {/* Progress bar below the step dots */}
-          <div style={s.progressBar}>
-            <div style={s.progressFill(progress)} />
+          <div data-part="progress-track" style={s.progressBar}>
+            <div data-part="progress-fill" style={s.progressFill(progress)} />
           </div>
         </>
       )}
@@ -286,16 +286,16 @@ export default function RusticStepWizard(props: StepWizardProps) {
       {/* Vertical mode: step list sidebar + content area side by side */}
       {showProgress && isVertical ? (
         <div style={{ display: 'flex', gap: '1.5rem' }}>
-          <div style={{ width: 180, flexShrink: 0 }}>
+          <div data-part="step-rail" data-orientation="vertical" style={{ width: 180, flexShrink: 0 }}>
             {steps.map((step, i) => (
-              <div key={step.key} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-                <div style={s.stepDot(i === current, i < current)}>
+              <div key={step.key} data-part="step" data-active={i === current} data-completed={i < current} style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                <div data-part="step-indicator" data-active={i === current} data-completed={i < current} style={s.stepDot(i === current, i < current)}>
                   {i < current ? '\u2713' : i + 1}
                 </div>
-                <div>
-                  <div style={s.stepLabel(i === current)}>{step.title}</div>
+                <div data-part="step-label-group">
+                  <div data-part="step-title" data-active={i === current} style={s.stepLabel(i === current)}>{step.title}</div>
                   {step.description && (
-                    <div style={{ fontSize: 'var(--ds-font-size-xs)', color: 'var(--ds-color-neutral-400)', marginTop: 2 }}>
+                    <div data-part="step-description" style={{ fontSize: 'var(--ds-font-size-xs)', color: 'var(--ds-color-neutral-400)', marginTop: 2 }}>
                       {step.description}
                     </div>
                   )}
@@ -303,34 +303,35 @@ export default function RusticStepWizard(props: StepWizardProps) {
               </div>
             ))}
           </div>
-          <div style={{ flex: 1, minWidth: 0, ...s.content }}>{currentDef?.content}</div>
+          <div data-part="content" style={{ flex: 1, minWidth: 0, ...s.content }}>{currentDef?.content}</div>
         </div>
       ) : (
-        <div style={s.content}>{currentDef?.content}</div>
+        <div data-part="content" style={s.content}>{currentDef?.content}</div>
       )}
 
       {/* Validation error banner */}
       {validationMessage && (
-        <div style={s.error}>{validationMessage}</div>
+        <div data-part="error-panel" style={s.error}>{validationMessage}</div>
       )}
 
       {/* Navigation bar: Back (ghost) on left, Skip/Next/Complete on right.
           All buttons disable during async validation. */}
-      <div style={s.nav}>
+      <div data-part="nav-bar" style={s.nav}>
         <div>
           {current > 0 && (
-            <button disabled={isValidating || actionsDisabled} style={s.btn('ghost')} onClick={() => setCurrent(current - 1)}>{prevLabel}</button>
+            <button data-part="prev-button" disabled={isValidating || actionsDisabled} style={s.btn('ghost')} onClick={() => setCurrent(current - 1)}>{prevLabel}</button>
           )}
         </div>
         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
           {footer}
           {/* Skip only appears for optional, non-final steps */}
           {allowSkip && currentDef?.optional && !isLast && (
-            <button disabled={isValidating || actionsDisabled} style={s.btn('ghost')} onClick={() => setCurrent(current + 1)}>{skipLabel}</button>
+            <button data-part="skip-button" disabled={isValidating || actionsDisabled} style={s.btn('ghost')} onClick={() => setCurrent(current + 1)}>{skipLabel}</button>
           )}
           {isLast ? (
             showCompleteAction ? (
               <button
+                data-part="complete-button"
                 disabled={isValidating || actionsDisabled || completeDisabled}
                 style={s.btn('primary')}
                 onClick={handleComplete}
@@ -339,7 +340,7 @@ export default function RusticStepWizard(props: StepWizardProps) {
               </button>
             ) : null
           ) : (
-            <button disabled={isValidating || actionsDisabled} style={s.btn('primary')} onClick={handleAdvance}>{nextLabel}</button>
+            <button data-part="next-button" disabled={isValidating || actionsDisabled} style={s.btn('primary')} onClick={handleAdvance}>{nextLabel}</button>
           )}
         </div>
       </div>

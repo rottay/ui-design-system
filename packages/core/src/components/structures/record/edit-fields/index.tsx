@@ -194,7 +194,12 @@ export function InlineEditorGroup({
   style,
 }: InlineEditorGroupProps): React.ReactElement {
   return (
-    <Stack spacing={0} className={className} style={{ minWidth: 0, width: '100%', ...style }}>
+    <Stack
+      spacing={0}
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="group"
+      style={{ minWidth: 0, width: '100%', ...style }}
+    >
       {children}
     </Stack>
   );
@@ -221,12 +226,18 @@ export function InlineEditor({
   const hasFooter = Boolean(footer || footerProps);
 
   return (
-    <Box className={className} style={style}>
+    <Box
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="editor"
+      data-headerless={headerless}
+      style={style}
+    >
       {!headerless ? (
-        <Flex align="start" justify="between" gap={14} wrap="wrap" style={{ paddingBottom: 14 }}>
+        <Flex data-part="editor-header" align="start" justify="between" gap={14} wrap="wrap" style={{ paddingBottom: 14 }}>
           <Flex align="start" gap={12} style={{ minWidth: 0, flex: '1 1 420px' }}>
             {Icon ? (
               <Box
+                data-part="editor-icon"
                 aria-hidden
                 style={{
                   width: 32,
@@ -246,6 +257,7 @@ export function InlineEditor({
             <Stack spacing={4} style={{ minWidth: 0 }}>
               {eyebrow ? (
                 <Text
+                  data-part="editor-eyebrow"
                   size="xs"
                   weight="bold"
                   style={{
@@ -258,18 +270,18 @@ export function InlineEditor({
                   {eyebrow}
                 </Text>
               ) : null}
-              <Text weight="bold" style={{ color: 'var(--ds-color-text-primary)' }}>
+              <Text data-part="editor-title" weight="bold" style={{ color: 'var(--ds-color-text-primary)' }}>
                 {title}
               </Text>
               {description ? (
-                <Text size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.45 }}>
+                <Text data-part="editor-description" size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.45 }}>
                   {description}
                 </Text>
               ) : null}
             </Stack>
           </Flex>
           {meta || actions ? (
-            <Flex align="center" justify="end" gap={8} wrap="wrap" style={{ minWidth: 0, flex: '0 1 auto' }}>
+            <Flex data-part="editor-actions" align="center" justify="end" gap={8} wrap="wrap" style={{ minWidth: 0, flex: '0 1 auto' }}>
               {meta}
               {actions}
             </Flex>
@@ -302,7 +314,10 @@ export function InlineEditGrid({
 
   return (
     <Box
-      className={className}
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="grid"
+      data-kind={kind}
+      data-expanded={kind === 'advanced' ? expanded : undefined}
       hidden={kind === 'advanced' && !expanded ? true : undefined}
       aria-hidden={kind === 'advanced' && !expanded ? true : undefined}
       style={{
@@ -337,11 +352,15 @@ export function InlineEditSection({
   contentStyle,
 }: InlineEditSectionProps): React.ReactElement {
   return (
-    <Box className={className} style={{ width: '100%', minWidth: 0, ...style }}>
-      <Flex align="center" justify="between" gap={12} wrap="wrap" style={{ paddingBottom: 10 }}>
+    <Box
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="section"
+      style={{ width: '100%', minWidth: 0, ...style }}
+    >
+      <Flex data-part="section-header" align="center" justify="between" gap={12} wrap="wrap" style={{ paddingBottom: 10 }}>
         <Flex align="center" gap={10} style={{ minWidth: 0, flex: '1 1 360px' }}>
           {Icon ? (
-            <Box aria-hidden style={{ color: mutedText, display: 'flex' }}>
+            <Box data-part="section-icon" aria-hidden style={{ color: mutedText, display: 'flex' }}>
               <Icon size={15} />
             </Box>
           ) : null}
@@ -349,6 +368,7 @@ export function InlineEditSection({
             <Flex align="center" gap={8} wrap="wrap" style={{ minWidth: 0 }}>
               {sectionNumber ? (
                 <Text
+                  data-part="section-number"
                   size="xs"
                   weight="bold"
                   style={{
@@ -360,24 +380,24 @@ export function InlineEditSection({
                   Section {sectionNumber}
                 </Text>
               ) : null}
-              <Text size="sm" weight="bold" style={{ color: 'var(--ds-color-text-primary)' }}>
+              <Text data-part="section-title" size="sm" weight="bold" style={{ color: 'var(--ds-color-text-primary)' }}>
                 {title}
               </Text>
             </Flex>
             {description ? (
-              <Text size="xs" style={{ color: mutedText, lineHeight: 1.4 }}>
+              <Text data-part="section-description" size="xs" style={{ color: mutedText, lineHeight: 1.4 }}>
                 {description}
               </Text>
             ) : null}
           </Stack>
         </Flex>
         {actions ? (
-          <Flex align="center" justify="end" gap={6} wrap="wrap" style={{ minWidth: 0 }}>
+          <Flex data-part="section-actions" align="center" justify="end" gap={6} wrap="wrap" style={{ minWidth: 0 }}>
             {actions}
           </Flex>
         ) : null}
       </Flex>
-      <Box style={contentStyle}>{children}</Box>
+      <Box data-part="section-content" style={contentStyle}>{children}</Box>
     </Box>
   );
 }
@@ -401,7 +421,9 @@ export function InlineEditControl({
 }: InlineEditControlProps): React.ReactElement {
   return (
     <Box
-      className={className}
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="control"
+      data-width={width}
       style={{
         minWidth: 0,
         maxWidth: '100%',
@@ -473,8 +495,15 @@ export function InlineEditField({
         : 'Safe to leave blank.');
 
   return (
-    <Box className={className} style={{ gridColumn: spanColumn[span], minWidth: 0, ...style }}>
+    <Box
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="field"
+      data-requirement={requirement}
+      data-error={Boolean(hasError)}
+      style={{ gridColumn: spanColumn[span], minWidth: 0, ...style }}
+    >
       <Box
+        data-part="field-label-row"
         style={{
           display: 'grid',
           gap: hint ? 3 : 0,
@@ -485,6 +514,7 @@ export function InlineEditField({
         <Flex align="center" gap={8} wrap="wrap">
           {fieldNumber ? (
             <Text
+              data-part="field-number"
               aria-hidden
               size="xs"
               style={{
@@ -497,12 +527,13 @@ export function InlineEditField({
             </Text>
           ) : null}
           {Icon ? (
-            <Box aria-hidden style={{ color: mutedText, display: 'flex' }}>
+            <Box data-part="field-icon" aria-hidden style={{ color: mutedText, display: 'flex' }}>
               <Icon size={14} />
             </Box>
           ) : null}
           <Box
             as="label"
+            data-part="field-label"
             htmlFor={htmlFor}
             style={{
               fontSize: 'var(--ds-font-size-sm, 0.875rem)',
@@ -517,8 +548,9 @@ export function InlineEditField({
           </Box>
           {shouldShowRequirement ? (
             <Tooltip content={requirementTooltip}>
-              <Flex align="center" gap={5} aria-hidden style={{ display: 'inline-flex' }}>
+              <Flex data-part="field-requirement" data-requirement={requirement} align="center" gap={5} aria-hidden style={{ display: 'inline-flex' }}>
                 <Box
+                  data-part="field-requirement-dot"
                   aria-hidden
                   style={{
                     width: 5,
@@ -528,7 +560,7 @@ export function InlineEditField({
                     flexShrink: 0,
                   }}
                 />
-                <Text size="xs" weight="bold" style={{ color: mutedText, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <Text data-part="field-requirement-copy" size="xs" weight="bold" style={{ color: mutedText, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                   {requirementCopy}
                 </Text>
               </Flex>
@@ -536,7 +568,7 @@ export function InlineEditField({
           ) : null}
         </Flex>
         {hint ? (
-          <Text id={hintId} size="xs" style={{ color: mutedText, lineHeight: 1.35, minWidth: 0 }}>
+          <Text data-part="field-hint" id={hintId} size="xs" style={{ color: mutedText, lineHeight: 1.35, minWidth: 0 }}>
             {hint}
           </Text>
         ) : null}
@@ -546,6 +578,7 @@ export function InlineEditField({
       </InlineEditControl>
       {hasError && errorMessage ? (
         <Text
+          data-part="field-error"
           id={resolvedErrorId}
           size="xs"
           style={{ color: 'var(--ds-color-error)', lineHeight: 1.4, marginTop: 5, display: 'block' }}
@@ -574,7 +607,10 @@ export function MoreFieldsToggle({
 }: MoreFieldsToggleProps): React.ReactElement {
   return (
     <Box
-      className={className}
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="toggle"
+      data-expanded={expanded}
+      data-sticky={sticky}
       style={{
         display: 'flex',
         justifyContent: expanded ? 'flex-end' : 'center',
@@ -631,7 +667,10 @@ export function InlineEditFooter({
       justify={hasFooterSupport ? 'between' : 'end'}
       gap={8}
       wrap="wrap"
-      className={className}
+      className={['ds-structure', 'ds-edit-fields', className].filter(Boolean).join(' ')}
+      data-part="footer"
+      data-saving={Boolean(isSaving)}
+      data-error={Boolean(error)}
       aria-live="polite"
       aria-busy={isSaving ? true : undefined}
       style={{
@@ -643,14 +682,14 @@ export function InlineEditFooter({
       }}
     >
       {hasFooterSupport ? (
-        <Stack spacing={2} style={{ minWidth: 0, flex: '1 1 280px' }}>
+        <Stack data-part="footer-support" spacing={2} style={{ minWidth: 0, flex: '1 1 280px' }}>
           {summary && error ? (
             <Text size="xs" style={{ color: mutedText }}>
               {summary}
             </Text>
           ) : null}
           {footerSummary ? (
-            <Text size="xs" style={{ color: error ? 'var(--ds-color-error)' : mutedText }}>
+            <Text data-part="footer-summary" size="xs" style={{ color: error ? 'var(--ds-color-error)' : mutedText }}>
               {footerSummary}
             </Text>
           ) : null}
@@ -659,7 +698,7 @@ export function InlineEditFooter({
               {hiddenDirtySummary}
             </Text>
           ) : null}
-          {impactPreview ? <Box>{impactPreview}</Box> : null}
+          {impactPreview ? <Box data-part="footer-impact-preview">{impactPreview}</Box> : null}
         </Stack>
       ) : null}
       <Flex align="center" justify="end" gap={8} wrap="wrap" style={{ minWidth: 0 }}>

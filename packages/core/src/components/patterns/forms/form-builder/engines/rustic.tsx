@@ -350,6 +350,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'password':
           return (
             <input
+              data-part="value-input"
+              data-field-type={field.type}
               type={field.type}
               placeholder={field.placeholder}
               value={(val as string) ?? ''}
@@ -362,6 +364,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'number':
           return (
             <input
+              data-part="value-input"
+              data-field-type="number"
               type="number"
               placeholder={field.placeholder}
               value={val !== undefined && val !== null ? String(val) : ''}
@@ -376,6 +380,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'textarea':
           return (
             <textarea
+              data-part="value-input"
+              data-field-type="textarea"
               placeholder={field.placeholder}
               value={(val as string) ?? ''}
               onChange={(e) => updateValue(field.name, e.target.value)}
@@ -387,6 +393,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'select':
           return (
             <select
+              data-part="value-input"
+              data-field-type="select"
               value={(val as string) ?? ''}
               onChange={(e) => updateValue(field.name, e.target.value)}
               disabled={fieldDisabled}
@@ -401,6 +409,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'multi-select':
           return (
             <select
+              data-part="value-input"
+              data-field-type="multi-select"
               multiple
               value={(val as string[]) ?? []}
               onChange={(e) => {
@@ -419,6 +429,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
           return (
             <label style={s.checkboxRow}>
               <input
+                data-part="value-input"
+                data-field-type="checkbox"
                 type="checkbox"
                 checked={!!val}
                 onChange={(e) => updateValue(field.name, e.target.checked)}
@@ -429,7 +441,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
           );
         case 'radio':
           return (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div data-part="value-input" data-field-type="radio" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {field.options?.map((opt) => (
                 <label key={opt.value} style={s.checkboxRow}>
                   <input
@@ -449,6 +461,8 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
           return (
             <label style={s.checkboxRow}>
               <input
+                data-part="value-input"
+                data-field-type="switch"
                 type="checkbox"
                 checked={!!val}
                 onChange={(e) => updateValue(field.name, e.target.checked)}
@@ -459,24 +473,26 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             </label>
           );
         case 'date':
-          return <input type="date" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type="date" type="date" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
         case 'time':
-          return <input type="time" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type="time" type="time" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
         case 'datetime':
-          return <input type="datetime-local" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type="datetime" type="datetime-local" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
         case 'file':
-          return <input type="file" disabled={fieldDisabled} style={inputStyle(field.name)} onChange={(e) => updateValue(field.name, e.target.files)} />;
+          return <input data-part="value-input" data-field-type="file" type="file" disabled={fieldDisabled} style={inputStyle(field.name)} onChange={(e) => updateValue(field.name, e.target.files)} />;
         case 'color':
           // Native color inputs only accept concrete color strings, not CSS vars.
-          return <input type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300))', borderRadius: 'var(--ds-radius-md)', cursor: 'pointer' }} />;
+          return <input data-part="value-input" data-field-type="color" type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300))', borderRadius: 'var(--ds-radius-md)', cursor: 'pointer' }} />;
         case 'slider':
-          return <input type="range" value={(val as number) ?? 0} onChange={(e) => updateValue(field.name, Number(e.target.value))} min={field.validation?.min ?? 0} max={field.validation?.max ?? 100} disabled={fieldDisabled} style={{ width: '100%' }} />;
+          return <input data-part="value-input" data-field-type="slider" type="range" value={(val as number) ?? 0} onChange={(e) => updateValue(field.name, Number(e.target.value))} min={field.validation?.min ?? 0} max={field.validation?.max ?? 100} disabled={fieldDisabled} style={{ width: '100%' }} />;
         case 'rating':
           return (
-            <div style={{ display: 'flex', gap: 4 }}>
+            <div data-part="value-input" data-field-type="rating" style={{ display: 'flex', gap: 4 }}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <span
                   key={star}
+                  data-part="rating-star"
+                  data-active={(val as number) >= star}
                   onClick={() => !fieldDisabled && updateValue(field.name, star)}
                   style={{ cursor: fieldDisabled ? 'default' : 'pointer', fontSize: 20, color: (val as number) >= star ? 'var(--ds-color-warning)' : 'var(--ds-color-border-primary, var(--ds-color-neutral-300))' }}
                 >
@@ -488,7 +504,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'custom':
           return field.render?.(field, val, (v) => updateValue(field.name, v)) ?? null;
         default:
-          return <input type="text" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type={field.type} type="text" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
       }
     },
     [currentValues, disabled, readOnly, updateValue, errors]
@@ -540,21 +556,22 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     return (
       <div
         key={field.name}
+        data-part="field"
         style={{
           ...fieldStyle,
           ...(adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
         }}
       >
         {showLabel && (
-          <label style={{ ...s.label, ...(adaptedLayout === 'horizontal' ? { minWidth: 140, paddingTop: 8 } : {}) }}>
+          <label data-part="field-label" style={{ ...s.label, ...(adaptedLayout === 'horizontal' ? { minWidth: 140, paddingTop: 8 } : {}) }}>
             {field.label ?? field.name}
-            {showRequired && field.required && <span style={s.required}>*</span>}
+            {showRequired && field.required && <span data-part="required-mark" style={s.required}>*</span>}
           </label>
         )}
-        <div style={adaptedLayout === 'horizontal' ? { flex: 1 } : undefined}>
+        <div data-part="field-content" style={adaptedLayout === 'horizontal' ? { flex: 1 } : undefined}>
           {content}
-          {field.description && !error && <div style={s.hint}>{field.description}</div>}
-          {error && <div style={s.error}>{error}</div>}
+          {field.description && !error && <div data-part="field-description" style={s.hint}>{field.description}</div>}
+          {error && <div data-part="field-error" style={s.error}>{error}</div>}
         </div>
       </div>
     );
@@ -573,6 +590,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
 
   return (
     <form
+      data-part="root"
       onSubmit={handleSubmit}
       className={className}
       style={{ fontFamily: 'var(--ds-font-family-base)', ...style }}
@@ -580,17 +598,19 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
       {/* Inline keyframes: Rustic engine cannot depend on global CSS, so
           the error-slide-in animation must be co-located here. */}
       <style>{`@keyframes ds-form-error-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }`}</style>
-      {title && <h3 style={s.title}>{title}</h3>}
-      {description && <p style={s.description}>{description}</p>}
+      {title && <h3 data-part="title" style={s.title}>{title}</h3>}
+      {description && <p data-part="description" style={s.description}>{description}</p>}
 
       {/* Step bar renders a bottom-bordered indicator for each step.
           Steps up to and including the current one are highlighted with
           the primary colour via the `s.stepItem(active)` factory. */}
       {adaptedLayout === 'steps' && stepLabels && (
-        <div style={s.stepBar}>
+        <div data-part="step-list" style={s.stepBar}>
           {stepLabels.map((label, i) => (
             <div
               key={i}
+              data-part="step-tab"
+              data-active={i <= currentStep}
               style={s.stepItem(i <= currentStep)}
               onClick={() => handleStepChange(i)}
             >
@@ -600,15 +620,15 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         </div>
       )}
 
-      <div style={containerStyle}>{fieldElements}</div>
+      <div data-part="fields" style={containerStyle}>{fieldElements}</div>
 
       {adaptedLayout === 'steps' && stepLabels && (
-        <div style={s.navRow}>
-          <button type="button" style={s.btn} disabled={currentStep === 0} onClick={() => handleStepChange(currentStep - 1)}>
+        <div data-part="wizard-nav" style={s.navRow}>
+          <button type="button" data-part="wizard-prev-button" style={s.btn} disabled={currentStep === 0} onClick={() => handleStepChange(currentStep - 1)}>
             Previous
           </button>
           {currentStep < stepLabels.length - 1 && (
-            <button type="button" style={s.btnPrimary} onClick={() => handleStepChange(currentStep + 1)}>
+            <button type="button" data-part="wizard-next-button" style={s.btnPrimary} onClick={() => handleStepChange(currentStep + 1)}>
               Next
             </button>
           )}
@@ -617,7 +637,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
 
       {/* Submit area is position:sticky so it stays visible when the form
           scrolls inside a modal or side panel. */}
-      {actions && <div style={s.submitArea}>{actions}</div>}
+      {actions && <div data-part="action-bar" style={s.submitArea}>{actions}</div>}
     </form>
   );
 }

@@ -229,12 +229,15 @@ export default function ModernStepWizard(props: StepWizardProps) {
   if (loading) {
     return (
       <div
+        data-part="root"
+        data-loading="true"
         className={['ds-step-wizard-skeleton', className].filter(Boolean).join(' ')}
         style={{ ...cardStyle, ...style }}
       >
         <div style={{ padding: 24 }}>
           {/* Shimmer bar for step indicators */}
           <div
+            data-part="skeleton-progress"
             className="ds-step-wizard-skeleton__progress"
             style={{
               height: 8,
@@ -246,6 +249,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
           />
           {/* Shimmer block for content */}
           <div
+            data-part="skeleton-content"
             className="ds-step-wizard-skeleton__content"
             style={{
               height: 200,
@@ -287,6 +291,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
     return (
       <div
         key={stepDef.key}
+        data-part="step"
+        data-active={isActive}
+        data-completed={isCompleted}
         style={{
           display: 'flex',
           flexDirection: isVertical ? 'row' : 'column',
@@ -298,6 +305,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
       >
         {/* Indicator circle */}
         <div
+          data-part="step-indicator"
+          data-active={isActive}
+          data-completed={isCompleted}
           style={{
             width: indicatorSize,
             height: indicatorSize,
@@ -320,6 +330,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
         {/* Label area */}
         <div
+          data-part="step-label-group"
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -329,6 +340,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
           }}
         >
           <span
+            data-part="step-title"
+            data-active={isActive}
+            data-completed={isCompleted}
             style={{
               fontSize: 13,
               fontWeight: isActive ? 600 : 400,
@@ -349,6 +363,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
           </span>
           {stepDef.description && (
             <span
+              data-part="step-description"
               style={{
                 fontSize: 11,
                 color: 'var(--ds-color-text-muted)',
@@ -375,6 +390,8 @@ export default function ModernStepWizard(props: StepWizardProps) {
       return (
         <div
           key={`connector-${index}`}
+          data-part="step-connector"
+          data-completed={isCompleted}
           style={{
             width: 2,
             flex: 1,
@@ -392,6 +409,8 @@ export default function ModernStepWizard(props: StepWizardProps) {
     return (
       <div
         key={`connector-${index}`}
+        data-part="step-connector"
+        data-completed={isCompleted}
         style={{
           flex: 1,
           height: 2,
@@ -418,6 +437,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   const errorDisplay = validationMessage ? (
     <div
+      data-part="error-panel"
       style={{
         display: 'flex',
         alignItems: 'flex-start',
@@ -443,6 +463,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   const navigationBar = (
     <div
+      data-part="nav-bar"
       style={{
         display: 'flex',
         justifyContent: 'space-between',
@@ -457,6 +478,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         {current > 0 && (
           <button
             type="button"
+            data-part="prev-button"
             disabled={navDisabled}
             onClick={() => setCurrent(current - 1)}
             style={{
@@ -477,6 +499,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         {allowSkip && currentDef?.optional && !isLast && (
           <button
             type="button"
+            data-part="skip-button"
             disabled={navDisabled}
             onClick={() => setCurrent(current + 1)}
             style={{
@@ -492,6 +515,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
           showCompleteAction ? (
             <button
               type="button"
+              data-part="complete-button"
               disabled={navDisabled || completeDisabled}
               onClick={handleComplete}
               style={{
@@ -505,6 +529,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         ) : (
           <button
             type="button"
+            data-part="next-button"
             disabled={navDisabled}
             onClick={handleAdvance}
             style={{
@@ -523,6 +548,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
   return (
     <div
+      data-part="root"
       className={className ?? ''}
       style={{ ...cardStyle, ...style }}
     >
@@ -530,6 +556,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         {/* Progress bar (subtle, at the very top) */}
         {showProgress && (
           <div
+            data-part="progress-track"
             style={{
               width: '100%',
               height: 4,
@@ -540,6 +567,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
             }}
           >
             <div
+              data-part="progress-fill"
               style={{
                 height: '100%',
                 borderRadius: 'var(--ds-radius-full)',
@@ -554,6 +582,8 @@ export default function ModernStepWizard(props: StepWizardProps) {
         {/* Step indicators */}
         {showProgress && !isVertical && (
           <div
+            data-part="step-rail"
+            data-orientation="horizontal"
             style={{
               display: 'flex',
               alignItems: 'flex-start',
@@ -569,6 +599,8 @@ export default function ModernStepWizard(props: StepWizardProps) {
           <div style={{ display: 'flex', gap: 32 }}>
             {/* Vertical step rail */}
             <div
+              data-part="step-rail"
+              data-orientation="vertical"
               style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -582,7 +614,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
 
             {/* Content area */}
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={contentAreaStyle}>{currentDef?.content}</div>
+              <div data-part="content" style={contentAreaStyle}>{currentDef?.content}</div>
               {errorDisplay}
               {navigationBar}
             </div>
@@ -590,7 +622,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
         ) : (
           <>
             {/* Horizontal: content below the step indicators */}
-            <div style={contentAreaStyle}>{currentDef?.content}</div>
+            <div data-part="content" style={contentAreaStyle}>{currentDef?.content}</div>
             {errorDisplay}
             {navigationBar}
           </>

@@ -62,6 +62,8 @@ const readOnlyTextStyle: CSSProperties = {
 /* Chevron icon for collapsible sections */
 const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
   <svg
+    data-part="section-chevron"
+    data-collapsed={collapsed}
     width="16"
     height="16"
     viewBox="0 0 16 16"
@@ -256,36 +258,36 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     (field: FieldDef): ReactNode => {
       const val = currentValues[field.name];
       if (val === undefined || val === null || val === '') {
-        return <span style={{ ...readOnlyTextStyle, color: 'var(--ds-color-text-muted)' }}>--</span>;
+        return <span data-part="readonly-value" data-field-type="empty" style={{ ...readOnlyTextStyle, color: 'var(--ds-color-text-muted)' }}>--</span>;
       }
 
       switch (field.type) {
         case 'checkbox':
         case 'switch':
-          return <span style={readOnlyTextStyle}>{val ? 'Yes' : 'No'}</span>;
+          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{val ? 'Yes' : 'No'}</span>;
         case 'select':
         case 'radio': {
           const opt = field.options?.find((o) => o.value === val);
-          return <span style={readOnlyTextStyle}>{opt?.label ?? String(val)}</span>;
+          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{opt?.label ?? String(val)}</span>;
         }
         case 'multi-select': {
           const vals = val as string[];
           const labels = vals.map((v) => field.options?.find((o) => o.value === v)?.label ?? v);
-          return <span style={readOnlyTextStyle}>{labels.join(', ')}</span>;
+          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{labels.join(', ')}</span>;
         }
         case 'color':
           return (
-            <span style={{ ...readOnlyTextStyle, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ width: 20, height: 20, borderRadius: 'var(--ds-radius-sm)', background: String(val), border: '1px solid var(--ds-color-border)' }} />
+            <span data-part="readonly-value" data-field-type={field.type} style={{ ...readOnlyTextStyle, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span data-part="color-swatch" style={{ width: 20, height: 20, borderRadius: 'var(--ds-radius-sm)', background: String(val), border: '1px solid var(--ds-color-border)' }} />
               {String(val)}
             </span>
           );
         case 'rating':
-          return <span style={readOnlyTextStyle}>{'*'.repeat(val as number) + ` (${val}/5)`}</span>;
+          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{'*'.repeat(val as number) + ` (${val}/5)`}</span>;
         case 'file':
-          return <span style={{ ...readOnlyTextStyle, color: 'var(--ds-color-text-muted)' }}>[File attached]</span>;
+          return <span data-part="readonly-value" data-field-type={field.type} style={{ ...readOnlyTextStyle, color: 'var(--ds-color-text-muted)' }}>[File attached]</span>;
         default:
-          return <span style={readOnlyTextStyle}>{String(val)}</span>;
+          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{String(val)}</span>;
       }
     },
     [currentValues]
@@ -490,6 +492,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               maxCount={1}
             >
               <span
+                data-part="upload-trigger"
                 style={{
                   display: 'inline-block',
                   padding: '6px 16px',
@@ -561,9 +564,10 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   if (loading) {
     return (
-      <div className={className} style={{ maxWidth: 720, width: '100%', ...style }}>
+      <div data-part="root" data-loading="true" className={className} style={{ maxWidth: 720, width: '100%', ...style }}>
         {/* Title shimmer */}
         <div
+          data-part="skeleton-bar"
           style={{
             height: 20,
             width: '40%',
@@ -575,6 +579,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         />
         {/* Description shimmer */}
         <div
+          data-part="skeleton-bar"
           style={{
             height: 14,
             width: '65%',
@@ -588,6 +593,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         {[1, 2, 3].map((i) => (
           <div key={i} style={{ marginBottom: 24 }}>
             <div
+              data-part="skeleton-bar"
               style={{
                 height: 14,
                 width: 100,
@@ -598,6 +604,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               }}
             />
             <div
+              data-part="skeleton-bar"
               style={{
                 height: 40,
                 width: '100%',
@@ -620,6 +627,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           }}
         >
           <div
+            data-part="skeleton-bar"
             style={{
               height: 36,
               width: 80,
@@ -629,6 +637,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             }}
           />
           <div
+            data-part="skeleton-bar"
             style={{
               height: 36,
               width: 100,
@@ -712,6 +721,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     return (
       <div
         key={field.name}
+        data-part="field"
         style={{
           width: '100%',
           ...(adaptedLayout === 'grid' && field.colSpan ? { gridColumn: `span ${field.colSpan}` } : {}),
@@ -733,12 +743,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           <>
             {content}
             {field.description && !error && (
-              <div style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-text-muted)', marginTop: 4 }}>
+              <div data-part="field-description" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-text-muted)', marginTop: 4 }}>
                 {field.description}
               </div>
             )}
             {error && (
-              <div style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)', marginTop: 4 }}>
+              <div data-part="field-error" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)', marginTop: 4 }}>
                 {error}
               </div>
             )}
@@ -794,12 +804,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className={className} style={formContainerStyle}>
+    <form data-part="root" onSubmit={handleSubmit} className={className} style={formContainerStyle}>
       {/* Title & description */}
       {(title || description) && (
         <div style={{ marginBottom: 24 }}>
           {title && (
-            <div style={{
+            <div data-part="title" style={{
               fontSize: 18,
               fontWeight: 600,
               color: 'var(--ds-color-text-primary)',
@@ -810,7 +820,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             </div>
           )}
           {description && (
-            <div style={{
+            <div data-part="description" style={{
               fontSize: 14,
               color: 'var(--ds-color-text-secondary)',
               lineHeight: '20px',
@@ -824,23 +834,30 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Wizard step indicator */}
       {adaptedLayout === 'steps' && stepLabels && (
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 0, marginBottom: 32 }}>
+        <div data-part="step-list" style={{ display: 'flex', alignItems: 'flex-start', gap: 0, marginBottom: 32 }}>
           {stepLabels.map((label, i) => {
             const isActive = i === currentStep;
             const isCompleted = i < currentStep;
             return (
               <React.Fragment key={i}>
                 {i > 0 && (
-                  <div style={{
-                    flex: 1,
-                    height: 2,
-                    marginTop: 15, // vertically center with 32px indicator
-                    background: isCompleted ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)',
-                    transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-                  }} />
+                  <div
+                    data-part="step-connector"
+                    data-completed={isCompleted}
+                    style={{
+                      flex: 1,
+                      height: 2,
+                      marginTop: 15, // vertically center with 32px indicator
+                      background: isCompleted ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)',
+                      transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
+                    }}
+                  />
                 )}
                 <button
                   type="button"
+                  data-part="step-button"
+                  data-active={isActive}
+                  data-completed={isCompleted}
                   onClick={() => handleStepChange(i)}
                   style={{
                     display: 'flex',
@@ -854,22 +871,27 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                     minWidth: 64,
                   }}
                 >
-                  <div style={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: '50%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 13,
-                    fontWeight: 600,
-                    flexShrink: 0,
-                    background: (isActive || isCompleted) ? 'var(--ds-color-primary)' : 'var(--ds-surface-panel)',
-                    color: (isActive || isCompleted) ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-text-muted)',
-                    border: (isActive || isCompleted) ? 'none' : '2px solid var(--ds-color-border-secondary)',
-                    boxShadow: isActive ? '0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)' : 'none',
-                    transition: `all var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-                  }}>
+                  <div
+                    data-part="step-indicator"
+                    data-active={isActive}
+                    data-completed={isCompleted}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: 13,
+                      fontWeight: 600,
+                      flexShrink: 0,
+                      background: (isActive || isCompleted) ? 'var(--ds-color-primary)' : 'var(--ds-surface-panel)',
+                      color: (isActive || isCompleted) ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-text-muted)',
+                      border: (isActive || isCompleted) ? 'none' : '2px solid var(--ds-color-border-secondary)',
+                      boxShadow: isActive ? '0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)' : 'none',
+                      transition: `all var(--ds-motion-normal) var(--ds-motion-ease-out)`,
+                    }}
+                  >
                     {isCompleted ? (
                       <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
                         <path d="M3 8l3.5 3.5L13 5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -878,17 +900,22 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                       i + 1
                     )}
                   </div>
-                  <span style={{
-                    fontSize: 12,
-                    fontWeight: isActive ? 600 : 400,
-                    color: isActive
-                      ? 'var(--ds-color-text-primary)'
-                      : isCompleted
-                        ? 'var(--ds-color-text-secondary)'
-                        : 'var(--ds-color-text-muted)',
-                    whiteSpace: 'nowrap',
-                    transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
-                  }}>
+                  <span
+                    data-part="step-label"
+                    data-active={isActive}
+                    data-completed={isCompleted}
+                    style={{
+                      fontSize: 12,
+                      fontWeight: isActive ? 600 : 400,
+                      color: isActive
+                        ? 'var(--ds-color-text-primary)'
+                        : isCompleted
+                          ? 'var(--ds-color-text-secondary)'
+                          : 'var(--ds-color-text-muted)',
+                      whiteSpace: 'nowrap',
+                      transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
+                    }}
+                  >
                     {label}
                   </span>
                 </button>
@@ -908,7 +935,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           <div key={section.key}>
             {/* Section divider (between sections, not before first) */}
             {sectionIdx > 0 && (
-              <div style={{
+              <div data-part="section-divider" style={{
                 height: 1,
                 background: 'var(--ds-color-border)',
                 margin: '28px 0',
@@ -919,6 +946,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {hasSectionHeader && (
               <button
                 type="button"
+                data-part="section-header"
+                data-collapsed={isCollapsed}
                 onClick={() => toggleSection(section.key)}
                 style={{
                   display: 'flex',
@@ -936,7 +965,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                 }}
               >
                 <div>
-                  <div style={{
+                  <div data-part="section-title" style={{
                     fontSize: 15,
                     fontWeight: 600,
                     color: 'var(--ds-color-text-primary)',
@@ -946,7 +975,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                     {section.title}
                   </div>
                   {section.description && (
-                    <div style={{
+                    <div data-part="section-description" style={{
                       fontSize: 13,
                       color: 'var(--ds-color-text-muted)',
                       lineHeight: '18px',
@@ -962,6 +991,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
             {/* Section content with smooth collapse */}
             <div
+              data-part="section-content"
+              data-collapsed={isCollapsed}
               ref={(el) => { sectionContentRefs.current[section.key] = el; }}
               style={{
                 overflow: 'hidden',
@@ -994,6 +1025,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {currentStep > 0 && (
               <button
                 type="button"
+                data-part="wizard-prev-button"
                 disabled={currentStep === 0}
                 onClick={() => handleStepChange(currentStep - 1)}
                 style={{
@@ -1020,7 +1052,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             {/* Step counter text */}
-            <span style={{
+            <span data-part="wizard-step-counter" style={{
               fontSize: 13,
               color: 'var(--ds-color-text-muted)',
               marginRight: 4,
@@ -1030,6 +1062,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {currentStep < stepLabels.length - 1 && (
               <button
                 type="button"
+                data-part="wizard-next-button"
                 onClick={() => handleStepChange(currentStep + 1)}
                 style={{
                   display: 'inline-flex',
@@ -1057,7 +1090,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Action bar */}
       {actions && (
-        <div style={{
+        <div data-part="action-bar" style={{
           display: 'flex',
           justifyContent: 'flex-end',
           alignItems: 'center',

@@ -205,16 +205,21 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
   // Uses the injected pulse keyframe for the shimmer effect.
   if (loading) {
     return (
-      <div className={className} style={{ ...s.container, ...style }}>
+      <div
+        className={['ds-pattern-approval-workflow', 'ds-engine-rustic', className].filter(Boolean).join(' ')}
+        data-part="root"
+        data-loading="true"
+        style={{ ...s.container, ...style }}
+      >
         <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
-        <div style={s.skeleton('40%', '1.25rem')} />
-        <div style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div data-part="skeleton-line" style={s.skeleton('40%', '1.25rem')} />
+        <div data-part="skeleton" style={{ marginTop: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           {[1, 2, 3].map((i) => (
-            <div key={i} style={{ display: 'flex', gap: '0.75rem' }}>
-              <div style={s.skeleton('12px', '12px')} />
+            <div key={i} data-part="skeleton-row" style={{ display: 'flex', gap: '0.75rem' }}>
+              <div data-part="skeleton-dot" style={s.skeleton('12px', '12px')} />
               <div style={{ flex: 1 }}>
-                <div style={s.skeleton('30%', '1rem')} />
-                <div style={{ ...s.skeleton('50%', '0.75rem'), marginTop: '0.5rem' }} />
+                <div data-part="skeleton-line" style={s.skeleton('30%', '1rem')} />
+                <div data-part="skeleton-line" style={{ ...s.skeleton('50%', '0.75rem'), marginTop: '0.5rem' }} />
               </div>
             </div>
           ))}
@@ -224,44 +229,54 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
   }
 
   return (
-    <div className={className} style={{ ...s.container, ...style }}>
+    <div
+      className={['ds-pattern-approval-workflow', 'ds-engine-rustic', className].filter(Boolean).join(' ')}
+      data-part="root"
+      data-loading="false"
+      style={{ ...s.container, ...style }}
+    >
       {/* Inline keyframe needed for the pulsing dot on the active step */}
       <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
 
-      <div style={s.header}>
-        <h3 style={s.title}>{title}</h3>
-        {entity && <span style={s.entityTag}>{entity}</span>}
+      <div data-part="header" style={s.header}>
+        <h3 data-part="title" style={s.title}>{title}</h3>
+        {entity && <span data-part="entity-badge" style={s.entityTag}>{entity}</span>}
       </div>
 
-      <div>
+      <div data-part="timeline">
         {steps.map((step, i) => {
           const isCurrent = i === currentStep;
           const isLast = i === steps.length - 1;
           const colors = statusColors[step.status];
 
           return (
-            <div key={step.key} style={s.stepRow}>
+            <div key={step.key} data-part="step" data-status={step.status} data-current={isCurrent} style={s.stepRow}>
               {/* Timeline column: dot uses primary color + pulse when this is
                   the active pending step; otherwise falls back to status color */}
               <div style={s.timeline}>
-                <div style={s.dot(isCurrent && step.status === 'pending' ? 'var(--ds-color-primary-500)' : colors.dot, isCurrent && step.status === 'pending')} />
-                {!isLast && <div style={s.line(colors.dot)} />}
+                <div
+                  data-part="step-dot"
+                  data-status={step.status}
+                  data-current={isCurrent}
+                  style={s.dot(isCurrent && step.status === 'pending' ? 'var(--ds-color-primary-500)' : colors.dot, isCurrent && step.status === 'pending')}
+                />
+                {!isLast && <div data-part="step-connector" data-status={step.status} style={s.line(colors.dot)} />}
               </div>
-              <div style={s.stepContent}>
-                <div style={s.approverRow}>
+              <div data-part="step-content" style={s.stepContent}>
+                <div data-part="step-approver-row" style={s.approverRow}>
                   {step.avatar}
-                  <span style={s.approverName}>{step.approver}</span>
-                  <span style={s.badge(step.status)}>{statusLabel[step.status]}</span>
+                  <span data-part="step-approver" style={s.approverName}>{step.approver}</span>
+                  <span data-part="step-status-badge" data-status={step.status} style={s.badge(step.status)}>{statusLabel[step.status]}</span>
                 </div>
                 {step.timestamp && (
-                  <div style={s.timestamp}>
+                  <div data-part="step-timestamp" style={s.timestamp}>
                     {typeof step.timestamp === 'string' ? step.timestamp : step.timestamp.toLocaleString()}
                   </div>
                 )}
-                {step.comments && <div style={s.comment}>{step.comments}</div>}
+                {step.comments && <div data-part="step-comment" style={s.comment}>{step.comments}</div>}
                 {/* Metadata key-value pairs for domain-specific context */}
                 {step.metadata && (
-                  <div style={{ marginTop: '0.25rem', fontSize: 'var(--ds-font-size-xs)', color: 'var(--ds-color-neutral-500)' }}>
+                  <div data-part="step-metadata" style={{ marginTop: '0.25rem', fontSize: 'var(--ds-font-size-xs)', color: 'var(--ds-color-neutral-500)' }}>
                     {Object.entries(step.metadata).map(([k, v]) => (
                       <div key={k}><span style={{ fontWeight: 500 }}>{k}:</span> {v}</div>
                     ))}
@@ -270,19 +285,19 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
                 {/* Disabled buttons use reduced opacity because native :disabled
                     styling is not reliably consistent across browsers without CSS */}
                 {isCurrent && step.status === 'pending' && (
-                  <div style={s.actions}>
+                  <div data-part="step-actions" style={s.actions}>
                     {onApprove && (
-                      <button style={{ ...s.btn('approve'), opacity: actionsDisabled ? 0.5 : 1 }} disabled={actionsDisabled} onClick={() => onApprove(step.key)}>
+                      <button data-part="step-action-button" data-action="approve" style={{ ...s.btn('approve'), opacity: actionsDisabled ? 0.5 : 1 }} disabled={actionsDisabled} onClick={() => onApprove(step.key)}>
                         Approve
                       </button>
                     )}
                     {onReject && (
-                      <button style={{ ...s.btn('reject'), opacity: actionsDisabled ? 0.5 : 1 }} disabled={actionsDisabled} onClick={() => onReject(step.key)}>
+                      <button data-part="step-action-button" data-action="reject" style={{ ...s.btn('reject'), opacity: actionsDisabled ? 0.5 : 1 }} disabled={actionsDisabled} onClick={() => onReject(step.key)}>
                         Reject
                       </button>
                     )}
                     {onEscalate && (
-                      <button style={{ ...s.btn('escalate'), opacity: actionsDisabled ? 0.5 : 1 }} disabled={actionsDisabled} onClick={() => onEscalate(step.key)}>
+                      <button data-part="step-action-button" data-action="escalate" style={{ ...s.btn('escalate'), opacity: actionsDisabled ? 0.5 : 1 }} disabled={actionsDisabled} onClick={() => onEscalate(step.key)}>
                         Escalate
                       </button>
                     )}
@@ -294,7 +309,7 @@ export default function RusticApprovalWorkflow(props: ApprovalWorkflowProps) {
         })}
       </div>
 
-      {footer && <div style={s.footer}>{footer}</div>}
+      {footer && <div data-part="footer" style={s.footer}>{footer}</div>}
     </div>
   );
 }
