@@ -42,7 +42,7 @@ Ordered by (value per unit of risk) × (readiness), not by size:
 | --- | --- | --- | --- | --- |
 | 1 | **CK-D** forms + record + workflow | 591 | ~6 | The cleanest cluster in the program: 589/591 category A, ZERO DaisyUI coupling, ZERO bridge rules (no legacy layer to reconcile — a first). Mechanically simple; ideal to run the new 3-parallel-migration pipeline on. Split D1 = patterns/forms, D2 = record + workflow + surfaces/pages/forms. |
 | 2 | **CK-B** headers | 335 | ~4 | Edit/Form share a byte-identical tone map + gradient recipe (ONE skin covers both, proven). Detail needs its OWN token set (same shape, every value diverges). page-shell/cockpit/workbench each own theirs. Zero imperative writes. |
-| 3 | **CK-A** dashboard widgets | 439 | ~4 | Highest-value chrome, but BLOCKED on the variant-pinning harness (see below). metrics/tokens.ts is genuinely shared (48 exports, cleanly imported by all 4 metrics variants) — the only real shared vocabulary found so far. |
+| 3 | **CK-A** dashboard widgets | 439 | ~4 | Highest-value chrome. **NO LONGER BLOCKED** (2026-07-13): the variant-pinning "harness" turned out to be an existing `variant` prop that already wins over the random pick — three lines of fixture, not machinery. metrics/tokens.ts is genuinely shared (48 exports, cleanly imported by all 4 metrics variants) — the only real shared vocabulary found so far. |
 | 4 | **CK-G** navigation patterns | 279 | 5 | environment-toggle carries 20 of the program's 46 hatch sites. 10 LIVE imperative writes in command-palette, all must be transcribed. |
 | 5 | **CK-F** communication | 272 | 6 | Two components (assistant, presence) are not engine-split and are structurally unlike the rest. |
 | 6 | **CK-C** workspace chrome | 466 | ~9 | 28 imperative writes (the densest in the program), 3 portaled components, and the highest STATE-SELECTED share (~40%) — mostly interactive chrome. Budget against the interaction work, not the site count. |
@@ -62,14 +62,38 @@ strictly worse code than the inline value. They are **not pending work** — car
 that can never reach 0 is a lie in the ratchet. Name the exemption, list the sites exactly (the
 inventories give exact counts), and gate on it. Blocks CK-E and CK-H1.
 
-### 2. The variant-pinning harness (blocks CK-A)
+### 2. ~~The variant-pinning harness (blocks CK-A)~~ — RESOLVED 2026-07-13, CK-A IS NOT BLOCKED
 
 `data-terminal-card` picks 1 of 4 card bodies at RANDOM per mount, and the four bodies are not
 exported — the `variant` prop is the only door. Without pinning, a byte-exact baseline is noise.
+
+**There is no harness to build. The door is already open, and nobody tried it.** Read at
+`data-terminal-card/index.tsx:862-866`, the precedence is explicit:
+
+```ts
+const variant = useMemo(() => {
+  if (propVariant) return propVariant;      // <- an explicit prop WINS, deterministically
+  if (contextVariant) return contextVariant; // <- DataTerminalCardProvider pins a whole page
+  return getPageVariant();                   // <- only then the random/SSR-mismatched fallback
+}, [propVariant, contextVariant]);
+```
+
+So the "harness" is: render four instances, `variant={1}` through `variant={4}`, in the pre-step
+fixture — or wrap a section in `<DataTerminalCardProvider variant={n}>`. All four bodies
+(`CommandCard`, `HUDCard`, `CircuitCard`, `MatrixCard`) are reachable through the switch at line 872.
+Three lines of fixture, not a piece of machinery.
+
+**CK-A is unblocked and should be scheduled on its merits** (439 sites, the highest-value chrome in
+the program). This is the CK-C lesson running backwards: there, a capability was assumed to be shared
+and was not; here, a capability was assumed to be missing and was already there. **Measure, then
+contract — in both directions.**
+
+P-77 still stands and is untouched by this: `getPageVariant()` returns 1 on the server and rolls
+`Math.random()` on the client, so every unpinned `DataTerminalCard` hydration-mismatches in every SSR
+app today. Pinning the fixture does not fix the product; it only makes the baseline honest.
 (`dashboard-insights`' `useVariant` has the same shape but ZERO callers — its 8 renderers are
 individually exported and directly mountable, so the trap is inert there. Do not "fix" it by wiring
-it up.) Also filed as P-77: the same function returns 1 on the server and rolls `Math.random()` on
-the client — a guaranteed hydration mismatch in every SSR app, shipping today.
+it up.)
 
 ## The traps that recur across clusters (bake into every contract)
 
