@@ -1,0 +1,22 @@
+/**
+ * DetailFormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
+ * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
+ * not paint a border at all.
+ *
+ * A SURFACE OWNS NO DOM (P-79). This surface renders no element of its own: it
+ * composes a `Stack` (stacked layout) or a `Grid` (split layout), and a `Card`.
+ * Its anatomy is the classNames on those -- `.ds-surface.ds-detail-form` plus the
+ * `--stacked` / `--split` modifier, and `.ds-detail-form__error-card`. See
+ * `form-surface.css` for the full specificity argument behind the Card's own
+ * `[data-part='root'][data-variant]` anchor.
+ *
+ * The error card uses `--ds-color-error-500`, matching WizardSurface and
+ * diverging from FormSurface's `--ds-color-error`. Pre-existing; transcribed
+ * verbatim.
+ */
+
+.ds-surface.ds-detail-form .ds-detail-form__error-card[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error-500);
+}

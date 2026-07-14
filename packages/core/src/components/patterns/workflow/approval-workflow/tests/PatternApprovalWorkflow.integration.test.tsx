@@ -8,11 +8,11 @@ import { STABLE_ENGINES, renderWithEngine } from '../../../../../_internal/testi
 describe('PatternApprovalWorkflow integration', () => {
   it.each(STABLE_ENGINES)('renders the live pattern with the %s engine', async (engine) => {
     if (engine === 'classic') {
-      await import('./engines/classic');
+      await import('../engines/classic');
     } else if (engine === 'modern') {
-      await import('./engines/modern');
+      await import('../engines/modern');
     } else {
-      await import('./engines/rustic');
+      await import('../engines/rustic');
     }
 
     const { container } = renderWithEngine(

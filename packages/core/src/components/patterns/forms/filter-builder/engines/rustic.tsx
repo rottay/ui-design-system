@@ -45,6 +45,8 @@ import {
  * @param props - See {@link FilterBuilderProps} for full prop documentation.
  * @returns A themeable, framework-free filter composer with AND/OR grouping.
  */
+const ROOT_CLASS_NAME = 'ds-pattern-filter-builder ds-engine-rustic';
+
 export default function RusticFilterBuilder(props: FilterBuilderProps) {
   const {
     fields,
@@ -252,20 +254,15 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     [value, onChange, updateRule]
   );
 
-  // Shared base styles for native inputs. All colors and radii come from
-  // --ds-* tokens with fallbacks so the component works even if the tenant
-  // theme is partially defined.
+  // Shared base sizing for native inputs. Every painted channel (border, radius,
+  // outline, background, colour) is keyed from the skin off `data-part`; only the
+  // compact-dependent metrics still have to reach the element inline.
   const inputStyle: React.CSSProperties = {
     padding: compact ? '3px 6px' : '5px 8px',
     fontSize: compact ? 12 : 13,
-    border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-    borderRadius: 4,
-    outline: 'none',
-    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    color: 'var(--ds-color-text-primary, var(--ds-color-text))',
   };
 
-  // Selects inherit the input style but add a pointer cursor and restore
+  // Selects inherit the input sizing but add a pointer cursor and restore
   // native appearance so the browser renders its dropdown chevron.
   const selectStyle: React.CSSProperties = {
     ...inputStyle,
@@ -273,16 +270,13 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
     appearance: 'auto' as any,
   };
 
-  // Action buttons (add rule / add group) use a dashed border to stay
-  // visually subordinate to the filter rows themselves.
+  // Action buttons (add rule / add group / add filter). The dashed border that
+  // keeps add-rule/add-group subordinate to the filter rows -- and the SOLID one
+  // the add-filter trigger overrode it with -- are both keyed per part in the skin.
   const smallBtnStyle: React.CSSProperties = {
     padding: '4px 10px',
-    border: '1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary))',
-    borderRadius: 4,
-    background: 'transparent',
     cursor: 'pointer',
     fontSize: compact ? 11 : 12,
-    color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
     display: 'flex',
     alignItems: 'center',
     gap: 4,
@@ -326,9 +320,9 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             }
           />
           <span
+            data-part="range-separator"
             style={{
               fontSize: 11,
-              color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
             }}
           >
             and
@@ -398,13 +392,13 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       case 'boolean':
         return (
           <label
+            data-part="boolean-label"
             style={{
               display: 'flex',
               alignItems: 'center',
               gap: 6,
               cursor: 'pointer',
               fontSize: 13,
-              color: 'var(--ds-color-text-primary, var(--ds-color-text))',
             }}
           >
             <input
@@ -456,7 +450,6 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             width: 56,
             textAlign: 'center',
             fontSize: compact ? 10 : 11,
-            color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
             fontWeight: 500,
             textTransform: 'uppercase',
           }}
@@ -504,13 +497,9 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            border: 'none',
-            background: 'transparent',
             cursor: 'pointer',
-            color: 'var(--ds-color-error, var(--ds-color-danger))',
             fontSize: 14,
             padding: 0,
-            borderRadius: 3,
           }}
         >
           &#x2715;
@@ -533,16 +522,9 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
         data-part="group"
         data-root={isRoot || undefined}
         style={{
-          borderLeft: isRoot
-            ? 'none'
-            : '3px solid var(--ds-color-primary-200, var(--ds-color-border-secondary))',
           paddingLeft: isRoot ? 0 : 16,
           marginLeft: isRoot ? 0 : 8,
           marginBottom: isRoot ? 0 : 8,
-          background: isRoot
-            ? 'transparent'
-            : 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))',
-          borderRadius: isRoot ? 0 : 4,
           padding: isRoot ? 0 : '8px 12px 8px 16px',
         }}
       >
@@ -566,19 +548,6 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
               data-logic={group.logic}
               style={{
                 padding: '3px 12px',
-                border:
-                  group.logic === 'and'
-                    ? '1px solid var(--ds-color-primary)'
-                    : '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-                borderRadius: 4,
-                background:
-                  group.logic === 'and'
-                    ? 'var(--ds-color-primary)'
-                    : 'transparent',
-                color:
-                  group.logic === 'and'
-                    ? 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))'
-                    : 'var(--ds-color-text-primary, var(--ds-color-text))',
                 cursor: 'pointer',
                 fontSize: 11,
                 fontWeight: 600,
@@ -597,13 +566,9 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: 'none',
-                background: 'transparent',
                 cursor: 'pointer',
-                color: 'var(--ds-color-error, var(--ds-color-danger))',
                 fontSize: 14,
                 padding: 0,
-                borderRadius: 3,
               }}
             >
               &#x2715;
@@ -652,10 +617,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
                 data-testid="add-filter-button"
                 data-part="add-filter-trigger"
                 data-open={addFilterOpen}
-                style={{
-                  ...smallBtnStyle,
-                  border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-                }}
+                style={smallBtnStyle}
               >
                 <span style={{ fontSize: 14, lineHeight: 1 }}>+</span>
                 {addFilterLabel}
@@ -670,10 +632,6 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
                     top: '100%',
                     left: 0,
                     marginTop: 4,
-                    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-                    border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-                    borderRadius: 4,
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
                     zIndex: 10,
                     minWidth: 180,
                     maxHeight: 260,
@@ -694,16 +652,9 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
                         padding: '6px 12px',
                         cursor: 'pointer',
                         fontSize: compact ? 12 : 13,
-                        color: 'var(--ds-color-text-primary, var(--ds-color-text))',
                         display: 'flex',
                         alignItems: 'center',
                         gap: 8,
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.currentTarget as HTMLDivElement).style.background = 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))';
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.currentTarget as HTMLDivElement).style.background = 'transparent';
                       }}
                     >
                       {f.icon && <span>{f.icon}</span>}
@@ -724,11 +675,8 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
               data-part="clear-button"
               style={{
                 padding: '4px 8px',
-                border: 'none',
-                background: 'transparent',
                 cursor: 'pointer',
                 fontSize: 12,
-                color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))',
               }}
             >
               {clearLabel}
@@ -744,13 +692,12 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
       <div
         data-part="root"
         data-loading="true"
-        className={className}
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
         style={{
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: 100,
-          color: 'var(--ds-color-text-muted)',
           fontSize: 13,
           ...style,
         }}
@@ -761,7 +708,7 @@ export default function RusticFilterBuilder(props: FilterBuilderProps) {
   }
 
   return (
-    <div data-part="root" className={className} style={style}>
+    <div data-part="root" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
       {renderGroup(value, 0)}
     </div>
   );

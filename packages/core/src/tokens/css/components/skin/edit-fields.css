@@ -1,0 +1,131 @@
+/**
+ * edit-fields skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: this structures family
+ * renders ONE DOM tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the precedence the inline objects held.
+ *
+ * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ * specificity (0,3,1). Any rule below that paints a real border colour repeats
+ * its own `data-part` to reach the (0,4,0) floor.
+ *
+ * SELECTOR LAW. `data-part` is a shared VOCABULARY, and this family shares four
+ * of its part names -- `section`, `section-header`, `section-title`,
+ * `section-description`, `section-content` -- with `form-sections`, plus `field`
+ * and `field-label` with `record`. The two families are DESIGNED to compose
+ * (an InlineEditSection inside a FormSections section, and vice versa), so a bare
+ * `[data-part='section-title']` under this scope would repaint the other family's
+ * title. Every rule below therefore:
+ *   1. anchors on the element that carries BOTH scope classes and the part
+ *      (`.ds-structure.ds-edit-fields[data-part='section']`), and
+ *   2. reaches inner parts only through a DIRECT-CHILD hop into
+ *      `section-header` / `editor-header` / `field-label-row` / `footer-support`.
+ * A nested FormSections/RecordField always lands in the CONTENT region, never
+ * inside one of those four chrome rows, so no rule here can escape into it. The
+ * one node inside a chrome row that a consumer supplies is `actions`/`meta`; a
+ * component nested there that also stamps `section-title` would be pathological.
+ */
+
+/* --- InlineEditor ---------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'][data-part='editor-icon'] {
+  border-radius: 8px;
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- InlineEditGrid -------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='grid'][data-part='grid'] {
+  border-top: 1px solid var(--ds-color-border-secondary);
+}
+
+/* --- InlineEditSection ----------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* --- InlineEditField ------------------------------------------------------- */
+
+/* `field-label-row` carries no consumer slot: every node under it is rendered by
+   this component, so the descendant hops below cannot escape. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-icon'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] > [data-part='field-hint'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-dot'] {
+  border-radius: 999px;
+}
+
+/* The dot takes its colour from its OWN requirement pill, not from an ancestor
+   field: a field nested inside another field's control slot would otherwise
+   inherit the outer field's requirement. Hence the direct-child hop from the
+   `[data-requirement]` that owns it. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='required'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='recommended'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='optional'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-text-muted);
+}
+
+/* Repeated part: Typography's own skin colours every `Text` at (0,4,0) via
+   `[data-color='default']`. A rule that only TIES that would be decided by
+   stylesheet order. Every `color` rule in this file that targets a `Text` node
+   therefore reaches b >= 5. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error'][data-part='field-error'] {
+  color: var(--ds-color-error);
+}
+
+/* --- InlineEditFooter ------------------------------------------------------ */
+
+.ds-structure.ds-edit-fields[data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-note'],
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-summary'],
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-hidden-summary'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* The footer summary slot is the error channel when one is present -- the footer
+   root reports it on `data-error`. */
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > [data-part='footer-summary'] {
+  color: var(--ds-color-error);
+}

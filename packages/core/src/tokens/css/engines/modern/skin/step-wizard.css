@@ -1,0 +1,156 @@
+/**
+ * Modern StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's
+ * inline `style` -- which the root relies on, since the JSX spreads the caller's
+ * `style` prop last (`{ ...cardStyle, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>`, which carries the pair
+ * `ds-pattern-step-wizard ds-engine-modern` + `data-part='root'`. The engine has
+ * two roots -- the content card and the loading early-return -- and both carry
+ * the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule painting a border COLOR must reach
+ * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
+ * (0,2,0). Non-border paint (background, color, box-shadow, border-radius) wins
+ * unlayered at (0,3,0). Pure `border: none` resets carry no colour and are exempt.
+ *
+ * KEYFRAME NAMESPACE: the skeleton shimmer was injected per-mount as a bare
+ * `@keyframes pulse`, which SHADOWS the global `pulse` in
+ * `foundation/animations/keyframes.css` (last parsed wins). The two bodies are
+ * value-identical today (50% -> opacity 1 -> .5), but the rustic engine's local
+ * `pulse` dims to .4 -- so mounting both engines on one page made whichever
+ * mounted last silently repaint the other. Namespaced here to make that
+ * impossible; the sibling rustic skin owns its own .4 copy.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-step-wizard-modern-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ---- root: card surface (was cardStyle, shared by the content + loading roots) ---- */
+.ds-pattern-step-wizard.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-1);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- loading skeleton shimmer bars ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-panel);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-content'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-panel);
+}
+
+/* ---- progress bar ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='progress-track'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-panel);
+}
+/* `width` stays inline: it is computed from the step index (runtime value). */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='progress-fill'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-primary);
+}
+
+/* ---- step indicator: the JSX resolved three properties through
+        `isActive`/`isCompleted` ternaries. Base = neither; `active` is written
+        last so it wins the background/colour it shares with `completed`, exactly
+        as the JS `isActive ? … : isCompleted ? … : …` chain did. ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'] {
+  border-radius: 50%;
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-muted);
+  border: 2px solid var(--ds-color-border-secondary);
+  box-shadow: none;
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+}
+
+/* ---- step title: same three-way chain, `active` last for the same reason.
+        `font-weight` stays inline (not a counted channel). ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'][data-completed='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- connector: one rule serves both orientations; the JSX painted the same
+        background in each branch and differed only in layout, which stays inline. ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-connector'] {
+  background: var(--ds-color-border-secondary);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-connector'][data-completed='true'] {
+  background: var(--ds-color-primary);
+}
+
+/* ---- validation error panel ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='error-panel'][data-part='error-panel'] {
+  background: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 25%, transparent);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-error);
+}
+
+/* ---- navigation bar ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='nav-bar'][data-part='nav-bar'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* ---- nav buttons. Three bases, one per part: ghost (prev), primary (next +
+        complete), link (skip). The disabled merge the JSX applied on top of each
+        base carried only opacity/cursor/pointer-events -- no paint -- so it stays
+        inline and no `:disabled` rule is needed here. ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='prev-button'][data-part='prev-button'] {
+  color: var(--ds-color-text-primary);
+  background: transparent;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='next-button'][data-part='next-button'],
+.ds-pattern-step-wizard.ds-engine-modern [data-part='complete-button'][data-part='complete-button'] {
+  color: var(--ds-color-text-on-primary);
+  background: var(--ds-color-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skip-button'][data-part='skip-button'] {
+  color: var(--ds-color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--ds-radius-md);
+}

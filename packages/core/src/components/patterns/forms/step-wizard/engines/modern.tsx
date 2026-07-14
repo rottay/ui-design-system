@@ -52,10 +52,9 @@ const ErrorIcon = () => (
  * Shared style constants (DS tokens)
  * -------------------------------------------------------------------------*/
 
+const ROOT_CLASS_NAME = 'ds-pattern-step-wizard ds-engine-modern';
+
 const cardStyle: CSSProperties = {
-  background: 'var(--ds-surface-card)',
-  boxShadow: 'var(--ds-elevation-1)',
-  borderRadius: 'var(--ds-radius-lg)',
   overflow: 'hidden',
 };
 
@@ -73,10 +72,6 @@ const ghostButtonBase: CSSProperties = {
   fontSize: 14,
   fontWeight: 500,
   lineHeight: '20px',
-  color: 'var(--ds-color-text-primary)',
-  background: 'transparent',
-  border: '1px solid var(--ds-color-border)',
-  borderRadius: 'var(--ds-radius-md)',
   cursor: 'pointer',
   transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
                border-color var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -92,10 +87,6 @@ const primaryButtonBase: CSSProperties = {
   fontSize: 14,
   fontWeight: 500,
   lineHeight: '20px',
-  color: 'var(--ds-color-text-on-primary)',
-  background: 'var(--ds-color-primary)',
-  border: 'none',
-  borderRadius: 'var(--ds-radius-md)',
   cursor: 'pointer',
   transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
                opacity var(--ds-motion-fast) var(--ds-motion-ease-out)`,
@@ -110,10 +101,6 @@ const linkButtonBase: CSSProperties = {
   fontSize: 14,
   fontWeight: 500,
   lineHeight: '20px',
-  color: 'var(--ds-color-text-muted)',
-  background: 'transparent',
-  border: 'none',
-  borderRadius: 'var(--ds-radius-md)',
   cursor: 'pointer',
   textDecoration: 'none',
   transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out),
@@ -231,7 +218,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
       <div
         data-part="root"
         data-loading="true"
-        className={['ds-step-wizard-skeleton', className].filter(Boolean).join(' ')}
+        className={[ROOT_CLASS_NAME, 'ds-step-wizard-skeleton', className].filter(Boolean).join(' ')}
         style={{ ...cardStyle, ...style }}
       >
         <div style={{ padding: 24 }}>
@@ -241,10 +228,8 @@ export default function ModernStepWizard(props: StepWizardProps) {
             className="ds-step-wizard-skeleton__progress"
             style={{
               height: 8,
-              borderRadius: 'var(--ds-radius-full)',
-              background: 'var(--ds-surface-panel)',
               marginBottom: 24,
-              animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
+              animation: 'ds-step-wizard-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
           {/* Shimmer block for content */}
@@ -253,12 +238,9 @@ export default function ModernStepWizard(props: StepWizardProps) {
             className="ds-step-wizard-skeleton__content"
             style={{
               height: 200,
-              borderRadius: 'var(--ds-radius-md)',
-              background: 'var(--ds-surface-panel)',
-              animation: 'pulse 2s var(--ds-motion-ease-in-out) infinite',
+              animation: 'ds-step-wizard-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
-          <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>
         </div>
       </div>
     );
@@ -274,19 +256,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
     const isCompleted = index < current;
 
     const indicatorSize = 32;
-
-    // Determine indicator colors
-    const indicatorBg = isActive
-      ? 'var(--ds-color-primary)'
-      : isCompleted
-        ? 'var(--ds-color-primary)'
-        : 'var(--ds-surface-panel)';
-    const indicatorColor = isActive || isCompleted
-      ? 'var(--ds-color-text-on-primary)'
-      : 'var(--ds-color-text-muted)';
-    const indicatorBorder = isActive || isCompleted
-      ? 'none'
-      : '2px solid var(--ds-color-border-secondary)';
 
     return (
       <div
@@ -311,18 +280,13 @@ export default function ModernStepWizard(props: StepWizardProps) {
           style={{
             width: indicatorSize,
             height: indicatorSize,
-            borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: 13,
             fontWeight: 600,
-            background: indicatorBg,
-            color: indicatorColor,
-            border: indicatorBorder,
             flexShrink: 0,
             transition: `all var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-            boxShadow: isActive ? '0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)' : 'none',
           }}
         >
           {isCompleted ? <CheckIcon /> : index + 1}
@@ -346,11 +310,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
             style={{
               fontSize: 13,
               fontWeight: isActive ? 600 : 400,
-              color: isActive
-                ? 'var(--ds-color-text-primary)'
-                : isCompleted
-                  ? 'var(--ds-color-text-secondary)'
-                  : 'var(--ds-color-text-muted)',
               lineHeight: '18px',
               whiteSpace: 'nowrap',
               overflow: 'hidden',
@@ -366,7 +325,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
               data-part="step-description"
               style={{
                 fontSize: 11,
-                color: 'var(--ds-color-text-muted)',
                 lineHeight: '14px',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
@@ -397,9 +355,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
             flex: 1,
             minHeight: 24,
             marginLeft: 15, // center on 32px indicator
-            background: isCompleted
-              ? 'var(--ds-color-primary)'
-              : 'var(--ds-color-border-secondary)',
             transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
           }}
         />
@@ -415,9 +370,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
           flex: 1,
           height: 2,
           minWidth: 16,
-          background: isCompleted
-            ? 'var(--ds-color-primary)'
-            : 'var(--ds-color-border-secondary)',
           transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
           marginTop: isVertical ? 0 : 16, // align with center of 32px indicator
         }}
@@ -444,10 +396,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
         gap: 10,
         padding: '12px 16px',
         marginTop: 16,
-        background: 'color-mix(in srgb, var(--ds-color-error) 8%, transparent)',
-        border: '1px solid color-mix(in srgb, var(--ds-color-error) 25%, transparent)',
-        borderRadius: 'var(--ds-radius-md)',
-        color: 'var(--ds-color-error)',
         fontSize: 14,
         lineHeight: '20px',
       }}
@@ -470,7 +418,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
         alignItems: 'center',
         marginTop: 24,
         paddingTop: 20,
-        borderTop: '1px solid var(--ds-color-border)',
       }}
     >
       {/* Left side: Previous */}
@@ -549,7 +496,7 @@ export default function ModernStepWizard(props: StepWizardProps) {
   return (
     <div
       data-part="root"
-      className={className ?? ''}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
       style={{ ...cardStyle, ...style }}
     >
       <div style={{ padding: 24 }}>
@@ -560,8 +507,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
             style={{
               width: '100%',
               height: 4,
-              borderRadius: 'var(--ds-radius-full)',
-              background: 'var(--ds-surface-panel)',
               marginBottom: 24,
               overflow: 'hidden',
             }}
@@ -570,8 +515,6 @@ export default function ModernStepWizard(props: StepWizardProps) {
               data-part="progress-fill"
               style={{
                 height: '100%',
-                borderRadius: 'var(--ds-radius-full)',
-                background: 'var(--ds-color-primary)',
                 width: `${progress}%`,
                 transition: `width var(--ds-motion-normal) var(--ds-motion-ease-out)`,
               }}

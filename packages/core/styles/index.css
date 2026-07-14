@@ -30688,6 +30688,1522 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
+ * Modern ApprovalWorkflow skin (WO-SKIN-06 / CK-D/R).
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could
+ * not paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the exact precedence the inline objects held.
+ *
+ * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ * specificity (0,3,1). Any rule below that paints a real border colour therefore
+ * repeats its own `data-part` to reach the (0,4,0) floor. `border: none` resets
+ * are exempt.
+ *
+ * `data-part` is a shared VOCABULARY -- `step`, `footer`, `title` and `root` are
+ * stamped by dozens of components. Every rule is anchored to this component's own
+ * two scope classes, and the engine class keeps the rustic tree out.
+ */
+
+/* Elevation. `panelCardStyle` (patterns/_internal) still supplies background,
+   border and radius inline: it is shared with 10 other patterns and is not this
+   batch's to move. */
+.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* --- Header --------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge'][data-part='entity-badge'] {
+  border: 1px solid var(--ds-color-border);
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Timeline dot ---------------------------------------------------------- */
+
+/* The JS resolved this as a single chain: an approved/rejected/escalated status
+   wins outright; only pending and skipped fall through to the current-step
+   accent, and then to the resting panel. The three status rules are declared
+   AFTER the current-step rule so that, at equal specificity, they win -- which is
+   what the ternary's ordering did. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'] {
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='approved'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='rejected'] {
+  background: var(--ds-color-error);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='escalated'] {
+  background: var(--ds-color-warning);
+}
+
+/* --- Timeline connector ---------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='pending'] {
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='approved'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='rejected'] {
+  background: var(--ds-color-error);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='escalated'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='skipped'] {
+  background: var(--ds-surface-panel);
+}
+
+/* --- Status badge ---------------------------------------------------------- */
+
+/* `pillBadgeSmStyle` still supplies the pill's box (radius, padding, type scale)
+   inline; it sets no colour, so nothing here is overwriting a spread. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending'] {
+  background: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated'] {
+  background: var(--ds-color-warning);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
+  background: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-primary);
+}
+
+/* --- Step body ------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-timestamp'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Action buttons -------------------------------------------------------- */
+
+/* Native `<button>` elements, not the DS Button primitive: no button.css rule
+   competes with these. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+/* Escalate is the outline (secondary) affordance -- it must not read as a peer of
+   approve/reject. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
+  background: transparent;
+  color: var(--ds-color-warning);
+  border: 1px solid var(--ds-color-warning);
+}
+
+/* --- Skeleton -------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'],
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-dot'] {
+  background: var(--ds-surface-panel);
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+
+/* Tailwind's `border-t` supplies the width; only the colour was ever inline. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='footer'][data-part='footer'] {
+  border-color: var(--ds-color-border);
+}
+
+/**
+ * Rustic ApprovalWorkflow skin (WO-SKIN-06 / CK-D/R).
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could
+ * not paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the exact precedence the inline objects held.
+ *
+ * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ * specificity (0,3,1). Any rule below that paints a real border colour repeats
+ * its own `data-part` to reach the (0,4,0) floor.
+ *
+ * `data-part` is a shared VOCABULARY. Every rule is anchored to this component's
+ * own two scope classes, and the engine class keeps the modern tree out.
+ *
+ * The `--ds-color-*-NNN, #hex` fallbacks below are transcribed verbatim from the
+ * engine: this is the token-less-environment fallback the rustic engine has
+ * always carried, not a new hardcoded colour.
+ */
+
+.ds-pattern-approval-workflow.ds-engine-rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-color-neutral-900);
+  background: var(--ds-color-neutral-0, #fff);
+  border: 1px solid var(--ds-color-neutral-200);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* --- Header --------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='entity-badge'][data-part='entity-badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-600);
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* --- Timeline dot ---------------------------------------------------------- */
+
+/* The dot takes the status colour, except on the current PENDING step, where it
+   takes the primary accent and pulses. The current-step rule is guarded on
+   `[data-status='pending']` exactly as the engine's `isCurrent && pending`
+   conjunction was -- a current escalated step keeps its warning dot. */
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'] {
+  border-radius: 50%;
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='pending'] {
+  background: var(--ds-color-neutral-400);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='approved'] {
+  background: var(--ds-color-success-500, #22c55e);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='rejected'] {
+  background: var(--ds-color-error-500, #ef4444);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='escalated'] {
+  background: var(--ds-color-warning-500, #f59e0b);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='skipped'] {
+  background: var(--ds-color-neutral-300);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='pending'][data-current='true'] {
+  background: var(--ds-color-primary-500);
+}
+
+/* --- Timeline connector ---------------------------------------------------- */
+
+/* The connector always takes the step's DOT colour, never the badge background. */
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='pending'] {
+  background: var(--ds-color-neutral-400);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='approved'] {
+  background: var(--ds-color-success-500, #22c55e);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='rejected'] {
+  background: var(--ds-color-error-500, #ef4444);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='escalated'] {
+  background: var(--ds-color-warning-500, #f59e0b);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='skipped'] {
+  background: var(--ds-color-neutral-300);
+}
+
+/* --- Status badge ---------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='pending'] {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-600);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='approved'] {
+  background: var(--ds-color-success-50, #ecfdf5);
+  color: var(--ds-color-success-700, #15803d);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='rejected'] {
+  background: var(--ds-color-error-50, #fef2f2);
+  color: var(--ds-color-error-700, #b91c1c);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='escalated'] {
+  background: var(--ds-color-warning-50, #fffbeb);
+  color: var(--ds-color-warning-700, #a16207);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='skipped'] {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-500);
+}
+
+/* --- Step body ------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-timestamp'],
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-metadata'] {
+  color: var(--ds-color-neutral-500);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-comment'][data-part='step-comment'] {
+  background: var(--ds-color-neutral-50);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* --- Action buttons -------------------------------------------------------- */
+
+/* Native `<button>` elements, not the DS Button primitive: no button.css rule
+   competes with these. The `1px solid` width/style is atomic with each action's
+   colour, so the shorthand carries both. */
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='approve'] {
+  background: var(--ds-color-success-600, #16a34a);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-color-success-600, #16a34a);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='reject'] {
+  background: var(--ds-color-error-600, #dc2626);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-color-error-600, #dc2626);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='escalate'] {
+  background: transparent;
+  color: var(--ds-color-warning-700, #a16207);
+  border: 1px solid var(--ds-color-warning-400, #fbbf24);
+}
+
+/* --- Skeleton -------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-line'],
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-dot'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-200);
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-neutral-200);
+}
+
+/* Namespaced: a local `@keyframes pulse` shadows a global of the same name and
+   wins (last parsed). The engine formerly injected a bare `pulse` per instance,
+   which silently retimed step-wizard's own `pulse` whenever both mounted. */
+@keyframes ds-approval-workflow-rustic-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/**
+ * Modern FilterBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-filter-builder
+ * ds-engine-modern` + `data-part='root'`. Both roots -- the tree and the loading
+ * early-return -- carry the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED, or + a contract attribute already on the element
+ * (`data-logic`, `:not([data-root])`) -- a `:not()` carries the specificity of its
+ * argument. Non-border paint wins unlayered at (0,3,0).
+ *
+ * TWO RUNTIME CONSTRAINTS, both load-bearing:
+ *
+ * 1. `value-input` is stamped on SIX controls, and the boolean one is a bare
+ *    `<input type="checkbox">` that carries NO paint at all -- it renders with the
+ *    UA's native checkbox chrome. Every input rule below is therefore gated
+ *    `:not([data-field-type='boolean'])`. Without the gate the skin would paint a
+ *    border, background and radius onto a native checkbox that never had them.
+ *
+ * 2. The nested-group tint is gated `:not([data-root])`. The root group carries
+ *    `data-root='true'` and is deliberately chrome-less (it must sit invisibly in
+ *    any parent layout); only nested groups get the left-border accent and inset
+ *    fill. The border WIDTH comes from the Tailwind `border-l-[3px]` utility on the
+ *    same element and stays there -- utilities sort after preflight, so it survives;
+ *    this skin owns only the COLOUR, exactly as the inline style did.
+ *
+ * The `add-filter-option` hover below replaces an imperative
+ * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.
+ * The element sets NO background at rest, so a `:hover`-only rule is byte-exact:
+ * at rest it falls through to transparent, exactly as before. Nothing else in
+ * `tokens/css/` competes for that element's background.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- rule row: the logic keyword column, and the "and" between a range's two
+        inputs (both are plain text elements with a literal inline colour -- no
+        `Text` prop map, nothing to resolve). ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='rule-logic-label'],
+.ds-pattern-filter-builder.ds-engine-modern [data-part='range-separator'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- the three native controls share one chrome. The boolean value-input is a
+        native checkbox and is excluded -- see constraint 1 in the header. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='value-input'][data-part='value-input']:not([data-field-type='boolean']),
+.ds-pattern-filter-builder.ds-engine-modern [data-part='field-select'][data-part='field-select'],
+.ds-pattern-filter-builder.ds-engine-modern [data-part='operator-select'][data-part='operator-select'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+  background: transparent;
+  color: inherit;
+}
+
+/* ---- remove buttons (rule + group carry the same literal) ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='remove-button'][data-part='remove-button'] {
+  background: transparent;
+  color: var(--ds-color-error);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- nested group: left-accent colour + inset fill. Root group is chrome-less
+        -- see constraint 2 in the header. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='group']:not([data-root]) {
+  border-color: color-mix(in srgb, var(--ds-color-primary) 30%, transparent);
+  background: var(--ds-surface-inset);
+}
+
+/* ---- AND/OR logic toggle: filled for the stricter AND, outlined for OR ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'][data-logic='and'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.ds-pattern-filter-builder.ds-engine-modern [data-part='logic-toggle'][data-logic='or'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- add-rule / add-group: dashed, to stay subordinate to the rows ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-rule-button'][data-part='add-rule-button'],
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-group-button'][data-part='add-group-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px dashed var(--ds-color-border);
+}
+
+/* ---- add-filter trigger + its dropdown ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-trigger'][data-part='add-filter-trigger'] {
+  background: var(--ds-color-bg-elevated, transparent);
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-dropdown'][data-part='add-filter-dropdown'] {
+  background: var(--ds-color-bg-elevated);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-elevation-2);
+}
+
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-filter-builder.ds-engine-modern [data-part='add-filter-option']:hover {
+  background: var(--ds-color-bg-secondary);
+}
+
+/* ---- clear-all ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='clear-button'][data-part='clear-button'] {
+  background: transparent;
+  color: var(--ds-color-text-secondary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- loading spinner. `animation` stays inline on `ds-spin`, a real shared
+        keyframe defined once in rustic's theme.css -- not a per-mount injection,
+        so there is nothing to namespace here. ---- */
+.ds-pattern-filter-builder.ds-engine-modern [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+  border-radius: 50%;
+}
+
+/**
+ * Rustic FilterBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-filter-builder
+ * ds-engine-rustic` + `data-part='root'`. Both roots -- the tree and the loading
+ * early-return -- carry the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED, or + a contract attribute (`data-logic`,
+ * `:not([data-root])`; a `:not()` carries the specificity of its argument).
+ *
+ * THREE RUNTIME CONSTRAINTS, all load-bearing:
+ *
+ * 1. `value-input` is stamped on SIX controls with THREE different paint sources:
+ *    the shared `inputStyle` (text/number/date/default), `selectStyle` (select and
+ *    multiSelect, which is `inputStyle` plus cursor/appearance -- identical paint),
+ *    and the boolean one, a bare `<input type="checkbox">` carrying NO paint at
+ *    all. The input rule is therefore gated `:not([data-field-type='boolean'])`,
+ *    or the skin would paint a border, background and radius onto a native
+ *    checkbox that never had them.
+ *
+ * 2. The add-filter TRIGGER is the P-78 case in this file. Its inline style was
+ *    `{ ...smallBtnStyle, border: '1px solid …' }` -- a later key deliberately
+ *    OVERWRITING the spread's `border: 1px dashed …`. So the trigger gets its own
+ *    rule with the SOLID border rather than being folded into the dashed
+ *    add-rule/add-group rule; lifting the shared border alone would have handed the
+ *    trigger back the dashed one and moved pixels with every value unchanged.
+ *
+ * 3. The nested-group tint is gated `:not([data-root])`: the root group carries
+ *    `data-root='true'` and is deliberately chrome-less. Unlike the modern engine,
+ *    this one painted `border-left` as a SHORTHAND over a maybe-undefined token,
+ *    so it is transcribed ATOMICALLY -- never split into longhands.
+ *
+ * The `add-filter-option` hover below replaces an imperative
+ * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.
+ * Its value carries a FALLBACK (`var(--ds-color-bg-secondary, var(--ds-color-bg-muted))`)
+ * that the modern engine's otherwise-identical write does NOT -- transcribed as
+ * written, not pattern-matched from the sibling. The element sets no background at
+ * rest, so a `:hover`-only rule is byte-exact.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root: the loading state's muted text (the tree root paints nothing) ---- */
+.ds-pattern-filter-builder.ds-engine-rustic[data-part='root'][data-loading='true'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- rule row: the logic keyword column, and the "and" between a range's two
+        inputs. Both carried the same literal; the fallback chain is part of the
+        value and is transcribed whole. ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='rule-logic-label'],
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='range-separator'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+/* ---- the label wrapping a boolean rule's native checkbox (it also renders the
+        True/False text, which is what the colour was for). ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='boolean-label'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- native controls (was inputStyle / selectStyle -- byte-identical paint).
+        The boolean value-input is a native checkbox and is excluded -- see
+        constraint 1 in the header. ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input']:not([data-field-type='boolean']),
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='field-select'][data-part='field-select'],
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='operator-select'][data-part='operator-select'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  outline: none;
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- remove buttons (rule + group carry the same literal) ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='remove-button'][data-part='remove-button'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-color-error, var(--ds-color-danger));
+  border-radius: 3px;
+}
+
+/* ---- nested group: primary-tinted left rule + muted fill. `border-left` stays a
+        SHORTHAND (constraint 3). ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='group']:not([data-root]) {
+  border-left: 3px solid var(--ds-color-primary-200, var(--ds-color-border-secondary));
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-muted));
+  border-radius: 4px;
+}
+
+/* ---- AND/OR logic toggle. The filled/outlined split is the engine's documented
+        design intent: filled = the stricter AND, outlined = the looser OR. ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='logic-toggle'][data-logic='and'] {
+  border: 1px solid var(--ds-color-primary);
+  border-radius: 4px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='logic-toggle'][data-logic='or'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- add-rule / add-group: the dashed smallBtnStyle ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-rule-button'][data-part='add-rule-button'],
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-group-button'][data-part='add-group-button'] {
+  border: 1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+/* ---- add-filter trigger: same base, but a SOLID border -- constraint 2 ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-trigger'][data-part='add-filter-trigger'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-dropdown'][data-part='add-filter-dropdown'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-option'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-option']:hover {
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-muted));
+}
+
+/* ---- clear-all ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='clear-button'][data-part='clear-button'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+/**
+ * Modern FormBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style` -- which two rules below DEPEND on; see constraints 1 and 2.
+ *
+ * SCOPE ROOT is the `<form>` carrying `ds-pattern-form-builder ds-engine-modern`
+ * + `data-part='root'`. The loading early-return is a `<div>` carrying the same
+ * pair + `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0), or + a contract attribute (`data-active`,
+ * `data-completed`). Non-border paint wins unlayered at (0,3,0). Pure
+ * `border: none` / `background: none` resets carry no colour and are exempt.
+ *
+ * THREE RUNTIME CONSTRAINTS, all load-bearing:
+ *
+ * 1. THE COLOR SWATCH KEEPS ITS INLINE `background` -- ON PURPOSE. It paints
+ *    `String(val)`, the hex the user actually picked: a value computed FROM DATA,
+ *    not selected from a token set, so it can never be enumerated in CSS. The
+ *    checkpoint's contract test PINS this (`FormsBatch.contract.test.tsx:255-256`
+ *    asserts the swatch paints `background` inline AND that it does NOT contain
+ *    `var(--ds-`), which also forbids the custom-property hatch. Only the swatch's
+ *    static `border` and `border-radius` moved here.
+ *
+ * 2. SIX ELEMENTS SHARE `data-part='skeleton-bar'` AND ONE HAS A DIFFERENT RADIUS.
+ *    Five use `--ds-radius-md`; the field-LABEL shimmer uses `--ds-radius-sm`.
+ *    Nothing in the stamped anatomy distinguished them, so `data-variant='label'`
+ *    now does. Do not "simplify" the two rules into one -- the tighter radius on
+ *    the label bar is real and the majority rule would swallow it.
+ *
+ * 3. `readonly-value` RESOLVES ITS COLOUR IN TWO PLACES. The base object painted
+ *    `--ds-color-text-primary`; the `empty` and `file` cases spread it and then
+ *    OVERWROTE `color` with `--ds-color-text-muted` (P-78: a later key silently
+ *    beating an earlier spread). Both halves move together below -- lifting only
+ *    the base would have handed those two cases back the primary colour with every
+ *    value unchanged.
+ *
+ * KEYFRAME NAMESPACE: the skeleton shimmer's `@keyframes formBuilderPulse` was
+ * injected per-mount from a `<style>` child. Moved here and renamed to the
+ * component+engine namespace so it cannot shadow, or be shadowed by, the global
+ * `pulse` or any sibling engine's copy.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-form-builder-modern-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ---- title + description ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- loading skeleton. Five of the six bars share a radius; the field-LABEL
+        shimmer is tighter, and `data-variant` is the only thing that tells them
+        apart -- see constraint 2. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-panel);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='label'] {
+  border-radius: var(--ds-radius-sm);
+}
+
+/* ---- read-only values. Base colour + the two cases that overrode it (constraint 3). ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='empty'],
+.ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='file'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- the colour swatch's static chrome. Its `background` stays inline -- constraint 1. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='color-swatch'][data-part='color-swatch'] {
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- upload trigger ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='upload-trigger'][data-part='upload-trigger'] {
+  color: var(--ds-color-text-primary);
+  background: var(--ds-surface-canvas);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+}
+
+/* ---- per-field help + error text ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='field-description'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='field-error'] {
+  color: var(--ds-color-error);
+}
+
+/* ---- wizard step rail ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-connector'] {
+  background: var(--ds-color-border-secondary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-connector'][data-completed='true'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-button'] {
+  background: none;
+  border: none;
+}
+
+/* ---- step indicator: the JSX merged `isActive || isCompleted` for background,
+        colour and border, and gave the focus ring to `isActive` alone. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'] {
+  border-radius: 50%;
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-muted);
+  border: 2px solid var(--ds-color-border-secondary);
+  box-shadow: none;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'],
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+}
+
+/* ---- step label: three-way chain, `active` written last to win as it did in JS.
+        `font-weight` stays inline (not a counted channel). ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'][data-completed='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- sections. The header reset `border` before setting `border-bottom`; the
+        order is preserved because a shorthand must not clobber the longhand. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-divider'] {
+  background: var(--ds-color-border);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-part='section-header'] {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- collapse chevron: the rotation is STATE-SELECTED off `data-collapsed`,
+        not a runtime angle. `transition` stays inline. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'] {
+  color: var(--ds-color-text-muted);
+  transform: rotate(0deg);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'][data-collapsed='true'] {
+  transform: rotate(-90deg);
+}
+
+/* ---- wizard navigation. `wizard-nav` and the skeleton's `action-bar` were the
+        two elements in this engine that carried paint and no anatomy; both are
+        stamped now, reusing the names the RUSTIC engine already uses for the same
+        two elements rather than minting new ones. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav'][data-part='wizard-nav'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-prev-button'][data-part='wizard-prev-button'] {
+  color: var(--ds-color-text-primary);
+  background: transparent;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-next-button'][data-part='wizard-next-button'] {
+  color: var(--ds-color-text-on-primary);
+  background: var(--ds-color-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-step-counter'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- action bar ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='action-bar'][data-part='action-bar'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/**
+ * Rustic FormBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. That matters more here than anywhere else in this checkpoint: the
+ * input chrome is written as LONGHANDS (`border-width`/`border-style`/
+ * `border-color`), and preflight kills `border-width` on every element. Unlayered
+ * is the only reason the 1px input border survives at all (P-76).
+ *
+ * SCOPE ROOT is the `<form>` carrying `ds-pattern-form-builder ds-engine-rustic`
+ * + `data-part='root'`. This engine has no loading branch (it destructures
+ * `loading` and never reads it -- a real, pre-existing cross-engine gap the
+ * contract test asserts explicitly rather than papering over).
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). A `:not()` carries the specificity of its argument.
+ *
+ * ONE RUNTIME CONSTRAINT, load-bearing:
+ *
+ * `value-input` is stamped on TWELVE controls fed by THREE different style objects
+ * plus four that carry no paint at all. The switch's `default` branch falls back to
+ * the shared input style, so the base rule below is written as an EXCLUSION list
+ * (`:not([data-field-type=…])`) rather than an allowlist of known types: an
+ * allowlist would silently drop any field type not enumerated in the switch, and
+ * the `default` branch exists precisely to catch those. Excluded, because each
+ * paints from somewhere else or not at all: textarea and select/multi-select (their
+ * own objects, byte-identical paint, kept as separate rules so a future edit to one
+ * cannot move the others); color (its own border + radius); and checkbox, switch,
+ * radio, slider, rating, which paint NOTHING and render as native UA controls.
+ *
+ * KEYFRAME NAMESPACE: `@keyframes ds-form-error-in` was injected per-mount from a
+ * `<style>` child inside the form. Moved here under the component+engine namespace
+ * so it cannot shadow or be shadowed; it is referenced only by this engine's error
+ * text, so nothing outside could have depended on the old name.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-form-builder-rustic-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- title + description ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='title'] {
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='description'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-500));
+}
+
+/* ---- field label + its required marker ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='field-label'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-700));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='required-mark'] {
+  color: var(--ds-color-error, var(--ds-color-danger));
+}
+
+/* ---- the shared native-input chrome. Exclusion list, not an allowlist -- see the
+        runtime constraint in the header. Longhand border, transcribed as written. ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input']:not([data-field-type='textarea']):not([data-field-type='select']):not([data-field-type='multi-select']):not([data-field-type='checkbox']):not([data-field-type='switch']):not([data-field-type='radio']):not([data-field-type='color']):not([data-field-type='slider']):not([data-field-type='rating']) {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+  outline: none;
+}
+
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='textarea'] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+  outline: none;
+}
+
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='select'],
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='multi-select'] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+  outline: none;
+}
+
+/* ---- the native colour input paints only its own frame ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='color'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+}
+
+/* ---- the errored input. `data-error` is stamped ONLY on the controls the JSX
+        actually merged the error style into (the shared-input family, textarea and
+        the two selects) -- never on the native checkbox/radio/switch/slider/rating,
+        which can be required-and-empty but were never given an error frame. Keying
+        the rule on the attribute rather than on `value-input` preserves that. ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-error='true'] {
+  border-color: var(--ds-color-error, var(--ds-color-danger));
+  box-shadow: var(--ds-shadow-input-error);
+}
+
+/* ---- the label wrapping a native checkbox / radio option / switch (it renders the
+        option text, which is what the colour was for). One part, three call sites. ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='choice-row'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-700));
+}
+
+/* ---- per-field help + error text. The error slides in on the namespaced keyframe;
+        `animation` stays inline (not a counted channel). ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='field-description'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-neutral-400));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='field-error'][data-part='field-error'] {
+  color: var(--ds-color-error, var(--ds-color-danger));
+  border-left: 2px solid var(--ds-color-error, var(--ds-color-danger));
+}
+
+/* ---- rating stars ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='rating-star'] {
+  color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='rating-star'][data-active='true'] {
+  color: var(--ds-color-warning);
+}
+
+/* ---- step tabs: an underlined bar, not the numbered circles the modern engine
+        draws. A genuine cross-engine divergence -- preserved, not reconciled.
+        `font-weight` stays inline (not a counted channel). ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='step-tab'][data-part='step-tab'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-neutral-400));
+  border-bottom: 2px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='step-tab'][data-part='step-tab'][data-active='true'] {
+  color: var(--ds-color-primary);
+  border-bottom: 2px solid var(--ds-color-primary);
+}
+
+/* ---- wizard navigation buttons ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='wizard-prev-button'][data-part='wizard-prev-button'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-700));
+}
+
+.ds-pattern-form-builder.ds-engine-rustic [data-part='wizard-next-button'][data-part='wizard-next-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* ---- the sticky submit area ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='action-bar'][data-part='action-bar'] {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: var(--ds-color-alpha-white-80);
+  border-top: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));
+}
+
+/**
+ * Modern InvoiceTemplate skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`, which the root relies on (`{ ...panelCardStyle, boxShadow, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-invoice-template
+ * ds-engine-modern` + `data-part='root'`.
+ *
+ * The loading early-return carries `data-part='root'` + `data-loading='true'` but
+ * NOT the scope classes, so the root rule below cannot reach it. That is load-
+ * bearing, not an oversight: the loading state never had an elevation, and the
+ * class pair is the only thing keeping the `box-shadow` off it.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * WHAT STAYS INLINE, DELIBERATELY: `panelCardStyle` and `pillBadgeStyle` are
+ * imported from `patterns/_internal/engines/modern/styles`, a module shared with
+ * approval-workflow (checkpoint CK-R) and nine other consumers fleet-wide. Their
+ * keys are counted against THAT file, not this one, and this skin does not
+ * restate them -- so the root's `background`/`border`/`border-radius` and the
+ * badge's `border-radius` still arrive inline from the shared kit. Only the keys
+ * this engine writes ITSELF move here. Checked before moving either: neither
+ * spread sets a key the JSX later layers over it, so lifting `box-shadow` (root)
+ * and `background`/`color` (badge) hands nothing back to the spread (P-78).
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root: the elevation the JSX layered over the shared panel card ---- */
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* ---- action buttons ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='print-button'][data-part='print-button'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='export-button'][data-part='export-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- status badge (was the statusStyles enum map, layered over the shared
+        pillBadgeStyle). One rule per status; `border-radius` stays inline with
+        the shared kit. ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='draft'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='sent'] {
+  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
+  color: var(--ds-color-info);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='paid'] {
+  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
+  color: var(--ds-color-success);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='overdue'] {
+  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  color: var(--ds-color-error);
+}
+
+/* ---- inset panels: Bill To + Notes shared one literal, kept as one rule
+        because both are this component's own DOM. ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='bill-to'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='notes'] {
+  background: var(--ds-surface-inset);
+}
+
+/* ---- totals divider ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='totals-divider'][data-part='totals-divider'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/**
+ * Rustic InvoiceTemplate skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`, which the root relies on (`{ ...containerStyle, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-invoice-template
+ * ds-engine-rustic` + `data-part='root'`. Both roots -- the document and the
+ * loading early-return -- carry the pair, because both spread `containerStyle`
+ * and so both must receive its border/background/radius.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * The status badge's `color: #fff` is a hardcoded literal, not a token -- a
+ * standing violation of the DS no-hardcoded-colours rule, and load-bearing: the
+ * four `statusColors` backgrounds all assume white text over them. Transcribed
+ * byte-exact, NOT fixed; changing it is a visual decision with its own baselines.
+ * The `--ds-color-*` fallback hexes below (`#e5e7eb`, `#fff`, `#f9fafb`, …) are
+ * likewise pre-existing and transcribed verbatim.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root: document container (was containerStyle, shared by both roots) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-neutral-200, #e5e7eb);
+  border-radius: var(--ds-radius-lg, 12px);
+  background: var(--ds-color-background, #fff);
+}
+
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='loading-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- action buttons (was btnStyle) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='print-button'][data-part='print-button'],
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='export-button'][data-part='export-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+  background: var(--ds-color-background, #fff);
+  color: var(--ds-color-text);
+}
+
+/* ---- company + client address lines share one literal ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='company-address-line'],
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='client-address-line'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- status badge (was the statusColors enum map). One rule per status; the
+        shared white text and radius sit in the base rule. ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  color: #fff;
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='draft'] {
+  background: var(--ds-color-neutral-400);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='sent'] {
+  background: var(--ds-color-primary);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='paid'] {
+  background: var(--ds-color-success, #22c55e);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='overdue'] {
+  background: var(--ds-color-error, #ef4444);
+}
+
+/* ---- inset panels: Bill To + Notes shared one literal (sectionBg) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='bill-to'],
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='notes'] {
+  background: var(--ds-color-neutral-50, #f9fafb);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='section-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- line-items table (was thStyle / tdStyle) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='items-header-cell'][data-part='items-header-cell'] {
+  color: var(--ds-color-text-muted);
+  border-bottom: 2px solid var(--ds-color-neutral-200, #e5e7eb);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='items-cell'][data-part='items-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-100, #f3f4f6);
+}
+
+/* ---- totals: the tax row is the only one that was de-emphasised ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='totals-row'][data-row='tax'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='totals-divider'][data-part='totals-divider'] {
+  border-top: 2px solid var(--ds-color-neutral-200, #e5e7eb);
+}
+
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='notes-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Modern StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's
+ * inline `style` -- which the root relies on, since the JSX spreads the caller's
+ * `style` prop last (`{ ...cardStyle, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>`, which carries the pair
+ * `ds-pattern-step-wizard ds-engine-modern` + `data-part='root'`. The engine has
+ * two roots -- the content card and the loading early-return -- and both carry
+ * the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
+ * `border-color` on every element. A rule painting a border COLOR must reach
+ * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
+ * (0,2,0). Non-border paint (background, color, box-shadow, border-radius) wins
+ * unlayered at (0,3,0). Pure `border: none` resets carry no colour and are exempt.
+ *
+ * KEYFRAME NAMESPACE: the skeleton shimmer was injected per-mount as a bare
+ * `@keyframes pulse`, which SHADOWS the global `pulse` in
+ * `foundation/animations/keyframes.css` (last parsed wins). The two bodies are
+ * value-identical today (50% -> opacity 1 -> .5), but the rustic engine's local
+ * `pulse` dims to .4 -- so mounting both engines on one page made whichever
+ * mounted last silently repaint the other. Namespaced here to make that
+ * impossible; the sibling rustic skin owns its own .4 copy.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-step-wizard-modern-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ---- root: card surface (was cardStyle, shared by the content + loading roots) ---- */
+.ds-pattern-step-wizard.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-1);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- loading skeleton shimmer bars ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-progress'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-panel);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skeleton-content'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-panel);
+}
+
+/* ---- progress bar ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='progress-track'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-surface-panel);
+}
+/* `width` stays inline: it is computed from the step index (runtime value). */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='progress-fill'] {
+  border-radius: var(--ds-radius-full);
+  background: var(--ds-color-primary);
+}
+
+/* ---- step indicator: the JSX resolved three properties through
+        `isActive`/`isCompleted` ternaries. Base = neither; `active` is written
+        last so it wins the background/colour it shares with `completed`, exactly
+        as the JS `isActive ? … : isCompleted ? … : …` chain did. ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'] {
+  border-radius: 50%;
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-muted);
+  border: 2px solid var(--ds-color-border-secondary);
+  box-shadow: none;
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+}
+
+/* ---- step title: same three-way chain, `active` last for the same reason.
+        `font-weight` stays inline (not a counted channel). ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'][data-completed='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-title'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- connector: one rule serves both orientations; the JSX painted the same
+        background in each branch and differed only in layout, which stays inline. ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-connector'] {
+  background: var(--ds-color-border-secondary);
+}
+.ds-pattern-step-wizard.ds-engine-modern [data-part='step-connector'][data-completed='true'] {
+  background: var(--ds-color-primary);
+}
+
+/* ---- validation error panel ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='error-panel'][data-part='error-panel'] {
+  background: color-mix(in srgb, var(--ds-color-error) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-color-error) 25%, transparent);
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-color-error);
+}
+
+/* ---- navigation bar ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='nav-bar'][data-part='nav-bar'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+/* ---- nav buttons. Three bases, one per part: ghost (prev), primary (next +
+        complete), link (skip). The disabled merge the JSX applied on top of each
+        base carried only opacity/cursor/pointer-events -- no paint -- so it stays
+        inline and no `:disabled` rule is needed here. ---- */
+.ds-pattern-step-wizard.ds-engine-modern [data-part='prev-button'][data-part='prev-button'] {
+  color: var(--ds-color-text-primary);
+  background: transparent;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='next-button'][data-part='next-button'],
+.ds-pattern-step-wizard.ds-engine-modern [data-part='complete-button'][data-part='complete-button'] {
+  color: var(--ds-color-text-on-primary);
+  background: var(--ds-color-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-step-wizard.ds-engine-modern [data-part='skip-button'][data-part='skip-button'] {
+  color: var(--ds-color-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+/**
+ * Rustic StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style` -- which the root relies on, since the JSX spreads the caller's `style`
+ * prop last (`{ ...s.container, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>`, carrying `ds-pattern-step-wizard
+ * ds-engine-rustic` + `data-part='root'`. Both roots -- the content card and the
+ * loading early-return -- carry the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). `2px solid transparent` counts as a border colour
+ * and is held to the same floor; only `none`/`0`/`unset` resets are exempt.
+ *
+ * KEYFRAME NAMESPACE: this engine injected a bare `@keyframes pulse` per mount
+ * whose body dims to .4, SHADOWING both the global `pulse` in
+ * `foundation/animations/keyframes.css` and the modern engine's local copy --
+ * both of which dim to .5. Whichever mounted last repainted the others. Held at
+ * .4 here under a namespaced name so the divergence is preserved and cannot leak.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`, hardcoded hex fallbacks
+ * included (`#fff`, `#fca5a5`, `#fef2f2`, `#b91c1c`) -- they are pre-existing.
+ */
+
+@keyframes ds-step-wizard-rustic-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ---- root: card container (was s.container, shared by content + loading roots) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-color-neutral-900);
+  background: var(--ds-color-neutral-0, #fff);
+  border: 1px solid var(--ds-color-neutral-200);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- loading skeleton shimmer bars (was s.skeleton; width/height stay inline,
+        they are call-site arguments) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='skeleton-progress'],
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='skeleton-content'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-200);
+}
+
+/* ---- step dot. The JSX resolved three properties independently:
+        background/colour keyed `completed ? … : active ? … : …` (completed wins),
+        border keyed `active ? … : …`. Writing `completed` LAST reproduces that
+        precedence for background/colour while the border stays owned by `active`. ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-indicator'][data-part='step-indicator'] {
+  border-radius: 50%;
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-500);
+  border: 2px solid transparent;
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
+  background: var(--ds-color-primary-100);
+  color: var(--ds-color-primary-700);
+  border: 2px solid var(--ds-color-primary-600);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+  background: var(--ds-color-primary-600);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- step title (was s.stepLabel; `font-weight` stays inline, not a counted channel).
+        Keyed on `data-active` only -- the JSX factory takes no `completed` param. ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-title'] {
+  color: var(--ds-color-neutral-500);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-title'][data-active='true'] {
+  color: var(--ds-color-neutral-900);
+}
+
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-description'] {
+  color: var(--ds-color-neutral-400);
+}
+
+/* ---- connector line (was s.stepLine) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-connector'] {
+  background: var(--ds-color-neutral-200);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-connector'][data-completed='true'] {
+  background: var(--ds-color-primary-600);
+}
+
+/* ---- progress bar. `width` stays inline on the fill: it is computed from the
+        step index (runtime value). ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='progress-track'] {
+  border-radius: 2px;
+  background: var(--ds-color-neutral-200);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='progress-fill'] {
+  border-radius: 2px;
+  background: var(--ds-color-primary-600);
+}
+
+/* ---- validation error banner (was s.error) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='error-panel'][data-part='error-panel'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-error-300, #fca5a5);
+  background: var(--ds-color-error-50, #fef2f2);
+  color: var(--ds-color-error-700, #b91c1c);
+}
+
+/* ---- nav buttons (was the s.btn(variant) factory): ghost = prev + skip,
+        primary = next + complete. ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='prev-button'][data-part='prev-button'],
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='skip-button'][data-part='skip-button'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ds-color-neutral-600);
+}
+
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='next-button'][data-part='next-button'],
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='complete-button'][data-part='complete-button'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-primary-600);
+  background: var(--ds-color-primary-600);
+  color: var(--ds-color-text-on-primary);
+}
+
+/**
  * Avatar compound skin — Avatar.Badge + Avatar.Group (WO-SKIN-05 checkpoint D1).
  *
  * DELIBERATELY UNLAYERED (P-47): every `rottay-*` cascade layer sorts before
@@ -30979,6 +32495,1017 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 .rottay-tooltip-content > .rottay-tooltip-arrow {
   background-color: var(--ds-tooltip-bg, var(--ds-color-text-primary));
   transform: rotate(45deg);
+}
+
+/**
+ * DetailFormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
+ * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
+ * not paint a border at all.
+ *
+ * A SURFACE OWNS NO DOM (P-79). This surface renders no element of its own: it
+ * composes a `Stack` (stacked layout) or a `Grid` (split layout), and a `Card`.
+ * Its anatomy is the classNames on those -- `.ds-surface.ds-detail-form` plus the
+ * `--stacked` / `--split` modifier, and `.ds-detail-form__error-card`. See
+ * `form-surface.css` for the full specificity argument behind the Card's own
+ * `[data-part='root'][data-variant]` anchor.
+ *
+ * The error card uses `--ds-color-error-500`, matching WizardSurface and
+ * diverging from FormSurface's `--ds-color-error`. Pre-existing; transcribed
+ * verbatim.
+ */
+
+.ds-surface.ds-detail-form .ds-detail-form__error-card[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error-500);
+}
+
+/**
+ * edit-fields skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: this structures family
+ * renders ONE DOM tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the precedence the inline objects held.
+ *
+ * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ * specificity (0,3,1). Any rule below that paints a real border colour repeats
+ * its own `data-part` to reach the (0,4,0) floor.
+ *
+ * SELECTOR LAW. `data-part` is a shared VOCABULARY, and this family shares four
+ * of its part names -- `section`, `section-header`, `section-title`,
+ * `section-description`, `section-content` -- with `form-sections`, plus `field`
+ * and `field-label` with `record`. The two families are DESIGNED to compose
+ * (an InlineEditSection inside a FormSections section, and vice versa), so a bare
+ * `[data-part='section-title']` under this scope would repaint the other family's
+ * title. Every rule below therefore:
+ *   1. anchors on the element that carries BOTH scope classes and the part
+ *      (`.ds-structure.ds-edit-fields[data-part='section']`), and
+ *   2. reaches inner parts only through a DIRECT-CHILD hop into
+ *      `section-header` / `editor-header` / `field-label-row` / `footer-support`.
+ * A nested FormSections/RecordField always lands in the CONTENT region, never
+ * inside one of those four chrome rows, so no rule here can escape into it. The
+ * one node inside a chrome row that a consumer supplies is `actions`/`meta`; a
+ * component nested there that also stamps `section-title` would be pathological.
+ */
+
+/* --- InlineEditor ---------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-icon'][data-part='editor-icon'] {
+  border-radius: 8px;
+  color: var(--ds-color-primary);
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)));
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, var(--ds-color-border-secondary));
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-eyebrow'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-edit-fields[data-part='editor'] > [data-part='editor-header'] [data-part='editor-description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- InlineEditGrid -------------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='grid'][data-part='grid'] {
+  border-top: 1px solid var(--ds-color-border-secondary);
+}
+
+/* --- InlineEditSection ----------------------------------------------------- */
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-icon'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-number'],
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* --- InlineEditField ------------------------------------------------------- */
+
+/* `field-label-row` carries no consumer slot: every node under it is rendered by
+   this component, so the descendant hops below cannot escape. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-number'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-icon'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-copy'],
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] > [data-part='field-hint'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement-dot'] {
+  border-radius: 999px;
+}
+
+/* The dot takes its colour from its OWN requirement pill, not from an ancestor
+   field: a field nested inside another field's control slot would otherwise
+   inherit the outer field's requirement. Hence the direct-child hop from the
+   `[data-requirement]` that owns it. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='required'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='recommended'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-label-row'] [data-part='field-requirement'][data-requirement='optional'] > [data-part='field-requirement-dot'] {
+  background: var(--ds-color-text-muted);
+}
+
+/* Repeated part: Typography's own skin colours every `Text` at (0,4,0) via
+   `[data-color='default']`. A rule that only TIES that would be decided by
+   stylesheet order. Every `color` rule in this file that targets a `Text` node
+   therefore reaches b >= 5. */
+.ds-structure.ds-edit-fields[data-part='field'] > [data-part='field-error'][data-part='field-error'] {
+  color: var(--ds-color-error);
+}
+
+/* --- InlineEditFooter ------------------------------------------------------ */
+
+.ds-structure.ds-edit-fields[data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-note'],
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-summary'],
+.ds-structure.ds-edit-fields[data-part='footer'] > [data-part='footer-support'] > [data-part='footer-hidden-summary'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* The footer summary slot is the error channel when one is present -- the footer
+   root reports it on `data-error`. */
+.ds-structure.ds-edit-fields[data-part='footer'][data-error='true'] > [data-part='footer-support'] > [data-part='footer-summary'] {
+  color: var(--ds-color-error);
+}
+
+/**
+ * form-sections skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: this structures
+ * family renders ONE DOM tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the precedence the inline objects held.
+ *
+ * TWO SPECIFICITY FLOORS, not one:
+ *  - BORDER-COLOR (P-48): each tenant ships an unlayered
+ *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
+ *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via
+ *    `[data-color='default']`. A `color` rule on a `Text` that merely ties that
+ *    would be decided by stylesheet order, so every one below reaches b >= 5.
+ *
+ * ==========================================================================
+ * THE COLLAPSIBLE HEADER HAS NO BOTTOM BORDER, AND THAT IS NOT A BUG (P-78).
+ * ==========================================================================
+ * The header's style object was `{ ...headerShellStyle, border: 'none', ... }`.
+ * `headerShellStyle` set `borderBottom`; the LATER `border: 'none'` -- a
+ * shorthand -- reset it. React writes style keys in object order, so the
+ * collapsible `<button>` header shipped with NO border at all, while the
+ * non-collapsible `<div>` header kept its divider. Lifting `border-bottom` onto
+ * `[data-part='section-header']` would hand the button a divider it has never
+ * had. The element-qualified pair below reproduces both branches exactly; do not
+ * "simplify" it into one rule.
+ *
+ * SELECTOR LAW. `data-part` is a shared VOCABULARY, and `section`,
+ * `section-header`, `section-title`, `section-description` and `section-content`
+ * are ALSO stamped by `edit-fields` -- which is designed to be composed inside a
+ * section's children. Every rule below therefore descends through
+ * `> [data-part='section'] > [data-part='section-header']`, a direct-child chain
+ * a nested InlineEditSection can never sit on (children land in
+ * `section-content`, three levels down a different branch). The only consumer
+ * slots inside the header are `summary` and `extra`; a component nested there
+ * that also stamped `section-title` would be pathological.
+ *
+ * ONE TOKEN SET PER COMPONENT. `--ds-form-sections-*` below and
+ * `RecordSummaryStrip`'s five variants share two byte-identical border formulas.
+ * They are deliberately NOT unified: each component resolves its own literal
+ * today, and a future edit to one must not move the other's pixels.
+ */
+
+/* --- Tone token sets ------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
+  --ds-form-sections-surface: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%);
+  --ds-form-sections-border: var(--ds-color-border-secondary);
+  --ds-form-sections-active-border: var(--ds-color-border);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+  --ds-form-sections-badge-bg: var(--ds-color-bg-secondary);
+  --ds-form-sections-badge-border: var(--ds-color-border-secondary);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-secondary) 14%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent);
+  --ds-form-sections-grid-size: 26px;
+  --ds-form-sections-shadow: 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='editorial'] {
+  --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-bg-primary) 6%);
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
+  --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
+  --ds-form-sections-active-border: color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-bg-primary) 28%);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 70%, var(--ds-color-bg-primary) 30%);
+  --ds-form-sections-badge-bg: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+  --ds-form-sections-badge-border: var(--ds-color-border-secondary);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent);
+  --ds-form-sections-grid-size: 26px;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='technical'] {
+  --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-text-muted) 6%);
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-secondary) 10%);
+  --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
+  --ds-form-sections-active-border: color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-text-muted) 28%);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 74%, var(--ds-color-text-muted) 26%);
+  --ds-form-sections-badge-bg: color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent);
+  --ds-form-sections-badge-border: var(--ds-color-border-secondary);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-secondary) 16%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent);
+  --ds-form-sections-grid-size: 22px;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='governance'] {
+  --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 95%, var(--ds-color-bg-primary) 5%);
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
+  --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
+  --ds-form-sections-active-border: color-mix(in srgb, var(--ds-color-border) 74%, var(--ds-color-bg-primary) 26%);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 72%, var(--ds-color-bg-primary) 28%);
+  --ds-form-sections-badge-bg: color-mix(in srgb, var(--ds-color-bg-primary) 44%, transparent);
+  --ds-form-sections-badge-border: color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 26%, transparent);
+  --ds-form-sections-grid-size: 24px;
+}
+
+/* --- Section shell --------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* card (default): the open section lifts -- brighter surface, firmer border, and
+   the only box-shadow in the family. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'] {
+  border-radius: 18px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: var(--ds-form-sections-muted-surface);
+  box-shadow: none;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'][data-open='true'] {
+  border-color: var(--ds-form-sections-active-border);
+  background: var(--ds-form-sections-surface);
+  box-shadow: var(--ds-form-sections-shadow);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'] {
+  border-radius: 18px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: var(--ds-form-sections-muted-surface);
+  box-shadow: none;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] {
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* The divided rhythm is a rule BETWEEN sections, so the first one carries none. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child) {
+  border-top: 1px solid var(--ds-form-sections-divider);
+}
+
+/* --- Section header -------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+  color: var(--ds-color-text-primary);
+  background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 62%, transparent);
+  background-image:
+    radial-gradient(circle at 12% 14%, var(--ds-form-sections-accent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 0%, var(--ds-form-sections-accent-secondary) 0%, transparent 30%),
+    radial-gradient(circle at 70% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 34%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 36%, transparent) 100%),
+    linear-gradient(var(--ds-form-sections-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-form-sections-grid-color) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    var(--ds-form-sections-grid-size) var(--ds-form-sections-grid-size),
+    var(--ds-form-sections-grid-size) var(--ds-form-sections-grid-size);
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+/* `:not(divided)` is not decoration: a non-collapsible FormSections resolves to
+   `divided` AND reports every section open, so an unguarded `[data-open]` rule
+   would tie the divided rule and be decided by stylesheet order. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] {
+  background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 70%, transparent);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] {
+  background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent);
+}
+
+/* See the P-78 note in this file's header: the collapsible header is a <button>
+   and has NEVER had a bottom border. These two rules are not interchangeable. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header'][data-part='section-header'] {
+  border-bottom: 1px solid var(--ds-form-sections-divider);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header'] {
+  border: none;
+}
+
+/* --- Section index --------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+  border-radius: 9px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: transparent;
+  color: var(--ds-color-text-tertiary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+  border-color: var(--ds-form-sections-active-border);
+  background: var(--ds-form-sections-muted-surface);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+  border-color: var(--ds-form-sections-divider);
+  background: transparent;
+}
+
+/* --- Section title / description ------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Section summary badge -------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'][data-part='section-summary'] {
+  border-radius: 999px;
+  border: 1px solid var(--ds-form-sections-badge-border);
+  background: var(--ds-form-sections-badge-bg);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary-text'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* --- Required / optional chip ----------------------------------------------- */
+
+/* The chip's own two-value vocabulary is independent of the section's four-value
+   tone: a required chip reads the same in every tone. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] {
+  border-radius: 999px;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, var(--ds-color-bg-primary) 12%);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > [data-part='section-chip-label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] {
+  background: var(--ds-color-bg-secondary);
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > [data-part='section-chip-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Toggle ----------------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'] {
+  border-radius: 9px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: transparent;
+  transform: rotate(0deg);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'][data-part='section-toggle'] {
+  border-color: var(--ds-form-sections-active-border);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'] {
+  border-color: var(--ds-form-sections-divider);
+}
+
+/* Part repeated so this OUTRANKS the resting `rotate(0deg)` above rather than
+   tying it and depending on declaration order. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'][data-open='true'] {
+  transform: rotate(180deg);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle-icon'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Section content --------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'] {
+  color: var(--ds-color-text-primary);
+  transform: translateY(-10px);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-open='true'] {
+  transform: translateY(0);
+}
+
+/* --- FormFactsCard ----------------------------------------------------------- */
+
+/* A standalone sibling card: it has no tone, so it takes the `default` tone's
+   surface, border and divider as literals rather than reading the tone tokens
+   above (which are declared on `[data-part='section']`, not on this root). */
+.ds-structure.ds-form-sections[data-part='facts-card'][data-part='facts-card'] {
+  border-radius: 16px;
+  border: 1px solid var(--ds-color-border-secondary);
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'][data-part='facts-card-eyebrow'],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'][data-part='facts-card-item-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-title'][data-part='facts-card-title'],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-part='facts-card-item-value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-description'][data-part='facts-card-description'],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-helper'][data-part='facts-card-item-helper'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'][data-part='facts-card-item'] {
+  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+}
+
+/**
+ * FormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
+ * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
+ * not paint a border at all.
+ *
+ * A SURFACE OWNS NO DOM (P-79). `Grid` and `Card` never forward a
+ * consumer-supplied `data-part` -- neither has a rest-spread in its prop
+ * destructuring -- yet `BaseComponentProps` declares the prop on every component,
+ * so `tsc` accepts a stamp that reaches nothing and a rule anchored on it would
+ * silently match zero elements. This surface's anatomy is therefore the
+ * classNames it puts on the primitives it composes: `.ds-surface.ds-form` on the
+ * Grid, `.ds-form__error-card` on the Card. Only the `Flex` it renders itself
+ * carries `data-part='actions'`.
+ *
+ * `.ds-form__error-card` must OUTRANK card.css's own
+ * `.ds-card.ds-card--modern[data-part='root'][data-variant='outlined']` at
+ * (0,4,0), because the inline `borderColor` it replaces did. `[data-part='root']`
+ * and `[data-variant]` are the Card's OWN stamps (the two attributes card.css
+ * itself keys on, so both are guaranteed present); together with the three
+ * classes they reach (0,5,0). A Card cannot be re-stamped from outside, so
+ * anchoring on its root part is safe here in a way it would not be on a Box.
+ */
+
+.ds-surface.ds-form [data-part='description'][data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* Mobile sticky action bar: the gradient is a scrim that fades the form out from
+   under the buttons. It exists only in the sticky posture. */
+.ds-surface.ds-form [data-part='actions'][data-sticky='true'] {
+  background: linear-gradient(to top, var(--ds-color-bg-primary) 85%, transparent);
+}
+
+.ds-surface.ds-form .ds-form__error-card[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error);
+}
+
+/**
+ * GuidedDraftFormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: the surface
+ * renders ONE tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all.
+ *
+ * ==========================================================================
+ * A SURFACE OWNS NO DOM (P-79). IT OWNS COMPOSITION.
+ * ==========================================================================
+ * `Grid`, `Card` and (in the modern engine) `Button` never emit a
+ * consumer-supplied `data-part`: Grid/Card have no rest-spread, and Button's own
+ * `partAttributes('trigger', …)` spread wins last and rewrites it. `tsc` accepts
+ * the stamp regardless -- `BaseComponentProps` declares `data-part` on every
+ * component -- so a rule anchored on one would silently match nothing. The
+ * anatomy of every composed primitive below is therefore its CLASSNAME. Only the
+ * nodes this surface renders ITSELF (`Box`/`Flex`/`Text`) are addressed by part.
+ *
+ * ==========================================================================
+ * THIS SKIN MUST OUTRANK THE PRIMITIVES IT PAINTS OVER.
+ * ==========================================================================
+ * The declarations below replace an INLINE style, which beat every rule in
+ * `button.css` and `card.css` -- including their hover states. To hold that same
+ * position from a stylesheet, each rule must clear the highest specificity those
+ * skins reach for the variant in question:
+ *   - Button `ghost`:  (0,4,0) resting, (0,5,0) `[data-state~='hovered']`
+ *                      (both engines; rustic's gradient variant also (0,5,0))
+ *   - Card `outlined`: (0,4,0) resting  (the (0,6,0) hover rules require
+ *                      `data-interactive`/`data-hoverable`, which none of these
+ *                      Cards set)
+ * Every rule here therefore reaches b >= 5, and the Button rules b >= 6. A rule
+ * that merely TIED would let the primitive's hover repaint a node that has never
+ * reacted to hover -- a new interaction, not a preserved one.
+ *
+ * A THIRD FLOOR, for text: Typography colours EVERY `Text` at (0,4,0) via
+ * `[data-color='default']`, so every `color` rule on a `Text` node reaches b >= 5
+ * as well.
+ */
+
+/* --- Draft status badge ----------------------------------------------------- */
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-bg-tertiary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'] {
+  border-radius: 50%;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='unsaved'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='saving'] {
+  background: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='saved'] {
+  background: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='error'] {
+  background: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='unsaved'] [data-part='draft-status-label'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='saving'] [data-part='draft-status-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='saved'] [data-part='draft-status-label'] {
+  color: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='error'] [data-part='draft-status-label'] {
+  color: var(--ds-color-error);
+}
+
+/* --- Section nav ------------------------------------------------------------ */
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-label'][data-part='section-nav-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* The nav item is a ghost `Button`: its className is the anatomy, its
+   `data-active`/`data-errors` survive the engine's prop allowlist, and the two
+   layouts paint DIFFERENT boxes -- a pill bar and a sidebar rail -- so
+   `data-layout` on the nav discriminates them. */
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] .ds-guided-draft-form__section-nav-item[data-active='false'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-tertiary));
+  border: 1px solid var(--ds-color-border, transparent);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
+  border: 1px solid var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='false'] {
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+}
+
+/* Errors outrank active in the label colour, exactly as the ternary did. The
+   three rules are mutually exclusive on `data-errors`, so none of them relies on
+   declaration order. */
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='true'] {
+  color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='false'][data-active='true'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='false'][data-active='false'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* The label defers to whatever the button resolved above. */
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-label'][data-part='section-nav-item-label'] {
+  color: inherit;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-complete'][data-part='section-nav-item-complete'] {
+  color: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-error-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-error);
+}
+
+/* --- Template picker -------------------------------------------------------- */
+
+/* The trigger is a ghost `Button` whose inline `transparent` background beat
+   button.css's ghost hover. Repeated class + repeated `data-variant` clears that
+   (0,5,0) hover rule so the card, not the button, owns the hover affordance. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card-trigger.ds-guided-draft-form__template-card-trigger[data-variant='ghost'][data-variant='ghost'] {
+  background: transparent;
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-icon'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-title'][data-part='template-card-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-description'][data-part='template-card-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Draft recovery banner --------------------------------------------------- */
+
+/* `[data-part='root'][data-variant]` are the Card's OWN stamps -- the two
+   attributes card.css itself keys on, so both are guaranteed present -- and they
+   buy the specificity needed to beat card.css's (0,4,0) variant border. The Card
+   cannot be re-stamped from outside (it drops a consumer `data-part`), so
+   anchoring on its root is safe here in a way it would not be on a Box. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery[data-part='root'][data-variant] {
+  border-color: var(--ds-color-info);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-icon'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-info-bg, var(--ds-color-bg-tertiary));
+  color: var(--ds-color-info);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-title'][data-part='draft-recovery-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-description'][data-part='draft-recovery-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Title bar --------------------------------------------------------------- */
+
+/* `title` is a part `Card` also stamps, and every section card wraps
+   consumer-rendered content. A descendant hop from the surface root could reach
+   one; the direct-child chain through `title-bar` cannot leave the header. */
+.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > * > [data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > * > [data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > [data-part='progress'] > [data-part='progress-count'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Section cards ------------------------------------------------------------ */
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-icon'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-title'][data-part='section-card-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-complete'][data-part='section-card-complete'] {
+  color: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-errors'][data-part='section-card-errors'] {
+  color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-description'][data-part='section-card-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Validation summary -------------------------------------------------------- */
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--error[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning[data-part='root'][data-variant] {
+  border-color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-summary-dot'] {
+  border-radius: 50%;
+}
+
+/* The summary dot has no severity of its own: it reports the CARD's verdict, and
+   the card's modifier class is the only place that verdict lives. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--error [data-part='validation-summary-dot'] {
+  background: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning [data-part='validation-summary-dot'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-summary-title'][data-part='validation-summary-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'] {
+  border-radius: 50%;
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'][data-severity='error'] {
+  background: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'][data-severity='warning'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-message'][data-part='validation-issue-message'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* Each issue reports its OWN severity, so the field name is reached through a
+   direct-child hop from that issue row rather than from the card's verdict. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue'][data-severity='error'] [data-part='validation-issue-field'][data-part='validation-issue-field'] {
+  color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue'][data-severity='warning'] [data-part='validation-issue-field'][data-part='validation-issue-field'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-overflow'][data-part='validation-issue-overflow'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Sticky submit bar ---------------------------------------------------------- */
+
+/* The submit bar docks to the viewport edge: it keeps only its top border, and
+   squares off. These are resets, exempt from the border-COLOUR floor, but they
+   still have to outrank card.css's `border` shorthand at (0,4,0). */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-card[data-part='root'][data-variant] {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.ds-surface.ds-guided-draft-form[data-part='root'] [data-part='submit-bar'] [data-part='submit-bar-progress'][data-part='submit-bar-progress'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * record skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: this structures family
+ * renders ONE DOM tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the precedence the inline objects held.
+ *
+ * TWO SPECIFICITY FLOORS, not one:
+ *  - BORDER-COLOR (P-48): each tenant ships an unlayered
+ *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
+ *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via
+ *    `[data-color='default']`. A `color` rule on a `Text` that merely ties that
+ *    would be decided by stylesheet order, so every one below reaches b >= 5,
+ *    usually by repeating the target's own part.
+ *
+ * SELECTOR LAW. `data-part` is a shared VOCABULARY: `field` and `field-label` are
+ * also stamped by `edit-fields`, and `panel` / `root` by half the fleet. Every
+ * rule anchors on the element carrying BOTH scope classes and the part, and
+ * reaches inner nodes through a direct-child hop wherever a consumer slot could
+ * otherwise sit in the path.
+ *
+ * `RecordSummaryStrip`'s five variants and `form-sections`' four tones share two
+ * byte-identical border formulas. They are NOT unified here: each file resolves
+ * its own literal today, and a future edit to one must not move the other's
+ * pixels. One token set per component.
+ */
+
+/* --- RecordSummaryStrip ---------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='summary-strip'] {
+  border-radius: 18px;
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 12%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 90%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* The label is the only channel the variant re-tints; value and helper are the
+   same two tokens in all five. */
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] [data-part='summary-item-label'],
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] [data-part='summary-item-label'],
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] [data-part='summary-item-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] [data-part='summary-item-label'] {
+  color: color-mix(in srgb, var(--ds-color-text-primary) 26%, var(--ds-color-text-muted) 74%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-value'][data-part='summary-item-value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-helper'][data-part='summary-item-helper'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- RecordField ----------------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='field'] {
+  border-radius: 14px;
+}
+
+.ds-structure.ds-record[data-part='field'][data-mono='false'] {
+  border: 1px solid var(--ds-color-border-secondary);
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
+}
+
+/* The mono field is the ID / key affordance: a firmer border and a denser fill
+   than the prose field beside it. */
+.ds-structure.ds-record[data-part='field'][data-mono='true'] {
+  border: 1px solid var(--ds-color-border);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
+}
+
+.ds-structure.ds-record[data-part='field'] > * > [data-part='field-label'][data-part='field-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-record[data-part='field'] > * > [data-part='field-helper'][data-part='field-helper'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-record[data-part='field'][data-empty='false'] [data-part='field-value'][data-part='field-value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-record[data-part='field'][data-empty='true'] [data-part='field-value'][data-part='field-value'] {
+  color: var(--ds-color-text-tertiary);
+}
+
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* `NavigationLinkProps` accepts a className but not a `data-part`, and a
+   consumer-supplied Link adapter is not this component's DOM. The anchor keeps
+   the field's own colour rather than the UA link colour. */
+.ds-structure.ds-record[data-part='field'] .ds-record__field-link {
+  color: inherit;
+}
+
+/* --- RecordActionBar ------------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='action-bar'][data-part='action-bar'] {
+  border-top: 1px solid var(--ds-color-border-secondary);
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 34%, transparent) 0%, transparent 100%);
+  background-size: 100% 100%;
+  background-position: 0 0;
+}
+
+/* The meta label/text pair renders only when `meta` is a string, so no consumer
+   node can sit on this path. */
+.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-label'] {
+  color: var(--ds-color-text-tertiary);
+}
+
+.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- RecordPanel ----------------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='panel'][data-part='panel'] {
+  border-radius: 18px;
+  border: 1px solid var(--ds-color-border-secondary);
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+}
+
+/**
+ * WizardSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
+ * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
+ * not paint a border at all.
+ *
+ * A SURFACE OWNS NO DOM (P-79). `Grid` and `Card` never forward a
+ * consumer-supplied `data-part`, so this surface's anatomy is the classNames it
+ * puts on them: `.ds-surface.ds-wizard` on the Grid, `.ds-wizard__error-card` on
+ * the Card. See `form-surface.css` for the full specificity argument -- the same
+ * (0,5,0) floor applies here, for the same reason.
+ *
+ * The error card uses `--ds-color-error-500`, while FormSurface's uses
+ * `--ds-color-error`. That divergence is pre-existing and transcribed verbatim:
+ * reconciling it is a visual-parity decision with its own baselines, not a
+ * byte-exact migration's call.
+ */
+
+.ds-surface.ds-wizard [data-part='description'][data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-wizard .ds-wizard__error-card[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error-500);
 }
 
 

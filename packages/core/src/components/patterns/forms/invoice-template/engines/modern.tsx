@@ -18,14 +18,6 @@ import React from 'react';
 import type { InvoiceTemplateProps } from '../InvoiceTemplate.types';
 import { panelCardStyle, pillBadgeStyle, spinnerStyle } from '../../../_internal/engines/modern/styles';
 
-/** Maps invoice status to DS token badge styles */
-const statusStyles: Record<string, React.CSSProperties> = {
-  draft: { background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-secondary)' },
-  sent: { background: 'color-mix(in srgb, var(--ds-color-info) 15%, transparent)', color: 'var(--ds-color-info)' },
-  paid: { background: 'color-mix(in srgb, var(--ds-color-success) 15%, transparent)', color: 'var(--ds-color-success)' },
-  overdue: { background: 'color-mix(in srgb, var(--ds-color-error) 15%, transparent)', color: 'var(--ds-color-error)' },
-};
-
 /**
  * Modern (token-driven) implementation of the InvoiceTemplate pattern.
  * Renders a card-based invoice with responsive table, token-styled badge for
@@ -62,14 +54,14 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
     <div
       data-part="root"
       className={`max-w-3xl mx-auto ds-pattern-invoice-template ds-engine-modern ${className ?? ''}`}
-      style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}
+      style={{ ...panelCardStyle, ...style }}
     >
       <div style={{ padding: 32 }}>
         {/* Actions */}
         {showActions && (onPrint || onExport) && (
           <div data-part="actions-bar" className="flex justify-end gap-2 mb-4 no-print">
-            {onPrint && <button data-part="print-button" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onPrint}>Print</button>}
-            {onExport && <button data-part="export-button" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} onClick={onExport}>Export</button>}
+            {onPrint && <button data-part="print-button" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={onPrint}>Print</button>}
+            {onExport && <button data-part="export-button" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer' }} onClick={onExport}>Export</button>}
           </div>
         )}
 
@@ -96,9 +88,9 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
             <p data-part="metadata-line" data-field="number" className="text-sm"><strong>Invoice #:</strong> {invoice.number}</p>
             <p data-part="metadata-line" data-field="date" className="text-sm"><strong>Date:</strong> {invoice.date}</p>
             {invoice.dueDate && <p data-part="metadata-line" data-field="dueDate" className="text-sm"><strong>Due:</strong> {invoice.dueDate}</p>}
-            {/* Status badge -- token-styled from statusStyles map */}
+            {/* Status badge -- the four status tints are keyed off data-status in the skin */}
             {invoice.status && (
-              <span data-part="status-badge" data-status={invoice.status} className="mt-2" style={{ ...pillBadgeStyle, ...statusStyles[invoice.status] }}>
+              <span data-part="status-badge" data-status={invoice.status} className="mt-2" style={pillBadgeStyle}>
                 {invoice.status.toUpperCase()}
               </span>
             )}
@@ -106,7 +98,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
         </div>
 
         {/* Bill To -- semi-transparent base-200 background separates this from the main content */}
-        <div data-part="bill-to" className="rounded-lg p-4 mb-6" style={{ background: 'var(--ds-surface-inset)' }}>
+        <div data-part="bill-to" className="rounded-lg p-4 mb-6">
           <div data-part="section-label" className="text-xs font-semibold uppercase opacity-30 mb-1">Bill To</div>
           <div data-part="client-name" className="font-semibold">{invoice.client.name}</div>
           {invoice.client.address && <div data-part="client-address-line" data-field="address" className="text-xs opacity-50">{invoice.client.address}</div>}
@@ -158,7 +150,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
               <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
               <span>{formatCurrency(invoice.tax)}</span>
             </div>
-            <div data-part="totals-divider" style={{ borderTop: '1px solid var(--ds-color-border)', margin: '4px 0' }} />
+            <div data-part="totals-divider" style={{ margin: '4px 0' }} />
             {/* Grand total -- larger text weight makes this the visual focal point */}
             <div data-part="totals-row" data-row="total" className="flex justify-between py-1 text-lg font-bold">
               <span>Total</span>
@@ -169,7 +161,7 @@ export default function ModernInvoiceTemplate(props: InvoiceTemplateProps) {
 
         {/* Notes -- whitespace-pre-wrap preserves line breaks from user input */}
         {invoice.notes && (
-          <div data-part="notes" className="mt-8 rounded-lg p-4" style={{ background: 'var(--ds-surface-inset)' }}>
+          <div data-part="notes" className="mt-8 rounded-lg p-4">
             <div data-part="section-label" className="text-xs font-semibold uppercase opacity-30 mb-1">Notes</div>
             <p data-part="notes-text" className="text-sm opacity-70 whitespace-pre-wrap">{invoice.notes}</p>
           </div>

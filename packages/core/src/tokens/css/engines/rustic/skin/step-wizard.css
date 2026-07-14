@@ -1,0 +1,132 @@
+/**
+ * Rustic StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style` -- which the root relies on, since the JSX spreads the caller's `style`
+ * prop last (`{ ...s.container, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>`, carrying `ds-pattern-step-wizard
+ * ds-engine-rustic` + `data-part='root'`. Both roots -- the content card and the
+ * loading early-return -- carry the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). `2px solid transparent` counts as a border colour
+ * and is held to the same floor; only `none`/`0`/`unset` resets are exempt.
+ *
+ * KEYFRAME NAMESPACE: this engine injected a bare `@keyframes pulse` per mount
+ * whose body dims to .4, SHADOWING both the global `pulse` in
+ * `foundation/animations/keyframes.css` and the modern engine's local copy --
+ * both of which dim to .5. Whichever mounted last repainted the others. Held at
+ * .4 here under a namespaced name so the divergence is preserved and cannot leak.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`, hardcoded hex fallbacks
+ * included (`#fff`, `#fca5a5`, `#fef2f2`, `#b91c1c`) -- they are pre-existing.
+ */
+
+@keyframes ds-step-wizard-rustic-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ---- root: card container (was s.container, shared by content + loading roots) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-color-neutral-900);
+  background: var(--ds-color-neutral-0, #fff);
+  border: 1px solid var(--ds-color-neutral-200);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* ---- loading skeleton shimmer bars (was s.skeleton; width/height stay inline,
+        they are call-site arguments) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='skeleton-progress'],
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='skeleton-content'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-200);
+}
+
+/* ---- step dot. The JSX resolved three properties independently:
+        background/colour keyed `completed ? … : active ? … : …` (completed wins),
+        border keyed `active ? … : …`. Writing `completed` LAST reproduces that
+        precedence for background/colour while the border stays owned by `active`. ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-indicator'][data-part='step-indicator'] {
+  border-radius: 50%;
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-500);
+  border: 2px solid transparent;
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
+  background: var(--ds-color-primary-100);
+  color: var(--ds-color-primary-700);
+  border: 2px solid var(--ds-color-primary-600);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+  background: var(--ds-color-primary-600);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* ---- step title (was s.stepLabel; `font-weight` stays inline, not a counted channel).
+        Keyed on `data-active` only -- the JSX factory takes no `completed` param. ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-title'] {
+  color: var(--ds-color-neutral-500);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-title'][data-active='true'] {
+  color: var(--ds-color-neutral-900);
+}
+
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-description'] {
+  color: var(--ds-color-neutral-400);
+}
+
+/* ---- connector line (was s.stepLine) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-connector'] {
+  background: var(--ds-color-neutral-200);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='step-connector'][data-completed='true'] {
+  background: var(--ds-color-primary-600);
+}
+
+/* ---- progress bar. `width` stays inline on the fill: it is computed from the
+        step index (runtime value). ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='progress-track'] {
+  border-radius: 2px;
+  background: var(--ds-color-neutral-200);
+}
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='progress-fill'] {
+  border-radius: 2px;
+  background: var(--ds-color-primary-600);
+}
+
+/* ---- validation error banner (was s.error) ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='error-panel'][data-part='error-panel'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-error-300, #fca5a5);
+  background: var(--ds-color-error-50, #fef2f2);
+  color: var(--ds-color-error-700, #b91c1c);
+}
+
+/* ---- nav buttons (was the s.btn(variant) factory): ghost = prev + skip,
+        primary = next + complete. ---- */
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='prev-button'][data-part='prev-button'],
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='skip-button'][data-part='skip-button'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ds-color-neutral-600);
+}
+
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='next-button'][data-part='next-button'],
+.ds-pattern-step-wizard.ds-engine-rustic [data-part='complete-button'][data-part='complete-button'] {
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-primary-600);
+  background: var(--ds-color-primary-600);
+  color: var(--ds-color-text-on-primary);
+}

@@ -51,10 +51,11 @@ import { Rate } from '../../../../primitives/feedback/Rate';
  * rendering where DS primitives are not used.
  * -------------------------------------------------------------------------*/
 
+const ROOT_CLASS_NAME = 'ds-pattern-form-builder ds-engine-modern';
+
 const readOnlyTextStyle: CSSProperties = {
   fontSize: 14,
   lineHeight: '20px',
-  color: 'var(--ds-color-text-primary)',
   padding: '8px 0',
   minHeight: 36,
 };
@@ -71,8 +72,6 @@ const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
     style={{
       flexShrink: 0,
       transition: `transform var(--ds-motion-normal) var(--ds-motion-ease-out)`,
-      transform: collapsed ? 'rotate(-90deg)' : 'rotate(0deg)',
-      color: 'var(--ds-color-text-muted)',
     }}
   >
     <path d="M4 6l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -258,7 +257,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     (field: FieldDef): ReactNode => {
       const val = currentValues[field.name];
       if (val === undefined || val === null || val === '') {
-        return <span data-part="readonly-value" data-field-type="empty" style={{ ...readOnlyTextStyle, color: 'var(--ds-color-text-muted)' }}>--</span>;
+        return <span data-part="readonly-value" data-field-type="empty" style={readOnlyTextStyle}>--</span>;
       }
 
       switch (field.type) {
@@ -278,14 +277,16 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
         case 'color':
           return (
             <span data-part="readonly-value" data-field-type={field.type} style={{ ...readOnlyTextStyle, display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span data-part="color-swatch" style={{ width: 20, height: 20, borderRadius: 'var(--ds-radius-sm)', background: String(val), border: '1px solid var(--ds-color-border)' }} />
+              {/* `background` is the hex the user picked -- a value computed from data,
+                  never selectable from a token set, so it cannot leave the TSX. */}
+              <span data-part="color-swatch" style={{ width: 20, height: 20, background: String(val) }} />
               {String(val)}
             </span>
           );
         case 'rating':
           return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{'*'.repeat(val as number) + ` (${val}/5)`}</span>;
         case 'file':
-          return <span data-part="readonly-value" data-field-type={field.type} style={{ ...readOnlyTextStyle, color: 'var(--ds-color-text-muted)' }}>[File attached]</span>;
+          return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>[File attached]</span>;
         default:
           return <span data-part="readonly-value" data-field-type={field.type} style={readOnlyTextStyle}>{String(val)}</span>;
       }
@@ -497,10 +498,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                   display: 'inline-block',
                   padding: '6px 16px',
                   fontSize: 14,
-                  color: 'var(--ds-color-text-primary)',
-                  background: 'var(--ds-surface-canvas)',
-                  border: '1px solid var(--ds-color-border)',
-                  borderRadius: 'var(--ds-radius-md)',
                   cursor: fieldDisabled ? 'not-allowed' : 'pointer',
                 }}
               >
@@ -564,17 +561,15 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" className={className} style={{ maxWidth: 720, width: '100%', ...style }}>
+      <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ maxWidth: 720, width: '100%', ...style }}>
         {/* Title shimmer */}
         <div
           data-part="skeleton-bar"
           style={{
             height: 20,
             width: '40%',
-            borderRadius: 'var(--ds-radius-md)',
-            background: 'var(--ds-surface-panel)',
             marginBottom: 8,
-            animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
+            animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
           }}
         />
         {/* Description shimmer */}
@@ -583,10 +578,8 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           style={{
             height: 14,
             width: '65%',
-            borderRadius: 'var(--ds-radius-md)',
-            background: 'var(--ds-surface-panel)',
             marginBottom: 28,
-            animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
+            animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
           }}
         />
         {/* Field shimmer rows */}
@@ -594,13 +587,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           <div key={i} style={{ marginBottom: 24 }}>
             <div
               data-part="skeleton-bar"
+              data-variant="label"
               style={{
                 height: 14,
                 width: 100,
-                borderRadius: 'var(--ds-radius-sm)',
-                background: 'var(--ds-surface-panel)',
                 marginBottom: 8,
-                animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
+                animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
               }}
             />
             <div
@@ -608,22 +600,20 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
               style={{
                 height: 40,
                 width: '100%',
-                borderRadius: 'var(--ds-radius-md)',
-                background: 'var(--ds-surface-panel)',
-                animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
+                animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
               }}
             />
           </div>
         ))}
         {/* Action bar shimmer */}
         <div
+          data-part="action-bar"
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
             gap: 12,
             marginTop: 32,
             paddingTop: 20,
-            borderTop: '1px solid var(--ds-color-border)',
           }}
         >
           <div
@@ -631,9 +621,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             style={{
               height: 36,
               width: 80,
-              borderRadius: 'var(--ds-radius-md)',
-              background: 'var(--ds-surface-panel)',
-              animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
+              animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
           <div
@@ -641,13 +629,10 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             style={{
               height: 36,
               width: 100,
-              borderRadius: 'var(--ds-radius-md)',
-              background: 'var(--ds-surface-panel)',
-              animation: 'formBuilderPulse 2s var(--ds-motion-ease-in-out) infinite',
+              animation: 'ds-form-builder-modern-pulse 2s var(--ds-motion-ease-in-out) infinite',
             }}
           />
         </div>
-        <style>{`@keyframes formBuilderPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`}</style>
       </div>
     );
   }
@@ -743,12 +728,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           <>
             {content}
             {field.description && !error && (
-              <div data-part="field-description" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-text-muted)', marginTop: 4 }}>
+              <div data-part="field-description" style={{ fontSize: 12, lineHeight: '16px', marginTop: 4 }}>
                 {field.description}
               </div>
             )}
             {error && (
-              <div data-part="field-error" style={{ fontSize: 12, lineHeight: '16px', color: 'var(--ds-color-error)', marginTop: 4 }}>
+              <div data-part="field-error" style={{ fontSize: 12, lineHeight: '16px', marginTop: 4 }}>
                 {error}
               </div>
             )}
@@ -804,7 +789,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   };
 
   return (
-    <form data-part="root" onSubmit={handleSubmit} className={className} style={formContainerStyle}>
+    <form data-part="root" onSubmit={handleSubmit} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={formContainerStyle}>
       {/* Title & description */}
       {(title || description) && (
         <div style={{ marginBottom: 24 }}>
@@ -812,7 +797,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             <div data-part="title" style={{
               fontSize: 18,
               fontWeight: 600,
-              color: 'var(--ds-color-text-primary)',
               lineHeight: '26px',
               letterSpacing: '-0.01em',
             }}>
@@ -822,7 +806,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           {description && (
             <div data-part="description" style={{
               fontSize: 14,
-              color: 'var(--ds-color-text-secondary)',
               lineHeight: '20px',
               marginTop: 4,
             }}>
@@ -848,7 +831,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                       flex: 1,
                       height: 2,
                       marginTop: 15, // vertically center with 32px indicator
-                      background: isCompleted ? 'var(--ds-color-primary)' : 'var(--ds-color-border-secondary)',
                       transition: `background var(--ds-motion-normal) var(--ds-motion-ease-out)`,
                     }}
                   />
@@ -864,8 +846,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                     flexDirection: 'column',
                     alignItems: 'center',
                     gap: 8,
-                    background: 'none',
-                    border: 'none',
                     cursor: 'pointer',
                     padding: 0,
                     minWidth: 64,
@@ -878,17 +858,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                     style={{
                       width: 32,
                       height: 32,
-                      borderRadius: '50%',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontSize: 13,
                       fontWeight: 600,
                       flexShrink: 0,
-                      background: (isActive || isCompleted) ? 'var(--ds-color-primary)' : 'var(--ds-surface-panel)',
-                      color: (isActive || isCompleted) ? 'var(--ds-color-text-on-primary)' : 'var(--ds-color-text-muted)',
-                      border: (isActive || isCompleted) ? 'none' : '2px solid var(--ds-color-border-secondary)',
-                      boxShadow: isActive ? '0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent)' : 'none',
                       transition: `all var(--ds-motion-normal) var(--ds-motion-ease-out)`,
                     }}
                   >
@@ -907,11 +882,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                     style={{
                       fontSize: 12,
                       fontWeight: isActive ? 600 : 400,
-                      color: isActive
-                        ? 'var(--ds-color-text-primary)'
-                        : isCompleted
-                          ? 'var(--ds-color-text-secondary)'
-                          : 'var(--ds-color-text-muted)',
                       whiteSpace: 'nowrap',
                       transition: `color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
                     }}
@@ -937,7 +907,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {sectionIdx > 0 && (
               <div data-part="section-divider" style={{
                 height: 1,
-                background: 'var(--ds-color-border)',
                 margin: '28px 0',
               }} />
             )}
@@ -954,9 +923,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   width: '100%',
-                  background: 'none',
-                  border: 'none',
-                  borderBottom: '1px solid var(--ds-color-border)',
                   padding: '0 0 14px 0',
                   marginBottom: isCollapsed ? 0 : 20,
                   cursor: 'pointer',
@@ -968,7 +934,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                   <div data-part="section-title" style={{
                     fontSize: 15,
                     fontWeight: 600,
-                    color: 'var(--ds-color-text-primary)',
                     lineHeight: '22px',
                     letterSpacing: '-0.005em',
                   }}>
@@ -977,7 +942,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                   {section.description && (
                     <div data-part="section-description" style={{
                       fontSize: 13,
-                      color: 'var(--ds-color-text-muted)',
                       lineHeight: '18px',
                       marginTop: 4,
                     }}>
@@ -1013,13 +977,12 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Wizard step navigation */}
       {adaptedLayout === 'steps' && stepLabels && (
-        <div style={{
+        <div data-part="wizard-nav" style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           marginTop: 28,
           paddingTop: 20,
-          borderTop: '1px solid var(--ds-color-border)',
         }}>
           <div>
             {currentStep > 0 && (
@@ -1037,10 +1000,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                   fontSize: 14,
                   fontWeight: 500,
                   lineHeight: '20px',
-                  color: 'var(--ds-color-text-primary)',
-                  background: 'transparent',
-                  border: '1px solid var(--ds-color-border)',
-                  borderRadius: 'var(--ds-radius-md)',
                   cursor: 'pointer',
                   transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out),
                                border-color var(--ds-motion-fast) var(--ds-motion-ease-out)`,
@@ -1054,7 +1013,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             {/* Step counter text */}
             <span data-part="wizard-step-counter" style={{
               fontSize: 13,
-              color: 'var(--ds-color-text-muted)',
               marginRight: 4,
             }}>
               Step {currentStep + 1} of {stepLabels.length}
@@ -1073,10 +1031,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
                   fontSize: 14,
                   fontWeight: 500,
                   lineHeight: '20px',
-                  color: 'var(--ds-color-text-on-primary)',
-                  background: 'var(--ds-color-primary)',
-                  border: 'none',
-                  borderRadius: 'var(--ds-radius-md)',
                   cursor: 'pointer',
                   transition: `background var(--ds-motion-fast) var(--ds-motion-ease-out)`,
                 }}
@@ -1097,7 +1051,6 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
           gap: 12,
           paddingTop: 20,
           marginTop: 32,
-          borderTop: '1px solid var(--ds-color-border)',
         }}>
           {actions}
         </div>

@@ -1,0 +1,104 @@
+/**
+ * Rustic InvoiceTemplate skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`, which the root relies on (`{ ...containerStyle, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-invoice-template
+ * ds-engine-rustic` + `data-part='root'`. Both roots -- the document and the
+ * loading early-return -- carry the pair, because both spread `containerStyle`
+ * and so both must receive its border/background/radius.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * The status badge's `color: #fff` is a hardcoded literal, not a token -- a
+ * standing violation of the DS no-hardcoded-colours rule, and load-bearing: the
+ * four `statusColors` backgrounds all assume white text over them. Transcribed
+ * byte-exact, NOT fixed; changing it is a visual decision with its own baselines.
+ * The `--ds-color-*` fallback hexes below (`#e5e7eb`, `#fff`, `#f9fafb`, …) are
+ * likewise pre-existing and transcribed verbatim.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root: document container (was containerStyle, shared by both roots) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-neutral-200, #e5e7eb);
+  border-radius: var(--ds-radius-lg, 12px);
+  background: var(--ds-color-background, #fff);
+}
+
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='loading-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- action buttons (was btnStyle) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='print-button'][data-part='print-button'],
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='export-button'][data-part='export-button'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+  background: var(--ds-color-background, #fff);
+  color: var(--ds-color-text);
+}
+
+/* ---- company + client address lines share one literal ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='company-address-line'],
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='client-address-line'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- status badge (was the statusColors enum map). One rule per status; the
+        shared white text and radius sit in the base rule. ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  color: #fff;
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='draft'] {
+  background: var(--ds-color-neutral-400);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='sent'] {
+  background: var(--ds-color-primary);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='paid'] {
+  background: var(--ds-color-success, #22c55e);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='status-badge'][data-status='overdue'] {
+  background: var(--ds-color-error, #ef4444);
+}
+
+/* ---- inset panels: Bill To + Notes shared one literal (sectionBg) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='bill-to'],
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='notes'] {
+  background: var(--ds-color-neutral-50, #f9fafb);
+  border-radius: var(--ds-radius-md, 8px);
+}
+
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='section-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- line-items table (was thStyle / tdStyle) ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='items-header-cell'][data-part='items-header-cell'] {
+  color: var(--ds-color-text-muted);
+  border-bottom: 2px solid var(--ds-color-neutral-200, #e5e7eb);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='items-cell'][data-part='items-cell'] {
+  border-bottom: 1px solid var(--ds-color-neutral-100, #f3f4f6);
+}
+
+/* ---- totals: the tax row is the only one that was de-emphasised ---- */
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='totals-row'][data-row='tax'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='totals-divider'][data-part='totals-divider'] {
+  border-top: 2px solid var(--ds-color-neutral-200, #e5e7eb);
+}
+
+.ds-pattern-invoice-template.ds-engine-rustic [data-part='notes-text'] {
+  color: var(--ds-color-text-muted);
+}

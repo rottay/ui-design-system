@@ -1,0 +1,150 @@
+/**
+ * Rustic FilterBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-filter-builder
+ * ds-engine-rustic` + `data-part='root'`. Both roots -- the tree and the loading
+ * early-return -- carry the pair; the loading one adds `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED, or + a contract attribute (`data-logic`,
+ * `:not([data-root])`; a `:not()` carries the specificity of its argument).
+ *
+ * THREE RUNTIME CONSTRAINTS, all load-bearing:
+ *
+ * 1. `value-input` is stamped on SIX controls with THREE different paint sources:
+ *    the shared `inputStyle` (text/number/date/default), `selectStyle` (select and
+ *    multiSelect, which is `inputStyle` plus cursor/appearance -- identical paint),
+ *    and the boolean one, a bare `<input type="checkbox">` carrying NO paint at
+ *    all. The input rule is therefore gated `:not([data-field-type='boolean'])`,
+ *    or the skin would paint a border, background and radius onto a native
+ *    checkbox that never had them.
+ *
+ * 2. The add-filter TRIGGER is the P-78 case in this file. Its inline style was
+ *    `{ ...smallBtnStyle, border: '1px solid …' }` -- a later key deliberately
+ *    OVERWRITING the spread's `border: 1px dashed …`. So the trigger gets its own
+ *    rule with the SOLID border rather than being folded into the dashed
+ *    add-rule/add-group rule; lifting the shared border alone would have handed the
+ *    trigger back the dashed one and moved pixels with every value unchanged.
+ *
+ * 3. The nested-group tint is gated `:not([data-root])`: the root group carries
+ *    `data-root='true'` and is deliberately chrome-less. Unlike the modern engine,
+ *    this one painted `border-left` as a SHORTHAND over a maybe-undefined token,
+ *    so it is transcribed ATOMICALLY -- never split into longhands.
+ *
+ * The `add-filter-option` hover below replaces an imperative
+ * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.
+ * Its value carries a FALLBACK (`var(--ds-color-bg-secondary, var(--ds-color-bg-muted))`)
+ * that the modern engine's otherwise-identical write does NOT -- transcribed as
+ * written, not pattern-matched from the sibling. The element sets no background at
+ * rest, so a `:hover`-only rule is byte-exact.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* ---- root: the loading state's muted text (the tree root paints nothing) ---- */
+.ds-pattern-filter-builder.ds-engine-rustic[data-part='root'][data-loading='true'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- rule row: the logic keyword column, and the "and" between a range's two
+        inputs. Both carried the same literal; the fallback chain is part of the
+        value and is transcribed whole. ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='rule-logic-label'],
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='range-separator'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+/* ---- the label wrapping a boolean rule's native checkbox (it also renders the
+        True/False text, which is what the colour was for). ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='boolean-label'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- native controls (was inputStyle / selectStyle -- byte-identical paint).
+        The boolean value-input is a native checkbox and is excluded -- see
+        constraint 1 in the header. ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input']:not([data-field-type='boolean']),
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='field-select'][data-part='field-select'],
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='operator-select'][data-part='operator-select'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  outline: none;
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- remove buttons (rule + group carry the same literal) ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='remove-button'][data-part='remove-button'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-color-error, var(--ds-color-danger));
+  border-radius: 3px;
+}
+
+/* ---- nested group: primary-tinted left rule + muted fill. `border-left` stays a
+        SHORTHAND (constraint 3). ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='group']:not([data-root]) {
+  border-left: 3px solid var(--ds-color-primary-200, var(--ds-color-border-secondary));
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-muted));
+  border-radius: 4px;
+}
+
+/* ---- AND/OR logic toggle. The filled/outlined split is the engine's documented
+        design intent: filled = the stricter AND, outlined = the looser OR. ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='logic-toggle'][data-logic='and'] {
+  border: 1px solid var(--ds-color-primary);
+  border-radius: 4px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='logic-toggle'][data-logic='or'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+
+/* ---- add-rule / add-group: the dashed smallBtnStyle ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-rule-button'][data-part='add-rule-button'],
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-group-button'][data-part='add-group-button'] {
+  border: 1px dashed var(--ds-color-border-secondary, var(--ds-color-border-primary));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+/* ---- add-filter trigger: same base, but a SOLID border -- constraint 2 ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-trigger'][data-part='add-filter-trigger'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}
+
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-dropdown'][data-part='add-filter-dropdown'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-option'] {
+  color: var(--ds-color-text-primary, var(--ds-color-text));
+}
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-option']:hover {
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-muted));
+}
+
+/* ---- clear-all ---- */
+.ds-pattern-filter-builder.ds-engine-rustic [data-part='clear-button'][data-part='clear-button'] {
+  border: none;
+  background: transparent;
+  color: var(--ds-color-text-tertiary, var(--ds-color-text-muted));
+}

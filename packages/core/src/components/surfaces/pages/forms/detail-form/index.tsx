@@ -73,7 +73,7 @@ export function DetailFormSurface({
     >
       <Stack spacing="lg">
         {config.presentation.error && (
-          <Card className="ds-detail-form__error-card" variant="outlined" style={{ borderColor: 'var(--ds-color-error-500)' }}>
+          <Card className="ds-detail-form__error-card" variant="outlined">
             <Card.Body>{config.presentation.error}</Card.Body>
           </Card>
         )}

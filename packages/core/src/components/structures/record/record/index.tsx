@@ -66,14 +66,6 @@ import {
   resolveSharedHeaderActionVariant,
 } from '../../../patterns/foundation/header-actions';
 
-const surfaceBackground = 'var(--ds-surface-card, var(--ds-color-bg-elevated))';
-const fieldBackground = 'color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent)';
-const borderColor = 'var(--ds-color-border-secondary)';
-const mutedText = 'var(--ds-color-text-muted)';
-const secondaryText = 'var(--ds-color-text-secondary)';
-const primaryText = 'var(--ds-color-text-primary)';
-const tertiaryText = 'var(--ds-color-text-tertiary)';
-
 export interface RecordSummaryItem {
   label: string;
   value: ReactNode;
@@ -96,53 +88,30 @@ export function RecordSummaryStrip({
 }) {
   const visibleItems = items.filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
 
+  // Box metrics only. Every colour, border and background this strip paints
+  // resolves from `data-variant` in `tokens/css/components/skin/record.css`.
   const variantStyles = {
     default: {
-      background: fieldBackground,
-      border: borderColor,
-      labelColor: mutedText,
-      valueColor: primaryText,
-      helperColor: secondaryText,
       gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
       padding: 18,
       gap: 16,
     },
     editorial: {
-      background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 12%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 90%, transparent) 100%)',
-      border: 'color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%)',
-      labelColor: 'var(--ds-color-text-secondary)',
-      valueColor: primaryText,
-      helperColor: secondaryText,
       gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
       padding: 18,
       gap: 16,
     },
     technical: {
-      background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent)',
-      border: 'color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%)',
-      labelColor: 'var(--ds-color-text-muted)',
-      valueColor: primaryText,
-      helperColor: secondaryText,
       gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
       padding: 18,
       gap: 16,
     },
     governance: {
-      background: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent) 100%)',
-      border: 'color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%)',
-      labelColor: 'color-mix(in srgb, var(--ds-color-text-primary) 26%, var(--ds-color-text-muted) 74%)',
-      valueColor: primaryText,
-      helperColor: secondaryText,
       gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
       padding: 18,
       gap: 16,
     },
     metrics: {
-      background: 'color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%)',
-      border: borderColor,
-      labelColor: mutedText,
-      valueColor: primaryText,
-      helperColor: secondaryText,
       gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
       padding: 20,
       gap: 18,
@@ -160,9 +129,6 @@ export function RecordSummaryStrip({
       data-variant={variant}
       style={{
         width: '100%',
-        borderRadius: 18,
-        border: `1px solid ${variantStyles.border}`,
-        background: variantStyles.background,
         padding: variantStyles.padding,
         ...style,
       }}
@@ -181,7 +147,6 @@ export function RecordSummaryStrip({
               size="xs"
               weight="bold"
               style={{
-                color: variantStyles.labelColor,
                 textTransform: 'uppercase',
                 letterSpacing: '0.12em',
                 fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -194,7 +159,6 @@ export function RecordSummaryStrip({
               size={variant === 'metrics' ? 'md' : 'sm'}
               weight="medium"
               style={{
-                color: variantStyles.valueColor,
                 wordBreak: 'break-word',
                 fontFamily: item.mono ? 'var(--ds-font-family-mono, monospace)' : undefined,
                 fontSize: variant === 'metrics' ? 16 : undefined,
@@ -203,7 +167,7 @@ export function RecordSummaryStrip({
               {item.value}
             </Text>
             {item.helper ? (
-              <Text data-part="summary-item-helper" size="xs" style={{ color: variantStyles.helperColor, lineHeight: 1.5 }}>
+              <Text data-part="summary-item-helper" size="xs" style={{ lineHeight: 1.5 }}>
                 {item.helper}
               </Text>
             ) : null}
@@ -305,7 +269,6 @@ export function RecordField({
       size="sm"
       weight="medium"
       style={{
-        color: resolved.empty ? tertiaryText : primaryText,
         fontFamily: mono ? 'var(--ds-font-family-mono, monospace)' : undefined,
         wordBreak: mono ? 'break-all' : 'break-word',
         lineHeight: 1.6,
@@ -326,18 +289,21 @@ export function RecordField({
   const linkInner = (
     <Flex align="center" gap={8} wrap="wrap" style={{ width: 'fit-content' }}>
       {valueNode}
-      <ArrowUpRight style={{ width: 13, height: 13, color: mutedText }} />
+      <ArrowUpRight data-part="field-link-icon" style={{ width: 13, height: 13 }} />
     </Flex>
   );
 
+  // `NavigationLinkProps` accepts `className` but not `data-part`, and a
+  // consumer-supplied Link adapter is not this component's DOM: the anchor's
+  // skin hook is therefore its class, not a part.
   const maybeLinkedValue =
     href && !resolved.empty ? (
       NavLink ? (
-        <NavLink href={href} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <NavLink className="ds-record__field-link" href={href} style={{ textDecoration: 'none' }}>
           {linkInner}
         </NavLink>
       ) : (
-        <a href={href} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <a className="ds-record__field-link" href={href} style={{ textDecoration: 'none' }}>
           {linkInner}
         </a>
       )
@@ -355,11 +321,6 @@ export function RecordField({
         gridColumn: `span ${span}`,
         minWidth: 0,
         padding: '12px 14px',
-        borderRadius: 14,
-        border: `1px solid ${mono ? 'var(--ds-color-border)' : borderColor}`,
-        background: mono
-          ? 'color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%)'
-          : fieldBackground,
       }}
     >
       <Stack spacing={6}>
@@ -368,7 +329,6 @@ export function RecordField({
           size="xs"
           weight="bold"
           style={{
-            color: mutedText,
             letterSpacing: '0.12em',
             textTransform: 'uppercase',
             fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -395,7 +355,7 @@ export function RecordField({
         </Flex>
 
         {helper ? (
-          <Text data-part="field-helper" size="xs" style={{ color: secondaryText, lineHeight: 1.5 }}>
+          <Text data-part="field-helper" size="xs" style={{ lineHeight: 1.5 }}>
             {helper}
           </Text>
         ) : null}
@@ -450,10 +410,6 @@ export function RecordActionBar({
       wrap="wrap"
       style={{
         paddingTop: 14,
-        borderTop: `1px solid ${borderColor}`,
-        backgroundImage: 'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 34%, transparent) 0%, transparent 100%)',
-        backgroundSize: '100% 100%',
-        backgroundPosition: '0 0',
         ...style,
       }}
     >
@@ -461,10 +417,10 @@ export function RecordActionBar({
         {typeof meta === 'string' ? (
           <Stack spacing={4}>
             <Text
+              data-part="action-bar-meta-label"
               size="xs"
               weight="bold"
               style={{
-                color: tertiaryText,
                 letterSpacing: '0.12em',
                 textTransform: 'uppercase',
                 fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -472,7 +428,7 @@ export function RecordActionBar({
             >
               Action rail
             </Text>
-            <Text size="sm" style={{ color: mutedText, lineHeight: 1.6 }}>
+            <Text data-part="action-bar-meta-text" size="sm" style={{ lineHeight: 1.6 }}>
               {meta}
             </Text>
           </Stack>
@@ -500,9 +456,6 @@ export function RecordPanel({
       data-part="panel"
       style={{
         width: '100%',
-        borderRadius: 18,
-        border: `1px solid ${borderColor}`,
-        background: surfaceBackground,
         padding: 18,
         ...style,
       }}

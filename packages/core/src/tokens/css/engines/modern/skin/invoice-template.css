@@ -1,0 +1,79 @@
+/**
+ * Modern InvoiceTemplate skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style`, which the root relies on (`{ ...panelCardStyle, boxShadow, ...style }`).
+ *
+ * SCOPE ROOT is the outer `<div>` carrying `ds-pattern-invoice-template
+ * ds-engine-modern` + `data-part='root'`.
+ *
+ * The loading early-return carries `data-part='root'` + `data-loading='true'` but
+ * NOT the scope classes, so the root rule below cannot reach it. That is load-
+ * bearing, not an oversight: the loading state never had an elevation, and the
+ * class pair is the only thing keeping the `box-shadow` off it.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). Non-border paint wins unlayered at (0,3,0).
+ *
+ * WHAT STAYS INLINE, DELIBERATELY: `panelCardStyle` and `pillBadgeStyle` are
+ * imported from `patterns/_internal/engines/modern/styles`, a module shared with
+ * approval-workflow (checkpoint CK-R) and nine other consumers fleet-wide. Their
+ * keys are counted against THAT file, not this one, and this skin does not
+ * restate them -- so the root's `background`/`border`/`border-radius` and the
+ * badge's `border-radius` still arrive inline from the shared kit. Only the keys
+ * this engine writes ITSELF move here. Checked before moving either: neither
+ * spread sets a key the JSX later layers over it, so lifting `box-shadow` (root)
+ * and `background`/`color` (badge) hands nothing back to the spread (P-78).
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* ---- root: the elevation the JSX layered over the shared panel card ---- */
+.ds-pattern-invoice-template.ds-engine-modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* ---- action buttons ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='print-button'][data-part='print-button'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='export-button'][data-part='export-button'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ---- status badge (was the statusStyles enum map, layered over the shared
+        pillBadgeStyle). One rule per status; `border-radius` stays inline with
+        the shared kit. ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='draft'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='sent'] {
+  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
+  color: var(--ds-color-info);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='paid'] {
+  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
+  color: var(--ds-color-success);
+}
+.ds-pattern-invoice-template.ds-engine-modern [data-part='status-badge'][data-status='overdue'] {
+  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  color: var(--ds-color-error);
+}
+
+/* ---- inset panels: Bill To + Notes shared one literal, kept as one rule
+        because both are this component's own DOM. ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='bill-to'],
+.ds-pattern-invoice-template.ds-engine-modern [data-part='notes'] {
+  background: var(--ds-surface-inset);
+}
+
+/* ---- totals divider ---- */
+.ds-pattern-invoice-template.ds-engine-modern [data-part='totals-divider'][data-part='totals-divider'] {
+  border-top: 1px solid var(--ds-color-border);
+}

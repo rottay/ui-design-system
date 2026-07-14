@@ -63,8 +63,6 @@ import { Box, Button, Flex, Stack, Text, Tooltip } from '../../../primitives';
 
 const fastTransition = 'var(--ds-motion-fast) var(--ds-motion-ease-out)';
 const normalTransition = 'var(--ds-motion-normal) var(--ds-motion-ease-out)';
-const borderColor = 'var(--ds-color-border-secondary)';
-const mutedText = 'var(--ds-color-text-muted)';
 
 /* -------------------------------------------------------------------------- */
 /* Types                                                                      */
@@ -245,10 +243,6 @@ export function InlineEditor({
                   flexShrink: 0,
                   display: 'grid',
                   placeItems: 'center',
-                  borderRadius: 8,
-                  color: 'var(--ds-color-primary)',
-                  background: 'color-mix(in srgb, var(--ds-color-primary) 10%, var(--ds-surface-card, var(--ds-color-bg-elevated)))',
-                  border: `1px solid color-mix(in srgb, var(--ds-color-primary) 22%, ${borderColor})`,
                 }}
               >
                 <Icon size={16} />
@@ -261,7 +255,6 @@ export function InlineEditor({
                   size="xs"
                   weight="bold"
                   style={{
-                    color: mutedText,
                     textTransform: 'uppercase',
                     letterSpacing: '0.08em',
                     lineHeight: 1,
@@ -270,11 +263,11 @@ export function InlineEditor({
                   {eyebrow}
                 </Text>
               ) : null}
-              <Text data-part="editor-title" weight="bold" style={{ color: 'var(--ds-color-text-primary)' }}>
+              <Text data-part="editor-title" weight="bold">
                 {title}
               </Text>
               {description ? (
-                <Text data-part="editor-description" size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.45 }}>
+                <Text data-part="editor-description" size="sm" style={{ lineHeight: 1.45 }}>
                   {description}
                 </Text>
               ) : null}
@@ -327,7 +320,6 @@ export function InlineEditGrid({
         width: '100%',
         alignItems: 'start',
         paddingBlock: 14,
-        borderTop: `1px solid ${borderColor}`,
         ...style,
       }}
     >
@@ -360,7 +352,7 @@ export function InlineEditSection({
       <Flex data-part="section-header" align="center" justify="between" gap={12} wrap="wrap" style={{ paddingBottom: 10 }}>
         <Flex align="center" gap={10} style={{ minWidth: 0, flex: '1 1 360px' }}>
           {Icon ? (
-            <Box data-part="section-icon" aria-hidden style={{ color: mutedText, display: 'flex' }}>
+            <Box data-part="section-icon" aria-hidden style={{ display: 'flex' }}>
               <Icon size={15} />
             </Box>
           ) : null}
@@ -372,7 +364,6 @@ export function InlineEditSection({
                   size="xs"
                   weight="bold"
                   style={{
-                    color: mutedText,
                     fontFamily: 'var(--ds-font-family-mono, monospace)',
                     letterSpacing: '0.08em',
                   }}
@@ -380,12 +371,12 @@ export function InlineEditSection({
                   Section {sectionNumber}
                 </Text>
               ) : null}
-              <Text data-part="section-title" size="sm" weight="bold" style={{ color: 'var(--ds-color-text-primary)' }}>
+              <Text data-part="section-title" size="sm" weight="bold">
                 {title}
               </Text>
             </Flex>
             {description ? (
-              <Text data-part="section-description" size="xs" style={{ color: mutedText, lineHeight: 1.4 }}>
+              <Text data-part="section-description" size="xs" style={{ lineHeight: 1.4 }}>
                 {description}
               </Text>
             ) : null}
@@ -440,12 +431,6 @@ export function InlineEditControl({
 /* -------------------------------------------------------------------------- */
 /* InlineEditField                                                           */
 /* -------------------------------------------------------------------------- */
-
-const requirementDotColor: Record<InlineEditFieldRequirement, string> = {
-  required: 'var(--ds-color-warning)',
-  recommended: 'var(--ds-color-primary)',
-  optional: mutedText,
-};
 
 const requirementDefaultCopy: Record<InlineEditFieldRequirement, string> = {
   required: 'Required',
@@ -518,7 +503,6 @@ export function InlineEditField({
               aria-hidden
               size="xs"
               style={{
-                color: mutedText,
                 fontFamily: 'var(--ds-font-family-mono, monospace)',
                 lineHeight: 1,
               }}
@@ -527,7 +511,7 @@ export function InlineEditField({
             </Text>
           ) : null}
           {Icon ? (
-            <Box data-part="field-icon" aria-hidden style={{ color: mutedText, display: 'flex' }}>
+            <Box data-part="field-icon" aria-hidden style={{ display: 'flex' }}>
               <Icon size={14} />
             </Box>
           ) : null}
@@ -538,7 +522,6 @@ export function InlineEditField({
             style={{
               fontSize: 'var(--ds-font-size-sm, 0.875rem)',
               fontWeight: 'var(--ds-font-weight-semibold, 600)',
-              color: 'var(--ds-color-text-secondary)',
               cursor: htmlFor ? 'pointer' : undefined,
             }}
             {...(hasError ? { 'aria-invalid': 'true' as const } : {})}
@@ -555,12 +538,10 @@ export function InlineEditField({
                   style={{
                     width: 5,
                     height: 5,
-                    borderRadius: 999,
-                    background: requirementDotColor[requirement],
                     flexShrink: 0,
                   }}
                 />
-                <Text data-part="field-requirement-copy" size="xs" weight="bold" style={{ color: mutedText, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <Text data-part="field-requirement-copy" size="xs" weight="bold" style={{ textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                   {requirementCopy}
                 </Text>
               </Flex>
@@ -568,7 +549,7 @@ export function InlineEditField({
           ) : null}
         </Flex>
         {hint ? (
-          <Text data-part="field-hint" id={hintId} size="xs" style={{ color: mutedText, lineHeight: 1.35, minWidth: 0 }}>
+          <Text data-part="field-hint" id={hintId} size="xs" style={{ lineHeight: 1.35, minWidth: 0 }}>
             {hint}
           </Text>
         ) : null}
@@ -581,7 +562,7 @@ export function InlineEditField({
           data-part="field-error"
           id={resolvedErrorId}
           size="xs"
-          style={{ color: 'var(--ds-color-error)', lineHeight: 1.4, marginTop: 5, display: 'block' }}
+          style={{ lineHeight: 1.4, marginTop: 5, display: 'block' }}
         >
           {errorMessage}
         </Text>
@@ -676,7 +657,6 @@ export function InlineEditFooter({
       style={{
         paddingTop: 14,
         marginTop: 14,
-        borderTop: `1px solid ${borderColor}`,
         transition: `border-color ${normalTransition}`,
         ...style,
       }}
@@ -684,17 +664,17 @@ export function InlineEditFooter({
       {hasFooterSupport ? (
         <Stack data-part="footer-support" spacing={2} style={{ minWidth: 0, flex: '1 1 280px' }}>
           {summary && error ? (
-            <Text size="xs" style={{ color: mutedText }}>
+            <Text data-part="footer-note" size="xs">
               {summary}
             </Text>
           ) : null}
           {footerSummary ? (
-            <Text data-part="footer-summary" size="xs" style={{ color: error ? 'var(--ds-color-error)' : mutedText }}>
+            <Text data-part="footer-summary" size="xs">
               {footerSummary}
             </Text>
           ) : null}
           {dirtySummary && hiddenDirtySummary ? (
-            <Text size="xs" style={{ color: mutedText }}>
+            <Text data-part="footer-hidden-summary" size="xs">
               {hiddenDirtySummary}
             </Text>
           ) : null}

@@ -1,0 +1,38 @@
+/**
+ * FormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
+ * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
+ * not paint a border at all.
+ *
+ * A SURFACE OWNS NO DOM (P-79). `Grid` and `Card` never forward a
+ * consumer-supplied `data-part` -- neither has a rest-spread in its prop
+ * destructuring -- yet `BaseComponentProps` declares the prop on every component,
+ * so `tsc` accepts a stamp that reaches nothing and a rule anchored on it would
+ * silently match zero elements. This surface's anatomy is therefore the
+ * classNames it puts on the primitives it composes: `.ds-surface.ds-form` on the
+ * Grid, `.ds-form__error-card` on the Card. Only the `Flex` it renders itself
+ * carries `data-part='actions'`.
+ *
+ * `.ds-form__error-card` must OUTRANK card.css's own
+ * `.ds-card.ds-card--modern[data-part='root'][data-variant='outlined']` at
+ * (0,4,0), because the inline `borderColor` it replaces did. `[data-part='root']`
+ * and `[data-variant]` are the Card's OWN stamps (the two attributes card.css
+ * itself keys on, so both are guaranteed present); together with the three
+ * classes they reach (0,5,0). A Card cannot be re-stamped from outside, so
+ * anchoring on its root part is safe here in a way it would not be on a Box.
+ */
+
+.ds-surface.ds-form [data-part='description'][data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* Mobile sticky action bar: the gradient is a scrim that fades the form out from
+   under the buttons. It exists only in the sticky posture. */
+.ds-surface.ds-form [data-part='actions'][data-sticky='true'] {
+  background: linear-gradient(to top, var(--ds-color-bg-primary) 85%, transparent);
+}
+
+.ds-surface.ds-form .ds-form__error-card[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error);
+}

@@ -23,15 +23,12 @@ import React from 'react';
 import type { ApprovalWorkflowProps, ApprovalStep, ApprovalStatus } from '../ApprovalWorkflow.types';
 import { panelCardStyle, cardBodyStyle, pillBadgeSmStyle } from '../../../_internal/engines/modern/styles';
 
-// Inline styles mapped from domain statuses for badge variants.
-// "skipped" uses reduced opacity to visually de-emphasize it,
-// distinguishing it from "pending" which is at full opacity.
-const statusBadgeStyle: Record<ApprovalStatus, React.CSSProperties> = {
-  pending: { background: 'var(--ds-color-alpha-black-100)', color: 'var(--ds-color-text-primary)' },
-  approved: { background: 'var(--ds-color-success)', color: 'var(--ds-color-text-on-primary)' },
-  rejected: { background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)' },
-  escalated: { background: 'var(--ds-color-warning)', color: 'var(--ds-color-text-on-primary)' },
-  skipped: { background: 'var(--ds-color-alpha-black-100)', color: 'var(--ds-color-text-primary)', opacity: 0.5 },
+// "skipped" is de-emphasized with reduced opacity, distinguishing it from
+// "pending" which is at full opacity. Opacity is not a skin channel, so it
+// stays inline; the badge's colors resolve from `data-status` in
+// `tokens/css/engines/modern/skin/approval-workflow.css`.
+const statusBadgeStyle: Partial<Record<ApprovalStatus, React.CSSProperties>> = {
+  skipped: { opacity: 0.5 },
 };
 
 const statusLabel: Record<ApprovalStatus, string> = {
@@ -42,14 +39,13 @@ const statusLabel: Record<ApprovalStatus, string> = {
   skipped: 'Skipped',
 };
 
-// Timeline connector line colors mirror the step's resolved status so the
-// visual trail shows at a glance which portions of the chain succeeded/failed.
-const statusLineStyle: Record<ApprovalStatus, React.CSSProperties> = {
-  pending: { background: 'var(--ds-surface-panel)' },
-  approved: { background: 'var(--ds-color-success)' },
-  rejected: { background: 'var(--ds-color-error)' },
-  escalated: { background: 'var(--ds-color-warning)' },
-  skipped: { background: 'var(--ds-surface-panel)' },
+// Box metrics shared by the three action buttons. Their per-action colors and
+// border resolve from `data-action` in the skin.
+const actionButtonStyle: React.CSSProperties = {
+  height: 32,
+  padding: '0 12px',
+  fontSize: 13,
+  cursor: 'pointer',
 };
 
 /**
@@ -83,16 +79,9 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
           data-status={step.status}
           data-current={isCurrent}
           className={`w-3 h-3 rounded-full flex-shrink-0 mt-1.5${isCurrent && step.status === 'pending' ? ' animate-pulse' : ''}`}
-          style={{
-            background:
-              step.status === 'approved' ? 'var(--ds-color-success)' :
-              step.status === 'rejected' ? 'var(--ds-color-error)' :
-              step.status === 'escalated' ? 'var(--ds-color-warning)' :
-              isCurrent ? 'var(--ds-color-primary)' : 'var(--ds-surface-panel)',
-          }}
         />
         {/* Hide the connector on the last step to avoid a dangling line */}
-        {!isLast && <div data-part="step-connector" data-status={step.status} className="w-0.5 flex-1 min-h-[2rem]" style={statusLineStyle[step.status]} />}
+        {!isLast && <div data-part="step-connector" data-status={step.status} className="w-0.5 flex-1 min-h-[2rem]" />}
       </div>
 
       {/* Content column: identity row, contextual details, and actions */}
@@ -104,18 +93,18 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
         </div>
 
         {step.timestamp && (
-          <p data-part="step-timestamp" className="text-xs mt-1" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <p data-part="step-timestamp" className="text-xs mt-1">
             {typeof step.timestamp === 'string' ? step.timestamp : step.timestamp.toLocaleString()}
           </p>
         )}
 
         {step.comments && (
-          <div data-part="step-comment" className="mt-2 p-2 rounded-lg text-sm" style={{ background: 'var(--ds-surface-inset)' }}>{step.comments}</div>
+          <div data-part="step-comment" className="mt-2 p-2 rounded-lg text-sm">{step.comments}</div>
         )}
 
         {/* Arbitrary metadata entries rendered as key-value pairs */}
         {step.metadata && (
-          <div data-part="step-metadata" className="mt-1 text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+          <div data-part="step-metadata" className="mt-1 text-xs">
             {Object.entries(step.metadata).map(([k, v]) => (
               <div key={k}><span className="font-medium">{k}:</span> {v}</div>
             ))}
@@ -127,17 +116,17 @@ function StepNode({ step, isCurrent, isLast, onApprove, onReject, onEscalate, ac
         {isCurrent && step.status === 'pending' && (
           <div data-part="step-actions" className="flex gap-2 mt-3">
             {onApprove && (
-              <button data-part="step-action-button" data-action="approve" style={{ background: 'var(--ds-color-success)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} disabled={actionsDisabled} onClick={() => onApprove(step.key)}>
+              <button data-part="step-action-button" data-action="approve" style={actionButtonStyle} disabled={actionsDisabled} onClick={() => onApprove(step.key)}>
                 Approve
               </button>
             )}
             {onReject && (
-              <button data-part="step-action-button" data-action="reject" style={{ background: 'var(--ds-color-error)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer' }} disabled={actionsDisabled} onClick={() => onReject(step.key)}>
+              <button data-part="step-action-button" data-action="reject" style={actionButtonStyle} disabled={actionsDisabled} onClick={() => onReject(step.key)}>
                 Reject
               </button>
             )}
             {onEscalate && (
-              <button data-part="step-action-button" data-action="escalate" style={{ background: 'transparent', color: 'var(--ds-color-warning)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-warning)', cursor: 'pointer' }} disabled={actionsDisabled} onClick={() => onEscalate(step.key)}>
+              <button data-part="step-action-button" data-action="escalate" style={actionButtonStyle} disabled={actionsDisabled} onClick={() => onEscalate(step.key)}>
                 Escalate
               </button>
             )}
@@ -170,17 +159,17 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
         className={['ds-pattern-approval-workflow', 'ds-engine-modern', className].filter(Boolean).join(' ')}
         data-part="root"
         data-loading="true"
-        style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}
+        style={{ ...panelCardStyle, ...style }}
       >
         <div className="animate-pulse" data-part="skeleton" style={cardBodyStyle}>
-          <div data-part="skeleton-line" className="h-5 rounded w-1/3 mb-4" style={{ background: 'var(--ds-surface-panel)' }} />
+          <div data-part="skeleton-line" className="h-5 rounded w-1/3 mb-4" />
           <div className="space-y-4">
             {[1, 2, 3].map((i) => (
               <div key={i} data-part="skeleton-row" className="flex gap-3">
-                <div data-part="skeleton-dot" className="w-3 h-3 rounded-full mt-1" style={{ background: 'var(--ds-surface-panel)' }} />
+                <div data-part="skeleton-dot" className="w-3 h-3 rounded-full mt-1" />
                 <div className="flex-1 space-y-2">
-                  <div data-part="skeleton-line" className="h-4 rounded w-1/4" style={{ background: 'var(--ds-surface-panel)' }} />
-                  <div data-part="skeleton-line" className="h-3 rounded w-1/2" style={{ background: 'var(--ds-surface-panel)' }} />
+                  <div data-part="skeleton-line" className="h-4 rounded w-1/4" />
+                  <div data-part="skeleton-line" className="h-3 rounded w-1/2" />
                 </div>
               </div>
             ))}
@@ -195,13 +184,13 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
       className={['ds-pattern-approval-workflow', 'ds-engine-modern', className].filter(Boolean).join(' ')}
       data-part="root"
       data-loading="false"
-      style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}
+      style={{ ...panelCardStyle, ...style }}
     >
       <div style={cardBodyStyle}>
         {/* Header with workflow title and optional entity identifier badge */}
         <div data-part="header" className="flex items-center gap-2 mb-4">
           <h3 data-part="title" className="text-lg font-semibold">{title}</h3>
-          {entity && <div data-part="entity-badge" style={{ ...pillBadgeSmStyle, border: '1px solid var(--ds-color-border)', color: 'var(--ds-color-text-secondary)' }}>{entity}</div>}
+          {entity && <div data-part="entity-badge" style={pillBadgeSmStyle}>{entity}</div>}
         </div>
 
         {/* Timeline: one StepNode per approval step, ordered sequentially */}
@@ -221,7 +210,7 @@ export default function ModernApprovalWorkflow(props: ApprovalWorkflowProps) {
         </div>
 
         {footer && (
-          <div data-part="footer" className="mt-4 pt-4 border-t" style={{ borderColor: 'var(--ds-color-border)' }}>{footer}</div>
+          <div data-part="footer" className="mt-4 pt-4 border-t">{footer}</div>
         )}
       </div>
     </div>

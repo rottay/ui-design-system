@@ -1,0 +1,192 @@
+/**
+ * Rustic ApprovalWorkflow skin (WO-SKIN-06 / CK-D/R).
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could
+ * not paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the exact precedence the inline objects held.
+ *
+ * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ * specificity (0,3,1). Any rule below that paints a real border colour repeats
+ * its own `data-part` to reach the (0,4,0) floor.
+ *
+ * `data-part` is a shared VOCABULARY. Every rule is anchored to this component's
+ * own two scope classes, and the engine class keeps the modern tree out.
+ *
+ * The `--ds-color-*-NNN, #hex` fallbacks below are transcribed verbatim from the
+ * engine: this is the token-less-environment fallback the rustic engine has
+ * always carried, not a new hardcoded colour.
+ */
+
+.ds-pattern-approval-workflow.ds-engine-rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-color-neutral-900);
+  background: var(--ds-color-neutral-0, #fff);
+  border: 1px solid var(--ds-color-neutral-200);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* --- Header --------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='entity-badge'][data-part='entity-badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-600);
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* --- Timeline dot ---------------------------------------------------------- */
+
+/* The dot takes the status colour, except on the current PENDING step, where it
+   takes the primary accent and pulses. The current-step rule is guarded on
+   `[data-status='pending']` exactly as the engine's `isCurrent && pending`
+   conjunction was -- a current escalated step keeps its warning dot. */
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'] {
+  border-radius: 50%;
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='pending'] {
+  background: var(--ds-color-neutral-400);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='approved'] {
+  background: var(--ds-color-success-500, #22c55e);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='rejected'] {
+  background: var(--ds-color-error-500, #ef4444);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='escalated'] {
+  background: var(--ds-color-warning-500, #f59e0b);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='skipped'] {
+  background: var(--ds-color-neutral-300);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-dot'][data-status='pending'][data-current='true'] {
+  background: var(--ds-color-primary-500);
+}
+
+/* --- Timeline connector ---------------------------------------------------- */
+
+/* The connector always takes the step's DOT colour, never the badge background. */
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='pending'] {
+  background: var(--ds-color-neutral-400);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='approved'] {
+  background: var(--ds-color-success-500, #22c55e);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='rejected'] {
+  background: var(--ds-color-error-500, #ef4444);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='escalated'] {
+  background: var(--ds-color-warning-500, #f59e0b);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-connector'][data-status='skipped'] {
+  background: var(--ds-color-neutral-300);
+}
+
+/* --- Status badge ---------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='pending'] {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-600);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='approved'] {
+  background: var(--ds-color-success-50, #ecfdf5);
+  color: var(--ds-color-success-700, #15803d);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='rejected'] {
+  background: var(--ds-color-error-50, #fef2f2);
+  color: var(--ds-color-error-700, #b91c1c);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='escalated'] {
+  background: var(--ds-color-warning-50, #fffbeb);
+  color: var(--ds-color-warning-700, #a16207);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-status-badge'][data-status='skipped'] {
+  background: var(--ds-color-neutral-100);
+  color: var(--ds-color-neutral-500);
+}
+
+/* --- Step body ------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-timestamp'],
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-metadata'] {
+  color: var(--ds-color-neutral-500);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-comment'][data-part='step-comment'] {
+  background: var(--ds-color-neutral-50);
+  border-radius: var(--ds-radius-md);
+  border: 1px solid var(--ds-color-neutral-200);
+}
+
+/* --- Action buttons -------------------------------------------------------- */
+
+/* Native `<button>` elements, not the DS Button primitive: no button.css rule
+   competes with these. The `1px solid` width/style is atomic with each action's
+   colour, so the shorthand carries both. */
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='approve'] {
+  background: var(--ds-color-success-600, #16a34a);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-color-success-600, #16a34a);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='reject'] {
+  background: var(--ds-color-error-600, #dc2626);
+  color: var(--ds-color-text-on-primary);
+  border: 1px solid var(--ds-color-error-600, #dc2626);
+}
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='step-action-button'][data-action='escalate'] {
+  background: transparent;
+  color: var(--ds-color-warning-700, #a16207);
+  border: 1px solid var(--ds-color-warning-400, #fbbf24);
+}
+
+/* --- Skeleton -------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-line'],
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='skeleton-dot'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-neutral-200);
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-rustic [data-part='footer'][data-part='footer'] {
+  border-top: 1px solid var(--ds-color-neutral-200);
+}
+
+/* Namespaced: a local `@keyframes pulse` shadows a global of the same name and
+   wins (last parsed). The engine formerly injected a bare `pulse` per instance,
+   which silently retimed step-wizard's own `pulse` whenever both mounted. */
+@keyframes ds-approval-workflow-rustic-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}

@@ -1,0 +1,305 @@
+/**
+ * GuidedDraftFormSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: the surface
+ * renders ONE tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all.
+ *
+ * ==========================================================================
+ * A SURFACE OWNS NO DOM (P-79). IT OWNS COMPOSITION.
+ * ==========================================================================
+ * `Grid`, `Card` and (in the modern engine) `Button` never emit a
+ * consumer-supplied `data-part`: Grid/Card have no rest-spread, and Button's own
+ * `partAttributes('trigger', …)` spread wins last and rewrites it. `tsc` accepts
+ * the stamp regardless -- `BaseComponentProps` declares `data-part` on every
+ * component -- so a rule anchored on one would silently match nothing. The
+ * anatomy of every composed primitive below is therefore its CLASSNAME. Only the
+ * nodes this surface renders ITSELF (`Box`/`Flex`/`Text`) are addressed by part.
+ *
+ * ==========================================================================
+ * THIS SKIN MUST OUTRANK THE PRIMITIVES IT PAINTS OVER.
+ * ==========================================================================
+ * The declarations below replace an INLINE style, which beat every rule in
+ * `button.css` and `card.css` -- including their hover states. To hold that same
+ * position from a stylesheet, each rule must clear the highest specificity those
+ * skins reach for the variant in question:
+ *   - Button `ghost`:  (0,4,0) resting, (0,5,0) `[data-state~='hovered']`
+ *                      (both engines; rustic's gradient variant also (0,5,0))
+ *   - Card `outlined`: (0,4,0) resting  (the (0,6,0) hover rules require
+ *                      `data-interactive`/`data-hoverable`, which none of these
+ *                      Cards set)
+ * Every rule here therefore reaches b >= 5, and the Button rules b >= 6. A rule
+ * that merely TIED would let the primitive's hover repaint a node that has never
+ * reacted to hover -- a new interaction, not a preserved one.
+ *
+ * A THIRD FLOOR, for text: Typography colours EVERY `Text` at (0,4,0) via
+ * `[data-color='default']`, so every `color` rule on a `Text` node reaches b >= 5
+ * as well.
+ */
+
+/* --- Draft status badge ----------------------------------------------------- */
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-bg-tertiary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'] {
+  border-radius: 50%;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='unsaved'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='saving'] {
+  background: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='saved'] {
+  background: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status-dot'][data-status='error'] {
+  background: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='unsaved'] [data-part='draft-status-label'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='saving'] [data-part='draft-status-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='saved'] [data-part='draft-status-label'] {
+  color: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='draft-status'][data-status='error'] [data-part='draft-status-label'] {
+  color: var(--ds-color-error);
+}
+
+/* --- Section nav ------------------------------------------------------------ */
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-label'][data-part='section-nav-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* The nav item is a ghost `Button`: its className is the anatomy, its
+   `data-active`/`data-errors` survive the engine's prop allowlist, and the two
+   layouts paint DIFFERENT boxes -- a pill bar and a sidebar rail -- so
+   `data-layout` on the nav discriminates them. */
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] .ds-guided-draft-form__section-nav-item[data-active='false'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-bg-secondary, var(--ds-color-bg-tertiary));
+  border: 1px solid var(--ds-color-border, transparent);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='pills'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
+  border: 1px solid var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='false'] {
+  border-radius: var(--ds-radius-sm);
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'][data-layout='sidebar'] .ds-guided-draft-form__section-nav-item[data-active='true'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-primary-bg, var(--ds-color-bg-tertiary));
+  border: 1px solid color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary));
+}
+
+/* Errors outrank active in the label colour, exactly as the ternary did. The
+   three rules are mutually exclusive on `data-errors`, so none of them relies on
+   declaration order. */
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='true'] {
+  color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='false'][data-active='true'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] .ds-guided-draft-form__section-nav-item[data-errors='false'][data-active='false'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* The label defers to whatever the button resolved above. */
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-label'][data-part='section-nav-item-label'] {
+  color: inherit;
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-complete'][data-part='section-nav-item-complete'] {
+  color: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form [data-part='section-nav'] [data-part='section-nav-item-error-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-error);
+}
+
+/* --- Template picker -------------------------------------------------------- */
+
+/* The trigger is a ghost `Button` whose inline `transparent` background beat
+   button.css's ghost hover. Repeated class + repeated `data-variant` clears that
+   (0,5,0) hover rule so the card, not the button, owns the hover affordance. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card-trigger.ds-guided-draft-form__template-card-trigger[data-variant='ghost'][data-variant='ghost'] {
+  background: transparent;
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-icon'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-title'][data-part='template-card-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__template-card [data-part='template-card-description'][data-part='template-card-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Draft recovery banner --------------------------------------------------- */
+
+/* `[data-part='root'][data-variant]` are the Card's OWN stamps -- the two
+   attributes card.css itself keys on, so both are guaranteed present -- and they
+   buy the specificity needed to beat card.css's (0,4,0) variant border. The Card
+   cannot be re-stamped from outside (it drops a consumer `data-part`), so
+   anchoring on its root is safe here in a way it would not be on a Box. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery[data-part='root'][data-variant] {
+  border-color: var(--ds-color-info);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-icon'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-color-info-bg, var(--ds-color-bg-tertiary));
+  color: var(--ds-color-info);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-title'][data-part='draft-recovery-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__draft-recovery [data-part='draft-recovery-description'][data-part='draft-recovery-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Title bar --------------------------------------------------------------- */
+
+/* `title` is a part `Card` also stamps, and every section card wraps
+   consumer-rendered content. A descendant hop from the surface root could reach
+   one; the direct-child chain through `title-bar` cannot leave the header. */
+.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > * > [data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > * > [data-part='subtitle'][data-part='subtitle'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-guided-draft-form[data-part='root'] > [data-part='title-bar'] > [data-part='progress'] > [data-part='progress-count'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Section cards ------------------------------------------------------------ */
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-icon'] {
+  color: var(--ds-color-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-title'][data-part='section-card-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-complete'][data-part='section-card-complete'] {
+  color: var(--ds-color-success);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-errors'][data-part='section-card-errors'] {
+  color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__section-card [data-part='section-card-description'][data-part='section-card-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Validation summary -------------------------------------------------------- */
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--error[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning[data-part='root'][data-variant] {
+  border-color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-summary-dot'] {
+  border-radius: 50%;
+}
+
+/* The summary dot has no severity of its own: it reports the CARD's verdict, and
+   the card's modifier class is the only place that verdict lives. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--error [data-part='validation-summary-dot'] {
+  background: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary--warning [data-part='validation-summary-dot'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-summary-title'][data-part='validation-summary-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'] {
+  border-radius: 50%;
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'][data-severity='error'] {
+  background: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-dot'][data-severity='warning'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-message'][data-part='validation-issue-message'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* Each issue reports its OWN severity, so the field name is reached through a
+   direct-child hop from that issue row rather than from the card's verdict. */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue'][data-severity='error'] [data-part='validation-issue-field'][data-part='validation-issue-field'] {
+  color: var(--ds-color-error);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue'][data-severity='warning'] [data-part='validation-issue-field'][data-part='validation-issue-field'] {
+  color: var(--ds-color-warning);
+}
+
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__validation-summary [data-part='validation-issue-overflow'][data-part='validation-issue-overflow'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- Sticky submit bar ---------------------------------------------------------- */
+
+/* The submit bar docks to the viewport edge: it keeps only its top border, and
+   squares off. These are resets, exempt from the border-COLOUR floor, but they
+   still have to outrank card.css's `border` shorthand at (0,4,0). */
+.ds-surface.ds-guided-draft-form .ds-guided-draft-form__submit-bar-card[data-part='root'][data-variant] {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+}
+
+.ds-surface.ds-guided-draft-form[data-part='root'] [data-part='submit-bar'] [data-part='submit-bar-progress'][data-part='submit-bar-progress'] {
+  color: var(--ds-color-text-muted);
+}

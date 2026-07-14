@@ -1,0 +1,26 @@
+/**
+ * WizardSurface skin (WO-SKIN-06 / CK-D/R). Engine-agnostic.
+ *
+ * DELIBERATELY UNLAYERED: every `@layer rottay-*` sorts before Tailwind's unnamed
+ * `base` layer, whose preflight zeroes `border-width`. A layered rule here could
+ * not paint a border at all.
+ *
+ * A SURFACE OWNS NO DOM (P-79). `Grid` and `Card` never forward a
+ * consumer-supplied `data-part`, so this surface's anatomy is the classNames it
+ * puts on them: `.ds-surface.ds-wizard` on the Grid, `.ds-wizard__error-card` on
+ * the Card. See `form-surface.css` for the full specificity argument -- the same
+ * (0,5,0) floor applies here, for the same reason.
+ *
+ * The error card uses `--ds-color-error-500`, while FormSurface's uses
+ * `--ds-color-error`. That divergence is pre-existing and transcribed verbatim:
+ * reconciling it is a visual-parity decision with its own baselines, not a
+ * byte-exact migration's call.
+ */
+
+.ds-surface.ds-wizard [data-part='description'][data-part='description'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-surface.ds-wizard .ds-wizard__error-card[data-part='root'][data-variant] {
+  border-color: var(--ds-color-error-500);
+}

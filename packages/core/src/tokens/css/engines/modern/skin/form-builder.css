@@ -1,0 +1,213 @@
+/**
+ * Modern FormBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's inline
+ * `style` -- which two rules below DEPEND on; see constraints 1 and 2.
+ *
+ * SCOPE ROOT is the `<form>` carrying `ds-pattern-form-builder ds-engine-modern`
+ * + `data-part='root'`. The loading early-return is a `<div>` carrying the same
+ * pair + `data-loading='true'`.
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0), or + a contract attribute (`data-active`,
+ * `data-completed`). Non-border paint wins unlayered at (0,3,0). Pure
+ * `border: none` / `background: none` resets carry no colour and are exempt.
+ *
+ * THREE RUNTIME CONSTRAINTS, all load-bearing:
+ *
+ * 1. THE COLOR SWATCH KEEPS ITS INLINE `background` -- ON PURPOSE. It paints
+ *    `String(val)`, the hex the user actually picked: a value computed FROM DATA,
+ *    not selected from a token set, so it can never be enumerated in CSS. The
+ *    checkpoint's contract test PINS this (`FormsBatch.contract.test.tsx:255-256`
+ *    asserts the swatch paints `background` inline AND that it does NOT contain
+ *    `var(--ds-`), which also forbids the custom-property hatch. Only the swatch's
+ *    static `border` and `border-radius` moved here.
+ *
+ * 2. SIX ELEMENTS SHARE `data-part='skeleton-bar'` AND ONE HAS A DIFFERENT RADIUS.
+ *    Five use `--ds-radius-md`; the field-LABEL shimmer uses `--ds-radius-sm`.
+ *    Nothing in the stamped anatomy distinguished them, so `data-variant='label'`
+ *    now does. Do not "simplify" the two rules into one -- the tighter radius on
+ *    the label bar is real and the majority rule would swallow it.
+ *
+ * 3. `readonly-value` RESOLVES ITS COLOUR IN TWO PLACES. The base object painted
+ *    `--ds-color-text-primary`; the `empty` and `file` cases spread it and then
+ *    OVERWROTE `color` with `--ds-color-text-muted` (P-78: a later key silently
+ *    beating an earlier spread). Both halves move together below -- lifting only
+ *    the base would have handed those two cases back the primary colour with every
+ *    value unchanged.
+ *
+ * KEYFRAME NAMESPACE: the skeleton shimmer's `@keyframes formBuilderPulse` was
+ * injected per-mount from a `<style>` child. Moved here and renamed to the
+ * component+engine namespace so it cannot shadow, or be shadowed by, the global
+ * `pulse` or any sibling engine's copy.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-form-builder-modern-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ---- title + description ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* ---- loading skeleton. Five of the six bars share a radius; the field-LABEL
+        shimmer is tighter, and `data-variant` is the only thing that tells them
+        apart -- see constraint 2. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-surface-panel);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='skeleton-bar'][data-variant='label'] {
+  border-radius: var(--ds-radius-sm);
+}
+
+/* ---- read-only values. Base colour + the two cases that overrode it (constraint 3). ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='empty'],
+.ds-pattern-form-builder.ds-engine-modern [data-part='readonly-value'][data-field-type='file'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- the colour swatch's static chrome. Its `background` stays inline -- constraint 1. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='color-swatch'][data-part='color-swatch'] {
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-color-border);
+}
+
+/* ---- upload trigger ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='upload-trigger'][data-part='upload-trigger'] {
+  color: var(--ds-color-text-primary);
+  background: var(--ds-surface-canvas);
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+}
+
+/* ---- per-field help + error text ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='field-description'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='field-error'] {
+  color: var(--ds-color-error);
+}
+
+/* ---- wizard step rail ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-connector'] {
+  background: var(--ds-color-border-secondary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-connector'][data-completed='true'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-button'] {
+  background: none;
+  border: none;
+}
+
+/* ---- step indicator: the JSX merged `isActive || isCompleted` for background,
+        colour and border, and gave the focus ring to `isActive` alone. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'] {
+  border-radius: 50%;
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-muted);
+  border: 2px solid var(--ds-color-border-secondary);
+  box-shadow: none;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'],
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-completed='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-indicator'][data-part='step-indicator'][data-active='true'] {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ds-color-primary) 20%, transparent);
+}
+
+/* ---- step label: three-way chain, `active` written last to win as it did in JS.
+        `font-weight` stays inline (not a counted channel). ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'][data-completed='true'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='step-label'][data-active='true'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* ---- sections. The header reset `border` before setting `border-bottom`; the
+        order is preserved because a shorthand must not clobber the longhand. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-divider'] {
+  background: var(--ds-color-border);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-header'][data-part='section-header'] {
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-description'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- collapse chevron: the rotation is STATE-SELECTED off `data-collapsed`,
+        not a runtime angle. `transition` stays inline. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'] {
+  color: var(--ds-color-text-muted);
+  transform: rotate(0deg);
+}
+.ds-pattern-form-builder.ds-engine-modern [data-part='section-chevron'][data-collapsed='true'] {
+  transform: rotate(-90deg);
+}
+
+/* ---- wizard navigation. `wizard-nav` and the skeleton's `action-bar` were the
+        two elements in this engine that carried paint and no anatomy; both are
+        stamped now, reusing the names the RUSTIC engine already uses for the same
+        two elements rather than minting new ones. ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-nav'][data-part='wizard-nav'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-prev-button'][data-part='wizard-prev-button'] {
+  color: var(--ds-color-text-primary);
+  background: transparent;
+  border: 1px solid var(--ds-color-border);
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-next-button'][data-part='wizard-next-button'] {
+  color: var(--ds-color-text-on-primary);
+  background: var(--ds-color-primary);
+  border: none;
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-form-builder.ds-engine-modern [data-part='wizard-step-counter'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ---- action bar ---- */
+.ds-pattern-form-builder.ds-engine-modern [data-part='action-bar'][data-part='action-bar'] {
+  border-top: 1px solid var(--ds-color-border);
+}

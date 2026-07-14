@@ -1,0 +1,325 @@
+/**
+ * form-sections skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: this structures
+ * family renders ONE DOM tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the precedence the inline objects held.
+ *
+ * TWO SPECIFICITY FLOORS, not one:
+ *  - BORDER-COLOR (P-48): each tenant ships an unlayered
+ *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
+ *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via
+ *    `[data-color='default']`. A `color` rule on a `Text` that merely ties that
+ *    would be decided by stylesheet order, so every one below reaches b >= 5.
+ *
+ * ==========================================================================
+ * THE COLLAPSIBLE HEADER HAS NO BOTTOM BORDER, AND THAT IS NOT A BUG (P-78).
+ * ==========================================================================
+ * The header's style object was `{ ...headerShellStyle, border: 'none', ... }`.
+ * `headerShellStyle` set `borderBottom`; the LATER `border: 'none'` -- a
+ * shorthand -- reset it. React writes style keys in object order, so the
+ * collapsible `<button>` header shipped with NO border at all, while the
+ * non-collapsible `<div>` header kept its divider. Lifting `border-bottom` onto
+ * `[data-part='section-header']` would hand the button a divider it has never
+ * had. The element-qualified pair below reproduces both branches exactly; do not
+ * "simplify" it into one rule.
+ *
+ * SELECTOR LAW. `data-part` is a shared VOCABULARY, and `section`,
+ * `section-header`, `section-title`, `section-description` and `section-content`
+ * are ALSO stamped by `edit-fields` -- which is designed to be composed inside a
+ * section's children. Every rule below therefore descends through
+ * `> [data-part='section'] > [data-part='section-header']`, a direct-child chain
+ * a nested InlineEditSection can never sit on (children land in
+ * `section-content`, three levels down a different branch). The only consumer
+ * slots inside the header are `summary` and `extra`; a component nested there
+ * that also stamped `section-title` would be pathological.
+ *
+ * ONE TOKEN SET PER COMPONENT. `--ds-form-sections-*` below and
+ * `RecordSummaryStrip`'s five variants share two byte-identical border formulas.
+ * They are deliberately NOT unified: each component resolves its own literal
+ * today, and a future edit to one must not move the other's pixels.
+ */
+
+/* --- Tone token sets ------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
+  --ds-form-sections-surface: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%);
+  --ds-form-sections-border: var(--ds-color-border-secondary);
+  --ds-form-sections-active-border: var(--ds-color-border);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+  --ds-form-sections-badge-bg: var(--ds-color-bg-secondary);
+  --ds-form-sections-badge-border: var(--ds-color-border-secondary);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-secondary) 14%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent);
+  --ds-form-sections-grid-size: 26px;
+  --ds-form-sections-shadow: 0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='editorial'] {
+  --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-bg-primary) 6%);
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
+  --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
+  --ds-form-sections-active-border: color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-bg-primary) 28%);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 70%, var(--ds-color-bg-primary) 30%);
+  --ds-form-sections-badge-bg: color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent);
+  --ds-form-sections-badge-border: var(--ds-color-border-secondary);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent);
+  --ds-form-sections-grid-size: 26px;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='technical'] {
+  --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-text-muted) 6%);
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-secondary) 10%);
+  --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
+  --ds-form-sections-active-border: color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-text-muted) 28%);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 74%, var(--ds-color-text-muted) 26%);
+  --ds-form-sections-badge-bg: color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent);
+  --ds-form-sections-badge-border: var(--ds-color-border-secondary);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-secondary) 16%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent);
+  --ds-form-sections-grid-size: 22px;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-tone='governance'] {
+  --ds-form-sections-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 95%, var(--ds-color-bg-primary) 5%);
+  --ds-form-sections-muted-surface: color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%);
+  --ds-form-sections-border: color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
+  --ds-form-sections-active-border: color-mix(in srgb, var(--ds-color-border) 74%, var(--ds-color-bg-primary) 26%);
+  --ds-form-sections-divider: color-mix(in srgb, var(--ds-color-border-secondary) 72%, var(--ds-color-bg-primary) 28%);
+  --ds-form-sections-badge-bg: color-mix(in srgb, var(--ds-color-bg-primary) 44%, transparent);
+  --ds-form-sections-badge-border: color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
+  --ds-form-sections-accent: color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent);
+  --ds-form-sections-accent-secondary: color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent);
+  --ds-form-sections-grid-color: color-mix(in srgb, var(--ds-color-text-muted) 26%, transparent);
+  --ds-form-sections-grid-size: 24px;
+}
+
+/* --- Section shell --------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* card (default): the open section lifts -- brighter surface, firmer border, and
+   the only box-shadow in the family. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'] {
+  border-radius: 18px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: var(--ds-form-sections-muted-surface);
+  box-shadow: none;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='card'][data-open='true'] {
+  border-color: var(--ds-form-sections-active-border);
+  background: var(--ds-form-sections-surface);
+  box-shadow: var(--ds-form-sections-shadow);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='soft'] {
+  border-radius: 18px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: var(--ds-form-sections-muted-surface);
+  box-shadow: none;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] {
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* The divided rhythm is a rule BETWEEN sections, so the first one carries none. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided']:not(:first-child) {
+  border-top: 1px solid var(--ds-form-sections-divider);
+}
+
+/* --- Section header -------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] {
+  color: var(--ds-color-text-primary);
+  background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 62%, transparent);
+  background-image:
+    radial-gradient(circle at 12% 14%, var(--ds-form-sections-accent) 0%, transparent 48%),
+    radial-gradient(circle at 84% 0%, var(--ds-form-sections-accent-secondary) 0%, transparent 30%),
+    radial-gradient(circle at 70% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%),
+    linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%),
+    linear-gradient(180deg, transparent 0%, transparent 34%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 36%, transparent) 100%),
+    linear-gradient(var(--ds-form-sections-grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ds-form-sections-grid-color) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    var(--ds-form-sections-grid-size) var(--ds-form-sections-grid-size),
+    var(--ds-form-sections-grid-size) var(--ds-form-sections-grid-size);
+  background-position: 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0;
+}
+
+/* `:not(divided)` is not decoration: a non-collapsible FormSections resolves to
+   `divided` AND reports every section open, so an unguarded `[data-open]` rule
+   would tie the divided rule and be decided by stylesheet order. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] {
+  background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 70%, transparent);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] {
+  background-color: color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent);
+}
+
+/* See the P-78 note in this file's header: the collapsible header is a <button>
+   and has NEVER had a bottom border. These two rules are not interchangeable. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > div[data-part='section-header'][data-part='section-header'] {
+  border-bottom: 1px solid var(--ds-form-sections-divider);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > button[data-part='section-header'] {
+  border: none;
+}
+
+/* --- Section index --------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+  border-radius: 9px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: transparent;
+  color: var(--ds-color-text-tertiary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-open='true']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+  border-color: var(--ds-form-sections-active-border);
+  background: var(--ds-form-sections-muted-surface);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-index'][data-part='section-index'] {
+  border-color: var(--ds-form-sections-divider);
+  background: transparent;
+}
+
+/* --- Section title / description ------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-title'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-description'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Section summary badge -------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary'][data-part='section-summary'] {
+  border-radius: 999px;
+  border: 1px solid var(--ds-form-sections-badge-border);
+  background: var(--ds-form-sections-badge-bg);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-summary-text'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* --- Required / optional chip ----------------------------------------------- */
+
+/* The chip's own two-value vocabulary is independent of the section's four-value
+   tone: a required chip reads the same in every tone. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'] {
+  border-radius: 999px;
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, var(--ds-color-bg-primary) 12%);
+  border: 1px solid var(--ds-color-border);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='required'] > [data-part='section-chip-label'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] {
+  background: var(--ds-color-bg-secondary);
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-chip'][data-badge-tone='optional'] > [data-part='section-chip-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Toggle ----------------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'] {
+  border-radius: 9px;
+  border: 1px solid var(--ds-form-sections-border);
+  background: transparent;
+  transform: rotate(0deg);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section']:not([data-appearance='divided']) > [data-part='section-header'] [data-part='section-toggle'][data-open='true'][data-part='section-toggle'] {
+  border-color: var(--ds-form-sections-active-border);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'][data-appearance='divided'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'] {
+  border-color: var(--ds-form-sections-divider);
+}
+
+/* Part repeated so this OUTRANKS the resting `rotate(0deg)` above rather than
+   tying it and depending on declaration order. */
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle'][data-part='section-toggle'][data-open='true'] {
+  transform: rotate(180deg);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > [data-part='section-header'] [data-part='section-toggle-icon'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Section content --------------------------------------------------------- */
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'] {
+  color: var(--ds-color-text-primary);
+  transform: translateY(-10px);
+}
+
+.ds-structure.ds-form-sections[data-part='root'] > [data-part='section'] > * > * > [data-part='section-content'][data-open='true'] {
+  transform: translateY(0);
+}
+
+/* --- FormFactsCard ----------------------------------------------------------- */
+
+/* A standalone sibling card: it has no tone, so it takes the `default` tone's
+   surface, border and divider as literals rather than reading the tone tokens
+   above (which are declared on `[data-part='section']`, not on this root). */
+.ds-structure.ds-form-sections[data-part='facts-card'][data-part='facts-card'] {
+  border-radius: 16px;
+  border: 1px solid var(--ds-color-border-secondary);
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-eyebrow'][data-part='facts-card-eyebrow'],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-label'][data-part='facts-card-item-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-title'][data-part='facts-card-title'],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-value'][data-part='facts-card-item-value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-description'][data-part='facts-card-description'],
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item-helper'][data-part='facts-card-item-helper'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-form-sections[data-part='facts-card'] [data-part='facts-card-item'][data-part='facts-card-item'] {
+  border-bottom: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent);
+}

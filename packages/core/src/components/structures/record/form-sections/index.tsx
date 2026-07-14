@@ -86,13 +86,6 @@ export interface FormFactsCardProps {
   style?: CSSProperties;
 }
 
-const sectionSurface = 'var(--ds-surface-card, var(--ds-color-bg-elevated))';
-const sectionSurfaceMuted = 'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 92%, var(--ds-color-bg-secondary) 8%)';
-const sectionBorder = 'var(--ds-color-border-secondary)';
-const sectionBorderActive = 'var(--ds-color-border)';
-const sectionDivider = 'color-mix(in srgb, var(--ds-color-border-secondary) 78%, transparent)';
-const sectionShadow = '0 14px 34px color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)';
-
 function buildInitialKeys(
   sections: FormSectionsEntry[],
   providedKeys?: string[],
@@ -117,146 +110,31 @@ function buildInitialKeys(
   return sections[0] ? [sections[0].key] : [];
 }
 
-function getToneAccent(tone: FormSectionTone) {
-  switch (tone) {
-    case 'editorial':
-      return {
-        badgeBackground: 'color-mix(in srgb, var(--ds-color-bg-primary) 34%, transparent)',
-        badgeBorder: sectionBorder,
-      };
-    case 'technical':
-      return {
-        badgeBackground: 'color-mix(in srgb, var(--ds-color-bg-secondary) 92%, transparent)',
-        badgeBorder: sectionBorder,
-      };
-    case 'governance':
-      return {
-        badgeBackground: 'color-mix(in srgb, var(--ds-color-bg-primary) 44%, transparent)',
-        badgeBorder: 'color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%)',
-      };
-    case 'default':
-    default:
-      return {
-        badgeBackground: 'var(--ds-color-bg-secondary)',
-        badgeBorder: sectionBorder,
-      };
-  }
-}
-
-function getToneShell(tone: FormSectionTone) {
-  switch (tone) {
-    case 'editorial':
-      return {
-        surface: 'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-bg-primary) 6%)',
-        mutedSurface: 'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%)',
-        border: 'color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%)',
-        activeBorder: 'color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-bg-primary) 28%)',
-        divider: 'color-mix(in srgb, var(--ds-color-border-secondary) 70%, var(--ds-color-bg-primary) 30%)',
-      };
-    case 'technical':
-      return {
-        surface: 'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 94%, var(--ds-color-text-muted) 6%)',
-        mutedSurface: 'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-secondary) 10%)',
-        border: 'color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%)',
-        activeBorder: 'color-mix(in srgb, var(--ds-color-border) 72%, var(--ds-color-text-muted) 28%)',
-        divider: 'color-mix(in srgb, var(--ds-color-border-secondary) 74%, var(--ds-color-text-muted) 26%)',
-      };
-    case 'governance':
-      return {
-        surface: 'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 95%, var(--ds-color-bg-primary) 5%)',
-        mutedSurface: 'color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 90%, var(--ds-color-bg-primary) 10%)',
-        border: 'color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%)',
-        activeBorder: 'color-mix(in srgb, var(--ds-color-border) 74%, var(--ds-color-bg-primary) 26%)',
-        divider: 'color-mix(in srgb, var(--ds-color-border-secondary) 72%, var(--ds-color-bg-primary) 28%)',
-      };
-    case 'default':
-    default:
-      return {
-        surface: sectionSurface,
-        mutedSurface: sectionSurfaceMuted,
-        border: sectionBorder,
-        activeBorder: sectionBorderActive,
-        divider: sectionDivider,
-      };
-  }
-}
-
-function getSectionHeaderPattern(tone: FormSectionTone) {
-  switch (tone) {
-    case 'editorial':
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 24%, transparent)',
-        gridSize: 26,
-      };
-    case 'technical':
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-secondary) 16%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 28%, transparent)',
-        gridSize: 22,
-      };
-    case 'governance':
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-primary) 14%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-secondary) 8%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 26%, transparent)',
-        gridSize: 24,
-      };
-    case 'default':
-    default:
-      return {
-        accent: 'color-mix(in srgb, var(--ds-color-text-secondary) 14%, transparent)',
-        accentSecondary: 'color-mix(in srgb, var(--ds-color-text-primary) 7%, transparent)',
-        gridColor: 'color-mix(in srgb, var(--ds-color-text-muted) 22%, transparent)',
-        gridSize: 26,
-      };
-  }
-}
-
-function getSectionShellStyles(
-  resolvedAppearance: FormSectionsAppearance,
-  isOpen: boolean,
-  index: number,
-  tone: FormSectionTone,
-): CSSProperties {
-  const shell = getToneShell(tone);
-
+/**
+ * Box metrics only. The four tones (surface, border, divider, badge, and the
+ * header's gradient/grid pattern) resolve from `data-tone` +
+ * `data-appearance` + `data-open` in
+ * `tokens/css/components/skin/form-sections.css`.
+ */
+function getSectionShellStyles(resolvedAppearance: FormSectionsAppearance): CSSProperties {
   if (resolvedAppearance === 'divided') {
     return {
       width: '100%',
-      borderRadius: 0,
       overflow: 'visible',
-      border: 'none',
-      borderTop: index === 0 ? 'none' : `1px solid ${shell.divider}`,
-      background: 'transparent',
-      boxShadow: 'none',
-      color: 'var(--ds-color-text-primary)',
     };
   }
 
   if (resolvedAppearance === 'soft') {
     return {
       width: '100%',
-      borderRadius: 18,
       overflow: 'hidden',
-      border: `1px solid ${shell.border}`,
-      background: shell.mutedSurface,
-      boxShadow: 'none',
-      color: 'var(--ds-color-text-primary)',
       transition: 'border-color 180ms ease, background 180ms ease',
     };
   }
 
   return {
     width: '100%',
-    borderRadius: 18,
     overflow: 'hidden',
-    border: `1px solid ${isOpen ? shell.activeBorder : shell.border}`,
-    background: isOpen ? shell.surface : shell.mutedSurface,
-    boxShadow: isOpen ? sectionShadow : 'none',
-    color: 'var(--ds-color-text-primary)',
     transition: 'border-color 180ms ease, box-shadow 180ms ease, background 180ms ease',
   };
 }
@@ -312,9 +190,6 @@ export function FormSections({
         const isOpen = resolvedKeys.includes(section.key);
         const resolvedAppearance = section.appearance ?? appearance ?? (!collapsible ? 'divided' : 'card');
         const resolvedTone = section.tone ?? tone ?? 'default';
-        const accentTone = getToneAccent(resolvedTone);
-        const shellTone = getToneShell(resolvedTone);
-        const headerPattern = getSectionHeaderPattern(resolvedTone);
         const headerPadding = resolvedAppearance === 'divided' ? '16px 10px 14px' : '18px 18px 16px';
         const contentPadding =
           resolvedAppearance === 'divided'
@@ -322,30 +197,9 @@ export function FormSections({
             : resolvedAppearance === 'soft'
               ? '18px 18px 20px'
               : '18px 18px 20px';
-        const headerBorderBottom = `1px solid ${shellTone.divider}`;
-        const headerSurface =
-          resolvedAppearance === 'divided'
-            ? 'color-mix(in srgb, var(--ds-color-bg-secondary) 52%, transparent)'
-            : isOpen
-              ? 'color-mix(in srgb, var(--ds-color-bg-secondary) 70%, transparent)'
-              : 'color-mix(in srgb, var(--ds-color-bg-secondary) 62%, transparent)';
         const headerShellStyle: CSSProperties = {
           width: '100%',
           padding: headerPadding,
-          color: 'var(--ds-color-text-primary)',
-          borderBottom: headerBorderBottom,
-          backgroundColor: headerSurface,
-          backgroundImage: [
-            `radial-gradient(circle at 12% 14%, ${headerPattern.accent} 0%, transparent 48%)`,
-            `radial-gradient(circle at 84% 0%, ${headerPattern.accentSecondary} 0%, transparent 30%)`,
-            'radial-gradient(circle at 70% 100%, color-mix(in srgb, var(--ds-color-text-primary) 5%, transparent) 0%, transparent 42%)',
-            'linear-gradient(180deg, color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent) 0%, transparent 28%)',
-            'linear-gradient(180deg, transparent 0%, transparent 34%, color-mix(in srgb, var(--ds-surface-card, var(--ds-color-bg-elevated)) 36%, transparent) 100%)',
-            `linear-gradient(${headerPattern.gridColor} 1px, transparent 1px)`,
-            `linear-gradient(90deg, ${headerPattern.gridColor} 1px, transparent 1px)`,
-          ].join(', '),
-          backgroundSize: `100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, ${headerPattern.gridSize}px ${headerPattern.gridSize}px, ${headerPattern.gridSize}px ${headerPattern.gridSize}px`,
-          backgroundPosition: '0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0',
         };
 
         const sectionHeader = (
@@ -356,16 +210,12 @@ export function FormSections({
                 style={{
                   width: 28,
                   height: 28,
-                  borderRadius: 9,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  border: `1px solid ${resolvedAppearance === 'divided' ? shellTone.divider : isOpen ? shellTone.activeBorder : shellTone.border}`,
-                  background: resolvedAppearance === 'divided' ? 'transparent' : isOpen ? shellTone.mutedSurface : 'transparent',
                   fontFamily: 'var(--ds-font-family-mono, monospace)',
                   fontSize: 11,
                   fontWeight: 700,
-                  color: 'var(--ds-color-text-tertiary)',
                   flexShrink: 0,
                 }}
               >
@@ -380,7 +230,6 @@ export function FormSections({
                       fontSize: 16,
                       fontWeight: 700,
                       lineHeight: 1.15,
-                      color: 'var(--ds-color-text-primary)',
                     }}
                   >
                     {section.title}
@@ -394,7 +243,6 @@ export function FormSections({
                     data-part="section-description"
                     size="sm"
                     style={{
-                      color: 'var(--ds-color-text-secondary)',
                       lineHeight: 1.55,
                       maxWidth: 720,
                     }}
@@ -412,16 +260,13 @@ export function FormSections({
                   style={{
                     maxWidth: 360,
                     padding: '5px 10px',
-                    borderRadius: 999,
-                    border: `1px solid ${accentTone.badgeBorder}`,
-                    background: accentTone.badgeBackground,
                     display: 'inline-flex',
                     alignItems: 'center',
                     whiteSpace: 'nowrap',
                   }}
                 >
                   {typeof section.summary === 'string' || typeof section.summary === 'number' ? (
-                    <Text size="xs" weight="medium" style={{ color: 'var(--ds-color-text-primary)' }}>
+                    <Text data-part="section-summary-text" size="xs" weight="medium">
                       {section.summary}
                     </Text>
                   ) : (
@@ -439,17 +284,13 @@ export function FormSections({
                   style={{
                     width: 28,
                     height: 28,
-                    borderRadius: 9,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    border: `1px solid ${resolvedAppearance === 'divided' ? shellTone.divider : isOpen ? shellTone.activeBorder : shellTone.border}`,
-                    background: 'transparent',
-                    transform: `rotate(${isOpen ? 180 : 0}deg)`,
                     transition: 'transform 180ms ease, border-color 180ms ease',
                   }}
                 >
-                  <ChevronDown data-part="section-toggle-icon" style={{ width: 15, height: 15, color: 'var(--ds-color-text-secondary)' }} />
+                  <ChevronDown data-part="section-toggle-icon" style={{ width: 15, height: 15 }} />
                 </Box>
               ) : null}
             </Flex>
@@ -463,7 +304,7 @@ export function FormSections({
             data-tone={resolvedTone}
             data-appearance={resolvedAppearance}
             data-open={isOpen}
-            style={getSectionShellStyles(resolvedAppearance, isOpen, index, resolvedTone)}
+            style={getSectionShellStyles(resolvedAppearance)}
           >
             {collapsible ? (
               <button
@@ -473,7 +314,6 @@ export function FormSections({
                 onClick={() => toggleSection(section.key)}
                 style={{
                   ...headerShellStyle,
-                  border: 'none',
                   cursor: 'pointer',
                   textAlign: 'left',
                 }}
@@ -500,8 +340,6 @@ export function FormSections({
                   style={{
                     padding: contentPadding,
                     opacity: isOpen ? 1 : 0,
-                    transform: `translateY(${isOpen ? 0 : -10}px)`,
-                    color: 'var(--ds-color-text-primary)',
                     transition: collapsible ? 'opacity 180ms ease, transform 180ms ease' : 'none',
                   }}
                 >
@@ -534,10 +372,6 @@ export function FormFactsCard({
       data-part="facts-card"
       style={{
         width: '100%',
-        borderRadius: 16,
-        border: `1px solid ${sectionBorder}`,
-        background: sectionSurface,
-        color: 'var(--ds-color-text-primary)',
         ...style,
       }}
     >
@@ -549,7 +383,6 @@ export function FormFactsCard({
               size="xs"
               weight="bold"
               style={{
-                color: 'var(--ds-color-text-muted)',
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -558,11 +391,11 @@ export function FormFactsCard({
               {eyebrow}
             </Text>
           ) : null}
-          <Text data-part="facts-card-title" style={{ fontSize: 17, fontWeight: 700, color: 'var(--ds-color-text-primary)' }}>
+          <Text data-part="facts-card-title" style={{ fontSize: 17, fontWeight: 700 }}>
             {title}
           </Text>
           {description ? (
-            <Text data-part="facts-card-description" size="sm" style={{ color: 'var(--ds-color-text-secondary)', lineHeight: 1.55 }}>
+            <Text data-part="facts-card-description" size="sm" style={{ lineHeight: 1.55 }}>
               {description}
             </Text>
           ) : null}
@@ -578,7 +411,6 @@ export function FormFactsCard({
               gap={16}
               style={{
                 padding: '10px 0',
-                borderBottom: `1px solid ${sectionDivider}`,
               }}
             >
               <Stack spacing="xs" style={{ minWidth: 0, flex: 1 }}>
@@ -587,7 +419,6 @@ export function FormFactsCard({
                   size="xs"
                   weight="bold"
                   style={{
-                    color: 'var(--ds-color-text-muted)',
                     letterSpacing: '0.12em',
                     textTransform: 'uppercase',
                     fontFamily: 'var(--ds-font-family-mono, monospace)',
@@ -596,7 +427,7 @@ export function FormFactsCard({
                   {item.label}
                 </Text>
                 {item.helper ? (
-                  <Text data-part="facts-card-item-helper" size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                  <Text data-part="facts-card-item-helper" size="xs">
                     {item.helper}
                   </Text>
                 ) : null}
@@ -606,7 +437,6 @@ export function FormFactsCard({
                 size="sm"
                 weight="medium"
                 style={{
-                  color: 'var(--ds-color-text-primary)',
                   maxWidth: 180,
                   textAlign: 'right',
                   wordBreak: 'break-word',
@@ -630,35 +460,19 @@ function SectionChip({
   label: string;
   tone: 'required' | 'optional';
 }) {
-  const accent =
-    tone === 'required'
-      ? {
-          background: 'color-mix(in srgb, var(--ds-color-bg-secondary) 88%, var(--ds-color-bg-primary) 12%)',
-          border: 'var(--ds-color-border)',
-          color: 'var(--ds-color-text-primary)',
-        }
-      : {
-          background: 'var(--ds-color-bg-secondary)',
-          border: sectionBorder,
-          color: 'var(--ds-color-text-secondary)',
-        };
-
   return (
     <Box
       data-part="section-chip"
       data-badge-tone={tone}
       style={{
-        borderRadius: 999,
         padding: '4px 8px',
-        background: accent.background,
-        border: `1px solid ${accent.border}`,
       }}
     >
       <Text
+        data-part="section-chip-label"
         size="xs"
         weight="bold"
         style={{
-          color: accent.color,
           lineHeight: 1,
           letterSpacing: '0.08em',
           textTransform: 'uppercase',

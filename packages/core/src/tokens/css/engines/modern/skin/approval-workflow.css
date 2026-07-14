@@ -1,0 +1,167 @@
+/**
+ * Modern ApprovalWorkflow skin (WO-SKIN-06 / CK-D/R).
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could
+ * not paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the exact precedence the inline objects held.
+ *
+ * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ * specificity (0,3,1). Any rule below that paints a real border colour therefore
+ * repeats its own `data-part` to reach the (0,4,0) floor. `border: none` resets
+ * are exempt.
+ *
+ * `data-part` is a shared VOCABULARY -- `step`, `footer`, `title` and `root` are
+ * stamped by dozens of components. Every rule is anchored to this component's own
+ * two scope classes, and the engine class keeps the rustic tree out.
+ */
+
+/* Elevation. `panelCardStyle` (patterns/_internal) still supplies background,
+   border and radius inline: it is shared with 10 other patterns and is not this
+   batch's to move. */
+.ds-pattern-approval-workflow.ds-engine-modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* --- Header --------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='entity-badge'][data-part='entity-badge'] {
+  border: 1px solid var(--ds-color-border);
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Timeline dot ---------------------------------------------------------- */
+
+/* The JS resolved this as a single chain: an approved/rejected/escalated status
+   wins outright; only pending and skipped fall through to the current-step
+   accent, and then to the resting panel. The three status rules are declared
+   AFTER the current-step rule so that, at equal specificity, they win -- which is
+   what the ternary's ordering did. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'] {
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-current='true'] {
+  background: var(--ds-color-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='approved'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='rejected'] {
+  background: var(--ds-color-error);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-dot'][data-status='escalated'] {
+  background: var(--ds-color-warning);
+}
+
+/* --- Timeline connector ---------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='pending'] {
+  background: var(--ds-surface-panel);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='approved'] {
+  background: var(--ds-color-success);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='rejected'] {
+  background: var(--ds-color-error);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='escalated'] {
+  background: var(--ds-color-warning);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-connector'][data-status='skipped'] {
+  background: var(--ds-surface-panel);
+}
+
+/* --- Status badge ---------------------------------------------------------- */
+
+/* `pillBadgeSmStyle` still supplies the pill's box (radius, padding, type scale)
+   inline; it sets no colour, so nothing here is overwriting a spread. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='pending'] {
+  background: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='approved'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='rejected'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='escalated'] {
+  background: var(--ds-color-warning);
+  color: var(--ds-color-text-on-primary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-status-badge'][data-status='skipped'] {
+  background: var(--ds-color-alpha-black-100);
+  color: var(--ds-color-text-primary);
+}
+
+/* --- Step body ------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-timestamp'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-comment'] {
+  background: var(--ds-surface-inset);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-metadata'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- Action buttons -------------------------------------------------------- */
+
+/* Native `<button>` elements, not the DS Button primitive: no button.css rule
+   competes with these. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'] {
+  border-radius: var(--ds-radius-md);
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='approve'] {
+  background: var(--ds-color-success);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='reject'] {
+  background: var(--ds-color-error);
+  color: var(--ds-color-text-on-primary);
+  border: none;
+}
+
+/* Escalate is the outline (secondary) affordance -- it must not read as a peer of
+   approve/reject. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='step-action-button'][data-action='escalate'] {
+  background: transparent;
+  color: var(--ds-color-warning);
+  border: 1px solid var(--ds-color-warning);
+}
+
+/* --- Skeleton -------------------------------------------------------------- */
+
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-line'],
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='skeleton-dot'] {
+  background: var(--ds-surface-panel);
+}
+
+/* --- Footer ---------------------------------------------------------------- */
+
+/* Tailwind's `border-t` supplies the width; only the colour was ever inline. */
+.ds-pattern-approval-workflow.ds-engine-modern [data-part='footer'][data-part='footer'] {
+  border-color: var(--ds-color-border);
+}

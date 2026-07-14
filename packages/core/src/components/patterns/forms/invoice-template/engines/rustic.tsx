@@ -18,51 +18,35 @@
 import React, { type CSSProperties } from 'react';
 import type { InvoiceTemplateProps } from '../InvoiceTemplate.types';
 
-/** Maps invoice status to --ds-* color tokens for the status badge */
-const statusColors: Record<string, string> = {
-  draft: 'var(--ds-color-neutral-400)',
-  sent: 'var(--ds-color-primary)',
-  paid: 'var(--ds-color-success, #22c55e)',
-  overdue: 'var(--ds-color-error, #ef4444)',
-};
+const ROOT_CLASS_NAME = 'ds-pattern-invoice-template ds-engine-rustic';
 
 /** Outer container -- constrains invoice width and centers it horizontally */
 const containerStyle: CSSProperties = {
   maxWidth: 800,
   margin: '0 auto',
-  border: '1px solid var(--ds-color-neutral-200, #e5e7eb)',
-  borderRadius: 'var(--ds-radius-lg, 12px)',
-  background: 'var(--ds-color-background, #fff)',
   padding: 32,
 };
 
-/** Lightweight button style using design tokens for border/radius */
+/** Lightweight button style */
 const btnStyle: CSSProperties = {
   padding: '6px 14px',
   fontSize: 'var(--ds-font-size-sm, 14px)',
-  borderRadius: 'var(--ds-radius-md, 8px)',
-  border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
-  background: 'var(--ds-color-background, #fff)',
-  color: 'var(--ds-color-text)',
   cursor: 'pointer',
   fontWeight: 500,
 };
 
-/** Table header cell style -- uppercase labels with a 2px bottom border */
+/** Table header cell style -- uppercase labels */
 const thStyle: CSSProperties = {
   padding: '8px 12px',
   fontSize: 'var(--ds-font-size-xs, 12px)',
   fontWeight: 600,
   textTransform: 'uppercase' as const,
-  color: 'var(--ds-color-text-muted)',
-  borderBottom: '2px solid var(--ds-color-neutral-200, #e5e7eb)',
 };
 
-/** Table data cell style -- subtle 1px separator between rows */
+/** Table data cell style */
 const tdStyle: CSSProperties = {
   padding: '10px 12px',
   fontSize: 'var(--ds-font-size-sm, 14px)',
-  borderBottom: '1px solid var(--ds-color-neutral-100, #f3f4f6)',
 };
 
 /**
@@ -92,17 +76,15 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
   /* Text-only loading state -- no spinner dependency since this engine avoids frameworks */
   if (loading) {
     return (
-      <div data-part="root" data-loading="true" className={className} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
-        <span data-part="loading-text" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+      <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
+        <span data-part="loading-text">Loading...</span>
       </div>
     );
   }
 
-  /** Reusable section background for "Bill To" and "Notes" panels */
+  /** Reusable section box for "Bill To" and "Notes" panels */
   const sectionBg: CSSProperties = {
     padding: 16,
-    background: 'var(--ds-color-neutral-50, #f9fafb)',
-    borderRadius: 'var(--ds-radius-md, 8px)',
     marginBottom: 24,
   };
 
@@ -111,13 +93,12 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
     fontSize: 'var(--ds-font-size-xs, 12px)',
     fontWeight: 600,
     textTransform: 'uppercase' as const,
-    color: 'var(--ds-color-text-muted)',
     opacity: 0.6,
     marginBottom: 4,
   };
 
   return (
-    <div data-part="root" className={className} style={{ ...containerStyle, ...style }}>
+    <div data-part="root" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...containerStyle, ...style }}>
       {/* Actions */}
       {showActions && (onPrint || onExport) && (
         <div data-part="actions-bar" style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginBottom: 16 }} className="no-print">
@@ -134,14 +115,14 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
             <img data-part="company-logo" src={invoice.company.logo} alt={invoice.company.name} style={{ height: 48, marginBottom: 8 }} />
           )}
           <div data-part="company-name" style={{ fontSize: 20, fontWeight: 700 }}>{invoice.company.name}</div>
-          {invoice.company.address && <div data-part="company-address-line" data-field="address" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.company.address}</div>}
+          {invoice.company.address && <div data-part="company-address-line" data-field="address" style={{ fontSize: 12 }}>{invoice.company.address}</div>}
           {invoice.company.city && (
-            <div data-part="company-address-line" data-field="city" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
+            <div data-part="company-address-line" data-field="city" style={{ fontSize: 12 }}>
               {invoice.company.city}{invoice.company.country ? `, ${invoice.company.country}` : ''}
             </div>
           )}
-          {invoice.company.taxId && <div data-part="company-address-line" data-field="taxId" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>Tax ID: {invoice.company.taxId}</div>}
-          {invoice.company.email && <div data-part="company-address-line" data-field="email" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.company.email}</div>}
+          {invoice.company.taxId && <div data-part="company-address-line" data-field="taxId" style={{ fontSize: 12 }}>Tax ID: {invoice.company.taxId}</div>}
+          {invoice.company.email && <div data-part="company-address-line" data-field="email" style={{ fontSize: 12 }}>{invoice.company.email}</div>}
         </div>
         {/* Invoice metadata -- watermark at 10% opacity for a subtle document label */}
         <div data-part="metadata" style={{ textAlign: 'right' }}>
@@ -149,15 +130,12 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
           <div data-part="metadata-line" data-field="number" style={{ fontSize: 14 }}><strong>Invoice #:</strong> {invoice.number}</div>
           <div data-part="metadata-line" data-field="date" style={{ fontSize: 14 }}><strong>Date:</strong> {invoice.date}</div>
           {invoice.dueDate && <div data-part="metadata-line" data-field="dueDate" style={{ fontSize: 14 }}><strong>Due:</strong> {invoice.dueDate}</div>}
-          {/* Status badge -- uses --ds-* color tokens from the statusColors map.
-              White text is hardcoded since all status colors have sufficient contrast. */}
+          {/* Status badge -- the four status colours are keyed off data-status in the
+              skin, which also carries the hardcoded white text those colours assume. */}
           {invoice.status && (
             <div data-part="status-badge" data-status={invoice.status} style={{
               display: 'inline-block',
               padding: '2px 10px',
-              borderRadius: 'var(--ds-radius-sm, 6px)',
-              background: statusColors[invoice.status],
-              color: '#fff',
               fontSize: 'var(--ds-font-size-xs, 12px)',
               fontWeight: 600,
               marginTop: 8,
@@ -172,14 +150,14 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
       <div data-part="bill-to" style={sectionBg}>
         <div data-part="section-label" style={labelStyle}>Bill To</div>
         <div data-part="client-name" style={{ fontWeight: 600 }}>{invoice.client.name}</div>
-        {invoice.client.address && <div data-part="client-address-line" data-field="address" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.client.address}</div>}
+        {invoice.client.address && <div data-part="client-address-line" data-field="address" style={{ fontSize: 12 }}>{invoice.client.address}</div>}
         {invoice.client.city && (
-          <div data-part="client-address-line" data-field="city" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>
+          <div data-part="client-address-line" data-field="city" style={{ fontSize: 12 }}>
             {invoice.client.city}{invoice.client.country ? `, ${invoice.client.country}` : ''}
           </div>
         )}
-        {invoice.client.taxId && <div data-part="client-address-line" data-field="taxId" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>Tax ID: {invoice.client.taxId}</div>}
-        {invoice.client.email && <div data-part="client-address-line" data-field="email" style={{ fontSize: 12, color: 'var(--ds-color-text-muted)' }}>{invoice.client.email}</div>}
+        {invoice.client.taxId && <div data-part="client-address-line" data-field="taxId" style={{ fontSize: 12 }}>Tax ID: {invoice.client.taxId}</div>}
+        {invoice.client.email && <div data-part="client-address-line" data-field="email" style={{ fontSize: 12 }}>{invoice.client.email}</div>}
       </div>
 
       {/* Line Items -- native HTML table with manually applied thStyle/tdStyle from above.
@@ -215,12 +193,12 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
             <span>{formatCurrency(invoice.subtotal)}</span>
           </div>
           {/* Tax line -- muted color to de-emphasize relative to grand total */}
-          <div data-part="totals-row" data-row="tax" style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14, color: 'var(--ds-color-text-muted)' }}>
+          <div data-part="totals-row" data-row="tax" style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 14 }}>
             <span>Tax{invoice.taxRate ? ` (${invoice.taxRate}%)` : ''}</span>
             <span>{formatCurrency(invoice.tax)}</span>
           </div>
           {/* Horizontal rule separating subtotal/tax from the grand total */}
-          <div data-part="totals-divider" style={{ borderTop: '2px solid var(--ds-color-neutral-200, #e5e7eb)', margin: '8px 0' }} />
+          <div data-part="totals-divider" style={{ margin: '8px 0' }} />
           {/* Grand total -- larger font makes this the visual focal point */}
           <div data-part="totals-row" data-row="total" style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', fontSize: 18, fontWeight: 700 }}>
             <span>Total</span>
@@ -233,7 +211,7 @@ export default function RusticInvoiceTemplate(props: InvoiceTemplateProps) {
       {invoice.notes && (
         <div data-part="notes" style={{ ...sectionBg, marginTop: 32, marginBottom: 0 }}>
           <div data-part="section-label" style={labelStyle}>Notes</div>
-          <div data-part="notes-text" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', color: 'var(--ds-color-text-muted)', whiteSpace: 'pre-wrap' }}>
+          <div data-part="notes-text" style={{ fontSize: 'var(--ds-font-size-sm, 14px)', whiteSpace: 'pre-wrap' }}>
             {invoice.notes}
           </div>
         </div>

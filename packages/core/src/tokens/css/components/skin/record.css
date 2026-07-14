@@ -1,0 +1,157 @@
+/**
+ * record skin (WO-SKIN-06 / CK-D/R). Engine-agnostic: this structures family
+ * renders ONE DOM tree under every engine, so one file serves all four.
+ *
+ * DELIBERATELY UNLAYERED. Every `@layer rottay-*` declared in
+ * `foundation/base.css` sorts BEFORE Tailwind's own unnamed `base` layer, whose
+ * preflight zeroes `border-width` on every element. A layered rule here could not
+ * paint a border at all. Unlayered outranks preflight and still yields to a
+ * consumer's inline `style` prop -- the precedence the inline objects held.
+ *
+ * TWO SPECIFICITY FLOORS, not one:
+ *  - BORDER-COLOR (P-48): each tenant ships an unlayered
+ *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
+ *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
+ *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via
+ *    `[data-color='default']`. A `color` rule on a `Text` that merely ties that
+ *    would be decided by stylesheet order, so every one below reaches b >= 5,
+ *    usually by repeating the target's own part.
+ *
+ * SELECTOR LAW. `data-part` is a shared VOCABULARY: `field` and `field-label` are
+ * also stamped by `edit-fields`, and `panel` / `root` by half the fleet. Every
+ * rule anchors on the element carrying BOTH scope classes and the part, and
+ * reaches inner nodes through a direct-child hop wherever a consumer slot could
+ * otherwise sit in the path.
+ *
+ * `RecordSummaryStrip`'s five variants and `form-sections`' four tones share two
+ * byte-identical border formulas. They are NOT unified here: each file resolves
+ * its own literal today, and a future edit to one must not move the other's
+ * pixels. One token set per component.
+ */
+
+/* --- RecordSummaryStrip ---------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='summary-strip'] {
+  border-radius: 18px;
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 12%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 90%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, var(--ds-color-bg-primary) 18%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] {
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 84%, var(--ds-color-text-muted) 16%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-primary) 18%, transparent) 0%, color-mix(in srgb, var(--ds-color-bg-secondary) 94%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--ds-color-border) 62%, var(--ds-color-bg-primary) 38%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] {
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* The label is the only channel the variant re-tints; value and helper are the
+   same two tokens in all five. */
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='default'] [data-part='summary-item-label'],
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='technical'] [data-part='summary-item-label'],
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='metrics'] [data-part='summary-item-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='editorial'] [data-part='summary-item-label'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'][data-variant='governance'] [data-part='summary-item-label'] {
+  color: color-mix(in srgb, var(--ds-color-text-primary) 26%, var(--ds-color-text-muted) 74%);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-value'][data-part='summary-item-value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-record[data-part='summary-strip'] [data-part='summary-item-helper'][data-part='summary-item-helper'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* --- RecordField ----------------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='field'] {
+  border-radius: 14px;
+}
+
+.ds-structure.ds-record[data-part='field'][data-mono='false'] {
+  border: 1px solid var(--ds-color-border-secondary);
+  background: color-mix(in srgb, var(--ds-color-bg-secondary) 88%, transparent);
+}
+
+/* The mono field is the ID / key affordance: a firmer border and a denser fill
+   than the prose field beside it. */
+.ds-structure.ds-record[data-part='field'][data-mono='true'] {
+  border: 1px solid var(--ds-color-border);
+  background: color-mix(in srgb, var(--ds-color-bg-primary) 18%, var(--ds-color-bg-secondary) 82%);
+}
+
+.ds-structure.ds-record[data-part='field'] > * > [data-part='field-label'][data-part='field-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+.ds-structure.ds-record[data-part='field'] > * > [data-part='field-helper'][data-part='field-helper'] {
+  color: var(--ds-color-text-secondary);
+}
+
+.ds-structure.ds-record[data-part='field'][data-empty='false'] [data-part='field-value'][data-part='field-value'] {
+  color: var(--ds-color-text-primary);
+}
+
+.ds-structure.ds-record[data-part='field'][data-empty='true'] [data-part='field-value'][data-part='field-value'] {
+  color: var(--ds-color-text-tertiary);
+}
+
+.ds-structure.ds-record[data-part='field'] [data-part='field-link-icon'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* `NavigationLinkProps` accepts a className but not a `data-part`, and a
+   consumer-supplied Link adapter is not this component's DOM. The anchor keeps
+   the field's own colour rather than the UA link colour. */
+.ds-structure.ds-record[data-part='field'] .ds-record__field-link {
+  color: inherit;
+}
+
+/* --- RecordActionBar ------------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='action-bar'][data-part='action-bar'] {
+  border-top: 1px solid var(--ds-color-border-secondary);
+  background-image: linear-gradient(180deg, color-mix(in srgb, var(--ds-color-bg-secondary) 34%, transparent) 0%, transparent 100%);
+  background-size: 100% 100%;
+  background-position: 0 0;
+}
+
+/* The meta label/text pair renders only when `meta` is a string, so no consumer
+   node can sit on this path. */
+.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-label'] {
+  color: var(--ds-color-text-tertiary);
+}
+
+.ds-structure.ds-record[data-part='action-bar'] > [data-part='action-bar-meta'] [data-part='action-bar-meta-text'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* --- RecordPanel ----------------------------------------------------------- */
+
+.ds-structure.ds-record[data-part='panel'][data-part='panel'] {
+  border-radius: 18px;
+  border: 1px solid var(--ds-color-border-secondary);
+  background: var(--ds-surface-card, var(--ds-color-bg-elevated));
+}

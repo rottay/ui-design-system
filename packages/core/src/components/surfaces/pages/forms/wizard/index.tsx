@@ -301,13 +301,13 @@ export function WizardSurface({
       <Grid.Item span={asideNode && !shouldStack ? 8 : undefined}>
         <Stack spacing={sectionSpacing}>
           {config.presentation.description && (
-            <Text data-part="description" style={{ color: 'var(--ds-color-text-muted)' }}>
+            <Text data-part="description">
               {config.presentation.description}
             </Text>
           )}
 
           {config.presentation.error && (
-            <Card className="ds-wizard__error-card" variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error-500)' }}>
+            <Card className="ds-wizard__error-card" variant={profileDefaults.cardVariant}>
               <Card.Body>{config.presentation.error}</Card.Body>
             </Card>
           )}

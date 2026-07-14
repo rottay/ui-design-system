@@ -90,7 +90,7 @@
       },
       "patterns/visualization/charts/tooltip/index.tsx": {
         "floor": 2,
-        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE ×5, SWATCH_STYLE ×1, label colors ×3) are all static tokens."
+        "why": "`TooltipValue`'s and `TooltipSeries`'s swatch `backgroundColor: color`/`backgroundColor: item.color` -- both a caller-supplied per-series/per-value color passed into the shared tooltip components every chart in the family mounts. The other 9 sites in this file (TOOLTIP_STYLE \u00d75, SWATCH_STYLE \u00d71, label colors \u00d73) are all static tokens."
       },
       "patterns/visualization/kanban-board/engines/modern.tsx": {
         "floor": 1,
@@ -115,6 +115,10 @@
       "patterns/visualization/map-view/engines/rustic.tsx": {
         "floor": 1,
         "why": "Same shape as modern: marker color dot `background: marker.color`, same no-fallback gap."
+      },
+      "patterns/forms/form-builder/engines/modern.tsx": {
+        "floor": 1,
+        "why": "form-builder/engines/modern.tsx:282 -- the color field's read-only swatch paints `background: String(val)`, the hex the USER PICKED in that field. A value computed from data; no token set can hold it. No rustic twin (rustic renders no swatch)."
       }
     },
     "$excluded": "charts/hooks/use-chart-theme.ts:291 is DEAD CODE (the hook has no callers anywhere in the repo, verified by grep). Do NOT exempt it -- exempting dead code freezes it in place with the gate's blessing. Wire it up or delete it; either way that is a product decision, not an exemption. charts/tooltip/crosshair.ts's dot-fill B site (`.attr('fill', (d) => d.color)`) is also real B but is 100% D3-imperative -- the file's own census count is 0, so it is invisible to this counter-based gate and cannot be floor-protected here at all; same for gauge/index.tsx's `needleColor` (see that file's own why)."

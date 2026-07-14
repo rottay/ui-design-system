@@ -1,0 +1,175 @@
+/**
+ * Rustic FormBuilder skin (WO-SKIN-06 checkpoint CK-D/F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
+ * unnamed `base` layer, so a layered rule loses to preflight regardless of
+ * specificity. That matters more here than anywhere else in this checkpoint: the
+ * input chrome is written as LONGHANDS (`border-width`/`border-style`/
+ * `border-color`), and preflight kills `border-width` on every element. Unlayered
+ * is the only reason the 1px input border survives at all (P-76).
+ *
+ * SCOPE ROOT is the `<form>` carrying `ds-pattern-form-builder ds-engine-rustic`
+ * + `data-part='root'`. This engine has no loading branch (it destructures
+ * `loading` and never reads it -- a real, pre-existing cross-engine gap the
+ * contract test asserts explicitly rather than papering over).
+ *
+ * SPECIFICITY (P-48): a rule painting a border COLOR must reach (0,4,0) to clear
+ * the tenant `html[data-tenant]:not([data-theme]):not(.light) *` border-color
+ * floor at (0,3,1). Bought from the two root classes (0,2,0) + the target's
+ * `data-part` REPEATED (0,2,0). A `:not()` carries the specificity of its argument.
+ *
+ * ONE RUNTIME CONSTRAINT, load-bearing:
+ *
+ * `value-input` is stamped on TWELVE controls fed by THREE different style objects
+ * plus four that carry no paint at all. The switch's `default` branch falls back to
+ * the shared input style, so the base rule below is written as an EXCLUSION list
+ * (`:not([data-field-type=…])`) rather than an allowlist of known types: an
+ * allowlist would silently drop any field type not enumerated in the switch, and
+ * the `default` branch exists precisely to catch those. Excluded, because each
+ * paints from somewhere else or not at all: textarea and select/multi-select (their
+ * own objects, byte-identical paint, kept as separate rules so a future edit to one
+ * cannot move the others); color (its own border + radius); and checkbox, switch,
+ * radio, slider, rating, which paint NOTHING and render as native UA controls.
+ *
+ * KEYFRAME NAMESPACE: `@keyframes ds-form-error-in` was injected per-mount from a
+ * `<style>` child inside the form. Moved here under the component+engine namespace
+ * so it cannot shadow or be shadowed; it is referenced only by this engine's error
+ * text, so nothing outside could have depended on the old name.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-form-builder-rustic-error-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- title + description ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='title'] {
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='description'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-500));
+}
+
+/* ---- field label + its required marker ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='field-label'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-700));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='required-mark'] {
+  color: var(--ds-color-error, var(--ds-color-danger));
+}
+
+/* ---- the shared native-input chrome. Exclusion list, not an allowlist -- see the
+        runtime constraint in the header. Longhand border, transcribed as written. ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input']:not([data-field-type='textarea']):not([data-field-type='select']):not([data-field-type='multi-select']):not([data-field-type='checkbox']):not([data-field-type='switch']):not([data-field-type='radio']):not([data-field-type='color']):not([data-field-type='slider']):not([data-field-type='rating']) {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+  outline: none;
+}
+
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='textarea'] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+  outline: none;
+}
+
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='select'],
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='multi-select'] {
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-primary, var(--ds-color-neutral-900));
+  outline: none;
+}
+
+/* ---- the native colour input paints only its own frame ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-field-type='color'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+}
+
+/* ---- the errored input. `data-error` is stamped ONLY on the controls the JSX
+        actually merged the error style into (the shared-input family, textarea and
+        the two selects) -- never on the native checkbox/radio/switch/slider/rating,
+        which can be required-and-empty but were never given an error frame. Keying
+        the rule on the attribute rather than on `value-input` preserves that. ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input'][data-error='true'] {
+  border-color: var(--ds-color-error, var(--ds-color-danger));
+  box-shadow: var(--ds-shadow-input-error);
+}
+
+/* ---- the label wrapping a native checkbox / radio option / switch (it renders the
+        option text, which is what the colour was for). One part, three call sites. ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='choice-row'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-700));
+}
+
+/* ---- per-field help + error text. The error slides in on the namespaced keyframe;
+        `animation` stays inline (not a counted channel). ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='field-description'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-neutral-400));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='field-error'][data-part='field-error'] {
+  color: var(--ds-color-error, var(--ds-color-danger));
+  border-left: 2px solid var(--ds-color-error, var(--ds-color-danger));
+}
+
+/* ---- rating stars ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='rating-star'] {
+  color: var(--ds-color-border-primary, var(--ds-color-neutral-300));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='rating-star'][data-active='true'] {
+  color: var(--ds-color-warning);
+}
+
+/* ---- step tabs: an underlined bar, not the numbered circles the modern engine
+        draws. A genuine cross-engine divergence -- preserved, not reconciled.
+        `font-weight` stays inline (not a counted channel). ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='step-tab'][data-part='step-tab'] {
+  color: var(--ds-color-text-tertiary, var(--ds-color-neutral-400));
+  border-bottom: 2px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+.ds-pattern-form-builder.ds-engine-rustic [data-part='step-tab'][data-part='step-tab'][data-active='true'] {
+  color: var(--ds-color-primary);
+  border-bottom: 2px solid var(--ds-color-primary);
+}
+
+/* ---- wizard navigation buttons ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='wizard-prev-button'][data-part='wizard-prev-button'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300));
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  color: var(--ds-color-text-secondary, var(--ds-color-neutral-700));
+}
+
+.ds-pattern-form-builder.ds-engine-rustic [data-part='wizard-next-button'][data-part='wizard-next-button'] {
+  border: none;
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* ---- the sticky submit area ---- */
+.ds-pattern-form-builder.ds-engine-rustic [data-part='action-bar'][data-part='action-bar'] {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: var(--ds-color-alpha-white-80);
+  border-top: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));
+}

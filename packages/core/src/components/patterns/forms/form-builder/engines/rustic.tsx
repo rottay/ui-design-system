@@ -35,23 +35,18 @@ const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms
 // ---------------------------------------------------------------------------
 // All visual tokens reference `--ds-*` CSS custom properties with sensible
 // fallbacks so the form renders correctly even without a theme provider.
+const ROOT_CLASS_NAME = 'ds-pattern-form-builder ds-engine-rustic';
+
 const s = {
   title: {
     fontSize: 'var(--ds-font-size-xl)',
     fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
     letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
-    color: 'var(--ds-color-text-primary, var(--ds-color-neutral-900))',
     margin: '0 0 4px 0',
   } as CSSProperties,
   description: {
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-color-text-secondary, var(--ds-color-neutral-500))',
     margin: '0 0 24px 0',
-  } as CSSProperties,
-  sectionDivider: {
-    border: 'none',
-    borderTop: '1px var(--ds-divider-style, solid) var(--ds-divider-color, var(--ds-color-neutral-200))',
-    margin: 'var(--ds-card-body-padding, 1.25rem) 0',
   } as CSSProperties,
   label: {
     display: 'block',
@@ -59,11 +54,9 @@ const s = {
     fontWeight: 'var(--ds-typography-heading-font-weight, 500)' as unknown as number,
     letterSpacing: 'var(--ds-typography-heading-letter-spacing, normal)',
     textTransform: 'var(--ds-typography-label-transform, none)' as CSSProperties['textTransform'],
-    color: 'var(--ds-color-text-secondary, var(--ds-color-neutral-700))',
     marginBottom: 6,
   } as CSSProperties,
   required: {
-    color: 'var(--ds-color-error, var(--ds-color-danger))',
     marginLeft: 3,
   } as CSSProperties,
   input: {
@@ -71,13 +64,6 @@ const s = {
     width: '100%',
     padding: '8px 12px',
     fontSize: 'var(--ds-font-size-sm)',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-color-border-primary, var(--ds-color-neutral-300))',
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    color: 'var(--ds-color-text-primary, var(--ds-color-neutral-900))',
-    outline: 'none',
     boxSizing: 'border-box' as const,
     transition: `border-color ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
@@ -86,13 +72,6 @@ const s = {
     width: '100%',
     padding: '8px 12px',
     fontSize: 'var(--ds-font-size-sm)',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-color-border-primary, var(--ds-color-neutral-300))',
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    color: 'var(--ds-color-text-primary, var(--ds-color-neutral-900))',
-    outline: 'none',
     boxSizing: 'border-box' as const,
     resize: 'vertical' as const,
     minHeight: 80,
@@ -103,27 +82,17 @@ const s = {
     width: '100%',
     padding: '8px 12px',
     fontSize: 'var(--ds-font-size-sm)',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'var(--ds-color-border-primary, var(--ds-color-neutral-300))',
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    color: 'var(--ds-color-text-primary, var(--ds-color-neutral-900))',
-    outline: 'none',
     boxSizing: 'border-box' as const,
     transition: `border-color ${RUSTIC_DURATION} ${RUSTIC_EASING}, box-shadow ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
   error: {
     fontSize: 'var(--ds-font-size-xs)',
-    color: 'var(--ds-color-error, var(--ds-color-danger))',
     marginTop: 4,
-    animation: `ds-form-error-in ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
-    borderLeft: '2px solid var(--ds-color-error, var(--ds-color-danger))',
+    animation: `ds-form-builder-rustic-error-in ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
     paddingLeft: 8,
   } as CSSProperties,
   hint: {
     fontSize: 'var(--ds-font-size-xs)',
-    color: 'var(--ds-color-text-tertiary, var(--ds-color-neutral-400))',
     marginTop: 4,
   } as CSSProperties,
   checkboxRow: {
@@ -132,7 +101,6 @@ const s = {
     gap: 8,
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-color-text-secondary, var(--ds-color-neutral-700))',
   } as CSSProperties,
   stepBar: {
     display: 'flex',
@@ -146,8 +114,6 @@ const s = {
       padding: '8px 0',
       fontSize: 'var(--ds-font-size-sm)',
       fontWeight: active ? 'var(--ds-typography-heading-font-weight, 600)' : 400,
-      color: active ? 'var(--ds-color-primary)' : 'var(--ds-color-text-tertiary, var(--ds-color-neutral-400))',
-      borderBottom: `2px solid ${active ? 'var(--ds-color-primary)' : 'var(--ds-color-border-primary, var(--ds-color-neutral-200))'}`,
       cursor: 'pointer',
       transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
     }) as CSSProperties,
@@ -160,10 +126,6 @@ const s = {
     padding: '8px 20px',
     fontSize: 'var(--ds-font-size-sm)',
     fontWeight: 500,
-    border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300))',
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-    color: 'var(--ds-color-text-secondary, var(--ds-color-neutral-700))',
     cursor: 'pointer',
     transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
   } as CSSProperties,
@@ -171,26 +133,14 @@ const s = {
     padding: '8px 20px',
     fontSize: 'var(--ds-font-size-sm)',
     fontWeight: 500,
-    border: 'none',
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-color-primary)',
-    color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
     cursor: 'pointer',
     transition: `all ${RUSTIC_DURATION} ${RUSTIC_EASING}`,
-  } as CSSProperties,
-  inputError: {
-    borderColor: 'var(--ds-color-error, var(--ds-color-danger))',
-    boxShadow: 'var(--ds-shadow-input-error)',
   } as CSSProperties,
   submitArea: {
     position: 'sticky' as const,
     bottom: 0,
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)',
-    background: 'var(--ds-color-alpha-white-80)',
     padding: '12px 0',
     marginTop: 16,
-    borderTop: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100))',
     zIndex: 5,
   } as CSSProperties,
 };
@@ -330,11 +280,6 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     [validate, onSubmit, currentValues, onValidationChange]
   );
 
-  // Merge error border/shadow onto the base input style only when a validation
-  // error exists. This keeps per-field style computation to a single lookup.
-  const inputStyle = (name: string): CSSProperties =>
-    errors[name] ? { ...s.input, ...s.inputError } : s.input;
-
   // Maps each FieldDef type to a native HTML input element styled with
   // inline styles from the `s` dictionary. All visual tokens flow through
   // CSS custom properties so tenant themes control the look without code changes.
@@ -358,7 +303,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
               onChange={(e) => updateValue(field.name, e.target.value)}
               disabled={fieldDisabled}
               readOnly={readOnly}
-              style={inputStyle(field.name)}
+              data-error={!!errors[field.name]} style={s.input}
             />
           );
         case 'number':
@@ -374,7 +319,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
               max={field.validation?.max}
               disabled={fieldDisabled}
               readOnly={readOnly}
-              style={inputStyle(field.name)}
+              data-error={!!errors[field.name]} style={s.input}
             />
           );
         case 'textarea':
@@ -382,12 +327,13 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             <textarea
               data-part="value-input"
               data-field-type="textarea"
+              data-error={!!errors[field.name]}
               placeholder={field.placeholder}
               value={(val as string) ?? ''}
               onChange={(e) => updateValue(field.name, e.target.value)}
               disabled={fieldDisabled}
               readOnly={readOnly}
-              style={{ ...s.textarea, ...(errors[field.name] ? s.inputError : {}) }}
+              style={s.textarea}
             />
           );
         case 'select':
@@ -395,10 +341,11 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             <select
               data-part="value-input"
               data-field-type="select"
+              data-error={!!errors[field.name]}
               value={(val as string) ?? ''}
               onChange={(e) => updateValue(field.name, e.target.value)}
               disabled={fieldDisabled}
-              style={{ ...s.select, ...(errors[field.name] ? s.inputError : {}) }}
+              style={s.select}
             >
               {field.placeholder && <option value="">{field.placeholder}</option>}
               {field.options?.map((opt) => (
@@ -411,6 +358,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             <select
               data-part="value-input"
               data-field-type="multi-select"
+              data-error={!!errors[field.name]}
               multiple
               value={(val as string[]) ?? []}
               onChange={(e) => {
@@ -418,7 +366,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
                 updateValue(field.name, selected);
               }}
               disabled={fieldDisabled}
-              style={{ ...s.select, minHeight: 80, ...(errors[field.name] ? s.inputError : {}) }}
+              style={{ ...s.select, minHeight: 80 }}
             >
               {field.options?.map((opt) => (
                 <option key={opt.value} value={opt.value} disabled={opt.disabled}>{opt.label}</option>
@@ -427,7 +375,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
           );
         case 'checkbox':
           return (
-            <label style={s.checkboxRow}>
+            <label data-part="choice-row" style={s.checkboxRow}>
               <input
                 data-part="value-input"
                 data-field-type="checkbox"
@@ -443,7 +391,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
           return (
             <div data-part="value-input" data-field-type="radio" style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {field.options?.map((opt) => (
-                <label key={opt.value} style={s.checkboxRow}>
+                <label key={opt.value} data-part="choice-row" style={s.checkboxRow}>
                   <input
                     type="radio"
                     name={field.name}
@@ -459,7 +407,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
           );
         case 'switch':
           return (
-            <label style={s.checkboxRow}>
+            <label data-part="choice-row" style={s.checkboxRow}>
               <input
                 data-part="value-input"
                 data-field-type="switch"
@@ -473,16 +421,16 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             </label>
           );
         case 'date':
-          return <input data-part="value-input" data-field-type="date" type="date" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type="date" type="date" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
         case 'time':
-          return <input data-part="value-input" data-field-type="time" type="time" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type="time" type="time" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
         case 'datetime':
-          return <input data-part="value-input" data-field-type="datetime" type="datetime-local" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type="datetime" type="datetime-local" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
         case 'file':
-          return <input data-part="value-input" data-field-type="file" type="file" disabled={fieldDisabled} style={inputStyle(field.name)} onChange={(e) => updateValue(field.name, e.target.files)} />;
+          return <input data-part="value-input" data-field-type="file" type="file" disabled={fieldDisabled} data-error={!!errors[field.name]} style={s.input} onChange={(e) => updateValue(field.name, e.target.files)} />;
         case 'color':
           // Native color inputs only accept concrete color strings, not CSS vars.
-          return <input data-part="value-input" data-field-type="color" type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-300))', borderRadius: 'var(--ds-radius-md)', cursor: 'pointer' }} />;
+          return <input data-part="value-input" data-field-type="color" type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, cursor: 'pointer' }} />;
         case 'slider':
           return <input data-part="value-input" data-field-type="slider" type="range" value={(val as number) ?? 0} onChange={(e) => updateValue(field.name, Number(e.target.value))} min={field.validation?.min ?? 0} max={field.validation?.max ?? 100} disabled={fieldDisabled} style={{ width: '100%' }} />;
         case 'rating':
@@ -494,7 +442,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
                   data-part="rating-star"
                   data-active={(val as number) >= star}
                   onClick={() => !fieldDisabled && updateValue(field.name, star)}
-                  style={{ cursor: fieldDisabled ? 'default' : 'pointer', fontSize: 20, color: (val as number) >= star ? 'var(--ds-color-warning)' : 'var(--ds-color-border-primary, var(--ds-color-neutral-300))' }}
+                  style={{ cursor: fieldDisabled ? 'default' : 'pointer', fontSize: 20 }}
                 >
                   &#9733;
                 </span>
@@ -504,7 +452,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'custom':
           return field.render?.(field, val, (v) => updateValue(field.name, v)) ?? null;
         default:
-          return <input data-part="value-input" data-field-type={field.type} type="text" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} style={inputStyle(field.name)} />;
+          return <input data-part="value-input" data-field-type={field.type} type="text" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
       }
     },
     [currentValues, disabled, readOnly, updateValue, errors]
@@ -592,12 +540,9 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     <form
       data-part="root"
       onSubmit={handleSubmit}
-      className={className}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
       style={{ fontFamily: 'var(--ds-font-family-base)', ...style }}
     >
-      {/* Inline keyframes: Rustic engine cannot depend on global CSS, so
-          the error-slide-in animation must be co-located here. */}
-      <style>{`@keyframes ds-form-error-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }`}</style>
       {title && <h3 data-part="title" style={s.title}>{title}</h3>}
       {description && <p data-part="description" style={s.description}>{description}</p>}
 

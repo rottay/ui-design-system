@@ -72,21 +72,25 @@ export function FormSurface({
     );
   }
 
+  // The sticky posture is a paint (a scrim gradient) plus a layout. `data-sticky`
+  // carries the condition into the skin; the layout stays here.
+  const actionsSticky = Boolean(isMobile && config.visual.mobileActionsSticky);
+
   const actionsNode = (
     <Flex
       data-part="actions"
+      data-sticky={actionsSticky}
       direction={isMobile ? 'column' : 'row'}
       gap={8}
       wrap="wrap"
       justify="end"
       style={
-        isMobile && config.visual.mobileActionsSticky
+        actionsSticky
           ? {
               position: 'sticky',
               bottom: 0,
               paddingTop: 12,
               paddingBottom: 4,
-              background: 'linear-gradient(to top, var(--ds-color-bg-primary) 85%, transparent)',
               zIndex: 1,
             }
           : undefined
@@ -133,7 +137,6 @@ export function FormSurface({
                   data-part="description"
                   size="sm"
                   style={{
-                    color: 'var(--ds-color-text-muted)',
                     lineHeight: 1.5,
                   }}
                 >
@@ -142,7 +145,7 @@ export function FormSurface({
               )}
 
               {config.presentation.error && (
-                <Card className="ds-form__error-card" variant={profileDefaults.cardVariant} style={{ borderColor: 'var(--ds-color-error)' }}>
+                <Card className="ds-form__error-card" variant={profileDefaults.cardVariant}>
                   <Card.Body>{config.presentation.error}</Card.Body>
                 </Card>
               )}

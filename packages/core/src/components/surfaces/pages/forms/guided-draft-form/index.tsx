@@ -138,13 +138,14 @@ export interface GuidedDraftFormSurfaceProps {
 // ---------------------------------------------------------------------------
 
 function DraftStatusBadge({ status, lastSavedAt }: { status: DraftStatus; lastSavedAt?: string }) {
-  const statusMap: Record<DraftStatus, { label: string; color: string }> = {
-    unsaved: { label: 'Unsaved changes', color: 'var(--ds-color-warning)' },
-    saving: { label: 'Saving...', color: 'var(--ds-color-text-muted)' },
-    saved: { label: lastSavedAt ? `Saved ${lastSavedAt}` : 'Saved', color: 'var(--ds-color-success)' },
-    error: { label: 'Save failed', color: 'var(--ds-color-error)' },
+  // Copy only. The dot and label take their colour from `data-status` in
+  // `tokens/css/components/skin/guided-draft-form.css`.
+  const statusLabel: Record<DraftStatus, string> = {
+    unsaved: 'Unsaved changes',
+    saving: 'Saving...',
+    saved: lastSavedAt ? `Saved ${lastSavedAt}` : 'Saved',
+    error: 'Save failed',
   };
-  const { label, color } = statusMap[status];
 
   return (
     <Flex
@@ -154,8 +155,6 @@ function DraftStatusBadge({ status, lastSavedAt }: { status: DraftStatus; lastSa
       gap={2}
       style={{
         padding: '4px 10px',
-        borderRadius: 'var(--ds-radius-sm)',
-        background: 'var(--ds-color-bg-tertiary)',
       }}
     >
       <Box
@@ -164,12 +163,10 @@ function DraftStatusBadge({ status, lastSavedAt }: { status: DraftStatus; lastSa
         style={{
           width: 6,
           height: 6,
-          borderRadius: '50%',
-          background: color,
           flexShrink: 0,
         }}
       />
-      <Text data-part="draft-status-label" size="xs" style={{ color, whiteSpace: 'nowrap' }}>{label}</Text>
+      <Text data-part="draft-status-label" size="xs" style={{ whiteSpace: 'nowrap' }}>{statusLabel[status]}</Text>
     </Flex>
   );
 }
@@ -207,7 +204,6 @@ function SectionNav({
           size="xs"
           weight="semibold"
           style={{
-            color: 'var(--ds-color-text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             marginBottom: 8,
@@ -238,7 +234,6 @@ function SectionNav({
           size="xs"
           weight="semibold"
           style={{
-            color: 'var(--ds-color-text-muted)',
             textTransform: 'uppercase',
             letterSpacing: '0.05em',
             marginBottom: 8,
@@ -270,22 +265,10 @@ function SectionNav({
                 size="sm"
                 onClick={() => onSectionClick(section.key)}
                 style={{
-                  borderRadius: 'var(--ds-radius-full, 9999px)',
-                  background: isActive
-                    ? 'var(--ds-color-primary-bg, var(--ds-color-bg-tertiary))'
-                    : 'var(--ds-color-bg-secondary, var(--ds-color-bg-tertiary))',
-                  color: section.hasErrors
-                    ? 'var(--ds-color-error)'
-                    : isActive
-                      ? 'var(--ds-color-primary)'
-                      : 'var(--ds-color-text-secondary)',
                   fontWeight: isActive ? 600 : 400,
                   whiteSpace: 'nowrap',
                   padding: '6px 14px',
                   flexShrink: 0,
-                  border: isActive
-                    ? '1px solid var(--ds-color-primary)'
-                    : '1px solid var(--ds-color-border, transparent)',
                   transition: 'all 150ms ease',
                 }}
               >
@@ -295,11 +278,11 @@ function SectionNav({
                       {section.icon}
                     </Box>
                   )}
-                  <Text data-part="section-nav-item-label" size="sm" style={{ color: 'inherit', whiteSpace: 'nowrap' }}>
+                  <Text data-part="section-nav-item-label" size="sm" style={{ whiteSpace: 'nowrap' }}>
                     {section.title}
                   </Text>
                   {section.isComplete && (
-                    <Text data-part="section-nav-item-complete" size="xs" style={{ color: 'var(--ds-color-success)', flexShrink: 0 }}>
+                    <Text data-part="section-nav-item-complete" size="xs" style={{ flexShrink: 0 }}>
                       ✓
                     </Text>
                   )}
@@ -309,8 +292,6 @@ function SectionNav({
                       style={{
                         width: 6,
                         height: 6,
-                        borderRadius: '50%',
-                        background: 'var(--ds-color-error)',
                         flexShrink: 0,
                       }}
                     />
@@ -345,7 +326,6 @@ function SectionNav({
         size="xs"
         weight="semibold"
         style={{
-          color: 'var(--ds-color-text-muted)',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
           marginBottom: 12,
@@ -369,18 +349,6 @@ function SectionNav({
               size="sm"
               onClick={() => onSectionClick(section.key)}
               style={{
-                borderRadius: 'var(--ds-radius-sm)',
-                border: `1px solid ${
-                  isActive ? 'color-mix(in srgb, var(--ds-color-primary) 26%, var(--ds-color-border-secondary))' : 'transparent'
-                }`,
-                background: isActive
-                  ? 'var(--ds-color-primary-bg, var(--ds-color-bg-tertiary))'
-                  : 'transparent',
-                color: section.hasErrors
-                  ? 'var(--ds-color-error)'
-                  : isActive
-                    ? 'var(--ds-color-primary)'
-                    : 'var(--ds-color-text-secondary)',
                 fontWeight: isActive ? 600 : 400,
                 justifyContent: 'flex-start',
                 width: '100%',
@@ -402,14 +370,13 @@ function SectionNav({
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'nowrap',
-                      color: 'inherit',
                     }}
                   >
                     {section.title}
                   </Text>
                 </Flex>
                 {section.isComplete && (
-                  <Text data-part="section-nav-item-complete" size="xs" style={{ color: 'var(--ds-color-success)', flexShrink: 0 }}>
+                  <Text data-part="section-nav-item-complete" size="xs" style={{ flexShrink: 0 }}>
                     ✓
                   </Text>
                 )}
@@ -419,8 +386,6 @@ function SectionNav({
                     style={{
                       width: 6,
                       height: 6,
-                      borderRadius: '50%',
-                      background: 'var(--ds-color-error)',
                       flexShrink: 0,
                     }}
                   />
@@ -468,7 +433,6 @@ function TemplateCard({
             whiteSpace: 'normal',
             display: 'block',
             width: '100%',
-            background: 'transparent',
           }}
         >
           <Stack spacing="xs">
@@ -477,18 +441,17 @@ function TemplateCard({
                 data-part="template-card-icon"
                 style={{
                   fontSize: 24,
-                  color: 'var(--ds-color-primary)',
                   marginBottom: 4,
                 }}
               >
                 {template.icon}
               </Box>
             )}
-            <Text data-part="template-card-title" size="sm" weight="semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
+            <Text data-part="template-card-title" size="sm" weight="semibold">
               {template.name}
             </Text>
             {template.description && (
-              <Text data-part="template-card-description" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+              <Text data-part="template-card-description" size="xs">
                 {template.description}
               </Text>
             )}
@@ -609,7 +572,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         <Card
           className="ds-guided-draft-form__draft-recovery"
           variant={profileDefaults.cardVariant}
-          style={{ borderColor: 'var(--ds-color-info)' }}
         >
           <Card.Body>
             <Flex align="center" gap={3}>
@@ -618,23 +580,20 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                 style={{
                   width: 32,
                   height: 32,
-                  borderRadius: 'var(--ds-radius-sm)',
-                  background: 'var(--ds-color-info-bg, var(--ds-color-bg-tertiary))',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
-                  color: 'var(--ds-color-info)',
                   fontSize: 14,
                 }}
               >
                 ↻
               </Box>
               <Box style={{ flex: 1 }}>
-                <Text data-part="draft-recovery-title" size="sm" weight="medium" style={{ color: 'var(--ds-color-text-primary)' }}>
+                <Text data-part="draft-recovery-title" size="sm" weight="medium">
                   Unsaved draft found
                 </Text>
-                <Text data-part="draft-recovery-description" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+                <Text data-part="draft-recovery-description" size="xs">
                   {draftRecovery.draftDate
                     ? `Last edited ${draftRecovery.draftDate}`
                     : 'You have an unsaved draft.'}
@@ -676,7 +635,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             data-part="title"
             size="xl"
             weight="semibold"
-            style={{ fontWeight: headingWeight, color: 'var(--ds-color-text-primary)' }}
+            style={{ fontWeight: headingWeight }}
           >
             {title}
           </Text>
@@ -684,7 +643,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
             <Text
               data-part="subtitle"
               size="sm"
-              style={{ color: 'var(--ds-color-text-muted)', marginTop: 2 }}
+              style={{ marginTop: 2 }}
             >
               {subtitle}
             </Text>
@@ -698,7 +657,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               showInfo={false}
               style={{ flex: 1 }}
             />
-            <Text size="xs" style={{ color: 'var(--ds-color-text-muted)', whiteSpace: 'nowrap' }}>
+            <Text data-part="progress-count" size="xs" style={{ whiteSpace: 'nowrap' }}>
               {completedCount}/{sections.length}
             </Text>
           </Flex>
@@ -786,7 +745,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                         <Box data-part="section-card-header">
                           <Flex align="center" gap={2}>
                             {section.icon && (
-                              <Box data-part="section-card-icon" style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+                              <Box data-part="section-card-icon" style={{ flexShrink: 0 }}>
                                 {section.icon}
                               </Box>
                             )}
@@ -796,7 +755,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                               weight="semibold"
                               style={{
                                 fontWeight: headingWeight,
-                                color: 'var(--ds-color-text-primary)',
                               }}
                             >
                               {section.title}
@@ -806,7 +764,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                                 data-part="section-card-complete"
                                 size="xs"
                                 style={{
-                                  color: 'var(--ds-color-success)',
                                   marginLeft: 'auto',
                                 }}
                               >
@@ -818,7 +775,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                                 data-part="section-card-errors"
                                 size="xs"
                                 style={{
-                                  color: 'var(--ds-color-error)',
                                   marginLeft: section.isComplete ? 0 : 'auto',
                                 }}
                               >
@@ -831,7 +787,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                               data-part="section-card-description"
                               size="sm"
                               style={{
-                                color: 'var(--ds-color-text-muted)',
                                 marginTop: 4,
                               }}
                             >
@@ -891,7 +846,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                         <Box data-part="section-card-header">
                           <Flex align="center" gap={2}>
                             {section.icon && (
-                              <Box data-part="section-card-icon" style={{ color: 'var(--ds-color-primary)', flexShrink: 0 }}>
+                              <Box data-part="section-card-icon" style={{ flexShrink: 0 }}>
                                 {section.icon}
                               </Box>
                             )}
@@ -901,7 +856,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                               weight="semibold"
                               style={{
                                 fontWeight: headingWeight,
-                                color: 'var(--ds-color-text-primary)',
                               }}
                             >
                               {section.title}
@@ -911,7 +865,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                                 data-part="section-card-complete"
                                 size="xs"
                                 style={{
-                                  color: 'var(--ds-color-success)',
                                   marginLeft: 'auto',
                                 }}
                               >
@@ -923,7 +876,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                                 data-part="section-card-errors"
                                 size="xs"
                                 style={{
-                                  color: 'var(--ds-color-error)',
                                   marginLeft: section.isComplete ? 0 : 'auto',
                                 }}
                               >
@@ -936,7 +888,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                               data-part="section-card-description"
                               size="sm"
                               style={{
-                                color: 'var(--ds-color-text-muted)',
                                 marginTop: 4,
                               }}
                             >
@@ -965,11 +916,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               : 'ds-guided-draft-form__validation-summary--warning',
           ].join(' ')}
           variant={profileDefaults.cardVariant}
-          style={{
-            borderColor: errorCount > 0
-              ? 'var(--ds-color-error)'
-              : 'var(--ds-color-warning)',
-          }}
         >
           <Card.Body>
             <Stack spacing="sm">
@@ -979,14 +925,10 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                   style={{
                     width: 8,
                     height: 8,
-                    borderRadius: '50%',
-                    background: errorCount > 0
-                      ? 'var(--ds-color-error)'
-                      : 'var(--ds-color-warning)',
                     flexShrink: 0,
                   }}
                 />
-                <Text data-part="validation-summary-title" size="sm" weight="semibold" style={{ color: 'var(--ds-color-text-primary)' }}>
+                <Text data-part="validation-summary-title" size="sm" weight="semibold">
                   {errorCount > 0 ? `${errorCount} error${errorCount > 1 ? 's' : ''}` : ''}
                   {errorCount > 0 && warningCount > 0 ? ', ' : ''}
                   {warningCount > 0 ? `${warningCount} warning${warningCount > 1 ? 's' : ''}` : ''}
@@ -1001,25 +943,16 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                       style={{
                         width: 4,
                         height: 4,
-                        borderRadius: '50%',
-                        background: issue.severity === 'error'
-                          ? 'var(--ds-color-error)'
-                          : 'var(--ds-color-warning)',
                         flexShrink: 0,
                         marginTop: 6,
                       }}
                     />
-                    <Text size="xs" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                    <Text data-part="validation-issue-message" size="xs">
                       <Text
                         as="span"
                         data-part="validation-issue-field"
                         size="xs"
                         weight="medium"
-                        style={{
-                          color: issue.severity === 'error'
-                            ? 'var(--ds-color-error)'
-                            : 'var(--ds-color-warning)',
-                        }}
                       >
                         {issue.field}
                       </Text>
@@ -1029,7 +962,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                   </Flex>
                 ))}
                 {validationIssues.length > 5 && (
-                  <Text size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+                  <Text data-part="validation-issue-overflow" size="xs">
                     +{validationIssues.length - 5} more issue{validationIssues.length - 5 > 1 ? 's' : ''}
                   </Text>
                 )}
@@ -1057,12 +990,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
         <Card
           className="ds-guided-draft-form__submit-bar-card"
           variant={profileDefaults.cardVariant}
-          style={{
-            borderRadius: 0,
-            borderLeft: 'none',
-            borderRight: 'none',
-            borderBottom: 'none',
-          }}
         >
           <Card.Body>
             {isMobile ? (
@@ -1073,7 +1000,6 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
                     data-part="submit-bar-progress"
                     size="xs"
                     style={{
-                      color: 'var(--ds-color-text-muted)',
                       textAlign: 'center',
                     }}
                   >
@@ -1109,7 +1035,7 @@ export function GuidedDraftFormSurface(props: GuidedDraftFormSurfaceProps) {
               // Tablet / Desktop: horizontal row
               <Flex align="center" gap={3}>
                 {showProgress && (
-                  <Text data-part="submit-bar-progress" size="xs" style={{ color: 'var(--ds-color-text-muted)' }}>
+                  <Text data-part="submit-bar-progress" size="xs">
                     {completedCount} of {sections.length} sections complete
                   </Text>
                 )}
