@@ -52,6 +52,8 @@ export function LoadingOverlay({ visible, message = 'Loading', logo }: LoadingOv
     <>
       <style dangerouslySetInnerHTML={{ __html: OVERLAY_CSS }} />
       <Box
+        className="ds-loading-overlay"
+        data-part="root"
         style={{
           position: 'absolute',
           inset: 0,
@@ -67,12 +69,13 @@ export function LoadingOverlay({ visible, message = 'Loading', logo }: LoadingOv
       >
         <Flex direction="column" align="center" gap={12}>
           {logo && (
-            <Box style={{ animation: 'lo-pulse 1.8s ease-in-out infinite' }}>
+            <Box data-part="logo" style={{ animation: 'lo-pulse 1.8s ease-in-out infinite' }}>
               {logo}
             </Box>
           )}
           <Flex align="center" gap={2}>
             <Text
+              data-part="message"
               size="sm"
               style={{
                 color: 'var(--ds-color-text-muted)',
@@ -85,6 +88,7 @@ export function LoadingOverlay({ visible, message = 'Loading', logo }: LoadingOv
             {[0, 1, 2].map((i) => (
               <Text
                 key={i}
+                data-part="dot"
                 size="sm"
                 style={{
                   color: 'var(--ds-color-text-muted)',
