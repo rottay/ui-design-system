@@ -1104,3 +1104,38 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   law has drawn blood seven, a dead-selector gate is likely the highest-value machinery left in this
   program.
 - **Status** — OPEN.
+
+### P-80 The pixel gate cannot see most of what a skin does
+
+- **Context** — While building the dead-selector check P-79 argued for, I probed all 2435 skin
+  selectors against every section of the whitelabel torture page, in both engines, in a real browser.
+  The dead-rule search came back **clean** (see below). The coverage number did not.
+- **Evidence** — A large share of skin rules match nothing on the torture page **at rest**, because
+  the state they key on is never rendered. Not exotic states — the ordinary ones:
+  `button[data-variant='outline'|'text'|'dashed'|'link'|'danger']`, `select[data-open='true']`,
+  `select [data-part='placeholder'|'loading']`, `upload [data-part='preview-modal']`,
+  `datepicker [data-status='error'|'warning']`, `table [data-part='sort-indicator'|'filter-row']`.
+- **Why it matters** — **the recorded baselines are the gate this entire program rests on.** A
+  byte-exact migration is certified by the claim "the pixels did not move". A rule no fixture renders
+  is a rule no baseline photographs, so a migration can break it and the gate stays green. We have
+  been plugging this hole one case at a time, by hand, whenever someone happened to notice: the
+  filter-builder hover pin (CK-D) and the EditHeader dead-hover pin (CK-B) both exist because a
+  contract author thought to ask. That is not a system.
+- **What it is NOT** — this does not say the rules are wrong, and it does not count the interaction
+  pins the specs perform (hover, open, focus), which do exercise some of these. The honest claim is
+  narrow and still damning: **the rest-state fixtures alone leave a large fraction of every skin
+  unphotographed.**
+- **Ask** — make fixture completeness measurable instead of a matter of authorial diligence. The
+  pre-step contract already demands "fixtures must render every state a rule will key on"; nothing
+  checks it. Report per-skin coverage (rules exercised / rules total), ratchet it, and make a new
+  skin's coverage a release condition. The tool exists:
+  `packages/showroom/e2e/diagnostics/skin-rule-coverage.spec.ts` — deliberately OUTSIDE the visual
+  suite's `testMatch`, since it is a diagnostic, not a gate, and would add minutes to every run.
+- **A note on how this was found, because the method is the point** — the first run of that probe
+  "found" select, date-picker, toast and the table's sort indicators to be dead. They were not: I had
+  hand-written the list of torture-page sections and omitted `pickers`, `overlay` and `tablestates`.
+  The second version accused five detail-panel skeleton rules and three skins of selecting for a part
+  named `x`; both were my own scanner's bugs (parts arrive via a `part` prop, and CSS comments quote
+  selectors as prose). **Every "finding" this audit produced before it was correct was a defect in the
+  audit.** A tool that reports a problem has not found one.
+- **Status** — OPEN.
