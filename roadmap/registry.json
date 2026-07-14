@@ -1669,6 +1669,11 @@
      "at": "2026-07-14 18:22",
      "by": "ds-agent",
      "note": "Recovery CERTIFIED: hidden inline 130 reconciled (96 counter false positives, 14 static migrations, 20 exact runtime floors); embedded CSS 202->7 (195 declarations moved). Fail-closed counter P2 families closed; engine audit green at fleet 634/embedded 7; 78 Node + 90 Vitest assertions; core and Showroom production builds green; affected 99-case visual matrix passed twice. CK-H1 inert pre-step also certified at unchanged 70/75/54/36 with 8 visual cases passed twice. CK-E re-audited at 478 gate sites (299 inline + 179 runtime SVG). Next: migrate CK-H1 190 sites, then CK-E 367 sites."
+    },
+    {
+     "at": "2026-07-14 18:38",
+     "by": "ds-agent",
+     "note": "CK-H1 CERTIFIED byte-exact at 74d6e151: 235 to 45, 190 static sites moved into 4 unlayered skins; 37 runtime-paint and 8 non-paint identities retained. Independent review caught and fixed the Card data-part drop via a class-authoritative hook. Skin gates all zero; focused Node and component suites green; production core and 289-page Showroom builds green; five tracked bundles regenerated; 8-case Rottay-dark and BitHire-light visual matrix passed twice without snapshot updates. CK-E is now the sole remaining WO-SKIN-06 checkpoint: 478 to 111, migrate 367."
     }
    ],
    "claimedBy": "ds-agent",

@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-H1 — tenant and branding preview migration contract
 
-Status: inert pre-step certified; migration ready (2026-07-14).
+Status: certified byte-exact at `74d6e151` (2026-07-14).
 
 This contract supersedes the stale `237 / 37 runtime / 10 false-positive` headline in
 `wo-skin-06-ck-h-inventory.md`. The fail-closed AST counter now excludes the two
@@ -146,7 +146,33 @@ plus branding-preview-sandbox and brand-studio on dark/light surfaces. It must e
 all palette steps, static badge/button states, both brand-studio grounds and the live `ColorField`
 swatch. Record pre-step baselines, then require two no-update passes after migration.
 
-## 7. Exit gate
+## 7. Certified result
+
+CK-H1 landed at `74d6e151` with the exact `22 / 14 / 0 / 9 = 45` floor. The 190 migrated sites live
+in four unlayered skins wired through both canonical entrypoints and all five tracked vertical
+bundles. The identity test pins all 37 runtime-paint leaves and eight non-paint domain leaves; the
+topology test hashes rendered tags/nesting while deliberately excluding paint lookup tables and
+prop bags, and matches the committed pre-step tree in all four sources.
+
+Independent review found one real composition trap before certification: every Card engine keeps a
+consumer class but drops a consumer `data-part`, so Brand Studio's action panel uses its surviving
+`.ds-pattern-brand-studio__action-panel` class as the authoritative `(0,4,0)` hook. Cross-engine
+host probes cover modern, rustic and classic Box/Text/Card composition. No exemption was added.
+
+Evidence:
+
+- `engine-token-audit.mjs --check`: `skins.parseErrors=0`, `skins.unwired=0`,
+  `skins.deadParts=0`, `skins.exemptionsBreached=0`;
+- focused Node identity/topology suite `5/5`, focused component suites green, including the legacy
+  TenantPreview contract updated to assert skin ownership rather than obsolete inline paint;
+- production core build and 289-page Showroom build green;
+- both entrypoints and the five tracked bundles contain all four skins;
+- the eight Rottay-dark/BitHire-light production screenshots passed two independent no-update runs
+  against the pre-step baselines.
+
+The Stage-2 rustic-preview inconsistency remains recorded and intentionally unfixed.
+
+## 8. Exit gate
 
 CK-H1 is certified only when:
 

@@ -13,7 +13,7 @@ purged mid-batch on 2026-07-13, costing an hour of reconstruction).
 | [wo-skin-03-status-inventory.md](./wo-skin-03-status-inventory.md) | Per-component paint map, status family. |
 | [wo-skin-03-overlays-inventory.md](./wo-skin-03-overlays-inventory.md) | Per-component paint map, overlay family. |
 | [wo-skin-06-embedded-css-recovery-addendum.md](./wo-skin-06-embedded-css-recovery-addendum.md) | Certified hidden inline/embedded-CSS recovery, adjudications and executable evidence. |
-| [wo-skin-06-ck-h1-contract.md](./wo-skin-06-ck-h1-contract.md) | Tenant/branding preview contract, exact 235 → 45 target and certified inert pre-step. |
+| [wo-skin-06-ck-h1-contract.md](./wo-skin-06-ck-h1-contract.md) | Tenant/branding preview contract and byte-exact certification at 235 → 45. |
 | [wo-skin-06-ck-e-reaudit.md](./wo-skin-06-ck-e-reaudit.md) | Current visualization census: 478 sites, exact channel floors and parallel migration slices. |
 
 The normative authoring law is not here — it is

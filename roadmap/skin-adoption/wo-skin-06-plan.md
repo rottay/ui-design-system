@@ -1,6 +1,6 @@
 # WO-SKIN-06 — execution plan
 
-Written after six of the nine clusters were inventoried (CK-A, B, C, D, F, G; E/H/I in flight).
+Written after six of the ten checkpoints were inventoried (CK-A, B, C, D, F, G; E/H/I in flight).
 It **replaces the decomposition in `wo-skin-06-triage.md` §6**, which was built on a premise the
 inventories destroyed.
 
@@ -41,26 +41,28 @@ Ordered by (value per unit of risk) × (readiness), not by size:
 | # | cluster | sites | skins | why here |
 | --- | --- | --- | --- | --- |
 | 1 | **CK-D** forms + record + workflow | 591 | ~6 | The cleanest cluster in the program: 589/591 category A, ZERO DaisyUI coupling, ZERO bridge rules (no legacy layer to reconcile — a first). Mechanically simple; ideal to run the new 3-parallel-migration pipeline on. Split D1 = patterns/forms, D2 = record + workflow + surfaces/pages/forms. |
-| 2 | **CK-B** headers | 335 | ~4 | Edit/Form share a byte-identical tone map + gradient recipe (ONE skin covers both, proven). Detail needs its OWN token set (same shape, every value diverges). page-shell/cockpit/workbench each own theirs. Zero imperative writes. |
+| 2 | **CK-B** headers | 334 | ~4 | Edit/Form share a byte-identical tone map + gradient recipe (ONE skin covers both, proven). Detail needs its OWN token set (same shape, every value diverges). page-shell/cockpit/workbench each own theirs. Zero imperative writes. |
 | 3 | **CK-A** dashboard widgets | 439 | ~4 | Highest-value chrome. **NO LONGER BLOCKED** (2026-07-13): the variant-pinning "harness" turned out to be an existing `variant` prop that already wins over the random pick — three lines of fixture, not machinery. metrics/tokens.ts is genuinely shared (48 exports, cleanly imported by all 4 metrics variants) — the only real shared vocabulary found so far. |
 | 4 | **CK-G** navigation patterns | 279 | 5 | environment-toggle carries 20 of the program's 46 hatch sites. 10 LIVE imperative writes in command-palette, all must be transcribed. |
-| 5 | **CK-F** communication | 272 | 6 | Two components (assistant, presence) are not engine-split and are structurally unlike the rest. |
+| 5 | **CK-F** communication | 271 | 6 | Two components (assistant, presence) are not engine-split and are structurally unlike the rest. |
 | 6 | **CK-C** workspace chrome | 466 | ~9 | 28 imperative writes (the densest in the program), 3 portaled components, and the highest STATE-SELECTED share (~40%) — mostly interactive chrome. Budget against the interaction work, not the site count. |
 | 7 | **CK-H2** misc | ~216 | ~5 | ~100% category A. |
-| 8 | **CK-I** long tail | 439 | ? | 46 files, mostly surfaces. Pending inventory. |
-| 9 | **CK-E** visualization | 308 | ~6 | LAST: the only cluster needing both the category-B exemption and the C hatch machinery, which must land first. |
-| 10 | **CK-H1** brand-preview trio | 237 | 0 | LAST: mostly an EXEMPTION exercise, not a migration. |
+| 8 | **CK-I** long tail | 397 | 38 | Certified across 43 scoped files; 381 true DOM-paint sites moved and permanent exclusions preserved. |
+| 9 | **CK-H1** tenant/branding previews | 235 → 45 | 4 | Certified after recovery: 190 static sites moved; 37 runtime-paint and 8 non-paint identities remain exact. |
+| 10 | **CK-E** visualization | 478 → 111 | pending | Final checkpoint: 299 inline + 179 runtime-SVG sites; 367 migrate and 111 exact Stage-1 floors remain. |
 
 ## The two pieces of machinery that must land before their dependents
 
 ### 1. The category-B ratchet exemption (`SKIN-EXEMPT-RUNTIME-VALUE`)
 
-~84 sites whose paint value IS runtime data: the brand-preview trio (their job is to render a colour
-the user picked), the charts' per-datum/per-series colours, presence's per-user identity colours.
+The per-file registry now measures every site whose paint value IS runtime data: tenant/branding
+previews (their job is to render a colour the user picked), charts' per-datum/per-series colours,
+and presence's per-user identity colours.
 A skin rule cannot hold these, and emitting one custom property per swatch or datum would be
 strictly worse code than the inline value. They are **not pending work** — carrying them as debt
 that can never reach 0 is a lie in the ratchet. Name the exemption, list the sites exactly (the
-inventories give exact counts), and gate on it. Blocks CK-E and CK-H1.
+inventories give exact counts), and gate on it. The machinery is certified; CK-H1 is complete and
+CK-E is its remaining consumer.
 
 ### 2. ~~The variant-pinning harness (blocks CK-A)~~ — RESOLVED 2026-07-13, CK-A IS NOT BLOCKED
 

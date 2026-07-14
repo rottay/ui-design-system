@@ -72,7 +72,7 @@ classic untouched; caller className/style semantics unchanged.
 
 #### WO-SKIN-06 execution state (2026-07-14)
 
-Decomposed into **9 checkpoints**, fully inventoried. The plan is
+Decomposed into **10 checkpoints**, fully inventoried. The plan is
 `skin-adoption/wo-skin-06-plan.md`, which **REPLACES the triage's §6 decomposition** — the triage
 grouped clusters "by shared vocabulary" and **every cluster inventoried falsified that premise**.
 The root cause was the same each time: **sharing was inferred from similarity.** Expect ONE TOKEN
@@ -89,7 +89,7 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | **CK-H2** | misc | 216 | CERTIFIED byte-exact (`c229859c`) — 9 skins; 213/216 counted sites moved, 3 deliberate caller-precedence residuals |
 | **CK-I** | long tail (surfaces) | 397 | CERTIFIED byte-exact (`8a5afeec`) — 43 files; forms excluded (already CK-D); OAuth hidden channel recovered by addendum |
 | Recovery | hidden inline/embedded CSS + orphan channels | 130 + 195 + addenda | CERTIFIED — inline 130 reconciled as 96 false positives + 14 static migrations + 20 exact runtime floors; embedded CSS 202 → 7 with 195 declarations moved; core/Showroom builds, audit, focused suites and 99-case visual matrix ×2 green |
-| CK-H1 | tenant/branding previews | 235 current | IN PROGRESS — inert anatomy/pre-step certified at unchanged `70/75/54/36`, production baselines 8/8 ×2; next migration moves 190 static sites to exact final inline floor 45 |
+| **CK-H1** | tenant/branding previews | 235 → 45 | CERTIFIED byte-exact (`74d6e151`) — 4 skins; 190 static sites moved, 37 runtime-paint + 8 non-paint identities preserved; core/Showroom builds, audit, focused suites and 8-case visual matrix ×2 green |
 | CK-E | visualization | 478 gate sites | PENDING — re-audited as 299 inline + 179 runtime SVG; Stage-1 target 367 migrations, final exact floor 111, runtime unclassified 2 → 0 |
 
 **The pipeline that works** (three migrations in parallel is the unlock): inventory → contract
