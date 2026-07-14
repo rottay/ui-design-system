@@ -1,0 +1,61 @@
+{
+  "$comment": [
+    "Sites whose PAINT VALUE is runtime data. A skin rule cannot hold them, and emitting one custom",
+    "property per swatch or datum would be strictly worse code than the inline value. They are NOT",
+    "pending work: carrying them as debt that can never reach 0 is a lie in the ratchet, and it sends",
+    "migration agents chasing an impossible zero.",
+    "",
+    "Each entry declares a FLOOR: the number of sites that must REMAIN inline in that file. The gate",
+    "enforces it in both directions -- a file may not drop below its floor (someone migrated paint",
+    "that cannot live in CSS), and the floor is what a migration's exit criterion is measured against",
+    "instead of 0.",
+    "",
+    "Counts come from the WO-SKIN-06 inventories (ck-e, ck-h, ck-f). Update them ONLY with a measured",
+    "recount, never to make a gate go green."
+  ],
+  "SKIN-EXEMPT-RUNTIME-VALUE": {
+    "$why": "The paint value is data supplied at runtime: a tenant's chosen brand hex, a per-datum chart colour, a per-user identity colour. Three of the four components here exist specifically to SHOW THE USER A COLOUR THEY PICKED.",
+    "files": {
+      "patterns/misc/tenant-preview/engines/modern.tsx": {
+        "floor": 22,
+        "why": "buildPaletteSteps() mixes a 10-step palette from the tenant's chosen hex (mixColor(base, '#fff'|'#000', ratio)), then renders it as swatches, buttons and badges."
+      },
+      "patterns/misc/tenant-preview/engines/rustic.tsx": {
+        "floor": 14,
+        "why": "The same 10 palette steps, plus 4 render sites. NOTE: rustic's Button/Input/Badge sections use generic DS scale tokens instead of the tenant's actual colour -- a real cross-engine inconsistency, filed separately, not something the migration may 'fix'."
+      },
+      "patterns/misc/brand-studio/index.tsx": {
+        "floor": 1,
+        "why": "index.tsx:387 -- background: isHex(value) ? value : 'transparent', the live swatch of the field the admin is typing into."
+      },
+      "patterns/communication/presence/index.tsx": {
+        "floor": 4,
+        "why": "Per-user identity colours on live cursors and rings (ringColor/cursorColor), including 1 site the counter cannot see (an SVG presentation attribute)."
+      },
+      "patterns/visualization/charts/**": {
+        "floor": 39,
+        "why": "Per-datum and per-series colour: palette[i % palette.length] across bar/pie/treemap/scatter/funnel/network/line/area/radar/sankey, caller-supplied d.color/item.color/seg.color, and bullet's resolvedRangeColors. Plus use-chart-theme.ts:291, which resolves a CSS var to hex via getComputedStyle because D3 needs hex for colour interpolation -- correct as written, must stay.",
+        "$note": "A glob: the per-file split lives in wo-skin-06-ck-e-inventory.md. Resolve it to concrete files when CK-E is contracted."
+      }
+    }
+  },
+  "SKIN-EXEMPT-CRASH-SAFE-FALLBACK": {
+    "$why": "Paint that must render when the theming provider itself has crashed. It cannot depend on a token, a skin, or anything the failure might have taken down.",
+    "files": {
+      "surfaces/foundation/SurfaceErrorBoundary.tsx": {
+        "floor": 8,
+        "why": "Hardcoded hex values, deliberately. The component's own comment says it must render even when the theme provider crashes -- a token would resolve to nothing in exactly the situation this component exists for."
+      }
+    }
+  },
+  "SKIN-EXEMPT-NOT-PAINT": {
+    "$why": "Paint-shaped property names on objects that never reach a DOM style prop. Not A, not B: migrating them is a category error -- no CSS selector can hold a TypeScript mutation.",
+    "files": {
+      "patterns/misc/brand-studio/index.tsx": {
+        "floor": 8,
+        "why": "BrandTheme DRAFT mutations (ctl.buttonPrimary = { ..., color: v }) and a hostile-theme test fixture. The admin's keystroke is written into a theme object, not painted. Lines 229, 323, 328, 763, 765, 767, 769, 775.",
+        "$note": "This file appears in two exemption families; its total floor is the SUM (1 runtime-value + 8 not-paint = 9)."
+      }
+    }
+  }
+}

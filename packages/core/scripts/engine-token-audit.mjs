@@ -2181,6 +2181,13 @@ const counters = {
   // (which feeds the per-tenant bundles the apps actually load) and
   // entrypoints/styles.css (which feeds dist/styles.css). Exact-0.
   "skins.unwired": countUnwiredSkins(),
+  // WO-SKIN-06: sites whose PAINT VALUE is runtime data (a tenant's chosen hex, a
+  // per-datum chart colour, a per-user identity colour) cannot live in a skin. They
+  // are NOT pending work -- carrying them as debt that can never reach 0 is a lie in
+  // the ratchet, and it sends migration agents chasing an impossible zero. Each is
+  // declared with a FLOOR in roadmap/skin-exemptions.json; this counts the files that
+  // have been migrated BELOW theirs, i.e. paint that cannot live in CSS was deleted.
+  "skins.exemptionsBreached": countExemptionBreaches(),
   // WO-ARC-09: per-file inline-paint ratchet over the six workspace-tier
   // components' migratable files. Decrease-only; each checkpoint's exit is its
   // files at 0. See countArc09PaintInFile()'s doc for the paint-vs-layout rule.
@@ -2225,6 +2232,44 @@ function countSkinParseErrors() {
     }
   }
   return errors;
+}
+
+/**
+ * WO-SKIN-06: the named exemptions hold their floor.
+ *
+ * A file in roadmap/skin-exemptions.json carries sites whose paint VALUE is runtime
+ * data -- no CSS rule can hold them, and one custom property per swatch or per datum
+ * would be strictly worse code than the inline value. Its floor is how many sites must
+ * REMAIN inline.
+ *
+ * Checked from BELOW: if a file drops under its floor, a migration deleted paint that
+ * cannot live in CSS and something renders wrong today. Above the floor is fine -- that
+ * is ordinary un-migrated work, already covered by the decrease-only ratchet. Glob
+ * entries are skipped: they are a planning aid and must be resolved to concrete files
+ * before their checkpoint is contracted. Exact-0 breaches.
+ */
+function countExemptionBreaches() {
+  const path = join(repoRoot, "roadmap/skin-exemptions.json");
+  if (!existsSync(path)) return 0;
+  const doc = JSON.parse(readFileSync(path, "utf8"));
+  let breaches = 0;
+  for (const [family, group] of Object.entries(doc)) {
+    if (family.startsWith("$") || !group || typeof group !== "object") continue;
+    for (const [file, entry] of Object.entries(group.files ?? {})) {
+      if (file.includes("*")) continue;
+      const full = join(componentsDir, file);
+      if (!existsSync(full)) continue;
+      const actual = countArc09PaintInFile(readFileSync(full, "utf8"));
+      if (actual < entry.floor) {
+        breaches += 1;
+        console.error(
+          `  - exemption breached (${family}): ${file} is at ${actual}, below its floor of ${entry.floor} -- ` +
+            "paint whose VALUE is runtime data was migrated into CSS, where it cannot live.",
+        );
+      }
+    }
+  }
+  return breaches;
 }
 
 /**
@@ -2334,6 +2379,8 @@ const EXACT = {
   "skins.parseErrors": 0,
   // A skin no entrypoint imports is just as dead, and just as silent.
   "skins.unwired": 0,
+  // Nobody may migrate a site whose paint VALUE is runtime data.
+  "skins.exemptionsBreached": 0,
 };
 
 /**
