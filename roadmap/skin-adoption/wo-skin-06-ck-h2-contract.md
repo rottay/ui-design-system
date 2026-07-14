@@ -400,7 +400,10 @@ cleanest result of any checkpoint so far on this axis, same footing as CK-C. Do 
 - The 4 dual-engine roots get the standard two-class `.ds-pattern-<comp>.ds-engine-<engine>` — (0,2,0).
   Border-COLOR rules need the target's `data-part` REPEATED ×2 to reach (0,4,0) and beat the tenant
   floor `html[data-tenant]…*` at (0,3,1). Non-border paint wins unlayered at (0,3,0) with a single
-  `data-part`.
+  `data-part`. **EXCEPTION: `color` on a composed `<Text>`/`Typography.Text` needs (0,5,0)** — the
+  Typography engine skin paints every `<Text>` at (0,4,0) via `[data-color]`, so a (0,3,0) color rule
+  loses once the inline color is stripped — data-part ×3 on these two-class roots (×4 on token-inspector's
+  single-class root); raw-element/icon color stays (0,3,0). See the migration-kit specificity law.
 - `token-inspector` is the one **single-class** root in this checkpoint (0,1,0) — mirrors CK-C's
   `status-filter-pills` precedent (itself mirroring CK-F's `assistant`/`presence`), not the
   `data-terminal-card` mistake the kit warns against. Border-color rules there need `data-part`

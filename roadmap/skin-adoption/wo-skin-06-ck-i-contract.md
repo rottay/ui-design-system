@@ -472,7 +472,14 @@ B/C categories in `skin-exemptions.json`.
   borders for `gallery-view`/`grid-view`/`cell-renderers`/`bulk-select-toggle`.
 - All `surfaces/` roots (`ds-surface ds-<comp>`) are two-class, (0,2,0) — border-color rules need
   `data-part` REPEATED ×2 to reach (0,4,0); non-border wins at (0,3,0) with one `data-part`. This
-  matches the shipped `guided-draft-form.css`/`detail-form-surface.css` precedent exactly.
+  matches the shipped `guided-draft-form.css`/`detail-form-surface.css` precedent exactly. **EXCEPTION:
+  `color` on a composed `<Text>`/`Typography.Text` needs (0,5,0)** — the Typography engine skin paints
+  every `<Text>` at (0,4,0) via `[data-color]`; a (0,3,0) color rule loses once the inline color is
+  stripped. On these two-class surface roots → data-part ×3; on the single-class `patterns/data`
+  roots (`gallery-view` etc.) → data-part ×4; raw-element/icon color stays lower. This is especially
+  live in the thin tail, whose single most-repeated site is `<Text style={{color:'…muted'}}>`
+  (`muted-text`) — those MUST reach (0,5,0), not the (0,3,0) the thin-tail vocabulary implies. See the
+  migration-kit specificity law; check `<Text>` vs raw at every color site.
 - Composed-primitive rules (the P-79 `className="ds-<comp>__<part>"` shape) inherit the SAME (0,4,0)
   border floor requirement — a rule like `.ds-surface.ds-detail-form .ds-detail-form__error-card[data-
   part='root'][data-variant]` (the shipped precedent's actual selector) buys its specificity from the

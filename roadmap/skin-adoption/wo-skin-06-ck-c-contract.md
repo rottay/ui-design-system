@@ -486,7 +486,11 @@ enum or boolean. This is simpler than CK-F (which had presence's per-user colors
 - Engine-split roots (`list-toolbar` modern, `saved-views` both engines) get the standard two-class
   root `.ds-pattern-<comp>.ds-engine-<engine>` — (0,2,0). Border-COLOR rules need the target's
   `data-part` REPEATED ×2 to reach (0,4,0) and beat the tenant floor `html[data-tenant]…*` at
-  (0,3,1). Non-border paint wins unlayered at (0,3,0) with a single `data-part`.
+  (0,3,1). Non-border paint wins unlayered at (0,3,0) with a single `data-part`. **EXCEPTION:
+  `color` on a composed `<Text>`/`Typography.Text` needs (0,5,0)** — the Typography engine skin paints
+  every `<Text>` at (0,4,0) via `[data-color]`, so a (0,3,0) color rule loses once the inline color is
+  stripped (text renders the data-color default) — data-part ×3 on these two-class roots; raw-element/
+  icon color stays (0,3,0). See the migration-kit specificity law; check `<Text>` vs raw at each site.
 - `structures/workspace` roots (all 8 components, plus the 3 standalone portal-panel classes) get
   the shipped two-class `.ds-structure.ds-<comp>` — (0,2,0), same math as above: data-part ×2 for
   border color, ×1 for everything else. This is the live convention (`field-filters-panel.css`),

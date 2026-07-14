@@ -253,6 +253,16 @@ byte-exact, flag it, do not "fix" it) move to the skin. Do NOT add any
   ×2 is only (0,3,0) and LOSES to the tenant floor. assistant's
   `PreviewDiffCard` divider `borderTop` and presence's overflow-badge border are
   the border-color sites here → data-part ×3.
+- **`color` on a composed `<Text>`/`Typography.Text` is a SEPARATE, HIGHER tier —
+  it needs (0,5,0), above the border floor.** Every `<Text>` unconditionally carries
+  `rottay-typography--<engine>` + `data-color`, and the Typography ENGINE skin paints
+  it at (0,4,0) `[data-color='…']`. A (0,3,0) or even (0,4,0) rule loses to it once the
+  inline color is stripped → the text renders the `data-color` default (text-primary/
+  secondary), a silent byte-exact break. Reach (0,5,0): engine-split → data-part ×3;
+  single-class → data-part ×4 (or class + one contract attr + part ×3). `color` on a
+  RAW element/icon has no Typography competitor and stays at (0,3,0). This is
+  pervasive in CK-F (timestamps, labels, descriptions, messages, diff cells, caret).
+  See the migration-kit specificity law. **Check `<Text>` vs raw at every color site.**
 
 **All skins are UNLAYERED** (P-76: layered rules lose to Tailwind preflight on
 border-width/margin/padding). Never write `*/` inside a skin comment — it closes

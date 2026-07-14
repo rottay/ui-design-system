@@ -66,9 +66,24 @@ can't paint these elements at all; and each tenant ships an unlayered
   `[data-part='x'][data-part='x']` (=2), OR a contract attribute already on the element
   (`[data-variant]`, `[data-checked]`, `[data-invalid]`, `[data-state~='focused']`, …).
 - Never buy the 4th unit from an incidental attribute (`role`, `aria-*`, `placeholder`).
-- **Non-border paint** (background, color, box-shadow, outline, border-radius, fill,
-  stroke, accent-color, filter) wins unlayered at (0,3,0): two root classes + one attribute
-  is enough; you do not need to repeat the data-part for these.
+- **Non-border paint** (background, box-shadow, outline, border-radius, fill,
+  stroke, accent-color, filter — AND `color` on a RAW element that has no `rottay-typography`
+  class: a `<div>`/`<span>`/`<Box>`, or an icon/SVG) wins unlayered at (0,3,0): two root
+  classes + one attribute is enough; you do not need to repeat the data-part for these.
+- **`color` on a composed `<Text>`/`Typography.Text` is the ONE exception — it needs (0,5,0),
+  a tier ABOVE the border floor.** Every `<Text>` UNCONDITIONALLY carries
+  `rottay-typography rottay-typography--<engine>` + `data-color` (default `'default'`), and the
+  Typography ENGINE skin paints it at
+  `.rottay-typography.rottay-typography--<engine>.rottay-typography--<engine>[data-color='…']`
+  = **(0,4,0)**. Today an inline `color` wins only because inline beats any non-`!important` CSS;
+  the moment you STRIP the inline color, a (0,3,0) or even (0,4,0) skin rule LOSES to that
+  Typography (0,4,0) and the text silently renders `text-primary`/`text-secondary` (the
+  `data-color` default) instead of your migrated color — a byte-exact break the counter never
+  sees. Reach **(0,5,0)**: two engine-split root classes + the descendant `data-part` **×3**,
+  OR one single-class root + `data-part` **×4** (or class + one contract attr + part ×3). Check
+  the SOURCE at each `color` site — `<Text …>` vs a raw element — and apply this only to the
+  Text ones. (Shipped precedent: `tokens/css/components/skin/data-terminal-card.css` header;
+  `tokens/css/engines/<engine>/skin/typography.css`.)
 - A rule keyed via a **descendant** (`[root] [data-part='track']`) already carries the root
   classes; add the descendant `data-part` (and repeat it for borders) to reach the floor.
 - **COUNT THE ACTUAL ROOT CLASSES (a single-class scope needs one MORE data-part repeat).** The
@@ -78,7 +93,10 @@ can't paint these elements at all; and each tenant ships an unlayered
   **(0,3,0)**, which the tenant border floor **(0,3,1)** WINS (equal b-column, the floor's `html`
   element breaks the tie). Repeat the data-part a THIRD time (`[data-part='x'][data-part='x'][data-part='x']`
   = (0,4,0)) to clear it. This bit an orchestrator ruling on CK-A; the migration agent caught it by
-  reading the specificity instead of the ruling. Non-border paint is unaffected (it wins at (0,3,0)).
+  reading the specificity instead of the ruling. Non-border paint is unaffected (it wins at (0,3,0))
+  — EXCEPT `color` on a composed `<Text>`, which needs a further repeat still to reach (0,5,0) and
+  beat the Typography engine skin (see the color-on-Text bullet above). A single-class root therefore
+  needs data-part ×4 for Text color, ×3 for border color, ×2 for other paint.
 
 ## State / handler mapping (delete the paint-only mechanism, transcribe to CSS)
 
