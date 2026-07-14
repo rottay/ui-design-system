@@ -430,3 +430,29 @@ what it looks like. `+ '15'` looks like a percentage. A ternary's colon looks li
 (it inflated the counter until today). A declared token looks live (P-73). A declared rule looks
 like it paints (P-76). A token file that exists looks adopted (CK-C). **Read what it DOES, not
 what it RESEMBLES.**
+
+---
+
+## THE COUNTER LIED IN BOTH DIRECTIONS — three fixes in one session (2026-07-13)
+
+The inline-paint counter is the ratchet the whole program is gated on. In one session it turned out
+to be wrong in three independent ways, found not by auditing it but by agents inventorying real
+files and noticing their numbers did not add up:
+
+| defect | direction | what it did | found by |
+| --- | --- | --- | --- |
+| ES6 object shorthand (`style={{ color }}`) | **BLIND** | A file could report ZERO inline paint while still painting inline. A gate that certifies a false zero is worse than no gate — it grants permission not to look. | CK-A inventory (stats-header) |
+| A ternary's colon (`background: active ? color : 'x'`) | **INFLATED** | `color :` read as a key. Sent agents hunting paint that does not exist. | CK-G inventory (environment-toggle) |
+| A return-type annotation (`function f(): { color: string }`) | **INFLATED** | Type members counted as paint. Same family as the interface-body bug fixed earlier the same day. | CK-F inventory (assistant) |
+
+All three are now drilled: the tests fail if anyone reinstates the bug. **The lesson is not "the
+counter had bugs" — it is that a gate nobody re-derives by hand becomes folklore.** Every one of
+these was caught because an agent counted a file BY HAND and compared. Keep asking inventories to
+reconcile their hand count against the counter, and to report the delta. The delta is the signal.
+
+**Known remaining blind spots (documented, not fixed — the INVENTORY is the coverage checklist, never the counter):**
+- String contents: `@keyframes` and per-instance `<style>` tags are invisible.
+- `.style.x as any = …` imperative writes with a cast.
+- SVG presentation attributes (`<circle fill={color}>`): real paint, uncounted. Fixing this would
+  inflate the ratchet across the whole charts family and expand the program's scope — record it,
+  do not chase it.
