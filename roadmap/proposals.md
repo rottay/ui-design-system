@@ -1303,3 +1303,27 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
   place instead of being duplicated into each component's skin. That is the honest root fix; the
   per-component de-share is the byte-exact expedient CK-G could reach.
 - **Status** — OPEN.
+
+### P-87 — `color` on a composed `<Text>` needs (0,5,0); the kit's "non-border wins at (0,3,0)" was incomplete
+- **Finding (CK-F, from a Typography-specificity probe).** Every `<Text>`/`Typography.Text` primitive
+  UNCONDITIONALLY renders `rottay-typography rottay-typography--<engine>` + `data-color` (default
+  `'default'`), and the Typography ENGINE skin paints it at
+  `.rottay-typography.--<engine>.--<engine>[data-color='…']` = **(0,4,0)**
+  (`engines/<engine>/skin/typography.css`). While a `color` is INLINE it wins (inline beats any
+  non-`!important` CSS), so nobody notices. The instant a migration STRIPS the inline color and adds a
+  skin rule at the kit's stated (0,3,0) — or even (0,4,0) — that rule LOSES to the Typography (0,4,0),
+  and the text silently renders the `data-color` default (`text-primary`/`text-secondary`) instead of
+  the migrated color. **A byte-exact break the inline-paint counter NEVER sees** (the counter only
+  knows the inline key left; it can't know the skin rule under-shot).
+- **The law.** `color` on a composed `<Text>` must reach **(0,5,0)**: engine-split two-class root →
+  data-part **×3**; single-class root → data-part **×4** (or class + one contract attr + part ×3).
+  `color` on a RAW element/icon/SVG has no Typography competitor and stays at (0,3,0). At each color
+  site, READ the source — `<Text>` vs raw — before choosing the recipe.
+- **Root cause of the gap.** The full rule lived only in `data-terminal-card.css`'s header (CK-A found
+  it), was never PROMOTED to `migration-kit.md`, so it propagated as the incomplete "non-border wins at
+  (0,3,0)" into the CK-F/C/H2/I contracts. Caught mid-CK-F-migration (agents already running) — warned
+  all three migration units directly, then promoted the law into the kit + all four contracts (commit
+  `f831995f`). Especially live in CK-I's thin tail, whose single most-repeated site is
+  `<Text style={{color:'…muted'}}>`.
+- **Status** — FIXED in the kit; the byte-exact visual cert is the backstop that catches any Text-color
+  rule that still under-shoots.
