@@ -49,7 +49,7 @@ Ordered by (value per unit of risk) × (readiness), not by size:
 | 7 | **CK-H2** misc | ~216 | ~5 | ~100% category A. |
 | 8 | **CK-I** long tail | 397 | 38 | Certified across 43 scoped files; 381 true DOM-paint sites moved and permanent exclusions preserved. |
 | 9 | **CK-H1** tenant/branding previews | 235 → 45 | 4 | Certified after recovery: 190 static sites moved; 37 runtime-paint and 8 non-paint identities remain exact. |
-| 10 | **CK-E** visualization | 478 → 111 | pending | Final checkpoint: 299 inline + 179 runtime-SVG sites; 367 migrate and 111 exact Stage-1 floors remain. |
+| 10 | **CK-E** visualization | 478 → 111 | pre-step certified; migration pending | Final checkpoint: exact floors, inert anatomy and 23 visual baselines are certified; 367 static/finite-state sites now migrate while 111 exact Stage-1 identities remain. |
 
 ## The two pieces of machinery that must land before their dependents
 

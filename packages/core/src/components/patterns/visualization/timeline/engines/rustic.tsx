@@ -22,6 +22,8 @@
 import React, { useMemo, type CSSProperties } from 'react';
 import type { TimelinePatternProps, TimelineItem } from '../Timeline.types';
 
+const ROOT_CLASS_NAME = 'ds-pattern-timeline ds-engine-rustic';
+
 /** Formats a timestamp for display inside a timeline item. */
 function formatTimestamp(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
@@ -201,14 +203,16 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
     // type color, falling back to the primary brand color.
     const color = item.color ?? typeColors[item.type ?? 'default'];
     return (
-      <div key={item.key} style={styles.item}>
+      <div data-part="item" data-type={item.type ?? 'default'} key={item.key} style={styles.item}>
         {/* Icon items get a larger ring-style dot; plain items get a solid circle. */}
         {item.icon ? (
-          <div style={styles.iconDot(color)}>{item.icon}</div>
+          <div data-part="marker" data-variant="icon" style={styles.iconDot(color)}>{item.icon}</div>
         ) : (
-          <div style={styles.dot(color)} />
+          <div data-part="marker" data-variant="solid" style={styles.dot(color)} />
         )}
         <div
+          data-part="item-card"
+          data-clickable={Boolean(onItemClick)}
           style={styles.card(!!onItemClick)}
           onClick={onItemClick ? () => onItemClick(item) : undefined}
           // Imperative hover shadow because inline styles cannot express :hover.
@@ -217,17 +221,17 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
         >
           {item.user && (
             <div style={styles.user}>
-              {item.user.avatar && <img src={item.user.avatar} alt={item.user.name} style={styles.avatar} />}
-              <span style={styles.userName}>{item.user.name}</span>
+              {item.user.avatar && <img data-part="avatar" src={item.user.avatar} alt={item.user.name} style={styles.avatar} />}
+              <span data-part="user-name" style={styles.userName}>{item.user.name}</span>
             </div>
           )}
           <div>
-            <span style={styles.title}>{item.title}</span>
+            <span data-part="title" style={styles.title}>{item.title}</span>
             {showTimestamp && (
-              <span style={styles.timestamp}>{formatTimestamp(item.timestamp)}</span>
+              <span data-part="timestamp" style={styles.timestamp}>{formatTimestamp(item.timestamp)}</span>
             )}
           </div>
-          {item.description && <div style={styles.description}>{item.description}</div>}
+          {item.description && <div data-part="description" style={styles.description}>{item.description}</div>}
         </div>
       </div>
     );
@@ -236,8 +240,8 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
   /** Renders a list of timeline items within a container that holds the
    *  vertical connector line as an absolutely-positioned child. */
   const renderList = (list: TimelineItem<T>[]) => (
-    <div style={styles.container}>
-      <div style={styles.line} />
+    <div data-part="list" style={styles.container}>
+      <div data-part="connector" style={styles.line} />
       {list.map((item) => {
         const defaultRender = buildDefaultRender(item);
         return renderItem ? (
@@ -251,29 +255,29 @@ export default function RusticTimeline<T>(props: TimelinePatternProps<T>) {
 
   // Early-return for loading and empty states before building the full timeline.
   if (loading) {
-    return <div className={className} style={{ ...styles.loading, ...style }}>Loading...</div>;
+    return <div data-part="root" data-loading="true" data-empty="false" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...styles.loading, ...style }}>Loading...</div>;
   }
 
   // Empty state preserves header/footer so surrounding layout stays intact.
   if (items.length === 0) {
     return (
-      <div className={className} style={style}>
+      <div data-part="root" data-loading="false" data-empty="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
         {header}
-        {emptyState ?? <div style={styles.empty}>No timeline items</div>}
+        {emptyState ?? <div data-part="empty" style={styles.empty}>No timeline items</div>}
         {footer}
       </div>
     );
   }
 
   return (
-    <div className={className} style={style}>
+    <div data-part="root" data-loading="false" data-empty="false" data-grouped={Boolean(grouped)} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
       {header}
       {/* When groupByDate is active, render each date cluster with its
           own heading; otherwise render all items as a single flat list. */}
       {grouped ? (
         Object.entries(grouped).map(([dateKey, group]) => (
-          <div key={dateKey} style={{ marginBottom: 24 }}>
-            <div style={styles.dateGroup}>{dateKey}</div>
+          <div data-part="date-group" key={dateKey} style={{ marginBottom: 24 }}>
+            <div data-part="date-heading" style={styles.dateGroup}>{dateKey}</div>
             {renderList(group)}
           </div>
         ))

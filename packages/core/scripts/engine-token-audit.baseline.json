@@ -818,7 +818,7 @@
   "fleet.inlinePaint.total": 634,
   "runtimeSvgPaint.filesScanned": 1047,
   "runtimeSvgPaint.total": 218,
-  "runtimeSvgPaint.unclassified": 2,
+  "runtimeSvgPaint.unclassified": 0,
   "runtimeSvgPaint.ignoredStructural": 387,
   "runtimeSvgPaint.index.ts": 0,
   "runtimeSvgPaint.patterns/_internal/engines/modern/styles.ts": 0,

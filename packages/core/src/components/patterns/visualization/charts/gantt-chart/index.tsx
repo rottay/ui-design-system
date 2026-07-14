@@ -100,6 +100,7 @@ export const GanttChart = memo(function GanttChart({
       .attr('width', chartWidth)
       .attr('height', dynamicHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const parsedTasks = tasks.map((t) => ({
@@ -127,6 +128,7 @@ export const GanttChart = memo(function GanttChart({
       .attr('transform', `translate(0,${innerHeight})`)
       .call(axisBottom(x).ticks(6))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px');
 
@@ -134,6 +136,7 @@ export const GanttChart = memo(function GanttChart({
     g.append('g')
       .call(axisLeft(y).tickFormat((id) => parsedTasks.find((t) => t.id === id)?.name ?? id))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
@@ -142,8 +145,9 @@ export const GanttChart = memo(function GanttChart({
       .call(axisBottom(x).ticks(6).tickSize(innerHeight).tickFormat(() => ''))
       .attr('opacity', 0.15)
       .selectAll('line')
+      .attr('data-part', 'grid-line')
       .style('stroke', 'var(--ds-color-border-secondary)');
-    g.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
+    g.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
 
     // Task bars are rendered as two overlapping rects per task: a translucent
     // background bar (full duration) and an opaque progress bar (partial width).
@@ -152,12 +156,14 @@ export const GanttChart = memo(function GanttChart({
       .data(parsedTasks)
       .enter()
       .append('g')
-      .attr('class', 'task');
+      .attr('class', 'task')
+      .attr('data-part', 'task');
 
     // Background bar at 25% opacity shows the full planned duration. The
     // progress overlay (below) fills a proportional width at full opacity.
     const rects = bars
       .append('rect')
+      .attr('data-part', 'task-duration')
       .attr('x', (d) => x(d.start))
       .attr('y', (d) => y(d.id) ?? 0)
       .attr('height', y.bandwidth())
@@ -181,6 +187,7 @@ export const GanttChart = memo(function GanttChart({
       const progressBars = bars
         .filter((d) => d.progress != null && d.progress > 0)
         .append('rect')
+        .attr('data-part', 'task-progress')
         .attr('x', (d) => x(d.start))
         .attr('y', (d) => y(d.id) ?? 0)
         .attr('height', y.bandwidth())
@@ -213,6 +220,7 @@ export const GanttChart = memo(function GanttChart({
       const now = new Date();
       if (now >= x.domain()[0] && now <= x.domain()[1]) {
         g.append('line')
+          .attr('data-part', 'today-marker')
           .attr('x1', x(now))
           .attr('x2', x(now))
           .attr('y1', 0)
@@ -222,6 +230,7 @@ export const GanttChart = memo(function GanttChart({
           .attr('stroke-dasharray', '4,3');
 
         g.append('text')
+          .attr('data-part', 'today-label')
           .attr('x', x(now))
           .attr('y', -6)
           .attr('text-anchor', 'middle')
@@ -231,6 +240,7 @@ export const GanttChart = memo(function GanttChart({
       }
     }
 
+    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
   }, [
     tasks,
@@ -251,7 +261,7 @@ export const GanttChart = memo(function GanttChart({
       svgRef={svgRef}
       width={width}
       height={dynamicHeight}
-      className={className}
+      className={['ds-chart-gantt', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

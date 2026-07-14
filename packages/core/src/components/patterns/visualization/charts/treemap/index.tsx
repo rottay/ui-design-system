@@ -78,11 +78,11 @@ export const TreeMap = memo(function TreeMap({
     rows: data.map((item) => [item.name, item.value]),
   };
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
-        <div key={d.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: palette[i % palette.length], display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.name}</span>
+        <div key={d.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.name}</span>
         </div>
       ))}
     </div>
@@ -114,12 +114,14 @@ export const TreeMap = memo(function TreeMap({
       .enter()
       .append('g')
       .attr('class', 'node')
+      .attr('data-part', 'tile')
       .attr('transform', (d: any) => `translate(${d.x0},${d.y0})`);
 
     // Tile rects are stroked with the background colour to create a visual gap
     // between adjacent tiles without relying on the treemap padding alone.
     const rects = nodes
       .append('rect')
+      .attr('data-part', 'tile-surface')
       .attr('width', (d: any) => Math.max(0, d.x1 - d.x0))
       .attr('height', (d: any) => Math.max(0, d.y1 - d.y0))
       .attr('fill', (_, i) => palette[i % palette.length])
@@ -145,6 +147,7 @@ export const TreeMap = memo(function TreeMap({
       // small tiles would just show clipped text that hurts readability.
       nodes
         .append('text')
+        .attr('data-part', 'tile-label')
         .attr('x', 4)
         .attr('y', 14)
         .style('fill', 'var(--ds-color-text-on-primary, var(--ds-color-white))')
@@ -161,6 +164,7 @@ export const TreeMap = memo(function TreeMap({
 
       nodes
         .append('text')
+        .attr('data-part', 'tile-value')
         .attr('x', 4)
         .attr('y', 26)
         .style('fill', 'color-mix(in srgb, var(--ds-color-text-on-primary, var(--ds-color-white)) 70%, transparent)')
@@ -191,7 +195,7 @@ export const TreeMap = memo(function TreeMap({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-treemap', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

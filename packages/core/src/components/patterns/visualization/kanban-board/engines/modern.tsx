@@ -21,6 +21,8 @@ import type { KanbanBoardProps } from '../KanbanBoard.types';
 import { pillBadgeSmStyle, spinnerStyle } from '../../../_internal/engines/modern/styles';
 import { useFlipLayout } from '../../../../../motion/hooks/use-flip-layout';
 
+const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-modern';
+
 /**
  * Modern Kanban board built on Tailwind utility classes with DS token styling.
  * Generic over `T` so any item shape can be used with a string key extractor.
@@ -116,18 +118,21 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
   if (loading) {
     return (
       <div
-        className={`flex items-center justify-center min-h-[300px] ${className ?? ''}`}
+        data-part="root"
+        data-loading="true"
+        className={[ROOT_CLASS_NAME, 'flex items-center justify-center min-h-[300px]', className].filter(Boolean).join(' ')}
         style={style}
       >
-        <span className="loading-spinner" style={spinnerStyle(32)} />
+        <span data-part="spinner" className="loading-spinner" style={spinnerStyle(32)} />
       </div>
     );
   }
 
   return (
-    <div className={className} style={style}>
-      {toolbar && <div className="mb-4">{toolbar}</div>}
+    <div data-part="root" data-loading="false" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
+      {toolbar && <div data-part="toolbar" className="mb-4">{toolbar}</div>}
       <div
+        data-part="board"
         className="flex overflow-x-auto pb-2"
         style={{ gap: columnGap }}
       >
@@ -142,12 +147,17 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
 
           return (
             <div
+              data-part="column"
+              data-collapsed={Boolean(column.collapsed)}
+              data-over-limit={isOverLimit}
+              data-dropping={isDropping}
               key={column.id}
               className={`flex flex-col ${column.collapsed ? 'w-12' : 'flex-1'}`}
               style={{ minWidth: column.collapsed ? 48 : columnMinWidth }}
             >
               {/* Column header */}
               <div
+                data-part="column-header"
                 className="rounded-xl px-4 py-3 mb-2"
                 style={{
                   background: 'var(--ds-surface-inset)',
@@ -162,10 +172,11 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       {column.icon}
-                      <span className="font-semibold text-sm">
+                      <span data-part="column-title" className="font-semibold text-sm">
                         {column.title}
                       </span>
                       <div
+                        data-part="wip-badge"
                         style={{
                           ...pillBadgeSmStyle,
                           ...(isOverLimit
@@ -186,6 +197,9 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   where the item will land. */}
               {!column.collapsed && (
                 <div
+                  data-part="column-body"
+                  data-dropping={isDropping}
+                  data-empty={column.items.length === 0}
                   className={`flex-1 rounded-xl p-2 min-h-[100px] transition-colors ${
                     isDropping ? 'ring-2' : ''
                   }`}
@@ -203,16 +217,19 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   onDrop={(e) => handleDrop(e, column.id, column.items.length)}
                 >
                   {column.items.length === 0 && emptyColumn ? (
-                    <div className="flex items-center justify-center p-6" style={{ color: 'var(--ds-color-text-secondary)' }}>
+                    <div data-part="empty-column" className="flex items-center justify-center p-6" style={{ color: 'var(--ds-color-text-secondary)' }}>
                       {emptyColumn}
                     </div>
                   ) : (
-                    <div className="flex flex-col gap-2">
+                    <div data-part="card-list" className="flex flex-col gap-2">
                       {/* Each card is both a drag source (draggable) and a
                           drop target (onDragOver/onDrop) to allow reordering
                           within the same column or moving across columns. */}
                       {column.items.map((item, index) => (
                         <div
+                          data-part="card"
+                          data-dragging={dragData?.itemId === itemKey(item)}
+                          data-clickable={Boolean(onItemClick)}
                           key={itemKey(item)}
                           ref={register(itemKey(item))}
                           draggable
@@ -238,7 +255,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
                           }`}
                           style={{ background: 'var(--ds-surface-card)', borderColor: 'var(--ds-color-border)', boxShadow: 'var(--ds-elevation-1)', borderRadius: 'var(--ds-radius-lg)' }}
                         >
-                          <div style={{ padding: 12 }}>
+                          <div data-part="card-content" style={{ padding: 12 }}>
                             {renderCard(item, column.id)}
                           </div>
                         </div>
@@ -248,6 +265,7 @@ export default function ModernKanbanBoard<T>(props: KanbanBoardProps<T>) {
 
                   {onAddItem && (
                     <button
+                      data-part="add-item"
                       style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px dashed var(--ds-color-border)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 4, width: '100%', marginTop: 8 }}
                       onClick={() => onAddItem(column.id)}
                     >

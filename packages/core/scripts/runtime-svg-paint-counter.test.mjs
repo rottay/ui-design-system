@@ -167,6 +167,28 @@ test("counts DOM SVG setAttribute paint but not Canvas paint", () => {
   );
 });
 
+test("classifies an explicitly marked computed DOM paint-copy sink without hiding it", () => {
+  const result = analyzeRuntimeSvgPaint(`
+    // @runtime-svg-paint-copy -- export fidelity copies the live presentation name/value.
+    svg.setAttribute(domAttributeName, exportTone);
+    /* @runtime-svg-paint-copy */
+    clone.setAttribute(prop === 'color' ? 'fill' : prop, rootTone);
+    unmarked.setAttribute(unknownName, unknownTone);
+  `);
+
+  assert.equal(result.count, 3);
+  assert.equal(result.classifiedPaint, 2);
+  assert.equal(result.domSetAttributes, 2);
+  assert.equal(result.unclassified, 1);
+  assert.deepEqual(
+    result.sites.map(({ kind, property }) => ({ kind, property })),
+    [
+      { kind: "dom-set-attribute", property: "computed-paint-copy" },
+      { kind: "dom-set-attribute", property: "computed-paint-copy" },
+    ]
+  );
+});
+
 test("counts DOM setAttributeNS paint and fails closed on a computed name", () => {
   const result = analyzeRuntimeSvgPaint(`
     svg.setAttributeNS(null, 'fill', computedTone);

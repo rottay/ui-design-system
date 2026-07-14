@@ -22,6 +22,8 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import type { TreeViewProps, TreeNode } from '../TreeView.types';
 
+const ROOT_CLASS_NAME = 'ds-pattern-tree-view ds-engine-rustic';
+
 /**
  * Recursively filters the tree, keeping any node whose label matches the query
  * or whose descendants match, preserving the full ancestor chain.
@@ -191,13 +193,27 @@ export default function RusticTreeView(props: TreeViewProps) {
       const checked = checkedSet.has(node.key);
 
       return (
-        <div key={node.key}>
+        <div
+          data-part="node"
+          data-depth={depth}
+          data-expanded={expanded}
+          data-selected={selected}
+          data-checked={checked}
+          data-disabled={Boolean(node.disabled)}
+          key={node.key}
+        >
           <div
+            data-part="node-row"
+            data-selected={selected}
+            data-disabled={Boolean(node.disabled)}
             style={s.nodeRow(depth, selected, node.disabled)}
             onClick={() => !node.disabled && handleSelect(node.key)}
             draggable={draggable && !node.disabled}
           >
             <button
+              data-part="toggle"
+              data-visible={Boolean(hasChildren)}
+              data-expanded={expanded}
               style={s.toggleBtn(!!hasChildren)}
               onClick={(e) => { e.stopPropagation(); handleToggle(node.key); }}
             >
@@ -205,6 +221,7 @@ export default function RusticTreeView(props: TreeViewProps) {
             </button>
             {checkable && (
               <input
+                data-part="checkbox"
                 type="checkbox"
                 style={s.checkbox}
                 checked={checked}
@@ -212,7 +229,7 @@ export default function RusticTreeView(props: TreeViewProps) {
                 onClick={(e) => e.stopPropagation()}
               />
             )}
-            {draggable && <span style={s.dragHandle}>::</span>}
+            {draggable && <span data-part="drag-handle" style={s.dragHandle}>::</span>}
             {node.icon && <span style={{ flexShrink: 0 }}>{node.icon}</span>}
             <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {renderNode ? renderNode(node, depth) : node.label}
@@ -226,19 +243,20 @@ export default function RusticTreeView(props: TreeViewProps) {
 
   if (loading) {
     return (
-      <div className={className} style={{ ...s.container, ...style }}>
+      <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...s.container, ...style }}>
         <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
         {[1, 2, 3, 4, 5].map((i) => (
-          <div key={i} style={{ ...s.skeleton(`${70 - (i % 3) * 10}%`, '1.25rem'), marginLeft: `${(i % 3) * 1.25}rem`, marginBottom: '0.375rem' }} />
+          <div data-part="skeleton" key={i} style={{ ...s.skeleton(`${70 - (i % 3) * 10}%`, '1.25rem'), marginLeft: `${(i % 3) * 1.25}rem`, marginBottom: '0.375rem' }} />
         ))}
       </div>
     );
   }
 
   return (
-    <div className={className} style={{ ...s.container, ...style }}>
+    <div data-part="root" data-loading="false" data-empty={filteredData.length === 0} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...s.container, ...style }}>
       {searchable && (
         <input
+          data-part="search-input"
           type="text"
           style={s.searchInput}
           placeholder={searchPlaceholder}
@@ -246,7 +264,7 @@ export default function RusticTreeView(props: TreeViewProps) {
           onChange={(e) => setSearchQuery(e.target.value)}
         />
       )}
-      <div>{renderNodes(filteredData, 0)}</div>
+      <div data-part="tree">{renderNodes(filteredData, 0)}</div>
     </div>
   );
 }

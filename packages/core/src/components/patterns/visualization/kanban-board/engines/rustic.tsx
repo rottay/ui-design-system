@@ -25,6 +25,7 @@ import type { KanbanBoardProps } from '../KanbanBoard.types';
 // deceleration curve and a 300ms entrance, suitable for most brands.
 const RUSTIC_EASING = 'cubic-bezier(0.16, 1, 0.3, 1)';
 const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms)';
+const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-rustic';
 
 /**
  * Rustic Kanban board using only inline styles and `--ds-*` CSS variables.
@@ -110,7 +111,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
   if (loading) {
     return (
       <div
-        className={className}
+        data-part="root"
+        data-loading="true"
+        className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
         style={{
           display: 'flex',
           justifyContent: 'center',
@@ -127,11 +130,12 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
   }
 
   return (
-    <div className={className} style={style}>
+    <div data-part="root" data-loading="false" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
       {toolbar && (
-        <div style={{ marginBottom: 16 }}>{toolbar}</div>
+        <div data-part="toolbar" style={{ marginBottom: 16 }}>{toolbar}</div>
       )}
       <div
+        data-part="board"
         style={{
           display: 'flex',
           gap: columnGap,
@@ -150,6 +154,10 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
 
           return (
             <div
+              data-part="column"
+              data-collapsed={Boolean(column.collapsed)}
+              data-over-limit={isOverLimit}
+              data-dropping={isDropping}
               key={column.id}
               style={{
                 minWidth: column.collapsed ? 48 : columnMinWidth,
@@ -160,6 +168,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
             >
               {/* Column header */}
               <div
+                data-part="column-header"
                 style={{
                   padding: '10px 14px',
                   marginBottom: 8,
@@ -190,6 +199,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                     >
                       {column.icon}
                       <span
+                        data-part="column-title"
                         style={{
                           fontWeight: 'var(--ds-typography-heading-font-weight, 600)' as unknown as number,
                           fontSize: 13,
@@ -200,6 +210,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                         {column.title}
                       </span>
                       <span
+                        data-part="wip-badge"
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
@@ -231,6 +242,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                   so the transition feels consistent with the brand. */}
               {!column.collapsed && (
                 <div
+                  data-part="column-body"
+                  data-dropping={isDropping}
+                  data-empty={column.items.length === 0}
                   style={{
                     flex: 1,
                     borderRadius: 'var(--ds-radius-sm, 6px)',
@@ -253,6 +267,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                 >
                   {column.items.length === 0 && emptyColumn ? (
                     <div
+                      data-part="empty-column"
                       style={{
                         padding: 24,
                         textAlign: 'center',
@@ -269,6 +284,9 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       const isDragging = dragData?.itemId === itemKey(item);
                       return (
                         <div
+                          data-part="card"
+                          data-dragging={isDragging}
+                          data-clickable={Boolean(onItemClick)}
                           key={itemKey(item)}
                           draggable
                           onDragStart={(e) =>
@@ -325,6 +343,7 @@ export default function RusticKanbanBoard<T>(props: KanbanBoardProps<T>) {
                       unobtrusive at rest. */}
                   {onAddItem && (
                     <button
+                      data-part="add-item"
                       onClick={() => onAddItem(column.id)}
                       style={{
                         width: '100%',

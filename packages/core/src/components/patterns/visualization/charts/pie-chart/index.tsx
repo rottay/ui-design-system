@@ -79,11 +79,11 @@ export const PieChart = memo(function PieChart({
     rows: data.map((item) => [item.label, item.value, total === 0 ? '0%' : `${((item.value / total) * 100).toFixed(1)}%`]),
   };
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
-        <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+        <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
         </div>
       ))}
     </div>
@@ -106,6 +106,7 @@ export const PieChart = memo(function PieChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
       .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
     // sort(null) preserves the data's original order rather than sorting by
@@ -132,10 +133,13 @@ export const PieChart = memo(function PieChart({
       .data(pieGenerator(data))
       .enter()
       .append('g')
-      .attr('class', 'slice');
+      .attr('class', 'slice')
+      .attr('data-part', 'slice');
 
     const paths = slices
       .append('path')
+      .attr('data-part', 'slice-surface')
+      .attr('data-variant', donut ? 'donut' : 'pie')
       .attr('fill', (d, i) => d.data.color ?? palette[i % palette.length])
       .attr('stroke', 'var(--ds-color-bg-primary)')
       .attr('stroke-width', 2);
@@ -168,6 +172,7 @@ export const PieChart = memo(function PieChart({
     if (showLabels && !compactState.hideSeriesLabels) {
       slices
         .append('text')
+        .attr('data-part', 'slice-label')
         .attr('transform', (d) => `translate(${labelArc.centroid(d)})`)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
@@ -189,7 +194,7 @@ export const PieChart = memo(function PieChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-pie', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

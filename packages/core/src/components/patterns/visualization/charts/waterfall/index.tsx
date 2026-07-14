@@ -139,15 +139,15 @@ export const WaterfallChart = memo(function WaterfallChart({
   };
 
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {[
         { label: 'Increase', color: increaseColor },
         { label: 'Decrease', color: decreaseColor },
         { label: 'Total', color: totalColor },
       ].map((item) => (
-        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: item.color, display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{item.label}</span>
+        <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" data-status={item.label.toLowerCase()} style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: item.color, display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.label}</span>
         </div>
       ))}
     </div>
@@ -166,6 +166,8 @@ export const WaterfallChart = memo(function WaterfallChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
+      .attr('data-orientation', orientation)
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const bars = computeBars(data);
@@ -197,6 +199,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         .attr('transform', `translate(0,${innerHeight})`)
         .call(axisBottom(x))
         .selectAll('text')
+        .attr('data-part', 'axis-tick-label')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
@@ -204,6 +207,7 @@ export const WaterfallChart = memo(function WaterfallChart({
       g.append('g')
         .call(axisLeft(y).ticks(tickCount))
         .selectAll('text')
+        .attr('data-part', 'axis-tick-label')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
@@ -212,6 +216,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         .attr('class', 'grid')
         .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
         .selectAll('line')
+        .attr('data-part', 'grid-line')
         .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
@@ -226,6 +231,7 @@ export const WaterfallChart = memo(function WaterfallChart({
             const yPos = y(bar.end);
 
             g.append('line')
+              .attr('data-part', 'connector')
               .attr('x1', xPos)
               .attr('x2', nextXPos)
               .attr('y1', yPos)
@@ -244,6 +250,8 @@ export const WaterfallChart = memo(function WaterfallChart({
         .enter()
         .append('rect')
         .attr('class', 'waterfall-bar')
+        .attr('data-part', 'bar')
+        .attr('data-status', (d) => d.type)
         .attr('x', (d) => x(d.label) ?? 0)
         .attr('width', x.bandwidth())
         .attr('rx', 2)
@@ -282,6 +290,7 @@ export const WaterfallChart = memo(function WaterfallChart({
           .enter()
           .append('text')
           .attr('class', 'waterfall-value')
+          .attr('data-part', 'value-label')
           .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
           .attr('y', (d) => {
             const topY = y(Math.max(d.start, d.end));
@@ -309,6 +318,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         .attr('transform', `translate(0,${innerHeight})`)
         .call(axisBottom(x).ticks(tickCount))
         .selectAll('text')
+        .attr('data-part', 'axis-tick-label')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
@@ -316,6 +326,7 @@ export const WaterfallChart = memo(function WaterfallChart({
       g.append('g')
         .call(axisLeft(y))
         .selectAll('text')
+        .attr('data-part', 'axis-tick-label')
         .style('fill', 'var(--ds-color-text-secondary)')
         .style('font-size', '12px');
 
@@ -324,6 +335,7 @@ export const WaterfallChart = memo(function WaterfallChart({
         .attr('class', 'grid')
         .call(axisBottom(x).ticks(tickCount).tickSize(-innerHeight).tickFormat(() => ''))
         .selectAll('line')
+        .attr('data-part', 'grid-line')
         .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
@@ -338,6 +350,7 @@ export const WaterfallChart = memo(function WaterfallChart({
             const xPos = x(bar.end);
 
             g.append('line')
+              .attr('data-part', 'connector')
               .attr('x1', xPos)
               .attr('x2', xPos)
               .attr('y1', yPos)
@@ -356,6 +369,8 @@ export const WaterfallChart = memo(function WaterfallChart({
         .enter()
         .append('rect')
         .attr('class', 'waterfall-bar')
+        .attr('data-part', 'bar')
+        .attr('data-status', (d) => d.type)
         .attr('y', (d) => y(d.label) ?? 0)
         .attr('height', y.bandwidth())
         .attr('rx', 2)
@@ -393,6 +408,7 @@ export const WaterfallChart = memo(function WaterfallChart({
           .enter()
           .append('text')
           .attr('class', 'waterfall-value')
+          .attr('data-part', 'value-label')
           .attr('y', (d) => (y(d.label) ?? 0) + y.bandwidth() / 2)
           .attr('x', (d) => {
             const rightX = x(Math.max(d.start, d.end));
@@ -407,7 +423,8 @@ export const WaterfallChart = memo(function WaterfallChart({
     }
 
     // Style axis lines
-    svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
   }, [data, chartWidth, chartHeight, orientation, increaseColor, decreaseColor, totalColor, showConnectors, showValues, formatVal, chartPersonality, margin, tickCount, compactState.compactTooltip]);
 
@@ -417,7 +434,7 @@ export const WaterfallChart = memo(function WaterfallChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-waterfall', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

@@ -35,8 +35,8 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   const census = JSON.parse(censusRun.stdout);
   assert.equal(Object.keys(census.files).length, 1047);
   assert.equal(census.total, 218);
-  assert.equal(census.classifiedPaint, 216);
-  assert.equal(census.unclassified, 2);
+  assert.equal(census.classifiedPaint, 218);
+  assert.equal(census.unclassified, 0);
   assert.equal(census.ignoredStructural, 387);
 
   const embeddedRun = spawnSync(process.execPath, [join(scriptsDir, 'embedded-css-paint-census.mjs'), '--json'], {
@@ -92,7 +92,7 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
 
   assert.equal(baseline['runtimeSvgPaint.filesScanned'], 1047);
   assert.equal(baseline['runtimeSvgPaint.total'], 218);
-  assert.equal(baseline['runtimeSvgPaint.unclassified'], 2);
+  assert.equal(baseline['runtimeSvgPaint.unclassified'], 0);
   assert.equal(baseline['runtimeSvgPaint.ignoredStructural'], 387);
   assert.equal(baseline['runtimeSvgPaint.patterns/communication/presence/index.tsx'], 1);
   assert.equal(baseline['runtimeSvgPaint.surfaces/pages/experience/oauth-transition/provider-icons/index.tsx'], 9);
@@ -100,6 +100,41 @@ test('engine audit wires full runtime/fleet censuses and rejects vanished keys',
   assert.equal(runtimeExemptions['patterns/communication/presence/index.tsx'].runtimeSvgFloor, 1);
   assert.equal(runtimeExemptions['patterns/visualization/charts/tooltip/crosshair.ts'].runtimeSvgFloor, 1);
   assert.equal(runtimeExemptions['patterns/visualization/charts/utils/export.ts'].runtimeSvgFloor, 4);
+  const ckERuntimeFloors = new Map([
+    ['patterns/visualization/charts/area-chart/index.tsx', 8],
+    ['patterns/visualization/charts/bar-chart/index.tsx', 6],
+    ['patterns/visualization/charts/bullet/index.tsx', 6],
+    ['patterns/visualization/charts/calendar-heatmap/index.tsx', 1],
+    ['patterns/visualization/charts/funnel-chart/index.tsx', 2],
+    ['patterns/visualization/charts/gantt-chart/index.tsx', 2],
+    ['patterns/visualization/charts/gauge/index.tsx', 4],
+    ['patterns/visualization/charts/heatmap/index.tsx', 1],
+    ['patterns/visualization/charts/histogram/index.tsx', 5],
+    ['patterns/visualization/charts/line-chart/index.tsx', 5],
+    ['patterns/visualization/charts/network-graph/index.tsx', 1],
+    ['patterns/visualization/charts/pie-chart/index.tsx', 1],
+    ['patterns/visualization/charts/radar-chart/index.tsx', 3],
+    ['patterns/visualization/charts/sankey/index.tsx', 2],
+    ['patterns/visualization/charts/scatter/index.tsx', 2],
+    ['patterns/visualization/charts/sparkline/index.tsx', 4],
+    ['patterns/visualization/charts/tooltip/crosshair.ts', 1],
+    ['patterns/visualization/charts/treemap/index.tsx', 1],
+    ['patterns/visualization/charts/utils/export.ts', 4],
+    ['patterns/visualization/charts/waterfall/index.tsx', 2],
+  ]);
+  assert.equal(
+    [...ckERuntimeFloors].reduce((sum, [path, floor]) => {
+      assert.equal(runtimeExemptions[path]?.runtimeSvgFloor, floor, `${path} runtime SVG floor drifted`);
+      return sum + floor;
+    }, 0),
+    61
+  );
+  assert.equal(
+    exemptions['SKIN-EXEMPT-NOT-PAINT'].files[
+      'patterns/visualization/charts/hooks/use-chart-theme.ts'
+    ].floor,
+    4
+  );
   assert.equal(
     runtimeExemptions['surfaces/pages/experience/oauth-transition/provider-icons/index.tsx'].runtimeSvgFloor,
     9

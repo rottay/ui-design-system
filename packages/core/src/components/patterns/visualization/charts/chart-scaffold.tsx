@@ -72,20 +72,20 @@ function renderSummary(summary?: ChartSummaryTable): ReactNode {
   }
 
   return (
-    <table>
-      {summary.caption ? <caption>{summary.caption}</caption> : null}
-      <thead>
-        <tr>
+    <table data-part="summary-table">
+      {summary.caption ? <caption data-part="summary-caption">{summary.caption}</caption> : null}
+      <thead data-part="summary-head">
+        <tr data-part="summary-row">
           {summary.headers.map((header) => (
-            <th key={header}>{header}</th>
+            <th key={header} data-part="summary-header">{header}</th>
           ))}
         </tr>
       </thead>
-      <tbody>
+      <tbody data-part="summary-body">
         {summary.rows.map((row, index) => (
-          <tr key={`${summary.caption ?? 'summary'}-${index}`}>
+          <tr key={`${summary.caption ?? 'summary'}-${index}`} data-part="summary-row">
             {row.map((cell, cellIndex) => (
-              <td key={`${summary.caption ?? 'summary'}-${index}-${cellIndex}`}>{String(cell)}</td>
+              <td key={`${summary.caption ?? 'summary'}-${index}-${cellIndex}`} data-part="summary-cell">{String(cell)}</td>
             ))}
           </tr>
         ))}
@@ -169,6 +169,7 @@ export function ChartScaffold({
     summaryItems.length > 0
       ? summaryItems[Math.min(activeSummaryIndex, Math.max(summaryItems.length - 1, 0))]
       : null;
+  const scaffoldClassName = ['ds-chart-scaffold', className].filter(Boolean).join(' ');
 
   // Arrow/Home/End keys cycle through summary items and trigger an aria-live
   // announcement, giving screen reader users a way to explore chart data.
@@ -203,8 +204,15 @@ export function ChartScaffold({
 
   if (loading) {
     return (
-      <div ref={containerRef} className={className} style={{ width: width ?? '100%', height, ...style }}>
+      <div
+        ref={containerRef}
+        className={scaffoldClassName}
+        data-part="chart-scaffold"
+        data-state="loading"
+        style={{ width: width ?? '100%', height, ...style }}
+      >
         <div
+          data-part="loading"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -220,17 +228,23 @@ export function ChartScaffold({
   }
 
   return (
-    <div ref={containerRef} className={className} style={{ position: 'relative', width: width ?? '100%', ...(minHeight ? { minHeight } : {}), ...style }}>
+    <div
+      ref={containerRef}
+      className={scaffoldClassName}
+      data-part="chart-scaffold"
+      data-state="ready"
+      style={{ position: 'relative', width: width ?? '100%', ...(minHeight ? { minHeight } : {}), ...style }}
+    >
       {title ? (
-        <div style={{ marginBottom: 4 }}>
-          <div style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
+        <div data-part="heading" style={{ marginBottom: 4 }}>
+          <div data-part="title" style={{ fontSize: 16, fontWeight: 600, color: 'var(--ds-color-text-primary)' }}>{title}</div>
           {subtitle ? (
-            <div style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>
+            <div data-part="subtitle" style={{ fontSize: 13, color: 'var(--ds-color-text-secondary)' }}>{subtitle}</div>
           ) : null}
         </div>
       ) : null}
 
-      <div id={descriptionId} style={VISUALLY_HIDDEN_STYLE}>
+      <div id={descriptionId} data-part="accessible-summary" style={VISUALLY_HIDDEN_STYLE}>
         <p>{ariaDescription}</p>
         {summaryItems.length > 0 ? (
           <p>
@@ -260,6 +274,7 @@ export function ChartScaffold({
           "interactive chart" for assistive technology. */}
       <svg
         ref={svgRef}
+        data-part="plot"
         role="img"
         aria-roledescription="interactive chart"
         tabIndex={0}

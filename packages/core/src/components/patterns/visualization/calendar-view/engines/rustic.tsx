@@ -20,6 +20,7 @@ import type { CalendarViewProps, CalendarEvent } from '../CalendarView.types';
 
 /** Abbreviated day headers starting at Sunday to match JS Date.getDay() indices. */
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const ROOT_CLASS_NAME = 'ds-pattern-calendar-view ds-engine-rustic';
 
 /**
  * Build a 7-column grid for the given month. Leading nulls pad the days
@@ -115,23 +116,30 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
   };
 
   return (
-    <div className={className} style={style}>
+    <div
+      data-part="root"
+      data-loading={loading}
+      data-view-mode={view}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      style={style}
+    >
       {header}
       {/* Render custom toolbar if provided; otherwise show the default
           inline-styled nav with prev/next buttons, a Today shortcut, and
           a view-mode select dropdown. */}
       {toolbar ?? (
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button style={btn} onClick={() => navigateMonth(-1)}>{'<'}</button>
-            <span style={{ fontWeight: 600, fontSize: 16, color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>
+        <div data-part="toolbar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <div data-part="navigation" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button data-part="toolbar-action" data-action="previous" style={btn} onClick={() => navigateMonth(-1)}>{'<'}</button>
+            <span data-part="month-title" style={{ fontWeight: 600, fontSize: 16, color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>
               {formatMonth(currentDate)}
             </span>
-            <button style={btn} onClick={() => navigateMonth(1)}>{'>'}</button>
+            <button data-part="toolbar-action" data-action="next" style={btn} onClick={() => navigateMonth(1)}>{'>'}</button>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <button style={btn} onClick={() => onDateChange?.(new Date())}>Today</button>
+          <div data-part="view-controls" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button data-part="toolbar-action" data-action="today" style={btn} onClick={() => onDateChange?.(new Date())}>Today</button>
             <select
+              data-part="view-select"
               style={{ ...btn, padding: '4px 8px' }}
               value={view}
               onChange={(e) => onViewChange?.(e.target.value as any)}
@@ -144,13 +152,13 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
         </div>
       )}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: 40, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+        <div data-part="loading" style={{ textAlign: 'center', padding: 40, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
           Loading...
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))', borderRadius: 'var(--ds-radius-md, 8px)', overflow: 'hidden' }}>
+        <div data-part="grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))', borderRadius: 'var(--ds-radius-md, 8px)', overflow: 'hidden' }}>
           {DAY_NAMES.map((d) => (
-            <div key={d} style={{ textAlign: 'center', fontSize: 12, fontWeight: 600, padding: '8px 0', background: 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))', borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-border))' }}>
+            <div data-part="weekday" key={d} style={{ textAlign: 'center', fontSize: 12, fontWeight: 600, padding: '8px 0', background: 'var(--ds-color-bg-secondary, var(--ds-color-bg-muted))', borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-border))' }}>
               {d}
             </div>
           ))}
@@ -162,6 +170,10 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
             const isToday = cell && toDateKey(cell) === today;
             return (
               <div
+                data-part="day-cell"
+                data-empty={cell === null}
+                data-today={Boolean(isToday)}
+                data-last-column={(i + 1) % 7 === 0}
                 key={key}
                 onClick={() => cell && onDateClick?.(cell)}
                 style={{
@@ -177,7 +189,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
               >
                 {cell && (
                   <>
-                    <div style={{
+                    <div data-part="date-label" style={{
                       fontSize: 12,
                       textAlign: 'right',
                       padding: '2px 4px',
@@ -190,6 +202,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                         overflow is shown as "+N more" below. */}
                     {dayEvents.slice(0, 3).map((ev) => (
                       <div
+                        data-part="event"
                         key={ev.id}
                         onClick={(e) => { e.stopPropagation(); onEventClick?.(ev); }}
                         style={{
@@ -209,7 +222,7 @@ export default function RusticCalendarView<T>(props: CalendarViewProps<T>) {
                       </div>
                     ))}
                     {dayEvents.length > 3 && (
-                      <div style={{ fontSize: 10, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', padding: '0 4px' }}>
+                      <div data-part="overflow-count" style={{ fontSize: 10, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', padding: '0 4px' }}>
                         +{dayEvents.length - 3} more
                       </div>
                     )}

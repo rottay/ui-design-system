@@ -204,7 +204,11 @@ export const Sparkline = memo(function Sparkline({
       width={width}
       height={height}
       viewBox={`0 0 ${numericWidth} ${height}`}
-      className={className}
+      className={['ds-chart-sparkline', className].filter(Boolean).join(' ')}
+      data-part="sparkline"
+      data-state="ready"
+      data-variant={resolvedCurve}
+      data-fill={resolvedFill ? 'true' : 'false'}
       style={{ display: 'inline-block', verticalAlign: 'middle', overflow: 'visible', ...style }}
       role="img"
       aria-label={`Sparkline: ${data.length} data points, range ${Math.min(...data)} to ${Math.max(...data)}`}
@@ -227,10 +231,10 @@ export const Sparkline = memo(function Sparkline({
 
       {/* Area fill gradient for a top-to-bottom fade effect */}
       {resolvedFill && computed.areaPath && (
-        <defs>
-          <linearGradient id={gradientId} x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor={resolvedColor} stopOpacity={fillOpacity} />
-            <stop offset="100%" stopColor={resolvedColor} stopOpacity={fillOpacity * 0.15} />
+        <defs data-part="definitions">
+          <linearGradient id={gradientId} data-part="area-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop data-part="area-gradient-stop" data-position="start" offset="0%" stopColor={resolvedColor} stopOpacity={fillOpacity} />
+            <stop data-part="area-gradient-stop" data-position="end" offset="100%" stopColor={resolvedColor} stopOpacity={fillOpacity * 0.15} />
           </linearGradient>
         </defs>
       )}
@@ -238,6 +242,7 @@ export const Sparkline = memo(function Sparkline({
       {/* Area fill path */}
       {resolvedFill && computed.areaPath && (
         <path
+          data-part="area"
           d={computed.areaPath}
           fill={`url(#${gradientId})`}
           stroke="none"
@@ -247,6 +252,7 @@ export const Sparkline = memo(function Sparkline({
       {/* Main line path */}
       <path
         ref={pathRef}
+        data-part="line"
         d={computed.linePath}
         fill="none"
         stroke={resolvedColor}
@@ -269,6 +275,7 @@ export const Sparkline = memo(function Sparkline({
       {/* End dot: highlights the most recent value */}
       {computed.endDot && (
         <circle
+          data-part="end-dot"
           cx={computed.endDot.cx}
           cy={computed.endDot.cy}
           r={strokeWidth + 1}
@@ -281,6 +288,7 @@ export const Sparkline = memo(function Sparkline({
       {/* Min dot: marks the lowest value */}
       {computed.minDot && (
         <circle
+          data-part="min-dot"
           cx={computed.minDot.cx}
           cy={computed.minDot.cy}
           r={strokeWidth}
@@ -293,6 +301,7 @@ export const Sparkline = memo(function Sparkline({
       {/* Max dot: marks the highest value */}
       {computed.maxDot && (
         <circle
+          data-part="max-dot"
           cx={computed.maxDot.cx}
           cy={computed.maxDot.cy}
           r={strokeWidth}

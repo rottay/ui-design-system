@@ -35,6 +35,15 @@ const JSX_PAINT_ATTRIBUTES = new Set([
 ]);
 
 /**
+ * Escape hatch for a computed DOM attribute name that intentionally copies
+ * already-rendered SVG paint (for example the self-contained chart exporter).
+ * The marker classifies the authored sink without hiding it: it still counts as
+ * one runtime-SVG paint site and therefore still needs an executable floor.
+ * Keep the marker directly on the `setAttribute` statement.
+ */
+const COMPUTED_PAINT_COPY_MARKER = "@runtime-svg-paint-copy";
+
+/**
  * Intrinsic SVG element names accepted by React/JSX. Restricting attributes to
  * these names keeps a component API such as `<Icon fill={tone} />` out of the
  * runtime-paint gate: that prop may or may not reach an SVG presentation
@@ -359,6 +368,20 @@ function isD3SetterShape(method, argumentCount) {
         (argumentCount === 2 || argumentCount === 3);
 }
 
+function hasComputedPaintCopyMarker(node, sourceFile) {
+  let anchor = node;
+  while (anchor.parent && !ts.isExpressionStatement(anchor)) {
+    anchor = anchor.parent;
+  }
+  if (!ts.isExpressionStatement(anchor)) return false;
+
+  const trivia = sourceFile.text.slice(
+    anchor.getFullStart(),
+    anchor.getStart(sourceFile)
+  );
+  return trivia.includes(COMPUTED_PAINT_COPY_MARKER);
+}
+
 /**
  * Analyze one JS/TS source without type-checking it. D3 setters are recognized as
  * `.attr`/`.attrTween(<name>, <value>)` and
@@ -508,12 +531,22 @@ export function analyzeRuntimeSvgPaint(text, fileName = "source.tsx") {
           method === "setAttributeNS" ? node.arguments[2] : node.arguments[1];
         const property = staticStringLiteral(nameExpression);
         if (property === null) {
-          recordUnclassified(
-            nameExpression,
-            "dom-set-attribute",
-            method,
-            nameExpression
-          );
+          if (hasComputedPaintCopyMarker(node, sourceFile)) {
+            record(
+              nameExpression,
+              "dom-set-attribute",
+              "computed-paint-copy",
+              valueExpression,
+              { nullishRemoval: false }
+            );
+          } else {
+            recordUnclassified(
+              nameExpression,
+              "dom-set-attribute",
+              method,
+              nameExpression
+            );
+          }
         } else if (DOM_PAINT_ATTRIBUTES.has(property)) {
           record(
             nameExpression,

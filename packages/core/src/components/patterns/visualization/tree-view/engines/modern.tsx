@@ -22,6 +22,8 @@ import React, { useState, useMemo, useCallback } from 'react';
 import type { TreeViewProps, TreeNode } from '../TreeView.types';
 import { panelCardStyle } from '../../../_internal/engines/modern/styles';
 
+const ROOT_CLASS_NAME = 'ds-pattern-tree-view ds-engine-modern';
+
 /**
  * Recursively filters the tree, keeping any node whose label matches the query
  * or whose descendants match, preserving the full ancestor chain.
@@ -112,8 +114,19 @@ export default function ModernTreeView(props: TreeViewProps) {
       const checked = checkedSet.has(node.key);
 
       return (
-        <div key={node.key}>
+        <div
+          data-part="node"
+          data-depth={depth}
+          data-expanded={expanded}
+          data-selected={selected}
+          data-checked={checked}
+          data-disabled={Boolean(node.disabled)}
+          key={node.key}
+        >
           <div
+            data-part="node-row"
+            data-selected={selected}
+            data-disabled={Boolean(node.disabled)}
             className={`flex items-center gap-1.5 px-2 py-1 rounded-md cursor-pointer transition-colors ${
               selected ? 'font-medium' : ''
             } ${node.disabled ? 'opacity-40 pointer-events-none' : ''}`}
@@ -125,6 +138,9 @@ export default function ModernTreeView(props: TreeViewProps) {
             draggable={draggable}
           >
             <button
+              data-part="toggle"
+              data-visible={Boolean(hasChildren)}
+              data-expanded={expanded}
               style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 24, width: 24, padding: 0, fontSize: 12, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', visibility: hasChildren ? 'visible' : 'hidden' }}
               onClick={(e) => { e.stopPropagation(); handleToggle(node.key); }}
             >
@@ -137,9 +153,9 @@ export default function ModernTreeView(props: TreeViewProps) {
               </svg>
             </button>
             {checkable && (
-              <input type="checkbox" style={{ width: 14, height: 14, cursor: 'pointer', accentColor: 'var(--ds-color-primary)' }} checked={checked} onChange={() => handleCheck(node.key)} onClick={(e) => e.stopPropagation()} />
+              <input data-part="checkbox" type="checkbox" style={{ width: 14, height: 14, cursor: 'pointer', accentColor: 'var(--ds-color-primary)' }} checked={checked} onChange={() => handleCheck(node.key)} onClick={(e) => e.stopPropagation()} />
             )}
-            {draggable && <span className="cursor-grab text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>::</span>}
+            {draggable && <span data-part="drag-handle" className="cursor-grab text-xs" style={{ color: 'var(--ds-color-text-secondary)' }}>::</span>}
             {node.icon && <span className="flex-shrink-0">{node.icon}</span>}
             <span className="text-sm truncate flex-1">{renderNode ? renderNode(node, depth) : node.label}</span>
           </div>
@@ -151,10 +167,10 @@ export default function ModernTreeView(props: TreeViewProps) {
 
   if (loading) {
     return (
-      <div className={className ?? ''} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
-        <div className="animate-pulse" style={{ padding: 20 }}>
+      <div data-part="root" data-loading="true" className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+        <div data-part="skeleton-list" className="animate-pulse" style={{ padding: 20 }}>
           {[1, 2, 3, 4, 5].map((i) => (
-            <div key={i} style={{ height: 24, borderRadius: 'var(--ds-radius-sm)', marginLeft: `${(i % 3) * 1.25}rem`, width: `${70 - (i % 3) * 10}%`, background: 'var(--ds-surface-panel)' }} />
+            <div data-part="skeleton" key={i} style={{ height: 24, borderRadius: 'var(--ds-radius-sm)', marginLeft: `${(i % 3) * 1.25}rem`, width: `${70 - (i % 3) * 10}%`, background: 'var(--ds-surface-panel)' }} />
           ))}
         </div>
       </div>
@@ -162,10 +178,11 @@ export default function ModernTreeView(props: TreeViewProps) {
   }
 
   return (
-    <div className={className ?? ''} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+    <div data-part="root" data-loading="false" data-empty={filteredData.length === 0} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
       <div style={{ padding: 12 }}>
         {searchable && (
           <input
+            data-part="search-input"
             type="text"
             className="w-full mb-2"
             style={{ padding: '6px 10px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: '1px solid var(--ds-color-border)', background: 'transparent', color: 'inherit', width: '100%' }}
@@ -174,7 +191,7 @@ export default function ModernTreeView(props: TreeViewProps) {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         )}
-        <div>{renderNodes(filteredData, 0)}</div>
+        <div data-part="tree">{renderNodes(filteredData, 0)}</div>
       </div>
     </div>
   );

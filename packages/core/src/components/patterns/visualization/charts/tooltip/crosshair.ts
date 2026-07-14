@@ -68,6 +68,8 @@ export function createChartCrosshair(
   const layer = g
     .append('g')
     .attr('class', 'chart-crosshair')
+    .attr('data-part', 'crosshair')
+    .attr('data-state', 'hidden')
     .style('pointer-events', 'none')
     .style('opacity', 0)
     .style('transition', 'opacity var(--ds-motion-fast) var(--ds-motion-ease-out)');
@@ -75,6 +77,8 @@ export function createChartCrosshair(
   const vLine = layer
     .append('line')
     .attr('class', 'chart-crosshair-v')
+    .attr('data-part', 'crosshair-line')
+    .attr('data-axis', 'x')
     .attr('y1', 0)
     .attr('y2', innerHeight)
     .attr('stroke', CROSSHAIR_LINE_COLOR)
@@ -84,6 +88,8 @@ export function createChartCrosshair(
   const hLine = layer
     .append('line')
     .attr('class', 'chart-crosshair-h')
+    .attr('data-part', 'crosshair-line')
+    .attr('data-axis', 'y')
     .attr('x1', 0)
     .attr('x2', innerWidth)
     .attr('stroke', CROSSHAIR_LINE_COLOR)
@@ -92,7 +98,7 @@ export function createChartCrosshair(
     .style('opacity', 0);
 
   function show(x: number, focusPoints: CrosshairFocusPoint[], horizontalAt?: number): void {
-    layer.style('opacity', 1);
+    layer.attr('data-state', 'visible').style('opacity', 1);
 
     vLine.attr('x1', x).attr('x2', x);
 
@@ -111,6 +117,7 @@ export function createChartCrosshair(
       .enter()
       .append('circle')
       .attr('class', 'chart-crosshair-dot')
+      .attr('data-part', 'crosshair-dot')
       .attr('r', 4)
       .attr('stroke', CROSSHAIR_DOT_RING_COLOR)
       .attr('stroke-width', 2)
@@ -121,7 +128,7 @@ export function createChartCrosshair(
   }
 
   function hide(): void {
-    layer.style('opacity', 0);
+    layer.attr('data-state', 'hidden').style('opacity', 0);
   }
 
   return { show, hide };

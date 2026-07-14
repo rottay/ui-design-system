@@ -179,6 +179,7 @@ function inlineStyles(
         ].includes(prop);
 
         if (isSvgPresentationAttr) {
+          // @runtime-svg-paint-copy -- fidelity sink: `prop` is the live presentation attribute.
           cloneEl.setAttribute(prop, value);
         } else {
           (cloneEl as SVGElement).style.setProperty(prop, value);
@@ -198,6 +199,7 @@ function inlineStyles(
       value = resolveCssVarValue(value, original);
     }
     if (prop === 'font-family' || prop === 'font-size' || prop === 'color') {
+      // @runtime-svg-paint-copy -- color is normalized to SVG fill; font properties pass through.
       clone.setAttribute(prop === 'color' ? 'fill' : prop, value);
     }
   }

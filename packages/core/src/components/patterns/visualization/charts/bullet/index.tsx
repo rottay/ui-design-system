@@ -171,7 +171,7 @@ export const BulletChart = memo(function BulletChart({
 
   // Legend node
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {[
         { label: 'Poor', color: resolvedRangeColors[0] },
         { label: 'Satisfactory', color: resolvedRangeColors[1] },
@@ -179,15 +179,15 @@ export const BulletChart = memo(function BulletChart({
         { label: 'Actual', color: valueColor },
         { label: 'Target', color: targetColor },
       ].map((item) => (
-        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{
+        <div key={item.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" data-variant={item.label === 'Target' ? 'target' : 'range'} style={{
             width: item.label === 'Target' ? 2 : 12,
             height: 12,
             borderRadius: item.label === 'Target' ? 0 : 2,
             backgroundColor: item.color,
             display: 'inline-block',
           }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{item.label}</span>
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.label}</span>
         </div>
       ))}
     </div>
@@ -217,6 +217,8 @@ export const BulletChart = memo(function BulletChart({
         const x = scaleLinear().domain([0, maxVal]).range([0, barAreaWidth]).clamp(true);
 
         const g = svg.append('g')
+          .attr('data-part', 'item')
+          .attr('data-orientation', 'horizontal')
           .attr('transform', `translate(${labelW},${yOffset})`);
 
         // ── Range bands (drawn from widest to narrowest = good, satisfactory, poor) ──
@@ -228,6 +230,7 @@ export const BulletChart = memo(function BulletChart({
 
         rangeBands.forEach((band, bandIndex) => {
           const rect = g.append('rect')
+            .attr('data-part', 'range-band')
             .attr('x', 0)
             .attr('y', 0)
             .attr('height', barHeight)
@@ -252,6 +255,7 @@ export const BulletChart = memo(function BulletChart({
         const valueBarY = (barHeight - valueBarHeight) / 2;
 
         const valueRect = g.append('rect')
+          .attr('data-part', 'value-bar')
           .attr('x', 0)
           .attr('y', valueBarY)
           .attr('height', valueBarHeight)
@@ -276,6 +280,7 @@ export const BulletChart = memo(function BulletChart({
         const markerY = (barHeight - markerHeight) / 2;
 
         const targetLine = g.append('rect')
+          .attr('data-part', 'target-marker')
           .attr('x', targetX - 1.5)
           .attr('y', markerY)
           .attr('width', 3)
@@ -304,6 +309,7 @@ export const BulletChart = memo(function BulletChart({
         // ── Label on left ──
         if (showLabels) {
           const labelText = svg.append('text')
+            .attr('data-part', 'item-label')
             .attr('x', labelW - 8)
             .attr('y', yOffset + barHeight / 2)
             .attr('text-anchor', 'end')
@@ -326,6 +332,7 @@ export const BulletChart = memo(function BulletChart({
         // ── Value text on right ──
         if (showLabels) {
           const valueText = svg.append('text')
+            .attr('data-part', 'value-label')
             .attr('x', labelW + barAreaWidth + 8)
             .attr('y', yOffset + barHeight / 2)
             .attr('text-anchor', 'start')
@@ -362,6 +369,8 @@ export const BulletChart = memo(function BulletChart({
         const barTop = labelH;
 
         const g = svg.append('g')
+          .attr('data-part', 'item')
+          .attr('data-orientation', 'vertical')
           .attr('transform', `translate(${xOffset},${barTop})`);
 
         // ── Range bands (drawn from tallest to shortest) ──
@@ -376,6 +385,7 @@ export const BulletChart = memo(function BulletChart({
           const bandY = y(band.upper);
 
           const rect = g.append('rect')
+            .attr('data-part', 'range-band')
             .attr('x', 0)
             .attr('y', bandY)
             .attr('width', barWidth)
@@ -404,6 +414,7 @@ export const BulletChart = memo(function BulletChart({
         const valueBarH = barAreaHeight - valueBarTop;
 
         const valueRect = g.append('rect')
+          .attr('data-part', 'value-bar')
           .attr('x', valueBarX)
           .attr('width', valueBarWidth)
           .attr('rx', 1)
@@ -431,6 +442,7 @@ export const BulletChart = memo(function BulletChart({
         const markerX = (barWidth - markerWidth) / 2;
 
         const targetLine = g.append('rect')
+          .attr('data-part', 'target-marker')
           .attr('x', markerX)
           .attr('y', targetY - 1.5)
           .attr('width', markerWidth)
@@ -459,6 +471,7 @@ export const BulletChart = memo(function BulletChart({
         // ── Label below ──
         if (showLabels) {
           const labelText = svg.append('text')
+            .attr('data-part', 'item-label')
             .attr('x', xOffset + barWidth / 2)
             .attr('y', barTop + barAreaHeight + 16)
             .attr('text-anchor', 'middle')
@@ -481,6 +494,7 @@ export const BulletChart = memo(function BulletChart({
         // ── Value text above ──
         if (showLabels) {
           const valueText = svg.append('text')
+            .attr('data-part', 'value-label')
             .attr('x', xOffset + barWidth / 2)
             .attr('y', barTop - 8)
             .attr('text-anchor', 'middle')
@@ -512,7 +526,7 @@ export const BulletChart = memo(function BulletChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-bullet', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

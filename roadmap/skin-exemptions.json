@@ -57,59 +57,89 @@
       },
       "patterns/visualization/charts/bar-chart/index.tsx": {
         "floor": 2,
-        "why": "Legend swatch backgroundColor: single-series `d.color ?? palette[i % palette.length]` and multi-series `s.color ?? palette[i % palette.length]` -- the actual bar fill itself is D3-imperative (`.attr('fill', ...)`), invisible to this counter; only the legend re-consumption of the same per-datum/per-series value is census-visible."
+        "runtimeSvgFloor": 6,
+        "why": "Two legend swatches and six D3 bar/gradient paint sinks consume caller- or datum-derived series colours. Both channels retain exact independent floors."
       },
       "patterns/visualization/charts/line-chart/index.tsx": {
         "floor": 2,
-        "why": "Legend swatch backgroundColor: `s.color ?? palette[i % palette.length]` (1), plus the same per-series color re-consumed a second time as `color` inside the `items={rows.map(...)}` array literal fed to `<TooltipSeries>` on hover (1). The line stroke/area-gradient/dot fill itself is D3-imperative, invisible here."
+        "runtimeSvgFloor": 5,
+        "why": "Legend/tooltip value objects retain two runtime colour sites; five D3 line, area-gradient and dot sinks paint the same caller-derived series colours."
       },
       "patterns/visualization/charts/area-chart/index.tsx": {
         "floor": 2,
-        "why": "Same shape as line-chart: legend swatch backgroundColor (1) + tooltip `items[].color` re-consumption (1). The area fill/gradient itself is D3-imperative, invisible here."
+        "runtimeSvgFloor": 8,
+        "why": "Legend/tooltip value objects retain two runtime colour sites; eight D3 area, gradient, line and dot sinks consume caller-derived series colours."
       },
       "patterns/visualization/charts/radar-chart/index.tsx": {
         "floor": 3,
-        "why": "Legend swatch backgroundColor: `s.color ?? palette[i % palette.length]` (1), plus `palette[0]` used twice as the default series color (`[{ name: 'Data', data, color: palette[0] }]`) when no `series` prop is passed -- two separate source occurrences, both real value-object literals, not a type annotation."
+        "runtimeSvgFloor": 3,
+        "why": "Three inline series-colour value sites and three D3 polygon/point sinks consume runtime palette or caller-supplied series colours."
       },
       "patterns/visualization/charts/scatter/index.tsx": {
         "floor": 1,
-        "why": "Legend swatch backgroundColor: `d.color ?? colors[i % colors.length]`. Point fill/stroke is D3-imperative, invisible here."
+        "runtimeSvgFloor": 2,
+        "why": "The legend swatch and two D3 point paint sinks consume per-datum or caller-palette colours."
       },
       "patterns/visualization/charts/pie-chart/index.tsx": {
         "floor": 1,
-        "why": "Legend swatch backgroundColor: `d.color ?? palette[i % palette.length]`. Slice fill is D3-imperative, invisible here."
+        "runtimeSvgFloor": 1,
+        "why": "The legend swatch and D3 slice fill consume per-datum or caller-palette colours."
       },
       "patterns/visualization/charts/treemap/index.tsx": {
         "floor": 1,
-        "why": "Legend swatch backgroundColor: `palette[i % palette.length]` -- no per-item override at all, pure index cycling, still B because `palette`/`colors` itself is a caller-supplied array. Tile fill is D3-imperative, invisible here."
+        "runtimeSvgFloor": 1,
+        "why": "The legend swatch and D3 tile fill consume the caller-supplied palette."
       },
       "patterns/visualization/charts/funnel-chart/index.tsx": {
         "floor": 1,
-        "why": "Legend swatch backgroundColor: `d.color ?? colors[i % colors.length]`. Segment fill is D3-imperative, invisible here."
+        "runtimeSvgFloor": 2,
+        "why": "The legend swatch and two D3 segment paint sinks consume per-datum or caller-palette colours."
       },
       "patterns/visualization/charts/waterfall/index.tsx": {
         "floor": 4,
-        "why": "The 3 legend-array `color:` entries (`increaseColor`/`decreaseColor`/`totalColor`, each typed `?: string` with a static-token default) plus their re-consumption as `item.color` on the swatch backgroundColor (1) -- 4 sites total, all traceable to the same 3 caller-overridable props. Bar fill is D3-imperative, invisible here."
+        "runtimeSvgFloor": 2,
+        "why": "Four legend value/swatch sites and two D3 bar paint sinks consume the caller-overridable increase, decrease and total colours."
       },
       "patterns/visualization/charts/histogram/index.tsx": {
         "floor": 2,
-        "why": "Legend swatch backgroundColor for `color` (bar fill prop, default var(--ds-color-primary)) and `cumulativeColor` (line/dot prop, default var(--ds-color-info)) -- both typed `?: string` with a static-token default, arbitrary once overridden. Bar/line/dot painting itself is D3-imperative, invisible here."
+        "runtimeSvgFloor": 5,
+        "why": "Two legend swatches and five D3 bar, cumulative-line and point sinks consume caller-overridable colours."
       },
       "patterns/visualization/charts/gauge/index.tsx": {
         "floor": 1,
-        "why": "Legend swatch backgroundColor: `seg.color` from the caller-suppliable `segments` array (DEFAULT_SEGMENTS' own 3 literal color values are A-static -- they are hardcoded fallback defaults, not a runtime read). `needleColor` (typed `?: string`, default var(--ds-color-text-primary)) feeds 3 D3 `.attr()` calls and is real B, but is NEVER a census-visible object-literal site anywhere in this file -- it cannot be floor-protected by this counter-based gate at all, same class as `crosshair.ts`'s dot fill (see the family $excluded note)."
+        "runtimeSvgFloor": 4,
+        "why": "The legend swatch consumes caller-supplied segment colour; four D3 sinks retain segment and caller-overridable needle paint."
       },
       "patterns/visualization/charts/bullet/index.tsx": {
         "floor": 12,
-        "why": "`resolvedRangeColors[0..2]`/`valueColor`/`targetColor` (5, built into the legend array) + `item.color` re-consumption on the swatch backgroundColor (1) + the `rangeBands` array literal (`{ upper, color: resolvedRangeColors[n] }`) rebuilt independently in BOTH the horizontal (3) and vertical (3) orientation branches. All 12 trace back to the same caller-overridable `rangeColors`/`valueColor`/`targetColor` props; the value-bar/target-marker/range-band fills themselves are D3-imperative, invisible here."
+        "runtimeSvgFloor": 6,
+        "why": "Twelve value-object and legend sites plus six D3 range/value/target sinks trace to caller-overridable range, value and target colours."
       },
       "patterns/visualization/charts/sankey/index.tsx": {
         "floor": 3,
-        "why": "Node layout object `color: n.color ?? colors[i % colors.length]` (1), link layout object `color: link.color ?? sn.color` -- a second-order fallback through the link's SOURCE NODE's already-resolved color, not independently computable (1), plus the node legend swatch backgroundColor re-consumption (1). Node/link fill itself is D3-imperative, invisible here."
+        "runtimeSvgFloor": 2,
+        "why": "Three node/link value-object and legend sites plus two D3 node/link sinks consume caller- or graph-derived colours."
       },
       "patterns/visualization/charts/network-graph/index.tsx": {
         "floor": 1,
-        "why": "Legend swatch backgroundColor: `colors[i % colors.length]`. Node fill (`groupColor()` or `d.color`) is D3-imperative, invisible here."
+        "runtimeSvgFloor": 1,
+        "why": "The legend swatch and D3 node fill consume caller palette, group or per-node colours."
+      },
+      "patterns/visualization/charts/calendar-heatmap/index.tsx": {
+        "runtimeSvgFloor": 1,
+        "why": "The D3 day-cell fill is a runtime scale output derived from chart data and the caller-visible colour range."
+      },
+      "patterns/visualization/charts/gantt-chart/index.tsx": {
+        "runtimeSvgFloor": 2,
+        "why": "The D3 task-duration and task-progress fills consume each task's caller-derived colour."
+      },
+      "patterns/visualization/charts/heatmap/index.tsx": {
+        "runtimeSvgFloor": 1,
+        "why": "The D3 cell fill is a runtime scale output derived from chart data and the caller-visible colour range."
+      },
+      "patterns/visualization/charts/sparkline/index.tsx": {
+        "runtimeSvgFloor": 4,
+        "why": "Four intrinsic-SVG paint attributes consume caller-overridable line, area and point colours."
       },
       "patterns/visualization/charts/tooltip/index.tsx": {
         "floor": 2,
@@ -152,7 +182,7 @@
         "why": "Nine intrinsic-SVG JSX paint attributes encode the canonical Google, LinkedIn and Microsoft provider marks. These colours are external brand identity, not tenant chrome; tokenizing them would make a skin incorrectly recolour the providers. The AST census measures exactly 9 authored paint sites in this file."
       }
     },
-    "$excluded": "charts/hooks/use-chart-theme.ts:291 is DEAD CODE (the hook has no callers anywhere in the repo, verified by grep). Do NOT exempt it -- exempting dead code freezes it in place with the gate's blessing. Wire it up or delete it; either way that is a product decision, not an exemption. gauge/index.tsx's `needleColor` is real D3-runtime paint, but its three setter uses were not promoted to executable floors here because this pass only adds floors with unequivocal checkpoint inventory evidence at exact site cardinality; see that file's own why."
+    "$excluded": "use-chart-theme's four background-shaped domain fields belong to SKIN-EXEMPT-NOT-PAINT below. Static chart paint is intentionally absent from this family and must migrate to scoped skins."
   },
   "SKIN-EXEMPT-EMBEDDED-CSS-CONTRACT": {
     "$why": "Source-authored CSS that intentionally remains inside a component because moving it to the global skin would change selector reach or activate behavior for unrelated consumers.",
@@ -183,6 +213,10 @@
       "surfaces/pages/operations/kanban/index.tsx": {
         "floor": 1,
         "why": "`color: col.color` builds the KanbanColumnDef passed to PatternKanbanBoard; it is domain-data forwarding, not a DOM style object. No CSS selector can replace this TypeScript value without changing the public column contract."
+      },
+      "patterns/visualization/charts/hooks/use-chart-theme.ts": {
+        "floor": 4,
+        "why": "The four `background` keys build ChartTheme surface data returned by the hook. They never enter a React style object or DOM sink; treating them as CSS paint would be a category error."
       }
     }
   }

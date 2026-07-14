@@ -109,7 +109,7 @@ export const NetworkGraph = memo(function NetworkGraph({
     const svg = select(svgRef.current);
     svg.selectAll('*').remove();
 
-    svg.attr('width', chartWidth).attr('height', chartHeight);
+    svg.attr('width', chartWidth).attr('height', chartHeight).attr('data-variant', directed ? 'directed' : 'undirected');
 
     // Stable group-to-colour mapping: groups are collected in insertion order
     // so the same group always maps to the same palette index across renders.
@@ -125,7 +125,9 @@ export const NetworkGraph = memo(function NetworkGraph({
     if (directed) {
       svg
         .append('defs')
+        .attr('data-part', 'definitions')
         .append('marker')
+        .attr('data-part', 'edge-marker')
         .attr('id', 'arrow')
         .attr('viewBox', '0 -5 10 10')
         .attr('refX', 20)
@@ -134,6 +136,7 @@ export const NetworkGraph = memo(function NetworkGraph({
         .attr('markerHeight', 6)
         .attr('orient', 'auto')
         .append('path')
+        .attr('data-part', 'edge-marker-path')
         .attr('d', 'M0,-5L10,0L0,5')
         .attr('fill', 'var(--ds-color-border-primary)');
     }
@@ -163,6 +166,8 @@ export const NetworkGraph = memo(function NetworkGraph({
       .enter()
       .append('line')
       .attr('class', 'link')
+      .attr('data-part', 'edge')
+      .attr('data-state', 'idle')
       .attr('stroke', 'var(--ds-color-border-primary)')
       .attr('stroke-opacity', 0.5)
       .attr('stroke-width', (d: any) => Math.sqrt(d.value ?? 1));
@@ -179,6 +184,8 @@ export const NetworkGraph = memo(function NetworkGraph({
       .enter()
       .append('g')
       .attr('class', 'node')
+      .attr('data-part', 'node')
+      .attr('data-state', 'idle')
       .call(
         drag<SVGGElement, any>()
           .on('start', (event, d) => {
@@ -199,6 +206,7 @@ export const NetworkGraph = memo(function NetworkGraph({
 
     nodeElements
       .append('circle')
+      .attr('data-part', 'node-mark')
       .attr('r', (d) => d.size ?? 8)
       .attr('fill', (d) => d.color ?? groupColor(d.group))
       .attr('stroke', 'var(--ds-color-bg-primary)')
@@ -211,6 +219,7 @@ export const NetworkGraph = memo(function NetworkGraph({
     // Labels
     nodeElements
       .append('text')
+      .attr('data-part', 'node-label')
       .attr('dx', 12)
       .attr('dy', 4)
       .style('fill', 'var(--ds-color-text-secondary)')
@@ -251,11 +260,11 @@ export const NetworkGraph = memo(function NetworkGraph({
 
   const groups = [...new Set(nodes.map((n) => n.group).filter(Boolean))] as string[];
   const legendNode = legend && groups.length > 0 ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" data-variant={directed ? 'directed' : 'undirected'} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {groups.map((group, i) => (
-        <div key={group} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors[i % colors.length], display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{group}</span>
+        <div key={group} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: colors[i % colors.length], display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{group}</span>
         </div>
       ))}
     </div>
@@ -267,7 +276,7 @@ export const NetworkGraph = memo(function NetworkGraph({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-network-graph', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

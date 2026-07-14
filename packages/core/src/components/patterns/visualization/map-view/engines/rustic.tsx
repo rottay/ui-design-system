@@ -18,6 +18,8 @@
 import React from 'react';
 import type { MapViewProps, MapMarker } from '../MapView.types';
 
+const ROOT_CLASS_NAME = 'ds-pattern-map-view ds-engine-rustic';
+
 /**
  * Rustic (Vanilla CSS) implementation of the MapView pattern.
  * All styling is done via inline styles with --ds-* CSS variable fallbacks,
@@ -46,15 +48,21 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
 
   return (
     /* Flex row: optional fixed-width sidebar + fluid main content area */
-    <div className={className} style={{ display: 'flex', gap: 16, ...style }}>
+    <div
+      data-part="root"
+      data-loading={loading}
+      data-empty={markers.length === 0}
+      className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')}
+      style={{ display: 'flex', gap: 16, ...style }}
+    >
       {sidebar && (
-        <div style={{ width: sidebarWidth, flexShrink: 0 }}>{sidebar}</div>
+        <div data-part="sidebar" style={{ width: sidebarWidth, flexShrink: 0 }}>{sidebar}</div>
       )}
-      <div style={{ flex: 1 }}>
+      <div data-part="content" style={{ flex: 1 }}>
         {toolbar}
         {/* Plain text loading indicator -- no framework spinner dependency */}
         {loading ? (
-          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+          <div data-part="loading" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
             Loading...
           </div>
         ) : (
@@ -63,6 +71,7 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
             {/* Placeholder map region -- uses bg-info token for a subtle
                  informational tint that visually distinguishes it from the marker list */}
             <div
+              data-part="map-placeholder"
               style={{
                 height,
                 borderRadius: 'var(--ds-radius-md, 8px)',
@@ -74,17 +83,17 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                 marginBottom: 16,
               }}
             >
-              <div style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 14, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+              <div data-part="placeholder-content" style={{ textAlign: 'center' }}>
+                <div data-part="placeholder-label" data-detail="title" style={{ fontSize: 14, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                   Map placeholder
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>
+                <div data-part="placeholder-label" data-detail="location" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', marginTop: 4 }}>
                   {center
                     ? `Center: ${center.lat.toFixed(4)}, ${center.lng.toFixed(4)}`
                     : 'No center set'}
                   {zoom != null ? ` | Zoom: ${zoom}` : ''}
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                <div data-part="placeholder-label" data-detail="count" style={{ fontSize: 12, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                   {markers.length} marker{markers.length !== 1 ? 's' : ''}
                 </div>
               </div>
@@ -92,12 +101,13 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
 
             {/* Marker list */}
             {markers.length === 0 ? (
-              <div style={{ textAlign: 'center', padding: 24, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', fontSize: 14 }}>
+              <div data-part="empty" style={{ textAlign: 'center', padding: 24, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))', fontSize: 14 }}>
                 No markers
               </div>
             ) : (
               /* Marker list container with token-based border and radius */
               <div
+                data-part="marker-list"
                 style={{
                   border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
                   borderRadius: 'var(--ds-radius-md, 8px)',
@@ -109,6 +119,9 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                   const isSelected = marker.id === selectedMarkerId;
                   return (
                     <div
+                      data-part="marker-row"
+                      data-selected={isSelected}
+                      data-last={i === markers.length - 1}
                       key={marker.id}
                       onClick={() => onMarkerClick?.(marker)}
                       style={{
@@ -133,6 +146,7 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                           {/* Color dot -- a small filled circle representing the marker's color */}
                           {marker.color && (
                             <span
+                              data-part="marker-color"
                               style={{
                                 width: 12,
                                 height: 12,
@@ -144,18 +158,18 @@ export default function RusticMapView<T>(props: MapViewProps<T>) {
                           )}
                           <div>
                             {/* Selected markers get bold weight for visual emphasis */}
-                            <div style={{ fontSize: 14, fontWeight: isSelected ? 600 : 400, color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>
+                            <div data-part="marker-label" style={{ fontSize: 14, fontWeight: isSelected ? 600 : 400, color: 'var(--ds-color-text-primary, var(--ds-color-text))' }}>
                               {marker.label ?? marker.id}
                             </div>
                             {/* Coordinates at 4-decimal precision (~11m accuracy) */}
-                            <div style={{ fontSize: 11, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
+                            <div data-part="coordinates" style={{ fontSize: 11, color: 'var(--ds-color-text-tertiary, var(--ds-color-text-muted))' }}>
                               {marker.lat.toFixed(4)}, {marker.lng.toFixed(4)}
                             </div>
                           </div>
                         </div>
                       )}
                       {isSelected && renderPopup && (
-                        <div style={{ marginTop: 8, paddingLeft: 20 }}>{renderPopup(marker)}</div>
+                        <div data-part="popup" style={{ marginTop: 8, paddingLeft: 20 }}>{renderPopup(marker)}</div>
                       )}
                     </div>
                   );

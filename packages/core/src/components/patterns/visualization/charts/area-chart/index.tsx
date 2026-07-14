@@ -105,11 +105,11 @@ export const AreaChart = memo(function AreaChart({
     ),
   };
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {series.map((s, i) => (
-        <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? palette[i % palette.length], opacity, display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+        <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? palette[i % palette.length], opacity, display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
         </div>
       ))}
     </div>
@@ -128,6 +128,7 @@ export const AreaChart = memo(function AreaChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const allPoints = series.flatMap((s) => s.data);
@@ -152,6 +153,7 @@ export const AreaChart = memo(function AreaChart({
     g.append('g')
       .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
       .selectAll('line')
+      .attr('data-part', 'grid-line')
       .style('stroke', 'var(--ds-color-border-secondary)')
       .style('stroke-opacity', 0.5);
     const domainEl = g.selectAll('.grid .domain, g > .domain').node();
@@ -162,12 +164,14 @@ export const AreaChart = memo(function AreaChart({
       .attr('transform', `translate(0,${innerHeight})`)
       .call(axisBottom(x))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     g.append('g')
       .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
@@ -215,8 +219,8 @@ export const AreaChart = memo(function AreaChart({
             .attr('x2', '0%')
             .attr('y2', '100%');
 
-          gradient.append('stop').attr('offset', '0%').attr('stop-color', color).attr('stop-opacity', 0.36);
-          gradient.append('stop').attr('offset', '100%').attr('stop-color', color).attr('stop-opacity', 0.08);
+          gradient.append('stop').attr('data-part', 'gradient-stop').attr('offset', '0%').attr('stop-color', color).attr('stop-opacity', 0.36);
+          gradient.append('stop').attr('data-part', 'gradient-stop').attr('offset', '100%').attr('stop-color', color).attr('stop-opacity', 0.08);
         }
 
         const stackedArea = area<any>()
@@ -227,6 +231,7 @@ export const AreaChart = memo(function AreaChart({
 
         g.append('path')
           .datum(layer)
+          .attr('data-part', 'area')
           .attr('fill', chartPersonality.useGradientFill ? `url(#${gradientId})` : color)
           .attr('fill-opacity', chartPersonality.useGradientFill ? 1 : opacity)
           .attr('stroke', color)
@@ -250,8 +255,8 @@ export const AreaChart = memo(function AreaChart({
             .attr('x2', '0%')
             .attr('y2', '100%');
 
-          gradient.append('stop').attr('offset', '0%').attr('stop-color', color).attr('stop-opacity', 0.36);
-          gradient.append('stop').attr('offset', '100%').attr('stop-color', color).attr('stop-opacity', 0.08);
+          gradient.append('stop').attr('data-part', 'gradient-stop').attr('offset', '0%').attr('stop-color', color).attr('stop-opacity', 0.36);
+          gradient.append('stop').attr('data-part', 'gradient-stop').attr('offset', '100%').attr('stop-color', color).attr('stop-opacity', 0.08);
         }
 
         const seriesArea = area<(typeof s.data)[0]>()
@@ -267,6 +272,7 @@ export const AreaChart = memo(function AreaChart({
 
         g.append('path')
           .datum(s.data)
+          .attr('data-part', 'area')
           .attr('fill', chartPersonality.useGradientFill ? `url(#${gradientId})` : color)
           .attr('fill-opacity', chartPersonality.useGradientFill ? 1 : opacity)
           .attr('d', seriesArea);
@@ -274,6 +280,7 @@ export const AreaChart = memo(function AreaChart({
         const path = g
           .append('path')
           .datum(s.data)
+          .attr('data-part', 'series-line')
           .attr('fill', 'none')
           .attr('stroke', color)
           .attr('stroke-width', 2)
@@ -311,6 +318,7 @@ export const AreaChart = memo(function AreaChart({
 
       g.append('rect')
         .attr('class', 'chart-hover-overlay')
+        .attr('data-part', 'interaction-overlay')
         .attr('width', innerWidth)
         .attr('height', innerHeight)
         .attr('fill', 'transparent')
@@ -361,13 +369,14 @@ export const AreaChart = memo(function AreaChart({
     }
 
     if (xAxisLabel) {
-      svg.append('text').attr('x', chartWidth / 2).attr('y', chartHeight - 4).attr('text-anchor', 'middle').style('fill', 'var(--ds-color-text-secondary)').style('font-size', '12px').text(xAxisLabel);
+      svg.append('text').attr('data-part', 'axis-label').attr('data-axis', 'x').attr('x', chartWidth / 2).attr('y', chartHeight - 4).attr('text-anchor', 'middle').style('fill', 'var(--ds-color-text-secondary)').style('font-size', '12px').text(xAxisLabel);
     }
     if (yAxisLabel) {
-      svg.append('text').attr('transform', 'rotate(-90)').attr('x', -chartHeight / 2).attr('y', 14).attr('text-anchor', 'middle').style('fill', 'var(--ds-color-text-secondary)').style('font-size', '12px').text(yAxisLabel);
+      svg.append('text').attr('data-part', 'axis-label').attr('data-axis', 'y').attr('transform', 'rotate(-90)').attr('x', -chartHeight / 2).attr('y', 14).attr('text-anchor', 'middle').style('fill', 'var(--ds-color-text-secondary)').style('font-size', '12px').text(yAxisLabel);
     }
 
-    svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
 
     // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
@@ -384,7 +393,7 @@ export const AreaChart = memo(function AreaChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-area', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

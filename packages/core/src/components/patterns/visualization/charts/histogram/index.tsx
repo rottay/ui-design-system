@@ -151,15 +151,15 @@ export const Histogram = memo(function Histogram({
 
   // Legend node for cumulative line
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-        <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: color, display: 'inline-block' }} />
-        <span style={{ color: 'var(--ds-color-text-secondary)' }}>{density ? 'Density' : 'Frequency'}</span>
+    <div data-part="legend" data-variant={density ? 'density' : 'frequency'} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      <div data-part="legend-item" data-series="histogram" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+        <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: color, display: 'inline-block' }} />
+        <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{density ? 'Density' : 'Frequency'}</span>
       </div>
       {cumulativeLine ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 2, backgroundColor: cumulativeColor, display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>Cumulative</span>
+        <div data-part="legend-item" data-series="cumulative" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 2, backgroundColor: cumulativeColor, display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>Cumulative</span>
         </div>
       ) : null}
     </div>
@@ -178,6 +178,8 @@ export const Histogram = memo(function Histogram({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
+      .attr('data-variant', density ? 'density' : 'frequency')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // X scale: continuous, spanning the full value range
@@ -209,24 +211,33 @@ export const Histogram = memo(function Histogram({
     }
 
     g.append('g')
+      .attr('data-part', 'axis')
+      .attr('data-axis', 'x')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(xAxis)
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Y axis
     g.append('g')
+      .attr('data-part', 'axis')
+      .attr('data-axis', 'y')
       .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Horizontal grid lines
     g.append('g')
       .attr('class', 'grid')
+      .attr('data-part', 'grid')
+      .attr('data-axis', 'y')
       .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
       .selectAll('line')
+      .attr('data-part', 'grid-line')
       .style('stroke', 'var(--ds-color-border-secondary)')
       .style('stroke-opacity', 0.5);
 
@@ -239,6 +250,9 @@ export const Histogram = memo(function Histogram({
       .enter()
       .append('rect')
       .attr('class', 'histogram-bar')
+      .attr('data-part', 'bar')
+      .attr('data-series', 'histogram')
+      .attr('data-state', 'idle')
       .attr('x', (d) => x(d.x0 ?? 0) + 1)
       .attr('width', (d) => Math.max(0, x(d.x1 ?? 0) - x(d.x0 ?? 0) - 1))
       .attr('fill', color)
@@ -284,6 +298,8 @@ export const Histogram = memo(function Histogram({
         .enter()
         .append('text')
         .attr('class', 'histogram-label')
+        .attr('data-part', 'value-label')
+        .attr('data-series', 'histogram')
         .attr('x', (d) => (x(d.x0 ?? 0) + x(d.x1 ?? 0)) / 2)
         .attr('text-anchor', 'middle')
         .style('fill', 'var(--ds-color-text-primary)')
@@ -329,6 +345,8 @@ export const Histogram = memo(function Histogram({
         // Right y-axis
         const rightAxis = g
           .append('g')
+          .attr('data-part', 'axis')
+          .attr('data-axis', 'cumulative')
           .attr('transform', `translate(${innerWidth},0)`)
           .call(
             axisLeft(yCumulative)
@@ -339,6 +357,7 @@ export const Histogram = memo(function Histogram({
 
         rightAxis
           .selectAll('text')
+          .attr('data-part', 'axis-tick-label')
           .style('fill', cumulativeColor)
           .style('font-size', '11px')
           .attr('text-anchor', 'start')
@@ -354,6 +373,7 @@ export const Histogram = memo(function Histogram({
         const path = g
           .append('path')
           .datum(cumulativeData)
+          .attr('data-part', 'cumulative-line')
           .attr('fill', 'none')
           .attr('stroke', cumulativeColor)
           .attr('stroke-width', 2)
@@ -366,6 +386,8 @@ export const Histogram = memo(function Histogram({
           .enter()
           .append('circle')
           .attr('class', 'cumulative-dot')
+          .attr('data-part', 'cumulative-point')
+          .attr('data-series', 'cumulative')
           .attr('cx', (d) => x(d.cx))
           .attr('cy', (d) => yCumulative(d.cy))
           .attr('r', 3)
@@ -401,6 +423,8 @@ export const Histogram = memo(function Histogram({
     if (xLabel) {
       svg
         .append('text')
+        .attr('data-part', 'axis-label')
+        .attr('data-axis', 'x')
         .attr('x', chartWidth / 2)
         .attr('y', chartHeight - 4)
         .attr('text-anchor', 'middle')
@@ -412,6 +436,8 @@ export const Histogram = memo(function Histogram({
     if (yLabel) {
       svg
         .append('text')
+        .attr('data-part', 'axis-label')
+        .attr('data-axis', 'y')
         .attr('transform', 'rotate(-90)')
         .attr('x', -chartHeight / 2)
         .attr('y', 14)
@@ -422,8 +448,9 @@ export const Histogram = memo(function Histogram({
     }
 
     // Style axis lines
-    svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
   }, [
     values,
     histogramBins,
@@ -450,7 +477,7 @@ export const Histogram = memo(function Histogram({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-histogram', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

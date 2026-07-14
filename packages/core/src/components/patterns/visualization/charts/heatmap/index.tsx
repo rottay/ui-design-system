@@ -103,6 +103,7 @@ export const HeatMap = memo(function HeatMap({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // X axis
@@ -110,6 +111,7 @@ export const HeatMap = memo(function HeatMap({
       .attr('transform', `translate(0,${innerHeight})`)
       .call(axisBottom(x))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px')
       .attr('transform', 'rotate(-45)')
@@ -119,6 +121,7 @@ export const HeatMap = memo(function HeatMap({
     g.append('g')
       .call(axisLeft(y))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '11px');
 
@@ -130,6 +133,7 @@ export const HeatMap = memo(function HeatMap({
       .enter()
       .append('rect')
       .attr('class', 'cell')
+      .attr('data-part', 'cell')
       .attr('x', (d) => x(d.x) ?? 0)
       .attr('y', (d) => y(d.y) ?? 0)
       .attr('width', x.bandwidth())
@@ -150,7 +154,8 @@ export const HeatMap = memo(function HeatMap({
       cells.append('title').text((d) => `${d.x}, ${d.y}: ${d.value}`);
     }
 
-    svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
   }, [
     data,
@@ -172,7 +177,7 @@ export const HeatMap = memo(function HeatMap({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-heatmap', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

@@ -20,6 +20,8 @@
 import React, { useMemo } from 'react';
 import type { TimelinePatternProps, TimelineItem } from '../Timeline.types';
 
+const ROOT_CLASS_NAME = 'ds-pattern-timeline ds-engine-modern';
+
 /** Formats a timestamp for display inside a timeline item. */
 function formatTimestamp(ts: string | Date): string {
   const date = typeof ts === 'string' ? new Date(ts) : ts;
@@ -89,64 +91,67 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
 
     return (
       <>
-        {index !== 0 && <hr />}
+        {index !== 0 && <hr data-part="connector" />}
         {showTimestamp && (
-          <div className={isRight ? 'timeline-end timeline-box' : 'timeline-start'}>
+          <div data-part="timestamp-slot" data-side={isRight ? 'right' : 'left'} className={isRight ? 'timeline-end timeline-box' : 'timeline-start'}>
             {!isRight && (
-              <time className="font-mono text-xs opacity-60">
+              <time data-part="timestamp" className="font-mono text-xs opacity-60">
                 {formatTimestamp(item.timestamp)}
               </time>
             )}
           </div>
         )}
-        <div className="timeline-middle">
+        <div data-part="marker" className="timeline-middle">
           {/* Render custom icon if provided; otherwise fall back to a
               checkmark circle SVG colored by the item's semantic type. */}
           {item.icon ? (
-            <span className="flex items-center justify-center w-5 h-5">{item.icon}</span>
+            <span data-part="marker-icon" data-type={item.type ?? 'default'} className="flex items-center justify-center w-5 h-5">{item.icon}</span>
           ) : (
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5" style={{ color: item.type === 'error' ? 'var(--ds-color-error)' : item.type === 'success' ? 'var(--ds-color-success)' : item.type === 'warning' ? 'var(--ds-color-warning)' : 'var(--ds-color-primary)' }}>
+            <svg data-part="marker-icon" data-type={item.type ?? 'default'} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5" style={{ color: item.type === 'error' ? 'var(--ds-color-error)' : item.type === 'success' ? 'var(--ds-color-success)' : item.type === 'warning' ? 'var(--ds-color-warning)' : 'var(--ds-color-primary)' }}>
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
             </svg>
           )}
         </div>
         <div
+          data-part="item-card"
+          data-side={isRight ? 'right' : 'left'}
+          data-clickable={Boolean(onItemClick)}
           className={`${isRight ? 'timeline-start' : 'timeline-end'} timeline-box ${onItemClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
           onClick={onItemClick ? () => onItemClick(item) : undefined}
         >
           <div className="flex items-center gap-2 mb-1">
             {item.user?.avatar && (
-              <div style={{ display: 'inline-flex', width: 24, height: 24, borderRadius: '50%', overflow: 'hidden' }}>
+              <div data-part="avatar" style={{ display: 'inline-flex', width: 24, height: 24, borderRadius: '50%', overflow: 'hidden' }}>
                 <img src={item.user.avatar} alt={item.user.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
             )}
             {item.user && <span className="text-xs font-semibold">{item.user.name}</span>}
             {item.type && item.type !== 'default' && (
-              <span style={{ display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', padding: '1px 5px', fontSize: 10, ...typeBadgeStyle[item.type] }}>{item.type}</span>
+              <span data-part="type-badge" data-type={item.type} style={{ display: 'inline-flex', alignItems: 'center', borderRadius: '9999px', padding: '1px 5px', fontSize: 10, ...typeBadgeStyle[item.type] }}>{item.type}</span>
             )}
           </div>
           <div className="font-semibold text-sm">{item.title}</div>
           {isRight && showTimestamp && (
-            <time className="font-mono text-xs opacity-60">
+            <time data-part="timestamp" className="font-mono text-xs opacity-60">
               {formatTimestamp(item.timestamp)}
             </time>
           )}
           {item.description && <p className="text-xs opacity-70 mt-1">{item.description}</p>}
         </div>
-        {index !== total - 1 && <hr />}
+        {index !== total - 1 && <hr data-part="connector" />}
       </>
     );
   };
 
   /** Renders a list of timeline items as a DaisyUI vertical timeline. */
   const renderList = (list: TimelineItem<T>[]) => (
-    <ul className="timeline timeline-vertical">
+    <ul data-part="list" className="timeline timeline-vertical">
       {list.map((item, index) => {
         const defaultRender = buildDefaultRender(item, index, list.length);
         return renderItem ? (
-          <li key={item.key}>{renderItem(item, defaultRender)}</li>
+          <li data-part="item" data-type={item.type ?? 'default'} key={item.key}>{renderItem(item, defaultRender)}</li>
         ) : (
-          <li key={item.key}>{defaultRender}</li>
+          <li data-part="item" data-type={item.type ?? 'default'} key={item.key}>{defaultRender}</li>
         );
       })}
     </ul>
@@ -155,8 +160,8 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   // Early-return loading state using DaisyUI's built-in spinner component.
   if (loading) {
     return (
-      <div className={`flex justify-center items-center py-12 ${className ?? ''}`} style={style}>
-        <span style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
+      <div data-part="root" data-loading="true" data-empty="false" data-mode={mode} className={[ROOT_CLASS_NAME, 'flex justify-center items-center py-12', className].filter(Boolean).join(' ')} style={style}>
+        <span data-part="spinner" style={{ display: 'inline-block', width: 24, height: 24, border: '3px solid var(--ds-color-border)', borderTopColor: 'var(--ds-color-primary)', borderRadius: '50%', animation: 'ds-spin var(--ds-motion-glacial) linear infinite' }} />
       </div>
     );
   }
@@ -164,10 +169,10 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   // Empty state preserves header/footer so surrounding layout stays intact.
   if (items.length === 0) {
     return (
-      <div className={className} style={style}>
+      <div data-part="root" data-loading="false" data-empty="true" data-mode={mode} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
         {header}
         {emptyState ?? (
-          <div className="text-center py-12 opacity-60">No timeline items</div>
+          <div data-part="empty" className="text-center py-12 opacity-60">No timeline items</div>
         )}
         {footer}
       </div>
@@ -175,14 +180,14 @@ export default function ModernTimeline<T>(props: TimelinePatternProps<T>) {
   }
 
   return (
-    <div className={`ds-pattern-timeline ds-engine-modern ${className ?? ''}`} style={style}>
+    <div data-part="root" data-loading="false" data-empty="false" data-mode={mode} data-grouped={Boolean(grouped)} className={[ROOT_CLASS_NAME, className].filter(Boolean).join(' ')} style={style}>
       {header}
       {/* When groupByDate is active, render each date cluster with its
           own heading; otherwise render all items as a single flat list. */}
       {grouped ? (
         Object.entries(grouped).map(([dateKey, group]) => (
-          <div key={dateKey} className="mb-6">
-            <div className="text-sm font-semibold opacity-70 mb-3">{dateKey}</div>
+          <div data-part="date-group" key={dateKey} className="mb-6">
+            <div data-part="date-heading" className="text-sm font-semibold opacity-70 mb-3">{dateKey}</div>
             {renderList(group)}
           </div>
         ))

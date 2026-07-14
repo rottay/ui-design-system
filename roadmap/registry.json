@@ -1674,6 +1674,11 @@
      "at": "2026-07-14 18:38",
      "by": "ds-agent",
      "note": "CK-H1 CERTIFIED byte-exact at 74d6e151: 235 to 45, 190 static sites moved into 4 unlayered skins; 37 runtime-paint and 8 non-paint identities retained. Independent review caught and fixed the Card data-part drop via a class-authoritative hook. Skin gates all zero; focused Node and component suites green; production core and 289-page Showroom builds green; five tracked bundles regenerated; 8-case Rottay-dark and BitHire-light visual matrix passed twice without snapshot updates. CK-E is now the sole remaining WO-SKIN-06 checkpoint: 478 to 111, migrate 367."
+    },
+    {
+     "at": "2026-07-14 19:07",
+     "by": "ds-agent",
+     "note": "CK-E inert pre-step CERTIFIED: start census unchanged at 478 = 299 inline + 179 runtime SVG; runtime channels fully classified at 166 D3 + 9 JSX + 4 DOM with unclassified 0; exact Stage-1 boundary pinned at 111 = 50 inline + 61 runtime. Scope/part/state anatomy and unchanged React/D3/DOM topology are executable contracts. Core and 289-page Showroom production builds green. The 14-test visual suite generated 23 baselines covering Rottay dark, BitHire light, modern/rustic, desktop/mobile, loading and interactive tooltip/crosshair/Sankey/brush/Kanban/Timeline states, then passed fully without snapshot updates. Next: migrate exactly 367 static/finite-state sites, retaining all 111 floor identities."
     }
    ],
    "claimedBy": "ds-agent",

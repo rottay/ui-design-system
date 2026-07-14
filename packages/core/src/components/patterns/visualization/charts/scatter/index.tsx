@@ -153,13 +153,14 @@ export const ScatterChart = memo(function ScatterChart({
 
   // Collect unique colors for a legend when points have explicit colors
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" data-variant={bubble ? 'bubble' : 'scatter'} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data
         .filter((d) => d.label)
         .slice(0, 10) // Limit legend to 10 items to avoid clutter
         .map((d, i) => (
-          <div key={d.label ?? i} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <div key={d.label ?? i} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
             <span
+              data-part="legend-swatch"
               style={{
                 width: 10,
                 height: 10,
@@ -168,7 +169,7 @@ export const ScatterChart = memo(function ScatterChart({
                 display: 'inline-block',
               }}
             />
-            <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+            <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
           </div>
         ))}
     </div>
@@ -187,6 +188,8 @@ export const ScatterChart = memo(function ScatterChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
+      .attr('data-variant', bubble ? 'bubble' : 'scatter')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // X scale with 5% padding on each side so points don't sit on axes
@@ -214,16 +217,22 @@ export const ScatterChart = memo(function ScatterChart({
 
     // X axis
     g.append('g')
+      .attr('data-part', 'axis')
+      .attr('data-axis', 'x')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(axisBottom(x).ticks(tickCount))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
     // Y axis
     g.append('g')
+      .attr('data-part', 'axis')
+      .attr('data-axis', 'y')
       .call(axisLeft(y).ticks(tickCount))
       .selectAll('text')
+      .attr('data-part', 'axis-tick-label')
       .style('fill', 'var(--ds-color-text-secondary)')
       .style('font-size', '12px');
 
@@ -232,8 +241,11 @@ export const ScatterChart = memo(function ScatterChart({
       // Horizontal grid
       g.append('g')
         .attr('class', 'grid-h')
+        .attr('data-part', 'grid')
+        .attr('data-axis', 'y')
         .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
         .selectAll('line')
+        .attr('data-part', 'grid-line')
         .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
@@ -242,9 +254,12 @@ export const ScatterChart = memo(function ScatterChart({
       // Vertical grid
       g.append('g')
         .attr('class', 'grid-v')
+        .attr('data-part', 'grid')
+        .attr('data-axis', 'x')
         .attr('transform', `translate(0,${innerHeight})`)
         .call(axisBottom(x).ticks(tickCount).tickSize(-innerHeight).tickFormat(() => ''))
         .selectAll('line')
+        .attr('data-part', 'grid-line')
         .style('stroke', 'var(--ds-color-border-secondary)')
         .style('stroke-opacity', 0.5);
 
@@ -263,6 +278,7 @@ export const ScatterChart = memo(function ScatterChart({
 
         const line = g
           .append('line')
+          .attr('data-part', 'trend-line')
           .attr('x1', x(x1))
           .attr('x2', x(x2))
           .attr('y1', y(y1))
@@ -290,6 +306,8 @@ export const ScatterChart = memo(function ScatterChart({
       .enter()
       .append('circle')
       .attr('class', 'scatter-point')
+      .attr('data-part', 'series-point')
+      .attr('data-state', 'idle')
       .attr('cx', (d) => x(d.x))
       .attr('cy', (d) => y(d.y))
       .attr('r', (d) => {
@@ -314,6 +332,7 @@ export const ScatterChart = memo(function ScatterChart({
       circles
         .style('cursor', 'pointer')
         .on('mouseenter mousemove', (event: MouseEvent, d) => {
+          select(event.currentTarget as SVGCircleElement).attr('data-state', 'hovered');
           const cx = x(d.x);
           const cy = y(d.y);
           const color = String(select(event.currentTarget as SVGCircleElement).attr('fill'));
@@ -337,7 +356,8 @@ export const ScatterChart = memo(function ScatterChart({
             />
           );
         })
-        .on('mouseleave', () => {
+        .on('mouseleave', (event: MouseEvent) => {
+          select(event.currentTarget as SVGCircleElement).attr('data-state', 'idle');
           crosshair.hide();
           hideTooltip();
         });
@@ -364,6 +384,8 @@ export const ScatterChart = memo(function ScatterChart({
     if (xLabel) {
       svg
         .append('text')
+        .attr('data-part', 'axis-label')
+        .attr('data-axis', 'x')
         .attr('x', chartWidth / 2)
         .attr('y', chartHeight - 4)
         .attr('text-anchor', 'middle')
@@ -375,6 +397,8 @@ export const ScatterChart = memo(function ScatterChart({
     if (yLabel) {
       svg
         .append('text')
+        .attr('data-part', 'axis-label')
+        .attr('data-axis', 'y')
         .attr('transform', 'rotate(-90)')
         .attr('x', -chartHeight / 2)
         .attr('y', 14)
@@ -385,8 +409,9 @@ export const ScatterChart = memo(function ScatterChart({
     }
 
     // Style axis lines
-    svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
 
     // Data/dimension changes rebuild the svg from scratch (selectAll('*').remove()
     // above), which would otherwise leave a stale React-side tooltip pointing at
@@ -402,7 +427,7 @@ export const ScatterChart = memo(function ScatterChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-scatter', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

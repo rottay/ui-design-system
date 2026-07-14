@@ -137,6 +137,9 @@ export function ChartTooltip({
   return (
     <div
       ref={tooltipRef}
+      className="ds-chart-tooltip"
+      data-part="chart-tooltip"
+      data-state={visible ? 'visible' : 'hidden'}
       style={{
         ...TOOLTIP_STYLE,
         left: adjusted.left,
@@ -185,10 +188,10 @@ export function TooltipValue({
   color?: string;
 }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      {color ? <span style={{ ...SWATCH_STYLE, backgroundColor: color }} /> : null}
-      <span style={{ color: 'var(--ds-color-text-secondary)' }}>{label}</span>
-      <span className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{value}</span>
+    <div className="ds-chart-tooltip-value" data-part="tooltip-value" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      {color ? <span data-part="swatch" style={{ ...SWATCH_STYLE, backgroundColor: color }} /> : null}
+      <span data-part="label" style={{ color: 'var(--ds-color-text-secondary)' }}>{label}</span>
+      <span data-part="value" className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{value}</span>
     </div>
   );
 }
@@ -217,9 +220,10 @@ export function TooltipSeries({
   items: Array<{ name: string; value: string | number; color: string }>;
 }) {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+    <div className="ds-chart-tooltip-series" data-part="tooltip-series" style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
       {title ? (
         <div
+          data-part="title"
           style={{
             fontWeight: 600,
             marginBottom: 2,
@@ -234,11 +238,12 @@ export function TooltipSeries({
           // `name` is not guaranteed unique -- compact mode (crosshair tooltips)
           // renders every row with an empty name, swatch-only.
           key={`${item.name}-${index}`}
+          data-part="series-row"
           style={{ display: 'flex', alignItems: 'center', gap: 6 }}
         >
-          <span style={{ ...SWATCH_STYLE, backgroundColor: item.color }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{item.name}</span>
-          <span className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{item.value}</span>
+          <span data-part="swatch" style={{ ...SWATCH_STYLE, backgroundColor: item.color }} />
+          <span data-part="label" style={{ color: 'var(--ds-color-text-secondary)' }}>{item.name}</span>
+          <span data-part="value" className="ds-nums-tabular" style={{ marginLeft: 'auto', fontWeight: 600, paddingLeft: 12 }}>{item.value}</span>
         </div>
       ))}
     </div>

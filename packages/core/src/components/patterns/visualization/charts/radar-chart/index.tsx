@@ -79,11 +79,11 @@ export const RadarChart = memo(function RadarChart({
     ),
   };
   const legendNode = legend && allSeries.length > 1 ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {allSeries.map((s, i) => (
-        <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+        <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: s.color ?? palette[i % palette.length], display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
         </div>
       ))}
     </div>
@@ -112,6 +112,7 @@ export const RadarChart = memo(function RadarChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
       .attr('transform', `translate(${chartWidth / 2},${chartHeight / 2})`);
 
     // rScale maps data values to radial pixel distance from the centre.
@@ -128,6 +129,7 @@ export const RadarChart = memo(function RadarChart({
       });
 
       g.append('polygon')
+        .attr('data-part', 'grid-level')
         .attr('points', points.map((p) => p.join(',')).join(' '))
         .attr('fill', 'none')
         .attr('stroke', 'var(--ds-color-border-secondary)')
@@ -138,6 +140,7 @@ export const RadarChart = memo(function RadarChart({
     axes.forEach((_, i) => {
       const angle = angleSlice * i - Math.PI / 2;
       g.append('line')
+        .attr('data-part', 'axis-line')
         .attr('x1', 0)
         .attr('y1', 0)
         .attr('x2', radius * Math.cos(angle))
@@ -152,6 +155,7 @@ export const RadarChart = memo(function RadarChart({
         const angle = angleSlice * i - Math.PI / 2;
         const labelR = radius + 18;
         g.append('text')
+          .attr('data-part', 'axis-label')
           .attr('x', labelR * Math.cos(angle))
           .attr('y', labelR * Math.sin(angle))
           .attr('text-anchor', 'middle')
@@ -174,6 +178,7 @@ export const RadarChart = memo(function RadarChart({
 
       const polygon = g
         .append('polygon')
+        .attr('data-part', 'series-area')
         .attr('points', points.map((p) => p.join(',')).join(' '))
         .attr('fill', color)
         .attr('fill-opacity', 0.2)
@@ -196,6 +201,7 @@ export const RadarChart = memo(function RadarChart({
         const r = rScale(d.value);
         const dot = g
           .append('circle')
+          .attr('data-part', 'series-point')
           .attr('cx', r * Math.cos(angle))
           .attr('cy', r * Math.sin(angle))
           .attr('r', 3.5)
@@ -216,7 +222,7 @@ export const RadarChart = memo(function RadarChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-radar', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

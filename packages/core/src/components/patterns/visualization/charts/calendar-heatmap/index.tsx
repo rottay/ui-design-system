@@ -224,18 +224,21 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
 
     const g = svg
       .append('g')
+      .attr('data-part', 'plot-area')
       .attr('transform', `translate(${dayLabelWidth}, ${monthLabelHeight})`);
 
     // Day-of-week labels (Mon, Wed, Fri) on left side
     if (showDayLabels) {
       const labelG = svg
         .append('g')
+        .attr('data-part', 'day-labels')
         .attr('transform', `translate(0, ${monthLabelHeight})`);
 
       DAY_LABELS.forEach((label, i) => {
         if (!label) return;
         labelG
           .append('text')
+          .attr('data-part', 'day-label')
           .attr('x', dayLabelWidth - 6)
           .attr('y', i * step + step / 2)
           .attr('dy', '0.35em')
@@ -253,7 +256,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
         timeDay.offset(endDate, 1),
       );
 
-      const labelG = svg.append('g');
+      const labelG = svg.append('g').attr('data-part', 'month-labels');
 
       months.forEach((monthDate) => {
         const weekOffset = Math.floor(
@@ -261,6 +264,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
         );
         labelG
           .append('text')
+          .attr('data-part', 'month-label')
           .attr('x', dayLabelWidth + weekOffset * step)
           .attr('y', monthLabelHeight - 4)
           .attr('text-anchor', 'start')
@@ -277,6 +281,11 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
       .enter()
       .append('rect')
       .attr('class', 'cal-cell')
+      .attr('data-part', 'cell')
+      .attr('data-state', (d) => {
+        const value = valueMap.get(fmtKey(d));
+        return value == null || value === 0 ? 'empty' : 'filled';
+      })
       .attr('x', (d) => {
         const weekOffset = Math.floor(timeDay.count(firstMonday, d) / 7);
         return weekOffset * step;
@@ -355,7 +364,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
       svgRef={svgRef}
       width={width}
       height={heightProp}
-      className={className}
+      className={['ds-chart-calendar-heatmap', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

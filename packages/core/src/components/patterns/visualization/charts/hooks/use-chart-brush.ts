@@ -394,6 +394,8 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
     children.push(
       createElement('rect', {
         key: 'brush-bg',
+        className: 'ds-chart-brush-background',
+        'data-part': 'brush-background',
         x: plotLeft,
         y: brushY,
         width: plotWidth,
@@ -408,6 +410,8 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
     children.push(
       createElement('line', {
         key: 'brush-separator',
+        className: 'ds-chart-brush-separator',
+        'data-part': 'brush-separator',
         x1: plotLeft,
         y1: brushY,
         x2: plotLeft + plotWidth,
@@ -426,6 +430,9 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
         children.push(
           createElement('rect', {
             key: 'dim-left',
+            className: 'ds-chart-brush-dim',
+            'data-part': 'brush-dim',
+            'data-side': 'left',
             x: plotLeft,
             y: brushY,
             width: pixelSelection.left,
@@ -442,6 +449,9 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
         children.push(
           createElement('rect', {
             key: 'dim-right',
+            className: 'ds-chart-brush-dim',
+            'data-part': 'brush-dim',
+            'data-side': 'right',
             x: plotLeft + pixelSelection.right,
             y: brushY,
             width: plotWidth - pixelSelection.right,
@@ -457,6 +467,8 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
       children.push(
         createElement('rect', {
           key: 'selection',
+          className: 'ds-chart-brush-selection',
+          'data-part': 'brush-selection',
           x: selLeft,
           y: brushY,
           width: Math.max(selWidth, 1),
@@ -471,6 +483,8 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
       children.push(
         createElement('rect', {
           key: 'selection-border',
+          className: 'ds-chart-brush-selection-border',
+          'data-part': 'brush-selection-border',
           x: selLeft,
           y: brushY,
           width: Math.max(selWidth, 1),
@@ -487,6 +501,9 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
       children.push(
         createElement('rect', {
           key: 'handle-left',
+          className: 'ds-chart-brush-handle',
+          'data-part': 'brush-handle',
+          'data-side': 'left',
           x: selLeft - HANDLE_WIDTH / 2,
           y: brushY + 4,
           width: HANDLE_WIDTH,
@@ -503,6 +520,9 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
       children.push(
         createElement('rect', {
           key: 'handle-right',
+          className: 'ds-chart-brush-handle',
+          'data-part': 'brush-handle',
+          'data-side': 'right',
           x: selLeft + selWidth - HANDLE_WIDTH / 2,
           y: brushY + 4,
           width: HANDLE_WIDTH,
@@ -520,6 +540,8 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
     children.push(
       createElement('rect', {
         key: 'brush-interaction',
+        className: 'ds-chart-brush-interaction',
+        'data-part': 'brush-interaction',
         x: plotLeft,
         y: brushY,
         width: plotWidth,
@@ -539,7 +561,17 @@ export function useChartBrush(options: UseChartBrushOptions): UseChartBrushRetur
       }),
     );
 
-    return createElement('g', { key: 'chart-brush-group', 'data-testid': 'chart-brush' }, ...children);
+    return createElement(
+      'g',
+      {
+        key: 'chart-brush-group',
+        className: 'ds-chart-brush',
+        'data-part': 'chart-brush',
+        'data-state': isBrushing ? 'brushing' : pixelSelection ? 'selected' : 'idle',
+        'data-testid': 'chart-brush',
+      },
+      ...children,
+    );
   }, [
     enabled,
     plotLeft,

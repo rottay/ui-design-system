@@ -172,20 +172,20 @@ export const BarChart = memo(function BarChart({
   // Build legend node.
   const legendNode = legend ? (
     isMultiSeries ? (
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
         {series!.map((s, i) => (
-          <div key={s.name} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-            <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: seriesColors[i], display: 'inline-block' }} />
-            <span style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
+          <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+            <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: seriesColors[i], display: 'inline-block' }} />
+            <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{s.name}</span>
           </div>
         ))}
       </div>
     ) : (
-      <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+      <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
         {singleData.map((d, i) => (
-          <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-            <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
-            <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+          <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+            <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
+            <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
           </div>
         ))}
       </div>
@@ -208,6 +208,7 @@ export const BarChart = memo(function BarChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // Crosshair is created once every bar is drawn (assigned at the bottom of
@@ -300,12 +301,14 @@ export const BarChart = memo(function BarChart({
             .attr('transform', `translate(0,${innerHeight})`)
             .call(axisBottom(x0))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y).ticks(tickCount))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
@@ -314,6 +317,7 @@ export const BarChart = memo(function BarChart({
             .attr('class', 'grid')
             .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
             .selectAll('line')
+            .attr('data-part', 'grid-line')
             .style('stroke', 'var(--ds-color-border-secondary)')
             .style('stroke-opacity', 0.5);
           g.selectAll('.grid .domain').remove();
@@ -328,6 +332,9 @@ export const BarChart = memo(function BarChart({
               .enter()
               .append('rect')
               .attr('class', `bar-stack-${layerIdx}`)
+              .attr('data-part', 'bar')
+              .attr('data-orientation', 'vertical')
+              .attr('data-layout', 'stacked')
               .attr('x', (d) => x0((d.data as Record<string, string>).__category) ?? 0)
               .attr('width', x0.bandwidth())
               .attr('rx', layerIdx === stackedData.length - 1 ? barRadius : 0)
@@ -366,6 +373,7 @@ export const BarChart = memo(function BarChart({
                 .enter()
                 .append('text')
                 .attr('class', `value-stack-${layerIdx}`)
+                .attr('data-part', 'value-label')
                 .attr('x', (d) => (x0((d.data as Record<string, string>).__category) ?? 0) + x0.bandwidth() / 2)
                 .attr('y', (d) => y(d[1]) + (y(d[0]) - y(d[1])) / 2)
                 .attr('text-anchor', 'middle')
@@ -394,12 +402,14 @@ export const BarChart = memo(function BarChart({
             .attr('transform', `translate(0,${innerHeight})`)
             .call(axisBottom(x0))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y).ticks(tickCount))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
@@ -408,6 +418,7 @@ export const BarChart = memo(function BarChart({
             .attr('class', 'grid')
             .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
             .selectAll('line')
+            .attr('data-part', 'grid-line')
             .style('stroke', 'var(--ds-color-border-secondary)')
             .style('stroke-opacity', 0.5);
           g.selectAll('.grid .domain').remove();
@@ -426,6 +437,9 @@ export const BarChart = memo(function BarChart({
             const bars = categoryGroups
               .append('rect')
               .attr('class', `bar-grouped-${sIdx}`)
+              .attr('data-part', 'bar')
+              .attr('data-orientation', 'vertical')
+              .attr('data-layout', 'grouped')
               .attr('x', x1(s.name) ?? 0)
               .attr('width', x1.bandwidth())
               .attr('rx', barRadius)
@@ -464,6 +478,7 @@ export const BarChart = memo(function BarChart({
               categoryGroups
                 .append('text')
                 .attr('class', `value-grouped-${sIdx}`)
+                .attr('data-part', 'value-label')
                 .attr('x', (x1(s.name) ?? 0) + x1.bandwidth() / 2)
                 .attr('text-anchor', 'middle')
                 .style('fill', 'var(--ds-color-text-primary)')
@@ -501,12 +516,14 @@ export const BarChart = memo(function BarChart({
             .attr('transform', `translate(0,${innerHeight})`)
             .call(axisBottom(x).ticks(tickCount))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y0))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
@@ -519,6 +536,9 @@ export const BarChart = memo(function BarChart({
               .enter()
               .append('rect')
               .attr('class', `bar-hstack-${layerIdx}`)
+              .attr('data-part', 'bar')
+              .attr('data-orientation', 'horizontal')
+              .attr('data-layout', 'stacked')
               .attr('y', (d) => y0((d.data as Record<string, string>).__category) ?? 0)
               .attr('height', y0.bandwidth())
               .attr('rx', layerIdx === stackedData.length - 1 ? barRadius : 0)
@@ -565,12 +585,14 @@ export const BarChart = memo(function BarChart({
             .attr('transform', `translate(0,${innerHeight})`)
             .call(axisBottom(x).ticks(tickCount))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
           g.append('g')
             .call(axisLeft(y0))
             .selectAll('text')
+            .attr('data-part', 'axis-tick-label')
             .style('fill', 'var(--ds-color-text-secondary)')
             .style('font-size', '12px');
 
@@ -587,6 +609,9 @@ export const BarChart = memo(function BarChart({
             const bars = categoryGroups
               .append('rect')
               .attr('class', `bar-hgrouped-${sIdx}`)
+              .attr('data-part', 'bar')
+              .attr('data-orientation', 'horizontal')
+              .attr('data-layout', 'grouped')
               .attr('y', y1(s.name) ?? 0)
               .attr('height', y1.bandwidth())
               .attr('rx', barRadius)
@@ -636,12 +661,14 @@ export const BarChart = memo(function BarChart({
           .attr('transform', `translate(0,${innerHeight})`)
           .call(axisBottom(x))
           .selectAll('text')
+          .attr('data-part', 'axis-tick-label')
           .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
         g.append('g')
           .call(axisLeft(y).ticks(tickCount))
           .selectAll('text')
+          .attr('data-part', 'axis-tick-label')
           .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
@@ -649,6 +676,7 @@ export const BarChart = memo(function BarChart({
           .attr('class', 'grid')
           .call(axisLeft(y).ticks(tickCount).tickSize(-innerWidth).tickFormat(() => ''))
           .selectAll('line')
+          .attr('data-part', 'grid-line')
           .style('stroke', 'var(--ds-color-border-secondary)')
           .style('stroke-opacity', 0.5);
         g.selectAll('.grid .domain').remove();
@@ -659,6 +687,9 @@ export const BarChart = memo(function BarChart({
           .enter()
           .append('rect')
           .attr('class', 'bar')
+          .attr('data-part', 'bar')
+          .attr('data-orientation', 'vertical')
+          .attr('data-layout', 'single')
           .attr('x', (d) => x(d.label) ?? 0)
           .attr('width', x.bandwidth())
           .attr('rx', barRadius)
@@ -691,6 +722,7 @@ export const BarChart = memo(function BarChart({
             .enter()
             .append('text')
             .attr('class', 'value')
+            .attr('data-part', 'value-label')
             .attr('x', (d) => (x(d.label) ?? 0) + x.bandwidth() / 2)
             .attr('y', (d) => y(d.value) - 5)
             .attr('text-anchor', 'middle')
@@ -713,12 +745,14 @@ export const BarChart = memo(function BarChart({
           .attr('transform', `translate(0,${innerHeight})`)
           .call(axisBottom(x).ticks(tickCount))
           .selectAll('text')
+          .attr('data-part', 'axis-tick-label')
           .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
         g.append('g')
           .call(axisLeft(y))
           .selectAll('text')
+          .attr('data-part', 'axis-tick-label')
           .style('fill', 'var(--ds-color-text-secondary)')
           .style('font-size', '12px');
 
@@ -728,6 +762,9 @@ export const BarChart = memo(function BarChart({
           .enter()
           .append('rect')
           .attr('class', 'bar')
+          .attr('data-part', 'bar')
+          .attr('data-orientation', 'horizontal')
+          .attr('data-layout', 'single')
           .attr('y', (d) => y(d.label) ?? 0)
           .attr('height', y.bandwidth())
           .attr('rx', barRadius)
@@ -759,6 +796,7 @@ export const BarChart = memo(function BarChart({
             .enter()
             .append('text')
             .attr('class', 'value')
+            .attr('data-part', 'value-label')
             .attr('x', (d) => x(d.value) + 5)
             .attr('y', (d) => (y(d.label) ?? 0) + y.bandwidth() / 2)
             .attr('dominant-baseline', 'middle')
@@ -774,6 +812,8 @@ export const BarChart = memo(function BarChart({
     if (xAxisLabel) {
       svg
         .append('text')
+        .attr('data-part', 'axis-label')
+        .attr('data-axis', 'x')
         .attr('x', chartWidth / 2)
         .attr('y', chartHeight - 4)
         .attr('text-anchor', 'middle')
@@ -785,6 +825,8 @@ export const BarChart = memo(function BarChart({
     if (yAxisLabel) {
       svg
         .append('text')
+        .attr('data-part', 'axis-label')
+        .attr('data-axis', 'y')
         .attr('transform', 'rotate(-90)')
         .attr('x', -chartHeight / 2)
         .attr('y', 14)
@@ -795,7 +837,8 @@ export const BarChart = memo(function BarChart({
     }
 
     // Style axis lines
-    svg.selectAll('.domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.domain').attr('data-part', 'axis-domain').style('stroke', 'var(--ds-color-border-primary)');
+    svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
     svg.selectAll('.tick line').style('stroke', 'var(--ds-color-border-primary)');
 
     // Assigned last so the crosshair paints on top of every bar; the
@@ -826,7 +869,7 @@ export const BarChart = memo(function BarChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-bar', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

@@ -460,6 +460,8 @@ export const SankeyChart = memo(function SankeyChart({
 
     const g = svg
       .append('g')
+      .attr('data-part', 'plot-area')
+      .attr('data-variant', align)
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const { layoutNodes, layoutLinks } = computeLayout(
@@ -474,7 +476,7 @@ export const SankeyChart = memo(function SankeyChart({
     );
 
     // --- Links layer (rendered first so nodes sit on top) ---
-    const linkGroup = g.append('g').attr('class', 'sankey-links');
+    const linkGroup = g.append('g').attr('class', 'sankey-links').attr('data-part', 'links');
 
     const linkPaths = linkGroup
       .selectAll('.sankey-link')
@@ -482,6 +484,8 @@ export const SankeyChart = memo(function SankeyChart({
       .enter()
       .append('path')
       .attr('class', 'sankey-link')
+      .attr('data-part', 'link')
+      .attr('data-state', 'idle')
       .attr('d', (d) => {
         const sx = d.sourceNode.x1;
         const sy = d.sy0 + d.width / 2;
@@ -498,10 +502,10 @@ export const SankeyChart = memo(function SankeyChart({
     // Hover interactions for links.
     linkPaths
       .on('mouseenter', function (_, d) {
-        select(this).attr('stroke-opacity', linkHoverOpacity);
+        select(this).attr('data-state', 'hovered').attr('stroke-opacity', linkHoverOpacity);
       })
       .on('mouseleave', function () {
-        select(this).attr('stroke-opacity', linkOpacity);
+        select(this).attr('data-state', 'idle').attr('stroke-opacity', linkOpacity);
       });
 
     if (onLinkClick) {
@@ -525,6 +529,7 @@ export const SankeyChart = memo(function SankeyChart({
         .enter()
         .append('text')
         .attr('class', 'sankey-link-label')
+        .attr('data-part', 'link-label')
         .attr('x', (d) => (d.sourceNode.x1 + d.targetNode.x0) / 2)
         .attr('y', (d) => {
           const sy = d.sy0 + d.width / 2;
@@ -561,7 +566,7 @@ export const SankeyChart = memo(function SankeyChart({
     }
 
     // --- Nodes layer ---
-    const nodeGroup = g.append('g').attr('class', 'sankey-nodes');
+    const nodeGroup = g.append('g').attr('class', 'sankey-nodes').attr('data-part', 'nodes');
 
     const nodeElements = nodeGroup
       .selectAll('.sankey-node')
@@ -569,11 +574,14 @@ export const SankeyChart = memo(function SankeyChart({
       .enter()
       .append('g')
       .attr('class', 'sankey-node')
+      .attr('data-part', 'node')
+      .attr('data-state', 'idle')
       .style('cursor', onNodeClick ? 'pointer' : 'default');
 
     // Node rectangles.
     const nodeRects = nodeElements
       .append('rect')
+      .attr('data-part', 'node-mark')
       .attr('x', (d) => d.x0)
       .attr('y', (d) => d.y0)
       .attr('width', (d) => d.x1 - d.x0)
@@ -591,11 +599,11 @@ export const SankeyChart = memo(function SankeyChart({
             ? linkHoverOpacity
             : linkOpacity * 0.3,
         );
-        select(this).select('rect').attr('stroke', 'var(--ds-color-text-primary)').attr('stroke-width', 1.5);
+        select(this).attr('data-state', 'hovered').select('rect').attr('stroke', 'var(--ds-color-text-primary)').attr('stroke-width', 1.5);
       })
       .on('mouseleave', function () {
         linkPaths.attr('stroke-opacity', linkOpacity);
-        select(this).select('rect').attr('stroke', null).attr('stroke-width', null);
+        select(this).attr('data-state', 'idle').select('rect').attr('stroke', null).attr('stroke-width', null);
       });
 
     if (onNodeClick) {
@@ -611,6 +619,7 @@ export const SankeyChart = memo(function SankeyChart({
     if (showNodeLabels) {
       nodeElements
         .append('text')
+        .attr('data-part', 'node-label')
         .attr('x', (d) => {
           // Place labels to the right of the node, unless the node is in the
           // last column, in which case place them to the left.
@@ -632,6 +641,7 @@ export const SankeyChart = memo(function SankeyChart({
       // Value beneath the label.
       nodeElements
         .append('text')
+        .attr('data-part', 'node-value')
         .attr('x', (d) => {
           const maxCol = Math.max(0, ...layoutNodes.map((n) => n.depth));
           return d.depth === maxCol ? d.x0 - 6 : d.x1 + 6;
@@ -681,10 +691,11 @@ export const SankeyChart = memo(function SankeyChart({
 
   // Legend.
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" data-variant="sankey" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {nodes.map((n, i) => (
-        <div key={n.id} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+        <div key={n.id} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
           <span
+            data-part="legend-swatch"
             style={{
               width: 12,
               height: 12,
@@ -693,7 +704,7 @@ export const SankeyChart = memo(function SankeyChart({
               display: 'inline-block',
             }}
           />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{n.label}</span>
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{n.label}</span>
         </div>
       ))}
     </div>
@@ -705,7 +716,7 @@ export const SankeyChart = memo(function SankeyChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-sankey', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

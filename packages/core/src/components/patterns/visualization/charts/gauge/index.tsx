@@ -157,11 +157,11 @@ export const GaugeChart = memo(function GaugeChart({
 
   // Legend node
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" data-variant="gauge" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {segments.map((seg) => (
-        <div key={`${seg.from}-${seg.to}`} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: seg.color, display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{seg.label ?? `${seg.from}-${seg.to}`}</span>
+        <div key={`${seg.from}-${seg.to}`} data-part="legend-item" data-state={seg === activeSegment ? 'active' : 'inactive'} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: seg.color, display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{seg.label ?? `${seg.from}-${seg.to}`}</span>
         </div>
       ))}
     </div>
@@ -190,6 +190,8 @@ export const GaugeChart = memo(function GaugeChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
+      .attr('data-variant', 'gauge')
       .attr('transform', `translate(${chartWidth / 2},${centerY})`);
 
     // Background track: a single muted arc spanning the full gauge range.
@@ -201,6 +203,7 @@ export const GaugeChart = memo(function GaugeChart({
       .cornerRadius(2);
 
     g.append('path')
+      .attr('data-part', 'track')
       .attr('d', backgroundArc({} as any) as string)
       .attr('fill', 'var(--ds-color-bg-tertiary)')
       .attr('opacity', 0.4);
@@ -221,6 +224,8 @@ export const GaugeChart = memo(function GaugeChart({
         .cornerRadius(1);
 
       const segPath = g.append('path')
+      .attr('data-part', 'segment')
+      .attr('data-state', seg === activeSegment ? 'active' : 'inactive')
         .attr('fill', seg.color)
         .attr('opacity', 0.85);
 
@@ -266,7 +271,7 @@ export const GaugeChart = memo(function GaugeChart({
       const needleLength = radius * 0.88;
       const needleBaseWidth = 4;
 
-      const needleGroup = g.append('g');
+      const needleGroup = g.append('g').attr('data-part', 'needle');
 
       // Needle triangle path: base at center, tip at the needle length.
       const needlePath = [
@@ -278,6 +283,7 @@ export const GaugeChart = memo(function GaugeChart({
 
       const needle = needleGroup
         .append('path')
+        .attr('data-part', 'needle-mark')
         .attr('d', needlePath)
         .attr('fill', needleColor)
         .attr('stroke', needleColor)
@@ -286,6 +292,7 @@ export const GaugeChart = memo(function GaugeChart({
       // Center cap circle
       needleGroup
         .append('circle')
+        .attr('data-part', 'needle-cap')
         .attr('cx', 0)
         .attr('cy', 0)
         .attr('r', needleBaseWidth + 2)
@@ -315,6 +322,7 @@ export const GaugeChart = memo(function GaugeChart({
     // Center value text
     if (showValue) {
       const valueText = g.append('text')
+        .attr('data-part', 'value-label')
         .attr('x', 0)
         .attr('y', 8)
         .attr('text-anchor', 'middle')
@@ -337,6 +345,7 @@ export const GaugeChart = memo(function GaugeChart({
     // Label text below the value
     if (label) {
       const labelText = g.append('text')
+        .attr('data-part', 'label')
         .attr('x', 0)
         .attr('y', showValue ? 32 : 8)
         .attr('text-anchor', 'middle')
@@ -366,7 +375,7 @@ export const GaugeChart = memo(function GaugeChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-gauge', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}

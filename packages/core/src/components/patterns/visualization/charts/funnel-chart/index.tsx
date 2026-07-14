@@ -78,11 +78,11 @@ export const FunnelChart = memo(function FunnelChart({
     ]),
   };
   const legendNode = legend ? (
-    <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
+    <div data-part="legend" data-orientation={orientation} style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
       {data.map((d, i) => (
-        <div key={d.label} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-          <span style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
-          <span style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
+        <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
+          <span data-part="legend-swatch" style={{ width: 12, height: 12, borderRadius: 2, backgroundColor: d.color ?? colors[i % colors.length], display: 'inline-block' }} />
+          <span data-part="legend-label" style={{ color: 'var(--ds-color-text-secondary)' }}>{d.label}</span>
         </div>
       ))}
     </div>
@@ -101,6 +101,8 @@ export const FunnelChart = memo(function FunnelChart({
       .attr('width', chartWidth)
       .attr('height', chartHeight)
       .append('g')
+      .attr('data-part', 'plot-area')
+      .attr('data-orientation', orientation)
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     const maxValue = max(data, (d) => d.value) ?? 1;
@@ -134,6 +136,9 @@ export const FunnelChart = memo(function FunnelChart({
 
         const polygon = g
           .append('polygon')
+          .attr('data-part', 'segment')
+          .attr('data-state', 'idle')
+          .attr('data-position', i === 0 ? 'first' : i === n - 1 ? 'last' : 'middle')
           .attr('points', points.map((p) => p.join(',')).join(' '))
           .attr('fill', color);
 
@@ -153,6 +158,7 @@ export const FunnelChart = memo(function FunnelChart({
         // Label
         const centerY = yPos + segmentHeight / 2;
         g.append('text')
+          .attr('data-part', 'segment-label')
           .attr('x', innerWidth / 2)
           .attr('y', centerY - 6)
           .attr('text-anchor', 'middle')
@@ -166,6 +172,7 @@ export const FunnelChart = memo(function FunnelChart({
         const pct = ((d.value / maxValue) * 100).toFixed(0);
         const valueText = showPercentage ? `${d.value} (${pct}%)` : String(d.value);
         g.append('text')
+          .attr('data-part', 'segment-value')
           .attr('x', innerWidth / 2)
           .attr('y', centerY + 10)
           .attr('text-anchor', 'middle')
@@ -178,6 +185,7 @@ export const FunnelChart = memo(function FunnelChart({
         if (showConversion && i > 0) {
           const rate = ((d.value / data[i - 1].value) * 100).toFixed(1);
           g.append('text')
+            .attr('data-part', 'conversion-label')
             .attr('x', innerWidth + 8)
             .attr('y', yPos + 4)
             .attr('dominant-baseline', 'middle')
@@ -211,6 +219,9 @@ export const FunnelChart = memo(function FunnelChart({
 
         const polygon = g
           .append('polygon')
+          .attr('data-part', 'segment')
+          .attr('data-state', 'idle')
+          .attr('data-position', i === 0 ? 'first' : i === n - 1 ? 'last' : 'middle')
           .attr('points', points.map((p) => p.join(',')).join(' '))
           .attr('fill', color);
 
@@ -228,6 +239,7 @@ export const FunnelChart = memo(function FunnelChart({
         }
 
         g.append('text')
+          .attr('data-part', 'segment-label')
           .attr('x', xPos + segmentWidth / 2)
           .attr('y', innerHeight / 2)
           .attr('text-anchor', 'middle')
@@ -246,7 +258,7 @@ export const FunnelChart = memo(function FunnelChart({
       svgRef={svgRef}
       width={width}
       height={height}
-      className={className}
+      className={['ds-chart-funnel', className].filter(Boolean).join(' ')}
       style={style}
       loading={loading}
       loadingLabel={chartPersonality.loadingLabel}
