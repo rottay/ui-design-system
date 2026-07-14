@@ -78,6 +78,35 @@ The ARC-09 real-engines suites now resolve ownership STRUCTURALLY: a node belong
 under test iff no other `data-part='root'` sits between it and that component's own root. Any new
 real-engines suite must do the same.
 
+## A pre-step must prove TWO invariants, not one (2026-07-13)
+
+> **Counter-identity proves no PAINT moved. It does NOT prove the DOM is unchanged.**
+
+The pipeline certified inertness by re-running the paint counter against a stashed tree and diffing:
+byte-identical counts ⇒ zero paint moved. That proof is real and it is **incomplete**.
+
+CK-D/R's pre-step wrapped three `<Card>`s in a `<Box>` (a reasonable first attempt at a real problem
+— Card eats `data-part`). A wrapper `<div>` moves no paint keys, so the counter said INERT. It *is*
+inert by the counter's definition. But it changes the element tree, and an extra div in a flex or
+stack context changes layout. **The baselines were then recorded from that DOM** — photographing a
+tree that was already a deviation from the component's original, and that ceased to exist the moment
+the wrapper was correctly removed. The reference was wrong in both directions, and every downstream
+byte-exactness claim would have been measured against it.
+
+**So a pre-step is inert iff BOTH hold:**
+
+1. `fleet.inlinePaint.<file>` is byte-identical to HEAD for every file it touched (no paint moved).
+2. The rendered **element tree** is unchanged — same tags, same nesting, same count. Only attributes
+   and classNames may differ.
+
+Check the second before recording a single baseline. A pre-step may add `data-part`, state
+attributes, and classNames. It may **never** add, remove, or re-nest an element. **Never add a
+wrapper to obtain a stampable node** — use the className (see below).
+
+This is the second time in one session that a check which *passed* proved nothing: the exemption gate
+read green from a file that did not exist, and an inertness proof read green over a DOM that had
+grown a div. **A green check is evidence only about the thing it actually looked at.**
+
 ## A surface owns no DOM (the eighth incident, 2026-07-13)
 
 > **A surface owns no DOM. It owns composition. Its anatomy is therefore carried by the classNames it
