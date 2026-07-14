@@ -52,7 +52,7 @@ describe('StepWizard advanced engine coverage', () => {
       } else if (engine === 'modern') {
         expect(container.querySelector('.ds-step-wizard-skeleton')).toBeTruthy();
       } else {
-        expect(container.querySelector('style')).toBeTruthy();
+        expect(container.querySelector('[data-part="skeleton-progress"]')).toBeTruthy();
       }
 
       rerender(

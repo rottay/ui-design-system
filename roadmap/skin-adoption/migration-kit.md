@@ -122,3 +122,45 @@ name; delete the `<style>` tag. Do NOT redefine a globally-loaded keyframe (`spi
 2. `cd packages/core && pnpm vitest run <your component dirs>` → existing tests green. Paste tail.
 Report: per-component one line (sites→0, skin file(s), states converted); the two tails;
 hardcoded-literal list; any deviation or contradiction with the inventory.
+
+## The pre-step's test grep has a FOURTH shape (2026-07-13)
+
+Every pre-step greps its family's unit tests for assertions that pin inline paint, so the
+orchestrator can adjudicate them while the migration runs. The pattern has always been three shapes:
+
+```
+toHaveStyle          .style.          getAttribute('style')
+```
+
+**A fourth exists and none of those three match it:**
+
+```
+querySelector('style')      querySelectorAll('style')      getElementsByTagName('style')
+```
+
+A test can pin a component's per-instance `<style>` tag — the keyframe/paint injection this program
+exists to delete — **by asserting the tag's mere existence**. Found when CK-D/F moved step-wizard's
+`@keyframes pulse` into the rustic skin and deleted the tag:
+
+```js
+// StepWizard.engine-advanced.test.tsx:55 — the rustic branch
+expect(container.querySelector('style')).toBeTruthy();   // the ONLY evidence the skeleton rendered
+```
+
+It was a **true positive**: the test pinned the scaffolding, not the thing it claimed to cover. Fixed
+to assert `[data-part="skeleton-progress"]`, which is what "covers the loading branch" actually means.
+The modern branch had always keyed on a className and was unaffected — the rustic branch simply had no
+class to key on, so the author reached for the nearest available artifact.
+
+**Add all three forms to the pre-step's grep.** And note the distractor: most `querySelector('style')`
+hits in this repo belong to the RESPONSIVE `<style>` injection in Box/Flex/Grid/Stack/Typography/
+Button/etc. (media queries, not paint). Those are a different mechanism and are not exposed. **Only a
+component that injects a `<style>` carrying paint or keyframes is at risk.**
+
+**Two live forward exposures, already located** — a future batch will break these the moment it moves
+their keyframes into a skin, and the contract should say so before the migration starts:
+
+| test | component | why it will break |
+| --- | --- | --- |
+| `patterns/communication/live-feed/tests/PatternLiveFeed.engine-advanced.test.tsx:52` | live-feed (rustic) | `expect(container.querySelector('style')).toBeTruthy()`; rustic injects a `<style>` with a LOCAL `pulse` keyframe (0.4) that deliberately differs from the global (0.5) — do not "de-duplicate" it |
+| `patterns/data/stats-grid/tests/PatternStatsGrid.engine-advanced.test.tsx:75` | stats-grid (both engines) | `expect(container.querySelector('style')).not.toBeNull()`; both engines inject a `<style>` |
