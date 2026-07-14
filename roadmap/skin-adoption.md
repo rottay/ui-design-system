@@ -87,7 +87,7 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | **CK-F** | communication | 271 | CERTIFIED byte-exact (`9d85264c`) — banked P-87 (color-on-`<Text>`=(0,5,0)) |
 | **CK-C** | workspace chrome | 466 | CERTIFIED byte-exact (`f0046708`) — 12 skins; 458/466 counted sites moved, 8 deliberate P-88/shared-token residuals |
 | **CK-H2** | misc | 216 | CERTIFIED byte-exact (`c229859c`) — 9 skins; 213/216 counted sites moved, 3 deliberate caller-precedence residuals |
-| CK-I | long tail (surfaces) | 397 | contract adjudicated (`77c9a202`) — forms EXCLUDED (already CK-D); averted a clobber |
+| **CK-I** | long tail (surfaces) | 397 | PRE-STEP CERTIFIED (`7a6d60ac`) — 40 renderables / 382 migratable sites; 12/12 contracts; 32 baselines stable twice; forms excluded (already CK-D) |
 | CK-E / CK-H1 | visualization / brand-preview trio | 308 / 237 | LAST — deferred until the exemption machinery is observed executing |
 
 **The pipeline that works** (three migrations in parallel is the unlock): inventory → contract

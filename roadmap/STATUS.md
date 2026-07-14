@@ -17,7 +17,7 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 14:35 — CK-H2 CERTIFIED byte-exact at c229859c: 9 skins, 213/216 counted sites moved with 3 deliberate file-manager modern caller-precedence residuals; all skin gates 0; 115/115 focused tests; core/showroom production builds green; 30 committed screenshots pass twice (7/7 + 7/7) without snapshot updates. Independent adversarial review found no code defects. CK-I inert anatomy is complete and its contract/production evidence is now being banked. |
+| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 15:01 — CK-I inert pre-step CERTIFIED at 7a6d60ac: 40 production renderables / 382 migratable sites (43/397 scoped including permanent exclusions), counters unchanged, 12/12 contracts, core/showroom production builds green, 32 baselines across 4 tenant/engine cases and two independent 4/4 no-update stability passes. Next: land hardened exemption/runtime-SVG measurement machinery, then migrate CK-I in five units. |
 
 ## Next up (todo, dependencies satisfied)
 
