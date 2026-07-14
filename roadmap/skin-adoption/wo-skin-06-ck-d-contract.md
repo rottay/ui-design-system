@@ -58,10 +58,16 @@ overrides header/record chrome that way. Do not assume your skin is the last wor
    to the spread and the pixels move even though every value is identical (P-78).
 4. **A numeric literal glued to a colour is an ALPHA BYTE, not a percentage.** `color + '15'` is
    8.24%. Never convert it to `color-mix(… 15%)`.
-5. **Imperative `.style.x =` writes**: the inventory found ONE in this cluster (form-sections' row
-   hover). Check whether anything competes with it before transcribing — the identical mechanism was
-   LIVE in one component and DEAD in another elsewhere in this program. Transcribe it to a `:hover`
-   rule on the SAME element it wrote to.
+5. **Imperative `.style.x =` writes — FOUR, all in `filter-builder` (checkpoint F).**
+   `engines/modern.tsx:598,601` and `engines/rustic.tsx:672,675`, on mouse enter/leave. An earlier
+   revision of this contract placed them in `form-sections`; that was WRONG (form-sections has zero,
+   grep-confirmed — the R pre-step agent caught it by reading the code instead of obeying the brief).
+   They use the `(e.currentTarget as HTMLDivElement).style.background =` shape, which **the counter
+   is BLIND to** — filter-builder can reach `inlinePaint: 0` with the hover mechanism fully intact
+   and inline. Check whether any CSS competes with them before transcribing (the identical mechanism
+   was LIVE in one component and DEAD in another elsewhere in this program). Transcribe each to a
+   `:hover` rule on the SAME element it wrote to, and PIN the hover in the spec first — a pixel gate
+   only catches what a baseline photographs, and no rest shot photographs a hover.
 6. **Local `@keyframes` shadow a global of the same name and win** (last parsed). Rename + namespace
    every keyframe you move; never delete a local "duplicate" without measuring which one paints.
 7. Scope classes grep-verified FREE across CSS **and** CSS-in-JS. Text colour painted inline via
@@ -79,8 +85,9 @@ overrides header/record chrome that way. Do not assume your skin is the last wor
   closed, disabled, error, the step-wizard's step states, the approval-workflow's statuses).
 - Specs `forms-batch.spec.ts` and `record-batch.spec.ts`: 4 rest shots each
   ({rottay,bithire} × {modern,rustic} × w1280) + interaction pins wherever hover paint exists —
-  **form-sections' row hover is MANDATORY** (it is the cluster's only imperative write, and a
-  migration that deletes it without transcribing breaks an interaction no baseline photographs).
+  **filter-builder's condition-row hover is MANDATORY, in BOTH engines** (it is the cluster's only
+  imperative write, it is invisible to the counter, and a migration that deletes it without
+  transcribing breaks an interaction no baseline photographs).
 - **Never `waitForTimeout` after a hover.** Use the `waitForSettled` idiom from
   `overlay-batch.spec.ts` (poll opacity/transform/box-shadow until unchanged across three frames).
   A baseline recorded mid-transition is inherited forever.
