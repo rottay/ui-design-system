@@ -211,20 +211,19 @@ export function countArc09PaintInFile(text) {
     // at an identifier boundary.
     if (topIs("{") && !inTypeBody() && /[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
       const ahead = text.slice(i, i + 48);
-      const m = ARC09_PAINT_KEY_RE.exec(ahead);
+      // An object KEY is preceded (skipping whitespace) by `{` or `,` and nothing
+      // else. Without this guard the `color` in `background: active ? color : x`
+      // reads as a second key -- the TERNARY's own colon looks like a key's colon --
+      // and the counter inflates. A gate that over-counts sends agents hunting
+      // paint that does not exist; it is as useless as one that under-counts.
+      let k = i - 1;
+      while (k >= 0 && /\s/.test(text[k])) k -= 1;
+      const atKeyPosition = k >= 0 && (text[k] === "{" || text[k] === ",");
+      const m = atKeyPosition ? ARC09_PAINT_KEY_RE.exec(ahead) : null;
       if (m && !ARC09_PAINT_EXEMPT.has(m[1])) count += 1;
-      else if (inStyleObj()) {
-        // A shorthand KEY is preceded (skipping whitespace) by `{` or `,` and by
-        // nothing else. Without this, the `color` in `background: env.color` reads
-        // as a shorthand key and the counter inflates -- a gate that over-counts is
-        // as useless as one that under-counts.
-        let j = i - 1;
-        while (j >= 0 && /\s/.test(text[j])) j -= 1;
-        const atKeyPosition = j >= 0 && (text[j] === "{" || text[j] === ",");
-        if (atKeyPosition) {
-          const sh = ARC09_PAINT_SHORTHAND_RE.exec(ahead);
-          if (sh && !ARC09_PAINT_EXEMPT.has(sh[1])) count += 1;
-        }
+      else if (atKeyPosition && inStyleObj()) {
+        const sh = ARC09_PAINT_SHORTHAND_RE.exec(ahead);
+        if (sh && !ARC09_PAINT_EXEMPT.has(sh[1])) count += 1;
       }
     }
     i++;
