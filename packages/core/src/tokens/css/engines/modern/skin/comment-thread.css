@@ -1,0 +1,107 @@
+/**
+ * Modern CommentThread skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-comment-thread ds-engine-modern`
+ * + `data-part='root'`; every painted element is a descendant with its own
+ * `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius) wins unlayered at (0,3,0).
+ * `border: none` resets carry no color and are exempt.
+ *
+ * TOKENS: modern's primary-button text color is `--ds-color-text-on-primary`;
+ * rustic's equivalent is `--ds-color-primary-foreground` — two real, independently
+ * declared tokens for the same slot, not aliases. Preserved verbatim, not unified
+ * (WO-SKIN-06 CK-F contract §0).
+ *
+ * INTERACTION: this component has no hover treatment in either engine (neither
+ * file ever wired onMouseEnter/Leave) — only the reaction pill's `[data-active]`
+ * state and the always-static remainder.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* avatar wrapper (reply avatar + composer avatar share one data-part) */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='avatar'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-primary);
+}
+
+/* edit / reply / new-comment textareas share the identical bordered-transparent
+   treatment */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='composer'] {
+  background: transparent;
+  color: inherit;
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edit-textarea'][data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-textarea'][data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='composer'][data-part='composer'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/* primary-filled action buttons: Save / Reply-submit / Comment-submit */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='save'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-submit'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='submit'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ghost action buttons: Cancel / Reply / Edit / Reply-cancel */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='cancel'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edit'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-cancel'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* delete: ghost shape, fixed error color -- never toggled, always red */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='delete'] {
+  background: transparent;
+  color: var(--ds-color-error);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* reaction pill: data-active selects background/color; shape stays static */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'][data-active='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* nested-reply left border line (className supplies the width/style, this
+   supplies the color) */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'][data-part='nested-line'] {
+  border-color: var(--ds-color-border);
+}
+
+/* loading spinner ring; consumes the global `ds-spin` keyframe (declared in
+   engines/rustic/theme.css, loaded into every bundle regardless of active
+   engine) -- animation-name stays inline, not a paint channel */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='spinner'] {
+  border-radius: 50%;
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+}

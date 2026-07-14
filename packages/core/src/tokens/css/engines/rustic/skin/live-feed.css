@@ -1,0 +1,95 @@
+/**
+ * Rustic (Vanilla / CSS-variable) LiveFeed skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed ds-engine-rustic`
+ * + `data-part='root'`, identical in the loading-skeleton and loaded branches.
+ *
+ * SPECIFICITY (P-48): root and banner both paint a border COLOR and have no
+ * second contract attribute to spend, so both reach (0,4,0) by repeating their
+ * own `data-part`. refresh/load-more borders are `none` (no color) and are
+ * exempt. Non-border paint wins unlayered at (0,3,0).
+ *
+ * TOKENS: this is the ONE engine of the three that consumes the
+ * `--ds-live-feed-*` component-scoped hatch (11 of 11 tokens, declared in
+ * `foundation/themes/default.css` and overridden per-tenant in the first-party
+ * artifacts) -- modern has no equivalent hatch to preserve (§0). Keep consuming
+ * these names; do not point them at modern's generic tokens.
+ *
+ * KEYFRAMES (§3 trap 1, orchestrator ruling): the local `@keyframes pulse` this
+ * file used to inject (`1 -> 0.4 -> 1`) is NOT a duplicate of the global
+ * `@keyframes pulse` (`1 -> 0.5 -> 1`, `foundation/animations/keyframes.css`) --
+ * the local `<style>` was injected after the global bundle, so the local 0.4 was
+ * the value actually rendering. Renamed `ds-live-feed-pulse`, value carried
+ * verbatim, per the `detail-panel` precedent
+ * (`tests/PatternDetailPanel.real-engines.test.tsx:196`): rename the local copy,
+ * never redefine the global name. `feedPulse` has no global equivalent at all;
+ * renamed `ds-live-feed-feed-pulse`, value carried verbatim. Both `animation`
+ * references in `engines/rustic.tsx` were updated to the new names.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-live-feed-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+
+@keyframes ds-live-feed-feed-pulse {
+  0% { background: var(--ds-live-feed-new-bg, var(--ds-color-info-bg)); }
+  100% { background: transparent; }
+}
+
+/* root: color/background/border/radius identical across both branches */
+.ds-pattern-live-feed.ds-engine-rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-color-neutral-900);
+  background: var(--ds-live-feed-bg, var(--ds-color-bg-elevated));
+  border: 1px solid var(--ds-live-feed-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg);
+}
+
+/* refresh button */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='refresh'] {
+  background: none;
+  border: none;
+  color: var(--ds-live-feed-refresh-color, var(--ds-color-text-secondary));
+  border-radius: var(--ds-radius-sm);
+}
+
+/* new-items bar */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='banner'][data-part='banner'] {
+  background: var(--ds-live-feed-new-bg, var(--ds-color-info-bg));
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-live-feed-new-color, var(--ds-color-info));
+  border: 1px solid var(--ds-live-feed-new-border, var(--ds-color-info-border));
+}
+
+/* new-items count badge */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-live-feed-badge-bg, var(--ds-color-primary));
+  color: var(--ds-live-feed-badge-color, var(--ds-color-text-on-primary));
+}
+
+/* empty state */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-live-feed-empty-color, var(--ds-color-text-muted));
+}
+
+/* load more */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='load-more'] {
+  background: none;
+  border: none;
+  color: var(--ds-live-feed-load-more-color, var(--ds-color-primary));
+  border-radius: var(--ds-radius-md);
+}
+
+/* skeleton factory (title bar + row blocks) */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='skeleton'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-live-feed-skeleton-bg, var(--ds-color-bg-tertiary));
+}

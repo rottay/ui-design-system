@@ -1,0 +1,107 @@
+/**
+ * Modern NotificationCenter skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-notification-center
+ * ds-engine-modern` + `data-part='root'`; every painted element is a descendant
+ * with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius, box-shadow) wins unlayered
+ * at (0,3,0).
+ *
+ * DEAD CODE: `typeBgStyles` (icon-container tint) in modern.tsx is defined but
+ * never referenced in JSX -- the orchestrator's pre-step audit confirmed this at
+ * runtime. There is no icon-container tint rule here because there is no DOM
+ * element to anchor one to; the dead const is left in place in the TSX per the
+ * CK-F contract addendum. Only `typeColorStyles` (the glyph color, live) moved.
+ *
+ * TOKENS: modern's "info" type resolves to `--ds-color-info`; rustic's resolves
+ * to `--ds-color-primary` -- a genuine cross-engine disagreement, not just a
+ * mechanism difference. modern's unread-row tint is an ad hoc `color-mix`;
+ * rustic's is the named `--ds-color-primary-50` scale token. Both preserved
+ * verbatim, not unified (WO-SKIN-06 CK-F contract §0).
+ *
+ * INTERACTION: the dismiss button's hover brighten was imperative
+ * (`.style.opacity =` in onMouseEnter/onMouseLeave, uncounted paint). The rule
+ * below replaces it; opacity's static 0.3 rest value stays inline on the element
+ * since opacity itself is not a paint channel this program moves.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* circular icon buttons: bell trigger + row dismiss share one treatment */
+.ds-pattern-notification-center.ds-engine-modern [data-part='trigger'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* unread-count badge on the trigger */
+.ds-pattern-notification-center.ds-engine-modern [data-part='badge'] {
+  border-radius: 9999px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* dropdown panel */
+.ds-pattern-notification-center.ds-engine-modern [data-part='panel'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+/* header bottom rule (className supplies the width/style) */
+.ds-pattern-notification-center.ds-engine-modern [data-part='header'][data-part='header'] {
+  border-color: var(--ds-color-border);
+}
+
+/* ghost text buttons: Mark all read / Clear all / per-item action */
+.ds-pattern-notification-center.ds-engine-modern [data-part='mark-all-read'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='clear-all'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='action'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* row bottom rule (className supplies the width/style) + unread tint */
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'][data-part='row'] {
+  border-color: var(--ds-color-border);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'][data-unread='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+
+/* type icon glyph color -- 4-way static map keyed on data-type */
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='info'] {
+  color: var(--ds-color-info);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='success'] {
+  color: var(--ds-color-success);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='error'] {
+  color: var(--ds-color-error);
+}
+
+/* unread title dot -- conditionally rendered, single static value */
+.ds-pattern-notification-center.ds-engine-modern [data-part='unread-dot'] {
+  background: var(--ds-color-primary);
+}
+
+/* dismiss hover brighten -- replaces the deleted onMouseEnter/onMouseLeave
+   .style.opacity writes */
+.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:hover {
+  opacity: 1;
+}

@@ -67,13 +67,9 @@ function getDotGlyph(category: ActionCategory): string {
 }
 
 /** Returns badge style for the action label. */
-function getActionBadgeStyle(category: ActionCategory): React.CSSProperties {
-  const color = getDotColor(category);
+function getActionBadgeStyle(): React.CSSProperties {
   return {
-    background: `color-mix(in srgb, ${color} 12%, transparent)`,
-    color,
     padding: '2px 8px',
-    borderRadius: 'var(--ds-radius-sm)',
     fontSize: 11,
     fontWeight: 600,
     lineHeight: 1.4,
@@ -129,8 +125,6 @@ function DiffView({ diff }: { diff: Record<string, { from: unknown; to: unknown 
       style={{
         marginTop: 8,
         padding: '8px 12px',
-        background: 'var(--ds-surface-inset)',
-        borderRadius: 'var(--ds-radius-md)',
         fontSize: 12,
         lineHeight: 1.6,
       }}
@@ -143,17 +137,16 @@ function DiffView({ diff }: { diff: Record<string, { from: unknown; to: unknown 
             display: 'flex',
             alignItems: 'baseline',
             gap: 6,
-            color: 'var(--ds-color-text-secondary)',
           }}
         >
-          <span data-part="diff-cell" data-diff-role="label" style={{ fontWeight: 600, color: 'var(--ds-color-text-primary)', minWidth: 60 }}>
+          <span data-part="diff-cell" data-diff-role="label" style={{ fontWeight: 600, minWidth: 60 }}>
             {field}:
           </span>
-          <span data-part="diff-cell" data-diff-role="from" style={{ textDecoration: 'line-through', color: 'var(--ds-color-text-muted)' }}>
+          <span data-part="diff-cell" data-diff-role="from" style={{ textDecoration: 'line-through' }}>
             {String(from)}
           </span>
-          <span data-part="diff-cell" data-diff-role="arrow" style={{ color: 'var(--ds-color-text-muted)' }}>{'\u2192'}</span>
-          <span data-part="diff-cell" data-diff-role="to" style={{ fontWeight: 500, color: 'var(--ds-color-text-primary)' }}>
+          <span data-part="diff-cell" data-diff-role="arrow">{'\u2192'}</span>
+          <span data-part="diff-cell" data-diff-role="to" style={{ fontWeight: 500 }}>
             {String(to)}
           </span>
         </div>
@@ -177,7 +170,6 @@ function Avatar({ name, src, size = 28 }: { name: string; src?: string; size?: n
         style={{
           width: size,
           height: size,
-          borderRadius: '50%',
           objectFit: 'cover',
           flexShrink: 0,
         }}
@@ -194,9 +186,6 @@ function Avatar({ name, src, size = 28 }: { name: string; src?: string; size?: n
         justifyContent: 'center',
         width: size,
         height: size,
-        borderRadius: '50%',
-        background: 'var(--ds-surface-panel)',
-        color: 'var(--ds-color-text-secondary)',
         fontSize: size * 0.42,
         fontWeight: 600,
         flexShrink: 0,
@@ -213,48 +202,35 @@ function Avatar({ name, src, size = 28 }: { name: string; src?: string; size?: n
  * Loading skeleton
  * --------------------------------------------------------------------------- */
 
-const shimmerKeyframes = `
-@keyframes ds-activity-shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-`;
-
 function LoadingSkeleton() {
-  const shimmerBg: React.CSSProperties = {
-    background: 'linear-gradient(90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75%)',
-    backgroundSize: '200% 100%',
+  const shimmerAnimation: React.CSSProperties = {
     animation: 'ds-activity-shimmer 1.5s ease-in-out infinite',
-    borderRadius: 'var(--ds-radius-sm)',
   };
 
   return (
-    <>
-      <style>{shimmerKeyframes}</style>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '16px 0' }}>
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} style={{ display: 'flex', gap: 16 }}>
-            {/* Dot skeleton */}
-            <div
-              data-part="skeleton"
-              style={{
-                ...shimmerBg,
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                flexShrink: 0,
-                marginTop: 4,
-              }}
-            />
-            {/* Content skeleton */}
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div data-part="skeleton" style={{ ...shimmerBg, width: '60%', height: 14 }} />
-              <div data-part="skeleton" style={{ ...shimmerBg, width: '40%', height: 10 }} />
-            </div>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20, padding: '16px 0' }}>
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div key={i} style={{ display: 'flex', gap: 16 }}>
+          {/* Dot skeleton */}
+          <div
+            data-part="skeleton"
+            style={{
+              ...shimmerAnimation,
+              width: 10,
+              height: 10,
+              borderRadius: '50%',
+              flexShrink: 0,
+              marginTop: 4,
+            }}
+          />
+          {/* Content skeleton */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div data-part="skeleton" style={{ ...shimmerAnimation, width: '60%', height: 14 }} />
+            <div data-part="skeleton" style={{ ...shimmerAnimation, width: '40%', height: 10 }} />
           </div>
-        ))}
-      </div>
-    </>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -272,7 +248,6 @@ function EmptyState({ message }: { message: string }) {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '48px 24px',
-        color: 'var(--ds-color-text-muted)',
         textAlign: 'center',
       }}
     >
@@ -314,7 +289,6 @@ function TimelineItem({
   renderActivity?: (activity: Activity) => React.ReactNode;
 }) {
   const category = classifyAction(activity.action);
-  const dotColor = getDotColor(category);
 
   return (
     <div
@@ -342,15 +316,11 @@ function TimelineItem({
           style={{
             width: 24,
             height: 24,
-            borderRadius: '50%',
-            background: `color-mix(in srgb, ${dotColor} 15%, transparent)`,
-            border: `2px solid ${dotColor}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: 10,
             fontWeight: 700,
-            color: dotColor,
             flexShrink: 0,
             zIndex: 1,
           }}
@@ -366,7 +336,6 @@ function TimelineItem({
             style={{
               width: 2,
               flex: 1,
-              background: 'var(--ds-color-border)',
               marginTop: 4,
             }}
             aria-hidden="true"
@@ -406,12 +375,11 @@ function TimelineItem({
                 style={{
                   fontSize: 14,
                   fontWeight: 600,
-                  color: 'var(--ds-color-text-primary)',
                 }}
               >
                 {activity.user.name}
               </span>
-              <span data-part="badge" data-action-category={category} style={getActionBadgeStyle(category)}>
+              <span data-part="badge" data-action-category={category} style={getActionBadgeStyle()}>
                 {activity.action}
               </span>
               {activity.entityType && (
@@ -419,7 +387,6 @@ function TimelineItem({
                   data-part="entity"
                   style={{
                     fontSize: 12,
-                    color: 'var(--ds-color-text-muted)',
                   }}
                 >
                   on {activity.entityType}
@@ -434,7 +401,6 @@ function TimelineItem({
               title={formatAbsoluteTime(activity.timestamp)}
               style={{
                 fontSize: 12,
-                color: 'var(--ds-color-text-muted)',
                 marginTop: 4,
                 cursor: 'default',
               }}
@@ -488,9 +454,6 @@ export default function ModernActivityLog(props: ActivityLogProps) {
         className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
         style={{
           ...style,
-          background: 'var(--ds-surface-card)',
-          boxShadow: 'var(--ds-elevation-1)',
-          borderRadius: 'var(--ds-radius-lg)',
           padding: '16px 24px',
         }}
       >
@@ -505,9 +468,6 @@ export default function ModernActivityLog(props: ActivityLogProps) {
       className={`ds-pattern-activity-log ds-engine-modern ${className ?? ''}`}
       style={{
         ...style,
-        background: 'var(--ds-surface-card)',
-        boxShadow: 'var(--ds-elevation-1)',
-        borderRadius: 'var(--ds-radius-lg)',
         padding: '20px 24px',
       }}
     >

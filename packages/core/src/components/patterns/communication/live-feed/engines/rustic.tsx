@@ -4,8 +4,9 @@
  * @fileoverview Rustic (Vanilla / CSS variables) engine for the LiveFeed pattern.
  * Renders a real-time feed using only inline styles with `--ds-*` design tokens,
  * making it framework-agnostic. Supports auto-refresh polling, a "new items" bar,
- * load-more pagination, and a custom `feedPulse` keyframe animation for new entries.
- * Injects its own `@keyframes` via an inline `<style>` tag to stay self-contained.
+ * load-more pagination, and a `ds-live-feed-feed-pulse` keyframe animation for new
+ * entries. The keyframes live in `engines/rustic/skin/live-feed.css`, referenced
+ * here only by name.
  *
  * @example
  * <RusticLiveFeed
@@ -30,10 +31,6 @@ import type { LiveFeedProps, FeedItem } from '../LiveFeed.types';
 const s = {
   container: {
     fontFamily: 'var(--ds-font-family-base)',
-    color: 'var(--ds-color-neutral-900)',
-    background: 'var(--ds-live-feed-bg, var(--ds-color-bg-elevated))',
-    border: '1px solid var(--ds-live-feed-border, var(--ds-color-border))',
-    borderRadius: 'var(--ds-radius-lg)',
     padding: '1.5rem',
   } as React.CSSProperties,
   headerRow: {
@@ -43,40 +40,28 @@ const s = {
     marginBottom: '0.75rem',
   } as React.CSSProperties,
   refreshBtn: {
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
     padding: '0.25rem',
-    color: 'var(--ds-live-feed-refresh-color, var(--ds-color-text-secondary))',
     fontSize: '1rem',
-    borderRadius: 'var(--ds-radius-sm)',
   } as React.CSSProperties,
   newBar: {
     textAlign: 'center' as const,
     padding: '0.5rem',
     marginBottom: '0.75rem',
-    background: 'var(--ds-live-feed-new-bg, var(--ds-color-info-bg))',
-    borderRadius: 'var(--ds-radius-md)',
     cursor: 'pointer',
     fontSize: 'var(--ds-font-size-sm)',
-    color: 'var(--ds-live-feed-new-color, var(--ds-color-info))',
     fontWeight: 500,
-    border: '1px solid var(--ds-live-feed-new-border, var(--ds-color-info-border))',
   } as React.CSSProperties,
   newBadge: {
     display: 'inline-block',
     padding: '0 0.375rem',
-    borderRadius: 'var(--ds-radius-full, 9999px)',
     fontSize: 'var(--ds-font-size-xs)',
     fontWeight: 600,
-    background: 'var(--ds-live-feed-badge-bg, var(--ds-color-primary))',
-    color: 'var(--ds-live-feed-badge-color, var(--ds-color-text-on-primary))',
     marginRight: '0.375rem',
   } as React.CSSProperties,
   empty: {
     textAlign: 'center' as const,
     padding: '2rem 0',
-    color: 'var(--ds-live-feed-empty-color, var(--ds-color-text-muted))',
     fontSize: 'var(--ds-font-size-sm)',
   } as React.CSSProperties,
   feedList: {
@@ -87,23 +72,17 @@ const s = {
   loadMore: {
     display: 'block',
     margin: '0.75rem auto 0',
-    background: 'none',
-    border: 'none',
     cursor: 'pointer',
-    color: 'var(--ds-live-feed-load-more-color, var(--ds-color-primary))',
     fontSize: 'var(--ds-font-size-sm)',
     fontWeight: 500,
     padding: '0.25rem 0.75rem',
-    borderRadius: 'var(--ds-radius-md)',
   } as React.CSSProperties,
   // Skeleton factory: returns a pulsing placeholder block at the given width/height.
   // Used during initial loading state to hint at incoming content layout.
   skeleton: (w: string, h: string) => ({
     width: w,
     height: h,
-    borderRadius: 'var(--ds-radius-md)',
-    background: 'var(--ds-live-feed-skeleton-bg, var(--ds-color-bg-tertiary))',
-    animation: 'pulse 1.5s ease-in-out infinite',
+    animation: 'ds-live-feed-pulse 1.5s ease-in-out infinite',
   } as React.CSSProperties),
 };
 
@@ -111,8 +90,9 @@ const s = {
  * Rustic (Vanilla) LiveFeed engine.
  *
  * Uses inline styles exclusively, referencing `--ds-*` CSS custom properties for
- * theming. Injects `@keyframes pulse` and `@keyframes feedPulse` via an inline
- * `<style>` tag so no external stylesheet is needed.
+ * theming. The skeleton pulse and new-item flash reference the
+ * `ds-live-feed-pulse` / `ds-live-feed-feed-pulse` keyframes declared in the
+ * rustic skin.
  *
  * @typeParam T - Feed item shape, must extend {@link FeedItem}.
  * @param props - {@link LiveFeedProps} -- items, renderItem callback, refresh/load-more controls.
@@ -156,8 +136,6 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   if (loading && items.length === 0) {
     return (
       <div data-part="root" className={`ds-pattern-live-feed ds-engine-rustic ${className ?? ''}`} style={{ ...s.container, ...style }}>
-        {/* Inline @keyframes since rustic engine has no external CSS dependency. */}
-        <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }`}</style>
         <div data-part="skeleton" style={s.skeleton('30%', '1rem')} />
         {[1, 2, 3].map((i) => (
           <div key={i} data-part="skeleton" style={{ ...s.skeleton('100%', '3.5rem'), marginTop: '0.5rem' }} />
@@ -168,12 +146,6 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
 
   return (
     <div data-part="root" className={`ds-pattern-live-feed ds-engine-rustic ${className ?? ''}`} style={{ ...s.container, ...style }}>
-      {/* Two keyframes injected inline:
-          - pulse: skeleton loading shimmer
-          - feedPulse: background flash on newly arrived feed items,
-            fading from info-bg to transparent over 1s. */}
-      <style>{`@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} } @keyframes feedPulse { 0%{background:var(--ds-live-feed-new-bg,var(--ds-color-info-bg))} 100%{background:transparent} }`}</style>
-
       {(header || onRefresh) && (
         <div style={s.headerRow}>
           <div>{header}</div>
@@ -201,12 +173,13 @@ export default function RusticLiveFeed<T extends FeedItem>(props: LiveFeedProps<
           emptyState ?? <div data-part="empty" style={s.empty}>No items</div>
         ) : (
           <div style={s.feedList}>
-            {/* New items receive feedPulse animation: a 1s background flash from
-                info-bg to transparent, drawing the user's eye to the fresh entry. */}
+            {/* New items receive the ds-live-feed-feed-pulse animation: a 1s
+                background flash from info-bg to transparent, drawing the user's
+                eye to the fresh entry. */}
             {displayItems.map((item, i) => (
               <div
                 key={item.key}
-                style={item.isNew ? { animation: 'feedPulse 1s ease-out' } : undefined}
+                style={item.isNew ? { animation: 'ds-live-feed-feed-pulse 1s ease-out' } : undefined}
               >
                 {renderItem(item, i)}
               </div>

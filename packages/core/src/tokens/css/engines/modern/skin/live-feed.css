@@ -1,0 +1,77 @@
+/**
+ * Modern LiveFeed skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed ds-engine-modern`
+ * + `data-part='root'`, identical in the loading-skeleton and loaded branches.
+ *
+ * SHARED HELPER OUT OF SCOPE: this engine spreads `panelCardStyle` /
+ * `cardBodyStyle` / `pillBadgeSmStyle` / `spinnerStyle` from the DS-wide
+ * `patterns/_internal/engines/modern/styles.ts` (11-file, non-family-specific)
+ * helper -- those styles are NOT migrated here; only the LOCAL keys this file
+ * declares directly (which override or add to the spread) move to this skin.
+ *
+ * SPECIFICITY (P-48): every border here is `none` (no color), so nothing in this
+ * file needs the (0,4,0) floor -- all rules win unlayered at (0,3,0).
+ *
+ * TOKENS: modern reads generic tokens throughout; the `--ds-live-feed-*`
+ * component-scoped hatch (11 tokens, declared and tenant-overridden) is
+ * rustic-only -- see `engines/rustic/skin/live-feed.css`. Two vocabularies, one
+ * per engine; not unified (§0).
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* root: only the local boxShadow override moves here -- panelCardStyle's own
+   background/border/radius stay in the untouched shared helper */
+.ds-pattern-live-feed.ds-engine-modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* skeleton: shared radius/background across the title bar and row blocks */
+.ds-pattern-live-feed.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-panel);
+}
+
+/* refresh button */
+.ds-pattern-live-feed.ds-engine-modern [data-part='refresh'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* new-items banner -- Signal-glow (spec section 5, role 3): reserved for live
+   moments like new real-time items arriving. */
+.ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+  background: var(--ds-color-info);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+  box-shadow: var(--ds-shadow-glow-primary);
+}
+
+/* banner count badge -- only these two channels are local overrides on top of
+   the untouched pillBadgeSmStyle spread (which carries no background/color) */
+.ds-pattern-live-feed.ds-engine-modern [data-part='badge'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-primary);
+}
+
+/* empty state */
+.ds-pattern-live-feed.ds-engine-modern [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* load more */
+.ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}

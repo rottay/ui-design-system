@@ -46,14 +46,11 @@ function formatTimestamp(ts: string): string {
 const avatarStyle = (size: number): CSSProperties => ({
   width: size,
   height: size,
-  borderRadius: '50%',
-  background: 'var(--ds-color-neutral-200, #e5e7eb)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   fontSize: size * 0.4,
   fontWeight: 600,
-  color: 'var(--ds-color-text-muted)',
   overflow: 'hidden',
   flexShrink: 0,
 });
@@ -63,10 +60,6 @@ const textareaStyle: CSSProperties = {
   width: '100%',
   padding: '8px 12px',
   fontSize: 'var(--ds-font-size-sm, 14px)',
-  borderRadius: 'var(--ds-radius-md, 8px)',
-  border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
-  background: 'var(--ds-color-background, #fff)',
-  color: 'var(--ds-color-text)',
   resize: 'vertical' as const,
   fontFamily: 'inherit',
 };
@@ -75,29 +68,21 @@ const textareaStyle: CSSProperties = {
 const btnStyle: CSSProperties = {
   padding: '4px 12px',
   fontSize: 'var(--ds-font-size-sm, 14px)',
-  borderRadius: 'var(--ds-radius-md, 8px)',
-  border: '1px solid var(--ds-color-neutral-300, #d1d5db)',
-  background: 'var(--ds-color-background, #fff)',
-  color: 'var(--ds-color-text)',
   cursor: 'pointer',
   fontWeight: 500,
 };
 
-/** Primary action button style -- inherits from btnStyle and overrides to the DS primary color. */
+/** Primary action button style -- shares btnStyle's non-paint metrics; the
+ * primary-color treatment (background/text/border) lives in the skin, keyed
+ * by data-part. */
 const primaryBtnStyle: CSSProperties = {
   ...btnStyle,
-  background: 'var(--ds-color-primary)',
-  color: 'var(--ds-color-primary-foreground, #fff)',
-  borderColor: 'var(--ds-color-primary)',
 };
 
 /** Ghost/link button style for inline actions (Reply, Edit, Delete). No border or background. */
 const linkBtnStyle: CSSProperties = {
-  background: 'none',
-  border: 'none',
   padding: '2px 4px',
   fontSize: 'var(--ds-font-size-xs, 12px)',
-  color: 'var(--ds-color-text-muted)',
   cursor: 'pointer',
   fontWeight: 500,
 };
@@ -162,11 +147,11 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
             <span style={{ fontWeight: 600, fontSize: 'var(--ds-font-size-sm, 14px)' }}>{comment.author.name}</span>
-            <span style={{ color: 'var(--ds-color-text-muted)', fontSize: 'var(--ds-font-size-xs, 12px)' }}>
+            <span data-part="timestamp" style={{ fontSize: 'var(--ds-font-size-xs, 12px)' }}>
               {formatTimestamp(comment.timestamp)}
             </span>
             {comment.edited && (
-              <span style={{ color: 'var(--ds-color-text-muted)', fontSize: 'var(--ds-font-size-xs, 12px)', fontStyle: 'italic', opacity: 0.6 }}>
+              <span data-part="edited-label" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', fontStyle: 'italic', opacity: 0.6 }}>
                 (edited)
               </span>
             )}
@@ -204,8 +189,6 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
                     ...btnStyle,
                     padding: '2px 8px',
                     fontSize: 'var(--ds-font-size-xs, 12px)',
-                    background: r.active ? 'var(--ds-color-primary-50, #eff6ff)' : undefined,
-                    borderColor: r.active ? 'var(--ds-color-primary)' : undefined,
                   }}
                   onClick={() => onReaction?.(comment.id, r.emoji)}
                 >
@@ -225,7 +208,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
               <button data-part="edit" style={linkBtnStyle} onClick={() => setEditing(true)}>Edit</button>
             )}
             {isOwner && onDelete && (
-              <button data-part="delete" style={{ ...linkBtnStyle, color: 'var(--ds-color-error, #ef4444)' }} onClick={() => onDelete(comment.id)}>Delete</button>
+              <button data-part="delete" style={linkBtnStyle} onClick={() => onDelete(comment.id)}>Delete</button>
             )}
           </div>
 
@@ -259,7 +242,7 @@ function CommentNode({ comment, depth, maxDepth, currentUser, onReply, onEdit, o
       {/* Nested replies -- rendered recursively with a left border line for
           visual threading. Stops at maxDepth to cap DOM nesting depth. */}
       {comment.replies && comment.replies.length > 0 && depth < maxDepth && (
-        <div data-part="nested-line" style={{ borderLeft: '2px solid var(--ds-color-neutral-200, #e5e7eb)', paddingLeft: 12 }}>
+        <div data-part="nested-line" style={{ paddingLeft: 12 }}>
           {comment.replies.map(reply => (
             <CommentNode
               key={reply.id}
@@ -316,7 +299,7 @@ export default function RusticCommentThread(props: CommentThreadProps) {
   if (loading) {
     return (
       <div data-part="root" className={`ds-pattern-comment-thread ds-engine-rustic ${className ?? ''}`} style={{ textAlign: 'center', padding: 48, ...style }}>
-        <span data-part="loading" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+        <span data-part="loading">Loading...</span>
       </div>
     );
   }
@@ -357,7 +340,7 @@ export default function RusticCommentThread(props: CommentThreadProps) {
 
       {/* Comments */}
       {comments.length === 0 ? (
-        <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
+        <div data-part="empty" style={{ textAlign: 'center', padding: 48 }}>
           {emptyMessage}
         </div>
       ) : (

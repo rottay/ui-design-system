@@ -29,8 +29,8 @@
         "why": "index.tsx:387 -- background: isHex(value) ? value : 'transparent', the live swatch of the field the admin is typing into."
       },
       "patterns/communication/presence/index.tsx": {
-        "floor": 4,
-        "why": "Per-user identity colours on live cursors and rings (ringColor/cursorColor), including 1 site the counter cannot see (an SVG presentation attribute)."
+        "floor": 3,
+        "why": "Per-user identity colours (ringColor/cursorColor) that stay inline: the avatar ring border, the avatar-initials colour, and the LiveCursor name-badge background -- 3 COUNTER-VISIBLE runtime object-literal sites. A 4th true-runtime site (the LiveCursor SVG `fill={cursorColor}` presentation attribute) is also inline but is INVISIBLE to the inline-paint counter (it is a JSX attribute, not a style-object key), so the counter's floor is 3, not the 4-site true-runtime total the CK-F inventory recorded. Recalibrated to the counter's measurement basis after the CK-F migration verified all runtime sites correctly inline at counter=3."
       },
       "patterns/visualization/charts/bar-chart/index.tsx": {
         "floor": 2,

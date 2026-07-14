@@ -147,9 +147,10 @@ export function PresenceBar({
             style={{
               width: dims.avatar,
               height: dims.avatar,
-              borderRadius: '50%',
+              // Ring color is caller-supplied per-user data; the width still
+              // rides this declaration since it is bound to the same size
+              // variant, so the whole border stays inline.
               border: `${dims.ring}px solid ${ringColor}`,
-              background: 'var(--ds-color-surface, #fff)',
               overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
@@ -171,7 +172,6 @@ export function PresenceBar({
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  borderRadius: '50%',
                   display: 'block',
                 }}
               />
@@ -203,9 +203,10 @@ export function PresenceBar({
           style={{
             width: dims.avatar,
             height: dims.avatar,
-            borderRadius: '50%',
-            border: `${dims.ring}px solid var(--ds-color-border, #d9d9d9)`,
-            background: 'var(--ds-color-surface-secondary, var(--ds-color-bg-secondary, #f5f5f5))',
+            // The ring is a fixed neutral border whose width still tracks the
+            // `size` variant, so only the width rides this uncounted custom
+            // property; the style + color are static and live in the skin.
+            '--ds-presence-badge-ring': `${dims.ring}px`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -215,7 +216,7 @@ export function PresenceBar({
             cursor: 'default',
             flexShrink: 0,
             boxSizing: 'border-box',
-          }}
+          } as React.CSSProperties}
         >
           <Text
             data-part="overflow-badge-count"
@@ -223,7 +224,6 @@ export function PresenceBar({
               fontSize: dims.font,
               fontWeight: 600,
               lineHeight: 1,
-              color: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))',
               userSelect: 'none',
             }}
           >
@@ -279,7 +279,6 @@ export function PresenceTypingIndicator({
       aria-live="polite"
       style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
-      <style>{`@keyframes ds-presence-dot { 0%, 80%, 100% { opacity: .35; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-3px); } }`}</style>
       <Box aria-hidden="true" style={{ display: 'inline-flex', gap: 3 }}>
         {[0, 1, 2].map((index) => (
           <Box
@@ -288,8 +287,6 @@ export function PresenceTypingIndicator({
             style={{
               width: 5,
               height: 5,
-              borderRadius: '50%',
-              background: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))',
               animation: `ds-presence-dot 1.2s ease-in-out ${index * 0.15}s infinite`,
             }}
           />
@@ -299,7 +296,6 @@ export function PresenceTypingIndicator({
         data-part="label"
         style={{
           fontSize: 13,
-          color: 'var(--ds-color-text-secondary, var(--ds-color-text-muted))',
         }}
       >
         {label}
@@ -384,15 +380,12 @@ export function LiveCursor({
           left: 12,
           top: 16,
           background: cursorColor,
-          color: '#fff',
           fontSize: 11,
           fontWeight: 600,
           lineHeight: 1,
           padding: '3px 6px',
-          borderRadius: 4,
           whiteSpace: 'nowrap',
           userSelect: 'none',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.15)',
         }}
       >
         {user.name}

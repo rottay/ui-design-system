@@ -1,0 +1,118 @@
+/**
+ * Rustic NotificationCenter skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-notification-center
+ * ds-engine-rustic` + `data-part='root'`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius, box-shadow) wins unlayered
+ * at (0,3,0).
+ *
+ * TOKENS: rustic's "info" type resolves to `--ds-color-primary`; modern's
+ * resolves to `--ds-color-info` -- a genuine cross-engine disagreement, not just
+ * a mechanism difference. rustic's unread-row tint is the named
+ * `--ds-color-primary-50` scale token; modern's is an ad hoc `color-mix`. Both
+ * preserved verbatim, not unified (WO-SKIN-06 CK-F contract §0).
+ *
+ * INTERACTION: rustic's dismiss button is a static `opacity: 0.5` with NO hover
+ * treatment at all -- unlike modern's imperative brighten-on-hover. This is a
+ * real, pre-existing engine asymmetry; no `:hover` rule is added here to match it.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`. Two hardcoded literals
+ * (not tokens) are transcribed as-is: badgeStyle's `borderRadius: 8` (-> 8px)
+ * and the icon-container-free pill shape it produces.
+ */
+
+/* trigger button: triggerBtnStyle unmodified */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='trigger'] {
+  background: none;
+  color: var(--ds-color-text);
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+}
+
+/* unread-count badge on the trigger */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='badge'] {
+  border-radius: 8px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* dropdown panel */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shadow-xl);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* header bottom rule */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* ghost link buttons: Mark all read / Clear all / per-item action -- linkBtnStyle
+   unmodified */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='mark-all-read'],
+.ds-pattern-notification-center.ds-engine-rustic [data-part='clear-all'],
+.ds-pattern-notification-center.ds-engine-rustic [data-part='action'] {
+  background: none;
+  color: var(--ds-color-primary);
+  border: none;
+}
+
+/* dismiss: linkBtnStyle + a fixed muted-color override, never toggled (no
+   hover -- see INTERACTION note above) */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='dismiss'] {
+  background: none;
+  color: var(--ds-color-text-muted);
+  border: none;
+}
+
+/* empty state */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* row bottom rule + unread tint (className-free -- both ride this component's
+   own style object) */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='row'][data-part='row'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='row'][data-unread='true'] {
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}
+
+/* type icon glyph color -- 4-way static map keyed on data-type */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='info'] {
+  color: var(--ds-color-primary);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='success'] {
+  color: var(--ds-color-success);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='error'] {
+  color: var(--ds-color-error);
+}
+
+/* unread title dot -- conditionally rendered, single static value */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='unread-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-primary);
+}
+
+/* message + timestamp share the identical muted color */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='message'],
+.ds-pattern-notification-center.ds-engine-rustic [data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}

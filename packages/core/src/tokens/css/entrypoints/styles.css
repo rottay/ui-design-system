@@ -291,6 +291,10 @@
 @import '../engines/modern/skin/workspace-switcher.css';
 @import '../engines/modern/skin/shortcuts-overlay.css';
 @import '../engines/modern/skin/locale-switcher.css';
+@import '../engines/modern/skin/comment-thread.css';
+@import '../engines/modern/skin/notification-center.css';
+@import '../engines/modern/skin/activity-log.css';
+@import '../engines/modern/skin/live-feed.css';
 @import '../engines/rustic/skin/step-wizard.css';
 @import '../engines/rustic/skin/page-shell.css';
 @import '../engines/rustic/skin/command-palette.css';
@@ -298,6 +302,10 @@
 @import '../engines/rustic/skin/workspace-switcher.css';
 @import '../engines/rustic/skin/shortcuts-overlay.css';
 @import '../engines/rustic/skin/locale-switcher.css';
+@import '../engines/rustic/skin/comment-thread.css';
+@import '../engines/rustic/skin/notification-center.css';
+@import '../engines/rustic/skin/activity-log.css';
+@import '../engines/rustic/skin/live-feed.css';
 @import '../components/skin/avatar-compounds.css';
 @import '../components/skin/card-compounds.css';
 @import '../components/skin/carousel-compounds.css';
@@ -326,6 +334,8 @@
 @import '../components/skin/metrics-rows.css';
 @import '../components/skin/stats-header.css';
 @import '../components/skin/data-terminal-card.css';
+@import '../components/skin/assistant.css';
+@import '../components/skin/presence.css';
 
 
 /* =============================================================================

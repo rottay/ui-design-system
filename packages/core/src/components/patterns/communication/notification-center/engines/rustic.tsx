@@ -20,15 +20,6 @@
 import React, { useState, useRef, useEffect, useCallback, type CSSProperties } from 'react';
 import type { NotificationCenterProps, Notification } from '../NotificationCenter.types';
 
-// Semantic color tokens for per-type icon coloring. Uses design system
-// variables so the colors adapt to theme changes automatically.
-const typeColors: Record<string, string> = {
-  info: 'var(--ds-color-primary)',
-  success: 'var(--ds-color-success)',
-  warning: 'var(--ds-color-warning)',
-  error: 'var(--ds-color-error)',
-};
-
 /**
  * Progressive degradation from relative ("3m ago") to calendar ("Mar 5").
  * Shared logic across all three engines, duplicated here because the Rustic
@@ -53,13 +44,9 @@ function formatTimestamp(ts: string): string {
 // to keep the JSX focused on structure rather than styling details.
 const triggerBtnStyle: CSSProperties = {
   position: 'relative',
-  background: 'none',
-  border: 'none',
   padding: 8,
   cursor: 'pointer',
   fontSize: 20,
-  color: 'var(--ds-color-text)',
-  borderRadius: 'var(--ds-radius-md, 8px)',
 };
 
 const badgeStyle: CSSProperties = {
@@ -68,9 +55,6 @@ const badgeStyle: CSSProperties = {
   right: 2,
   minWidth: 16,
   height: 16,
-  borderRadius: 8,
-  background: 'var(--ds-color-primary)',
-  color: 'var(--ds-color-text-on-primary, var(--ds-color-text-inverse))',
   fontSize: 10,
   fontWeight: 600,
   display: 'flex',
@@ -86,10 +70,6 @@ const dropdownStyle: CSSProperties = {
   marginTop: 8,
   width: 360,
   maxHeight: 440,
-  background: 'var(--ds-color-bg-elevated, var(--ds-color-bg-primary))',
-  border: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
-  borderRadius: 'var(--ds-radius-lg, 12px)',
-  boxShadow: 'var(--ds-shadow-xl)',
   overflow: 'hidden',
   display: 'flex',
   flexDirection: 'column',
@@ -101,15 +81,11 @@ const headerStyle: CSSProperties = {
   justifyContent: 'space-between',
   alignItems: 'center',
   padding: '10px 14px',
-  borderBottom: '1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200))',
 };
 
 const linkBtnStyle: CSSProperties = {
-  background: 'none',
-  border: 'none',
   padding: '2px 6px',
   fontSize: 'var(--ds-font-size-xs, 12px)',
-  color: 'var(--ds-color-primary)',
   cursor: 'pointer',
   fontWeight: 500,
 };
@@ -215,7 +191,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
               background. Each row is clickable to trigger onRead. */}
           <div style={{ flex: 1, overflowY: 'auto', maxHeight: 360 }}>
             {visibleNotifications.length === 0 ? (
-              <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
+              <div data-part="empty" style={{ textAlign: 'center', padding: 48 }}>
                 {emptyMessage}
               </div>
             ) : (
@@ -228,8 +204,6 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                     display: 'flex',
                     gap: 10,
                     padding: '10px 14px',
-                    borderBottom: '1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100))',
-                    background: item.read ? undefined : 'var(--ds-color-primary-50, var(--ds-color-bg-muted))',
                     cursor: 'pointer',
                     alignItems: 'flex-start',
                   }}
@@ -237,7 +211,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                 >
                   {/* Type icon: custom icon or Unicode fallback. Colored with
                       the semantic token matching the notification type. */}
-                  <span data-part="icon" data-type={item.type} style={{ fontSize: 16, marginTop: 2, flexShrink: 0, color: typeColors[item.type] }}>
+                  <span data-part="icon" data-type={item.type} style={{ fontSize: 16, marginTop: 2, flexShrink: 0 }}>
                     {item.icon || (
                       item.type === 'success' ? '\u2713' :
                       item.type === 'error' ? '\u2717' :
@@ -253,15 +227,15 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                       </span>
                       {/* Small primary dot for visual unread indicator */}
                       {!item.read && (
-                        <span data-part="unread-dot" data-unread={true} style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--ds-color-primary)', flexShrink: 0 }} />
+                        <span data-part="unread-dot" data-unread={true} style={{ width: 6, height: 6, flexShrink: 0 }} />
                       )}
                     </div>
-                    <div data-part="message" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 2 }}>
+                    <div data-part="message" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', marginTop: 2 }}>
                       {item.message}
                     </div>
                     {/* Footer row: timestamp + optional action button */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 4 }}>
-                      <span data-part="timestamp" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', opacity: 0.7 }}>
+                      <span data-part="timestamp" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', opacity: 0.7 }}>
                         {formatTimestamp(item.timestamp)}
                       </span>
                       {item.action && (
@@ -280,7 +254,7 @@ export default function RusticNotificationCenter(props: NotificationCenterProps)
                   {onClear && (
                     <button
                       data-part="dismiss"
-                      style={{ ...linkBtnStyle, color: 'var(--ds-color-text-muted)', opacity: 0.5, fontSize: 14, padding: 2 }}
+                      style={{ ...linkBtnStyle, opacity: 0.5, fontSize: 14, padding: 2 }}
                       onClick={(e) => { e.stopPropagation(); onClear(item.id); }}
                     >
                       x

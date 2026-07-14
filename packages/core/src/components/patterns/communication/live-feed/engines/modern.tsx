@@ -70,11 +70,11 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   // Subsequent refreshes keep existing items visible (no flicker).
   if (loading && items.length === 0) {
     return (
-      <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+      <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={{ ...panelCardStyle, ...style }}>
         <div className="animate-pulse" style={cardBodyStyle}>
-          <div data-part="skeleton" style={{ height: 16, borderRadius: 'var(--ds-radius-sm)', width: '33%', marginBottom: 16, background: 'var(--ds-surface-panel)' }} />
+          <div data-part="skeleton" style={{ height: 16, width: '33%', marginBottom: 16 }} />
           {[1, 2, 3].map((i) => (
-            <div key={i} data-part="skeleton" style={{ height: 64, borderRadius: 'var(--ds-radius-sm)', marginBottom: 8, background: 'var(--ds-surface-panel)' }} />
+            <div key={i} data-part="skeleton" style={{ height: 64, marginBottom: 8 }} />
           ))}
         </div>
       </div>
@@ -82,14 +82,14 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
   }
 
   return (
-    <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={{ ...panelCardStyle, boxShadow: 'var(--ds-elevation-1)', ...style }}>
+    <div data-part="root" className={`ds-pattern-live-feed ds-engine-modern ${className ?? ''}`} style={{ ...panelCardStyle, ...style }}>
       <div style={cardBodyStyle}>
         {/* Header */}
         {(header || onRefresh) && (
           <div className="flex items-center justify-between mb-3">
             <div>{header}</div>
             {onRefresh && (
-              <button data-part="refresh" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', width: 32, height: 32, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={onRefresh}>
+              <button data-part="refresh" style={{ width: 32, height: 32, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: 0, fontSize: 13 }} onClick={onRefresh}>
                 {loading ? (
                   <span style={spinnerStyle(14)} />
                 ) : (
@@ -109,10 +109,10 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             data-part="banner"
             // Signal-glow (spec section 5, role 3): reserved for live moments like
             // new real-time items arriving. Collapses to none when --ds-effect-intensity is 0.
-            style={{ background: 'var(--ds-color-info)', color: 'var(--ds-color-text-on-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', marginBottom: 12, boxShadow: 'var(--ds-shadow-glow-primary)' }}
+            style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8, width: '100%', marginBottom: 12 }}
             onClick={onShowNewItems}
           >
-            <div data-part="badge" style={{ ...pillBadgeSmStyle, background: 'var(--ds-surface-panel)', color: 'var(--ds-color-text-primary)' }}>{newItemsCount}</div>
+            <div data-part="badge" style={pillBadgeSmStyle}>{newItemsCount}</div>
             new {newItemsCount === 1 ? 'item' : 'items'}
           </button>
         )}
@@ -121,7 +121,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
             When omitted, the feed grows unbounded. */}
         <div style={{ maxHeight: maxHeight ?? undefined, overflow: maxHeight ? 'auto' : undefined }}>
           {displayItems.length === 0 ? (
-            emptyState ?? <div data-part="empty" className="text-center py-8" style={{ color: 'var(--ds-color-text-secondary)' }}>No items</div>
+            emptyState ?? <div data-part="empty" className="text-center py-8">No items</div>
           ) : (
             <div className="flex flex-col gap-2">
               {/* ds-pulse-changed (foundation/animations/transitions.css) flashes
@@ -141,7 +141,7 @@ export default function ModernLiveFeed<T extends FeedItem>(props: LiveFeedProps<
         {/* Load more */}
         {hasMore && onLoadMore && (
           <div className="text-center mt-3">
-            <button data-part="load-more" style={{ background: 'transparent', color: 'var(--ds-color-text-primary)', height: 32, padding: '0 12px', fontSize: 13, borderRadius: 'var(--ds-radius-md)', border: 'none', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={onLoadMore}>
+            <button data-part="load-more" style={{ height: 32, padding: '0 12px', fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onClick={onLoadMore}>
               {loading && <span style={spinnerStyle(14)} />}
               Load more
             </button>

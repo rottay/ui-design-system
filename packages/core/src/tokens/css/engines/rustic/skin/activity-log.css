@@ -1,0 +1,122 @@
+/**
+ * Rustic (Vanilla / CSS-variable) ActivityLog skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-activity-log ds-engine-rustic`
+ * + `data-part='root'`, identical in the loading and loaded branches.
+ *
+ * SPECIFICITY (P-48): root and filter both paint a border COLOR and have no
+ * second contract attribute to spend, so both reach (0,4,0) by repeating their
+ * own `data-part` (two root classes (0,2,0) + `data-part` x2 (0,2,0)). The dot
+ * and badge backgrounds are non-border paint and win unlayered at (0,3,0).
+ *
+ * CLASSIFIER (§3 trap 2): rustic's `getActionColor` returns the resolved
+ * `--ds-color-*` token STRING directly (not a semantic enum like modern's
+ * `classifyAction`) -- e.g. `data-action-category="var(--ds-color-success)"`.
+ * This skin keys on that literal token string; it is a different vocabulary
+ * from modern's `create|update|delete|view|system` on purpose (§0, §3 trap 2 --
+ * the classification LOGIC diverges between engines and is not reconciled by
+ * this migration). The unmatched-action fallback string is transcribed verbatim,
+ * including its own nested fallback.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* root: border/background/radius identical across the loading and loaded branches */
+.ds-pattern-activity-log.ds-engine-rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg, 12px);
+  background: var(--ds-color-surface, var(--ds-color-background));
+}
+
+/* loading text (no skeleton in rustic -- plain text row, §ADDENDUM 4) */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='loading'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* filter selects (action-type + user, same style constant) */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  background: var(--ds-color-surface, var(--ds-color-background));
+  color: var(--ds-color-text);
+}
+
+/* empty state */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timeline dot: base radius, then per-token background keyed on the literal
+   getActionColor() string the classifier stamped into data-action-category */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'] {
+  border-radius: 50%;
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-success)"] {
+  background: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-primary)"] {
+  background: var(--ds-color-primary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-error)"] {
+  background: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-secondary)"] {
+  background: var(--ds-color-secondary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-text-secondary, var(--ds-color-text-muted))"] {
+  background: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+/* connecting line */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='line'] {
+  background: var(--ds-color-border-secondary, var(--ds-color-border));
+}
+
+/* avatar (single wrapper div, image or initials both render inside it unpainted) */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-color-surface-secondary, var(--ds-color-bg-secondary));
+  color: var(--ds-color-text-muted);
+}
+
+/* action tag: base radius + on-primary text color for all categories, then
+   per-token background keyed the same way as the dot */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-text-on-primary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-success)"] {
+  background: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-primary)"] {
+  background: var(--ds-color-primary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-error)"] {
+  background: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-secondary)"] {
+  background: var(--ds-color-secondary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-text-secondary, var(--ds-color-text-muted))"] {
+  background: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+/* entity label */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='entity'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timestamp */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* diff wrapper */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='diff'] {
+  color: var(--ds-color-text-muted);
+}

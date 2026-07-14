@@ -53,13 +53,10 @@ export type {
   MessageBubbleProps,
 } from './types';
 
-// Keyframes are owned inline by the streaming and typing paths so their
-// animations run whether or not a sibling indicator is mounted. Identical
-// duplicate definitions are idempotent at the CSS cascade level.
-const ASSISTANT_CARET_KEYFRAMES =
-  '@keyframes ds-assistant-caret { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }';
-const ASSISTANT_DOT_KEYFRAMES =
-  '@keyframes ds-assistant-dot { 0%, 80%, 100% { opacity: .35; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-2px); } }';
+// Animation keyframes (`ds-assistant-caret`, `ds-assistant-dot`) live in
+// `components/skin/assistant.css`, not injected per-mount here, so the
+// streaming caret and typing/status dots animate without a co-mounted
+// dependency.
 
 // -- Internal mapping helpers --
 
@@ -132,43 +129,27 @@ function toolStatusToTone(
   }
 }
 
-/** Resolves a badge tone to its semantic color CSS variable. */
-function toneToColorVar(tone: AssistantStatusBadgeProps['tone']): string {
-  switch (tone) {
-    case 'success':
-      return 'var(--ds-color-success)';
-    case 'warning':
-      return 'var(--ds-color-warning)';
-    case 'danger':
-      return 'var(--ds-color-error)';
-    case 'info':
-      return 'var(--ds-color-info)';
-    default:
-      return 'var(--ds-color-text-muted)';
-  }
-}
-
 /**
- * Resolves an agent activity status to its dot color, liveness, and default
- * label. Live states (thinking/streaming/acting) animate; idle/error hold
- * static. Colors resolve through semantic `--ds-color-*` tokens.
+ * Resolves an agent activity status to its liveness and default label. Live
+ * states (thinking/streaming/acting) animate; idle/error hold static. The
+ * dot's per-status color is a skin rule keyed on the stamped `data-status`
+ * (`components/skin/assistant.css`), not computed here.
  */
 function agentStatusVisual(status: AssistantAgentStatus): {
-  color: string;
   live: boolean;
   defaultLabel: string;
 } {
   switch (status) {
     case 'thinking':
-      return { color: 'var(--ds-color-info)', live: true, defaultLabel: 'Thinking' };
+      return { live: true, defaultLabel: 'Thinking' };
     case 'streaming':
-      return { color: 'var(--ds-color-primary-500)', live: true, defaultLabel: 'Streaming' };
+      return { live: true, defaultLabel: 'Streaming' };
     case 'acting':
-      return { color: 'var(--ds-color-warning)', live: true, defaultLabel: 'Acting' };
+      return { live: true, defaultLabel: 'Acting' };
     case 'error':
-      return { color: 'var(--ds-color-error)', live: false, defaultLabel: 'Error' };
+      return { live: false, defaultLabel: 'Error' };
     default:
-      return { color: 'var(--ds-color-text-muted)', live: false, defaultLabel: 'Idle' };
+      return { live: false, defaultLabel: 'Idle' };
   }
 }
 
@@ -225,26 +206,21 @@ export function StreamingText({
         <Text style={{ whiteSpace: 'pre-wrap', fontFamily }}>{text}</Text>
       )}
       {streaming ? (
-        <>
-          {/* Caret keyframes are owned here so the caret animates without a
-              co-mounted TypingIndicator. Under reduced motion the caret holds
-              a static position instead of blinking. */}
-          <style>{ASSISTANT_CARET_KEYFRAMES}</style>
-          <Text
-            data-part="caret"
-            aria-hidden="true"
-            style={{
-              marginLeft: 4,
-              display: 'inline-block',
-              color: 'var(--ds-color-primary-500)',
-              animation: reduceMotion
-                ? 'none'
-                : 'ds-assistant-caret 1s steps(2, jump-none) infinite',
-            }}
-          >
-            |
-          </Text>
-        </>
+        // Under reduced motion the caret holds a static position instead of
+        // blinking.
+        <Text
+          data-part="caret"
+          aria-hidden="true"
+          style={{
+            marginLeft: 4,
+            display: 'inline-block',
+            animation: reduceMotion
+              ? 'none'
+              : 'ds-assistant-caret 1s steps(2, jump-none) infinite',
+          }}
+        >
+          |
+        </Text>
       ) : null}
     </Box>
   );
@@ -271,7 +247,6 @@ export function TypingIndicator({
       aria-live="polite"
       style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
-      <style>{ASSISTANT_DOT_KEYFRAMES}</style>
       <Box aria-hidden="true" style={{ display: 'inline-flex', gap: 4 }}>
         {[0, 1, 2].map((index) => (
           <Box
@@ -280,8 +255,6 @@ export function TypingIndicator({
             style={{
               width: 6,
               height: 6,
-              borderRadius: '50%',
-              background: 'var(--ds-color-primary-500)',
               animation: `ds-assistant-dot 1.1s ease-in-out ${index * 0.12}s infinite`,
             }}
           />
@@ -343,7 +316,7 @@ export function ToolCallCard({
                   <Box />
                 )}
                 {duration ? (
-                  <Text data-part="tool-card" data-tone={tone} size="sm" style={{ color: toneToColorVar(tone) }}>
+                  <Text data-part="tool-card" data-tone={tone} size="sm">
                     {duration}
                   </Text>
                 ) : null}
@@ -405,7 +378,6 @@ export function AssistantStatusIndicator({
       aria-live="polite"
       style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}
     >
-      {animate ? <style>{ASSISTANT_DOT_KEYFRAMES}</style> : null}
       <Box
         data-part="dot"
         data-status={status}
@@ -413,8 +385,6 @@ export function AssistantStatusIndicator({
         style={{
           width: 8,
           height: 8,
-          borderRadius: '50%',
-          background: visual.color,
           animation: animate ? 'ds-assistant-dot 1.1s ease-in-out infinite' : 'none',
         }}
       />
@@ -458,16 +428,6 @@ export function PreviewDiffCard({
           </Stack>
           {rows.map((row, index) => {
             const change = row.change ?? 'updated';
-            const beforeColor =
-              change === 'removed'
-                ? 'var(--ds-color-error)'
-                : 'var(--ds-color-text-muted)';
-            const afterColor =
-              change === 'added' || change === 'updated'
-                ? 'var(--ds-color-success)'
-                : change === 'removed'
-                  ? 'var(--ds-color-text-muted)'
-                  : undefined;
             return (
               <Stack
                 key={`diff-row-${index}`}
@@ -475,7 +435,7 @@ export function PreviewDiffCard({
                 direction="horizontal"
                 spacing="sm"
                 align="center"
-                style={{ borderTop: '1px solid var(--ds-color-border)', paddingTop: 6 }}
+                style={{ paddingTop: 6 }}
               >
                 <Text size="sm" style={{ flex: 2, minWidth: 0, fontWeight: 600 }}>
                   {row.label}
@@ -488,7 +448,6 @@ export function PreviewDiffCard({
                       data-change={change}
                       size="sm"
                       style={{
-                        color: beforeColor,
                         textDecoration:
                           change === 'removed' || change === 'updated'
                             ? 'line-through'
@@ -515,7 +474,6 @@ export function PreviewDiffCard({
                       data-change={change}
                       size="sm"
                       style={{
-                        color: afterColor,
                         fontWeight: change === 'unchanged' ? undefined : 600,
                       }}
                     >
@@ -709,7 +667,7 @@ export function MessageBubble({
             {timestamp || status || meta ? (
               <Stack spacing="xs">
                 {timestamp ? (
-                  <Text data-part="timestamp" style={{ color: 'var(--ds-color-text-muted)', fontSize: 12 }}>
+                  <Text data-part="timestamp" style={{ fontSize: 12 }}>
                     {timestamp}
                   </Text>
                 ) : null}

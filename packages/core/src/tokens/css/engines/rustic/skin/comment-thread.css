@@ -1,0 +1,131 @@
+/**
+ * Rustic CommentThread skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-comment-thread ds-engine-rustic`
+ * + `data-part='root'` (added by the anatomy pre-step -- rustic previously carried
+ * no scope class at all).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius) wins unlayered at (0,3,0).
+ *
+ * TOKENS: rustic's primary-button text color is `--ds-color-primary-foreground,
+ * #fff`; modern's equivalent is `--ds-color-text-on-primary` -- two real,
+ * independently declared tokens for the same slot, not aliases. Preserved
+ * verbatim, not unified (WO-SKIN-06 CK-F contract §0).
+ *
+ * REACTION PILL: the JS override wrote `background`/`borderColor` as an explicit
+ * `r.active ? value : undefined` pair on TOP of a `...btnStyle` spread -- when
+ * inactive, the `undefined` erases btnStyle's own background/border-color rather
+ * than falling back to them. The inactive rule below therefore omits `background`
+ * entirely (byte-exact: no inline background at rest) and the border color the
+ * inactive state keeps is btnStyle's own neutral-300, not a fallback value.
+ *
+ * INTERACTION: no hover treatment anywhere in this file (matches modern -- neither
+ * engine wired onMouseEnter/Leave for comment-thread).
+ *
+ * FOLLOW-UP CLOSED: the timestamp span and the "(edited)" label span were
+ * initially unstamped (no data-part) and left inline. `data-part='timestamp'`
+ * and `data-part='edited-label'` were added (attribute-only, inert) and their
+ * `color` moved below -- both are raw spans, not `<Text>`, so (0,3,0) is correct
+ * (no Typography engine-skin competitor to out-specify).
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* avatar (CommentNode + composer, both use avatarStyle(32) unmodified) */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-color-neutral-200, #e5e7eb);
+  color: var(--ds-color-text-muted);
+}
+
+/* edit / reply / new-comment textareas share textareaStyle unmodified */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='composer'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-background, #fff);
+  color: var(--ds-color-text);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'][data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-textarea'][data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='composer'][data-part='composer'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+
+/* Cancel / Reply-cancel: btnStyle unmodified */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-background, #fff);
+  color: var(--ds-color-text);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'][data-part='cancel'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel'][data-part='reply-cancel'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+
+/* Save / Reply-submit / Comment-submit: primaryBtnStyle (btnStyle's metrics +
+   the primary-color override; the override's borderColor wins over btnStyle's
+   own border color, so the rendered border is 1px solid primary, not neutral-300) */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='save'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='submit'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground, #fff);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='save'][data-part='save'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'][data-part='reply-submit'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='submit'][data-part='submit'] {
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* Reply / Edit: linkBtnStyle unmodified */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edit'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-text-muted);
+}
+
+/* Delete: linkBtnStyle + a fixed error-color override, never toggled */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='delete'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-error, #ef4444);
+}
+
+/* reaction pill: base is btnStyle's border-radius/color only -- background and
+   border-color are explicitly absent at rest (see REACTION PILL note above) */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'] {
+  border-radius: var(--ds-radius-md, 8px);
+  color: var(--ds-color-text);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'][data-part='reaction'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'][data-active='true'] {
+  background: var(--ds-color-primary-50, #eff6ff);
+  border-color: var(--ds-color-primary);
+}
+
+/* nested-reply left border line */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='nested-line'][data-part='nested-line'] {
+  border-left: 2px solid var(--ds-color-neutral-200, #e5e7eb);
+}
+
+/* loading text + empty state + timestamp + edited-label share the identical
+   muted color */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='loading'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='empty'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='timestamp'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edited-label'] {
+  color: var(--ds-color-text-muted);
+}

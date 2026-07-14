@@ -32944,6 +32944,470 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 
 /**
+ * Modern CommentThread skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-comment-thread ds-engine-modern`
+ * + `data-part='root'`; every painted element is a descendant with its own
+ * `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius) wins unlayered at (0,3,0).
+ * `border: none` resets carry no color and are exempt.
+ *
+ * TOKENS: modern's primary-button text color is `--ds-color-text-on-primary`;
+ * rustic's equivalent is `--ds-color-primary-foreground` — two real, independently
+ * declared tokens for the same slot, not aliases. Preserved verbatim, not unified
+ * (WO-SKIN-06 CK-F contract §0).
+ *
+ * INTERACTION: this component has no hover treatment in either engine (neither
+ * file ever wired onMouseEnter/Leave) — only the reaction pill's `[data-active]`
+ * state and the always-static remainder.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* avatar wrapper (reply avatar + composer avatar share one data-part) */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='avatar'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-primary);
+}
+
+/* edit / reply / new-comment textareas share the identical bordered-transparent
+   treatment */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='composer'] {
+  background: transparent;
+  color: inherit;
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edit-textarea'][data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-textarea'][data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='composer'][data-part='composer'] {
+  border: 1px solid var(--ds-color-border);
+}
+
+/* primary-filled action buttons: Save / Reply-submit / Comment-submit */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='save'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-submit'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='submit'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* ghost action buttons: Cancel / Reply / Edit / Reply-cancel */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='cancel'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='edit'],
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reply-cancel'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* delete: ghost shape, fixed error color -- never toggled, always red */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='delete'] {
+  background: transparent;
+  color: var(--ds-color-error);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* reaction pill: data-active selects background/color; shape stays static */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='reaction'][data-active='true'] {
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* nested-reply left border line (className supplies the width/style, this
+   supplies the color) */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='nested-line'][data-part='nested-line'] {
+  border-color: var(--ds-color-border);
+}
+
+/* loading spinner ring; consumes the global `ds-spin` keyframe (declared in
+   engines/rustic/theme.css, loaded into every bundle regardless of active
+   engine) -- animation-name stays inline, not a paint channel */
+.ds-pattern-comment-thread.ds-engine-modern [data-part='spinner'] {
+  border-radius: 50%;
+}
+.ds-pattern-comment-thread.ds-engine-modern [data-part='spinner'][data-part='spinner'] {
+  border: 3px solid var(--ds-color-border);
+  border-top-color: var(--ds-color-primary);
+}
+
+/**
+ * Modern NotificationCenter skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-notification-center
+ * ds-engine-modern` + `data-part='root'`; every painted element is a descendant
+ * with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius, box-shadow) wins unlayered
+ * at (0,3,0).
+ *
+ * DEAD CODE: `typeBgStyles` (icon-container tint) in modern.tsx is defined but
+ * never referenced in JSX -- the orchestrator's pre-step audit confirmed this at
+ * runtime. There is no icon-container tint rule here because there is no DOM
+ * element to anchor one to; the dead const is left in place in the TSX per the
+ * CK-F contract addendum. Only `typeColorStyles` (the glyph color, live) moved.
+ *
+ * TOKENS: modern's "info" type resolves to `--ds-color-info`; rustic's resolves
+ * to `--ds-color-primary` -- a genuine cross-engine disagreement, not just a
+ * mechanism difference. modern's unread-row tint is an ad hoc `color-mix`;
+ * rustic's is the named `--ds-color-primary-50` scale token. Both preserved
+ * verbatim, not unified (WO-SKIN-06 CK-F contract §0).
+ *
+ * INTERACTION: the dismiss button's hover brighten was imperative
+ * (`.style.opacity =` in onMouseEnter/onMouseLeave, uncounted paint). The rule
+ * below replaces it; opacity's static 0.3 rest value stays inline on the element
+ * since opacity itself is not a paint channel this program moves.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* circular icon buttons: bell trigger + row dismiss share one treatment */
+.ds-pattern-notification-center.ds-engine-modern [data-part='trigger'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: 50%;
+  border: none;
+}
+
+/* unread-count badge on the trigger */
+.ds-pattern-notification-center.ds-engine-modern [data-part='badge'] {
+  border-radius: 9999px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary);
+}
+
+/* dropdown panel */
+.ds-pattern-notification-center.ds-engine-modern [data-part='panel'] {
+  background: var(--ds-surface-card);
+  border-radius: var(--ds-radius-lg);
+  box-shadow: var(--ds-elevation-3);
+}
+
+/* header bottom rule (className supplies the width/style) */
+.ds-pattern-notification-center.ds-engine-modern [data-part='header'][data-part='header'] {
+  border-color: var(--ds-color-border);
+}
+
+/* ghost text buttons: Mark all read / Clear all / per-item action */
+.ds-pattern-notification-center.ds-engine-modern [data-part='mark-all-read'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='clear-all'],
+.ds-pattern-notification-center.ds-engine-modern [data-part='action'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* row bottom rule (className supplies the width/style) + unread tint */
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'][data-part='row'] {
+  border-color: var(--ds-color-border);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='row'][data-unread='true'] {
+  background: color-mix(in srgb, var(--ds-color-primary) 10%, transparent);
+}
+
+/* type icon glyph color -- 4-way static map keyed on data-type */
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='info'] {
+  color: var(--ds-color-info);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='success'] {
+  color: var(--ds-color-success);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-pattern-notification-center.ds-engine-modern [data-part='icon'][data-type='error'] {
+  color: var(--ds-color-error);
+}
+
+/* unread title dot -- conditionally rendered, single static value */
+.ds-pattern-notification-center.ds-engine-modern [data-part='unread-dot'] {
+  background: var(--ds-color-primary);
+}
+
+/* dismiss hover brighten -- replaces the deleted onMouseEnter/onMouseLeave
+   .style.opacity writes */
+.ds-pattern-notification-center.ds-engine-modern [data-part='dismiss']:hover {
+  opacity: 1;
+}
+
+/**
+ * Modern ActivityLog skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style` (the root forwards the caller's `style`/`className`).
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-activity-log ds-engine-modern`
+ * + `data-part='root'`, identical in both the loading and loaded branches; every
+ * painted element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0). The timeline dot's border is the only border-color site here, and it
+ * already carries a second contract attribute -- `data-action-category` -- so the
+ * floor is bought from the two root classes (0,2,0) + `data-part` (0,1,0) +
+ * `data-action-category` (0,1,0), no repeat needed. Non-border paint wins
+ * unlayered at (0,3,0).
+ *
+ * CLASSIFIER (§3 trap 2): `data-action-category` holds modern's OWN 5-way
+ * `classifyAction` result (create/update/delete/view/system). Rustic's classifier
+ * is a different if-chain with different buckets and no `system` catch-all -- the
+ * two engines' skins are independent recipes, not a shared vocabulary; see
+ * `engines/rustic/skin/activity-log.css` for rustic's (differently-keyed) values.
+ *
+ * AVATAR: the `<img>` and fallback `<span>` both carry `data-part='avatar'`, but
+ * only the span paints a background/color (the img shows the photo). Selectors
+ * are split by tag, not by a new data-part, to keep the img free of a background
+ * that never painted before.
+ *
+ * SKELETON: the dot skeleton and the two text-line skeletons share
+ * `data-part='skeleton'` but the dot overrides its border-radius to a circle; that
+ * one divergent channel stays inline (an inline style always outranks this
+ * external rule) while the shared background/background-size/radius move here.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-activity-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* root: identical background/shadow/radius in the loading and loaded branches */
+.ds-pattern-activity-log.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-1);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* diff container */
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff'] {
+  background: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-row'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='label'],
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='from'],
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='arrow'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* avatar: split by tag -- the img never painted a background/color, only radius */
+.ds-pattern-activity-log.ds-engine-modern img[data-part='avatar'] {
+  border-radius: 50%;
+}
+.ds-pattern-activity-log.ds-engine-modern span[data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+
+/* skeleton: shared shimmer + default (line) radius; the dot's 50% override stays
+   inline on the element (inline wins over this rule, no selector needed here) */
+.ds-pattern-activity-log.ds-engine-modern [data-part='skeleton'] {
+  background: linear-gradient(90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75%);
+  background-size: 200% 100%;
+  border-radius: var(--ds-radius-sm);
+}
+
+/* empty state */
+.ds-pattern-activity-log.ds-engine-modern [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timeline dot: base radius for all categories, then the border-color-bearing
+   background/border/color per classifyAction category (color-mix percentages
+   preserved verbatim -- 15% for the dot ring, distinct from the badge's 12%) */
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'] {
+  border-radius: 50%;
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='create'] {
+  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
+  border: 2px solid var(--ds-color-success);
+  color: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='update'] {
+  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
+  border: 2px solid var(--ds-color-info);
+  color: var(--ds-color-info);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='delete'] {
+  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  border: 2px solid var(--ds-color-error);
+  color: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='view'] {
+  background: color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent);
+  border: 2px solid var(--ds-color-text-muted);
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='system'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+  border: 2px solid var(--ds-color-warning);
+  color: var(--ds-color-warning);
+}
+
+/* connecting line */
+.ds-pattern-activity-log.ds-engine-modern [data-part='line'] {
+  background: var(--ds-color-border);
+}
+
+/* actor name */
+.ds-pattern-activity-log.ds-engine-modern [data-part='user'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* action badge: base radius for all categories (12% color-mix, distinct from the
+   dot's 15%), then per-category background + text color */
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'] {
+  border-radius: var(--ds-radius-sm);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='create'] {
+  background: color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+  color: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='update'] {
+  background: color-mix(in srgb, var(--ds-color-info) 12%, transparent);
+  color: var(--ds-color-info);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='delete'] {
+  background: color-mix(in srgb, var(--ds-color-error) 12%, transparent);
+  color: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='view'] {
+  background: color-mix(in srgb, var(--ds-color-text-muted) 12%, transparent);
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='system'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+  color: var(--ds-color-warning);
+}
+
+/* entity label */
+.ds-pattern-activity-log.ds-engine-modern [data-part='entity'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timestamp */
+.ds-pattern-activity-log.ds-engine-modern [data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Modern LiveFeed skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed ds-engine-modern`
+ * + `data-part='root'`, identical in the loading-skeleton and loaded branches.
+ *
+ * SHARED HELPER OUT OF SCOPE: this engine spreads `panelCardStyle` /
+ * `cardBodyStyle` / `pillBadgeSmStyle` / `spinnerStyle` from the DS-wide
+ * `patterns/_internal/engines/modern/styles.ts` (11-file, non-family-specific)
+ * helper -- those styles are NOT migrated here; only the LOCAL keys this file
+ * declares directly (which override or add to the spread) move to this skin.
+ *
+ * SPECIFICITY (P-48): every border here is `none` (no color), so nothing in this
+ * file needs the (0,4,0) floor -- all rules win unlayered at (0,3,0).
+ *
+ * TOKENS: modern reads generic tokens throughout; the `--ds-live-feed-*`
+ * component-scoped hatch (11 tokens, declared and tenant-overridden) is
+ * rustic-only -- see `engines/rustic/skin/live-feed.css`. Two vocabularies, one
+ * per engine; not unified (§0).
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+/* root: only the local boxShadow override moves here -- panelCardStyle's own
+   background/border/radius stay in the untouched shared helper */
+.ds-pattern-live-feed.ds-engine-modern[data-part='root'] {
+  box-shadow: var(--ds-elevation-1);
+}
+
+/* skeleton: shared radius/background across the title bar and row blocks */
+.ds-pattern-live-feed.ds-engine-modern [data-part='skeleton'] {
+  border-radius: var(--ds-radius-sm);
+  background: var(--ds-surface-panel);
+}
+
+/* refresh button */
+.ds-pattern-live-feed.ds-engine-modern [data-part='refresh'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/* new-items banner -- Signal-glow (spec section 5, role 3): reserved for live
+   moments like new real-time items arriving. */
+.ds-pattern-live-feed.ds-engine-modern [data-part='banner'] {
+  background: var(--ds-color-info);
+  color: var(--ds-color-text-on-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+  box-shadow: var(--ds-shadow-glow-primary);
+}
+
+/* banner count badge -- only these two channels are local overrides on top of
+   the untouched pillBadgeSmStyle spread (which carries no background/color) */
+.ds-pattern-live-feed.ds-engine-modern [data-part='badge'] {
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-primary);
+}
+
+/* empty state */
+.ds-pattern-live-feed.ds-engine-modern [data-part='empty'] {
+  color: var(--ds-color-text-secondary);
+}
+
+/* load more */
+.ds-pattern-live-feed.ds-engine-modern [data-part='load-more'] {
+  background: transparent;
+  color: var(--ds-color-text-primary);
+  border-radius: var(--ds-radius-md);
+  border: none;
+}
+
+/**
  * Rustic StepWizard skin (WO-SKIN-06 checkpoint CK-D/F).
  *
  * DELIBERATELY UNLAYERED (P-47): every `@layer rottay-*` sorts before Tailwind's
@@ -33738,6 +34202,476 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 
 .ds-pattern-locale-switcher.ds-engine-rustic [data-part='option'][data-focused='true'] {
   background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));
+}
+
+/**
+ * Rustic CommentThread skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-comment-thread ds-engine-rustic`
+ * + `data-part='root'` (added by the anatomy pre-step -- rustic previously carried
+ * no scope class at all).
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius) wins unlayered at (0,3,0).
+ *
+ * TOKENS: rustic's primary-button text color is `--ds-color-primary-foreground,
+ * #fff`; modern's equivalent is `--ds-color-text-on-primary` -- two real,
+ * independently declared tokens for the same slot, not aliases. Preserved
+ * verbatim, not unified (WO-SKIN-06 CK-F contract §0).
+ *
+ * REACTION PILL: the JS override wrote `background`/`borderColor` as an explicit
+ * `r.active ? value : undefined` pair on TOP of a `...btnStyle` spread -- when
+ * inactive, the `undefined` erases btnStyle's own background/border-color rather
+ * than falling back to them. The inactive rule below therefore omits `background`
+ * entirely (byte-exact: no inline background at rest) and the border color the
+ * inactive state keeps is btnStyle's own neutral-300, not a fallback value.
+ *
+ * INTERACTION: no hover treatment anywhere in this file (matches modern -- neither
+ * engine wired onMouseEnter/Leave for comment-thread).
+ *
+ * FOLLOW-UP CLOSED: the timestamp span and the "(edited)" label span were
+ * initially unstamped (no data-part) and left inline. `data-part='timestamp'`
+ * and `data-part='edited-label'` were added (attribute-only, inert) and their
+ * `color` moved below -- both are raw spans, not `<Text>`, so (0,3,0) is correct
+ * (no Typography engine-skin competitor to out-specify).
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* avatar (CommentNode + composer, both use avatarStyle(32) unmodified) */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-color-neutral-200, #e5e7eb);
+  color: var(--ds-color-text-muted);
+}
+
+/* edit / reply / new-comment textareas share textareaStyle unmodified */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='composer'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-background, #fff);
+  color: var(--ds-color-text);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edit-textarea'][data-part='edit-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-textarea'][data-part='reply-textarea'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='composer'][data-part='composer'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+
+/* Cancel / Reply-cancel: btnStyle unmodified */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-background, #fff);
+  color: var(--ds-color-text);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='cancel'][data-part='cancel'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-cancel'][data-part='reply-cancel'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+
+/* Save / Reply-submit / Comment-submit: primaryBtnStyle (btnStyle's metrics +
+   the primary-color override; the override's borderColor wins over btnStyle's
+   own border color, so the rendered border is 1px solid primary, not neutral-300) */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='save'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='submit'] {
+  border-radius: var(--ds-radius-md, 8px);
+  background: var(--ds-color-primary);
+  color: var(--ds-color-primary-foreground, #fff);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='save'][data-part='save'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply-submit'][data-part='reply-submit'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='submit'][data-part='submit'] {
+  border: 1px solid var(--ds-color-primary);
+}
+
+/* Reply / Edit: linkBtnStyle unmodified */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reply'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edit'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-text-muted);
+}
+
+/* Delete: linkBtnStyle + a fixed error-color override, never toggled */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='delete'] {
+  background: none;
+  border: none;
+  color: var(--ds-color-error, #ef4444);
+}
+
+/* reaction pill: base is btnStyle's border-radius/color only -- background and
+   border-color are explicitly absent at rest (see REACTION PILL note above) */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'] {
+  border-radius: var(--ds-radius-md, 8px);
+  color: var(--ds-color-text);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'][data-part='reaction'] {
+  border: 1px solid var(--ds-color-neutral-300, #d1d5db);
+}
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='reaction'][data-active='true'] {
+  background: var(--ds-color-primary-50, #eff6ff);
+  border-color: var(--ds-color-primary);
+}
+
+/* nested-reply left border line */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='nested-line'][data-part='nested-line'] {
+  border-left: 2px solid var(--ds-color-neutral-200, #e5e7eb);
+}
+
+/* loading text + empty state + timestamp + edited-label share the identical
+   muted color */
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='loading'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='empty'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='timestamp'],
+.ds-pattern-comment-thread.ds-engine-rustic [data-part='edited-label'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Rustic NotificationCenter skin (WO-SKIN-06 CK-F unit F1).
+ *
+ * DELIBERATELY UNLAYERED (P-76): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule cannot paint these elements at all.
+ *
+ * SCOPE ROOT: the root `<div>` carries `ds-pattern-notification-center
+ * ds-engine-rustic` + `data-part='root'`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
+ * Non-border paint (background, color, border-radius, box-shadow) wins unlayered
+ * at (0,3,0).
+ *
+ * TOKENS: rustic's "info" type resolves to `--ds-color-primary`; modern's
+ * resolves to `--ds-color-info` -- a genuine cross-engine disagreement, not just
+ * a mechanism difference. rustic's unread-row tint is the named
+ * `--ds-color-primary-50` scale token; modern's is an ad hoc `color-mix`. Both
+ * preserved verbatim, not unified (WO-SKIN-06 CK-F contract §0).
+ *
+ * INTERACTION: rustic's dismiss button is a static `opacity: 0.5` with NO hover
+ * treatment at all -- unlike modern's imperative brighten-on-hover. This is a
+ * real, pre-existing engine asymmetry; no `:hover` rule is added here to match it.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`. Two hardcoded literals
+ * (not tokens) are transcribed as-is: badgeStyle's `borderRadius: 8` (-> 8px)
+ * and the icon-container-free pill shape it produces.
+ */
+
+/* trigger button: triggerBtnStyle unmodified */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='trigger'] {
+  background: none;
+  color: var(--ds-color-text);
+  border-radius: var(--ds-radius-md, 8px);
+  border: none;
+}
+
+/* unread-count badge on the trigger */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='badge'] {
+  border-radius: 8px;
+  background: var(--ds-color-primary);
+  color: var(--ds-color-text-on-primary, var(--ds-color-text-inverse));
+}
+
+/* dropdown panel */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='panel'] {
+  background: var(--ds-color-bg-elevated, var(--ds-color-bg-primary));
+  border-radius: var(--ds-radius-lg, 12px);
+  box-shadow: var(--ds-shadow-xl);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='panel'][data-part='panel'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* header bottom rule */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));
+}
+
+/* ghost link buttons: Mark all read / Clear all / per-item action -- linkBtnStyle
+   unmodified */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='mark-all-read'],
+.ds-pattern-notification-center.ds-engine-rustic [data-part='clear-all'],
+.ds-pattern-notification-center.ds-engine-rustic [data-part='action'] {
+  background: none;
+  color: var(--ds-color-primary);
+  border: none;
+}
+
+/* dismiss: linkBtnStyle + a fixed muted-color override, never toggled (no
+   hover -- see INTERACTION note above) */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='dismiss'] {
+  background: none;
+  color: var(--ds-color-text-muted);
+  border: none;
+}
+
+/* empty state */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* row bottom rule + unread tint (className-free -- both ride this component's
+   own style object) */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='row'][data-part='row'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='row'][data-unread='true'] {
+  background: var(--ds-color-primary-50, var(--ds-color-bg-muted));
+}
+
+/* type icon glyph color -- 4-way static map keyed on data-type */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='info'] {
+  color: var(--ds-color-primary);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='success'] {
+  color: var(--ds-color-success);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-pattern-notification-center.ds-engine-rustic [data-part='icon'][data-type='error'] {
+  color: var(--ds-color-error);
+}
+
+/* unread title dot -- conditionally rendered, single static value */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='unread-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-primary);
+}
+
+/* message + timestamp share the identical muted color */
+.ds-pattern-notification-center.ds-engine-rustic [data-part='message'],
+.ds-pattern-notification-center.ds-engine-rustic [data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Rustic (Vanilla / CSS-variable) ActivityLog skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-activity-log ds-engine-rustic`
+ * + `data-part='root'`, identical in the loading and loaded branches.
+ *
+ * SPECIFICITY (P-48): root and filter both paint a border COLOR and have no
+ * second contract attribute to spend, so both reach (0,4,0) by repeating their
+ * own `data-part` (two root classes (0,2,0) + `data-part` x2 (0,2,0)). The dot
+ * and badge backgrounds are non-border paint and win unlayered at (0,3,0).
+ *
+ * CLASSIFIER (§3 trap 2): rustic's `getActionColor` returns the resolved
+ * `--ds-color-*` token STRING directly (not a semantic enum like modern's
+ * `classifyAction`) -- e.g. `data-action-category="var(--ds-color-success)"`.
+ * This skin keys on that literal token string; it is a different vocabulary
+ * from modern's `create|update|delete|view|system` on purpose (§0, §3 trap 2 --
+ * the classification LOGIC diverges between engines and is not reconciled by
+ * this migration). The unmatched-action fallback string is transcribed verbatim,
+ * including its own nested fallback.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+/* root: border/background/radius identical across the loading and loaded branches */
+.ds-pattern-activity-log.ds-engine-rustic[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg, 12px);
+  background: var(--ds-color-surface, var(--ds-color-background));
+}
+
+/* loading text (no skeleton in rustic -- plain text row, §ADDENDUM 4) */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='loading'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* filter selects (action-type + user, same style constant) */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='filter'][data-part='filter'] {
+  border-radius: var(--ds-radius-md, 8px);
+  border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));
+  background: var(--ds-color-surface, var(--ds-color-background));
+  color: var(--ds-color-text);
+}
+
+/* empty state */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timeline dot: base radius, then per-token background keyed on the literal
+   getActionColor() string the classifier stamped into data-action-category */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'] {
+  border-radius: 50%;
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-success)"] {
+  background: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-primary)"] {
+  background: var(--ds-color-primary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-error)"] {
+  background: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-secondary)"] {
+  background: var(--ds-color-secondary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='dot'][data-action-category="var(--ds-color-text-secondary, var(--ds-color-text-muted))"] {
+  background: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+/* connecting line */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='line'] {
+  background: var(--ds-color-border-secondary, var(--ds-color-border));
+}
+
+/* avatar (single wrapper div, image or initials both render inside it unpainted) */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-color-surface-secondary, var(--ds-color-bg-secondary));
+  color: var(--ds-color-text-muted);
+}
+
+/* action tag: base radius + on-primary text color for all categories, then
+   per-token background keyed the same way as the dot */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'] {
+  border-radius: var(--ds-radius-sm, 6px);
+  color: var(--ds-color-text-on-primary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-success)"] {
+  background: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-primary)"] {
+  background: var(--ds-color-primary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-error)"] {
+  background: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-secondary)"] {
+  background: var(--ds-color-secondary);
+}
+.ds-pattern-activity-log.ds-engine-rustic [data-part='badge'][data-action-category="var(--ds-color-text-secondary, var(--ds-color-text-muted))"] {
+  background: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+/* entity label */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='entity'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timestamp */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* diff wrapper */
+.ds-pattern-activity-log.ds-engine-rustic [data-part='diff'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Rustic (Vanilla / CSS-variable) LiveFeed skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47), same rationale as the modern skin: a layered
+ * rule loses to Tailwind preflight on layer order whatever its specificity;
+ * unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style`.
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-live-feed ds-engine-rustic`
+ * + `data-part='root'`, identical in the loading-skeleton and loaded branches.
+ *
+ * SPECIFICITY (P-48): root and banner both paint a border COLOR and have no
+ * second contract attribute to spend, so both reach (0,4,0) by repeating their
+ * own `data-part`. refresh/load-more borders are `none` (no color) and are
+ * exempt. Non-border paint wins unlayered at (0,3,0).
+ *
+ * TOKENS: this is the ONE engine of the three that consumes the
+ * `--ds-live-feed-*` component-scoped hatch (11 of 11 tokens, declared in
+ * `foundation/themes/default.css` and overridden per-tenant in the first-party
+ * artifacts) -- modern has no equivalent hatch to preserve (§0). Keep consuming
+ * these names; do not point them at modern's generic tokens.
+ *
+ * KEYFRAMES (§3 trap 1, orchestrator ruling): the local `@keyframes pulse` this
+ * file used to inject (`1 -> 0.4 -> 1`) is NOT a duplicate of the global
+ * `@keyframes pulse` (`1 -> 0.5 -> 1`, `foundation/animations/keyframes.css`) --
+ * the local `<style>` was injected after the global bundle, so the local 0.4 was
+ * the value actually rendering. Renamed `ds-live-feed-pulse`, value carried
+ * verbatim, per the `detail-panel` precedent
+ * (`tests/PatternDetailPanel.real-engines.test.tsx:196`): rename the local copy,
+ * never redefine the global name. `feedPulse` has no global equivalent at all;
+ * renamed `ds-live-feed-feed-pulse`, value carried verbatim. Both `animation`
+ * references in `engines/rustic.tsx` were updated to the new names.
+ *
+ * Values transcribed verbatim from `engines/rustic.tsx`.
+ */
+
+@keyframes ds-live-feed-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .4; }
+}
+
+@keyframes ds-live-feed-feed-pulse {
+  0% { background: var(--ds-live-feed-new-bg, var(--ds-color-info-bg)); }
+  100% { background: transparent; }
+}
+
+/* root: color/background/border/radius identical across both branches */
+.ds-pattern-live-feed.ds-engine-rustic[data-part='root'][data-part='root'] {
+  color: var(--ds-color-neutral-900);
+  background: var(--ds-live-feed-bg, var(--ds-color-bg-elevated));
+  border: 1px solid var(--ds-live-feed-border, var(--ds-color-border));
+  border-radius: var(--ds-radius-lg);
+}
+
+/* refresh button */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='refresh'] {
+  background: none;
+  border: none;
+  color: var(--ds-live-feed-refresh-color, var(--ds-color-text-secondary));
+  border-radius: var(--ds-radius-sm);
+}
+
+/* new-items bar */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='banner'][data-part='banner'] {
+  background: var(--ds-live-feed-new-bg, var(--ds-color-info-bg));
+  border-radius: var(--ds-radius-md);
+  color: var(--ds-live-feed-new-color, var(--ds-color-info));
+  border: 1px solid var(--ds-live-feed-new-border, var(--ds-color-info-border));
+}
+
+/* new-items count badge */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='badge'] {
+  border-radius: var(--ds-radius-full, 9999px);
+  background: var(--ds-live-feed-badge-bg, var(--ds-color-primary));
+  color: var(--ds-live-feed-badge-color, var(--ds-color-text-on-primary));
+}
+
+/* empty state */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='empty'] {
+  color: var(--ds-live-feed-empty-color, var(--ds-color-text-muted));
+}
+
+/* load more */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='load-more'] {
+  background: none;
+  border: none;
+  color: var(--ds-live-feed-load-more-color, var(--ds-color-primary));
+  border-radius: var(--ds-radius-md);
+}
+
+/* skeleton factory (title bar + row blocks) */
+.ds-pattern-live-feed.ds-engine-rustic [data-part='skeleton'] {
+  border-radius: var(--ds-radius-md);
+  background: var(--ds-live-feed-skeleton-bg, var(--ds-color-bg-tertiary));
 }
 
 /**
@@ -37812,6 +38746,309 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
 }
 .ds-data-terminal-stat [data-part='stat-label'][data-part='stat-label'][data-part='stat-label'][data-part='stat-label'] {
   color: var(--ds-color-text-secondary);
+}
+
+/**
+ * Assistant skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/assistant.css. The kit has no engine split
+ * and no single root: eight independently-exported sub-components
+ * (AssistantStatusBadge, StreamingText, TypingIndicator, ToolCallCard,
+ * AssistantStatusIndicator, PreviewDiffCard, ConfirmActionCard, MessageBubble),
+ * each its own scope island carrying `ds-assistant-<export>` on its own root
+ * plus `data-part` on every painted descendant. AssistantStatusBadge and
+ * ConfirmActionCard own no paint of their own (badge tone rides Tag's variant
+ * prop; ConfirmActionCard's controls ride Button's variant prop) and have no
+ * rules here.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's base layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * CARD-ROOTED EXPORTS (P-79 precision): ToolCallCard, PreviewDiffCard, and
+ * ConfirmActionCard render a `<Card>` whose root always carries the FORCED
+ * `data-part='root'` Card sets internally -- a custom part passed in never
+ * lands there, only `className` merges. Their scope class rides `className`
+ * (works); none of the three paints its own Card root, so no rule here
+ * targets `[data-part='root']` on these exports. All their painted elements
+ * are inner Box/Text/Stack descendants that forward the part passed to them.
+ *
+ * SPECIFICITY (P-48), single scope class per export (0,1,0):
+ *   - NON-BORDER paint on a Box (background, border-radius) reaches (0,3,0)
+ *     with the class + the descendant `data-part` repeated once (class(1) +
+ *     part(2) = 3), or class + part + a state attribute (class(1) + part(1)
+ *     + attr(1) = 3) when a state selector is already in play. No Typography
+ *     competitor exists for Box paint.
+ *   - `color` on a composed `Text` must EXCEED the Typography engine skins'
+ *     own `[data-color='default']` rule, which both modern and rustic ship at
+ *     (0,4,0) (`.rottay-typography.rottay-typography--<engine>
+ *     .rottay-typography--<engine>[data-color='default']`) -- every Text here
+ *     renders with an unset `color` prop, so it always carries
+ *     `data-color='default'` and always competes. Reaching (0,5,0) needs
+ *     class + descendant part repeated to four (class(1) + part(4) = 5), or
+ *     class + part(3) + a state attribute (class(1) + part(3) + attr(1) = 5).
+ *     State-keyed overrides on the SAME channel as an unqualified base rule
+ *     are bumped one unit further (part repeated one more time) so the
+ *     override strictly exceeds the base instead of tying on source order.
+ *   - A BORDER COLOR must reach (0,4,0): class + descendant part repeated to
+ *     three (class(1) + part(3) = 4). PreviewDiffCard's row divider is the
+ *     one border-color site in this file.
+ *
+ * STATE: `data-status` (AssistantStatusIndicator's dot, the agent-activity
+ * 5-way), `data-tone` (ToolCallCard's terminal duration text, the tool-status
+ * 4-way), `data-change` + `data-diff-side` together (PreviewDiffCard's
+ * before/after cells -- the SAME `change` value maps to a DIFFERENT color per
+ * side, so both attributes are required to disambiguate; see the divergent
+ * before/after mapping below).
+ *
+ * PreviewDiffCard's after-cell `unchanged` case sets no inline `color` in the
+ * TSX (falls through to the Typography default) and correspondingly has no
+ * rule here -- adding one would change, not preserve, the rendered color.
+ *
+ * Values transcribed verbatim from index.tsx's `agentStatusVisual`,
+ * `toneToColorVar` (now removed -- both were pure paint-value lookups
+ * superseded by these state-keyed rules; `agentStatusVisual`'s `live` and
+ * `defaultLabel` fields remain in the TSX, only unused for paint) and the
+ * `beforeColor`/`afterColor` ternaries in `PreviewDiffCard`. No hardcoded
+ * literals in this file -- every value is a `--ds-color-*` token.
+ */
+
+/* ============================================================================
+ * Keyframes -- already `ds-`-namespaced and fleet-unique in the TSX, moved
+ * here verbatim. `ds-assistant-dot` is shared by TypingIndicator's three dots
+ * and AssistantStatusIndicator's single dot; one declaration covers both.
+ * ==========================================================================*/
+
+@keyframes ds-assistant-caret {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes ds-assistant-dot {
+  0%, 80%, 100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+/* ============================================================================
+ * StreamingText -- caret.
+ * ==========================================================================*/
+
+.ds-assistant-streaming-text [data-part='caret'][data-part='caret'][data-part='caret'][data-part='caret'] {
+  color: var(--ds-color-primary-500);
+}
+
+/* ============================================================================
+ * TypingIndicator -- three bouncing dots (Box, no Typography competition).
+ * ==========================================================================*/
+
+.ds-assistant-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-primary-500);
+}
+
+/* ============================================================================
+ * ToolCallCard -- terminal receipt duration text, tinted by tool-status tone.
+ * `data-tone` reaches ToolCallCard only via `toolStatusToTone`, which never
+ * returns 'neutral'; the unqualified base rule is the function's original
+ * default branch, kept for completeness though unreachable today.
+ * ==========================================================================*/
+
+.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='success'] {
+  color: var(--ds-color-success);
+}
+.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='warning'] {
+  color: var(--ds-color-warning);
+}
+.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='danger'] {
+  color: var(--ds-color-error);
+}
+.ds-assistant-tool-call-card [data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-part='tool-card'][data-tone='info'] {
+  color: var(--ds-color-info);
+}
+
+/* ============================================================================
+ * AssistantStatusIndicator -- agent-activity dot (Box, no Typography
+ * competition). `data-status` carries the raw prop value, all five members
+ * of the AssistantAgentStatus union covered explicitly (no unqualified
+ * fallback needed).
+ * ==========================================================================*/
+
+.ds-assistant-status-indicator [data-part='dot'][data-part='dot'] {
+  border-radius: 50%;
+}
+.ds-assistant-status-indicator [data-part='dot'][data-status='idle'] {
+  background: var(--ds-color-text-muted);
+}
+.ds-assistant-status-indicator [data-part='dot'][data-status='thinking'] {
+  background: var(--ds-color-info);
+}
+.ds-assistant-status-indicator [data-part='dot'][data-status='streaming'] {
+  background: var(--ds-color-primary-500);
+}
+.ds-assistant-status-indicator [data-part='dot'][data-status='acting'] {
+  background: var(--ds-color-warning);
+}
+.ds-assistant-status-indicator [data-part='dot'][data-status='error'] {
+  background: var(--ds-color-error);
+}
+
+/* ============================================================================
+ * PreviewDiffCard -- row divider (border-color, needs (0,4,0)) and the
+ * before/after value cells (Text, needs (0,5,0), keyed on BOTH data-change
+ * and data-diff-side since the same change maps to a different color per
+ * side).
+ * ==========================================================================*/
+
+.ds-assistant-preview-diff-card [data-part='divider'][data-part='divider'][data-part='divider'] {
+  border-top: 1px solid var(--ds-color-border);
+}
+
+.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'] {
+  color: var(--ds-color-text-muted);
+}
+.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-part='preview-cell'][data-diff-side='before'][data-change='removed'] {
+  color: var(--ds-color-error);
+}
+
+.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='added'] {
+  color: var(--ds-color-success);
+}
+.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='updated'] {
+  color: var(--ds-color-success);
+}
+.ds-assistant-preview-diff-card [data-part='preview-cell'][data-part='preview-cell'][data-diff-side='after'][data-change='removed'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* ============================================================================
+ * MessageBubble -- footer timestamp.
+ * ==========================================================================*/
+
+.ds-assistant-message-bubble [data-part='timestamp'][data-part='timestamp'][data-part='timestamp'][data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}
+
+/**
+ * Presence skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/presence.css. Three independently-exported
+ * sub-components (PresenceBar, PresenceTypingIndicator, LiveCursor), each its
+ * own scope island carrying `ds-presence-<export>` on its own root plus
+ * `data-part` on every painted descendant.
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before
+ * Tailwind's base layer, so a layered rule loses to preflight regardless of
+ * specificity. Unlayered outranks preflight and still yields to a caller's
+ * inline `style`.
+ *
+ * RUNTIME STAYS INLINE, no exemption entry needed: PresenceBar's avatar ring
+ * `border` and avatar-initials `color` (both `ringColor = user.color ||
+ * DEFAULT_COLOR`), and LiveCursor's `cursor-badge` `background` (same shape
+ * via `cursorColor`) are genuine per-user caller data and are not represented
+ * here at all -- they remain exactly as written in index.tsx. LiveCursor's
+ * SVG `fill={cursorColor}` (per-user, a JSX presentation attribute, not a
+ * style key) and `stroke="var(--ds-color-surface, #fff)"` (static but also a
+ * JSX attribute) stay inline for the same reason; moving the static `stroke`
+ * into a CSS `stroke:` rule would be a channel change, not a byte-exact move.
+ *
+ * RUNTIME HATCH: `--ds-presence-badge-ring` carries the overflow badge's ring
+ * WIDTH, which tracks the `size` prop (`sm`: 2px, `md`: 2.5px) and has no
+ * stamped attribute to key CSS off of; the width is set inline (uncounted
+ * quoted custom-property key) and consumed here alongside the static
+ * style/color that make up the rest of the border-color site.
+ *
+ * SPECIFICITY (P-48), single scope class per export (0,1,0):
+ *   - NON-BORDER paint on a Box (background, border-radius) reaches (0,3,0)
+ *     with the class + the descendant `data-part` repeated once (class(1) +
+ *     part(2) = 3). The avatar's `<img>` fallback has no `data-part` of its
+ *     own (a single, unconditional child needs none); its border-radius rule
+ *     buys the same three units from the class + the parent `[data-part=
+ *     'avatar']` repeated, plus the `img` element selector (which adds to the
+ *     c-column only, not required for the floor but free).
+ *   - `color` on a composed `Text` (`overflow-badge-count`, `label`) must
+ *     EXCEED the Typography engine skins' own `[data-color='default']` rule,
+ *     which both modern and rustic ship at (0,4,0). Both Texts here render
+ *     with an unset `color` prop, so they always carry `data-color='default'`
+ *     and always compete. Reaching (0,5,0) needs class + part repeated to
+ *     four (class(1) + part(4) = 5).
+ *   - A BORDER COLOR must reach (0,4,0): class + part repeated to three
+ *     (class(1) + part(3) = 4). The overflow badge's ring is the one
+ *     border-color site in this file.
+ *
+ * Two pre-existing "no hardcoded colors" defects, preserved byte-exact per
+ * team flag (not fixed by this migration): LiveCursor's `cursor-badge`
+ * `color: #fff` and `box-shadow: 0 1px 3px rgba(0,0,0,0.15)` are literal
+ * values, not `--ds-*` tokens, sitting beside the properly-tokenized
+ * `cursorColor`/`DEFAULT_COLOR` in the same component.
+ */
+
+@keyframes ds-presence-dot {
+  0%, 80%, 100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+}
+
+/* ============================================================================
+ * PresenceBar -- avatar (ring stays inline, RUNTIME), fallback initials
+ * (RUNTIME, no rule here), overflow badge.
+ * ==========================================================================*/
+
+.ds-presence-bar [data-part='avatar'][data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-color-surface, #fff);
+}
+.ds-presence-bar [data-part='avatar'][data-part='avatar'] img {
+  border-radius: 50%;
+}
+
+.ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'] {
+  border-radius: 50%;
+  background: var(--ds-color-surface-secondary, var(--ds-color-bg-secondary, #f5f5f5));
+}
+.ds-presence-bar [data-part='overflow-badge'][data-part='overflow-badge'][data-part='overflow-badge'] {
+  border: var(--ds-presence-badge-ring) solid var(--ds-color-border, #d9d9d9);
+}
+.ds-presence-bar [data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'][data-part='overflow-badge-count'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+/* ============================================================================
+ * PresenceTypingIndicator -- three bouncing dots (Box) + label (Text).
+ * ==========================================================================*/
+
+.ds-presence-typing-indicator [data-part='typing-dot'][data-part='typing-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+.ds-presence-typing-indicator [data-part='label'][data-part='label'][data-part='label'][data-part='label'] {
+  color: var(--ds-color-text-secondary, var(--ds-color-text-muted));
+}
+
+/* ============================================================================
+ * LiveCursor -- name badge (background stays inline, RUNTIME).
+ * ==========================================================================*/
+
+.ds-presence-live-cursor [data-part='cursor-badge'][data-part='cursor-badge'] {
+  color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 

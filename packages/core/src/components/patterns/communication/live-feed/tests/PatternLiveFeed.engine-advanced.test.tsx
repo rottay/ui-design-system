@@ -49,7 +49,13 @@ describe('PatternLiveFeed advanced engine coverage', () => {
       } else if (engine === 'modern') {
         expect(container.querySelector('.animate-pulse')).toBeTruthy();
       } else {
-        expect(container.querySelector('style')).toBeTruthy();
+        // Rustic renders its loading skeleton as [data-part='skeleton'] nodes.
+        // WO-SKIN-06 CK-F moved the rustic engine's inline `<style>` keyframes into
+        // an unlayered skin, so the old `querySelector('style')` assertion (which
+        // only ever proved the scaffolding tag existed, not that the skeleton
+        // rendered) no longer holds — assert the actual skeleton element, matching
+        // the classic (.ant-skeleton) and modern (.animate-pulse) branches above.
+        expect(container.querySelector('[data-part="skeleton"]')).toBeTruthy();
       }
 
       rerender(

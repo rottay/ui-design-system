@@ -164,15 +164,15 @@ describe('assistant patterns', () => {
   });
 
   it('streams a shimmer/caret while live and stops dead on completion (rendered alone)', async () => {
-    // Rendered without a TypingIndicator so the caret keyframes must be owned by
-    // the streaming path itself; a co-mounting dependency would fail this.
+    // Rendered without a TypingIndicator so the caret must render on the streaming
+    // path itself; a co-mounting dependency would fail this. WO-SKIN-06 CK-F moved the
+    // caret's `ds-assistant-caret` keyframe into an unlayered skin (no longer injected
+    // per-mount), so assert the caret's anatomy ([data-part='caret']) — the real
+    // evidence it rendered — rather than the contents of an injected <style> tag.
     const streamingView = renderSurface(<StreamingText text="Generating summary" streaming />);
 
     expect(await screen.findByText('|')).toBeInTheDocument();
-    const injectedStyles = Array.from(document.querySelectorAll('style'))
-      .map((node) => node.textContent ?? '')
-      .join('\n');
-    expect(injectedStyles).toContain('ds-assistant-caret');
+    expect(document.querySelector('[data-part="caret"]')).toBeTruthy();
 
     streamingView.unmount();
 

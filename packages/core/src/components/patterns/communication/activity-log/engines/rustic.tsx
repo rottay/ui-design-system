@@ -54,19 +54,12 @@ function formatTimestamp(ts: string): string {
 // Extracted as module-level objects to avoid re-creating on every render.
 
 const containerStyle: CSSProperties = {
-  border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-  borderRadius: 'var(--ds-radius-lg, 12px)',
-  background: 'var(--ds-color-surface, var(--ds-color-background))',
   padding: 16,
 };
 
 const selectStyle: CSSProperties = {
   padding: '4px 8px',
   fontSize: 'var(--ds-font-size-sm, 14px)',
-  borderRadius: 'var(--ds-radius-md, 8px)',
-  border: '1px solid var(--ds-color-border-primary, var(--ds-color-border))',
-  background: 'var(--ds-color-surface, var(--ds-color-background))',
-  color: 'var(--ds-color-text)',
 };
 
 /**
@@ -95,27 +88,24 @@ export default function RusticActivityLog(props: ActivityLogProps) {
   if (loading) {
     return (
       <div data-part="root" className={`ds-pattern-activity-log ds-engine-rustic ${className ?? ''}`} style={{ ...containerStyle, textAlign: 'center', padding: 48, ...style }}>
-        <span data-part="loading" style={{ color: 'var(--ds-color-text-muted)' }}>Loading...</span>
+        <span data-part="loading">Loading...</span>
       </div>
     );
   }
 
   // Timeline dot -- colored circle that visually represents the action type.
   // marginTop: 6 aligns the dot center with the first line of text.
-  const dotStyle = (color: string): CSSProperties => ({
+  const dotStyle: CSSProperties = {
     width: 10,
     height: 10,
-    borderRadius: '50%',
-    background: color,
     flexShrink: 0,
     marginTop: 6,
-  });
+  };
 
   // Vertical connecting line between timeline dots. marginLeft: 4 centers
   // the 2px line under the 10px dot.
   const lineStyle: CSSProperties = {
     width: 2,
-    background: 'var(--ds-color-border-secondary, var(--ds-color-border))',
     flexShrink: 0,
     alignSelf: 'stretch',
     marginLeft: 4,
@@ -124,28 +114,22 @@ export default function RusticActivityLog(props: ActivityLogProps) {
   const avatarStyle = (size: number): CSSProperties => ({
     width: size,
     height: size,
-    borderRadius: '50%',
-    background: 'var(--ds-color-surface-secondary, var(--ds-color-bg-secondary))',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     fontSize: size * 0.45,
     fontWeight: 600,
-    color: 'var(--ds-color-text-muted)',
     overflow: 'hidden',
     flexShrink: 0,
   });
 
   // Inline action tag: filled background with on-primary text color.
-  const tagStyle = (color: string): CSSProperties => ({
+  const tagStyle: CSSProperties = {
     display: 'inline-block',
     padding: '2px 8px',
-    borderRadius: 'var(--ds-radius-sm, 6px)',
     fontSize: 'var(--ds-font-size-xs, 12px)',
     fontWeight: 500,
-    background: color,
-    color: 'var(--ds-color-text-on-primary)',
-  });
+  };
 
   return (
     <div data-part="root" className={`ds-pattern-activity-log ds-engine-rustic ${className ?? ''}`} style={{ ...containerStyle, ...style }}>
@@ -184,7 +168,7 @@ export default function RusticActivityLog(props: ActivityLogProps) {
       )}
 
       {activities.length === 0 ? (
-        <div data-part="empty" style={{ textAlign: 'center', padding: 48, color: 'var(--ds-color-text-muted)' }}>
+        <div data-part="empty" style={{ textAlign: 'center', padding: 48 }}>
           {emptyMessage}
         </div>
       ) : (
@@ -195,7 +179,7 @@ export default function RusticActivityLog(props: ActivityLogProps) {
               <div key={activity.id} style={{ display: 'flex', gap: 12 }}>
                 {/* Timeline line + dot */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: 10 }}>
-                  <div data-part="dot" data-action-category={color} style={dotStyle(color)} />
+                  <div data-part="dot" data-action-category={color} style={dotStyle} />
                   {index < activities.length - 1 && <div data-part="line" style={{ ...lineStyle, flex: 1 }} />}
                 </div>
 
@@ -221,19 +205,19 @@ export default function RusticActivityLog(props: ActivityLogProps) {
                         <span data-part="user" style={{ fontWeight: 500, fontSize: 'var(--ds-font-size-sm, 14px)' }}>
                           {activity.user.name}
                         </span>
-                        <span data-part="badge" data-action-category={color} style={tagStyle(color)}>{activity.action}</span>
+                        <span data-part="badge" data-action-category={color} style={tagStyle}>{activity.action}</span>
                         {activity.entityType && (
-                          <span data-part="entity" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+                          <span data-part="entity" style={{ fontSize: 'var(--ds-font-size-xs, 12px)' }}>
                             on {activity.entityType}
                             {activity.entityId ? ` #${activity.entityId}` : ''}
                           </span>
                         )}
                       </div>
-                      <div data-part="timestamp" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)', marginTop: 4, marginLeft: 32 }}>
+                      <div data-part="timestamp" style={{ fontSize: 'var(--ds-font-size-xs, 12px)', marginTop: 4, marginLeft: 32 }}>
                         {formatTimestamp(activity.timestamp)}
                       </div>
                       {activity.diff && (
-                        <div data-part="diff" style={{ marginTop: 8, marginLeft: 32, fontSize: 'var(--ds-font-size-xs, 12px)', color: 'var(--ds-color-text-muted)' }}>
+                        <div data-part="diff" style={{ marginTop: 8, marginLeft: 32, fontSize: 'var(--ds-font-size-xs, 12px)' }}>
                           {Object.entries(activity.diff).map(([field, { from, to }]) => (
                             <div key={field}>
                               <strong>{field}:</strong>{' '}

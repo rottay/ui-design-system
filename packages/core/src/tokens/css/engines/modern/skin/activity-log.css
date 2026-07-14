@@ -1,0 +1,169 @@
+/**
+ * Modern ActivityLog skin (WO-SKIN-06 CK-F).
+ *
+ * DELIBERATELY UNLAYERED (P-47): every `rottay-*` layer sorts before Tailwind's
+ * `base` layer, so a layered rule loses to preflight regardless of specificity.
+ * Unlayered outranks preflight + DaisyUI and still yields to a caller's inline
+ * `style` (the root forwards the caller's `style`/`className`).
+ *
+ * SCOPE ROOT: the outer `<div>` carries `ds-pattern-activity-log ds-engine-modern`
+ * + `data-part='root'`, identical in both the loading and loaded branches; every
+ * painted element is a descendant with its own `data-part`.
+ *
+ * SPECIFICITY (P-48): each tenant ships an unlayered
+ * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
+ * `border-color` on every element. A rule that paints a border COLOR must reach
+ * (0,4,0). The timeline dot's border is the only border-color site here, and it
+ * already carries a second contract attribute -- `data-action-category` -- so the
+ * floor is bought from the two root classes (0,2,0) + `data-part` (0,1,0) +
+ * `data-action-category` (0,1,0), no repeat needed. Non-border paint wins
+ * unlayered at (0,3,0).
+ *
+ * CLASSIFIER (§3 trap 2): `data-action-category` holds modern's OWN 5-way
+ * `classifyAction` result (create/update/delete/view/system). Rustic's classifier
+ * is a different if-chain with different buckets and no `system` catch-all -- the
+ * two engines' skins are independent recipes, not a shared vocabulary; see
+ * `engines/rustic/skin/activity-log.css` for rustic's (differently-keyed) values.
+ *
+ * AVATAR: the `<img>` and fallback `<span>` both carry `data-part='avatar'`, but
+ * only the span paints a background/color (the img shows the photo). Selectors
+ * are split by tag, not by a new data-part, to keep the img free of a background
+ * that never painted before.
+ *
+ * SKELETON: the dot skeleton and the two text-line skeletons share
+ * `data-part='skeleton'` but the dot overrides its border-radius to a circle; that
+ * one divergent channel stays inline (an inline style always outranks this
+ * external rule) while the shared background/background-size/radius move here.
+ *
+ * Values transcribed verbatim from `engines/modern.tsx`.
+ */
+
+@keyframes ds-activity-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* root: identical background/shadow/radius in the loading and loaded branches */
+.ds-pattern-activity-log.ds-engine-modern[data-part='root'] {
+  background: var(--ds-surface-card);
+  box-shadow: var(--ds-elevation-1);
+  border-radius: var(--ds-radius-lg);
+}
+
+/* diff container */
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff'] {
+  background: var(--ds-surface-inset);
+  border-radius: var(--ds-radius-md);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-row'] {
+  color: var(--ds-color-text-secondary);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='label'],
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='to'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='from'],
+.ds-pattern-activity-log.ds-engine-modern [data-part='diff-cell'][data-diff-role='arrow'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* avatar: split by tag -- the img never painted a background/color, only radius */
+.ds-pattern-activity-log.ds-engine-modern img[data-part='avatar'] {
+  border-radius: 50%;
+}
+.ds-pattern-activity-log.ds-engine-modern span[data-part='avatar'] {
+  border-radius: 50%;
+  background: var(--ds-surface-panel);
+  color: var(--ds-color-text-secondary);
+}
+
+/* skeleton: shared shimmer + default (line) radius; the dot's 50% override stays
+   inline on the element (inline wins over this rule, no selector needed here) */
+.ds-pattern-activity-log.ds-engine-modern [data-part='skeleton'] {
+  background: linear-gradient(90deg, var(--ds-surface-panel) 25%, var(--ds-surface-inset) 50%, var(--ds-surface-panel) 75%);
+  background-size: 200% 100%;
+  border-radius: var(--ds-radius-sm);
+}
+
+/* empty state */
+.ds-pattern-activity-log.ds-engine-modern [data-part='empty'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timeline dot: base radius for all categories, then the border-color-bearing
+   background/border/color per classifyAction category (color-mix percentages
+   preserved verbatim -- 15% for the dot ring, distinct from the badge's 12%) */
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'] {
+  border-radius: 50%;
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='create'] {
+  background: color-mix(in srgb, var(--ds-color-success) 15%, transparent);
+  border: 2px solid var(--ds-color-success);
+  color: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='update'] {
+  background: color-mix(in srgb, var(--ds-color-info) 15%, transparent);
+  border: 2px solid var(--ds-color-info);
+  color: var(--ds-color-info);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='delete'] {
+  background: color-mix(in srgb, var(--ds-color-error) 15%, transparent);
+  border: 2px solid var(--ds-color-error);
+  color: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='view'] {
+  background: color-mix(in srgb, var(--ds-color-text-muted) 15%, transparent);
+  border: 2px solid var(--ds-color-text-muted);
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='dot'][data-action-category='system'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 15%, transparent);
+  border: 2px solid var(--ds-color-warning);
+  color: var(--ds-color-warning);
+}
+
+/* connecting line */
+.ds-pattern-activity-log.ds-engine-modern [data-part='line'] {
+  background: var(--ds-color-border);
+}
+
+/* actor name */
+.ds-pattern-activity-log.ds-engine-modern [data-part='user'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* action badge: base radius for all categories (12% color-mix, distinct from the
+   dot's 15%), then per-category background + text color */
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'] {
+  border-radius: var(--ds-radius-sm);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='create'] {
+  background: color-mix(in srgb, var(--ds-color-success) 12%, transparent);
+  color: var(--ds-color-success);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='update'] {
+  background: color-mix(in srgb, var(--ds-color-info) 12%, transparent);
+  color: var(--ds-color-info);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='delete'] {
+  background: color-mix(in srgb, var(--ds-color-error) 12%, transparent);
+  color: var(--ds-color-error);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='view'] {
+  background: color-mix(in srgb, var(--ds-color-text-muted) 12%, transparent);
+  color: var(--ds-color-text-muted);
+}
+.ds-pattern-activity-log.ds-engine-modern [data-part='badge'][data-action-category='system'] {
+  background: color-mix(in srgb, var(--ds-color-warning) 12%, transparent);
+  color: var(--ds-color-warning);
+}
+
+/* entity label */
+.ds-pattern-activity-log.ds-engine-modern [data-part='entity'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* timestamp */
+.ds-pattern-activity-log.ds-engine-modern [data-part='timestamp'] {
+  color: var(--ds-color-text-muted);
+}
