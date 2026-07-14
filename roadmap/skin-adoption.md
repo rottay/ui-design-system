@@ -88,9 +88,9 @@ SET PER COMPONENT; unification is a separate design pass with its own baselines.
 | **CK-C** | workspace chrome | 466 | CERTIFIED byte-exact (`f0046708`) — 12 skins; 458/466 counted sites moved, 8 deliberate P-88/shared-token residuals |
 | **CK-H2** | misc | 216 | CERTIFIED byte-exact (`c229859c`) — 9 skins; 213/216 counted sites moved, 3 deliberate caller-precedence residuals |
 | **CK-I** | long tail (surfaces) | 397 | CERTIFIED byte-exact (`8a5afeec`) — 43 files; forms excluded (already CK-D); OAuth hidden channel recovered by addendum |
-| Recovery | hidden inline/embedded CSS + orphan channels | 130 + 195 + addenda | IN PROGRESS — Presence/OAuth/Loading certified; 130 newly visible inline sites need adjudication and 195 static embedded declarations in 23 files remain |
-| CK-H1 | tenant/branding previews | 235 current | PENDING — 190 static sites migrate; exact final inline floor 45 |
-| CK-E | visualization | 476 instrumented | PENDING — includes inline + runtime-SVG channels and visualization-specific runtime floors |
+| Recovery | hidden inline/embedded CSS + orphan channels | 130 + 195 + addenda | CERTIFIED — inline 130 reconciled as 96 false positives + 14 static migrations + 20 exact runtime floors; embedded CSS 202 → 7 with 195 declarations moved; core/Showroom builds, audit, focused suites and 99-case visual matrix ×2 green |
+| CK-H1 | tenant/branding previews | 235 current | IN PROGRESS — inert anatomy/pre-step certified at unchanged `70/75/54/36`, production baselines 8/8 ×2; next migration moves 190 static sites to exact final inline floor 45 |
+| CK-E | visualization | 478 gate sites | PENDING — re-audited as 299 inline + 179 runtime SVG; Stage-1 target 367 migrations, final exact floor 111, runtime unclassified 2 → 0 |
 
 **The pipeline that works** (three migrations in parallel is the unlock): inventory → contract
 (orchestrator) → **inert pre-step** (anatomy + torture section + spec + contract test; baselines
@@ -101,11 +101,13 @@ and `skins.unwired` fails the build if it is forgotten) → certify.
 **Proving a pre-step is inert is mechanical, not a judgement call**: re-run the paint counter against
 a stashed tree and diff. Byte-identical counts ⇒ zero paint moved. Do not eyeball a diff.
 
-**Exemptions are executable and channel-specific** (`roadmap/skin-exemptions.json`: 32 entries;
-`inlineFloor=102`, `runtimeSvgFloor=11`, `embeddedCssFloor=7`). The gate enforces each floor per
+**Exemptions are executable and channel-specific** (`roadmap/skin-exemptions.json`: 37 entries
+across 36 files; `inlineFloor=122`, `runtimeSvgFloor=15`, `embeddedCssFloor=7`). The gate enforces each floor per
 file and per channel: runtime-authored paint cannot be moved into static CSS, SVG paint cannot
 substitute for an inline floor, and the one bounded embedded-CSS contract cannot absorb debt from
-another file. The original glob loophole was removed on 2026-07-13.
+another file. The original glob loophole was removed on 2026-07-13. CK-E's re-audited 61-site
+runtime-SVG floor is not yet registered; its contract must add the missing 56 exact sites before
+paint migration begins.
 
 ### WO-SKIN-07 Skin-adoption program certification + release
 - Full core suite (respect the standing failure ledger), full visual suite, `--check`, docs

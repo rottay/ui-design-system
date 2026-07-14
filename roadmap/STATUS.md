@@ -17,7 +17,7 @@
 
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
-| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 16:57 — Presence, OAuthTransition y LoadingOverlay addenda certificados; censos fail-closed de inline, runtime SVG y embedded CSS integrados a CI. Deuda honesta de recuperación: 130 paints inline ocultos + 195 paints embedded CSS; siguiente paso: migración/adjudicación masiva antes de CK-H1 y CK-E. |
+| WO-SKIN-06 | Skin adoption: patterns + structures remainder | ds-agent | 2026-07-14 | 2026-07-14 18:22 — Recovery CERTIFIED: hidden inline 130 reconciled (96 counter false positives, 14 static migrations, 20 exact runtime floors); embedded CSS 202->7 (195 declarations moved). Fail-closed counter P2 families closed; engine audit green at fleet 634/embedded 7; 78 Node + 90 Vitest assertions; core and Showroom production builds green; affected 99-case visual matrix passed twice. CK-H1 inert pre-step also certified at unchanged 70/75/54/36 with 8 visual cases passed twice. CK-E re-audited at 478 gate sites (299 inline + 179 runtime SVG). Next: migrate CK-H1 190 sites, then CK-E 367 sites. |
 
 ## Next up (todo, dependencies satisfied)
 
