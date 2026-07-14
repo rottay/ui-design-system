@@ -23,6 +23,21 @@ export const ARC09_PAINT_KEY_RE = new RegExp(
 export const ARC09_PAINT_EXEMPT = new Set(["borderCollapse", "borderSpacing"]);
 
 /**
+ * The same paint names in ES6 SHORTHAND position: `style={{ color }}`, or a bare
+ * `color,` inside a style object. The colon-anchored regex above cannot see these,
+ * so a file could report ZERO inline paint while still painting inline — a gate
+ * that certifies a false zero is worse than no gate. Found in the wild at
+ * structures/dashboard/stats-header (WO-SKIN-06 CK-A inventory).
+ *
+ * Deliberately NARROW: only counted inside a `style` object. A bare `{ color }`
+ * elsewhere is far more often a DESTRUCTURING pattern (`const { color } = props`)
+ * than paint, and counting those would flood the ratchet with false positives.
+ */
+export const ARC09_PAINT_SHORTHAND_RE = new RegExp(
+  ARC09_PAINT_KEY_RE.source.replace(/\\s\*:$/, "") + "\\s*(?=[,}])",
+);
+
+/**
  * Count inline paint in a TSX source: paint-named object-literal keys AND
  * imperative `el.style.<paint> = …` mutations.
  *
@@ -61,6 +76,11 @@ export function countArc09PaintInFile(text) {
   const typeBodyDepths = [];
   const inTypeBody = () => typeBodyDepths.length > 0;
   let pendingTypeBody = false;
+  // Stack depths at which a STYLE object opened (`style={{ … }}`, `style: { … }`).
+  // ES6 shorthand paint (`{ color }`) is only counted inside one -- see
+  // ARC09_PAINT_SHORTHAND_RE's doc for why the narrow scope is deliberate.
+  const styleObjDepths = [];
+  const inStyleObj = () => styleObjDepths.length > 0;
   let i = 0;
   while (i < n) {
     const c = text[i];
@@ -126,6 +146,13 @@ export function countArc09PaintInFile(text) {
         typeBodyDepths.push(stack.length);
         pendingTypeBody = false;
       }
+      if (c === "{") {
+        // `style={{`, `style={`, `style: {` -- and any object nested inside one.
+        const back = text.slice(Math.max(0, i - 24), i);
+        if (/\bstyle\s*(=\s*\{?|:)\s*$/.test(back) || inStyleObj()) {
+          styleObjDepths.push(stack.length);
+        }
+      }
       stack.push(c);
       i++;
       continue;
@@ -141,6 +168,9 @@ export function countArc09PaintInFile(text) {
         stack.pop();
         if (typeBodyDepths.length > 0 && typeBodyDepths[typeBodyDepths.length - 1] === stack.length) {
           typeBodyDepths.pop();
+        }
+        if (styleObjDepths.length > 0 && styleObjDepths[styleObjDepths.length - 1] === stack.length) {
+          styleObjDepths.pop();
         }
       }
       i++;
@@ -180,8 +210,22 @@ export function countArc09PaintInFile(text) {
     // a paint key is an object-literal key (innermost bracket is `{`) starting
     // at an identifier boundary.
     if (topIs("{") && !inTypeBody() && /[A-Za-z]/.test(c) && (i === 0 || !/[A-Za-z0-9_$]/.test(text[i - 1]))) {
-      const m = ARC09_PAINT_KEY_RE.exec(text.slice(i, i + 48));
+      const ahead = text.slice(i, i + 48);
+      const m = ARC09_PAINT_KEY_RE.exec(ahead);
       if (m && !ARC09_PAINT_EXEMPT.has(m[1])) count += 1;
+      else if (inStyleObj()) {
+        // A shorthand KEY is preceded (skipping whitespace) by `{` or `,` and by
+        // nothing else. Without this, the `color` in `background: env.color` reads
+        // as a shorthand key and the counter inflates -- a gate that over-counts is
+        // as useless as one that under-counts.
+        let j = i - 1;
+        while (j >= 0 && /\s/.test(text[j])) j -= 1;
+        const atKeyPosition = j >= 0 && (text[j] === "{" || text[j] === ",");
+        if (atKeyPosition) {
+          const sh = ARC09_PAINT_SHORTHAND_RE.exec(ahead);
+          if (sh && !ARC09_PAINT_EXEMPT.has(sh[1])) count += 1;
+        }
+      }
     }
     i++;
   }
