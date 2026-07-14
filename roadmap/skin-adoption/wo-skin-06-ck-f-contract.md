@@ -5,9 +5,53 @@ Reads on top of `wo-skin-06-ck-f-inventory.md` (the site-by-site truth) and
 exists; this contract is normative for *how* it moves. Where they disagree, the
 inventory's site table wins on facts and this contract wins on method.
 
-Scope: `packages/core/src/components/patterns/communication/` — **272 counted
-sites** across six components. `classic.tsx` (AntD wrapper, 0 counted sites in
-every engine-split component) is **out of scope** and must not be touched.
+Scope: `packages/core/src/components/patterns/communication/` — **271 counted
+sites** (was 272; the counter's return-type-annotation blind spot at assistant:157
+was fixed in `inline-paint-counter.mjs` between the inventory and the pre-step, so
+assistant's floor is 15, not 16 — a counter fix, not lost paint) across six
+components. `classic.tsx` (AntD wrapper, 0 counted sites in every engine-split
+component) is **out of scope** and must not be touched.
+
+---
+
+## ORCHESTRATOR ADDENDUM — CK-F pre-step findings (drilled + committed `8ebf56bc`; these SUPERSEDE the inventory where noted)
+
+The anatomy pre-step (both invariants proven and independently re-verified by the
+orchestrator: counter 271/delta-0, DOM unchanged via attribute-only diff + AST probe;
+contract test 42/42, family suites 114/114) surfaced six facts the migration MUST honor.
+The stamped attributes referenced below are already in the tree — migration keys off them.
+
+1. **Count is 271, assistant floor is 15** (see scope line). Do not chase assistant to a
+   number the counter can't express; hand-count and report the delta as always.
+2. **`typeBgStyles` (notification-center/modern.tsx:31) is DEAD CODE — never referenced in
+   JSX (grep-confirmed).** The §0 divergence "notification-center icon container tint:
+   modern has a color-mix background; rustic has none" is FALSE at runtime — BOTH engines
+   lack the tint today, because modern's is defined-but-never-applied. **There is no
+   modern-only tint value to preserve.** Do NOT write a skin rule for it; there is no DOM
+   element to anchor one to. Leave the dead const in place (removing dead code is out of a
+   byte-exact pre-step/migration's scope) and flag it for a possible future cleanup.
+   Strike this divergence from §0's non-unifiable list — it was never real.
+3. **Rustic activity-log's `data-action-category` holds a raw color-token string**
+   (e.g. `data-action-category="var(--ds-color-success)"`), NOT a semantic enum like
+   modern's (`"create"`). `getActionColor()` returns the token directly, so the two engines'
+   attribute vocabularies differ by construction. The rustic skin keys on the literal token
+   string (valid CSS attribute-value match) or leaves the resolved color where the classifier
+   put it; either way, do not assume rustic's attribute mirrors modern's enum.
+4. **Rustic activity-log's loading state is a plain "Loading…" text row — NO skeleton, NO
+   shimmer** (only modern has `LoadingSkeleton`/`ds-activity-shimmer`). Do not go looking for
+   a rustic skeleton to migrate; there is none. The pre-step stamped `data-part="loading"` on
+   the rustic branch and `skeleton` parts only on modern.
+5. **PreviewDiffCard needed `data-diff-side="before"|"after"` beyond `data-change`.** Modern
+   maps the SAME `change` value to DIFFERENT colors per side (e.g. `removed` → before=error,
+   after=muted), so `data-change` alone can't distinguish the two cells. The pre-step stamped
+   `data-diff-side` on both cells; the skin MUST key on `[data-part='preview-cell'][data-change=…][data-diff-side=…]`.
+6. **Card forces its own `data-part="root"` and does NOT forward a custom one** (it merges
+   `className` correctly, though). assistant's three Card-rooted exports (ToolCallCard,
+   PreviewDiffCard, ConfirmActionCard) carry their scope class via `className` (works) and rely
+   on Card's forced `data-part="root"`; their INNER paint elements (Box/Text) carry their own
+   forwarded data-parts. The migration must anchor Card-rooted skin rules to the scope-class +
+   Card's forced `root`, and never expect a custom data-part to land on a `<Card>`/`<Card.Body>`
+   root. (P-79 precision — verified empirically in the pre-step, documented in the contract test.)
 
 ---
 
