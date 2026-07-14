@@ -1,0 +1,165 @@
+/**
+ * ActivityTimeline skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/activity-timeline.css — single DOM tree under
+ * every engine. Scope root carries the single class `ds-activity-timeline`;
+ * the kit's "two root classes" budget is bought by REPEATING it.
+ *
+ * SPECIFICITY (P-48): a tenant's unlayered border-color floor sits at (0,3,1),
+ * so border-COLOR rules reach (0,4,0) (repeated scope class + repeated data-part);
+ * non-border paint wins at (0,3,0); `Text` color buys (0,5,0) to beat the
+ * typography skin (0,4,0).
+ *
+ * ICON COLOR: Bell / ExternalLink carry no data-part — painted on the stamped
+ * ancestor Box (currentColor). The per-item chevron is a bare lucide `svg` with
+ * no data-part and no stampable direct parent; it is reached by
+ * `[data-part='item-content'] svg` (the only svg inside item-content), which
+ * takes its colour from item-content's own currentColor and its hover
+ * transform/opacity from the item's `:hover` (upload.css / progress-compounds
+ * precedent for svg leaves).
+ *
+ * HOVER: the per-item hover was React `isHovered` state (deleted from the TSX);
+ * it is transcribed to `[data-part='item']:hover …`. `data-type` selects the
+ * bounded 5-value `ActivityItem["type"]` enum for both the `TYPE_CONFIG` gradient
+ * and the `"var(--ds-color-" + type + …)"` string-concat sites. The badge count
+ * text is a literal `white` in source, transcribed verbatim.
+ */
+
+/* root + header ------------------------------------------------------------- */
+
+.ds-activity-timeline.ds-activity-timeline[data-part='root'] {
+  background: var(--ds-color-bg-secondary);
+}
+.ds-activity-timeline.ds-activity-timeline[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+/* bell box + badge ---------------------------------------------------------- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='bell-box'] {
+  background: var(--ds-color-primary-100);
+  color: var(--ds-color-primary);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='bell-box'][data-part='bell-box'] {
+  border: 1px solid var(--ds-color-primary-200);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='badge'] {
+  border-radius: 50%;
+  background: var(--ds-color-error);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='badge'][data-part='badge'] {
+  border: 2px solid var(--ds-color-bg-secondary);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+  color: white;
+}
+
+/* title + live indicator ---------------------------------------------------- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='live-dot'] {
+  border-radius: 50%;
+  background: var(--ds-color-success);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='live-label'][data-part='live-label'][data-part='live-label'] {
+  color: var(--ds-color-success);
+}
+
+/* view-all pill ------------------------------------------------------------- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='view-all-link'] {
+  background: var(--ds-color-primary-100);
+  color: var(--ds-color-primary);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='view-all-link'][data-part='view-all-link'] {
+  border: 1px solid var(--ds-color-primary-200);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='view-all-label'][data-part='view-all-label'][data-part='view-all-label'] {
+  color: var(--ds-color-primary);
+}
+
+/* per-item connector -------------------------------------------------------- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='connector'] {
+  background: var(--ds-color-border-secondary);
+}
+
+/* per-item icon box — background + icon colour keyed on type, hover scale ---- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'] {
+  transform: scale(1);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-icon-box'] {
+  transform: scale(1.1);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-type='primary'] { background: var(--ds-color-primary-100); color: var(--ds-color-primary); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-type='info']    { background: var(--ds-color-info-100);    color: var(--ds-color-info); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-type='warning'] { background: var(--ds-color-warning-100); color: var(--ds-color-warning); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-type='error']   { background: var(--ds-color-error-100);   color: var(--ds-color-error); }
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'][data-type='success'] { border: 1px solid var(--ds-color-success); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'][data-type='primary'] { border: 1px solid var(--ds-color-primary); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'][data-type='info']    { border: 1px solid var(--ds-color-info); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'][data-type='warning'] { border: 1px solid var(--ds-color-warning); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-icon-box'][data-part='item-icon-box'][data-type='error']   { border: 1px solid var(--ds-color-error); }
+
+/* per-item content — static bg, hover translate + type-tinted border-color --- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'] {
+  background: var(--ds-color-bg-primary);
+  transform: translateX(0);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'] {
+  transform: translateX(4px);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-part='item-content'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='success'] { border-color: var(--ds-color-success-200); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='primary'] { border-color: var(--ds-color-primary-200); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='info']    { border-color: var(--ds-color-info-200); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='warning'] { border-color: var(--ds-color-warning-200); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'][data-part='item-content'][data-type='error']   { border-color: var(--ds-color-error-200); }
+
+/* item-content currentColor feeds the chevron; sibling Text carry own colour - */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-type='success'] { color: var(--ds-color-success); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-type='primary'] { color: var(--ds-color-primary); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-type='info']    { color: var(--ds-color-info); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-type='warning'] { color: var(--ds-color-warning); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'][data-type='error']   { color: var(--ds-color-error); }
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-text'][data-part='item-text'][data-part='item-text'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* per-item time dot — background keyed on type ------------------------------ */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-dot'] {
+  border-radius: 50%;
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='success'] { background: var(--ds-color-success); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='primary'] { background: var(--ds-color-primary); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='info']    { background: var(--ds-color-info); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='warning'] { background: var(--ds-color-warning); }
+.ds-activity-timeline.ds-activity-timeline [data-part='item-dot'][data-type='error']   { background: var(--ds-color-error); }
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-time'][data-part='item-time'][data-part='item-time'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* chevron — bare svg inside item-content: hover slide-in (colour inherited) -- */
+
+.ds-activity-timeline.ds-activity-timeline [data-part='item-content'] svg {
+  opacity: 0;
+  transform: translateX(-6px);
+}
+.ds-activity-timeline.ds-activity-timeline [data-part='item']:hover [data-part='item-content'] svg {
+  opacity: 1;
+  transform: translateX(0);
+}

@@ -1,0 +1,150 @@
+/**
+ * ActivityCards skin — engine-agnostic, DELIBERATELY UNLAYERED (P-47).
+ * Home: tokens/css/components/skin/activity-cards.css — single DOM tree under
+ * every engine. Scope root carries the single class `ds-activity-cards`,
+ * repeated to buy the "two root classes" budget.
+ *
+ * SPECIFICITY (P-48): border-COLOR reaches (0,4,0) over the tenant floor (0,3,1);
+ * non-border paint wins at (0,3,0); `Text` colour buys (0,5,0).
+ *
+ * DIVERGENCE: this variant's `TYPE_CONFIG` gradient is `90deg`, NOT the `135deg`
+ * the other three activity variants use — a real, visible accent direction and
+ * kept as its own value (a byte-exact pass may not flatten it onto 135deg).
+ *
+ * ICON COLOUR via stamped-ancestor currentColor; the chevron is the only
+ * direct-child svg of `item-row`, reached by `[data-part='item-row'] > svg`.
+ * HOVER was React `isHovered` (deleted from the TSX), transcribed to
+ * `[data-part='item']:hover …`; the item's own `<style>` hover treatment stays
+ * suppressed by the rest rules below. Badge count text is a literal `white`.
+ */
+
+/* root + header ------------------------------------------------------------- */
+
+.ds-activity-cards.ds-activity-cards[data-part='root'] {
+  background: var(--ds-color-bg-secondary);
+}
+.ds-activity-cards.ds-activity-cards[data-part='root'][data-part='root'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+.ds-activity-cards.ds-activity-cards [data-part='header'][data-part='header'] {
+  border-bottom: 1px solid var(--ds-color-border-secondary);
+}
+
+/* bell box + badge ---------------------------------------------------------- */
+
+.ds-activity-cards.ds-activity-cards [data-part='bell-box'] {
+  background: var(--ds-color-primary-100);
+  color: var(--ds-color-primary);
+}
+.ds-activity-cards.ds-activity-cards [data-part='bell-box'][data-part='bell-box'] {
+  border: 1px solid var(--ds-color-primary-200);
+}
+.ds-activity-cards.ds-activity-cards [data-part='badge'] {
+  border-radius: 50%;
+  background: var(--ds-color-error);
+}
+.ds-activity-cards.ds-activity-cards [data-part='badge'][data-part='badge'] {
+  border: 2px solid var(--ds-color-bg-secondary);
+}
+.ds-activity-cards.ds-activity-cards [data-part='badge-count'][data-part='badge-count'][data-part='badge-count'] {
+  color: white;
+}
+
+/* title --------------------------------------------------------------------- */
+
+.ds-activity-cards.ds-activity-cards [data-part='title'][data-part='title'][data-part='title'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* view-all pill ------------------------------------------------------------- */
+
+.ds-activity-cards.ds-activity-cards [data-part='view-all-link'] {
+  background: var(--ds-color-primary-100);
+  color: var(--ds-color-primary);
+}
+.ds-activity-cards.ds-activity-cards [data-part='view-all-link'][data-part='view-all-link'] {
+  border: 1px solid var(--ds-color-primary-200);
+}
+.ds-activity-cards.ds-activity-cards [data-part='view-all-label'][data-part='view-all-label'][data-part='view-all-label'] {
+  color: var(--ds-color-primary);
+}
+
+/* per-item shell ------------------------------------------------------------ */
+
+.ds-activity-cards.ds-activity-cards [data-part='item'] {
+  background: var(--ds-color-bg-primary);
+}
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-part='item'] {
+  border: 1px solid var(--ds-color-border-secondary);
+}
+
+/* accent bar — type gradient (90deg), hover widens 3px -> 4px ---------------- */
+
+.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='success'] { background: linear-gradient(90deg, var(--ds-color-success), var(--ds-color-success-200)); }
+.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='primary'] { background: linear-gradient(90deg, var(--ds-color-primary), var(--ds-color-primary-200)); }
+.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='info']    { background: linear-gradient(90deg, var(--ds-color-info), var(--ds-color-info-200)); }
+.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='warning'] { background: linear-gradient(90deg, var(--ds-color-warning), var(--ds-color-warning-200)); }
+.ds-activity-cards.ds-activity-cards [data-part='accent-bar'][data-type='error']   { background: linear-gradient(90deg, var(--ds-color-error), var(--ds-color-error-200)); }
+
+.ds-activity-cards.ds-activity-cards [data-part='accent-bar'] {
+  width: 3px;
+}
+.ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='accent-bar'] {
+  width: 4px;
+}
+
+/* per-item icon box — bg + type-200 border + icon colour; hover scale -------- */
+
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'] {
+  transform: scale(1);
+}
+.ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-icon-box'] {
+  transform: scale(1.1);
+}
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-type='success'] { background: var(--ds-color-success-100); color: var(--ds-color-success); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-type='primary'] { background: var(--ds-color-primary-100); color: var(--ds-color-primary); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-type='info']    { background: var(--ds-color-info-100);    color: var(--ds-color-info); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-type='warning'] { background: var(--ds-color-warning-100); color: var(--ds-color-warning); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-type='error']   { background: var(--ds-color-error-100);   color: var(--ds-color-error); }
+
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'][data-type='success'] { border: 1px solid var(--ds-color-success-200); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'][data-type='primary'] { border: 1px solid var(--ds-color-primary-200); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'][data-type='info']    { border: 1px solid var(--ds-color-info-200); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'][data-type='warning'] { border: 1px solid var(--ds-color-warning-200); }
+.ds-activity-cards.ds-activity-cards [data-part='item-icon-box'][data-part='item-icon-box'][data-type='error']   { border: 1px solid var(--ds-color-error-200); }
+
+.ds-activity-cards.ds-activity-cards [data-part='item-text'][data-part='item-text'][data-part='item-text'] {
+  color: var(--ds-color-text-primary);
+}
+
+/* per-item time dot — background keyed on type ------------------------------ */
+
+.ds-activity-cards.ds-activity-cards [data-part='item-dot'] {
+  border-radius: 50%;
+}
+.ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='success'] { background: var(--ds-color-success); }
+.ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='primary'] { background: var(--ds-color-primary); }
+.ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='info']    { background: var(--ds-color-info); }
+.ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='warning'] { background: var(--ds-color-warning); }
+.ds-activity-cards.ds-activity-cards [data-part='item-dot'][data-type='error']   { background: var(--ds-color-error); }
+
+.ds-activity-cards.ds-activity-cards [data-part='item-time'][data-part='item-time'][data-part='item-time'] {
+  color: var(--ds-color-text-muted);
+}
+
+/* chevron — direct-child svg of item-row: type colour + hover slide-in ------- */
+
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='success'] [data-part='item-row'] > svg { color: var(--ds-color-success); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='primary'] [data-part='item-row'] > svg { color: var(--ds-color-primary); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='info']    [data-part='item-row'] > svg { color: var(--ds-color-info); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='warning'] [data-part='item-row'] > svg { color: var(--ds-color-warning); }
+.ds-activity-cards.ds-activity-cards [data-part='item'][data-type='error']   [data-part='item-row'] > svg { color: var(--ds-color-error); }
+
+.ds-activity-cards.ds-activity-cards [data-part='item-row'] > svg {
+  opacity: 0;
+  transform: translateX(-6px);
+}
+.ds-activity-cards.ds-activity-cards [data-part='item']:hover [data-part='item-row'] > svg {
+  opacity: 1;
+  transform: translateX(0);
+}

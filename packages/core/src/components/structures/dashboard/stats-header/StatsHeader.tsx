@@ -29,37 +29,6 @@ import { useSmoothCounter, useReducedMotion } from '../../../../motion/hooks';
 import type { StatItem, StatsHeaderProps, AccentColor } from './types';
 
 // ============================================================================
-// ACCENT COLOR MAP
-// ============================================================================
-
-const ACCENT_CSS_VAR: Record<AccentColor, string> = {
-  primary: 'var(--ds-color-primary)',
-  success: 'var(--ds-color-success)',
-  warning: 'var(--ds-color-warning)',
-  error: 'var(--ds-color-error)',
-  info: 'var(--ds-color-info)',
-};
-
-/**
- * Returns a CSS color string at the given opacity for the accent.
- * Uses color-mix to derive transparent variants from DS tokens.
- */
-function accentAtOpacity(accent: AccentColor, opacity: number): string {
-  const pct = Math.round(opacity * 100);
-  return `color-mix(in srgb, ${ACCENT_CSS_VAR[accent]} ${pct}%, transparent)`;
-}
-
-// ============================================================================
-// CHANGE COLORS
-// ============================================================================
-
-const CHANGE_COLORS: Record<'increase' | 'decrease' | 'neutral', string> = {
-  increase: 'var(--ds-color-success)',
-  decrease: 'var(--ds-color-error)',
-  neutral: 'var(--ds-color-text-muted)',
-};
-
-// ============================================================================
 // useCountUp (canonical: delegates to useSmoothCounter from motion/hooks)
 // ============================================================================
 
@@ -96,8 +65,6 @@ function SkeletonBar({ width, height }: { width: number; height: number }) {
       style={{
         width,
         height,
-        borderRadius: 4,
-        background: 'var(--ds-color-bg-secondary)',
         animation: 'pulse-card-skeleton 1.5s ease-in-out infinite',
       }}
     />
@@ -114,8 +81,6 @@ function SkeletonDots() {
           style={{
             width: 4,
             height: 4,
-            borderRadius: '50%',
-            background: 'var(--ds-color-bg-secondary)',
             animation: 'pulse-card-skeleton 1.5s ease-in-out infinite',
             animationDelay: `${i * 80}ms`,
           }}
@@ -133,9 +98,6 @@ function SkeletonCard() {
         flex: '1 1 0',
         minWidth: 0,
         padding: '20px 24px',
-        background: 'var(--ds-color-bg-primary)',
-        border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
-        borderRadius: 12,
         minHeight: 140,
         position: 'relative' as const,
         overflow: 'hidden',
@@ -156,7 +118,6 @@ function SkeletonCard() {
           left: 0,
           right: 0,
           height: 40,
-          background: 'linear-gradient(to top, color-mix(in srgb, var(--ds-color-text-primary) 3%, transparent), transparent)',
           pointerEvents: 'none' as const,
         }}
       />
@@ -194,8 +155,6 @@ function SparklineDots({
             style={{
               width: 4,
               height: 4,
-              borderRadius: '50%',
-              background: ACCENT_CSS_VAR[accent],
               opacity,
               transition: 'transform 200ms ease, opacity 200ms ease',
               animation:
@@ -279,7 +238,6 @@ function ChangeIndicator({
   changeLabel?: string;
   periodLabel?: string;
 }) {
-  const color = CHANGE_COLORS[changeType];
   const sign = changeType === 'increase' ? '+' : '';
   const displayText = changeLabel ?? `${sign}${change}`;
 
@@ -292,7 +250,7 @@ function ChangeIndicator({
 
   return (
     <Flex direction="column" align="end" gap={2} data-part="change-indicator">
-      <Flex align="center" gap={3} data-part="change-row" data-change={changeType} style={{ color }}>
+      <Flex align="center" gap={3} data-part="change-row" data-change={changeType}>
         <IconComponent size={13} />
         <Text
           data-part="change-value"
@@ -300,7 +258,6 @@ function ChangeIndicator({
           style={{
             fontSize: 13,
             fontWeight: 600,
-            color,
             fontVariantNumeric: 'tabular-nums',
             lineHeight: 1,
           }}
@@ -316,7 +273,6 @@ function ChangeIndicator({
             fontWeight: 500,
             textTransform: 'uppercase' as const,
             letterSpacing: '0.04em',
-            color: 'var(--ds-color-text-muted)',
             lineHeight: 1,
           }}
         >
@@ -340,8 +296,6 @@ function ProgressBar({ value, accent }: { value: number; accent: AccentColor }) 
       style={{
         width: '100%',
         height: 3,
-        borderRadius: 2,
-        background: 'var(--ds-color-bg-secondary)',
         overflow: 'hidden',
         marginTop: 10,
       }}
@@ -352,8 +306,6 @@ function ProgressBar({ value, accent }: { value: number; accent: AccentColor }) 
         style={{
           width: `${clamped}%`,
           height: '100%',
-          borderRadius: 2,
-          background: ACCENT_CSS_VAR[accent],
           transition: 'width 400ms ease',
         }}
       />
@@ -379,32 +331,32 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
 
   const isClickable = !!stat.onClick;
 
+  // The press/hover/rest priority chain is gated on `isClickable` (pressed only
+  // fires for clickable cards), which a plain CSS `:active` cannot reproduce; the
+  // gated state logic stays in JS and drives two custom properties the skin reads.
   const cardStyle: CSSProperties = {
     flex: '1 1 0',
     minWidth: 0,
     padding: compact ? '18px 18px' : '20px 24px',
-    background: 'var(--ds-color-bg-primary)',
-    border: '1px solid color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
-    borderRadius: 12,
     transition: 'transform 200ms ease, box-shadow 200ms ease',
     position: 'relative',
     overflow: 'hidden',
     minHeight: compact ? 120 : 140,
     cursor: isClickable ? 'pointer' : 'default',
     ...(pressed
-      ? {
-          transform: 'scale(0.98)',
-          boxShadow: '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
-        }
+      ? ({
+          '--ds-stats-header-card-transform': 'scale(0.98)',
+          '--ds-stats-header-card-shadow': '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
+        } as CSSProperties)
       : hovered
-        ? {
-            transform: 'translateY(-2px)',
-            boxShadow: '0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
-          }
-        : {
-            transform: 'translateY(0)',
-            boxShadow: '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
-          }),
+        ? ({
+            '--ds-stats-header-card-transform': 'translateY(-2px)',
+            '--ds-stats-header-card-shadow': '0 8px 24px color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)',
+          } as CSSProperties)
+        : ({
+            '--ds-stats-header-card-transform': 'translateY(0)',
+            '--ds-stats-header-card-shadow': '0 1px 3px color-mix(in srgb, var(--ds-color-text-primary) 2%, transparent)',
+          } as CSSProperties)),
   };
 
   return (
@@ -427,7 +379,6 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
             fontWeight: 600,
             textTransform: 'uppercase',
             letterSpacing: '0.06em',
-            color: 'var(--ds-color-text-muted)',
             lineHeight: 1.4,
           }}
         >
@@ -437,7 +388,6 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
           <Box
             data-part="stat-icon"
             style={{
-              color: 'var(--ds-color-text-muted)',
               opacity: 0.6,
               display: 'flex',
               alignItems: 'center',
@@ -462,7 +412,6 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
               style={{
                 fontSize: 20,
                 fontWeight: 500,
-                color: 'var(--ds-color-text-secondary)',
                 lineHeight: 1,
               }}
             >
@@ -474,7 +423,6 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
             style={{
               fontSize: compact ? 28 : 36,
               fontWeight: 800,
-              color: 'var(--ds-color-text-primary)',
               fontVariantNumeric: 'tabular-nums',
               lineHeight: 1,
             }}
@@ -487,7 +435,6 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
               style={{
                 fontSize: compact ? 12 : 14,
                 fontWeight: 500,
-                color: 'var(--ds-color-text-muted)',
                 lineHeight: 1,
                 marginLeft: 2,
               }}
@@ -529,7 +476,6 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
             fontSize: 11,
             fontWeight: 400,
             fontStyle: 'italic',
-            color: 'var(--ds-color-text-muted)',
             marginTop: 8,
             lineHeight: 1.4,
           }}
@@ -547,7 +493,6 @@ function StatCard({ stat, compact = false }: { stat: StatItem; compact?: boolean
           left: 0,
           right: 0,
           height: 40,
-          background: `linear-gradient(to top, ${accentAtOpacity(accent, 0.06)}, transparent)`,
           pointerEvents: 'none',
         }}
       />

@@ -300,6 +300,16 @@
 @import '../components/skin/form-header.css';
 @import '../components/skin/collection-header.css';
 @import '../components/skin/dashboard-header.css';
+@import '../components/skin/activity-ticker.css';
+@import '../components/skin/activity-timeline.css';
+@import '../components/skin/activity-compact.css';
+@import '../components/skin/activity-cards.css';
+@import '../components/skin/metrics-minimal.css';
+@import '../components/skin/metrics-cards.css';
+@import '../components/skin/metrics-chart.css';
+@import '../components/skin/metrics-rows.css';
+@import '../components/skin/stats-header.css';
+@import '../components/skin/data-terminal-card.css';
 
 
 /* Layer 4: INTENTIONALLY OMITTED - tenant overrides added per-vertical */

@@ -230,6 +230,17 @@ describe('DashboardWidgets data-part contract (WO-SKIN-06 CK-A)', () => {
         const fill = q(container, '[data-part="progress-fill"]')[0] as HTMLElement;
         expect(fill).toBeTruthy();
         expect(fill.getAttribute('data-band')).toBe(band);
+        // Migration-added anatomy (the pre-step missed these; the orchestrator
+        // authorised the stamps so the header border + signal dots can leave the TSX).
+        if (variant === 1) {
+          // CommandCard's three terminal dots (their per-dot colour is keyed by
+          // scope-anchored :nth-child on fixed-order siblings; the baseline verifies
+          // the colours, this asserts the parts reached the DOM).
+          expect(q(container, '[data-part="terminal-dot"]').length).toBe(3);
+        } else {
+          // HUD/Circuit/Matrix carry the header-section bottom border.
+          expect(q(container, '[data-part="section-divider"]').length).toBeGreaterThanOrEqual(1);
+        }
       }
     });
 
