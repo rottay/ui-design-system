@@ -2073,6 +2073,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
           continuity={shellConfig?.continuity}
           focusReaction={shellConfig?.focusReaction}
           previewEmphasis={shellConfig?.previewEmphasis}
+          particleField={shellConfig?.particleField}
           focusActive={Boolean(focusedKey)}
           previewActive={Boolean(showPreviewRail)}
           className={['ds-surface ds-collection-workspace', enhanced ? 'ds-collection-enhanced' : undefined].filter(Boolean).join(' ')}

@@ -422,6 +422,21 @@ export interface WorkspaceResponsiveConfig {
 }
 
 /** Visual presentation configuration. */
+export interface WorkspaceShellParticleFieldConfig {
+  /**
+   * Runtime state for the optional ParticleField enhancement.
+   *
+   * The shell deliberately fails closed: omitted and unrecognized values use
+   * the static fallback. `live` is an explicit opt-in reserved for routes that
+   * have passed the complete ParticleField lifecycle gate.
+   * @default 'quarantined'
+   */
+  mode?: 'quarantined' | 'live';
+  /** Accessible name that explains the meaning of the static alternative. */
+  fallbackLabel?: string;
+}
+
+/** Visual presentation configuration. */
 export interface WorkspaceShellPresentationConfig {
   /** Visual shell variant applied around premium workspaces. */
   variant?: 'default' | 'ai-field';
@@ -437,6 +452,11 @@ export interface WorkspaceShellPresentationConfig {
   focusReaction?: boolean;
   /** Whether preview rails receive extra visual emphasis within the shell. */
   previewEmphasis?: boolean;
+  /**
+   * Independently controlled ParticleField runtime and static alternative.
+   * Omission is intentionally equivalent to `{ mode: 'quarantined' }`.
+   */
+  particleField?: WorkspaceShellParticleFieldConfig;
 }
 
 /** Visual presentation configuration. */
