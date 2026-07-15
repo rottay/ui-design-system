@@ -2263,7 +2263,7 @@
    "lane": "craft",
    "order": 12,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2280,11 +2280,17 @@
    ],
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. Coordinate the use-chart-personality ownership window with WO-CRA-13; status lives only in this registry.",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-07-15 18:19",
+     "by": "codex-cra12",
+     "note": "CRA12 closure candidate is durable across the fleet: DS 2798a864 establishes explicit millisecond timing, SSR-safe MotionProvider/reduced-motion behavior and governance; 49f7997e activates the exact expiring fleet baseline; 031f59ad bounds dependency-honesty memory without weakening fail-closed analysis. @rottay/design-system 2.19.4 is published/latest. Bithire 4ffd4fe38, Platform ddf19b32 and Evnto 2ed73b65c adopt the release, exact Motion 12.42.2 dependency state and supplier contract. Boundary/SSR/hydration/reduced-motion focal coverage, DS build+CRA14, Bithire supplier/typecheck/14 tests, standalone pack, final standalone CRA12 sentinel and the full direct dependency-honesty core+3-app+pack gate are green. Runtime/tenant/motion reference docs landed in docs-engineering b12862a."
+    }
+   ],
    "claimedBy": "codex-cra12",
    "claimedAt": "2026-07-15",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-07-15",
+   "evidence": "DS 2798a864 implements explicit *Ms timing with 80/120/200/320/500/900ms boundaries, one-minor compatibility, one SSR-safe MotionProvider, hydration-safe/live reduced-motion policy and final-first CountUp; 49f7997e activates the exact expiring governance baseline; 031f59ad keeps the full fail-closed dependency audit within bounded memory. @rottay/design-system 2.19.4 is published/latest; DS focal coverage, build+CRA14 and standalone pack are green. Bithire 4ffd4fe38, Platform ddf19b32 and Evnto 2ed73b65c durably adopt DS 2.19.4, Motion 12.42.2, migrated imports and supplier contracts. The final standalone CRA12 sentinel passes after those commits, rejecting new/stale/mutated keyframe, transition-all, raw-timing, direct-import and dependency drift; the direct full dependency-honesty core+3-app+pack gate passes in 81.57s at 2,172,715,008-byte max RSS with zero swaps. Bithire supplier gate, typecheck and 14 focused tests are green. Runtime, tenancy and motion docs landed in docs-engineering b12862a.",
    "execution": {
     "decisionOwner": "motion-system",
     "touchedRepos": [
