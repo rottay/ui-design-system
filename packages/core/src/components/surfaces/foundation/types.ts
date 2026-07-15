@@ -180,6 +180,14 @@ export interface SurfaceResolvedCapability {
   disabled?: boolean;
 }
 
+/** Stable capability anatomy declared by a surface before data is available. */
+export interface SurfaceCapabilityRegistration {
+  kind: SurfaceCapabilityKind;
+  id: string;
+  label?: ReactNode;
+  disabled?: boolean;
+}
+
 /**
  * Presentation-only access input resolved by the owning app/server.
  *

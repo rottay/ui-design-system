@@ -94,12 +94,20 @@ function buildConfig(overrides?: Partial<DetailSurfaceConfig<WorkspaceView>>): D
 describe('DetailSurface', () => {
   it('renders error and retry states before detail content', async () => {
     const onRetry = vi.fn();
+    const forbidden = vi.fn(() => {
+      throw new Error('detail callbacks must not execute without loaded data');
+    });
+    const map = vi.fn(adapter.map);
+    const config = buildConfig({ access: { mode: 'all' } });
+    if (config.presentation.tabs?.[2]) config.presentation.tabs[2].visible = forbidden;
+    if (config.behavior.actions?.[1]) config.behavior.actions[1].visible = forbidden;
+    Object.defineProperty(config, 'permissions', { get: forbidden });
 
-    renderSurface(
+    const { container } = renderSurface(
       <DetailSurface
         data={{ id: 'ws-1', name: 'Acme Workspace' }}
-        adapter={adapter}
-        config={buildConfig()}
+        adapter={{ ...adapter, map }}
+        config={config}
         error={new Error('Could not load workspace')}
         onRetry={onRetry}
       />
@@ -109,6 +117,18 @@ describe('DetailSurface', () => {
     if (!retryButton) throw new Error('Try again button not found');
     fireEvent.click(retryButton);
     expect(onRetry).toHaveBeenCalledTimes(1);
+    expect(container.querySelector('[data-capability-count="6"]')).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-capability-kind="field"][data-capability-id="workspace.name"]'),
+    ).toHaveTextContent('name');
+    expect(
+      container.querySelector('[data-capability-kind="tab"][data-capability-id="workspace.security"]'),
+    ).toHaveTextContent('Security');
+    expect(
+      container.querySelector('[data-capability-kind="action"][data-capability-id="archive"]'),
+    ).toHaveTextContent('Archive');
+    expect(map).not.toHaveBeenCalled();
+    expect(forbidden).not.toHaveBeenCalled();
   });
 
   it('renders both default and custom empty states when no data is available', async () => {

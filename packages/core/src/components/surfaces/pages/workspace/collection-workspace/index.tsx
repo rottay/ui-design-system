@@ -679,6 +679,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     adaptive,
     access,
     permissions,
+    capabilityRegistry,
   } = props;
 
   const surfaceAccess = access ?? permissions;
@@ -1408,6 +1409,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               loading={loading}
               error={error}
               access={surfaceAccess}
+              capabilityRegistry={capabilityRegistry}
               emptyState={emptyState}
               actions={actions}
               actionsColumnWidth={actionsColumnWidth}
@@ -2029,6 +2031,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               emptyState={emptyState}
               error={error}
               access={surfaceAccess}
+              capabilityRegistry={capabilityRegistry}
               actions={actions}
               actionsColumnWidth={actionsColumnWidth}
               onRowClick={handleRowClick}

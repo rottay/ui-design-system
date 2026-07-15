@@ -14,6 +14,7 @@ import type {
   EntityAdapter,
   SurfaceAccessInput,
   SurfaceAction,
+  SurfaceCapabilityRegistration,
   SurfaceCapabilityKind,
   SurfaceColumn,
   DetailSurfaceTab,
@@ -48,6 +49,52 @@ export function resolveSurfaceCapability(
   return access.capabilities.find(
     (capability) => capability.kind === input.kind && capability.id === input.id
   );
+}
+
+/**
+ * Resolve a declared capability registry without invoking item/data callbacks.
+ * The app-resolved `all` path preserves every declaration; resolved access only
+ * projects the app's explicit visibility/disabled decisions.
+ */
+export function resolveSurfaceCapabilityRegistry(
+  registrations: ReadonlyArray<SurfaceCapabilityRegistration>,
+  access: SurfaceAccessInput | undefined
+): SurfaceCapabilityRegistration[] {
+  const seen = new Set<string>();
+  const resolved: SurfaceCapabilityRegistration[] = [];
+
+  for (const registration of registrations) {
+    const id = registration.id.trim();
+    if (!id) continue;
+
+    const registryKey = `${registration.kind}:${id}`;
+    if (seen.has(registryKey)) continue;
+    seen.add(registryKey);
+
+    const normalized = id === registration.id ? registration : { ...registration, id };
+    if (isAllSurfaceAccess(access)) {
+      resolved.push(normalized);
+      continue;
+    }
+
+    if (!resolveSurfacePermission(access, { kind: registration.kind, id })) {
+      continue;
+    }
+
+    if (!isResolvedSurfaceAccess(access)) {
+      resolved.push(normalized);
+      continue;
+    }
+
+    const capability = resolveSurfaceCapability(access, { kind: registration.kind, id });
+    resolved.push(
+      capability?.disabled && !normalized.disabled
+        ? { ...normalized, disabled: true }
+        : normalized
+    );
+  }
+
+  return resolved;
 }
 
 export function mapSurfaceData<TRaw, TView>(

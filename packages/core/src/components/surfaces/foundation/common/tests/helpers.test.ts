@@ -17,6 +17,7 @@ import {
   resolveFieldAccessForRow,
   resolveSurfaceAction,
   resolveSurfaceButtonVariant,
+  resolveSurfaceCapabilityRegistry,
   resolveSurfaceDetailActionVariant,
   resolveSurfacePermission,
   stringifySurfaceValue,
@@ -135,6 +136,16 @@ describe('normalizeSurfaceError', () => {
     ]);
     expect(resolveSurfacePermission(access, { kind: 'route', id: '/admin' })).toBe(true);
     expect(resolveSurfacePermission(access, { kind: 'route', id: '/missing' })).toBe(false);
+    expect(
+      resolveSurfaceCapabilityRegistry(
+        [
+          { kind: 'action', id: 'edit', label: 'Edit' },
+          { kind: 'action', id: 'archive', label: 'Archive' },
+          { kind: 'action', id: 'missing', label: 'Missing' },
+        ],
+        access
+      )
+    ).toEqual([{ kind: 'action', id: 'edit', label: 'Edit', disabled: true }]);
   });
 
   it('filters single actions through the same permission rules as action bars', () => {

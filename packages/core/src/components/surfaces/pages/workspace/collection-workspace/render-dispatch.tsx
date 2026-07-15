@@ -14,8 +14,15 @@ import React from 'react';
 import type { ReactNode } from 'react';
 import type { ColumnDef } from '../../../../patterns/foundation/types';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
-import type { SurfaceAccessInput } from '../../../foundation/types';
-import { isAllSurfaceAccess } from '../../../foundation/helpers';
+import type {
+  SurfaceAccessInput,
+  SurfaceCapabilityRegistration,
+} from '../../../foundation/types';
+import {
+  isAllSurfaceAccess,
+  resolveSurfaceCapabilityRegistry,
+} from '../../../foundation/helpers';
+import { SurfaceCapabilityAnatomy } from '../../../foundation/states';
 import type { DensityKey } from '../../../../patterns/data/list-toolbar/ListToolbar.types';
 import type { BulkAction } from '../../../../patterns/foundation/types';
 import type { SortConfig, PaginationConfig, FilterDef } from '../../../../patterns/foundation/types';
@@ -39,6 +46,7 @@ export interface CollectionRenderDispatchProps<T extends object> {
   emptyState?: ReactNode;
   error?: ReactNode;
   access?: SurfaceAccessInput;
+  capabilityRegistry?: ReadonlyArray<SurfaceCapabilityRegistration>;
 
   // Table-specific props
   actions?: (row: T, index: number) => ReactNode;
@@ -109,17 +117,33 @@ function getColumnCapabilityId<T>(column: ColumnDef<T>): string {
 function CollectionErrorAnatomy<T extends object>({
   access,
   actions,
+  capabilityRegistry,
   columns,
   error,
   viewMode,
 }: Pick<
   CollectionRenderDispatchProps<T>,
-  'access' | 'actions' | 'columns' | 'error' | 'viewMode'
+  'access' | 'actions' | 'capabilityRegistry' | 'columns' | 'error' | 'viewMode'
 >): React.ReactElement {
   const registeredColumns = isAllSurfaceAccess(access)
     ? columns
     : columns.filter((column) => column.visible !== false);
-  const capabilityCount = registeredColumns.length + (actions ? 1 : 0);
+  const explicitRegistry = capabilityRegistry ?? [];
+  const hasExplicitRowActions = explicitRegistry.some(
+    (capability) => capability.kind === 'action'
+  );
+  const registrations: SurfaceCapabilityRegistration[] = [
+    ...explicitRegistry,
+    ...registeredColumns.map((column) => ({
+      kind: 'column' as const,
+      id: getColumnCapabilityId(column),
+      label: getColumnHeader(column as ColumnDef<unknown>),
+    })),
+    ...(actions && !hasExplicitRowActions
+      ? [{ kind: 'action' as const, id: 'row-actions', label: 'Row actions' }]
+      : []),
+  ];
+  const capabilities = resolveSurfaceCapabilityRegistry(registrations, access);
 
   return (
     <Box
@@ -127,7 +151,7 @@ function CollectionErrorAnatomy<T extends object>({
       data-part="root"
       data-view-mode={viewMode}
       data-state="error"
-      data-capability-count={capabilityCount}
+      data-capability-count={capabilities.length}
       padding="lg"
       style={{ display: 'grid', gap: 'var(--ds-spacing-4, 16px)' }}
     >
@@ -135,72 +159,10 @@ function CollectionErrorAnatomy<T extends object>({
         {error}
       </Box>
 
-      {capabilityCount > 0 ? (
-        <Box
-          data-part="capability-anatomy"
-          aria-label="Registered collection capabilities"
-          style={{ display: 'grid', gap: 'var(--ds-spacing-2, 8px)' }}
-        >
-          <Text
-            data-part="capability-anatomy-label"
-            size="xs"
-            color="muted"
-            style={{ fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}
-          >
-            Available when data recovers
-          </Text>
-          <Box
-            role="list"
-            data-part="capability-list"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 132px), 1fr))',
-              gap: 'var(--ds-spacing-2, 8px)',
-            }}
-          >
-            {registeredColumns.map((column) => {
-              const capabilityId = getColumnCapabilityId(column);
-              return (
-                <Box
-                  role="listitem"
-                  key={`column-${capabilityId}`}
-                  data-part="capability"
-                  data-capability-kind="column"
-                  data-capability-id={capabilityId}
-                  style={{
-                    minWidth: 0,
-                    padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
-                    border: '1px solid var(--ds-color-border, currentColor)',
-                    borderRadius: 'var(--ds-radius-md, 8px)',
-                    opacity: 0.72,
-                  }}
-                >
-                  <Text size="sm" style={{ fontWeight: 650 }}>
-                    {getColumnHeader(column as ColumnDef<unknown>)}
-                  </Text>
-                </Box>
-              );
-            })}
-            {actions ? (
-              <Box
-                role="listitem"
-                data-part="capability"
-                data-capability-kind="action"
-                data-capability-id="row-actions"
-                style={{
-                  minWidth: 0,
-                  padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
-                  border: '1px solid var(--ds-color-border, currentColor)',
-                  borderRadius: 'var(--ds-radius-md, 8px)',
-                  opacity: 0.72,
-                }}
-              >
-                <Text size="sm" style={{ fontWeight: 650 }}>Row actions</Text>
-              </Box>
-            ) : null}
-          </Box>
-        </Box>
-      ) : null}
+      <SurfaceCapabilityAnatomy
+        capabilities={capabilities}
+        ariaLabel="Registered collection capabilities"
+      />
     </Box>
   );
 }
@@ -587,6 +549,7 @@ export function CollectionRenderDispatch<T extends object>(
     emptyState,
     error,
     access,
+    capabilityRegistry,
     mobileCard,
     actions,
     onRowClick,
@@ -599,6 +562,7 @@ export function CollectionRenderDispatch<T extends object>(
       <CollectionErrorAnatomy
         access={access}
         actions={actions}
+        capabilityRegistry={capabilityRegistry}
         columns={columns}
         error={error}
         viewMode={viewMode}

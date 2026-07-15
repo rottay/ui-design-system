@@ -9,12 +9,12 @@
  */
 
 import type { ReactNode } from 'react';
-import { Alert, Button, Card, Skeleton, Stack, Text } from '../../../primitives';
+import { Alert, Box, Button, Card, Skeleton, Stack, Text } from '../../../primitives';
 import { PatternEmptyState } from '../../../patterns';
 import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
 import { useTokens } from '../../../../hooks/tokens';
 import { normalizeSurfaceError, resolveSurfaceButtonVariant } from '../helpers';
-import type { SurfaceAction } from '../types';
+import type { SurfaceAction, SurfaceCapabilityRegistration } from '../types';
 import { useSurfaceTranslations } from '../i18n';
 
 export interface SurfaceLoadingStateProps {
@@ -141,6 +141,70 @@ export function SurfaceErrorState({
         </Stack>
       </Card.Body>
     </Card>
+  );
+}
+
+export interface SurfaceCapabilityAnatomyProps {
+  capabilities: ReadonlyArray<SurfaceCapabilityRegistration>;
+  label?: ReactNode;
+  ariaLabel?: string;
+}
+
+/** Responsive, data-independent inventory shown beside a failed surface load. */
+export function SurfaceCapabilityAnatomy({
+  capabilities,
+  label = 'Available when data recovers',
+  ariaLabel = 'Registered surface capabilities',
+}: SurfaceCapabilityAnatomyProps): React.ReactElement | null {
+  if (capabilities.length === 0) return null;
+
+  return (
+    <Box
+      data-part="capability-anatomy"
+      data-capability-count={capabilities.length}
+      aria-label={ariaLabel}
+      style={{ display: 'grid', gap: 'var(--ds-spacing-2, 8px)' }}
+    >
+      <Text
+        data-part="capability-anatomy-label"
+        size="xs"
+        color="muted"
+        style={{ fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase' }}
+      >
+        {label}
+      </Text>
+      <Box
+        role="list"
+        data-part="capability-list"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 132px), 1fr))',
+          gap: 'var(--ds-spacing-2, 8px)',
+        }}
+      >
+        {capabilities.map((capability) => (
+          <Box
+            role="listitem"
+            key={`${capability.kind}-${capability.id}`}
+            data-part="capability"
+            data-capability-kind={capability.kind}
+            data-capability-id={capability.id}
+            data-disabled={capability.disabled ? 'true' : undefined}
+            style={{
+              minWidth: 0,
+              padding: 'var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px)',
+              border: '1px solid var(--ds-color-border, currentColor)',
+              borderRadius: 'var(--ds-radius-md, 8px)',
+              opacity: capability.disabled ? 0.5 : 0.72,
+            }}
+          >
+            <Text size="sm" style={{ fontWeight: 650 }}>
+              {capability.label ?? capability.id}
+            </Text>
+          </Box>
+        ))}
+      </Box>
+    </Box>
   );
 }
 

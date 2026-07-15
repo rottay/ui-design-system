@@ -20,6 +20,7 @@ import type { SavedView } from '../../../patterns/data/saved-views/SavedViews.ty
 import type { CalendarEvent } from '../../../patterns/visualization/calendar-view/CalendarView.types';
 import type {
   AppResolvedSurfaceAccess,
+  SurfaceCapabilityRegistration,
   SurfacePermissionsConfig,
 } from '../types';
 
@@ -514,6 +515,12 @@ export interface CollectionWorkspaceConfig<T> {
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
+  /**
+   * Data-independent capability declarations that cannot be inferred from
+   * columns (for example individual row actions). Used to preserve anatomy
+   * during failed loads without invoking row callbacks.
+   */
+  capabilityRegistry?: ReadonlyArray<SurfaceCapabilityRegistration>;
   /**
    * Standalone page or embedded detail/workbench posture. Defaults to `page`.
    */

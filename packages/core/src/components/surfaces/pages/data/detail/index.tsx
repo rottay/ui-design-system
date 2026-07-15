@@ -23,13 +23,23 @@ import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 import {
   filterDetailSurfaceTabs,
   filterSurfaceActions,
+  isAllSurfaceAccess,
+  resolveSurfaceCapabilityRegistry,
   resolveSurfaceDetailActionVariant,
 } from '../../../foundation/helpers';
 import { useSurfaceTranslations } from '../../../foundation/i18n';
 import { useSurfaceProfileDefaults } from '../../../foundation/profile-defaults';
 import { SurfaceAccentBar } from '../../../foundation/personality-helpers';
-import type { DetailSurfaceConfig, EntityAdapter } from '../../../foundation/types';
-import { SurfaceEmptyState, SurfaceErrorState } from '../../../foundation/states';
+import type {
+  DetailSurfaceConfig,
+  EntityAdapter,
+  SurfaceCapabilityRegistration,
+} from '../../../foundation/types';
+import {
+  SurfaceCapabilityAnatomy,
+  SurfaceEmptyState,
+  SurfaceErrorState,
+} from '../../../foundation/states';
 import { PageShellSurface } from '../../../layout/page-shell';
 
 export interface DetailSurfaceProps<TRaw, TView> {
@@ -39,6 +49,37 @@ export interface DetailSurfaceProps<TRaw, TView> {
   loading?: boolean;
   error?: unknown;
   onRetry?: () => void | Promise<void>;
+}
+
+function resolveDetailErrorCapabilities<TRaw, TView>(
+  adapter: EntityAdapter<TRaw, TView>,
+  config: DetailSurfaceConfig<TView>
+): SurfaceCapabilityRegistration[] {
+  const access = config.access ?? config.permissions;
+  const includeStaticHidden = isAllSurfaceAccess(access);
+  const registrations: SurfaceCapabilityRegistration[] = [
+    ...adapter.fields.map((field) => ({
+      kind: 'field' as const,
+      id: field.fieldId,
+      label: field.label ?? field.key,
+    })),
+    ...(config.presentation.tabs ?? [])
+      .filter((tab) => includeStaticHidden || tab.visible !== false)
+      .map((tab) => ({
+        kind: 'tab' as const,
+        id: tab.permissionId ?? tab.key,
+        label: tab.label,
+        disabled: tab.disabled,
+      })),
+    ...(config.behavior.actions ?? []).map((action) => ({
+        kind: 'action' as const,
+        id: action.id,
+        label: action.label,
+        disabled: action.disabled,
+      })),
+  ];
+
+  return resolveSurfaceCapabilityRegistry(registrations, access);
 }
 
 /** Detail-page shell with adapter mapping, action normalization, and tab filtering. */
@@ -55,9 +96,22 @@ export function DetailSurface<TRaw, TView>({
   const { isMobile } = useBreakpoints();
 
   if (error) {
+    const capabilities = resolveDetailErrorCapabilities(adapter, config);
     return (
-      <Box>
-        <SurfaceErrorState error={error} onRetry={onRetry} />
+      <Box
+        className="ds-surface ds-detail-surface"
+        data-part="root"
+        data-state="error"
+        data-capability-count={capabilities.length}
+        style={{ display: 'grid', gap: 'var(--ds-spacing-4, 16px)' }}
+      >
+        <Box data-part="error-state" aria-live="polite">
+          <SurfaceErrorState error={error} onRetry={onRetry} />
+        </Box>
+        <SurfaceCapabilityAnatomy
+          capabilities={capabilities}
+          ariaLabel="Registered detail capabilities"
+        />
       </Box>
     );
   }

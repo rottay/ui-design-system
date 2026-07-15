@@ -803,6 +803,37 @@ describe('CollectionWorkspaceSurface', () => {
     expect(renderActions).not.toHaveBeenCalled();
   });
 
+  it('uses explicit row-action registrations instead of collapsing them into one generic capability', async () => {
+    const renderActions = vi.fn(() => {
+      throw new Error('row actions must not execute without row data');
+    });
+    const { container } = renderSurface(
+      <CollectionWorkspaceSurface
+        {...buildProps({
+          access: { mode: 'all' },
+          actions: renderActions,
+          capabilityRegistry: [
+            { kind: 'action', id: 'record.preview', label: 'Preview record' },
+            { kind: 'action', id: 'record.open', label: 'Open details' },
+          ],
+          error: <div data-testid="registered-action-error">Database unavailable</div>,
+        })}
+      />,
+    );
+
+    expect(await screen.findByTestId('registered-action-error')).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-capability-kind="action"][data-capability-id="record.preview"]'),
+    ).toHaveTextContent('Preview record');
+    expect(
+      container.querySelector('[data-capability-kind="action"][data-capability-id="record.open"]'),
+    ).toHaveTextContent('Open details');
+    expect(
+      container.querySelector('[data-capability-kind="action"][data-capability-id="row-actions"]'),
+    ).not.toBeInTheDocument();
+    expect(renderActions).not.toHaveBeenCalled();
+  });
+
   // -------------------------------------------------------------------------
   // Row click in cards view
   // -------------------------------------------------------------------------
