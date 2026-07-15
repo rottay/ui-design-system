@@ -27,6 +27,9 @@ const phases = ["0", "1", "2A", "2B", "2C", "3", "4", "5", "6"];
 const liveRegistry = () => JSON.parse(
   fs.readFileSync(new URL("../roadmap/registry.json", import.meta.url), "utf8"),
 );
+// Live-registry assertions must follow the program's fixed New York calendar;
+// fixture-only temporal tests below retain their explicit 2026-07-14 clock.
+const LIVE_REGISTRY_TODAY = localDate();
 const convergenceLedgerFixture = () => structuredClone(
   liveRegistry().traceability["ds-improvements"].convergenceLedger,
 );
@@ -1003,7 +1006,7 @@ test("the mutation guard rejects duplicate work-order ids and incoherent done me
   duplicate.workOrders.push(structuredClone(
     duplicate.workOrders.find((workOrder) => workOrder.id === "WO-GAT-05"),
   ));
-  assert.ok(validateRegistryMutationIntegrity(duplicate, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(duplicate, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("WO-GAT-05: duplicate work-order id (2 entries)"),
   ));
 
@@ -1015,7 +1018,7 @@ test("the mutation guard rejects duplicate work-order ids and incoherent done me
     claimedAt: null,
     doneAt: null,
   });
-  const errors = validateDsImprovementsTraceability(incoherent, { today: "2026-07-14" });
+  const errors = validateDsImprovementsTraceability(incoherent, { today: LIVE_REGISTRY_TODAY });
   assert.ok(errors.some((error) => error.includes("done requires claimedBy")));
   assert.ok(errors.some((error) => error.includes("done requires a valid claimedAt")));
   assert.ok(errors.some((error) => error.includes("done requires a valid doneAt")));
@@ -1047,7 +1050,7 @@ const assertSemanticRejects = (registry, matcher) => {
 const assertFullGateRejectsWithoutThrowing = (registry) => {
   let errors;
   assert.doesNotThrow(() => {
-    errors = validateRegistryMutationIntegrity(registry, { today: "2026-07-14" });
+    errors = validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY });
   });
   assert.ok(errors.length > 0, "full registry mutation gate must reject the mutation");
   return errors;
@@ -1061,7 +1064,7 @@ test("the live v2 convergence ledger is the exact 32-capability, 65-edge canonic
   assert.equal(ledger.edges.length, 65);
   assert.deepEqual(ledger, canonicalCrossProgramConvergenceLedger());
   assert.deepEqual(validateCrossProgramConvergenceLedger(registry), []);
-  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }), []);
+  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }), []);
 });
 
 test("equivalent convergence reordering preserves semantics, fingerprint and the full gate", () => {
@@ -1077,7 +1080,7 @@ test("equivalent convergence reordering preserves semantics, fingerprint and the
   }
   assert.deepEqual(validateCrossProgramConvergenceLedger(registry), []);
   assert.equal(dsImprovementsPlanFingerprint(registry), baselineFingerprint);
-  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }), []);
+  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }), []);
 });
 
 test("all 32 canonical capabilities are deletion-drilled", () => {
@@ -1580,7 +1583,7 @@ test("Symbol, BigInt, function, getter, proxy and cycle payloads fail closed acr
     let fingerprint;
     assert.doesNotThrow(() => { semantic = validateCrossProgramConvergenceLedger(registry); }, name);
     assert.doesNotThrow(() => {
-      full = validateRegistryMutationIntegrity(registry, { today: "2026-07-14" });
+      full = validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY });
     }, name);
     assert.doesNotThrow(() => { fingerprint = dsImprovementsPlanFingerprint(registry); }, name);
     assert.ok(semantic.length > 0, `${name}: semantic gate must fail closed`);
@@ -1708,7 +1711,7 @@ test("strict JSON-data shape rejects prototype, accessor, proxy, sparse and non-
       semantic = validateCrossProgramConvergenceLedger(registry);
     }, name);
     assert.doesNotThrow(() => {
-      full = validateRegistryMutationIntegrity(registry, { today: "2026-07-14" });
+      full = validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY });
     }, name);
     assert.doesNotThrow(() => {
       fingerprint = dsImprovementsPlanFingerprint(registry);
@@ -1730,7 +1733,7 @@ test("strict JSON-data shape rejects prototype, accessor, proxy, sparse and non-
     assert.ok(validateCrossProgramConvergenceLedger(pollutedPrototypeRegistry).length > 0);
     assert.ok(validateRegistryMutationIntegrity(
       pollutedPrototypeRegistry,
-      { today: "2026-07-14" },
+      { today: LIVE_REGISTRY_TODAY },
     ).length > 0);
     assert.notEqual(
       dsImprovementsPlanFingerprint(pollutedPrototypeRegistry),
@@ -1749,7 +1752,7 @@ test("strict JSON-data shape rejects prototype, accessor, proxy, sparse and non-
   );
   assert.deepEqual(validateCrossProgramConvergenceLedger(nullPrototypeRegistry), []);
   assert.deepEqual(
-    validateRegistryMutationIntegrity(nullPrototypeRegistry, { today: "2026-07-14" }),
+    validateRegistryMutationIntegrity(nullPrototypeRegistry, { today: LIVE_REGISTRY_TODAY }),
     [],
   );
   assert.equal(dsImprovementsPlanFingerprint(nullPrototypeRegistry), baselineFingerprint);
@@ -1764,7 +1767,7 @@ test("strict JSON-data shape rejects prototype, accessor, proxy, sparse and non-
   externalCapability.nonConsumerEndpoints = emptyEndpoints;
   assert.deepEqual(validateCrossProgramConvergenceLedger(aliasedRegistry), []);
   assert.deepEqual(
-    validateRegistryMutationIntegrity(aliasedRegistry, { today: "2026-07-14" }),
+    validateRegistryMutationIntegrity(aliasedRegistry, { today: LIVE_REGISTRY_TODAY }),
     [],
   );
   assert.equal(dsImprovementsPlanFingerprint(aliasedRegistry), baselineFingerprint);
@@ -1822,14 +1825,14 @@ test("UIDS-NF-001 remains one DS-owned capability with one external authority", 
 
 test("the live adjudicated program plan is fingerprint-locked against authority swaps", () => {
   const registry = liveRegistry();
-  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }), []);
+  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }), []);
 
   const item = registry.traceability["ds-improvements"].items.find(
     (candidate) => candidate.id === "DS-IMP-060",
   );
   item.authority = "WO-GAT-05";
   item.phase = "0";
-  const errors = validateRegistryMutationIntegrity(registry, { today: "2026-07-14" });
+  const errors = validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY });
   assert.ok(errors.some((error) => error.includes("adjudicated plan fingerprint changed")));
 });
 
@@ -1837,7 +1840,7 @@ test("the adjudicated fingerprint locks structured owner-GO and phase controls",
   const registry = liveRegistry();
   registry.traceability["ds-improvements"].phaseControls["0"].ownerGo.evidence =
     "A different but superficially positive owner authorization.";
-  assert.ok(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("adjudicated plan fingerprint changed"),
   ));
 });
@@ -1846,7 +1849,7 @@ test("the operational fingerprint rejects removing ARC11 to GAT07", () => {
   const registry = liveRegistry();
   const arc11 = registry.workOrders.find((workOrder) => workOrder.id === "WO-ARC-11");
   arc11.dependsOn = arc11.dependsOn.filter((dependency) => dependency !== "WO-GAT-07");
-  assert.ok(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("adjudicated plan fingerprint changed"),
   ));
 });
@@ -1855,7 +1858,7 @@ test("the operational fingerprint rejects removing CRA15 to CRA14", () => {
   const registry = liveRegistry();
   const cra15 = registry.workOrders.find((workOrder) => workOrder.id === "WO-CRA-15");
   cra15.dependsOn = cra15.dependsOn.filter((dependency) => dependency !== "WO-CRA-14");
-  assert.ok(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("adjudicated plan fingerprint changed"),
   ));
 });
@@ -1863,7 +1866,7 @@ test("the operational fingerprint rejects removing CRA15 to CRA14", () => {
 test("the operational fingerprint rejects moving the CRA14 support milestone out of Phase 0", () => {
   const registry = liveRegistry();
   registry.workOrders.find((workOrder) => workOrder.id === "WO-CRA-14").phase = "1";
-  assert.ok(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("adjudicated plan fingerprint changed"),
   ));
 });
@@ -1871,25 +1874,25 @@ test("the operational fingerprint rejects moving the CRA14 support milestone out
 test("the DS program rejects a parallel statuses map", () => {
   const registry = liveRegistry();
   registry.traceability["ds-improvements"].statuses = { "DS-IMP-001": "done" };
-  assert.ok(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("statuses is a forbidden parallel state/status store"),
   ));
 
   const rootContainer = liveRegistry();
   rootContainer.dsImprovementsStatuses = { "DS-IMP-001": "done" };
-  assert.ok(validateRegistryMutationIntegrity(rootContainer, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(rootContainer, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("forbidden root-level parallel DS state/status container"),
   ));
 
   const disguisedMap = liveRegistry();
   disguisedMap.traceability["ds-improvements"].statusesByWo = { "WO-GAT-05": "done" };
-  assert.ok(validateRegistryMutationIntegrity(disguisedMap, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(disguisedMap, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("statusesByWo is not part of the closed DS-improvements schema"),
   ));
 
   const rootAuthority = liveRegistry();
   rootAuthority.statusAuthority = "roadmap/SHADOW.md";
-  assert.ok(validateRegistryMutationIntegrity(rootAuthority, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(rootAuthority, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("statusAuthority is a forbidden root-level parallel DS state/status container"),
   ));
 });
@@ -1897,13 +1900,13 @@ test("the DS program rejects a parallel statuses map", () => {
 test("DS trace items reject state aliases outside workOrders status", () => {
   const registry = liveRegistry();
   registry.traceability["ds-improvements"].items[0].state = "done";
-  assert.ok(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes(".state is a forbidden parallel state/status store"),
   ));
 
   const disguisedState = liveRegistry();
   disguisedState.traceability["ds-improvements"].items[0].stateById = { "DS-IMP-001": "done" };
-  assert.ok(validateRegistryMutationIntegrity(disguisedState, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(disguisedState, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("stateById is not part of the closed DS-improvements schema"),
   ));
 });
@@ -1911,25 +1914,25 @@ test("DS trace items reject state aliases outside workOrders status", () => {
 test("structured owner GO rejects an Owner approval denied reason", () => {
   const registry = liveRegistry();
   registry.traceability["ds-improvements"].phaseControls["0"].claimStateReason = "Owner approval denied for Phase 0.";
-  assert.ok(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(registry, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("claimStateReason records a denied/revoked owner decision"),
   ));
   assert.match(
-    phaseClaimBlocker(registry, registry.workOrders.find((workOrder) => workOrder.id === "WO-GAT-05"), { today: "2026-07-14" }),
+    phaseClaimBlocker(registry, registry.workOrders.find((workOrder) => workOrder.id === "WO-GAT-05"), { today: LIVE_REGISTRY_TODAY }),
     /owner GO is denied or revoked/,
   );
 
   const withheld = liveRegistry();
   withheld.traceability["ds-improvements"].phaseControls["0"].claimStateReason =
     "Owner withheld approval and vetoed Phase 0.";
-  assert.ok(validateRegistryMutationIntegrity(withheld, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(withheld, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("records a denied/revoked owner decision"),
   ));
 
   const fakeEvidence = liveRegistry();
   fakeEvidence.traceability["ds-improvements"].phaseControls["0"].ownerGo.evidence =
     "FAKE: owner vetoed this wave; authorization does not exist.";
-  assert.ok(validateRegistryMutationIntegrity(fakeEvidence, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(fakeEvidence, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("records a denied/revoked owner decision"),
   ));
 
@@ -1940,7 +1943,7 @@ test("structured owner GO rejects an Owner approval denied reason", () => {
     phaseClaimBlocker(
       nonexistent,
       nonexistent.workOrders.find((workOrder) => workOrder.id === "WO-GAT-05"),
-      { today: "2026-07-14" },
+      { today: LIVE_REGISTRY_TODAY },
     ),
     /owner GO is denied or revoked/,
   );
@@ -1949,25 +1952,25 @@ test("structured owner GO rejects an Owner approval denied reason", () => {
 test("the closed registry schema rejects shadow state outside the DS program subtree", () => {
   const rootLedger = liveRegistry();
   rootLedger.workflowLedger = { "DS-IMP-127": "done" };
-  assert.ok(validateRegistryMutationIntegrity(rootLedger, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(rootLedger, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("registry.workflowLedger is not part of the closed DS-improvements schema"),
   ));
 
   const traceMirror = liveRegistry();
   traceMirror.traceability.auditMirror = { sourceStates: { "DS-IMP-127": "done" } };
-  assert.ok(validateRegistryMutationIntegrity(traceMirror, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(traceMirror, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("registry.traceability.auditMirror is not part of the closed DS-improvements schema"),
   ));
 
   const woState = liveRegistry();
   woState.workOrders.find((workOrder) => workOrder.id === "WO-GAT-05").state = "done";
-  assert.ok(validateRegistryMutationIntegrity(woState, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(woState, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("workOrders.WO-GAT-05.state is not part of the closed DS-improvements schema"),
   ));
 
   const milestoneState = liveRegistry();
   milestoneState.workOrders.find((workOrder) => workOrder.id === "WO-GAT-07").milestone.status = "done";
-  assert.ok(validateRegistryMutationIntegrity(milestoneState, { today: "2026-07-14" }).some(
+  assert.ok(validateRegistryMutationIntegrity(milestoneState, { today: LIVE_REGISTRY_TODAY }).some(
     (error) => error.includes("workOrders.WO-GAT-07.milestone.status is not part of the closed DS-improvements schema"),
   ));
 });
