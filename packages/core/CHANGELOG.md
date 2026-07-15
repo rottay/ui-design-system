@@ -1,5 +1,14 @@
 # @rottay/design-system
 
+## 2.19.7
+
+### Patch Changes
+
+- Make the modern feedback modal adopt a full-viewport phone posture from the shared responsive
+  authority while preserving explicit fullscreen behavior and tenant-owned styling.
+- Treat StatsGrid `columns` as a desktop ceiling: one track on phone, up to two on tablet, and the
+  requested count on desktop across all engines, with overflow-safe tracks and explicit style escape hatches.
+
 ## 2.19.6
 
 ### Patch Changes
