@@ -2319,7 +2319,7 @@
    "lane": "craft",
    "order": 13,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2350,8 +2350,8 @@
    ],
    "claimedBy": "codex-cra13",
    "claimedAt": "2026-07-15",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-07-15",
+   "evidence": "DS 685ef9d9 closes explicit compact activation, exact capability traits, public root exports, tooltip personality, provider-resolved palette fallbacks and runtime prop fixtures; Bithire fe0eb79c7 removes unsupported mounts; docs 5a890ca aligns the public contract. Current closure evidence: 39/39 API/compact/theme/export/tooltip tests, 31/31 affected-family correctness tests, core and showroom TypeScript green; earlier correctness floor remains 53/53.",
    "execution": {
     "decisionOwner": "visualization-runtime",
     "touchedRepos": [
