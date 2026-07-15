@@ -16,7 +16,7 @@
  */
 
 import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
-import { arrayValueAt } from '@/_internal/utils/collections';
+import { arrayValueAt, setArrayValueAt } from '@/_internal/utils/collections';
 import type { OTPInputProps } from '../OTPInput.types';
 import { OTPINPUT_DEFAULTS } from '../OTPInput.types';
 
@@ -111,7 +111,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     if (e.key === 'Backspace') {
       e.preventDefault();
       const newValues = [...internalValues];
-      if (internalValues[index]) {
+      if (arrayValueAt(internalValues, index)) {
         newValues[index] = '';
         updateValue(newValues);
       } else if (index > 0) {
@@ -152,15 +152,15 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
-            ref={(el) => { inputRefs.current[index] = el; }}
+            ref={(el) => { setArrayValueAt(inputRefs.current, index, el); }}
             id={`${idPrefix}-${index}`}
             type={mask ? 'password' : 'text'}
             inputMode={type === 'numeric' ? 'numeric' : 'text'}
             maxLength={1}
             data-part="slot"
             data-error={error ? 'true' : 'false'}
-            data-filled={internalValues[index] ? 'true' : 'false'}
-            value={internalValues[index] || ''}
+            data-filled={arrayValueAt(internalValues, index) ? 'true' : 'false'}
+            value={arrayValueAt(internalValues, index) || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
             style={{ ...sizeStyle, padding: 0, textAlign: 'center', fontFamily: 'monospace', fontWeight: 700, opacity: disabled ? 0.5 : 1, cursor: disabled ? 'not-allowed' : 'text' }}

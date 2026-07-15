@@ -82,7 +82,8 @@ export interface SelectionPreviewRailProps<T extends object> {
   preview?: SelectionPreviewRailPreviewConfig<T>;
 }
 
-function readDisplayRecordValue(record: object, key: PropertyKey): unknown {
+function readDisplayRecordValue(record: unknown, key: PropertyKey): unknown {
+  if (typeof record !== 'object' || record === null) return undefined;
   const value = Reflect.get(record, key);
   return typeof value === 'function' ? undefined : value;
 }

@@ -17,7 +17,7 @@
  */
 
 import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
-import { arrayValueAt } from '@/_internal/utils/collections';
+import { arrayValueAt, setArrayValueAt } from '@/_internal/utils/collections';
 import type { OTPInputProps } from '../OTPInput.types';
 import { OTPINPUT_DEFAULTS } from '../OTPInput.types';
 
@@ -113,7 +113,7 @@ export default function ClassicOTPInput(props: OTPInputProps): React.ReactElemen
     if (e.key === 'Backspace') {
       e.preventDefault();
       const newValues = [...internalValues];
-      if (internalValues[index]) {
+      if (arrayValueAt(internalValues, index)) {
         newValues[index] = '';
         updateValue(newValues);
       } else if (index > 0) {
@@ -167,12 +167,12 @@ export default function ClassicOTPInput(props: OTPInputProps): React.ReactElemen
         {Array.from({ length }, (_, index) => (
           <input
             key={index}
-            ref={(el) => { inputRefs.current[index] = el; }}
+            ref={(el) => { setArrayValueAt(inputRefs.current, index, el); }}
             id={`${idPrefix}-${index}`}
             type={mask ? 'password' : 'text'}
             inputMode={type === 'numeric' ? 'numeric' : 'text'}
             maxLength={1}
-            value={internalValues[index] || ''}
+            value={arrayValueAt(internalValues, index) || ''}
             disabled={disabled}
             autoFocus={autoFocus && index === 0}
             style={inputStyle}

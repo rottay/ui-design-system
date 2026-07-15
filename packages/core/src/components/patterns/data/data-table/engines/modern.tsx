@@ -830,7 +830,7 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
   useEffect(() => {
     if (activeRowIndex < 0 || !tbodyRef.current) return;
     const rows = tbodyRef.current.querySelectorAll<HTMLTableRowElement>('tr[data-row-index]');
-    const targetRow = rows[activeRowIndex];
+    const targetRow = rows.item(activeRowIndex);
     if (targetRow) {
       targetRow.focus();
     }

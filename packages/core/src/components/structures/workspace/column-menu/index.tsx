@@ -29,6 +29,11 @@ import { ArrowDown, ArrowUp, ChevronDown, ChevronRight, GripVertical, PinOff, Ro
 
 import { Box, Checkbox, Flex, Text } from '../../../primitives';
 
+function readColumnRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 /** Minimal column shape required by the menu. Compatible with any richer
  *  ColumnDef<T> via structural subtyping. */
 export interface ColumnMenuColumn {
@@ -574,7 +579,7 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
                     const isPinnedLeft = draftPinned.left.includes(column.key);
                     const isPinnedRight = draftPinned.right.includes(column.key);
                     const isPinned = isPinnedLeft || isPinnedRight;
-                    const currentWidth = draftWidths[column.key];
+                    const currentWidth = readColumnRecordValue(draftWidths, column.key) as number | undefined;
                     const isEditingWidth = editingWidthKey === column.key;
                     const isDragging = draggedColumnKey === column.key;
                     const isDragTarget = dragOverColumnKey === column.key && draggedColumnKey !== column.key;

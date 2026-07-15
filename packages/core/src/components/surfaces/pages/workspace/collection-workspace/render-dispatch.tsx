@@ -101,7 +101,12 @@ function resolveKey<T extends object>(
   rowKey: keyof T | ((row: T) => string),
 ): string {
   if (typeof rowKey === 'function') return rowKey(item);
-  return String(Reflect.get(item, rowKey));
+  return String(readCollectionRecordValue(item, rowKey));
+}
+
+function readCollectionRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
 }
 
 function getColumnHeader(column: ColumnDef<unknown>): ReactNode {
@@ -175,8 +180,8 @@ function getColumnValue<T extends object>(
   const rawValue = column.accessorFn
     ? column.accessorFn(row)
     : column.accessorKey
-      ? Reflect.get(row, column.accessorKey)
-      : Reflect.get(row, column.key);
+      ? readCollectionRecordValue(row, column.accessorKey)
+      : readCollectionRecordValue(row, column.key);
 
   if (column.render) {
     return column.render(rawValue, row, index);
@@ -630,7 +635,7 @@ export function CollectionRenderDispatch<T extends object>(
     // Group data by field value
     const groupMap = new Map<string, T[]>();
     for (const item of data) {
-      const groupValue = String((item as Record<string, unknown>)[groupField] ?? 'Uncategorized');
+      const groupValue = String(readCollectionRecordValue(item, groupField) ?? 'Uncategorized');
       if (!groupMap.has(groupValue)) groupMap.set(groupValue, []);
       groupMap.get(groupValue)!.push(item);
     }

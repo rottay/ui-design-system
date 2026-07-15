@@ -12,3 +12,9 @@ export function arrayValueAt<T>(values: readonly T[], integer: number): T | unde
 
   return values[normalized];
 }
+
+/** Assign an array slot by non-negative integer position without shifting siblings. */
+export function setArrayValueAt<T>(values: T[], integer: number, value: T): void {
+  if (!Number.isInteger(integer) || integer < 0) return;
+  values[integer] = value;
+}

@@ -27,6 +27,13 @@ import { PageShellSurface } from '../../../layout/page-shell';
 import { useSurfaceResponsiveLayout } from '../../../foundation/responsive';
 import { SurfaceEmptyState, SurfaceErrorState } from '../../../foundation/states';
 
+function readWizardStepErrors(
+  errors: Record<string, Record<string, string>>,
+  stepKey: string
+): Record<string, string> | undefined {
+  return Reflect.get(errors, stepKey) as Record<string, string> | undefined;
+}
+
 function renderWizardStepContent(
   step: WizardSurfaceStepConfig,
   context: WizardSurfaceStepRenderContext,
@@ -314,7 +321,7 @@ export function WizardSurface({
 
           <PatternStepWizard
             steps={visibleSteps.map((step) => {
-              const validationErrors = Reflect.get(stepErrors, step.key) as Record<string, string> | undefined;
+              const validationErrors = readWizardStepErrors(stepErrors, step.key);
 
               return {
                 key: step.key,

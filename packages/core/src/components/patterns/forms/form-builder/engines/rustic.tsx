@@ -21,6 +21,7 @@
  */
 
 import React, { useState, useCallback, useMemo, type ReactNode, type CSSProperties } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
@@ -308,7 +309,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
               onChange={(e) => updateValue(field.name, e.target.value)}
               disabled={fieldDisabled}
               readOnly={readOnly}
-              data-error={!!errors[field.name]} style={s.input}
+              data-error={Boolean(readRecordValue(errors, field.name))} style={s.input}
             />
           );
         case 'number':
@@ -324,7 +325,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
               max={field.validation?.max}
               disabled={fieldDisabled}
               readOnly={readOnly}
-              data-error={!!errors[field.name]} style={s.input}
+              data-error={Boolean(readRecordValue(errors, field.name))} style={s.input}
             />
           );
         case 'textarea':
@@ -332,7 +333,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             <textarea
               data-part="value-input"
               data-field-type="textarea"
-              data-error={!!errors[field.name]}
+              data-error={Boolean(readRecordValue(errors, field.name))}
               placeholder={field.placeholder}
               value={(val as string) ?? ''}
               onChange={(e) => updateValue(field.name, e.target.value)}
@@ -346,7 +347,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             <select
               data-part="value-input"
               data-field-type="select"
-              data-error={!!errors[field.name]}
+              data-error={Boolean(readRecordValue(errors, field.name))}
               value={(val as string) ?? ''}
               onChange={(e) => updateValue(field.name, e.target.value)}
               disabled={fieldDisabled}
@@ -363,7 +364,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             <select
               data-part="value-input"
               data-field-type="multi-select"
-              data-error={!!errors[field.name]}
+              data-error={Boolean(readRecordValue(errors, field.name))}
               multiple
               value={(val as string[]) ?? []}
               onChange={(e) => {
@@ -426,13 +427,13 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
             </label>
           );
         case 'date':
-          return <input data-part="value-input" data-field-type="date" type="date" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
+          return <input data-part="value-input" data-field-type="date" type="date" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
         case 'time':
-          return <input data-part="value-input" data-field-type="time" type="time" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
+          return <input data-part="value-input" data-field-type="time" type="time" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
         case 'datetime':
-          return <input data-part="value-input" data-field-type="datetime" type="datetime-local" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
+          return <input data-part="value-input" data-field-type="datetime" type="datetime-local" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
         case 'file':
-          return <input data-part="value-input" data-field-type="file" type="file" disabled={fieldDisabled} data-error={!!errors[field.name]} style={s.input} onChange={(e) => updateValue(field.name, e.target.files)} />;
+          return <input data-part="value-input" data-field-type="file" type="file" disabled={fieldDisabled} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} onChange={(e) => updateValue(field.name, e.target.files)} />;
         case 'color':
           // Native color inputs only accept concrete color strings, not CSS vars.
           return <input data-part="value-input" data-field-type="color" type="color" value={(val as string) ?? '#111827'} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} style={{ width: 48, height: 36, padding: 2, cursor: 'pointer' }} />;
@@ -457,7 +458,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
         case 'custom':
           return field.render?.(field, val, (v) => updateValue(field.name, v)) ?? null;
         default:
-          return <input data-part="value-input" data-field-type={field.type} type="text" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={!!errors[field.name]} style={s.input} />;
+          return <input data-part="value-input" data-field-type={field.type} type="text" value={(val as string) ?? ''} onChange={(e) => updateValue(field.name, e.target.value)} disabled={fieldDisabled} readOnly={readOnly} data-error={Boolean(readRecordValue(errors, field.name))} style={s.input} />;
       }
     },
     [currentValues, disabled, readOnly, updateValue, errors]
@@ -496,7 +497,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     const content = renderField
       ? renderField(field, defaultRender, readRecordValue(currentValues, field.name))
       : defaultRender;
-    const error = errors[field.name];
+    const error = readRecordValue(errors, field.name) as string | undefined;
     // Checkbox fields embed their label inline, so the outer label is hidden
     // to avoid a redundant double-label.
     const showLabel = showLabels && field.type !== 'checkbox';
@@ -532,7 +533,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     );
   };
 
-  const fieldsToRender = adaptedLayout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
+  const fieldsToRender = adaptedLayout === 'steps' ? (arrayValueAt(stepFields, currentStep) ?? []) : visibleFields;
   const fieldElements = fieldsToRender.map(renderFormField);
   const gapStr = typeof gap === 'number' ? `${gap}px` : gap;
 

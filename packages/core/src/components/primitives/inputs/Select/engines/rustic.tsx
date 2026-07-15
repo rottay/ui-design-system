@@ -391,8 +391,9 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
   const scrollOptionIntoView = useCallback((index: number) => {
     if (listRef.current) {
       const optionElements = listRef.current.querySelectorAll('[role="option"]');
-      if (optionElements[index]) {
-        optionElements[index].scrollIntoView({ block: 'nearest' });
+      const optionElement = optionElements.item(index);
+      if (optionElement) {
+        optionElement.scrollIntoView({ block: 'nearest' });
       }
     }
   }, []);

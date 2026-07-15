@@ -21,6 +21,7 @@
  */
 
 import React, { useState, useCallback, useMemo, type ReactNode } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import {
   Form,
   Input,
@@ -269,7 +270,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
     const content = renderField
       ? renderField(field, defaultRender, readRecordValue(currentValues, field.name))
       : defaultRender;
-    const error = errors[field.name];
+    const error = readRecordValue(errors, field.name) as string | undefined;
 
     return (
       <Form.Item
@@ -294,7 +295,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
   const formLayout = adaptedLayout === 'horizontal' ? 'horizontal' : 'vertical';
 
   // In step mode, only the current step's fields are rendered.
-  const fieldsToRender = adaptedLayout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
+  const fieldsToRender = adaptedLayout === 'steps' ? (arrayValueAt(stepFields, currentStep) ?? []) : visibleFields;
 
   const fieldElements = fieldsToRender.map(renderFormField);
 

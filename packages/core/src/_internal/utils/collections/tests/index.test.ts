@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { arrayValueAt } from '..';
+import { arrayValueAt, setArrayValueAt } from '..';
 
 describe('shared/utils/collections', () => {
   const values = ['first', 'second', 'third'] as const;
@@ -27,5 +27,24 @@ describe('shared/utils/collections', () => {
   it('preserves undefined values and sparse slots', () => {
     expect(arrayValueAt([undefined], 0)).toBeUndefined();
     expect(arrayValueAt(new Array<string>(1), 0)).toBeUndefined();
+  });
+
+  it('assigns a requested slot without shifting earlier values', () => {
+    const mutableValues = ['first'];
+
+    setArrayValueAt(mutableValues, 2, 'third');
+
+    expect(mutableValues.length).toBe(3);
+    expect(mutableValues[0]).toBe('first');
+    expect(mutableValues[2]).toBe('third');
+  });
+
+  it('ignores invalid assignment positions', () => {
+    const mutableValues = ['first'];
+
+    setArrayValueAt(mutableValues, -1, 'negative');
+    setArrayValueAt(mutableValues, 0.5, 'fractional');
+
+    expect(mutableValues).toEqual(['first']);
   });
 });

@@ -152,13 +152,18 @@ function resolveKey<T extends object>(
   rowKey: keyof T | ((row: T) => string),
 ): string {
   if (typeof rowKey === 'function') return rowKey(item);
-  return String(Reflect.get(item, rowKey));
+  return String(readCollectionRecordValue(item, rowKey));
+}
+
+function readCollectionRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
 }
 
 function resolveSortValue<T extends object>(row: T, column: ColumnDef<T>): unknown {
   if (column.accessorFn) return column.accessorFn(row);
-  if (column.accessorKey) return Reflect.get(row, column.accessorKey);
-  return Reflect.get(row, column.key);
+  if (column.accessorKey) return readCollectionRecordValue(row, column.accessorKey);
+  return readCollectionRecordValue(row, column.key);
 }
 
 function compareSortValues(a: unknown, b: unknown): number {
@@ -301,7 +306,7 @@ function normalizeHeaderMetaLabel(value: string): string {
 
 function readHeaderMetaValue(row: object, keys: string[]): unknown {
   for (const key of keys) {
-    const value = Reflect.get(row, key);
+    const value = readCollectionRecordValue(row, key);
     if (value != null) return value;
   }
   return undefined;
@@ -1070,7 +1075,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       if (column.editable !== undefined || !column.accessorKey) return column;
 
       const sampleValue = data
-        .map((item) => item[column.accessorKey as keyof T])
+        .map((item) => readCollectionRecordValue(item, column.accessorKey as PropertyKey))
         .find(isInlineEditablePrimitive);
       const editor = inferInlineEditor<T>(sampleValue);
       if (!editor) return column;
@@ -1095,7 +1100,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
     return data.map((item) => {
       const itemKey = resolveKey(item, rowKey);
-      const itemDraft = draftCellValues[itemKey];
+      const itemDraft = readCollectionRecordValue(draftCellValues, itemKey) as Partial<T> | undefined;
       if (!itemDraft) return item;
 
       return {
@@ -1122,7 +1127,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
       setDraftCellValues((current) => ({
         ...current,
         [itemKey]: {
-          ...(current[itemKey] ?? {}),
+          ...((readCollectionRecordValue(current, itemKey) as Record<string, unknown> | undefined) ?? {}),
           [column.accessorKey as string]: newValue,
         },
       }));

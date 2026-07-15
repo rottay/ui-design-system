@@ -23,6 +23,7 @@
  */
 
 import React, { useState, useCallback, useMemo, useRef, useEffect, type ReactNode, type CSSProperties } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { FormBuilderProps } from '../FormBuilder.types';
 import type { FieldDef } from '../../../foundation/types';
 import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
@@ -307,7 +308,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       const val = readRecordValue(currentValues, field.name);
       const fieldDisabled = disabled || field.disabled;
-      const hasError = !!errors[field.name];
+      const hasError = Boolean(readRecordValue(errors, field.name));
 
       switch (field.type) {
         case 'text':
@@ -674,7 +675,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
    * Otherwise all fields belong to a default unnamed section.
    */
   const groupedSections = useMemo(() => {
-    const fieldsToGroup = adaptedLayout === 'steps' ? (stepFields[currentStep] ?? []) : visibleFields;
+    const fieldsToGroup = adaptedLayout === 'steps' ? (arrayValueAt(stepFields, currentStep) ?? []) : visibleFields;
     const sections: { key: string; title?: string; description?: string; fields: FieldDef[] }[] = [];
     let current: { key: string; title?: string; description?: string; fields: FieldDef[] } = {
       key: '__default',
@@ -707,7 +708,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     const content = renderField
       ? renderField(field, defaultRender, readRecordValue(currentValues, field.name))
       : defaultRender;
-    const error = errors[field.name];
+    const error = readRecordValue(errors, field.name) as string | undefined;
     const showLabel = showLabels && field.type !== 'checkbox';
 
     return (
@@ -904,9 +905,9 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
       {/* Sections with optional collapse */}
       {groupedSections.map((section, sectionIdx) => {
-        const isCollapsed = !!collapsedSections[section.key];
+        const isCollapsed = Boolean(readRecordValue(collapsedSections, section.key));
         const hasSectionHeader = !!section.title;
-        const contentHeight = sectionHeights[section.key];
+        const contentHeight = readRecordValue(sectionHeights, section.key) as number | undefined;
 
         return (
           <div key={section.key}>
@@ -964,7 +965,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
             <div
               data-part="section-content"
               data-collapsed={isCollapsed}
-              ref={(el) => { sectionContentRefs.current[section.key] = el; }}
+              ref={(el) => { Reflect.set(sectionContentRefs.current, section.key, el); }}
               style={{
                 overflow: 'hidden',
                 transition: hasSectionHeader

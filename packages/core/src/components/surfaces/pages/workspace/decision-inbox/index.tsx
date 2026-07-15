@@ -25,6 +25,11 @@ import { Button } from '../../../../primitives/inputs/Button';
 import { Textarea } from '../../../../primitives/inputs/Textarea';
 import { Skeleton } from '../../../../primitives/feedback/Skeleton';
 
+function readDecisionRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -266,7 +271,7 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
     if (!selectedItem) return;
     const key = typeof rowKey === 'function'
       ? rowKey(selectedItem)
-      : String(Reflect.get(selectedItem, rowKey));
+      : String(readDecisionRecordValue(selectedItem, rowKey));
     const decisionDef = decisions.find(d => d.key === action);
     if (decisionDef?.requiresReason && !reasonText) {
       setPendingAction(action);
