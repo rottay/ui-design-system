@@ -1,5 +1,15 @@
 # @rottay/design-system
 
+## 2.19.1
+
+### Patch Changes
+
+- Add the app-resolved `access: all | resolved` presentation contract to all 33 surface configs. `all`
+  is the superadmin path and bypasses every DS visibility, allow/deny, cascade, row and callback filter
+  before it is evaluated; legacy `permissions` remains available for one compatibility release.
+- Quarantine live particle-field routes behind the explicit craft opt-in and publish the focused optional
+  supplier entrypoints plus ES2020-safe runtime helpers prepared by the Wave-0 dependency work.
+
 ## 2.19.0
 
 ### Minor Changes
