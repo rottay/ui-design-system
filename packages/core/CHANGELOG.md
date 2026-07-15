@@ -1,5 +1,16 @@
 # @rottay/design-system
 
+## 2.19.4
+
+### Patch Changes
+
+- Ship the refreshed supplier contract for the surface-capability exports and keep app manifests
+  honest about every runtime supplier they render through the design system.
+- Harden the packaged supplier scanner so ordinary computed data access remains valid while
+  explicit and definitely-callable loader transport stays fail-closed.
+- Certify the published tarball through a clean, fully offline consumer with isolated runtime
+  packages, resolved exports, ESM/CJS execution, and a supplier-free non-consuming bundle.
+
 ## 2.19.3
 
 ### Patch Changes
