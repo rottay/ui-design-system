@@ -27,6 +27,10 @@ import type { DensityKey } from '../../../../patterns/data/list-toolbar/ListTool
 import type { BulkAction } from '../../../../patterns/foundation/types';
 import type { SortConfig, PaginationConfig, FilterDef } from '../../../../patterns/foundation/types';
 import { PatternDataTable } from '../../../../patterns/data/data-table';
+import type {
+  DataTableMobileCardContext,
+  DataTablePatternProps,
+} from '../../../../patterns/data/data-table';
 import { PatternGridView } from '../../../../patterns/data/grid-view';
 import { PatternGalleryView } from '../../../../patterns/data/gallery-view';
 import { Box } from '../../../../primitives/layout/Box';
@@ -86,7 +90,7 @@ export interface CollectionRenderDispatchProps<T extends object> {
   editingCell?: { rowKey: string; columnKey: string } | null;
   editTrigger?: 'click' | 'doubleClick';
   tabNavigation?: boolean;
-  mobileCard?: (row: T, index: number) => ReactNode;
+  mobileCard?: DataTablePatternProps<T>['mobileCard'];
 
   // Cards-specific (legacy inline card grid)
   focusEnabled?: boolean;
@@ -561,6 +565,37 @@ export function CollectionRenderDispatch<T extends object>(
     focusEnabled,
   } = props;
 
+  const createCardContext = (
+    item: T,
+    index: number,
+  ): DataTableMobileCardContext<T> => {
+    const itemKey = resolveKey(item, rowKey);
+    const selectedKeys = props.selectedKeys ?? [];
+    const selected = selectedKeys.includes(itemKey);
+
+    return {
+      item,
+      index,
+      rowKey: itemKey,
+      selected,
+      selectable: props.selectable ?? false,
+      toggleSelection: () => {
+        if (!props.selectable) return;
+
+        const nextKeys = selected
+          ? selectedKeys.filter((key) => key !== itemKey)
+          : [...selectedKeys, itemKey];
+        const selectedItems = data.filter((candidate) =>
+          nextKeys.includes(resolveKey(candidate, rowKey)),
+        );
+
+        props.onSelectionChange?.(nextKeys, selectedItems);
+      },
+      open: () => onRowClick?.(item, index),
+      actions: actions?.(item, index),
+    };
+  };
+
   // Error state
   if (error) {
     return (
@@ -587,7 +622,7 @@ export function CollectionRenderDispatch<T extends object>(
       <PatternGridView<T>
         className="ds-surface ds-collection-render-dispatch"
         data={data}
-        renderCard={cardRenderer}
+        renderCard={(item, index) => cardRenderer(item, index, createCardContext(item, index))}
         rowKey={rowKey}
         columns={gc.columns}
         minColumnWidth={typeof gc.minCardWidth === 'number' ? gc.minCardWidth : undefined}
@@ -699,7 +734,11 @@ export function CollectionRenderDispatch<T extends object>(
                 )}
                 {items.map((item) => (
                   <Box key={resolveKey(item, rowKey)}>
-                    {kc.renderCard?.(item, col.id) ?? mobileCard?.(item, 0) ?? (
+                    {kc.renderCard?.(item, col.id) ?? mobileCard?.(
+                      item,
+                      data.indexOf(item),
+                      createCardContext(item, data.indexOf(item)),
+                    ) ?? (
                       <Text className="ds-collection-render-dispatch__muted-text" data-part="muted-text">No card renderer</Text>
                     )}
                   </Box>
@@ -807,7 +846,7 @@ export function CollectionRenderDispatch<T extends object>(
               }}
             >
               {cardRenderer
-                ? cardRenderer(item, i)
+                ? cardRenderer(item, i, createCardContext(item, i))
                 : renderFallbackCard({ row: item, index: i, columns, actions })}
             </Box>
             );

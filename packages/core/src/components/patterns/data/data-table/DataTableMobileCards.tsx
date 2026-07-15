@@ -3,6 +3,7 @@
 import React from 'react';
 import { Box, Card, Checkbox, Flex, Stack, Text } from '../../../primitives';
 import type { ColumnDef, ResponsiveColumnMode } from '../../foundation/types';
+import type { DataTableMobileCardContext } from './DataTable.types';
 import { resolveAccessor } from './DataTable.types';
 
 function stringifyMobileValue(value: unknown): string {
@@ -42,7 +43,11 @@ export interface DataTableMobileCardsProps<T extends object> {
   onToggleSelection?: (key: string) => void;
   onRowClick?: (row: T, index: number) => void;
   actions?: (row: T, index: number) => React.ReactNode;
-  mobileCard?: (row: T, index: number) => React.ReactNode;
+  mobileCard?: (
+    row: T,
+    index: number,
+    context: DataTableMobileCardContext<T>,
+  ) => React.ReactNode;
 }
 
 /**
@@ -101,11 +106,26 @@ export function DataTableMobileCards<T extends object>({
       {data.map((row, index) => {
         const rowKey = getRowKey(row, index);
         const isSelected = selectedKeys.includes(rowKey);
+        const resolvedActions = actions?.(row, index);
+        const mobileCardContext: DataTableMobileCardContext<T> = {
+          item: row,
+          index,
+          rowKey,
+          selected: isSelected,
+          selectable,
+          toggleSelection: () => onToggleSelection?.(rowKey),
+          open: () => onRowClick?.(row, index),
+          actions: resolvedActions,
+        };
 
         if (mobileCard) {
           return (
-            <Box key={rowKey}>
-              {mobileCard(row, index)}
+            <Box
+              key={rowKey}
+              data-part="mobile-card-custom"
+              data-selected={isSelected ? 'true' : 'false'}
+            >
+              {mobileCard(row, index, mobileCardContext)}
             </Box>
           );
         }
@@ -175,10 +195,10 @@ export function DataTableMobileCards<T extends object>({
                   </Stack>
                 )}
 
-                {actions && (
+                {resolvedActions && (
                   <Box onClick={(event) => event.stopPropagation()}>
                     <Flex gap={8} wrap="wrap">
-                      {actions(row, index)}
+                      {resolvedActions}
                     </Flex>
                   </Box>
                 )}

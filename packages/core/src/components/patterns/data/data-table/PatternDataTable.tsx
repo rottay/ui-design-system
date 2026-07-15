@@ -169,9 +169,34 @@ export function PatternDataTable<T extends object>(
   );
   const shouldUseMobileCards = isMobile && visibleColumns.length > 0;
 
+  // Emit the token-resolved density CSS variables on either responsive root,
+  // not only the desktop engine. Mobile cards are the same data capability
+  // and must preserve the caller's density, class and root sizing contract.
+  const densityVars =
+    props.density === 'compact'
+      ? resolveDensityStyleVars('compact')
+      : props.density === 'spacious'
+        ? undefined
+        : resolveDensityStyleVars('comfortable');
+
   if (shouldUseMobileCards) {
     return (
-      <Stack spacing="md">
+      <Stack
+        spacing="md"
+        fullWidth
+        data-part="mobile-root"
+        data-density={props.density ?? 'comfortable'}
+        className={[
+          'ds-pattern-data-table ds-data-table--mobile',
+          props.className,
+        ].filter(Boolean).join(' ')}
+        style={{
+          width: '100%',
+          minWidth: 0,
+          ...(densityVars ?? {}),
+          ...props.style,
+        }}
+      >
         {header}
         {toolbar}
         <MobileBulkActions
@@ -220,17 +245,6 @@ export function PatternDataTable<T extends object>(
       </Stack>
     );
   }
-
-  // Emit the token-resolved density CSS variables (design-language §3) on the
-  // engine root for the two canonical modes so cell padding derives from the
-  // `--ds-density-cell-padding` cascade. The legacy `spacious` mode keeps its
-  // existing per-engine padding untouched (no density vars emitted).
-  const densityVars =
-    props.density === 'compact'
-      ? resolveDensityStyleVars('compact')
-      : props.density === 'spacious'
-        ? undefined
-        : resolveDensityStyleVars('comfortable');
 
   return (
     <DataTableEngine

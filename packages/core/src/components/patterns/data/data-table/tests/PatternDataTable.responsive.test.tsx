@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
-import { describe, expect, it, afterEach } from 'vitest';
-import { render, screen, cleanup } from '@testing-library/react';
+import { describe, expect, it, afterEach, vi } from 'vitest';
+import { render, screen, cleanup, fireEvent } from '@testing-library/react';
 
 import { mockMatchMedia } from '../../../../../_internal/testing/helpers/match-media';
 import { DesignSystemProvider } from '../../../../../runtime/bootstrap';
@@ -130,6 +130,68 @@ describe('PatternDataTable responsive columns', () => {
       expect(await screen.findByText('Alice', undefined, { timeout: 5000 })).toBeInTheDocument();
       expect(screen.getByText('alice@test.com')).toBeInTheDocument();
       expect(screen.getByText('Admin')).toBeInTheDocument();
+    });
+  });
+
+  describe('custom mobile card behavior context', () => {
+    it('preserves selection, open, and row actions for app-authored cards', async () => {
+      mockMatchMedia(390);
+
+      const onSelectionChange = vi.fn();
+      const onRowClick = vi.fn();
+
+      const { container } = render(
+        <DesignSystemProvider
+          tenantConfig={TEST_TENANT_CONFIG}
+          forceEngine="classic"
+          skipCssLoading
+        >
+          <Suspense fallback={<div>Loading...</div>}>
+            <PatternDataTable<Row>
+              engine="classic"
+              data={rows}
+              rowKey="id"
+              columns={[{ key: 'name', header: 'Name', accessorKey: 'name' }]}
+              selectable
+              selectedKeys={['1']}
+              density="compact"
+              className="product-mobile-table"
+              style={{ backgroundColor: 'rgb(1, 2, 3)' }}
+              onSelectionChange={onSelectionChange}
+              onRowClick={onRowClick}
+              actions={(row) => <span>{`Actions for ${row.name}`}</span>}
+              mobileCard={(row, _index, context) => (
+                <div>
+                  <span>{`${row.name}: ${context.selected ? 'selected' : 'not selected'}`}</span>
+                  <button type="button" onClick={context.toggleSelection}>
+                    {`Toggle ${row.name}`}
+                  </button>
+                  <button type="button" onClick={context.open}>
+                    {`Open ${row.name}`}
+                  </button>
+                  {context.actions}
+                </div>
+              )}
+            />
+          </Suspense>
+        </DesignSystemProvider>,
+      );
+
+      expect(await screen.findByText('Alice: selected')).toBeInTheDocument();
+      expect(screen.getByText('Bob: not selected')).toBeInTheDocument();
+      expect(screen.getByText('Actions for Alice')).toBeInTheDocument();
+      const mobileRoot = container.querySelector<HTMLElement>('[data-part="mobile-root"]');
+      expect(mobileRoot).toHaveClass('product-mobile-table');
+      expect(mobileRoot).toHaveAttribute('data-density', 'compact');
+      expect(mobileRoot?.style.width).toBe('100%');
+      expect(mobileRoot?.style.backgroundColor).toBe('rgb(1, 2, 3)');
+      expect(mobileRoot?.style.getPropertyValue('--ds-density-scale')).not.toBe('');
+
+      fireEvent.click(screen.getByRole('button', { name: 'Toggle Bob' }));
+      expect(onSelectionChange).toHaveBeenCalledWith(['1', '2'], rows);
+
+      fireEvent.click(screen.getByRole('button', { name: 'Open Bob' }));
+      expect(onRowClick).toHaveBeenCalledWith(rows[1], 1);
     });
   });
 

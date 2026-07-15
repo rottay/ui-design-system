@@ -17,6 +17,7 @@ import type {
   SortConfig,
 } from '../../../patterns/foundation/types';
 import type { SavedView } from '../../../patterns/data/saved-views/SavedViews.types';
+import type { DataTableMobileCardContext } from '../../../patterns/data/data-table/DataTable.types';
 import type { CalendarEvent } from '../../../patterns/visualization/calendar-view/CalendarView.types';
 import type {
   AppResolvedSurfaceAccess,
@@ -148,8 +149,12 @@ export interface CollectionGalleryConfig<T = unknown> {
  * Formalizes what today is an ad-hoc mobileCard render prop.
  */
 export interface CollectionCardsConfig<T = unknown> {
-  /** Card renderer. Today this is the mobileCard prop. */
-  renderCard: (item: T, index: number) => ReactNode;
+  /** Card renderer with canonical selection, open, and action behavior. */
+  renderCard: (
+    item: T,
+    index: number,
+    context: DataTableMobileCardContext<T>,
+  ) => ReactNode;
   /** Number of columns or 'auto'. */
   columns?: number | 'auto';
   /** Minimum card width for auto-fill. */

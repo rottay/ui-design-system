@@ -35,6 +35,33 @@ export type AggregationFn<T> =
   | ((items: T[]) => ReactNode);
 
 /**
+ * Product behavior supplied to a custom mobile-card renderer.
+ *
+ * The third callback argument is additive and therefore keeps existing
+ * `(row, index) => ReactNode` renderers source-compatible. New renderers can
+ * preserve the table's selection, open and row-action mechanics instead of
+ * rebuilding them from unrelated app state.
+ */
+export interface DataTableMobileCardContext<T> {
+  /** The record rendered by this mobile card. */
+  item: T;
+  /** Zero-based index in the current data projection. */
+  index: number;
+  /** Stable key resolved through the table's canonical `rowKey` contract. */
+  rowKey: string;
+  /** Whether this row is part of the current controlled/uncontrolled selection. */
+  selected: boolean;
+  /** Whether row selection is enabled for this table. */
+  selectable: boolean;
+  /** Toggle this row in the canonical table selection state. */
+  toggleSelection: () => void;
+  /** Run the table's canonical row-open/click behavior for this record. */
+  open: () => void;
+  /** Resolved row actions, ready for placement inside the custom card. */
+  actions?: ReactNode;
+}
+
+/**
  * Props for the DataTable pattern component.
  *
  * The DataTable is a generic, slot-driven table that supports server-side and
@@ -256,10 +283,15 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
    * `mobileBreakpoint`, the table switches from a traditional row layout to a
    * card-based layout using this renderer.
    *
-   * @param row   - The data object for this card.
-   * @param index - Zero-based index in `data`.
+   * @param row     - The data object for this card.
+   * @param index   - Zero-based index in `data`.
+   * @param context - Canonical selection, open, and row-action behavior.
    */
-  mobileCard?: (row: T, index: number) => ReactNode;
+  mobileCard?: (
+    row: T,
+    index: number,
+    context: DataTableMobileCardContext<T>,
+  ) => ReactNode;
 
   /**
    * Viewport width (in pixels) at which the table switches to mobile card

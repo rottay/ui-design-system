@@ -43,6 +43,7 @@ import {
   resolveSurfacePermission,
 } from '../../../foundation/helpers';
 import { PatternDataTable } from '../../../../patterns/data/data-table';
+import type { DataTablePatternProps } from '../../../../patterns/data/data-table';
 import { PatternFilterPanel } from '../../../../patterns/forms/filter-panel';
 import { PatternSavedViewsBar } from '../../../../patterns/data/saved-views';
 import { PatternListToolbar } from '../../../../patterns/data/list-toolbar';
@@ -119,7 +120,7 @@ export interface CollectionWorkspaceProps<T extends object> extends CollectionWo
   // Layout
   headerSlot?: ReactNode;
   footerSlot?: ReactNode;
-  mobileCard?: (row: T, index: number) => ReactNode;
+  mobileCard?: DataTablePatternProps<T>['mobileCard'];
   defaultViewMode?: 'table' | 'cards';
   /** Per-mode render configurations (grid, kanban, gallery, calendar, cards) */
   viewModes?: CollectionViewModeConfigs<T>;

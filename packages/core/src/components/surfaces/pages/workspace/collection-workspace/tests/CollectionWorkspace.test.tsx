@@ -629,6 +629,66 @@ describe('CollectionWorkspaceSurface', () => {
     expect(await screen.findByTestId('card-3')).toBeInTheDocument();
   });
 
+  it('passes canonical selection, open, and actions into cards-mode renderers', async () => {
+    const onSelectionChange = vi.fn();
+    const onRowClick = vi.fn();
+
+    renderSurface(
+      <CollectionWorkspaceSurface
+        {...buildProps({
+          defaultViewMode: 'cards',
+          onRowClick,
+          actions: (row) => <span>{`Actions for ${row.name}`}</span>,
+          behavior: {
+            selection: {
+              enabled: true,
+              selectedKeys: ['1'],
+              onSelectionChange,
+            },
+          },
+          viewModes: {
+            cards: {
+              renderCard: (row, _index, context) => (
+                <div>
+                  <span>{`${row.name}: ${context.selected ? 'selected' : 'not selected'}`}</span>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      context.toggleSelection();
+                    }}
+                  >
+                    {`Toggle ${row.name}`}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      context.open();
+                    }}
+                  >
+                    {`Open ${row.name}`}
+                  </button>
+                  {context.actions}
+                </div>
+              ),
+            },
+          },
+        })}
+      />,
+    );
+
+    expect(await screen.findByText('Alice: selected')).toBeInTheDocument();
+    expect(screen.getByText('Bob: not selected')).toBeInTheDocument();
+    expect(screen.getByText('Actions for Alice')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Toggle Bob' }));
+    expect(onSelectionChange).toHaveBeenCalledWith(['1', '2'], TEST_DATA.slice(0, 2));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open Bob' }));
+    expect(onRowClick).toHaveBeenCalledWith(TEST_DATA[1], 1);
+  });
+
   // -------------------------------------------------------------------------
   // Preview rail
   // -------------------------------------------------------------------------

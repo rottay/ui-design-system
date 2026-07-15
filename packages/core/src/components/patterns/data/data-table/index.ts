@@ -11,7 +11,11 @@
  * rendering API reusable across domains.
  */
 
-export type { DataTablePatternProps, AggregationFn } from './DataTable.types';
+export type {
+  DataTablePatternProps,
+  DataTableMobileCardContext,
+  AggregationFn,
+} from './DataTable.types';
 export { resolveAccessor, resolveRowKey } from './DataTable.types';
 export type {
   ColumnDef,
