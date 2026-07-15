@@ -314,7 +314,7 @@ export function WizardSurface({
 
           <PatternStepWizard
             steps={visibleSteps.map((step) => {
-              const validationErrors = stepErrors[step.key];
+              const validationErrors = Reflect.get(stepErrors, step.key) as Record<string, string> | undefined;
 
               return {
                 key: step.key,

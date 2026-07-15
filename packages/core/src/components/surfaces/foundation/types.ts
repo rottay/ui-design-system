@@ -394,7 +394,7 @@ export interface ListSurfaceVisualConfig {
   /** Callback when visible columns change (e.g., from a column settings panel). */
   onColumnVisibilityChange?: (visibleKeys: string[]) => void;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -532,7 +532,7 @@ export interface DashboardSurfaceVisualConfig {
   /** Stack sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -650,7 +650,7 @@ export interface DetailSurfaceVisualConfig {
   /** Move the sidebar content below the main detail content on mobile. Defaults to `true`. */
   collapseSidebarOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -698,7 +698,7 @@ export interface FormSurfaceVisualConfig {
   /** Keep the submit/cancel action cluster visible near the bottom on mobile. */
   mobileActionsSticky?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -823,7 +823,7 @@ export interface WizardSurfaceVisualConfig {
   /** Use a compact step indicator on mobile (numbers only, no labels). */
   compactStepsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -896,7 +896,7 @@ export interface HeaderSurfaceVisualConfig {
   /** Hide secondary (non-primary) actions on mobile to reduce clutter. */
   hideSecondaryActionsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -960,7 +960,7 @@ export interface SidebarSurfaceVisualConfig {
   /** Automatically collapse the sidebar on mobile viewports. */
   collapseOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1025,7 +1025,7 @@ export interface DetailFormSurfaceVisualConfig {
   /** Hide the aside/summary panel on mobile to focus on the form. */
   hideAsideOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1087,7 +1087,7 @@ export interface VisualizationSurfaceVisualConfig {
   /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
   compactChartsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1164,7 +1164,7 @@ export interface SearchSurfaceVisualConfig {
   /** Keep the search input sticky at the top on mobile. */
   stickySearchOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1243,7 +1243,7 @@ export interface EditorSurfaceVisualConfig {
   /** Use a compact single-row toolbar on mobile. */
   compactToolbarOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1352,7 +1352,7 @@ export interface OperationalSurfaceVisualConfig {
   /** Stack the dashboard-style sections into a single column on mobile. Defaults to `true`. */
   stackSectionsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1439,7 +1439,7 @@ export interface MediaSurfaceVisualConfig {
   /** Maximum number of gallery columns on mobile. */
   mobileColumnsLimit?: number;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1532,7 +1532,7 @@ export interface ChatSurfaceVisualConfig {
   /** Keep the message composer input sticky at the bottom on mobile. */
   stickyInputOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1600,7 +1600,7 @@ export interface SchedulerSurfaceVisualConfig {
   /** Hide the timeline sidebar on mobile. */
   hideTimelineOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1693,7 +1693,7 @@ export interface CompareSurfaceVisualConfig {
   /** Maximum number of items to compare side-by-side on mobile. */
   mobileCompareLimit?: number;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1745,7 +1745,7 @@ export interface AuthSurfaceVisualConfig {
   /** Use a compact form layout on mobile (reduce spacing and padding). */
   compactFormOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1802,7 +1802,7 @@ export interface MarketingSurfaceVisualConfig {
   stackOnMobile?: boolean;
   stackOnTablet?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1855,7 +1855,7 @@ export interface OnboardingSurfaceVisualConfig {
   /** Hide the hero illustration on mobile to save vertical space. */
   hideIllustrationOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1904,7 +1904,7 @@ export interface EmptyStateSurfaceVisualConfig {
   /** Hide the illustration graphic on mobile. Set to false to keep it visible. */
   hideIllustrationOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -1952,7 +1952,7 @@ export interface SettingsSurfaceVisualConfig {
   /** Collapse the settings sidebar navigation on mobile. */
   collapseSidebarOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2042,7 +2042,7 @@ export interface AuditSurfaceVisualConfig {
   /** Use compact audit entries on mobile (fewer visible columns). */
   compactEntriesOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2133,7 +2133,7 @@ export interface BillingSurfaceVisualConfig {
   /** Collapse the billing sidebar on mobile. */
   collapseSidebarOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2204,7 +2204,7 @@ export interface ProfileSurfaceVisualConfig {
   /** Collapse the profile sidebar navigation on mobile. */
   collapseSidebarOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2281,7 +2281,7 @@ export interface NotificationSurfaceVisualConfig {
   /** Use compact notification items on mobile (smaller avatars, shorter text). */
   compactItemsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2375,7 +2375,7 @@ export interface ImportExportSurfaceVisualConfig {
   /** Stack import/export sections vertically on mobile. */
   stackOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2467,7 +2467,7 @@ export interface ReportSurfaceVisualConfig {
   /** Use compact chart rendering on mobile (reduced padding, smaller labels). */
   compactChartsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2544,7 +2544,7 @@ export interface TeamSurfaceVisualConfig {
   /** Default view mode on mobile ('cards' or 'table'). */
   mobileDefaultView?: 'cards' | 'table';
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2629,7 +2629,7 @@ export interface IntegrationSurfaceVisualConfig {
   /** Use compact card rendering for integration items on mobile. */
   compactCardsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2714,7 +2714,7 @@ export interface KanbanSurfaceVisualConfig {
   /** Stack columns vertically on mobile instead of horizontal scroll. */
   stackColumnsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2791,7 +2791,7 @@ export interface ActivitySurfaceVisualConfig {
   /** Stack activity feed layout vertically on mobile. */
   stackOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2868,7 +2868,7 @@ export interface FileBrowserSurfaceVisualConfig {
   /** Stack file browser layout vertically on mobile (breadcrumb + list). */
   stackOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2953,7 +2953,7 @@ export interface PricingSurfaceVisualConfig {
   /** Use compact column rendering on mobile (reduced feature rows, smaller text). */
   compactColumnsOnMobile?: boolean;
 
-  /** Override profile-level defaults for this specific surface instance. */
+  /** Reserved profile override shape; currently unconsumed and has no runtime effect. */
   profileOverrides?: SurfaceVisualOverrides;
 }
 
@@ -2999,13 +2999,12 @@ export interface PricingSurfaceConfig {
 // ---------------------------------------------------------------------------
 
 /**
- * Visual overrides that any surface config can provide to override
- * profile-level defaults for that specific surface instance.
+ * Reserved shape declared by each surface visual config. The standalone merge
+ * hook can resolve it, but no production surface calls that hook today, so a
+ * nested `visual.profileOverrides` value has no runtime effect.
  *
- * When present, these values take precedence over the product profile
- * and personality token defaults resolved by `useSurfaceProfileDefaults()`.
- *
- * Precedence chain: surface visual overrides > personality tokens > product profile > fallback.
+ * @deprecated Experimental and unconsumed. DS-IMP-022 owns field-by-field
+ * wiring or removal in its deferred phase; do not advertise or add new uses.
  */
 export interface SurfaceVisualOverrides {
   density?: 'compact' | 'comfortable' | 'spacious';

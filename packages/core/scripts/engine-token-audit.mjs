@@ -24,19 +24,28 @@
  * Usage:
  *   node scripts/engine-token-audit.mjs            # print the current counts
  *   node scripts/engine-token-audit.mjs --check    # exit 1 if any counter rose above baseline
- *   node scripts/engine-token-audit.mjs --update-baseline   # rewrite the baseline to current
+ *   node scripts/engine-token-audit.mjs --update-baseline   # tighten existing ceilings only
  *   node scripts/engine-token-audit.mjs --coverage # write the token-coverage report (informational)
+ *   node scripts/engine-token-audit.mjs --check --quiet     # concise CI output
  */
-import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, readdirSync, statSync, mkdirSync, renameSync } from 'node:fs';
 import { countArc09PaintInFile } from './lib/inline-paint-counter.mjs';
-import { collectBelowFloorFailures, countPremiumEffectConsumers } from './lib/effect-consumer-counter.mjs';
+import { countPremiumEffectConsumers } from './lib/effect-consumer-counter.mjs';
 import { countSkinExemptionBreaches } from './lib/skin-exemption-audit.mjs';
 import { countRuntimeSvgPaintByFile } from './lib/runtime-svg-paint-counter.mjs';
-import { countEmbeddedCssPaintByFile } from './lib/embedded-css-paint-counter.mjs';
-import { collectMissingPrefixedCounters } from './lib/counter-presence-audit.mjs';
+import { countEmbeddedCssPaintByFile, countEmbeddedCssPaintInFile } from './lib/embedded-css-paint-counter.mjs';
 import { ARC09_INLINE_PAINT_FILES, collectFleetInlinePaintSourceFiles } from './lib/fleet-inline-paint-census.mjs';
 import { collectSourceFiles as collectRuntimeSvgSourceFiles } from './runtime-svg-paint-census.mjs';
 import { countDeadParts } from './skin-dead-part-audit.mjs';
+import {
+  evaluateBaselineTightening,
+  evaluateZeroLockCheck,
+  summarizeZeroLocks,
+} from './lib/zero-lock-policy.mjs';
+import {
+  ENGINE_TOKEN_EXACT as EXACT,
+  ENGINE_TOKEN_MINIMUM as MIN,
+} from './lib/engine-token-governance.mjs';
 import postcss from 'postcss';
 import { resolve, dirname, join, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -51,6 +60,15 @@ const here = dirname(fileURLToPath(import.meta.url));
 const root = resolve(here, '..');
 const componentsDir = join(root, 'src/components');
 const baselinePath = join(here, 'engine-token-audit.baseline.json');
+const quiet = process.argv.includes('--quiet');
+
+function argumentValue(name) {
+  const prefix = `${name}=`;
+  const inline = process.argv.find((arg) => arg.startsWith(prefix));
+  if (inline) return inline.slice(prefix.length);
+  const index = process.argv.indexOf(name);
+  return index >= 0 ? process.argv[index + 1] : undefined;
+}
 
 /**
  * Collect every `engines/<engineName>.tsx` or `engines/<engineName>/*.tsx` component source
@@ -2436,6 +2454,31 @@ const counters = {
 };
 
 /**
+ * Adversarial fixture seam used only by WO-GAT-07's end-to-end evasion drills.
+ *
+ * The fixture is parsed by the same production counters as the real component
+ * tree, then added to two existing completed-zero keys. This avoids a toy
+ * duplicate scanner and avoids adding test-only counters to the 2,922-key
+ * baseline. Normal runs have no fixture and therefore no behavior change.
+ */
+const evasionFixture = argumentValue('--gat07-evasion-fixture');
+let evasionProbe = null;
+if (evasionFixture) {
+  const fixturePath = resolve(evasionFixture);
+  if (!existsSync(fixturePath) || !statSync(fixturePath).isFile()) {
+    throw new Error(`WO-GAT-07 evasion fixture does not exist: ${fixturePath}`);
+  }
+  const fixtureText = readFileSync(fixturePath, 'utf8');
+  evasionProbe = {
+    fixture: fixturePath,
+    inlinePaint: countArc09PaintInFile(fixtureText, fixturePath),
+    embeddedCssPaint: countEmbeddedCssPaintInFile(fixtureText, fixturePath),
+  };
+  counters['arc09.inlinePaint.primitives/display/Table/engines/modern.tsx'] += evasionProbe.inlinePaint;
+  counters['embeddedCssPaint.primitives/display/Table/engines/modern.tsx'] += evasionProbe.embeddedCssPaint;
+}
+
+/**
  * WO-ARC-05: viewport media queries inside the engine SKIN stylesheets.
  *
  * A design system renders the same component at rail width, half width and full
@@ -2566,59 +2609,6 @@ function countViewportMediaQueriesInSkins() {
   return count;
 }
 
-/** Invariants checked for exact equality (not just decrease-only) in --check. */
-const EXACT = {
-  // One elevation source of truth: the foundation ramp, with --ds-shadow-* aliases.
-  'depth.shadowScales': 1,
-  // Layout is a component-layer concern; no undeclared modern-vs-siblings axis
-  // divergence survives (WO-ENG-10, spec section 10). See
-  // countCrossEngineLayoutDivergences()'s doc comment for this counter's
-  // precise (intentionally narrow) detection scope and known blind spots.
-  'layout.crossEngineDivergences': 0,
-  // One radius source of truth: foundation/themes/default.css.
-  'scale.radiusScaleDeclarations': 1,
-  // No dark-blind focus ring survives on any dark-surface tenant (audit 3.4).
-  'state.darkFocusRingDefects': 0,
-  // Every remaining theme.css selector is consumer-proven (WO-ENG-08, spec section 8).
-  'themeCss.unreferencedSelectors': 0,
-  // A skin that does not parse loads no rules; nothing else in the chain sees it.
-  'skins.parseErrors': 0,
-  // A skin no entrypoint imports is just as dead, and just as silent.
-  'skins.unwired': 0,
-  // Summed exemption cardinality floors and their configuration must remain valid;
-  // checkpoint evidence, not this aggregate counter, owns source-site identity.
-  'skins.exemptionsBreached': 0,
-  // A skin rule anchored on a data-part the source never stamps reaches nobody.
-  'skins.deadParts': 0,
-  // Embedded CSS must stay fully classifiable. Any parser ambiguity, computed
-  // sink/property or other unknown fails closed instead of certifying a zero.
-  'embeddedCssPaint.unclassified': 0,
-  'embeddedCssPaint.parseFailures': 0,
-  'embeddedCssPaint.dynamicProperties': 0,
-  'embeddedCssPaint.unknownSinks': 0,
-};
-
-/**
- * Invariants checked as a MINIMUM floor (counter must be >= value) in --check.
- * Unlike the decrease-only ratchet, these are keys where a HIGHER value is
- * healthy: the number of sanctioned premium-effect consumers (spec section 5,
- * the 1/0/0 dead layer now wired). Keys here are exempt from the decrease-only
- * "risen above baseline" check.
- */
-const MIN = {
-  'effects.gradientConsumers': 1,
-  'effects.glassConsumers': 1,
-  'effects.glowConsumers': 1,
-  // Measured productive four-tier fleet cardinality after dynamic enumeration.
-  'fleet.inlinePaint.filesScanned': 769,
-  // Measured productive component source cardinality after global SVG expansion.
-  // More files are healthy; a missing subtree or disabled collector is not.
-  'runtimeSvgPaint.filesScanned': 1047,
-  // Same productive component universe, independently parsed for real CSS
-  // injected by JSX, React.createElement, DOM style nodes or CSSStyleSheet.
-  'embeddedCssPaint.filesScanned': 1047,
-};
-
 const mode = process.argv.includes('--check')
   ? 'check'
   : process.argv.includes('--update-baseline')
@@ -2630,9 +2620,29 @@ const mode = process.argv.includes('--check')
   : 'report';
 
 if (mode === 'update') {
-  writeFileSync(baselinePath, JSON.stringify(counters, null, 2) + '\n');
-  console.log('engine-token-audit: baseline updated');
-  console.log(counters);
+  if (evasionFixture) {
+    console.error('engine-token-audit: --update-baseline cannot run with --gat07-evasion-fixture');
+    process.exit(1);
+  }
+  if (!existsSync(baselinePath)) {
+    console.error('engine-token-audit: baseline initialization requires an explicit reviewed file, not --update-baseline');
+    process.exit(1);
+  }
+  const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
+  const tightening = evaluateBaselineTightening({ baseline, candidate: counters, exact: EXACT, minimum: MIN });
+  if (!tightening.ok) {
+    console.error('engine-token-audit --update-baseline REFUSED (updates may only tighten existing counters):');
+    for (const error of tightening.errors) console.error(`  - ${error}`);
+    process.exit(1);
+  }
+  const temporaryPath = `${baselinePath}.tmp-${process.pid}`;
+  writeFileSync(temporaryPath, JSON.stringify(counters, null, 2) + '\n');
+  renameSync(temporaryPath, baselinePath);
+  const locks = summarizeZeroLocks(counters, { exact: EXACT, minimum: MIN });
+  if (!locks.ok) throw new Error(`cannot summarize tightened baseline: ${locks.errors.join('; ')}`);
+  console.log(
+    `engine-token-audit: baseline tightened atomically (${locks.counters} counters; ${locks.zeroLocked} zero-locked; ${locks.positiveOrdinaryCeilings} decrease-only ceilings; ${locks.positiveExactInvariants} positive exact invariants; ${locks.positiveMinimumFloors} positive minimum floors)`,
+  );
   process.exit(0);
 }
 
@@ -2676,21 +2686,27 @@ if (mode === 'apca-report') {
   process.exit(0);
 }
 
-console.log('engine-token-audit — modern engine files:', files.length);
-for (const [k, v] of Object.entries(counters)) console.log(`  ${k}: ${v}`);
+if (!quiet) {
+  console.log('engine-token-audit — modern engine files:', files.length);
+  for (const [k, v] of Object.entries(counters)) console.log(`  ${k}: ${v}`);
+}
 
 // WO-GAT-02: one-line token-coverage summary, appended to both report and --check output
 // (computed unconditionally so --check callers see it too; the coverage report itself is
 // informational and never gates -- see buildTokenCoverage()'s doc comment).
 const coverageSummary = buildTokenCoverage();
-console.log(
-  `engine-token-audit — token coverage: ${coverageSummary.filesScanned} files scanned, ${coverageSummary.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverageSummary.literalsOutstandingTotal} hardcoded literals outstanding`
-);
+if (!quiet) {
+  console.log(
+    `engine-token-audit — token coverage: ${coverageSummary.filesScanned} files scanned, ${coverageSummary.tokensConsumedUnique} unique --ds-* tokens consumed, ${coverageSummary.literalsOutstandingTotal} hardcoded literals outstanding`
+  );
+}
 
 // WO-GAT-04: one-line APCA summary, appended to both report and --check output.
-console.log(
-  `engine-token-audit — APCA contrast: ${apca.failures} pairings below threshold (body>=${APCA_BODY_MIN}/ui>=${APCA_UI_MIN}), ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated across ${APCA_PALETTES.length} palettes`
-);
+if (!quiet) {
+  console.log(
+    `engine-token-audit — APCA contrast: ${apca.failures} pairings below threshold (body>=${APCA_BODY_MIN}/ui>=${APCA_UI_MIN}), ${apca.skipped} skipped (unresolvable), ${apca.evaluated} evaluated across ${APCA_PALETTES.length} palettes`
+  );
+}
 
 if (mode === 'report') {
   console.log('\nengine-token-audit — APCA pairing detail:');
@@ -2727,62 +2743,23 @@ if (mode === 'report') {
 
 if (mode === 'check') {
   if (!existsSync(baselinePath)) {
-    console.error('engine-token-audit --check: no baseline (run --update-baseline first)');
+    console.error('engine-token-audit --check: no baseline (initialization requires an explicit reviewed baseline file)');
     process.exit(1);
   }
   const baseline = JSON.parse(readFileSync(baselinePath, 'utf8'));
-  const risen = [];
-  // A counter the baseline has never heard of used to compare against Infinity,
-  // so it could not rise and could not fail. It measured, printed a number, and
-  // gated nothing. An unbaselined counter is reported as its own failure rather
-  // than defaulted to a value that makes it inert.
-  const unbaselined = [];
-  for (const [k, v] of Object.entries(counters)) {
-    if (k in MIN) continue; // floor-governed (higher is healthy), not ceiling-governed
-    if (k in EXACT) continue; // invariant-governed, checked for equality below
-    if (!(k in baseline)) {
-      unbaselined.push(`${k}: ${v} (run --update-baseline, and say why in the WO)`);
-      continue;
-    }
-    if (v > baseline[k]) risen.push(`${k}: ${v} > baseline ${baseline[k]}`);
-  }
-  // The current->baseline loop above cannot see keys that vanished with a file,
-  // subtree, or collector spread. Runtime SVG, fleet inline paint and embedded
-  // CSS each emit one key for every eligible source file (including zeros), so
-  // baseline-only keys are an explicit failure until a deliberate measured
-  // baseline change retires them.
-  const missingRuntimeCounters = collectMissingPrefixedCounters(counters, baseline, 'runtimeSvgPaint.');
-  const missingFleetCounters = collectMissingPrefixedCounters(counters, baseline, 'fleet.inlinePaint.');
-  const missingEmbeddedCssCounters = collectMissingPrefixedCounters(counters, baseline, 'embeddedCssPaint.');
-  const invariant = [];
-  for (const [k, expected] of Object.entries(EXACT)) {
-    if (counters[k] !== expected) invariant.push(`${k}: ${counters[k]} != required ${expected}`);
-  }
-  const belowFloor = collectBelowFloorFailures(counters, MIN);
-  if (
-    risen.length ||
-    invariant.length ||
-    belowFloor.length ||
-    unbaselined.length ||
-    missingRuntimeCounters.length ||
-    missingFleetCounters.length ||
-    missingEmbeddedCssCounters.length
-  ) {
+  const policy = evaluateZeroLockCheck({ baseline, current: counters, exact: EXACT, minimum: MIN });
+  if (!policy.ok) {
     console.error('engine-token-audit --check FAILED:');
-    for (const u of unbaselined) console.error('  - counter has no baseline, so it gates nothing: ' + u);
-    for (const r of risen) console.error('  - rose above baseline: ' + r);
-    for (const r of invariant) console.error('  - invariant broken: ' + r);
-    for (const r of belowFloor) console.error('  - below required floor: ' + r);
-    for (const key of missingRuntimeCounters) {
-      console.error('  - baseline runtime SVG counter disappeared: ' + key);
-    }
-    for (const key of missingFleetCounters) {
-      console.error('  - baseline fleet inline-paint counter disappeared: ' + key);
-    }
-    for (const key of missingEmbeddedCssCounters) {
-      console.error('  - baseline embedded-CSS counter disappeared: ' + key);
-    }
+    for (const error of policy.errors) console.error(`  - ${error}`);
+    if (evasionProbe) console.error(`  - WO-GAT-07 evasion fixture result: ${JSON.stringify(evasionProbe)}`);
     process.exit(1);
   }
-  console.log('engine-token-audit --check OK (all counters within baseline; invariants and floors hold)');
+  const locks = summarizeZeroLocks(baseline, { exact: EXACT, minimum: MIN });
+  if (!locks.ok) {
+    console.error(`engine-token-audit --check FAILED:\n  - ${locks.errors.join('\n  - ')}`);
+    process.exit(1);
+  }
+  console.log(
+    `engine-token-audit --check OK (${locks.counters} counters; ${locks.zeroLocked} completed zeros locked exactly; ${locks.positiveOrdinaryCeilings} decrease-only ceilings; ${locks.positiveExactInvariants} positive exact invariants; ${locks.positiveMinimumFloors} positive minimum floors)`,
+  );
 }

@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Rustic (Vanilla / CSS variables) engine for the DetailPanel pattern.
- * Renders an entity detail view using only inline styles with `--ds-*` design tokens,
- * making it framework-agnostic. Includes a header with avatar/title/status/actions,
+ * Renders an entity detail view with structural layout in React and component paint
+ * in the unlayered rustic skin. Includes a header with avatar/title/status/actions,
  * tabbed content with an animated underline indicator, an optional sidebar, breadcrumbs,
  * and a footer. Hover/focus effects are applied via inline event handlers since there
  * is no CSS class system.
@@ -170,9 +170,9 @@ const s = {
 /**
  * Rustic (Vanilla) DetailPanel engine.
  *
- * Uses inline styles exclusively, referencing `--ds-*` CSS custom properties for
- * theming. Hover and focus effects are applied via inline event handlers since
- * there is no class-based CSS. Tab state can be controlled or uncontrolled.
+ * Uses CSS custom properties plus the rustic skin for paint and interaction
+ * states; remaining inline values are structural/runtime layout. Tab state can
+ * be controlled or uncontrolled.
  *
  * @typeParam T - Shape of the entity data object being displayed.
  * @param props - {@link DetailPanelProps} -- data, header info, tabs, sidebar, and actions.

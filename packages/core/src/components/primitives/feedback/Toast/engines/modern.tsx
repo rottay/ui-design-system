@@ -244,7 +244,7 @@ export default function ModernToast(props: ToastProps): React.ReactElement | nul
   // border-color from `--alert-border-color` as part of its BASE rule (this
   // engine applies only the structural `alert` class, never an `alert-{variant}`
   // modifier), and personality.css adds a `border-left-width` accent bar on the
-  // same class. Both are layered; only an unlayered rule -- or the inline style
+  // same class. Both are layered; an unlayered rule -- or the former element-style
   // this replaced -- out-ranks them.
   const baseClasses = 'alert';
   // Enter/exit motion comes entirely from the inline `animation` set below via

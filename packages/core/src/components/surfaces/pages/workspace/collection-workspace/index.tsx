@@ -18,6 +18,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { CheckSquare2, ChevronDown, Filter } from 'lucide-react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { ColumnDef, EditableConfig, PaginationConfig, SortConfig } from '../../../../patterns/foundation/types';
 import type {
   CollectionWorkspaceChromeConfig,
@@ -141,13 +142,14 @@ function resolveKey<T extends object>(
   item: T,
   rowKey: keyof T | ((row: T) => string),
 ): string {
-  return typeof rowKey === 'function' ? rowKey(item) : String(item[rowKey]);
+  if (typeof rowKey === 'function') return rowKey(item);
+  return String(Reflect.get(item, rowKey));
 }
 
 function resolveSortValue<T extends object>(row: T, column: ColumnDef<T>): unknown {
   if (column.accessorFn) return column.accessorFn(row);
-  if (column.accessorKey) return row[column.accessorKey];
-  return (row as Record<string, unknown>)[column.key];
+  if (column.accessorKey) return Reflect.get(row, column.accessorKey);
+  return Reflect.get(row, column.key);
 }
 
 function compareSortValues(a: unknown, b: unknown): number {
@@ -216,7 +218,7 @@ function parseRailWidth(value: string | number | undefined, fallback = DEFAULT_P
   if (typeof value === 'number' && Number.isFinite(value)) return value;
   if (typeof value !== 'string') return fallback;
   const pxMatches = [...value.matchAll(/(\d+(?:\.\d+)?)px/g)];
-  const lastPx = pxMatches.at(-1)?.[1];
+  const lastPx = arrayValueAt(pxMatches, -1)?.[1];
   if (lastPx) return Number(lastPx);
   const numeric = Number(value);
   return Number.isFinite(numeric) ? numeric : fallback;
@@ -289,9 +291,9 @@ function normalizeHeaderMetaLabel(value: string): string {
 }
 
 function readHeaderMetaValue(row: object, keys: string[]): unknown {
-  const record = row as Record<string, unknown>;
   for (const key of keys) {
-    if (record[key] != null) return record[key];
+    const value = Reflect.get(row, key);
+    if (value != null) return value;
   }
   return undefined;
 }

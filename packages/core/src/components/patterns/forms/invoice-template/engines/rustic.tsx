@@ -51,8 +51,8 @@ const tdStyle: CSSProperties = {
 
 /**
  * Rustic (Vanilla CSS) implementation of the InvoiceTemplate pattern.
- * All styling uses inline CSSProperties with --ds-* token fallbacks.
- * The table is a native HTML table with manually applied styles.
+ * Styling combines authored engine CSS with bounded runtime layout values.
+ * The table is native HTML addressed through stable anatomy attributes.
  *
  * @param props - See {@link InvoiceTemplateProps} for the full prop contract.
  * @returns The rendered invoice template.

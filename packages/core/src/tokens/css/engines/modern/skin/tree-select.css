@@ -14,7 +14,7 @@
  * modern never portals -- the mirror image of Select, whose custom-dropdown
  * branch does).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
  * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
  * already reach (0,4,0) with a single descendant hop, so no part here needs

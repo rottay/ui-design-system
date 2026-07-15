@@ -60,6 +60,11 @@ const readOnlyTextStyle: CSSProperties = {
   minHeight: 36,
 };
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 /* Chevron icon for collapsible sections */
 const ChevronIcon = ({ collapsed }: { collapsed: boolean }) => (
   <svg
@@ -198,7 +203,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     const errs: Record<string, string> = {};
     fields.forEach((field) => {
       if (isHidden(field)) return;
-      const val = currentValues[field.name];
+      const val = readRecordValue(currentValues, field.name);
       if (field.required && isEmptyFieldValue(field, val)) {
         errs[field.name] = field.validation?.message ?? `${field.label ?? field.name} is required`;
       }
@@ -238,7 +243,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
   );
 
   const toggleSection = useCallback((sectionKey: string) => {
-    setCollapsedSections((prev) => ({ ...prev, [sectionKey]: !prev[sectionKey] }));
+    setCollapsedSections((prev: Record<string, boolean>) => ({ ...prev, [sectionKey]: !prev[sectionKey] }));
   }, []);
 
   /* -- Measure section heights for smooth collapse animation ------------ */
@@ -255,7 +260,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   const renderReadOnlyValue = useCallback(
     (field: FieldDef): ReactNode => {
-      const val = currentValues[field.name];
+      const val = readRecordValue(currentValues, field.name);
       if (val === undefined || val === null || val === '') {
         return <span data-part="readonly-value" data-field-type="empty" style={readOnlyTextStyle}>--</span>;
       }
@@ -300,7 +305,7 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
     (field: FieldDef): ReactNode => {
       if (readOnly) return renderReadOnlyValue(field);
 
-      const val = currentValues[field.name];
+      const val = readRecordValue(currentValues, field.name);
       const fieldDisabled = disabled || field.disabled;
       const hasError = !!errors[field.name];
 
@@ -699,7 +704,9 @@ export default function ModernFormBuilder(props: FormBuilderProps) {
 
   const renderFormField = (field: FieldDef) => {
     const defaultRender = renderFieldInput(field);
-    const content = renderField ? renderField(field, defaultRender, currentValues[field.name]) : defaultRender;
+    const content = renderField
+      ? renderField(field, defaultRender, readRecordValue(currentValues, field.name))
+      : defaultRender;
     const error = errors[field.name];
     const showLabel = showLabels && field.type !== 'checkbox';
 

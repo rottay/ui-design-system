@@ -23,7 +23,7 @@
  * class `.ds-select-shell__dropdown[data-part='dropdown']`; parts inside it
  * (search-input, option, group-label, empty) are descendants of THAT.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). In-tree parts get
  * it from the two root classes (0,2,0) + `[data-part='root']` + descendant
  * `[data-part]`. Standalone portal parts have only one class, so the 4th unit is

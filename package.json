@@ -60,7 +60,10 @@
     "roadmap:test": "node --test scripts/roadmap-status.test.mjs",
     "roadmap:check": "pnpm roadmap:test && node scripts/roadmap-status.mjs check",
     "roadmap:commercial": "node scripts/roadmap-commercial-status.mjs status",
-    "roadmap:commercial:check": "node scripts/roadmap-commercial-status.mjs check"
+    "roadmap:commercial:check": "node scripts/roadmap-commercial-status.mjs check",
+    "dependency:honesty": "node scripts/dependency-honesty.mjs check --require-apps",
+    "dependency:honesty:apps": "node scripts/dependency-honesty.mjs apps --require-apps",
+    "dependency:honesty:test": "node --test scripts/dependency-honesty.test.mjs"
   },
   "packageManager": "pnpm@9.15.9",
   "engines": {

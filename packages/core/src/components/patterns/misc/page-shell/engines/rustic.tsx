@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview PageShell -- Rustic engine (Vanilla / CSS variables).
- * Standard page layout shell using only inline styles with --ds-*
- * design tokens. No CSS framework dependency. Features a custom
+ * Standard page layout shell using authored engine CSS and bounded runtime
+ * layout values backed by --ds-* design tokens. No UI-framework dependency. Features a custom
  * breadcrumb nav with "/" separators, back button with HTML arrow
  * entity, title/subtitle header with actions, and a tab bar built
  * from native buttons with active-state border highlighting.
@@ -23,7 +23,7 @@ import type { PageShellProps } from '../PageShell.types';
 
 /**
  * Rustic (Vanilla CSS) implementation of the PageShell pattern.
- * All styling uses inline CSSProperties with --ds-* token fallbacks.
+ * Styling combines authored engine CSS with bounded runtime layout values.
  * Builds its own breadcrumb, back button, tab bar, and title area.
  *
  * @param props - See {@link PageShellProps} for the full prop contract.

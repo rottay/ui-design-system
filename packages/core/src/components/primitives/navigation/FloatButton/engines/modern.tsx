@@ -57,8 +57,8 @@ function getFloatButtonClassName(
     : 'rounded-lg';
 
   // The DaisyUI `btn` class list is load-bearing beyond color: `theme.css`'s
-  // layered `.btn:hover` / `.btn:active` rules are the ONLY source of this
-  // button's hover/press SCALE — no inline style ever contested them, so the
+  // layered `.btn:hover` / `.btn:active` rules are authoritative for this
+  // button's hover/press SCALE — no runtime paint ever contested them, so the
   // interaction exists nowhere else. Removing or renaming these classes deletes
   // it silently. The scope classes are prepended alongside, never in place of.
   return [

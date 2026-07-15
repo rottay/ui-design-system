@@ -13,6 +13,11 @@ import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 import type { AggregationFn } from './DataTable.types';
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 // ---------------------------------------------------------------------------
 // Public types
 // ---------------------------------------------------------------------------
@@ -52,7 +57,7 @@ function computeAggregate<T>(
   // Extract numeric values for built-in strategies
   const numericValues: number[] = [];
   for (const item of items) {
-    const raw = (item as Record<string, unknown>)[columnKey];
+    const raw = readRecordValue(item, columnKey);
     const num = Number(raw);
     if (!Number.isNaN(num) && raw !== null && raw !== undefined && raw !== '') {
       numericValues.push(num);
@@ -142,7 +147,7 @@ export function useGroupedData<T>(
     const groupMap = new Map<string, T[]>();
 
     for (const item of data) {
-      const raw = (item as Record<string, unknown>)[groupBy];
+      const raw = readRecordValue(item, groupBy);
       const groupValue = raw == null ? '' : String(raw);
 
       const existing = groupMap.get(groupValue);

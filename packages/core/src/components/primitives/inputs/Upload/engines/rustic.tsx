@@ -50,6 +50,12 @@ function isImageFile(file: UploadFile): boolean {
   return /\.(png|jpe?g|gif|webp|bmp|svg|ico|avif)(\?.*)?$/i.test(url);
 }
 
+function readThumbUrl(thumbUrls: Record<string, string>, uid: string): string | undefined {
+  if (!Object.prototype.hasOwnProperty.call(thumbUrls, uid)) return undefined;
+  const value = Reflect.get(thumbUrls, uid);
+  return typeof value === 'string' ? value : undefined;
+}
+
 // ---------------------------------------------------------------------------
 // Shared inline styles
 // ---------------------------------------------------------------------------
@@ -254,7 +260,7 @@ interface FileItemProps {
  */
 const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onPreview, itemRender, progress, thumbUrls }) => {
   const [hovered, setHovered] = useState(false);
-  const thumb = file.thumbUrl || file.url || thumbUrls[file.uid];
+  const thumb = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
   const isImg = isImageFile(file);
   const isUploading = file.status === 'uploading';
   const isCircle = listType === 'picture-circle';
@@ -343,8 +349,8 @@ const RusticFileItem: React.FC<FileItemProps> = ({ file, listType, onRemove, onP
 /**
  * Rustic Upload component (pure HTML/CSS with CSS variables).
  *
- * Manages file selection via a hidden native input. Uses inline styles from
- * the `sharedStyles` object for all visual rendering, making it fully
+ * Manages file selection via a hidden native input. Uses runtime style props from
+ * the `sharedStyles` object for visual rendering, making it fully
  * independent of external CSS. Supports controlled/uncontrolled file lists,
  * picture grid modes, and directory upload via the webkitdirectory attribute.
  *
@@ -385,7 +391,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     useEffect(() => {
       if (listType === 'text') return;
       actualFileList.forEach(async (file) => {
-        if (thumbUrls[file.uid] || file.thumbUrl || file.url) return;
+        if (readThumbUrl(thumbUrls, file.uid) || file.thumbUrl || file.url) return;
         const url = await getFileThumbUrl(file);
         if (url) setThumbUrls((prev) => ({ ...prev, [file.uid]: url }));
       });
@@ -417,7 +423,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     // Falls back to built-in image preview when no custom onPreview is provided
     const handlePreview = useCallback((file: UploadFile) => {
       if (onPreview) { onPreview(file); return; }
-      const src = file.thumbUrl || file.url || thumbUrls[file.uid];
+      const src = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
       if (src && isImageFile(file)) setPreviewImage({ src, alt: file.name });
     }, [onPreview, thumbUrls]);
 
@@ -529,7 +535,7 @@ Upload.displayName = 'Upload.Rustic';
 /**
  * Rustic Upload.Dragger component (pure HTML/CSS with CSS variables).
  *
- * Provides a drag-and-drop zone styled entirely with inline styles. The
+ * Provides a drag-and-drop zone styled with token-backed style objects. The
  * dropzone border and background change on dragOver via state-driven style
  * swaps rather than CSS pseudo-classes, keeping the zero-framework promise.
  *
@@ -573,7 +579,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
     useEffect(() => {
       if (listType === 'text') return;
       actualFileList.forEach(async (file) => {
-        if (thumbUrls[file.uid] || file.thumbUrl || file.url) return;
+        if (readThumbUrl(thumbUrls, file.uid) || file.thumbUrl || file.url) return;
         const url = await getFileThumbUrl(file);
         if (url) setThumbUrls((prev) => ({ ...prev, [file.uid]: url }));
       });
@@ -611,7 +617,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
 
     const handlePreview = useCallback((file: UploadFile) => {
       if (onPreview) { onPreview(file); return; }
-      const src = file.thumbUrl || file.url || thumbUrls[file.uid];
+      const src = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
       if (src && isImageFile(file)) setPreviewImage({ src, alt: file.name });
     }, [onPreview, thumbUrls]);
 

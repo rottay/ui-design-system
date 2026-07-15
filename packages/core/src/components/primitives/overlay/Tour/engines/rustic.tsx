@@ -90,7 +90,7 @@ const getTargetElement = (target: TourStepProps['target']): HTMLElement | null =
  * @returns Guided tour using vanilla HTML/CSS
  */
 export const Tour = React.forwardRef<HTMLDivElement, TourProps>(
-  (props, ref) => {
+  (props: TourProps, ref) => {
     const {
       steps,
       current: controlledCurrent,

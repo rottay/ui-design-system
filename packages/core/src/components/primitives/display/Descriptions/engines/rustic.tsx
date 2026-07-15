@@ -46,7 +46,7 @@ const SIZE_FONT_MAP: Record<string, string> = {
  *
  * @param props - Unified DescriptionsProps from the design system type contract
  * @param ref - Forwarded ref attached to the outer container div
- * @returns A semantically structured description list using only inline styles
+ * @returns A semantically structured description list with stable engine anatomy
  */
 export const RusticDescriptions = forwardRef<HTMLDivElement, DescriptionsProps>(
   (props, ref) => {

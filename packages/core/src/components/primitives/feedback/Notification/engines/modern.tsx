@@ -258,7 +258,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   // in topRight while an error shows in bottomRight). Each group renders
   // its own toast container with appropriate positioning classes.
   const groupedNotifications = notifications.reduce<Record<NotificationPlacement, InternalNotification[]>>(
-    (acc, notification) => {
+    (acc: Record<NotificationPlacement, InternalNotification[]>, notification) => {
       const p = notification.placement || placement;
       if (!acc[p]) acc[p] = [];
       acc[p].push(notification);
@@ -471,7 +471,7 @@ export const NotificationItem: React.FC<NotificationItemProps> = ({
   // Notification skin. Unlayered is load-bearing: the root carries DaisyUI's
   // `alert` class, whose base rule paints a border-color, and personality.css adds
   // a `border-left-width` accent bar on the same class -- both are layered, and
-  // only an unlayered rule (or the inline style this replaced) out-ranks them.
+  // an unlayered rule (or the former element-style site) out-ranks them.
   // The `open` type has no entry, as before: it inherits DaisyUI's own fill.
 
   // Inline SVGs (h-6 w-6 = 24px) are slightly larger than Message icons

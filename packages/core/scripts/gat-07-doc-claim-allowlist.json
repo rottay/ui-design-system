@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 2,
+  "algorithm": "gat07-generated-claim-contract-v2",
+  "documents": {
+    "ui-design-system/packages/core/docs/reference/contracts/README.md": {
+      "claims": [
+        "component-extensions"
+      ],
+      "blocks": [
+        {
+          "claimId": "component-extensions",
+          "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+        },
+        {
+          "claimId": "component-extensions",
+          "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+        }
+      ]
+    },
+    "ui-design-system/CLAUDE.md": {
+      "claims": [
+        "surface-profile-overrides"
+      ],
+      "blocks": [
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "411f9c47676866174cc715aae57ebeea9b03b88fa9ab8138ca2c598478b737ee"
+        },
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "dd0eac3deb8fe323484dd3c4a8e216971a9da09137b6a5d5f39f25cb3969859d"
+        }
+      ]
+    },
+    "docs-engineering/engineering/design-system/README.md": {
+      "claims": [
+        "component-extensions",
+        "surface-profile-overrides"
+      ],
+      "blocks": [
+        {
+          "claimId": "component-extensions",
+          "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+        },
+        {
+          "claimId": "component-extensions",
+          "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+        },
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "411f9c47676866174cc715aae57ebeea9b03b88fa9ab8138ca2c598478b737ee"
+        },
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "dd0eac3deb8fe323484dd3c4a8e216971a9da09137b6a5d5f39f25cb3969859d"
+        }
+      ]
+    },
+    "docs-engineering/engineering/design-system/foundations/contracts/README.md": {
+      "claims": [
+        "component-extensions"
+      ],
+      "blocks": [
+        {
+          "claimId": "component-extensions",
+          "sha256": "3464f1aa41e687154765df298bc5e9a20d0da3b697a07916462b92cae21e09ad"
+        },
+        {
+          "claimId": "component-extensions",
+          "sha256": "f4f3b4507b7f839f263d2a07edfaa579200e3145b171051715e506a613b53caa"
+        }
+      ]
+    },
+    "docs-engineering/engineering/design-system/foundations/hooks/README.md": {
+      "claims": [
+        "surface-profile-overrides"
+      ],
+      "blocks": [
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "411f9c47676866174cc715aae57ebeea9b03b88fa9ab8138ca2c598478b737ee"
+        },
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "dd0eac3deb8fe323484dd3c4a8e216971a9da09137b6a5d5f39f25cb3969859d"
+        }
+      ]
+    },
+    "docs-engineering/engineering/design-system/components/surfaces/README.md": {
+      "claims": [
+        "surface-profile-overrides"
+      ],
+      "blocks": [
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "411f9c47676866174cc715aae57ebeea9b03b88fa9ab8138ca2c598478b737ee"
+        },
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "dd0eac3deb8fe323484dd3c4a8e216971a9da09137b6a5d5f39f25cb3969859d"
+        }
+      ]
+    },
+    "docs-engineering/engineering/design-system/components/surfaces/foundation/README.md": {
+      "claims": [
+        "surface-profile-overrides"
+      ],
+      "blocks": [
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "411f9c47676866174cc715aae57ebeea9b03b88fa9ab8138ca2c598478b737ee"
+        },
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "dd0eac3deb8fe323484dd3c4a8e216971a9da09137b6a5d5f39f25cb3969859d"
+        }
+      ]
+    },
+    "docs-engineering/engineering/design-system/components/surfaces/pages/README.md": {
+      "claims": [
+        "surface-profile-overrides"
+      ],
+      "blocks": [
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "411f9c47676866174cc715aae57ebeea9b03b88fa9ab8138ca2c598478b737ee"
+        },
+        {
+          "claimId": "surface-profile-overrides",
+          "sha256": "dd0eac3deb8fe323484dd3c4a8e216971a9da09137b6a5d5f39f25cb3969859d"
+        }
+      ]
+    }
+  }
+}

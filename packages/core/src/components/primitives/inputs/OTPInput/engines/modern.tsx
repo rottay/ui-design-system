@@ -16,6 +16,7 @@
  */
 
 import React, { useState, useCallback, useRef, useId, useEffect } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { OTPInputProps } from '../OTPInput.types';
 import { OTPINPUT_DEFAULTS } from '../OTPInput.types';
 
@@ -25,6 +26,10 @@ const SIZE_STYLES: Record<string, React.CSSProperties> = {
   md: { width: 44, height: 44, fontSize: 20 },
   lg: { width: 52, height: 52, fontSize: 24 },
 };
+
+function focusInputAt(inputs: readonly (HTMLInputElement | null)[], index: number): void {
+  arrayValueAt(inputs, index)?.focus();
+}
 
 /**
  * Modern engine OTPInput built with DaisyUI / Tailwind CSS.
@@ -94,7 +99,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     newValues[index] = char;
     updateValue(newValues);
     if (index < length - 1) {
-      inputRefs.current[index + 1]?.focus();
+      focusInputAt(inputRefs.current, index + 1);
     }
   }, [internalValues, isValidChar, length, updateValue]);
 
@@ -112,12 +117,12 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
       } else if (index > 0) {
         newValues[index - 1] = '';
         updateValue(newValues);
-        inputRefs.current[index - 1]?.focus();
+        focusInputAt(inputRefs.current, index - 1);
       }
     } else if (e.key === 'ArrowLeft' && index > 0) {
-      inputRefs.current[index - 1]?.focus();
+      focusInputAt(inputRefs.current, index - 1);
     } else if (e.key === 'ArrowRight' && index < length - 1) {
-      inputRefs.current[index + 1]?.focus();
+      focusInputAt(inputRefs.current, index + 1);
     }
   }, [internalValues, length, updateValue]);
 
@@ -136,7 +141,7 @@ export default function ModernOTPInput(props: OTPInputProps): React.ReactElement
     });
     updateValue(newValues);
     const focusIndex = Math.min(chars.length, length - 1);
-    inputRefs.current[focusIndex]?.focus();
+    focusInputAt(inputRefs.current, focusIndex);
   }, [internalValues, isValidChar, length, updateValue]);
 
   const sizeStyle = SIZE_STYLES[size] || SIZE_STYLES.md;

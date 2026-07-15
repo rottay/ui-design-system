@@ -12,6 +12,7 @@
  */
 import { useState, useMemo, useCallback, useRef, useEffect } from 'react';
 import type { Key, RefObject } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { TableProps, ColumnType, SortOrder, EditingCell } from '../Table.types';
 
 // ---------------------------------------------------------------------------
@@ -116,13 +117,19 @@ export function columnFieldKey<T>(col: ColumnType<T>): string | undefined {
 // ---------------------------------------------------------------------------
 // Value accessor
 // ---------------------------------------------------------------------------
-/** Read nested values from a record using the same rules as the public column API. */
+/** Read nested values from a non-callable object; primitive/callable records fail closed. */
 export function getNestedValue<T>(record: T, dataIndex?: string | string[]): unknown {
   if (!dataIndex) return undefined;
   if (Array.isArray(dataIndex)) {
-    return dataIndex.reduce<unknown>((obj, key) => (obj as Record<string, unknown>)?.[key], record as unknown);
+    let current: unknown = record;
+    for (const key of dataIndex) {
+      if (typeof current !== 'object' || current === null) return undefined;
+      current = Reflect.get(current, key);
+    }
+    return current;
   }
-  return (record as Record<string, unknown>)[dataIndex];
+  if (typeof record !== 'object' || record === null) return undefined;
+  return Reflect.get(record, dataIndex);
 }
 
 // ---------------------------------------------------------------------------
@@ -236,7 +243,7 @@ export function useTableFeatures<T extends object>(
   const getRowKey = useCallback(
     (record: T, index: number): TableKey => {
       if (typeof rowKey === 'function') return normalizeTableKey(rowKey(record), index);
-      return normalizeTableKey((record as Record<string, unknown>)[rowKey], index);
+      return normalizeTableKey(getNestedValue(record, rowKey), index);
     },
     [rowKey]
   );
@@ -523,7 +530,9 @@ export function useTableFeatures<T extends object>(
 
   const handleResizeStart = useCallback(
     (field: string, startX: number) => {
-      const currentWidth = columnWidths[field] || 100;
+      const currentWidth = typeof columnWidths === 'object' && columnWidths !== null
+        ? Reflect.get(columnWidths, field) || 100
+        : 100;
       resizeStartRef.current = { field, startX, startWidth: currentWidth };
       setResizingColumn(field);
     },
@@ -649,8 +658,8 @@ export function useTableFeatures<T extends object>(
         // Move to the same column in the next row
         const nextRowIdx = index + 1;
         if (nextRowIdx < displayData.length) {
-          const nextRecord = displayData[nextRowIdx];
-          if (isCellEditable(column, nextRecord, nextRowIdx)) {
+          const nextRecord = arrayValueAt(displayData, nextRowIdx);
+          if (nextRecord !== undefined && isCellEditable(column, nextRecord, nextRowIdx)) {
             const rKey = String(getRowKey(nextRecord, nextRowIdx));
             const colKey = columnFieldKey(column) || String(column.key) || '';
             setEditingCell({ rowKey: rKey, columnKey: colKey });
@@ -669,7 +678,8 @@ export function useTableFeatures<T extends object>(
 
         // First, try remaining columns in the same row
         while (nextColIdx >= 0 && nextColIdx < leafColumns.length) {
-          const nextCol = leafColumns[nextColIdx];
+          const nextCol = arrayValueAt(leafColumns, nextColIdx);
+          if (nextCol === undefined) break;
           if (isCellEditable(nextCol, record, index)) {
             const rKey = String(getRowKey(record, index));
             const colKey = columnFieldKey(nextCol) || String(nextCol.key) || '';
@@ -682,11 +692,13 @@ export function useTableFeatures<T extends object>(
         // If no editable cell found in this row, try next/prev row
         const nextRowIdx = index + direction;
         if (nextRowIdx >= 0 && nextRowIdx < displayData.length) {
-          const nextRecord = displayData[nextRowIdx];
+          const nextRecord = arrayValueAt(displayData, nextRowIdx);
+          if (nextRecord === undefined) return;
           const startCol = direction === 1 ? 0 : leafColumns.length - 1;
           let ci = startCol;
           while (ci >= 0 && ci < leafColumns.length) {
-            const nextCol = leafColumns[ci];
+            const nextCol = arrayValueAt(leafColumns, ci);
+            if (nextCol === undefined) break;
             if (isCellEditable(nextCol, nextRecord, nextRowIdx)) {
               const rKey = String(getRowKey(nextRecord, nextRowIdx));
               const colKey = columnFieldKey(nextCol) || String(nextCol.key) || '';

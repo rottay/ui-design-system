@@ -6,7 +6,7 @@
  *
  *   - no `rottay-*` cascade layer can paint a component at all, because Tailwind's
  *     `@layer base` sorts after all seven of them (measured; P-47);
- *   - each tenant ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ *   - the Platform-only Rottay artifact ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
  *     border floor at (0,3,1) that outranks any single-class component rule (P-48).
  *
  * The rules read the `data-*` contract the component stamps. Rest, hover and the

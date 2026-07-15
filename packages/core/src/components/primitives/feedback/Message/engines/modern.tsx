@@ -420,7 +420,7 @@ export const MessageItem: React.FC<MessageItemProps> = ({
   // modern Message skin. Unlayered is load-bearing: the root carries DaisyUI's
   // `alert` class, whose base rule paints a border-color, and personality.css
   // adds a `border-left-width` accent bar on the same class -- both are layered,
-  // and only an unlayered rule (or the inline style this replaced) out-ranks them.
+  // and an unlayered rule (or the former element-style site) out-ranks them.
 
   // Inline SVG icons instead of an icon library to keep the Modern engine's
   // bundle lightweight. Each icon uses stroke-based paths for consistent

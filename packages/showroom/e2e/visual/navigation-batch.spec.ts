@@ -98,10 +98,9 @@ for (const fixture of FIXTURES) {
 // Interaction-state pins (rottay/w1280 only).
 //
 // FloatButton hovered in BOTH engines is MANDATORY (checkpoint N contract,
-// decision N2): its hover/active scale transform is delivered entirely by a
-// layered `.btn:hover`/`.btn:active` rule in theme.css with ZERO inline
-// footprint on the modern engine -- there is no inline style to diff, so this
-// screenshot is the only mechanism that can catch a future migration
+// decision N2): its hover/active scale transform is delivered by a
+// layered `.btn:hover`/`.btn:active` rule in theme.css with no runtime-paint
+// footprint on the modern engine, so this screenshot catches a future migration
 // silently dropping the interaction. Also pinned: Menu item hovered, Tabs
 // hovered, Pagination hovered, Segmented hovered -- the family's remaining
 // components with real interaction paint per the checkpoint N inventory.

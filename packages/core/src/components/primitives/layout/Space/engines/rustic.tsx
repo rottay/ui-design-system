@@ -42,7 +42,7 @@ import { toLegacySize } from '../../../../../contracts/common';
 
 /**
  * Rustic engine implementation of the Space component.
- * Builds the entire layout from inline CSS flexbox properties, avoiding
+ * Builds the layout from token-backed flexbox properties, avoiding
  * any dependency on Ant Design or Tailwind. This makes it safe for
  * server-side rendering and third-party widget embedding.
  *

@@ -110,7 +110,7 @@ const styles = {
  * `hasSider` is true so the sidebar sits alongside the content area.
  *
  * @param props - Layout container props (hasSider, className, style).
- * @returns A ref-forwarding div element styled entirely with inline CSS.
+ * @returns A ref-forwarding div element styled with token-backed CSS properties.
  */
 export const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
   (props, ref) => {

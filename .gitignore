@@ -21,8 +21,16 @@ coverage-*/
 .nyc_output/
 *.lcov
 
-# Gate evidence (drill diffs, sighted captures) — generated, uploaded by CI, never committed
-test-artifacts/
+# Gate evidence is generated/uploaded by CI except for GAT-07's authoritative,
+# byte-checked semantic proof. Keep every other capture ignored.
+test-artifacts/*
+!test-artifacts/gates/
+test-artifacts/gates/*
+!test-artifacts/gates/gat-07/
+test-artifacts/gates/gat-07/*
+!test-artifacts/gates/gat-07/semantic-evidence.json
+!test-artifacts/gates/gat-07/semantic-hash.txt
+.gat07/
 # Playwright visual-regression run output (baselines under e2e/visual/__screenshots__/ ARE committed)
 packages/showroom/test-results/
 packages/showroom/playwright-report/

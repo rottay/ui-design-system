@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview EnvironmentToggle -- Rustic engine (Vanilla / CSS variables).
- * Provides an environment switching UI using only inline styles with
- * --ds-* design tokens. No CSS framework dependency. Supports three
+ * Provides an environment switching UI using authored engine CSS and bounded
+ * runtime layout values backed by --ds-* design tokens. Supports three
  * display variants: radio-style toggle (default), pill buttons, and
  * a custom dropdown. Includes a colored banner for non-production
  * environments and a production-safety confirmation modal.
@@ -111,7 +111,7 @@ const pillBtnStyle = (active: boolean, color: string): CSSProperties => ({
 
 /**
  * Rustic (Vanilla CSS) implementation of the EnvironmentToggle pattern.
- * All styling uses inline CSSProperties with --ds-* token fallbacks.
+ * Styling combines authored engine CSS with bounded runtime layout values.
  * Manages its own dropdown open/close and click-outside detection.
  *
  * @param props - See {@link EnvironmentToggleProps} for the full prop contract.

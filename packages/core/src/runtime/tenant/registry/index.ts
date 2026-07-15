@@ -30,7 +30,7 @@ import { rottayBrandTheme, bithireBrandTheme, evntoBrandTheme, themanagementmiam
  * chart rendering, typography casing, accent decorations, and card behavior --
  * without any per-tenant branching in component code.
  */
-const KNOWN_TENANTS: Record<string, TenantConfig> = {
+const KNOWN_TENANTS: Readonly<Record<string, TenantConfig>> = {
   /**
    * Rottay - Default tenant
    * Professional dark IT/AI SaaS aesthetic

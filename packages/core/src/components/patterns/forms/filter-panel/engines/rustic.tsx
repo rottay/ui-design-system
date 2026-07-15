@@ -39,7 +39,7 @@ const baseInput: React.CSSProperties = {
 
 /**
  * Renders the appropriate native HTML form control for a given filter definition,
- * styled entirely with inline styles and `--ds-*` CSS variables.
+ * styled with token-backed style objects and `--ds-*` CSS variables.
  */
 function renderFilterControl(
   filter: FilterDef,

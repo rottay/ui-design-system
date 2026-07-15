@@ -198,7 +198,6 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
       className: `rottay-float-button rottay-float-button--rustic ${className}`.trim(),
       style: buttonStyle,
       title: typeof tooltip === 'string' ? tooltip : undefined,
-      'data-part': 'trigger',
       'data-variant': type,
       'data-shape': shape,
     };
@@ -210,6 +209,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
           ref={ref as React.Ref<HTMLAnchorElement>}
           href={href}
           target={target}
+          data-part="trigger"
           {...commonProps}
         >
           {content}
@@ -219,7 +219,7 @@ export const FloatButton = React.forwardRef<HTMLButtonElement, FloatButtonProps>
 
     // Render as button by default
     return (
-      <button ref={ref} type="button" onClick={onClick} {...commonProps}>
+      <button ref={ref} type="button" onClick={onClick} data-part="trigger" {...commonProps}>
         {content}
       </button>
     );

@@ -1470,6 +1470,34 @@ function countScopedStylePaintInFile(text, fileName) {
     seen.add(expression);
 
     if (ts.isStringLiteralLike(expression)) return new Set([expression.text]);
+    if (ts.isTemplateExpression(expression)) {
+      let values = new Set([expression.head.text]);
+      for (const span of expression.templateSpans) {
+        const interpolated = staticStringValues(span.expression, new Set(seen));
+        if (!interpolated) return null;
+        const next = new Set();
+        for (const prefix of values) {
+          for (const value of interpolated) {
+            next.add(`${prefix}${value}${span.literal.text}`);
+          }
+        }
+        values = next;
+      }
+      return values;
+    }
+    if (
+      ts.isBinaryExpression(expression) &&
+      expression.operatorToken.kind === ts.SyntaxKind.PlusToken
+    ) {
+      const left = staticStringValues(expression.left, new Set(seen));
+      const right = staticStringValues(expression.right, new Set(seen));
+      if (!left || !right) return null;
+      return new Set(
+        [...left].flatMap((prefix) =>
+          [...right].map((suffix) => `${prefix}${suffix}`)
+        )
+      );
+    }
     if (ts.isConditionalExpression(expression)) {
       const left = staticStringValues(expression.whenTrue, seen);
       const right = staticStringValues(expression.whenFalse, seen);
@@ -1479,7 +1507,19 @@ function countScopedStylePaintInFile(text, fileName) {
     if (ts.isIdentifier(expression)) {
       const entry = resolve(expression);
       if (!entry) return null;
-      if (entry.initializer) return staticStringValues(entry.initializer, seen);
+      const sources = [
+        entry.initializer,
+        ...(bindingAssignments.get(entry) ?? []).filter(
+          (value) => value.getStart(sourceFile) < expression.getStart(sourceFile)
+        ),
+      ].filter(Boolean);
+      if (sources.length > 0) {
+        const resolved = sources.map((value) =>
+          staticStringValues(value, new Set(seen))
+        );
+        if (resolved.some((value) => value === null)) return null;
+        return new Set(resolved.flatMap((value) => [...value]));
+      }
       const type = entry.type;
       if (!type) return null;
       const nodes = ts.isUnionTypeNode(type) ? type.types : [type];
@@ -1580,6 +1620,139 @@ function countScopedStylePaintInFile(text, fileName) {
       maximum = Math.max(maximum, count);
     }
     return maximum;
+  }
+
+  /**
+   * Resolve productive DOM attribute-writer aliases. Direct member calls,
+   * `.bind(...)`, `.call(...)`, `.apply(...)`, Reflect.apply and lexical alias
+   * chains all reach the same sink. Leaving those spellings unclassified lets
+   * an inline style bypass an exact-zero counter without changing behavior.
+   */
+  function resolveAttributeWriter(node, directInvocation = false, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return null;
+    seen.add(expression);
+
+    const access = propertyAccessParts(expression);
+    let accessNames = access?.name ? new Set([access.name]) : null;
+    if (
+      !accessNames &&
+      ts.isElementAccessExpression(expression) &&
+      expression.argumentExpression
+    ) {
+      accessNames = staticStringValues(expression.argumentExpression);
+    }
+    const writerNames = accessNames
+      ? [...accessNames].filter((name) =>
+          ["setAttribute", "setAttributeNS"].includes(name)
+        )
+      : [];
+    if (writerNames.length > 0) {
+      return { method: writerNames[0], bound: directInvocation };
+    }
+
+    if (ts.isCallExpression(expression)) {
+      const bind = propertyAccessParts(expression.expression);
+      if (
+        bind?.name === "get" &&
+        unwrapExpression(bind.object)?.getText(sourceFile) === "Reflect"
+      ) {
+        const names = staticStringValues(expression.arguments[1]);
+        const methods = names
+          ? [...names].filter((name) =>
+              ["setAttribute", "setAttributeNS"].includes(name)
+            )
+          : [];
+        return methods.length > 0
+          ? { method: methods[0], bound: false }
+          : null;
+      }
+      if (bind?.name === "bind") {
+        const writer = resolveAttributeWriter(bind.object, false, seen);
+        return writer ? { ...writer, bound: true } : null;
+      }
+      return null;
+    }
+
+    if (!ts.isIdentifier(expression)) return null;
+    const entry = resolve(expression);
+    if (!entry || seen.has(entry)) return null;
+    seen.add(entry);
+    if (
+      entry.fromBindingPattern &&
+      ["setAttribute", "setAttributeNS"].includes(entry.boundProperty)
+    ) {
+      return { method: entry.boundProperty, bound: false };
+    }
+    const sources = [
+      entry.initializer,
+      ...(bindingAssignments.get(entry) ?? []),
+    ].filter(Boolean);
+    if (sources.length !== 1) return null;
+    return resolveAttributeWriter(sources[0], false, seen);
+  }
+
+  function staticApplyArguments(node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return null;
+    seen.add(expression);
+    if (ts.isArrayLiteralExpression(expression)) {
+      const args = [];
+      for (const element of expression.elements) {
+        if (ts.isOmittedExpression(element)) return null;
+        if (ts.isSpreadElement(element)) {
+          const nested = staticApplyArguments(element.expression, new Set(seen));
+          if (!nested) return null;
+          args.push(...nested);
+        } else {
+          args.push(element);
+        }
+      }
+      return args;
+    }
+    if (ts.isIdentifier(expression)) {
+      const entry = resolve(expression);
+      if (!entry || seen.has(entry)) return null;
+      seen.add(entry);
+      const sources = [
+        entry.initializer,
+        ...(bindingAssignments.get(entry) ?? []),
+      ].filter(Boolean);
+      return sources.length === 1
+        ? staticApplyArguments(sources[0], seen)
+        : null;
+    }
+    return null;
+  }
+
+  function normalizedAttributeWriterCall(node) {
+    const callee = unwrapExpression(node.expression);
+    const access = propertyAccessParts(callee);
+
+    if (
+      access?.name === "apply" &&
+      unwrapExpression(access.object)?.getText(sourceFile) === "Reflect"
+    ) {
+      const writer = resolveAttributeWriter(node.arguments[0]);
+      if (!writer) return null;
+      const args = staticApplyArguments(node.arguments[2]);
+      return { writer, args, opaqueArgs: args === null };
+    }
+
+    if (access && ["call", "apply"].includes(access.name)) {
+      const writer = resolveAttributeWriter(access.object);
+      if (!writer) return null;
+      if (access.name === "call") {
+        return { writer, args: [...node.arguments].slice(1), opaqueArgs: false };
+      }
+      const args = staticApplyArguments(node.arguments[1]);
+      return { writer, args, opaqueArgs: args === null };
+    }
+
+    const writer = resolveAttributeWriter(callee, true);
+    return writer?.bound
+      ? { writer, args: [...node.arguments], opaqueArgs: false }
+      : null;
   }
 
   function createElementTargetKind(node) {
@@ -2417,6 +2590,10 @@ function countScopedStylePaintInFile(text, fileName) {
   // assertion or an actual style/prop-bag sink.
   for (const entry of entries) {
     const initializer = unwrapExpression(entry.initializer);
+    if (entry.fromBindingPattern && entry.boundProperty === "style") {
+      styleBindings.add(entry);
+      continue;
+    }
     if (
       !isDomStylesheetRoot(entry.initializer) &&
       ((/style$/i.test(entry.name) &&
@@ -2655,7 +2832,26 @@ function countScopedStylePaintInFile(text, fileName) {
     if (!ts.isCallExpression(node)) continue;
     const name = callName(node);
     const callee = propertyAccessParts(node.expression);
-    if (
+    const attributeWriter = normalizedAttributeWriterCall(node);
+    if (attributeWriter) {
+      if (!attributeWriter.args) {
+        count += 1;
+      } else {
+        const attributeIndex = attributeWriter.writer.method === "setAttributeNS" ? 1 : 0;
+        const valueIndex = attributeIndex + 1;
+        const attributes = staticStringValues(
+          attributeWriter.args[attributeIndex]
+        );
+        if (
+          attributes &&
+          [...attributes].some((attribute) => attribute.toLowerCase() === "style")
+        ) {
+          count += countCssTextExpression(attributeWriter.args[valueIndex]);
+        } else if (attributes === null && attributeWriter.opaqueArgs) {
+          count += 1;
+        }
+      }
+    } else if (
       name === "setProperty" &&
       callee &&
       isQualifiedStyleTarget(callee.object)
@@ -2696,18 +2892,6 @@ function countScopedStylePaintInFile(text, fileName) {
       isQualifiedStyleTarget(node.arguments[0])
     ) {
       markExpression(node.arguments[1], "style");
-    } else if (name === "setAttribute" && node.arguments.length >= 1) {
-      const attribute = staticString(node.arguments[0]);
-      // Dynamic SVG presentation attributes belong to runtimeSvgPaint; this
-      // channel owns only an explicitly authored inline `style` attribute.
-      if (attribute?.toLowerCase() === "style") {
-        count += countCssTextExpression(node.arguments[1]);
-      }
-    } else if (name === "setAttributeNS" && node.arguments.length >= 2) {
-      const attribute = staticString(node.arguments[1]);
-      if (attribute?.toLowerCase() === "style") {
-        count += countCssTextExpression(node.arguments[2]);
-      }
     } else if (name === "style" && node.arguments.length >= 2) {
       // D3 and compatible CSS setter chains use `.style(name, value)`. SVG
       // presentation paint (`fill`/`stroke`) and dynamic setter names remain

@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview LocaleSwitcher -- Rustic engine (Vanilla / CSS variables).
- * Renders a locale dropdown using only inline styles with --ds-* design
- * tokens. No CSS framework dependency. Supports flag + label display,
+ * Renders a locale dropdown with structural inline layout and token-driven
+ * rustic skin paint. No CSS framework dependency. Supports flag + label display,
  * size variants, full keyboard navigation, and click-outside dismissal.
  *
  * @example
@@ -74,8 +74,8 @@ const menuItemBaseStyle: CSSProperties = {
 
 /**
  * Rustic (vanilla CSS variables) implementation of the LocaleSwitcher pattern.
- * Uses only inline styles with --ds-* design tokens. Implements a custom
- * dropdown with click-outside dismissal and keyboard navigation.
+ * Uses --ds-* design tokens through the rustic skin and retains only structural
+ * inline values. Implements click-outside dismissal and keyboard navigation.
  */
 export default function RusticLocaleSwitcher(props: LocaleSwitcherProps) {
   const {
@@ -174,7 +174,7 @@ export default function RusticLocaleSwitcher(props: LocaleSwitcherProps) {
   useEffect(() => {
     if (open && focusIndex >= 0 && menuRef.current) {
       const items = menuRef.current.querySelectorAll('[data-locale-option]');
-      const target = items[focusIndex] as HTMLElement | undefined;
+      const target = items.item(focusIndex) as HTMLElement | null;
       target?.scrollIntoView?.({ block: 'nearest' });
     }
   }, [open, focusIndex]);

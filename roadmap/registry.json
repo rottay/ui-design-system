@@ -1824,7 +1824,7 @@
    "lane": "gates",
    "order": 7,
    "size": "L",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -1862,12 +1862,17 @@
      "at": "2026-07-15 00:07",
      "by": "codex-orchestrator",
      "note": "Independent adversarial NO-GO: eight paint/CSS fixtures and seven indirect claim fixtures remained falsely green; registry extraction, DOM-linked data-part evidence, negative comment handling, corpus discovery, allowlist semantics and toolchain manifest need hardening. The artifact also hashed mutable registry state and could not converge after progress/done. Zero-lock totality and 100,000-counter stress passed. Corrections and a fresh independent review are required."
+    },
+    {
+     "at": "2026-07-15 12:53",
+     "by": "codex-orchestrator",
+     "note": "Corrections closed the adversarial findings and the final sealed rerun converged twice against docs-engineering@076359827cf2cb4e4bc2e816aed8f50efed0d97b. The Phase-0 claim floor is complete without asserting the deferred Phase-6 DS-IMP-060 authority."
     }
    ],
    "claimedBy": "codex-gat07",
    "claimedAt": "2026-07-14",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-07-15",
+   "evidence": "Final artifact test-artifacts/gates/gat-07/semantic-evidence.json is sealed by 71c548fb482b4cc231dc2b88af3e87abf11074648fdbf2b038e0e814a9e087ab against docs-engineering@076359827cf2cb4e4bc2e816aed8f50efed0d97b. Two deterministic runs agree across 2,922 governed counters, 2,807 exact zeros and 544 documented data-part entries. Registry mutation, public-claim, paint/CSS, stale-comment, corpus-discovery, allowlist and DOM-provenance adversarial drills fail closed; the bounded milestone does not claim final DS-IMP-060 completion.",
    "execution": {
     "decisionOwner": "design-system-quality",
     "touchedRepos": [
@@ -2038,7 +2043,13 @@
    ],
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
-   "progressLog": [],
+   "progressLog": [
+    {
+     "at": "2026-07-15 12:53",
+     "by": "codex-orchestrator",
+     "note": "Dependency/supplier groundwork and ES2020-safe runtime hardening are implemented and core TypeScript is green. The work order remains open: the strict runtime-edge diagnostic still reports an opaque computed-access false positive, and packed-artifact plus fleet-copy certification are intentionally deferred to the consolidated release checkpoint instead of blocking product work."
+    }
+   ],
    "claimedBy": "codex-arc10",
    "claimedAt": "2026-07-14",
    "doneAt": null,

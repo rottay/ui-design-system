@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Rustic (Vanilla / CSS variables) engine for the LiveFeed pattern.
- * Renders a real-time feed using only inline styles with `--ds-*` design tokens,
- * making it framework-agnostic. Supports auto-refresh polling, a "new items" bar,
+ * Renders a real-time feed with structural layout in React and paint/state in the
+ * unlayered rustic skin. Supports auto-refresh polling, a "new items" bar,
  * load-more pagination, and a `ds-live-feed-feed-pulse` keyframe animation for new
  * entries. The keyframes live in `engines/rustic/skin/live-feed.css`, referenced
  * here only by name.
@@ -89,8 +89,8 @@ const s = {
 /**
  * Rustic (Vanilla) LiveFeed engine.
  *
- * Uses inline styles exclusively, referencing `--ds-*` CSS custom properties for
- * theming. The skeleton pulse and new-item flash reference the
+ * Uses `--ds-*` CSS custom properties and the rustic skin for paint. The skeleton
+ * pulse and new-item flash reference the
  * `ds-live-feed-pulse` / `ds-live-feed-feed-pulse` keyframes declared in the
  * rustic skin.
  *

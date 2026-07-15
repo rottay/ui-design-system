@@ -40,6 +40,7 @@
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useCallback, Children, cloneElement, isValidElement } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { SplitterProps, SplitterPanelProps } from '../Splitter.types';
 import { SPLITTER_DEFAULTS } from '../Splitter.types';
 
@@ -139,7 +140,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
           : moveEvent.clientX - rect.left;
         const percentage = (offset / totalSize) * 100;
 
-        setSizes((prevSizes) => {
+        setSizes((prevSizes: number[]) => {
           const newSizes = [...prevSizes];
           // Calculate how far the gutter has moved relative to the cumulative
           // size of all panels before (and including) the active one
@@ -192,7 +193,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
           <React.Fragment key={index}>
             {/* Inject the calculated size percentage into each Panel child */}
             {isValidElement(child)
-              ? cloneElement(child as React.ReactElement<SplitterPanelProps & { size?: number }>, { size: sizes[index] })
+              ? cloneElement(child as React.ReactElement<SplitterPanelProps & { size?: number }>, { size: arrayValueAt(sizes, index) })
               : child}
             {/* Render a gutter drag handle between each pair of panels */}
             {index < childArray.length - 1 && (

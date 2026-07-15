@@ -82,12 +82,17 @@ export interface SelectionPreviewRailProps<T extends object> {
   preview?: SelectionPreviewRailPreviewConfig<T>;
 }
 
+function readDisplayRecordValue(record: object, key: PropertyKey): unknown {
+  const value = Reflect.get(record, key);
+  return typeof value === 'function' ? undefined : value;
+}
+
 function resolvePathValue(record: Record<string, unknown>, path: string): unknown {
-  if (!path.includes('.')) return record[path];
+  if (!path.includes('.')) return readDisplayRecordValue(record, path);
 
   return path.split('.').reduce<unknown>((accumulator, segment) => {
     if (accumulator && typeof accumulator === 'object') {
-      return (accumulator as Record<string, unknown>)[segment];
+      return readDisplayRecordValue(accumulator, segment);
     }
     return undefined;
   }, record);
@@ -102,12 +107,12 @@ function resolveColumnValue<T extends object>(
     return resolvePathValue(record, column.dataIndex);
   }
 
-  return record[column.key];
+  return readDisplayRecordValue(record, column.key);
 }
 
 function extractString(record: Record<string, unknown>, candidates: string[]): string | undefined {
   for (const candidate of candidates) {
-    const value = record[candidate];
+    const value = readDisplayRecordValue(record, candidate);
     if (typeof value === 'string' && value.trim()) {
       return value;
     }
@@ -369,15 +374,18 @@ export function SelectionPreviewRail<T extends object>({
                 }}
               >
                 <Flex align="start" gap={10}>
-                  <ScanSearch
+                  <span
                     data-part="match-reason-icon"
                     style={{
+                      display: 'inline-flex',
                       width: 15,
                       height: 15,
                       marginTop: 2,
                       flexShrink: 0,
                     }}
-                  />
+                  >
+                    <ScanSearch aria-hidden="true" style={{ width: 15, height: 15 }} />
+                  </span>
                   <Box style={{ minWidth: 0 }}>
                     <Flex align="center" gap={8} wrap="wrap">
                       <Badge variant="primary" size="sm">

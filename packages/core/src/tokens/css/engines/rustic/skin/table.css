@@ -12,7 +12,7 @@
  * carries `ds-table ds-table--rustic`; every painted element is a descendant
  * with a `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). A descendant rule that sets `border` / `border-color` / a
  * `border-*-color` longhand must therefore reach (0,4,0): the div's two

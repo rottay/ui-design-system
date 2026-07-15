@@ -4,8 +4,8 @@
  * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
  * unnamed base layer. This engine-agnostic pattern has a single scope class,
  * so border-color selectors reach (0,4,0) through repeated target parts or a
- * finite-state attribute and clear the tenant floor at (0,3,1). All values
- * are transcribed verbatim from the component's former inline styles;
+ * finite-state attribute and clear the tenant floor at (0,3,1). Values
+ * are transcribed verbatim from the component's former runtime style props;
  * instance-scoped appearance variables remain owned by appearanceToVariables().
  */
 

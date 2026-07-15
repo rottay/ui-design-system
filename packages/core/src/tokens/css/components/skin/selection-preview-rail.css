@@ -13,7 +13,7 @@
  * shadow; identity-card mixes 88/12 with an 8%/48px shadow), so the two roots and
  * their two cards are separate rules — a merged rule would be a silent pixel change.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule here that paints a `border` /
  * `border-color` must reach (0,4,0): on the root that is the two root classes +
@@ -93,7 +93,7 @@
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
 }
 
-/* the raw lucide icon paints via currentColor, so `color` on the svg is its stroke */
+/* the intrinsic icon wrapper owns color; the nested glyph inherits currentColor */
 .ds-structure.ds-selection-preview-rail [data-part='match-reason-icon'] {
   color: var(--ds-color-primary);
 }

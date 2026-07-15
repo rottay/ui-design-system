@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the AlertDialog overlay component.
- * Renders a fully self-contained modal using only inline styles and design-system
- * CSS custom properties -- no Ant Design or Tailwind dependency required.
+ * Renders a self-contained modal using authored engine CSS, bounded runtime layout
+ * values, and design-system custom properties -- no Ant Design or Tailwind dependency.
  *
  * @example
  * ```tsx

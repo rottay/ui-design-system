@@ -25,6 +25,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { TreeProps, TreeDataNode } from '../Tree.types';
 import { TREE_DEFAULTS } from '../Tree.types';
 import {
@@ -809,7 +810,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
       // Auto-focus the first visible node when the tree receives keyboard
       // input but no node is focused yet (e.g., first Tab into the tree).
       if (!focusedKey) {
-        if (visibleKeys.length > 0) setFocusedKey(visibleKeys[0]);
+        const firstKey = arrayValueAt(visibleKeys, 0);
+        if (firstKey !== undefined) setFocusedKey(firstKey);
         return;
       }
       const currentIndex = visibleKeys.indexOf(focusedKey);
@@ -819,7 +821,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         case 'ArrowDown': {
           e.preventDefault();
           if (currentIndex < visibleKeys.length - 1) {
-            const nextKey = visibleKeys[currentIndex + 1];
+            const nextKey = arrayValueAt(visibleKeys, currentIndex + 1);
+            if (nextKey === undefined) break;
             setFocusedKey(nextKey);
             nodeRefs.current.get(nextKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           }
@@ -828,7 +831,8 @@ export default function ModernTree(props: TreeProps): React.ReactElement {
         case 'ArrowUp': {
           e.preventDefault();
           if (currentIndex > 0) {
-            const prevKey = visibleKeys[currentIndex - 1];
+            const prevKey = arrayValueAt(visibleKeys, currentIndex - 1);
+            if (prevKey === undefined) break;
             setFocusedKey(prevKey);
             nodeRefs.current.get(prevKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           }

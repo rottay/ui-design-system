@@ -1,19 +1,19 @@
 /**
  * @fileoverview Toast Rustic Engine - Rottay Design System
  * @description Pure HTML/CSS implementation of the Toast component.
- * Headless implementation with inline styles and zero external dependencies.
+ * Headless implementation with structural inline layout and zero external dependencies.
  *
  * @remarks
  * The Rustic engine provides a completely self-contained toast implementation:
  * - No external CSS framework dependencies
- * - All styles applied via inline CSS
+ * - Paint and interaction states owned by the unlayered rustic skin
  * - Maximum accessibility with ARIA attributes
  * - Ideal for projects without Ant Design or DaisyUI
  *
  * This implementation provides:
  * - Pure React with no external styling dependencies
  * - Complete feature parity with other engines
- * - Inline styles for maximum isolation
+ * - Inline layout only where values are genuinely instance-dependent
  * - Full accessibility support
  *
  * @example Basic Usage
@@ -115,7 +115,7 @@ function getDefaultIcon(variant: ToastVariant): React.ReactNode {
  * RusticToast - Pure HTML/CSS implementation of Toast.
  *
  * @description
- * A headless toast component with all styles applied inline.
+ * A headless toast component whose paint is applied by the rustic skin.
  * Perfect for applications that don't use Ant Design or DaisyUI.
  *
  * @remarks

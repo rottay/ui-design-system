@@ -241,10 +241,14 @@ Features implemented across Waves 2 through 6 of the DS execution plan.
 
 ### Wave 5 -- Surface Lifecycle and Permissions
 
+<!-- GAT07-CLAIM surface-profile-overrides: reserved-experimental; runtime=unconsumed; affirmative-behavior=false; owner=DS-IMP-022 -->
+
+GAT07-CONTRACT surface-profile-overrides: symbols=[SurfaceVisualOverrides, useSurfaceProfileDefaultsWithOverrides, visual.profileOverrides]; disposition=reserved-experimental; runtime-status=isolated-helper-unconsumed-by-surfaces; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-022; target-phase=2A.
+
 - `useSurfaceState` hook (8 lifecycle states, `renderState` helper)
 - Feedback components: `SurfaceLoadingSkeleton`, `SurfaceEmptyStateCard`, `SurfaceErrorStateCard`, `SurfaceStaleBanner`, `SurfaceOfflineBanner`
-- `useSurfaceProfileDefaultsWithOverrides` hook
-- `SurfaceVisualOverrides` type on all 33 surface visual configs
+- The generated GAT07 contract above is the only authority for the reserved
+  surface-override family.
 - Enhanced permissions: `isRowAllowed`, `cascadeRules`, `resolveFieldAccess`
 
 ### Wave 6 -- Branding Validation, Collaboration, and Lint Rules

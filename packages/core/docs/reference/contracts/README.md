@@ -14,7 +14,7 @@ contracts/
   tenants/          # TenantConfig, TenantBranding, TenantTokenOverrides
   tokens/           # DesignTokens, PersonalityTokens, SurfaceTokens, MotionTokens
   product-profiles/ # ProductProfile, ProductProfileKey
-  extensions/       # Universal Extension System (16 categories)
+  extensions/       # Reserved type-only extension sketch (16 categories; no runtime resolver)
   index.ts          # Barrel re-exporting all contracts
 ```
 
@@ -45,11 +45,14 @@ personality dimensions.
 Animation, chart, typography, accent, and card personality. These define the
 "feel" of a product (formal, playful, expressive) independently of colors.
 
-### ComponentExtensions (universal extension system)
+### Reserved compatibility surface
 
-16 independently optional extension categories (slots, columns, actions,
-filters, rendering, selection, sorting, pagination, motion, layout, data,
-drag-and-drop, export, keyboard, lifecycle, accessibility).
+<!-- GAT07-CLAIM component-extensions: reserved-deprecated; runtime=unimplemented; affirmative-behavior=false; owner=DS-IMP-021 -->
+
+GAT07-CONTRACT component-extensions: symbols=[ComponentExtensions, ExtensionHelpers, EngineAwareProps.extensions]; disposition=reserved-deprecated; runtime-status=unimplemented; affirmative-behavior=false; production-consumers=0; executable-assertions=0; owner=design-system-program/DS-IMP-021; target-phase=2A.
+
+The generated contract above is authoritative. Prefer evidenced
+component-owned props, compounds, and slots.
 
 ## Usage
 

@@ -16,6 +16,7 @@
 
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
 import { Modal, Input, Empty, Typography, Space, Tag } from 'antd';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { CommandPaletteProps, CommandItem } from '../CommandPalette.types';
 
 const { Text } = Typography;
@@ -112,7 +113,7 @@ export default function ClassicCommandPalette(props: CommandPaletteProps) {
       setActiveIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      const item = flatItems[activeIndex];
+      const item = activeIndex >= 0 ? arrayValueAt(flatItems, activeIndex) : undefined;
       if (item) handleSelect(item);
     }
   };

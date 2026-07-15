@@ -18,7 +18,7 @@
  * `top`/`left` STAY INLINE: they come from `getBoundingClientRect()` on every
  * frame the tooltip is positioned -- genuine runtime data, and not paint.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. The shortcut chip's border is the only border
  * here; it reaches (0,5,0) via the two bubble classes + `[data-part='bubble']` +

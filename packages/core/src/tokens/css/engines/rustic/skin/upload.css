@@ -25,7 +25,7 @@
  * picture+text (one shared block, `:not(...)` of the two card/circle
  * modifiers) to mirror that.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1). Every rule that paints a border COLOR reaches (0,4,0) via a
  * listType root modifier class, or (where none applies) a repeated
  * `[data-part='x'][data-part='x']`. Non-border paint wins unlayered at (0,3,0)

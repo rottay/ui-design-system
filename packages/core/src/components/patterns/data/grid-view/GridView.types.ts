@@ -145,6 +145,11 @@ export interface GridViewProps<T> {
   style?: CSSProperties;
 }
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 /**
  * Resolves a unique string key for a grid item, used for React keys and
  * selection tracking. Falls back to the array index when `rowKey` is not
@@ -163,5 +168,5 @@ export function resolveGridRowKey<T>(
 ): string {
   if (!rowKey) return String(index);
   if (typeof rowKey === 'function') return rowKey(item);
-  return String((item as Record<string, unknown>)[rowKey as string]);
+  return String(readRecordValue(item, rowKey as string));
 }

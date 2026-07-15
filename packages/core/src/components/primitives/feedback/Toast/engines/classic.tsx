@@ -156,13 +156,13 @@ export default function ClassicToast(props: ToastProps): React.ReactElement | nu
       // Unique key per toast allows targeted destroy on action click
       const key = `toast-${Date.now()}`;
 
-      notification[type]({
+      const notificationConfig = {
         key,
         message: title || description,
         description: title ? description : undefined,
         icon,
         duration: duration === 0 ? 0 : durationInSeconds,
-        placement: 'topRight',
+        placement: 'topRight' as const,
         className,
         style,
         onClose,
@@ -186,16 +186,52 @@ export default function ClassicToast(props: ToastProps): React.ReactElement | nu
             {action.label}
           </button>
         ) : undefined,
-      });
+      };
+      switch (type) {
+        case 'success':
+          notification.success(notificationConfig);
+          break;
+        case 'info':
+          notification.info(notificationConfig);
+          break;
+        case 'warning':
+          notification.warning(notificationConfig);
+          break;
+        case 'error':
+          notification.error(notificationConfig);
+          break;
+        default: {
+          const unsupportedType: never = type;
+          throw new Error(`Unsupported toast notification type: ${String(unsupportedType)}`);
+        }
+      }
     } else {
       // Use message for simple toasts
-      message[type]({
+      const messageConfig = {
         content: description,
         duration: duration === 0 ? 0 : durationInSeconds,
         className,
         style,
         onClose,
-      });
+      };
+      switch (type) {
+        case 'success':
+          message.success(messageConfig);
+          break;
+        case 'info':
+          message.info(messageConfig);
+          break;
+        case 'warning':
+          message.warning(messageConfig);
+          break;
+        case 'error':
+          message.error(messageConfig);
+          break;
+        default: {
+          const unsupportedType: never = type;
+          throw new Error(`Unsupported toast message type: ${String(unsupportedType)}`);
+        }
+      }
     }
 
     return () => {

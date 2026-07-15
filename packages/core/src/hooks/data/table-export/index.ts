@@ -133,10 +133,10 @@ function isBrowser(): boolean {
 }
 
 /**
- * Read a value from a data item by key.
+ * Read a value from a data item by key, returning empty string for nullish or callable items.
  */
 function readValue(item: any, key: string): any {
-  if (item === null || item === undefined) return '';
+  if (item === null || item === undefined || typeof item === 'function') return '';
   return item[key];
 }
 

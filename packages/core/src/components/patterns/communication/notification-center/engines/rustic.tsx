@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Rustic (Vanilla CSS) engine for the NotificationCenter pattern.
- * Uses only inline styles backed by `--ds-*` CSS custom properties -- no Ant
+ * Uses structural inline layout plus an unlayered token-driven skin -- no Ant
  * Design or Tailwind dependency. Implements its own absolute-positioned dropdown
  * with manual click-outside detection, matching the same controlled/uncontrolled
  * open state contract as the Classic and Modern engines.
@@ -94,11 +94,11 @@ const linkBtnStyle: CSSProperties = {
  * Rustic (Vanilla CSS) engine for the NotificationCenter pattern.
  *
  * Renders a framework-agnostic dropdown using `position: absolute` and manual
- * click-outside handling. Styles are driven entirely by `--ds-*` CSS custom
- * properties with hardcoded fallbacks for graceful degradation.
+ * click-outside handling. Structural layout is inline; paint and interaction
+ * states are owned by the unlayered rustic skin and its `--ds-*` properties.
  *
  * @param props - {@link NotificationCenterProps}
- * @returns A framework-agnostic notification dropdown with inline styles.
+ * @returns A framework-agnostic notification dropdown painted by the rustic skin.
  */
 export default function RusticNotificationCenter(props: NotificationCenterProps) {
   const {

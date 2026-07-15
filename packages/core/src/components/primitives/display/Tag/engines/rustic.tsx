@@ -4,11 +4,11 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine provides a lightweight, dependency-free tag using only
- * inline styles and semantic HTML elements.
+ * This engine provides a lightweight, dependency-free tag using semantic HTML,
+ * structural inline layout, and the unlayered rustic skin.
  *
  * **Implementation Details:**
- * - Uses inline styles for all visual properties
+ * - Paint and interaction states live in the unlayered rustic skin
  * - Uses semantic span element with role attributes
  * - Handles close button with accessibility
  * - Full keyboard navigation support
@@ -64,8 +64,8 @@ const CloseIcon: React.FC = () => (
 /**
  * Rustic (Pure HTML/CSS) implementation of the Tag component.
  *
- * Provides a fully accessible, dependency-free tag implementation
- * using only native HTML elements and inline CSS.
+ * Provides a fully accessible, dependency-free tag implementation using native
+ * HTML, structural inline layout, and the unlayered rustic skin for paint.
  *
  * @param props - Tag component properties
  * @returns Pure HTML tag element

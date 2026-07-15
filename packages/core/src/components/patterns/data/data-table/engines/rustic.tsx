@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Rustic (Apollo) engine for the DataTable pattern, rendered
- * entirely with inline styles that reference `--ds-*` CSS custom properties.
+ * with token-backed style objects that reference `--ds-*` CSS custom properties.
  * This engine carries zero external CSS dependencies (no Tailwind, no Ant
  * Design) so it can run in any host environment -- including iframes, email
  * previews, and Remotion renders -- while still respecting the tenant's
@@ -199,7 +199,7 @@ const styles = {
  * the Classic (Titan) engine.
  *
  * @param props - Engine-agnostic table configuration; see {@link DataTablePatternProps}.
- * @returns A data table rendered entirely with inline styles and CSS variables.
+ * @returns A data table rendered with token-backed style objects and CSS variables.
  */
 export default function RusticDataTable<T extends object>(props: DataTablePatternProps<T>) {
   const {

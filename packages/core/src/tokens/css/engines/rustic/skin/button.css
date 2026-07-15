@@ -6,7 +6,7 @@
  * than pseudo-classes". They do -- and so does Tailwind's preflight, which sits
  * in an `@layer base` that sorts after every `rottay-*` layer. A skin in a
  * design-system layer cannot paint a `button` at all (measured; see P-47), and a
- * single-class rule loses its border colour to each tenant's unlayered
+ * single-class rule loses its border colour to the tenant-scoped unlayered
  * `* { border-color: … }` floor at (0,3,1) (see P-48). Two classes plus the
  * anatomy part and the variant reach (0,4,0), which clears both.
  *

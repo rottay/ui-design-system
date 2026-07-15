@@ -6,6 +6,9 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "rottay-ds-supplier-honesty": "./consumer/ds-supplier-honesty.mjs"
+  },
   "sideEffects": [
     "*.css",
     "styles/**/*.css",
@@ -72,6 +75,13 @@
       "import": "./dist/commercial.js",
       "require": "./dist/commercial.cjs"
     },
+    "./supplier-contract": {
+      "default": "./supplier-contract.json"
+    },
+    "./supplier-honesty-cli": {
+      "import": "./consumer/ds-supplier-honesty.mjs",
+      "default": "./consumer/ds-supplier-honesty.mjs"
+    },
     "./commercial.css": {
       "style": "./dist/commercial.css",
       "import": "./dist/commercial.css",
@@ -89,6 +99,8 @@
     "dist/platform.css",
     "dist/bithire.css",
     "dist/evnto.css",
+    "supplier-contract.json",
+    "consumer/ds-supplier-honesty.mjs",
     "styles/**/*.css",
     "!dist/**/*.d.ts.map",
     "README.md"
@@ -101,6 +113,8 @@
     "build:commercial-css": "node scripts/build-commercial-css.mjs",
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
     "cra14:check": "node scripts/cra-14-public-barrel-gate.mjs",
+    "gat07:check": "node scripts/gat-07-exact-proof.mjs --check-artifact",
+    "gat07:write": "node scripts/gat-07-exact-proof.mjs --write",
     "test:scripts": "node --test scripts/*.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
     "pretest": "node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",
@@ -253,29 +267,16 @@
   },
   "peerDependencies": {
     "@ant-design/icons": "^5.5.0",
-    "@heroui/react": "^2.8.5",
     "antd": "^5.21.0",
     "d3": "^7.9.0",
     "framer-motion": "^12.0.0",
-    "geist": "^1.3.0",
     "lucide-react": ">=0.545.0 <1.0.0",
     "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
+    "react-dom": "^18.0.0 || ^19.0.0",
+    "typescript": "^5.7.0"
   },
   "peerDependenciesMeta": {
-    "@heroui/react": {
-      "optional": true
-    },
-    "d3": {
-      "optional": true
-    },
-    "framer-motion": {
-      "optional": true
-    },
-    "geist": {
-      "optional": true
-    },
-    "lucide-react": {
+    "typescript": {
       "optional": true
     }
   },
@@ -283,6 +284,7 @@
     "dayjs": "^1.11.20"
   },
   "devDependencies": {
+    "@ant-design/icons": "^5.6.1",
     "@ant-design/v5-patch-for-react-19": "1.0.3",
     "@storybook/addon-a11y": "^9.1.20",
     "@storybook/addon-docs": "^9.1.20",
@@ -300,9 +302,13 @@
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.5.0",
+    "antd": "^5.29.3",
     "daisyui": "^5.5.19",
+    "d3": "^7.9.0",
+    "framer-motion": "^12.38.0",
     "happy-dom": "^20.9.0",
     "jsdom": "^27.4.0",
+    "lucide-react": "^0.563.0",
     "postcss": "^8.5.10",
     "postcss-cli": "^11.0.1",
     "react": "^19.2.5",

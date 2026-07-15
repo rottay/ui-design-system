@@ -15,7 +15,7 @@
  * the input's `:focus-visible` -> `input:focus-visible ~ [data-part='circle']`.
  * The dot scale is keyed on `data-checked`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via `[data-checked]` (+ `:hover`)
  * beyond the two root classes + `[data-part='circle']`. Non-border paint wins
  * unlayered at (0,3,0) or higher.

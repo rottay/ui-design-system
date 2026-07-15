@@ -1,0 +1,4112 @@
+{
+  "schemaVersion": 1,
+  "supplierPackages": [
+    "@ant-design/icons",
+    "@react-three/drei",
+    "@react-three/fiber",
+    "antd",
+    "d3",
+    "framer-motion",
+    "lucide-react",
+    "three"
+  ],
+  "nonRuntimeEntrypoints": [
+    "./commercial.css",
+    "./styles",
+    "./styles.css",
+    "./styles/bithire",
+    "./styles/evnto",
+    "./styles/modern",
+    "./styles/platform",
+    "./styles/rottay",
+    "./supplier-contract"
+  ],
+  "entrypoints": {
+    ".": {
+      "exports": [
+        "ACTION_DOCK_DEFAULTS",
+        "ADAPTIVE_OVERLAY_DEFAULTS",
+        "AFFIX_DEFAULTS",
+        "ALERT_DIALOG_DEFAULTS",
+        "ALIGN_ITEMS_MAP",
+        "ANCHOR_DEFAULTS",
+        "APCA_BODY_TEXT_MIN_LC",
+        "ASPECT_RATIO_DEFAULTS",
+        "AUTOCOMPLETE_DEFAULTS",
+        "ActionDock",
+        "ActiveFiltersBar",
+        "ActivityCards",
+        "ActivityCompact",
+        "ActivitySurface",
+        "ActivityTicker",
+        "ActivityTimeline",
+        "AdaptiveOverlay",
+        "Affix",
+        "Alert",
+        "AlertDialog",
+        "Anchor",
+        "AntdConfigProvider",
+        "AppShell",
+        "AreaChart",
+        "AspectRatio",
+        "AssistantStatusBadge",
+        "AssistantStatusIndicator",
+        "AuditSurface",
+        "Aurora",
+        "AuthSurface",
+        "AutoComplete",
+        "Avatar",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "BACKTOP_DEFAULTS",
+        "BOTTOM_TAB_BAR_DEFAULTS",
+        "BOX_DEFAULTS",
+        "BackTop",
+        "Badge",
+        "BarChart",
+        "BillingSurface",
+        "BottomTabBar",
+        "Box",
+        "BrandingPreviewSandbox",
+        "Breadcrumb",
+        "BulkSelectToggle",
+        "BulletChart",
+        "Button",
+        "CALLOUT_COLORS",
+        "CALLOUT_DEFAULTS",
+        "CASCADER_DEFAULTS",
+        "COLLAPSE_DEFAULTS",
+        "COLORPICKER_DEFAULTS",
+        "CONFIRM_DIALOG_DEFAULTS",
+        "CONFIRM_DIALOG_VARIANT_COLORS",
+        "CONTAINER_DEFAULTS",
+        "CONTAINER_MAX_WIDTHS",
+        "CONTAINER_PADDINGS",
+        "CONTEXTMENU_DEFAULTS",
+        "Calendar",
+        "CalendarHeatMap",
+        "Callout",
+        "Card",
+        "Carousel",
+        "Cascader",
+        "ChartTooltip",
+        "ChatSurface",
+        "Checkbox",
+        "CheckboxGroup",
+        "Collapse",
+        "CollectionHeader",
+        "CollectionWorkspace",
+        "CollectionWorkspaceSurface",
+        "ColorPicker",
+        "ColumnMenu",
+        "ColumnSettingsDropdown",
+        "CommandCenterSurface",
+        "CommandRegistryProvider",
+        "CompareSurface",
+        "ConfirmActionCard",
+        "ConfirmDialog",
+        "ConnectedCommandPalette",
+        "Container",
+        "ContextMenu",
+        "CopyToCheck",
+        "CountUp",
+        "DEFAULT_COLORS",
+        "DEFAULT_COMPACT_CONFIG",
+        "DEFAULT_LOCALES",
+        "DEFAULT_MARGIN",
+        "DEFAULT_OPERATORS_BY_TYPE",
+        "DEFAULT_PACK",
+        "DEFAULT_PRODUCT_PROFILE_KEY",
+        "DEFAULT_TENANT_CONFIG",
+        "DEFAULT_TENANT_SLUG",
+        "DIVIDER_DEFAULTS",
+        "DIVIDER_DEFAULT_COLORS",
+        "DIVIDER_SPACING_MAP",
+        "DROPDOWN_DEFAULTS",
+        "DSErrorBoundary",
+        "DashboardHeader",
+        "DashboardSurface",
+        "DataTerminalCard",
+        "DataTerminalCardProvider",
+        "DataTerminalStat",
+        "DatePicker",
+        "DecisionInboxSurface",
+        "Descriptions",
+        "DesignSystemProvider",
+        "DetailFormSurface",
+        "DetailHeader",
+        "DetailSurface",
+        "Divider",
+        "Drawer",
+        "Dropdown",
+        "ENGINE_REGISTRY",
+        "EXAMPLE_SKIN_PACK",
+        "EditHeader",
+        "EditorSurface",
+        "Empty",
+        "EmptyStateSurface",
+        "EngineContext",
+        "EngineErrorBoundary",
+        "EngineProvider",
+        "ErrorCategory",
+        "ErrorHandler",
+        "ErrorSeverity",
+        "ExportButton",
+        "FALLBACK_ENGINE",
+        "FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND",
+        "FIRST_PARTY_ARTIFACT_SPECS",
+        "FLEX_ALIGN_MAP",
+        "FLEX_DEFAULTS",
+        "FLEX_JUSTIFY_MAP",
+        "FLOAT_BUTTON_DEFAULTS",
+        "FORMFIELD_DEFAULTS",
+        "FadeIn",
+        "FeatureContext",
+        "FeatureGate",
+        "FeatureProvider",
+        "FieldFiltersPanel",
+        "FileBrowserSurface",
+        "Flex",
+        "FloatButton",
+        "FocusModeProvider",
+        "FocusTrap",
+        "Form",
+        "FormFactsCard",
+        "FormField",
+        "FormHeader",
+        "FormSections",
+        "FormSurface",
+        "FunnelChart",
+        "GAP_MAP",
+        "GENERATED_ARTIFACT_BANNER",
+        "GRID_DEFAULTS",
+        "GRID_ITEM_DEFAULTS",
+        "GanttChart",
+        "GaugeChart",
+        "GlassCard",
+        "GlowEffect",
+        "GradientBackground",
+        "Grid",
+        "GridItem",
+        "GridPattern",
+        "GuidedDraftFormSurface",
+        "HOVERCARD_DEFAULTS",
+        "HamburgerToX",
+        "HeaderSurface",
+        "Heading",
+        "HeatMap",
+        "Hide",
+        "Histogram",
+        "HoverCard",
+        "I18nContext",
+        "I18nProvider",
+        "Image",
+        "ImageFallback",
+        "ImageSkeleton",
+        "ImportExportSurface",
+        "InlineEditControl",
+        "InlineEditField",
+        "InlineEditFooter",
+        "InlineEditGrid",
+        "InlineEditSection",
+        "InlineEditor",
+        "InlineEditorGroup",
+        "Input",
+        "InputAddon",
+        "InputGroup",
+        "InputNumber",
+        "IntegrationSurface",
+        "JUSTIFY_ITEMS_MAP",
+        "KBD_DEFAULTS",
+        "KanbanSurface",
+        "Kbd",
+        "LAYOUT_DEFAULTS",
+        "LOCALE_CONFIGS",
+        "Layout",
+        "LineChart",
+        "Link",
+        "List",
+        "ListSurface",
+        "ListToolbar",
+        "LiveCursor",
+        "LoadingOverlay",
+        "MENTIONS_DEFAULTS",
+        "MENU_DEFAULTS",
+        "MOBILE_HEADER_DEFAULTS",
+        "MODAL_MAX_HEIGHT_MAP",
+        "MODAL_PADDING_MAP",
+        "MODAL_RADIUS_MAP",
+        "MODAL_SIZE_MAP",
+        "Magnetic",
+        "MarketingSurface",
+        "MediaSurface",
+        "Mentions",
+        "Menu",
+        "MenuDivider",
+        "MenuGroup",
+        "MenuItem",
+        "MenuSubMenu",
+        "MessageBubble",
+        "MessageItem",
+        "MessageProvider",
+        "MetricsCards",
+        "MetricsChart",
+        "MetricsMinimal",
+        "MetricsRows",
+        "MobileHeader",
+        "Modal",
+        "ModalBody",
+        "ModalCloseButton",
+        "ModalFooter",
+        "ModalHeader",
+        "MoreFieldsToggle",
+        "Morph",
+        "NAV_LINK_DEFAULTS",
+        "NAV_LINK_TYPE_COLORS",
+        "NavLink",
+        "NavigationLinkProvider",
+        "NetworkGraph",
+        "NoiseTexture",
+        "NotificationItem",
+        "NotificationProvider",
+        "NotificationSurface",
+        "OAUTH_TRANSITION_VARIANT_ORDER",
+        "OAuthTransitionScreen",
+        "OPERATOR_DEFINITIONS",
+        "OTPINPUT_DEFAULTS",
+        "OTPInput",
+        "OVERLAY_MODAL_DEFAULTS",
+        "OnboardingSurface",
+        "OperationalSurface",
+        "Overlay",
+        "OverlayModal",
+        "PASSWORD_INPUT_DEFAULTS",
+        "POPCONFIRM_DEFAULTS",
+        "POPOVER_DEFAULTS",
+        "PRODUCT_PROFILES",
+        "PageShellSurface",
+        "Pagination",
+        "Paragraph",
+        "Parallax",
+        "ParticleField",
+        "Particles",
+        "PasswordInput",
+        "PatternActivityLog",
+        "PatternApprovalInbox",
+        "PatternApprovalWorkflow",
+        "PatternBrandStudio",
+        "PatternCalendarView",
+        "PatternCockpitHeader",
+        "PatternColumnSettings",
+        "PatternCommandPalette",
+        "PatternCommentThread",
+        "PatternDataTable",
+        "PatternDetailPanel",
+        "PatternEmptyState",
+        "PatternEnvironmentToggle",
+        "PatternFileManager",
+        "PatternFilterBuilder",
+        "PatternFilterPanel",
+        "PatternFormBuilder",
+        "PatternGalleryView",
+        "PatternGridView",
+        "PatternInvoiceTemplate",
+        "PatternKanbanBoard",
+        "PatternListToolbar",
+        "PatternLiveFeed",
+        "PatternLocaleSwitcher",
+        "PatternMapView",
+        "PatternModerationGallery",
+        "PatternNotificationCenter",
+        "PatternOperationalLedger",
+        "PatternPageShell",
+        "PatternPricingTable",
+        "PatternSavedViewsBar",
+        "PatternShiftMatrix",
+        "PatternShortcutsOverlay",
+        "PatternStatsGrid",
+        "PatternStepWizard",
+        "PatternTenantPreview",
+        "PatternTimeline",
+        "PatternTreeView",
+        "PatternUserProfileCard",
+        "PatternWorkbenchHeader",
+        "PatternWorkspaceSwitcher",
+        "PieChart",
+        "Popconfirm",
+        "Popover",
+        "Portal",
+        "PremiumFormFactsCard",
+        "PremiumFormSections",
+        "Presence",
+        "PresenceBar",
+        "PresenceTypingIndicator",
+        "PreviewDiffCard",
+        "PricingSurface",
+        "ProductProfileContext",
+        "ProductProfileProvider",
+        "ProfileSurface",
+        "Progress",
+        "PulseValue",
+        "QRCode",
+        "RADIUS_MAP",
+        "RATE_DEFAULTS",
+        "RATE_SIZE_MAP",
+        "RATIO_PRESETS",
+        "RadarChart",
+        "Radio",
+        "RadioGroup",
+        "Rate",
+        "RecordActionBar",
+        "RecordField",
+        "RecordFieldGrid",
+        "RecordPanel",
+        "RecordSummaryStrip",
+        "RecordWorkbenchSurface",
+        "ReportSurface",
+        "ResponsiveContext",
+        "ResponsiveProvider",
+        "ResponsiveSlot",
+        "Result",
+        "SCROLLBAR_SIZES",
+        "SCROLL_AREA_DEFAULTS",
+        "SEGMENTED_DEFAULTS",
+        "SHADOW_MAP",
+        "SHEET_DEFAULTS",
+        "SHELL_DEFAULTS",
+        "SLIDER_DEFAULTS",
+        "SPACE_ALIGN_MAP",
+        "SPACE_DEFAULTS",
+        "SPACE_SIZE_MAP",
+        "SPACING_MAP",
+        "SPLITTER_DEFAULTS",
+        "STACK_ALIGN_MAP",
+        "STACK_DEFAULTS",
+        "STACK_JUSTIFY_MAP",
+        "STACK_SPACING_MAP",
+        "STEPPER_DEFAULTS",
+        "STEPPER_FONT_SIZE_MAP",
+        "STEPPER_SIZE_MAP",
+        "STEPS_DEFAULTS",
+        "STRENGTH_COLORS",
+        "STRENGTH_WIDTHS",
+        "SankeyChart",
+        "SavedViewsMenu",
+        "ScaleIn",
+        "ScatterChart",
+        "SchedulerSurface",
+        "ScopeSwitcher",
+        "ScrollArea",
+        "ScrollReveal",
+        "SearchCommandBar",
+        "SearchSurface",
+        "Segmented",
+        "Select",
+        "SelectionPreviewRail",
+        "SettingsSurface",
+        "Sheet",
+        "ShimmerText",
+        "ShortcutProvider",
+        "ShortcutScope",
+        "Show",
+        "SidebarSurface",
+        "Skeleton",
+        "SkeletonAvatar",
+        "SkeletonButton",
+        "SkeletonCard",
+        "SkeletonForm",
+        "SkeletonListItem",
+        "SkeletonParagraph",
+        "SkeletonTable",
+        "SkeletonText",
+        "SlideIn",
+        "Slider",
+        "Space",
+        "Sparkline",
+        "Spinner",
+        "Splitter",
+        "Spotlight",
+        "Stack",
+        "StaggerChildren",
+        "Statistic",
+        "StatsHeader",
+        "StatusFilterPills",
+        "Stepper",
+        "StepperContent",
+        "StepperStep",
+        "Steps",
+        "StreamingText",
+        "SurfaceActionFooter",
+        "SurfaceEmptyState",
+        "SurfaceEmptyStateCard",
+        "SurfaceErrorBoundary",
+        "SurfaceErrorState",
+        "SurfaceErrorStateCard",
+        "SurfaceFieldGrid",
+        "SurfaceLoadingSkeleton",
+        "SurfaceLoadingState",
+        "SurfaceOfflineBanner",
+        "SurfacePanel",
+        "SurfaceReadField",
+        "SurfaceStaleBanner",
+        "SurfaceSummaryStrip",
+        "Switch",
+        "SystemCssVariablesBridge",
+        "TAGINPUT_DEFAULTS",
+        "THICKNESS_MAP",
+        "TONE_TO_AVATAR_VARIANT",
+        "TONE_TO_BADGE_VARIANT",
+        "TONE_TO_CALLOUT_VARIANT",
+        "TONE_TO_TAG_VARIANT",
+        "TORTURE_PROBE_VARS",
+        "TOUR_DEFAULTS",
+        "TRANSFER_DEFAULTS",
+        "TREESELECT_DEFAULTS",
+        "Table",
+        "TableCheckboxStyles",
+        "TableToolbar",
+        "Tabs",
+        "Tag",
+        "TagGroup",
+        "TagInput",
+        "TeamSurface",
+        "TenantContext",
+        "TenantProvider",
+        "Text",
+        "TextReveal",
+        "Textarea",
+        "ThemeContext",
+        "ThemeProvider",
+        "TimePicker",
+        "Timeline",
+        "Toast",
+        "ToastContainer",
+        "ToastProvider",
+        "Toggle",
+        "TokenInspector",
+        "ToolCallCard",
+        "Tooltip",
+        "TooltipSeries",
+        "TooltipValue",
+        "Tour",
+        "Transfer",
+        "Tree",
+        "TreeMap",
+        "TreeSelect",
+        "TypingIndicator",
+        "Typography",
+        "UPLOAD_DEFAULTS",
+        "Upload",
+        "VERTICAL_REGISTRY",
+        "ViewModeSwitcher",
+        "VisualizationSurface",
+        "VoiceInputButton",
+        "WATERMARK_DEFAULTS",
+        "WaterfallChart",
+        "Watermark",
+        "WizardSurface",
+        "WorkspaceAdvancedFilters",
+        "WorkspaceColumnsMenu",
+        "WorkspaceCommandBar",
+        "WorkspaceFilterRail",
+        "WorkspaceHeader",
+        "WorkspacePreviewRail",
+        "WorkspaceScopes",
+        "WorkspaceShell",
+        "WorkspaceViewsMenu",
+        "acquireSkinPack",
+        "actionsColumn",
+        "apcaContrast",
+        "applySkinPack",
+        "ar",
+        "arePropsEqual",
+        "bithireBrandTheme",
+        "brandThemeToBranding",
+        "brandThemeToChromeVariables",
+        "brandThemeToPersonality",
+        "brandThemeToTenantAppearanceAdvanced",
+        "brandThemeToTokenOverrides",
+        "buildHideMediaQuery",
+        "buildShowMediaQuery",
+        "buildTenantSelector",
+        "buildViewModes",
+        "cellRenderers",
+        "clearCustomRegistry",
+        "clearServerHeaders",
+        "clearSkinPacks",
+        "clearTenantCache",
+        "column",
+        "columns",
+        "compileBrandTheme",
+        "configureCustomEngine",
+        "configureDomainLookup",
+        "configureTenantApi",
+        "copyToClipboard",
+        "countActiveFilters",
+        "createActivitySurfaceConfig",
+        "createAuditSurfaceConfig",
+        "createAuthSurfaceConfig",
+        "createBillingSurfaceConfig",
+        "createChatSurfaceConfig",
+        "createCompareSurfaceConfig",
+        "createCompoundComponent",
+        "createCustomWrapper",
+        "createDashboardSurfaceConfig",
+        "createDetailFormSurfaceConfig",
+        "createDetailSurfaceConfig",
+        "createEdgeConfigDomainLookup",
+        "createEditorSurfaceConfig",
+        "createEmptyStateSurfaceConfig",
+        "createEngineComponent",
+        "createFileBrowserSurfaceConfig",
+        "createFormSurfaceConfig",
+        "createHeaderSurfaceConfig",
+        "createImportExportSurfaceConfig",
+        "createIntegrationSurfaceConfig",
+        "createKanbanSurfaceConfig",
+        "createListSurfaceConfig",
+        "createMarketingSurfaceConfig",
+        "createMediaSurfaceConfig",
+        "createNotificationSurfaceConfig",
+        "createOnboardingSurfaceConfig",
+        "createOperationalSurfaceConfig",
+        "createPricingSurfaceConfig",
+        "createProfileSurfaceConfig",
+        "createPropsComparator",
+        "createRecipeVariant",
+        "createReportSurfaceConfig",
+        "createSchedulerSurfaceConfig",
+        "createSearchSurfaceConfig",
+        "createSettingsSurfaceConfig",
+        "createSidebarSurfaceConfig",
+        "createSubComponent",
+        "createTeamSurfaceConfig",
+        "createTenantConfig",
+        "createTenantSchemaConfig",
+        "createVisualizationSurfaceConfig",
+        "createWizardSurfaceConfig",
+        "deepMergeTokenOverrides",
+        "defaultViewModeIcons",
+        "defaultViewModeLabels",
+        "deriveTenantColorRamps",
+        "deserializeBrandTheme",
+        "en",
+        "errorInDev",
+        "es",
+        "evntoBrandTheme",
+        "expandCascadedPermissions",
+        "exportChart",
+        "fetchRemoteTenantConfig",
+        "filterDetailSurfaceTabs",
+        "filterSurfaceActions",
+        "filterSurfaceColumns",
+        "filterSurfaceFields",
+        "filterSurfaceRowActions",
+        "filterSurfaceTabbedViews",
+        "formatCurrency",
+        "formatDate",
+        "formatDateRange",
+        "formatFileSize",
+        "formatList",
+        "formatNumber",
+        "formatPercent",
+        "formatRelativeTime",
+        "formatShortcutKey",
+        "fr",
+        "generateClipboardText",
+        "generateCsv",
+        "generateFilterId",
+        "generateJson",
+        "generateTenantCss",
+        "generateTenantCssFile",
+        "getAvailableEngines",
+        "getCustomComponent",
+        "getCustomEngineConfig",
+        "getDefaultEngine",
+        "getDefaultTenant",
+        "getDefaultTenantConfig",
+        "getEngine",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "getOAuthTransitionApp",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionPool",
+        "getOAuthTransitionProvider",
+        "getOAuthTransitionVariant",
+        "getOperatorsForField",
+        "getOperatorsForFieldWithCustom",
+        "getProductProfile",
+        "getRegisteredComponentCount",
+        "getRegisteredComponents",
+        "getRegisteredPacks",
+        "getRegisteredSkinPack",
+        "getStableEngines",
+        "getTenantConfig",
+        "getThicknessValue",
+        "getVerticalPreset",
+        "hasCustomComponent",
+        "inferSharedHeaderActionKind",
+        "isDarkSurfacePalette",
+        "isFieldVisibleForRow",
+        "isFilterGroup",
+        "isFilterRule",
+        "isKnownTenant",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId",
+        "isValidBranding",
+        "isValidEngine",
+        "isValidEngineName",
+        "isValidPlan",
+        "isValidTenantConfig",
+        "loadStaticTenantConfig",
+        "mapSurfaceData",
+        "mergeOperatorsByType",
+        "mergePartialPersonality",
+        "message",
+        "normalizeSurfaceDensity",
+        "normalizeSurfaceError",
+        "notification",
+        "pickOAuthTransitionVariant",
+        "preloadTenantConfig",
+        "pt",
+        "recordTransitionName",
+        "registerCustomComponent",
+        "registerCustomComponents",
+        "registerSkinPack",
+        "renderVerticalArtifact",
+        "resolveAccessor",
+        "resolveColumnValue",
+        "resolveEngine",
+        "resolveFieldAccessForRow",
+        "resolveFromDomain",
+        "resolveFromHeader",
+        "resolveFromSubdomain",
+        "resolveGalleryKey",
+        "resolveGridRowKey",
+        "resolveHeader",
+        "resolveListCardMinWidth",
+        "resolvePersonalityPreset",
+        "resolvePosture",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "resolveRowKey",
+        "resolveSharedHeaderActionIcon",
+        "resolveSharedHeaderActionTooltip",
+        "resolveSharedHeaderActionVariant",
+        "resolveStackSpacing",
+        "resolveSurfaceAction",
+        "resolveSurfaceButtonVariant",
+        "resolveSurfaceDetailActionVariant",
+        "resolveSurfacePermission",
+        "resolveSurfaceTabsType",
+        "resolveTenant",
+        "resolveValue",
+        "rottayBrandTheme",
+        "serializeBrandTheme",
+        "setServerHeaders",
+        "startDsViewTransition",
+        "stringifySurfaceValue",
+        "themanagementmiamiBrandTheme",
+        "toBreakpoint",
+        "toLegacySize",
+        "toOperatorDefinition",
+        "toSupportedLocale",
+        "toast",
+        "tortureDarkBrandTheme",
+        "tortureLightBrandTheme",
+        "triggerDownload",
+        "unregisterCustomComponent",
+        "unregisterSkinPack",
+        "useAccentTokens",
+        "useAdaptivePosture",
+        "useAriaAnnounce",
+        "useAutoSave",
+        "useBreakpoints",
+        "useCardTokens",
+        "useChartBrush",
+        "useChartCompact",
+        "useChartDimensions",
+        "useChartExport",
+        "useChartPersonality",
+        "useChartTooltip",
+        "useChat",
+        "useCollapseTokens",
+        "useCollectionWorkspace",
+        "useColorTokens",
+        "useCommandPaletteItems",
+        "useCommands",
+        "useCreateTenant",
+        "useCrossTabSync",
+        "useCustomStatus",
+        "useDataTable",
+        "useDeferredPending",
+        "useDraftSave",
+        "useDsFocusMode",
+        "useEngineContext",
+        "useErrorHandler",
+        "useExecuteCommand",
+        "useFeatureContext",
+        "useFeatureContextAlias",
+        "useFeatures",
+        "useFilterPanel",
+        "useFlipLayout",
+        "useFocusTrap",
+        "useForm",
+        "useFormBuilder",
+        "useFormDiff",
+        "useGlobalSearch",
+        "useGlobalShortcut",
+        "useGlobalShortcuts",
+        "useGroupedData",
+        "useHasFeature",
+        "useHasShortcutProvider",
+        "useI18nContext",
+        "useInView",
+        "useInlineEditing",
+        "useKanban",
+        "useKeyboardNavigation",
+        "useLayoutPreference",
+        "useLocale",
+        "useMediaQuery",
+        "useMessage",
+        "useMotionPersonality",
+        "useMotionTokens",
+        "useMousePosition",
+        "useNavigationLink",
+        "useNotification",
+        "useNotificationPreferences",
+        "useOptimisticList",
+        "useOptimisticUpdate",
+        "useOptionalTokens",
+        "usePdfExport",
+        "usePortalContainer",
+        "usePresence",
+        "useProductProfile",
+        "useProductProfileContext",
+        "usePulseOnChange",
+        "useReducedMotion",
+        "useRegisterCommands",
+        "useRegisteredShortcuts",
+        "useResponsive",
+        "useResponsiveValue",
+        "useRouterState",
+        "useRovingTabindex",
+        "useScrollProgress",
+        "useShellContext",
+        "useShortcutScope",
+        "useSmoothCounter",
+        "useSortableList",
+        "useSpacingTokens",
+        "useStreamingText",
+        "useSurfaceProfileDefaults",
+        "useSurfaceProfileDefaultsWithOverrides",
+        "useSurfaceQuery",
+        "useSurfaceState",
+        "useTableExport",
+        "useTenant",
+        "useTenantBranding",
+        "useTenantContext",
+        "useTheme",
+        "useThemeContext",
+        "useToast",
+        "useTokens",
+        "useTranslation",
+        "useTypographyTokens",
+        "useUndoRedo",
+        "useVariant",
+        "useViewTransition",
+        "useVirtualScroll",
+        "useVoiceInput",
+        "warnInDev",
+        "warnOnceInDev"
+      ],
+      "symbols": {
+        "ActionDock": [
+          "antd"
+        ],
+        "ActiveFiltersBar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ActivityCards": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ActivityCompact": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ActivitySurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ActivityTicker": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ActivityTimeline": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "AdaptiveOverlay": [
+          "antd"
+        ],
+        "Affix": [
+          "antd"
+        ],
+        "Alert": [
+          "antd"
+        ],
+        "AlertDialog": [
+          "antd"
+        ],
+        "Anchor": [
+          "antd"
+        ],
+        "AntdConfigProvider": [
+          "antd"
+        ],
+        "AreaChart": [
+          "antd",
+          "d3"
+        ],
+        "AssistantStatusBadge": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "AssistantStatusIndicator": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "AuditSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Aurora": [
+          "antd",
+          "framer-motion"
+        ],
+        "AuthSurface": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "AutoComplete": [
+          "antd"
+        ],
+        "Avatar": [
+          "antd"
+        ],
+        "BackTop": [
+          "antd"
+        ],
+        "Badge": [
+          "antd"
+        ],
+        "BarChart": [
+          "antd",
+          "d3"
+        ],
+        "BillingSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "BottomTabBar": [
+          "antd"
+        ],
+        "Breadcrumb": [
+          "antd"
+        ],
+        "buildViewModes": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "BulkSelectToggle": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "BulletChart": [
+          "antd",
+          "d3"
+        ],
+        "Button": [
+          "antd"
+        ],
+        "Calendar": [
+          "antd"
+        ],
+        "CalendarHeatMap": [
+          "antd",
+          "d3"
+        ],
+        "Card": [
+          "antd"
+        ],
+        "Carousel": [
+          "antd"
+        ],
+        "Cascader": [
+          "antd"
+        ],
+        "ChatSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Checkbox": [
+          "antd"
+        ],
+        "Collapse": [
+          "antd"
+        ],
+        "CollectionHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "CollectionWorkspace": [
+          "@ant-design/icons",
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "CollectionWorkspaceSurface": [
+          "@ant-design/icons",
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ColorPicker": [
+          "antd"
+        ],
+        "ColumnMenu": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ColumnSettingsDropdown": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "CommandCenterSurface": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "CompareSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ConfirmActionCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ConfirmDialog": [
+          "antd"
+        ],
+        "ConnectedCommandPalette": [
+          "antd"
+        ],
+        "ContextMenu": [
+          "antd"
+        ],
+        "CopyToCheck": [
+          "antd",
+          "lucide-react"
+        ],
+        "CountUp": [
+          "antd",
+          "framer-motion"
+        ],
+        "DashboardHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "DashboardSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "DataTerminalCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "DataTerminalCardProvider": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "DataTerminalStat": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "DatePicker": [
+          "antd"
+        ],
+        "DecisionInboxSurface": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "defaultViewModeIcons": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "defaultViewModeLabels": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Descriptions": [
+          "antd"
+        ],
+        "DesignSystemProvider": [
+          "antd"
+        ],
+        "DetailFormSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "DetailHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "DetailSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Divider": [
+          "antd"
+        ],
+        "Drawer": [
+          "antd"
+        ],
+        "Dropdown": [
+          "antd"
+        ],
+        "EditHeader": [
+          "@ant-design/icons",
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "EditorSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Empty": [
+          "antd"
+        ],
+        "EmptyStateSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ExportButton": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "FadeIn": [
+          "antd",
+          "framer-motion"
+        ],
+        "FieldFiltersPanel": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "FileBrowserSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Flex": [
+          "antd"
+        ],
+        "FloatButton": [
+          "antd"
+        ],
+        "Form": [
+          "antd"
+        ],
+        "FormFactsCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "FormField": [
+          "antd"
+        ],
+        "FormHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "FormSections": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "FormSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "FunnelChart": [
+          "antd",
+          "d3"
+        ],
+        "GanttChart": [
+          "antd",
+          "d3"
+        ],
+        "GaugeChart": [
+          "antd",
+          "d3"
+        ],
+        "GlowEffect": [
+          "antd",
+          "framer-motion"
+        ],
+        "GradientBackground": [
+          "antd",
+          "framer-motion"
+        ],
+        "GridPattern": [
+          "antd",
+          "framer-motion"
+        ],
+        "GuidedDraftFormSurface": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "HamburgerToX": [
+          "antd"
+        ],
+        "HeaderSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Heading": [
+          "antd"
+        ],
+        "HeatMap": [
+          "antd",
+          "d3"
+        ],
+        "Histogram": [
+          "antd",
+          "d3"
+        ],
+        "HoverCard": [
+          "antd"
+        ],
+        "Image": [
+          "antd"
+        ],
+        "ImportExportSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "inferSharedHeaderActionKind": [
+          "lucide-react"
+        ],
+        "InlineEditControl": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "InlineEditField": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "InlineEditFooter": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "InlineEditGrid": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "InlineEditor": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "InlineEditorGroup": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "InlineEditSection": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Input": [
+          "antd"
+        ],
+        "InputNumber": [
+          "antd"
+        ],
+        "IntegrationSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "KanbanSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Layout": [
+          "antd"
+        ],
+        "LineChart": [
+          "antd",
+          "d3"
+        ],
+        "Link": [
+          "antd"
+        ],
+        "List": [
+          "antd"
+        ],
+        "ListSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ListToolbar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "LiveCursor": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "LoadingOverlay": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Magnetic": [
+          "antd",
+          "framer-motion"
+        ],
+        "MarketingSurface": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "MediaSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Mentions": [
+          "antd"
+        ],
+        "Menu": [
+          "antd"
+        ],
+        "message": [
+          "antd"
+        ],
+        "MessageBubble": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "MessageItem": [
+          "antd"
+        ],
+        "MessageProvider": [
+          "antd"
+        ],
+        "MetricsCards": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "MetricsChart": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "MetricsMinimal": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "MetricsRows": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "MobileHeader": [
+          "antd"
+        ],
+        "Modal": [
+          "antd"
+        ],
+        "MoreFieldsToggle": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Morph": [
+          "antd",
+          "framer-motion"
+        ],
+        "NavLink": [
+          "antd"
+        ],
+        "NetworkGraph": [
+          "antd",
+          "d3"
+        ],
+        "normalizeSurfaceDensity": [
+          "antd"
+        ],
+        "notification": [
+          "antd"
+        ],
+        "NotificationItem": [
+          "antd"
+        ],
+        "NotificationProvider": [
+          "antd"
+        ],
+        "NotificationSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "OnboardingSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "OperationalSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "OverlayModal": [
+          "antd"
+        ],
+        "PageShellSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Pagination": [
+          "antd"
+        ],
+        "Paragraph": [
+          "antd"
+        ],
+        "Parallax": [
+          "framer-motion"
+        ],
+        "ParticleField": [
+          "antd",
+          "framer-motion"
+        ],
+        "Particles": [
+          "antd",
+          "framer-motion"
+        ],
+        "PasswordInput": [
+          "antd"
+        ],
+        "PatternActivityLog": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternApprovalInbox": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternApprovalWorkflow": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternBrandStudio": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternCalendarView": [
+          "antd"
+        ],
+        "PatternCockpitHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternColumnSettings": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternCommandPalette": [
+          "antd"
+        ],
+        "PatternCommentThread": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternDataTable": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternDetailPanel": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternEmptyState": [
+          "antd"
+        ],
+        "PatternEnvironmentToggle": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternFileManager": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternFilterBuilder": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternFilterPanel": [
+          "antd",
+          "lucide-react"
+        ],
+        "PatternFormBuilder": [
+          "antd"
+        ],
+        "PatternGalleryView": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternGridView": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternInvoiceTemplate": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternKanbanBoard": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternListToolbar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternLiveFeed": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternLocaleSwitcher": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternMapView": [
+          "antd"
+        ],
+        "PatternModerationGallery": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternNotificationCenter": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternOperationalLedger": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternPageShell": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternPricingTable": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternSavedViewsBar": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternShiftMatrix": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternShortcutsOverlay": [
+          "antd"
+        ],
+        "PatternStatsGrid": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternStepWizard": [
+          "antd"
+        ],
+        "PatternTimeline": [
+          "antd"
+        ],
+        "PatternTreeView": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternUserProfileCard": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PatternWorkbenchHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PatternWorkspaceSwitcher": [
+          "@ant-design/icons",
+          "antd"
+        ],
+        "PieChart": [
+          "antd",
+          "d3"
+        ],
+        "Popconfirm": [
+          "antd"
+        ],
+        "Popover": [
+          "antd"
+        ],
+        "PremiumFormFactsCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PremiumFormSections": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PresenceBar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PresenceTypingIndicator": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PreviewDiffCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "PricingSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ProfileSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Progress": [
+          "antd"
+        ],
+        "QRCode": [
+          "antd"
+        ],
+        "RadarChart": [
+          "antd",
+          "d3"
+        ],
+        "Radio": [
+          "antd"
+        ],
+        "Rate": [
+          "antd"
+        ],
+        "RecordActionBar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "RecordField": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "RecordFieldGrid": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "RecordPanel": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "RecordSummaryStrip": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "RecordWorkbenchSurface": [
+          "antd"
+        ],
+        "ReportSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "resolveListCardMinWidth": [
+          "antd"
+        ],
+        "resolveSharedHeaderActionIcon": [
+          "lucide-react"
+        ],
+        "resolveSharedHeaderActionTooltip": [
+          "lucide-react"
+        ],
+        "resolveSharedHeaderActionVariant": [
+          "lucide-react"
+        ],
+        "resolveSurfaceTabsType": [
+          "antd"
+        ],
+        "Result": [
+          "antd"
+        ],
+        "SankeyChart": [
+          "antd",
+          "d3"
+        ],
+        "SavedViewsMenu": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ScaleIn": [
+          "antd",
+          "framer-motion"
+        ],
+        "ScatterChart": [
+          "antd",
+          "d3"
+        ],
+        "SchedulerSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ScopeSwitcher": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "ScrollReveal": [
+          "antd",
+          "framer-motion"
+        ],
+        "SearchCommandBar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SearchSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Segmented": [
+          "antd"
+        ],
+        "Select": [
+          "antd"
+        ],
+        "SelectionPreviewRail": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SettingsSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Sheet": [
+          "antd"
+        ],
+        "ShimmerText": [
+          "antd",
+          "framer-motion"
+        ],
+        "SidebarSurface": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Skeleton": [
+          "antd"
+        ],
+        "SlideIn": [
+          "antd",
+          "framer-motion"
+        ],
+        "Slider": [
+          "antd"
+        ],
+        "Space": [
+          "antd"
+        ],
+        "Sparkline": [
+          "antd",
+          "d3"
+        ],
+        "Spinner": [
+          "antd"
+        ],
+        "Splitter": [
+          "antd"
+        ],
+        "Spotlight": [
+          "framer-motion"
+        ],
+        "StaggerChildren": [
+          "antd",
+          "framer-motion"
+        ],
+        "Statistic": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "StatsHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "StatusFilterPills": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Stepper": [
+          "antd"
+        ],
+        "Steps": [
+          "antd"
+        ],
+        "StreamingText": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceActionFooter": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceEmptyState": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceEmptyStateCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceErrorState": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceErrorStateCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceFieldGrid": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceLoadingSkeleton": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceLoadingState": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceOfflineBanner": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfacePanel": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceReadField": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceStaleBanner": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "SurfaceSummaryStrip": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Switch": [
+          "antd"
+        ],
+        "SystemCssVariablesBridge": [
+          "antd"
+        ],
+        "Table": [
+          "antd"
+        ],
+        "TableToolbar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Tabs": [
+          "antd"
+        ],
+        "Tag": [
+          "antd"
+        ],
+        "TagInput": [
+          "antd"
+        ],
+        "TeamSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Text": [
+          "antd"
+        ],
+        "Textarea": [
+          "antd"
+        ],
+        "TextReveal": [
+          "antd",
+          "framer-motion"
+        ],
+        "Timeline": [
+          "antd"
+        ],
+        "TimePicker": [
+          "antd"
+        ],
+        "Toast": [
+          "antd"
+        ],
+        "ToastContainer": [
+          "antd"
+        ],
+        "Toggle": [
+          "antd"
+        ],
+        "ToolCallCard": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Tooltip": [
+          "antd"
+        ],
+        "Tour": [
+          "antd"
+        ],
+        "Transfer": [
+          "antd"
+        ],
+        "Tree": [
+          "antd"
+        ],
+        "TreeMap": [
+          "antd",
+          "d3"
+        ],
+        "TreeSelect": [
+          "antd"
+        ],
+        "TypingIndicator": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "Typography": [
+          "antd"
+        ],
+        "Upload": [
+          "antd"
+        ],
+        "useAccentTokens": [
+          "antd"
+        ],
+        "useCardTokens": [
+          "antd"
+        ],
+        "useChartDimensions": [
+          "antd"
+        ],
+        "useChartPersonality": [
+          "antd"
+        ],
+        "useColorTokens": [
+          "antd"
+        ],
+        "useForm": [
+          "antd"
+        ],
+        "useMessage": [
+          "antd"
+        ],
+        "useMotionPersonality": [
+          "antd",
+          "framer-motion"
+        ],
+        "useMotionTokens": [
+          "antd"
+        ],
+        "useNotification": [
+          "antd"
+        ],
+        "useOptionalTokens": [
+          "antd"
+        ],
+        "useSpacingTokens": [
+          "antd"
+        ],
+        "useSurfaceProfileDefaults": [
+          "antd"
+        ],
+        "useSurfaceProfileDefaultsWithOverrides": [
+          "antd"
+        ],
+        "useSurfaceState": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "useTokens": [
+          "antd"
+        ],
+        "useTypographyTokens": [
+          "antd"
+        ],
+        "ViewModeSwitcher": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "VisualizationSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "VoiceInputButton": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WaterfallChart": [
+          "antd",
+          "d3"
+        ],
+        "Watermark": [
+          "antd"
+        ],
+        "WizardSurface": [
+          "@ant-design/icons",
+          "antd",
+          "d3",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspaceAdvancedFilters": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspaceColumnsMenu": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspaceCommandBar": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspaceFilterRail": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspaceHeader": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspacePreviewRail": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspaceScopes": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ],
+        "WorkspaceShell": [
+          "antd",
+          "framer-motion"
+        ],
+        "WorkspaceViewsMenu": [
+          "antd",
+          "framer-motion",
+          "lucide-react"
+        ]
+      },
+      "supplierFreeExports": [
+        "ACTION_DOCK_DEFAULTS",
+        "ADAPTIVE_OVERLAY_DEFAULTS",
+        "AFFIX_DEFAULTS",
+        "ALERT_DIALOG_DEFAULTS",
+        "ALIGN_ITEMS_MAP",
+        "ANCHOR_DEFAULTS",
+        "APCA_BODY_TEXT_MIN_LC",
+        "ASPECT_RATIO_DEFAULTS",
+        "AUTOCOMPLETE_DEFAULTS",
+        "AppShell",
+        "AspectRatio",
+        "AvatarBadge",
+        "AvatarFallback",
+        "AvatarGroup",
+        "BACKTOP_DEFAULTS",
+        "BOTTOM_TAB_BAR_DEFAULTS",
+        "BOX_DEFAULTS",
+        "Box",
+        "BrandingPreviewSandbox",
+        "CALLOUT_COLORS",
+        "CALLOUT_DEFAULTS",
+        "CASCADER_DEFAULTS",
+        "COLLAPSE_DEFAULTS",
+        "COLORPICKER_DEFAULTS",
+        "CONFIRM_DIALOG_DEFAULTS",
+        "CONFIRM_DIALOG_VARIANT_COLORS",
+        "CONTAINER_DEFAULTS",
+        "CONTAINER_MAX_WIDTHS",
+        "CONTAINER_PADDINGS",
+        "CONTEXTMENU_DEFAULTS",
+        "Callout",
+        "ChartTooltip",
+        "CheckboxGroup",
+        "CommandRegistryProvider",
+        "Container",
+        "DEFAULT_COLORS",
+        "DEFAULT_COMPACT_CONFIG",
+        "DEFAULT_LOCALES",
+        "DEFAULT_MARGIN",
+        "DEFAULT_OPERATORS_BY_TYPE",
+        "DEFAULT_PACK",
+        "DEFAULT_PRODUCT_PROFILE_KEY",
+        "DEFAULT_TENANT_CONFIG",
+        "DEFAULT_TENANT_SLUG",
+        "DIVIDER_DEFAULTS",
+        "DIVIDER_DEFAULT_COLORS",
+        "DIVIDER_SPACING_MAP",
+        "DROPDOWN_DEFAULTS",
+        "DSErrorBoundary",
+        "ENGINE_REGISTRY",
+        "EXAMPLE_SKIN_PACK",
+        "EngineContext",
+        "EngineErrorBoundary",
+        "EngineProvider",
+        "ErrorCategory",
+        "ErrorHandler",
+        "ErrorSeverity",
+        "FALLBACK_ENGINE",
+        "FIRST_PARTY_ARTIFACT_REGENERATE_COMMAND",
+        "FIRST_PARTY_ARTIFACT_SPECS",
+        "FLEX_ALIGN_MAP",
+        "FLEX_DEFAULTS",
+        "FLEX_JUSTIFY_MAP",
+        "FLOAT_BUTTON_DEFAULTS",
+        "FORMFIELD_DEFAULTS",
+        "FeatureContext",
+        "FeatureGate",
+        "FeatureProvider",
+        "FocusModeProvider",
+        "FocusTrap",
+        "GAP_MAP",
+        "GENERATED_ARTIFACT_BANNER",
+        "GRID_DEFAULTS",
+        "GRID_ITEM_DEFAULTS",
+        "GlassCard",
+        "Grid",
+        "GridItem",
+        "HOVERCARD_DEFAULTS",
+        "Hide",
+        "I18nContext",
+        "I18nProvider",
+        "ImageFallback",
+        "ImageSkeleton",
+        "InputAddon",
+        "InputGroup",
+        "JUSTIFY_ITEMS_MAP",
+        "KBD_DEFAULTS",
+        "Kbd",
+        "LAYOUT_DEFAULTS",
+        "LOCALE_CONFIGS",
+        "MENTIONS_DEFAULTS",
+        "MENU_DEFAULTS",
+        "MOBILE_HEADER_DEFAULTS",
+        "MODAL_MAX_HEIGHT_MAP",
+        "MODAL_PADDING_MAP",
+        "MODAL_RADIUS_MAP",
+        "MODAL_SIZE_MAP",
+        "MenuDivider",
+        "MenuGroup",
+        "MenuItem",
+        "MenuSubMenu",
+        "ModalBody",
+        "ModalCloseButton",
+        "ModalFooter",
+        "ModalHeader",
+        "NAV_LINK_DEFAULTS",
+        "NAV_LINK_TYPE_COLORS",
+        "NavigationLinkProvider",
+        "NoiseTexture",
+        "OAUTH_TRANSITION_VARIANT_ORDER",
+        "OAuthTransitionScreen",
+        "OPERATOR_DEFINITIONS",
+        "OTPINPUT_DEFAULTS",
+        "OTPInput",
+        "OVERLAY_MODAL_DEFAULTS",
+        "Overlay",
+        "PASSWORD_INPUT_DEFAULTS",
+        "POPCONFIRM_DEFAULTS",
+        "POPOVER_DEFAULTS",
+        "PRODUCT_PROFILES",
+        "PatternTenantPreview",
+        "Portal",
+        "Presence",
+        "ProductProfileContext",
+        "ProductProfileProvider",
+        "PulseValue",
+        "RADIUS_MAP",
+        "RATE_DEFAULTS",
+        "RATE_SIZE_MAP",
+        "RATIO_PRESETS",
+        "RadioGroup",
+        "ResponsiveContext",
+        "ResponsiveProvider",
+        "ResponsiveSlot",
+        "SCROLLBAR_SIZES",
+        "SCROLL_AREA_DEFAULTS",
+        "SEGMENTED_DEFAULTS",
+        "SHADOW_MAP",
+        "SHEET_DEFAULTS",
+        "SHELL_DEFAULTS",
+        "SLIDER_DEFAULTS",
+        "SPACE_ALIGN_MAP",
+        "SPACE_DEFAULTS",
+        "SPACE_SIZE_MAP",
+        "SPACING_MAP",
+        "SPLITTER_DEFAULTS",
+        "STACK_ALIGN_MAP",
+        "STACK_DEFAULTS",
+        "STACK_JUSTIFY_MAP",
+        "STACK_SPACING_MAP",
+        "STEPPER_DEFAULTS",
+        "STEPPER_FONT_SIZE_MAP",
+        "STEPPER_SIZE_MAP",
+        "STEPS_DEFAULTS",
+        "STRENGTH_COLORS",
+        "STRENGTH_WIDTHS",
+        "ScrollArea",
+        "ShortcutProvider",
+        "ShortcutScope",
+        "Show",
+        "SkeletonAvatar",
+        "SkeletonButton",
+        "SkeletonCard",
+        "SkeletonForm",
+        "SkeletonListItem",
+        "SkeletonParagraph",
+        "SkeletonTable",
+        "SkeletonText",
+        "Stack",
+        "StepperContent",
+        "StepperStep",
+        "SurfaceErrorBoundary",
+        "TAGINPUT_DEFAULTS",
+        "THICKNESS_MAP",
+        "TONE_TO_AVATAR_VARIANT",
+        "TONE_TO_BADGE_VARIANT",
+        "TONE_TO_CALLOUT_VARIANT",
+        "TONE_TO_TAG_VARIANT",
+        "TORTURE_PROBE_VARS",
+        "TOUR_DEFAULTS",
+        "TRANSFER_DEFAULTS",
+        "TREESELECT_DEFAULTS",
+        "TableCheckboxStyles",
+        "TagGroup",
+        "TenantContext",
+        "TenantProvider",
+        "ThemeContext",
+        "ThemeProvider",
+        "ToastProvider",
+        "TokenInspector",
+        "TooltipSeries",
+        "TooltipValue",
+        "UPLOAD_DEFAULTS",
+        "VERTICAL_REGISTRY",
+        "WATERMARK_DEFAULTS",
+        "acquireSkinPack",
+        "actionsColumn",
+        "apcaContrast",
+        "applySkinPack",
+        "ar",
+        "arePropsEqual",
+        "bithireBrandTheme",
+        "brandThemeToBranding",
+        "brandThemeToChromeVariables",
+        "brandThemeToPersonality",
+        "brandThemeToTenantAppearanceAdvanced",
+        "brandThemeToTokenOverrides",
+        "buildHideMediaQuery",
+        "buildShowMediaQuery",
+        "buildTenantSelector",
+        "cellRenderers",
+        "clearCustomRegistry",
+        "clearServerHeaders",
+        "clearSkinPacks",
+        "clearTenantCache",
+        "column",
+        "columns",
+        "compileBrandTheme",
+        "configureCustomEngine",
+        "configureDomainLookup",
+        "configureTenantApi",
+        "copyToClipboard",
+        "countActiveFilters",
+        "createActivitySurfaceConfig",
+        "createAuditSurfaceConfig",
+        "createAuthSurfaceConfig",
+        "createBillingSurfaceConfig",
+        "createChatSurfaceConfig",
+        "createCompareSurfaceConfig",
+        "createCompoundComponent",
+        "createCustomWrapper",
+        "createDashboardSurfaceConfig",
+        "createDetailFormSurfaceConfig",
+        "createDetailSurfaceConfig",
+        "createEdgeConfigDomainLookup",
+        "createEditorSurfaceConfig",
+        "createEmptyStateSurfaceConfig",
+        "createEngineComponent",
+        "createFileBrowserSurfaceConfig",
+        "createFormSurfaceConfig",
+        "createHeaderSurfaceConfig",
+        "createImportExportSurfaceConfig",
+        "createIntegrationSurfaceConfig",
+        "createKanbanSurfaceConfig",
+        "createListSurfaceConfig",
+        "createMarketingSurfaceConfig",
+        "createMediaSurfaceConfig",
+        "createNotificationSurfaceConfig",
+        "createOnboardingSurfaceConfig",
+        "createOperationalSurfaceConfig",
+        "createPricingSurfaceConfig",
+        "createProfileSurfaceConfig",
+        "createPropsComparator",
+        "createRecipeVariant",
+        "createReportSurfaceConfig",
+        "createSchedulerSurfaceConfig",
+        "createSearchSurfaceConfig",
+        "createSettingsSurfaceConfig",
+        "createSidebarSurfaceConfig",
+        "createSubComponent",
+        "createTeamSurfaceConfig",
+        "createTenantConfig",
+        "createTenantSchemaConfig",
+        "createVisualizationSurfaceConfig",
+        "createWizardSurfaceConfig",
+        "deepMergeTokenOverrides",
+        "deriveTenantColorRamps",
+        "deserializeBrandTheme",
+        "en",
+        "errorInDev",
+        "es",
+        "evntoBrandTheme",
+        "expandCascadedPermissions",
+        "exportChart",
+        "fetchRemoteTenantConfig",
+        "filterDetailSurfaceTabs",
+        "filterSurfaceActions",
+        "filterSurfaceColumns",
+        "filterSurfaceFields",
+        "filterSurfaceRowActions",
+        "filterSurfaceTabbedViews",
+        "formatCurrency",
+        "formatDate",
+        "formatDateRange",
+        "formatFileSize",
+        "formatList",
+        "formatNumber",
+        "formatPercent",
+        "formatRelativeTime",
+        "formatShortcutKey",
+        "fr",
+        "generateClipboardText",
+        "generateCsv",
+        "generateFilterId",
+        "generateJson",
+        "generateTenantCss",
+        "generateTenantCssFile",
+        "getAvailableEngines",
+        "getCustomComponent",
+        "getCustomEngineConfig",
+        "getDefaultEngine",
+        "getDefaultTenant",
+        "getDefaultTenantConfig",
+        "getEngine",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "getOAuthTransitionApp",
+        "getOAuthTransitionDefaultVariant",
+        "getOAuthTransitionPool",
+        "getOAuthTransitionProvider",
+        "getOAuthTransitionVariant",
+        "getOperatorsForField",
+        "getOperatorsForFieldWithCustom",
+        "getProductProfile",
+        "getRegisteredComponentCount",
+        "getRegisteredComponents",
+        "getRegisteredPacks",
+        "getRegisteredSkinPack",
+        "getStableEngines",
+        "getTenantConfig",
+        "getThicknessValue",
+        "getVerticalPreset",
+        "hasCustomComponent",
+        "isDarkSurfacePalette",
+        "isFieldVisibleForRow",
+        "isFilterGroup",
+        "isFilterRule",
+        "isKnownTenant",
+        "isOAuthProvider",
+        "isOAuthTransitionVariantId",
+        "isValidBranding",
+        "isValidEngine",
+        "isValidEngineName",
+        "isValidPlan",
+        "isValidTenantConfig",
+        "loadStaticTenantConfig",
+        "mapSurfaceData",
+        "mergeOperatorsByType",
+        "mergePartialPersonality",
+        "normalizeSurfaceError",
+        "pickOAuthTransitionVariant",
+        "preloadTenantConfig",
+        "pt",
+        "recordTransitionName",
+        "registerCustomComponent",
+        "registerCustomComponents",
+        "registerSkinPack",
+        "renderVerticalArtifact",
+        "resolveAccessor",
+        "resolveColumnValue",
+        "resolveEngine",
+        "resolveFieldAccessForRow",
+        "resolveFromDomain",
+        "resolveFromHeader",
+        "resolveFromSubdomain",
+        "resolveGalleryKey",
+        "resolveGridRowKey",
+        "resolveHeader",
+        "resolvePersonalityPreset",
+        "resolvePosture",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "resolveRowKey",
+        "resolveStackSpacing",
+        "resolveSurfaceAction",
+        "resolveSurfaceButtonVariant",
+        "resolveSurfaceDetailActionVariant",
+        "resolveSurfacePermission",
+        "resolveTenant",
+        "resolveValue",
+        "rottayBrandTheme",
+        "serializeBrandTheme",
+        "setServerHeaders",
+        "startDsViewTransition",
+        "stringifySurfaceValue",
+        "themanagementmiamiBrandTheme",
+        "toBreakpoint",
+        "toLegacySize",
+        "toOperatorDefinition",
+        "toSupportedLocale",
+        "toast",
+        "tortureDarkBrandTheme",
+        "tortureLightBrandTheme",
+        "triggerDownload",
+        "unregisterCustomComponent",
+        "unregisterSkinPack",
+        "useAdaptivePosture",
+        "useAriaAnnounce",
+        "useAutoSave",
+        "useBreakpoints",
+        "useChartBrush",
+        "useChartCompact",
+        "useChartExport",
+        "useChartTooltip",
+        "useChat",
+        "useCollapseTokens",
+        "useCollectionWorkspace",
+        "useCommandPaletteItems",
+        "useCommands",
+        "useCreateTenant",
+        "useCrossTabSync",
+        "useCustomStatus",
+        "useDataTable",
+        "useDeferredPending",
+        "useDraftSave",
+        "useDsFocusMode",
+        "useEngineContext",
+        "useErrorHandler",
+        "useExecuteCommand",
+        "useFeatureContext",
+        "useFeatureContextAlias",
+        "useFeatures",
+        "useFilterPanel",
+        "useFlipLayout",
+        "useFocusTrap",
+        "useFormBuilder",
+        "useFormDiff",
+        "useGlobalSearch",
+        "useGlobalShortcut",
+        "useGlobalShortcuts",
+        "useGroupedData",
+        "useHasFeature",
+        "useHasShortcutProvider",
+        "useI18nContext",
+        "useInView",
+        "useInlineEditing",
+        "useKanban",
+        "useKeyboardNavigation",
+        "useLayoutPreference",
+        "useLocale",
+        "useMediaQuery",
+        "useMousePosition",
+        "useNavigationLink",
+        "useNotificationPreferences",
+        "useOptimisticList",
+        "useOptimisticUpdate",
+        "usePdfExport",
+        "usePortalContainer",
+        "usePresence",
+        "useProductProfile",
+        "useProductProfileContext",
+        "usePulseOnChange",
+        "useReducedMotion",
+        "useRegisterCommands",
+        "useRegisteredShortcuts",
+        "useResponsive",
+        "useResponsiveValue",
+        "useRouterState",
+        "useRovingTabindex",
+        "useScrollProgress",
+        "useShellContext",
+        "useShortcutScope",
+        "useSmoothCounter",
+        "useSortableList",
+        "useStreamingText",
+        "useSurfaceQuery",
+        "useTableExport",
+        "useTenant",
+        "useTenantBranding",
+        "useTenantContext",
+        "useTheme",
+        "useThemeContext",
+        "useToast",
+        "useTranslation",
+        "useUndoRedo",
+        "useVariant",
+        "useViewTransition",
+        "useVirtualScroll",
+        "useVoiceInput",
+        "warnInDev",
+        "warnOnceInDev"
+      ]
+    },
+    "./server": {
+      "exports": [
+        "DEFAULT_TENANT_SLUG",
+        "brandingContrastRatio",
+        "createEdgeConfigDomainLookup",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "isBundledTenant",
+        "isKnownTenant",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "toSupportedLocale",
+        "validateBrandingContrast"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "DEFAULT_TENANT_SLUG",
+        "brandingContrastRatio",
+        "createEdgeConfigDomainLookup",
+        "getKnownTenantConfig",
+        "getKnownTenantSlugs",
+        "isBundledTenant",
+        "isKnownTenant",
+        "resolveRequestTenant",
+        "resolveRequestTenantAsync",
+        "toSupportedLocale",
+        "validateBrandingContrast"
+      ]
+    },
+    "./icons": {
+      "exports": [
+        "AccessibilityIcon",
+        "ActivityIcon",
+        "AlertCircleIcon",
+        "AlertIcon",
+        "AlertOctagonIcon",
+        "AlertTriangleIcon",
+        "AlignCenterIcon",
+        "AlignJustifyIcon",
+        "AlignLeftIcon",
+        "ArchiveIcon",
+        "ArrowDownIcon",
+        "ArrowDownLeftIcon",
+        "ArrowDownRightIcon",
+        "ArrowLeftIcon",
+        "ArrowLeftRightIcon",
+        "ArrowRightIcon",
+        "ArrowUpDownIcon",
+        "ArrowUpIcon",
+        "ArrowUpRightIcon",
+        "AudioLinesIcon",
+        "AudioWaveformIcon",
+        "AwardIcon",
+        "BadgeCheckIcon",
+        "BadgeDollarSignIcon",
+        "BanIcon",
+        "BarChart3Icon",
+        "BarcodeIcon",
+        "BaseIcon",
+        "BellIcon",
+        "BellOffIcon",
+        "BookOpenIcon",
+        "BookmarkIcon",
+        "BookmarkPlusIcon",
+        "BotIcon",
+        "BoxesIcon",
+        "BracesIcon",
+        "BrainCircuitIcon",
+        "BrainIcon",
+        "BriefcaseBusinessIcon",
+        "BriefcaseIcon",
+        "Building2Icon",
+        "BuildingIcon",
+        "CalculatorIcon",
+        "CalendarCheckIcon",
+        "CalendarClockIcon",
+        "CalendarDaysIcon",
+        "CalendarIcon",
+        "CalendarPlusIcon",
+        "CameraIcon",
+        "ChartNoAxesColumnIcon",
+        "CheckCheckIcon",
+        "CheckCircle2Icon",
+        "CheckCircleIcon",
+        "CheckIcon",
+        "CheckSquareIcon",
+        "ChefHatIcon",
+        "ChevronDownIcon",
+        "ChevronLeftIcon",
+        "ChevronRightIcon",
+        "ChevronUpIcon",
+        "ChromeIcon",
+        "CircleAlertIcon",
+        "CircleDashedIcon",
+        "CircleDollarSignIcon",
+        "CircleDotIcon",
+        "CircleIcon",
+        "CircuitBoardIcon",
+        "ClipboardCheckIcon",
+        "ClipboardCopyIcon",
+        "ClipboardIcon",
+        "ClipboardListIcon",
+        "Clock3Icon",
+        "ClockIcon",
+        "Code2Icon",
+        "CodeIcon",
+        "CoffeeIcon",
+        "CoinsIcon",
+        "Columns3Icon",
+        "CommandIcon",
+        "CompassIcon",
+        "CopyIcon",
+        "CpuIcon",
+        "CreditCardIcon",
+        "CrosshairIcon",
+        "CrownIcon",
+        "DatabaseIcon",
+        "DollarSignIcon",
+        "DotIcon",
+        "DownloadIcon",
+        "DramaIcon",
+        "Edit2Icon",
+        "Edit3Icon",
+        "EditIcon",
+        "ExternalLinkIcon",
+        "EyeIcon",
+        "EyeOffIcon",
+        "FileAudioIcon",
+        "FileCheck2Icon",
+        "FileCheckIcon",
+        "FileCodeIcon",
+        "FileDownIcon",
+        "FileEditIcon",
+        "FileIcon",
+        "FilePenLineIcon",
+        "FilePlus2Icon",
+        "FileQuestionIcon",
+        "FileSearchIcon",
+        "FileSignatureIcon",
+        "FileStackIcon",
+        "FileTextIcon",
+        "FileTypeIcon",
+        "FileWarningIcon",
+        "FilterIcon",
+        "FingerprintIcon",
+        "FlagIcon",
+        "FlameIcon",
+        "FlaskConicalIcon",
+        "FolderIcon",
+        "FolderOpenIcon",
+        "FolderTreeIcon",
+        "FunnelIcon",
+        "GaugeIcon",
+        "GemIcon",
+        "GiftIcon",
+        "GitBranchIcon",
+        "GitCompareIcon",
+        "GithubIcon",
+        "Globe2Icon",
+        "GlobeIcon",
+        "GraduationCapIcon",
+        "Grid3x3Icon",
+        "GridIcon",
+        "GripVerticalIcon",
+        "HandIcon",
+        "HandshakeIcon",
+        "HashIcon",
+        "HeadphonesIcon",
+        "HeartHandshakeIcon",
+        "HeartIcon",
+        "HelpCircleIcon",
+        "HighlighterIcon",
+        "HistoryIcon",
+        "HomeIcon",
+        "ICON_SIZE_MAP",
+        "ICON_SIZE_TOKENS",
+        "ImageIcon",
+        "ImageOffIcon",
+        "InboxIcon",
+        "InfinityIcon",
+        "InfoIcon",
+        "InstagramIcon",
+        "KanbanIcon",
+        "KeyIcon",
+        "KeyRoundIcon",
+        "KeyboardIcon",
+        "LandmarkIcon",
+        "LanguagesIcon",
+        "Layers3Icon",
+        "LayersIcon",
+        "LayoutDashboardIcon",
+        "LayoutGridIcon",
+        "LayoutIcon",
+        "LayoutListIcon",
+        "LayoutTemplateIcon",
+        "LightbulbIcon",
+        "LineChartIcon",
+        "Link2Icon",
+        "LinkIcon",
+        "LinkedinIcon",
+        "ListChecksIcon",
+        "ListFilterIcon",
+        "ListIcon",
+        "Loader2Icon",
+        "LoaderCircleIcon",
+        "LoaderIcon",
+        "LockIcon",
+        "LockKeyholeIcon",
+        "LogOutIcon",
+        "MailIcon",
+        "MailOpenIcon",
+        "MapPinIcon",
+        "Maximize2Icon",
+        "MedalIcon",
+        "MegaphoneIcon",
+        "MenuIcon",
+        "MessageCircleIcon",
+        "MessageSquareIcon",
+        "MessageSquarePlusIcon",
+        "MessageSquareQuoteIcon",
+        "MessageSquareTextIcon",
+        "MessageSquareWarningIcon",
+        "Mic2Icon",
+        "MicIcon",
+        "MicOffIcon",
+        "MicVocalIcon",
+        "Minimize2Icon",
+        "MinusCircleIcon",
+        "MinusIcon",
+        "MonitorIcon",
+        "MonitorSmartphoneIcon",
+        "MoreHorizontalIcon",
+        "MoreVerticalIcon",
+        "MoveIcon",
+        "MusicIcon",
+        "NavigationIcon",
+        "PackageCheckIcon",
+        "PackageIcon",
+        "PackageSearchIcon",
+        "PaletteIcon",
+        "PalmtreeIcon",
+        "PanelLeftCloseIcon",
+        "PanelLeftOpenIcon",
+        "PanelRightCloseIcon",
+        "PaperclipIcon",
+        "PauseCircleIcon",
+        "PauseIcon",
+        "PencilIcon",
+        "PencilLineIcon",
+        "PercentIcon",
+        "PhoneCallIcon",
+        "PhoneIcon",
+        "PhoneIncomingIcon",
+        "PhoneOffIcon",
+        "PieChartIcon",
+        "PinIcon",
+        "PinOffIcon",
+        "PlaneIcon",
+        "PlayCircleIcon",
+        "PlayIcon",
+        "PlugIcon",
+        "PlusCircleIcon",
+        "PlusIcon",
+        "PowerIcon",
+        "PowerOffIcon",
+        "PrinterIcon",
+        "QrCodeIcon",
+        "QuoteIcon",
+        "RadarIcon",
+        "RadioIcon",
+        "RadioTowerIcon",
+        "ReceiptIcon",
+        "ReceiptTextIcon",
+        "RefreshCcwIcon",
+        "RefreshCwIcon",
+        "Repeat2Icon",
+        "RepeatIcon",
+        "ReplyIcon",
+        "RocketIcon",
+        "RotateCcwIcon",
+        "RotateCwIcon",
+        "RouteIcon",
+        "SaveIcon",
+        "ScaleIcon",
+        "ScanFaceIcon",
+        "ScanLineIcon",
+        "ScanSearchIcon",
+        "SearchIcon",
+        "SearchXIcon",
+        "SendIcon",
+        "SendMessageIcon",
+        "ServerIcon",
+        "Settings2Icon",
+        "SettingsIcon",
+        "Share2Icon",
+        "ShieldAlertIcon",
+        "ShieldCheckIcon",
+        "ShieldIcon",
+        "ShieldOffIcon",
+        "ShieldXIcon",
+        "ShoppingBagIcon",
+        "ShoppingCartIcon",
+        "ShuffleIcon",
+        "SignalHighIcon",
+        "SkipBackIcon",
+        "SkipForwardIcon",
+        "SlidersHorizontalIcon",
+        "SmartphoneIcon",
+        "SparklesIcon",
+        "SquareIcon",
+        "StarIcon",
+        "StickyNoteIcon",
+        "StoreIcon",
+        "Table2Icon",
+        "TabletIcon",
+        "TagIcon",
+        "TagsIcon",
+        "TargetIcon",
+        "ThumbsDownIcon",
+        "ThumbsUpIcon",
+        "TicketIcon",
+        "TimerIcon",
+        "TimerResetIcon",
+        "ToggleLeftIcon",
+        "ToggleRightIcon",
+        "Trash2Icon",
+        "TrendingDownIcon",
+        "TrendingUpIcon",
+        "TrophyIcon",
+        "TruckIcon",
+        "TwitterIcon",
+        "Undo2Icon",
+        "UnlockIcon",
+        "UnplugIcon",
+        "UploadIcon",
+        "UserCheckIcon",
+        "UserCogIcon",
+        "UserIcon",
+        "UserMinusIcon",
+        "UserPlusIcon",
+        "UserRoundCheckIcon",
+        "UserRoundIcon",
+        "UserXIcon",
+        "UsersIcon",
+        "UsersRoundIcon",
+        "UtensilsCrossedIcon",
+        "VariableIcon",
+        "VideoIcon",
+        "Volume2Icon",
+        "VolumeXIcon",
+        "VoteIcon",
+        "WalletCardsIcon",
+        "WalletIcon",
+        "Wand2Icon",
+        "WarehouseIcon",
+        "WebhookIcon",
+        "WifiIcon",
+        "WifiOffIcon",
+        "WineIcon",
+        "WorkflowIcon",
+        "WrenchIcon",
+        "XCircleIcon",
+        "XIcon",
+        "ZapIcon",
+        "createIcon"
+      ],
+      "symbols": {
+        "AccessibilityIcon": [
+          "lucide-react"
+        ],
+        "ActivityIcon": [
+          "lucide-react"
+        ],
+        "AlertCircleIcon": [
+          "lucide-react"
+        ],
+        "AlertOctagonIcon": [
+          "lucide-react"
+        ],
+        "AlertTriangleIcon": [
+          "lucide-react"
+        ],
+        "AlignCenterIcon": [
+          "lucide-react"
+        ],
+        "AlignJustifyIcon": [
+          "lucide-react"
+        ],
+        "AlignLeftIcon": [
+          "lucide-react"
+        ],
+        "ArchiveIcon": [
+          "lucide-react"
+        ],
+        "ArrowDownIcon": [
+          "lucide-react"
+        ],
+        "ArrowDownLeftIcon": [
+          "lucide-react"
+        ],
+        "ArrowDownRightIcon": [
+          "lucide-react"
+        ],
+        "ArrowLeftIcon": [
+          "lucide-react"
+        ],
+        "ArrowLeftRightIcon": [
+          "lucide-react"
+        ],
+        "ArrowRightIcon": [
+          "lucide-react"
+        ],
+        "ArrowUpDownIcon": [
+          "lucide-react"
+        ],
+        "ArrowUpIcon": [
+          "lucide-react"
+        ],
+        "ArrowUpRightIcon": [
+          "lucide-react"
+        ],
+        "AudioLinesIcon": [
+          "lucide-react"
+        ],
+        "AudioWaveformIcon": [
+          "lucide-react"
+        ],
+        "AwardIcon": [
+          "lucide-react"
+        ],
+        "BadgeCheckIcon": [
+          "lucide-react"
+        ],
+        "BadgeDollarSignIcon": [
+          "lucide-react"
+        ],
+        "BanIcon": [
+          "lucide-react"
+        ],
+        "BarChart3Icon": [
+          "lucide-react"
+        ],
+        "BarcodeIcon": [
+          "lucide-react"
+        ],
+        "BellIcon": [
+          "lucide-react"
+        ],
+        "BellOffIcon": [
+          "lucide-react"
+        ],
+        "BookmarkIcon": [
+          "lucide-react"
+        ],
+        "BookmarkPlusIcon": [
+          "lucide-react"
+        ],
+        "BookOpenIcon": [
+          "lucide-react"
+        ],
+        "BotIcon": [
+          "lucide-react"
+        ],
+        "BoxesIcon": [
+          "lucide-react"
+        ],
+        "BracesIcon": [
+          "lucide-react"
+        ],
+        "BrainCircuitIcon": [
+          "lucide-react"
+        ],
+        "BrainIcon": [
+          "lucide-react"
+        ],
+        "BriefcaseBusinessIcon": [
+          "lucide-react"
+        ],
+        "BriefcaseIcon": [
+          "lucide-react"
+        ],
+        "Building2Icon": [
+          "lucide-react"
+        ],
+        "BuildingIcon": [
+          "lucide-react"
+        ],
+        "CalculatorIcon": [
+          "lucide-react"
+        ],
+        "CalendarCheckIcon": [
+          "lucide-react"
+        ],
+        "CalendarClockIcon": [
+          "lucide-react"
+        ],
+        "CalendarDaysIcon": [
+          "lucide-react"
+        ],
+        "CalendarIcon": [
+          "lucide-react"
+        ],
+        "CalendarPlusIcon": [
+          "lucide-react"
+        ],
+        "CameraIcon": [
+          "lucide-react"
+        ],
+        "ChartNoAxesColumnIcon": [
+          "lucide-react"
+        ],
+        "CheckCheckIcon": [
+          "lucide-react"
+        ],
+        "CheckCircle2Icon": [
+          "lucide-react"
+        ],
+        "CheckCircleIcon": [
+          "lucide-react"
+        ],
+        "CheckIcon": [
+          "lucide-react"
+        ],
+        "CheckSquareIcon": [
+          "lucide-react"
+        ],
+        "ChefHatIcon": [
+          "lucide-react"
+        ],
+        "ChevronDownIcon": [
+          "lucide-react"
+        ],
+        "ChevronLeftIcon": [
+          "lucide-react"
+        ],
+        "ChevronRightIcon": [
+          "lucide-react"
+        ],
+        "ChevronUpIcon": [
+          "lucide-react"
+        ],
+        "ChromeIcon": [
+          "lucide-react"
+        ],
+        "CircleAlertIcon": [
+          "lucide-react"
+        ],
+        "CircleDashedIcon": [
+          "lucide-react"
+        ],
+        "CircleDollarSignIcon": [
+          "lucide-react"
+        ],
+        "CircleDotIcon": [
+          "lucide-react"
+        ],
+        "CircleIcon": [
+          "lucide-react"
+        ],
+        "CircuitBoardIcon": [
+          "lucide-react"
+        ],
+        "ClipboardCheckIcon": [
+          "lucide-react"
+        ],
+        "ClipboardCopyIcon": [
+          "lucide-react"
+        ],
+        "ClipboardIcon": [
+          "lucide-react"
+        ],
+        "ClipboardListIcon": [
+          "lucide-react"
+        ],
+        "Clock3Icon": [
+          "lucide-react"
+        ],
+        "ClockIcon": [
+          "lucide-react"
+        ],
+        "Code2Icon": [
+          "lucide-react"
+        ],
+        "CodeIcon": [
+          "lucide-react"
+        ],
+        "CoffeeIcon": [
+          "lucide-react"
+        ],
+        "CoinsIcon": [
+          "lucide-react"
+        ],
+        "Columns3Icon": [
+          "lucide-react"
+        ],
+        "CommandIcon": [
+          "lucide-react"
+        ],
+        "CompassIcon": [
+          "lucide-react"
+        ],
+        "CopyIcon": [
+          "lucide-react"
+        ],
+        "CpuIcon": [
+          "lucide-react"
+        ],
+        "CreditCardIcon": [
+          "lucide-react"
+        ],
+        "CrosshairIcon": [
+          "lucide-react"
+        ],
+        "CrownIcon": [
+          "lucide-react"
+        ],
+        "DatabaseIcon": [
+          "lucide-react"
+        ],
+        "DollarSignIcon": [
+          "lucide-react"
+        ],
+        "DotIcon": [
+          "lucide-react"
+        ],
+        "DownloadIcon": [
+          "lucide-react"
+        ],
+        "DramaIcon": [
+          "lucide-react"
+        ],
+        "Edit2Icon": [
+          "lucide-react"
+        ],
+        "Edit3Icon": [
+          "lucide-react"
+        ],
+        "EditIcon": [
+          "lucide-react"
+        ],
+        "ExternalLinkIcon": [
+          "lucide-react"
+        ],
+        "EyeIcon": [
+          "lucide-react"
+        ],
+        "EyeOffIcon": [
+          "lucide-react"
+        ],
+        "FileAudioIcon": [
+          "lucide-react"
+        ],
+        "FileCheck2Icon": [
+          "lucide-react"
+        ],
+        "FileCheckIcon": [
+          "lucide-react"
+        ],
+        "FileCodeIcon": [
+          "lucide-react"
+        ],
+        "FileDownIcon": [
+          "lucide-react"
+        ],
+        "FileEditIcon": [
+          "lucide-react"
+        ],
+        "FileIcon": [
+          "lucide-react"
+        ],
+        "FilePenLineIcon": [
+          "lucide-react"
+        ],
+        "FilePlus2Icon": [
+          "lucide-react"
+        ],
+        "FileQuestionIcon": [
+          "lucide-react"
+        ],
+        "FileSearchIcon": [
+          "lucide-react"
+        ],
+        "FileSignatureIcon": [
+          "lucide-react"
+        ],
+        "FileStackIcon": [
+          "lucide-react"
+        ],
+        "FileTextIcon": [
+          "lucide-react"
+        ],
+        "FileTypeIcon": [
+          "lucide-react"
+        ],
+        "FileWarningIcon": [
+          "lucide-react"
+        ],
+        "FilterIcon": [
+          "lucide-react"
+        ],
+        "FingerprintIcon": [
+          "lucide-react"
+        ],
+        "FlagIcon": [
+          "lucide-react"
+        ],
+        "FlameIcon": [
+          "lucide-react"
+        ],
+        "FlaskConicalIcon": [
+          "lucide-react"
+        ],
+        "FolderIcon": [
+          "lucide-react"
+        ],
+        "FolderOpenIcon": [
+          "lucide-react"
+        ],
+        "FolderTreeIcon": [
+          "lucide-react"
+        ],
+        "FunnelIcon": [
+          "lucide-react"
+        ],
+        "GaugeIcon": [
+          "lucide-react"
+        ],
+        "GemIcon": [
+          "lucide-react"
+        ],
+        "GiftIcon": [
+          "lucide-react"
+        ],
+        "GitBranchIcon": [
+          "lucide-react"
+        ],
+        "GitCompareIcon": [
+          "lucide-react"
+        ],
+        "GithubIcon": [
+          "lucide-react"
+        ],
+        "Globe2Icon": [
+          "lucide-react"
+        ],
+        "GlobeIcon": [
+          "lucide-react"
+        ],
+        "GraduationCapIcon": [
+          "lucide-react"
+        ],
+        "Grid3x3Icon": [
+          "lucide-react"
+        ],
+        "GridIcon": [
+          "lucide-react"
+        ],
+        "GripVerticalIcon": [
+          "lucide-react"
+        ],
+        "HandIcon": [
+          "lucide-react"
+        ],
+        "HandshakeIcon": [
+          "lucide-react"
+        ],
+        "HashIcon": [
+          "lucide-react"
+        ],
+        "HeadphonesIcon": [
+          "lucide-react"
+        ],
+        "HeartHandshakeIcon": [
+          "lucide-react"
+        ],
+        "HeartIcon": [
+          "lucide-react"
+        ],
+        "HelpCircleIcon": [
+          "lucide-react"
+        ],
+        "HighlighterIcon": [
+          "lucide-react"
+        ],
+        "HistoryIcon": [
+          "lucide-react"
+        ],
+        "HomeIcon": [
+          "lucide-react"
+        ],
+        "ImageIcon": [
+          "lucide-react"
+        ],
+        "ImageOffIcon": [
+          "lucide-react"
+        ],
+        "InboxIcon": [
+          "lucide-react"
+        ],
+        "InfinityIcon": [
+          "lucide-react"
+        ],
+        "InfoIcon": [
+          "lucide-react"
+        ],
+        "InstagramIcon": [
+          "lucide-react"
+        ],
+        "KanbanIcon": [
+          "lucide-react"
+        ],
+        "KeyboardIcon": [
+          "lucide-react"
+        ],
+        "KeyIcon": [
+          "lucide-react"
+        ],
+        "KeyRoundIcon": [
+          "lucide-react"
+        ],
+        "LandmarkIcon": [
+          "lucide-react"
+        ],
+        "LanguagesIcon": [
+          "lucide-react"
+        ],
+        "Layers3Icon": [
+          "lucide-react"
+        ],
+        "LayersIcon": [
+          "lucide-react"
+        ],
+        "LayoutDashboardIcon": [
+          "lucide-react"
+        ],
+        "LayoutGridIcon": [
+          "lucide-react"
+        ],
+        "LayoutIcon": [
+          "lucide-react"
+        ],
+        "LayoutListIcon": [
+          "lucide-react"
+        ],
+        "LayoutTemplateIcon": [
+          "lucide-react"
+        ],
+        "LightbulbIcon": [
+          "lucide-react"
+        ],
+        "LineChartIcon": [
+          "lucide-react"
+        ],
+        "Link2Icon": [
+          "lucide-react"
+        ],
+        "LinkedinIcon": [
+          "lucide-react"
+        ],
+        "LinkIcon": [
+          "lucide-react"
+        ],
+        "ListChecksIcon": [
+          "lucide-react"
+        ],
+        "ListFilterIcon": [
+          "lucide-react"
+        ],
+        "ListIcon": [
+          "lucide-react"
+        ],
+        "Loader2Icon": [
+          "lucide-react"
+        ],
+        "LoaderCircleIcon": [
+          "lucide-react"
+        ],
+        "LockIcon": [
+          "lucide-react"
+        ],
+        "LockKeyholeIcon": [
+          "lucide-react"
+        ],
+        "LogOutIcon": [
+          "lucide-react"
+        ],
+        "MailIcon": [
+          "lucide-react"
+        ],
+        "MailOpenIcon": [
+          "lucide-react"
+        ],
+        "MapPinIcon": [
+          "lucide-react"
+        ],
+        "Maximize2Icon": [
+          "lucide-react"
+        ],
+        "MedalIcon": [
+          "lucide-react"
+        ],
+        "MegaphoneIcon": [
+          "lucide-react"
+        ],
+        "MenuIcon": [
+          "lucide-react"
+        ],
+        "MessageCircleIcon": [
+          "lucide-react"
+        ],
+        "MessageSquareIcon": [
+          "lucide-react"
+        ],
+        "MessageSquarePlusIcon": [
+          "lucide-react"
+        ],
+        "MessageSquareQuoteIcon": [
+          "lucide-react"
+        ],
+        "MessageSquareTextIcon": [
+          "lucide-react"
+        ],
+        "MessageSquareWarningIcon": [
+          "lucide-react"
+        ],
+        "Mic2Icon": [
+          "lucide-react"
+        ],
+        "MicIcon": [
+          "lucide-react"
+        ],
+        "MicOffIcon": [
+          "lucide-react"
+        ],
+        "MicVocalIcon": [
+          "lucide-react"
+        ],
+        "Minimize2Icon": [
+          "lucide-react"
+        ],
+        "MinusCircleIcon": [
+          "lucide-react"
+        ],
+        "MinusIcon": [
+          "lucide-react"
+        ],
+        "MonitorIcon": [
+          "lucide-react"
+        ],
+        "MonitorSmartphoneIcon": [
+          "lucide-react"
+        ],
+        "MoreHorizontalIcon": [
+          "lucide-react"
+        ],
+        "MoreVerticalIcon": [
+          "lucide-react"
+        ],
+        "MoveIcon": [
+          "lucide-react"
+        ],
+        "MusicIcon": [
+          "lucide-react"
+        ],
+        "NavigationIcon": [
+          "lucide-react"
+        ],
+        "PackageCheckIcon": [
+          "lucide-react"
+        ],
+        "PackageIcon": [
+          "lucide-react"
+        ],
+        "PackageSearchIcon": [
+          "lucide-react"
+        ],
+        "PaletteIcon": [
+          "lucide-react"
+        ],
+        "PalmtreeIcon": [
+          "lucide-react"
+        ],
+        "PanelLeftCloseIcon": [
+          "lucide-react"
+        ],
+        "PanelLeftOpenIcon": [
+          "lucide-react"
+        ],
+        "PanelRightCloseIcon": [
+          "lucide-react"
+        ],
+        "PaperclipIcon": [
+          "lucide-react"
+        ],
+        "PauseCircleIcon": [
+          "lucide-react"
+        ],
+        "PauseIcon": [
+          "lucide-react"
+        ],
+        "PencilIcon": [
+          "lucide-react"
+        ],
+        "PencilLineIcon": [
+          "lucide-react"
+        ],
+        "PercentIcon": [
+          "lucide-react"
+        ],
+        "PhoneCallIcon": [
+          "lucide-react"
+        ],
+        "PhoneIcon": [
+          "lucide-react"
+        ],
+        "PhoneIncomingIcon": [
+          "lucide-react"
+        ],
+        "PhoneOffIcon": [
+          "lucide-react"
+        ],
+        "PieChartIcon": [
+          "lucide-react"
+        ],
+        "PinIcon": [
+          "lucide-react"
+        ],
+        "PinOffIcon": [
+          "lucide-react"
+        ],
+        "PlaneIcon": [
+          "lucide-react"
+        ],
+        "PlayCircleIcon": [
+          "lucide-react"
+        ],
+        "PlayIcon": [
+          "lucide-react"
+        ],
+        "PlugIcon": [
+          "lucide-react"
+        ],
+        "PlusCircleIcon": [
+          "lucide-react"
+        ],
+        "PlusIcon": [
+          "lucide-react"
+        ],
+        "PowerIcon": [
+          "lucide-react"
+        ],
+        "PowerOffIcon": [
+          "lucide-react"
+        ],
+        "PrinterIcon": [
+          "lucide-react"
+        ],
+        "QrCodeIcon": [
+          "lucide-react"
+        ],
+        "QuoteIcon": [
+          "lucide-react"
+        ],
+        "RadarIcon": [
+          "lucide-react"
+        ],
+        "RadioIcon": [
+          "lucide-react"
+        ],
+        "RadioTowerIcon": [
+          "lucide-react"
+        ],
+        "ReceiptIcon": [
+          "lucide-react"
+        ],
+        "ReceiptTextIcon": [
+          "lucide-react"
+        ],
+        "RefreshCcwIcon": [
+          "lucide-react"
+        ],
+        "RefreshCwIcon": [
+          "lucide-react"
+        ],
+        "Repeat2Icon": [
+          "lucide-react"
+        ],
+        "RepeatIcon": [
+          "lucide-react"
+        ],
+        "ReplyIcon": [
+          "lucide-react"
+        ],
+        "RocketIcon": [
+          "lucide-react"
+        ],
+        "RotateCcwIcon": [
+          "lucide-react"
+        ],
+        "RotateCwIcon": [
+          "lucide-react"
+        ],
+        "RouteIcon": [
+          "lucide-react"
+        ],
+        "SaveIcon": [
+          "lucide-react"
+        ],
+        "ScaleIcon": [
+          "lucide-react"
+        ],
+        "ScanFaceIcon": [
+          "lucide-react"
+        ],
+        "ScanLineIcon": [
+          "lucide-react"
+        ],
+        "ScanSearchIcon": [
+          "lucide-react"
+        ],
+        "SearchIcon": [
+          "lucide-react"
+        ],
+        "SearchXIcon": [
+          "lucide-react"
+        ],
+        "SendIcon": [
+          "lucide-react"
+        ],
+        "SendMessageIcon": [
+          "lucide-react"
+        ],
+        "ServerIcon": [
+          "lucide-react"
+        ],
+        "Settings2Icon": [
+          "lucide-react"
+        ],
+        "SettingsIcon": [
+          "lucide-react"
+        ],
+        "Share2Icon": [
+          "lucide-react"
+        ],
+        "ShieldAlertIcon": [
+          "lucide-react"
+        ],
+        "ShieldCheckIcon": [
+          "lucide-react"
+        ],
+        "ShieldIcon": [
+          "lucide-react"
+        ],
+        "ShieldOffIcon": [
+          "lucide-react"
+        ],
+        "ShieldXIcon": [
+          "lucide-react"
+        ],
+        "ShoppingBagIcon": [
+          "lucide-react"
+        ],
+        "ShoppingCartIcon": [
+          "lucide-react"
+        ],
+        "ShuffleIcon": [
+          "lucide-react"
+        ],
+        "SignalHighIcon": [
+          "lucide-react"
+        ],
+        "SkipBackIcon": [
+          "lucide-react"
+        ],
+        "SkipForwardIcon": [
+          "lucide-react"
+        ],
+        "SlidersHorizontalIcon": [
+          "lucide-react"
+        ],
+        "SmartphoneIcon": [
+          "lucide-react"
+        ],
+        "SparklesIcon": [
+          "lucide-react"
+        ],
+        "SquareIcon": [
+          "lucide-react"
+        ],
+        "StarIcon": [
+          "lucide-react"
+        ],
+        "StickyNoteIcon": [
+          "lucide-react"
+        ],
+        "StoreIcon": [
+          "lucide-react"
+        ],
+        "Table2Icon": [
+          "lucide-react"
+        ],
+        "TabletIcon": [
+          "lucide-react"
+        ],
+        "TagIcon": [
+          "lucide-react"
+        ],
+        "TagsIcon": [
+          "lucide-react"
+        ],
+        "TargetIcon": [
+          "lucide-react"
+        ],
+        "ThumbsDownIcon": [
+          "lucide-react"
+        ],
+        "ThumbsUpIcon": [
+          "lucide-react"
+        ],
+        "TicketIcon": [
+          "lucide-react"
+        ],
+        "TimerIcon": [
+          "lucide-react"
+        ],
+        "TimerResetIcon": [
+          "lucide-react"
+        ],
+        "ToggleLeftIcon": [
+          "lucide-react"
+        ],
+        "ToggleRightIcon": [
+          "lucide-react"
+        ],
+        "Trash2Icon": [
+          "lucide-react"
+        ],
+        "TrendingDownIcon": [
+          "lucide-react"
+        ],
+        "TrendingUpIcon": [
+          "lucide-react"
+        ],
+        "TrophyIcon": [
+          "lucide-react"
+        ],
+        "TruckIcon": [
+          "lucide-react"
+        ],
+        "TwitterIcon": [
+          "lucide-react"
+        ],
+        "Undo2Icon": [
+          "lucide-react"
+        ],
+        "UnlockIcon": [
+          "lucide-react"
+        ],
+        "UnplugIcon": [
+          "lucide-react"
+        ],
+        "UploadIcon": [
+          "lucide-react"
+        ],
+        "UserCheckIcon": [
+          "lucide-react"
+        ],
+        "UserCogIcon": [
+          "lucide-react"
+        ],
+        "UserIcon": [
+          "lucide-react"
+        ],
+        "UserMinusIcon": [
+          "lucide-react"
+        ],
+        "UserPlusIcon": [
+          "lucide-react"
+        ],
+        "UserRoundCheckIcon": [
+          "lucide-react"
+        ],
+        "UserRoundIcon": [
+          "lucide-react"
+        ],
+        "UsersIcon": [
+          "lucide-react"
+        ],
+        "UsersRoundIcon": [
+          "lucide-react"
+        ],
+        "UserXIcon": [
+          "lucide-react"
+        ],
+        "UtensilsCrossedIcon": [
+          "lucide-react"
+        ],
+        "VariableIcon": [
+          "lucide-react"
+        ],
+        "VideoIcon": [
+          "lucide-react"
+        ],
+        "Volume2Icon": [
+          "lucide-react"
+        ],
+        "VolumeXIcon": [
+          "lucide-react"
+        ],
+        "VoteIcon": [
+          "lucide-react"
+        ],
+        "WalletCardsIcon": [
+          "lucide-react"
+        ],
+        "WalletIcon": [
+          "lucide-react"
+        ],
+        "Wand2Icon": [
+          "lucide-react"
+        ],
+        "WarehouseIcon": [
+          "lucide-react"
+        ],
+        "WebhookIcon": [
+          "lucide-react"
+        ],
+        "WifiIcon": [
+          "lucide-react"
+        ],
+        "WifiOffIcon": [
+          "lucide-react"
+        ],
+        "WineIcon": [
+          "lucide-react"
+        ],
+        "WorkflowIcon": [
+          "lucide-react"
+        ],
+        "WrenchIcon": [
+          "lucide-react"
+        ],
+        "XCircleIcon": [
+          "lucide-react"
+        ],
+        "XIcon": [
+          "lucide-react"
+        ],
+        "ZapIcon": [
+          "lucide-react"
+        ]
+      },
+      "wildcard": [
+        "lucide-react"
+      ],
+      "supplierFreeExports": [
+        "AlertIcon",
+        "BaseIcon",
+        "ICON_SIZE_MAP",
+        "ICON_SIZE_TOKENS",
+        "LoaderIcon",
+        "createIcon"
+      ]
+    },
+    "./eslint": {
+      "exports": [
+        "configs",
+        "plugin",
+        "rules"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "configs",
+        "plugin",
+        "rules"
+      ]
+    },
+    "./commercial": {
+      "exports": [
+        "AsciiDiagram",
+        "AsciiFrame",
+        "COMMERCIAL_GRAY_HEX",
+        "COMMERCIAL_INK_HEX",
+        "COMMERCIAL_PAPER_HEX",
+        "CropMarks",
+        "InvertSection",
+        "MonoStat",
+        "ProductWindow",
+        "SectionFrame",
+        "TerminalBlock",
+        "TextureBackdrop",
+        "TreeView",
+        "Typewriter",
+        "commercialGray",
+        "commercialTokens"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "AsciiDiagram",
+        "AsciiFrame",
+        "COMMERCIAL_GRAY_HEX",
+        "COMMERCIAL_INK_HEX",
+        "COMMERCIAL_PAPER_HEX",
+        "CropMarks",
+        "InvertSection",
+        "MonoStat",
+        "ProductWindow",
+        "SectionFrame",
+        "TerminalBlock",
+        "TextureBackdrop",
+        "TreeView",
+        "Typewriter",
+        "commercialGray",
+        "commercialTokens"
+      ]
+    },
+    "./supplier-honesty-cli": {
+      "exports": [
+        "inferRenderedSuppliers",
+        "inspectInstalledDesignSystem",
+        "resolveInstalledContractMode",
+        "runSupplierHonesty",
+        "scanAppSuppliers"
+      ],
+      "symbols": {},
+      "supplierFreeExports": [
+        "inferRenderedSuppliers",
+        "inspectInstalledDesignSystem",
+        "resolveInstalledContractMode",
+        "runSupplierHonesty",
+        "scanAppSuppliers"
+      ]
+    }
+  }
+}

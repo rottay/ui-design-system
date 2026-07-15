@@ -143,7 +143,7 @@ const PROBES: readonly Probe[] = [
   {
     // The outlined card is the only variant whose border-width is non-zero, and
     // therefore the only place `--ds-card-border` is observable -- the very
-    // channel each tenant's unlayered `*` border floor contests (P-48).
+    // channel the Rottay platform artifact's unlayered `*` border floor contests (P-48).
     name: 'card-outlined',
     slug: 'extras',
     container: '[data-testid="probe-extras"]',
@@ -527,7 +527,7 @@ test.describe('the states mean what the anatomy contract says they mean', () => 
     // to put back what it overwrote. The modern Button did exactly that: its
     // hover set `borderColor` as a longhand over a `border` shorthand, and once
     // the pointer left, the colour did not come back -- it fell through to
-    // whatever the cascade said, which on a dark tenant is the `*` border floor
+    // whatever the cascade said, which on the Rottay platform artifact is its `*` border floor
     // and elsewhere is `currentColor`. Nothing photographed it, because no
     // baseline hovers.
     for (const fixture of FIXTURES) {

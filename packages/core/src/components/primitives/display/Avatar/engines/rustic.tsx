@@ -43,7 +43,7 @@ function getInitials(name?: string, alt?: string): string {
  * and status indicator dots.
  *
  * @param props - Unified AvatarProps from the design system type contract
- * @returns A React element built entirely from native HTML elements and inline styles
+ * @returns A React element built from native HTML elements and token-backed style objects
  */
 export default function RusticAvatar(props: AvatarProps): React.ReactElement {
   const {

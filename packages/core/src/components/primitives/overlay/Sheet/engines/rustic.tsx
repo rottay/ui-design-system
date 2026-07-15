@@ -26,7 +26,7 @@ import { SHEET_DEFAULTS } from '../Sheet.types';
 /**
  * Rustic engine implementation of Sheet using vanilla HTML/CSS and createPortal.
  *
- * Builds all positioning, animations, and theming from inline styles backed
+ * Builds positioning, animations, and theming from token-backed style objects
  * by CSS custom properties (--ds-*). Supports bottom, left, and right sides
  * with distinct border-radius patterns and size constraints.
  *

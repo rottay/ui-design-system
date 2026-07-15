@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 2,
+  "typescriptRoots": [
+    {
+      "path": "packages/core/src",
+      "includeTests": false
+    },
+    {
+      "path": "packages/showroom/src",
+      "includeTests": false
+    },
+    {
+      "path": "packages/showroom/e2e/visual",
+      "includeTests": true
+    }
+  ],
+  "cssRoots": [
+    "packages/core/src/tokens/css/components",
+    "packages/core/src/tokens/css/engines"
+  ],
+  "authoredExtensionRoots": [
+    "packages/core/src/tokens/css/artifacts"
+  ]
+}

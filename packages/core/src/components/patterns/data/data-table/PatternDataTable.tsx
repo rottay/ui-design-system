@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo, useState } from 'react';
 import { createEngineComponent } from '../../../../runtime/engines/factory';
+import { stampDataPart } from '../../../../runtime/data-part';
 import { resolveDensityStyleVars } from '../../../../tokens/ts/base/density';
 import { useBreakpoints } from '../../../../hooks/responsive/useBreakpoints';
 import { useMediaQuery } from '../../../../hooks/responsive/useMediaQuery';
@@ -52,6 +53,10 @@ function MobileBulkActions<T extends object>({
   rowKey?: keyof T | ((row: T) => string);
   bulkActions?: DataTablePatternProps<T>['bulkActions'];
 }): React.ReactElement | null {
+  const setBulkRootRef = useCallback((node: HTMLDivElement | null) => {
+    if (node) stampDataPart(node, 'mobile-bulk-actions');
+  }, []);
+
   if (!bulkActions || bulkActions.length === 0 || selectedKeys.length === 0) {
     return null;
   }
@@ -62,12 +67,12 @@ function MobileBulkActions<T extends object>({
 
   return (
     <Flex
+      ref={setBulkRootRef}
       align="center"
       justify="between"
       gap={12}
       wrap="wrap"
       className="ds-pattern-data-table ds-data-table--mobile"
-      data-part="mobile-bulk-actions"
     >
       <Text color="subtle" style={{ fontSize: 13 }}>
         {`${selectedKeys.length} selected`}

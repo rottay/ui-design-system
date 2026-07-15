@@ -15,7 +15,7 @@
  * OUTSIDE the trigger's DOM subtree, so those rules are standalone, never
  * `[data-part='trigger'] …` descendants (ARC-09 precedent).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR (incl. `transparent`, excl.
  * `none`/`0`) must reach (0,4,0).
  *   - TRIGGER is a single element with 2 classes + 1 `[data-part]` attr ->

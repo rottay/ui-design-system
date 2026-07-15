@@ -8,7 +8,7 @@
  * early-return both carry the class pair, `data-part='root'`, and — loading only —
  * `data-loading='true'`).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED for the remaining

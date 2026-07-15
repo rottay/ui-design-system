@@ -9,7 +9,7 @@
  * pure HTML and CSS. It provides:
  * - Zero external dependencies
  * - Maximum accessibility compliance
- * - Full customization via inline styles
+ * - Per-instance values exposed through skin-consumed custom properties
  * - Smallest possible bundle footprint
  * - Works in any React environment
  *
@@ -21,7 +21,7 @@
  * - Server-side rendering optimization
  *
  * **Multi-Tenant Theming:**
- * Rustic rates use inline styles that can be customized via:
+ * Rustic rates expose values to the unlayered skin through:
  * - Direct prop values (activeColor, inactiveColor)
  * - CSS variables defined in tenant themes
  * - Style prop for complete override
@@ -174,7 +174,7 @@ const createStyles = (
  * @remarks
  * **Key Features:**
  * - No external CSS or component libraries
- * - All styles computed inline
+ * - Paint and interaction states owned by the unlayered rustic skin
  * - Full keyboard navigation support
  * - ARIA radiogroup semantics
  * - Half-star support via overlay technique
@@ -208,7 +208,7 @@ const createStyles = (
  * ```
  */
 export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
-  (props, ref) => {
+  (props: RateProps, ref) => {
     // -------------------------------------------------------------------------
     // Props Destructuring
     // -------------------------------------------------------------------------

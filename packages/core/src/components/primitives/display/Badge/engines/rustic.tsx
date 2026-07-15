@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rustic engine for the Badge component, using pure HTML/CSS.
- * Zero external dependencies -- all styling via inline styles and CSS custom
- * properties, with injected keyframes for the pulse animation.
+ * Zero external dependencies -- component paint lives in the unlayered rustic
+ * skin, with CSS custom properties and a governed pulse animation.
  *
  * @example
  * ```tsx
@@ -33,12 +33,12 @@ type BadgePositionStyle = React.CSSProperties & Record<'--ds-badge-position-tran
 /**
  * Rustic (pure HTML/CSS) implementation of the Badge component.
  *
- * Supports four style variants (solid, outline, soft, ghost) via computed
- * inline styles. A `<style>` tag is injected only when pulse is active to
- * provide the keyframe animation without requiring a global stylesheet.
+ * Supports four style variants (solid, outline, soft, ghost) through semantic
+ * stamps and custom properties consumed by the rustic skin. Generated
+ * responsive geometry may use a scoped `<style>` tag; pulse paint stays in the skin.
  *
  * @param props - Unified BadgeProps from the design system type contract
- * @returns React element built entirely from native HTML elements and inline styles
+ * @returns Native HTML structure painted by the rustic Badge skin
  */
 export default function RusticBadge(props: BadgeProps): React.ReactElement {
   const {

@@ -132,7 +132,7 @@ const buildGridStyles = (props: GridProps, skipResponsiveTemplate = false): CSSP
  * Assembles inline CSSProperties for a grid item.
  *
  * Handles named areas, explicit column/row placement, and span shorthands
- * entirely through inline styles (no external CSS classes needed).
+ * through token-backed style objects (no external CSS classes needed).
  */
 const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
   const { span, colSpan, rowSpan, colStart, colEnd, rowStart, rowEnd, area, alignSelf, justifySelf, placeSelf, zIndex, style } = props;
@@ -164,11 +164,11 @@ const buildGridItemStyles = (props: GridItemProps): CSSProperties => {
 };
 
 /**
- * Rustic Grid container using pure inline CSS styles.
+ * Rustic Grid container using token-backed CSS properties.
  *
- * All CSS Grid properties are expressed as inline styles for zero external
+ * CSS Grid properties are expressed as token-backed style objects for zero external
  * dependencies. Responsive breakpoint objects trigger a scoped `<style>` block
- * with media queries, which is the only non-inline CSS this engine produces.
+ * with media queries emitted by this engine in a scoped block.
  *
  * @param props - Grid container props including columns, rows, gap, template overrides, etc.
  * @returns A polymorphic, ref-forwarding grid container element.

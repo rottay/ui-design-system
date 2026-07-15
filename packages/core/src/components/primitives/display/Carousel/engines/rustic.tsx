@@ -4,14 +4,14 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine provides a lightweight, dependency-free carousel using only
- * inline styles and semantic HTML elements.
+ * This engine provides a lightweight, dependency-free carousel using semantic
+ * HTML, structural inline layout, and the unlayered rustic skin.
  *
  * **Exported Components:**
  * - `Carousel` - Main carousel component
  *
  * **Implementation Details:**
- * - Uses inline styles for all visual properties
+ * - Uses the unlayered rustic skin for paint and inline values for runtime geometry
  * - CSS transition-based animations
  * - Interval-based autoplay
  * - ARIA attributes for screen readers
@@ -181,8 +181,8 @@ export const Carousel = forwardRef<CarouselRef, CarouselProps>(
       };
     }, [autoplay, autoplaySpeed, isPaused, next]);
 
-    // All visual properties use inline styles (no external CSS) to keep
-    // the rustic engine fully self-contained and dependency-free.
+    // Instance-dependent geometry remains inline; the rustic skin owns paint
+    // and interaction states while keeping the engine dependency-free.
     const containerStyle: React.CSSProperties = {
       position: 'relative',
       width: '100%',

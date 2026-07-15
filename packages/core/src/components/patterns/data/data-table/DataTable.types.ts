@@ -537,6 +537,11 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
   virtualRowHeight?: number;
 }
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 /**
  * Resolves the display value for a cell by checking the column's accessor
  * chain: `accessorFn` first, then `accessorKey`, then falls back to `key`.
@@ -548,8 +553,8 @@ export interface DataTablePatternProps<T> extends PatternBaseProps {
  */
 export function resolveAccessor<T>(column: ColumnDef<T>, row: T): unknown {
   if (column.accessorFn) return column.accessorFn(row);
-  if (column.accessorKey) return (row as Record<string, unknown>)[column.accessorKey];
-  return (row as Record<string, unknown>)[column.key];
+  if (column.accessorKey) return readRecordValue(row, column.accessorKey);
+  return readRecordValue(row, column.key);
 }
 
 /**
@@ -566,5 +571,5 @@ export function resolveAccessor<T>(column: ColumnDef<T>, row: T): unknown {
 export function resolveRowKey<T>(row: T, rowKey: DataTablePatternProps<T>['rowKey'], index: number): string {
   if (!rowKey) return String(index);
   if (typeof rowKey === 'function') return rowKey(row);
-  return String((row as Record<string, unknown>)[rowKey as string]);
+  return String(readRecordValue(row, rowKey as string));
 }

@@ -27,6 +27,7 @@ import React, {
   useImperativeHandle,
   useId,
 } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -50,7 +51,7 @@ import {
 /**
  * Rustic (Vanilla CSS) Select engine.
  *
- * Builds the entire select UI from raw HTML elements and inline styles driven
+ * Builds the select UI from raw HTML elements and token-backed style objects driven
  * by CSS custom properties. Unlike the classic (antd) and modern (DaisyUI)
  * engines, this engine has no runtime dependency on a UI framework, which
  * makes it ideal for lightweight deployments and custom-branded tenants.
@@ -321,9 +322,11 @@ const RusticSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
     switch (e.key) {
       case 'Enter':
         e.preventDefault();
-        if (isOpen && focusedIndex >= 0 && optionItems[focusedIndex]) {
-          const opt = optionItems[focusedIndex].option!;
-          handleSelect(opt.value, opt);
+        if (isOpen && focusedIndex >= 0) {
+          const focusedItem = arrayValueAt(optionItems, focusedIndex);
+          if (focusedItem?.option) {
+            handleSelect(focusedItem.option.value, focusedItem.option);
+          }
         } else if (!isOpen) {
           setIsOpen(true);
         }

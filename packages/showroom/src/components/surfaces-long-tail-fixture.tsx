@@ -300,7 +300,7 @@ function FoundationFamily() {
       <Case id="foundation-personality" label="personality helpers: profile accent wrapper and responsive section spacing">
         <DashboardSurface
           config={{
-            visual: { statsColumns: 2, profileOverrides: { accentPosition: 'top', accentBarStyle: 'gradient' } },
+            visual: { statsColumns: 2 },
             presentation: {
               chrome: { title: 'Personality proof' },
               sections: [{ key: 'personality', title: 'Accent section', description: 'Profile-driven chrome', content: <Text>Section content</Text> }],

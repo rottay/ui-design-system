@@ -24,7 +24,7 @@
  * emitted, so the width stays at preflight's 0 and no color can show -- which is
  * why there is no borderless counterpart to these two rules.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element; the two border-color rules clear it at (0,5,0)+.
  * Values transcribed verbatim from `engines/modern.tsx`.

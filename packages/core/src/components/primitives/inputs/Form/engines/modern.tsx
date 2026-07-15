@@ -123,6 +123,25 @@ interface FormContextValue {
 
 const FormContext = createContext<FormContextValue | null>(null);
 
+function readOwnRecordValue<T>(record: Record<string, T>, key: string): T | undefined {
+  if (!Object.prototype.hasOwnProperty.call(record, key)) return undefined;
+  return Reflect.get(record, key) as T;
+}
+
+function writeOwnRecordValue<T>(record: Record<string, T>, key: string, value: T): void {
+  Reflect.set(record, key, value);
+}
+
+function copyWithOwnRecordValue<T>(record: Record<string, T>, key: string, value: T): Record<string, T> {
+  const next = { ...record };
+  writeOwnRecordValue(next, key, value);
+  return next;
+}
+
+function deleteOwnRecordValue(record: object, key: string): void {
+  Reflect.deleteProperty(record, key);
+}
+
 /**
  * Custom useForm hook providing a stable FormInstance for the Modern engine.
  *
@@ -146,20 +165,20 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
     // We normalise to dot-delimited keys for flat storage in the refs.
     getFieldValue: (name) => {
       const key = Array.isArray(name) ? name.join('.') : String(name);
-      return valuesRef.current[key];
+      return readOwnRecordValue(valuesRef.current, key);
     },
     getFieldsValue: (nameList) => {
       if (!nameList) return valuesRef.current as T;
       const result: Record<string, unknown> = {};
       nameList.forEach((name) => {
         const key = Array.isArray(name) ? name.join('.') : String(name);
-        result[key] = valuesRef.current[key];
+        writeOwnRecordValue(result, key, readOwnRecordValue(valuesRef.current, key));
       });
       return result as T;
     },
     setFieldValue: (name, value) => {
       const key = Array.isArray(name) ? name.join('.') : String(name);
-      valuesRef.current[key] = value;
+      writeOwnRecordValue(valuesRef.current, key, value);
       listenersRef.current.forEach((fn) => fn());
     },
     setFieldsValue: (values) => {
@@ -170,9 +189,9 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
       if (fields) {
         fields.forEach((name) => {
           const key = Array.isArray(name) ? name.join('.') : String(name);
-          delete valuesRef.current[key];
-          delete errorsRef.current[key];
-          delete touchedRef.current[key];
+          deleteOwnRecordValue(valuesRef.current, key);
+          deleteOwnRecordValue(errorsRef.current, key);
+          deleteOwnRecordValue(touchedRef.current, key);
         });
       } else {
         valuesRef.current = {};
@@ -189,12 +208,12 @@ export function useForm<T = unknown>(): [FormInstance<T>] {
     },
     isFieldTouched: (name) => {
       const key = Array.isArray(name) ? name.join('.') : String(name);
-      return !!touchedRef.current[key];
+      return Boolean(readOwnRecordValue(touchedRef.current, key));
     },
     isFieldsTouched: () => Object.values(touchedRef.current).some(Boolean),
     getFieldError: (name) => {
       const key = Array.isArray(name) ? name.join('.') : String(name);
-      return errorsRef.current[key] || [];
+      return readOwnRecordValue(errorsRef.current, key) ?? [];
     },
     getFieldsError: () => {
       return Object.entries(errorsRef.current).map(([name, errors]) => ({
@@ -260,7 +279,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   const valuesRef = useRef<Record<string, unknown>>(initialValues as Record<string, unknown>);
 
   const getFieldRules = useCallback((fieldName: string) => {
-    return fieldRulesRef.current[fieldName];
+    return readOwnRecordValue(fieldRulesRef.current, fieldName);
   }, []);
 
   // Wrap form instance methods to sync with component state
@@ -290,7 +309,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
         originalSetFieldValue.call(resolvedForm, fieldName, value);
         // Update component state
         const key = Array.isArray(fieldName) ? fieldName.join('.') : String(fieldName);
-        const nextValues = { ...valuesRef.current, [key]: value };
+        const nextValues = copyWithOwnRecordValue(valuesRef.current, key, value);
         valuesRef.current = nextValues;
         setValues(nextValues);
       };
@@ -305,7 +324,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
             const newValues = { ...prev };
             fields.forEach(field => {
               const key = Array.isArray(field) ? field.join('.') : String(field);
-              delete newValues[key];
+              deleteOwnRecordValue(newValues, key);
             });
             valuesRef.current = newValues;
             return newValues;
@@ -338,24 +357,27 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   }, [resolvedForm, initialValues]);
 
   const setValue = useCallback((fieldName: string, value: unknown) => {
-    const nextValues = { ...valuesRef.current, [fieldName]: value };
+    const nextValues = copyWithOwnRecordValue(valuesRef.current, fieldName, value);
     valuesRef.current = nextValues;
     setValues(nextValues);
-    onValuesChange?.({ [fieldName]: value } as Partial<unknown>, nextValues as unknown);
+    onValuesChange?.(
+      copyWithOwnRecordValue({} as Record<string, unknown>, fieldName, value) as Partial<unknown>,
+      nextValues as unknown,
+    );
   }, [onValuesChange]);
 
   const setError = useCallback((fieldName: string, fieldErrors: string[]) => {
-    setErrors((prev) => ({ ...prev, [fieldName]: fieldErrors }));
+    setErrors((prev) => copyWithOwnRecordValue(prev, fieldName, fieldErrors));
   }, []);
 
   const setFieldTouched = useCallback((fieldName: string, isTouched: boolean) => {
-    setTouched((prev) => ({ ...prev, [fieldName]: isTouched }));
+    setTouched((prev) => copyWithOwnRecordValue(prev, fieldName, isTouched));
   }, []);
 
   const registerField = useCallback((fieldName: string, initialValue?: unknown, rules?: FormRule[]) => {
-    fieldRulesRef.current[fieldName] = rules;
-    if (initialValue !== undefined && values[fieldName] === undefined) {
-      const nextValues = { ...valuesRef.current, [fieldName]: initialValue };
+    writeOwnRecordValue(fieldRulesRef.current, fieldName, rules);
+    if (initialValue !== undefined && readOwnRecordValue(values, fieldName) === undefined) {
+      const nextValues = copyWithOwnRecordValue(valuesRef.current, fieldName, initialValue);
       valuesRef.current = nextValues;
       setValues(nextValues);
     }
@@ -368,9 +390,9 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
   const validateField = useCallback(async (fieldName: string, rules?: FormRule[]): Promise<string[]> => {
     if (!rules || rules.length === 0) return [];
 
-    setValidating((prev) => ({ ...prev, [fieldName]: true }));
+    setValidating((prev) => copyWithOwnRecordValue(prev, fieldName, true));
 
-    const value = valuesRef.current[fieldName];
+    const value = readOwnRecordValue(valuesRef.current, fieldName);
     const fieldErrors: string[] = [];
 
     for (const rule of rules) {
@@ -397,7 +419,7 @@ const FormBase = React.forwardRef<FormInstance, FormProps>((props, ref) => {
       }
     }
 
-    setValidating((prev) => ({ ...prev, [fieldName]: false }));
+    setValidating((prev) => copyWithOwnRecordValue(prev, fieldName, false));
     setError(fieldName, fieldErrors);
     return fieldErrors;
   }, [values, setError]);
@@ -555,23 +577,24 @@ const FormItem: React.FC<FormItemProps> = (props) => {
   // Field dependencies: when a dependency changes, re-validate this field
   const depsKey = dependencies?.map((d) => {
     const k = Array.isArray(d) ? d.join('.') : String(d);
-    return `${k}:${JSON.stringify(values[k])}`;
+    return `${k}:${JSON.stringify(readOwnRecordValue(values, k))}`;
   }).join('|');
 
   useEffect(() => {
     if (!dependencies || !fieldName || !rules) return;
     // Only re-validate if the field has been touched (avoid validating on mount)
-    if (touched[fieldName]) {
+    if (readOwnRecordValue(touched, fieldName)) {
       validateField(fieldName, rules);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [depsKey]);
 
-  const fieldValue = fieldName ? values[fieldName] : undefined;
-  const fieldErrors = fieldName ? (errors[fieldName] || []) : [];
-  const isFieldValidating = fieldName ? !!validatingMap[fieldName] : false;
+  const fieldValue = fieldName ? readOwnRecordValue(values, fieldName) : undefined;
+  const fieldErrors = fieldName ? (readOwnRecordValue(errors, fieldName) ?? []) : [];
+  const isFieldValidating = fieldName ? Boolean(readOwnRecordValue(validatingMap, fieldName)) : false;
+  const isFieldTouched = fieldName ? Boolean(readOwnRecordValue(touched, fieldName)) : false;
   const hasError = validateStatus === 'error' || fieldErrors.length > 0;
-  const isSuccess = validateStatus === 'success' || (touched[fieldName] && fieldErrors.length === 0 && !isFieldValidating && fieldValue !== undefined && fieldValue !== '');
+  const isSuccess = validateStatus === 'success' || (isFieldTouched && fieldErrors.length === 0 && !isFieldValidating && fieldValue !== undefined && fieldValue !== '');
   const isWarning = validateStatus === 'warning';
   const isRequired = required || rules?.some((r) => r.required);
   const showColon = itemColon ?? colon;
@@ -776,7 +799,7 @@ const FormErrorList: React.FC<FormErrorListProps> = (props) => {
   if (!context) return null;
 
   const errors = fieldName
-    ? context.errors[Array.isArray(fieldName) ? fieldName.join('.') : String(fieldName)] || []
+    ? readOwnRecordValue(context.errors, Array.isArray(fieldName) ? fieldName.join('.') : String(fieldName)) ?? []
     : Object.values(context.errors).flat();
 
   if (errors.length === 0) return null;

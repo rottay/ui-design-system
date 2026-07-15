@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Rustic (Vanilla / CSS variables) engine for the FilterBuilder pattern.
- * Uses zero third-party UI libraries -- all styling is expressed through inline
- * styles referencing `--ds-*` design-token CSS variables. Input and select
+ * Uses zero third-party UI libraries; authored engine classes and bounded
+ * runtime layout styles reference `--ds-*` design-token CSS variables. Input and select
  * elements use native HTML controls styled with consistent token-based borders,
  * colors, and radii so the filter builder respects the active tenant theme.
  *
@@ -39,7 +39,7 @@ import {
 } from '../FilterBuilder.types';
 
 /**
- * Rustic FilterBuilder using only inline styles and `--ds-*` CSS variables.
+ * Rustic FilterBuilder using authored engine CSS plus bounded runtime layout styles.
  * Manages a recursive filter tree (FilterGroup) via immutable updates.
  *
  * @param props - See {@link FilterBuilderProps} for full prop documentation.

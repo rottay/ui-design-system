@@ -4,8 +4,8 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine uses Tailwind utilities with DS token inline styles
- * for a lightweight, theme-integrated statistic display.
+ * This engine uses structural utilities with the token-driven modern skin for
+ * a lightweight, theme-integrated statistic display.
  *
  * **Exported Components:**
  * - `Statistic` - Main statistic component
@@ -107,8 +107,8 @@ const SCOPE_CLASSES = 'rottay-statistic rottay-statistic--modern';
 /**
  * Modern Engine implementation of the Statistic component.
  *
- * This implementation uses Tailwind CSS utilities and DS token inline styles
- * for a lightweight, customizable appearance.
+ * This implementation uses structural utilities and the token-driven modern
+ * skin for a lightweight, customizable appearance.
  *
  * @example
  * ```tsx

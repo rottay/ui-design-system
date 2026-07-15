@@ -41,12 +41,39 @@ const PULSE_STYLE: React.CSSProperties = {
 function SkeletonBlock(props: {
   width: number | string;
   height: number;
-  part: string;
+  part:
+    | 'skeleton-action'
+    | 'skeleton-avatar'
+    | 'skeleton-badge'
+    | 'skeleton-breadcrumb'
+    | 'skeleton-content'
+    | 'skeleton-sidebar'
+    | 'skeleton-subtitle'
+    | 'skeleton-tab'
+    | 'skeleton-title';
   style?: React.CSSProperties;
 }) {
   return (
     <div
-      data-part={props.part}
+      data-part={
+        props.part === 'skeleton-action'
+          ? 'skeleton-action'
+          : props.part === 'skeleton-avatar'
+            ? 'skeleton-avatar'
+            : props.part === 'skeleton-badge'
+              ? 'skeleton-badge'
+              : props.part === 'skeleton-breadcrumb'
+                ? 'skeleton-breadcrumb'
+                : props.part === 'skeleton-content'
+                  ? 'skeleton-content'
+                  : props.part === 'skeleton-sidebar'
+                    ? 'skeleton-sidebar'
+                    : props.part === 'skeleton-subtitle'
+                      ? 'skeleton-subtitle'
+                      : props.part === 'skeleton-tab'
+                        ? 'skeleton-tab'
+                        : 'skeleton-title'
+      }
       style={{
         width: props.width,
         height: props.height,

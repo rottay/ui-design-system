@@ -3,7 +3,7 @@
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the ContextMenu overlay component.
  * Renders a portal-based floating menu at the cursor position on right-click,
- * styled entirely via inline CSS and design-system token variables.
+ * styled via token-backed CSS properties and design-system variables.
  *
  * @example
  * ```tsx

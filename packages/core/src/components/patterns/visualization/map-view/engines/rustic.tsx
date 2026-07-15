@@ -22,7 +22,7 @@ const ROOT_CLASS_NAME = 'ds-pattern-map-view ds-engine-rustic';
 
 /**
  * Rustic (Vanilla CSS) implementation of the MapView pattern.
- * All styling is done via inline styles with --ds-* CSS variable fallbacks,
+ * Styling uses token-backed style objects with --ds-* CSS variable fallbacks,
  * ensuring full tenant-theme compatibility without framework lock-in.
  *
  * @param props - See {@link MapViewProps} for the full prop contract.

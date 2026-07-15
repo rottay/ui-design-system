@@ -10,7 +10,7 @@
  * + `data-part='root'`, identical in both the loading and loaded branches; every
  * painted element is a descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0). The timeline dot's border is the only border-color site here, and it

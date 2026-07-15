@@ -23,7 +23,7 @@
  * INSIDE this engine's body. Anchoring each section on `root > surface > ...`
  * keeps engine paint off a composed compound, which owns its own skin.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border-color floor at
  * (0,3,1), so any rule painting a border COLOR must reach b >= 4. The shell class
  * + `[data-part='root']` gives 2; the target's own `data-part` is REPEATED to buy
  * the remaining 2. `border: none` resets carry no color and are exempt.

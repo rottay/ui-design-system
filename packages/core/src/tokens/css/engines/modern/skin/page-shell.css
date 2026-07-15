@@ -12,7 +12,7 @@
  * the main root carries `data-loading='false'`. Every painted element is a
  * descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule painting `border` / `border-color` with
  * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):

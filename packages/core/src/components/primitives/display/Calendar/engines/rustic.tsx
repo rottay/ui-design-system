@@ -3,8 +3,8 @@
 /**
  * @fileoverview Rustic Calendar engine -- pure HTML/CSS (zero UI-library dependencies).
  *
- * Lightweight calendar using only inline styles with CSS custom properties
- * (`var(--ds-*)`) and semantic HTML. Supports month view (7-column CSS Grid),
+ * Lightweight calendar using authored engine CSS, bounded runtime layout values,
+ * `var(--ds-*)` custom properties, and semantic HTML. Supports month view (7-column CSS Grid),
  * year view (3-column month grid), controlled and uncontrolled value modes,
  * date disabling, and custom cell renderers -- all with rich ARIA attributes
  * (role="application", role="grid", role="gridcell", aria-selected, aria-disabled).

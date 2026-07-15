@@ -14,6 +14,7 @@
 'use client';
 
 import React, { useEffect, useRef, useMemo } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { QRCodeProps } from '../QRCode.types';
 import { QRCODE_DEFAULTS } from '../QRCode.types';
 
@@ -105,8 +106,10 @@ export default function RusticQRCode(props: QRCodeProps): React.ReactElement {
     // Draw QR modules
     ctx.fillStyle = color;
     for (let i = 0; i < gridSize; i++) {
+      const row = arrayValueAt(pattern, i);
+      if (!row) continue;
       for (let j = 0; j < gridSize; j++) {
-        if (pattern[i][j]) {
+        if (arrayValueAt(row, j)) {
           ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
         }
       }

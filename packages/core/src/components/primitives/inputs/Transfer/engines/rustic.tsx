@@ -45,7 +45,7 @@ const DEFAULT_PAGE_SIZE = 10;
 
 /**
  * Internal panel component that renders one side (source or target) of the
- * Transfer. Uses only inline styles driven by CSS variables for theming.
+ * Transfer. Uses the rustic skin for paint and inline values for runtime layout.
  * Includes optional search, select-all, paginated item list, and empty state.
  */
 const TransferListComponent: React.FC<TransferListProps> = ({

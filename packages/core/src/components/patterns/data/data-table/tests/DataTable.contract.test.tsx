@@ -280,15 +280,17 @@ describe('DataTable data-part contract (mobile branch)', () => {
     expect(bulkRoot?.className).toContain('ds-data-table--mobile');
     expect(Array.from(scoped)).toContain(bulkRoot);
 
-    // 3 cards, one per row; the selected row's card carries the modifier class.
-    const cards = container.querySelectorAll('.ds-data-table__mobile-card');
-    expect(cards).toHaveLength(3);
-    const selectedCards = container.querySelectorAll('.ds-data-table__mobile-card--selected');
-    expect(selectedCards).toHaveLength(1);
-
-    expect(container.querySelectorAll('[data-part="mobile-card-title"]')).toHaveLength(3);
-    // 2 summary columns per card (amount, status) x 3 cards.
-    expect(container.querySelectorAll('[data-part="mobile-card-summary-label"]')).toHaveLength(6);
-    expect(container.querySelectorAll('[data-part="mobile-card-summary-value"]')).toHaveLength(6);
+    // Card is engine-lazy independently of Stack/Flex. Wait for that Suspense
+    // boundary instead of treating the two already-resolved scope roots as a
+    // proxy for card readiness.
+    await waitFor(() => {
+      // 3 cards, one per row; the selected row's card carries the modifier class.
+      expect(container.querySelectorAll('.ds-data-table__mobile-card')).toHaveLength(3);
+      expect(container.querySelectorAll('.ds-data-table__mobile-card--selected')).toHaveLength(1);
+      expect(container.querySelectorAll('[data-part="mobile-card-title"]')).toHaveLength(3);
+      // 2 summary columns per card (amount, status) x 3 cards.
+      expect(container.querySelectorAll('[data-part="mobile-card-summary-label"]')).toHaveLength(6);
+      expect(container.querySelectorAll('[data-part="mobile-card-summary-value"]')).toHaveLength(6);
+    });
   });
 });

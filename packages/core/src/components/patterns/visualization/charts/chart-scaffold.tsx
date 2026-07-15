@@ -8,6 +8,7 @@
  */
 
 import React, { useId, useMemo, useState, type CSSProperties, type ReactNode, type RefObject } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 
 /**
  * Visually hidden but screen-reader-readable styles used by charts to expose
@@ -166,7 +167,7 @@ export function ChartScaffold({
 
   const activeSummaryItem =
     summaryItems.length > 0
-      ? summaryItems[Math.min(activeSummaryIndex, Math.max(summaryItems.length - 1, 0))]
+      ? arrayValueAt(summaryItems, Math.min(activeSummaryIndex, Math.max(summaryItems.length - 1, 0))) ?? null
       : null;
   const scaffoldClassName = ['ds-chart-scaffold', className].filter(Boolean).join(' ');
 

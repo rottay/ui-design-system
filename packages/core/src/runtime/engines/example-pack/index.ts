@@ -26,12 +26,12 @@
  *   (verified: rustic Button never sets `letter-spacing` or `text-transform`).
  *
  * Verified anatomy coverage at the time this pack was written: `trigger`
- * (Button) and `root` (Card) are the only parts stamped with
+ * (Button) and `root` (Card) are the currently stamped parts with
  * `[data-part]`/`[data-state]` in the rustic engine (custom's default
  * fallback). Input and Select expose stable but pre-anatomy BEM class hooks
  * (`.rottay-input--focused`, `.rottay-select--open`) instead. Badge, Table,
- * Tabs, and Modal expose neither — they render fully from inline styles with
- * only a caller-supplied `className` passthrough — so this pack does not
+ * Tabs, and Modal expose neither — they render from runtime style props with
+ * a caller-supplied `className` passthrough — so this pack does not
  * attempt `css` selectors for them; `tokenOverrides` still reskins their
  * colors/radius because they read the same `--ds-*` custom properties.
  *

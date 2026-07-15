@@ -395,7 +395,7 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
    * Group notifications by their placement position.
    */
   const groupedNotifications = notifications.reduce<Record<NotificationPlacement, InternalNotification[]>>(
-    (acc, notification) => {
+    (acc: Record<NotificationPlacement, InternalNotification[]>, notification) => {
       const p = notification.placement || placement;
       if (!acc[p]) acc[p] = [];
       acc[p].push(notification);
@@ -505,7 +505,7 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
  *
  * @description
  * Renders an individual notification using vanilla HTML/CSS.
- * Supports all standard notification features with inline styles.
+ * Supports standard notification features with token-backed style objects.
  *
  * @remarks
  * Features:

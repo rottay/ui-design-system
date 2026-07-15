@@ -1,7 +1,7 @@
 /**
  * @fileoverview Modern engine for Textarea - Rottay Design System
- * @description Premium textarea implementation with pure DS token inline styles.
- * No DaisyUI dependency -- all styling via CSS custom properties for full theme control.
+ * @description Premium textarea implementation with paint in the unlayered
+ * modern skin and DS custom properties for full theme control.
  *
  * @remarks
  * **Visual Spec:**
@@ -58,7 +58,7 @@ const SIZE_CONFIG: Record<string, SizeConfig> = {
 /**
  * Modern (pure DS tokens) implementation of Textarea.
  *
- * All styling uses inline styles with DS CSS custom properties.
+ * Structure remains inline; paint and interaction states live in the modern skin.
  * Supports size, variant, status, disabled, and readOnly props.
  * The onChange signature is normalized to `(value, event)` for DS consistency.
  *

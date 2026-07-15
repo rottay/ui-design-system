@@ -89,7 +89,8 @@ function resolveKey<T extends object>(
   item: T,
   rowKey: keyof T | ((row: T) => string),
 ): string {
-  return typeof rowKey === 'function' ? rowKey(item) : String(item[rowKey]);
+  if (typeof rowKey === 'function') return rowKey(item);
+  return String(Reflect.get(item, rowKey));
 }
 
 function getColumnHeader(column: ColumnDef<unknown>): ReactNode {
@@ -104,8 +105,8 @@ function getColumnValue<T extends object>(
   const rawValue = column.accessorFn
     ? column.accessorFn(row)
     : column.accessorKey
-      ? row[column.accessorKey]
-      : (row as Record<string, unknown>)[column.key];
+      ? Reflect.get(row, column.accessorKey)
+      : Reflect.get(row, column.key);
 
   if (column.render) {
     return column.render(rawValue, row, index);

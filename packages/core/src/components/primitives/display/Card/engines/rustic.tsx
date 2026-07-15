@@ -4,11 +4,11 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine provides a lightweight, dependency-free card using only
- * inline styles and semantic HTML for maximum accessibility.
+ * This engine provides a lightweight, dependency-free card using
+ * token-backed style objects and semantic HTML for maximum accessibility.
  *
  * **Implementation Details:**
- * - Uses inline styles for all visual properties
+ * - Uses token-backed style objects for visual properties
  * - Uses semantic HTML with ARIA attributes
  * - Spinner overlay for loading state
  * - Full keyboard navigation support

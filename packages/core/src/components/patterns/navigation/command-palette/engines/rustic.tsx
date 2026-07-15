@@ -17,6 +17,7 @@
  */
 
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { CommandPaletteProps, CommandItem } from '../CommandPalette.types';
 
 /**
@@ -102,7 +103,7 @@ export default function RusticCommandPalette(props: CommandPaletteProps) {
       setActiveIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      const item = filtered[activeIndex];
+      const item = activeIndex >= 0 ? arrayValueAt(filtered, activeIndex) : undefined;
       if (item) handleSelect(item);
     } else if (e.key === 'Escape') {
       onOpenChange(false);

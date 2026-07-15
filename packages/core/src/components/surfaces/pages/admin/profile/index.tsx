@@ -19,6 +19,11 @@ export interface ProfileSurfaceProps {
   loading?: boolean;
 }
 
+function readProfileValue(values: Record<string, unknown>, key: string): unknown {
+  const value = Reflect.get(values, key);
+  return typeof value === 'function' ? undefined : value;
+}
+
 // Each profile section manages its own edit/view toggle and local form state.
 // This isolates section saves so editing one section does not force the entire
 // profile into edit mode.
@@ -86,7 +91,7 @@ function ProfileSectionCard({
                 {editing && !field.readOnly ? (
                   field.type === 'textarea' ? (
                     <Textarea
-                      value={String(values[field.key] ?? '')}
+                      value={String(readProfileValue(values, field.key) ?? '')}
                       // The `any` type on the event handles both DS primitives
                   // (which pass the value directly as a string) and native
                   // HTML inputs (which pass a SyntheticEvent). This dual
@@ -98,7 +103,7 @@ function ProfileSectionCard({
                     />
                   ) : (
                     <Input
-                      value={String(values[field.key] ?? '')}
+                      value={String(readProfileValue(values, field.key) ?? '')}
                       onChange={(e: any) =>
                         setValues((prev) => ({ ...prev, [field.key]: typeof e === 'string' ? e : e?.target?.value ?? '' }))
                       }
@@ -107,7 +112,7 @@ function ProfileSectionCard({
                     />
                   )
                 ) : (
-                  <Text>{String(values[field.key] || '-')}</Text>
+                  <Text>{String(readProfileValue(values, field.key) || '-')}</Text>
                 )}
               </Stack>
             ))}

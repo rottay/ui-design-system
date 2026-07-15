@@ -47,12 +47,20 @@
 
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { axisBottom, axisLeft, max, scaleBand, scaleLinear, select, stack, sum, type Selection } from 'd3';
+import { arrayValueAt } from '@/_internal/utils/collections';
 
 import type { ChartBaseProps, DataPoint, Series } from '../Charts.types';
 import { DEFAULT_MARGIN } from '../Charts.types';
 import { useChartDimensions, useChartPersonality, useChartCompact, useChartTooltip } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 import { ChartTooltip, TooltipSeries, TooltipValue } from '../tooltip';
+
+const FALLBACK_BAR_COLOR = 'var(--ds-color-primary)';
+
+function resolvePaletteColor(palette: readonly string[], index: number): string {
+  const paletteIndex = palette.length > 0 ? index % palette.length : 0;
+  return arrayValueAt(palette, paletteIndex) ?? FALLBACK_BAR_COLOR;
+}
 import { createChartCrosshair, pointerToContainerPosition } from '../tooltip/crosshair';
 
 /** Props for the {@link BarChart} component. */
@@ -144,7 +152,7 @@ export const BarChart = memo(function BarChart({
   // Resolve the color for each series entry.
   const seriesColors = useMemo(() => {
     if (!isMultiSeries) return [];
-    return series!.map((s, i) => s.color ?? palette[i % palette.length]);
+    return series!.map((s, i) => s.color ?? resolvePaletteColor(palette, i));
   }, [isMultiSeries, series, palette]);
 
   // Build summary table for accessibility.
@@ -175,7 +183,7 @@ export const BarChart = memo(function BarChart({
       <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
         {series!.map((s, i) => (
           <div key={s.name} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-            <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: seriesColors[i], display: 'inline-block' }} />
+            <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: arrayValueAt(seriesColors, i), display: 'inline-block' }} />
             <span data-part="legend-label">{s.name}</span>
           </div>
         ))}
@@ -184,7 +192,7 @@ export const BarChart = memo(function BarChart({
       <div data-part="legend" style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 8, justifyContent: 'center' }}>
         {singleData.map((d, i) => (
           <div key={d.label} data-part="legend-item" style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12 }}>
-            <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? palette[i % palette.length], display: 'inline-block' }} />
+            <span data-part="legend-swatch" style={{ width: 12, height: 12, backgroundColor: d.color ?? resolvePaletteColor(palette, i), display: 'inline-block' }} />
             <span data-part="legend-label">{d.label}</span>
           </div>
         ))}
@@ -321,8 +329,8 @@ export const BarChart = memo(function BarChart({
 
           // Render each stacked layer as a group of rects.
           stackedData.forEach((layer, layerIdx) => {
-            const color = seriesColors[layerIdx];
-            const seriesName = seriesNames[layerIdx];
+            const color = arrayValueAt(seriesColors, layerIdx) ?? resolvePaletteColor(palette, layerIdx);
+            const seriesName = arrayValueAt(seriesNames, layerIdx);
 
             const bars = g.selectAll(`.bar-stack-${layerIdx}`)
               .data(layer)
@@ -425,7 +433,7 @@ export const BarChart = memo(function BarChart({
             .attr('transform', (cat) => `translate(${x0(cat) ?? 0},0)`);
 
           series!.forEach((s, sIdx) => {
-            const color = seriesColors[sIdx];
+            const color = arrayValueAt(seriesColors, sIdx) ?? resolvePaletteColor(palette, sIdx);
 
             const bars = categoryGroups
               .append('rect')
@@ -518,8 +526,8 @@ export const BarChart = memo(function BarChart({
             .style('font-size', '12px');
 
           stackedData.forEach((layer, layerIdx) => {
-            const color = seriesColors[layerIdx];
-            const seriesName = seriesNames[layerIdx];
+            const color = arrayValueAt(seriesColors, layerIdx) ?? resolvePaletteColor(palette, layerIdx);
+            const seriesName = arrayValueAt(seriesNames, layerIdx);
 
             const bars = g.selectAll(`.bar-hstack-${layerIdx}`)
               .data(layer)
@@ -592,7 +600,7 @@ export const BarChart = memo(function BarChart({
             .attr('transform', (cat) => `translate(0,${y0(cat) ?? 0})`);
 
           series!.forEach((s, sIdx) => {
-            const color = seriesColors[sIdx];
+            const color = arrayValueAt(seriesColors, sIdx) ?? resolvePaletteColor(palette, sIdx);
 
             const bars = categoryGroups
               .append('rect')
@@ -679,7 +687,7 @@ export const BarChart = memo(function BarChart({
           .attr('width', x.bandwidth())
           .attr('rx', barRadius)
           .attr('ry', barRadius)
-          .attr('fill', (d, i) => d.color ?? palette[i % palette.length]);
+          .attr('fill', (d, i) => d.color ?? resolvePaletteColor(palette, i));
 
         attachBarHover(bars, (d) => ({
           cx: (x(d.label) ?? 0) + x.bandwidth() / 2,
@@ -751,7 +759,7 @@ export const BarChart = memo(function BarChart({
           .attr('height', y.bandwidth())
           .attr('rx', barRadius)
           .attr('ry', barRadius)
-          .attr('fill', (d, i) => d.color ?? palette[i % palette.length]);
+          .attr('fill', (d, i) => d.color ?? resolvePaletteColor(palette, i));
 
         attachBarHover(bars, (d) => ({
           cx: x(d.value),

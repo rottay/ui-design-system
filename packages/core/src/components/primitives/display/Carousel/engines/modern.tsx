@@ -1,10 +1,10 @@
 /**
  * @fileoverview Carousel Modern Engine - Rottay Design System
- * @description DS token inline-styled carousel with scroll-snap navigation.
+ * @description Token-driven carousel with scroll-snap navigation.
  *
  * @remarks
  * All visual styling uses DS token CSS custom properties (`--ds-*`).
- * Arrow buttons and dot indicators use inline styles, not DaisyUI classes.
+ * Arrow buttons and dot indicators are painted by the unlayered modern skin.
  *
  * **Features:**
  * - Scroll-snap based navigation
@@ -46,7 +46,7 @@ import { CAROUSEL_DEFAULTS } from '../Carousel.types';
 /**
  * Modern Carousel - Token-driven Tailwind Implementation
  *
- * This implementation provides a carousel using Tailwind CSS utilities and DS token inline styles.
+ * This implementation provides a carousel using structural utilities and the token-driven modern skin.
  * It offers a lightweight alternative with full customization through utility classes.
  *
  * @component

@@ -15,7 +15,7 @@
  *
  * THE TITLE'S COLOR IS NOT HERE, DELIBERATELY. `engines/modern/theme.css`'s
  * `.stat-title { color: var(--ds-statistic-title-color) }` is uncontested on the
- * title today (its inline style sets only line-height and margin) and `color` is
+ * title today (its runtime style sets line-height and margin) and `color` is
  * a channel preflight does not touch, so that rule paints. Declaring the same
  * color here would take ownership of a channel this skin never held.
  *

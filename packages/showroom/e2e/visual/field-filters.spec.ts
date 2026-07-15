@@ -8,11 +8,10 @@ import { test, expect, type Page, type Locator } from '@playwright/test';
 // paint. This spec captures the panel's current appearance (8 element
 // screenshots) as the pre-migration baseline, and separately pins the
 // rustic-input focus-suppression cascade fact recorded in the WO-ARC-09
-// checkpoint 2 contract: today the panel's inline `controlStyle` outranks
-// the rustic input skin's `[data-state~='focused']` rules on every channel
-// it sets, so focusing that control paints nothing. The migration's skin
-// selectors must reproduce that exactly (P-64/(0,8,0) escalation), and this
-// equality block is what proves it stayed true byte for byte.
+// checkpoint 2 contract: the panel's migrated (0,8,0) suppression selector
+// outranks the rustic input skin's `[data-state~='focused']` rules on every
+// channel it sets, so focusing that control paints nothing. This equality
+// block pins that preserved defect until its deliberate accessibility WO.
 //
 // This is NOT states.spec.ts: that file's "every focusable subject paints a
 // keyboard focus indicator" invariant would flag the rustic input's

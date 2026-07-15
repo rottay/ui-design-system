@@ -80,11 +80,12 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
   // Index events by date string for O(1) lookup per cell during render.
   // Only keyed by start date -- multi-day events appear on their start day only.
   const eventsByDate = useMemo(() => {
-    const map: Record<string, CalendarEvent<T>[]> = {};
+    const map = new Map<string, CalendarEvent<T>[]>();
     for (const ev of events) {
       const key = toDateKey(ev.start);
-      if (!map[key]) map[key] = [];
-      map[key].push(ev);
+      const bucket = map.get(key);
+      if (bucket) bucket.push(ev);
+      else map.set(key, [ev]);
     }
     return map;
   }, [events]);
@@ -150,7 +151,7 @@ export default function ModernCalendarView<T>(props: CalendarViewProps<T>) {
               after the last day) use a faded background and no click handler. */}
           {cells.map((cell, i) => {
             const key = cell ? toDateKey(cell) : `empty-${i}`;
-            const dayEvents = cell ? eventsByDate[toDateKey(cell)] ?? [] : [];
+            const dayEvents = cell ? eventsByDate.get(toDateKey(cell)) ?? [] : [];
             const isToday = cell && toDateKey(cell) === today;
             return (
               <div

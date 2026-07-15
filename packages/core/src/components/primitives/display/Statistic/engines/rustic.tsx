@@ -4,15 +4,15 @@
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine provides a lightweight, dependency-free statistic using only
- * inline styles and semantic HTML elements.
+ * This engine provides a lightweight, dependency-free statistic using semantic
+ * HTML, structural inline layout, and the unlayered rustic skin.
  *
  * **Exported Components:**
  * - `Statistic` - Main statistic component
  * - `Countdown` - Countdown timer with ARIA attributes
  *
  * **Implementation Details:**
- * - Uses inline styles for all visual properties
+ * - Paint and interaction states live in the unlayered rustic skin
  * - WCAG 2.1 AA compliant color contrast
  * - Interval-based countdown updates
  * - Semantic HTML and ARIA attributes

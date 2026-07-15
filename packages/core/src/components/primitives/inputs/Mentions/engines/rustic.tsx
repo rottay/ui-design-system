@@ -17,6 +17,7 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback, useMemo, useLayoutEffect } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 
 import type { MentionsProps, MentionsOption } from '../Mentions.types';
 import { MENTIONS_DEFAULTS } from '../Mentions.types';
@@ -197,12 +198,14 @@ export const Mentions = React.forwardRef<HTMLTextAreaElement, MentionsProps>(
           );
           break;
         case 'Enter':
-        case 'Tab':
-          if (filteredOptions[focusedIndex]) {
+        case 'Tab': {
+          const focusedOption = focusedIndex >= 0 ? arrayValueAt(filteredOptions, focusedIndex) : undefined;
+          if (focusedOption) {
             e.preventDefault();
-            handleSelect(filteredOptions[focusedIndex]);
+            handleSelect(focusedOption);
           }
           break;
+        }
         case 'Escape':
           setIsOpen(false);
           break;

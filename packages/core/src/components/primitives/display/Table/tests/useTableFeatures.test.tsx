@@ -108,6 +108,10 @@ describe('useTableFeatures', () => {
     expect(getNestedValue(BASE_ROWS[0]!, ['meta', 'name'])).toBe('Zoe');
     expect(getNestedValue(BASE_ROWS[0]!, 'status')).toBe('Draft');
     expect(getNestedValue(BASE_ROWS[0]!, undefined)).toBeUndefined();
+    expect(getNestedValue((() => undefined) as unknown as TableRow, 'status')).toBeUndefined();
+    expect(getNestedValue('primitive', 'length')).toBeUndefined();
+    const inherited = Object.create({ meta: { name: 'Inherited' } }) as TableRow;
+    expect(getNestedValue(inherited, ['meta', 'name'])).toBe('Inherited');
   });
 
   it('covers sorting, filtering, pagination clamping, sticky config, and summary detection', async () => {

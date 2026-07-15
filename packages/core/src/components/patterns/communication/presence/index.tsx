@@ -7,7 +7,7 @@
  *
  * These components own the VISUAL contract only. Apps provide the WebSocket
  * data (user lists, typing state, cursor positions). All components are
- * engine-agnostic -- they use DS primitives with inline styles and CSS
+ * engine-agnostic -- they use DS primitives with runtime style props and CSS
  * variables, no engine switch needed.
  */
 

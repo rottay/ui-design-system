@@ -337,16 +337,21 @@ export function ColumnMenu<T extends ColumnMenuColumn>({
 
   const handleTogglePin = useCallback((key: string, side: 'left' | 'right') => {
     setDraftPinned((prev) => {
-      const isAlreadyPinned = prev[side].includes(key);
+      const currentSide = side === 'left' ? prev.left : prev.right;
+      const oppositeSide = side === 'left' ? prev.right : prev.left;
+      const isAlreadyPinned = currentSide.includes(key);
       if (isAlreadyPinned) {
-        return { ...prev, [side]: prev[side].filter((k) => k !== key) };
+        const nextCurrentSide = currentSide.filter((currentKey) => currentKey !== key);
+        return side === 'left'
+          ? { left: nextCurrentSide, right: prev.right }
+          : { left: prev.left, right: nextCurrentSide };
       }
       // Remove from other side if present, then add to this side.
-      const otherSide = side === 'left' ? 'right' : 'left';
-      return {
-        [otherSide]: prev[otherSide].filter((k) => k !== key),
-        [side]: [...prev[side], key],
-      } as { left: string[]; right: string[] };
+      const nextCurrentSide = [...currentSide, key];
+      const nextOppositeSide = oppositeSide.filter((currentKey) => currentKey !== key);
+      return side === 'left'
+        ? { left: nextCurrentSide, right: nextOppositeSide }
+        : { left: nextOppositeSide, right: nextCurrentSide };
     });
   }, []);
 

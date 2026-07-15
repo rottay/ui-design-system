@@ -28,7 +28,7 @@ const RUSTIC_DURATION = 'var(--ds-personality-animation-entrance-duration, 300ms
 const ROOT_CLASS_NAME = 'ds-pattern-kanban-board ds-engine-rustic';
 
 /**
- * Rustic Kanban board using only inline styles and `--ds-*` CSS variables.
+ * Rustic Kanban board using token-backed style objects and `--ds-*` CSS variables.
  * Generic over `T` so any item shape can be used with a string key extractor.
  *
  * @param props - See {@link KanbanBoardProps} for full prop documentation.

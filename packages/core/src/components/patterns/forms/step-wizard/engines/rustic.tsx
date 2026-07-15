@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Rustic (Vanilla CSS) engine for the StepWizard pattern.
- * Uses only inline styles backed by `--ds-*` CSS custom properties, making it
- * framework-agnostic. Renders step indicators as numbered dots with a connecting
+ * Uses framework-agnostic React structure plus a token-driven rustic skin.
+ * Renders step indicators as numbered dots with a connecting
  * line, a content area, and a navigation bar -- all without Ant Design or
  * Tailwind. Hardcoded hex fallbacks ensure the component renders acceptably when
  * design-system tokens are not loaded.
@@ -121,8 +121,9 @@ const s = {
  * Rustic (Vanilla CSS) engine for the StepWizard pattern.
  *
  * Renders numbered dot indicators, a connecting line, a progress bar, a content
- * area, and a navigation bar -- all using inline styles backed by `--ds-*` CSS
- * custom properties. No external CSS framework required.
+ * area, and a navigation bar. Structural geometry remains inline while paint
+ * and interaction states live in the unlayered rustic skin. No external CSS
+ * framework is required.
  *
  * @param props - {@link StepWizardProps}
  * @returns A framework-agnostic card containing the step wizard.

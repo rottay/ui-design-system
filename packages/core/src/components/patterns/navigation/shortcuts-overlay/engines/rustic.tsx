@@ -22,7 +22,7 @@ import type { ShortcutsOverlayProps, ShortcutDisplayItem } from '../ShortcutsOve
 
 /**
  * Rustic (Vanilla CSS) implementation of the ShortcutsOverlay pattern.
- * All styling uses inline CSSProperties with --ds-* token fallbacks.
+ * Styling combines authored engine CSS with bounded runtime layout values.
  * Builds its own dialog, backdrop, search input, and kbd key tags.
  *
  * @param props - See {@link ShortcutsOverlayProps} for the full prop contract.

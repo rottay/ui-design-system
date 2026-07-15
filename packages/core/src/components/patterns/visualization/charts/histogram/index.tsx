@@ -20,6 +20,7 @@
  */
 
 import { memo, useEffect, useRef } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import {
   axisBottom,
   axisLeft,
@@ -183,8 +184,10 @@ export const Histogram = memo(function Histogram({
       .attr('transform', `translate(${margin.left},${margin.top})`);
 
     // X scale: continuous, spanning the full value range
-    const xMin = histogramBins[0].x0 ?? 0;
-    const xMax = histogramBins[histogramBins.length - 1].x1 ?? 0;
+    const firstBin = arrayValueAt(histogramBins, 0);
+    const lastBin = arrayValueAt(histogramBins, histogramBins.length - 1);
+    const xMin = firstBin?.x0 ?? 0;
+    const xMax = lastBin?.x1 ?? 0;
     const x = scaleLinear().domain([xMin, xMax]).range([0, innerWidth]);
 
     // Y scale: frequency or density
@@ -198,6 +201,7 @@ export const Histogram = memo(function Histogram({
     } else {
       yValues = histogramBins.map((b) => b.length);
     }
+    const getYValue = (index: number): number => arrayValueAt(yValues, index) ?? 0;
 
     const y = scaleLinear()
       .domain([0, max(yValues) ?? 0])
@@ -263,10 +267,10 @@ export const Histogram = memo(function Histogram({
         const count = d.length;
         const range = `${fmtVal(x0)} - ${fmtVal(x1)}`;
         if (compactState.compactTooltip) {
-          return density ? yValues[i].toFixed(4) : String(count);
+          return density ? getYValue(i).toFixed(4) : String(count);
         }
         return density
-          ? `${range}: ${yValues[i].toFixed(4)}`
+          ? `${range}: ${getYValue(i).toFixed(4)}`
           : `${range}: ${count}`;
       });
     }
@@ -279,12 +283,12 @@ export const Histogram = memo(function Histogram({
         .transition()
         .duration(chartPersonality.animationDuration)
         .delay((_, i) => i * 50)
-        .attr('y', (_, i) => y(yValues[i]))
-        .attr('height', (_, i) => innerHeight - y(yValues[i]));
+        .attr('y', (_, i) => y(getYValue(i)))
+        .attr('height', (_, i) => innerHeight - y(getYValue(i)));
     } else {
       bars
-        .attr('y', (_, i) => y(yValues[i]))
-        .attr('height', (_, i) => innerHeight - y(yValues[i]));
+        .attr('y', (_, i) => y(getYValue(i)))
+        .attr('height', (_, i) => innerHeight - y(getYValue(i)));
     }
 
     // Frequency labels on bars
@@ -300,7 +304,7 @@ export const Histogram = memo(function Histogram({
         .attr('x', (d) => (x(d.x0 ?? 0) + x(d.x1 ?? 0)) / 2)
         .attr('text-anchor', 'middle')
         .style('font-size', '11px')
-        .text((_, i) => density ? yValues[i].toFixed(2) : yValues[i]);
+        .text((_, i) => density ? getYValue(i).toFixed(2) : getYValue(i));
 
       if (chartPersonality.animate) {
         labels
@@ -309,10 +313,10 @@ export const Histogram = memo(function Histogram({
           .transition()
           .duration(chartPersonality.animationDuration)
           .delay((_, i) => i * 50)
-          .attr('y', (_, i) => y(yValues[i]) - 5)
+          .attr('y', (_, i) => y(getYValue(i)) - 5)
           .attr('opacity', 1);
       } else {
-        labels.attr('y', (_, i) => y(yValues[i]) - 5);
+        labels.attr('y', (_, i) => y(getYValue(i)) - 5);
       }
     }
 
@@ -325,12 +329,14 @@ export const Histogram = memo(function Histogram({
         const cumulativeData: Array<{ cx: number; cy: number }> = [];
 
         // Start point at the left edge of the first bin at zero
-        cumulativeData.push({ cx: histogramBins[0].x0 ?? 0, cy: 0 });
+        cumulativeData.push({ cx: firstBin?.x0 ?? 0, cy: 0 });
 
         for (let i = 0; i < histogramBins.length; i++) {
-          cumulative += yValues[i];
+          const currentBin = arrayValueAt(histogramBins, i);
+          if (!currentBin) continue;
+          cumulative += getYValue(i);
           cumulativeData.push({
-            cx: histogramBins[i].x1 ?? 0,
+            cx: currentBin.x1 ?? 0,
             cy: cumulative / totalCount,
           });
         }

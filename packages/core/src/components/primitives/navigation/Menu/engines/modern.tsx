@@ -1,10 +1,11 @@
 /**
  * @fileoverview Menu Modern Engine - Rottay Design System
- * @description Premium CSS-in-JS implementation of the Menu component.
+ * @description Token-driven implementation of the Menu component.
  * Part of the Rottay Design System's multi-engine architecture.
  *
  * @remarks
- * The Modern engine uses design-system tokens and inline styles to deliver
+ * The Modern engine uses design-system tokens, structural inline layout, and
+ * the unlayered modern skin to deliver
  * a Linear/Vercel-quality sidebar menu with:
  * - Left accent bar for active items
  * - Subtle hover backgrounds
@@ -563,10 +564,10 @@ function renderModernMenuItems(
 // ============================================================================
 
 /**
- * Premium CSS-in-JS implementation of the Menu component.
+ * Token-driven implementation of the Menu component.
  *
  * @description
- * Renders the Menu component using design-system tokens and inline styles
+ * Renders the Menu component using design-system tokens and the modern skin
  * for a Linear/Vercel-quality sidebar navigation experience.
  *
  * @remarks

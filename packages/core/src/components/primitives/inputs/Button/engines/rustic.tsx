@@ -129,7 +129,7 @@ const LoadingSpinner: React.FC<{ size?: string }> = ({ size = 'md' }) => {
 /**
  * Rustic (vanilla HTML/CSS) implementation of the DS Button.
  *
- * All styling is computed via inline styles referencing CSS custom properties,
+ * Styling is computed with token-backed style objects referencing CSS custom properties,
  * so no Tailwind or Ant Design classes are needed. Hover, focus, and active
  * states are tracked in React state because inline styles override CSS
  * pseudo-classes -- see `tokens/css/engines/rustic/skin/button.css` for why the

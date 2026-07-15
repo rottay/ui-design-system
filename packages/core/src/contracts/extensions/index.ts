@@ -1,8 +1,8 @@
 /**
  * @fileoverview Universal Extension System - Rottay Design System
- * @description Provides the unified `ComponentExtensions<T>` protocol that lets
- * apps inject columns, actions, filters, slots, and more into DS presets
- * without modifying the design system source.
+ * @description Reserved, type-only compatibility surface for a universal
+ * extension protocol that was designed but never connected to production
+ * component rendering.
  *
  * @remarks
  * The extension system is organized into 16 independently optional categories:
@@ -24,12 +24,10 @@
  * 15. **LifecycleExtensions** - Before/after hooks for data and view events
  * 16. **AccessibilityExtensions** - ARIA, a11y, i18n overrides
  *
- * Presets adopt whichever categories apply to their UI. The generic `T`
- * parameter represents the row/item data shape, enabling type-safe
- * renderers, sort comparators, and action handlers.
- *
- * The `ExtensionHelpers<T>` interface provides a convenience API consumed
- * by presets via `ctx.ext` to merge defaults with app-provided extensions.
+ * No production preset reads `ComponentExtensions`, no runtime resolver creates
+ * `ExtensionHelpers`, and passing `EngineAwareProps.extensions` has no effect.
+ * DS-IMP-021 owns deprecation/removal after the deferred external-import census;
+ * use component-owned props, compounds and slots that have executable evidence.
  *
  * @see {@link ComponentExtensions} - Top-level extension container
  * @see {@link ExtensionHelpers} - Helper API for preset authors
@@ -817,6 +815,12 @@ export interface ResolvedColumn<T = any> {
  * Unified ComponentExtensions<T>
  * ========================================================================= */
 
+/**
+ * Reserved 16-axis extension shape. It has no production resolver or consumer.
+ *
+ * @deprecated No runtime effect. DS-IMP-021 owns replacement/removal after the
+ * deferred external-import census; do not add new consumers.
+ */
 export interface ComponentExtensions<T = any> {
   /** Named content injection slots */
   slots?: SlotMap<T>;
@@ -853,9 +857,15 @@ export interface ComponentExtensions<T = any> {
 }
 
 /* =========================================================================
- * ExtensionHelpers - API consumed by presets via ctx.ext
+ * ExtensionHelpers - reserved resolver shape; no runtime implementation exists
  * ========================================================================= */
 
+/**
+ * Type-only sketch of the resolver that was never implemented.
+ *
+ * @deprecated No runtime implementation creates this interface. DS-IMP-021
+ * owns any future small, component-specific replacement.
+ */
 export interface ExtensionHelpers<T = any> {
   // --- Slots ---
   /** Render a named slot. Returns null if slot not defined and no fallback. */

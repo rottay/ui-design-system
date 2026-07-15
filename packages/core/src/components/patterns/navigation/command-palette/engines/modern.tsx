@@ -17,6 +17,7 @@
  */
 
 import React, { useState, useMemo, useRef, useEffect, useCallback } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { CommandPaletteProps, CommandItem } from '../CommandPalette.types';
 import { menuSectionTitleStyle } from '../../../_internal/engines/modern/styles';
 
@@ -120,7 +121,7 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       setActiveIndex((i) => Math.max(i - 1, 0));
     } else if (e.key === 'Enter') {
       e.preventDefault();
-      const item = filtered[activeIndex];
+      const item = activeIndex >= 0 ? arrayValueAt(filtered, activeIndex) : undefined;
       if (item) handleSelect(item);
     } else if (e.key === 'Escape') {
       onOpenChange(false);
@@ -134,8 +135,9 @@ export default function ModernCommandPalette(props: CommandPaletteProps) {
       'input, button, [tabindex]:not([tabindex="-1"]), a[href]'
     );
     if (focusable.length === 0) return;
-    const first = focusable[0];
-    const last = focusable[focusable.length - 1];
+    const first = focusable.item(0);
+    const last = focusable.item(focusable.length - 1);
+    if (!first || !last) return;
     if (e.shiftKey) {
       if (document.activeElement === first) {
         e.preventDefault();

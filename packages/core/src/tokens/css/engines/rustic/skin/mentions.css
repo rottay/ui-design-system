@@ -18,7 +18,7 @@
  * The textarea sets NO `color` channel -- transcribed byte-exact from the source
  * (the text color inherits the browser default there); filed as a proposal.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via the two root classes +
  * `[data-part='root']` + `[data-part='textarea']`. Non-border paint wins
  * unlayered at (0,4,0).

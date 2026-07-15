@@ -1,16 +1,16 @@
 /**
  * @fileoverview Tag Modern Engine - Rottay Design System
- * @description Token-driven tag with DS token inline styles only.
+ * @description Token-driven tag painted by the unlayered modern skin.
  * Part of the Rottay Design System's display primitives collection.
  *
  * @remarks
- * This engine uses DS token inline styles exclusively for rendering.
+ * This engine uses the modern Tag skin for paint and DS tokens for theming.
  * No DaisyUI badge classes are used.
  *
  * **Implementation Details:**
  * - Inline pill styles for the container (display, border-radius, etc.)
  * - SIZE_STYLES map for size variants via CSSProperties
- * - DS token inline styles for color variants via --ds-color-*
+ * - Skin-owned color variants via --ds-color-* custom properties
  * - Outline variant uses transparent background with border
  *
  * @example Basic Usage
@@ -68,8 +68,8 @@ const SIZE_STYLES: Record<string, React.CSSProperties> = {
 /**
  * Modern (token-driven) implementation of the Tag component.
  *
- * Uses DS token inline styles exclusively
- * for a lightweight, customizable tag implementation.
+ * Uses the token-driven modern skin for a lightweight, customizable tag
+ * implementation.
  *
  * @param props - Tag component properties
  * @returns DS token-styled tag element

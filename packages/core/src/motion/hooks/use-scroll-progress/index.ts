@@ -56,14 +56,17 @@ export function useScrollProgress(target?: RefObject<HTMLElement | null>): numbe
     // Attach to either the specific element or window. The `passive` flag
     // tells the browser this handler will never call `preventDefault()`,
     // enabling scroll-performance optimizations.
-    const scrollElement = element || window;
-    scrollElement.addEventListener('scroll', handleScroll, { passive: true });
+    if (element) element.addEventListener('scroll', handleScroll, { passive: true });
+    else window.addEventListener('scroll', handleScroll, { passive: true });
 
     // Calculate initial progress in case the page loads mid-scroll
     // (e.g. browser back-navigation or anchor links).
     handleScroll();
 
-    return () => scrollElement.removeEventListener('scroll', handleScroll);
+    return () => {
+      if (element) element.removeEventListener('scroll', handleScroll);
+      else window.removeEventListener('scroll', handleScroll);
+    };
   }, [target]);
 
   return progress;

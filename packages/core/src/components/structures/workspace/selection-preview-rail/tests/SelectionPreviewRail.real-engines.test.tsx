@@ -256,8 +256,8 @@ describe.each(['modern', 'rustic'] as const)(
         nodes.forEach((el) => expectNoInlinePaint(el, part));
       }
 
-      // The raw lucide icon: its color moved to the skin (currentColor -> stroke),
-      // so no inline color survives on the svg.
+      // The intrinsic icon wrapper owns skin color and the nested glyph inherits
+      // currentColor, so no inline color survives on the stamped node.
       const icons = container.querySelectorAll<HTMLElement>('[data-part="match-reason-icon"]');
       expect(icons.length, 'match-reason-icon did not render').toBeGreaterThan(0);
       icons.forEach((el) => expect(el.style.color, 'match-reason-icon paints color inline').toBe(''));

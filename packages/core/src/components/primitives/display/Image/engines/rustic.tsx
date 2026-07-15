@@ -1,6 +1,6 @@
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the Image display primitive.
- * Zero-dependency implementation styled entirely with inline styles and DS CSS
+ * Zero-dependency implementation styled with token-backed style objects and DS CSS
  * variables, featuring a custom full-screen zoom overlay dialog.
  *
  * @example

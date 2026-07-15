@@ -27,6 +27,7 @@
 
 import React, { useCallback, useId, useMemo, useState } from 'react';
 
+import { arrayValueAt } from '@/_internal/utils/collections';
 import { Badge, Box, Button, Card, Flex, Heading, Input, Select, Stack, Text } from '../../../primitives';
 import { compileBrandTheme } from '../../../../compilers/brand-theme';
 import { validateBrandingContrast, type BrandingColors } from '../../../../_internal/a11y/contrast';
@@ -1332,16 +1333,20 @@ export function PatternBrandStudio({
           >
             Live preview on both grounds
           </Text>
-          {surfaces.map((surface, index) => (
-            <PreviewPanel
-              key={surface.key}
-              theme={theme}
-              surface={surface}
-              scopeSalt={scopeSalt}
-              galleries={galleries}
-              report={reports[index]}
-            />
-          ))}
+          {surfaces.map((surface, index) => {
+            const report = arrayValueAt(reports, index);
+            if (!report) return null;
+            return (
+              <PreviewPanel
+                key={surface.key}
+                theme={theme}
+                surface={surface}
+                scopeSalt={scopeSalt}
+                galleries={galleries}
+                report={report}
+              />
+            );
+          })}
 
           <Card
             className="ds-pattern-brand-studio__action-panel"

@@ -192,11 +192,11 @@ export function ExportButton<T = unknown>({
       if (e.key === 'ArrowDown') {
         e.preventDefault();
         const next = idx < items.length - 1 ? idx + 1 : 0;
-        items[next].focus();
+        items.item(next)?.focus();
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         const prev = idx > 0 ? idx - 1 : items.length - 1;
-        items[prev].focus();
+        items.item(prev)?.focus();
       }
     },
     [],

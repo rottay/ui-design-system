@@ -36,7 +36,7 @@ import type { VerticalKey, VerticalPreset } from './types';
  * Verticals are the DS-owned fallback layer for domains. Real tenants should
  * reference these presets, not duplicate them one by one.
  */
-export const VERTICAL_REGISTRY: Record<string, VerticalPreset> = {
+export const VERTICAL_REGISTRY: Readonly<Record<string, VerticalPreset>> = {
   /**
    * Evnto - Event management platform
    *

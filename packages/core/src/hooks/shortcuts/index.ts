@@ -66,6 +66,7 @@ import {
   type ReactNode,
 } from 'react';
 import { createElement } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -495,7 +496,7 @@ export function ShortcutProvider({ children }: ShortcutProviderProps) {
       // Same scoped-wins-over-global priority as combos, above.
       const sequenceMatches: ParsedShortcut[] = [];
       for (const entry of registryRef.current.values()) {
-        const { parsed } = entry;
+        const { parsed }: ShortcutRegistryEntry = entry;
         if (!parsed.isSequence) continue;
 
         const { sequence } = parsed;
@@ -651,14 +652,15 @@ export function useGlobalShortcuts(shortcuts: ShortcutDefinition[]): void {
     // Register all shortcuts. Each handler/when closure reads from the
     // ref at invocation time, not registration time.
     shortcutsRef.current.forEach((shortcut, index) => {
-      const id = ids[index];
+      const id = arrayValueAt(ids, index);
+      if (!id) return;
       const wrappedDefinition: ShortcutDefinition = {
         key: shortcut.key,
         description: shortcut.description,
         category: shortcut.category,
         scope: shortcut.scope,
-        handler: () => shortcutsRef.current[index]?.handler(),
-        when: shortcut.when ? () => shortcutsRef.current[index]?.when?.() ?? false : undefined,
+        handler: () => arrayValueAt(shortcutsRef.current, index)?.handler(),
+        when: shortcut.when ? () => arrayValueAt(shortcutsRef.current, index)?.when?.() ?? false : undefined,
       };
 
       const parsed = parseShortcut(wrappedDefinition);

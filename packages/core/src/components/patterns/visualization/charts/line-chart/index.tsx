@@ -18,6 +18,7 @@
  */
 
 import { memo, useEffect, useRef } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import {
   area,
   axisBottom,
@@ -318,7 +319,7 @@ export const LineChart = memo(function LineChart({
           const local = plotLocalPointerPosition(event, svgRef.current, margin);
           if (!local) return;
           const idx = nearestIndexByPixel(local.x, snapCandidates.map((c) => c.px));
-          const snapped = snapCandidates[idx];
+          const snapped = arrayValueAt(snapCandidates, idx);
           if (!snapped) return;
 
           const focusPoints: Array<{ y: number; color: string }> = [];

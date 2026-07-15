@@ -16,7 +16,7 @@
  * its status color. `isFocused` was set unconditionally in `onFocus`/`onBlur`,
  * so native `:focus` matches it exactly; the imperative state is removed.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via the two root classes +
  * `[data-part='root']` + the descendant `[data-part='input']` (status rules go
  * higher via the extra status attribute). Non-border paint (background, color,

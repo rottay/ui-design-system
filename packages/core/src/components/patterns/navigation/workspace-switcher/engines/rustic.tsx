@@ -80,7 +80,7 @@ const dividerStyle: CSSProperties = {
 };
 
 /**
- * Rustic engine workspace switcher using only inline styles and CSS variables.
+ * Rustic workspace switcher using authored engine CSS and token-backed runtime layout values.
  * Mirrors the feature set of Classic/Modern engines (keyboard nav, unread badges,
  * create workspace, current user footer) without any third-party UI dependency.
  *

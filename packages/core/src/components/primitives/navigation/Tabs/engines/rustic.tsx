@@ -6,7 +6,7 @@
  * Provides a zero-dependency, fully accessible tabs experience.
  *
  * @remarks
- * The Rustic engine uses only vanilla HTML and CSS, making it ideal for:
+ * The Rustic engine uses vanilla HTML and CSS, making it ideal for:
  * - Projects that need minimal dependencies
  * - Server-side rendering scenarios
  * - Maximum accessibility compliance
@@ -39,6 +39,7 @@
  */
 
 import React, { useCallback, useId, useRef, useState } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { TabsProps, TabItem, TabsSize } from '../Tabs.types';
 import { TABS_DEFAULTS } from '../Tabs.types';
 import { isResponsiveValue, generateResponsiveCSS, type ResponsivePropEntry } from '../../../layout/shared/responsive-props';
@@ -136,7 +137,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
 
   const size = scalarOrUndefined(sizeProp) ?? (TABS_DEFAULTS.size as TabsSize);
   // Ref map for imperative focus management during keyboard navigation
-  const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const tabRefs = useRef<Map<string, HTMLButtonElement | null>>(new Map());
 
   // ============================================================================
   // State Management
@@ -146,7 +147,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
    * Internal state for uncontrolled mode.
    * Falls back to first item if no default provided.
    */
-  const [active, setActive] = useState(activeKey || defaultActiveKey || items[0]?.key);
+  const [active, setActive] = useState(activeKey || defaultActiveKey || arrayValueAt(items, 0)?.key);
 
   /**
    * Handles tab selection.
@@ -164,7 +165,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
   const focusAndActivate = useCallback(
     (key: string) => {
       handleChange(key);
-      tabRefs.current[key]?.focus();
+      tabRefs.current.get(key)?.focus();
     },
     [tabRefs]
   );
@@ -180,17 +181,17 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
       switch (event.key) {
         case 'ArrowRight':
         case 'ArrowDown':
-          nextKey = enabledItems[(enabledIndex + 1) % enabledItems.length]?.key;
+          nextKey = arrayValueAt(enabledItems, (enabledIndex + 1) % enabledItems.length)?.key;
           break;
         case 'ArrowLeft':
         case 'ArrowUp':
-          nextKey = enabledItems[(enabledIndex - 1 + enabledItems.length) % enabledItems.length]?.key;
+          nextKey = arrayValueAt(enabledItems, (enabledIndex - 1 + enabledItems.length) % enabledItems.length)?.key;
           break;
         case 'Home':
-          nextKey = enabledItems[0]?.key;
+          nextKey = arrayValueAt(enabledItems, 0)?.key;
           break;
         case 'End':
-          nextKey = enabledItems[enabledItems.length - 1]?.key;
+          nextKey = arrayValueAt(enabledItems, -1)?.key;
           break;
         default:
           return;
@@ -267,7 +268,7 @@ export default function RusticTabs(props: TabsProps): React.ReactElement {
           <button
             key={item.key}
             ref={(node) => {
-              tabRefs.current[item.key] = node;
+              tabRefs.current.set(item.key, node);
             }}
             id={`tabs-tab-${tabsId}-${item.key}`}
             role="tab"

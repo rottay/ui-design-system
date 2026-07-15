@@ -83,9 +83,14 @@ export interface UseInlineEditingReturn<T> {
 // Hook
 // ---------------------------------------------------------------------------
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 function resolveRowKeyValue<T>(row: T, rowKey: keyof T | ((row: T) => string)): string {
   if (typeof rowKey === 'function') return rowKey(row);
-  return String((row as Record<string, unknown>)[rowKey as string]);
+  return String(readRecordValue(row, rowKey as string));
 }
 
 export function useInlineEditing<T extends Record<string, unknown>>(
@@ -118,7 +123,7 @@ export function useInlineEditing<T extends Record<string, unknown>>(
     async (row: T, columnKey: string, newValue: unknown, oldValue: unknown) => {
       if (batchMode) {
         const rk = resolveRowKeyValue(row, rowKey);
-        setPendingEdits((prev) => ({
+        setPendingEdits((prev: Record<string, Record<string, unknown>>) => ({
           ...prev,
           [rk]: {
             ...(prev[rk] ?? {}),
@@ -166,7 +171,7 @@ export function useInlineEditing<T extends Record<string, unknown>>(
         const row = data.find((r) => resolveRowKeyValue(r, rowKey) === rk);
         if (!row) continue;
         for (const [ck, newValue] of Object.entries(colEdits)) {
-          const oldValue = (row as Record<string, unknown>)[ck];
+          const oldValue = readRecordValue(row, ck);
           await onSave(row, ck, newValue, oldValue);
         }
       }

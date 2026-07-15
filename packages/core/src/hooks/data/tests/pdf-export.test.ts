@@ -171,6 +171,14 @@ describe('usePdfExport', () => {
       expect(tableData.rows[0]).toEqual(['', '']);
     });
 
+    it('treats callable data rows as empty values', () => {
+      const { result } = renderHook(() => usePdfExport());
+
+      const tableData = result.current.preparePdfData([(() => undefined) as any], basicColumns);
+
+      expect(tableData.rows[0]).toEqual(['', '']);
+    });
+
     it('handles empty data array', () => {
       const { result } = renderHook(() => usePdfExport());
 

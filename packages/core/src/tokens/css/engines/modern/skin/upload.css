@@ -27,7 +27,7 @@
  * additionally carries `ds-upload--${listType}` / `ds-upload-dragger--${listType}`
  * when `listType !== 'text'` (text has no modifier, matching rustic).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1). Every rule that paints a border COLOR here reaches (0,4,0) via a
  * listType root modifier class, or (where no modifier applies) a repeated
  * `[data-part='x'][data-part='x']`. Non-border paint (background, color,

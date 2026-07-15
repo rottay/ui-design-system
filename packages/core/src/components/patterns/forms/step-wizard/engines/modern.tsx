@@ -1,12 +1,13 @@
 'use client';
 
 /**
- * @fileoverview Modern engine for the StepWizard pattern using DS token inline styles.
+ * @fileoverview Modern engine for the StepWizard pattern using the token-driven skin.
  * Renders clean step indicators with connecting lines, a card-like content area,
  * and a navigation bar with ghost/primary buttons. Supports horizontal and vertical
  * orientations, per-step async validation, and controlled or uncontrolled step state.
  *
- * All styling uses DS token CSS variables -- no DaisyUI or Tailwind classes.
+ * Paint and interaction states live in the unlayered modern skin; remaining
+ * inline values are structural or instance-dependent.
  *
  * @example
  * <ModernStepWizard
@@ -118,7 +119,7 @@ const disabledOverride: CSSProperties = {
  * -------------------------------------------------------------------------*/
 
 /**
- * Modern engine for the StepWizard pattern using DS token inline styles.
+ * Modern engine for the StepWizard pattern using the token-driven modern skin.
  *
  * Renders a card with step indicators (numbered dots with connecting lines),
  * a content area, and navigation buttons. The progress bar uses DS token CSS

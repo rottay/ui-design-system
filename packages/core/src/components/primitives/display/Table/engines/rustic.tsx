@@ -3,8 +3,8 @@
 /**
  * @fileoverview Rustic Table engine -- pure HTML/CSS (zero UI-library dependencies).
  *
- * Full-featured data table using only inline styles with CSS custom properties
- * (`var(--ds-*)`) and semantic HTML. Achieves feature parity with the Modern
+ * Full-featured data table using authored engine CSS, bounded runtime layout values,
+ * `var(--ds-*)` custom properties, and semantic HTML. Achieves feature parity with the Modern
  * engine (sorting, filtering, pagination, selection, expand, virtual scroll,
  * sticky columns, column resize, nested headers, inline editing, summary rows)
  * but without any DaisyUI or Tailwind dependency, making it ideal for

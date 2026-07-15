@@ -3,8 +3,8 @@
 /**
  * @fileoverview TimePicker Modern Engine -- DaisyUI/Tailwind with custom dropdown panel.
  * Uses a read-only text input that opens a custom hour/minute selection dropdown
- * on click (anywhere in the field). All popup panel styles are inline because
- * the panel renders in a portal outside the app's Tailwind scope.
+ * on click (anywhere in the field). Popup geometry remains inline while the
+ * standalone modern skin owns paint/state across the portal boundary.
  *
  * @module TimePicker/Engines/Modern
  * @category Inputs
@@ -44,7 +44,7 @@ const ClockIcon = () => (
 );
 
 // ---------------------------------------------------------------------------
-// TimePanel -- the dropdown with hour/minute columns (all inline styles)
+// TimePanel -- inline geometry/layout; paint is owned by the modern skin.
 // ---------------------------------------------------------------------------
 
 interface TimePanelProps {

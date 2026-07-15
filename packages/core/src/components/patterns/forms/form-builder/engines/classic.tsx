@@ -46,6 +46,11 @@ import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 /**
  * Ant Design-backed form builder that translates a declarative `FieldDef[]`
  * schema into `<Form.Item>` wrapped input components. Supports four layout
@@ -135,7 +140,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
     const errs: Record<string, string> = {};
     fields.forEach((field) => {
       if (isHidden(field)) return;
-      const val = currentValues[field.name];
+      const val = readRecordValue(currentValues, field.name);
       if (field.required && (val === undefined || val === null || val === '')) {
         errs[field.name] = field.validation?.message ?? `${field.label ?? field.name} is required`;
       }
@@ -184,7 +189,7 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
   // can update form state without accessing internals.
   const renderFieldInput = useCallback(
     (field: FieldDef): ReactNode => {
-      const val = currentValues[field.name];
+      const val = readRecordValue(currentValues, field.name);
       // Per-field disabled merges with form-level disabled: either wins.
       const fieldDisabled = disabled || field.disabled;
       const commonProps = { disabled: fieldDisabled, readOnly };
@@ -261,7 +266,9 @@ export default function ClassicFormBuilder(props: FormBuilderProps) {
   // the field definition, and current value so it can wrap, replace, or augment.
   const renderFormField = (field: FieldDef) => {
     const defaultRender = renderFieldInput(field);
-    const content = renderField ? renderField(field, defaultRender, currentValues[field.name]) : defaultRender;
+    const content = renderField
+      ? renderField(field, defaultRender, readRecordValue(currentValues, field.name))
+      : defaultRender;
     const error = errors[field.name];
 
     return (

@@ -46,6 +46,7 @@
  * @package @rottay/design-system
  */
 import React, { useState, useRef, useCallback, Children, cloneElement, isValidElement } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { SplitterProps, SplitterPanelProps } from '../Splitter.types';
 import { SPLITTER_DEFAULTS } from '../Splitter.types';
 
@@ -83,7 +84,7 @@ const styles = {
 
 /**
  * Rustic engine implementation of the Splitter.Panel sub-component.
- * Uses percentage-based `flex: 0 0 {size}%` sizing with inline styles only.
+ * Uses a bounded runtime `flex: 0 0 {size}%` value alongside authored engine CSS.
  * The `size` prop is injected by the parent Splitter via cloneElement.
  *
  * @param props - Panel configuration plus injected `size` percentage
@@ -175,7 +176,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
           : moveEvent.clientX - rect.left;
         const percentage = (offset / totalSize) * 100;
 
-        setSizes((prevSizes) => {
+        setSizes((prevSizes: number[]) => {
           const newSizes = [...prevSizes];
           // Determine how far the mouse has moved past the cumulative edge
           // of all panels before (and including) the active gutter's left panel
@@ -232,7 +233,7 @@ export const Splitter = React.forwardRef<HTMLDivElement, SplitterProps>(
           <React.Fragment key={index}>
             {/* Inject calculated size into each Panel child */}
             {isValidElement(child)
-              ? cloneElement(child as React.ReactElement<SplitterPanelProps & { size?: number }>, { size: sizes[index] })
+              ? cloneElement(child as React.ReactElement<SplitterPanelProps & { size?: number }>, { size: arrayValueAt(sizes, index) })
               : child}
             {/* Render gutter drag handles between panels; hover highlight is CSS. */}
             {index < childArray.length - 1 && (

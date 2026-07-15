@@ -31,6 +31,7 @@ import React, {
 } from 'react';
 
 import { createPortal } from 'react-dom';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { SelectProps, SelectOption, SelectSize } from '../Select.types';
 import { SELECT_DEFAULTS, SIZE_MAP } from '../Select.types';
 import {
@@ -552,7 +553,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           e.preventDefault();
           setIsOpen(true);
           if (selectableIndices.length > 0) {
-            setFocusedIndex(selectableIndices[0]);
+            setFocusedIndex(arrayValueAt(selectableIndices, 0) ?? -1);
           }
         }
         return;
@@ -563,34 +564,34 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
           e.preventDefault();
           const currentPos = selectableIndices.indexOf(focusedIndex);
           const nextPos = currentPos < selectableIndices.length - 1 ? currentPos + 1 : 0;
-          setFocusedIndex(selectableIndices[nextPos] ?? -1);
+          setFocusedIndex(arrayValueAt(selectableIndices, nextPos) ?? -1);
           break;
         }
         case 'ArrowUp': {
           e.preventDefault();
           const currentPos = selectableIndices.indexOf(focusedIndex);
           const prevPos = currentPos > 0 ? currentPos - 1 : selectableIndices.length - 1;
-          setFocusedIndex(selectableIndices[prevPos] ?? -1);
+          setFocusedIndex(arrayValueAt(selectableIndices, prevPos) ?? -1);
           break;
         }
         case 'Home': {
           e.preventDefault();
           if (selectableIndices.length > 0) {
-            setFocusedIndex(selectableIndices[0]);
+            setFocusedIndex(arrayValueAt(selectableIndices, 0) ?? -1);
           }
           break;
         }
         case 'End': {
           e.preventDefault();
           if (selectableIndices.length > 0) {
-            setFocusedIndex(selectableIndices[selectableIndices.length - 1]);
+            setFocusedIndex(arrayValueAt(selectableIndices, -1) ?? -1);
           }
           break;
         }
         case 'Enter': {
           e.preventDefault();
           if (focusedIndex >= 0) {
-            const item = renderableItems[focusedIndex];
+            const item = arrayValueAt(renderableItems, focusedIndex);
             if (item?.type === 'option' && item.option && !item.option.disabled) {
               handleSelect(item.option.value, item.option);
             }
@@ -619,7 +620,7 @@ const ModernSelect = forwardRef<HTMLElement, SelectProps>((props, ref) => {
       if (selectedIdx >= 0 && selectableIndices.includes(selectedIdx)) {
         setFocusedIndex(selectedIdx);
       } else {
-        setFocusedIndex(selectableIndices[0]);
+        setFocusedIndex(arrayValueAt(selectableIndices, 0) ?? -1);
       }
     } else if (!isOpen) {
       setFocusedIndex(-1);

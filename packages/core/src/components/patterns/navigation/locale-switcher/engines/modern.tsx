@@ -92,7 +92,7 @@ const triggerMdStyle: CSSProperties = {
 
 /**
  * Modern (token-driven) implementation of the LocaleSwitcher pattern.
- * Uses inline styles with DS CSS variables for all visual properties.
+ * Uses inline structure plus the unlayered modern skin for paint and states.
  * Implements a custom dropdown with click-outside dismissal and full
  * keyboard navigation (ArrowUp, ArrowDown, Enter, Escape).
  */
@@ -194,7 +194,7 @@ export default function ModernLocaleSwitcher(props: LocaleSwitcherProps) {
   useEffect(() => {
     if (open && focusIndex >= 0 && menuRef.current) {
       const items = menuRef.current.querySelectorAll('[data-locale-option]');
-      const target = items[focusIndex] as HTMLElement | undefined;
+      const target = items.item(focusIndex) as HTMLElement | null;
       target?.scrollIntoView?.({ block: 'nearest' });
     }
   }, [open, focusIndex]);

@@ -9,7 +9,7 @@
  *
  * **Ant Design Features Utilized:**
  * - Native Radio component
- * - Radio.Group for exclusive selection
+ * - Radio.Group for single-choice selection
  * - optionType="button" for button-style radios
  * - buttonStyle="solid" or "outline" for button appearance
  *

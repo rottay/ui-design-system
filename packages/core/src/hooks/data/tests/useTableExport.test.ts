@@ -313,6 +313,22 @@ describe('useTableExport', () => {
       expect(lines[1]).toBe(',');
     });
 
+    it('treats callable data rows as empty values', () => {
+      const { result } = renderHook(() =>
+        useTableExport({
+          data: [(() => undefined) as any],
+          columns: basicColumns,
+        })
+      );
+
+      act(() => {
+        result.current.exportCsv();
+      });
+
+      const content = lastBlobContent!.replace('\uFEFF', '');
+      expect(content.split('\r\n')[1]).toBe(',');
+    });
+
     it('handles empty data array', () => {
       const { result } = renderHook(() =>
         useTableExport({

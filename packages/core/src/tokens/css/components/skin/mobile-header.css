@@ -17,7 +17,7 @@
  * component the caller drops into a slot. Each painted element therefore carries
  * its own class and is matched by a COMPOUND selector.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1). The root's `border-bottom` carries a real color, so it must reach
  * (0,4,0); with only ONE root class that is bought by a thrice-repeated
  * `[data-part='root']` (the voice-input-button precedent). The back button's

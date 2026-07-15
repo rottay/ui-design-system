@@ -20,6 +20,7 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { AutoCompleteProps, AutoCompleteOption } from '../AutoComplete.types';
 import { AUTOCOMPLETE_DEFAULTS } from '../AutoComplete.types';
 import { toLegacySize } from '../../../../../contracts/common';
@@ -38,7 +39,7 @@ const SIZE_CONFIG: Record<string, { height: string }> = {
  *
  * Manages its own controlled/uncontrolled value, dropdown visibility, keyboard
  * navigation, and click-outside dismissal -- the same feature surface as the
- * Modern engine but styled entirely through inline styles referencing CSS variables.
+ * Modern engine styled through token-backed style objects referencing CSS variables.
  * ARIA attributes (`role="combobox"`, `aria-expanded`, `role="listbox"`) are applied
  * for screen-reader compatibility.
  *
@@ -168,12 +169,14 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             prev > 0 ? prev - 1 : filteredOptions.length - 1
           );
           break;
-        case 'Enter':
+        case 'Enter': {
           e.preventDefault();
-          if (focusedIndex >= 0 && filteredOptions[focusedIndex]) {
-            handleSelect(filteredOptions[focusedIndex]);
+          const focusedOption = focusedIndex >= 0 ? arrayValueAt(filteredOptions, focusedIndex) : undefined;
+          if (focusedOption) {
+            handleSelect(focusedOption);
           }
           break;
+        }
         case 'Escape':
           handleOpenChange(false);
           break;

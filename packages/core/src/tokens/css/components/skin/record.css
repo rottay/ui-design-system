@@ -9,7 +9,7 @@
  * consumer's inline `style` prop -- the precedence the inline objects held.
  *
  * TWO SPECIFICITY FLOORS, not one:
- *  - BORDER-COLOR (P-48): each tenant ships an unlayered
+ *  - BORDER-COLOR (P-48): the Platform-only Rottay artifact ships an unlayered
  *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
  *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via

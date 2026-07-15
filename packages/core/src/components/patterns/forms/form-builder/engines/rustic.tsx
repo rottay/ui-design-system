@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Rustic (Apollo) engine for the FormBuilder pattern, rendered
- * entirely with inline styles that reference `--ds-*` CSS custom properties.
+ * with token-backed style objects that reference `--ds-*` CSS custom properties.
  * This engine has zero external CSS dependencies (no Tailwind, no Ant Design)
  * so it can run in any host environment -- including iframes, email previews,
  * and Remotion renders -- while still respecting the tenant's design-system
@@ -145,6 +145,11 @@ const s = {
   } as CSSProperties,
 };
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 /**
  * Vanilla inline-style form builder that uses `--ds-*` CSS custom properties
  * for all visual decisions. Ships zero external CSS -- ideal for isolated
@@ -152,7 +157,7 @@ const s = {
  * Includes a sticky submit area for long scrollable forms inside modals.
  *
  * @param props - Engine-agnostic form configuration; see {@link FormBuilderProps}.
- * @returns A rendered `<form>` element styled entirely with inline styles and CSS variables.
+ * @returns A rendered `<form>` element styled with token-backed style objects and CSS variables.
  */
 export default function RusticFormBuilder(props: FormBuilderProps) {
   const {
@@ -238,7 +243,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
     const errs: Record<string, string> = {};
     fields.forEach((field) => {
       if (isHidden(field)) return;
-      const val = currentValues[field.name];
+      const val = readRecordValue(currentValues, field.name);
       if (field.required && (val === undefined || val === null || val === '')) {
         errs[field.name] = field.validation?.message ?? `${field.label ?? field.name} is required`;
       }
@@ -285,7 +290,7 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
   // CSS custom properties so tenant themes control the look without code changes.
   const renderFieldInput = useCallback(
     (field: FieldDef): ReactNode => {
-      const val = currentValues[field.name];
+      const val = readRecordValue(currentValues, field.name);
       // Per-field disabled merges with form-level disabled: either wins.
       const fieldDisabled = disabled || field.disabled;
 
@@ -488,7 +493,9 @@ export default function RusticFormBuilder(props: FormBuilderProps) {
   // or augment the rendering without reimplementing the entire switch.
   const renderFormField = (field: FieldDef) => {
     const defaultRender = renderFieldInput(field);
-    const content = renderField ? renderField(field, defaultRender, currentValues[field.name]) : defaultRender;
+    const content = renderField
+      ? renderField(field, defaultRender, readRecordValue(currentValues, field.name))
+      : defaultRender;
     const error = errors[field.name];
     // Checkbox fields embed their label inline, so the outer label is hidden
     // to avoid a redundant double-label.

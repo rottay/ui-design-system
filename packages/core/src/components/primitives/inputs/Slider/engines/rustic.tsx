@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Slider Rustic Engine -- pure HTML/CSS with CSS variable theming.
- * Renders a fully custom slider track, rail, handles, and marks using only
- * inline styles driven by `--ds-slider-*` design tokens, making it safe for
+ * Renders a custom slider track, rail, handles, and marks using
+ * token-backed style objects driven by `--ds-slider-*` design tokens, making it safe for
  * multi-tenant theme isolation.
  *
  * @example

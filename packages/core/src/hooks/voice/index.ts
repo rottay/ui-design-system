@@ -71,9 +71,11 @@ interface SpeechRecognitionConstructor {
   new (): SpeechRecognitionLike;
 }
 
-interface SpeechRecognitionWindow extends Window {
-  SpeechRecognition?: SpeechRecognitionConstructor;
-  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+declare global {
+  interface Window {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  }
 }
 
 type NavigatorWithMicrophoneSupport = Navigator & {
@@ -87,8 +89,7 @@ type NavigatorWithMicrophoneSupport = Navigator & {
 
 function getSpeechRecognitionConstructor(): SpeechRecognitionConstructor | null {
   if (typeof window === 'undefined') return null;
-  const speechWindow = window as SpeechRecognitionWindow;
-  return speechWindow.SpeechRecognition ?? speechWindow.webkitSpeechRecognition ?? null;
+  return window.SpeechRecognition ?? window.webkitSpeechRecognition ?? null;
 }
 
 function getErrorMessage(errorCode?: string): string {

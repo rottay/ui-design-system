@@ -1,7 +1,7 @@
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the ConfirmDialog overlay component.
- * Renders a variant-aware confirmation modal using only inline styles and DS CSS
- * custom properties, with full ARIA support and manual scroll/keyboard management.
+ * Renders a variant-aware confirmation modal using authored engine CSS, bounded runtime
+ * layout values, and DS custom properties, with full ARIA support and manual scroll/keyboard management.
  *
  * @example
  * ```tsx

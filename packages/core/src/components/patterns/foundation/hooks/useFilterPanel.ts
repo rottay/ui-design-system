@@ -22,6 +22,11 @@
 import { useState, useCallback, useMemo } from 'react';
 import type { FilterDef } from '../types';
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 export interface UseFilterPanelOptions {
   filters: FilterDef[];
   initialValues?: Record<string, unknown>;
@@ -105,7 +110,7 @@ export function useFilterPanel(options: UseFilterPanelOptions): UseFilterPanelRe
     return Object.entries(values).filter(([key, val]) => {
       if (val === undefined || val === null || val === '') return false;
       if (Array.isArray(val) && val.length === 0) return false;
-      return val !== defaults[key];
+      return val !== readRecordValue(defaults, key);
     }).length;
   }, [values, defaults]);
 

@@ -16,6 +16,7 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { AutoCompleteProps, AutoCompleteOption } from '../AutoComplete.types';
 import { AUTOCOMPLETE_DEFAULTS } from '../AutoComplete.types';
 import { toLegacySize } from '../../../../../contracts/common';
@@ -158,12 +159,14 @@ export const AutoComplete = React.forwardRef<HTMLDivElement, AutoCompleteProps>(
             prev > 0 ? prev - 1 : filteredOptions.length - 1
           );
           break;
-        case 'Enter':
+        case 'Enter': {
           e.preventDefault();
-          if (focusedIndex >= 0 && filteredOptions[focusedIndex]) {
-            handleSelect(filteredOptions[focusedIndex]);
+          const focusedOption = focusedIndex >= 0 ? arrayValueAt(filteredOptions, focusedIndex) : undefined;
+          if (focusedOption) {
+            handleSelect(focusedOption);
           }
           break;
+        }
         case 'Escape':
           handleOpenChange(false);
           break;

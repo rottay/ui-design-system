@@ -259,7 +259,6 @@ export default function RusticModal(props: ModalProps): React.ReactElement | nul
   return (
     <Portal>
       <Overlay
-        dataPart="backdrop"
         visible={open && showBackdrop}
         onClick={handleBackdropClick}
         clickable={closeOnBackdropClick}

@@ -36,6 +36,11 @@ const DEFAULT_GAP = 16;
 const DEFAULT_ASPECT_RATIO = '1';
 const SKELETON_COUNT = 8;
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
@@ -105,9 +110,9 @@ function DefaultGalleryCard<T>({
   captionField?: keyof T & string;
   aspectRatio: string;
 }) {
-  const imageUrl = (item as Record<string, unknown>)[imageField];
+  const imageUrl = readRecordValue(item, imageField);
   const caption = captionField
-    ? (item as Record<string, unknown>)[captionField]
+    ? readRecordValue(item, captionField)
     : undefined;
   const hasImage = typeof imageUrl === 'string' && imageUrl.length > 0;
 

@@ -4,7 +4,7 @@
  * DELIBERATELY UNLAYERED, at (0,4,0) or higher on every rule that sets
  * `border-color` -- the same two reasons as the Button/Card rustic skins:
  * no `rottay-*` layer can paint an element Tailwind's `base` layer also
- * targets (P-47), and each tenant's unlayered `*` border floor sits at
+ * targets (P-47), and the Rottay platform artifact's unlayered `*` border floor sits at
  * (0,3,1), outranking a bare two-class rule (P-48). The presence check
  * `[data-variant]` (true on every render; the prop always resolves to one of
  * four values) is used purely to add a specificity component where a rule
@@ -55,7 +55,7 @@
 
 /* base: layout, transition, resting border/shadow. Border-COLOR is
    deliberately absent -- the priority chain below sets it, each rule
-   reaching (0,4,0)+ so it survives the tenant `*` border floor (P-48). */
+   reaching (0,4,0)+ so it survives the Rottay artifact's `*` border floor (P-48). */
 .rottay-input.rottay-input--rustic[data-part='root'] {
   position: relative;
   display: inline-flex;

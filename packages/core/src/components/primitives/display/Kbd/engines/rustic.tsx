@@ -2,7 +2,7 @@
 
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the Kbd display primitive.
- * Zero-dependency keyboard indicator styled entirely with inline styles and
+ * Zero-dependency keyboard indicator styled with token-backed style objects and
  * DS CSS variables, featuring an inset shadow for extra depth.
  *
  * @example

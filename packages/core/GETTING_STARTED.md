@@ -487,13 +487,15 @@ Use the builder functions (`createListSurfaceConfig`, `createDashboardSurfaceCon
 - Verify your bundler supports dynamic `import()` for code splitting.
 - Run `pnpm analyze` inside the design system package to check against performance budgets.
 
-### "Module not found: @heroui/react" or other dependency errors
+### Supplier dependency errors
 
-`@heroui/react`, `framer-motion`, `lucide-react`, `d3`, `dayjs`, and `geist` are direct dependencies of the design system and should be installed automatically. If they are missing, run:
+`antd`, `@ant-design/icons`, `framer-motion`, `lucide-react`, and `d3` are runtime suppliers exposed as design-system peers. A consuming app must declare every supplier reached by the DS symbols it imports. Run the packaged honesty gate to identify the exact declarations required by that app:
 
 ```bash
-pnpm install
+pnpm exec rottay-ds-supplier-honesty
 ```
+
+`dayjs` remains an internal runtime dependency and is installed with the design system.
 
 ### Dark mode not applying
 

@@ -47,9 +47,11 @@ export interface EngineAwareProps {
    */
   style?: CSSProperties;
   /**
-   * Extension points for customizing component rendering.
-   * Allows apps to inject columns, actions, filters, slots, and more
-   * without modifying the design system presets.
+   * Reserved compatibility field for the unimplemented universal extension API.
+   * Production components do not read it and passing it has no runtime effect.
+   *
+   * @deprecated DS-IMP-021 owns replacement/removal after the deferred
+   * external-import census. Use each component's evidenced props/compounds.
    */
   extensions?: ComponentExtensions;
 }

@@ -3,8 +3,8 @@
 /**
  * @fileoverview Rustic (Vanilla CSS) engine for the TreeView pattern.
  *
- * Zero-dependency tree implementation using only inline styles and `--ds-*`
- * CSS custom properties. All interactive affordances (expand/collapse toggle,
+ * Zero-dependency tree implementation using authored engine CSS and bounded
+ * runtime layout values backed by `--ds-*` custom properties. Interactive affordances (expand/collapse toggle,
  * selection highlight, checkbox, drag handle) are built from native HTML
  * elements without any CSS framework. Style objects are pre-computed in the
  * `s` namespace for readability and to avoid repeated object allocations

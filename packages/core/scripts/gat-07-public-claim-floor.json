@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "scope": "DS-IMP-060-phase-0-minimum",
+  "finalCertificationAuthority": "WO-GAT-09",
+  "claims": [
+    {
+      "id": "component-extensions",
+      "symbols": [
+        "ComponentExtensions",
+        "ExtensionHelpers",
+        "EngineAwareProps.extensions"
+      ],
+      "disposition": "reserved-deprecated",
+      "runtimeStatus": "unimplemented",
+      "affirmativeBehaviorClaimAllowed": false,
+      "productionConsumers": [],
+      "executableAssertions": [],
+      "deferredOwner": {
+        "sourceId": "DS-IMP-021",
+        "owner": "design-system-program",
+        "targetPhase": "2A",
+        "decision": "external-import census, then component-owned replacement or removal"
+      },
+      "definitionFiles": [
+        "src/contracts/extensions/index.ts",
+        "src/contracts/engine/index.ts"
+      ],
+      "requiredAssertions": {
+        "staticallyResolvedExtensionRuntimeReferences": 0,
+        "staticallyResolvedExtensionHelperReferences": 0,
+        "staticallyResolvedPotentialConsumers": 0,
+        "unsupportedGovernedReferences": 0,
+        "registeredExecutableEvidence": 0,
+        "deprecatedMarkersMinimum": 3
+      }
+    },
+    {
+      "id": "surface-profile-overrides",
+      "symbols": [
+        "SurfaceVisualOverrides",
+        "useSurfaceProfileDefaultsWithOverrides",
+        "visual.profileOverrides"
+      ],
+      "disposition": "reserved-experimental",
+      "runtimeStatus": "isolated-helper-unconsumed-by-surfaces",
+      "affirmativeBehaviorClaimAllowed": false,
+      "productionConsumers": [],
+      "executableAssertions": [],
+      "deferredOwner": {
+        "sourceId": "DS-IMP-022",
+        "owner": "design-system-program",
+        "targetPhase": "2A",
+        "decision": "wire each field with runtime and visual evidence or remove it"
+      },
+      "definitionFiles": [
+        "src/components/surfaces/foundation/types.ts",
+        "src/components/surfaces/foundation/hooks/useSurfaceProfileDefaultsWithOverrides.ts",
+        "src/components/surfaces/index.ts"
+      ],
+      "requiredAssertions": {
+        "profileOverrideDeclarations": 33,
+        "staticallyResolvedSurfaceHookCalls": 0,
+        "staticallyResolvedShowroomProfileOverrideReferences": 0,
+        "staticallyResolvedPotentialConsumers": 0,
+        "unsupportedGovernedReferences": 0,
+        "registeredExecutableEvidence": 0,
+        "deprecatedMarkersMinimum": 3
+      }
+    }
+  ]
+}

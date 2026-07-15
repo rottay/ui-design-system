@@ -274,20 +274,29 @@ function addBinding(scopes, scope, name, entry) {
   bindings.set(name, entries);
 }
 
-function addBindingName(scopes, scope, name, entry) {
+  function addBindingName(scopes, scope, name, entry) {
   if (ts.isIdentifier(name)) {
     addBinding(scopes, scope, name.text, entry);
     return;
   }
-  if (ts.isObjectBindingPattern(name) || ts.isArrayBindingPattern(name)) {
-    for (const element of name.elements) {
-      if (ts.isBindingElement(element)) {
-        addBindingName(scopes, scope, element.name, {
-          ...entry,
-          initializer: element.initializer ?? null,
-        });
+    if (ts.isObjectBindingPattern(name) || ts.isArrayBindingPattern(name)) {
+      for (const element of name.elements) {
+        if (ts.isBindingElement(element)) {
+          const bindingSource = entry.bindingSource ?? entry.initializer ?? null;
+          addBindingName(scopes, scope, element.name, {
+            ...entry,
+            initializer: element.initializer ?? null,
+            bindingSource,
+            boundProperty: ts.isObjectBindingPattern(name)
+              ? element.propertyName
+                ? staticPropertyName(element.propertyName)
+                : ts.isIdentifier(element.name)
+                ? element.name.text
+                : null
+              : null,
+          });
+        }
       }
-    }
   }
 }
 
@@ -469,11 +478,33 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     ) {
       return expression.text;
     }
+    if (ts.isTemplateExpression(expression)) {
+      let value = expression.head.text;
+      for (const span of expression.templateSpans) {
+        const interpolated = resolveStaticString(span.expression, new Set(seen));
+        if (interpolated === null) return null;
+        value += interpolated + span.literal.text;
+      }
+      return value;
+    }
+    if (
+      ts.isBinaryExpression(expression) &&
+      expression.operatorToken.kind === ts.SyntaxKind.PlusToken
+    ) {
+      const left = resolveStaticString(expression.left, new Set(seen));
+      const right = resolveStaticString(expression.right, new Set(seen));
+      return left === null || right === null ? null : left + right;
+    }
+    if (ts.isConditionalExpression(expression)) {
+      const whenTrue = resolveStaticString(expression.whenTrue, new Set(seen));
+      const whenFalse = resolveStaticString(expression.whenFalse, new Set(seen));
+      return whenTrue !== null && whenTrue === whenFalse ? whenTrue : null;
+    }
     if (ts.isIdentifier(expression)) {
       const binding = resolveBinding(expression);
-      return binding.status === "resolved" && binding.entry.initializer
-        ? resolveStaticString(binding.entry.initializer, seen)
-        : null;
+      if (binding.status !== "resolved") return null;
+      const value = bindingValueBeforeUse(binding.entry, expression);
+      return value ? resolveStaticString(value, seen) : null;
     }
     return null;
   }
@@ -533,6 +564,21 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     if (expression.text === "document" && binding.status === "missing") {
       return true;
     }
+    if (
+      binding.status === "resolved" &&
+      binding.entry.boundProperty === "document"
+    ) {
+      const source = unwrapExpression(binding.entry.bindingSource);
+      if (source && ts.isIdentifier(source)) {
+        const sourceBinding = resolveBinding(source);
+        if (
+          ["window", "globalThis", "self"].includes(source.text) &&
+          sourceBinding.status === "missing"
+        ) {
+          return true;
+        }
+      }
+    }
     return (
       binding.status === "resolved" &&
       binding.entry.initializer &&
@@ -543,18 +589,25 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
   function isDocumentCreateElementCall(node) {
     const expression = unwrapExpression(node);
     if (!expression || !ts.isCallExpression(expression)) return null;
-    const receiver = accessReceiver(expression.expression);
+    const invocation = normalizeInvocation(expression);
     if (
-      !receiver ||
-      accessName(expression.expression) !== "createElement" ||
-      !isDocumentExpression(receiver)
+      !invocation ||
+      !["createElement", "createElementNS"].includes(invocation.target.name) ||
+      !invocation.receiver ||
+      !isDocumentExpression(invocation.receiver)
     ) {
       return null;
     }
-    const tag = expression.arguments[0]
-      ? resolveStaticString(expression.arguments[0])
+    if (!invocation.args) return "maybe";
+    const tagIndex = invocation.target.name === "createElementNS" ? 1 : 0;
+    const tag = invocation.args[tagIndex]
+      ? resolveStaticString(invocation.args[tagIndex])
       : null;
-    return tag === "style" ? "style" : tag === null ? "maybe" : "not-style";
+    return tag?.toLowerCase() === "style"
+      ? "style"
+      : tag === null
+      ? "maybe"
+      : "not-style";
   }
 
   function mergeStatuses(statuses) {
@@ -593,6 +646,230 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
           right.declaration.getStart(sourceFile)
       );
     return assignments.at(-1)?.expression ?? entry.initializer ?? null;
+  }
+
+  function isReflectExpression(node) {
+    const expression = unwrapExpression(node);
+    if (!expression || !ts.isIdentifier(expression)) return false;
+    const binding = resolveBinding(expression);
+    return expression.text === "Reflect" && binding.status === "missing";
+  }
+
+  function staticArgumentList(node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return null;
+    seen.add(expression);
+    if (ts.isArrayLiteralExpression(expression)) {
+      const result = [];
+      for (const element of expression.elements) {
+        if (ts.isOmittedExpression(element)) return null;
+        if (ts.isSpreadElement(element)) {
+          const nested = staticArgumentList(element.expression, new Set(seen));
+          if (!nested) return null;
+          result.push(...nested);
+        } else {
+          result.push(element);
+        }
+      }
+      return result;
+    }
+    if (ts.isIdentifier(expression)) {
+      const binding = resolveBinding(expression);
+      if (binding.status !== "resolved" || seen.has(binding.entry)) return null;
+      seen.add(binding.entry);
+      const value = bindingValueBeforeUse(binding.entry, expression);
+      return value ? staticArgumentList(value, seen) : null;
+    }
+    return null;
+  }
+
+  /**
+   * Normalize the productive JS spellings of a callable member. The paint
+   * audit must see the same sink through direct calls, lexical aliases,
+   * destructuring, bind/call/apply, and Reflect.get/apply.
+   */
+  function resolveCallableExpression(node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return null;
+    seen.add(expression);
+
+    if (
+      ts.isPropertyAccessExpression(expression) ||
+      ts.isElementAccessExpression(expression)
+    ) {
+      return {
+        name: accessName(expression),
+        receiver: expression.expression,
+        boundArgs: [],
+        boundThis: false,
+        moduleSource: null,
+      };
+    }
+
+    if (ts.isIdentifier(expression)) {
+      const binding = resolveBinding(expression);
+      if (binding.status === "missing") {
+        return {
+          name: expression.text,
+          receiver: null,
+          boundArgs: [],
+          boundThis: false,
+          moduleSource: null,
+        };
+      }
+      if (binding.status !== "resolved" || seen.has(binding.entry)) return null;
+      seen.add(binding.entry);
+      const entry = binding.entry;
+      if (entry.kind === "import") {
+        return {
+          name: entry.importedName,
+          receiver: null,
+          boundArgs: [],
+          boundThis: false,
+          moduleSource: entry.importSource,
+        };
+      }
+      if (entry.boundProperty) {
+        return {
+          name: entry.boundProperty,
+          receiver: entry.bindingSource ?? null,
+          boundArgs: [],
+          boundThis: false,
+          moduleSource: null,
+        };
+      }
+      const value = bindingValueBeforeUse(entry, expression);
+      return value ? resolveCallableExpression(value, seen) : null;
+    }
+
+    if (!ts.isCallExpression(expression)) return null;
+    const callee = unwrapExpression(expression.expression);
+    const calleeAccess =
+      callee &&
+      (ts.isPropertyAccessExpression(callee) ||
+        ts.isElementAccessExpression(callee))
+        ? callee
+        : null;
+    if (
+      calleeAccess &&
+      accessName(calleeAccess) === "get" &&
+      isReflectExpression(calleeAccess.expression)
+    ) {
+      return {
+        name: expression.arguments[1]
+          ? resolveStaticString(expression.arguments[1])
+          : null,
+        receiver: expression.arguments[0] ?? null,
+        boundArgs: [],
+        boundThis: false,
+        moduleSource: null,
+      };
+    }
+    if (calleeAccess && accessName(calleeAccess) === "bind") {
+      const target = resolveCallableExpression(calleeAccess.expression, seen);
+      if (!target) return null;
+      return {
+        ...target,
+        receiver: expression.arguments[0] ?? null,
+        boundThis: true,
+        boundArgs: [
+          ...(target.boundArgs ?? []),
+          ...expression.arguments.slice(1),
+        ],
+      };
+    }
+    return null;
+  }
+
+  function normalizeInvocation(node) {
+    if (!ts.isCallExpression(node)) return null;
+    const callee = unwrapExpression(node.expression);
+    const calleeAccess =
+      callee &&
+      (ts.isPropertyAccessExpression(callee) ||
+        ts.isElementAccessExpression(callee))
+        ? callee
+        : null;
+
+    if (
+      calleeAccess &&
+      accessName(calleeAccess) === "apply" &&
+      isReflectExpression(calleeAccess.expression)
+    ) {
+      const target = resolveCallableExpression(node.arguments[0]);
+      if (!target) return null;
+      const args = staticArgumentList(node.arguments[2]);
+      return {
+        target,
+        receiver: target.boundThis
+          ? target.receiver
+          : node.arguments[1] ?? null,
+        args:
+          args === null ? null : [...(target.boundArgs ?? []), ...args],
+        opaqueArgs: args === null,
+      };
+    }
+
+    if (calleeAccess && ["call", "apply"].includes(accessName(calleeAccess))) {
+      const target = resolveCallableExpression(calleeAccess.expression);
+      if (!target) return null;
+      const isApply = accessName(calleeAccess) === "apply";
+      const args = isApply
+        ? staticArgumentList(node.arguments[1])
+        : [...node.arguments].slice(1);
+      return {
+        target,
+        receiver: target.boundThis
+          ? target.receiver
+          : node.arguments[0] ?? null,
+        args: args === null ? null : [...(target.boundArgs ?? []), ...args],
+        opaqueArgs: args === null,
+      };
+    }
+
+    const target = resolveCallableExpression(callee);
+    if (!target) return null;
+    return {
+      target,
+      receiver: target.receiver,
+      args: [...(target.boundArgs ?? []), ...node.arguments],
+      opaqueArgs: false,
+    };
+  }
+
+  function isReactNamespaceExpression(node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return false;
+    seen.add(expression);
+    if (
+      (ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression)) &&
+      accessName(expression) === "React"
+    ) {
+      const receiver = unwrapExpression(expression.expression);
+      if (receiver && ts.isIdentifier(receiver)) {
+        const binding = resolveBinding(receiver);
+        return (
+          ["window", "globalThis", "self"].includes(receiver.text) &&
+          binding.status === "missing"
+        );
+      }
+      return false;
+    }
+    if (!ts.isIdentifier(expression)) return false;
+    const binding = resolveBinding(expression);
+    if (binding.status === "missing") return expression.text === "React";
+    if (binding.status !== "resolved" || seen.has(binding.entry)) return false;
+    seen.add(binding.entry);
+    if (
+      binding.entry.kind === "import" &&
+      binding.entry.importSource === "react" &&
+      ["default", "*"].includes(binding.entry.importedName)
+    ) {
+      return true;
+    }
+    const value = bindingValueBeforeUse(binding.entry, expression);
+    return value ? isReactNamespaceExpression(value, seen) : false;
   }
 
   function functionStyleNodeStatus(fn, seen) {
@@ -688,17 +965,59 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
   }
 
   function sheetStatus(node, seen = new Set()) {
+    let asserted = node;
+    while (
+      asserted &&
+      (ts.isParenthesizedExpression(asserted) ||
+        ts.isAsExpression(asserted) ||
+        ts.isTypeAssertionExpression(asserted) ||
+        ts.isNonNullExpression(asserted) ||
+        ts.isSatisfiesExpression(asserted))
+    ) {
+      if (
+        (ts.isAsExpression(asserted) ||
+          ts.isTypeAssertionExpression(asserted) ||
+          ts.isSatisfiesExpression(asserted)) &&
+        /(?:^|\W)CSSStyleSheet(?:\W|$)/.test(
+          asserted.type.getText(sourceFile)
+        )
+      ) {
+        return "style";
+      }
+      asserted = asserted.expression;
+    }
     const expression = unwrapExpression(node);
     if (!expression) return "not-style";
     const identity = `${expression.pos}:${expression.end}:${expression.kind}`;
     if (seen.has(identity)) return "maybe";
     seen.add(identity);
-    if (
-      ts.isNewExpression(expression) &&
-      ts.isIdentifier(expression.expression) &&
-      expression.expression.text === "CSSStyleSheet"
-    ) {
-      return "style";
+    if (ts.isNewExpression(expression)) {
+      const ctor = unwrapExpression(expression.expression);
+      if (ctor && ts.isIdentifier(ctor)) {
+        const binding = resolveBinding(ctor);
+        if (ctor.text === "CSSStyleSheet" && binding.status === "missing") {
+          return "style";
+        }
+        if (binding.status === "resolved") {
+          const value = bindingValueBeforeUse(binding.entry, ctor);
+          if (
+            value &&
+            ts.isIdentifier(unwrapExpression(value)) &&
+            unwrapExpression(value).text === "CSSStyleSheet" &&
+            resolveBinding(unwrapExpression(value)).status === "missing"
+          ) {
+            return "style";
+          }
+        }
+      }
+      if (
+        ctor &&
+        (ts.isPropertyAccessExpression(ctor) ||
+          ts.isElementAccessExpression(ctor)) &&
+        accessName(ctor) === "CSSStyleSheet"
+      ) {
+        return "style";
+      }
     }
     if (
       (ts.isPropertyAccessExpression(expression) ||
@@ -707,12 +1026,50 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     ) {
       return styleNodeStatus(expression.expression, seen);
     }
+    if (
+      ts.isElementAccessExpression(expression) &&
+      isAdoptedStyleSheetList(expression.expression)
+    ) {
+      return "style";
+    }
     if (ts.isIdentifier(expression)) {
       const binding = resolveBinding(expression);
-      if (binding.status === "resolved" && binding.entry.initializer) {
-        return sheetStatus(binding.entry.initializer, seen);
+      if (binding.status === "resolved") {
+        if (binding.entry.boundProperty === "sheet") {
+          return styleNodeStatus(binding.entry.bindingSource, seen);
+        }
+        const declaredType = binding.entry.declaration?.type;
+        if (
+          declaredType &&
+          /(?:^|\W)CSSStyleSheet(?:\W|$)/.test(
+            declaredType.getText(sourceFile)
+          )
+        ) {
+          return "style";
+        }
+        const value = bindingValueBeforeUse(binding.entry, expression);
+        if (value) return sheetStatus(value, seen);
       }
       if (binding.status === "ambiguous") return "maybe";
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return mergeStatuses([
+        sheetStatus(expression.whenTrue, new Set(seen)),
+        sheetStatus(expression.whenFalse, new Set(seen)),
+      ]);
+    }
+    if (
+      ts.isBinaryExpression(expression) &&
+      [
+        ts.SyntaxKind.BarBarToken,
+        ts.SyntaxKind.QuestionQuestionToken,
+        ts.SyntaxKind.AmpersandAmpersandToken,
+      ].includes(expression.operatorToken.kind)
+    ) {
+      return mergeStatuses([
+        sheetStatus(expression.left, new Set(seen)),
+        sheetStatus(expression.right, new Set(seen)),
+      ]);
     }
     return "not-style";
   }
@@ -877,9 +1234,14 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     return false;
   }
 
-  function analyzeCssLiteral(node, cssText, computedProperties = []) {
+  function analyzeCssLiteral(
+    node,
+    cssText,
+    computedProperties = [],
+    identitySalt = ""
+  ) {
     if (!looksLikeCss(cssText)) return;
-    const identity = `${node.pos}:${node.end}:${node.kind}`;
+    const identity = `${node.pos}:${node.end}:${node.kind}:${identitySalt}`;
     if (seenCssLiterals.has(identity)) return;
     seenCssLiterals.add(identity);
     cssLiterals += 1;
@@ -1180,43 +1542,228 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     if (!resolved) recordUnknownSink(node, "opaque-style-props");
   }
 
-  function isReactStyleCall(node) {
-    if (!ts.isCallExpression(node) || node.arguments.length === 0) return false;
-    const callee = unwrapExpression(node.expression);
-    let createElement = false;
-    if (ts.isIdentifier(callee)) {
-      createElement = callee.text === "createElement";
-    } else if (
-      ts.isPropertyAccessExpression(callee) ||
-      ts.isElementAccessExpression(callee)
+  function reactCreateElementInvocation(node) {
+    const invocation = normalizeInvocation(node);
+    if (!invocation || invocation.target.name !== "createElement") return null;
+    const importedFactory =
+      invocation.target.moduleSource === "react" &&
+      invocation.target.name === "createElement";
+    if (
+      !importedFactory &&
+      (!invocation.receiver ||
+        !isReactNamespaceExpression(invocation.receiver))
     ) {
-      const receiver = unwrapExpression(callee.expression);
-      createElement =
-        accessName(callee) === "createElement" &&
-        ts.isIdentifier(receiver) &&
-        receiver.text === "React";
+      return null;
     }
-    return createElement && resolveStaticString(node.arguments[0]) === "style";
+    return invocation;
+  }
+
+  function analyzeHtmlPayload(node, kind) {
+    const html = resolveStaticString(node);
+    if (html === null) {
+      recordUnknownSink(node, `opaque-${kind}-payload`);
+      return;
+    }
+
+    let match;
+    let index = 0;
+    const styleBlocks = /<style\b[^>]*>([\s\S]*?)<\/style\s*>/gi;
+    while ((match = styleBlocks.exec(html))) {
+      analyzeCssLiteral(node, match[1], [], `${kind}:style:${index}`);
+      index += 1;
+    }
+    if (
+      /<style\b/i.test(
+        html.replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, "")
+      )
+    ) {
+      recordUnknownSink(node, `malformed-${kind}-style-markup`);
+    }
+
+    let styleAttributeCount = 0;
+    const quotedStyleAttributes =
+      /\sstyle\s*=\s*(["'])([\s\S]*?)\1/gi;
+    while ((match = quotedStyleAttributes.exec(html))) {
+      analyzeCssLiteral(
+        node,
+        `embedded-html-node{${match[2]}}`,
+        [],
+        `${kind}:attribute:${index}`
+      );
+      index += 1;
+      styleAttributeCount += 1;
+    }
+    const unquotedStyleAttributes = /\sstyle\s*=\s*(?!["'])([^\s>]+)/gi;
+    while ((match = unquotedStyleAttributes.exec(html))) {
+      analyzeCssLiteral(
+        node,
+        `embedded-html-node{${match[1]}}`,
+        [],
+        `${kind}:attribute:${index}`
+      );
+      index += 1;
+      styleAttributeCount += 1;
+    }
+    const attributeMarkers = html.match(/\sstyle\s*=/gi)?.length ?? 0;
+    if (styleAttributeCount < attributeMarkers) {
+      recordUnknownSink(node, `malformed-${kind}-style-attribute`);
+    }
+  }
+
+  function isAdoptedStyleSheetList(node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return false;
+    seen.add(expression);
+    if (
+      (ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression)) &&
+      accessName(expression) === "adoptedStyleSheets"
+    ) {
+      return true;
+    }
+    if (ts.isIdentifier(expression)) {
+      const binding = resolveBinding(expression);
+      if (binding.status !== "resolved" || seen.has(binding.entry)) return false;
+      seen.add(binding.entry);
+      const value = bindingValueBeforeUse(binding.entry, expression);
+      return value ? isAdoptedStyleSheetList(value, seen) : false;
+    }
+    return false;
+  }
+
+  function isLocallyConstructedStyleSheet(node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) return false;
+    seen.add(expression);
+    if (ts.isNewExpression(expression)) {
+      return sheetStatus(expression) === "style";
+    }
+    if (
+      (ts.isPropertyAccessExpression(expression) ||
+        ts.isElementAccessExpression(expression)) &&
+      accessName(expression) === "sheet"
+    ) {
+      return styleNodeStatus(expression.expression) === "style";
+    }
+    if (ts.isIdentifier(expression)) {
+      const binding = resolveBinding(expression);
+      if (binding.status !== "resolved" || seen.has(binding.entry)) return false;
+      seen.add(binding.entry);
+      const value = bindingValueBeforeUse(binding.entry, expression);
+      return value ? isLocallyConstructedStyleSheet(value, seen) : false;
+    }
+    if (ts.isConditionalExpression(expression)) {
+      return (
+        isLocallyConstructedStyleSheet(expression.whenTrue, new Set(seen)) &&
+        isLocallyConstructedStyleSheet(expression.whenFalse, new Set(seen))
+      );
+    }
+    return false;
+  }
+
+  function validateAdoptedStyleSheets(node, owner = node, seen = new Set()) {
+    const expression = unwrapExpression(node);
+    if (!expression || seen.has(expression)) {
+      recordUnknownSink(owner, "opaque-adopted-stylesheets");
+      return;
+    }
+    seen.add(expression);
+    if (isAdoptedStyleSheetList(expression)) return;
+    if (ts.isArrayLiteralExpression(expression)) {
+      for (const element of expression.elements) {
+        if (ts.isOmittedExpression(element)) continue;
+        const value = ts.isSpreadElement(element)
+          ? unwrapExpression(element.expression)
+          : unwrapExpression(element);
+        if (!value) {
+          recordUnknownSink(owner, "opaque-adopted-stylesheet");
+        } else if (ts.isSpreadElement(element)) {
+          if (!isAdoptedStyleSheetList(value)) {
+            validateAdoptedStyleSheets(value, owner, new Set(seen));
+          }
+        } else {
+          const status = sheetStatus(value);
+          if (!isLocallyConstructedStyleSheet(value)) {
+            recordUnknownSink(
+              owner,
+              status === "maybe"
+                ? "computed-adopted-stylesheet"
+                : "opaque-adopted-stylesheet"
+            );
+          }
+        }
+      }
+      return;
+    }
+    if (ts.isIdentifier(expression)) {
+      const binding = resolveBinding(expression);
+      if (binding.status === "resolved") {
+        const value = bindingValueBeforeUse(binding.entry, expression);
+        if (value) {
+          validateAdoptedStyleSheets(value, owner, seen);
+          return;
+        }
+      }
+    }
+    if (ts.isConditionalExpression(expression)) {
+      validateAdoptedStyleSheets(expression.whenTrue, owner, new Set(seen));
+      validateAdoptedStyleSheets(expression.whenFalse, owner, new Set(seen));
+      return;
+    }
+    recordUnknownSink(owner, "opaque-adopted-stylesheets");
+  }
+
+  function collectReflectPropertySink(invocation, node) {
+    if (
+      invocation?.target.name !== "set" ||
+      !invocation.receiver ||
+      !isReflectExpression(invocation.receiver)
+    ) {
+      return;
+    }
+    if (!invocation.args) {
+      recordUnknownSink(node, "opaque-reflect-set-arguments");
+      return;
+    }
+    const [target, propertyNode, value] = invocation.args;
+    const property = propertyNode ? resolveStaticString(propertyNode) : null;
+    if (property === "adoptedStyleSheets") {
+      if (value) validateAdoptedStyleSheets(value, node);
+      else recordUnknownSink(node, "opaque-adopted-stylesheets");
+      return;
+    }
+    const receiverStatus = target ? styleNodeStatus(target) : "not-style";
+    if (
+      receiverStatus === "style" &&
+      ["textContent", "innerHTML", "innerText"].includes(property)
+    ) {
+      if (value) roots.push(value);
+      else recordUnknownSink(node, "opaque-style-text-sink");
+    } else if (receiverStatus === "maybe") {
+      recordUnknownSink(node, "computed-style-sink");
+    } else if (["innerHTML", "outerHTML"].includes(property)) {
+      if (value) analyzeHtmlPayload(value, property.toLowerCase());
+      else recordUnknownSink(node, `opaque-${property.toLowerCase()}-payload`);
+    } else if (property === null && receiverStatus !== "not-style") {
+      recordUnknownSink(node, "computed-style-sink");
+    }
   }
 
   function collectStyleMethodCall(node) {
     if (!ts.isCallExpression(node)) return;
-    const callee = unwrapExpression(node.expression);
-    if (
-      !callee ||
-      (!ts.isPropertyAccessExpression(callee) &&
-        !ts.isElementAccessExpression(callee))
-    ) {
-      return;
-    }
-    const method = accessName(callee);
-    const receiver = callee.expression;
+    const invocation = normalizeInvocation(node);
+    if (!invocation) return;
+    const method = invocation.target.name;
+    const receiver = invocation.receiver;
+    if (!receiver) return;
     const domStatus = styleNodeStatus(receiver);
     const sheet = sheetStatus(receiver);
+    const args = invocation.args;
 
     if (["append", "prepend", "replaceChildren"].includes(method)) {
       if (domStatus === "style") {
-        roots.push(...node.arguments);
+        if (args) roots.push(...args);
+        else recordUnknownSink(node, "opaque-style-element-arguments");
       } else if (domStatus === "maybe") {
         recordUnknownSink(node, "computed-style-element");
       }
@@ -1224,17 +1771,25 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     }
     if (method === "appendChild") {
       if (domStatus === "style") {
-        for (const argument of node.arguments) {
+        if (!args) {
+          recordUnknownSink(node, "opaque-style-element-arguments");
+          return;
+        }
+        for (const argument of args) {
           const value = unwrapExpression(argument);
+          const textInvocation =
+            value && ts.isCallExpression(value)
+              ? normalizeInvocation(value)
+              : null;
           if (
-            value &&
-            ts.isCallExpression(value) &&
-            (ts.isPropertyAccessExpression(value.expression) ||
-              ts.isElementAccessExpression(value.expression)) &&
-            accessName(value.expression) === "createTextNode" &&
-            isDocumentExpression(value.expression.expression)
+            textInvocation?.target.name === "createTextNode" &&
+            textInvocation.receiver &&
+            isDocumentExpression(textInvocation.receiver)
           ) {
-            if (value.arguments[0]) roots.push(value.arguments[0]);
+            if (textInvocation.args?.[0]) roots.push(textInvocation.args[0]);
+            else recordUnknownSink(value, "opaque-style-text-node");
+          } else {
+            recordUnknownSink(argument, "opaque-style-child");
           }
         }
       } else if (domStatus === "maybe") {
@@ -1244,9 +1799,29 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     }
     if (["replace", "replaceSync", "insertRule"].includes(method)) {
       if (sheet === "style") {
-        if (node.arguments[0]) roots.push(node.arguments[0]);
+        if (args?.[0]) roots.push(args[0]);
+        else recordUnknownSink(node, "opaque-stylesheet-arguments");
       } else if (sheet === "maybe") {
         recordUnknownSink(node, "computed-stylesheet");
+      }
+      return;
+    }
+    if (method === "insertAdjacentHTML") {
+      if (args?.[1]) analyzeHtmlPayload(args[1], "insert-adjacent-html");
+      else recordUnknownSink(node, "opaque-insert-adjacent-html-arguments");
+      return;
+    }
+    if (
+      ["push", "unshift"].includes(method) &&
+      isAdoptedStyleSheetList(receiver)
+    ) {
+      if (!args) {
+        recordUnknownSink(node, "opaque-adopted-stylesheets-arguments");
+      } else {
+        validateAdoptedStyleSheets(
+          ts.factory.createArrayLiteralExpression(args),
+          node
+        );
       }
       return;
     }
@@ -1281,6 +1856,17 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
         if (value) collectHtmlObject(value);
       }
     }
+    if (ts.isJsxAttribute(node) && node.name.getText() === "children") {
+      const openingLike = jsxOpeningLike(node);
+      if (openingLike?.tagName.getText() === "style") {
+        const initializer = node.initializer;
+        if (initializer && ts.isJsxExpression(initializer) && initializer.expression) {
+          roots.push(initializer.expression);
+        } else if (initializer && ts.isStringLiteralLike(initializer)) {
+          roots.push(initializer);
+        }
+      }
+    }
     if (ts.isJsxSpreadAttribute(node)) {
       const openingLike = jsxOpeningLike(node);
       if (openingLike?.tagName.getText() === "style") {
@@ -1288,9 +1874,36 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
       }
     }
     if (ts.isCallExpression(node)) {
-      if (isReactStyleCall(node)) {
-        if (node.arguments[1]) collectStyleProps(node.arguments[1]);
-        roots.push(...node.arguments.slice(2));
+      const reactInvocation = reactCreateElementInvocation(node);
+      if (reactInvocation) {
+        if (!reactInvocation.args) {
+          recordUnknownSink(node, "opaque-react-create-element-arguments");
+        } else {
+          const tag = reactInvocation.args[0]
+            ? resolveStaticString(reactInvocation.args[0])
+            : null;
+          if (tag?.toLowerCase() === "style") {
+            if (reactInvocation.args[1]) {
+              collectStyleProps(reactInvocation.args[1]);
+            }
+            roots.push(...reactInvocation.args.slice(2));
+          }
+        }
+      }
+      const normalized = normalizeInvocation(node);
+      collectReflectPropertySink(normalized, node);
+      if (
+        normalized?.target.name === null &&
+        normalized.receiver &&
+        (isDocumentExpression(normalized.receiver) ||
+          isReactNamespaceExpression(normalized.receiver))
+      ) {
+        const possibleTag = normalized.args?.[0]
+          ? resolveStaticString(normalized.args[0])
+          : null;
+        if (possibleTag?.toLowerCase() === "style" || normalized.opaqueArgs) {
+          recordUnknownSink(node, "computed-style-factory");
+        }
       }
       collectStyleMethodCall(node);
     }
@@ -1299,6 +1912,7 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
       [
         ts.SyntaxKind.EqualsToken,
         ts.SyntaxKind.PlusEqualsToken,
+        ts.SyntaxKind.AmpersandAmpersandEqualsToken,
         ts.SyntaxKind.BarBarEqualsToken,
         ts.SyntaxKind.QuestionQuestionEqualsToken,
       ].includes(node.operatorToken.kind) &&
@@ -1307,9 +1921,7 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
     ) {
       const property = accessName(node.left);
       const receiverStatus = styleNodeStatus(node.left.expression);
-      const knownTextSink = ["textContent", "innerHTML", "innerText"].includes(
-        property
-      );
+      const knownTextSink = ["textContent", "innerHTML", "innerText"].includes(property);
       if (receiverStatus === "style" && knownTextSink) {
         roots.push(node.right);
       } else if (
@@ -1317,6 +1929,11 @@ export function analyzeEmbeddedCssPaint(text, fileName = "source.tsx") {
         (receiverStatus === "maybe" && (knownTextSink || property === null))
       ) {
         recordUnknownSink(node.left, "computed-style-sink");
+      } else if (["innerHTML", "outerHTML"].includes(property)) {
+        analyzeHtmlPayload(node.right, property.toLowerCase());
+      }
+      if (property === "adoptedStyleSheets") {
+        validateAdoptedStyleSheets(node.right, node.left);
       }
     }
     ts.forEachChild(node, visit);

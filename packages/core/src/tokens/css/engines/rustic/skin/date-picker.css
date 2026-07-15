@@ -75,7 +75,7 @@
  * (two separate `:hover` rules, transform ungated, background gated). The
  * leave-state resets to the resting value the rules above already provide.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
  * two root classes + the target's own `data-part` repeated. Under the

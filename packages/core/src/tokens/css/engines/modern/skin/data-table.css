@@ -12,7 +12,7 @@
  * is a descendant with its own `data-part`. The card surface, the loading/empty
  * states, the pagination bar and the bulk bar are all descendants of that div.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A descendant rule that paints `border` /
  * `border-color` / a `border-*-color` longhand must therefore reach (0,4,0):

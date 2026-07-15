@@ -197,7 +197,7 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
       onClose?: () => void
     ) => {
       const config = normalizeConfig(content, duration, onClose);
-      const destroy = api[type]({
+      const messageConfig = {
         content: config.content,
         duration: config.duration ?? MESSAGE_DEFAULTS.duration,
         key: config.key,
@@ -205,7 +205,25 @@ export function useMessage(): [MessageInstance, React.ReactElement | null] {
         className: config.className,
         style: config.style,
         onClose: config.onClose,
-      });
+      };
+      const destroy = (() => {
+        switch (type) {
+          case 'success':
+            return api.success(messageConfig);
+          case 'error':
+            return api.error(messageConfig);
+          case 'info':
+            return api.info(messageConfig);
+          case 'warning':
+            return api.warning(messageConfig);
+          case 'loading':
+            return api.loading(messageConfig);
+          default: {
+            const unsupportedType: never = type;
+            throw new Error(`Unsupported message type: ${String(unsupportedType)}`);
+          }
+        }
+      })();
 
       // Return a callable + thenable object so consumers can either call
       // result() to destroy immediately or result.then() to chain after auto-close.

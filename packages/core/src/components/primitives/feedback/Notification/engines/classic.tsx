@@ -210,9 +210,7 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
   const createNotificationMethod = useCallback(
     (type: NotificationType) => {
       return (config: NotificationConfig) => {
-        const methodName = type === 'open' ? 'open' : type;
-
-        api[methodName]({
+        const notificationConfig = {
           message: config.message,
           description: config.description,
           duration: config.duration ?? NOTIFICATION_DEFAULTS.duration,
@@ -225,7 +223,24 @@ export function useNotification(): [NotificationInstance, React.ReactElement | n
           closeIcon: config.closeIcon,
           onClose: config.onClose,
           onClick: config.onClick,
-        });
+        };
+
+        switch (type) {
+          case 'success':
+            return api.success(notificationConfig);
+          case 'error':
+            return api.error(notificationConfig);
+          case 'info':
+            return api.info(notificationConfig);
+          case 'warning':
+            return api.warning(notificationConfig);
+          case 'open':
+            return api.open(notificationConfig);
+          default: {
+            const unsupportedType: never = type;
+            throw new Error(`Unsupported notification type: ${String(unsupportedType)}`);
+          }
+        }
       };
     },
     [api]

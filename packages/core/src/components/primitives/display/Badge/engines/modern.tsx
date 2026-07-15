@@ -1,7 +1,7 @@
 /**
  * @fileoverview Modern engine for the Badge component - Premium quality.
- * Uses inline styles driven by --ds-* CSS custom properties for precise,
- * editorial styling. Inspired by Linear, Vercel, and Stripe Dashboard.
+ * Uses the unlayered modern skin, driven by --ds-* CSS custom properties, for
+ * precise editorial styling. Inspired by Linear, Vercel, and Stripe Dashboard.
  *
  * @remarks
  * Three visual styles:

@@ -174,7 +174,8 @@ export function MetricsCards({ metrics, density = 'comfortable' }: MetricsProps)
   // Density-resolved card padding (design-language §3): a tenant/brand
   // `--ds-metric-card-padding` override wins, else the density preset
   // (`1rem` comfortable / `0.75rem` compact) with a literal fallback.
-  const cardPadding = `var(--ds-metric-card-padding, ${DENSITY_PRESETS[density].cardPadding})`;
+  const densityPreset = density === 'compact' ? DENSITY_PRESETS.compact : DENSITY_PRESETS.comfortable;
+  const cardPadding = `var(--ds-metric-card-padding, ${densityPreset.cardPadding})`;
   return (
     <Box
       className="ds-metrics-cards"

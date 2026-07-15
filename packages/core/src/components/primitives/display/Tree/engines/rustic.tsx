@@ -1,8 +1,8 @@
 /**
  * @fileoverview Rustic Tree engine -- pure HTML/CSS (zero UI-library dependencies).
  *
- * Full-featured hierarchical tree using only inline styles with CSS custom properties
- * (`var(--ds-*)`) and semantic HTML. Implements expand/collapse, checkable nodes
+ * Full-featured hierarchical tree using authored engine CSS, bounded runtime layout values,
+ * `var(--ds-*)` custom properties, and semantic HTML. Implements expand/collapse, checkable nodes
  * with cascading half-checked state, drag-and-drop reordering, async child loading,
  * search/filter with auto-expand, tree-line connectors, and WAI-ARIA TreeView
  * keyboard navigation -- all without DaisyUI, Tailwind, or Ant Design.
@@ -26,6 +26,7 @@
 'use client';
 
 import React, { useState, useCallback, useRef, useMemo, useEffect } from 'react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { TreeProps, TreeDataNode } from '../Tree.types';
 import { TREE_DEFAULTS } from '../Tree.types';
 import {
@@ -72,8 +73,8 @@ function highlightText(text: React.ReactNode, searchValue: string): React.ReactN
 }
 
 // ---------------------------------------------------------------------------
-// CSS-in-JS styles (all using CSS variables)
-// Rustic engine uses pure inline styles with CSS custom property fallbacks
+// CSS-in-JS style objects use CSS variables.
+// Rustic engine uses runtime style props with CSS custom property fallbacks
 // so tenant themes override colors without any class-based system.
 // ---------------------------------------------------------------------------
 
@@ -189,7 +190,7 @@ const TreeNodeRender: React.FC<TreeNodeRenderProps> = ({
   nodeRef,
   isLast,
   parentIsLast,
-}) => {
+}: TreeNodeRenderProps) => {
   const normalizedNodeKey = normalizeTreeKey(nodeKey);
   const hasChildren = children && children.length > 0;
   // Show the expand arrow when: has children OR is a non-leaf that might
@@ -842,7 +843,8 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
       // Auto-focus the first visible node when the tree receives keyboard input
       // but no node is focused yet (e.g., first Tab into the tree).
       if (!focusedKey) {
-        if (visibleKeys.length > 0) setFocusedKey(visibleKeys[0]);
+        const firstKey = arrayValueAt(visibleKeys, 0);
+        if (firstKey !== undefined) setFocusedKey(firstKey);
         return;
       }
       const currentIndex = visibleKeys.indexOf(focusedKey);
@@ -852,7 +854,8 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
         case 'ArrowDown': {
           e.preventDefault();
           if (currentIndex < visibleKeys.length - 1) {
-            const nextKey = visibleKeys[currentIndex + 1];
+            const nextKey = arrayValueAt(visibleKeys, currentIndex + 1);
+            if (nextKey === undefined) break;
             setFocusedKey(nextKey);
             nodeRefs.current.get(nextKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           }
@@ -861,7 +864,8 @@ export default function RusticTree(props: TreeProps): React.ReactElement {
         case 'ArrowUp': {
           e.preventDefault();
           if (currentIndex > 0) {
-            const prevKey = visibleKeys[currentIndex - 1];
+            const prevKey = arrayValueAt(visibleKeys, currentIndex - 1);
+            if (prevKey === undefined) break;
             setFocusedKey(prevKey);
             nodeRefs.current.get(prevKey)?.querySelector<HTMLElement>('[data-tree-node-key]')?.focus();
           }

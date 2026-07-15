@@ -2,8 +2,8 @@
 
 /**
  * @fileoverview Per-surface profile defaults override hook.
- * @description Companion to `useSurfaceProfileDefaults()` that accepts optional
- * `SurfaceVisualOverrides` from an individual surface config's `visual.profileOverrides`.
+ * @description Isolated experimental merge helper. It accepts
+ * `SurfaceVisualOverrides`, but no production surface invokes it today.
  *
  * Merge precedence:
  * 1. Surface visual overrides (highest -- per-surface instance)
@@ -29,9 +29,9 @@ import {
 /**
  * Resolve surface profile defaults with per-surface visual overrides.
  *
- * Individual surfaces pass their `config.visual.profileOverrides` to this hook.
- * Any field present in the overrides object takes precedence over the base
- * profile defaults resolved from personality tokens and product profile.
+ * This helper is unit-testable in isolation; that does not make the 33 nested
+ * `visual.profileOverrides` declarations effective. Production surfaces do not
+ * call it, so those fields currently have no runtime effect.
  *
  * When `overrides` is `undefined` or empty, the hook short-circuits and returns
  * the base defaults without allocating a new object.
@@ -39,13 +39,9 @@ import {
  * @param overrides - Optional visual overrides from a surface config's `visual.profileOverrides`.
  * @returns A memoized `ResolvedSurfaceProfileDefaults` with overrides applied.
  *
- * @example
- * ```tsx
- * // Inside a surface component
- * const defaults = useSurfaceProfileDefaultsWithOverrides(
- *   config.visual.profileOverrides
- * );
- * ```
+ * @deprecated Experimental/unconsumed. DS-IMP-022 owns field-by-field wiring
+ * or removal in its deferred phase. Do not use this export as evidence that
+ * surface configs apply profile overrides.
  */
 export function useSurfaceProfileDefaultsWithOverrides(
   overrides?: SurfaceVisualOverrides

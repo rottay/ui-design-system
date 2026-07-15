@@ -185,7 +185,7 @@ export function useUndoRedo<T>(
   initialStateRef.current = initialState;
 
   // Derived values
-  const { history, index: historyIndex } = undoRedoState;
+  const { history, index: historyIndex }: UndoRedoState<T> = undoRedoState;
   const state = history[historyIndex];
   const canUndo = historyIndex > 0;
   const canRedo = historyIndex < history.length - 1;
@@ -193,7 +193,7 @@ export function useUndoRedo<T>(
   // Push a new state entry, truncating future and enforcing max size
   const setState = useCallback(
     (newState: T | ((prev: T) => T)) => {
-      setUndoRedoState((prev) => {
+      setUndoRedoState((prev: UndoRedoState<T>) => {
         const currentState = prev.history[prev.index];
         const resolvedState =
           typeof newState === 'function'
@@ -227,7 +227,7 @@ export function useUndoRedo<T>(
 
   // Navigate backward in history
   const undo = useCallback(() => {
-    setUndoRedoState((prev) => {
+    setUndoRedoState((prev: UndoRedoState<T>) => {
       if (prev.index <= 0) return prev;
       return { ...prev, index: prev.index - 1 };
     });
@@ -235,7 +235,7 @@ export function useUndoRedo<T>(
 
   // Navigate forward in history
   const redo = useCallback(() => {
-    setUndoRedoState((prev) => {
+    setUndoRedoState((prev: UndoRedoState<T>) => {
       if (prev.index >= prev.history.length - 1) return prev;
       return { ...prev, index: prev.index + 1 };
     });
@@ -259,13 +259,13 @@ export function useUndoRedo<T>(
   // re-registrations.
   const keyboardHandlers = useRef({
     onUndo: () => {
-      setUndoRedoState((prev) => {
+      setUndoRedoState((prev: UndoRedoState<T>) => {
         if (prev.index <= 0) return prev;
         return { ...prev, index: prev.index - 1 };
       });
     },
     onRedo: () => {
-      setUndoRedoState((prev) => {
+      setUndoRedoState((prev: UndoRedoState<T>) => {
         if (prev.index >= prev.history.length - 1) return prev;
         return { ...prev, index: prev.index + 1 };
       });

@@ -4,7 +4,7 @@
  * @fileoverview Rustic (Vanilla/CSS-variable) engine for the ActivityLog pattern.
  * Zero external UI library dependency -- renders a custom vertical timeline with
  * colored dots, connecting lines, action tags, avatar circles, and diff rendering,
- * all through inline styles referencing `--ds-*` CSS custom properties. Includes
+ * through token-backed style objects referencing `--ds-*` CSS custom properties. Includes
  * native `<select>` filters for action type and user.
  *
  * @example
@@ -63,7 +63,7 @@ const selectStyle: CSSProperties = {
 };
 
 /**
- * Rustic engine activity log using only inline styles and CSS variables.
+ * Rustic engine activity log using token-backed style objects and CSS variables.
  * Renders a hand-crafted vertical timeline (dot + connecting line per entry)
  * with action tags, avatars, timestamps, and optional field-level diffs.
  *

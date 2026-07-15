@@ -30,7 +30,7 @@
  *    any parent layout); only nested groups get the left-border accent and inset
  *    fill. The border WIDTH comes from the Tailwind `border-l-[3px]` utility on the
  *    same element and stays there -- utilities sort after preflight, so it survives;
- *    this skin owns only the COLOUR, exactly as the inline style did.
+ *    this skin owns the COLOUR channel formerly carried by runtime paint.
  *
  * The `add-filter-option` hover below replaces an imperative
  * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.

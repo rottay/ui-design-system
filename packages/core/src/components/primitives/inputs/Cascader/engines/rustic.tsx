@@ -19,6 +19,7 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { CascaderProps, CascaderOption, CascaderValue, CascaderFieldNames } from '../Cascader.types';
 import { CASCADER_DEFAULTS } from '../Cascader.types';
 import { toLegacySize } from '../../../../../contracts/common';
@@ -528,7 +529,8 @@ export const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                       const optValue = getValue(option, fieldNames);
                       const optLabel = getLabel(option, fieldNames);
                       const optChildren = getChildren(option, fieldNames);
-                      const isSelected = selectedPath[colIndex] && getValue(selectedPath[colIndex], fieldNames) === optValue;
+                      const selectedOption = arrayValueAt(selectedPath, colIndex);
+                      const isSelected = selectedOption && getValue(selectedOption, fieldNames) === optValue;
                       const isLoading = loadingKeys.has(optValue);
                       const hasExpandIndicator = (optChildren && optChildren.length > 0) || (!optionIsLeaf(option, fieldNames) && loadData);
 

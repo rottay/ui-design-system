@@ -12171,7 +12171,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
    fork: it targets touch hardware regardless of screen size, so fine (mouse)
    pointer rendering is untouched. Button/link/checkbox/radio/select hit
    areas are already floored by the unlayered rule in foundation/base.css;
-   the modern Input's <input> renders with inline styles and only a
+   the modern Input's <input> renders with runtime style props and a
    per-render hashed class, so `.rottay-input--modern` is its stable hook
    for this floor. */
 @media (pointer: coarse) {
@@ -13291,8 +13291,8 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * Measured on the shipped bundle: with this button's inline style removed and a
  * `@layer rottay-engines` rule applied, the background stayed `rgba(0,0,0,0)`,
  * the radius stayed `0px` and the border stayed `0px`. The identical rule,
- * unlayered, painted all three. That is the whole reason this engine painted
- * inline: inline style was the only position in this cascade a skin could hold.
+ * unlayered, painted the three channels. The former runtime paint occupied
+ * the winning position available to this skin in the cascade.
  *
  * Unlayered is the correct position, not a workaround. It outranks preflight and
  * DaisyUI, and it still yields to a consumer's own inline `style` prop -- the
@@ -13309,9 +13309,9 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * ties are broken by position exactly as they were by spread order.
  *
  * Every selector carries BOTH classes the element wears. That is not decoration:
- * each tenant's extension sheet ships an unlayered
+ * the Rottay platform artifact ships an unlayered
  *
- *     html[data-tenant='…']:not([data-theme='light']) *, ::after, ::before {
+ *     html[data-tenant='rottay']:not([data-theme='light']) *, ::after, ::before {
  *       border-color: var(--ds-color-border);
  *     }
  *
@@ -13321,7 +13321,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * floor meant for elements that have no opinion. Two classes plus the anatomy
  * part and the variant reach (0,4,0), so the variant's own border survives.
  *
- * A tenant that wants a different button border sets `--ds-button-{variant}-border`.
+ * A consumer that wants a different button border sets `--ds-button-{variant}-border`.
  * The `*` rule outranking every single-class component rule in the design system
  * is filed as P-48; this file does not fix it, it clears it.
  */
@@ -13582,7 +13582,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * than pseudo-classes". They do -- and so does Tailwind's preflight, which sits
  * in an `@layer base` that sorts after every `rottay-*` layer. A skin in a
  * design-system layer cannot paint a `button` at all (measured; see P-47), and a
- * single-class rule loses its border colour to each tenant's unlayered
+ * single-class rule loses its border colour to the tenant-scoped unlayered
  * `* { border-color: … }` floor at (0,3,1) (see P-48). Two classes plus the
  * anatomy part and the variant reach (0,4,0), which clears both.
  *
@@ -13864,7 +13864,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  *
  *   - no `rottay-*` cascade layer can paint a component at all, because Tailwind's
  *     `@layer base` sorts after all seven of them (measured; P-47);
- *   - each tenant ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
+ *   - the Platform-only Rottay artifact ships an unlayered `html[data-tenant]:not([data-theme]):not(.light) *`
  *     border floor at (0,3,1) that outranks any single-class component rule (P-48).
  *
  * The rules read the `data-*` contract the component stamps. Rest, hover and the
@@ -14437,7 +14437,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * DELIBERATELY UNLAYERED, at (0,4,0) or higher on every rule that sets
  * `border-color` -- the same two reasons as the Button/Card rustic skins:
  * no `rottay-*` layer can paint an element Tailwind's `base` layer also
- * targets (P-47), and each tenant's unlayered `*` border floor sits at
+ * targets (P-47), and the Rottay platform artifact's unlayered `*` border floor sits at
  * (0,3,1), outranking a bare two-class rule (P-48). The presence check
  * `[data-variant]` (true on every render; the prop always resolves to one of
  * four values) is used purely to add a specificity component where a rule
@@ -14488,7 +14488,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
 
 /* base: layout, transition, resting border/shadow. Border-COLOR is
    deliberately absent -- the priority chain below sets it, each rule
-   reaching (0,4,0)+ so it survives the tenant `*` border floor (P-48). */
+   reaching (0,4,0)+ so it survives the Rottay artifact's `*` border floor (P-48). */
 .rottay-input.rottay-input--rustic[data-part='root'] {
   position: relative;
   display: inline-flex;
@@ -14901,7 +14901,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * The div carries `ds-table ds-table--modern`; every painted element is a
  * descendant with a `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A descendant rule that sets `border` /
  * `border-color` / a `border-*-color` longhand must therefore reach (0,4,0):
@@ -15074,7 +15074,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * carries `ds-table ds-table--rustic`; every painted element is a descendant
  * with a `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). A descendant rule that sets `border` / `border-color` / a
  * `border-*-color` longhand must therefore reach (0,4,0): the div's two
@@ -15305,7 +15305,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * shared-file home of the WO-ARC-09 contract; no --modern/--rustic
  * discriminator because the component renders one DOM under every engine.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule here that sets `border` /
  * `border-color` must reach (0,4,0): the two root classes (0,2,0) + the
@@ -15458,7 +15458,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * descendant with a `data-part`. The engine has two roots — the main panel and
  * the loading early-return — and both carry the class pair + `data-part='root'`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that sets `border` / `border-color`
  * must reach (0,4,0): the two root classes (0,2,0) + the `data-part` REPEATED on
@@ -15749,7 +15749,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * shadow; identity-card mixes 88/12 with an 8%/48px shadow), so the two roots and
  * their two cards are separate rules — a merged rule would be a silent pixel change.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule here that paints a `border` /
  * `border-color` must reach (0,4,0): on the root that is the two root classes +
@@ -15829,7 +15829,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
   border: 1px solid color-mix(in srgb, var(--ds-color-primary) 22%, transparent);
 }
 
-/* the raw lucide icon paints via currentColor, so `color` on the svg is its stroke */
+/* the intrinsic icon wrapper owns color; the nested glyph inherits currentColor */
 .ds-structure.ds-selection-preview-rail [data-part='match-reason-icon'] {
   color: var(--ds-color-primary);
 }
@@ -15868,7 +15868,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * the content panel and the loading early-return — and both carry the class pair,
  * `data-part='root'`, and (loading only) `data-loading='true'`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints `border` / `border-color`
  * must reach (0,4,0): the two root classes (0,2,0) + a `data-part` REPEATED on
@@ -16293,7 +16293,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * is a descendant with its own `data-part`. The card surface, the loading/empty
  * states, the pagination bar and the bulk bar are all descendants of that div.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A descendant rule that paints `border` /
  * `border-color` / a `border-*-color` longhand must therefore reach (0,4,0):
@@ -17069,7 +17069,7 @@ html[data-tenant] .ant-collapse-ghost > .ant-collapse-item > .ant-collapse-conte
  * the JS) > filled > default. The disabled rule is ordered after filled so it
  * wins the (0,4,0) tie when a field is both.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border floor at (0,3,1);
  * every border-color rule below reaches (0,4,0) via a variant/status attribute
  * beyond the two root classes + `[data-part='root']`. Non-border paint
@@ -17604,7 +17604,7 @@ div:has(> .ds-password-input.ds-password-input--modern[data-part='root']) ~ * [d
  * native `:focus` exactly; `box-shadow` reproduces `isFocused && !error` via
  * `:focus:not([data-error='true'])`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule below reaches (0,4,0) via a variant/error attribute
  * (or `:not()` chain) beyond the two root classes + `[data-part='root']`.
  * Non-border paint (background, color, outline, box-shadow, border-radius)
@@ -17955,7 +17955,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * the input's `:focus-visible` -> `input:focus-visible ~ [data-part='circle']`.
  * The dot scale is keyed on `data-checked`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via `[data-checked]` (+ `:hover`)
  * beyond the two root classes + `[data-part='circle']`. Non-border paint wins
  * unlayered at (0,3,0) or higher.
@@ -18098,7 +18098,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * gated `:not([data-disabled='true'])`; the focus ring (removed
  * `isFocusVisible`) -> `input:focus-visible ~ [data-part='box']`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via a state attribute (or the
  * repeated `[data-part='box']`) beyond the two root classes. Non-border paint
  * wins unlayered at (0,3,0) or higher.
@@ -18183,7 +18183,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `--ds-checkbox-box-radius`. Border priority error > active(fill) > default;
  * the active rule carries `:not([data-error='true'])` so error wins.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via a state attribute (or the
  * repeated `[data-part='box']`) beyond the two root classes. Non-border paint
  * wins unlayered at (0,3,0) or higher.
@@ -18390,7 +18390,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `:focus:not([data-error='true'])` rule; the blurred border returns to the base
  * rule. `onFocus`'s `.select()` is kept.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * the slot border reaches (0,4,0) via the repeated `[data-part='slot']`.
  * Non-border paint wins unlayered at (0,3,0).
  */
@@ -18431,7 +18431,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * focus box-shadow ring has no error gate, matching the original. `caretColor:
  * transparent` is not a paint channel the census counts and stays inline.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every slot border rule reaches (0,4,0) via the repeated `[data-part='slot']`
  * (or a state attribute). Non-border paint wins unlayered at (0,3,0) or higher.
  *
@@ -18749,7 +18749,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * runtime value carried once, on the root, via the uncounted custom properties
  * `--ds-rg-color-border` / `--ds-rg-color-bg` / `--ds-rg-color-dot`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule below reaches (0,4,0) via the `--button` class or the
  * `[data-part='option']` ancestor plus a repeated/qualifying attribute. Non-
  * border paint wins unlayered at (0,3,0) or lower (no universal floor).
@@ -18842,7 +18842,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `VARIANT_MAP`, all `var(--ds-button-<variant>-*, #hex)` references) are
  * carried byte-exact via the uncounted custom properties `--ds-button-icon-*`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * the border reaches (0,4,0) via the repeated `[data-part='trigger']` beyond
  * the two root classes. Non-border paint wins unlayered at (0,3,0) or higher.
  */
@@ -18880,7 +18880,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `ds-voice-input-button-pulse` / `-spin`; the inline `animation` references the
  * new names, and `-spin` no longer shadows the global `spin`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1); with only ONE root class, the border rules reach (0,4,0) via a
  * thrice-repeated `[data-part='root']` (base) or twice plus a state attribute.
  * Non-border paint wins unlayered at (0,2,0)+.
@@ -19088,7 +19088,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * additionally carries `ds-upload--${listType}` / `ds-upload-dragger--${listType}`
  * when `listType !== 'text'` (text has no modifier, matching rustic).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1). Every rule that paints a border COLOR here reaches (0,4,0) via a
  * listType root modifier class, or (where no modifier applies) a repeated
  * `[data-part='x'][data-part='x']`. Non-border paint (background, color,
@@ -19297,7 +19297,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * picture+text (one shared block, `:not(...)` of the two card/circle
  * modifiers) to mirror that.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1). Every rule that paints a border COLOR reaches (0,4,0) via a
  * listType root modifier class, or (where none applies) a repeated
  * `[data-part='x'][data-part='x']`. Non-border paint wins unlayered at (0,3,0)
@@ -19513,7 +19513,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `:has()` (the `input-number.css` idiom), the page-count span via a
  * scoped child combinator off `panel-pagination`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
  * classes + the target's own `data-part` REPEATED (or a repeated `:has()`,
@@ -19606,7 +19606,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (repeated for the border floor), the page-count span is reached as the
  * lone child of `panel-pagination`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
  * classes + the target's own `data-part`/class REPEATED. Non-border paint
@@ -19745,7 +19745,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * which the counter does not count, consumed here by a static rule -- same
  * idiom as PasswordInput's strength-fill / Toggle's track-fill.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Rules that paint a border COLOR reach (0,4,0) via the two root
  * classes + the target's own `data-part` REPEATED (or a repeated `:has()`).
@@ -19824,7 +19824,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * counted by the fleet audit), consumed here by a static rule -- same idiom
  * as PasswordInput's strength-fill / Toggle's track-fill.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via
  * the two root classes + the target's `data-part` REPEATED, same as every
@@ -19932,7 +19932,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * here (loads once, globally, instead of re-injecting on every panel mount);
  * `TimePanel`'s inline `animation` reference was updated to match.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via the
  * two root classes + the target's own `data-part` repeated, same as every
@@ -20090,7 +20090,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * ring has no status dependency in the original -- it shows on focus
  * regardless of status, so it carries no such guard.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Border-color rules reach (0,4,0) via the two root classes + the
  * target's own `data-part` repeated. Non-border paint (background-color,
@@ -20206,7 +20206,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * structurally fixing the gap); `panelStyle.animation`'s inline reference was
  * updated to match.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
  * two root classes + the target's own `data-part` repeated. Under the
@@ -20456,7 +20456,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (two separate `:hover` rules, transform ungated, background gated). The
  * leave-state resets to the resting value the rules above already provide.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Under a trigger root, a border-color rule reaches (0,4,0) via the
  * two root classes + the target's own `data-part` repeated. Under the
@@ -20722,7 +20722,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * its status color. `isFocused` was set unconditionally in `onFocus`/`onBlur`,
  * so native `:focus` matches it exactly; the imperative state is removed.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via the two root classes +
  * `[data-part='root']` + the descendant `[data-part='input']` (status rules go
  * higher via the extra status attribute). Non-border paint (background, color,
@@ -20841,7 +20841,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * The textarea sets NO `color` channel -- transcribed byte-exact from the source
  * (the text color inherits the browser default there); filed as a proposal.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border floor at (0,3,1);
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border floor at (0,3,1);
  * every border-color rule reaches (0,4,0) via the two root classes +
  * `[data-part='root']` + `[data-part='textarea']`. Non-border paint wins
  * unlayered at (0,4,0).
@@ -20905,7 +20905,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * class `.ds-select-shell__dropdown[data-part='dropdown']`; parts inside it
  * (search-input, option, group-label, empty) are descendants of THAT.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). In-tree parts get
  * it from the two root classes (0,2,0) + `[data-part='root']` + descendant
  * `[data-part]`. Standalone portal parts have only one class, so the 4th unit is
@@ -21475,7 +21475,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * modern never portals -- the mirror image of Select, whose custom-dropdown
  * branch does).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
  * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
  * already reach (0,4,0) with a single descendant hop, so no part here needs
@@ -21605,7 +21605,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * OUTSIDE the trigger's DOM subtree, so those rules are standalone, never
  * `[data-part='trigger'] …` descendants (ARC-09 precedent).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR (incl. `transparent`, excl.
  * `none`/`0`) must reach (0,4,0).
  *   - TRIGGER is a single element with 2 classes + 1 `[data-part]` attr ->
@@ -21832,7 +21832,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * descendants of the root with their own `data-part` (grep-verified -- this
  * file has no `createPortal` import, unlike the rustic sibling below).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR must reach (0,4,0). The two root
  * classes (0,2,0) + `[data-part='root']` + any descendant `[data-part]`
  * already reach (0,4,0) with a single descendant hop, so nothing here needs
@@ -21971,7 +21971,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * standalone, never `[data-part='trigger'] …` descendants (ARC-09 precedent,
  * matches TreeSelect rustic's portal posture exactly).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border floor at
  * (0,3,1); a rule that sets a border COLOR (incl. `transparent`, excl.
  * `none`/`0`) must reach (0,4,0).
  *   - TRIGGER is a single element with 2 classes + 1 `[data-part]` attr ->
@@ -22250,7 +22250,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `.rottay-alert` would introduce that rule's paint. `-shell` is collision-free
  * (grep-verified), mirroring `rottay-progress-shell`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. Per-tone `border-color` therefore reaches
  * (0,4,0) via the two shell classes + `[data-part='root']` + `[data-tone]`.
@@ -25868,7 +25868,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * INSIDE this engine's body. Anchoring each section on `root > surface > ...`
  * keeps engine paint off a composed compound, which owns its own skin.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered `*` border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered `*` border-color floor at
  * (0,3,1), so any rule painting a border COLOR must reach b >= 4. The shell class
  * + `[data-part='root']` gives 2; the target's own `data-part` is REPEATED to buy
  * the remaining 2. `border: none` resets carry no color and are exempt.
@@ -27647,7 +27647,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * inline-paint counter — they are real paint, migrated from the inventory's
  * coverage list, not the counter's.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1). The root's `border-top` carries a real color, so it must reach
  * (0,4,0); with only ONE root class that is bought by a thrice-repeated
  * `[data-part='root']` (the voice-input-button precedent). The tab button's
@@ -27881,7 +27881,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * component the caller drops into a slot. Each painted element therefore carries
  * its own class and is matched by a COMPOUND selector.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered border-color floor at
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered border-color floor at
  * (0,3,1). The root's `border-bottom` carries a real color, so it must reach
  * (0,4,0); with only ONE root class that is bought by a thrice-repeated
  * `[data-part='root']` (the voice-input-button precedent). The back button's
@@ -28555,7 +28555,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * that component. Rustic's root carries no DaisyUI `alert` class, so nothing
  * external composes onto its border channel.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. The left accent is a `border-left` SHORTHAND
  * (as it is inline) so width, style and color land atomically; it therefore
@@ -28936,7 +28936,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * emitted, so the width stays at preflight's 0 and no color can show -- which is
  * why there is no borderless counterpart to these two rules.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element; the two border-color rules clear it at (0,5,0)+.
  * Values transcribed verbatim from `engines/modern.tsx`.
@@ -28989,7 +28989,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * background resets -- so it gets its own rules rather than being left to
  * default.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element; the bordered `border` / `border-bottom`
  * shorthands clear it at (0,5,0)+. Values transcribed verbatim from
@@ -30070,7 +30070,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * THE TITLE'S COLOR IS NOT HERE, DELIBERATELY. `engines/modern/theme.css`'s
  * `.stat-title { color: var(--ds-statistic-title-color) }` is uncontested on the
- * title today (its inline style sets only line-height and margin) and `color` is
+ * title today (its runtime style sets line-height and margin) and `color` is
  * a channel preflight does not touch, so that rule paints. Declaring the same
  * color here would take ownership of a channel this skin never held.
  *
@@ -30597,7 +30597,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `top`/`left` STAY INLINE: they come from `getBoundingClientRect()` on every
  * frame the tooltip is positioned -- genuine runtime data, and not paint.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. The shortcut chip's border is the only border
  * here; it reaches (0,5,0) via the two bubble classes + `[data-part='bubble']` +
@@ -31248,7 +31248,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * not paint a border at all. Unlayered outranks preflight and still yields to a
  * consumer's inline `style` prop -- the exact precedence the inline objects held.
  *
- * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * BORDER-COLOR FLOOR (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  * specificity (0,3,1). Any rule below that paints a real border colour therefore
  * repeats its own `data-part` to reach the (0,4,0) floor. `border: none` resets
@@ -31416,7 +31416,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * not paint a border at all. Unlayered outranks preflight and still yields to a
  * consumer's inline `style` prop -- the exact precedence the inline objects held.
  *
- * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * BORDER-COLOR FLOOR (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  * specificity (0,3,1). Any rule below that paints a real border colour repeats
  * its own `data-part` to reach the (0,4,0) floor.
@@ -31632,7 +31632,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *    any parent layout); only nested groups get the left-border accent and inset
  *    fill. The border WIDTH comes from the Tailwind `border-l-[3px]` utility on the
  *    same element and stays there -- utilities sort after preflight, so it survives;
- *    this skin owns only the COLOUR, exactly as the inline style did.
+ *    this skin owns the COLOUR channel formerly carried by runtime paint.
  *
  * The `add-filter-option` hover below replaces an imperative
  * `onMouseEnter`/`onMouseLeave` pair that wrote `el.style.background` directly.
@@ -32479,7 +32479,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * two roots -- the content card and the loading early-return -- and both carry
  * the pair; the loading one adds `data-loading='true'`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule painting a border COLOR must reach
  * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
@@ -32635,7 +32635,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * loading early-return and the main render use that same root. Every painted
  * element is a descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints `border` / `border-color`
  * with a real color (including `transparent`, which is NOT a reset) must reach
@@ -32763,7 +32763,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * the main root carries `data-loading='false'`. Every painted element is a
  * descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule painting `border` / `border-color` with
  * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
@@ -32878,7 +32878,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * loading early-return and the main render use that same root. Every painted
  * element is a descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule painting `border` / `border-color` with
  * a real color (including `transparent`, which is NOT a reset) must reach (0,4,0):
@@ -33026,7 +33026,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `position:fixed` DOM descendant of the tenant-scoped root, so descendant selectors
  * from the scope class reach it (no portal-root escape).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
@@ -33380,7 +33380,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * rule cannot paint these elements; unlayered outranks preflight + DaisyUI and
  * still yields to a caller's inline `style`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * border-color on every element. A rule that paints a border COLOR must reach
  * (0,4,0): the two root classes (0,2,0) + the target's `data-part` REPEATED
@@ -33506,7 +33506,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * + `data-part='root'`; every painted element is a descendant with its own
  * `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
@@ -33614,7 +33614,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * ds-engine-modern` + `data-part='root'`; every painted element is a descendant
  * with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
@@ -33724,7 +33724,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * + `data-part='root'`, identical in both the loading and loaded branches; every
  * painted element is a descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0). The timeline dot's border is the only border-color site here, and it
@@ -34187,7 +34187,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * SCOPE ROOT: the overlay `<div>` carries `ds-pattern-command-palette ds-engine-rustic`
  * + `data-part='root'`. NOT portaled (position:fixed, DOM descendant of the scope).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting `border-color`
  * on every element. A border COLOR must reach (0,4,0): two root classes + `data-part`
  * REPEATED. `3px solid transparent` IS a color and must hold the (0,4,0) floor, or the
@@ -34767,7 +34767,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * + `data-part='root'` (added by the anatomy pre-step -- rustic previously carried
  * no scope class at all).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
@@ -34898,7 +34898,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * SCOPE ROOT: the root `<div>` carries `ds-pattern-notification-center
  * ds-engine-rustic` + `data-part='root'`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) setting
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + the target's `data-part` REPEATED (0,2,0).
@@ -35554,7 +35554,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * paint a border at all. Unlayered outranks preflight and still yields to a
  * consumer's inline `style` prop -- the precedence the inline objects held.
  *
- * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * BORDER-COLOR FLOOR (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  * specificity (0,3,1). Any rule below that paints a real border colour repeats
  * its own `data-part` to reach the (0,4,0) floor.
@@ -35687,7 +35687,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * consumer's inline `style` prop -- the precedence the inline objects held.
  *
  * TWO SPECIFICITY FLOORS, not one:
- *  - BORDER-COLOR (P-48): each tenant ships an unlayered
+ *  - BORDER-COLOR (P-48): the Platform-only Rottay artifact ships an unlayered
  *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
  *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via
@@ -36358,7 +36358,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * consumer's inline `style` prop -- the precedence the inline objects held.
  *
  * TWO SPECIFICITY FLOORS, not one:
- *  - BORDER-COLOR (P-48): each tenant ships an unlayered
+ *  - BORDER-COLOR (P-48): the Platform-only Rottay artifact ships an unlayered
  *    `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  *    (0,3,1). Every rule below that paints a real border colour reaches (0,4,0).
  *  - TEXT COLOUR: Typography's own skin colours EVERY `Text` at (0,4,0) via
@@ -36783,7 +36783,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * early-return both carry the class pair, `data-part='root'`, and — loading only —
  * `data-loading='true'`).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED for the remaining
@@ -37303,7 +37303,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `ds-structure ds-dashboard-header` + `data-part='root'` + `data-compact`
  * (both the compact and full renders share the class pair and part).
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): two root classes (0,2,0) + a `data-part` REPEATED or a real contract
@@ -37423,7 +37423,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * (`.ds-activity-ticker.ds-activity-ticker` = 0,2,0) since the pre-step minted a
  * single scope class, not a class pair.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints a border COLOR must reach
  * (0,4,0): the repeated scope class (0,2,0) + the target `data-part` REPEATED
@@ -39330,7 +39330,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * specificity budget below is bought from that one class plus REPEATED
  * `data-part` and/or the contract attributes — never an incidental attribute.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element, and the modern/rustic Typography skins paint
  * every composed `Text` at
@@ -46827,8 +46827,8 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * DELIBERATELY UNLAYERED (P-47): named DS layers sort before Tailwind's
  * unnamed base layer. This engine-agnostic pattern has a single scope class,
  * so border-color selectors reach (0,4,0) through repeated target parts or a
- * finite-state attribute and clear the tenant floor at (0,3,1). All values
- * are transcribed verbatim from the component's former inline styles;
+ * finite-state attribute and clear the tenant floor at (0,3,1). Values
+ * are transcribed verbatim from the component's former runtime style props;
  * instance-scoped appearance variables remain owned by appearanceToVariables().
  */
 
@@ -47000,7 +47000,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  * `.ds-pattern-brand-studio`; instance-scoped surface variables remain on the
  * preview content and the live swatch background remains inline.
  *
- * Border-bearing rules reach (0,4,0) to clear the tenant universal floor
+ * Border-bearing rules reach (0,4,0) to clear the Platform-only Rottay artifact floor
  * (P-48). Composed Text colors reach (0,5,0) so they beat Typography's own
  * engine skin (P-87). Card drops a consumer `data-part` in every engine, so
  * the action panel uses its surviving component class as the authoritative
@@ -47095,7 +47095,7 @@ div:has(> .ds-password-input.ds-password-input--rustic[data-part='root']) ~ [dat
  *
  * Every rule is anchored to the production scope that owns the element. The
  * repeated scope class gives paint declarations specificity (0,4,0) where the
- * tenant universal floor would otherwise win. Geometry and runtime series
+ * Platform-only Rottay artifact floor would otherwise win. Geometry and runtime series
  * colours remain in React/D3.
  */
 

@@ -67,13 +67,13 @@ const SimpleImage: React.FC = () => (
 /**
  * Rustic (pure HTML/CSS) implementation of the Empty component.
  *
- * All styling is inline with CSS custom property fallbacks, ensuring it
- * renders correctly even without a loaded theme stylesheet. Uses
+ * Styling combines authored engine CSS with token-backed runtime layout values.
+ * The semantic empty-state markup uses
  * role="status" and aria-label for screen reader accessibility.
  *
  * @param props - Unified EmptyProps from the design system type contract
  * @param ref - Forwarded ref attached to the outer container div
- * @returns A dependency-free empty state element using only inline styles
+ * @returns A dependency-free empty state element with stable engine anatomy
  */
 const RusticEmpty = forwardRef<HTMLDivElement, EmptyProps>(
   (props, ref) => {

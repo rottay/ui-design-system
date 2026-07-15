@@ -58,7 +58,7 @@ export default function ModernScrollArea(props: ScrollAreaProps): React.ReactEle
     }
   })();
 
-  // Only maxHeight/maxWidth need inline styles; overflow is class-based
+  // maxHeight/maxWidth remain element-style values; overflow is class-based
   const containerStyle: React.CSSProperties = {
     maxHeight,
     maxWidth,

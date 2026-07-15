@@ -27,6 +27,7 @@
 
 import React, { useMemo, useState, useCallback, useRef, useEffect } from 'react';
 import { Check, GripVertical, X } from 'lucide-react';
+import { arrayValueAt } from '@/_internal/utils/collections';
 import type { DataTablePatternProps } from '../DataTable.types';
 import { resolveAccessor, resolveRowKey } from '../DataTable.types';
 import ModernCheckbox from '../../../../primitives/inputs/Checkbox/engines/modern';
@@ -288,10 +289,10 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
       const currentIdx = editableCols.findIndex((c) => c.key === currentKey);
       if (direction === 'next') {
         const nextIdx = currentIdx + 1;
-        return nextIdx < editableCols.length ? editableCols[nextIdx].key : null;
+        return nextIdx < editableCols.length ? arrayValueAt(editableCols, nextIdx)?.key ?? null : null;
       } else {
         const prevIdx = currentIdx - 1;
-        return prevIdx >= 0 ? editableCols[prevIdx].key : null;
+        return prevIdx >= 0 ? arrayValueAt(editableCols, prevIdx)?.key ?? null : null;
       }
     },
     [visibleColumns]
@@ -841,8 +842,8 @@ export default function ModernDataTable<T extends object>(props: DataTablePatter
 
   const densityPadding = DENSITY_PADDING_MAP[density];
 
-  // Table classes -- we no longer rely on DaisyUI utility classes; all styling
-  // is applied via inline styles using DS tokens for full theme compatibility.
+  // Table classes -- we no longer rely on DaisyUI utility classes; styling
+  // is applied via token-backed runtime style props for full theme compatibility.
   const tableClasses = 'ds-modern-table';
 
   // Total column count for colSpan (selection + expand + data + actions)

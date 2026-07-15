@@ -4,7 +4,7 @@
  * `.ds-pattern-brand-studio`; instance-scoped surface variables remain on the
  * preview content and the live swatch background remains inline.
  *
- * Border-bearing rules reach (0,4,0) to clear the tenant universal floor
+ * Border-bearing rules reach (0,4,0) to clear the Platform-only Rottay artifact floor
  * (P-48). Composed Text colors reach (0,5,0) so they beat Typography's own
  * engine skin (P-87). Card drops a consumer `data-part` in every engine, so
  * the action panel uses its surviving component class as the authoritative

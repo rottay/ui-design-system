@@ -22,7 +22,7 @@
  * counted by the fleet audit), consumed here by a static rule -- same idiom
  * as PasswordInput's strength-fill / Toggle's track-fill.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color floor at
  * (0,3,1). Under the trigger root, a border-color rule reaches (0,4,0) via
  * the two root classes + the target's `data-part` REPEATED, same as every

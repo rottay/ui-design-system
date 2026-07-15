@@ -936,7 +936,7 @@ export function ThemeProvider({
     // ── Dark mode color overrides ──────────────────────────────────
     // These are applied unconditionally; the CSS specificity of
     // [data-theme='dark'] selectors in tenant stylesheets will be
-    // overridden by inline styles only when dark mode is active.
+    // overridden by element-style values while dark mode is active.
     // Components that reference these vars will pick them up when
     // the theme switches to dark.
     if (branding?.darkPrimaryColor) {

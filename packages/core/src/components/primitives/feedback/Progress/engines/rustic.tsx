@@ -27,7 +27,7 @@
  * **Multi-Tenant Theming:**
  * Rustic uses CSS custom properties for theming:
  * - Progress colors adapt based on status
- * - All dimensions use inline styles for flexibility
+ * - Dimensions use token-backed style objects for flexibility
  *
  * **Status Colors:**
  * | Status | Color |
@@ -87,7 +87,7 @@ import { PROGRESS_DEFAULTS } from '../Progress.types';
  * - Line type uses div-based track and bar
  * - Circle type uses SVG with stroke-dasharray
  * - Active status includes animated stripe pattern
- * - All styling done via inline styles for isolation
+ * - Authored engine CSS is combined with bounded runtime geometry
  *
  * **Circle Progress:**
  * - Uses SVG circles for track and progress

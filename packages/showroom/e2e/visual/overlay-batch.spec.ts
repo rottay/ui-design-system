@@ -34,7 +34,7 @@ import { test, expect, type Page, type Locator } from '@playwright/test';
 //   named artifact for review.
 // - Dropdown modern ITEM HOVERED: the hover background comes from
 //   `modern/theme.css`'s `.menu li > button:hover` rule, not from Dropdown's
-//   own inline styles -- a plain "open" shot would miss it entirely, so this
+//   own element styles -- a plain "open" shot would miss it completely, so this
 //   one requires an explicit hover step beyond opening the panel.
 // ---------------------------------------------------------------------------
 

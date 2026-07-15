@@ -142,7 +142,7 @@ const SIZE_CLASSES: Record<string, string> = {
  * ```
  */
 export const Rate = React.forwardRef<HTMLDivElement, RateProps>(
-  (props, ref) => {
+  (props: RateProps, ref) => {
     // -------------------------------------------------------------------------
     // Props Destructuring
     // -------------------------------------------------------------------------

@@ -3,7 +3,7 @@
 /**
  * @fileoverview Classic engine for the Callout component, styled after Ant Design.
  * Renders an inline alert banner with icon, title, body, optional action slot,
- * and a dismissible close button -- all using inline styles and CSS variables.
+ * and a dismissible close button using token-backed style objects and CSS variables.
  *
  * @example
  * ```tsx

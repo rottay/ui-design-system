@@ -11,7 +11,7 @@
  * loading early-return and the main render use that same root. Every painted
  * element is a descendant with its own `data-part`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element. A rule that paints `border` / `border-color`
  * with a real color (including `transparent`, which is NOT a reset) must reach

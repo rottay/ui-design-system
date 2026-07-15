@@ -28,7 +28,7 @@
  * import { EngineProvider, Link } from '@rottay/design-system';
  *
  * <EngineProvider engine="rustic">
- *   {/* All Links use pure HTML/CSS *\/}
+ *   {/* Links use pure HTML/CSS *\/}
  *   <Link href="/about" type="secondary">About Us</Link>
  *   <Link href="/contact" type="primary">Contact</Link>
  * </EngineProvider>
@@ -71,7 +71,7 @@ import { LINK_DEFAULTS } from '../Link.types';
  *
  * @remarks
  * - Uses LINK_TYPE_COLORS for consistent color mapping
- * - Applies inline styles for all visual properties
+ * - Combines authored engine CSS with bounded runtime state values
  * - Includes color transition for smooth hover states
  * - Fully accessible with ARIA disabled attribute
  *

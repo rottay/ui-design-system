@@ -18,7 +18,7 @@
  * specificity budget below is bought from that one class plus REPEATED
  * `data-part` and/or the contract attributes — never an incidental attribute.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * `border-color` on every element, and the modern/rustic Typography skins paint
  * every composed `Text` at

@@ -400,11 +400,15 @@ export function resolveColumnValue<TView>(
     return column.accessorFn(item);
   }
 
-  if (column.accessorKey) {
-    return (item as Record<string, unknown>)[column.accessorKey];
+  if (typeof item !== 'object' || item === null) {
+    return undefined;
   }
 
-  return (item as Record<string, unknown>)[column.key];
+  if (column.accessorKey) {
+    return Reflect.get(item, column.accessorKey);
+  }
+
+  return Reflect.get(item, column.key);
 }
 
 /** Convert heterogeneous field values into stable display strings for summaries and fallbacks. */

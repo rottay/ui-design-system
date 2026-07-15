@@ -178,7 +178,7 @@ interface TimePickerPanelProps {
 }
 
 // Time selection uses native <select> elements for reliable mobile behavior.
-// All styles are inline because this component renders inside a portal.
+// Geometry stays inline; the standalone portal skin owns paint and state.
 const TimePickerPanel: React.FC<TimePickerPanelProps> = ({
   hours,
   minutes,
@@ -330,10 +330,9 @@ const CalendarPanel: React.FC<CalendarPanelProps> = ({
   );
 
   // ---------------------------------------------------------------------------
-  // Shared inline styles for portal-rendered panels.
-  // All styles must be inline because portal content renders outside the app's
-  // Tailwind scope, so utility classes get purged. DaisyUI oklch vars are set
-  // on :root and cascade to portals.
+  // Shared structural geometry for portal-rendered panels. Paint/state live in
+  // the standalone panel skin because portal content sits outside the trigger
+  // root. DaisyUI oklch vars are set on :root and still cascade to portals.
   // ---------------------------------------------------------------------------
   const panelStyle: React.CSSProperties = {
     padding: 'var(--ds-spacing-3, 12px)',

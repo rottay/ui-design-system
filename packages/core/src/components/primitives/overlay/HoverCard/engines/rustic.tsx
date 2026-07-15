@@ -3,7 +3,7 @@
 /**
  * @fileoverview Rustic (pure HTML/CSS) engine for the HoverCard overlay component.
  * Renders a portal-based card at a position computed from the trigger's bounding
- * rect, styled entirely via inline CSS and DS custom properties. Supports
+ * rect, styled via token-backed CSS properties and DS custom properties. Supports
  * configurable open/close delays and all four side placements.
  *
  * @example

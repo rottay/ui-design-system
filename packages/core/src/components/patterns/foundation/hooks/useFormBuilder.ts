@@ -22,6 +22,11 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
 import type { FieldDef } from '../types';
 
+function readRecordValue(value: unknown, key: PropertyKey): unknown {
+  if (typeof value !== 'object' || value === null) return undefined;
+  return Reflect.get(value, key);
+}
+
 export interface UseFormBuilderOptions {
   fields: FieldDef[];
   initialValues?: Record<string, unknown>;
@@ -104,7 +109,7 @@ export function useFormBuilder(options: UseFormBuilderOptions): UseFormBuilderRe
   const getDefaults = useCallback(() => {
     const defaults: Record<string, unknown> = {};
     for (const field of fields) {
-      defaults[field.name] = initialValues[field.name] ?? field.defaultValue ?? '';
+      defaults[field.name] = readRecordValue(initialValues, field.name) ?? field.defaultValue ?? '';
     }
     return defaults;
   }, [fields, initialValues]);
@@ -120,7 +125,9 @@ export function useFormBuilder(options: UseFormBuilderOptions): UseFormBuilderRe
   // Dirty check compares current values to the initial snapshot via strict
   // equality. Uses useMemo so it only re-evaluates when `values` changes.
   const isDirty = useMemo(() => {
-    return Object.keys(values).some((k) => values[k] !== initialRef.current[k]);
+    return Object.keys(values).some((k) => (
+      readRecordValue(values, k) !== readRecordValue(initialRef.current, k)
+    ));
   }, [values]);
 
   // Valid when the errors map is empty. Re-evaluated only when errors change.
@@ -131,7 +138,7 @@ export function useFormBuilder(options: UseFormBuilderOptions): UseFormBuilderRe
   const setValue = useCallback((name: string, value: unknown) => {
     setValuesState((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => {
-      if (!prev[name]) return prev;
+      if (!readRecordValue(prev, name)) return prev;
       const next = { ...prev };
       delete next[name];
       return next;
@@ -167,7 +174,7 @@ export function useFormBuilder(options: UseFormBuilderOptions): UseFormBuilderRe
     for (const field of fields) {
       const hidden = typeof field.hidden === 'function' ? field.hidden(values) : field.hidden;
       if (hidden) continue;
-      const error = validateField(field, values[field.name]);
+      const error = validateField(field, readRecordValue(values, field.name));
       if (error) newErrors[field.name] = error;
     }
     setErrors(newErrors);
@@ -195,12 +202,15 @@ export function useFormBuilder(options: UseFormBuilderOptions): UseFormBuilderRe
   // Returns a props bag that can be spread onto any DS input component.
   // Errors are only surfaced after the field has been touched (blurred),
   // preventing premature validation messages while the user is still typing.
-  const getFieldProps = useCallback((name: string) => ({
-    value: values[name],
-    onChange: (value: unknown) => setValue(name, value),
-    onBlur: () => touch(name),
-    error: touched[name] ? errors[name] : undefined,
-  }), [values, errors, touched, setValue, touch]);
+  const getFieldProps = useCallback((name: string) => {
+    const error = readRecordValue(errors, name);
+    return {
+      value: readRecordValue(values, name),
+      onChange: (value: unknown) => setValue(name, value),
+      onBlur: () => touch(name),
+      error: readRecordValue(touched, name) === true && typeof error === 'string' ? error : undefined,
+    };
+  }, [values, errors, touched, setValue, touch]);
 
   return {
     values,

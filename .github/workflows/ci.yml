@@ -51,7 +51,7 @@ jobs:
           CORE="false"
           SHOWROOM="false"
 
-          if echo "$CHANGED" | grep -qE '^(packages/core/|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
+          if echo "$CHANGED" | grep -qE '^(packages/core/|scripts/dependency-honesty\.(mjs|test\.mjs)$|packages/showroom/e2e/responsive/overflow-baseline\.json$|roadmap/(skin-exemptions|skin-census)\.json$|\.github/workflows/ci\.yml$)'; then
             CORE="true"
           fi
 
@@ -111,6 +111,24 @@ jobs:
       - name: Audit machinery regression tests
         run: pnpm --filter @rottay/design-system run test:scripts
 
+      - name: Checkout WO-GAT-07 documentation evidence
+        uses: actions/checkout@v4
+        with:
+          repository: rottay/docs-engineering
+          ref: 076359827cf2cb4e4bc2e816aed8f50efed0d97b
+          path: .gat07/docs-engineering
+          token: ${{ secrets.DOCS_TOOLING_TOKEN || secrets.NPM_TOKEN || github.token }}
+
+      - name: WO-GAT-07 exact proof and artifact freshness
+        run: pnpm --filter @rottay/design-system run gat07:check
+        env:
+          DOCS_ENGINEERING_ROOT: ${{ github.workspace }}/.gat07/docs-engineering
+
+      - name: Dependency graph and identity honesty
+        run: |
+          pnpm dependency:honesty:test
+          node scripts/dependency-honesty.mjs static
+
       # Must run BEFORE Build. `build` runs `build:vertical-css`, which regenerates
       # every first-party artifact in place -- so by the time any test runs, a
       # hand-edited artifact has already been silently overwritten with a correct
@@ -126,6 +144,9 @@ jobs:
       # against the exact dist artifacts produced immediately above it.
       - name: Build + ParticleField quarantine gate
         run: pnpm --filter @rottay/design-system run build
+
+      - name: Packed artifact and non-consuming bundle honesty
+        run: node scripts/dependency-honesty.mjs pack
 
       - name: Bundle budgets
         run: |

@@ -78,6 +78,12 @@ function isImageFile(file: UploadFile): boolean {
   return /\.(png|jpe?g|gif|webp|bmp|svg|ico|avif)(\?.*)?$/i.test(url);
 }
 
+function readThumbUrl(thumbUrls: Record<string, string>, uid: string): string | undefined {
+  if (!Object.prototype.hasOwnProperty.call(thumbUrls, uid)) return undefined;
+  const value = Reflect.get(thumbUrls, uid);
+  return typeof value === 'string' ? value : undefined;
+}
+
 // ---------------------------------------------------------------------------
 // Preview Modal
 // ---------------------------------------------------------------------------
@@ -187,7 +193,7 @@ const FileItem: React.FC<FileItemProps> = ({
   thumbUrls,
 }) => {
   const [hovered, setHovered] = useState(false);
-  const thumb = file.thumbUrl || file.url || thumbUrls[file.uid];
+  const thumb = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
   const isImg = isImageFile(file);
   const isUploading = file.status === 'uploading';
 
@@ -388,7 +394,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
     useEffect(() => {
       if (listType === 'text') return;
       actualFileList.forEach(async (file) => {
-        if (thumbUrls[file.uid] || file.thumbUrl || file.url) return;
+        if (readThumbUrl(thumbUrls, file.uid) || file.thumbUrl || file.url) return;
         const url = await getFileThumbUrl(file);
         if (url) setThumbUrls((prev) => ({ ...prev, [file.uid]: url }));
       });
@@ -431,7 +437,7 @@ export const Upload = React.forwardRef<HTMLDivElement, UploadProps>(
 
     const handlePreview = useCallback((file: UploadFile) => {
       if (onPreview) { onPreview(file); return; }
-      const src = file.thumbUrl || file.url || thumbUrls[file.uid];
+      const src = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
       if (src && isImageFile(file)) setPreviewImage({ src, alt: file.name });
     }, [onPreview, thumbUrls]);
 
@@ -594,7 +600,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
     useEffect(() => {
       if (listType === 'text') return;
       actualFileList.forEach(async (file) => {
-        if (thumbUrls[file.uid] || file.thumbUrl || file.url) return;
+        if (readThumbUrl(thumbUrls, file.uid) || file.thumbUrl || file.url) return;
         const url = await getFileThumbUrl(file);
         if (url) setThumbUrls((prev) => ({ ...prev, [file.uid]: url }));
       });
@@ -630,7 +636,7 @@ export const Dragger = React.forwardRef<HTMLDivElement, DraggerProps>(
 
     const handlePreview = useCallback((file: UploadFile) => {
       if (onPreview) { onPreview(file); return; }
-      const src = file.thumbUrl || file.url || thumbUrls[file.uid];
+      const src = file.thumbUrl || file.url || readThumbUrl(thumbUrls, file.uid);
       if (src && isImageFile(file)) setPreviewImage({ src, alt: file.name });
     }, [onPreview, thumbUrls]);
 

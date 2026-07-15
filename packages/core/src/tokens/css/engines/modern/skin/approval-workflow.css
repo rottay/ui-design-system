@@ -7,7 +7,7 @@
  * not paint a border at all. Unlayered outranks preflight and still yields to a
  * consumer's inline `style` prop -- the exact precedence the inline objects held.
  *
- * BORDER-COLOR FLOOR (P-48): each tenant ships an unlayered
+ * BORDER-COLOR FLOOR (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border-color rule at
  * specificity (0,3,1). Any rule below that paints a real border colour therefore
  * repeats its own `data-part` to reach the (0,4,0) floor. `border: none` resets

@@ -264,7 +264,9 @@ export function DecisionInboxSurface<T extends object>(props: DecisionInboxSurfa
 
   const handleDecision = useCallback((action: string) => {
     if (!selectedItem) return;
-    const key = typeof rowKey === 'function' ? rowKey(selectedItem) : String(selectedItem[rowKey]);
+    const key = typeof rowKey === 'function'
+      ? rowKey(selectedItem)
+      : String(Reflect.get(selectedItem, rowKey));
     const decisionDef = decisions.find(d => d.key === action);
     if (decisionDef?.requiresReason && !reasonText) {
       setPendingAction(action);

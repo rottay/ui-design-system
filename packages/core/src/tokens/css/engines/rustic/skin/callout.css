@@ -13,7 +13,7 @@
  * that component. Rustic's root carries no DaisyUI `alert` class, so nothing
  * external composes onto its border channel.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. The left accent is a `border-left` SHORTHAND
  * (as it is inline) so width, style and color land atomically; it therefore

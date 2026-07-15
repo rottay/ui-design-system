@@ -29,7 +29,7 @@
  * the JS) > filled > default. The disabled rule is ordered after filled so it
  * wins the (0,4,0) tie when a field is both.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` border floor at (0,3,1);
  * every border-color rule below reaches (0,4,0) via a variant/status attribute
  * beyond the two root classes + `[data-part='root']`. Non-border paint

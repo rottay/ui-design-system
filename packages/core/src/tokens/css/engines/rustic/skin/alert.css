@@ -13,7 +13,7 @@
  * `.rottay-alert` would introduce that rule's paint. `-shell` is collision-free
  * (grep-verified), mirroring `rottay-progress-shell`.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element. Per-tone `border-color` therefore reaches
  * (0,4,0) via the two shell classes + `[data-part='root']` + `[data-tone]`.

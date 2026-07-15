@@ -128,7 +128,7 @@ export const ApolloHeading = forwardRef<HTMLHeadingElement, HeadingProps>(
     const scalarSize = scalarOrUndefined(size);
     const effectiveSize = scalarSize || defaultSizeMap[level];
 
-    // All visual properties are set via inline styles referencing DS CSS
+    // Visual properties use token-backed style objects referencing DS CSS
     // variables (var(--ds-*)) with hardcoded fallbacks, ensuring the heading
     // renders correctly without a theme provider (SSR, email, etc.).
     const headingStyle: React.CSSProperties = {

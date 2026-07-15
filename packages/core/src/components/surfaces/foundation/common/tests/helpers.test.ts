@@ -277,6 +277,22 @@ describe('normalizeSurfaceError', () => {
         { count: 5 }
       )
     ).toBe(5);
+    expect(
+      resolveColumnValue(
+        { key: 'count' },
+        (() => 5) as unknown as { count: number }
+      )
+    ).toBeUndefined();
+    const prototype = Object.defineProperty({}, 'inherited', {
+      get(this: { value: string }) {
+        return this.value;
+      },
+    });
+    const rowWithPrototype = Object.assign(Object.create(prototype), { value: 'same-reference' }) as {
+      value: string;
+      inherited: string;
+    };
+    expect(resolveColumnValue({ key: 'inherited' }, rowWithPrototype)).toBe('same-reference');
 
     expect(stringifySurfaceValue(true)).toBe('true');
     expect(stringifySurfaceValue(new Date('2026-03-14T00:00:00Z'))).toBe('2026-03-14T00:00:00.000Z');

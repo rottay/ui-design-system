@@ -24,7 +24,7 @@
  * background resets -- so it gets its own rules rather than being left to
  * default.
  *
- * SPECIFICITY (P-48): each tenant ships an unlayered
+ * SPECIFICITY (P-48): the Platform-only Rottay artifact ships an unlayered
  * `html[data-tenant]:not([data-theme]):not(.light) *` at (0,3,1) that sets
  * border-color on every element; the bordered `border` / `border-bottom`
  * shorthands clear it at (0,5,0)+. Values transcribed verbatim from

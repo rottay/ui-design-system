@@ -122,7 +122,7 @@ function deepEqual(a: any, b: any): boolean {
 
   if (Array.isArray(a) !== Array.isArray(b)) return false;
 
-  if (typeof a === 'object') {
+  if (typeof a === 'object' && typeof b === 'object') {
     // Date comparison
     if (a instanceof Date && b instanceof Date) {
       return a.getTime() === b.getTime();
