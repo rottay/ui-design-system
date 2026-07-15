@@ -18,6 +18,10 @@ import type {
 } from '../../../patterns/foundation/types';
 import type { SavedView } from '../../../patterns/data/saved-views/SavedViews.types';
 import type { CalendarEvent } from '../../../patterns/visualization/calendar-view/CalendarView.types';
+import type {
+  AppResolvedSurfaceAccess,
+  SurfacePermissionsConfig,
+} from '../types';
 
 // ---------------------------------------------------------------------------
 // Canonical view modes
@@ -506,6 +510,10 @@ export interface WorkspaceActiveFiltersConfig {
  * concerns (e.g., KanbanSurface adds drag-drop column config).
  */
 export interface CollectionWorkspaceConfig<T> {
+  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  access?: AppResolvedSurfaceAccess;
+  /** @deprecated Use `access`; retained for one compatibility release. */
+  permissions?: SurfacePermissionsConfig;
   /**
    * Standalone page or embedded detail/workbench posture. Defaults to `page`.
    */

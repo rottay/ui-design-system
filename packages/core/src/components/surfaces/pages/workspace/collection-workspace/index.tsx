@@ -38,6 +38,10 @@ import type {
 } from '../../../../structures/workspace/search-command-bar';
 import { useCollectionWorkspace } from '../../../foundation/hooks/useCollectionWorkspace';
 import { useAdaptivePosture } from '../../../foundation/hooks/useAdaptivePosture';
+import {
+  isResolvedSurfaceAccess,
+  resolveSurfacePermission,
+} from '../../../foundation/helpers';
 import { PatternDataTable } from '../../../../patterns/data/data-table';
 import { PatternFilterPanel } from '../../../../patterns/forms/filter-panel';
 import { PatternSavedViewsBar } from '../../../../patterns/data/saved-views';
@@ -57,6 +61,11 @@ import { CollectionRenderDispatch } from './render-dispatch';
 import type { CollectionViewMode, CollectionViewModeConfigs } from '../../../foundation/contracts/collection';
 import { resolveDensityStyleVars, normalizeDensityMode } from '../../../../../tokens/ts/base/density';
 import type { DensityMode } from '../../../../../tokens/ts/base/density';
+
+function collectionColumnCapabilityId<T>(column: ColumnDef<T>): string {
+  const fieldId = (column as ColumnDef<T> & { fieldId?: string }).fieldId;
+  return fieldId?.trim() || column.key;
+}
 
 // ---------------------------------------------------------------------------
 // Props
@@ -668,10 +677,24 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     error,
     emptyState,
     adaptive,
+    access,
+    permissions,
   } = props;
 
+  const surfaceAccess = access ?? permissions;
+  const capabilityColumns = useMemo(
+    () =>
+      columns.filter((column) =>
+        resolveSurfacePermission(surfaceAccess, {
+          kind: isResolvedSurfaceAccess(surfaceAccess) ? 'column' : 'field',
+          id: collectionColumnCapabilityId(column),
+        }),
+      ),
+    [columns, surfaceAccess],
+  );
+
   const workspace = useCollectionWorkspace({
-    config: { controls, behavior, presentation, data, columns },
+    config: { controls, behavior, presentation, data, columns: capabilityColumns },
     defaultViewMode,
   });
   const [internalSorting, setInternalSorting] = useState<SortConfig | null>(
@@ -1016,8 +1039,8 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
   }, [controls?.export?.enabled, controls?.export?.onExport, controls?.export?.formats]);
 
   const defaultColumnKeys = useMemo(
-    () => columns.map((column) => column.key),
-    [columns],
+    () => capabilityColumns.map((column) => column.key),
+    [capabilityColumns],
   );
 
   const usesExternalSorting = Boolean(behavior?.onSortChange);
@@ -1033,7 +1056,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     : internalSorting;
 
   const effectiveColumns = useMemo<ColumnDef<T>[]>(() => {
-    const persistedColumns = resolvePersistedInlineColumns(columns, {
+    const persistedColumns = resolvePersistedInlineColumns(capabilityColumns, {
       enabled: inlineEditingEnabled,
       hasTableSave: hasInlinePersistenceHandler,
     });
@@ -1056,7 +1079,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
         editable: editor,
       };
     });
-  }, [autoEnableInlineEditing, columns, data, hasInlinePersistenceHandler, inlineEditingEnabled]);
+  }, [autoEnableInlineEditing, capabilityColumns, data, hasInlinePersistenceHandler, inlineEditingEnabled]);
 
   useEffect(() => {
     if (previousDataRef.current === data) return;
@@ -1143,7 +1166,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
     controls?.columnSettings?.enabled &&
       (
         (
-          columns.length > 0 &&
+          capabilityColumns.length > 0 &&
           (
             controls.columnSettings.onColumnsChange ||
             controls.columnSettings.onVisibleColumnsChange ||
@@ -1160,12 +1183,12 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
 
   const columnMenuColumns = useMemo(
     () =>
-      columns.map((column) => ({
+      capabilityColumns.map((column) => ({
         key: column.key,
         title: typeof column.header === 'string' ? column.header : column.key,
         group: column.group,
       })),
-    [columns],
+    [capabilityColumns],
   );
 
   const columnMenuActions = useMemo(
@@ -1384,6 +1407,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               rowKey={rowKey}
               loading={loading}
               error={error}
+              access={surfaceAccess}
               emptyState={emptyState}
               actions={actions}
               actionsColumnWidth={actionsColumnWidth}
@@ -2004,6 +2028,7 @@ export function CollectionWorkspaceSurface<T extends object>(props: CollectionWo
               loading={loading}
               emptyState={emptyState}
               error={error}
+              access={surfaceAccess}
               actions={actions}
               actionsColumnWidth={actionsColumnWidth}
               onRowClick={handleRowClick}

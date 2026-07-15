@@ -769,6 +769,40 @@ describe('CollectionWorkspaceSurface', () => {
     expect(await screen.findByText('Something went wrong')).toBeInTheDocument();
   });
 
+  it('keeps every registered column and row-action capability visible for all access when data fails', async () => {
+    const renderActions = vi.fn(() => {
+      throw new Error('row actions must not execute without row data');
+    });
+    const columns: ColumnDef<TestRow>[] = [
+      { key: 'name', header: 'Name', accessorKey: 'name' },
+      { key: 'status', header: 'Operational status', accessorKey: 'status', visible: false },
+    ];
+
+    const { container } = renderSurface(
+      <CollectionWorkspaceSurface
+        {...buildProps({
+          access: { mode: 'all' },
+          actions: renderActions,
+          columns,
+          error: <div data-testid="data-error">Prisma read failed</div>,
+        })}
+      />,
+    );
+
+    expect(await screen.findByTestId('data-error')).toHaveTextContent('Prisma read failed');
+    expect(screen.getByText('Available when data recovers')).toBeInTheDocument();
+    expect(
+      container.querySelector('[data-capability-kind="column"][data-capability-id="name"]'),
+    ).toHaveTextContent('Name');
+    expect(
+      container.querySelector('[data-capability-kind="column"][data-capability-id="status"]'),
+    ).toHaveTextContent('Operational status');
+    expect(
+      container.querySelector('[data-capability-kind="action"][data-capability-id="row-actions"]'),
+    ).toHaveTextContent('Row actions');
+    expect(renderActions).not.toHaveBeenCalled();
+  });
+
   // -------------------------------------------------------------------------
   // Row click in cards view
   // -------------------------------------------------------------------------
