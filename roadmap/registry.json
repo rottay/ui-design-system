@@ -2028,7 +2028,7 @@
    "lane": "architecture",
    "order": 10,
    "size": "M",
-   "status": "in-progress",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -2052,8 +2052,8 @@
    ],
    "claimedBy": "codex-arc10",
    "claimedAt": "2026-07-14",
-   "doneAt": null,
-   "evidence": null,
+   "doneAt": "2026-07-15",
+   "evidence": "Dependency honesty landed in 78300b0c and 0d0e6007; release metadata prepared in cd84b754. The strict core graph is honest across 1,294 production files with exactly one React 19.2.5, ReactDOM 19.2.5 and Dayjs 1.11.20 identity. The regenerated supplier contract classifies every runtime export, including the ARC11 capability exports. The focused certifier suite is 37/37 green, including fail-closed loader transport, app manifest parity, producer mutation boundaries, identity checks and deletion drills. node scripts/dependency-honesty.mjs apps --require-apps is green for app-platform, app-bithire and app-evnto with every direct and DS-rendered supplier declared. Packed-artifact proof is green without network or workspace links: the real DS tarball installs against 10 locally packed runtime roots and a 114-package isolated closure, resolves 15 exports, executes 6 ESM plus 5 CJS conditions, builds 11 runtime fixtures and leaves the non-consuming root bundle supplier-free at 36 bytes. Independent adversarial review rejected 12/12 static or definitely-callable loader transports, accepted 5/5 ordinary computed data accesses, and gave GO on policy, cache isolation and contract truth.",
    "execution": {
     "decisionOwner": "design-system-architecture",
     "touchedRepos": [
