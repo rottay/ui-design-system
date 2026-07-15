@@ -1,5 +1,12 @@
 # @rottay/design-system
 
+## 2.19.6
+
+### Patch Changes
+
+- Prevent custom card interaction handlers from bubbling into the collection wrapper and invoking
+  row-open behavior twice; selection and open handlers can now consume the originating event.
+
 ## 2.19.5
 
 ### Patch Changes
