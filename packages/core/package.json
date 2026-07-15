@@ -96,9 +96,11 @@
   "scripts": {
     "dev": "node scripts/dev.mjs",
     "build": "tsc && vite build && pnpm run build:modern-css && pnpm run build:commercial-css && pnpm run build:vertical-css",
+    "postbuild": "pnpm run cra14:check",
     "build:modern-css": "postcss src/tokens/css/engines/modern/compiled.css -o dist/modern-engine.css",
     "build:commercial-css": "node scripts/build-commercial-css.mjs",
     "engine-audit:check": "node scripts/engine-token-audit.mjs --check",
+    "cra14:check": "node scripts/cra-14-public-barrel-gate.mjs",
     "test:scripts": "node --test scripts/*.test.mjs && vitest run --config scripts/vitest.scripts.config.ts",
     "pretest": "node scripts/engine-token-audit.mjs --check && node scripts/build-vertical-artifacts.mjs --check && node scripts/build-vertical-css.mjs --check",
     "build:vertical-artifacts": "node scripts/build-vertical-artifacts.mjs",

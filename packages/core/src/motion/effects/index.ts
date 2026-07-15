@@ -12,6 +12,8 @@ export { GlowEffect } from './glow-effect';
 export { ShimmerText } from './shimmer-text';
 export { Spotlight } from './spotlight';
 export { Aurora } from './aurora';
-export { ParticleField, Particles } from './particles';
+// Keep the canvas runtime behind a render-triggered dynamic boundary. The
+// package root may re-export this facade without requesting the runtime chunk.
+export { ParticleField, Particles } from './particles/public';
 export { NoiseTexture } from './noise-texture';
 export { GridPattern } from './grid-pattern';

@@ -122,7 +122,9 @@ jobs:
       - name: Artifact staleness (before Build regenerates them)
         run: pnpm --filter @rottay/design-system exec vitest run src/tokens/__tests__/first-party-artifacts-generated.test.ts
 
-      - name: Build
+      # The package postbuild hook runs the WO-CRA-14 public-barrel/chunk gate
+      # against the exact dist artifacts produced immediately above it.
+      - name: Build + ParticleField quarantine gate
         run: pnpm --filter @rottay/design-system run build
 
       - name: Bundle budgets

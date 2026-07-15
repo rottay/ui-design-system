@@ -124,6 +124,18 @@ describe('WO-CRA-14 WorkspaceShell ParticleField quarantine', () => {
       resolve(process.cwd(), 'src/tokens/css/components/skin/collection-shell.css'),
       'utf8',
     );
+    const consumablePlatformSkin = readFileSync(
+      resolve(process.cwd(), 'styles/platform.css'),
+      'utf8',
+    );
+    const motionEffectsBarrel = readFileSync(
+      resolve(process.cwd(), 'src/motion/effects/index.ts'),
+      'utf8',
+    );
+    const publicParticleFieldFacade = readFileSync(
+      resolve(process.cwd(), 'src/motion/effects/particles/public.tsx'),
+      'utf8',
+    );
     const collectionWorkspaceSource = readFileSync(
       resolve(
         process.cwd(),
@@ -136,8 +148,15 @@ describe('WO-CRA-14 WorkspaceShell ParticleField quarantine', () => {
     expect(shellSource).toContain("import('../../../../motion/effects/particles')");
     expect(shellSource).toContain('.then(({ ParticleField }) => ({');
     expect(shellSkin).toContain('.ds-collection-shell__static-particle-field');
+    expect(consumablePlatformSkin).toContain('.ds-collection-shell__static-particle-field');
     expect(shellSkin).toContain("[data-field-pattern='hybrid']");
     expect(shellSkin).toContain('background-image: radial-gradient');
+    expect(motionEffectsBarrel).toContain(
+      "export { ParticleField, Particles } from './particles/public'",
+    );
+    expect(publicParticleFieldFacade).toContain("import('./index')");
+    expect(publicParticleFieldFacade).not.toMatch(/from\s+['\"]\.\/index['\"]/);
+    expect(publicParticleFieldFacade).not.toMatch(/style=\{\{/);
     expect(collectionWorkspaceSource).toContain(
       'particleField={shellConfig?.particleField}',
     );
