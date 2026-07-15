@@ -1,5 +1,14 @@
 # @rottay/design-system
 
+## 2.19.5
+
+### Patch Changes
+
+- Preserve selection, open and row-action behavior when data tables and collection workspaces
+  project app-authored cards on mobile through an additive renderer context.
+- Keep mobile data-table roots full-width and retain caller class, style and density contracts when
+  the responsive renderer switches away from desktop rows.
+
 ## 2.19.4
 
 ### Patch Changes
