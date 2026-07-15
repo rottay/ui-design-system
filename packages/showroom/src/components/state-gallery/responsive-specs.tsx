@@ -293,6 +293,7 @@ export const RESPONSIVE_SPECS: FlagshipSpec[] = [
                 fields={FORM_BUILDER_FIELDS}
                 layout="grid"
                 columns={2}
+                autoAdaptive
                 onSubmit={() => undefined}
                 style={{ width: '100%' }}
               />
