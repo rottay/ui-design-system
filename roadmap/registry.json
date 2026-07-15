@@ -2117,6 +2117,11 @@
      "at": "2026-07-15 14:45",
      "by": "codex-orchestrator",
      "note": "CollectionWorkspaceSurface now consumes app-resolved access and preserves registered column plus row-action anatomy beside visible data errors (DS 7cc5c74a). Bithire forwards the superadmin all contract into the live Agent Roster (0d464f275), and its manifest/lock now pin published @rottay/design-system 2.19.2 (622a8f088). The focused DS collection suite is green at 36/36, core TypeScript and the 2.19.2 package build are green, and the focused Bithire adapter/adoption suite is green at 3/3. Generated fleet registries and dead factory drain remain before ARC-11 closure."
+    },
+    {
+     "at": "2026-07-15 14:50",
+     "by": "codex-orchestrator",
+     "note": "The app-resolved presentation contract now preserves explicit field, tab and individual-action anatomy through collection and detail load failures (DS 4fc07796), with Bithire Agent Roster registrations landed in 68119289f. Published @rottay/design-system 2.19.3 (release 336bd5ea) is pinned by Bithire 220ef765b. Focused DS coverage is green at 57/57, core TypeScript and the 2.19.3 build are green, and the focused Bithire suite remains green at 3/3. Authorization and data access remain app/server-owned; the DS only renders final all|resolved presentation decisions."
     }
    ],
    "claimedBy": "codex-arc11",
