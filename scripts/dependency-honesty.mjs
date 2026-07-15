@@ -134,7 +134,13 @@ function runtimeTypeContextMap(ts) {
 }
 
 function runtimeTypeContextFor(ts, fileName) {
-  return runtimeTypeContextMap(ts).get(resolve(fileName));
+  return runtimeTypeContexts.get(ts)?.get(resolve(fileName));
+}
+
+function clearRuntimeAnalysisState(ts = typescript) {
+  if (!ts) return;
+  runtimeAnalysisCaches.delete(ts);
+  runtimeTypeContexts.delete(ts);
 }
 
 function primeRuntimeTypeContext(ts, files) {
@@ -2180,6 +2186,10 @@ export function auditCoreDependencyGraph(root = coreRoot) {
   }
   const rootImports = entryGraphs.get('.')?.externalImports ?? new Map();
   const errors = validateSupplierDeclarations({ manifest, allImports, rootImports });
+  // The graph above is now reduced to paths and package names. Drop its strict
+  // analysis Program before the independent contract derivator creates its own
+  // full TypeScript Program, keeping the core peak bounded as well.
+  clearRuntimeAnalysisState();
   errors.push(...validateSupplierContract(readJson(resolve(root, 'supplier-contract.json')), deriveSupplierContract(root)));
 
   const report = {};
@@ -3872,7 +3882,15 @@ export function auditApps({ requireApps = false } = {}) {
   const report = {};
   const errors = [];
   for (const appRoot of roots) {
-    const app = auditAppSupplierManifest(appRoot);
+    let app;
+    try {
+      app = auditAppSupplierManifest(appRoot);
+    } finally {
+      // App inventories share parsed ASTs only within one repository. Keeping
+      // their caches past this point retains every source tree for no benefit
+      // and made `check --require-apps` grow monotonically across the fleet.
+      clearRuntimeAnalysisState();
+    }
     report[basename(appRoot)] = {
       directImports: app.suppliers,
       renderedThroughDesignSystem: app.renderedSuppliers,
@@ -3894,7 +3912,15 @@ async function runCli() {
 
   const output = {};
   if (command === 'check' || command === 'static') {
-    const core = auditCoreDependencyGraph();
+    let core;
+    try {
+      core = auditCoreDependencyGraph();
+    } finally {
+      // Core uses shared TypeScript Programs for its strict capability/type
+      // analysis. The reports below contain only paths and counts, so those
+      // Programs must not remain live while app inventories are scanned.
+      clearRuntimeAnalysisState();
+    }
     formatErrors('core dependency graph is dishonest', core.errors);
     const identities = auditRuntimeIdentities();
     formatErrors('runtime identity gate failed', identities.errors);
