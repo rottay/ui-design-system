@@ -242,6 +242,12 @@ then the signature pass last.
   - Artifact-regeneration impact: all three first-party artifacts (`bithire`, `evnto`, `rottay`) are now build products. `app-bithire`'s generated `index.css` parity guard will diff on its next regeneration.
   - **This note is the external-release marker** consumed by `app-evnto` roadmap WO-EXP-10 and `app-platform` roadmap WO-EXP-07. Their orchestrators may flip their BLOCKED-ON-EXTERNAL status citing this evidence string. Note for `app-evnto` specifically: WO-ENG-17 means it now renders `modern` where it rendered `classic`, and WO-ENG-22 fixed a white-on-white badge and select that only became visible because of it. Capture a full before/after set before taking the bump.
 
+- **AMENDMENT 2026-07-14 (WO-SKIN-07 release)** — `@rottay/design-system@2.19.0`
+  was published and is now the concrete external-release marker for app-platform
+  WO-EXP-07 and app-evnto WO-EXP-10. Only app-bithire moved from `2.18.0` to
+  `2.19.0`, after its same-seed before/after gallery and static certification.
+  app-platform remains on `2.17.0`; app-evnto remains on `2.8.24`.
+
 - **AMENDMENT 2026-07-09** — WO-ENG-14 was added to the dependency list after measurement, not after reading. Two of the five signature cues this pass applies -- surface-tint gradients and glass overlays -- rendered on NO first-party tenant: rottay's card face measured a top-to-bottom luminance delta of exactly 0.000, because `ThemeProvider` stamped the literal `'none'` inline over the design system's own default tint. Capturing a "before/after signature gallery" against a surface that cannot paint the signature would have produced a gallery that proved nothing, scored well, and shipped. This WO was unsatisfiable in its original order. WO-ENG-14 landed the guard; rottay now measures 4.000.
 - **Steps** —
   1. Apply the five signature cues across the flagship set (button, input, select, card, badge, table, tabs, modal, stats-grid) using ONLY the tokens minted by ENG-01/03/04/05 — no new inline invention.
