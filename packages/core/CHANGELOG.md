@@ -1,5 +1,15 @@
 # @rottay/design-system
 
+## 2.19.3
+
+### Patch Changes
+
+- Add a data-independent surface capability registry and responsive anatomy renderer so load
+  failures preserve registered fields, columns, tabs, and individual actions without invoking
+  data callbacks.
+- Extend `CollectionWorkspaceSurface` with `capabilityRegistry` and preserve full registered
+  anatomy in `DetailSurface` error states under app-resolved superadmin access.
+
 ## 2.19.2
 
 ### Patch Changes
