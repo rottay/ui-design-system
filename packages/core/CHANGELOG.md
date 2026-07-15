@@ -1,5 +1,14 @@
 # @rottay/design-system
 
+## 2.19.2
+
+### Patch Changes
+
+- Extend the app-resolved `access` contract to `CollectionWorkspaceSurface`, including deterministic
+  column filtering for resolved access and the superadmin `all` short-circuit.
+- Preserve registered column and row-action anatomy when collection data fails, using a responsive
+  error layout that never invokes row callbacks without data.
+
 ## 2.19.1
 
 ### Patch Changes
