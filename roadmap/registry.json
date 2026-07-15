@@ -2263,7 +2263,7 @@
    "lane": "craft",
    "order": 12,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2281,8 +2281,8 @@
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. Coordinate the use-chart-personality ownership window with WO-CRA-13; status lives only in this registry.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "codex-cra12",
+   "claimedAt": "2026-07-15",
    "doneAt": null,
    "evidence": null,
    "execution": {
