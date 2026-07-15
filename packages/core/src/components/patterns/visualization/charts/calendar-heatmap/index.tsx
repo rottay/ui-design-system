@@ -24,6 +24,7 @@
 
 import { memo, useEffect, useMemo, useRef } from 'react';
 import {
+  color as parseColor,
   interpolateRgb,
   scaleQuantize,
   select,
@@ -34,8 +35,9 @@ import {
 } from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
-import { useChartDimensions, useChartPersonality } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartTheme } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
+import { resolveCssColor } from '../utils/resolve-css-color';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -80,10 +82,13 @@ export interface CalendarHeatMapProps extends ChartBaseProps {
 
 /** Normalise a Date-or-string input to a midnight-local Date. */
 function toDate(input: Date | string): Date {
-  if (input instanceof Date) return input;
+  const date = input instanceof Date
+    ? new Date(input)
   // Parse YYYY-MM-DD as local (not UTC) by replacing hyphens so the
   // Date constructor treats it as a local date string.
-  return new Date(input.replace(/-/g, '/'));
+    : new Date(input.replace(/-/g, '/'));
+  if (Number.isFinite(date.getTime())) date.setHours(0, 0, 0, 0);
+  return date;
 }
 
 /** Format a Date as YYYY-MM-DD for use as a lookup key. */
@@ -94,6 +99,43 @@ const fmtMonth = timeFormat('%b');
 
 /** Day-of-week labels rendered on the left side (Mon = index 0). */
 const DAY_LABELS = ['Mon', '', 'Wed', '', 'Fri', '', ''];
+const DEFAULT_LOW_COLOR = 'var(--ds-color-bg-tertiary)';
+const LOW_COLOR_FALLBACK = '#e5e7eb';
+const HIGH_COLOR_FALLBACK = '#0072b2';
+const DEFAULT_COLOR_STEPS = 5;
+const MAX_COLOR_STEPS = 256;
+
+function resolveD3Color(
+  value: string,
+  owner: HTMLElement | SVGElement | null,
+  fallback: string,
+): string {
+  const resolved = resolveCssColor(value, owner, fallback);
+  return parseColor(resolved)?.formatRgb() ?? fallback;
+}
+
+function normalizeColorSteps(value: number): number {
+  if (!Number.isFinite(value)) return DEFAULT_COLOR_STEPS;
+  return Math.min(MAX_COLOR_STEPS, Math.max(2, Math.floor(value)));
+}
+
+function normalizePositiveSize(value: number, fallback: number): number {
+  return Number.isFinite(value) && value > 0 ? value : fallback;
+}
+
+function normalizeGap(value: number): number {
+  return Number.isFinite(value) && value >= 0 ? value : 2;
+}
+
+function quantizeDomain(values: number[]): [number, number] {
+  if (values.length === 0) return [0, 1];
+  const minimum = Math.min(...values);
+  const maximum = Math.max(...values);
+  if (minimum !== maximum) return [minimum, maximum];
+  if (minimum > 0) return [0, minimum];
+  if (minimum < 0) return [minimum, 0];
+  return [-1, 0];
+}
 
 // ---------------------------------------------------------------------------
 // Component
@@ -136,17 +178,28 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, heightProp);
   const chartPersonality = useChartPersonality({ animate, tooltip, colorScheme });
-  const resolvedColorRange =
-    colorRange ?? ['var(--ds-color-bg-tertiary)', chartPersonality.colors[0] ?? 'var(--ds-color-primary-500)'];
+  // Keep imperative paint reactive to the owning provider rather than to a
+  // document-global theme. Passing the ref (not ref.current) also covers the
+  // normal null-first-render lifecycle.
+  const chartTheme = useChartTheme(containerRef);
+  const resolvedColorRange = useMemo<[string, string]>(() => (
+    colorRange ?? [DEFAULT_LOW_COLOR, chartPersonality.colors[0] ?? 'var(--ds-color-primary-500)']
+  ), [chartPersonality.colors, colorRange]);
 
   // Resolve date range -------------------------------------------------
   const endDate = useMemo(() => {
-    if (endDateProp) return toDate(endDateProp);
+    if (endDateProp) {
+      const parsed = toDate(endDateProp);
+      if (Number.isFinite(parsed.getTime())) return parsed;
+    }
     return new Date();
   }, [endDateProp]);
 
   const startDate = useMemo(() => {
-    if (startDateProp) return toDate(startDateProp);
+    if (startDateProp) {
+      const parsed = toDate(startDateProp);
+      if (Number.isFinite(parsed.getTime())) return parsed;
+    }
     const d = new Date(endDate);
     d.setFullYear(d.getFullYear() - 1);
     d.setDate(d.getDate() + 1); // exactly 365/366 days
@@ -157,8 +210,11 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
   const valueMap = useMemo(() => {
     const map = new Map<string, number>();
     for (const point of data) {
-      const key = fmtKey(toDate(point.date));
-      map.set(key, (map.get(key) ?? 0) + point.value);
+      const date = toDate(point.date);
+      if (!Number.isFinite(date.getTime()) || !Number.isFinite(point.value)) continue;
+      const key = fmtKey(date);
+      const nextValue = (map.get(key) ?? 0) + point.value;
+      if (Number.isFinite(nextValue)) map.set(key, nextValue);
     }
     return map;
   }, [data]);
@@ -170,28 +226,40 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
 
   // Accessible summary table -----------------------------------------
   const summary = useMemo(() => {
-    const nonZero = allDays
-      .map((d) => ({ date: fmtKey(d), value: valueMap.get(fmtKey(d)) ?? 0 }))
-      .filter((d) => d.value > 0);
+    const recordedDays = allDays.flatMap((date) => {
+      const key = fmtKey(date);
+      const value = valueMap.get(key);
+      return value == null || !Number.isFinite(value)
+        ? []
+        : [{ date: key, value }];
+    });
 
     return {
       caption: title ? `${title} data summary` : 'Calendar heatmap data summary',
       headers: ['Date', 'Value'],
-      rows: nonZero.slice(0, 50).map((d) => [d.date, d.value]),
+      rows: recordedDays.slice(0, 50).map((d) => [d.date, d.value]),
     };
   }, [allDays, valueMap, title]);
 
   // Layout constants --------------------------------------------------
   const dayLabelWidth = showDayLabels ? 32 : 0;
   const monthLabelHeight = showMonthLabels ? 18 : 0;
-  const step = cellSize + cellGap;
+  const resolvedCellSize = normalizePositiveSize(cellSize, 14);
+  const resolvedCellGap = normalizeGap(cellGap);
+  const resolvedColorSteps = normalizeColorSteps(colorSteps);
+  const step = resolvedCellSize + resolvedCellGap;
 
   // Render D3 ---------------------------------------------------------
   useEffect(() => {
-    if (!svgRef.current || allDays.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
+    if (allDays.length === 0) {
+      svg.attr('width', 0).attr('height', 0);
+      return;
+    }
 
     // Compute grid bounds
     const firstMonday = timeMonday.floor(startDate);
@@ -200,27 +268,31 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
     );
     const gridWidth = totalWeeks * step;
     const gridHeight = 7 * step;
+    const measuredWidth = Number.isFinite(dimensions.width) ? Math.max(0, dimensions.width) : 0;
     const svgWidth = responsive
-      ? Math.max(dimensions.width, gridWidth + dayLabelWidth + 8)
+      ? Math.max(measuredWidth, gridWidth + dayLabelWidth + 8)
       : gridWidth + dayLabelWidth + 8;
     const svgHeight = gridHeight + monthLabelHeight + 4;
 
     svg.attr('width', svgWidth).attr('height', svgHeight);
 
-    // Value domain (only positive values for quantize)
-    const values = [...valueMap.values()];
-    const maxVal = values.length > 0 ? Math.max(...values) : 1;
-    const minVal = 0;
+    const values = [...valueMap.values()].filter((value) => Number.isFinite(value));
 
     // Build discrete color steps via quantize scale
-    const colorInterpolator = interpolateRgb(resolvedColorRange[0], resolvedColorRange[1]);
+    const colorOwner = containerRef.current ?? svgNode;
+    const lowColor = resolveD3Color(resolvedColorRange[0], colorOwner, LOW_COLOR_FALLBACK);
+    const highColor = resolveD3Color(resolvedColorRange[1], colorOwner, HIGH_COLOR_FALLBACK);
+    const colorInterpolator = interpolateRgb(lowColor, highColor);
     const stepColors: string[] = [];
-    for (let i = 0; i < colorSteps; i++) {
-      stepColors.push(colorInterpolator(i / (colorSteps - 1)));
+    for (let i = 0; i < resolvedColorSteps; i++) {
+      stepColors.push(colorInterpolator(i / (resolvedColorSteps - 1)));
     }
+    // The first color is reserved for dates with no observation. Recorded
+    // negative and zero values still receive a deterministic filled color.
+    const filledStepColors = stepColors.slice(1);
     const colorScale = scaleQuantize<string>()
-      .domain([minVal + 0.001, maxVal]) // ensure 0 is below domain
-      .range(stepColors);
+      .domain(quantizeDomain(values))
+      .range(filledStepColors);
 
     const g = svg
       .append('g')
@@ -282,7 +354,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
       .attr('data-part', 'cell')
       .attr('data-state', (d) => {
         const value = valueMap.get(fmtKey(d));
-        return value == null || value === 0 ? 'empty' : 'filled';
+        return value == null || !Number.isFinite(value) ? 'empty' : 'filled';
       })
       .attr('x', (d) => {
         const weekOffset = Math.floor(timeDay.count(firstMonday, d) / 7);
@@ -293,33 +365,34 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
         const dow = (d.getDay() + 6) % 7;
         return dow * step;
       })
-      .attr('width', cellSize)
-      .attr('height', cellSize)
+      .attr('width', resolvedCellSize)
+      .attr('height', resolvedCellSize)
       .attr('rx', 'var(--ds-radius-sm, 2)')
       .attr('ry', 'var(--ds-radius-sm, 2)')
       .attr('fill', (d) => {
         const val = valueMap.get(fmtKey(d));
-        if (val == null || val === 0) return resolvedColorRange[0];
-        return colorScale(val) ?? resolvedColorRange[0];
+        if (val == null || !Number.isFinite(val)) return lowColor;
+        return colorScale(val) ?? lowColor;
       })
       .style('cursor', onCellClick ? 'pointer' : 'default');
 
     // Tooltips
     if (chartPersonality.tooltip) {
       cells.append('title').text((d) => {
-        const val = valueMap.get(fmtKey(d)) ?? 0;
+        const rawValue = valueMap.get(fmtKey(d));
+        const hasValue = rawValue != null && Number.isFinite(rawValue);
+        const val = hasValue ? rawValue : 0;
         if (formatTooltip) return formatTooltip(d, val);
         const dateStr = fmtKey(d);
-        return val === 0
-          ? `${dateStr}: No activity`
-          : `${dateStr}: ${val}`;
+        return hasValue ? `${dateStr}: ${val}` : `${dateStr}: No activity`;
       });
     }
 
     // Click handler
     if (onCellClick) {
       cells.on('click', (_event, d) => {
-        const val = valueMap.get(fmtKey(d)) ?? 0;
+        const rawValue = valueMap.get(fmtKey(d));
+        const val = rawValue != null && Number.isFinite(rawValue) ? rawValue : 0;
         onCellClick(d, val);
       });
     }
@@ -333,15 +406,19 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
         .delay((_, i) => i * 0.5)
         .attr('opacity', 1);
     }
+
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
   }, [
     allDays,
     valueMap,
     startDate,
     endDate,
     resolvedColorRange,
-    colorSteps,
-    cellSize,
-    cellGap,
+    resolvedColorSteps,
+    resolvedCellSize,
+    resolvedCellGap,
     step,
     showMonthLabels,
     showDayLabels,
@@ -352,6 +429,7 @@ export const CalendarHeatMap = memo(function CalendarHeatMap({
     chartPersonality.animate,
     chartPersonality.animationDuration,
     chartPersonality.tooltip,
+    chartTheme,
     formatTooltip,
     onCellClick,
   ]);

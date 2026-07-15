@@ -143,9 +143,7 @@ export function ChartScaffold({
 }: ChartScaffoldProps) {
   const descriptionId = useId();
   const titleId = useId();
-  const svgTitleId = useId();
-  const svgDescId = useId();
-  const summaryListId = useId();
+  const fallbackTitleId = useId();
   // Tracks which data point the user navigated to via keyboard so we can
   // announce it via aria-live for screen readers.
   const [activeSummaryIndex, setActiveSummaryIndex] = useState(0);
@@ -236,12 +234,16 @@ export function ChartScaffold({
     >
       {title ? (
         <div data-part="heading" style={{ marginBottom: 4 }}>
-          <div data-part="title" style={{ fontSize: 16, fontWeight: 600 }}>{title}</div>
+          <div id={titleId} data-part="title" style={{ fontSize: 16, fontWeight: 600 }}>{title}</div>
           {subtitle ? (
             <div data-part="subtitle" style={{ fontSize: 13 }}>{subtitle}</div>
           ) : null}
         </div>
-      ) : null}
+      ) : (
+        <span id={fallbackTitleId} data-part="accessible-title" style={VISUALLY_HIDDEN_STYLE}>
+          {ariaLabel}
+        </span>
+      )}
 
       <div id={descriptionId} data-part="accessible-summary" style={VISUALLY_HIDDEN_STYLE}>
         <p>{ariaDescription}</p>
@@ -257,9 +259,9 @@ export function ChartScaffold({
           </p>
         ) : null}
         {summaryItems.length > 0 ? (
-          <ul id={summaryListId}>
+          <ul>
             {summaryItems.map((item, index) => (
-              <li key={`${summaryListId}-${index}`} aria-current={index === activeSummaryIndex ? 'true' : undefined}>
+              <li key={`${descriptionId}-${index}`} aria-current={index === activeSummaryIndex ? 'true' : undefined}>
                 {item}
               </li>
             ))}
@@ -287,15 +289,11 @@ export function ChartScaffold({
           fontVariantNumeric: 'var(--ds-numeric-tabular)' as CSSProperties['fontVariantNumeric'],
           fontSize: 'var(--ds-font-size-xs)',
         }}
-        aria-label={ariaLabel}
-        aria-labelledby={title ? `${titleId} ${svgTitleId}` : svgTitleId}
-        aria-describedby={`${descriptionId}${summaryItems.length > 0 ? ` ${summaryListId}` : ''}`}
+        aria-labelledby={title ? titleId : fallbackTitleId}
+        aria-describedby={descriptionId}
         aria-keyshortcuts={summaryItems.length > 0 ? 'ArrowLeft ArrowRight ArrowUp ArrowDown Home End' : undefined}
         onKeyDown={handleKeyboardNavigation}
-      >
-        <title id={svgTitleId}>{ariaLabel}</title>
-        <desc id={svgDescId}>{ariaDescription}</desc>
-      </svg>
+      />
 
       {overlay ?? null}
 

@@ -8,14 +8,32 @@
  * rendering, CSS vars work natively -- the raw CSS var strings are also
  * returned via `cssVars` for that use case.
  *
- * Re-resolves automatically when tenant or theme changes by observing
- * `data-tenant` and `data-theme` attribute mutations on `<html>`.
+ * Re-resolves automatically when the owning chart element or any of its
+ * provider ancestors changes theme-relevant attributes.
  *
  * SSR-safe: returns sensible fallback values when `window` is undefined.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type RefObject,
+} from 'react';
 import { useChartPersonality } from './use-chart-personality';
+import { DEFAULT_COLORS } from '../Charts.types';
+import {
+  resolveCssColor,
+  type ChartColorOwner,
+} from '../utils/resolve-css-color';
+
+export type { ChartColorOwner } from '../utils/resolve-css-color';
+
+export type ChartThemeOwner =
+  | ChartColorOwner
+  | RefObject<ChartColorOwner | null>;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -99,40 +117,17 @@ const FALLBACK_HEX = {
   textSubtitle: '#8c8c8c',
   textLegend: '#bfbfbf',
   textValue: '#262626',
-  palette: '#6366f1',
 } as const;
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-/**
- * Extracts the CSS custom-property name from a `var(--name)` string and
- * resolves it via `getComputedStyle`. Returns the original string unchanged
- * when it is already a raw value (hex, rgb, named color, etc.).
- */
-function resolveVar(varString: string): string {
-  if (typeof window === 'undefined') return varString;
-
-  const match = varString.match(/var\((--[^),]+)/);
-  if (!match) return varString; // Already a raw value
-
-  const resolved = getComputedStyle(document.documentElement)
-    .getPropertyValue(match[1])
-    .trim();
-
-  return resolved || varString;
+function categoricalFallback(index: number): string {
+  return DEFAULT_COLORS.at(index % DEFAULT_COLORS.length) ?? '#6366f1';
 }
 
-/** Resolves a single named CSS variable (without the `var()` wrapper). */
-function resolveName(name: string, fallback: string): string {
-  if (typeof window === 'undefined') return fallback;
-
-  const resolved = getComputedStyle(document.documentElement)
-    .getPropertyValue(name)
-    .trim();
-
-  return resolved || fallback;
+function readChartOwner(
+  source: ChartThemeOwner | null,
+): ChartColorOwner | null {
+  if (!source) return null;
+  return 'nodeType' in source ? source : source.current;
 }
 
 // ---------------------------------------------------------------------------
@@ -144,7 +139,11 @@ function buildFallbackTheme(
   personality: ChartTheme['personality'],
 ): ChartTheme {
   return {
-    palette: paletteVars.map(() => FALLBACK_HEX.palette),
+    // Preserve concrete personality colors in SSR and use the already-audited
+    // accessible categorical sequence only for variables that need a fallback.
+    palette: paletteVars.map((value, index) =>
+      resolveCssColor(value, null, categoricalFallback(index)),
+    ),
     axis: {
       lineColor: FALLBACK_HEX.axisLine,
       tickColor: FALLBACK_HEX.axisTickColor,
@@ -186,16 +185,15 @@ function buildFallbackTheme(
  * (CSS var strings) and personality tokens, then resolves every CSS variable
  * to its computed value via `getComputedStyle`.
  *
- * A `MutationObserver` watches `data-tenant` and `data-theme` attributes on
- * `<html>` so the resolved values are re-computed whenever the tenant or
- * theme changes at runtime.
+ * A `MutationObserver` watches the owner-to-provider ancestor chain so local
+ * tenant roots stay isolated while class/style/theme changes remain reactive.
  *
  * @returns A `ChartTheme` object containing resolved hex values, raw CSS var
  *   strings, and personality pass-through values.
  *
  * @example
  * ```tsx
- * const theme = useChartTheme();
+ * const theme = useChartTheme(svgRef);
  *
  * // For D3 / canvas / export -- use resolved hex:
  * const colorScale = d3.scaleOrdinal(theme.palette);
@@ -207,8 +205,11 @@ function buildFallbackTheme(
  * if (theme.personality.animate) { ... }
  * ```
  */
-export function useChartTheme(): ChartTheme {
+export function useChartTheme(
+  ownerSource: ChartThemeOwner | null = null,
+): ChartTheme {
   const chartPersonality = useChartPersonality();
+  const owner = readChartOwner(ownerSource);
 
   // A monotonically increasing counter that forces re-resolution when the
   // tenant or theme changes. Using a counter instead of storing the attribute
@@ -245,42 +246,63 @@ export function useChartTheme(): ChartTheme {
     setRevision(revisionRef.current);
   }, []);
 
-  // Watch for tenant/theme attribute changes on <html>.
+  // Observe only the real owner ancestry. The chain naturally includes html
+  // when it is an ancestor, without using it as a global color lookup root.
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (
+      typeof window === 'undefined' ||
+      typeof MutationObserver === 'undefined' ||
+      !ownerSource
+    ) {
+      return;
+    }
 
-    const observer = new MutationObserver((mutations) => {
-      for (const mutation of mutations) {
-        if (
-          mutation.type === 'attributes' &&
-          (mutation.attributeName === 'data-tenant' ||
-            mutation.attributeName === 'data-theme')
-        ) {
-          bumpRevision();
-          break;
-        }
-      }
+    // Ref objects are intentionally read again after commit: during the first
+    // render `ref.current` is null, then React assigns the element before this
+    // effect. The revision turns that normal lifecycle into a resolved theme.
+    const effectOwner = readChartOwner(ownerSource);
+    if (!effectOwner) return;
+    if (effectOwner !== owner) bumpRevision();
+
+    const observer = new MutationObserver(() => {
+      bumpRevision();
     });
 
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ['data-tenant', 'data-theme'],
-    });
+    let current: Element | null = effectOwner;
+    while (current) {
+      observer.observe(current, {
+        attributes: true,
+        attributeFilter: [
+          'class',
+          'style',
+          'data-tenant',
+          'data-theme',
+          'data-engine',
+          'data-skin',
+        ],
+      });
+      current = current.parentElement;
+    }
 
     return () => {
       observer.disconnect();
     };
-  }, [bumpRevision]);
+  }, [bumpRevision, owner, ownerSource]);
 
   // Resolve all CSS variables into concrete values. Re-runs when the palette
-  // changes (different color scheme) or when revision bumps (tenant/theme swap).
+  // changes, the owner changes, or a scoped provider mutation bumps revision.
   const theme = useMemo<ChartTheme>(() => {
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || !owner) {
       return buildFallbackTheme(paletteVars, personality);
     }
 
+    const resolveName = (name: string, fallback: string): string =>
+      resolveCssColor(`var(${name})`, owner, fallback);
+
     return {
-      palette: paletteVars.map((v) => resolveVar(v)),
+      palette: paletteVars.map((value, index) =>
+        resolveCssColor(value, owner, categoricalFallback(index)),
+      ),
       axis: {
         lineColor: resolveName(CSS_VARS.axisLine, FALLBACK_HEX.axisLine),
         tickColor: resolveName(CSS_VARS.axisTickColor, FALLBACK_HEX.axisTickColor),
@@ -309,8 +331,8 @@ export function useChartTheme(): ChartTheme {
       },
       personality,
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- revision triggers re-resolution
-  }, [paletteVars, personality, revision]);
+    // revision is an intentional invalidation signal for computed CSS.
+  }, [owner, paletteVars, personality, revision]);
 
   return theme;
 }

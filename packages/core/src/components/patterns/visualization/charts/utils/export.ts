@@ -13,6 +13,8 @@
  * ```
  */
 
+import { resolveCssColor } from './resolve-css-color';
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -76,35 +78,31 @@ const INLINE_PROPERTIES = [
 ] as const;
 
 /**
- * Checks whether a CSS value string contains a `var(--` reference.
+ * Checks whether a CSS value string contains a custom-property reference.
  */
 function containsCssVar(value: string): boolean {
-  return value.includes('var(--');
+  return value.includes('var(');
 }
 
 /**
- * Resolves a CSS variable reference (e.g. `var(--ds-color-primary-500)`) by
- * reading the computed style of the given element. Handles nested var()
- * expressions and fallback values.
- *
- * Returns the original value unchanged if it does not contain a var() reference.
+ * Resolves any variable-bearing attributes already present on the clone. This
+ * covers inline SVG presentation attributes and style declarations before
+ * computed properties are copied over them.
  */
-function resolveCssVarValue(value: string, element: Element): string {
-  if (!containsCssVar(value)) return value;
+function resolveVariableAttributes(
+  original: HTMLElement | SVGElement,
+  clone: HTMLElement | SVGElement,
+): void {
+  for (const attribute of Array.from(clone.attributes)) {
+    if (!containsCssVar(attribute.value)) continue;
 
-  // Replace all var(--name) and var(--name, fallback) occurrences
-  return value.replace(
-    /var\(\s*(--[a-zA-Z0-9-]+)\s*(?:,\s*([^)]+))?\)/g,
-    (_match, varName: string, fallback?: string) => {
-      const resolved = getComputedStyle(element)
-        .getPropertyValue(varName)
-        .trim();
-
-      if (resolved) return resolved;
-      if (fallback) return resolveCssVarValue(fallback.trim(), element);
-      return '';
-    },
-  );
+    const resolved = resolveCssColor(attribute.value, original);
+    if (resolved) {
+      clone.setAttribute(attribute.name, resolved);
+    } else {
+      clone.removeAttribute(attribute.name);
+    }
+  }
 }
 
 /**
@@ -131,6 +129,13 @@ function inlineStyles(
     const origEl = originalElements[i];
     const cloneEl = cloneElements[i] as SVGElement | HTMLElement;
 
+    if (
+      (origEl instanceof SVGElement || origEl instanceof HTMLElement) &&
+      (cloneEl instanceof SVGElement || cloneEl instanceof HTMLElement)
+    ) {
+      resolveVariableAttributes(origEl, cloneEl);
+    }
+
     // Handle foreignObject: flatten to text
     if (origEl.tagName === 'foreignObject') {
       const textContent = origEl.textContent?.trim();
@@ -142,7 +147,10 @@ function inlineStyles(
         textEl.setAttribute('y', y);
         const computedStyle = getComputedStyle(origEl);
         textEl.setAttribute('font-size', computedStyle.fontSize);
-        textEl.setAttribute('fill', computedStyle.color || '#000000');
+        textEl.setAttribute(
+          'fill',
+          resolveCssColor(computedStyle.color, origEl as SVGElement, '#000000'),
+        );
         textEl.textContent = textContent;
         cloneEl.parentNode?.replaceChild(textEl, cloneEl);
       } else {
@@ -162,8 +170,9 @@ function inlineStyles(
 
       // Resolve CSS variable references to concrete values
       if (containsCssVar(value)) {
-        value = resolveCssVarValue(value, origEl);
+        value = resolveCssColor(value, origEl as HTMLElement | SVGElement);
       }
+      if (!value) continue;
 
       // For SVG presentation attributes, set as attribute rather than style
       // to maximize compatibility with SVG renderers that ignore inline styles.
@@ -190,18 +199,27 @@ function inlineStyles(
     }
   }
 
+  resolveVariableAttributes(original, clone);
+
   // Also resolve presentation attributes on the root <svg> element itself
   const rootComputed = getComputedStyle(original);
   for (const prop of INLINE_PROPERTIES) {
     let value = rootComputed.getPropertyValue(prop).trim();
     if (!value) continue;
     if (containsCssVar(value)) {
-      value = resolveCssVarValue(value, original);
+      value = resolveCssColor(value, original);
     }
+    if (!value) continue;
     if (prop === 'font-family' || prop === 'font-size' || prop === 'color') {
       // @runtime-svg-paint-copy -- color is normalized to SVG fill; font properties pass through.
       clone.setAttribute(prop === 'color' ? 'fill' : prop, value);
     }
+  }
+
+  // Stylesheet rules are redundant once computed paint is inlined. Removing
+  // them also prevents a standalone export from retaining unresolved var().
+  for (const styleElement of Array.from(clone.querySelectorAll('style'))) {
+    styleElement.remove();
   }
 }
 
@@ -310,7 +328,10 @@ async function exportAsSvg(
     const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
     bgRect.setAttribute('width', String(dims.width));
     bgRect.setAttribute('height', String(dims.height));
-    bgRect.setAttribute('fill', options.backgroundColor);
+    bgRect.setAttribute(
+      'fill',
+      resolveCssColor(options.backgroundColor, svgElement, 'transparent'),
+    );
     clone.insertBefore(bgRect, clone.firstChild);
   }
 
@@ -329,7 +350,11 @@ async function exportAsPng(
   options: ChartExportOptions,
 ): Promise<void> {
   const scale = options.scale ?? 2;
-  const bgColor = options.backgroundColor ?? '#ffffff';
+  const bgColor = resolveCssColor(
+    options.backgroundColor ?? '#ffffff',
+    svgElement,
+    '#ffffff',
+  );
 
   const clone = prepareSvgClone(svgElement);
   const dims = getSvgDimensions(svgElement);

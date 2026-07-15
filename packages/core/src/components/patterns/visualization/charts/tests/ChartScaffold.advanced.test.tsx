@@ -1,8 +1,25 @@
 import React, { createRef } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
+import { BarChart } from '..';
 import { ChartScaffold } from '../chart-scaffold';
+import { renderSurface } from '../../../../surfaces/foundation/common/test-utils';
+
+function externalReferences(
+  svg: SVGSVGElement,
+  attribute: 'aria-labelledby' | 'aria-describedby',
+): Element[] {
+  const ids = svg.getAttribute(attribute)?.split(/\s+/).filter(Boolean) ?? [];
+  expect(ids.length).toBeGreaterThan(0);
+
+  return ids.map((id) => {
+    const referenced = document.getElementById(id);
+    expect(referenced).not.toBeNull();
+    expect(svg.contains(referenced)).toBe(false);
+    return referenced as Element;
+  });
+}
 
 describe('ChartScaffold advanced coverage', () => {
   it('omits summary keyboard affordances when the summary is empty', () => {
@@ -59,5 +76,48 @@ describe('ChartScaffold advanced coverage', () => {
 
     fireEvent.keyDown(chart, { key: 'ArrowUp' });
     expect(screen.getByText(/active data point: month: jan, orders: 12/i)).toBeInTheDocument();
+  });
+
+  it.each([
+    {
+      caseName: 'with a visual title',
+      title: 'Live pipeline',
+      accessibleName: 'Live pipeline',
+      expectedTitlePart: 'title',
+    },
+    {
+      caseName: 'without a visual title',
+      title: undefined,
+      accessibleName: 'Bar chart',
+      expectedTitlePart: 'accessible-title',
+    },
+  ])('keeps React-owned ARIA references after a real D3 render $caseName', async ({
+    title,
+    accessibleName,
+    expectedTitlePart,
+  }) => {
+    const { container } = renderSurface(
+      <BarChart
+        {...(title ? { title } : {})}
+        width={420}
+        height={260}
+        responsive={false}
+        animate={false}
+        data={[
+          { label: 'Qualified', value: 18 },
+          { label: 'Interview', value: 9 },
+        ]}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(container.querySelectorAll('svg rect').length).toBeGreaterThan(0);
+    });
+
+    const chart = screen.getByRole('img', { name: accessibleName }) as unknown as SVGSVGElement;
+    const [accessibleTitle] = externalReferences(chart, 'aria-labelledby');
+    expect(accessibleTitle).toHaveAttribute('data-part', expectedTitlePart);
+    externalReferences(chart, 'aria-describedby');
+    expect(chart.querySelector('title, desc')).toBeNull();
   });
 });

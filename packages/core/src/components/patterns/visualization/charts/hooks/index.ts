@@ -91,7 +91,7 @@ export { useChartCompact } from './use-chart-compact';
 export type { UseChartCompactOptions, ResolvedChartCompact } from './use-chart-compact';
 
 export { useChartTheme } from './use-chart-theme';
-export type { ChartTheme } from './use-chart-theme';
+export type { ChartColorOwner, ChartTheme, ChartThemeOwner } from './use-chart-theme';
 
 export { useChartTooltip } from './use-chart-tooltip';
 export type { UseChartTooltipReturn } from './use-chart-tooltip';

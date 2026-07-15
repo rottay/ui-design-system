@@ -4,6 +4,21 @@ import { describe, expect, it } from 'vitest';
 
 import { ChartScaffold, describeChart } from '../chart-scaffold';
 
+function expectExternalIdReferences(
+  svg: SVGSVGElement,
+  attribute: 'aria-labelledby' | 'aria-describedby',
+): Element[] {
+  const ids = svg.getAttribute(attribute)?.split(/\s+/).filter(Boolean) ?? [];
+  expect(ids.length).toBeGreaterThan(0);
+
+  return ids.map((id) => {
+    const referenced = document.getElementById(id);
+    expect(referenced).not.toBeNull();
+    expect(svg.contains(referenced)).toBe(false);
+    return referenced as Element;
+  });
+}
+
 describe('ChartScaffold', () => {
   it('renders loading state without mounting the svg shell', () => {
     const containerRef = createRef<HTMLDivElement>();
@@ -47,6 +62,12 @@ describe('ChartScaffold', () => {
     const svg = screen.getByRole('img', { name: 'Typography chart' }) as unknown as SVGSVGElement;
     expect(svg.style.fontVariantNumeric).toBe('var(--ds-numeric-tabular)');
     expect(svg.style.fontSize).toBe('var(--ds-font-size-xs)');
+    expect(expectExternalIdReferences(svg, 'aria-labelledby')[0]).toHaveAttribute(
+      'data-part',
+      'accessible-title',
+    );
+    expectExternalIdReferences(svg, 'aria-describedby');
+    expect(svg.querySelector('title, desc')).toBeNull();
   });
 
   it('supports keyboard navigation through summary items and optional title/subtitle/legend', () => {
@@ -76,11 +97,16 @@ describe('ChartScaffold', () => {
       />
     );
 
-    const chart = screen.getByRole('img', { name: 'Revenue chart' });
+    const chart = screen.getByRole('img', { name: 'Revenue' }) as unknown as SVGSVGElement;
     expect(screen.getByText('Revenue')).toBeInTheDocument();
     expect(screen.getByText('Weekly performance')).toBeInTheDocument();
     expect(screen.getByText('Legend node')).toBeInTheDocument();
     expect(screen.getByText(/active data point: day: mon, value: 12/i)).toBeInTheDocument();
+    const [visualTitle] = expectExternalIdReferences(chart, 'aria-labelledby');
+    expect(visualTitle).toHaveAttribute('data-part', 'title');
+    expect(visualTitle).toHaveTextContent('Revenue');
+    expectExternalIdReferences(chart, 'aria-describedby');
+    expect(chart.querySelector('title, desc')).toBeNull();
 
     fireEvent.keyDown(chart, { key: 'ArrowRight' });
     expect(screen.getByText(/active data point: day: tue, value: 18/i)).toBeInTheDocument();

@@ -21,13 +21,47 @@
  * />
  */
 
-import { memo, useEffect, useRef } from 'react';
-import { axisBottom, axisLeft, extent, interpolateRgb, scaleBand, scaleSequential, select } from 'd3';
+import { memo, useEffect, useMemo, useRef } from 'react';
+import {
+  axisBottom,
+  axisLeft,
+  color as parseColor,
+  extent,
+  interpolateRgb,
+  scaleBand,
+  scaleSequential,
+  select,
+} from 'd3';
 
 import type { ChartBaseProps } from '../Charts.types';
-import { DEFAULT_MARGIN } from '../Charts.types';
-import { useChartDimensions, useChartPersonality } from '../hooks';
+import { useChartDimensions, useChartPersonality, useChartTheme } from '../hooks';
 import { ChartScaffold, describeChart } from '../chart-scaffold';
+import { resolveCssColor } from '../utils/resolve-css-color';
+
+const DEFAULT_HEATMAP_COLOR_RANGE: [string, string] = [
+  'var(--ds-color-info-bg)',
+  'var(--ds-color-primary-500)',
+];
+const DEFAULT_HEATMAP_MARGIN = { top: 20, right: 20, bottom: 60, left: 80 };
+const LOW_COLOR_FALLBACK = '#e5e7eb';
+const HIGH_COLOR_FALLBACK = '#0072b2';
+
+function resolveD3Color(
+  value: string,
+  owner: HTMLElement | SVGElement | null,
+  fallback: string,
+): string {
+  const resolved = resolveCssColor(value, owner, fallback);
+  return parseColor(resolved)?.formatRgb() ?? fallback;
+}
+
+function sequentialDomain(values: number[]): [number, number] {
+  const [minimum, maximum] = extent(values) as [number, number];
+  if (minimum !== maximum) return [minimum, maximum];
+  if (minimum > 0) return [0, minimum];
+  if (minimum < 0) return [minimum, 0];
+  return [0, 1];
+}
 
 /** Props for the {@link HeatMap} component. */
 export interface HeatMapProps extends ChartBaseProps {
@@ -48,7 +82,7 @@ export const HeatMap = memo(function HeatMap({
   data,
   xLabels: xLabelsProp,
   yLabels: yLabelsProp,
-  colorRange = ['var(--ds-color-info-bg)', 'var(--ds-color-primary-500)'],
+  colorRange = DEFAULT_HEATMAP_COLOR_RANGE,
   cellRadius = 2,
   width,
   height = 400,
@@ -61,32 +95,48 @@ export const HeatMap = memo(function HeatMap({
   animate = true,
   responsive = true,
   tooltip = true,
-  margin = { top: 20, right: 20, bottom: 60, left: 80 },
+  margin = DEFAULT_HEATMAP_MARGIN,
 }: HeatMapProps) {
   const svgRef = useRef<SVGSVGElement>(null);
   const { containerRef, dimensions } = useChartDimensions(width, height);
   const chartPersonality = useChartPersonality({ animate, tooltip });
+  // The stable ref form resolves after mount and changes identity whenever
+  // this chart's provider ancestry mutates. The D3 effect can then repaint
+  // tenant colors without reading document-global theme state.
+  const chartTheme = useChartTheme(containerRef);
   const chartWidth = responsive ? dimensions.width : typeof width === 'number' ? width : 600;
   const chartHeight = height;
-  const summary = {
+  const finiteData = useMemo(
+    () => data.filter((item) => Number.isFinite(item.value)),
+    [data],
+  );
+  const summary = useMemo(() => ({
     caption: title ? `${title} data summary` : 'Heatmap data summary',
     headers: ['X', 'Y', 'Value'],
-    rows: data.map((item) => [item.x, item.y, item.value]),
-  };
+    rows: finiteData.map((item) => [item.x, item.y, item.value]),
+  }), [finiteData, title]);
 
   useEffect(() => {
-    if (!svgRef.current || !data || data.length === 0) return;
+    const svgNode = svgRef.current;
+    if (!svgNode) return;
 
-    const svg = select(svgRef.current);
-    svg.selectAll('*').remove();
+    const svg = select(svgNode);
+    svg.selectAll('*').interrupt().remove();
 
-    const innerWidth = chartWidth - margin.left - margin.right;
-    const innerHeight = chartHeight - margin.top - margin.bottom;
+    const safeChartWidth = Number.isFinite(chartWidth) ? Math.max(0, chartWidth) : 0;
+    const safeChartHeight = Number.isFinite(chartHeight) ? Math.max(0, chartHeight) : 0;
+    svg.attr('width', safeChartWidth).attr('height', safeChartHeight);
+
+    if (finiteData.length === 0) return;
+
+    const innerWidth = Math.max(0, safeChartWidth - margin.left - margin.right);
+    const innerHeight = Math.max(0, safeChartHeight - margin.top - margin.bottom);
+    if (innerWidth === 0 || innerHeight === 0) return;
 
     // Derive axis labels from data when the consumer does not provide them
     // explicitly; Set preserves insertion order for a stable axis layout.
-    const xLabels = xLabelsProp ?? [...new Set(data.map((d) => d.x))];
-    const yLabels = yLabelsProp ?? [...new Set(data.map((d) => d.y))];
+    const xLabels = xLabelsProp ?? [...new Set(finiteData.map((d) => d.x))];
+    const yLabels = yLabelsProp ?? [...new Set(finiteData.map((d) => d.y))];
 
     // 5% padding between cells visually separates them while preserving the
     // grid alignment; bandwidth() accounts for this padding automatically.
@@ -96,12 +146,14 @@ export const HeatMap = memo(function HeatMap({
     // Sequential color scale maps the data's value range to a two-stop gradient.
     // This is preferred over a diverging scale because heatmaps here represent
     // magnitude, not deviation from a midpoint.
-    const [minVal, maxVal] = extent(data, (d) => d.value) as [number, number];
-    const colorScale = scaleSequential().domain([minVal, maxVal]).interpolator(interpolateRgb(colorRange[0], colorRange[1]));
+    const colorOwner = containerRef.current ?? svgNode;
+    const lowColor = resolveD3Color(colorRange[0], colorOwner, LOW_COLOR_FALLBACK);
+    const highColor = resolveD3Color(colorRange[1], colorOwner, HIGH_COLOR_FALLBACK);
+    const colorScale = scaleSequential<string>()
+      .domain(sequentialDomain(finiteData.map((item) => item.value)))
+      .interpolator(interpolateRgb(lowColor, highColor));
 
     const g = svg
-      .attr('width', chartWidth)
-      .attr('height', chartHeight)
       .append('g')
       .attr('data-part', 'plot-area')
       .attr('transform', `translate(${margin.left},${margin.top})`);
@@ -127,7 +179,7 @@ export const HeatMap = memo(function HeatMap({
     // scale. The staggered 10ms delay creates a "wave" reveal across the matrix.
     const cells = g
       .selectAll('.cell')
-      .data(data)
+      .data(finiteData)
       .enter()
       .append('rect')
       .attr('class', 'cell')
@@ -154,8 +206,12 @@ export const HeatMap = memo(function HeatMap({
 
     svg.selectAll('.domain').attr('data-part', 'axis-domain');
     svg.selectAll('.tick line:not([data-part])').attr('data-part', 'axis-tick');
+
+    return () => {
+      svg.selectAll('*').interrupt();
+    };
   }, [
-    data,
+    finiteData,
     chartWidth,
     chartHeight,
     xLabelsProp,
@@ -165,6 +221,7 @@ export const HeatMap = memo(function HeatMap({
     chartPersonality.animate,
     chartPersonality.animationDuration,
     chartPersonality.tooltip,
+    chartTheme,
     margin,
   ]);
 
@@ -181,7 +238,7 @@ export const HeatMap = memo(function HeatMap({
       title={title}
       subtitle={subtitle}
       ariaLabel={title ?? 'Heatmap'}
-      ariaDescription={describeChart('Heatmap', data.length, subtitle)}
+      ariaDescription={describeChart('Heatmap', finiteData.length, subtitle)}
       summary={summary}
     />
   );

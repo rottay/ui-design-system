@@ -112,4 +112,43 @@ describe('chart export paint fidelity', () => {
     expect(exported).toContain('stroke="rgb(101, 67, 33)"');
     style.remove();
   });
+
+  it('bakes owner-scoped nested variables into SVG paint with no var() residue', async () => {
+    const createObjectURL = installDownloadStubs();
+    const svg = chartSvg();
+    const rect = svg.querySelector('.export-mark') as SVGRectElement;
+    svg.style.setProperty('--export-background', '#f4f5f6');
+    rect.style.setProperty('--export-base', 'rgb(12, 34, 56)');
+    rect.style.setProperty('--export-paint', 'var(--export-base)');
+    rect.setAttribute('fill', 'var(--export-paint, #000000)');
+    rect.setAttribute('stroke', 'var(--missing-stroke, rgb(65, 43, 21))');
+
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const embeddedStyle = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    embeddedStyle.textContent = '.unused { fill: var(--stylesheet-residue); }';
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    const stop = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop.style.setProperty('--export-stop', '#789abc');
+    stop.setAttribute('stop-color', 'var(--export-stop)');
+    gradient.appendChild(stop);
+    defs.append(embeddedStyle, gradient);
+    svg.insertBefore(defs, rect);
+    const computedStyle = vi.spyOn(window, 'getComputedStyle');
+
+    await exportChart(svg, {
+      format: 'svg',
+      filename: 'tenant-paint',
+      backgroundColor: 'var(--export-background)',
+    });
+
+    const blob = createObjectURL.mock.calls[0]?.[0];
+    const exported = await (blob as Blob).text();
+    expect(exported).toContain('fill="rgb(12, 34, 56)"');
+    expect(exported).toContain('stroke="rgb(65, 43, 21)"');
+    expect(exported).toContain('fill="#f4f5f6"');
+    expect(exported).toContain('stop-color="#789abc"');
+    expect(exported).not.toContain('<style');
+    expect(exported).not.toContain('var(');
+    expect(computedStyle).not.toHaveBeenCalledWith(document.documentElement);
+  });
 });
