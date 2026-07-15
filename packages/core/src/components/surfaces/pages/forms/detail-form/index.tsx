@@ -35,8 +35,8 @@ export function DetailFormSurface({
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
   // Permission-aware field filtering removes fields the current user cannot
   // see before they reach the form builder, avoiding empty-field placeholders.
-  const visibleFields = filterSurfaceFields(config.behavior.fields, config.permissions);
-  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.permissions);
+  const visibleFields = filterSurfaceFields(config.behavior.fields, config.access ?? config.permissions);
+  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access ?? config.permissions);
   // Surface maxWidth overrides chrome maxWidth so individual surfaces can
   // constrain form width without altering the shared chrome config.
   const chrome = {
@@ -61,7 +61,7 @@ export function DetailFormSurface({
         ...(config.behavior.secondaryActions ?? []),
         ...(config.behavior.cancelAction ? [config.behavior.cancelAction] : []),
       ]}
-      permissions={config.permissions}
+      permissions={config.access ?? config.permissions}
     />
   );
 

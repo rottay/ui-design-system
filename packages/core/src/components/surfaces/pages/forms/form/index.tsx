@@ -43,14 +43,14 @@ export function FormSurface({
   const { shouldStack, isMobile } = useSurfaceResponsiveLayout(config.visual);
   // Fields are permission-filtered before reaching the form builder so
   // restricted fields never appear in the DOM at all.
-  const visibleFields = filterSurfaceFields(config.behavior.fields, config.permissions);
+  const visibleFields = filterSurfaceFields(config.behavior.fields, config.access ?? config.permissions);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   // Label text transform (uppercase, capitalize, sentence) comes from the
   // product personality profile, keeping form labels consistent across
   // every form surface without per-instance configuration.
   const labelTransform = resolveLabelTextTransform(profileDefaults.labelStyle);
-  const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.permissions);
-  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.permissions);
+  const cancelAction = resolveSurfaceAction(config.behavior.cancelAction, config.access ?? config.permissions);
+  const submitAction = resolveSurfaceAction(config.behavior.submitAction, config.access ?? config.permissions);
   const chrome = {
     ...config.presentation.chrome,
     maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,

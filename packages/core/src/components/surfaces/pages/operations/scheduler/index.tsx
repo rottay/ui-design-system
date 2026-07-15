@@ -36,7 +36,7 @@ export function SchedulerSurface({
   const actionsNode = (
     <Stack spacing="sm">
       {config.presentation.toolbarStart}
-      <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />
+      <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />
       {config.presentation.toolbarEnd}
     </Stack>
   );

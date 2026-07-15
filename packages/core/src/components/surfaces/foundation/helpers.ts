@@ -10,14 +10,45 @@ import type { ColumnDef, FieldDef } from '../../patterns/foundation/types';
 import type { DetailAction } from '../../patterns/data/detail-panel';
 import type { ButtonVariant } from '../../primitives/inputs/Button';
 import type {
+  AppResolvedSurfaceAccess,
   EntityAdapter,
+  SurfaceAccessInput,
   SurfaceAction,
+  SurfaceCapabilityKind,
   SurfaceColumn,
   DetailSurfaceTab,
   SurfaceFieldDef,
-  SurfacePermissionsConfig,
+  SurfaceResolvedCapability,
   SurfaceTabbedView,
 } from './types';
+
+/** True only for the explicit app-resolved superadmin presentation signal. */
+export function isAllSurfaceAccess(
+  access: SurfaceAccessInput | undefined
+): access is Extract<AppResolvedSurfaceAccess, { mode: 'all' }> {
+  return Boolean(access && 'mode' in access && access.mode === 'all');
+}
+
+/** True only for a bounded app-resolved capability inventory. */
+export function isResolvedSurfaceAccess(
+  access: SurfaceAccessInput | undefined
+): access is Extract<AppResolvedSurfaceAccess, { mode: 'resolved' }> {
+  return Boolean(access && 'mode' in access && access.mode === 'resolved');
+}
+
+/** Resolve one capability without interpreting app roles, grants, or cascades. */
+export function resolveSurfaceCapability(
+  access: SurfaceAccessInput | undefined,
+  input: { kind: SurfaceCapabilityKind; id: string }
+): SurfaceResolvedCapability | undefined {
+  if (!isResolvedSurfaceAccess(access)) {
+    return undefined;
+  }
+
+  return access.capabilities.find(
+    (capability) => capability.kind === input.kind && capability.id === input.id
+  );
+}
 
 export function mapSurfaceData<TRaw, TView>(
   rawData: TRaw[],
@@ -33,17 +64,30 @@ export function mapSurfaceData<TRaw, TView>(
  * narrow place where explicit grants and custom `isAllowed` logic are combined.
  */
 export function resolveSurfacePermission(
-  permissions: SurfacePermissionsConfig | undefined,
+  access: SurfaceAccessInput | undefined,
   input: {
-    kind: 'field' | 'action' | 'tab';
+    kind: SurfaceCapabilityKind;
     id: string;
   }
 ): boolean {
-  if (!permissions) {
+  if (!access || isAllSurfaceAccess(access)) {
     return true;
   }
 
-  if (input.kind === 'action') {
+  if (isResolvedSurfaceAccess(access)) {
+    return resolveSurfaceCapability(access, input)?.visible ?? false;
+  }
+
+  const permissions = access;
+
+  // Legacy permissions never owned route visibility. Keep routes app-owned.
+  if (input.kind === 'route') {
+    return true;
+  }
+
+  const legacyKind = input.kind === 'column' ? 'field' : input.kind;
+
+  if (legacyKind === 'action') {
     if (permissions.allowedActions && !permissions.allowedActions.includes(input.id)) {
       return false;
     }
@@ -54,15 +98,15 @@ export function resolveSurfacePermission(
   }
 
   const permissionRule =
-    input.kind === 'field'
+    legacyKind === 'field'
       ? permissions.fields?.[input.id]
-      : input.kind === 'action'
+      : legacyKind === 'action'
         ? permissions.actions?.[input.id]
         : permissions.tabs?.[input.id];
 
   if (permissions.isAllowed) {
     return permissions.isAllowed({
-      kind: input.kind,
+      kind: legacyKind,
       id: input.id,
       permission: permissionRule?.permission,
       context: permissions.runtimeContext,
@@ -126,27 +170,35 @@ export function expandCascadedPermissions(
  */
 export function filterSurfaceRowActions<TView>(
   actions: SurfaceAction<TView>[] | undefined,
-  permissions: SurfacePermissionsConfig | undefined,
+  access: SurfaceAccessInput | undefined,
   row: TView,
   rowIndex: number
 ): SurfaceAction<TView>[] {
-  // Start with the global action filter (visibility + permission rules).
-  const globallyAllowed = filterSurfaceActions(actions, permissions, row);
+  if (isAllSurfaceAccess(access)) {
+    return actions ?? [];
+  }
 
-  if (!permissions?.isRowAllowed) {
+  // Start with the global action filter (visibility + permission rules).
+  const globallyAllowed = filterSurfaceActions(actions, access, row);
+
+  if (isResolvedSurfaceAccess(access)) {
+    return globallyAllowed;
+  }
+
+  if (!access?.isRowAllowed) {
     return globallyAllowed;
   }
 
   return globallyAllowed.filter((action) => {
-    const permissionRule = permissions.actions?.[action.id];
+    const permissionRule = access.actions?.[action.id];
 
-    return permissions.isRowAllowed!({
+    return access.isRowAllowed!({
       kind: 'action',
       id: action.id,
       permission: permissionRule?.permission,
       row,
       rowIndex,
-      context: permissions.runtimeContext,
+      context: access.runtimeContext,
     });
   });
 }
@@ -157,30 +209,34 @@ export function filterSurfaceRowActions<TView>(
  */
 export function isFieldVisibleForRow<TView>(
   fieldId: string,
-  permissions: SurfacePermissionsConfig | undefined,
+  access: SurfaceAccessInput | undefined,
   row: TView,
   rowIndex: number
 ): boolean {
-  if (!permissions) {
+  if (!access || isAllSurfaceAccess(access)) {
     return true;
   }
 
-  // If isRowAllowed is defined, use it for field-level row checks.
-  if (permissions.isRowAllowed) {
-    const permissionRule = permissions.fields?.[fieldId];
+  if (isResolvedSurfaceAccess(access)) {
+    return resolveSurfacePermission(access, { kind: 'field', id: fieldId });
+  }
 
-    return permissions.isRowAllowed({
+  // If isRowAllowed is defined, use it for field-level row checks.
+  if (access.isRowAllowed) {
+    const permissionRule = access.fields?.[fieldId];
+
+    return access.isRowAllowed({
       kind: 'field',
       id: fieldId,
       permission: permissionRule?.permission,
       row,
       rowIndex,
-      context: permissions.runtimeContext,
+      context: access.runtimeContext,
     });
   }
 
   // Fall back to global field permission.
-  return resolveSurfacePermission(permissions, {
+  return resolveSurfacePermission(access, {
     kind: 'field',
     id: fieldId,
   });
@@ -199,26 +255,36 @@ export function isFieldVisibleForRow<TView>(
  */
 export function resolveFieldAccessForRow<TView>(
   fieldId: string,
-  permissions: SurfacePermissionsConfig | undefined,
+  access: SurfaceAccessInput | undefined,
   row: TView,
   rowIndex: number
 ): 'visible' | 'readonly' | 'hidden' {
-  if (!permissions) {
+  if (!access || isAllSurfaceAccess(access)) {
     return 'visible';
   }
 
+  if (isResolvedSurfaceAccess(access)) {
+    const capability = resolveSurfaceCapability(access, { kind: 'field', id: fieldId });
+
+    if (!capability?.visible) {
+      return 'hidden';
+    }
+
+    return capability.disabled ? 'readonly' : 'visible';
+  }
+
   // 1. Dynamic per-row field access has highest priority.
-  if (permissions.resolveFieldAccess) {
-    return permissions.resolveFieldAccess({
+  if (access.resolveFieldAccess) {
+    return access.resolveFieldAccess({
       fieldId,
       row,
       rowIndex,
-      context: permissions.runtimeContext,
+      context: access.runtimeContext,
     });
   }
 
   // 2-4. Fall back to boolean visibility check.
-  const isVisible = isFieldVisibleForRow(fieldId, permissions, row, rowIndex);
+  const isVisible = isFieldVisibleForRow(fieldId, access, row, rowIndex);
 
   return isVisible ? 'visible' : 'hidden';
 }
@@ -226,11 +292,15 @@ export function resolveFieldAccessForRow<TView>(
 /** Filter visible columns before they reach table-like patterns. */
 export function filterSurfaceColumns<TView>(
   columns: SurfaceColumn<TView>[],
-  permissions: SurfacePermissionsConfig | undefined
+  access: SurfaceAccessInput | undefined
 ): SurfaceColumn<TView>[] {
+  if (isAllSurfaceAccess(access)) {
+    return columns;
+  }
+
   return columns.filter((column) => {
-    return resolveSurfacePermission(permissions, {
-      kind: 'field',
+    return resolveSurfacePermission(access, {
+      kind: isResolvedSurfaceAccess(access) ? 'column' : 'field',
       id: column.fieldId,
     });
   });
@@ -239,20 +309,36 @@ export function filterSurfaceColumns<TView>(
 /** Filter action bars against both declarative visibility and permission rules. */
 export function filterSurfaceActions<TView>(
   actions: SurfaceAction<TView>[] | undefined,
-  permissions: SurfacePermissionsConfig | undefined,
+  access: SurfaceAccessInput | undefined,
   item?: TView
 ): SurfaceAction<TView>[] {
-  return (actions ?? []).filter((action) => {
+  if (isAllSurfaceAccess(access)) {
+    return actions ?? [];
+  }
+
+  const visibleActions = (actions ?? []).filter((action) => {
     const isVisible = action.visible ? action.visible(item as TView) : true;
 
     if (!isVisible) {
       return false;
     }
 
-    return resolveSurfacePermission(permissions, {
+    return resolveSurfacePermission(access, {
       kind: 'action',
       id: action.id,
     });
+  });
+
+  if (!isResolvedSurfaceAccess(access)) {
+    return visibleActions;
+  }
+
+  return visibleActions.map((action) => {
+    const capability = resolveSurfaceCapability(access, { kind: 'action', id: action.id });
+
+    return capability?.disabled && !action.disabled
+      ? { ...action, disabled: true }
+      : action;
   });
 }
 
@@ -268,22 +354,30 @@ export function filterSurfaceActions<TView>(
  */
 export function resolveSurfaceAction<TView>(
   action: SurfaceAction<TView> | undefined,
-  permissions: SurfacePermissionsConfig | undefined,
+  access: SurfaceAccessInput | undefined,
   item?: TView
 ): SurfaceAction<TView> | undefined {
-  return filterSurfaceActions(action ? [action] : undefined, permissions, item)[0];
+  if (isAllSurfaceAccess(access)) {
+    return action;
+  }
+
+  return filterSurfaceActions(action ? [action] : undefined, access, item)[0];
 }
 
 export function filterSurfaceFields(
   fields: SurfaceFieldDef[],
-  permissions: SurfacePermissionsConfig | undefined
+  access: SurfaceAccessInput | undefined
 ): SurfaceFieldDef[] {
+  if (isAllSurfaceAccess(access)) {
+    return fields;
+  }
+
   return fields.filter((field) => {
     if (!field.fieldId) {
       return true;
     }
 
-    return resolveSurfacePermission(permissions, {
+    return resolveSurfacePermission(access, {
       kind: 'field',
       id: field.fieldId,
     });
@@ -293,9 +387,13 @@ export function filterSurfaceFields(
 /** Filter tabbed navigation so hidden or unauthorized views never reach the renderer. */
 export function filterSurfaceTabbedViews<TView extends SurfaceTabbedView>(
   views: TView[],
-  permissions: SurfacePermissionsConfig | undefined
+  access: SurfaceAccessInput | undefined
 ): TView[] {
-  return views.filter((view) => {
+  if (isAllSurfaceAccess(access)) {
+    return views;
+  }
+
+  const visibleViews = views.filter((view) => {
     const isVisible =
       typeof view.visible === 'function'
         ? view.visible()
@@ -305,20 +403,39 @@ export function filterSurfaceTabbedViews<TView extends SurfaceTabbedView>(
       return false;
     }
 
-    return resolveSurfacePermission(permissions, {
+    return resolveSurfacePermission(access, {
       kind: 'tab',
       id: view.permissionId ?? view.key,
     });
+  });
+
+  if (!isResolvedSurfaceAccess(access)) {
+    return visibleViews;
+  }
+
+  return visibleViews.map((view) => {
+    const capability = resolveSurfaceCapability(access, {
+      kind: 'tab',
+      id: view.permissionId ?? view.key,
+    });
+
+    return capability?.disabled && !view.disabled
+      ? { ...view, disabled: true }
+      : view;
   });
 }
 
 /** Apply tab visibility and permission rules to detail surfaces on a per-item basis. */
 export function filterDetailSurfaceTabs<TView>(
   tabs: DetailSurfaceTab<TView>[] | undefined,
-  permissions: SurfacePermissionsConfig | undefined,
+  access: SurfaceAccessInput | undefined,
   item: TView
 ): DetailSurfaceTab<TView>[] {
-  return (tabs ?? []).filter((tab) => {
+  if (isAllSurfaceAccess(access)) {
+    return tabs ?? [];
+  }
+
+  const visibleTabs = (tabs ?? []).filter((tab) => {
     const isVisible =
       typeof tab.visible === 'function'
         ? tab.visible(item)
@@ -328,10 +445,25 @@ export function filterDetailSurfaceTabs<TView>(
       return false;
     }
 
-    return resolveSurfacePermission(permissions, {
+    return resolveSurfacePermission(access, {
       kind: 'tab',
       id: tab.permissionId ?? tab.key,
     });
+  });
+
+  if (!isResolvedSurfaceAccess(access)) {
+    return visibleTabs;
+  }
+
+  return visibleTabs.map((tab) => {
+    const capability = resolveSurfaceCapability(access, {
+      kind: 'tab',
+      id: tab.permissionId ?? tab.key,
+    });
+
+    return capability?.disabled && !tab.disabled
+      ? { ...tab, disabled: true }
+      : tab;
   });
 }
 

@@ -95,7 +95,7 @@ export function CompareSurface({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />}
+      actions={<SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />}
       loading={loading}
     >
       {!hasData ? (

@@ -295,15 +295,15 @@ export function ListSurface<TRaw, TView extends object>({
   // Permission filtering is memoized because it drives both column visibility
   // and the "no visible columns" edge case detection.
   const permittedColumns = useMemo(() => {
-    return filterSurfaceColumns(config.behavior.columns, config.permissions);
-  }, [config.behavior.columns, config.permissions]);
+    return filterSurfaceColumns(config.behavior.columns, config.access ?? config.permissions);
+  }, [config.behavior.columns, config.access ?? config.permissions]);
   const primaryAction = useMemo(() => {
-    return resolveSurfaceAction(config.behavior.primaryAction, config.permissions);
-  }, [config.behavior.primaryAction, config.permissions]);
+    return resolveSurfaceAction(config.behavior.primaryAction, config.access ?? config.permissions);
+  }, [config.behavior.primaryAction, config.access ?? config.permissions]);
 
   const rowActions = useMemo(() => {
-    return filterSurfaceActions(config.behavior.rowActions, config.permissions);
-  }, [config.behavior.rowActions, config.permissions]);
+    return filterSurfaceActions(config.behavior.rowActions, config.access ?? config.permissions);
+  }, [config.behavior.rowActions, config.access ?? config.permissions]);
 
   const activeFilterCount = countActiveFilters(config.behavior.filterValues);
   const effectiveView = isMobile ? resolvedMobileView : activeView;

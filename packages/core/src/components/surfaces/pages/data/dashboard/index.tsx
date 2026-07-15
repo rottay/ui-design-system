@@ -47,7 +47,7 @@ export function DashboardSurface({
   const isMobile = responsiveLayout.isMobile;
   // Permission filtering happens early so the action count drives both
   // rendering and layout decisions (e.g. no empty action bar wrapper).
-  const headerActions = filterSurfaceActions(config.behavior.headerActions, config.permissions);
+  const headerActions = filterSurfaceActions(config.behavior.headerActions, config.access ?? config.permissions);
   // Spacing and heading weight resolve from personality tokens, allowing
   // the same dashboard config to render differently across product profiles.
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);

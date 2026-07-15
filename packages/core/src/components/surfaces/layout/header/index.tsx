@@ -26,7 +26,7 @@ export function HeaderSurface({
   const profileDefaults = useSurfaceProfileDefaults();
   // Tabs are permission-filtered so restricted tabs never appear in the
   // navigation, avoiding confusing "access denied" states.
-  const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs ?? [], config.permissions);
+  const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs ?? [], config.access ?? config.permissions);
   // Fall back to the first visible tab if the requested activeTab was
   // hidden by permissions or does not exist in the config.
   const resolvedActiveTabKey =
@@ -41,7 +41,7 @@ export function HeaderSurface({
   const actionsNode = (
     <Stack spacing="sm">
       {config.presentation.actionsStart}
-      <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />
+      <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />
     </Stack>
   );
 

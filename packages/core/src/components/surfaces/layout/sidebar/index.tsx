@@ -96,7 +96,7 @@ export function SidebarSurface({ config }: SidebarSurfaceProps): React.ReactElem
             <Box className="ds-sidebar__navigation" data-part="navigation">{config.presentation.sidebar}</Box>
             <SurfaceActionBar
               actions={config.behavior.actions}
-              permissions={config.permissions}
+              permissions={config.access ?? config.permissions}
               justify="start"
             />
             {config.presentation.footer}

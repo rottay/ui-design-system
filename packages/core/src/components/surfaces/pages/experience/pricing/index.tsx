@@ -23,7 +23,7 @@ export function PricingSurface({
   config,
   loading = false,
 }: PricingSurfaceProps): React.ReactElement {
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
+  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />;
 
   // Plans and features are re-mapped to strip surface-level metadata before
   // reaching the pricing pattern. This keeps the pattern API stable even if

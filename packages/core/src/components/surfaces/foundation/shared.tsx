@@ -12,12 +12,13 @@
 import type { MouseEvent, ReactNode } from 'react';
 import { Button, Card, Flex, Stack, Text } from '../../primitives';
 import { filterSurfaceActions, resolveSurfaceButtonVariant } from './helpers';
-import type { SurfaceAction, SurfacePermissionsConfig, SurfaceTabbedView } from './types';
+import type { SurfaceAccessInput, SurfaceAction, SurfaceTabbedView } from './types';
 
 export interface SurfaceActionBarProps<TView = void> {
   actions?: SurfaceAction<TView>[];
   item?: TView;
-  permissions?: SurfacePermissionsConfig;
+  /** Presentation access already resolved by the app/server. */
+  permissions?: SurfaceAccessInput;
   justify?: 'start' | 'center' | 'end' | 'between';
   size?: 'sm' | 'md' | 'lg';
   stopPropagation?: boolean;

@@ -84,7 +84,7 @@ export function DetailSurface<TRaw, TView>({
 
   // Convert the surface action vocabulary into the narrower detail-panel contract.
   const actions = item
-    ? filterSurfaceActions(config.behavior.actions, config.permissions, item).map((action) => ({
+    ? filterSurfaceActions(config.behavior.actions, config.access ?? config.permissions, item).map((action) => ({
         key: action.id,
         label: action.label,
         icon: action.icon,
@@ -102,7 +102,7 @@ export function DetailSurface<TRaw, TView>({
 
   // Tabs are filtered after mapping the item so `visible` and `badge` callbacks can inspect real data.
   const visibleTabs = item
-    ? filterDetailSurfaceTabs(config.presentation.tabs, config.permissions, item).map((tab) => ({
+    ? filterDetailSurfaceTabs(config.presentation.tabs, config.access ?? config.permissions, item).map((tab) => ({
         key: tab.key,
         label: tab.label,
         icon: tab.icon,

@@ -22,7 +22,7 @@ export function FileBrowserSurface({
   config,
   loading = false,
 }: FileBrowserSurfaceProps): React.ReactElement {
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
+  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />;
 
   // The pattern requires discriminated union types (FileItem / FolderItem).
   // We use type predicates to narrow from the surface config's types into

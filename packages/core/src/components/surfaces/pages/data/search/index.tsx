@@ -121,8 +121,8 @@ export function SearchSurface({
   }, [config.behavior.results, selectedId]);
 
   const resultActions = useMemo(() => {
-    return filterSurfaceActions(config.behavior.resultActions, config.permissions, selectedResult);
-  }, [config.behavior.resultActions, config.permissions, selectedResult]);
+    return filterSurfaceActions(config.behavior.resultActions, config.access ?? config.permissions, selectedResult);
+  }, [config.behavior.resultActions, config.access ?? config.permissions, selectedResult]);
 
   const setSelectedResult = (result: SearchSurfaceResult): void => {
     if (config.behavior.selectedResultId === undefined) {
@@ -153,7 +153,7 @@ export function SearchSurface({
         ...config.presentation.chrome,
         maxWidth: config.visual.maxWidth ?? config.presentation.chrome.maxWidth,
       }}
-      actions={<SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />}
+      actions={<SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />}
       loading={loading}
     >
       <Stack
@@ -277,7 +277,7 @@ export function SearchSurface({
                     <SurfaceActionBar
                       actions={resultActions}
                       item={selectedResult}
-                      permissions={config.permissions}
+                      permissions={config.access ?? config.permissions}
                     />
                   }
                 >

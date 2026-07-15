@@ -59,6 +59,7 @@ export function OnboardingSurface({
       ),
     },
     behavior: config.behavior,
+    access: config.access,
     permissions: config.permissions,
   };
 

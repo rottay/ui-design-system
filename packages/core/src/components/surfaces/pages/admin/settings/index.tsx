@@ -49,11 +49,11 @@ export function SettingsSurface({
   const { shouldStack } = useSurfaceResponsiveLayout(config.visual);
   const sectionSpacing = resolveStackSpacing(profileDefaults.sectionSpacing);
   const headingWeight = resolveHeadingFontWeight(profileDefaults.headerWeight);
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
+  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />;
 
   // Permission-filtered tabs prevent users from seeing settings categories
   // they cannot access, avoiding "access denied" dead ends inside the page.
-  const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs, config.permissions);
+  const visibleTabs = filterSurfaceTabbedViews(config.behavior.tabs, config.access ?? config.permissions);
 
   // Fall back to the first visible tab if the requested active tab was
   // removed by permission filtering.

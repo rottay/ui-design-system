@@ -195,7 +195,7 @@ export function IntegrationSurface({
   config,
   loading = false,
 }: IntegrationSurfaceProps): React.ReactElement {
-  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.permissions} />;
+  const actionsNode = <SurfaceActionBar actions={config.behavior.actions} permissions={config.access ?? config.permissions} />;
   const useTabs = config.visual.layout === 'tabs';
 
   // API Keys and Webhooks always appear because they are the minimum

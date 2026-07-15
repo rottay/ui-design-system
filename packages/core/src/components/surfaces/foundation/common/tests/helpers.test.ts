@@ -52,6 +52,91 @@ describe('normalizeSurfaceError', () => {
     );
   });
 
+  it('short-circuits every presentation filter for app-resolved all access', () => {
+    const forbidden = vi.fn(() => {
+      throw new Error('all access must not evaluate presentation policy');
+    });
+    const access = Object.defineProperties(
+      { mode: 'all' as const },
+      {
+        capabilities: { get: forbidden },
+        isAllowed: { get: forbidden },
+        isRowAllowed: { get: forbidden },
+        resolveFieldAccess: { get: forbidden },
+      }
+    );
+    const action = Object.defineProperty(
+      { id: 'delete', label: 'Delete' },
+      'visible',
+      { get: forbidden }
+    );
+    const column = Object.defineProperty(
+      { key: 'secret', title: 'Secret' },
+      'fieldId',
+      { get: forbidden }
+    );
+    const field = Object.defineProperty(
+      { name: 'secret', label: 'Secret' },
+      'fieldId',
+      { get: forbidden }
+    );
+    const tab = Object.defineProperty(
+      { key: 'audit', label: 'Audit', render: () => null },
+      'visible',
+      { get: forbidden }
+    );
+
+    expect(filterSurfaceColumns([column as never], access)).toEqual([column]);
+    expect(filterSurfaceActions([action], access)).toEqual([action]);
+    expect(filterSurfaceRowActions([action], access, { id: 1 }, 0)).toEqual([action]);
+    expect(filterSurfaceFields([field as never], access)).toEqual([field]);
+    expect(filterSurfaceTabbedViews([tab], access)).toEqual([tab]);
+    expect(filterDetailSurfaceTabs([tab], access, { id: 1 })).toEqual([tab]);
+    expect(resolveSurfaceAction(action, access)).toBe(action);
+    expect(resolveFieldAccessForRow('secret', access, { id: 1 }, 0)).toBe('visible');
+    expect(resolveSurfacePermission(access, { kind: 'route', id: '/admin' })).toBe(true);
+    expect(forbidden).not.toHaveBeenCalled();
+  });
+
+  it('uses only the app-resolved capability inventory in resolved mode', () => {
+    const access = {
+      mode: 'resolved' as const,
+      capabilities: [
+        { kind: 'column' as const, id: 'name', visible: true },
+        { kind: 'column' as const, id: 'cost', visible: false },
+        { kind: 'field' as const, id: 'salary', visible: true, disabled: true },
+        { kind: 'action' as const, id: 'edit', visible: true, disabled: true },
+        { kind: 'action' as const, id: 'archive', visible: false },
+        { kind: 'tab' as const, id: 'audit', visible: true, disabled: true },
+        { kind: 'route' as const, id: '/admin', visible: true },
+      ],
+    };
+    const edit = { id: 'edit', label: 'Edit' };
+
+    expect(
+      filterSurfaceColumns(
+        [
+          { key: 'name', fieldId: 'name', title: 'Name' },
+          { key: 'cost', fieldId: 'cost', title: 'Cost' },
+        ],
+        access
+      ).map((column) => column.fieldId)
+    ).toEqual(['name']);
+    expect(
+      filterSurfaceActions(
+        [edit, { id: 'archive', label: 'Archive' }, { id: 'missing', label: 'Missing' }],
+        access
+      )
+    ).toEqual([{ ...edit, disabled: true }]);
+    expect(resolveFieldAccessForRow('salary', access, { id: 1 }, 0)).toBe('readonly');
+    expect(resolveFieldAccessForRow('missing', access, { id: 1 }, 0)).toBe('hidden');
+    expect(filterSurfaceTabbedViews([{ key: 'audit', label: 'Audit' }], access)).toEqual([
+      { key: 'audit', label: 'Audit', disabled: true },
+    ]);
+    expect(resolveSurfacePermission(access, { kind: 'route', id: '/admin' })).toBe(true);
+    expect(resolveSurfacePermission(access, { kind: 'route', id: '/missing' })).toBe(false);
+  });
+
   it('filters single actions through the same permission rules as action bars', () => {
     const action = {
       id: 'delete-record',

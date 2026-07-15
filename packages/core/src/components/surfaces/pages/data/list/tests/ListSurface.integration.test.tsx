@@ -131,6 +131,36 @@ const rows: RawCandidate[] = [
 ];
 
 describe('ListSurface integration', () => {
+  it('lets all access bypass legacy filters and visibility callbacks', async () => {
+    const baseConfig = buildConfig();
+    const config: ListSurfaceConfig<RawCandidate> = {
+      ...baseConfig,
+      access: { mode: 'all' },
+      behavior: {
+        ...baseConfig.behavior,
+        rowActions: [
+          ...(baseConfig.behavior.rowActions ?? []),
+          {
+            id: 'callback-hidden',
+            label: 'Callback hidden',
+            visible: () => false,
+          },
+        ],
+      },
+    };
+    Object.defineProperty(config, 'permissions', {
+      get: () => {
+        throw new Error('legacy permissions must not be read when access is provided');
+      },
+    });
+
+    const { container } = renderSurface(<ListSurface data={rows} adapter={adapter} config={config} />);
+
+    expect(await screen.findByText('Salary')).toBeInTheDocument();
+    expect(getButtonByText(container, /restricted/i)).toBeInTheDocument();
+    expect(getButtonByText(container, /callback hidden/i)).toBeInTheDocument();
+  });
+
   it('renders table mode, filters, permission filtering, and primary actions', async () => {
     const config = buildConfig();
     const primaryAction = config.behavior.primaryAction;

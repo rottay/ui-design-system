@@ -2087,7 +2087,7 @@
    "lane": "architecture",
    "order": 11,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06",
@@ -2102,9 +2102,15 @@
    ],
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
-   "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "progressLog": [
+    {
+     "at": "2026-07-15 13:13",
+     "by": "codex-orchestrator",
+     "note": "The DS presentation contract now accepts app-resolved all|resolved access across all 33 surface configs. all short-circuits fields, columns, tabs, actions, row callbacks, allow/deny rules and legacy permission getters; focused unit/integration coverage and core TypeScript are green. Fleet capability registries, app superadmin adapters and visible data-error anatomy remain before closure."
+    }
+   ],
+   "claimedBy": "codex-arc11",
+   "claimedAt": "2026-07-15",
    "doneAt": null,
    "evidence": null,
    "execution": {
