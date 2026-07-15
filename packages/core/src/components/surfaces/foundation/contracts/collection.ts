@@ -511,7 +511,7 @@ export interface WorkspaceActiveFiltersConfig {
  * concerns (e.g., KanbanSurface adds drag-drop column config).
  */
 export interface CollectionWorkspaceConfig<T> {
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;

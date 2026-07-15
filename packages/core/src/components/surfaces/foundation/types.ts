@@ -191,8 +191,8 @@ export interface SurfaceCapabilityRegistration {
 /**
  * Presentation-only access input resolved by the owning app/server.
  *
- * `all` is the superadmin path: every registered capability stays visible and
- * no DS visibility, permission, cascade, or row callback is evaluated.
+ * `all` is an upstream-resolved, unfiltered presentation mode: every registered
+ * capability stays visible, no DS policy callback runs, and no authorization is granted.
  */
 export type AppResolvedSurfaceAccess =
   | { mode: 'all' }
@@ -511,7 +511,7 @@ export interface ListSurfaceConfig<TView> {
   visual: ListSurfaceVisualConfig;
   presentation: ListSurfacePresentationConfig<TView>;
   behavior: ListSurfaceBehaviorConfig<TView>;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -602,7 +602,7 @@ export interface DashboardSurfaceConfig {
   visual: DashboardSurfaceVisualConfig;
   presentation: DashboardSurfacePresentationConfig;
   behavior: DashboardSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -705,7 +705,7 @@ export interface DetailSurfaceConfig<TView> {
   visual: DetailSurfaceVisualConfig;
   presentation: DetailSurfacePresentationConfig<TView>;
   behavior: DetailSurfaceBehaviorConfig<TView>;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -797,7 +797,7 @@ export interface FormSurfaceConfig {
   visual: FormSurfaceVisualConfig;
   presentation: FormSurfacePresentationConfig;
   behavior: FormSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -925,7 +925,7 @@ export interface WizardSurfaceConfig {
   visual: WizardSurfaceVisualConfig;
   presentation: WizardSurfacePresentationConfig;
   behavior: WizardSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -981,7 +981,7 @@ export interface HeaderSurfaceConfig {
   visual: HeaderSurfaceVisualConfig;
   presentation: HeaderSurfacePresentationConfig;
   behavior: HeaderSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1049,7 +1049,7 @@ export interface SidebarSurfaceConfig {
   visual: SidebarSurfaceVisualConfig;
   presentation: SidebarSurfacePresentationConfig;
   behavior: SidebarSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1127,7 +1127,7 @@ export interface DetailFormSurfaceConfig {
   visual: DetailFormSurfaceVisualConfig;
   presentation: DetailFormSurfacePresentationConfig;
   behavior: DetailFormSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1181,7 +1181,7 @@ export interface VisualizationSurfaceConfig {
   visual: VisualizationSurfaceVisualConfig;
   presentation: VisualizationSurfacePresentationConfig;
   behavior: VisualizationSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1280,7 +1280,7 @@ export interface SearchSurfaceConfig {
   visual: SearchSurfaceVisualConfig;
   presentation: SearchSurfacePresentationConfig;
   behavior: SearchSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1356,7 +1356,7 @@ export interface EditorSurfaceConfig {
   visual: EditorSurfaceVisualConfig;
   presentation: EditorSurfacePresentationConfig;
   behavior: EditorSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1462,7 +1462,7 @@ export interface OperationalSurfaceConfig<TFeed extends FeedItem = FeedItem> {
   visual: OperationalSurfaceVisualConfig;
   presentation: OperationalSurfacePresentationConfig;
   behavior: OperationalSurfaceBehaviorConfig<TFeed>;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1548,7 +1548,7 @@ export interface MediaSurfaceConfig {
   visual: MediaSurfaceVisualConfig;
   presentation: MediaSurfacePresentationConfig;
   behavior: MediaSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1655,7 +1655,7 @@ export interface ChatSurfaceConfig {
   visual: ChatSurfaceVisualConfig;
   presentation: ChatSurfacePresentationConfig;
   behavior: ChatSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1721,7 +1721,7 @@ export interface SchedulerSurfaceConfig {
   visual: SchedulerSurfaceVisualConfig;
   presentation: SchedulerSurfacePresentationConfig;
   behavior: SchedulerSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1802,7 +1802,7 @@ export interface CompareSurfaceConfig {
   visual: CompareSurfaceVisualConfig;
   presentation: CompareSurfacePresentationConfig;
   behavior: CompareSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1865,7 +1865,7 @@ export interface AuthSurfaceConfig {
   visual: AuthSurfaceVisualConfig;
   presentation: AuthSurfacePresentationConfig;
   behavior: AuthSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1923,7 +1923,7 @@ export interface MarketingSurfaceConfig {
   visual: MarketingSurfaceVisualConfig;
   presentation: MarketingSurfacePresentationConfig;
   behavior: MarketingSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -1973,7 +1973,7 @@ export interface OnboardingSurfaceConfig {
   presentation: OnboardingSurfacePresentationConfig;
   /** Reuses wizard behavior: steps, values, navigation, submit. */
   behavior: WizardSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2028,7 +2028,7 @@ export interface EmptyStateSurfaceConfig {
   visual: EmptyStateSurfaceVisualConfig;
   presentation: EmptyStateSurfacePresentationConfig;
   behavior: EmptyStateSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2081,7 +2081,7 @@ export interface SettingsSurfaceConfig {
   visual: SettingsSurfaceVisualConfig;
   presentation: SettingsSurfacePresentationConfig;
   behavior: SettingsSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2171,7 +2171,7 @@ export interface AuditSurfaceConfig {
   visual: AuditSurfaceVisualConfig;
   presentation: AuditSurfacePresentationConfig;
   behavior: AuditSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2269,7 +2269,7 @@ export interface BillingSurfaceConfig {
   visual: BillingSurfaceVisualConfig;
   presentation: BillingSurfacePresentationConfig;
   behavior: BillingSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2341,7 +2341,7 @@ export interface ProfileSurfaceConfig {
   visual: ProfileSurfaceVisualConfig;
   presentation: ProfileSurfacePresentationConfig;
   behavior: ProfileSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2422,7 +2422,7 @@ export interface NotificationSurfaceConfig {
   visual: NotificationSurfaceVisualConfig;
   presentation: NotificationSurfacePresentationConfig;
   behavior: NotificationSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2532,7 +2532,7 @@ export interface ImportExportSurfaceConfig {
   visual: ImportExportSurfaceVisualConfig;
   presentation: ImportExportSurfacePresentationConfig;
   behavior: ImportExportSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2624,7 +2624,7 @@ export interface ReportSurfaceConfig {
   visual: ReportSurfaceVisualConfig;
   presentation: ReportSurfacePresentationConfig;
   behavior: ReportSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2695,7 +2695,7 @@ export interface TeamSurfaceConfig {
   visual: TeamSurfaceVisualConfig;
   presentation: TeamSurfacePresentationConfig;
   behavior: TeamSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2787,7 +2787,7 @@ export interface IntegrationSurfaceConfig {
   visual: IntegrationSurfaceVisualConfig;
   presentation: IntegrationSurfacePresentationConfig;
   behavior: IntegrationSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2872,7 +2872,7 @@ export interface KanbanSurfaceConfig {
   visual: KanbanSurfaceVisualConfig;
   presentation: KanbanSurfacePresentationConfig;
   behavior: KanbanSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -2951,7 +2951,7 @@ export interface ActivitySurfaceConfig {
   visual: ActivitySurfaceVisualConfig;
   presentation: ActivitySurfacePresentationConfig;
   behavior: ActivitySurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -3039,7 +3039,7 @@ export interface FileBrowserSurfaceConfig {
   visual: FileBrowserSurfaceVisualConfig;
   presentation: FileBrowserSurfacePresentationConfig;
   behavior: FileBrowserSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;
@@ -3123,7 +3123,7 @@ export interface PricingSurfaceConfig {
   visual: PricingSurfaceVisualConfig;
   presentation: PricingSurfacePresentationConfig;
   behavior: PricingSurfaceBehaviorConfig;
-  /** App/server-resolved presentation access. `all` is the superadmin bypass. */
+  /** Upstream-resolved presentation access. `all` renders every registered capability; it grants no authorization. */
   access?: AppResolvedSurfaceAccess;
   /** @deprecated Use `access`; retained for one compatibility release. */
   permissions?: SurfacePermissionsConfig;

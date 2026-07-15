@@ -23,7 +23,7 @@ import type {
   SurfaceTabbedView,
 } from './types';
 
-/** True only for the explicit app-resolved superadmin presentation signal. */
+/** True only for explicit upstream-resolved, unfiltered presentation access. */
 export function isAllSurfaceAccess(
   access: SurfaceAccessInput | undefined
 ): access is Extract<AppResolvedSurfaceAccess, { mode: 'all' }> {
