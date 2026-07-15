@@ -347,6 +347,15 @@ export interface ModalProps extends BaseComponentProps, EngineAwareProps {
   fullScreen?: boolean;
 
   /**
+   * Whether the modern engine automatically uses a fullscreen, app-like
+   * posture on phone viewports. The device tier comes from the shared
+   * responsive runtime, so consumers do not create an extra viewport
+   * subscription per modal.
+   * @default true
+   */
+  adaptiveFullscreen?: boolean;
+
+  /**
    * Z-index for the modal and overlay.
    * @default 1000
    */
@@ -566,6 +575,9 @@ export const MODAL_DEFAULTS: Partial<ModalProps> = {
 
   /** Vertically centered by default */
   centered: true,
+
+  /** Use an app-like fullscreen posture on phone viewports */
+  adaptiveFullscreen: true,
 
   /** Backdrop visible by default */
   showBackdrop: true,

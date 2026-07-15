@@ -30,6 +30,7 @@ import type { ModalProps, ModalSize } from '../Modal.types';
 import { MODAL_DEFAULTS, PADDING_MAP } from '../Modal.types';
 import { Portal } from '../../../overlay/Modal/utils/Portal';
 import { useModalInertSiblings } from '../../../overlay/Modal/utils/useModalInertSiblings';
+import { useBreakpoints } from '../../../../../hooks/responsive/useBreakpoints';
 
 // ============================================================================
 // Constants
@@ -85,12 +86,15 @@ function getOverlayBackground(showBackdrop: boolean, overlayOpacity: number): st
 // ============================================================================
 
 export default function ModernModal(props: ModalProps): React.ReactElement {
+  const { isMobile } = useBreakpoints();
+
   const {
     open,
     size = MODAL_DEFAULTS.size as ModalSize,
     centered = MODAL_DEFAULTS.centered,
     placement = 'center',
     fullScreen = false,
+    adaptiveFullscreen = MODAL_DEFAULTS.adaptiveFullscreen,
     zIndex,
     radius = MODAL_DEFAULTS.radius,
     shadow = MODAL_DEFAULTS.shadow,
@@ -125,6 +129,8 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
   const panelRef = useRef<HTMLDivElement>(null);
   const isOpen = Boolean(open);
   const backdropClosable = closeOnBackdropClick ?? closeOnOverlayClick;
+  const isAdaptiveFullscreen = !fullScreen && adaptiveFullscreen !== false && isMobile;
+  const effectiveFullscreen = fullScreen || isAdaptiveFullscreen;
 
   useModalInertSiblings(isOpen);
 
@@ -176,8 +182,10 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
 
   if (!isOpen) return <></>;
 
-  const maxWidth = fullScreen ? '100vw' : SIZE_WIDTH_MAP[size as ModalSize] || SIZE_WIDTH_MAP.md;
-  const placementStyles = getPlacementStyles(placement, centered);
+  const maxWidth = effectiveFullscreen ? '100vw' : SIZE_WIDTH_MAP[size as ModalSize] || SIZE_WIDTH_MAP.md;
+  const placementStyles: ReturnType<typeof getPlacementStyles> = isAdaptiveFullscreen
+    ? { alignItems: 'stretch' as const }
+    : getPlacementStyles(placement, centered);
   const sectionBorder = divider ? '1px solid var(--ds-modal-border-color, var(--ds-color-border))' : 'none';
   const contentPadding = PADDING_MAP[padding ?? 'lg'] ?? PADDING_MAP.lg;
 
@@ -231,27 +239,32 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
           ref={panelRef}
           data-part="surface"
           data-open="true"
+          data-fullscreen={effectiveFullscreen ? 'true' : 'false'}
+          data-adaptive-fullscreen={isAdaptiveFullscreen ? 'true' : 'false'}
           tabIndex={-1}
           role="dialog"
           aria-modal="true"
           aria-label={typeof title === 'string' ? title : undefined}
           className={className}
           style={{
-            position: 'relative',
-            width: fullScreen ? '100vw' : '100%',
+            position: isAdaptiveFullscreen ? 'fixed' : 'relative',
+            inset: isAdaptiveFullscreen ? 0 : undefined,
+            width: effectiveFullscreen ? '100vw' : '100%',
             maxWidth,
             height: fullScreen ? '100vh' : undefined,
-            maxHeight: fullScreen ? '100vh' : '85vh',
+            maxHeight: fullScreen ? '100vh' : isAdaptiveFullscreen ? undefined : '85vh',
             display: 'flex',
             flexDirection: 'column',
-            margin: fullScreen ? 0 : '16px',
+            margin: effectiveFullscreen ? 0 : '16px',
             // Per-instance radius/elevation and the divider rule ride hatches the
             // skin consumes. `--ds-modal-section-border` is declared here, on the
             // surface, so the header and footer rules inherit one resolved value.
-            '--ds-modal-surface-radius': fullScreen ? 0 : (RADIUS_MAP[radius ?? 'lg'] ?? RADIUS_MAP.lg),
+            '--ds-modal-surface-radius': effectiveFullscreen ? 0 : (RADIUS_MAP[radius ?? 'lg'] ?? RADIUS_MAP.lg),
             '--ds-modal-surface-shadow': shadow ? 'var(--ds-modal-shadow, var(--ds-elevation-5))' : 'none',
             '--ds-modal-section-border': sectionBorder,
-            animation: disableAnimation ? undefined : 'ds-modal-panel-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out)',
+            animation: disableAnimation || isAdaptiveFullscreen
+              ? undefined
+              : 'ds-modal-panel-enter-modern var(--ds-motion-normal) var(--ds-motion-ease-out)',
             overflow: 'hidden',
             ...style,
           } as React.CSSProperties}
@@ -331,7 +344,7 @@ export default function ModernModal(props: ModalProps): React.ReactElement {
               flex: '1 1 auto',
               overflowY: 'auto',
               padding: contentPadding,
-              maxHeight: fullScreen ? undefined : '70vh',
+              maxHeight: effectiveFullscreen ? undefined : '70vh',
             }}
           >
             {children}

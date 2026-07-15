@@ -132,6 +132,8 @@ function StatCard({
 
   const cardStyle: React.CSSProperties = {
     cursor: onClick ? 'pointer' : undefined,
+    minWidth: 0,
+    overflow: 'hidden',
     ...(variant === 'outlined'
       ? { border: '1px solid var(--ds-stats-grid-card-border, var(--ds-color-border))' }
       : variant === 'filled'
@@ -159,7 +161,11 @@ function StatCard({
         value={displayValue}
         prefix={prefix}
         suffix={stat.suffix}
-        valueStyle={{ color: stat.color }}
+        valueStyle={{
+          color: stat.color,
+          maxWidth: '100%',
+          overflowWrap: 'anywhere',
+        }}
         valueRender={(node) => <span className="ds-nums-tabular">{node}</span>}
       />
       {stat.change != null && (
@@ -181,9 +187,25 @@ function StatCard({
 }
 
 /** Skeleton placeholder grid rendered while stat data is being fetched. */
-function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | number }) {
+function LoadingSkeleton({
+  columns,
+  gap,
+  viewport,
+}: {
+  columns: number;
+  gap: string | number;
+  viewport: 'phone' | 'tablet' | 'desktop';
+}) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: resolveStatsGridColumns(columns), gap }}>
+    <div
+      style={{
+        display: 'grid',
+        width: '100%',
+        minWidth: 0,
+        gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
+        gap,
+      }}
+    >
       {Array.from({ length: columns }).map((_, i) => (
         <Card key={i} loading size="small" />
       ))}
@@ -203,7 +225,7 @@ function LoadingSkeleton({ columns, gap }: { columns: number; gap: string | numb
  */
 export default function ClassicStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
-  const { prefersReducedMotion } = useBreakpoints();
+  const { isMobile, isTablet, prefersReducedMotion } = useBreakpoints();
   const {
     stats,
     renderStat,
@@ -220,15 +242,21 @@ export default function ClassicStatsGrid(props: StatsGridProps) {
   // Resolve animation settings from the personality system. This merges the
   // explicit `animate` prop with the personality defaults and reduced-motion pref.
   const motion = resolveStatsGridMotion(tokens.personality, prefersReducedMotion, animate);
+  const viewport = isMobile ? 'phone' : isTablet ? 'tablet' : 'desktop';
 
-  if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
+  if (loading) {
+    return <LoadingSkeleton columns={columns} gap={gap} viewport={viewport} />;
+  }
 
   return (
     <div
       className={className}
       style={{
         display: 'grid',
-        gridTemplateColumns: resolveStatsGridColumns(columns),
+        width: '100%',
+        minWidth: 0,
+        boxSizing: 'border-box',
+        gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
         gap,
         ...style,
       }}

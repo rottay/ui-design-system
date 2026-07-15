@@ -9,8 +9,8 @@
  * and optional prefix/suffix formatting.
  */
 
-import type { ReactNode } from 'react';
-import type { PatternBaseProps, StatDef } from '../../foundation/types';
+import type { ReactNode } from "react";
+import type { PatternBaseProps, StatDef } from "../../foundation/types";
 
 /**
  * Props for the StatsGrid pattern component.
@@ -47,9 +47,13 @@ export interface StatsGridProps extends PatternBaseProps {
   renderStat?: (stat: StatDef, defaultRender: ReactNode) => ReactNode;
 
   /**
-   * Number of columns in the grid layout. Renders a fixed `columns`-track
-   * horizontal grid (via the shared `resolveStatsGridColumns` helper);
-   * identical across classic, modern, and rustic. Defaults to 4.
+   * Maximum number of columns in the grid layout. Phone renders one column,
+   * tablet renders up to two, and desktop preserves this explicit ceiling
+   * (via the shared `resolveStatsGridColumns` helper). Identical across
+   * classic, modern, and rustic. Defaults to 4.
+   *
+   * A caller-provided `style.gridTemplateColumns` remains the explicit escape
+   * hatch when a product needs a layout outside this adaptive progression.
    */
   columns?: number;
 
@@ -72,7 +76,7 @@ export interface StatsGridProps extends PatternBaseProps {
    * - `'filled'`: Solid background fill.
    * - `'glass'`: Frosted glass / translucent effect.
    */
-  variant?: 'default' | 'outlined' | 'filled' | 'glass';
+  variant?: "default" | "outlined" | "filled" | "glass";
 
   /**
    * Whether to animate stat values counting up from zero on mount.

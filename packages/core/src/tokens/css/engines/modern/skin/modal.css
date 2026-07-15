@@ -45,6 +45,20 @@
   box-shadow: var(--ds-modal-surface-shadow);
   outline: none;
 }
+
+/* Phone posture uses the dynamic viewport when supported, with a 100vh
+   fallback for older engines. Kept in CSS so the fallback can coexist without
+   `!important` or a second viewport subscription. */
+.rottay-modal-root--modern > [data-part='surface'][data-adaptive-fullscreen='true'] {
+  height: 100vh;
+  max-height: 100vh;
+}
+@supports (height: 100dvh) {
+  .rottay-modal-root--modern > [data-part='surface'][data-adaptive-fullscreen='true'] {
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+}
 .rottay-modal-root--modern.rottay-modal-root--modern
   > [data-part='surface'][data-part='surface'] {
   border: 1px solid var(--ds-color-border);

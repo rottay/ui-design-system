@@ -6,6 +6,37 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import React from 'react';
 import { Modal } from '../';
+import ModernModal from '../engines/modern';
+import {
+  ResponsiveContext,
+  type ResponsiveContextValue,
+} from '../../../../../runtime/responsive';
+
+const PHONE_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
+  deviceClass: 'phone',
+  activeBreakpoint: 'xs',
+  isPhone: true,
+  isTablet: false,
+  isDesktop: false,
+  pointer: 'coarse',
+  orientation: 'portrait',
+  prefersReducedMotion: false,
+  isPhoneOrTablet: true,
+  isTabletOrDesktop: false,
+  isTouchDevice: true,
+};
+
+const DESKTOP_RESPONSIVE_CONTEXT: ResponsiveContextValue = {
+  ...PHONE_RESPONSIVE_CONTEXT,
+  deviceClass: 'desktop',
+  activeBreakpoint: 'lg',
+  isPhone: false,
+  isDesktop: true,
+  pointer: 'fine',
+  isPhoneOrTablet: false,
+  isTabletOrDesktop: true,
+  isTouchDevice: false,
+};
 
 // Mock the engine factory
 vi.mock('../../../../../runtime/engines/factory', () => ({
@@ -78,6 +109,37 @@ vi.mock('../../../../../runtime/engines/factory', () => ({
 }));
 
 describe('Modal', () => {
+  describe('Modern responsive posture', () => {
+    it('opens fullscreen on phone and preserves explicit fullscreen on desktop', () => {
+      const { rerender } = render(
+        <ResponsiveContext.Provider value={PHONE_RESPONSIVE_CONTEXT}>
+          <ModernModal open title="Phone modal">Content</ModernModal>
+        </ResponsiveContext.Provider>,
+      );
+
+      const phoneSurface = screen.getByRole('dialog');
+      expect(phoneSurface).toHaveAttribute('data-fullscreen', 'true');
+      expect(phoneSurface).toHaveAttribute('data-adaptive-fullscreen', 'true');
+      expect(phoneSurface.style.width).toBe('100vw');
+      expect(phoneSurface.style.position).toBe('fixed');
+      expect(phoneSurface.style.margin).toBe('0px');
+      expect(phoneSurface.style.getPropertyValue('--ds-modal-surface-radius')).toBe('0');
+
+      rerender(
+        <ResponsiveContext.Provider value={DESKTOP_RESPONSIVE_CONTEXT}>
+          <ModernModal open fullScreen title="Desktop fullscreen modal">
+            Content
+          </ModernModal>
+        </ResponsiveContext.Provider>,
+      );
+
+      const explicitSurface = screen.getByRole('dialog');
+      expect(explicitSurface).toHaveAttribute('data-fullscreen', 'true');
+      expect(explicitSurface).toHaveAttribute('data-adaptive-fullscreen', 'false');
+      expect(explicitSurface.style.height).toBe('100vh');
+    });
+  });
+
   describe('Basic Rendering', () => {
     it('renders when open', () => {
       render(<Modal open title="Test Modal">Content</Modal>);

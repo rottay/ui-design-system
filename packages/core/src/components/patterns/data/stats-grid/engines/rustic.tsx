@@ -146,6 +146,8 @@ function StatCard({
           "--ds-stats-grid-accent": stat.color,
           padding: "var(--ds-card-body-padding, 20px)",
           cursor: onClick ? "pointer" : undefined,
+          minWidth: 0,
+          overflow: "hidden",
         } as React.CSSProperties
       }
       onClick={onClick}
@@ -209,6 +211,8 @@ function StatCard({
             "var(--ds-typography-heading-font-weight, 700)" as unknown as number,
           lineHeight: 1.2,
           letterSpacing: "-0.02em",
+          maxWidth: "100%",
+          overflowWrap: "anywhere",
         }}
       >
         {stat.prefix}
@@ -279,10 +283,12 @@ function LoadingSkeleton({
   columns,
   gap,
   animation,
+  viewport,
 }: {
   columns: number;
   gap: string | number;
   animation: "pulse" | "wave";
+  viewport: "phone" | "tablet" | "desktop";
 }) {
   return (
     <>
@@ -293,7 +299,9 @@ function LoadingSkeleton({
         data-skeleton-animation={animation}
         style={{
           display: "grid",
-          gridTemplateColumns: resolveStatsGridColumns(columns),
+          width: "100%",
+          minWidth: 0,
+          gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
           gap,
         }}
       >
@@ -340,7 +348,7 @@ function LoadingSkeleton({
  */
 export default function RusticStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
-  const { prefersReducedMotion } = useBreakpoints();
+  const { isMobile, isTablet, prefersReducedMotion } = useBreakpoints();
   const {
     stats,
     renderStat,
@@ -361,6 +369,7 @@ export default function RusticStatsGrid(props: StatsGridProps) {
     prefersReducedMotion,
     animate
   );
+  const viewport = isMobile ? "phone" : isTablet ? "tablet" : "desktop";
 
   // Show placeholder skeleton during data fetching to prevent layout shift.
   // The skeleton animation style (pulse vs wave) comes from personality tokens.
@@ -370,6 +379,7 @@ export default function RusticStatsGrid(props: StatsGridProps) {
         columns={columns}
         gap={gap}
         animation={motion.skeletonAnimation}
+        viewport={viewport}
       />
     );
 
@@ -383,7 +393,10 @@ export default function RusticStatsGrid(props: StatsGridProps) {
       data-variant={variant}
       style={{
         display: "grid",
-        gridTemplateColumns: resolveStatsGridColumns(columns),
+        width: "100%",
+        minWidth: 0,
+        boxSizing: "border-box",
+        gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
         gap,
         ...style,
       }}

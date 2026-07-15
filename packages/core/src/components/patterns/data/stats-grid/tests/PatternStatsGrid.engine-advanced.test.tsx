@@ -1,5 +1,5 @@
 import React from "react";
-import { act, fireEvent, screen } from "@testing-library/react";
+import { act, fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 import type { StableEngineName } from "../../../../../_internal/testing/helpers/engine-test-utils";
@@ -7,6 +7,7 @@ import {
   STABLE_ENGINES,
   renderWithEngine,
 } from "../../../../../_internal/testing/helpers/engine-test-utils";
+import { mockMatchMedia } from "../../../../../_internal/testing/helpers/match-media";
 import type { StatsGridProps } from "../StatsGrid.types";
 import ClassicStatsGrid from "../engines/classic";
 import ModernStatsGrid from "../engines/modern";
@@ -94,6 +95,56 @@ describe("PatternStatsGrid advanced engine coverage", () => {
         ).not.toBeNull();
         expect(container.querySelector("style")).toBeNull();
       }
+    }
+  );
+
+  it.each(STABLE_ENGINES)(
+    "renders the shared phone/tablet/desktop column progression through the %s engine",
+    async (engine) => {
+      const Component = COMPONENTS[engine];
+      const cases = [
+        { width: 390, columns: 4, expected: "repeat(1, minmax(0, 1fr))" },
+        { width: 800, columns: 4, expected: "repeat(2, minmax(0, 1fr))" },
+        { width: 1280, columns: 3, expected: "repeat(3, minmax(0, 1fr))" },
+      ] as const;
+
+      for (const responsiveCase of cases) {
+        mockMatchMedia(responsiveCase.width);
+        const result = renderWithEngine(
+          <Component {...createProps({ columns: responsiveCase.columns })} />,
+          engine
+        );
+        const root = result.container.firstElementChild as HTMLElement;
+
+        await waitFor(() => {
+          expect(root.style.gridTemplateColumns).toBe(responsiveCase.expected);
+        });
+        expect(root.style.width).toBe("100%");
+        expect(root.style.minWidth).toBe("0");
+        result.unmount();
+      }
+    }
+  );
+
+  it.each(STABLE_ENGINES)(
+    "preserves an explicit gridTemplateColumns style override through the %s engine",
+    (engine) => {
+      mockMatchMedia(390);
+      const Component = COMPONENTS[engine];
+      const explicitColumns = "repeat(3, minmax(12rem, 1fr))";
+      const { container } = renderWithEngine(
+        <Component
+          {...createProps({
+            columns: 6,
+            style: { gridTemplateColumns: explicitColumns },
+          })}
+        />,
+        engine
+      );
+
+      expect(
+        (container.firstElementChild as HTMLElement).style.gridTemplateColumns
+      ).toBe(explicitColumns);
     }
   );
 

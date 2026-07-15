@@ -211,6 +211,7 @@ function StatCard({
     flexDirection: "column",
     gap: 4,
     position: "relative",
+    minWidth: 0,
     overflow: "hidden",
   } as React.CSSProperties;
 
@@ -291,6 +292,8 @@ function StatCard({
             fontWeight: 700,
             lineHeight: 1.1,
             letterSpacing: "-0.02em",
+            maxWidth: "100%",
+            overflowWrap: "anywhere",
           }}
         >
           {stat.prefix}
@@ -346,9 +349,11 @@ function StatCard({
 function LoadingSkeleton({
   columns,
   gap,
+  viewport,
 }: {
   columns: number;
   gap: string | number;
+  viewport: "phone" | "tablet" | "desktop";
 }) {
   return (
     <>
@@ -358,7 +363,9 @@ function LoadingSkeleton({
         data-loading="true"
         style={{
           display: "grid",
-          gridTemplateColumns: resolveStatsGridColumns(columns),
+          width: "100%",
+          minWidth: 0,
+          gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
           gap,
         }}
       >
@@ -418,7 +425,7 @@ function LoadingSkeleton({
  */
 export default function ModernStatsGrid(props: StatsGridProps) {
   const tokens = useTokens();
-  const { prefersReducedMotion } = useBreakpoints();
+  const { isMobile, isTablet, prefersReducedMotion } = useBreakpoints();
   const {
     stats,
     renderStat,
@@ -440,19 +447,25 @@ export default function ModernStatsGrid(props: StatsGridProps) {
     prefersReducedMotion,
     animate
   );
+  const viewport = isMobile ? "phone" : isTablet ? "tablet" : "desktop";
 
   // Column axis is a component-layer concern shared by every engine
-  // (Quiet Premium spec section 10): a fixed `columns`-track horizontal
-  // grid, identical to classic/rustic. See resolveStatsGridColumns.
+  // (Quiet Premium spec section 10): one track on phone, up to two on tablet,
+  // and the caller's `columns` ceiling on desktop.
   const gridStyle: React.CSSProperties = {
     display: "grid",
-    gridTemplateColumns: resolveStatsGridColumns(columns),
+    width: "100%",
+    minWidth: 0,
+    boxSizing: "border-box",
+    gridTemplateColumns: resolveStatsGridColumns(columns, viewport),
     gap,
     ...style,
   };
 
   // Show placeholder skeleton during data fetching to prevent layout shift.
-  if (loading) return <LoadingSkeleton columns={columns} gap={gap} />;
+  if (loading) {
+    return <LoadingSkeleton columns={columns} gap={gap} viewport={viewport} />;
+  }
 
   return (
     <div
