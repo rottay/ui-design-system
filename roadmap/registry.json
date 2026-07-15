@@ -1,11 +1,12 @@
 {
- "$schema": "roadmap work-order state registry (single source of WO status; specs live in the engine-modern lane .md file)",
- "updated": "2026-07-15",
+ "$schema": "roadmap work-order state registry (single source of WO status; specs live in roadmap lane markdown files)",
+ "updated": "2026-07-14",
  "rules": {
-  "done_requires": "all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done",
-  "claim_requires": "all dependsOn done",
+  "done_requires": "status in-progress + all dependsOn done + non-empty --evidence + mustLandWith partner in-progress/done; support milestones never complete source IDs",
+  "claim_requires": "all dependsOn done + DS-improvements phase claimState open",
   "edit_via": "scripts/roadmap-status.mjs only (claim/done/reopen); never hand-edit statuses",
-  "new_work": "new WO in engine-modern.md + registry entry, verified by roadmap-status.mjs check; NO new plan documents anywhere"
+  "new_work": "new WO in its lane markdown + registry entry, verified by roadmap-status.mjs check; NO new plan documents anywhere",
+  "wave_gate": "future phases remain locked until prior checkpoint evidence and explicit owner GO"
  },
  "metrics": [
   {
@@ -1722,7 +1723,7 @@
    ],
    "claimedBy": "ds-agent",
    "claimedAt": "2026-07-14",
-   "doneAt": "2026-07-15",
+   "doneAt": "2026-07-14",
    "evidence": "@rottay/design-system@2.19.0 was built, packed and published to GitHub Packages as latest (tarball sha 6235a48a1858ef4ac3a5a129d882fc30ca6f29a7). Core build, engine/token/artifact checks, Storybook build budgets (17.71 MB/50 MB; largest chunk 2.05 MB/3 MB), full showroom visual gates 487/487, signature 11/11, hairline 2/2 and the standing unit ledger (only the 10-file allowlist: 13 failed tests, 82 passed) were certified. app-bithire alone was repinned exactly 2.18.0->2.19.0 from the registry (commit 72405adbf); its seven same-seed before/after screens keep identical dimensions, six are pixel-identical and login differs only 0.4514% from its clock/activity animation. BitHire static certification passed end-to-end: unit 222/222 suites (1960 tests), contracts 113/113 (1193), architecture 150/150 (982 passed, 1 expected skip), integration API 20/20 (304), plus all lint/architecture/roadmap/docs/listing/UX/schema/styles/domain/i18n/dependency/override gates. app-platform remains pinned 2.17.0 and app-evnto 2.8.24; 2.19.0 is their external-release marker, not an unauthorized repin."
   },
   {
@@ -1732,9 +1733,7 @@
    "order": 5,
    "size": "S",
    "status": "done",
-   "dependsOn": [
-    "WO-SKIN-07"
-   ],
+   "dependsOn": [],
    "mustLandWith": [],
    "programs": [
     "ds-improvements"
@@ -1745,29 +1744,31 @@
    "phase": "0",
    "notes": "Also freezes the Phase-0 schema/claim boundary for deferred DS-IMP-061; runtime TenantThemeConfig delivery remains Phase 1. Sources pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8.",
    "progressLog": [],
-   "claimedBy": "codex",
-   "claimedAt": "2026-07-15",
-   "doneAt": "2026-07-15",
-   "evidence": "Pinned docs-engineering revision 969205380fd24eb45947bf3748db5a6cacd798f8; registry maps exactly DS-IMP-001..128 as 21 execute, 99 deferred, 6 absorbed and 2 routed with no duplicate authority or shadow status; node --test scripts/roadmap-status.test.mjs passes 22/22 including missing-ID, duplicate-ID, backlink, routed-path, deferred-expiry and absorbed-cycle red drills; pnpm roadmap:check reports 73 WOs consistent across 6 lanes; trace commands resolve execute/deferred/routed authorities.",
+   "claimedBy": "codex-wave0",
+   "claimedAt": "2026-07-14",
+   "doneAt": "2026-07-14",
+   "evidence": "Pinned docs-engineering revision 969205380fd24eb45947bf3748db5a6cacd798f8 is proven by git object and exact source, roadmap and adjudication paths plus terminal anchors. The registry covers exactly DS-IMP-001..128 as 21 execute, 99 deferred, 6 absorbed and 2 routed across 12 final authorities, with roadmap/registry.json as sole status authority and adjudicated plan fingerprint a381034eb9253b71223199848c9e1a1dff5f6b0b39767f558c8c3e7f4c4e53cd. The schema is closed at registry root, traceability, work-order, execution, milestone and progress boundaries. TZ=UTC roadmap tests pass 54/54 and roadmap:check reports 75 WOs across 6 lanes. Missing/duplicate IDs, authority swaps, fake SHA/path/anchor, program removal, root/trace/WO/milestone shadow state, changed dependencies/phases/milestones/owner-GO and blank done metadata all fail; independent regression review returned GO.",
    "execution": {
     "decisionOwner": "design-system-program",
     "touchedRepos": [
      "ui-design-system",
      "docs-engineering"
     ],
-    "rollback": "Revert this one-time mapping before any new work is claimed.",
-    "disable": "Leave every mapped work order todo and reject claim/done when authority validation fails.",
+    "rollback": "Restore the last validated DS-IMP mapping atomically before any functional claim and return every newly mapped work order to todo.",
+    "disable": "Reject claim and done transitions whenever namespace, backlink, dependency, disposition, route or sole-status-authority validation fails.",
     "telemetry": [
-     "missing authorities",
-     "duplicate authorities",
-     "invalid terminal dispositions",
-     "invalid external routes"
+     "contiguous DS-IMP namespace coverage",
+     "authority backlink cardinality",
+     "invalid or cyclic dependencies",
+     "invalid absorbed/routed/deferred records",
+     "competing DS status stores"
     ],
     "stopConditions": [
-     "any DS-IMP is missing or duplicated",
-     "an executable ID lacks one WO",
-     "a terminal disposition lacks a canonical successor or valid route",
-     "another DS live status store appears"
+     "any missing or duplicate ID",
+     "an execute item lacks exactly one sourceIds backlink",
+     "an invalid terminal successor or external route",
+     "an unknown or cyclic dependency",
+     "a second live DS status source"
     ]
    }
   },
@@ -1791,24 +1792,29 @@
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
    "progressLog": [],
-   "claimedBy": "codex",
-   "claimedAt": "2026-07-15",
-   "doneAt": "2026-07-15",
-   "evidence": "Registry defines exact keyed phaseControls for 0,1,2A,2B,2C,3,4,5,6; every record has decisionOwner, decisionDate, rollback, disable, telemetry and stopConditions; all 11 Wave-0 authority WOs reference a declared phase and complete execution controls; 22/22 roadmap-status tests include missing phase/control and incomplete-WO red drills; pnpm roadmap:check green.",
+   "claimedBy": "codex-wave0",
+   "claimedAt": "2026-07-14",
+   "doneAt": "2026-07-14",
+   "evidence": "All 9 phase controls for 0, 1, 2A, 2B, 2C, 3, 4, 5 and 6 are complete; only Phase 0 is open and its structured ownerGo is decision go with owner, date and evidence, while every later phase is locked with decision pending and null approval metadata. All 11 required fields across all 9 controls were deletion-drilled 99/99. TZ=UTC tests pass 54/54 and prove fixed America/New_York dates, future/malformed dates red, negative/fake/nonexistent GO red, multiple/unapproved/premature phases red, later-phase dependencies red, locked claims red and prior-authority/deferred barriers active. In-memory GAT05 then GAT06 claim/done transitions validated cleanly. Registry and generated STATUS writes use temporary-file rename, and independent regression review returned GO.",
    "execution": {
     "decisionOwner": "design-system-program",
     "touchedRepos": [
      "ui-design-system"
     ],
-    "rollback": "Registry-only control: revert before functional Wave 0 work is claimed.",
-    "disable": "Block every functional claim until all nine phase-control records validate.",
+    "rollback": "Before functional claims, restore the previous validated phase-control records without altering runtime code or completed inherited work.",
+    "disable": "Reject claims for DS-improvements work orders when their phase is locked or any required phase control or drill is invalid.",
     "telemetry": [
-     "phase-control completeness",
-     "owner/date completeness",
-     "rollback drill evidence"
+     "nine-of-nine phase-control completeness",
+     "claimState and owner/date integrity",
+     "future or malformed dates",
+     "field-deletion mutation drills",
+     "rollback/disable drill evidence"
     ],
     "stopConditions": [
-     "any phase lacks owner, rollback, disable, telemetry or stop conditions"
+     "any missing or empty phase control",
+     "a future decision or open date",
+     "a locked phase accepts a claim",
+     "a rollback/disable path lacks a falsifiable drill"
     ]
    }
   },
@@ -1832,33 +1838,46 @@
     "DS-IMP-006",
     "DS-IMP-055",
     "DS-IMP-056",
-    "DS-IMP-059",
+    "DS-IMP-059"
+   ],
+   "supportsSourceIds": [
     "DS-IMP-060"
    ],
+   "milestone": {
+    "id": "DS-IMP-060-phase-0-minimum",
+    "scope": "Land the minimal unconsumed-export and public-claim floor without asserting full Phase-6 claim integrity.",
+    "completionEffect": "none",
+    "finalAuthority": "WO-GAT-09",
+    "finalPhase": "6"
+   },
    "phase": "0",
-   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. This WO supports the DS-IMP-060 Phase-0 minimum but cannot complete that Phase-6 source ID; status lives only in this registry.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "design-system-quality",
     "touchedRepos": [
-     "ui-design-system"
+     "ui-design-system",
+     "docs-engineering"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Revert only the affected ratchet, generated inventory or claim-gate slice while retaining prior runtime behavior and the recorded failure ledger.",
+    "disable": "Freeze new public/documentation claims and new completion claims until exact-zero and consumption evidence is reproducible.",
     "telemetry": [
-     "exact-zero counters",
-     "unconsumed public exports",
-     "claim-to-fixture coverage",
-     "clean-graph repeatability"
+     "completed exact-zero counters and residual slack",
+     "unconsumed public exports/config fields",
+     "claim-to-production/fixture coverage",
+     "clean-graph run agreement",
+     "provenance classification of moving numerics"
     ],
     "stopConditions": [
-     "a completed counter has slack",
-     "a public claim lacks a production consumer or fixture",
-     "two clean runs disagree"
+     "a completed counter has non-zero slack",
+     "a public claim lacks production consumption or executable fixture",
+     "two clean runs disagree",
+     "a moving count is normative without revision and method",
+     "Phase-0 work is presented as full DS-IMP-060 completion"
     ]
    }
   },
@@ -1888,21 +1907,82 @@
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "ecosystem-program",
     "touchedRepos": [
      "ui-design-system",
      "docs-engineering"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Revert only the affected owner, order and link rows; never copy or mutate external program status.",
+    "disable": "Block downstream claims for any capability whose owner, dependency direction or status authority is unresolved.",
     "telemetry": [
      "unowned contested capabilities",
-     "duplicate status records",
-     "broken external registry links"
+     "duplicated implementation ownership",
+     "shadow or duplicated status records",
+     "broken external links",
+     "cross-program ordering inversions"
     ],
     "stopConditions": [
-     "DS duplicates compliance/economy/module status",
-     "a contested capability lacks owner/order/link"
+     "DS mirrors compliance/economy/module status",
+     "a capability has multiple implementation owners",
+     "a dependency link is missing or broken",
+     "DS absorbs domain authorization, financial truth, compliance policy or AI transport"
+    ]
+   }
+  },
+  {
+   "id": "WO-GAT-09",
+   "title": "Full claim-integrity certification",
+   "lane": "gates",
+   "order": 9,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06",
+    "WO-GAT-07",
+    "WO-CRA-15"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-060"
+   ],
+   "phase": "6",
+   "notes": "Final authority for DS-IMP-060. Phase 0 only supplies a bounded milestone through WO-GAT-07; this WO remains phase-locked until the Wave-6 checkpoint is explicitly opened and its dependency set is revalidated against the then-live registry.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "design-system-release",
+    "touchedRepos": [
+     "ui-design-system",
+     "docs-engineering",
+     "app-bithire",
+     "app-platform",
+     "app-evnto"
+    ],
+    "rollback": "Certification changes no runtime default; reopen the owning source authority and withdraw the unsupported claim.",
+    "disable": "Block publish, app repin and system-certification claims while claim-integrity evidence is incomplete or contradictory.",
+    "telemetry": [
+     "claim-to-evidence cardinality",
+     "generated inventory freshness and revision",
+     "reproducibility classification",
+     "stale numeric and document assertions",
+     "clean-run agreement",
+     "open, deferred and expired authority inventory"
+    ],
+    "stopConditions": [
+     "Phase 6 is not explicitly open",
+     "an all/every/complete/working claim lacks executable evidence",
+     "corpus or count provenance is missing",
+     "two clean runs disagree",
+     "a deferred item expires without adjudication",
+     "another execute authority remains open",
+     "docs claim desired-system completion before all gates are proven"
     ]
    }
   },
@@ -1933,24 +2013,29 @@
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "design-system-architecture",
     "touchedRepos": [
      "ui-design-system",
      "app-bithire",
      "app-platform",
      "app-evnto"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Keep the previous entry/subpath and last certified app resolution available for one release; never restore producer-node_modules mutation as rollback.",
+    "disable": "Block DS publish and app repins, and resolve consumers to the last certified registry package or app-side alias while graph honesty is red.",
     "telemetry": [
      "root static dependency graph",
      "runtime identity count",
-     "consumer bundle sentinels"
+     "non-consuming bundle supplier presence",
+     "app import-to-manifest parity",
+     "producer node_modules mutation detection",
+     "packed-tarball export resolution"
     ],
     "stopConditions": [
      "root reaches a falsely optional peer",
      "React/ReactDOM/Dayjs identity duplicates",
-     "an app renders an undeclared supplier"
+     "an app renders an undeclared supplier",
+     "a consumer mutates or builds inside the producer",
+     "packed exports require workspace links"
     ]
    }
   },
@@ -1963,7 +2048,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-GAT-07"
    ],
    "mustLandWith": [],
    "programs": [
@@ -1980,23 +2066,27 @@
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "design-system-architecture",
     "touchedRepos": [
      "ui-design-system",
      "app-bithire",
      "app-platform",
      "app-evnto"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Roll back one presentation adapter at a time without changing server authorization; fall back to app-supplied pre-resolved visibility while retaining capability anatomy and visible error states.",
+    "disable": "Disable the affected DS presentation filter and render the registered capability from the app-resolved inventory; never infer grants or hide load failures.",
     "telemetry": [
-     "registered capability visibility",
-     "all-mode filter bypass",
-     "data-load error rendering"
+     "registered-versus-visible capability counts",
+     "all-mode short-circuit coverage",
+     "resolved-mode determinism",
+     "visible data/Prisma error states",
+     "remaining DS grant/cascade/allow-deny evaluators"
     ],
     "stopConditions": [
-     "all mode hides a route/field/column/tab/action",
-     "a Prisma/data error removes capability anatomy"
+     "all hides any route/field/column/tab/action",
+     "a data error removes registered anatomy",
+     "DS evaluates authorization policy",
+     "server authorization tests regress"
     ]
    }
   },
@@ -2009,7 +2099,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-ARC-10"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2026,21 +2117,26 @@
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "evnto-release-owner",
     "touchedRepos": [
      "ui-design-system",
      "app-evnto"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Repin the previous certified DS package and restore the single compatibility artifact without overwriting tenant DB values.",
+    "disable": "Block the Evnto repin or select the compatibility artifact until the exact registry-resolved package and theme-source matrix are certified.",
     "telemetry": [
-     "Evnto DS pin",
-     "theme-source count",
-     "density/radius/depth/motion divergence"
+     "exact Evnto DS pin and artifact provenance",
+     "structural theme-source count",
+     "density/radius/depth/motion divergence",
+     "SSR/hydration agreement",
+     "tenant-value preservation"
     ],
     "stopConditions": [
-     "Evnto has multiple structural theme authorities",
-     "certified repin changes behavior without compatibility evidence"
+     "multiple structural authorities",
+     "linked or non-registry package resolution",
+     "behavior or task loss",
+     "hydration mismatch",
+     "tenant DB appearance is overwritten by app policy"
     ]
    }
   },
@@ -2053,7 +2149,10 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-GAT-07",
+    "WO-ARC-11",
+    "WO-ENG-23"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2070,23 +2169,28 @@
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "adaptive-experience",
     "touchedRepos": [
      "ui-design-system",
      "app-bithire",
      "app-platform",
      "app-evnto"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Revert one adaptive field or route at a time, retain the desktop path and remove the unsupported option from the advertised contract.",
+    "disable": "Disable the individual adaptive renderer or posture and use the known desktop or route fallback without advertising fake mobile behavior.",
     "telemetry": [
-     "adaptive fields with production consumers",
+     "adaptive field-to-production-consumer coverage",
+     "dead createConfig factories",
      "phone navigation availability",
-     "dead config factories"
+     "primary-action reachability",
+     "360px overflow, keyboard and safe-area results"
     ],
     "stopConditions": [
-     "an adaptive field exists only in types/tests",
-     "a phone route has no navigation door"
+     "a retained field exists only in types/builders/tests",
+     "a phone route has no navigation door",
+     "a primary action is hidden or unreachable",
+     "undeclared horizontal overflow",
+     "Phase-2B task projection is falsely claimed complete"
     ]
    }
   },
@@ -2099,7 +2203,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-ARC-10"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2111,28 +2216,37 @@
     "DS-IMP-085"
    ],
    "phase": "0",
-   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. Coordinate the use-chart-personality ownership window with WO-CRA-13; status lives only in this registry.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "motion-system",
     "touchedRepos": [
-     "ui-design-system"
+     "ui-design-system",
+     "app-bithire",
+     "app-platform",
+     "app-evnto"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Preserve the prior public timing compatibility mapping for one minor and return an affected recipe to its static final state.",
+    "disable": "Disable an individual motion recipe or direct choreography path while keeping deterministic static and reduced-motion output.",
     "telemetry": [
-     "ambiguous motion units",
-     "motion authority count",
-     "global keyframe/direct-library paths"
+     "ambiguous public units and callers",
+     "runtime motion-authority count",
+     "SSR/hydration motion divergence",
+     "reduced-motion intermediate frames",
+     "bare keyframes, transition-all and direct-library paths",
+     "mixed motion/framer-motion dependency graphs"
     ],
     "stopConditions": [
-     "public timing is unit-ambiguous",
-     "more than one runtime authority governs reduced motion",
-     "certified routes use raw global choreography"
+     "public timing remains unit-ambiguous",
+     "reduced motion animates or CountUp emits intermediate frames",
+     "more than one runtime authority",
+     "hydration starts unexpected motion",
+     "a certified route uses ungoverned choreography",
+     "the fleet-atomic supplier rename is only partially applied"
     ]
    }
   },
@@ -2145,7 +2259,8 @@
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
-    "WO-GAT-06"
+    "WO-GAT-06",
+    "WO-ARC-10"
    ],
    "mustLandWith": [],
    "programs": [
@@ -2164,32 +2279,37 @@
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "visualization-runtime",
     "touchedRepos": [
-     "ui-design-system"
+     "ui-design-system",
+     "app-platform"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Retain the legacy chart export and rendering path while reverting only the faulty semantic correction; never restore silent incorrect output as success.",
+    "disable": "Disable a broken chart family to its deterministic static or typed visible error fallback.",
     "telemetry": [
-     "provider color resolution",
-     "invalid/empty/cycle fixtures",
-     "public prop consumption",
-     "accessible DOM retention"
+     "provider-root color resolution and monotonicity",
+     "negative/zero/constant/invalid/cyclic/empty results",
+     "stale marks after empty transitions",
+     "accessible title/description retention",
+     "public prop and export consumption",
+     "definition-ID and network-layout continuity"
     ],
     "stopConditions": [
-     "provider colors collapse",
-     "invalid data renders nondeterministically",
-     "D3 deletes accessible DOM",
-     "a public prop has no consumer"
+     "provider colors collapse or leak across roots",
+     "invalid or cyclic data renders silently",
+     "empty data retains marks",
+     "D3 deletes or dangles accessible DOM",
+     "a public symbol lacks a consumer or fixture",
+     "semantics change silently"
     ]
    }
   },
   {
    "id": "WO-CRA-14",
-   "title": "ParticleField quarantine and hardening",
+   "title": "ParticleField Stage-A quarantine",
    "lane": "craft",
    "order": 14,
-   "size": "L",
+   "size": "S",
    "status": "todo",
    "dependsOn": [
     "WO-GAT-05",
@@ -2199,35 +2319,100 @@
    "programs": [
     "ds-improvements"
    ],
-   "sourceIds": [
+   "sourceIds": [],
+   "supportsSourceIds": [
     "DS-IMP-106"
    ],
+   "milestone": {
+    "id": "DS-IMP-106-stage-a-quarantine",
+    "scope": "Remove live high-intensity ParticleField exposure from the five Platform ai-field routes and prove the static fallback/chunk boundary.",
+    "completionEffect": "none",
+    "finalAuthority": "WO-CRA-15",
+    "finalPhase": "2C"
+   },
    "phase": "0",
-   "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
+   "notes": "Stage-A support milestone only. Completion quarantines active routes but cannot complete DS-IMP-106; full lifecycle/resource hardening remains WO-CRA-15 in Phase 2C.",
    "progressLog": [],
    "claimedBy": null,
    "claimedAt": null,
    "doneAt": null,
    "evidence": null,
    "execution": {
-    "decisionOwner": "design-system-program",
+    "decisionOwner": "visualization-runtime",
     "touchedRepos": [
      "ui-design-system",
      "app-platform"
     ],
-    "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
-    "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
+    "rollback": "Return every affected Platform route to the shared static fallback; never restore live high-intensity ParticleField exposure before WO-CRA-15 certifies.",
+    "disable": "Use the independent route-level kill switch to prevent live ParticleField mounting while preserving the labelled static alternative.",
     "telemetry": [
-     "live high-intensity routes",
-     "DPR/count budget",
-     "RAF suspension",
-     "cleanup/context loss",
-     "fallback use"
+     "five-route exposure inventory",
+     "kill-switch state per route",
+     "live ParticleField mount count",
+     "static fallback activation",
+     "lazy-chunk presence in quarantined routes"
     ],
     "stopConditions": [
-     "a live route bypasses the static fallback before gates pass",
-     "hidden/offscreen RAF continues",
-     "context loss or reduced motion has no fallback"
+     "a high-intensity route bypasses quarantine",
+     "a disabled route still mounts Canvas or RAF",
+     "the fallback is absent or unlabeled",
+     "Stage A increments DS-IMP-106 completion"
+    ]
+   }
+  },
+  {
+   "id": "WO-CRA-15",
+   "title": "ParticleField and Canvas/WebGL hardening",
+   "lane": "craft",
+   "order": 15,
+   "size": "L",
+   "status": "todo",
+   "dependsOn": [
+    "WO-GAT-05",
+    "WO-GAT-06",
+    "WO-CRA-12",
+    "WO-CRA-13",
+    "WO-CRA-14"
+   ],
+   "mustLandWith": [],
+   "programs": [
+    "ds-improvements"
+   ],
+   "sourceIds": [
+    "DS-IMP-106"
+   ],
+   "phase": "2C",
+   "notes": "Final authority for DS-IMP-106. WO-CRA-14 is only the Phase-0 quarantine milestone; this hardening WO remains phase-locked until the owner approves Phase 2C.",
+   "progressLog": [],
+   "claimedBy": null,
+   "claimedAt": null,
+   "doneAt": null,
+   "evidence": null,
+   "execution": {
+    "decisionOwner": "visualization-runtime",
+    "touchedRepos": [
+     "ui-design-system",
+     "app-platform"
+    ],
+    "rollback": "Keep all Platform routes on the certified static fallback and revert the governed ParticleField runtime independently.",
+    "disable": "Disable the ParticleField runtime globally or per route through the Stage-A kill switch without affecting the static alternative.",
+    "telemetry": [
+     "resolved provider colors across two roots",
+     "adaptive DPR and particle count",
+     "hidden/offscreen RAF state",
+     "listener and resource cleanup",
+     "context-loss and error fallback",
+     "reduced-motion and accessible-alternative use",
+     "long-task, bundle and context budgets"
+    ],
+    "stopConditions": [
+     "Phase 2C is not explicitly open",
+     "background or offscreen work continues",
+     "resources or listeners leak",
+     "provider colors remain unresolved or cross-root",
+     "context loss or reduced motion lacks fallback",
+     "accessible meaning disappears",
+     "a recorded performance or resource budget is exceeded"
     ]
    }
   }
@@ -2702,8 +2887,8 @@
     {
      "id": "DS-IMP-060",
      "disposition": "execute",
-     "authority": "WO-GAT-07",
-     "phase": "0"
+     "authority": "WO-GAT-09",
+     "phase": "6"
     },
     {
      "id": "DS-IMP-061",
@@ -3050,8 +3235,8 @@
     {
      "id": "DS-IMP-106",
      "disposition": "execute",
-     "authority": "WO-CRA-14",
-     "phase": "0"
+     "authority": "WO-CRA-15",
+     "phase": "2C"
     },
     {
      "id": "DS-IMP-107",
@@ -3250,6 +3435,16 @@
     "0": {
      "decisionOwner": "design-system-program",
      "decisionDate": "2026-07-13",
+     "claimState": "open",
+     "openedBy": "owner",
+     "openedAt": "2026-07-14",
+     "claimStateReason": "The owner explicitly authorized the modern implementation with wave-by-wave validation on 2026-07-14; WO-GAT-05 and WO-GAT-06 still gate every functional claim.",
+     "ownerGo": {
+      "decision": "go",
+      "by": "owner",
+      "at": "2026-07-14",
+      "evidence": "Owner authorization recorded in the Codex task on 2026-07-14 for wave-by-wave implementation."
+     },
      "rollback": "Keep the one-release local-link fallback, retain last-known-valid tenant configuration, and restore static particle fallback.",
      "disable": "Block registry claims; disable live ParticleField exposure; reject invalid TenantThemeConfig without mutating persisted data.",
      "telemetry": [
@@ -3268,6 +3463,16 @@
     "1": {
      "decisionOwner": "design-system-architecture",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting the complete Wave-0 checkpoint and explicit owner GO.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Select the prior scoped provider/artifact path without deleting persisted tenant data.",
      "disable": "Disable new provider scoping/layer selection and retain legacy-engine compatibility.",
      "telemetry": [
@@ -3286,6 +3491,16 @@
     "3": {
      "decisionOwner": "design-system-brand",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting the complete prior-wave checkpoint and explicit owner GO.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Switch grammar and tenant selections to the prior first-party baseline.",
      "disable": "Disable an individual recipe/signature prototype through the manifest.",
      "telemetry": [
@@ -3303,6 +3518,16 @@
     "4": {
      "decisionOwner": "platform-adoption",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting the complete prior-wave checkpoint and explicit owner GO.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Repin the previous certified DS release and rerun anatomy/slot compatibility.",
      "disable": "Disable promoted adapters or perimeter consumers independently while preserving DB data.",
      "telemetry": [
@@ -3321,6 +3546,16 @@
     "5": {
      "decisionOwner": "skin-adoption",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting the complete prior-wave checkpoint and explicit owner GO; inherited extraction remains evidence, not certification.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Retain each byte-exact predecessor until retroactive conformance evidence is green.",
      "disable": "Stop the category checkpoint and keep its predecessor active.",
      "telemetry": [
@@ -3337,6 +3572,16 @@
     "6": {
      "decisionOwner": "design-system-release",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting all prior wave checkpoints and explicit owner GO for system certification.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Certification changes no runtime default; reopen the owning item and block release.",
      "disable": "Block publish/repin and retain the previous certified release.",
      "telemetry": [
@@ -3356,6 +3601,16 @@
     "2A": {
      "decisionOwner": "design-system-craft",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting the complete prior-wave checkpoint and explicit owner GO.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Select legacy composition and leave recipes/resolvers opt-in.",
      "disable": "Disable an individual recipe in the manifest without disabling TenantThemeConfig.",
      "telemetry": [
@@ -3372,6 +3627,16 @@
     "2B": {
      "decisionOwner": "design-system-experience",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting the complete prior-wave checkpoint and explicit owner GO.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Keep topology, motion and icon compatibility aliases for one minor and select the prior adapter.",
      "disable": "Disable individual motion recipes or supplier adapters while preserving static/reduced-motion output.",
      "telemetry": [
@@ -3390,6 +3655,16 @@
     "2C": {
      "decisionOwner": "visualization-runtime",
      "decisionDate": "2026-07-13",
+     "claimState": "locked",
+     "openedBy": null,
+     "openedAt": null,
+     "claimStateReason": "Awaiting the complete prior-wave checkpoint and explicit owner GO; only the DS-IMP-106 Stage-A quarantine may execute in Phase 0.",
+     "ownerGo": {
+      "decision": "pending",
+      "by": null,
+      "at": null,
+      "evidence": null
+     },
      "rollback": "Keep legacy Bar/Line/HeatMap exports for one minor through a compatibility adapter.",
      "disable": "Feature-flag Spatial, WebGPU and effects independently and fall back to governed SVG/static output.",
      "telemetry": [

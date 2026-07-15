@@ -7,14 +7,14 @@
   [`../../docs-engineering/engineering/design-system/runtime/engines/modern/README.md`](../../docs-engineering/engineering/design-system/runtime/engines/modern/README.md).
   Its evidence base is the visual audit at
   [`../../docs-engineering/archive/audits/2026-07-06-modern-engine-visual-audit-davila.md`](../../docs-engineering/archive/audits/2026-07-06-modern-engine-visual-audit-davila.md).
-- **The work** lives in FIVE lanes — 34 WOs total (full-program conversion approved by the owner
-  2026-07-07):
-  - [`engine-modern.md`](./engine-modern.md) (12 WOs — the modern-engine premium uplift)
-  - [`craft.md`](./craft.md) (10 WOs — DS interaction, craft, motion, AI surfaces, brand tooling)
-  - [`gates.md`](./gates.md) (4 WOs — visual-regression, package-quality, whitelabel, and a11y proof)
-  - [`tokens.md`](./tokens.md) (3 WOs — generated artifacts, OKLCH color engine, DaisyUI retirement)
-  - [`architecture.md`](./architecture.md) (5 WOs — headless core restructure; runs LAST per the
-    owner sequencing law)
+- **The work** lives in the registry-linked lanes below. Counts and live state are derived in
+  [`STATUS.md`](./STATUS.md) and are deliberately not duplicated here:
+  - [`engine-modern.md`](./engine-modern.md) — modern-engine and release/theme-source work;
+  - [`craft.md`](./craft.md) — interaction, adaptive/mobile, motion, charts, AI and spatial craft;
+  - [`gates.md`](./gates.md) — visual, package, whitelabel, accessibility and program-truth gates;
+  - [`tokens.md`](./tokens.md) — generated artifacts, color/token governance and legacy cleanup;
+  - [`architecture.md`](./architecture.md) — behavior, ownership, package and access architecture;
+  - [`skin-adoption.md`](./skin-adoption.md) — Stage-1 extraction and retroactive conformance evidence.
 
   > The commercial-surfaces program (the showroom Monochrome Signature relaunch of `showroom.rottay.com`
   > + the shared `@rottay/design-system/commercial` kit, WO-SHW-01..05) lives in `roadmap-commercial/` —
@@ -219,6 +219,35 @@ be fixed or deliberately respecified in its own work order.
   If a doc is not the lane, the registry, generated STATUS, or the spec, it does not exist. The ONE
   sanctioned exception is [`proposals.md`](./proposals.md) — the owner-review inbox (owner request
   2026-07-07): items there are NOT work until the owner approves them 1:1 and they become WO blocks.
+
+### DS-improvements authority, milestones and wave locks
+
+- The adjudicated modern program is pinned through `traceability.ds-improvements`. Its requirements
+  live in `docs-engineering/engineering/audits/ds-improvements`; its only live status remains this
+  registry. The validator proves that the pinned commit exists and contains the source, roadmap and
+  adjudication files, resolves terminal Markdown anchors, rejects a shadow `statusAuthority`, and
+  fingerprints the adjudicated trace plan, the mapped WOs' phases/dependencies/`mustLandWith`/
+  source/support/milestone topology, and all phase-control/structured-owner-GO records. A later wave
+  changes that fingerprint only in the same reviewed code-plus-registry update that maps the new WOs.
+- `sourceIds` are final completion authorities. `supportsSourceIds` are bounded milestones only:
+  completing a support WO never completes or increments the linked DS-IMP source ID. Every support
+  milestone names its distinct final authority and final phase.
+- The DS-improvements burn-down is derived only from each trace item's final authority. Support WOs,
+  deferred items, absorbed tombstones and routed work are reported separately instead of being
+  presented as completed scope.
+- Every phase control carries a mechanical `claimState`. At most one phase is open; every later phase
+  stays locked until every earlier authority is done, prior controls are locked, deferred items
+  targeted through the phase are adjudicated, and a structured `ownerGo` record carries the explicit
+  owner decision, date and evidence. Negative approval prose cannot open a phase. A green dependency
+  graph cannot override a locked phase, and a WO cannot depend on a later phase. Dates use the fixed
+  `America/New_York` program calendar even when CI runs in UTC.
+- Registry and generated STATUS writes use temporary-file rename. The registry schema is closed at
+  root, traceability, work-order, execution, milestone and progress-entry boundaries. Duplicate WO
+  IDs, incoherent todo/in-progress/done metadata, blank evidence, parallel status/state aliases and
+  removal of the activated DS program fail before any state mutation reaches disk.
+- `WO-GAT-09` is the final claim-integrity barrier: it cannot close while another executable authority
+  is open or a deferred review is overdue. Phase-0 claim checks are deliberately not system
+  certification.
 
 ## Bootstrap prompt for a fresh agent (copy-paste verbatim)
 

@@ -180,22 +180,25 @@ These work orders execute the requirements pinned at `docs-engineering@969205380
 
 ### WO-GAT-05 DS improvements registry governance
 - **Source IDs / phase** — DS-IMP-127; Phase 0.
-- **Outcome** — Every DS-IMP-001..128 has exactly one executable authority, explicit deferred owner/date/phase, absorbed successor, or routed external owner/link. DS-IMP-061 remains Phase 1, while this WO freezes its Phase-0 schema/claim boundary so no false Advanced editor promise enters execution.
-- **Steps** — Validate the pinned requirements, roadmap and adjudication paths; reject missing/duplicate IDs, duplicate WO authorities, invalid dependencies, terminal dispositions without successors, external links that do not resolve, and any second DS live-status store.
-- **Acceptance gate** — `jq` parses the registry; the namespace is exactly 128 unique contiguous IDs; each executable item points to one existing WO whose `sourceIds` contains it; no WO claims an absorbed/routed/deferred ID; all terminal links resolve. Inject one duplicate and one missing ID and prove the check fails, then restore.
+- **Depends on** — none.
+- **Outcome** — Every DS-IMP-001..128 has exactly one executable authority, explicit deferred owner/date/phase, absorbed successor, or routed external owner/link. DS-IMP-061 remains Phase 1, while this WO freezes its Phase-0 schema/claim boundary so no false Advanced editor promise enters execution. The activated program cannot be removed to regain pre-program behavior.
+- **Steps** — Validate that the pinned Git revision exists and contains the requirements, roadmap and adjudication files; resolve terminal Markdown anchors; enforce `roadmap/registry.json` as the sole status authority; reject missing/duplicate trace IDs, duplicate WO IDs/authorities, invalid or later-phase dependencies, terminal dispositions without successors, external links that do not resolve, and any second DS live-status store or status/state alias. Close the registry schema at root, traceability, work-order, execution, milestone and progress-entry boundaries. Fingerprint the adjudicated trace disposition/authority/phase/owner/route plan, every mapped WO phase/dependency/`mustLandWith`/source/support/milestone authority, and every phase-control/structured-owner-GO record so changing them requires a reviewed code-plus-registry wave update.
+- **Acceptance gate** — `jq` parses the registry; the namespace is exactly 128 unique contiguous IDs; each executable item points to one existing WO whose `sourceIds` contains it; no WO claims an absorbed/routed/deferred ID; all pinned files, commit objects, terminal anchors and external links resolve. Inject a duplicate/missing trace ID, duplicate WO ID, authority swap, fake 40-character SHA, root/trace/WO/milestone shadow state, broken decision anchor, removed milestone dependency, moved phase and modified owner-GO evidence and prove every mutation fails, then restore.
 - **Execution control** — Roll back this mapping atomically before any new claim; disable by rejecting claim/done transitions. Telemetry: missing/duplicate authorities and invalid routes. Stop on the first incomplete authority or competing status source.
 - **Do NOT** — Do not mark functional work done, mirror external status, or create another registry/lane.
 
 ### WO-GAT-06 Per-phase rollback and telemetry controls
 - **Source IDs / phase** — DS-IMP-128; Phase 0.
-- **Outcome** — Phase 0, 1, 2A, 2B, 2C, 3, 4, 5 and 6 each have a decision owner/date, rollback, disable/kill path, telemetry and falsifiable stop conditions before functional work can be claimed.
-- **Steps** — Keep the nine records in `traceability.ds-improvements.phaseControls`; validate exact phase names, non-empty controls and owner/date; require every DS-improvements WO to reference one phase.
-- **Acceptance gate** — Registry check is green; delete each required control field in a drill and observe a red check; every functional Wave-0 WO depends on this WO and WO-GAT-05.
+- **Depends on** — WO-GAT-05.
+- **Outcome** — Phase 0, 1, 2A, 2B, 2C, 3, 4, 5 and 6 each have a decision owner/date, rollback, disable/kill path, telemetry, falsifiable stop conditions and a mechanical claim lock before functional work can be claimed.
+- **Steps** — Keep the nine records in `traceability.ds-improvements.phaseControls`; validate exact phase names, non-empty controls, owner/date, `claimState` and structured `ownerGo`. An open phase requires `ownerGo.decision: "go"`, owner/date/evidence alignment and a non-negative reason; a locked phase requires `ownerGo.decision: "pending"` with no approval metadata. At most one phase may be open. A later phase cannot open until every prior phase is locked, every earlier execute authority is done and every deferred item targeted through the new phase is adjudicated. Reject dependencies on a later phase and require every DS-improvements WO to reference one phase. Dates use the program calendar (`America/New_York`) even under UTC CI.
+- **Acceptance gate** — Registry check is green; delete all eleven required fields across all nine phase records (99 drills) and observe red checks; future dates, negative/fake owner-GO text, unapproved/multiple/premature phase openings, later-phase dependencies and claims against a locked phase fail; every functional Wave-0 WO depends on this WO and WO-GAT-05. Registry and generated status writes use temporary-file rename rather than partial direct writes.
 - **Execution control** — Registry-only rollback before functional claims; disable by blocking claims. Telemetry: completeness and rollback-drill evidence. Stop if any phase control is absent or empty.
 - **Do NOT** — Do not treat prose in docs as a runtime switch or claim a rollback that has not been named.
 
 ### WO-GAT-07 Exact proof and claim floor
-- **Source IDs / phase** — DS-IMP-005, 006, 055, 056, 059 and 060; Phase 0.
+- **Source IDs / phase** — DS-IMP-005, 006, 055, 056 and 059; Phase 0. Supports the bounded DS-IMP-060 Phase-0 minimum, but WO-GAT-09 remains its only completion authority in Phase 6.
+- **Depends on** — WO-GAT-05 and WO-GAT-06.
 - **Outcome** — Completed/measured-zero paint gates are exact, public claims have a production consumer or executable fixture, the clean dependency graph is reproducible twice, and Phase 0 lands the minimal unconsumed-export claim gate without pretending the Phase-6 certification is complete.
 - **Steps** — Regenerate baselines at a pinned revision; remove non-zero ceilings from completed keys; add evasion drills; enumerate public exports/props/config claims and link each to production consumption or a fixture; persist or classify inventory evidence rather than copying stale numerics.
 - **Acceptance gate** — Two clean runs agree; exact-zero injection and an unconsumed-export injection both fail; no completed key has slack; every supported claim has executable evidence or is removed/corrected. Existing known failures remain an explicit reproducible ledger, never silently broadened.
@@ -204,8 +207,20 @@ These work orders execute the requirements pinned at `docs-engineering@969205380
 
 ### WO-GAT-08 Cross-program convergence ledger
 - **Source IDs / phase** — DS-IMP-123; Phase 0.
+- **Depends on** — WO-GAT-05 and WO-GAT-06.
 - **Outcome** — One ordering/ownership ledger links DS work to modules/apps, compliance and token economy while each external program keeps its own status authority.
 - **Steps** — Record owner, dependency direction and canonical external path for every contested capability; place chart correctness before compliance/economy consumers; preserve app ownership for permissions/domain truth; apply promote-before-second-copy to generic UI mechanics.
 - **Acceptance gate** — Every contested capability has exactly one implementation owner and one status authority; all links resolve; a scan finds no copied external statuses in this registry; UIDS-NF-001 and other overlaps have one canonical owner.
 - **Execution control** — Roll back ledger links only; disable downstream claims whose owner/order is unresolved. Telemetry: unowned overlaps, duplicate statuses and broken links. Stop on duplicated implementation or shadow status.
 - **Do NOT** — Do not absorb financial truth, AI transport, compliance policy or app authorization into the DS.
+
+## DS improvements — Phase 6 final authority
+
+### WO-GAT-09 Full claim-integrity certification
+- **Source IDs / phase** — DS-IMP-060; Phase 6 final authority.
+- **Depends on** — WO-GAT-05, WO-GAT-06, WO-GAT-07 and WO-CRA-15, plus the dynamic completion barrier over every other executable DS authority.
+- **Outcome** — Every public `all`/`every`/`complete`/`working` claim has current executable evidence, every moving count records revision/method/reproducibility, and no deferred or open authority can be hidden behind a green documentation claim.
+- **Steps** — Generate the public-claim inventory; link each claim to production consumption or an executable fixture; classify corpus/count provenance; run two clean certifications; refuse completion while another execute authority is open or a deferred review is overdue.
+- **Acceptance gate** — Two clean runs agree; claim-to-evidence cardinality is complete; docs link executable proof; no open execute authority remains; no deferred item is overdue; inject an unsupported completeness claim and prove the gate fails.
+- **Execution control** — Certification changes no runtime default. Withdraw unsupported claims, block publish/repin/system certification, and retain the prior certified release. Telemetry covers claim cardinality, inventory freshness, provenance, stale assertions, clean-run agreement and open/expired authorities.
+- **Do NOT** — Do not count WO-GAT-07's Phase-0 milestone as DS-IMP-060 completion, approve prose-only evidence, or claim the desired system while any authority remains open.

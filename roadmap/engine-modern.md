@@ -96,6 +96,7 @@ then the signature pass last.
 
 ### WO-ENG-23 Evnto certified theme source
 - **Source IDs / phase** — DS-IMP-062; Phase 0.
+- **Depends on** — WO-GAT-05, WO-GAT-06 and WO-ARC-10.
 - **Outcome** — Evnto consumes one certified DS release and one canonical source for density, radius, depth and motion; its unconditional structural theme replacement is removed without erasing tenant-configured DB appearance.
 - **Steps** — Inventory the current DS pin and every theme emitter/override; choose the canonical DS/tenant channel; remove or map structural replacements; certify the exact registry artifact before an app repin; preserve a compatibility artifact for rollback.
 - **Acceptance gate** — One source per structural axis; production build/typecheck/tests and Evnto visual/task matrix green; first paint and hydration agree; a duplicate-emitter drill fails; the pinned package is registry-resolved, not linked.

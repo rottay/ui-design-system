@@ -144,6 +144,7 @@ after the fleet is on the core.
 
 ### WO-ARC-10 Root dependency honesty
 - **Source IDs / phase** — DS-IMP-001 and DS-IMP-115; Phase 0.
+- **Depends on** — WO-GAT-05 and WO-GAT-06.
 - **Outcome** — A root export cannot statically reach a dependency labelled optional; the clean core graph has one React, ReactDOM and Dayjs identity; each app declares the suppliers it renders. A hard dependency, focused subpath or split package is acceptable when its graph/tarball/consumer proof is honest.
 - **Steps** — Trace every root export to D3, Motion, Lucide, Three and antd; remove zero-importer peers; isolate or promote each reachable dependency; add clean-install graph, packed-tarball and non-consuming consumer-bundle sentinels; compare app imports to manifests.
 - **Acceptance gate** — Frozen clean install; identity check exactly one each; a non-consuming root fixture contains none of the five supplier families through a false optional path; importer fixtures fail when their peer is undeclared; packed exports resolve without workspace links.
@@ -153,6 +154,7 @@ after the fleet is on the core.
 
 ### WO-ARC-11 Superadmin presentation bypass
 - **Source IDs / phase** — DS-IMP-072; Phase 0.
+- **Depends on** — WO-GAT-05, WO-GAT-06 and WO-GAT-07.
 - **Outcome** — Authorization remains app/server-owned. Passing resolved access `all` bypasses every DS presentation filter for routes, fields, columns, tabs and actions; a data/Prisma failure renders a visible error state and never makes registered capability anatomy disappear.
 - **Steps** — Inventory all DS permission/grant/cascade interpretations; replace them with resolved `all | resolved` presentation input; generate fixtures for every registered capability; add failing-data fixtures while keeping server authorization tests intact.
 - **Acceptance gate** — Superadmin fixtures expose 100% of registered routes/fields/columns/tabs/actions; deny/resolved fixtures remain deterministic; injected Prisma/data failures show the capability plus error state; server authorization suites remain green.
