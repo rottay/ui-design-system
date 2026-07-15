@@ -1824,7 +1824,7 @@
    "lane": "gates",
    "order": 7,
    "size": "L",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -1853,8 +1853,8 @@
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8. This WO supports the DS-IMP-060 Phase-0 minimum but cannot complete that Phase-6 source ID; status lives only in this registry.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "codex-gat07",
+   "claimedAt": "2026-07-14",
    "doneAt": null,
    "evidence": null,
    "execution": {
@@ -1887,7 +1887,7 @@
    "lane": "gates",
    "order": 8,
    "size": "S",
-   "status": "todo",
+   "status": "done",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -1901,16 +1901,36 @@
    ],
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
-   "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
-   "doneAt": null,
-   "evidence": null,
+   "progressLog": [
+    {
+     "at": "2026-07-14 22:28",
+     "by": "codex-orchestrator",
+     "note": "Implemented the machine-readable 18-capability/21-edge convergence ledger inside registry.json. Added closed-schema validation, pinned canonical/status/consumer reference resolution, recursive no-shadow-state checks, exact owner/source catalogs, promote-before-second-copy and chart UI-only ordering, cycle/duplicate guards, ownership boundaries, and fingerprint coverage. roadmap tests and check pass 68/68; awaiting independent adversarial review before done."
+    },
+    {
+     "at": "2026-07-14 22:37",
+     "by": "codex-orchestrator",
+     "note": "Full gate rerun after hardening: roadmap:check passes 69/69 in normal and TZ=UTC environments; node syntax checks, jq parse and git diff --check are green. Awaiting an independent adversarial reviewer before completion."
+    },
+    {
+      "at": "2026-07-14 23:13",
+      "by": "codex-gat08-v2",
+      "note": "Implemented schema v2 as an exact 32-capability/65-edge manifest, including the explicit 17-edge DB-driven tenant set, split chat/chart authorities, PDP versus presentation visibility, two-consumer NodeCanvas plus marketing non-consumer, recursive copied-state denylist, total fingerprinting and fail-closed full mutation coverage. Expanded roadmap suite to 73/73 with 32 capability and 65 edge deletion drills, mapping swaps, malformed shapes and reorder stability; awaiting independent adversarial rereview before completion."
+    },
+    {
+      "at": "2026-07-14 23:39",
+      "by": "codex-orchestrator",
+      "note": "Independent final GO after strict JSON-shape hardening: 85 hostile mutations rejected without throws, 6 JSON-equivalent structures accepted, getters never executed, proxy/inheritance/accessor/sparse-array laundering closed, depth-20000 stress remained total, and the valid fingerprint stayed a0c8e535906ffdee05f120b16b7685b1d30226e46d8eef5be9bd179ecc240291. roadmap:check passed 75/75 in local and UTC environments."
+    }
+   ],
+   "claimedBy": "codex-orchestrator",
+   "claimedAt": "2026-07-14",
+   "doneAt": "2026-07-14",
+   "evidence": "Schema v2 is an exact closed ledger of 32 capabilities and 65 edges, including the canonical 17-edge DB-driven tenant set, atomic chat/chart authorities, Platform-Core PDP versus DS presentation visibility, two NodeCanvas consumers plus Marketing as an explicit non-consumer, and explicit domain-truth boundaries. Canonical/source/status/consumer references are pinned and copied external state is forbidden recursively. The semantic gate, full mutation gate and fingerprint are total and fail closed over strict JSON data: proxies, inheritance, accessors, symbols, non-enumerable shadow keys, sparse/custom arrays, non-finite numbers, cycles and hostile values cannot retain the adjudicated fingerprint or throw. Final suite passed 75/75 under local and TZ=UTC; roadmap:check reports 75 WOs across 6 lanes. Independent reviewers ran 85 hostile mutations, 6 valid JSON-equivalent structures and depth-20000 stress; all invalid shapes failed, all valid equivalents and reorderings preserved fingerprint a0c8e535906ffdee05f120b16b7685b1d30226e46d8eef5be9bd179ecc240291. Independent final decision: GO.",
    "execution": {
     "decisionOwner": "ecosystem-program",
     "touchedRepos": [
-     "ui-design-system",
-     "docs-engineering"
+     "ui-design-system"
     ],
     "rollback": "Revert only the affected owner, order and link rows; never copy or mutate external program status.",
     "disable": "Block downstream claims for any capability whose owner, dependency direction or status authority is unresolved.",
@@ -1992,7 +2012,7 @@
    "lane": "architecture",
    "order": 10,
    "size": "M",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -2008,8 +2028,8 @@
    "phase": "0",
    "notes": "Requirements/evidence pinned to docs-engineering@969205380fd24eb45947bf3748db5a6cacd798f8; status lives only in this registry.",
    "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "claimedBy": "codex-arc10",
+   "claimedAt": "2026-07-14",
    "doneAt": null,
    "evidence": null,
    "execution": {
@@ -2310,7 +2330,7 @@
    "lane": "craft",
    "order": 14,
    "size": "S",
-   "status": "todo",
+   "status": "in-progress",
    "dependsOn": [
     "WO-GAT-05",
     "WO-GAT-06"
@@ -2332,9 +2352,15 @@
    },
    "phase": "0",
    "notes": "Stage-A support milestone only. Completion quarantines active routes but cannot complete DS-IMP-106; full lifecycle/resource hardening remains WO-CRA-15 in Phase 2C.",
-   "progressLog": [],
-   "claimedBy": null,
-   "claimedAt": null,
+   "progressLog": [
+    {
+     "at": "2026-07-14 23:09",
+     "by": "codex-cra14",
+     "note": "Adversarial NO-GO: CSS bundles are stale, Platform remains pinned to 2.17.0 from before the contract, and the barrel bundle loaded particles; correction is in progress."
+    }
+   ],
+   "claimedBy": "codex-cra14",
+   "claimedAt": "2026-07-14",
    "doneAt": null,
    "evidence": null,
    "execution": {
@@ -2423,6 +2449,1371 @@
    "roadmap": "/Users/daniel/Developer/Rottay/docs-engineering/engineering/audits/ds-improvements/09-implementation-roadmap-and-gates.md",
    "adjudication": "/Users/daniel/Developer/Rottay/docs-engineering/engineering/audits/ds-improvements/13-claude-reaudit-adjudication.md",
    "statusAuthority": "roadmap/registry.json",
+   "convergenceLedger": {
+    "schemaVersion": 2,
+    "sourceRevision": "969205380fd24eb45947bf3748db5a6cacd798f8",
+    "capabilities": [
+     {
+      "id": "collection.mobile-filter-mechanics",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-076"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-076"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-076"
+      },
+      "ownedScope": "Adaptive sheet, route, dropdown and accordion filter mechanics with focus and action continuity.",
+      "excludedScope": "App filter vocabulary, query semantics, surviving phone facts and domain actions.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appevnto"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "collection.saved-view-mechanics",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-032",
+       "DS-IMP-033",
+       "DS-IMP-035"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-032"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-032"
+      },
+      "ownedScope": "Generic saved-view anatomy, behavior, accessibility and typed composition seams.",
+      "excludedScope": "Persistence rules, domain filters, naming rules, authorization and app mutations.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appevnto"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "collection.bulk-action-mechanics",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-032",
+       "DS-IMP-033",
+       "DS-IMP-035"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-033"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-033"
+      },
+      "ownedScope": "Selection, bulk-action presentation, overflow, focus and accessible confirmation mechanics.",
+      "excludedScope": "Domain commands, mutation orchestration, permission decisions and app-specific copy.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appevnto"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "collection.empty-state-mechanics",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-033",
+       "DS-IMP-094"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-033"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-033"
+      },
+      "ownedScope": "Reusable empty, loading, error and recovery anatomy with accessible action placement.",
+      "excludedScope": "Domain explanation, eligibility, data recovery logic and app-owned next actions.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appevnto"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "record.detail-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-032",
+       "DS-IMP-033",
+       "DS-IMP-035"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-032"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-032"
+      },
+      "ownedScope": "Domain-free detail shell anatomy, slots, focus, responsive inspector mechanics and accessibility.",
+      "excludedScope": "Record vocabulary, data loaders, domain panels, business actions and authorization.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appevnto"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "assistant.chat-surface-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-063"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-063"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-063"
+      },
+      "ownedScope": "Transcript, composer slots, tool receipt, source, artifact, streaming and accessible observable-state anatomy.",
+      "excludedScope": "Provider transport, prompts, tools, app-server invocation, permissions, redaction and domain workbenches.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appevnto"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "assistant.prompt-composer-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-067"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-067"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-067"
+      },
+      "ownedScope": "Domain-free prompt, model, tool, attachment, voice and suggestion composition anatomy.",
+      "excludedScope": "Prompt content, model routing, provider invocation, tool execution and app data.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "assistant.agent-trace-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-069"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-069"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-069"
+      },
+      "ownedScope": "Typed step, source, tool, control and accessible observable-state anatomy.",
+      "excludedScope": "Agent execution, tool authorization, provider transport, app telemetry and domain semantics.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "assistant.experience-suite",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-094"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-094"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-094"
+      },
+      "ownedScope": "Composable AI surface anatomy across mobile, reduced-motion and accessibility postures.",
+      "excludedScope": "Provider transport, app-server orchestration, prompts, tools, permissions and app data.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "authorization.permission-resolution",
+      "implementationOwner": "platform-core",
+      "sourceIds": [
+       "T-C1-04"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-1-roots.md",
+       "entity": "T-C1-04"
+      },
+      "statusAuthority": {
+       "program": "platform-core",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-1-roots.md",
+       "entity": "T-C1-04"
+      },
+      "ownedScope": "Permission decision, grant resolution, cache invalidation and server-side evaluation.",
+      "excludedScope": "Design-system anatomy and rendering of already-resolved presentation access.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-permissions"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "authorization.presentation-visibility",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-072"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-072"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "WO-ARC-11"
+      },
+      "ownedScope": "Rendering of final presentation decisions, including the all-access bypass across generated surfaces.",
+      "excludedScope": "Permission matching, authorization evaluation, server enforcement and data-access decisions.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appevnto"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "visualization.correctness-foundation",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-095",
+       "DS-IMP-096",
+       "DS-IMP-097"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-095"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "WO-CRA-13"
+      },
+      "ownedScope": "Provider-scoped color, data/layout correctness and honest public chart and accessible DOM contracts.",
+      "excludedScope": "Compliance controls, economy calculations, domain aggregation, units and business meaning.",
+      "consumerEndpoints": [
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-2"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-5"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "visualization.react-owned-kernel",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-098"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-098"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-098"
+      },
+      "ownedScope": "React-owned semantic SVG with D3 geometry, interruption and concurrent-root safety.",
+      "excludedScope": "Domain aggregation, app-owned annotations, units and financial or compliance truth.",
+      "consumerEndpoints": [
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-2"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-5"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "visualization.renderer-neutral-spec",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-099"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-099"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-099"
+      },
+      "ownedScope": "Renderer-neutral semantic specification and declared responsive projections.",
+      "excludedScope": "App aggregation, priority, order inference, domain calculations and renderer leakage.",
+      "consumerEndpoints": [
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-2"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-5"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "visualization.a11y-interaction",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-100"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-100"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-100"
+      },
+      "ownedScope": "Hover, focus, touch and keyboard interaction plus summary, table and download anatomy.",
+      "excludedScope": "Domain drill actions, app permissions, business copy and data-export authorization.",
+      "consumerEndpoints": [
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-2"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-5"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "visualization.vertical-grammar",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-101"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-101"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-101"
+      },
+      "ownedScope": "Vertical-aware visual channels, labels, targets, bands, annotations, forecasts and provenance anatomy.",
+      "excludedScope": "Control evidence, market semantics, token calculations, accounting meaning and app decisions.",
+      "consumerEndpoints": [
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-2"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-5"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "visualization.analytical-purpose-catalog",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-102"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-102"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-102"
+      },
+      "ownedScope": "Chart-family selection and misuse, data-constraint, mobile and accessibility fixtures by analytical purpose.",
+      "excludedScope": "Domain calculations, source-data quality, financial truth and compliance evidence.",
+      "consumerEndpoints": [
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-2"
+       },
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-5"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "patterns.capability-matrix-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-070"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-070"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-070"
+      },
+      "ownedScope": "Generic grouped axes, sticky anatomy, inherited and locked cell presentation, keyboard and accessible controls.",
+      "excludedScope": "Role semantics, authorization evaluation, grant mutation and server enforcement.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       },
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "patterns.operational-ledger-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-024",
+       "DS-IMP-124"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-124"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-024"
+      },
+      "ownedScope": "Generic rows, anatomy, accessible labels and opaque or preformatted value rendering.",
+      "excludedScope": "Decimal arithmetic, balances, conservation, reservations, journals, counterparties and financial truth.",
+      "consumerEndpoints": [
+       {
+        "program": "token-economy",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-TE-5"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "economy.financial-ledger-truth",
+      "implementationOwner": "token-economy",
+      "sourceIds": [
+       "DS-IMP-124",
+       "T-TE-0"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-TE-0"
+      },
+      "statusAuthority": {
+       "program": "token-economy",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-TE-0"
+      },
+      "ownedScope": "Canonical decimal, journal, balance, reservation, conservation and accounting contracts.",
+      "excludedScope": "Generic design-system row anatomy and opaque value presentation.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "spatial.node-canvas-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-071"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-071"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-071"
+      },
+      "ownedScope": "Domain-agnostic nodes, ports, edges, keyboard, pan, zoom, minimap and inspector-selection mechanics.",
+      "excludedScope": "Scene meaning, graph data, calculations, rules, workflow and app interactions.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "compliance-program",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+        "entity": "T-CP-3"
+       }
+      ],
+      "nonConsumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-marketing"
+       }
+      ]
+     },
+     {
+      "id": "ai.provider-transport",
+      "implementationOwner": "dm-ia-chat",
+      "sourceIds": [
+       "DS-IMP-122",
+       "T-P2-iachat"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+       "entity": "T-P2-iachat"
+      },
+      "statusAuthority": {
+       "program": "dm-ia-chat",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+       "entity": "T-P2-iachat"
+      },
+      "ownedScope": "Provider SDK, routing, failover, transport and service-side model invocation.",
+      "excludedScope": "Design-system chat anatomy and app-owned UI-to-server integration, tools, prompts and data.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "compliance.control-policy",
+      "implementationOwner": "compliance",
+      "sourceIds": [
+       "T-CP-1"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-CP-1"
+      },
+      "statusAuthority": {
+       "program": "compliance-program",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-CP-1"
+      },
+      "ownedScope": "Control catalog, framework semantics, evidence rules, applicability and compliance decisions.",
+      "excludedScope": "Generic visualization, matrix and layout anatomy.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "compliance.reporting-ui-semantics",
+      "implementationOwner": "compliance",
+      "sourceIds": [
+       "T-CP-3"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-CP-3"
+      },
+      "statusAuthority": {
+       "program": "compliance-program",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-CP-3"
+      },
+      "ownedScope": "Evidence-pack, framework coverage, attestation and consent-receipt meaning.",
+      "excludedScope": "Generic chart, matrix, responsive projection and accessible interaction mechanics.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "economy.multiplier-ui-semantics",
+      "implementationOwner": "token-economy",
+      "sourceIds": [
+       "T-TE-2"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-TE-2"
+      },
+      "statusAuthority": {
+       "program": "token-economy",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-TE-2"
+      },
+      "ownedScope": "Tenant multiplier resolution, pricing inputs, override meaning and economy-facing presentation semantics.",
+      "excludedScope": "Generic chart grammar, projections, interaction and token rendering.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "economy.controls-analytics-ui-semantics",
+      "implementationOwner": "token-economy",
+      "sourceIds": [
+       "DS-IMP-124",
+       "T-TE-5"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-TE-5"
+      },
+      "statusAuthority": {
+       "program": "token-economy",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md",
+       "entity": "T-TE-5"
+      },
+      "ownedScope": "Rewards, refunds, spend caps, alerts and economy controls with opaque decimal values.",
+      "excludedScope": "Generic chart, operational-ledger anatomy and any IEEE-754 financial calculation in DS.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "tooling.eslint-recommended-preset",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "UIDS-NF-001"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/modules/ui-design-system/proposed-features/UIDS-NF-001-shared-eslint-preset-and-adoption-gate.md",
+       "entity": "UIDS-NF-001"
+      },
+      "statusAuthority": {
+       "program": "full-ecosystem",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+       "entity": "T-P2-uidesignsystem"
+      },
+      "ownedScope": "Consumable design-system lint preset and ecosystem token-discipline adoption gate.",
+      "excludedScope": "App-owned product lint rules, domain behavior and application release decisions.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "tenant-theme.schema-compiler",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-061"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-061"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-061"
+      },
+      "ownedScope": "Versioned data-only TenantThemeConfig schema, normalization and deterministic token compiler.",
+      "excludedScope": "Tenant persistence, app-platform mutations, SSR, auth, email, Open Graph and app delivery.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "tenant-branding.assets-anatomy",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-120"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-120"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-120"
+      },
+      "ownedScope": "Reusable logo, favicon, email, auth and Open Graph asset schema and presentation anatomy.",
+      "excludedScope": "Tenant storage, DB reads, SSR, auth, email, Open Graph, application delivery and domain verification.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-svcauth"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-notifications"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "tenant-branding.read-model",
+      "implementationOwner": "tenancy",
+      "sourceIds": [
+       "DS-IMP-120",
+       "TEN-F-008",
+       "TEN-F-009"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-120"
+      },
+      "statusAuthority": {
+       "program": "full-ecosystem",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+       "entity": "T-P2-tenancy"
+      },
+      "ownedScope": "Versioned tenant branding and theme DB read model exposed through an owned tenancy port.",
+      "excludedScope": "Design-system compilation, app-platform editing, SSR, auth, email, Open Graph and app rendering.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-svcauth"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-notifications"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "tenant-theme.vertical-capability-manifest",
+      "implementationOwner": "design-system",
+      "sourceIds": [
+       "DS-IMP-121"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-121"
+      },
+      "statusAuthority": {
+       "program": "ds-improvements",
+       "path": "roadmap/registry.json",
+       "entity": "DS-IMP-121"
+      },
+      "ownedScope": "Versioned vertical capability manifest that declares safe simple and advanced visual fields.",
+      "excludedScope": "Tenant persistence, raw CSS, selectors, behavior, engine selection, topology and app mutations.",
+      "consumerEndpoints": [],
+      "nonConsumerEndpoints": []
+     },
+     {
+      "id": "tenant-theme.app-platform-console",
+      "implementationOwner": "app-platform",
+      "sourceIds": [
+       "DS-IMP-121"
+      ],
+      "canonicalRef": {
+       "path": "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md",
+       "entity": "DS-IMP-121"
+      },
+      "statusAuthority": {
+       "program": "full-ecosystem",
+       "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+       "entity": "T-P2-appplatform"
+      },
+      "ownedScope": "Tenant-facing simple and advanced editor generated from schema and vertical capabilities with DB round-trip.",
+      "excludedScope": "Design-system schema ownership, tenancy DB ownership, service delivery and raw CSS or topology editing.",
+      "consumerEndpoints": [
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appbithire"
+       },
+       {
+        "program": "full-ecosystem",
+        "path": "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md",
+        "entity": "T-P2-appplatform"
+       }
+      ],
+      "nonConsumerEndpoints": []
+     }
+    ],
+    "edges": [
+     {
+      "from": "collection.mobile-filter-mechanics",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.mobile-filter-mechanics",
+      "to": "T-P2-appevnto",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.mobile-filter-mechanics",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.saved-view-mechanics",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.saved-view-mechanics",
+      "to": "T-P2-appevnto",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.saved-view-mechanics",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.bulk-action-mechanics",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.bulk-action-mechanics",
+      "to": "T-P2-appevnto",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.bulk-action-mechanics",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.empty-state-mechanics",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.empty-state-mechanics",
+      "to": "T-P2-appevnto",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "collection.empty-state-mechanics",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "record.detail-anatomy",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "record.detail-anatomy",
+      "to": "T-P2-appevnto",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "record.detail-anatomy",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "generic-mechanics-before-second-copy"
+     },
+     {
+      "from": "assistant.prompt-composer-anatomy",
+      "to": "assistant.chat-surface-anatomy",
+      "relationship": "precedes",
+      "scope": "corrected-chat-anatomy-prerequisite"
+     },
+     {
+      "from": "assistant.agent-trace-anatomy",
+      "to": "assistant.chat-surface-anatomy",
+      "relationship": "precedes",
+      "scope": "corrected-chat-anatomy-prerequisite"
+     },
+     {
+      "from": "assistant.experience-suite",
+      "to": "assistant.chat-surface-anatomy",
+      "relationship": "precedes",
+      "scope": "corrected-chat-anatomy-prerequisite"
+     },
+     {
+      "from": "assistant.chat-surface-anatomy",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "corrected-chat-surface-before-adoption"
+     },
+     {
+      "from": "assistant.chat-surface-anatomy",
+      "to": "T-P2-appevnto",
+      "relationship": "precedes",
+      "scope": "corrected-chat-surface-before-adoption"
+     },
+     {
+      "from": "assistant.chat-surface-anatomy",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "corrected-chat-surface-before-adoption"
+     },
+     {
+      "from": "authorization.permission-resolution",
+      "to": "T-P2-permissions",
+      "relationship": "precedes",
+      "scope": "server-policy-only"
+     },
+     {
+      "from": "authorization.presentation-visibility",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "presentation-decisions-only"
+     },
+     {
+      "from": "authorization.presentation-visibility",
+      "to": "T-P2-appevnto",
+      "relationship": "precedes",
+      "scope": "presentation-decisions-only"
+     },
+     {
+      "from": "authorization.presentation-visibility",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "presentation-decisions-only"
+     },
+     {
+      "from": "visualization.correctness-foundation",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.correctness-foundation",
+      "to": "T-TE-2",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.correctness-foundation",
+      "to": "T-TE-5",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.react-owned-kernel",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.react-owned-kernel",
+      "to": "T-TE-2",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.react-owned-kernel",
+      "to": "T-TE-5",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.renderer-neutral-spec",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.renderer-neutral-spec",
+      "to": "T-TE-2",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.renderer-neutral-spec",
+      "to": "T-TE-5",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.a11y-interaction",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.a11y-interaction",
+      "to": "T-TE-2",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.a11y-interaction",
+      "to": "T-TE-5",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.vertical-grammar",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.vertical-grammar",
+      "to": "T-TE-2",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.vertical-grammar",
+      "to": "T-TE-5",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.analytical-purpose-catalog",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.analytical-purpose-catalog",
+      "to": "T-TE-2",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "visualization.analytical-purpose-catalog",
+      "to": "T-TE-5",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "patterns.capability-matrix-anatomy",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "patterns.capability-matrix-anatomy",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "patterns.operational-ledger-anatomy",
+      "to": "T-TE-5",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "spatial.node-canvas-anatomy",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "spatial.node-canvas-anatomy",
+      "to": "T-CP-3",
+      "relationship": "precedes",
+      "scope": "consumer-ui-only"
+     },
+     {
+      "from": "tenant-theme.schema-compiler",
+      "to": "tenant-branding.read-model",
+      "relationship": "precedes",
+      "scope": "schema-contract-only"
+     },
+     {
+      "from": "tenant-theme.schema-compiler",
+      "to": "tenant-theme.vertical-capability-manifest",
+      "relationship": "precedes",
+      "scope": "schema-contract-only"
+     },
+     {
+      "from": "tenant-theme.schema-compiler",
+      "to": "tenant-theme.app-platform-console",
+      "relationship": "precedes",
+      "scope": "schema-generated-editor-fields"
+     },
+     {
+      "from": "tenant-branding.assets-anatomy",
+      "to": "T-P2-svcauth",
+      "relationship": "precedes",
+      "scope": "reusable-assets-contract-only"
+     },
+     {
+      "from": "tenant-branding.assets-anatomy",
+      "to": "T-P2-notifications",
+      "relationship": "precedes",
+      "scope": "reusable-assets-contract-only"
+     },
+     {
+      "from": "tenant-branding.assets-anatomy",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "reusable-assets-contract-only"
+     },
+     {
+      "from": "tenant-branding.assets-anatomy",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "reusable-assets-contract-only"
+     },
+     {
+      "from": "tenant-branding.read-model",
+      "to": "tenant-theme.app-platform-console",
+      "relationship": "precedes",
+      "scope": "db-read-model-input"
+     },
+     {
+      "from": "tenant-branding.read-model",
+      "to": "T-P2-svcauth",
+      "relationship": "precedes",
+      "scope": "db-read-model-consumer"
+     },
+     {
+      "from": "tenant-branding.read-model",
+      "to": "T-P2-notifications",
+      "relationship": "precedes",
+      "scope": "db-read-model-consumer"
+     },
+     {
+      "from": "tenant-branding.read-model",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "db-read-model-consumer"
+     },
+     {
+      "from": "tenant-branding.read-model",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "db-read-model-consumer"
+     },
+     {
+      "from": "tenant-theme.vertical-capability-manifest",
+      "to": "tenant-theme.app-platform-console",
+      "relationship": "precedes",
+      "scope": "vertical-capability-fields"
+     },
+     {
+      "from": "tenant-theme.schema-compiler",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "tenant-theme-compiler-contract-only"
+     },
+     {
+      "from": "tenant-theme.schema-compiler",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "tenant-theme-compiler-contract-only"
+     },
+     {
+      "from": "tenant-theme.app-platform-console",
+      "to": "T-P2-appbithire",
+      "relationship": "precedes",
+      "scope": "db-write-to-first-paint"
+     },
+     {
+      "from": "tenant-theme.app-platform-console",
+      "to": "T-P2-appplatform",
+      "relationship": "precedes",
+      "scope": "db-write-to-first-paint"
+     }
+    ]
+   },
    "items": [
     {
      "id": "DS-IMP-001",

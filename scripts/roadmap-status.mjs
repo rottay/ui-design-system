@@ -43,6 +43,9 @@ import path from "node:path";
 import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { types as utilTypes } from "node:util";
+
+const isProxy = utilTypes.isProxy;
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const ROADMAP = path.join(ROOT, "roadmap");
@@ -72,7 +75,7 @@ const DS_IMPROVEMENTS_PHASE_INDEX = new Map(
 // Adjudicated program-plan lock. Mutable status/evidence/review dates are
 // deliberately excluded; trace mapping and mapped-WO topology changes require
 // a reviewed code+registry update when the owner opens the next wave.
-const DS_IMPROVEMENTS_PLAN_SHA256 = "a381034eb9253b71223199848c9e1a1dff5f6b0b39767f558c8c3e7f4c4e53cd";
+const DS_IMPROVEMENTS_PLAN_SHA256 = "a0c8e535906ffdee05f120b16b7685b1d30226e46d8eef5be9bd179ecc240291";
 const DS_IMPROVEMENTS_SOURCE_REVISION = "969205380fd24eb45947bf3748db5a6cacd798f8";
 const DS_IMPROVEMENTS_DOC_ROOT = path.resolve(
   ROOT,
@@ -90,6 +93,512 @@ const DS_IMPROVEMENTS_ADJUDICATION_PATH = path.join(
   DS_IMPROVEMENTS_DOC_ROOT,
   "13-claude-reaudit-adjudication.md",
 );
+const DS_CONVERGENCE_SCHEMA_VERSION = 2;
+const DS_CONVERGENCE_CHAT_ID = "assistant.chat-surface-anatomy";
+const DS_CONVERGENCE_AI_TRANSPORT_ID = "ai.provider-transport";
+const DS_CONVERGENCE_UIDS_PRESET_ID = "tooling.eslint-recommended-preset";
+const DS_CONVERGENCE_DS_BACKLOG = "../docs-engineering/engineering/audits/ds-improvements/08-consolidated-findings-and-feature-backlog.md";
+const DS_CONVERGENCE_PHASE_1 = "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-1-roots.md";
+const DS_CONVERGENCE_PHASE_2 = "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-2-conformance.md";
+const DS_CONVERGENCE_PHASE_4 = "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/execution-board/phase-4-revenue.md";
+const DS_CONVERGENCE_UIDS_FEATURE = "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/modules/ui-design-system/proposed-features/UIDS-NF-001-shared-eslint-preset-and-adoption-gate.md";
+const DS_CONVERGENCE_TENANT_FINDING_008 = "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/modules/tenancy/findings/TEN-F-008-whitelabel-ops-incomplete.md";
+const DS_CONVERGENCE_TENANT_FINDING_009 = "../docs-engineering/engineering/audits/2026-07-09-full-ecosystem-max-audit/modules/tenancy/findings/TEN-F-009-jsonb-relational-blobs.md";
+const canonical = (pathValue, entity) => ({ path: pathValue, entity });
+const authority = (program, pathValue, entity) => ({ program, path: pathValue, entity });
+const localAuthority = (entity) => authority(
+  DS_IMPROVEMENTS_KEY,
+  DS_IMPROVEMENTS_STATUS_AUTHORITY,
+  entity,
+);
+const phase2Endpoint = (entity) => authority("full-ecosystem", DS_CONVERGENCE_PHASE_2, entity);
+const phase4Endpoint = (program, entity) => authority(program, DS_CONVERGENCE_PHASE_4, entity);
+const DS_CONVERGENCE_APP_ENDPOINT_REFS = [
+  phase2Endpoint("T-P2-appbithire"),
+  phase2Endpoint("T-P2-appevnto"),
+  phase2Endpoint("T-P2-appplatform"),
+];
+const capability = ({
+  id,
+  implementationOwner,
+  sourceIds,
+  canonicalRef,
+  statusAuthority,
+  ownedScope,
+  excludedScope,
+  consumerEndpoints = [],
+  nonConsumerEndpoints = [],
+}) => ({
+  id,
+  implementationOwner,
+  sourceIds,
+  canonicalRef,
+  statusAuthority,
+  ownedScope,
+  excludedScope,
+  consumerEndpoints,
+  nonConsumerEndpoints,
+});
+
+// Closed v2 catalog: every contested capability has one owner, one resolvable
+// status authority and an exact set of consumers/non-consumers. Local execute
+// sources point to their live WO; deferred sources remain their own authority.
+const DS_CONVERGENCE_CAPABILITIES = [
+  capability({
+    id: "collection.mobile-filter-mechanics",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-076"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-076"),
+    statusAuthority: localAuthority("DS-IMP-076"),
+    ownedScope: "Adaptive sheet, route, dropdown and accordion filter mechanics with focus and action continuity.",
+    excludedScope: "App filter vocabulary, query semantics, surviving phone facts and domain actions.",
+    consumerEndpoints: DS_CONVERGENCE_APP_ENDPOINT_REFS,
+  }),
+  capability({
+    id: "collection.saved-view-mechanics",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-032", "DS-IMP-033", "DS-IMP-035"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-032"),
+    statusAuthority: localAuthority("DS-IMP-032"),
+    ownedScope: "Generic saved-view anatomy, behavior, accessibility and typed composition seams.",
+    excludedScope: "Persistence rules, domain filters, naming rules, authorization and app mutations.",
+    consumerEndpoints: DS_CONVERGENCE_APP_ENDPOINT_REFS,
+  }),
+  capability({
+    id: "collection.bulk-action-mechanics",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-032", "DS-IMP-033", "DS-IMP-035"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-033"),
+    statusAuthority: localAuthority("DS-IMP-033"),
+    ownedScope: "Selection, bulk-action presentation, overflow, focus and accessible confirmation mechanics.",
+    excludedScope: "Domain commands, mutation orchestration, permission decisions and app-specific copy.",
+    consumerEndpoints: DS_CONVERGENCE_APP_ENDPOINT_REFS,
+  }),
+  capability({
+    id: "collection.empty-state-mechanics",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-033", "DS-IMP-094"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-033"),
+    statusAuthority: localAuthority("DS-IMP-033"),
+    ownedScope: "Reusable empty, loading, error and recovery anatomy with accessible action placement.",
+    excludedScope: "Domain explanation, eligibility, data recovery logic and app-owned next actions.",
+    consumerEndpoints: DS_CONVERGENCE_APP_ENDPOINT_REFS,
+  }),
+  capability({
+    id: "record.detail-anatomy",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-032", "DS-IMP-033", "DS-IMP-035"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-032"),
+    statusAuthority: localAuthority("DS-IMP-032"),
+    ownedScope: "Domain-free detail shell anatomy, slots, focus, responsive inspector mechanics and accessibility.",
+    excludedScope: "Record vocabulary, data loaders, domain panels, business actions and authorization.",
+    consumerEndpoints: DS_CONVERGENCE_APP_ENDPOINT_REFS,
+  }),
+  capability({
+    id: DS_CONVERGENCE_CHAT_ID,
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-063"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-063"),
+    statusAuthority: localAuthority("DS-IMP-063"),
+    ownedScope: "Transcript, composer slots, tool receipt, source, artifact, streaming and accessible observable-state anatomy.",
+    excludedScope: "Provider transport, prompts, tools, app-server invocation, permissions, redaction and domain workbenches.",
+    consumerEndpoints: DS_CONVERGENCE_APP_ENDPOINT_REFS,
+  }),
+  capability({
+    id: "assistant.prompt-composer-anatomy",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-067"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-067"),
+    statusAuthority: localAuthority("DS-IMP-067"),
+    ownedScope: "Domain-free prompt, model, tool, attachment, voice and suggestion composition anatomy.",
+    excludedScope: "Prompt content, model routing, provider invocation, tool execution and app data.",
+  }),
+  capability({
+    id: "assistant.agent-trace-anatomy",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-069"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-069"),
+    statusAuthority: localAuthority("DS-IMP-069"),
+    ownedScope: "Typed step, source, tool, control and accessible observable-state anatomy.",
+    excludedScope: "Agent execution, tool authorization, provider transport, app telemetry and domain semantics.",
+  }),
+  capability({
+    id: "assistant.experience-suite",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-094"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-094"),
+    statusAuthority: localAuthority("DS-IMP-094"),
+    ownedScope: "Composable AI surface anatomy across mobile, reduced-motion and accessibility postures.",
+    excludedScope: "Provider transport, app-server orchestration, prompts, tools, permissions and app data.",
+  }),
+  capability({
+    id: "authorization.permission-resolution",
+    implementationOwner: "platform-core",
+    sourceIds: ["T-C1-04"],
+    canonicalRef: canonical(DS_CONVERGENCE_PHASE_1, "T-C1-04"),
+    statusAuthority: authority("platform-core", DS_CONVERGENCE_PHASE_1, "T-C1-04"),
+    ownedScope: "Permission decision, grant resolution, cache invalidation and server-side evaluation.",
+    excludedScope: "Design-system anatomy and rendering of already-resolved presentation access.",
+    consumerEndpoints: [phase2Endpoint("T-P2-permissions")],
+  }),
+  capability({
+    id: "authorization.presentation-visibility",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-072"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-072"),
+    statusAuthority: localAuthority("WO-ARC-11"),
+    ownedScope: "Rendering of final presentation decisions, including the all-access bypass across generated surfaces.",
+    excludedScope: "Permission matching, authorization evaluation, server enforcement and data-access decisions.",
+    consumerEndpoints: DS_CONVERGENCE_APP_ENDPOINT_REFS,
+  }),
+  capability({
+    id: "visualization.correctness-foundation",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-095", "DS-IMP-096", "DS-IMP-097"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-095"),
+    statusAuthority: localAuthority("WO-CRA-13"),
+    ownedScope: "Provider-scoped color, data/layout correctness and honest public chart and accessible DOM contracts.",
+    excludedScope: "Compliance controls, economy calculations, domain aggregation, units and business meaning.",
+    consumerEndpoints: [
+      phase4Endpoint("compliance-program", "T-CP-3"),
+      phase4Endpoint("token-economy", "T-TE-2"),
+      phase4Endpoint("token-economy", "T-TE-5"),
+    ],
+  }),
+  capability({
+    id: "visualization.react-owned-kernel",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-098"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-098"),
+    statusAuthority: localAuthority("DS-IMP-098"),
+    ownedScope: "React-owned semantic SVG with D3 geometry, interruption and concurrent-root safety.",
+    excludedScope: "Domain aggregation, app-owned annotations, units and financial or compliance truth.",
+    consumerEndpoints: [
+      phase4Endpoint("compliance-program", "T-CP-3"),
+      phase4Endpoint("token-economy", "T-TE-2"),
+      phase4Endpoint("token-economy", "T-TE-5"),
+    ],
+  }),
+  capability({
+    id: "visualization.renderer-neutral-spec",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-099"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-099"),
+    statusAuthority: localAuthority("DS-IMP-099"),
+    ownedScope: "Renderer-neutral semantic specification and declared responsive projections.",
+    excludedScope: "App aggregation, priority, order inference, domain calculations and renderer leakage.",
+    consumerEndpoints: [
+      phase4Endpoint("compliance-program", "T-CP-3"),
+      phase4Endpoint("token-economy", "T-TE-2"),
+      phase4Endpoint("token-economy", "T-TE-5"),
+    ],
+  }),
+  capability({
+    id: "visualization.a11y-interaction",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-100"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-100"),
+    statusAuthority: localAuthority("DS-IMP-100"),
+    ownedScope: "Hover, focus, touch and keyboard interaction plus summary, table and download anatomy.",
+    excludedScope: "Domain drill actions, app permissions, business copy and data-export authorization.",
+    consumerEndpoints: [
+      phase4Endpoint("compliance-program", "T-CP-3"),
+      phase4Endpoint("token-economy", "T-TE-2"),
+      phase4Endpoint("token-economy", "T-TE-5"),
+    ],
+  }),
+  capability({
+    id: "visualization.vertical-grammar",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-101"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-101"),
+    statusAuthority: localAuthority("DS-IMP-101"),
+    ownedScope: "Vertical-aware visual channels, labels, targets, bands, annotations, forecasts and provenance anatomy.",
+    excludedScope: "Control evidence, market semantics, token calculations, accounting meaning and app decisions.",
+    consumerEndpoints: [
+      phase4Endpoint("compliance-program", "T-CP-3"),
+      phase4Endpoint("token-economy", "T-TE-2"),
+      phase4Endpoint("token-economy", "T-TE-5"),
+    ],
+  }),
+  capability({
+    id: "visualization.analytical-purpose-catalog",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-102"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-102"),
+    statusAuthority: localAuthority("DS-IMP-102"),
+    ownedScope: "Chart-family selection and misuse, data-constraint, mobile and accessibility fixtures by analytical purpose.",
+    excludedScope: "Domain calculations, source-data quality, financial truth and compliance evidence.",
+    consumerEndpoints: [
+      phase4Endpoint("compliance-program", "T-CP-3"),
+      phase4Endpoint("token-economy", "T-TE-2"),
+      phase4Endpoint("token-economy", "T-TE-5"),
+    ],
+  }),
+  capability({
+    id: "patterns.capability-matrix-anatomy",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-070"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-070"),
+    statusAuthority: localAuthority("DS-IMP-070"),
+    ownedScope: "Generic grouped axes, sticky anatomy, inherited and locked cell presentation, keyboard and accessible controls.",
+    excludedScope: "Role semantics, authorization evaluation, grant mutation and server enforcement.",
+    consumerEndpoints: [
+      phase2Endpoint("T-P2-appplatform"),
+      phase4Endpoint("compliance-program", "T-CP-3"),
+    ],
+  }),
+  capability({
+    id: "patterns.operational-ledger-anatomy",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-024", "DS-IMP-124"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-124"),
+    statusAuthority: localAuthority("DS-IMP-024"),
+    ownedScope: "Generic rows, anatomy, accessible labels and opaque or preformatted value rendering.",
+    excludedScope: "Decimal arithmetic, balances, conservation, reservations, journals, counterparties and financial truth.",
+    consumerEndpoints: [phase4Endpoint("token-economy", "T-TE-5")],
+  }),
+  capability({
+    id: "economy.financial-ledger-truth",
+    implementationOwner: "token-economy",
+    sourceIds: ["DS-IMP-124", "T-TE-0"],
+    canonicalRef: canonical(DS_CONVERGENCE_PHASE_4, "T-TE-0"),
+    statusAuthority: phase4Endpoint("token-economy", "T-TE-0"),
+    ownedScope: "Canonical decimal, journal, balance, reservation, conservation and accounting contracts.",
+    excludedScope: "Generic design-system row anatomy and opaque value presentation.",
+  }),
+  capability({
+    id: "spatial.node-canvas-anatomy",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-071"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-071"),
+    statusAuthority: localAuthority("DS-IMP-071"),
+    ownedScope: "Domain-agnostic nodes, ports, edges, keyboard, pan, zoom, minimap and inspector-selection mechanics.",
+    excludedScope: "Scene meaning, graph data, calculations, rules, workflow and app interactions.",
+    consumerEndpoints: [
+      phase2Endpoint("T-P2-appbithire"),
+      phase4Endpoint("compliance-program", "T-CP-3"),
+    ],
+    nonConsumerEndpoints: [phase2Endpoint("T-P2-marketing")],
+  }),
+  capability({
+    id: DS_CONVERGENCE_AI_TRANSPORT_ID,
+    implementationOwner: "dm-ia-chat",
+    sourceIds: ["DS-IMP-122", "T-P2-iachat"],
+    canonicalRef: canonical(DS_CONVERGENCE_PHASE_2, "T-P2-iachat"),
+    statusAuthority: authority("dm-ia-chat", DS_CONVERGENCE_PHASE_2, "T-P2-iachat"),
+    ownedScope: "Provider SDK, routing, failover, transport and service-side model invocation.",
+    excludedScope: "Design-system chat anatomy and app-owned UI-to-server integration, tools, prompts and data.",
+  }),
+  capability({
+    id: "compliance.control-policy",
+    implementationOwner: "compliance",
+    sourceIds: ["T-CP-1"],
+    canonicalRef: canonical(DS_CONVERGENCE_PHASE_4, "T-CP-1"),
+    statusAuthority: phase4Endpoint("compliance-program", "T-CP-1"),
+    ownedScope: "Control catalog, framework semantics, evidence rules, applicability and compliance decisions.",
+    excludedScope: "Generic visualization, matrix and layout anatomy.",
+  }),
+  capability({
+    id: "compliance.reporting-ui-semantics",
+    implementationOwner: "compliance",
+    sourceIds: ["T-CP-3"],
+    canonicalRef: canonical(DS_CONVERGENCE_PHASE_4, "T-CP-3"),
+    statusAuthority: phase4Endpoint("compliance-program", "T-CP-3"),
+    ownedScope: "Evidence-pack, framework coverage, attestation and consent-receipt meaning.",
+    excludedScope: "Generic chart, matrix, responsive projection and accessible interaction mechanics.",
+  }),
+  capability({
+    id: "economy.multiplier-ui-semantics",
+    implementationOwner: "token-economy",
+    sourceIds: ["T-TE-2"],
+    canonicalRef: canonical(DS_CONVERGENCE_PHASE_4, "T-TE-2"),
+    statusAuthority: phase4Endpoint("token-economy", "T-TE-2"),
+    ownedScope: "Tenant multiplier resolution, pricing inputs, override meaning and economy-facing presentation semantics.",
+    excludedScope: "Generic chart grammar, projections, interaction and token rendering.",
+  }),
+  capability({
+    id: "economy.controls-analytics-ui-semantics",
+    implementationOwner: "token-economy",
+    sourceIds: ["DS-IMP-124", "T-TE-5"],
+    canonicalRef: canonical(DS_CONVERGENCE_PHASE_4, "T-TE-5"),
+    statusAuthority: phase4Endpoint("token-economy", "T-TE-5"),
+    ownedScope: "Rewards, refunds, spend caps, alerts and economy controls with opaque decimal values.",
+    excludedScope: "Generic chart, operational-ledger anatomy and any IEEE-754 financial calculation in DS.",
+  }),
+  capability({
+    id: DS_CONVERGENCE_UIDS_PRESET_ID,
+    implementationOwner: "design-system",
+    sourceIds: ["UIDS-NF-001"],
+    canonicalRef: canonical(DS_CONVERGENCE_UIDS_FEATURE, "UIDS-NF-001"),
+    statusAuthority: phase2Endpoint("T-P2-uidesignsystem"),
+    ownedScope: "Consumable design-system lint preset and ecosystem token-discipline adoption gate.",
+    excludedScope: "App-owned product lint rules, domain behavior and application release decisions.",
+  }),
+  capability({
+    id: "tenant-theme.schema-compiler",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-061"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-061"),
+    statusAuthority: localAuthority("DS-IMP-061"),
+    ownedScope: "Versioned data-only TenantThemeConfig schema, normalization and deterministic token compiler.",
+    excludedScope: "Tenant persistence, app-platform mutations, SSR, auth, email, Open Graph and app delivery.",
+    consumerEndpoints: [
+      phase2Endpoint("T-P2-appbithire"),
+      phase2Endpoint("T-P2-appplatform"),
+    ],
+  }),
+  capability({
+    id: "tenant-branding.assets-anatomy",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-120"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-120"),
+    statusAuthority: localAuthority("DS-IMP-120"),
+    ownedScope: "Reusable logo, favicon, email, auth and Open Graph asset schema and presentation anatomy.",
+    excludedScope: "Tenant storage, DB reads, SSR, auth, email, Open Graph, application delivery and domain verification.",
+    consumerEndpoints: [
+      phase2Endpoint("T-P2-svcauth"),
+      phase2Endpoint("T-P2-notifications"),
+      phase2Endpoint("T-P2-appbithire"),
+      phase2Endpoint("T-P2-appplatform"),
+    ],
+  }),
+  capability({
+    id: "tenant-branding.read-model",
+    implementationOwner: "tenancy",
+    sourceIds: ["DS-IMP-120", "TEN-F-008", "TEN-F-009"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-120"),
+    statusAuthority: phase2Endpoint("T-P2-tenancy"),
+    ownedScope: "Versioned tenant branding and theme DB read model exposed through an owned tenancy port.",
+    excludedScope: "Design-system compilation, app-platform editing, SSR, auth, email, Open Graph and app rendering.",
+    consumerEndpoints: [
+      phase2Endpoint("T-P2-svcauth"),
+      phase2Endpoint("T-P2-notifications"),
+      phase2Endpoint("T-P2-appbithire"),
+      phase2Endpoint("T-P2-appplatform"),
+    ],
+  }),
+  capability({
+    id: "tenant-theme.vertical-capability-manifest",
+    implementationOwner: "design-system",
+    sourceIds: ["DS-IMP-121"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-121"),
+    statusAuthority: localAuthority("DS-IMP-121"),
+    ownedScope: "Versioned vertical capability manifest that declares safe simple and advanced visual fields.",
+    excludedScope: "Tenant persistence, raw CSS, selectors, behavior, engine selection, topology and app mutations.",
+  }),
+  capability({
+    id: "tenant-theme.app-platform-console",
+    implementationOwner: "app-platform",
+    sourceIds: ["DS-IMP-121"],
+    canonicalRef: canonical(DS_CONVERGENCE_DS_BACKLOG, "DS-IMP-121"),
+    statusAuthority: phase2Endpoint("T-P2-appplatform"),
+    ownedScope: "Tenant-facing simple and advanced editor generated from schema and vertical capabilities with DB round-trip.",
+    excludedScope: "Design-system schema ownership, tenancy DB ownership, service delivery and raw CSS or topology editing.",
+    consumerEndpoints: [
+      phase2Endpoint("T-P2-appbithire"),
+      phase2Endpoint("T-P2-appplatform"),
+    ],
+  }),
+];
+const DS_CONVERGENCE_CAPABILITY_BY_ID = new Map(
+  DS_CONVERGENCE_CAPABILITIES.map((entry) => [entry.id, entry]),
+);
+const DS_CONVERGENCE_PROMOTE_FIRST_IDS = new Set([
+  "collection.mobile-filter-mechanics",
+  "collection.saved-view-mechanics",
+  "collection.bulk-action-mechanics",
+  "collection.empty-state-mechanics",
+  "record.detail-anatomy",
+  DS_CONVERGENCE_CHAT_ID,
+]);
+const DS_CONVERGENCE_APP_ENDPOINTS = new Set([
+  "T-P2-appbithire",
+  "T-P2-appevnto",
+  "T-P2-appplatform",
+]);
+const DS_CONVERGENCE_EXTERNAL_PROGRAM_BY_ENTITY = new Map([
+  ["T-C1-04", "platform-core"],
+  ["T-P2-iachat", "dm-ia-chat"],
+  ["T-P2-permissions", "full-ecosystem"],
+  ["T-P2-tenancy", "full-ecosystem"],
+  ["T-P2-marketing", "full-ecosystem"],
+  ["T-P2-svcauth", "full-ecosystem"],
+  ["T-P2-notifications", "full-ecosystem"],
+  ["T-P2-appbithire", "full-ecosystem"],
+  ["T-P2-appevnto", "full-ecosystem"],
+  ["T-P2-appplatform", "full-ecosystem"],
+  ["T-P2-uidesignsystem", "full-ecosystem"],
+  ["T-TE-0", "token-economy"],
+  ["T-TE-2", "token-economy"],
+  ["T-TE-5", "token-economy"],
+  ["T-CP-1", "compliance-program"],
+  ["T-CP-3", "compliance-program"],
+]);
+
+const convergenceEdge = (from, to, scope) => ({ from, to, relationship: "precedes", scope });
+const edgesTo = (from, targets, scope) => targets.map((to) => convergenceEdge(from, to, scope));
+const DS_CONVERGENCE_CHART_IDS = [
+  "visualization.correctness-foundation",
+  "visualization.react-owned-kernel",
+  "visualization.renderer-neutral-spec",
+  "visualization.a11y-interaction",
+  "visualization.vertical-grammar",
+  "visualization.analytical-purpose-catalog",
+];
+const DS_CONVERGENCE_CHART_ENDPOINTS = ["T-CP-3", "T-TE-2", "T-TE-5"];
+const DS_CONVERGENCE_TENANT_EDGES = [
+  convergenceEdge("tenant-theme.schema-compiler", "tenant-branding.read-model", "schema-contract-only"),
+  convergenceEdge("tenant-theme.schema-compiler", "tenant-theme.vertical-capability-manifest", "schema-contract-only"),
+  convergenceEdge("tenant-theme.schema-compiler", "tenant-theme.app-platform-console", "schema-generated-editor-fields"),
+  ...edgesTo("tenant-branding.assets-anatomy", [
+    "T-P2-svcauth",
+    "T-P2-notifications",
+    "T-P2-appbithire",
+    "T-P2-appplatform",
+  ], "reusable-assets-contract-only"),
+  convergenceEdge("tenant-branding.read-model", "tenant-theme.app-platform-console", "db-read-model-input"),
+  ...edgesTo("tenant-branding.read-model", [
+    "T-P2-svcauth",
+    "T-P2-notifications",
+    "T-P2-appbithire",
+    "T-P2-appplatform",
+  ], "db-read-model-consumer"),
+  convergenceEdge("tenant-theme.vertical-capability-manifest", "tenant-theme.app-platform-console", "vertical-capability-fields"),
+  ...edgesTo("tenant-theme.schema-compiler", [
+    "T-P2-appbithire",
+    "T-P2-appplatform",
+  ], "tenant-theme-compiler-contract-only"),
+  ...edgesTo("tenant-theme.app-platform-console", [
+    "T-P2-appbithire",
+    "T-P2-appplatform",
+  ], "db-write-to-first-paint"),
+];
+const DS_CONVERGENCE_EXPECTED_EDGES = [
+  ...[...DS_CONVERGENCE_PROMOTE_FIRST_IDS]
+    .filter((id) => id !== DS_CONVERGENCE_CHAT_ID)
+    .flatMap((id) => edgesTo(id, [...DS_CONVERGENCE_APP_ENDPOINTS], "generic-mechanics-before-second-copy")),
+  ...edgesTo("assistant.prompt-composer-anatomy", [DS_CONVERGENCE_CHAT_ID], "corrected-chat-anatomy-prerequisite"),
+  ...edgesTo("assistant.agent-trace-anatomy", [DS_CONVERGENCE_CHAT_ID], "corrected-chat-anatomy-prerequisite"),
+  ...edgesTo("assistant.experience-suite", [DS_CONVERGENCE_CHAT_ID], "corrected-chat-anatomy-prerequisite"),
+  ...edgesTo(DS_CONVERGENCE_CHAT_ID, [...DS_CONVERGENCE_APP_ENDPOINTS], "corrected-chat-surface-before-adoption"),
+  convergenceEdge("authorization.permission-resolution", "T-P2-permissions", "server-policy-only"),
+  ...edgesTo("authorization.presentation-visibility", [...DS_CONVERGENCE_APP_ENDPOINTS], "presentation-decisions-only"),
+  ...DS_CONVERGENCE_CHART_IDS.flatMap((id) => edgesTo(id, DS_CONVERGENCE_CHART_ENDPOINTS, "consumer-ui-only")),
+  ...edgesTo("patterns.capability-matrix-anatomy", ["T-P2-appplatform", "T-CP-3"], "consumer-ui-only"),
+  convergenceEdge("patterns.operational-ledger-anatomy", "T-TE-5", "consumer-ui-only"),
+  ...edgesTo("spatial.node-canvas-anatomy", ["T-P2-appbithire", "T-CP-3"], "consumer-ui-only"),
+  ...DS_CONVERGENCE_TENANT_EDGES,
+];
+
+export function canonicalCrossProgramConvergenceLedger() {
+  return structuredClone({
+    schemaVersion: DS_CONVERGENCE_SCHEMA_VERSION,
+    sourceRevision: DS_IMPROVEMENTS_SOURCE_REVISION,
+    capabilities: DS_CONVERGENCE_CAPABILITIES,
+    edges: DS_CONVERGENCE_EXPECTED_EDGES,
+  });
+}
 
 const ROADMAP_TIME_ZONE = "America/New_York";
 const localDateTimeParts = (now, timeZone) => Object.fromEntries(
@@ -148,33 +657,38 @@ const isLocalDateTime = (value) => typeof value === "string"
 
 const pinnedPathCache = new Map();
 function pinnedPathContent(filePath, revision) {
-  const absolutePath = path.resolve(ROOT, filePath);
-  const cacheKey = `${absolutePath}\0${revision}`;
-  if (pinnedPathCache.has(cacheKey)) return pinnedPathCache.get(cacheKey);
+  if (typeof filePath !== "string" || typeof revision !== "string") return null;
+  try {
+    const absolutePath = path.resolve(ROOT, filePath);
+    const cacheKey = `${absolutePath}\0${revision}`;
+    if (pinnedPathCache.has(cacheKey)) return pinnedPathCache.get(cacheKey);
 
-  const rootResult = spawnSync(
-    "git",
-    ["-C", path.dirname(absolutePath), "rev-parse", "--show-toplevel"],
-    { encoding: "utf8" },
-  );
-  if (rootResult.status !== 0) {
-    pinnedPathCache.set(cacheKey, null);
+    const rootResult = spawnSync(
+      "git",
+      ["-C", path.dirname(absolutePath), "rev-parse", "--show-toplevel"],
+      { encoding: "utf8" },
+    );
+    if (rootResult.status !== 0) {
+      pinnedPathCache.set(cacheKey, null);
+      return null;
+    }
+    const repositoryRoot = rootResult.stdout.trim();
+    const repositoryPath = path.relative(repositoryRoot, absolutePath).split(path.sep).join("/");
+    if (!repositoryPath || repositoryPath.startsWith("../")) {
+      pinnedPathCache.set(cacheKey, null);
+      return null;
+    }
+    const showResult = spawnSync(
+      "git",
+      ["-C", repositoryRoot, "show", `${revision}:${repositoryPath}`],
+      { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 },
+    );
+    const content = showResult.status === 0 ? showResult.stdout : null;
+    pinnedPathCache.set(cacheKey, content);
+    return content;
+  } catch {
     return null;
   }
-  const repositoryRoot = rootResult.stdout.trim();
-  const repositoryPath = path.relative(repositoryRoot, absolutePath).split(path.sep).join("/");
-  if (!repositoryPath || repositoryPath.startsWith("../")) {
-    pinnedPathCache.set(cacheKey, null);
-    return null;
-  }
-  const showResult = spawnSync(
-    "git",
-    ["-C", repositoryRoot, "show", `${revision}:${repositoryPath}`],
-    { encoding: "utf8", maxBuffer: 16 * 1024 * 1024 },
-  );
-  const content = showResult.status === 0 ? showResult.stdout : null;
-  pinnedPathCache.set(cacheKey, content);
-  return content;
 }
 
 const githubHeadingSlug = (heading) => heading
@@ -208,11 +722,165 @@ const parallelStateKey = (key) => {
   return /^(?:(?:shadow|live|current|program|trace|item|authority|workorder|completion|dsimprovements))?(?:status(?:es)?|states?)(?:(?:map|byid|board|ledger|store|snapshot))?$/.test(normalized);
 };
 
+const UNREADABLE_VALUE = Symbol("unreadable-value");
+const safeRead = (value, key) => {
+  try {
+    return value?.[key];
+  } catch {
+    return UNREADABLE_VALUE;
+  }
+};
+const safeIsArray = (value) => {
+  try {
+    return Array.isArray(value);
+  } catch {
+    return false;
+  }
+};
+
+// The registry is persisted as JSON, so mutation gates must reject values that
+// merely imitate JSON through prototypes, accessors or Proxy traps. Inspect
+// descriptors before reading values: a hostile getter must never execute while
+// deciding whether a value is safe to validate or fingerprint.
+function strictJsonDataShapeErrors(value, label = "registry", ancestors = new WeakSet()) {
+  if (value === null || typeof value === "string" || typeof value === "boolean") return [];
+  if (typeof value === "number") {
+    return Number.isFinite(value) ? [] : [`${label} must be a finite JSON number`];
+  }
+  if (typeof value !== "object") {
+    return [`${label} must contain JSON data only; ${typeof value} is not allowed`];
+  }
+
+  try {
+    // util.types.isProxy does not invoke get/ownKeys traps and also identifies a
+    // revoked Proxy, so it must precede every other object introspection.
+    if (isProxy(value)) return [`${label} must not be a Proxy`];
+  } catch {
+    return [`${label} cannot be inspected safely and is rejected as non-JSON data`];
+  }
+
+  if (ancestors.has(value)) return [`${label} contains a cycle and is not JSON data`];
+  ancestors.add(value);
+  const errors = [];
+  try {
+    let prototype;
+    let keys;
+    try {
+      prototype = Reflect.getPrototypeOf(value);
+      keys = Reflect.ownKeys(value);
+    } catch {
+      return [`${label} cannot be inspected safely and is rejected as non-JSON data`];
+    }
+
+    if (Array.isArray(value)) {
+      if (prototype !== Array.prototype) {
+        errors.push(`${label} must use the ordinary Array prototype`);
+      }
+
+      const lengthDescriptor = Reflect.getOwnPropertyDescriptor(value, "length");
+      if (!lengthDescriptor || !("value" in lengthDescriptor)
+        || !Number.isSafeInteger(lengthDescriptor.value)
+        || lengthDescriptor.value < 0) {
+        errors.push(`${label}.length must be an own finite data property`);
+      }
+      const length = lengthDescriptor && "value" in lengthDescriptor
+        && Number.isSafeInteger(lengthDescriptor.value) && lengthDescriptor.value >= 0
+        ? lengthDescriptor.value
+        : 0;
+      let indexCount = 0;
+      for (const key of keys) {
+        if (typeof key !== "string") {
+          errors.push(`${label} must not contain symbol keys`);
+          continue;
+        }
+        if (key === "length") continue;
+        const index = Number(key);
+        const isCanonicalIndex = Number.isInteger(index)
+          && index >= 0
+          && index < length
+          && String(index) === key;
+        if (!isCanonicalIndex) {
+          errors.push(`${label}.${key} is a custom array property and is not JSON data`);
+          continue;
+        }
+        indexCount += 1;
+        const descriptor = Reflect.getOwnPropertyDescriptor(value, key);
+        if (!descriptor || !("value" in descriptor) || descriptor.enumerable !== true) {
+          errors.push(`${label}[${key}] must be an own enumerable data property`);
+          continue;
+        }
+        errors.push(...strictJsonDataShapeErrors(
+          descriptor.value,
+          `${label}[${key}]`,
+          ancestors,
+        ));
+      }
+      if (indexCount !== length) {
+        errors.push(`${label} must be dense with own indices 0..${Math.max(length - 1, 0)}`);
+      }
+      return errors;
+    }
+
+    if (prototype !== Object.prototype && prototype !== null) {
+      errors.push(`${label} must use Object.prototype or a null prototype`);
+    }
+    for (const key of keys) {
+      if (typeof key !== "string") {
+        errors.push(`${label} must not contain symbol keys`);
+        continue;
+      }
+      const descriptor = Reflect.getOwnPropertyDescriptor(value, key);
+      if (!descriptor || !("value" in descriptor) || descriptor.enumerable !== true) {
+        errors.push(`${label}.${key} must be an own enumerable data property`);
+        continue;
+      }
+      errors.push(...strictJsonDataShapeErrors(descriptor.value, `${label}.${key}`, ancestors));
+    }
+    return errors;
+  } catch {
+    return [`${label} cannot be inspected safely and is rejected as non-JSON data`];
+  } finally {
+    // A repeated acyclic alias serializes as repeated JSON and is valid. Only a
+    // reference to an active ancestor is a cycle.
+    ancestors.delete(value);
+  }
+}
+
+// Validate first, then detach validation from inherited prototype state. This
+// preserves acyclic aliases while ensuring a polluted Object.prototype cannot
+// supply a missing canonical field after the strict shape check has passed.
+function strictJsonDataSnapshot(value, seen = new Map()) {
+  if (value === null || typeof value !== "object") return value;
+  if (seen.has(value)) return seen.get(value);
+  if (Array.isArray(value)) {
+    const length = Reflect.getOwnPropertyDescriptor(value, "length").value;
+    const copy = new Array(length);
+    seen.set(value, copy);
+    for (let index = 0; index < length; index += 1) {
+      copy[index] = strictJsonDataSnapshot(
+        Reflect.getOwnPropertyDescriptor(value, String(index)).value,
+        seen,
+      );
+    }
+    return copy;
+  }
+  const copy = Object.create(null);
+  seen.set(value, copy);
+  for (const key of Reflect.ownKeys(value)) {
+    copy[key] = strictJsonDataSnapshot(Reflect.getOwnPropertyDescriptor(value, key).value, seen);
+  }
+  return copy;
+}
+
 const unknownObjectKeyErrors = (value, label, allowedKeys) => {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return [];
-  return Object.keys(value)
-    .filter((key) => !allowedKeys.has(key))
-    .map((key) => `${label}.${key} is not part of the closed DS-improvements schema`);
+  if (!value || typeof value !== "object" || safeIsArray(value)) return [];
+  try {
+    return Object.keys(value)
+      .filter((key) => !allowedKeys.has(key))
+      .map((key) => `${label}.${key} is not part of the closed DS-improvements schema`);
+  } catch {
+    return [`${label} cannot be inspected safely and is rejected by the closed DS-improvements schema`];
+  }
 };
 
 const DS_IMPROVEMENTS_PROGRAM_KEYS = new Set([
@@ -223,6 +891,7 @@ const DS_IMPROVEMENTS_PROGRAM_KEYS = new Set([
   "statusAuthority",
   "range",
   "phaseControls",
+  "convergenceLedger",
   "items",
 ]);
 const DS_IMPROVEMENTS_PHASE_CONTROL_KEYS = new Set([
@@ -247,6 +916,21 @@ const DS_IMPROVEMENTS_ITEM_KEYS = {
   rejected: new Set(["id", "disposition", "decisionRef", "reason"]),
 };
 const DS_IMPROVEMENTS_EXTERNAL_KEYS = new Set(["owner", "path"]);
+const DS_CONVERGENCE_LEDGER_KEYS = new Set(["schemaVersion", "sourceRevision", "capabilities", "edges"]);
+const DS_CONVERGENCE_CAPABILITY_KEYS = new Set([
+  "id",
+  "implementationOwner",
+  "sourceIds",
+  "canonicalRef",
+  "statusAuthority",
+  "ownedScope",
+  "excludedScope",
+  "consumerEndpoints",
+  "nonConsumerEndpoints",
+]);
+const DS_CONVERGENCE_CANONICAL_REF_KEYS = new Set(["path", "entity"]);
+const DS_CONVERGENCE_AUTHORITY_REF_KEYS = new Set(["program", "path", "entity"]);
+const DS_CONVERGENCE_EDGE_KEYS = new Set(["from", "to", "relationship", "scope"]);
 const REGISTRY_ROOT_KEYS = new Set(["$schema", "updated", "rules", "metrics", "workOrders", "traceability"]);
 const REGISTRY_RULE_KEYS = new Set(["done_requires", "claim_requires", "edit_via", "new_work", "wave_gate"]);
 const REGISTRY_METRIC_KEYS = new Set(["name", "baseline", "target", "measure", "asOf"]);
@@ -311,92 +995,760 @@ function parallelStateErrors(value, label, seen = new WeakSet()) {
   return errors;
 }
 
-const sortedArrayOrValue = (value) => Array.isArray(value) ? [...value].sort() : value;
+function fingerprintSafeValue(value, seen = new WeakSet()) {
+  if (value === UNREADABLE_VALUE) return "__unreadable__";
+  if (value === undefined) return "__undefined__";
+  if (typeof value === "bigint") return `__bigint__:${value.toString()}`;
+  if (typeof value === "symbol") return `__symbol__:${String(value)}`;
+  if (typeof value === "function") return "__function__";
+  if (value == null || typeof value !== "object") return value;
+  try {
+    if (seen.has(value)) return "__cycle__";
+    seen.add(value);
+    if (Array.isArray(value)) {
+      return value.map((entry) => fingerprintSafeValue(entry, seen));
+    }
+    return Object.fromEntries(
+      Object.keys(value)
+        .sort()
+        .map((key) => [key, fingerprintSafeValue(safeRead(value, key), seen)]),
+    );
+  } catch {
+    return "__uninspectable_object__";
+  }
+}
+
+const stableFingerprintText = (value) => {
+  try {
+    return JSON.stringify(fingerprintSafeValue(value));
+  } catch {
+    return '"__unserializable__"';
+  }
+};
+const identityPart = (value) => {
+  const serialized = stableFingerprintText(value);
+  let type;
+  try {
+    type = typeof value;
+  } catch {
+    type = "unreadable";
+  }
+  return `${type}:${serialized.length}:${serialized}`;
+};
+const compareSafeScalars = (left, right) => {
+  if (typeof left === "string" && typeof right === "string") return left.localeCompare(right);
+  return identityPart(left).localeCompare(identityPart(right));
+};
+const compareIdentityFields = (left, right, fields) => {
+  for (const field of fields) {
+    const comparison = compareSafeScalars(safeRead(left, field), safeRead(right, field));
+    if (comparison) return comparison;
+  }
+  return 0;
+};
+const sortedArrayOrValue = (value) => {
+  if (!safeIsArray(value)) return fingerprintSafeValue(value);
+  try {
+    if (value.every((entry) => typeof entry === "string")) return [...value].sort();
+    return value
+      .map((entry) => fingerprintSafeValue(entry))
+      .sort((left, right) => stableFingerprintText(left).localeCompare(stableFingerprintText(right)));
+  } catch {
+    return "__uninspectable_array__";
+  }
+};
 const dsSourceIds = (workOrder, field) => Array.isArray(workOrder?.[field])
   ? workOrder[field].filter((id) => isNonEmptyString(id) && id.startsWith(`${DS_IMPROVEMENTS_PREFIX}-`))
   : [];
 
-export function dsImprovementsPlanFingerprint(reg) {
+const escapeRegExp = (value) => String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const referenceIdentity = (reference) => ["program", "path", "entity"]
+  .map((key) => identityPart(safeRead(reference, key)))
+  .join("|");
+const edgeIdentity = (edge) => ["from", "relationship", "to"]
+  .map((key) => identityPart(safeRead(edge, key)))
+  .join("|");
+const canonicalReferenceIdentity = (reference) => ["path", "entity"]
+  .map((key) => identityPart(safeRead(reference, key)))
+  .join("|");
+const sameStringSet = (actual, expected) => {
+  if (!safeIsArray(actual) || !safeIsArray(expected)) return false;
+  try {
+    const actualIdentities = actual.map(identityPart);
+    const expectedIdentities = expected.map(identityPart);
+    actualIdentities.sort();
+    expectedIdentities.sort();
+    return actualIdentities.length === expectedIdentities.length
+      && new Set(actualIdentities).size === actualIdentities.length
+      && actualIdentities.every((value, index) => value === expectedIdentities[index]);
+  } catch {
+    return false;
+  }
+};
+
+function convergenceCopiedStateErrors(value, label, seen = new WeakSet()) {
+  if (value == null) return [];
+  if (typeof value === "string") {
+    const normalized = value
+      .normalize("NFKC")
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, " ")
+      .trim();
+    const padded = ` ${normalized} `;
+    const errors = [];
+    const copiedStatePhrases = [
+      "todo",
+      "not started",
+      "planned",
+      "pending",
+      "queued",
+      "in progress",
+      "blocked",
+      "paused",
+      "on hold",
+      "verify",
+      "verifying",
+      "in review",
+      "done",
+      "complete",
+      "completed",
+      "shipped",
+      "reopened",
+      "cancelled",
+      "canceled",
+    ];
+    if (copiedStatePhrases.some((phrase) => padded.includes(` ${phrase} `))) {
+      errors.push(`${label} copies external state value "${value}"; the convergence ledger stores links, never state`);
+    }
+    if (/\d+(?:\.\d+)?\s*%/u.test(value)
+      || /\b\d+\s*\/\s*\d+\b/u.test(value)
+      || /\b\d+\s+of\s+\d+\b/iu.test(value)) {
+      errors.push(`${label} copies a progress quantity; the convergence ledger stores links, never progress`);
+    }
+    return errors;
+  }
+  if (typeof value !== "object") return [];
+  try {
+    if (seen.has(value)) return [];
+    seen.add(value);
+  } catch {
+    return [`${label} cannot be inspected safely and is rejected`];
+  }
+  const errors = [];
+  let isArray;
+  try {
+    isArray = Array.isArray(value);
+  } catch {
+    return [`${label} cannot be inspected safely and is rejected`];
+  }
+  if (isArray) {
+    try {
+      value.forEach((entry, index) => errors.push(...convergenceCopiedStateErrors(entry, `${label}[${index}]`, seen)));
+    } catch {
+      errors.push(`${label} cannot be inspected safely and is rejected`);
+    }
+    return errors;
+  }
+  let keys;
+  try {
+    keys = Object.keys(value);
+  } catch {
+    return [`${label} cannot be inspected safely and is rejected`];
+  }
+  for (const key of keys) {
+    const nested = safeRead(value, key);
+    const normalizedKey = key.toLowerCase().replace(/[^a-z0-9]/g, "");
+    if (normalizedKey !== "statusauthority" && (
+      normalizedKey.includes("status")
+      || normalizedKey.includes("state")
+      || normalizedKey.includes("progress")
+      || normalizedKey.includes("completion")
+      || normalizedKey.startsWith("done")
+      || normalizedKey.startsWith("claimed")
+      || normalizedKey.includes("evidence")
+    )) {
+      errors.push(`${label}.${key} is forbidden copied state/progress metadata`);
+    }
+    if (nested === UNREADABLE_VALUE) {
+      errors.push(`${label}.${key} cannot be read safely and is rejected`);
+      continue;
+    }
+    errors.push(...convergenceCopiedStateErrors(nested, `${label}.${key}`, seen));
+  }
+  return errors;
+}
+
+function pinnedEntityReferenceErrors(reference, label, revision, { tableRow = false } = {}) {
+  const errors = [];
+  if (!isPlainObject(reference)) {
+    return [`${label} must be an object`];
+  }
+  const referencePath = safeRead(reference, "path");
+  const referenceEntity = safeRead(reference, "entity");
+  if (!isNonEmptyString(referencePath) || !isNonEmptyString(referenceEntity)) {
+    errors.push(`${label} requires scalar path and entity`);
+    return errors;
+  }
+  if (!isFullGitSha(revision)) {
+    errors.push(`${label} cannot resolve without a valid pinned revision`);
+    return errors;
+  }
+  let absolutePath;
+  try {
+    absolutePath = path.resolve(ROOT, referencePath);
+  } catch {
+    errors.push(`${label}.path cannot be resolved safely`);
+    return errors;
+  }
+  if (!fs.existsSync(absolutePath)) {
+    errors.push(`${label}.path does not exist from the repository root: ${referencePath}`);
+    return errors;
+  }
+  const content = pinnedPathContent(referencePath, revision);
+  if (content == null) {
+    errors.push(`${label}.path is absent at pinned revision ${revision}: ${referencePath}`);
+    return errors;
+  }
+  if (tableRow) {
+    const rows = content.match(new RegExp(`^\\|\\s*\\*\\*${escapeRegExp(referenceEntity)}\\*\\*\\s*\\|`, "gm")) || [];
+    if (rows.length !== 1) {
+      errors.push(`${label}.entity ${referenceEntity} must resolve to exactly one pinned authority row (found ${rows.length})`);
+    }
+  } else if (!content.includes(referenceEntity)) {
+    errors.push(`${label}.entity does not resolve at pinned revision ${revision}: ${referenceEntity}`);
+  }
+  return errors;
+}
+
+/**
+ * Validate DS-IMP-123's owner/order/link ledger. It deliberately contains no
+ * copied status: DS and every adjacent program retain their own authority.
+ */
+const isPlainObject = (value) => {
+  try {
+    return value != null && typeof value === "object" && !Array.isArray(value);
+  } catch {
+    return false;
+  }
+};
+const sameCanonicalReference = (actual, expected) => isPlainObject(actual)
+  && canonicalReferenceIdentity(actual) === canonicalReferenceIdentity(expected);
+const sameAuthorityReference = (actual, expected) => isPlainObject(actual)
+  && referenceIdentity(actual) === referenceIdentity(expected);
+const sameReferenceSet = (actual, expected) => Array.isArray(actual)
+  && actual.length === expected.length
+  && new Set(actual.map(referenceIdentity)).size === actual.length
+  && sameStringSet(actual.map(referenceIdentity), expected.map(referenceIdentity));
+
+const convergenceSourceReference = (sourceId) => {
+  if (typeof sourceId !== "string") return null;
+  if (sourceId.startsWith("DS-IMP-")) return canonical(DS_CONVERGENCE_DS_BACKLOG, sourceId);
+  if (sourceId === "T-C1-04") return canonical(DS_CONVERGENCE_PHASE_1, sourceId);
+  if (sourceId.startsWith("T-P2-")) return canonical(DS_CONVERGENCE_PHASE_2, sourceId);
+  if (sourceId.startsWith("T-TE-") || sourceId.startsWith("T-CP-")) {
+    return canonical(DS_CONVERGENCE_PHASE_4, sourceId);
+  }
+  if (sourceId === "UIDS-NF-001") return canonical(DS_CONVERGENCE_UIDS_FEATURE, sourceId);
+  if (sourceId === "TEN-F-008") return canonical(DS_CONVERGENCE_TENANT_FINDING_008, sourceId);
+  if (sourceId === "TEN-F-009") return canonical(DS_CONVERGENCE_TENANT_FINDING_009, sourceId);
+  return null;
+};
+
+const exactReferenceSetError = (id, field, actual, expected) => {
+  if (sameReferenceSet(actual, expected)) return null;
+  const expectedEntities = expected.map((entry) => entry.entity).join(", ") || "(none)";
+  return `${id}: ${field} must be exactly ${expectedEntities}`;
+};
+
+// Schema v2 is a closed canonical manifest. It carries links and boundaries
+// only, never mirrored state. Array order is irrelevant; membership is exact.
+function validateCrossProgramConvergenceLedgerUnsafe(reg) {
+  const errors = [];
+  const program = reg?.traceability?.[DS_IMPROVEMENTS_KEY];
+  const ledger = program?.convergenceLedger;
+  const label = `traceability.${DS_IMPROVEMENTS_KEY}.convergenceLedger`;
+  if (!isPlainObject(ledger)) {
+    return [`${label} is required and must be an object`];
+  }
+
+  errors.push(...unknownObjectKeyErrors(ledger, label, DS_CONVERGENCE_LEDGER_KEYS));
+  errors.push(...convergenceCopiedStateErrors(ledger, label));
+  if (safeRead(ledger, "schemaVersion") !== DS_CONVERGENCE_SCHEMA_VERSION) {
+    errors.push(`${label}.schemaVersion must be ${DS_CONVERGENCE_SCHEMA_VERSION}`);
+  }
+  const ledgerSourceRevision = safeRead(ledger, "sourceRevision");
+  if (ledgerSourceRevision !== DS_IMPROVEMENTS_SOURCE_REVISION
+    || ledgerSourceRevision !== sourceReference(program).revision) {
+    errors.push(`${label}.sourceRevision must equal the pinned DS source revision ${DS_IMPROVEMENTS_SOURCE_REVISION}`);
+  }
+
+  const programItems = Array.isArray(program?.items) ? program.items : [];
+  const workOrders = Array.isArray(reg?.workOrders) ? reg.workOrders : [];
+  const capabilities = Array.isArray(ledger.capabilities) ? ledger.capabilities : [];
+  if (!Array.isArray(ledger.capabilities)) errors.push(`${label}.capabilities must be an array`);
+  const capabilityCounts = new Map();
+
+  const validateEndpointArray = (capabilityId, field, actualValue, expectedValue) => {
+    if (!Array.isArray(actualValue)) {
+      errors.push(`${capabilityId}: ${field} must be an array`);
+      return;
+    }
+    const exactError = exactReferenceSetError(capabilityId, field, actualValue, expectedValue);
+    if (exactError) errors.push(exactError);
+    const seen = new Set();
+    actualValue.forEach((endpoint, endpointIndex) => {
+      const endpointLabel = `${capabilityId}.${field}[${endpointIndex}]`;
+      if (!isPlainObject(endpoint)) {
+        errors.push(`${endpointLabel} requires scalar program, path and entity`);
+        return;
+      }
+      errors.push(...unknownObjectKeyErrors(endpoint, endpointLabel, DS_CONVERGENCE_AUTHORITY_REF_KEYS));
+      if (![endpoint.program, endpoint.path, endpoint.entity].every(isNonEmptyString)) {
+        errors.push(`${endpointLabel} requires scalar program, path and entity`);
+        return;
+      }
+      const identity = referenceIdentity(endpoint);
+      if (seen.has(identity)) errors.push(`${capabilityId}: duplicate ${field} reference ${endpoint.entity}`);
+      seen.add(identity);
+      const expectedProgram = DS_CONVERGENCE_EXTERNAL_PROGRAM_BY_ENTITY.get(endpoint.entity);
+      if (!expectedProgram || endpoint.program !== expectedProgram) {
+        errors.push(`${endpointLabel}.program for ${endpoint.entity} must be "${expectedProgram || "a registered external program"}"`);
+      }
+      errors.push(...pinnedEntityReferenceErrors(
+        endpoint,
+        endpointLabel,
+        ledgerSourceRevision,
+        { tableRow: true },
+      ));
+    });
+  };
+
+  capabilities.forEach((entry, index) => {
+    const capabilityLabel = `${label}.capabilities[${index}]`;
+    if (!isPlainObject(entry)) {
+      errors.push(`${capabilityLabel} must be an object`);
+      return;
+    }
+    errors.push(...unknownObjectKeyErrors(entry, capabilityLabel, DS_CONVERGENCE_CAPABILITY_KEYS));
+    if (!isNonEmptyString(entry.id)) {
+      errors.push(`${capabilityLabel}.id must be a non-empty scalar`);
+      return;
+    }
+
+    capabilityCounts.set(entry.id, (capabilityCounts.get(entry.id) || 0) + 1);
+    const expected = DS_CONVERGENCE_CAPABILITY_BY_ID.get(entry.id);
+    if (!expected) {
+      errors.push(`${entry.id}: unknown convergence capability`);
+      return;
+    }
+
+    if (entry.implementationOwner !== expected.implementationOwner
+      || !isNonEmptyString(entry.implementationOwner)) {
+      errors.push(`${entry.id}: implementationOwner must be scalar "${expected.implementationOwner}"`);
+    }
+    if (!sameStringSet(entry.sourceIds, expected.sourceIds)) {
+      errors.push(`${entry.id}: sourceIds must be exactly ${expected.sourceIds.join(", ")}`);
+    }
+    for (const field of ["ownedScope", "excludedScope"]) {
+      if (!isNonEmptyString(entry[field]) || entry[field] !== expected[field]) {
+        errors.push(`${entry.id}: ${field} must match the canonical v2 boundary`);
+      }
+    }
+
+    if (!isPlainObject(entry.canonicalRef)) {
+      errors.push(`${entry.id}.canonicalRef must be an object`);
+    } else {
+      errors.push(...unknownObjectKeyErrors(
+        entry.canonicalRef,
+        `${entry.id}.canonicalRef`,
+        DS_CONVERGENCE_CANONICAL_REF_KEYS,
+      ));
+      if (!sameCanonicalReference(entry.canonicalRef, expected.canonicalRef)) {
+        errors.push(`${entry.id}: canonicalRef must be ${expected.canonicalRef.path}#${expected.canonicalRef.entity}`);
+      }
+      errors.push(...pinnedEntityReferenceErrors(
+        entry.canonicalRef,
+        `${entry.id}.canonicalRef`,
+        ledgerSourceRevision,
+      ));
+    }
+
+    if (!isPlainObject(entry.statusAuthority)) {
+      errors.push(`${entry.id}: statusAuthority must be one scalar object`);
+    } else {
+      errors.push(...unknownObjectKeyErrors(
+        entry.statusAuthority,
+        `${entry.id}.statusAuthority`,
+        DS_CONVERGENCE_AUTHORITY_REF_KEYS,
+      ));
+      if (![entry.statusAuthority.program, entry.statusAuthority.path, entry.statusAuthority.entity]
+        .every(isNonEmptyString)) {
+        errors.push(`${entry.id}: statusAuthority requires scalar program, path and entity`);
+      }
+      if (!sameAuthorityReference(entry.statusAuthority, expected.statusAuthority)) {
+        errors.push(`${entry.id}: statusAuthority must match the canonical v2 authority ${expected.statusAuthority.entity}`);
+      }
+      if (entry.statusAuthority.program === DS_IMPROVEMENTS_KEY) {
+        if (entry.statusAuthority.path !== DS_IMPROVEMENTS_STATUS_AUTHORITY) {
+          errors.push(`${entry.id}: DS statusAuthority.path must be ${DS_IMPROVEMENTS_STATUS_AUTHORITY}`);
+        }
+        const authorityMatches = [
+          ...programItems.filter((item) => item?.id === entry.statusAuthority.entity),
+          ...workOrders.filter((workOrder) => workOrder?.id === entry.statusAuthority.entity),
+        ];
+        if (authorityMatches.length !== 1) {
+          errors.push(`${entry.id}: DS statusAuthority.entity must resolve exactly once in the local registry (found ${authorityMatches.length})`);
+        }
+      } else {
+        const expectedProgram = DS_CONVERGENCE_EXTERNAL_PROGRAM_BY_ENTITY.get(entry.statusAuthority.entity);
+        if (!expectedProgram || entry.statusAuthority.program !== expectedProgram) {
+          errors.push(`${entry.id}: statusAuthority.program for ${entry.statusAuthority.entity} must be "${expectedProgram || "a registered external program"}"`);
+        }
+        errors.push(...pinnedEntityReferenceErrors(
+          entry.statusAuthority,
+          `${entry.id}.statusAuthority`,
+          ledgerSourceRevision,
+          { tableRow: true },
+        ));
+      }
+    }
+
+    validateEndpointArray(entry.id, "consumerEndpoints", entry.consumerEndpoints, expected.consumerEndpoints);
+    validateEndpointArray(
+      entry.id,
+      "nonConsumerEndpoints",
+      entry.nonConsumerEndpoints,
+      expected.nonConsumerEndpoints,
+    );
+    if (Array.isArray(entry.consumerEndpoints) && Array.isArray(entry.nonConsumerEndpoints)) {
+      const consumerEntities = new Set(entry.consumerEndpoints.map((endpoint) => endpoint?.entity));
+      for (const endpoint of entry.nonConsumerEndpoints) {
+        if (consumerEntities.has(endpoint?.entity)) {
+          errors.push(`${entry.id}: ${endpoint.entity} cannot be both consumer and non-consumer`);
+        }
+      }
+    }
+
+    for (const sourceId of expected.sourceIds) {
+      const sourceRef = convergenceSourceReference(sourceId);
+      if (!sourceRef) {
+        errors.push(`${entry.id}: sourceId ${sourceId} has no canonical source reference`);
+        continue;
+      }
+      errors.push(...pinnedEntityReferenceErrors(
+        sourceRef,
+        `${entry.id}.sourceIds.${sourceId}`,
+        ledgerSourceRevision,
+      ));
+      if (sourceId.startsWith("DS-IMP-")) {
+        const matches = programItems.filter((item) => item?.id === sourceId);
+        if (matches.length !== 1) {
+          errors.push(`${entry.id}: sourceId ${sourceId} must resolve exactly once in local traceability (found ${matches.length})`);
+        }
+      }
+    }
+  });
+
+  if (capabilities.length !== DS_CONVERGENCE_CAPABILITIES.length) {
+    errors.push(`${label}.capabilities must contain exactly ${DS_CONVERGENCE_CAPABILITIES.length} entries`);
+  }
+  for (const expected of DS_CONVERGENCE_CAPABILITIES) {
+    const count = capabilityCounts.get(expected.id) || 0;
+    if (count !== 1) {
+      errors.push(`${expected.id}: convergence capability must appear exactly once (found ${count})`);
+    }
+  }
+  for (const [id, count] of capabilityCounts) {
+    if (count > 1) errors.push(`${id}: duplicate convergence capability (${count})`);
+  }
+
+  const edges = Array.isArray(ledger.edges) ? ledger.edges : [];
+  if (!Array.isArray(ledger.edges)) errors.push(`${label}.edges must be an array`);
+  const expectedEdges = new Map(
+    DS_CONVERGENCE_EXPECTED_EDGES.map((edge) => [edgeIdentity(edge), edge]),
+  );
+  if (DS_CONVERGENCE_TENANT_EDGES.length !== 17) {
+    errors.push("internal convergence manifest error: tenant edge set must contain exactly 17 entries");
+  }
+  if (expectedEdges.size !== DS_CONVERGENCE_EXPECTED_EDGES.length) {
+    errors.push("internal convergence manifest error: canonical edges contain a duplicate identity");
+  }
+
+  const allExternalEntities = new Set(
+    DS_CONVERGENCE_CAPABILITIES.flatMap((entry) => [
+      ...entry.consumerEndpoints,
+      ...entry.nonConsumerEndpoints,
+    ]).map((entry) => entry.entity),
+  );
+  const knownNodes = new Set([...DS_CONVERGENCE_CAPABILITY_BY_ID.keys(), ...allExternalEntities]);
+  const seenEdges = new Set();
+  const adjacency = new Map();
+  edges.forEach((edge, index) => {
+    const edgeLabel = `${label}.edges[${index}]`;
+    if (!isPlainObject(edge)) {
+      errors.push(`${edgeLabel} requires scalar from, to, relationship and scope`);
+      return;
+    }
+    errors.push(...unknownObjectKeyErrors(edge, edgeLabel, DS_CONVERGENCE_EDGE_KEYS));
+    if (![edge.from, edge.to, edge.relationship, edge.scope].every(isNonEmptyString)) {
+      errors.push(`${edgeLabel} requires scalar from, to, relationship and scope`);
+      return;
+    }
+    if (!DS_CONVERGENCE_CAPABILITY_BY_ID.has(edge.from)) {
+      errors.push(`${edgeLabel}.from must be a declared capability: ${edge.from}`);
+    }
+    if (!knownNodes.has(edge.to)) errors.push(`${edgeLabel}.to is unknown: ${edge.to}`);
+    if (edge.from === edge.to) errors.push(`${edgeLabel} cannot be a self-edge`);
+    const identity = edgeIdentity(edge);
+    if (seenEdges.has(identity)) {
+      errors.push(`${edgeLabel} duplicates from/relationship/to; scope cannot create a second edge`);
+    }
+    seenEdges.add(identity);
+
+    const expected = expectedEdges.get(identity);
+    if (!expected) {
+      errors.push(`${edgeLabel} is not part of the canonical v2 edge set`);
+    } else if (edge.scope !== expected.scope || edge.relationship !== expected.relationship) {
+      errors.push(`${edgeLabel} must use relationship "${expected.relationship}" and scope "${expected.scope}"`);
+    }
+
+    if (allExternalEntities.has(edge.to)) {
+      const source = DS_CONVERGENCE_CAPABILITY_BY_ID.get(edge.from);
+      if (!source?.consumerEndpoints.some((endpoint) => endpoint.entity === edge.to)) {
+        errors.push(`${edgeLabel}.to ${edge.to} is not a declared consumer of ${edge.from}`);
+      }
+      if (source?.nonConsumerEndpoints.some((endpoint) => endpoint.entity === edge.to)) {
+        errors.push(`${edgeLabel}.to ${edge.to} is an explicit non-consumer of ${edge.from}`);
+      }
+    }
+    const destinations = adjacency.get(edge.from) || [];
+    destinations.push(edge.to);
+    adjacency.set(edge.from, destinations);
+  });
+
+  if (edges.length !== DS_CONVERGENCE_EXPECTED_EDGES.length) {
+    errors.push(`${label}.edges must contain exactly ${DS_CONVERGENCE_EXPECTED_EDGES.length} entries`);
+  }
+  for (const expected of DS_CONVERGENCE_EXPECTED_EDGES) {
+    if (!seenEdges.has(edgeIdentity(expected))) {
+      errors.push(`missing canonical convergence edge ${expected.from} -> ${expected.to} (${expected.scope})`);
+    }
+  }
+
+  const tenantEdgeIdentities = new Set(DS_CONVERGENCE_TENANT_EDGES.map(edgeIdentity));
+  const actualTenantEdges = edges.filter((edge) => isPlainObject(edge)
+    && (String(edge.from).startsWith("tenant-") || tenantEdgeIdentities.has(edgeIdentity(edge))));
+  if (actualTenantEdges.length !== 17
+    || !sameStringSet(actualTenantEdges.map(edgeIdentity), [...tenantEdgeIdentities])) {
+    errors.push("tenant convergence must contain exactly the canonical 17-edge DB-driven set");
+  }
+
+  const visiting = new Set();
+  const visited = new Set();
+  const visit = (node, stack) => {
+    if (visiting.has(node)) {
+      errors.push(`convergence edge cycle: ${[...stack, node].join(" -> ")}`);
+      return;
+    }
+    if (visited.has(node)) return;
+    visiting.add(node);
+    for (const destination of adjacency.get(node) || []) {
+      if (DS_CONVERGENCE_CAPABILITY_BY_ID.has(destination)) {
+        visit(destination, [...stack, node]);
+      }
+    }
+    visiting.delete(node);
+    visited.add(node);
+  };
+  for (const node of DS_CONVERGENCE_CAPABILITY_BY_ID.keys()) visit(node, []);
+
+  return errors;
+}
+
+export function validateCrossProgramConvergenceLedger(reg) {
+  try {
+    const shapeErrors = strictJsonDataShapeErrors(reg);
+    if (shapeErrors.length) return shapeErrors;
+    return validateCrossProgramConvergenceLedgerUnsafe(strictJsonDataSnapshot(reg));
+  } catch {
+    return [
+      `traceability.${DS_IMPROVEMENTS_KEY}.convergenceLedger contains an uninspectable malformed value and is rejected`,
+    ];
+  }
+}
+
+function dsImprovementsPlanFingerprintUnsafe(reg) {
   const items = Array.isArray(reg?.traceability?.[DS_IMPROVEMENTS_KEY]?.items)
     ? reg.traceability[DS_IMPROVEMENTS_KEY].items
     : [];
   const normalizedItems = items
     .map((item) => {
-      const base = { id: item?.id, disposition: item?.disposition };
-      switch (item?.disposition) {
+      const disposition = safeRead(item, "disposition");
+      const base = {
+        id: fingerprintSafeValue(safeRead(item, "id")),
+        disposition: fingerprintSafeValue(disposition),
+      };
+      switch (disposition) {
         case "execute":
-          return { ...base, authority: item.authority, phase: item.phase };
+          return {
+            ...base,
+            authority: fingerprintSafeValue(safeRead(item, "authority")),
+            phase: fingerprintSafeValue(safeRead(item, "phase")),
+          };
         case "deferred":
-          return { ...base, owner: item.owner, targetPhase: item.targetPhase, reason: item.reason };
+          return {
+            ...base,
+            owner: fingerprintSafeValue(safeRead(item, "owner")),
+            targetPhase: fingerprintSafeValue(safeRead(item, "targetPhase")),
+            reason: fingerprintSafeValue(safeRead(item, "reason")),
+          };
         case "absorbed":
           return {
             ...base,
-            canonicalIds: [...canonicalIds(item)].sort(),
-            decisionRef: item.decisionRef,
-            reason: item.reason,
+            canonicalIds: sortedArrayOrValue(canonicalIds(item)),
+            decisionRef: fingerprintSafeValue(safeRead(item, "decisionRef")),
+            reason: fingerprintSafeValue(safeRead(item, "reason")),
           };
-        case "routed":
+        case "routed": {
+          const external = safeRead(item, "external");
           return {
             ...base,
-            externalOwner: item.external?.owner,
-            externalPath: item.external?.path,
-            reason: item.reason,
+            externalOwner: fingerprintSafeValue(safeRead(external, "owner")),
+            externalPath: fingerprintSafeValue(safeRead(external, "path")),
+            reason: fingerprintSafeValue(safeRead(item, "reason")),
           };
+        }
         case "rejected":
-          return { ...base, decisionRef: item.decisionRef, reason: item.reason };
+          return {
+            ...base,
+            decisionRef: fingerprintSafeValue(safeRead(item, "decisionRef")),
+            reason: fingerprintSafeValue(safeRead(item, "reason")),
+          };
         default:
           return base;
       }
     })
-    .sort((left, right) => String(left.id).localeCompare(String(right.id)));
+    .sort((left, right) => compareSafeScalars(left.id, right.id));
   const normalizedWorkOrders = (Array.isArray(reg?.workOrders) ? reg.workOrders : [])
     .filter((workOrder) => dsSourceIds(workOrder, "sourceIds").length || dsSourceIds(workOrder, "supportsSourceIds").length)
-    .map((workOrder) => ({
-      id: workOrder.id,
-      phase: workOrder.phase,
-      dependsOn: sortedArrayOrValue(workOrder.dependsOn),
-      mustLandWith: sortedArrayOrValue(workOrder.mustLandWith),
-      sourceIds: dsSourceIds(workOrder, "sourceIds").sort(),
-      supportsSourceIds: dsSourceIds(workOrder, "supportsSourceIds").sort(),
-      milestone: workOrder.milestone ? {
-        id: workOrder.milestone.id,
-        scope: workOrder.milestone.scope,
-        completionEffect: workOrder.milestone.completionEffect,
-        finalAuthority: workOrder.milestone.finalAuthority,
-        finalPhase: workOrder.milestone.finalPhase,
-      } : null,
-    }))
-    .sort((left, right) => String(left.id).localeCompare(String(right.id)));
+    .map((workOrder) => {
+      const milestone = safeRead(workOrder, "milestone");
+      return {
+        id: fingerprintSafeValue(safeRead(workOrder, "id")),
+        phase: fingerprintSafeValue(safeRead(workOrder, "phase")),
+        dependsOn: sortedArrayOrValue(safeRead(workOrder, "dependsOn")),
+        mustLandWith: sortedArrayOrValue(safeRead(workOrder, "mustLandWith")),
+        sourceIds: dsSourceIds(workOrder, "sourceIds").sort(),
+        supportsSourceIds: dsSourceIds(workOrder, "supportsSourceIds").sort(),
+        milestone: milestone ? {
+          id: fingerprintSafeValue(safeRead(milestone, "id")),
+          scope: fingerprintSafeValue(safeRead(milestone, "scope")),
+          completionEffect: fingerprintSafeValue(safeRead(milestone, "completionEffect")),
+          finalAuthority: fingerprintSafeValue(safeRead(milestone, "finalAuthority")),
+          finalPhase: fingerprintSafeValue(safeRead(milestone, "finalPhase")),
+        } : null,
+      };
+    })
+    .sort((left, right) => compareSafeScalars(left.id, right.id));
   const phaseControls = reg?.traceability?.[DS_IMPROVEMENTS_KEY]?.phaseControls || {};
   const normalizedPhaseControls = DS_IMPROVEMENTS_PHASES.map((phase) => {
-    const controls = phaseControls[phase] || {};
+    const controls = safeRead(phaseControls, phase) || {};
+    const ownerGo = safeRead(controls, "ownerGo");
     return {
       phase,
-      decisionOwner: controls.decisionOwner,
-      decisionDate: controls.decisionDate,
-      claimState: controls.claimState,
-      openedBy: controls.openedBy,
-      openedAt: controls.openedAt,
-      claimStateReason: controls.claimStateReason,
-      ownerGo: controls.ownerGo ? {
-        decision: controls.ownerGo.decision,
-        by: controls.ownerGo.by,
-        at: controls.ownerGo.at,
-        evidence: controls.ownerGo.evidence,
+      decisionOwner: fingerprintSafeValue(safeRead(controls, "decisionOwner")),
+      decisionDate: fingerprintSafeValue(safeRead(controls, "decisionDate")),
+      claimState: fingerprintSafeValue(safeRead(controls, "claimState")),
+      openedBy: fingerprintSafeValue(safeRead(controls, "openedBy")),
+      openedAt: fingerprintSafeValue(safeRead(controls, "openedAt")),
+      claimStateReason: fingerprintSafeValue(safeRead(controls, "claimStateReason")),
+      ownerGo: ownerGo ? {
+        decision: fingerprintSafeValue(safeRead(ownerGo, "decision")),
+        by: fingerprintSafeValue(safeRead(ownerGo, "by")),
+        at: fingerprintSafeValue(safeRead(ownerGo, "at")),
+        evidence: fingerprintSafeValue(safeRead(ownerGo, "evidence")),
       } : null,
-      rollback: controls.rollback,
-      disable: controls.disable,
-      telemetry: sortedArrayOrValue(controls.telemetry),
-      stopConditions: sortedArrayOrValue(controls.stopConditions),
+      rollback: fingerprintSafeValue(safeRead(controls, "rollback")),
+      disable: fingerprintSafeValue(safeRead(controls, "disable")),
+      telemetry: sortedArrayOrValue(safeRead(controls, "telemetry")),
+      stopConditions: sortedArrayOrValue(safeRead(controls, "stopConditions")),
     };
   });
+  const ledger = reg?.traceability?.[DS_IMPROVEMENTS_KEY]?.convergenceLedger || {};
+  const normalizeAuthorityReference = (reference) => isPlainObject(reference) ? {
+    program: fingerprintSafeValue(safeRead(reference, "program")),
+    path: fingerprintSafeValue(safeRead(reference, "path")),
+    entity: fingerprintSafeValue(safeRead(reference, "entity")),
+  } : fingerprintSafeValue(reference);
+  const normalizeReferenceArray = (value) => safeIsArray(value)
+    ? value
+      .map(normalizeAuthorityReference)
+      .sort((left, right) => compareIdentityFields(left, right, ["program", "path", "entity"]))
+    : fingerprintSafeValue(value);
+  const ledgerCapabilities = safeRead(ledger, "capabilities");
+  const normalizedCapabilities = safeIsArray(ledgerCapabilities)
+    ? ledgerCapabilities
+      .map((capability) => isPlainObject(capability) ? {
+        id: fingerprintSafeValue(safeRead(capability, "id")),
+        implementationOwner: fingerprintSafeValue(safeRead(capability, "implementationOwner")),
+        sourceIds: sortedArrayOrValue(safeRead(capability, "sourceIds")),
+        canonicalRef: isPlainObject(safeRead(capability, "canonicalRef")) ? {
+          path: fingerprintSafeValue(safeRead(safeRead(capability, "canonicalRef"), "path")),
+          entity: fingerprintSafeValue(safeRead(safeRead(capability, "canonicalRef"), "entity")),
+        } : fingerprintSafeValue(safeRead(capability, "canonicalRef")),
+        statusAuthority: normalizeAuthorityReference(safeRead(capability, "statusAuthority")),
+        ownedScope: fingerprintSafeValue(safeRead(capability, "ownedScope")),
+        excludedScope: fingerprintSafeValue(safeRead(capability, "excludedScope")),
+        consumerEndpoints: normalizeReferenceArray(safeRead(capability, "consumerEndpoints")),
+        nonConsumerEndpoints: normalizeReferenceArray(safeRead(capability, "nonConsumerEndpoints")),
+      } : fingerprintSafeValue(capability))
+      .sort((left, right) => compareSafeScalars(safeRead(left, "id"), safeRead(right, "id")))
+    : fingerprintSafeValue(ledgerCapabilities);
+  const ledgerEdges = safeRead(ledger, "edges");
+  const normalizedEdges = safeIsArray(ledgerEdges)
+    ? ledgerEdges
+      .map((edge) => isPlainObject(edge) ? {
+        from: fingerprintSafeValue(safeRead(edge, "from")),
+        to: fingerprintSafeValue(safeRead(edge, "to")),
+        relationship: fingerprintSafeValue(safeRead(edge, "relationship")),
+        scope: fingerprintSafeValue(safeRead(edge, "scope")),
+      } : fingerprintSafeValue(edge))
+      .sort((left, right) => compareIdentityFields(left, right, ["from", "relationship", "to"])
+        || compareSafeScalars(safeRead(left, "scope"), safeRead(right, "scope")))
+    : fingerprintSafeValue(ledgerEdges);
+  const normalizedConvergenceLedger = {
+    schemaVersion: fingerprintSafeValue(safeRead(ledger, "schemaVersion")),
+    sourceRevision: fingerprintSafeValue(safeRead(ledger, "sourceRevision")),
+    capabilities: normalizedCapabilities,
+    edges: normalizedEdges,
+  };
   return createHash("sha256")
     .update(JSON.stringify({
       items: normalizedItems,
       workOrders: normalizedWorkOrders,
       phaseControls: normalizedPhaseControls,
+      convergenceLedger: normalizedConvergenceLedger,
     }))
     .digest("hex");
+}
+
+const MALFORMED_DS_PLAN_FINGERPRINT = createHash("sha256")
+  .update("ds-improvements:uninspectable-malformed-plan")
+  .digest("hex");
+
+export function dsImprovementsPlanFingerprint(reg) {
+  try {
+    if (strictJsonDataShapeErrors(reg).length) return MALFORMED_DS_PLAN_FINGERPRINT;
+    const snapshot = strictJsonDataSnapshot(reg);
+    // The ledger is a closed, canonical schema. A JSON-shaped but unknown or
+    // semantically invalid ledger must not retain the adjudicated fingerprint.
+    if (validateCrossProgramConvergenceLedgerUnsafe(snapshot).length) {
+      return MALFORMED_DS_PLAN_FINGERPRINT;
+    }
+    return dsImprovementsPlanFingerprintUnsafe(snapshot);
+  } catch {
+    return MALFORMED_DS_PLAN_FINGERPRINT;
+  }
 }
 
 /**
@@ -662,6 +2014,8 @@ export function validateDsImprovementsTraceability(
       errors.push(`traceability.${DS_IMPROVEMENTS_KEY}.phaseControls.${phase} is not a declared DS improvements phase`);
     }
   }
+
+  errors.push(...validateCrossProgramConvergenceLedger(reg));
 
   const items = Array.isArray(program.items) ? program.items : [];
   if (!Array.isArray(program.items)) {
@@ -1391,7 +2745,7 @@ function detectCycles(reg) {
 }
 
 /** Pure registry gate used immediately before every filesystem mutation. */
-export function validateRegistryMutationIntegrity(
+function validateRegistryMutationIntegrityUnsafe(
   reg,
   { today = localDate() } = {},
 ) {
@@ -1476,6 +2830,16 @@ export function validateRegistryMutationIntegrity(
   errors.push(...validateDsImprovementsTraceability(reg, { today, enforcePinnedPlan: true }));
   errors.push(...detectCycles(reg).map((cycle) => `dependency cycle: ${cycle}`));
   return errors;
+}
+
+export function validateRegistryMutationIntegrity(reg, options = {}) {
+  try {
+    const shapeErrors = strictJsonDataShapeErrors(reg);
+    if (shapeErrors.length) return shapeErrors;
+    return validateRegistryMutationIntegrityUnsafe(strictJsonDataSnapshot(reg), options);
+  } catch {
+    return ["registry contains an uninspectable malformed value and is rejected"];
+  }
 }
 
 function check() {

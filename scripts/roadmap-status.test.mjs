@@ -4,12 +4,15 @@ import test from "node:test";
 
 import {
   actionableWorkOrders,
+  canonicalCrossProgramConvergenceLedger,
+  dsImprovementsPlanFingerprint,
   localDate,
   localDateTime,
   phaseClaimBlocker,
   summarizeDsImprovements,
   summarizeDsSupportMilestones,
   validateDoneTransition,
+  validateCrossProgramConvergenceLedger,
   validateDsImprovementsTraceability,
   validateGat09CompletionBarrier,
   validateRegistryMutationIntegrity,
@@ -23,6 +26,9 @@ const allIds = Array.from(
 const phases = ["0", "1", "2A", "2B", "2C", "3", "4", "5", "6"];
 const liveRegistry = () => JSON.parse(
   fs.readFileSync(new URL("../roadmap/registry.json", import.meta.url), "utf8"),
+);
+const convergenceLedgerFixture = () => structuredClone(
+  liveRegistry().traceability["ds-improvements"].convergenceLedger,
 );
 
 const validPhaseControls = () => Object.fromEntries(phases.map((phase) => {
@@ -64,6 +70,7 @@ function validRegistry() {
         statusAuthority: "roadmap/registry.json",
         range: { prefix: "DS-IMP", first: 1, last: 128 },
         phaseControls: validPhaseControls(),
+        convergenceLedger: convergenceLedgerFixture(),
         items: allIds.map((id) => id === "DS-IMP-061"
           ? {
             id,
@@ -100,6 +107,20 @@ function validRegistry() {
           telemetry: ["pnpm roadmap:check"],
           stopConditions: ["A DS-IMP id has more than one authority."],
         },
+      },
+      {
+        id: "WO-ARC-11",
+        status: "todo",
+        programs: [],
+        dependsOn: [],
+        mustLandWith: [],
+      },
+      {
+        id: "WO-CRA-13",
+        status: "todo",
+        programs: [],
+        dependsOn: [],
+        mustLandWith: [],
       },
     ],
   };
@@ -999,6 +1020,804 @@ test("the mutation guard rejects duplicate work-order ids and incoherent done me
   assert.ok(errors.some((error) => error.includes("done requires a valid claimedAt")));
   assert.ok(errors.some((error) => error.includes("done requires a valid doneAt")));
   assert.ok(errors.some((error) => error.includes("done requires non-empty evidence")));
+});
+
+const convergenceCapability = (registry, id) => registry.traceability["ds-improvements"]
+  .convergenceLedger.capabilities.find((capability) => capability?.id === id);
+const convergenceEdges = (registry) => registry.traceability["ds-improvements"].convergenceLedger.edges;
+const endpointReference = (registry, entity) => {
+  for (const capability of registry.traceability["ds-improvements"].convergenceLedger.capabilities) {
+    for (const field of ["consumerEndpoints", "nonConsumerEndpoints"]) {
+      const found = capability[field].find((endpoint) => endpoint.entity === entity);
+      if (found) return structuredClone(found);
+    }
+  }
+  throw new Error(`missing endpoint fixture ${entity}`);
+};
+const semanticErrors = (registry) => validateCrossProgramConvergenceLedger(registry);
+const assertSemanticRejects = (registry, matcher) => {
+  let errors;
+  assert.doesNotThrow(() => { errors = semanticErrors(registry); });
+  assert.ok(errors.length > 0, "semantic convergence validation must reject the mutation");
+  if (matcher) {
+    assert.ok(errors.some((error) => matcher.test(error)), `${matcher} not found in:\n${errors.join("\n")}`);
+  }
+  return errors;
+};
+const assertFullGateRejectsWithoutThrowing = (registry) => {
+  let errors;
+  assert.doesNotThrow(() => {
+    errors = validateRegistryMutationIntegrity(registry, { today: "2026-07-14" });
+  });
+  assert.ok(errors.length > 0, "full registry mutation gate must reject the mutation");
+  return errors;
+};
+
+test("the live v2 convergence ledger is the exact 32-capability, 65-edge canonical manifest", () => {
+  const registry = liveRegistry();
+  const ledger = registry.traceability["ds-improvements"].convergenceLedger;
+  assert.equal(ledger.schemaVersion, 2);
+  assert.equal(ledger.capabilities.length, 32);
+  assert.equal(ledger.edges.length, 65);
+  assert.deepEqual(ledger, canonicalCrossProgramConvergenceLedger());
+  assert.deepEqual(validateCrossProgramConvergenceLedger(registry), []);
+  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }), []);
+});
+
+test("equivalent convergence reordering preserves semantics, fingerprint and the full gate", () => {
+  const registry = liveRegistry();
+  const baselineFingerprint = dsImprovementsPlanFingerprint(registry);
+  const ledger = registry.traceability["ds-improvements"].convergenceLedger;
+  ledger.capabilities.reverse();
+  ledger.edges.reverse();
+  for (const capability of ledger.capabilities) {
+    capability.sourceIds.reverse();
+    capability.consumerEndpoints.reverse();
+    capability.nonConsumerEndpoints.reverse();
+  }
+  assert.deepEqual(validateCrossProgramConvergenceLedger(registry), []);
+  assert.equal(dsImprovementsPlanFingerprint(registry), baselineFingerprint);
+  assert.deepEqual(validateRegistryMutationIntegrity(registry, { today: "2026-07-14" }), []);
+});
+
+test("all 32 canonical capabilities are deletion-drilled", () => {
+  const baseline = liveRegistry();
+  const ids = baseline.traceability["ds-improvements"].convergenceLedger.capabilities
+    .map((capability) => capability.id);
+  assert.equal(ids.length, 32);
+  for (const id of ids) {
+    const registry = liveRegistry();
+    registry.traceability["ds-improvements"].convergenceLedger.capabilities =
+      registry.traceability["ds-improvements"].convergenceLedger.capabilities
+        .filter((capability) => capability.id !== id);
+    assertSemanticRejects(registry, new RegExp(`${id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}: convergence capability must appear exactly once`));
+  }
+});
+
+test("all 65 canonical edges are deletion-drilled", () => {
+  const baseline = liveRegistry();
+  const edges = baseline.traceability["ds-improvements"].convergenceLedger.edges;
+  assert.equal(edges.length, 65);
+  for (let index = 0; index < edges.length; index += 1) {
+    const registry = liveRegistry();
+    registry.traceability["ds-improvements"].convergenceLedger.edges.splice(index, 1);
+    assertSemanticRejects(registry, /missing canonical convergence edge/);
+  }
+});
+
+test("catalog ownership, source, canonical, authority and consumer mappings are exact", () => {
+  const mutations = [
+    {
+      name: "owner",
+      mutate(registry) {
+        convergenceCapability(registry, "authorization.permission-resolution").implementationOwner = "design-system";
+      },
+      matcher: /implementationOwner must be scalar "platform-core"/,
+    },
+    {
+      name: "source",
+      mutate(registry) {
+        convergenceCapability(registry, "assistant.prompt-composer-anatomy").sourceIds = ["DS-IMP-069"];
+      },
+      matcher: /sourceIds must be exactly DS-IMP-067/,
+    },
+    {
+      name: "same-program canonical",
+      mutate(registry) {
+        convergenceCapability(registry, "collection.saved-view-mechanics").canonicalRef.entity = "DS-IMP-033";
+      },
+      matcher: /canonicalRef must be/,
+    },
+    {
+      name: "same-program local authority",
+      mutate(registry) {
+        convergenceCapability(registry, "collection.saved-view-mechanics").statusAuthority.entity = "DS-IMP-033";
+      },
+      matcher: /statusAuthority must match the canonical v2 authority DS-IMP-032/,
+    },
+    {
+      name: "same-program external canonical",
+      mutate(registry) {
+        convergenceCapability(registry, "compliance.control-policy").canonicalRef.entity = "T-CP-3";
+      },
+      matcher: /canonicalRef must be/,
+    },
+    {
+      name: "same-program external authority",
+      mutate(registry) {
+        convergenceCapability(registry, "compliance.control-policy").statusAuthority.entity = "T-CP-3";
+      },
+      matcher: /statusAuthority must match the canonical v2 authority T-CP-1/,
+    },
+    {
+      name: "consumer swap",
+      mutate(registry) {
+        const capability = convergenceCapability(registry, "collection.mobile-filter-mechanics");
+        capability.consumerEndpoints[2] = endpointReference(registry, "T-P2-marketing");
+      },
+      matcher: /consumerEndpoints must be exactly/,
+    },
+    {
+      name: "extra consumer",
+      mutate(registry) {
+        convergenceCapability(registry, "collection.mobile-filter-mechanics")
+          .consumerEndpoints.push(endpointReference(registry, "T-CP-3"));
+      },
+      matcher: /consumerEndpoints must be exactly/,
+    },
+    {
+      name: "non-consumer deletion",
+      mutate(registry) {
+        convergenceCapability(registry, "spatial.node-canvas-anatomy").nonConsumerEndpoints = [];
+      },
+      matcher: /nonConsumerEndpoints must be exactly T-P2-marketing/,
+    },
+  ];
+  for (const { name, mutate, matcher } of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    assertSemanticRejects(registry, matcher);
+    assertFullGateRejectsWithoutThrowing(registry);
+    assert.notEqual(dsImprovementsPlanFingerprint(registry), dsImprovementsPlanFingerprint(liveRegistry()), name);
+  }
+});
+
+test("atomic chat and chart rows retain their independent status authorities", () => {
+  const registry = liveRegistry();
+  const expected = new Map([
+    ["assistant.chat-surface-anatomy", [["DS-IMP-063"], "DS-IMP-063"]],
+    ["assistant.prompt-composer-anatomy", [["DS-IMP-067"], "DS-IMP-067"]],
+    ["assistant.agent-trace-anatomy", [["DS-IMP-069"], "DS-IMP-069"]],
+    ["assistant.experience-suite", [["DS-IMP-094"], "DS-IMP-094"]],
+    ["visualization.correctness-foundation", [["DS-IMP-095", "DS-IMP-096", "DS-IMP-097"], "WO-CRA-13"]],
+    ["visualization.react-owned-kernel", [["DS-IMP-098"], "DS-IMP-098"]],
+    ["visualization.renderer-neutral-spec", [["DS-IMP-099"], "DS-IMP-099"]],
+    ["visualization.a11y-interaction", [["DS-IMP-100"], "DS-IMP-100"]],
+    ["visualization.vertical-grammar", [["DS-IMP-101"], "DS-IMP-101"]],
+    ["visualization.analytical-purpose-catalog", [["DS-IMP-102"], "DS-IMP-102"]],
+  ]);
+  for (const [id, [sourceIds, authorityEntity]] of expected) {
+    const capability = convergenceCapability(registry, id);
+    assert.deepEqual(capability.sourceIds, sourceIds);
+    assert.equal(capability.statusAuthority.entity, authorityEntity);
+  }
+});
+
+test("permission resolution and presentation visibility stay separate and ordered to honest consumers", () => {
+  const registry = liveRegistry();
+  const resolution = convergenceCapability(registry, "authorization.permission-resolution");
+  const presentation = convergenceCapability(registry, "authorization.presentation-visibility");
+  assert.equal(resolution.implementationOwner, "platform-core");
+  assert.equal(resolution.statusAuthority.entity, "T-C1-04");
+  assert.equal(presentation.implementationOwner, "design-system");
+  assert.equal(presentation.statusAuthority.entity, "WO-ARC-11");
+  assert.deepEqual(
+    resolution.consumerEndpoints.map((endpoint) => endpoint.entity),
+    ["T-P2-permissions"],
+  );
+  assert.ok(convergenceEdges(registry).some((edge) =>
+    edge.from === "authorization.permission-resolution"
+      && edge.to === "T-P2-permissions"
+      && edge.scope === "server-policy-only"));
+});
+
+test("edge semantics reject endpoint sources, endpoint chains, arbitrary capability chains and scope duplicates", () => {
+  const mutations = [
+    (registry) => convergenceEdges(registry).push({
+      from: "T-P2-appbithire",
+      to: "assistant.chat-surface-anatomy",
+      relationship: "precedes",
+      scope: "consumer-ui-only",
+    }),
+    (registry) => convergenceEdges(registry).push({
+      from: "T-P2-appbithire",
+      to: "T-P2-appplatform",
+      relationship: "precedes",
+      scope: "consumer-ui-only",
+    }),
+    (registry) => convergenceEdges(registry).push({
+      from: "assistant.chat-surface-anatomy",
+      to: "visualization.react-owned-kernel",
+      relationship: "precedes",
+      scope: "generic-dependency",
+    }),
+    (registry) => convergenceEdges(registry).push({
+      from: "authorization.permission-resolution",
+      to: "tenant-theme.schema-compiler",
+      relationship: "precedes",
+      scope: "backend-wide",
+    }),
+    (registry) => {
+      const duplicate = structuredClone(convergenceEdges(registry)[0]);
+      duplicate.scope = "different-scope";
+      convergenceEdges(registry).push(duplicate);
+    },
+  ];
+  for (const mutate of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    assertSemanticRejects(registry, /canonical v2 edge set|from must be a declared capability|duplicates from\/relationship\/to/);
+    assertFullGateRejectsWithoutThrowing(registry);
+  }
+});
+
+test("consumer swaps cannot be laundered by changing the matching edge", () => {
+  const registry = liveRegistry();
+  const capability = convergenceCapability(registry, "collection.mobile-filter-mechanics");
+  capability.consumerEndpoints[2] = endpointReference(registry, "T-CP-3");
+  const edge = convergenceEdges(registry).find((candidate) =>
+    candidate.from === capability.id && candidate.to === "T-P2-appplatform");
+  edge.to = "T-CP-3";
+  assertSemanticRejects(registry, /consumerEndpoints must be exactly|canonical v2 edge set/);
+  assertFullGateRejectsWithoutThrowing(registry);
+});
+
+test("NodeCanvas has exactly two real consumers and marketing is an explicit non-consumer", () => {
+  const baseline = liveRegistry();
+  const capability = convergenceCapability(baseline, "spatial.node-canvas-anatomy");
+  assert.deepEqual(
+    capability.consumerEndpoints.map((endpoint) => endpoint.entity),
+    ["T-P2-appbithire", "T-CP-3"],
+  );
+  assert.deepEqual(
+    capability.nonConsumerEndpoints.map((endpoint) => endpoint.entity),
+    ["T-P2-marketing"],
+  );
+
+  const mutations = [
+    (registry) => {
+      convergenceCapability(registry, capability.id).consumerEndpoints.pop();
+    },
+    (registry) => {
+      convergenceCapability(registry, capability.id)
+        .consumerEndpoints.push(endpointReference(registry, "T-P2-appplatform"));
+    },
+    (registry) => {
+      const nodeCanvas = convergenceCapability(registry, capability.id);
+      nodeCanvas.consumerEndpoints.push(endpointReference(registry, "T-P2-marketing"));
+      nodeCanvas.nonConsumerEndpoints = [];
+    },
+  ];
+  for (const mutate of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    assertSemanticRejects(registry, /consumerEndpoints must be exactly|nonConsumerEndpoints must be exactly/);
+  }
+});
+
+test("the tenant program is exactly the documented 17-edge DB-driven set without DS delivery ownership", () => {
+  const registry = liveRegistry();
+  const tenantEdges = convergenceEdges(registry)
+    .filter((edge) => edge.from.startsWith("tenant-"))
+    .map((edge) => `${edge.from}>${edge.to}>${edge.scope}`)
+    .sort();
+  assert.deepEqual(tenantEdges, [
+    "tenant-branding.assets-anatomy>T-P2-appbithire>reusable-assets-contract-only",
+    "tenant-branding.assets-anatomy>T-P2-appplatform>reusable-assets-contract-only",
+    "tenant-branding.assets-anatomy>T-P2-notifications>reusable-assets-contract-only",
+    "tenant-branding.assets-anatomy>T-P2-svcauth>reusable-assets-contract-only",
+    "tenant-branding.read-model>T-P2-appbithire>db-read-model-consumer",
+    "tenant-branding.read-model>T-P2-appplatform>db-read-model-consumer",
+    "tenant-branding.read-model>T-P2-notifications>db-read-model-consumer",
+    "tenant-branding.read-model>T-P2-svcauth>db-read-model-consumer",
+    "tenant-branding.read-model>tenant-theme.app-platform-console>db-read-model-input",
+    "tenant-theme.app-platform-console>T-P2-appbithire>db-write-to-first-paint",
+    "tenant-theme.app-platform-console>T-P2-appplatform>db-write-to-first-paint",
+    "tenant-theme.schema-compiler>T-P2-appbithire>tenant-theme-compiler-contract-only",
+    "tenant-theme.schema-compiler>T-P2-appplatform>tenant-theme-compiler-contract-only",
+    "tenant-theme.schema-compiler>tenant-branding.read-model>schema-contract-only",
+    "tenant-theme.schema-compiler>tenant-theme.app-platform-console>schema-generated-editor-fields",
+    "tenant-theme.schema-compiler>tenant-theme.vertical-capability-manifest>schema-contract-only",
+    "tenant-theme.vertical-capability-manifest>tenant-theme.app-platform-console>vertical-capability-fields",
+  ]);
+  assert.equal(tenantEdges.length, 17);
+  assert.equal(
+    convergenceCapability(registry, "tenant-branding.read-model").implementationOwner,
+    "tenancy",
+  );
+  assert.equal(
+    convergenceCapability(registry, "tenant-theme.app-platform-console").implementationOwner,
+    "app-platform",
+  );
+  assert.match(
+    convergenceCapability(registry, "tenant-branding.assets-anatomy").excludedScope,
+    /application delivery/,
+  );
+  assert.ok(convergenceEdges(registry)
+    .filter((edge) => edge.from === "tenant-branding.assets-anatomy")
+    .every((edge) => edge.scope === "reusable-assets-contract-only"));
+});
+
+test("tenant owner, authority, consumer and edge substitutions fail closed", () => {
+  const mutations = [
+    (registry) => {
+      convergenceCapability(registry, "tenant-branding.read-model").implementationOwner = "design-system";
+    },
+    (registry) => {
+      convergenceCapability(registry, "tenant-branding.read-model").statusAuthority =
+        structuredClone(convergenceCapability(registry, "tenant-theme.app-platform-console").statusAuthority);
+    },
+    (registry) => {
+      convergenceCapability(registry, "tenant-theme.schema-compiler")
+        .consumerEndpoints.push(endpointReference(registry, "T-P2-notifications"));
+    },
+    (registry) => {
+      convergenceEdges(registry).find((edge) =>
+        edge.from === "tenant-theme.schema-compiler"
+          && edge.to === "tenant-branding.read-model").to = "tenant-theme.app-platform-console";
+    },
+  ];
+  for (const mutate of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    assertSemanticRejects(registry);
+    assertFullGateRejectsWithoutThrowing(registry);
+  }
+});
+
+test("status-copy denylist catches variants, casing, separators, percentages and progress fractions", () => {
+  const copiedValues = [
+    "TODO",
+    "not_started",
+    "Not-Started",
+    "planned",
+    "PENDING",
+    "queued",
+    "in_progress",
+    "blocked",
+    "paused",
+    "on-hold",
+    "verify",
+    "VERIFYING",
+    "in_review",
+    "done",
+    "complete",
+    "completed",
+    "shipped",
+    "reopened",
+    "cancelled",
+    "canceled",
+    "`pending`",
+    "43%",
+    "2/7",
+    "2 of 7",
+  ];
+  for (const copiedValue of copiedValues) {
+    const registry = liveRegistry();
+    convergenceCapability(registry, "authorization.permission-resolution").ownedScope =
+      `External value ${copiedValue}`;
+    assertSemanticRejects(registry, /copies external state value|copies a progress quantity/);
+  }
+  assert.equal(
+    semanticErrors(liveRegistry()).some((error) => error.includes("observable-state")),
+    false,
+  );
+});
+
+test("status, state, progress, completion, done, claim and evidence metadata keys are denied recursively", () => {
+  for (const key of [
+    "status",
+    "state",
+    "progress",
+    "completion",
+    "doneAt",
+    "claimedBy",
+    "evidence",
+  ]) {
+    const registry = liveRegistry();
+    convergenceCapability(registry, "authorization.permission-resolution").canonicalRef[key] = "linked";
+    assertSemanticRejects(registry, /forbidden copied state\/progress metadata/);
+  }
+});
+
+test("all closed convergence object levels reject unknown keys", () => {
+  const mutations = [
+    (registry) => { registry.traceability["ds-improvements"].convergenceLedger.shadow = true; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").shadow = true; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").canonicalRef.shadow = true; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").statusAuthority.shadow = true; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").consumerEndpoints[0].shadow = true; },
+    (registry) => { convergenceCapability(registry, "spatial.node-canvas-anatomy").nonConsumerEndpoints[0].shadow = true; },
+    (registry) => { convergenceEdges(registry)[0].shadow = true; },
+  ];
+  for (const mutate of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    assertSemanticRejects(registry, /closed DS-improvements schema/);
+  }
+});
+
+test("malformed capability, reference, endpoint and edge shapes never throw in semantic or full gates", () => {
+  const mutations = [
+    (registry) => { registry.traceability["ds-improvements"].convergenceLedger.capabilities = null; },
+    (registry) => { registry.traceability["ds-improvements"].convergenceLedger.capabilities = {}; },
+    (registry) => { registry.traceability["ds-improvements"].convergenceLedger.capabilities[0] = null; },
+    (registry) => { registry.traceability["ds-improvements"].convergenceLedger.capabilities[0] = "x"; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").sourceIds = {}; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").canonicalRef = null; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").canonicalRef = {}; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").statusAuthority = null; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").statusAuthority = {}; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").consumerEndpoints = null; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").consumerEndpoints = {}; },
+    (registry) => { convergenceCapability(registry, "collection.mobile-filter-mechanics").consumerEndpoints[0] = null; },
+    (registry) => { convergenceCapability(registry, "spatial.node-canvas-anatomy").nonConsumerEndpoints = null; },
+    (registry) => { registry.traceability["ds-improvements"].convergenceLedger.edges = null; },
+    (registry) => { registry.traceability["ds-improvements"].convergenceLedger.edges = {}; },
+    (registry) => { convergenceEdges(registry)[0] = null; },
+    (registry) => { convergenceEdges(registry)[0] = "x"; },
+    (registry) => { convergenceEdges(registry)[0].to = {}; },
+    (registry) => {
+      const endpoints = convergenceCapability(registry, "collection.mobile-filter-mechanics").consumerEndpoints;
+      endpoints.push(endpoints);
+    },
+  ];
+  const baselineFingerprint = dsImprovementsPlanFingerprint(liveRegistry());
+  for (const mutate of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    assert.doesNotThrow(() => dsImprovementsPlanFingerprint(registry));
+    assert.notEqual(dsImprovementsPlanFingerprint(registry), baselineFingerprint);
+    assertSemanticRejects(registry);
+    assertFullGateRejectsWithoutThrowing(registry);
+  }
+});
+
+test("Symbol, BigInt, function, getter, proxy and cycle payloads fail closed across every convergence boundary", () => {
+  const baselineFingerprint = dsImprovementsPlanFingerprint(liveRegistry());
+  const cycle = () => {
+    const value = {};
+    value.self = value;
+    return value;
+  };
+  const throwingGetterObject = (field = "value") => Object.defineProperty({}, field, {
+    configurable: true,
+    enumerable: true,
+    get() {
+      throw new Error(`hostile getter: ${field}`);
+    },
+  });
+  const throwingProxy = () => new Proxy({}, {
+    get() {
+      throw new Error("hostile proxy get");
+    },
+    ownKeys() {
+      throw new Error("hostile proxy ownKeys");
+    },
+  });
+  const revokedProxy = () => {
+    const revocable = Proxy.revocable({}, {});
+    revocable.revoke();
+    return revocable.proxy;
+  };
+  const ledger = (registry) => registry.traceability["ds-improvements"].convergenceLedger;
+  const firstCapability = (registry) => ledger(registry).capabilities[0];
+  const firstEndpoint = (registry) => firstCapability(registry).consumerEndpoints[0];
+  const firstEdge = (registry) => ledger(registry).edges[0];
+
+  const mutations = [
+    ["revision Symbol", (registry) => { ledger(registry).sourceRevision = Symbol("revision"); }],
+    ["revision BigInt", (registry) => { ledger(registry).sourceRevision = 1n; }],
+    ["revision function", (registry) => { ledger(registry).sourceRevision = () => "revision"; }],
+    ["revision cycle", (registry) => { ledger(registry).sourceRevision = cycle(); }],
+    ["revision getter", (registry) => {
+      Object.defineProperty(ledger(registry), "sourceRevision", {
+        configurable: true,
+        enumerable: true,
+        get() { throw new Error("hostile revision getter"); },
+      });
+    }],
+    ["revision proxy", (registry) => { ledger(registry).sourceRevision = throwingProxy(); }],
+
+    ["canonical ref Symbol", (registry) => { firstCapability(registry).canonicalRef.path = Symbol("path"); }],
+    ["authority ref BigInt", (registry) => { firstCapability(registry).statusAuthority.entity = 1n; }],
+    ["canonical ref function", (registry) => { firstCapability(registry).canonicalRef.entity = () => "entity"; }],
+    ["canonical ref cycle", (registry) => { firstCapability(registry).canonicalRef = cycle(); }],
+    ["canonical ref getter", (registry) => {
+      firstCapability(registry).canonicalRef = throwingGetterObject("path");
+    }],
+    ["authority ref proxy", (registry) => { firstCapability(registry).statusAuthority = throwingProxy(); }],
+    ["canonical ref revoked proxy", (registry) => { firstCapability(registry).canonicalRef = revokedProxy(); }],
+
+    ["sourceIds Symbol", (registry) => { firstCapability(registry).sourceIds = [Symbol("source")]; }],
+    ["sourceIds BigInt", (registry) => { firstCapability(registry).sourceIds = [1n]; }],
+    ["sourceIds function", (registry) => { firstCapability(registry).sourceIds = [() => "source"]; }],
+    ["sourceIds cycle", (registry) => { firstCapability(registry).sourceIds = [cycle()]; }],
+    ["sourceIds getter", (registry) => {
+      Object.defineProperty(firstCapability(registry), "sourceIds", {
+        configurable: true,
+        enumerable: true,
+        get() { throw new Error("hostile sourceIds getter"); },
+      });
+    }],
+    ["sourceIds proxy", (registry) => { firstCapability(registry).sourceIds = throwingProxy(); }],
+    ["sourceIds revoked proxy", (registry) => { firstCapability(registry).sourceIds = revokedProxy(); }],
+
+    ["endpoint Symbol", (registry) => { firstEndpoint(registry).program = Symbol("program"); }],
+    ["endpoint BigInt", (registry) => { firstEndpoint(registry).entity = 1n; }],
+    ["endpoint function", (registry) => { firstEndpoint(registry).path = () => "path"; }],
+    ["endpoint cycle", (registry) => { firstCapability(registry).consumerEndpoints[0] = cycle(); }],
+    ["endpoint getter", (registry) => {
+      firstCapability(registry).consumerEndpoints[0] = throwingGetterObject("program");
+    }],
+    ["endpoint proxy", (registry) => { firstCapability(registry).consumerEndpoints[0] = throwingProxy(); }],
+    ["endpoint revoked proxy", (registry) => { firstCapability(registry).consumerEndpoints[0] = revokedProxy(); }],
+
+    ["edge Symbol", (registry) => { firstEdge(registry).from = Symbol("from"); }],
+    ["edge BigInt", (registry) => { firstEdge(registry).to = 1n; }],
+    ["edge function", (registry) => { firstEdge(registry).scope = () => "scope"; }],
+    ["edge cycle", (registry) => { ledger(registry).edges[0] = cycle(); }],
+    ["edge getter", (registry) => { ledger(registry).edges[0] = throwingGetterObject("from"); }],
+    ["edge proxy", (registry) => { ledger(registry).edges[0] = throwingProxy(); }],
+    ["edge revoked proxy", (registry) => { ledger(registry).edges[0] = revokedProxy(); }],
+  ];
+
+  for (const [name, mutate] of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    let semantic;
+    let full;
+    let fingerprint;
+    assert.doesNotThrow(() => { semantic = validateCrossProgramConvergenceLedger(registry); }, name);
+    assert.doesNotThrow(() => {
+      full = validateRegistryMutationIntegrity(registry, { today: "2026-07-14" });
+    }, name);
+    assert.doesNotThrow(() => { fingerprint = dsImprovementsPlanFingerprint(registry); }, name);
+    assert.ok(semantic.length > 0, `${name}: semantic gate must fail closed`);
+    assert.ok(full.length > 0, `${name}: full gate must fail closed`);
+    assert.notEqual(fingerprint, baselineFingerprint, `${name}: fingerprint must cover malformed state`);
+  }
+});
+
+test("strict JSON-data shape rejects prototype, accessor, proxy, sparse and non-JSON laundering at every ledger level", () => {
+  const baselineFingerprint = dsImprovementsPlanFingerprint(liveRegistry());
+  const ledger = (registry) => registry.traceability["ds-improvements"].convergenceLedger;
+  const firstCapability = (registry) => ledger(registry).capabilities[0];
+  const firstEndpoint = (registry) => firstCapability(registry).consumerEndpoints[0];
+  const firstEdge = (registry) => ledger(registry).edges[0];
+  const sparseWithInheritedIndices = (values) => {
+    const sparse = new Array(values.length);
+    const prototype = Object.create(Array.prototype);
+    values.forEach((value, index) => {
+      Object.defineProperty(prototype, String(index), {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value,
+      });
+    });
+    Object.setPrototypeOf(sparse, prototype);
+    return sparse;
+  };
+  const canonicalGetter = (target, field) => {
+    const value = target[field];
+    Object.defineProperty(target, field, {
+      configurable: true,
+      enumerable: true,
+      get() { return value; },
+    });
+  };
+  const revokedProxy = (value) => {
+    const revocable = Proxy.revocable(value, {});
+    revocable.revoke();
+    return revocable.proxy;
+  };
+
+  const mutations = [
+    ["inherited ledger", (registry) => {
+      registry.traceability["ds-improvements"].convergenceLedger = Object.create(ledger(registry));
+    }],
+    ["inherited capability", (registry) => {
+      ledger(registry).capabilities[0] = Object.create(firstCapability(registry));
+    }],
+    ["inherited canonical reference", (registry) => {
+      firstCapability(registry).canonicalRef = Object.create(firstCapability(registry).canonicalRef);
+    }],
+    ["inherited authority reference", (registry) => {
+      firstCapability(registry).statusAuthority = Object.create(firstCapability(registry).statusAuthority);
+    }],
+    ["inherited endpoint", (registry) => {
+      firstCapability(registry).consumerEndpoints[0] = Object.create(firstEndpoint(registry));
+    }],
+    ["inherited edge", (registry) => {
+      ledger(registry).edges[0] = Object.create(firstEdge(registry));
+    }],
+    ["canonical ledger getter", (registry) => canonicalGetter(ledger(registry), "schemaVersion")],
+    ["canonical capability getter", (registry) => canonicalGetter(firstCapability(registry), "id")],
+    ["canonical reference getter", (registry) => canonicalGetter(firstCapability(registry).canonicalRef, "path")],
+    ["canonical endpoint getter", (registry) => canonicalGetter(firstEndpoint(registry), "program")],
+    ["canonical edge getter", (registry) => canonicalGetter(firstEdge(registry), "scope")],
+    ["transparent ledger Proxy", (registry) => {
+      registry.traceability["ds-improvements"].convergenceLedger = new Proxy(ledger(registry), {});
+    }],
+    ["transparent capability Proxy", (registry) => {
+      ledger(registry).capabilities[0] = new Proxy(firstCapability(registry), {});
+    }],
+    ["transparent array Proxy", (registry) => {
+      ledger(registry).capabilities = new Proxy(ledger(registry).capabilities, {});
+    }],
+    ["revoked edge Proxy", (registry) => {
+      ledger(registry).edges[0] = revokedProxy(firstEdge(registry));
+    }],
+    ["symbol shadow status", (registry) => {
+      ledger(registry)[Symbol("status")] = "done";
+    }],
+    ["non-enumerable shadow status", (registry) => {
+      Object.defineProperty(firstCapability(registry), "status", {
+        configurable: true,
+        enumerable: false,
+        value: "done",
+      });
+    }],
+    ["sparse inherited capabilities", (registry) => {
+      ledger(registry).capabilities = sparseWithInheritedIndices(ledger(registry).capabilities);
+    }],
+    ["sparse inherited sourceIds", (registry) => {
+      firstCapability(registry).sourceIds = sparseWithInheritedIndices(firstCapability(registry).sourceIds);
+    }],
+    ["sparse inherited endpoints", (registry) => {
+      firstCapability(registry).consumerEndpoints = sparseWithInheritedIndices(
+        firstCapability(registry).consumerEndpoints,
+      );
+    }],
+    ["sparse inherited edges", (registry) => {
+      ledger(registry).edges = sparseWithInheritedIndices(ledger(registry).edges);
+    }],
+    ["array custom property", (registry) => {
+      firstCapability(registry).sourceIds.shadow = "done";
+    }],
+    ["array accessor index", (registry) => canonicalGetter(firstCapability(registry).sourceIds, "0")],
+    ["NaN scalar", (registry) => { ledger(registry).schemaVersion = Number.NaN; }],
+    ["positive Infinity scalar", (registry) => { firstCapability(registry).ownedScope = Infinity; }],
+    ["negative Infinity scalar", (registry) => { firstEdge(registry).scope = -Infinity; }],
+    ["cycle", (registry) => {
+      const value = {};
+      value.self = value;
+      firstCapability(registry).canonicalRef = value;
+    }],
+    ["enumerable unknown ledger key", (registry) => { ledger(registry).shadow = "linked"; }],
+  ];
+
+  for (const [name, mutate] of mutations) {
+    const registry = liveRegistry();
+    mutate(registry);
+    let semantic;
+    let full;
+    let fingerprint;
+    assert.doesNotThrow(() => {
+      semantic = validateCrossProgramConvergenceLedger(registry);
+    }, name);
+    assert.doesNotThrow(() => {
+      full = validateRegistryMutationIntegrity(registry, { today: "2026-07-14" });
+    }, name);
+    assert.doesNotThrow(() => {
+      fingerprint = dsImprovementsPlanFingerprint(registry);
+    }, name);
+    assert.ok(semantic.length > 0, `${name}: semantic gate must reject`);
+    assert.ok(full.length > 0, `${name}: full mutation gate must reject`);
+    assert.notEqual(fingerprint, baselineFingerprint, `${name}: fingerprint must fail closed`);
+  }
+
+  const pollutedPrototypeRegistry = liveRegistry();
+  const pollutedLedger = ledger(pollutedPrototypeRegistry);
+  const inheritedSchemaVersion = pollutedLedger.schemaVersion;
+  delete pollutedLedger.schemaVersion;
+  Object.defineProperty(Object.prototype, "schemaVersion", {
+    configurable: true,
+    value: inheritedSchemaVersion,
+  });
+  try {
+    assert.ok(validateCrossProgramConvergenceLedger(pollutedPrototypeRegistry).length > 0);
+    assert.ok(validateRegistryMutationIntegrity(
+      pollutedPrototypeRegistry,
+      { today: "2026-07-14" },
+    ).length > 0);
+    assert.notEqual(
+      dsImprovementsPlanFingerprint(pollutedPrototypeRegistry),
+      baselineFingerprint,
+      "an inherited field cannot supply missing JSON data",
+    );
+  } finally {
+    delete Object.prototype.schemaVersion;
+  }
+
+  const nullPrototypeRegistry = liveRegistry();
+  const originalLedger = ledger(nullPrototypeRegistry);
+  nullPrototypeRegistry.traceability["ds-improvements"].convergenceLedger = Object.assign(
+    Object.create(null),
+    originalLedger,
+  );
+  assert.deepEqual(validateCrossProgramConvergenceLedger(nullPrototypeRegistry), []);
+  assert.deepEqual(
+    validateRegistryMutationIntegrity(nullPrototypeRegistry, { today: "2026-07-14" }),
+    [],
+  );
+  assert.equal(dsImprovementsPlanFingerprint(nullPrototypeRegistry), baselineFingerprint);
+
+  const aliasedRegistry = liveRegistry();
+  const emptyEndpoints = [];
+  const externalCapability = convergenceCapability(
+    aliasedRegistry,
+    "economy.financial-ledger-truth",
+  );
+  externalCapability.consumerEndpoints = emptyEndpoints;
+  externalCapability.nonConsumerEndpoints = emptyEndpoints;
+  assert.deepEqual(validateCrossProgramConvergenceLedger(aliasedRegistry), []);
+  assert.deepEqual(
+    validateRegistryMutationIntegrity(aliasedRegistry, { today: "2026-07-14" }),
+    [],
+  );
+  assert.equal(dsImprovementsPlanFingerprint(aliasedRegistry), baselineFingerprint);
+});
+
+test("fingerprint covers non-consumers and exact edge scopes while remaining total", () => {
+  const baseline = liveRegistry();
+  const baselineFingerprint = dsImprovementsPlanFingerprint(baseline);
+
+  const nonConsumer = liveRegistry();
+  convergenceCapability(nonConsumer, "spatial.node-canvas-anatomy").nonConsumerEndpoints = [];
+  assert.notEqual(dsImprovementsPlanFingerprint(nonConsumer), baselineFingerprint);
+
+  const scope = liveRegistry();
+  convergenceEdges(scope)[0].scope = "changed-scope";
+  assert.notEqual(dsImprovementsPlanFingerprint(scope), baselineFingerprint);
+
+  for (const registry of [nonConsumer, scope]) {
+    assertFullGateRejectsWithoutThrowing(registry);
+  }
+});
+
+test("DS never absorbs provider transport, financial truth or compliance policy", () => {
+  for (const id of [
+    "ai.provider-transport",
+    "economy.financial-ledger-truth",
+    "compliance.control-policy",
+  ]) {
+    const registry = liveRegistry();
+    convergenceCapability(registry, id).implementationOwner = "design-system";
+    assertSemanticRejects(registry, /implementationOwner must be scalar/);
+  }
+
+  const registry = liveRegistry();
+  convergenceEdges(registry).push({
+    from: "ai.provider-transport",
+    to: "assistant.chat-surface-anatomy",
+    relationship: "precedes",
+    scope: "backend-wide",
+  });
+  assertSemanticRejects(registry, /canonical v2 edge set/);
+});
+
+test("UIDS-NF-001 remains one DS-owned capability with one external authority", () => {
+  const registry = liveRegistry();
+  const preset = convergenceCapability(registry, "tooling.eslint-recommended-preset");
+  assert.equal(preset.implementationOwner, "design-system");
+  assert.deepEqual(preset.sourceIds, ["UIDS-NF-001"]);
+  assert.equal(preset.canonicalRef.entity, "UIDS-NF-001");
+  assert.equal(preset.statusAuthority.entity, "T-P2-uidesignsystem");
+
+  preset.statusAuthority.entity = "T-P2-appplatform";
+  assertSemanticRejects(registry, /statusAuthority must match the canonical v2 authority/);
 });
 
 test("the live adjudicated program plan is fingerprint-locked against authority swaps", () => {
