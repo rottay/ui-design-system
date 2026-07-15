@@ -7,7 +7,7 @@
 | Lane | Done | In progress | Todo | Total |
 | --- | --- | --- | --- | --- |
 | [engine-modern](./engine-modern.md) | 22 | 0 | 1 | 23 |
-| [craft](./craft.md) | 10 | 1 | 4 | 15 |
+| [craft](./craft.md) | 10 | 2 | 3 | 15 |
 | [gates](./gates.md) | 8 | 0 | 1 | 9 |
 | [tokens](./tokens.md) | 10 | 0 | 0 | 10 |
 | [architecture](./architecture.md) | 10 | 1 | 0 | 11 |
@@ -19,7 +19,7 @@
 
 | Source IDs done | Source IDs in progress | Source IDs todo | Execute authorities done/total | Deferred | Absorbed | Routed | Rejected |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 10 | 1 | 10 | 5/12 | 99 | 6 | 2 | 0 |
+| 10 | 4 | 7 | 5/12 | 99 | 6 | 2 | 0 |
 
 ## Support milestones — partial evidence, no source completion effect
 
@@ -33,6 +33,7 @@
 | WO | Title | Claimed by | Since | Last progress |
 | --- | --- | --- | --- | --- |
 | WO-ARC-11 | Superadmin presentation bypass | codex-arc11 | 2026-07-15 | 2026-07-15 14:50 — The app-resolved presentation contract now preserves explicit field, tab and individual-action anatomy through collection and detail load failures (DS 4fc07796), with Bithire Agent Roster registrations landed in 68119289f. Published @rottay/design-system 2.19.3 (release 336bd5ea) is pinned by Bithire 220ef765b. Focused DS coverage is green at 57/57, core TypeScript and the 2.19.3 build are green, and the focused Bithire suite remains green at 3/3. Authorization and data access remain app/server-owned; the DS only renders final all/resolved presentation decisions. |
+| WO-CRA-13 | Chart correctness floor | codex-cra13 | 2026-07-15 | 2026-07-15 16:05 — Provider-scoped chart paint slice landed in DS bd681b26 and Bithire 8ec34ca79: HeatMap/CalendarHeatMap resolve from their owner, repaint on live provider mutations, preserve negative/zero/constant/invalid/empty semantics, export concrete SVG colors, and keep React-owned accessible names/descriptions outside D3 redraw. Focused DS evidence is 22/22 plus core typecheck; Bithire provider-color inventory is 3/3. WO remains open for the remaining chart-family domains/empty transitions, cyclic Sankey, unique IDs/network continuity, explicit compact activation and public prop/export honesty. |
 | WO-CRA-14 | ParticleField Stage-A quarantine | codex-cra14 | 2026-07-14 | 2026-07-15 01:00 — Independent technical GO after adversarial correction: Platform 35a2dcf7 rejects spoofed resolver provenance and hostile loaders (53/53), DS runtime/barrel/CSS gates are green. Integration remains blocked: app-platform is pinned to registry DS 2.17.0, producing exactly five particleField TS2353 errors and the old static ParticleField path; keep WO in-progress until consolidated publish and repin. |
 
 ## Next up (todo, dependencies satisfied)
@@ -41,7 +42,6 @@
 | --- | --- | --- | --- | --- |
 | WO-ENG-23 | Evnto certified theme source | M | engine-modern | ds-improvements |
 | WO-CRA-12 | Motion authority and unit floor | M | craft | ds-improvements |
-| WO-CRA-13 | Chart correctness floor | L | craft | ds-improvements |
 
 ## Blocked (dependencies or phase claim lock)
 
